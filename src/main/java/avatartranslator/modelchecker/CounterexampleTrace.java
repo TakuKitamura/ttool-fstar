@@ -2,19 +2,20 @@ package avatartranslator.modelchecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSpecification;
-import avatartranslator.AvatarStateMachine;
+
 
 public class CounterexampleTrace {
     private LinkedList<CounterexampleTraceState> trace;
     private CounterexampleTraceState counterexampleState;
     private AvatarSpecification spec;
-    private List<String> autTraces;
+    private List<CounterexampleQueryReport> autTraces;
 
     
     public CounterexampleTrace(AvatarSpecification spec) {
@@ -41,7 +42,7 @@ public class CounterexampleTrace {
     }
     
     
-    public List<String> getAUTTrace() {
+    public List<CounterexampleQueryReport> getAUTTrace() {
         return autTraces;
     }
     
@@ -72,6 +73,70 @@ public class CounterexampleTrace {
         while (cs.father != null) {
             cs = cs.father;
             trace.add(0, cs);
+        }
+
+        return true;
+    }
+    
+    
+    public boolean buildTrace(Map<Integer, SpecificationState> states, Map<Integer, CounterexampleTraceState> counterstates) {
+        if (counterexampleState == null) {
+            return false;
+        }
+
+        trace = new LinkedList<CounterexampleTraceState>();
+
+        CounterexampleTraceState cs = counterexampleState;
+        CounterexampleTraceState loopPoint = counterstates.get(counterexampleState.hash);
+        
+        if (loopPoint != null) {
+            //search for a loop
+            boolean loop = false;
+            while (cs.father != null) {
+                cs = cs.father;
+                if (cs == loopPoint) {
+                    loop = true;
+                }
+            }
+            if (loop == true) {
+                //registered path contains a loop
+                cs = counterexampleState;
+                trace.add(cs);
+                while (cs.father != null) {
+                    cs = cs.father;
+                    trace.add(0, cs);
+                }
+            } else {
+                //registered path does not contain a loop
+                cs = loopPoint;
+                trace.add(cs);
+                while (cs.father != null) {
+                    cs = cs.father;
+                    trace.add(0, cs);
+                }
+                List<SpecificationState> loopTrace = findLoopTrace(states.get(loopPoint.hash));
+                if (loopTrace != null) {
+                    //integrate
+                    for (SpecificationState ss : loopTrace) {
+                        trace.add(counterstates.get(ss.hashValue));
+                    }
+                } else {
+                    //continue normally
+                    int pos = trace.size();
+                    cs = counterexampleState;
+                    while (cs.father != loopPoint) {
+                        cs = cs.father;
+                        trace.add(pos, cs);
+                    }
+                }
+            }
+        } else {
+            //normal trace
+            trace.add(cs);
+            while (cs.father != null) {
+                cs = cs.father;
+                trace.add(0, cs);
+            }
         }
 
         return true;
@@ -138,7 +203,7 @@ public class CounterexampleTrace {
         int id = 0;
         SpecificationState state = null;
         for (CounterexampleTraceState cs : trace) {
-            if (state != null) {
+            if (state != null && state.nexts != null) {
                 for (SpecificationLink sl : state.nexts) {
                     if (sl.destinationState.hashValue == cs.hash) {
                         s.append("Transition " + sl.action + "\n");
@@ -158,13 +223,13 @@ public class CounterexampleTrace {
         return s.toString();
     }
     
-    public void generateTraceAUT(String name, Map<Integer, SpecificationState> states) {
+    public void generateTraceAUT(String query, Map<Integer, SpecificationState> states) {
         if (trace == null) {
             return;
         }
         
         if (autTraces == null) {
-            autTraces = new ArrayList<String>();
+            autTraces = new ArrayList<CounterexampleQueryReport>();
         }
         
         List<AvatarBlock> blocks = spec.getListOfBlocks();
@@ -200,8 +265,42 @@ public class CounterexampleTrace {
         
         s.insert(0 ,"des(0," + (trace.size() - 1) + "," + statesID.size() + ")\n");
         
+        CounterexampleQueryReport cr = new CounterexampleQueryReport(null, query, s.toString());
+        autTraces.add(cr);
+    }
+    
+    private List<SpecificationState> findLoopTrace(SpecificationState start) {
+        Set<Long> visited= new HashSet<Long>();
+        List<SpecificationState> loopTrace = new ArrayList<>();
         
-        autTraces.add(s.toString());
+        if (!(start.getNextsSize() == 0 || visited.contains(start.id))) {
+            for (SpecificationLink i : start.nexts) {
+                if(findLoopTraceRec(i.destinationState, start, visited, loopTrace, 0)) {
+                    return loopTrace;
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    private boolean findLoopTraceRec(SpecificationState start, SpecificationState arrival, Set<Long> visited, List<SpecificationState> loopTrace, int depth) {
+        loopTrace.add(depth, start);
+        
+        if (start == arrival) {
+            return true;
+        } else if (start.getNextsSize() == 0 || visited.contains(start.id)) {
+            return false;
+        }
+        
+        visited.add(start.id);
+        for (SpecificationLink i : start.nexts) {
+            if (findLoopTraceRec(i.destinationState, arrival, visited, loopTrace, depth + 1)) {
+                return true;
+            }
+        }
+        loopTrace.remove(depth);
+        return false;
     }
 
 }

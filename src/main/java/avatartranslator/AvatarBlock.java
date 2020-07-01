@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
  * Class AvatarBlock
  * Creation: 20/05/2010
@@ -61,6 +60,10 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     private int blockIndex; //Index of block in the Avatar Specification
 
     private String globalCode;
+    
+    private int booleanOffset;
+    private int attributeOptRatio;
+    private List<AvatarAttribute> constants;
 
 
     public AvatarBlock(String _name, AvatarSpecification _avspec, Object _referenceObject) {
@@ -71,6 +74,8 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         methods = new LinkedList<AvatarMethod>();
         signals = new LinkedList<AvatarSignal>();
         asm = new AvatarStateMachine(this, "statemachineofblock__" + _name, _referenceObject);
+        booleanOffset = -1;
+        attributeOptRatio = 1;
     }
 
 
@@ -119,6 +124,18 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         signals.add(_signal);
     }
 
+    public AvatarSignal addSignalIfApplicable(String name, int type, Object refObject) {
+        AvatarSignal sig = getSignalByName(name);
+        if (sig != null) {
+            return sig;
+        }
+        sig = new AvatarSignal(name, type, refObject);
+        addSignal(sig);
+        return sig;
+
+    }
+
+
     public List<AvatarAttribute> getAttributes() {
         return attributes;
     }
@@ -164,11 +181,15 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         }
     }
 
-    public void addIntAttributeIfApplicable(String _name) {
-        if (getAvatarAttributeWithName(_name) == null) {
-            AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);
-            attributes.add(aa);
+    public AvatarAttribute addIntAttributeIfApplicable(String _name) {
+        AvatarAttribute old = getAvatarAttributeWithName(_name);
+        if (old != null) {
+            return old;
         }
+
+        AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);
+        attributes.add(aa);
+        return aa;
     }
 
     public String toString() {
@@ -282,6 +303,28 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
             cpt++;
         }
         return -1;
+    }
+    
+    public int getIndexOfConstantWithName(String _name) {
+        int cpt = 0;
+        
+        if (constants == null) {
+            return -1;
+        }
+        for (AvatarAttribute attribute : constants) {
+            if (attribute.getName().compareTo(_name) == 0) {
+                return cpt;
+            }
+            cpt++;
+        }
+        return -1;
+    }
+    
+    public AvatarAttribute getConstantWithIndex(int index) {
+        if (constants == null) {
+            return null;
+        }
+        return constants.get(index);
     }
 
     /**
@@ -696,6 +739,96 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
             }
         }
         return outside;
+    }
+    
+    
+    //move boolean attributes to last positions in list attributes
+    public void sortAttributes() {
+        List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
+        
+        for (AvatarAttribute attribute : attributes) {
+            if (attribute.getType() != AvatarType.BOOLEAN) {
+                newAttributes.add(attribute);
+            }
+        }
+        
+        booleanOffset = newAttributes.size();
+        
+        for (AvatarAttribute attribute : attributes) {
+            if (attribute.getType() == AvatarType.BOOLEAN) {
+                newAttributes.add(attribute);
+            }
+        }
+        
+        attributes = newAttributes;
+    }
+    
+    public int getBooleanOffset() {
+        return booleanOffset;
+    }
+    
+    
+    public int getAttributeOptRatio() {
+        return attributeOptRatio;
+    }
+    
+    public void setAttributeOptRatio(int attributeOptRatio) {
+        if (attributeOptRatio == 2 || attributeOptRatio == 4) {
+            this.attributeOptRatio = attributeOptRatio;
+        } else {
+            this.attributeOptRatio = 1;
+        }
+    }
+    
+    
+    public void removeConstantAttributes() {
+        AvatarTransition at;
+        List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
+        constants = new LinkedList<AvatarAttribute>();
+
+        for (AvatarAttribute attr : attributes) {
+            boolean toKeep = false;
+            
+            if (attr.isTimer()) {
+                toKeep = true;
+            }
+            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+                if (elt instanceof AvatarTransition) {
+                    at = (AvatarTransition) elt;
+                    for (AvatarAction aa : at.getActions()) {
+                        if (aa instanceof AvatarActionAssignment) {
+                           if (((AvatarActionAssignment) aa).leftHand.getName().compareTo(attr.name) == 0) {
+                               //assigned
+                               toKeep = true;
+                           }
+                        }
+                    }
+                } else if (elt instanceof AvatarActionOnSignal) {
+                    AvatarSignal sig = ((AvatarActionOnSignal) elt).getSignal();
+                    if (sig != null && sig.isIn()) {
+                        for (String val : ((AvatarActionOnSignal) elt).getValues()) {
+                            if (val.compareTo(attr.name) == 0) {
+                                //assigned
+                                toKeep = true;
+                            }
+                        }
+                    }
+                } else if (elt instanceof AvatarRandom) {
+                    if (((AvatarRandom) elt).getVariable().compareTo(attr.name) == 0) {
+                        toKeep = true;
+                    }
+                }
+                if (toKeep) {
+                    break;
+                }
+            }
+            if (!toKeep) {
+                constants.add(attr);
+            } else {
+                newAttributes.add(attr);
+            }
+        }
+        attributes = newAttributes;
     }
 
 

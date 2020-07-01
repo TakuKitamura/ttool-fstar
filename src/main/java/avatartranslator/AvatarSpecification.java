@@ -355,6 +355,8 @@ public class AvatarSpecification extends AvatarElement {
         AvatarTransition at;
         boolean returnVal;
         
+        AvatarExpressionSolver.emptyAttributesMap();
+        
         for (AvatarBlock block : getListOfBlocks()) {
             AvatarStateMachine asm = block.getStateMachine();
 
@@ -363,6 +365,12 @@ public class AvatarSpecification extends AvatarElement {
                     at = (AvatarTransition) elt;
                     if (at.isGuarded()) {
                         returnVal = at.buildGuardSolver();
+                        if (returnVal == false) {
+                            errors.add(at);
+                        }
+                    }
+                    if (at.hasDelay()) {
+                        returnVal = at.buildDelaySolver();
                         if (returnVal == false) {
                             errors.add(at);
                         }
@@ -424,6 +432,24 @@ public class AvatarSpecification extends AvatarElement {
 
         for(int i=0; i<addedBlocks.size(); i++) {
             addBlock(addedBlocks.get(i));
+        }
+    }
+    
+    public void removeConstants() {
+        for(AvatarBlock block : blocks) {
+            block.removeConstantAttributes();
+        }
+    }
+    
+    public void sortAttributes() {
+        for(AvatarBlock block: blocks) {
+            block.sortAttributes();
+        }
+    }
+    
+    public void setAttributeOptRatio(int attributeOptRatio) {
+        for(AvatarBlock block: blocks) {
+            block.setAttributeOptRatio(attributeOptRatio);
         }
     }
 //
