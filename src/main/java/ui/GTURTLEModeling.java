@@ -1894,17 +1894,22 @@ public class GTURTLEModeling {
     }
 
     public void generateFullAvatarFromTML() {
-        if (tmlm != null && tmap == null) {
+        /*if (tmlm != null && tmap == null) {
             tmap = tmlm.getDefaultMapping();
-        }
+        }*/
 
 
-        FullTML2Avatar t2a = new FullTML2Avatar(tmap);
+        FullTML2Avatar t2a = new FullTML2Avatar(tmlm);
         TraceManager.addDev("Avatar spec generation");
         avatarspec = t2a.generateAvatarSpec("1");
 
         if (mgui.isExperimentalOn()) {
-            mgui.drawAvatarSpecification(avatarspec);
+
+            TraceManager.addDev("Avatar spec:" + avatarspec.toString());
+            //mgui.drawAvatarSpecification(avatarspec);
+            //TraceManager.addDev("Avatar spec:" + avatarspec.toString());
+            //AvatarSpecification av2 = avatarspec.advancedClone();
+            //mgui.drawAvatarSpecification(av2);
         }
     }
 
@@ -8694,6 +8699,10 @@ public class GTURTLEModeling {
             mgui.resetAllDIPLOIDs();
             listE.useDIPLOIDs();
             mgui.setMode(MainGUI.GEN_DESIGN_OK);
+
+
+
+
             return true;
         }
     }
@@ -9035,6 +9044,7 @@ public class GTURTLEModeling {
     public void drawBlockProperties(AvatarBlock ab, AvatarBDBlock bl) {
         for (avatartranslator.AvatarSignal sig : ab.getSignals()) {
             String name = sig.getName().split("__")[sig.getName().split("__").length - 1];
+
             //           sig.setName(name);
             String[] types = new String[sig.getListOfAttributes().size()];
             String[] typeIds = new String[sig.getListOfAttributes().size()];
@@ -9044,7 +9054,7 @@ public class GTURTLEModeling {
                 typeIds[i] = attr.getName();
                 i++;
             }
-            TraceManager.addDev("Adding signal " + sig);
+            //TraceManager.addDev("Adding signal " + sig + " with name=" + name);
             bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, types, typeIds));
         }
 
@@ -9173,8 +9183,8 @@ public class GTURTLEModeling {
                 originDestMap.put(bl1.split("__")[bl1.split("__").length - 1], hs);
             }
         }
-        //Add Relations
 
+        //Add Relations
         for (String bl1 : originDestMap.keySet()) {
             for (String bl2 : originDestMap.get(bl1)) {
                 Vector<Point> points = new Vector<Point>();
@@ -9201,7 +9211,7 @@ public class GTURTLEModeling {
                 //Add Relations to connector
                 for (AvatarRelation ar : avspec.getRelations()) {
                     if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)) {
-
+                        //TraceManager.addDev("Trying adding signal relations to connector");
                         //TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
 
                         conn.setAsynchronous(ar.isAsynchronous());
@@ -9210,9 +9220,12 @@ public class GTURTLEModeling {
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
                         //
                         for (int i = 0; i < ar.nbOfSignals(); i++) {
+                            //TraceManager.addDev("Adding signal relations to connector");
                             //
+                            TraceManager.addDev("Adding signal 1: " + ar.getSignal1(i).toString() + " of block " + ar.block1.getName());
                             conn.addSignal(ar.getSignal1(i).toString(), ar.getSignal1(i).getInOut() == 0, ar.block1.getName().contains(bl1));
-                            conn.addSignal(ar.getSignal2(i).toString(), ar.getSignal2(i).getInOut() == 0, !ar.block1.getName().contains(bl1));
+                            TraceManager.addDev("Adding signal 2:" + ar.getSignal2(i).toString() + " of block " + ar.block2.getName());
+                            conn.addSignal(ar.getSignal2(i).toString(), ar.getSignal2(i).getInOut() == 0, !ar.block2.getName().contains(bl2));
                             //
                         }
                         //
@@ -9234,6 +9247,8 @@ public class GTURTLEModeling {
             }
         }
         ypos += 100;
+
+
         //Add Pragmas
         AvatarBDPragma pragma = new AvatarBDPragma(xpos, ypos, xpos, xpos * 2, ypos, ypos * 2, false, null, abd);
         //  String[] arr = new String[avspec.getPragmas().size()];

@@ -124,6 +124,18 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         signals.add(_signal);
     }
 
+    public AvatarSignal addSignalIfApplicable(String name, int type, Object refObject) {
+        AvatarSignal sig = getSignalByName(name);
+        if (sig != null) {
+            return sig;
+        }
+        sig = new AvatarSignal(name, type, refObject);
+        addSignal(sig);
+        return sig;
+
+    }
+
+
     public List<AvatarAttribute> getAttributes() {
         return attributes;
     }
@@ -169,11 +181,15 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         }
     }
 
-    public void addIntAttributeIfApplicable(String _name) {
-        if (getAvatarAttributeWithName(_name) == null) {
-            AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);
-            attributes.add(aa);
+    public AvatarAttribute addIntAttributeIfApplicable(String _name) {
+        AvatarAttribute old = getAvatarAttributeWithName(_name);
+        if (old != null) {
+            return old;
         }
+
+        AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, this, null);
+        attributes.add(aa);
+        return aa;
     }
 
     public String toString() {

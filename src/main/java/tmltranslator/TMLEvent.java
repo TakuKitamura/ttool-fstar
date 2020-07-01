@@ -37,21 +37,21 @@
  */
 
 
-
-
 package tmltranslator;
 
 import ui.tmlcompd.TMLCPrimitivePort;
 
-import java.util.*;
-
-import myutil.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Class TMLEvent
  * Creation: 22/11/2005
- * @version 1.0 22/11/2005
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 22/11/2005
  */
 public class TMLEvent extends TMLCommunicationElement {
     // Options
@@ -77,7 +77,6 @@ public class TMLEvent extends TMLCommunicationElement {
     public boolean checkConf;
 
 
-
     public TMLEvent(String name, Object reference, int _maxEvt, boolean _isBlocking) {
         super(name, reference);
         params = new Vector<TMLType>();
@@ -89,12 +88,16 @@ public class TMLEvent extends TMLCommunicationElement {
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
         ports = new ArrayList<TMLCPrimitivePort>();
-        checkConf=false;
+        checkConf = false;
         //TraceManager.addDev("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
     }
 
     public int getNbOfParams() {
         return params.size();
+    }
+
+    public Vector <TMLType> getParams() {
+        return params;
     }
 
     public void setSizeFIFO(int _max) {
@@ -115,7 +118,6 @@ public class TMLEvent extends TMLCommunicationElement {
     }
 
 
-
     public void setTasks(TMLTask _origin, TMLTask _destination) {
         origin = _origin;
         destination = _destination;
@@ -132,11 +134,26 @@ public class TMLEvent extends TMLCommunicationElement {
         return origin;
     }
 
+
+    public boolean hasOriginTask(TMLTask t) {
+        if (origin == t) {
+            return true;
+        }
+        for (TMLTask task : originTasks) {
+            //TraceManager.addDev("Comparing " + t.getTaskName() + " with " + task.getTaskName());
+            if (task == t) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean hasDestinationTask(TMLTask t) {
         if (destination == t) {
             return true;
         }
-        for (TMLTask task: destinationTasks) {
+        for (TMLTask task : destinationTasks) {
             //TraceManager.addDev("Comparing " + t.getTaskName() + " with " + task.getTaskName());
             if (task == t) {
                 return true;
@@ -206,7 +223,7 @@ public class TMLEvent extends TMLCommunicationElement {
     }
 
     public TMLType getType(int i) {
-        if (i<getNbOfParams()) {
+        if (i < getNbOfParams()) {
             return params.elementAt(i);
         } else {
             return null;
@@ -233,8 +250,8 @@ public class TMLEvent extends TMLCommunicationElement {
         if (_list.length() == 0) {
             return true;
         }
-        String []split = _list.split(",");
-        for(int i=0; i<split.length; i++) {
+        String[] split = _list.split(",");
+        for (int i = 0; i < split.length; i++) {
             if (!TMLType.isAValidType(split[i])) {
                 return false;
             }
@@ -244,9 +261,9 @@ public class TMLEvent extends TMLCommunicationElement {
 
 
     public void addParam(String _list) {
-        String []split = _list.split(",");
+        String[] split = _list.split(",");
         TMLType type;
-        for(int i=0; i<split.length; i++) {
+        for (int i = 0; i < split.length; i++) {
             if (TMLType.isAValidType(split[i])) {
                 type = new TMLType(TMLType.getType(split[i]));
                 addParam(type);
@@ -316,26 +333,26 @@ public class TMLEvent extends TMLCommunicationElement {
     public String toXML() {
         String s = "<TMLEVENT ";
         s += "name=\"" + name + "\" ";
-        s += "origintask=\"" +  origin.getName() + "\" ";
-	if (originPort != null) {
-	    s += "originport=\"" +  originPort.getName() + "\" ";
-	}
+        s += "origintask=\"" + origin.getName() + "\" ";
+        if (originPort != null) {
+            s += "originport=\"" + originPort.getName() + "\" ";
+        }
         s += "destinationtask=\"" + destination.getName() + "\" ";
-	if (destinationPort != null) {
-	    s += "destinationport=\"" + destinationPort.getName() + "\" ";
-	}
-	s += "maxEvt=\"" + maxEvt + "\" ";
+        if (destinationPort != null) {
+            s += "destinationport=\"" + destinationPort.getName() + "\" ";
+        }
+        s += "maxEvt=\"" + maxEvt + "\" ";
         s += "isBlocking=\"" + isBlocking + "\" ";
-	s += "canBeNotified=\"" + canBeNotified + "\" ";
-	s += "isLossy=\"" + isLossy + "\" ";
+        s += "canBeNotified=\"" + canBeNotified + "\" ";
+        s += "isLossy=\"" + isLossy + "\" ";
         s += "lossPercentage=\"" + lossPercentage + "\" ";
-	s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
-	s += ">\n";
-	for (TMLType t: params) {
-	    s += "<PARAM type=\"" + t.toString() + "\" />";
-	}
+        s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
+        s += ">\n";
+        for (TMLType t : params) {
+            s += "<PARAM type=\"" + t.toString() + "\" />";
+        }
         s += "</TMLEVENT>\n";
-	return s;
+        return s;
     }
 
     public boolean equalSpec(Object o) {
@@ -362,7 +379,7 @@ public class TMLEvent extends TMLCommunicationElement {
         if (destination != null) {
             if (!destination.equalSpec(event.getDestinationTask())) return false;
         }
-        if(!(new HashSet<>(params).equals(new HashSet<>(event.params))))
+        if (!(new HashSet<>(params).equals(new HashSet<>(event.params))))
             return false;
         return maxEvt == event.maxEvt &&
                 isBlocking == event.isBlocking &&

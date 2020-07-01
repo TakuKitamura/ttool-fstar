@@ -142,6 +142,7 @@ public class TMLType {
 
     }
 
+
     public static String getStringType(int type) {
         switch(type) {
         case NATURAL:
