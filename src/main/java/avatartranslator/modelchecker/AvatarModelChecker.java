@@ -959,7 +959,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     private void generateCounterexample() {
         if (counterexample && counterTrace.hasCounterexample()) {
-            counterTrace.buildTrace();
+            counterTrace.buildTrace(states, traceStates);
             if (studySafety) {
                 counterTraceReport.append("Trace for " + safety.getRawProperty() + "\n");
                 counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");

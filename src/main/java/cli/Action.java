@@ -41,6 +41,7 @@ package cli;
 
 import avatartranslator.AvatarSpecification;
 import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelchecker.CounterexampleQueryReport;
 import avatartranslator.modelcheckervalidator.ModelCheckerValidator;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -854,7 +855,8 @@ public class Action extends Command {
                     + "-n NUM\tmaximum states created (Only for a non verification study)\n"
                     + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
                     + "-c\tconsider full concurrency between actions\n"
-                    + "-v FILE\tsave counterexample traces for pragmas in FILE";
+                    + "-v FILE\tsave counterexample traces for pragmas in FILE"
+                    + "-va FILE\tsave counterexample traces and AUT graph for pragmas in FILE";
             }
 
             public String getExample() {
@@ -889,6 +891,7 @@ public class Action extends Command {
                 amc.setComputeRG(false);
                 boolean rgGraph = false;
                 boolean counterTraces = false;
+                boolean counterTracesAUT = false;
                 boolean reachabilityAnalysis = false;
                 boolean livenessAnalysis = false;
                 boolean safetyAnalysis = false;
@@ -997,6 +1000,16 @@ public class Action extends Command {
                                 return Interpreter.BAD;
                             }
                             break;
+                        case "-va":
+                            if (i != commands.length - 1) {
+                                counterPath = commands[++i];
+                                amc.setCounterExampleTrace(true, true);
+                                counterTraces = true;
+                                counterTracesAUT = true;
+                            } else {
+                                return Interpreter.BAD;
+                            }
+                            break;
                         default:
                             return Interpreter.BAD;
                     }
@@ -1031,17 +1044,40 @@ public class Action extends Command {
                 if (counterTraces) {
                     String trace = amc.getCounterTrace();
                     
-                    String autfile;
+                    String file;
                     if (counterPath.indexOf("$") != -1) {
-                        autfile = Conversion.replaceAllChar(counterPath, '$', dateAndTime);
+                        file = Conversion.replaceAllChar(counterPath, '$', dateAndTime);
                     } else {
-                        autfile = counterPath;
+                        file = counterPath;
                     }
                     try {
-                        FileUtils.saveFile(autfile, trace);
-                        System.out.println("\nCounterexample trace saved in " + autfile + "\n");
+                        File f = new File(file);
+                        FileUtils.saveFile(file, trace);
+                        System.out.println("\nCounterexample trace saved in " + file + "\n");
                     } catch (Exception e) {
-                        System.out.println("\nCounterexample trace could not be saved in " + autfile + "\n");
+                        System.out.println("\nCounterexample trace could not be saved in " + file + "\n");
+                    }
+                    
+                    List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
+                    if (autTraces != null) {
+                        int i = 0;
+                        String autfile = FileUtils.removeFileExtension(file);
+                        for (CounterexampleQueryReport tr : autTraces) {
+                            String filename = autfile + "_" + i + ".aut";
+                            try {
+                                RG rg = new RG(file);
+                                rg.data = tr.getReport();
+                                rg.fileName = filename;
+                                rg.name = tr.getQuery();
+                                interpreter.mgui.addRG(rg);
+                                File f = new File(filename);
+                                FileUtils.saveFile(filename, tr.getReport());
+                                System.out.println("Counterexample graph trace " + tr.getQuery() + " saved in " + filename + "\n");
+                            } catch (Exception e) {
+                                System.out.println("Counterexample graph trace "+ tr.getQuery() + " could not be saved in " + filename + "\n");
+                            }
+                            i++;
+                        }
                     }
                 }
 
