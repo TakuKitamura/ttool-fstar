@@ -16,11 +16,13 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
     public InteractiveSimulationActions[] actions;
     private Vector<SimulationTransaction> transTransfer;
-
+    private int indexTrans = 0;
     private static final int BIG_IDLE = 50;
     private static String htmlPaneContent;
     protected JComboBox<String> units;
-
+    private JButton buttonPrev;
+    private JButton buttonNext;
+    private int maxIndexTrans = 0;
     private JTextPane sdpanel;
     protected JLabel status;
 
@@ -30,15 +32,8 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         super(_title);
         mgui = _mgui;
         initActions();
-        if (_trans.size() > 2000) {
-            int numTraces = _trans.size();
-            transTransfer = new Vector<SimulationTransaction>();
-            for (int i = 0; i < 2000; i++) {
-                transTransfer.add(_trans.get(numTraces - 2000 + i));
-            }
-        } else {
-            transTransfer = new Vector<SimulationTransaction>(_trans);
-        }
+        transTransfer = new Vector<SimulationTransaction>(_trans);
+        maxIndexTrans = (transTransfer.size() - 1) / 2000;
         makeComponents();
     }
 
@@ -56,10 +51,19 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
         // Top panel
         JPanel topPanel = new JPanel();
+        buttonPrev = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_PREV_TRANS_TIMELINE]);
+        topPanel.add(buttonPrev);
+        buttonNext = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_NEXT_TRANS_TIMELINE]);
+        topPanel.add(buttonNext);
         JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW]);
         topPanel.add(buttonClose);
         JButton buttonHtml = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML]);
         topPanel.add(buttonHtml);
+        if(transTransfer.size() <= 2000) {
+            buttonPrev.setEnabled(false);
+            buttonNext.setEnabled(false);
+        }
+        updateButtonState();
 
         framePanel.add(topPanel, BorderLayout.NORTH);
 
@@ -67,7 +71,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         sdpanel = new JTextPane();
         sdpanel.setEditable(false);
         sdpanel.setContentType("text/html");
-        htmlPaneContent = generateHtmlContent(transTransfer);
+        htmlPaneContent = generateHtmlContent(0);
         sdpanel.setText(htmlPaneContent);
 
         JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -82,7 +86,9 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         pack();
 
     }
-    private String generateHtmlContent( Vector<SimulationTransaction> trans) {
+    public String generateHtmlContent( int indexTrans) {
+        Vector<SimulationTransaction> trans = new Vector<SimulationTransaction>(transTransfer.subList((0 < 2000 * indexTrans) ? 2000 * indexTrans : 0 ,(transTransfer.size() - 1 < 2000 * indexTrans +2000) ? transTransfer.size() - 1 : 2000 * indexTrans +2000));
+        System.out.println("Sub list from " + ((0 < 2000 * indexTrans) ? 2000 * indexTrans : 0) + " to " + ((transTransfer.size() - 1 < 2000 * indexTrans +2000) ? transTransfer.size() - 1 : 2000 * indexTrans +2000));
         String htmlContent = "";
         Map<String, Vector<SimulationTransaction>> map = new HashMap<String, Vector<SimulationTransaction>>();
         Map<String, String> taskColors = new HashMap<String, String>();
@@ -361,7 +367,17 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             return;
         }
     }
+    private void updateButtonState() {
+        if (indexTrans == 0)
+            buttonPrev.setEnabled(false);
+        else
+            buttonPrev.setEnabled(true);
 
+        if (indexTrans >= maxIndexTrans)
+            buttonNext.setEnabled(false);
+        else
+            buttonNext.setEnabled(true);
+    }
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand())) {
@@ -369,6 +385,22 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             close();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML].getActionCommand())) {
             saveHTML();
+        }
+        else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_NEXT_TRANS_TIMELINE].getActionCommand())) {
+            if (indexTrans < maxIndexTrans) {
+                indexTrans ++;
+                htmlPaneContent = generateHtmlContent(indexTrans);
+                sdpanel.setText(htmlPaneContent);
+            }
+            updateButtonState();
+        }
+        else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_PREV_TRANS_TIMELINE].getActionCommand())) {
+            if (indexTrans > 0) {
+                indexTrans --;
+                htmlPaneContent = generateHtmlContent(indexTrans);
+                sdpanel.setText(htmlPaneContent);
+            }
+            updateButtonState();
         }
     }
 }
