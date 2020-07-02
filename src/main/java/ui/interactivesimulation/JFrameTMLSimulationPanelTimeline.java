@@ -18,13 +18,16 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
     private Vector<SimulationTransaction> transTransfer;
     private int indexTrans = 0;
     private static final int BIG_IDLE = 50;
+    private static int NUMBER_OF_TRANS_TO_SHOW = 200;
     private static String htmlPaneContent;
-    protected JComboBox<String> units;
     private JButton buttonPrev;
     private JButton buttonNext;
+    private JComboBox<Integer> comboBoxUpdateView;
     private int maxIndexTrans = 0;
     private JTextPane sdpanel;
     protected JLabel status;
+    private Container framePanel;
+    private ProgressMonitor pm;
 
     private MainGUI mgui;
 
@@ -33,7 +36,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         mgui = _mgui;
         initActions();
         transTransfer = new Vector<SimulationTransaction>(_trans);
-        maxIndexTrans = (transTransfer.size() - 1) / 2000;
+        maxIndexTrans = (transTransfer.size() - 1) / NUMBER_OF_TRANS_TO_SHOW;
         makeComponents();
     }
 
@@ -46,7 +49,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
     public void makeComponents() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        Container framePanel = getContentPane();
+        framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
 
         // Top panel
@@ -59,7 +62,48 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         topPanel.add(buttonClose);
         JButton buttonHtml = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML]);
         topPanel.add(buttonHtml);
-        if(transTransfer.size() <= 2000) {
+        JTextField numberTrans = new JTextField("Number of transactions to Show");
+        numberTrans.setEditable(false);
+        topPanel.add(numberTrans);
+        Integer[] numberOfTransToShow = new Integer[] {100, 200, 500, 1000, 2000};
+        comboBoxUpdateView = new JComboBox<Integer>(numberOfTransToShow);
+        switch (NUMBER_OF_TRANS_TO_SHOW){
+            case 100: comboBoxUpdateView.setSelectedIndex(0); break;
+            case 500: comboBoxUpdateView.setSelectedIndex(2); break;
+            case 1000: comboBoxUpdateView.setSelectedIndex(3); break;
+            case 2000: comboBoxUpdateView.setSelectedIndex(4); break;
+            default: comboBoxUpdateView.setSelectedIndex(1); break;
+        }
+
+        comboBoxUpdateView.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                try {
+                    NUMBER_OF_TRANS_TO_SHOW = (Integer) comboBoxUpdateView.getSelectedItem();
+                } catch (Exception e) {
+                    //TraceManager.addDev(nbOfTransactions.getText());
+                    //TraceManager.addDev("Invalid default transaction");
+                    NUMBER_OF_TRANS_TO_SHOW = 200;
+                }
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buttonPrev.setEnabled(false);
+                        buttonNext.setEnabled(false);
+                        maxIndexTrans = (transTransfer.size() - 1) / NUMBER_OF_TRANS_TO_SHOW;
+                        indexTrans = 0;
+                        htmlPaneContent = generateHtmlContent(indexTrans);
+                        sdpanel.setText(htmlPaneContent);
+                        updateButtonState();
+                    }
+                });
+                t.start();
+            }
+        });
+        topPanel.add(comboBoxUpdateView);
+
+        if(transTransfer.size() <= NUMBER_OF_TRANS_TO_SHOW) {
             buttonPrev.setEnabled(false);
             buttonNext.setEnabled(false);
         }
@@ -87,8 +131,8 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
     }
     public String generateHtmlContent( int indexTrans) {
-        Vector<SimulationTransaction> trans = new Vector<SimulationTransaction>(transTransfer.subList((0 < 2000 * indexTrans) ? 2000 * indexTrans : 0 ,(transTransfer.size() - 1 < 2000 * indexTrans +2000) ? transTransfer.size() - 1 : 2000 * indexTrans +2000));
-        System.out.println("Sub list from " + ((0 < 2000 * indexTrans) ? 2000 * indexTrans : 0) + " to " + ((transTransfer.size() - 1 < 2000 * indexTrans +2000) ? transTransfer.size() - 1 : 2000 * indexTrans +2000));
+        Vector<SimulationTransaction> trans = new Vector<SimulationTransaction>(transTransfer.subList((0 < NUMBER_OF_TRANS_TO_SHOW * indexTrans) ? NUMBER_OF_TRANS_TO_SHOW * indexTrans : 0 ,(transTransfer.size() - 1 < NUMBER_OF_TRANS_TO_SHOW * indexTrans +NUMBER_OF_TRANS_TO_SHOW) ? transTransfer.size() : NUMBER_OF_TRANS_TO_SHOW * indexTrans +NUMBER_OF_TRANS_TO_SHOW));
+        System.out.println("Sub list from " + ((0 < NUMBER_OF_TRANS_TO_SHOW * indexTrans) ? NUMBER_OF_TRANS_TO_SHOW * indexTrans : 0) + " to " + ((transTransfer.size() - 1 < NUMBER_OF_TRANS_TO_SHOW * indexTrans +NUMBER_OF_TRANS_TO_SHOW) ? transTransfer.size() - 1 : NUMBER_OF_TRANS_TO_SHOW * indexTrans + NUMBER_OF_TRANS_TO_SHOW) + " transize " + trans.size());
         String htmlContent = "";
         Map<String, Vector<SimulationTransaction>> map = new HashMap<String, Vector<SimulationTransaction>>();
         Map<String, String> taskColors = new HashMap<String, String>();
@@ -110,6 +154,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 taskColors.put(taskname, cellClass);
             }
         }
+        UIManager.put("ProgressMonitor.progressText", "Processing");
+        pm = new ProgressMonitor(framePanel, "Generating Content", "Task starting", 0, map.size());
+        pm.setMillisToDecideToPopup(100);
+        pm.setMillisToPopup(100);
         for (String i : map.keySet()) {
             if (Integer.valueOf(map.get(i).lastElement().endTime) > endTime) endTime = Integer.valueOf(map.get(i).lastElement().endTime);
         }
@@ -216,7 +264,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 " }\n";
         htmlContent += "</style>\n" +
                 "</head>\n<body>\n<table style=\"float: left;position: relative;\">";
-        htmlContent += "<tr><td width=\"170px\" style=\"max-width: 170px;min-width: 170px;border-style: none none none none;\"></td>\n" +
+        htmlContent += "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n" +
                 "<td class=\"notfirst\"></td>\n" +
                 "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align: right\" colspan=\"" + endTime +
                 "\"><b>Time</b></td>\n</tr>\n" +
@@ -224,14 +272,21 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 "<div class = \"clear\"></div>";
         int count = 0;
         for (String i : map.keySet()) {
-            System.out.println("Wrting content for " + i);
+            pm.setNote("Writing content for " + i);
+            //updating ProgressMonitor progress
+            pm.setProgress(count);
+            if (pm.isCanceled()) {
+                htmlContent = "<h1>Process has been terminated by user.</h1>";
+                return htmlContent;
+            }
+            System.out.println("Writing content for " + i);
             count ++;
             int rowLength = 0;
             Vector<String> listScale = new Vector<String>();
             Vector<String> listScaleTime = new Vector<String>();
             listScale.add("0");
             listScaleTime.add("0");
-            htmlContent += "<tr><td width=\"170px\" style=\"max-width: 170px;min-width: 170px;background-color: aqua;\">" + i + "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
+            htmlContent += "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" + i + "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
             for (int j = 0; j < map.get(i).size(); j++) {
 
                 if (j == 0 && Integer.valueOf(map.get(i).get(j).startTime) != 0) {
@@ -290,7 +345,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     htmlContent += "<th></th>";
                 }
             }
-            htmlContent += "</tr>\n<tr><td width=\"170px\" style=\"max-width: 170px;min-width: 170px;border-style: none none none none;\"></td>\n" +
+            htmlContent += "</tr>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n" +
                     "<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>";
             for (int l = 0; l < listScale.size(); l++) {
                 if (l + 1 >= listScale.size()) {
@@ -307,15 +362,17 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
 
         }
-        htmlContent += "</table>\n<table>\n<tr><td width=\"170px\" style=\"max-width: 170px;min-width: 170px;border-style: none none none none;\"></td>\n" +
+        htmlContent += "</table>\n<table>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n" +
                 "<td class=\"notlast\"></td>\n";
         for (String colors : taskColors.keySet()) {
-            htmlContent += "<td  class = \"" + taskColors.get(colors) + "\" style=\"max-width: 170px;min-width: 170px;\">" + colors + "</td>";
+            htmlContent += "<td  class = \"" + taskColors.get(colors) + "\" style=\"max-width: unset;min-width: 170px;\">" + colors + "</td>";
             htmlContent += "<td class=\"space\"></td>";
         }
 
         htmlContent += "</tr>\n</table>\n</body>\n" + "</html>";
 //        System.out.println(htmlContent);
+        pm.setNote("Task finished");
+        pm.close();
         return htmlContent;
     }
 
@@ -387,20 +444,36 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             saveHTML();
         }
         else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_NEXT_TRANS_TIMELINE].getActionCommand())) {
-            if (indexTrans < maxIndexTrans) {
-                indexTrans ++;
-                htmlPaneContent = generateHtmlContent(indexTrans);
-                sdpanel.setText(htmlPaneContent);
-            }
-            updateButtonState();
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    buttonPrev.setEnabled(false);
+                    buttonNext.setEnabled(false);
+                    if (indexTrans < maxIndexTrans) {
+                        indexTrans ++;
+                        htmlPaneContent = generateHtmlContent(indexTrans);
+                        sdpanel.setText(htmlPaneContent);
+                    }
+                    updateButtonState();
+                }
+            });
+            t.start();
         }
         else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_PREV_TRANS_TIMELINE].getActionCommand())) {
-            if (indexTrans > 0) {
-                indexTrans --;
-                htmlPaneContent = generateHtmlContent(indexTrans);
-                sdpanel.setText(htmlPaneContent);
-            }
-            updateButtonState();
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    buttonPrev.setEnabled(false);
+                    buttonNext.setEnabled(false);
+                    if (indexTrans > 0) {
+                        indexTrans --;
+                        htmlPaneContent = generateHtmlContent(indexTrans);
+                        sdpanel.setText(htmlPaneContent);
+                    }
+                    updateButtonState();
+                }
+            });
+            t.start();
         }
     }
 }

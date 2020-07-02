@@ -1069,6 +1069,13 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } else {
             buttonStart.setEnabled(false);
         }
+        if ((mode == NOT_STARTED) || (mode == STARTED_NOT_CONNECTED)) {
+            buttonShowTrace.setEnabled(false);
+            buttonShowTraceTimeline.setEnabled(false);
+        } else {
+            buttonShowTrace.setEnabled(true);
+            buttonShowTraceTimeline.setEnabled(true);
+        }
 
         if ((mode == STARTED_NOT_CONNECTED) || (mode == STARTED_AND_CONNECTED)) {
             buttonStopAndClose.setEnabled(true);
@@ -1533,11 +1540,24 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             public void run() {
                 try {
                     synchronized (wait) {
+                        buttonShowTraceTimeline.setEnabled(false);
                         updateTransactions();
+                        UIManager.put("ProgressMonitor.progressText", "Processing");
+                        ProgressMonitor pm = new ProgressMonitor(getContentPane(), "Updating Transaction List",
+                                "Task starting", 0, 100);
+                        int temp = 0;
                         while (trans == null) {
-                            System.out.println("Updating transaction list");
-                            Thread.sleep(100);
+                            temp ++;
+                            pm.setMillisToDecideToPopup(100);
+                            //after deciding if predicted time is longer than 100 show popup
+                            pm.setMillisToPopup(100);
+                            //updating ProgressMonitor note
+                            pm.setNote("Updating transaction list");
+                            pm.setProgress(temp);
+                            Thread.sleep(50);
                         }
+                        pm.setNote("Task finished");
+                        pm.close();
                         wait.notify();
                     }
                 } catch (InterruptedException e) {
@@ -1585,8 +1605,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, _transCopy, "Show Trace - Timeline");
                             tmlSimPanelTimeline.setVisible(true);
                         }
+                        buttonShowTraceTimeline.setEnabled(true);
                     } else {
                         System.out.println("Trans is null, Transaction list need to be updated (button \"Update transactions\" under Transactions tab).");
+                        buttonShowTraceTimeline.setEnabled(true);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
