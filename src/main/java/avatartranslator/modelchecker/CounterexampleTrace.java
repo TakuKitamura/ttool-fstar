@@ -89,7 +89,7 @@ public class CounterexampleTrace {
         CounterexampleTraceState cs = counterexampleState;
         CounterexampleTraceState loopPoint = counterstates.get(counterexampleState.hash);
         
-        if (loopPoint != null) {
+        if (loopPoint != null && loopPoint != counterexampleState) {
             //search for a loop
             boolean loop = false;
             while (cs.father != null) {
