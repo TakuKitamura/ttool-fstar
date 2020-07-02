@@ -52,6 +52,7 @@ public class SimulationTransaction {
 
     public String nodeType;
     public String deviceName;
+    public String coreNumber;
     public String taskName;
     public String command;
     public String startTime;

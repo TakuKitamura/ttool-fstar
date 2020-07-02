@@ -112,7 +112,11 @@ public class InteractiveSimulationActions extends AbstractAction {
 
     public static final int ACT_SAVE_SD_PNG = 39;
     public static final int ACT_REMOVE_ALL_TRANS = 41;
-    public static final int NB_ACTION = 42;
+    public static final int ACT_SHOW_TRACE_TIMELINE = 42;
+    public static final int ACT_SAVE_TIMELINE_HTML = 43;
+    public static final int ACT_SHOW_NEXT_TRANS_TIMELINE = 44;
+    public static final int ACT_SHOW_PREV_TRANS_TIMELINE = 45;
+    public static final int NB_ACTION = 46;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -199,10 +203,14 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_UPDATE_LATENCY] = new TAction("update-latency", "Update latencies", IconManager.imgic75, IconManager.imgic75, "Update latencies", "Update latencies", '0');
         actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
 		actions[ACT_SHOW_TRACE] = new TAction("show-trace", "Show Simulation Traces", IconManager.imgic7007, IconManager.imgic7007, "Show Simulation Traces", "Show Simulation Traces", '0');
+        actions[ACT_SHOW_TRACE_TIMELINE] = new TAction("show-trace-timeline", "Simulation Trace - Timeline", IconManager.imgic8030, IconManager.imgic8030, "Show Simulation Traces in timeline", "Show Simulation Traces in timeline format", '0');
 
         actions[ACT_QUIT_SD_WINDOW] = new TAction("close-sdpanel", "Close Window", IconManager.imgic27, IconManager.imgic27, "Close window", "Close this window", 'Q');
         actions[ACT_SAVE_SD_SVG] = new TAction("svg-sdpanel", "Save in SVG Format", IconManager.imgic1310, IconManager.imgic1310, "Save in SVG Format", "Save as SVG file", 'S');
         actions[ACT_SAVE_SD_PNG] = new TAction("png-sdpanel", "Save in PNG Format", IconManager.imgic1310, IconManager.imgic1310, "Save in PNG Format", "Save as PNG file", 'S');
+        actions[ACT_SAVE_TIMELINE_HTML] = new TAction("html-timelinepanel", "Save in html Format", IconManager.imgic1310, IconManager.imgic1310, "Save in HTML Format", "Save as HTML file", 'S');
+        actions[ACT_SHOW_NEXT_TRANS_TIMELINE] = new TAction("next-html-timeline", "Next Transactions", IconManager.imgic51, IconManager.imgic51, "Show next 2000 trans", "Show next 2000 trans", '0');
+        actions[ACT_SHOW_PREV_TRANS_TIMELINE] = new TAction("prev-html-timeline", "Previous Transactions", IconManager.imgic45, IconManager.imgic45, "Show previous 2000 trans", "Show previous 2000 trans", '0');
     }
 
 

@@ -114,7 +114,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private String hostSystemC;
     private String pathExecute;
 
-    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace;
+    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace, buttonShowTraceTimeline;
     protected JTextArea jta;
     protected JScrollPane jsp;
 
@@ -257,6 +257,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private PipedOutputStream pos;
 	private PipedInputStream pis;
 	private JFrameTMLSimulationPanel tmlSimPanel;
+	private JFrameTMLSimulationPanelTimeline tmlSimPanelTimeline;
 	private BufferedWriter bw;
 	private int simIndex=0;
     
@@ -332,6 +333,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
         buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
         buttonShowTrace = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE]);
+        buttonShowTraceTimeline = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_TIMELINE]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
 
 
@@ -351,11 +353,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         JPanel jp = new JPanel();
         //jp.setBackground(ColorManager.InteractiveSimulationBackground);
-        //jp.setPreferredSize(new Dimension(800, 75));
+        jp.setPreferredSize(new Dimension(800, 80));
         jp.add(buttonStart);
         jp.add(buttonStopAndClose);
         jp.add(buttonClose);
         jp.add(buttonShowTrace);
+        jp.add(buttonShowTraceTimeline);
         mainpanel.add(jp, BorderLayout.NORTH);
 
 
@@ -1082,7 +1085,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 
     public void close() {
-        if(mode != NOT_STARTED)  {
+        if (mode != NOT_STARTED)  {
             go = false;
             if (rc != null) {
                 try {
@@ -1522,6 +1525,77 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			
 		}
 	}
+
+	public void writeSimTraceTimeline() {
+	    Object wait = 0;
+	    Thread updateTransaction = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (wait) {
+                        updateTransactions();
+                        while (trans == null) {
+                            System.out.println("Updating transaction list");
+                            Thread.sleep(100);
+                        }
+                        wait.notify();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+	    Thread startTimelinePane = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    synchronized (wait) {
+                        while(trans == null) {
+                            System.out.println("Wait transaction list");
+                            Thread.sleep(100);
+                            wait.wait();
+                        }
+                    }
+                    if (trans != null && !trans.isEmpty()) {
+                        System.out.println("trans is updated with size " + trans.size());
+                        //Make a popup to select which tasks
+                        Vector<String> tmlComponentsToValidate = new Vector<String>();
+                        List<String> tasks = new ArrayList<String>();
+                        for (TMLTask task : tmap.getTMLModeling().getTasks()) {
+                            tasks.add(task.getName());
+                        }
+                        JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+
+                        GraphicLib.centerOnParent(jdstmlc);
+                        jdstmlc.setVisible(true);
+                        Vector<SimulationTransaction> _transCopy = new Vector<SimulationTransaction>();
+//                int temp = 0;
+//                if (trans.size() > 2000) temp = trans.size() - 2000;// get 2000 latest transactions.
+                        for (int i = 0; i < trans.size(); i++) {
+                            for (String taskname : tmlComponentsToValidate) {
+                                if (taskname.equals(trans.get(i).taskName)) {
+                                    int checkPenalty = Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).startTime) - Integer.valueOf(trans.get(i).length);
+                                    if (checkPenalty > 0) trans.get(i).startTime = String.valueOf(Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).length));
+                                    _transCopy.add(trans.get(i));
+                                }
+                            }
+                        }
+                        if (!_transCopy.isEmpty()) {
+                            tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, _transCopy, "Show Trace - Timeline");
+                            tmlSimPanelTimeline.setVisible(true);
+                        }
+                    } else {
+                        System.out.println("Trans is null, Transaction list need to be updated (button \"Update transactions\" under Transactions tab).");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+	    updateTransaction.start();
+	    startTimelinePane.start();
+    }
 	
 	public void writeArchitectureSimTrace(){
 	}
@@ -2205,6 +2279,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             }
 
                             st.deviceName = elt.getAttribute("devicename");
+                            st.coreNumber = elt.getAttribute("corenumber");
+
                             String commandT = elt.getAttribute("command");
                             if (commandT != null) {
                                 int index = commandT.indexOf(": ");
@@ -2349,7 +2425,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     processLatency();
                 }
                 for(TURTLEPanel _tab : mgui.getTabs()) {
-                    if(_tab instanceof TMLArchiPanel) {
+                    if (_tab instanceof TMLArchiPanel) {
                         for (TDiagramPanel tdp : _tab.getPanels()) {
                             if (tdp instanceof TMLArchiDiagramPanel) {
                                 mgui.selectTab(tdp);
@@ -2591,7 +2667,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             jpsv.setVariableButton(b);
         }
 
-        if(busyMode == 3) {
+        if (busyMode == 3) {
             actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
         }
 
@@ -3079,7 +3155,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             try {
                 //
                 Integer old = runningTable.get(i);
-                if(old != null) {
+                if (old != null) {
                     mgui.removeRunningId(old);
                     runningTable.remove(old);
                 }
@@ -3426,7 +3502,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             //TraceManager.addDev("Start simulation!");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
             for(TURTLEPanel _tab : mgui.getTabs()) {
-                if(_tab instanceof TMLArchiPanel) {
+                if (_tab instanceof TMLArchiPanel) {
                     for (TDiagramPanel tdp : _tab.getPanels()) {
                         if (tdp instanceof TMLArchiDiagramPanel) {
                             mgui.selectTab(tdp);
@@ -3498,15 +3574,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].getActionCommand())) {
             sendCommand("rmat 1");
 
-            if(taskTransactionPanel != null) {
+            if (taskTransactionPanel != null) {
                 taskTransactionPanel.resetTable();
             }
-            if(taskTransactionPanel != null) {
+            if (taskTransactionPanel != null) {
                 transactionPanel.resetTable();
             }
 
             for(TURTLEPanel _tab : mgui.getTabs()) {
-                if(_tab instanceof TMLArchiPanel) {
+                if (_tab instanceof TMLArchiPanel) {
                     for (TDiagramPanel tdp : _tab.getPanels()) {
                         if (tdp instanceof TMLArchiDiagramPanel) {
                             mgui.selectTab(tdp);
@@ -3553,7 +3629,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             resetSimTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE].getActionCommand())) {
 			writeSimTrace();
-		}
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_TIMELINE].getActionCommand())) {
+            writeSimTraceTimeline();
+        }
     }
 
     private String formatString(String input) {

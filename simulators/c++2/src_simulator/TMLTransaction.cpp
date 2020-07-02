@@ -93,9 +93,9 @@ std::string TMLTransaction::toShortString() const{
 
 void TMLTransaction::toXML(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID) const {
   if (_command==0) {
-    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" id=\"" << _command->getID() << "\" runnableTime=\"" << _runnableTime  << "\" command=\"0\"";
+    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" corenumber=\"" << _transactCoreNumber << "\" id=\"" << _command->getID() << "\" runnableTime=\"" << _runnableTime  << "\" command=\"0\"";
   } else {
-    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"" << _command->toShortString() << "\"";
+    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" corenumber=\"" << _transactCoreNumber << "\" command=\"" << _command->toShortString() << "\"";
     std::cout << "Info transaction:" <<  " starttime=\"" << _startTime << "\" endtime=\"" << getEndTime() << " length" << _length << "\" virtuallength=" <<  _virtualLength << " getStartTime:" << getStartTime() << "\n"; 
     glob << " starttime=\"" << _startTime << "\" endtime=\"" << getEndTime() << "\" length=\"" << _length << "\" virtuallength=\"" <<  _virtualLength << "\" id=\"" << _command->getID() << "\""<< " runnableTime=\"" << _runnableTime <<  "\"" ;
     if (_channel!=0) glob << " ch=\"" << _channel->toShortString() <<  "\""  ;
@@ -108,11 +108,11 @@ void TMLTransaction::toXML(std::ostringstream& glob, int deviceID, std::string d
 
 void TMLTransaction::toXMLByTask(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID, std::string taskName) const {
   if (_command==0) {
-    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" id=\"" << _command->getID() << "\" runnableTime=\"" << _runnableTime  << "\" command=\"0\"";
+    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" corenumber=\"" << _transactCoreNumber << "\" id=\"" << _command->getID() << "\" runnableTime=\"" << _runnableTime  << "\" command=\"0\"";
   } else {
     if (_command->getTask()->toString() == taskName){
         std::cout << "Info transaction:  "<< "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"" << _command->toShortString() << "\"" << std::endl;
-        glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"" << _command->toShortString() << "\"";
+        glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" corenumber=\"" << _transactCoreNumber << "\" command=\"" << _command->toShortString() << "\"";
         glob << " starttime=\"" << _startTime << "\" endtime=\"" << getEndTime() << "\" length=\"" << _length << "\" virtuallength=\"" <<  _virtualLength << "\" id=\"" << _command->getID() << "\""<< " runnableTime=\"" << _runnableTime <<  "\"" ;
         if (_channel!=0) glob << " ch=\"" << _channel->toShortString() <<  "\""  ;
     }

@@ -78,6 +78,7 @@ public class SimulationTransactionParser extends DefaultHandler {
             }
 
             st.deviceName = attributes.getValue("devicename");
+            st.coreNumber = attributes.getValue("corenumber");
             String commandT = attributes.getValue("command");
             if (commandT != null) {
                 int index = commandT.indexOf(": ");
