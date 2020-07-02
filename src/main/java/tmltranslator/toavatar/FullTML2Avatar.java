@@ -74,6 +74,7 @@ public class FullTML2Avatar {
     public Map<String, Integer> originDestMap = new HashMap<String, Integer>();
     private Map<String, AvatarSignal> signalInMap = new HashMap<String, AvatarSignal>();
     private Map<String, AvatarSignal> signalOutMap = new HashMap<String, AvatarSignal>();
+    private Map<TMLRequest, AvatarSignal> signalRequest = new HashMap<TMLRequest, AvatarSignal>();
     public Map<String, Object> stateObjectMap = new HashMap<String, Object>();
     public Map<TMLTask, List<SecurityPattern>> accessKeys = new HashMap<TMLTask, List<SecurityPattern>>();
 
@@ -181,10 +182,114 @@ public class FullTML2Avatar {
 				}
 			}*/
 
+
+
+        for (TMLRequest request : tmlmodel.getRequests()) {
+            TraceManager.addDev("Handling request: " + request.getName());
+
+            AvatarBlock bDest = taskBlockMap.get(request.getDestinationTask());
+            AvatarRelation ar = new AvatarRelation(request.getName(), top,
+                    taskBlockMap.get(request.getDestinationTask()), request.getReferenceObject());
+
+            AvatarSignal sigReqOut = new AvatarSignal(bDest.getName() + "_" + getLastName(request.getName()), ui.AvatarSignal.OUT, request
+                    .getReferenceObject
+                    ());
+            top.addSignal(sigReqOut);
+            signalRequest.put(request, sigReqOut);
+
+            AvatarSignal sigReqIn = new AvatarSignal(getLastName(request.getName()), ui.AvatarSignal.IN, request.getReferenceObject());
+            bDest.addSignal(sigReqIn);
+
+
+            // Adding parameters
+            int cpt = 0;
+            for(TMLType tmlt: request.getParams()) {
+                AvatarAttribute aa = new AvatarAttribute("p" + cpt, getAvatarType(tmlt), null, null);
+                sigReqOut.addParameter(aa);
+                sigReqIn.addParameter(aa);
+                cpt ++;
+            }
+
+            ar.setAsynchronous(true);
+            ar.setSizeOfFIFO(8);
+            ar.setBlocking(false);
+            ar.addSignals(sigReqOut, sigReqIn);
+            avspec.addRelation(ar);
+
+
+            for (TMLTask t1 : request.getOriginTasks()) {
+
+                //signalOutMap.add(request.getName(), sigReqOut);
+                /*TraceManager.addDev("T1=" + t1.getName() + " request=" + request.getName());
+                TraceManager.addDev("Dest tak=" + request.getDestinationTask().getName());
+                AvatarBlock b = taskBlockMap.get(t1);
+
+                if (b == null) {
+                    TraceManager.addDev("Block b null for t1");
+                } else {
+                    TraceManager.addDev("B / t1 = " + b.getName());
+                }
+
+                b = taskBlockMap.get(request.getDestinationTask());
+                if (b == null) {
+                    TraceManager.addDev("Block b null for dest task");
+                } else {
+                    TraceManager.addDev("B / dest = " + b.getName());
+                }*/
+
+                /*AvatarRelation ar = new AvatarRelation(request.getName(), taskBlockMap.get(t1),
+                        taskBlockMap.get(request.getDestinationTask()), request.getReferenceObject());
+                //ar.setPrivate(originDestMap.get(t1.getName() + "__" + request.getDestinationTask().getName()) == 1);
+                List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
+                List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
+                for (AvatarSignal sig : signals) {
+                    if (sig.getInOut() == AvatarSignal.IN) {
+                        String name = sig.getName();
+
+                        if (name.equals(getName(request.getName()))) {
+                            sig1.add(sig);
+                        }
+                    }
+                }
+                //Find out signal
+                for (AvatarSignal sig : signals) {
+                    if (sig.getInOut() == AvatarSignal.OUT) {
+                        String name = sig.getName();
+
+                        if (name.equals(getName(request.getName()))) {
+                            sig2.add(sig);
+                        }
+                    }
+                }
+                if (sig1.size() == 0) {
+                    sig1.add(new AvatarSignal(getName(request.getName()), AvatarSignal.IN, null));
+                }
+                if (sig2.size() == 0) {
+                    sig2.add(new AvatarSignal(getName(request.getName()), AvatarSignal.OUT, null));
+                }
+                if (sig1.size() == 1 && sig2.size() == 1) {
+                    ar.addSignals(sig2.get(0), sig1.get(0));
+                } else {
+                    //Throw error
+                    TraceManager.addDev("Could not match for " + request.getName());
+                }*/
+
+                // Adding signals to blocks
+
+
+            }
+        }
+
+
         for (TMLTask task : tasks) {
 
             AvatarBlock block = taskBlockMap.get(task);
             //Add temp variable for unsendable signals
+
+
+
+
+
 
             //Add all signals
             for (TMLChannel chan : tmlmodel.getChannels(task)) {
@@ -291,7 +396,9 @@ public class FullTML2Avatar {
             //AvatarTransition last;
             AvatarStateMachine asm = block.getStateMachine();
 
+
             //TODO: Create a fork with many requests. This looks terrible
+            // No! This is easy!!
             if (tmlmodel.getRequestToMe(task) != null) {
                 //Create iteration attribute
                 AvatarAttribute req_loop_index = new AvatarAttribute("req_loop_index", AvatarType.INTEGER, block, null);
@@ -304,7 +411,7 @@ public class FullTML2Avatar {
                 AvatarStartState ss = new AvatarStartState("start", task.getActivityDiagram().get(0).getReferenceObject());
                 asm.addElement(ss);
                 AvatarTransition at = new AvatarTransition(block, "__after_start", task.getActivityDiagram().get(0).getReferenceObject());
-                at.addAction(AvatarTerm.createActionFromString(block, "req_loop_index = 0"));
+                //at.addAction(AvatarTerm.createActionFromString(block, "req_loop_index = 0"));
                 ss.addNext(at);
                 asm.addElement(at);
 
@@ -350,33 +457,32 @@ public class FullTML2Avatar {
                 for (Object obj : tmlmodel.getRequestsToMe(task)) {
                     TMLRequest req = (TMLRequest) obj;
                     AvatarTransition incrTran = new AvatarTransition(block, "__after_loopstart__" + req.getName(), task.getActivityDiagram().get(0).getReferenceObject());
-                    incrTran.addAction(AvatarTerm.createActionFromString(block, "req_loop_index = req_loop_index + 1"));
-                    incrTran.setGuard(AvatarGuard.createFromString(block, "req_loop_index != " + loopLimit));
+                    //incrTran.addAction(AvatarTerm.createActionFromString(block, "req_loop_index = req_loop_index + 1"));
+                    //incrTran.setGuard(AvatarGuard.createFromString(block, "req_loop_index != " + loopLimit));
                     asm.addElement(incrTran);
                     loopstart.addNext(incrTran);
-                    AvatarSignal sig;
-                    if (!signalInMap.containsKey(req.getName())) {
-                        sig = new AvatarSignal(getName(req.getName()), AvatarSignal.IN, req.getReferenceObject());
-                        block.addSignal(sig);
-                        signals.add(sig);
-                        signalInMap.put(req.getName(), sig);
-                    } else {
-                        sig = signalInMap.get(req.getName());
-                    }
+                    AvatarSignal sig = block.getSignalByName(getLastName(req.getName()));
+
                     AvatarActionOnSignal as = new AvatarActionOnSignal("getRequest__" + req.getName(), sig, req.getReferenceObject());
                     incrTran.addNext(as);
                     asm.addElement(as);
 						/*as.addValue(req.getName()+"__reqData");
 						AvatarAttribute requestData= new AvatarAttribute(req.getName()+"__reqData", AvatarType.INTEGER, block, null);
 						block.addAttribute(requestData);*/
+
+						String att1 = "arg";
+                    String att2 = "__req";
+						int cpt = 1;
                     for (int i = 0; i < req.getNbOfParams(); i++) {
-                        if (block.getAvatarAttributeWithName(req.getParam(i)) == null) {
-                            //Throw Error
-                            as.addValue("tmp");
-                        } else {
-                            sig.addParameter(block.getAvatarAttributeWithName(req.getParam(i)));
-                            as.addValue(req.getParam(i));
+                        String arg = att1 + cpt + att2;
+                        as.addValue(arg);
+                        AvatarAttribute aa = block.getAvatarAttributeWithName(arg);
+                        if (aa == null) {
+                            aa = new AvatarAttribute(arg, sig.getListOfAttributes().get(cpt).getType(), block, req.getReferenceObject());
+                            block.addAttribute(aa);
                         }
+                        cpt ++;
+
                     }
                     AvatarTransition tran = new AvatarTransition(block, "__after_" + req.getName(), task.getActivityDiagram().get(0).getReferenceObject());
                     as.addNext(tran);
@@ -592,48 +698,7 @@ public class FullTML2Avatar {
             }
         }
 
-        for (TMLRequest request : tmlmodel.getRequests()) {
-            for (TMLTask t1 : request.getOriginTasks()) {
-                AvatarRelation ar = new AvatarRelation(request.getName(), taskBlockMap.get(t1), taskBlockMap.get(request.getDestinationTask()), request.getReferenceObject());
-                ar.setPrivate(originDestMap.get(t1.getName() + "__" + request.getDestinationTask().getName()) == 1);
-                List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
-                List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
-                for (AvatarSignal sig : signals) {
-                    if (sig.getInOut() == AvatarSignal.IN) {
-                        String name = sig.getName();
 
-                        if (name.equals(getName(request.getName()))) {
-                            sig1.add(sig);
-                        }
-                    }
-                }
-                //Find out signal
-                for (AvatarSignal sig : signals) {
-                    if (sig.getInOut() == AvatarSignal.OUT) {
-                        String name = sig.getName();
-
-                        if (name.equals(getName(request.getName()))) {
-                            sig2.add(sig);
-                        }
-                    }
-                }
-                if (sig1.size() == 0) {
-                    sig1.add(new AvatarSignal(getName(request.getName()), AvatarSignal.IN, null));
-                }
-                if (sig2.size() == 0) {
-                    sig2.add(new AvatarSignal(getName(request.getName()), AvatarSignal.OUT, null));
-                }
-                if (sig1.size() == 1 && sig2.size() == 1) {
-                    ar.addSignals(sig2.get(0), sig1.get(0));
-                } else {
-                    //Throw error
-                    TraceManager.addDev("Could not match for " + request.getName());
-                }
-
-                ar.setAsynchronous(false);
-                avspec.addRelation(ar);
-            }
-        }
 
         for (TMLEvent event : tmlmodel.getEvents()) {
 
@@ -814,6 +879,7 @@ public class FullTML2Avatar {
             TMLSendRequest sr = (TMLSendRequest) ae;
             TMLRequest req = sr.getRequest();
             AvatarSignal sig;
+
             boolean checkAcc = false;
             if (ae.getReferenceObject() != null) {
                 checkAcc = ((TGComponent) ae.getReferenceObject()).getCheckableAccessibility();
@@ -824,24 +890,32 @@ public class FullTML2Avatar {
             }
             AvatarState signalState = new AvatarState("signalstate_" + ae.getName().replaceAll(" ", "") + "_" + req.getName().replaceAll(" ", ""), ae.getReferenceObject(), checkAcc, checked);
             AvatarTransition signalTran = new AvatarTransition(block, "__after_signalstate_" + ae.getName() + "_" + req.getName(), ae.getReferenceObject());
-            if (!signalOutMap.containsKey(req.getName())) {
-                sig = new AvatarSignal(getName(req.getName()), AvatarSignal.OUT, req.getReferenceObject());
+            sig = signalRequest.get(req);
+
+            TraceManager.addDev("Found sig="  + sig.getSignalName());
+
+            /*if (!signalOutMap.containsKey(req.getName())) {
+                sig = new AvatarSignal(getName(req.getName()+"_out"), AvatarSignal.OUT, req.getReferenceObject());
                 signals.add(sig);
                 signalOutMap.put(req.getName(), sig);
                 block.addSignal(sig);
             } else {
                 sig = signalOutMap.get(req.getName());
-            }
+            }*/
 
             AvatarActionOnSignal as = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
+
+            TraceManager.addDev("Send request in block " + block.getName() + " nb of params:" + sr.getNbOfParams());
+
             for (int i = 0; i < sr.getNbOfParams(); i++) {
+
                 if (block.getAvatarAttributeWithName(sr.getParam(i)) == null) {
                     //Throw Error
                     TraceManager.addDev("Missing Attribute " + sr.getParam(i));
                     as.addValue("tmp");
                 } else {
                     //	Add parameter to signal and actiononsignal
-                    sig.addParameter(block.getAvatarAttributeWithName(sr.getParam(i)));
+                    //sig.addParameter(block.getAvatarAttributeWithName(sr.getParam(i)));
                     as.addValue(sr.getParam(i));
                 }
             }
@@ -1493,7 +1567,9 @@ public class FullTML2Avatar {
                     tran.addAction(val);
                 } else if (ae instanceof TMLExecI){
                     tran.setDelays(((TMLExecI)(ae)).getAction(), ((TMLExecI)(ae)).getAction());
-                }
+                } else if (ae instanceof TMLExecC){
+                tran.setDelays(((TMLExecC)(ae)).getAction(), ((TMLExecC)(ae)).getAction());
+            }
 
             }
 
@@ -1868,6 +1944,15 @@ public class FullTML2Avatar {
 
         avspec.addBlock(fifo);
         return fifo;
+    }
+
+
+    public String getLastName(String name) {
+        String[] split = name.split("__");
+        if (split.length > 0) {
+            return split[split.length-1];
+        }
+        return name;
     }
 
     public String getNameReworked(String name, int index) {

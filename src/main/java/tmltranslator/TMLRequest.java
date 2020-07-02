@@ -99,6 +99,10 @@ public class TMLRequest extends TMLCommunicationElement {
         return null;
     }
 
+    public Vector<TMLType> getParams() {
+        return params;
+    }
+
     public String getParam(int i){
         if (i<paramNames.size()) {
             return paramNames.get(i);
