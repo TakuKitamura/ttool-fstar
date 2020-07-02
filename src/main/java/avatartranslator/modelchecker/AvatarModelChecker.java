@@ -136,7 +136,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             initialSpec.removeCompositeStates();
             //TraceManager.addDev("Before clone:\n" + initialSpec);
             spec = initialSpec.advancedClone();
-            spec.removeConstants();
+            //spec.removeConstants();
             //TraceManager.addDev("After clone:\n" + spec);
         }
         ignoreEmptyTransitions = true;
@@ -2031,6 +2031,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     private void actionOnProperty(SpecificationState newState, int i, SpecificationState similar, SpecificationState _ss) {
         boolean cexample = false;
+        int addToPending = -1;
         
         if (studySafety) {
             if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES) {
@@ -2039,19 +2040,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     safety.result = false;
                     cexample = true;
                 } else if (similar == null){
-                    pendingStates.add(newState);
+                    addToPending = 1;
                 }
             } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
                 if (similar == null) {
                     if (!newState.property) {
-                        if (i == 0) {
-                            //Priority for parallel DFS on the first transition
-                            pendingStates.add(0, newState);
-                        } else {
-                            //Not priority for parallel BFS on the other transitions
-                            pendingStates.add(newState);
-                        }
-                    } else {
+                        addToPending = i;
+                    } else if (counterexample == false){
                         newState.freeUselessAllocations();
                     }
                 } else if (!newState.property) {
@@ -2064,15 +2059,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
             } else if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE) {
                 if (similar == null) {
-                    if (!newState.property) { 
-                        if (i == 0) {
-                            //Priority for parallel DFS on the first transition
-                            pendingStates.add(0, newState);
-                        } else {
-                            //Not priority for parallel BFS on the other transitions
-                            pendingStates.add(newState);
-                        }
-                    } else {
+                    if (!newState.property) {
+                        addToPending = i;
+                    } else if (counterexample == false) {
                         newState.freeUselessAllocations();
                     }
                 } else if (newState.property == false) {
@@ -2089,7 +2078,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     safety.result = true;
                     cexample = true;
                 } else if (similar == null) {
-                    pendingStates.add(newState);
+                    addToPending = 1;
                 }
             } else if (safety.safetyType == SafetyProperty.LEADS_TO) {
                 if (similar == null) {
@@ -2101,7 +2090,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         safetyLeadStates.put(state.getHash(state.getBlockValues()), state);
                         newState.property = false;
                     }
-                    pendingStates.add(newState);
+                    addToPending = 1;
                 }
             }
         } else if (studyReinit && similar != null) {
@@ -2130,6 +2119,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
                 traceStates.put(cs.hash, cs);
             }
+        }
+        
+        if (addToPending == 0) {
+            //Priority for parallel DFS on the first transition
+            pendingStates.add(0, newState);
+        } else if (addToPending > 0) {
+            //Not priority for parallel BFS on the other transitions
+            pendingStates.add(newState);
         }
     }
     
