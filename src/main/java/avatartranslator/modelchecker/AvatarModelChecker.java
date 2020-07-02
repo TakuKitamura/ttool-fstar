@@ -114,6 +114,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     //Debug counterexample
     private boolean counterexample;
+    private boolean counterTraceText;
     private boolean counterTraceAUT;
     private CounterexampleTrace counterTrace;
     public Map<Integer, CounterexampleTraceState> traceStates;
@@ -362,11 +363,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return false;
     }
     
-    public void setCounterExampleTrace(boolean counterexample, boolean counterTraceAUT) {
-        this.counterexample = counterexample;
-        if (counterexample) {
+    public void setCounterExampleTrace(boolean counterTraceText, boolean counterTraceAUT) {
+        this.counterexample = counterTraceText || counterTraceAUT;
+        this.counterTraceText = counterTraceText;
+        this.counterTraceAUT = counterTraceAUT;
+        if (counterTraceText) {
             counterTraceReport = new StringBuilder();
-            this.counterTraceAUT = counterTraceAUT;
         }
     }
     
@@ -960,12 +962,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private void generateCounterexample() {
         if (counterexample && counterTrace.hasCounterexample()) {
             counterTrace.buildTrace(states, traceStates);
-            if (studySafety) {
-                counterTraceReport.append("Trace for " + safety.getRawProperty() + "\n");
-                counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
-            } else if (deadlockStop) {
-                counterTraceReport.append("Trace for NO Deadlocks\n");
-                counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+            if (counterTraceText) {
+                if (studySafety) {
+                    counterTraceReport.append("Trace for " + safety.getRawProperty() + "\n");
+                    counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+                } else if (deadlockStop) {
+                    counterTraceReport.append("Trace for NO Deadlocks\n");
+                    counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+                }
             }
             if (counterTraceAUT) {
                 if (studySafety) {
