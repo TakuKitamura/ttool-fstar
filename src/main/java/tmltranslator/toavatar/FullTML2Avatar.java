@@ -753,12 +753,14 @@ public class FullTML2Avatar {
             AvatarStopState stops = new AvatarStopState(ae.getName(), ae.getReferenceObject());
             elementList.add(stops);
             return elementList;
+
         } else if (ae instanceof TMLStartState) {
             AvatarStartState ss = new AvatarStartState(ae.getName(), ae.getReferenceObject());
             tran = new AvatarTransition(block, "__after_" + ae.getName(), ss.getReferenceObject());
             ss.addNext(tran);
             elementList.add(ss);
             elementList.add(tran);
+
         } else if (ae instanceof TMLRandom) {
             AvatarRandom ar = new AvatarRandom(ae.getName(), ae.getReferenceObject());
             TMLRandom tmlr = (TMLRandom) ae;
@@ -769,6 +771,7 @@ public class FullTML2Avatar {
             //Add to list
             elementList.add(ar);
             elementList.add(tran);
+
         } else if (ae instanceof TMLSequence) {
             //Get all list of sequences and paste together
             List<AvatarStateMachineElement> seq = translateState(ae.getNextElement(0), block);
@@ -1058,14 +1061,19 @@ public class FullTML2Avatar {
                 elementList.add(as);
                 as.addNext(tran);
                 elementList.add(tran);
+
             } else {
                 //Notify Event, I don't know how to translate this
-                AvatarRandom as = new AvatarRandom(ae.getName(), ae.getReferenceObject());
+                AvatarSignal sig = signalInMap.get(evt.getName()+ NOTIFIED);
+                TraceManager.addDev("sig="  + sig);
+                AvatarActionOnSignal aaos = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
+
+
                 tran = new AvatarTransition(block, "__after_" + ae.getName(), ae.getReferenceObject());
-                as.setVariable(aee.getVariable());
-                as.setValues("0", "1");
-                as.addNext(tran);
-                elementList.add(as);
+                aaos.addValue(aee.getVariable());
+
+                aaos.addNext(tran);
+                elementList.add(aaos);
                 elementList.add(tran);
             }
 
@@ -1486,6 +1494,7 @@ public class FullTML2Avatar {
                 }
 
             }
+
         } else if (ae instanceof TMLActivityElementWithIntervalAction) {
             AvatarState as = new AvatarState(ae.getName().replaceAll(" ", ""), ae.getReferenceObject());
             tran = new AvatarTransition(block, "__after_" + ae.getName(), ae.getReferenceObject());
@@ -1694,9 +1703,11 @@ public class FullTML2Avatar {
                 elementList.addAll(nexts);
             }
             return elementList;
+
         } else {
             TraceManager.addDev("undefined tml element " + ae);
         }
+
         List<AvatarStateMachineElement> nexts = translateState(ae.getNextElement(0), block);
         if (nexts.size() == 0) {
             //in an infinite loop i hope
