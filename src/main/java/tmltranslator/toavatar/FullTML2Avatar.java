@@ -1491,6 +1491,8 @@ public class FullTML2Avatar {
                 if (ae instanceof TMLActionState) {
                     String val = ((TMLActionState) ae).getAction();
                     tran.addAction(val);
+                } else if (ae instanceof TMLExecI){
+                    tran.setDelays(((TMLExecI)(ae)).getAction(), ((TMLExecI)(ae)).getAction());
                 }
 
             }
@@ -1498,6 +1500,8 @@ public class FullTML2Avatar {
         } else if (ae instanceof TMLActivityElementWithIntervalAction) {
             AvatarState as = new AvatarState(ae.getName().replaceAll(" ", ""), ae.getReferenceObject());
             tran = new AvatarTransition(block, "__after_" + ae.getName(), ae.getReferenceObject());
+            TMLActivityElementWithIntervalAction ia = (TMLActivityElementWithIntervalAction) ae;
+            tran.setDelays(ia.getMinDelay(), ia.getMaxDelay());
             as.addNext(tran);
             elementList.add(as);
             elementList.add(tran);
@@ -1617,6 +1621,7 @@ public class FullTML2Avatar {
                 //Make initializaton, then choice state with transitions
                 List<AvatarStateMachineElement> elements = translateState(ae.getNextElement(0), block);
                 List<AvatarStateMachineElement> afterloop = translateState(ae.getNextElement(1), block);
+
                 AvatarState initState = new AvatarState(ae.getName().replaceAll(" ", "") + "__init", ae.getReferenceObject());
                 elementList.add(initState);
                 //Build transition to choice
@@ -1625,17 +1630,29 @@ public class FullTML2Avatar {
                 //tran.addAction(AvatarTerm.createActionFromString(block, "loop_index=0"));
                 elementList.add(tran);
                 initState.addNext(tran);
+
                 //Choice state
                 AvatarState as = new AvatarState(ae.getName().replaceAll(" ", "") + "__choice", ae.getReferenceObject());
                 elementList.add(as);
                 tran.addNext(as);
+
+                //End state
+                AvatarState asEnd = new AvatarState(ae.getName().replaceAll(" ", "") + "__incr", ae.getReferenceObject());
+                elementList.add(asEnd);
+                AvatarTransition tranToEnd = new AvatarTransition(block, "loop_init__" + ae.getName(), ae.getReferenceObject());
+                tranToEnd.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
+                elementList.add(tranToEnd);
+                asEnd.addNext(tranToEnd);
+                tranToEnd.addNext(as);
+
+
                 //transition to first element of loop
                 tran = new AvatarTransition(block, "loop_increment__" + ae.getName(), ae.getReferenceObject());
                 //Set default loop limit guard
                 tran.setGuard(AvatarGuard.createFromString(block, loop.getCondition()));
                 /*AvatarGuard guard = */
                 //AvatarGuard.createFromString(block, loop.getCondition());
-                tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
+                //tran.addAction(AvatarTerm.createActionFromString(block, loop.getIncrement()));
                 //tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
                 if (elements.size() > 0) {
                     tran.addNext(elements.get(0));
@@ -1646,12 +1663,12 @@ public class FullTML2Avatar {
                 for (AvatarStateMachineElement e : elements) {
                     if (e instanceof AvatarStopState) {
                     } else if (e.getNexts().size() == 0) {
-                        e.addNext(as);
+                        e.addNext(asEnd);
                         elementList.add(e);
                     } else if (e.getNext(0) instanceof AvatarStopState) {
                         //Remove the transition to AvatarStopState
                         e.removeNext(0);
-                        e.addNext(as);
+                        e.addNext(asEnd);
                         elementList.add(e);
                     } else {
                         elementList.add(e);
