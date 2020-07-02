@@ -456,12 +456,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         
         //Countertrace
         cadvanced.gridwidth = 1;
-        countertrace = new JCheckBox("Generate counterexample traces", generateCountertraceSelected);
-        countertrace.addActionListener(this);
-        jpadvanced.add(countertrace, cadvanced);
-        countertraceAUT = new JCheckBox("Generate counterexample AUT graphs", generateCountertraceAUTSelected);
+        countertraceAUT = new JCheckBox("Generate property AUT graph trace", generateCountertraceAUTSelected);
         countertraceAUT.addActionListener(this);
         jpadvanced.add(countertraceAUT, cadvanced);
+        countertrace = new JCheckBox("Generate property text trace", generateCountertraceSelected);
+        countertrace.addActionListener(this);
+        jpadvanced.add(countertrace, cadvanced);
         cadvanced.gridwidth = GridBagConstraints.REMAINDER;
         countertraceField = new JTextField(countertracePath);
         jpadvanced.add(countertraceField, cadvanced);
@@ -905,8 +905,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             Date date = new Date();
             String dateAndTime = dateFormat.format(date);
             
-            if (generateCountertraceSelected) {
-                String trace = amc.getCounterTrace();
+            if (generateCountertraceSelected || generateCountertraceAUTSelected) {
                 
                 String file;
                 if (countertraceField.getText().indexOf("$") != -1) {
@@ -914,33 +913,37 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 } else {
                     file = countertraceField.getText();
                 }
-                try {
-                    File f = new File(file);
-                    FileUtils.saveFile(file, trace);
-                    jta.append("\nCounterexample trace saved in " + file + "\n");
-                } catch (Exception e) {
-                    jta.append("\nCounterexample trace could not be saved in " + file + "\n");
+                if (generateCountertraceSelected) {
+                    String trace = amc.getCounterTrace();
+                    try {
+                        File f = new File(file);
+                        FileUtils.saveFile(file, trace);
+                        jta.append("\nCounterexample trace saved in " + file + "\n");
+                    } catch (Exception e) {
+                        jta.append("\nCounterexample trace could not be saved in " + file + "\n");
+                    }
                 }
-                
-                List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
-                if (autTraces != null) {
-                    int i = 0;
-                    String autfile = FileUtils.removeFileExtension(file);
-                    for (CounterexampleQueryReport tr : autTraces) {
-                        String filename = autfile + "_" + i + ".aut";
-                        try {
-                            RG rg = new RG(file);
-                            rg.data = tr.getReport();
-                            rg.fileName = filename;
-                            rg.name = tr.getQuery();
-                            mgui.addRG(rg);
-                            File f = new File(filename);
-                            FileUtils.saveFile(filename, tr.getReport());
-                            jta.append("Counterexample graph trace " + tr.getQuery() + " saved in " + filename + "\n");
-                        } catch (Exception e) {
-                            jta.append("Counterexample graph trace "+ tr.getQuery() + " could not be saved in " + filename + "\n");
+                if (generateCountertraceAUTSelected) {
+                    List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
+                    if (autTraces != null) {
+                        int i = 0;
+                        String autfile = FileUtils.removeFileExtension(file);
+                        for (CounterexampleQueryReport tr : autTraces) {
+                            String filename = autfile + "_" + i + ".aut";
+                            try {
+                                RG rg = new RG(file);
+                                rg.data = tr.getReport();
+                                rg.fileName = filename;
+                                rg.name = tr.getQuery();
+                                mgui.addRG(rg);
+                                File f = new File(filename);
+                                FileUtils.saveFile(filename, tr.getReport());
+                                jta.append("Counterexample graph trace " + tr.getQuery() + " saved in " + filename + "\n");
+                            } catch (Exception e) {
+                                jta.append("Counterexample graph trace "+ tr.getQuery() + " could not be saved in " + filename + "\n");
+                            }
+                            i++;
                         }
-                        i++;
                     }
                 }
             }
@@ -1113,7 +1116,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         
         countertrace.setEnabled(safety.isSelected() || noDeadlocks.isSelected());
-        countertraceAUT.setEnabled(countertrace.isSelected());
+        countertraceAUT.setEnabled(safety.isSelected() || noDeadlocks.isSelected());
         countertraceField.setEnabled(countertrace.isSelected());
         generateCountertraceSelected = countertrace.isSelected();
         generateCountertraceAUTSelected = countertraceAUT.isSelected();

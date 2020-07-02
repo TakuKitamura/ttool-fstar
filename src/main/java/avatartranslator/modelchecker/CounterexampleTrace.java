@@ -251,7 +251,7 @@ public class CounterexampleTrace {
             if (!statesID.containsKey(states.get(cs.hash).id)) {
                 statesID.put(states.get(cs.hash).id, id++);
             }
-            if (state != null) {
+            if (state != null && state.nexts != null) {
                 for (SpecificationLink sl : state.nexts) {
                     if (sl.destinationState.hashValue == cs.hash) {
                         s.append("(" + statesID.get(sl.originState.id) + ",\"" + sl.action + "\"," + statesID.get(sl.destinationState.id) + ")\n");
