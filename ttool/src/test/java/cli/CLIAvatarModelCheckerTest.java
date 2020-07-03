@@ -273,8 +273,28 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
     }
 	
 	@Test
-    public void testValidatePressureController_V2() {
+    public void testValidatePressureController() {
         String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val3";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        assertTrue(outputResult.toString().contains("true"));
+    }
+	
+	@Test
+    public void testCoffeeMachineAsync() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val4";
         String script;
         
         outputResult = new StringBuilder();

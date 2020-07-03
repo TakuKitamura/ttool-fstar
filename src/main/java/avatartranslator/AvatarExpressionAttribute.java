@@ -49,7 +49,7 @@ import avatartranslator.modelchecker.SpecificationState;
  * @author Alessandro TEMPIA CALVINO
  * @version 1.0 17/04/2020
  */
-public class AvatarExpressionAttribute {
+public class AvatarExpressionAttribute implements AvatarExpressionAttributeInterface{
     private AvatarBlock block;
     private int blockIndex;
     private int accessIndex;
