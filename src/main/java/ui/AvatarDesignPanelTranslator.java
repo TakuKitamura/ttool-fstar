@@ -2028,8 +2028,8 @@ public class AvatarDesignPanelTranslator {
             //            if (tgc instanceof AvatarSMDConnector) {
             //                AvatarSMDConnector asmdco = (AvatarSMDConnector) tgc;
             // Issue #69
-            TraceManager.addDev("Found connector in block " + block.getOwnerName() + " between " +
-                    connector.getTGComponent1() + " and " + connector.getTGComponent2());
+            //TraceManager.addDev("Found connector in block " + block.getOwnerName() + " between " +
+              //      connector.getTGComponent1() + " and " + connector.getTGComponent2());
             if (prunedConectors.contains(connector)) {
                 TraceManager.addDev("******************************** PRUNED connector: " + connector);
             } else {
@@ -2061,7 +2061,7 @@ public class AvatarDesignPanelTranslator {
                             if (element1 != null && element2 != null) {
                                 final AvatarSMDConnector avatarSmdConnector = (AvatarSMDConnector) connector;
 
-                                TraceManager.addDev("Handling connector");
+                                //TraceManager.addDev("Handling connector");
 
                                 //if (asm.findEmptyTransition(element1, element2) == null) {
                                     //TraceManager.addDev("-- Empty transition");

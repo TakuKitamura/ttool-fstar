@@ -1905,7 +1905,7 @@ public class GTURTLEModeling {
 
         if (mgui.isExperimentalOn()) {
 
-            TraceManager.addDev("Avatar spec:" + avatarspec.toString());
+            //TraceManager.addDev("Avatar spec:" + avatarspec.toString());
             //mgui.drawAvatarSpecification(avatarspec);
             //TraceManager.addDev("Avatar spec:" + avatarspec.toString());
             //AvatarSpecification av2 = avatarspec.advancedClone();

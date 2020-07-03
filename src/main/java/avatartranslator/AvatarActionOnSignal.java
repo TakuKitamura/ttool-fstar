@@ -146,7 +146,11 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     		}
     		return aaos;
     	} else {
-    		TraceManager.addDev("NULL signal in new spec: " + getSignal().getName());
+    	    if (getSignal() != null) {
+                TraceManager.addDev("NULL signal in new spec: " + getSignal().getName());
+            } else {
+                TraceManager.addDev("NULL signal in aaos");
+            }
     	}
 
     	return null;
