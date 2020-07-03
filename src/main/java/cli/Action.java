@@ -1068,7 +1068,7 @@ public class Action extends Command {
                                 RG rg = new RG(file);
                                 rg.data = tr.getReport();
                                 rg.fileName = filename;
-                                rg.name = tr.getQuery();
+                                rg.name = tr.getQuery() + "_" + dateAndTime;
                                 interpreter.mgui.addRG(rg);
                                 File f = new File(filename);
                                 FileUtils.saveFile(filename, tr.getReport());
