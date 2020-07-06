@@ -591,7 +591,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     public void startModelChecking(int _nbOfThreads) {
-        nbOfThreads = 1;
+        nbOfThreads = _nbOfThreads;
 
         // Init data stuctures
         states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
@@ -666,7 +666,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
     public void startModelChecking(SpecificationState initialState, int _nbOfThreads) {
-        nbOfThreads = 1;
+        nbOfThreads = _nbOfThreads;
         stateID = 0;
         nbOfDeadlocks = 0;
         
