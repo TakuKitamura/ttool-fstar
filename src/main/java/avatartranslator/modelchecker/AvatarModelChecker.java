@@ -487,7 +487,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     safety.initLead();
                     ignoreEmptyTransitions = emptyTr;
                     ignoreConcurrenceBetweenInternalActions = true;
-                    for (SpecificationState state : safetyLeadStates.values()) {
+                    Iterator<Map.Entry<Integer,SpecificationState>> iter = safetyLeadStates.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        SpecificationState state = iter.next().getValue();
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
                         resetCounterexample();
@@ -495,6 +497,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         if (safety.result == false) {
                             generateCounterexample();
                             break;
+                        } else {
+                            //free memory
+                            iter.remove();
                         }
                     }
                     System.out.println("Dimensions of lead states to elaborate: " + safetyLeadStates.size());
@@ -586,7 +591,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     public void startModelChecking(int _nbOfThreads) {
-        nbOfThreads = _nbOfThreads;
+        nbOfThreads = 1;
 
         // Init data stuctures
         states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
@@ -661,7 +666,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
     public void startModelChecking(SpecificationState initialState, int _nbOfThreads) {
-        nbOfThreads = _nbOfThreads;
+        nbOfThreads = 1;
         stateID = 0;
         nbOfDeadlocks = 0;
         
