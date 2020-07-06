@@ -489,7 +489,8 @@ public class AvatarDesignPanelTranslator {
 
 
         //Divide into simple statements
-
+        state = removeExternalBrackets(state);
+        
         String[] split = state.split("[|&]+");
         //     System.out.println("split " + split[0]);
         if (split.length > 1) {
@@ -668,6 +669,35 @@ public class AvatarDesignPanelTranslator {
             }
         }
         return true;
+    }
+    
+    private String removeExternalBrackets(String expression) {
+        while (expression.startsWith("(") && expression.endsWith(")")) {
+            if (getClosingBracket(expression, 1) == expression.length() - 1) {
+                expression = expression.substring(1, expression.length() - 1).trim();
+            } else {
+                break;
+            }
+        }
+        return expression;
+    }
+    
+    private int getClosingBracket(String expression, int startChar) {
+        int level = 0;
+        char a;
+        for (int i = startChar; i < expression.length(); i++) {
+            a = expression.charAt(i);
+            if (a == ')') {
+                if (level == 0) {
+                    return i;
+                } else {
+                    level--;
+                }
+            } else if (a == '(') {
+                level++;
+            }
+        }
+        return -1;
     }
 
     private AvatarAttribute createRegularAttribute(AvatarStateMachineOwner _ab, TAttribute _a, String _preName) {
