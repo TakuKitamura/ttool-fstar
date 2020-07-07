@@ -260,6 +260,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private JFrameTMLSimulationPanelTimeline tmlSimPanelTimeline;
 	private BufferedWriter bw;
 	private int simIndex=0;
+    private String listOfTaskToShowInTimeLine = "";
+    private String timelineTempFile = "";
     
 	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
         super(_title);
@@ -1533,90 +1535,50 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 
-	public void writeSimTraceTimeline() {
-	    Object wait = 0;
-	    Thread updateTransaction = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (wait) {
-                        buttonShowTraceTimeline.setEnabled(false);
-                        updateTransactions();
-                        UIManager.put("ProgressMonitor.progressText", "Processing");
-                        ProgressMonitor pm = new ProgressMonitor(getContentPane(), "Updating Transaction List",
-                                "Task starting", 0, 100);
-                        int temp = 0;
-                        while (trans == null) {
-                            temp ++;
-                            pm.setMillisToDecideToPopup(100);
-                            //after deciding if predicted time is longer than 100 show popup
-                            pm.setMillisToPopup(100);
-                            //updating ProgressMonitor note
-                            pm.setNote("Updating transaction list");
-                            pm.setProgress(temp);
-                            Thread.sleep(50);
-                        }
-                        pm.setNote("Task finished");
-                        pm.close();
-                        wait.notify();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+	private void updateTimelineTrace() {
+        if (tmlSimPanelTimeline != null && tmlSimPanelTimeline.isShowing() && !listOfTaskToShowInTimeLine.equals("")) {
+            tmlSimPanelTimeline.setParam(paramMainCommand.getText().trim());
+            mctb.setEnabled(false);
+            tmlSimPanelTimeline.setContentPaneEnable(false);
+//            System.out.println(timelineTempFile);
+//            System.out.println(listOfTaskToShowInTimeLine);
+            sendCommand( "save-timeline-trace-in-file" + " " + timelineTempFile + " " + listOfTaskToShowInTimeLine );
+            tmlSimPanelTimeline.setPaneContent(timelineTempFile);
+            tmlSimPanelTimeline.setContentPaneEnable(true);
+            mctb.setEnabled(true);
+        }
+    }
 
-	    Thread startTimelinePane = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    synchronized (wait) {
-                        while(trans == null) {
-                            System.out.println("Wait transaction list");
-                            Thread.sleep(100);
-                            wait.wait();
-                        }
-                    }
-                    if (trans != null && !trans.isEmpty()) {
-                        System.out.println("trans is updated with size " + trans.size());
-                        //Make a popup to select which tasks
-                        Vector<String> tmlComponentsToValidate = new Vector<String>();
-                        List<String> tasks = new ArrayList<String>();
-                        for (TMLTask task : tmap.getTMLModeling().getTasks()) {
-                            tasks.add(task.getName());
-                        }
-                        JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
-
-                        GraphicLib.centerOnParent(jdstmlc);
-                        jdstmlc.setVisible(true);
-                        Vector<SimulationTransaction> _transCopy = new Vector<SimulationTransaction>();
-//                int temp = 0;
-//                if (trans.size() > 2000) temp = trans.size() - 2000;// get 2000 latest transactions.
-                        for (int i = 0; i < trans.size(); i++) {
-                            for (String taskname : tmlComponentsToValidate) {
-                                if (taskname.equals(trans.get(i).taskName)) {
-                                    int checkPenalty = Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).startTime) - Integer.valueOf(trans.get(i).length);
-                                    if (checkPenalty > 0) trans.get(i).startTime = String.valueOf(Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).length));
-                                    _transCopy.add(trans.get(i));
-                                }
-                            }
-                        }
-                        if (!_transCopy.isEmpty()) {
-                            tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, _transCopy, "Show Trace - Timeline");
-                            tmlSimPanelTimeline.setVisible(true);
-                        }
-                        buttonShowTraceTimeline.setEnabled(true);
-                    } else {
-                        System.out.println("Trans is null, Transaction list need to be updated (button \"Update transactions\" under Transactions tab).");
-                        buttonShowTraceTimeline.setEnabled(true);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-	    updateTransaction.start();
-	    startTimelinePane.start();
+	private void writeSimTraceTimeline() {
+        buttonShowTraceTimeline.setEnabled(false);
+        //Make a popup to select which tasks
+        Vector<String> tmlComponentsToValidate = new Vector<String>();
+        List<String> tasks = new ArrayList<String>();
+        for (TMLTask task : tmap.getTMLModeling().getTasks()) {
+            tasks.add(task.getName());
+        }
+        JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+        GraphicLib.centerOnParent(jdstmlc);
+        jdstmlc.setVisible(true);
+        listOfTaskToShowInTimeLine = "";
+        timelineTempFile = "timetimetrace.html";
+        for (String taskname : tmlComponentsToValidate) {
+            listOfTaskToShowInTimeLine += taskname + ",";
+        }
+        final String directory = saveDirName.getText().trim();
+        if ( !directory.isEmpty() ) {
+            if (!directory.endsWith(File.separator))
+                timelineTempFile = directory + File.separator + timelineTempFile;
+            else
+                timelineTempFile = directory + timelineTempFile;
+        }
+        if (!listOfTaskToShowInTimeLine.equals("")) {
+            sendCommand( "save-timeline-trace-in-file" + " " + timelineTempFile + " " + listOfTaskToShowInTimeLine );
+            tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, this, "Show Trace - Timeline", timelineTempFile);
+            tmlSimPanelTimeline.setParam(paramMainCommand.getText().trim());
+            tmlSimPanelTimeline.setVisible(true);
+        }
+        buttonShowTraceTimeline.setEnabled(true);
     }
 	
 	public void writeArchitectureSimTrace(){
@@ -2837,7 +2799,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	        int type;
             if (format.compareTo("0") == 0) {
                 type = SimulationTrace.VCD_DIPLO;
-            } else if (format.compareTo("1") == 0) {
+            } else if (format.compareTo("1") == 0 || format.compareTo("4") == 0) {
 	            type = SimulationTrace.HTML_DIPLO;
             } else  if (format.compareTo("2") == 0){
 	            type = SimulationTrace.TXT_DIPLO;
@@ -3546,27 +3508,37 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             //TraceManager.addDev("Start simulation!");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand()))  {
             sendCommand("run-to-next-breakpoint");
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].getActionCommand()))  {
             sendCommandWithPositiveInt("run-x-time-units");
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].getActionCommand()))  {
             sendCommandWithPositiveInt("run-to-time");
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].getActionCommand()))  {
             sendCommandWithPositiveInt("run-x-transactions");
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand()))  {
             sendCommandWithPositiveInt("run-x-commands");
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].getActionCommand()))  {
             runExploration();
             //sendCommand("run-exploration");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].getActionCommand()))  {
             toNextBusTransfer();
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].getActionCommand()))  {
             runUntilCPUExecutes();
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].getActionCommand()))  {
             toNextMemoryTransfer();
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].getActionCommand()))  {
             runUntilTaskExecutes();
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].getActionCommand()))  {
             runUntilChannelAccess();
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_VCD].getActionCommand()))  {
             saveTraceVCD();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_HTML].getActionCommand()))  {
@@ -3593,6 +3565,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             transTimes=new HashMap<String, List<String>>();
             processLatency();
             askForUpdate();
+            updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].getActionCommand())) {
             sendCommand("rmat 1");
 

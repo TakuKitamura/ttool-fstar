@@ -157,99 +157,36 @@ public class TimelineDiagramTest extends AbstractUITest {
                 return;
             }
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
-            // Starts simulation
-            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
-            Thread.sleep(1000);
-            // Connects to the simulator, incase of using terminal: "./run.x -server" to start server and "nc localhost 3490" to connect to server
-            rc = new RemoteConnection("localhost");
+            // Run the simulator
+            String graphPath = SIM_DIR + "testgraph_" + s + ".html";
             try {
-                rc.connect();
-                isReady = true;
-            } catch (RemoteConnectionException rce) {
-                System.out.println("Could not connect to server.");
+
+                String[] params = new String[3];
+
+                params[0] = "./" + SIM_DIR + "run.x";
+                params[1] = "-cmd";
+                params[2] = "1 6 100; 7 4 " + graphPath + " ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2";
+                proc = Runtime.getRuntime().exec(params);
+                //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                monitorError(proc);
+
+                while ((str = proc_in.readLine()) != null) {
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    System.out.println("executing: " + str);
+                }
+            } catch (Exception e) {
+                // Probably make is not installed
+                System.out.println("FAILED: executing simulation");
+                return;
             }
-
-            toServer(" 1 0", rc);
-            Thread.sleep(5);
-            toServer("22 100", rc);
-            Thread.sleep(5);
-            while (running) {
-                String demo = null;
-                try {
-                    demo = rc.readOneLine();
-                } catch (RemoteConnectionException e) {
-                    e.printStackTrace();
-                }
-                if (demo.contains("transnb nb=")) {
-                    running = false;
-                }
-                int index0 = demo.indexOf("<transinfo");
-
-                if ((index0 > -1)) {
-                    analyzeServerAnswer(demo, index0);
-                } else {
-                    continue;
-                }
-            }
-
-            System.out.println("Transaction list size: " + trans.size());
-
-            JFrameTMLSimulationPanelTimeline tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mainGUI, trans,
-                    "Show Trace - Timeline");
-//            System.out.println(tmlSimPanelTimeline.generateHtmlContent(0));
             File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
             String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            assertTrue(content.equals(tmlSimPanelTimeline.generateHtmlContent(0)));
+            File file1 = new File(graphPath);
+            String content1 = FileUtils.readFileToString(file1, StandardCharsets.UTF_8);
+            assertTrue(content.equals(content1));
 
         }
-    }
-    private synchronized void toServer(String s, RemoteConnection rc) throws RemoteConnectionException {
-        while(!isReady) {
-            TraceManager.addDev("Server not ready");
-            try {
-                rc.send("13");
-                wait(250);
-            } catch (InterruptedException ie) {
-
-            }
-        }
-        rc.send(s);
-    }
-
-    private void  analyzeServerAnswer(String s, int index0) {
-        String val = s.substring(index0+10).trim();
-        Pattern p = Pattern.compile("\"([^\"]*)\"");
-        Matcher m = p.matcher(val);
-        ArrayList<String> splited = new ArrayList<>();
-        while (m.find()) {
-            splited.add(m.group(1));
-        }
-        writeTransValue(splited);
-    }
-
-    private void writeTransValue(ArrayList<String> val) {
-        if(trans == null) trans = new Vector<SimulationTransaction>();
-        SimulationTransaction st = new SimulationTransaction();
-        st.uniqueID = Long.valueOf(val.get(0));
-        st.nodeType = val.get(1);
-        st.deviceName = val.get(2);
-        st.coreNumber = val.get(3);
-        int index = val.get(4).indexOf(": ");
-        if (index == -1){
-            st.taskName = "Unknown";
-            st.command = val.get(4);
-        } else {
-            st.taskName = val.get(4).substring(0, index).trim();
-            st.command = val.get(4).substring(index+1, val.get(4).length()).trim();
-        }
-        st.startTime = val.get(5);
-        st.endTime = val.get(6);
-        st.length = val.get(7);
-        st.virtualLength = val.get(8);
-        st.id = val.get(9);
-        st.runnableTime = val.get(10);
-        st.channelName = (val.size() > 11) ? val.get(11) : "Unknown";
-
-        trans.add(st);
     }
 }

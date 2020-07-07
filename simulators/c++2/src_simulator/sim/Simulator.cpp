@@ -461,7 +461,67 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
     (*j)->latencies2XML(glob, id1,id2);
   }
 }
+void Simulator::timeline2HTML(std::string& iTraceFileName,std::string& iTracetaskList) const {
+    if ( !ends_with( iTraceFileName, EXT_HTML ) ) {
+        iTraceFileName.append( EXT_HTML );
+    }
+    std::ofstream myfile(iTraceFileName.c_str());
+    //myfile<<"model name: "<<iTraceFileName.c_str();
+    std::map<TMLTask*, std::string> taskCellClasses;
 
+    if (myfile.is_open()) {
+        myfile << SCHED_HTML_DOC; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
+        myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
+        myfile << SCHED_HTML_BEG_HEAD; // <head>\n
+        myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
+        myfile << SCHED_HTML_CSS_CONTENT_TIMELINE;
+        myfile << SCHED_HTML_END_STYLE; // <style>\n";
+        myfile << SCHED_HTML_META; // <meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n
+        myfile << SCHED_HTML_BEG_TITLE; // <title>
+        myfile << "Scheduling";
+        myfile << SCHED_HTML_END_TITLE; // </title>\n
+        myfile << SCHED_HTML_END_HEAD; // </head>\n
+        myfile << SCHED_HTML_BEG_BODY; // <body>\n
+//        myfile << "<h1>Task to show: " << iTracetaskList.c_str() <<"</h1>\n";
+        myfile << "<table style=\"float: left;position: relative;\"><tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n"
+               << "<td class=\"notfirst\"></td>\n"
+               << "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align: right\"colspan=\"1000\"><b>Time</b></td>\n</tr>\n"
+               << "<tr><th></th><th class=\"notfirst\"></th></tr>\n"
+               << "<div class = \"clear\"></div>" << std::endl;
+        for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+            for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
+                taskCellClasses = (*i)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
+                (*i)->setCycleTime((*i)->getCycleTime()+1);
+            }
+            if((*i)->getAmoutOfCore() == 1)
+                (*i)->setCycleTime(0);
+            }
+
+        for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){
+            (*j)->setStartFlagHTML(true);
+            for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+                (*j)->setHtmlCurrTask(*i);
+                taskCellClasses = (*j)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
+                (*j)->setStartFlagHTML(false);
+            }
+        }
+
+        for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+            taskCellClasses = (*j)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
+        }
+        myfile << "</tr>\n<tr><th>HW</th><th class=\"notfirst\"></th></tr>\n<div class = \"clear\"></div>\n";
+        myfile << "</table>\n<table>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notlast\"></td>\n<td class=\"notlast\"></td>\n";
+        for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+            TMLTask* task = (*taskColIt).first;
+            // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
+            myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;min-width: 170px;\">" << task->toString() << "</td><td class=\"space\"></td>";
+        }
+        myfile << "</tr>\n</table>\n";
+        myfile << SCHED_HTML_END_BODY; // </body>\n
+        myfile << SCHED_HTML_END_HTML; // </html>\n
+        myfile.close();
+    }
+}
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
 #ifdef DEBUG_HTML
 std::cout<<"schedule2HTML--------------------------------------******************"<<std::endl;
@@ -1880,10 +1940,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     std::cout << "End Write x samples/events to channel y." << std::endl;
     break;
   }
-  case 7: //Save trace in file x
+  case 7: { //Save trace in file x
     std::cout << "Save trace in file x." << std::endl;
     aInpStream >> aParam1;
     aInpStream >>aStrParam;
+    std::string aStrParamTask;
+    aInpStream >> aStrParamTask;
     switch (aParam1){
     case 0: //VCD
       aGlobMsg << TAG_MSGo << "Schedule output in VCD format" << TAG_MSGc << std::endl;
@@ -1900,12 +1962,17 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     case 3: //XML
       aGlobMsg << TAG_MSGo << "Schedule output in XML format" << TAG_MSGc << std::endl;
       schedule2XML(anEntityMsg,aStrParam);
+    case 4: //timeline diagram
+      aGlobMsg << TAG_MSGo << "Schedule output in HTML format" << TAG_MSGc << std::endl;
+      timeline2HTML(aStrParam, aStrParamTask);
+      break;
     default:
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       anErrorCode=3;
     }
     std::cout << "End Save trace in file x." << std::endl;
     break;
+  }
   case 8:{ //Save simulation state in file x
     std::cout << "Save simulation state in file x." << std::endl;
     aInpStream >> aStrParam;

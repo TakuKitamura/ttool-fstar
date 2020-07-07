@@ -168,7 +168,155 @@ void CPU::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
 
   }
 }
+std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ofstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const {
+    TransactionList _transactListClone;
+    std::string taskList = iTracetaskList.c_str();
+    for (int z = 0; z < _transactList.size(); z++) {
+        std::string taskName = _transactList[z]->getCommand()->getTask()->toString();
+        std::size_t pos = taskList.find(taskName); /*pos1 = position of "bin" if we working with open model*/
+        if(pos != std::string::npos){
+            _transactListClone.push_back(_transactList[z]);
+        }
+    }
+    if ( _transactListClone.size() == 0 ) {
+        std::cout << "Device never activated" << std::endl;
+    } else {
+        myfile << "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "_core_" << this->_cycleTime << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;//myfile << "<table>" << std::endl << "<tr>";
+//        std::map<TMLTask*, std::string> taskCellClasses;
+//        unsigned int nextCellClassIndex = 0;
+        TMLTime aCurrTime = 0;
+        unsigned int tempReduce = 0;
+        std::vector<unsigned int> listScale;
+        std::vector<unsigned int> listScaleTime;
+        listScale.push_back(0);
+        listScaleTime.push_back(0);
+        bool changeCssClass = false;
+        unsigned int endTimeOfCore = 0;
+        for( unsigned int j = _transactListClone.size()-1; j >= 0; j-- ) {
+            if(  _transactListClone[j]->getTransactCoreNumber() == this->_cycleTime ){
+                endTimeOfCore = _transactListClone[j]->getEndTime();
+                break;
+            }
+        }
+        for( TransactionList::const_iterator i = _transactListClone.begin(); i != _transactListClone.end(); ++i ) {
+          std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
+          std::cout<<"time : "<<_cycleTime<<std::endl;
+          //std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
+          if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
+        TMLTransaction* aCurrTrans = *i;
+        unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
+        bool isBlankTooBig = false;
+        std::ostringstream tempString;
+        int tempBlanks;
+        if(endTimeOfCore >= 250 && aBlanks > 10) {
+            int newBlanks = 10;
+            tempBlanks = aBlanks;
+            tempReduce += aBlanks - newBlanks;
+            aBlanks = newBlanks;
+            isBlankTooBig = true;
+            changeCssClass = true;
+        }
+        if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
+            listScale.push_back(aBlanks+1);
+            tempString << tempBlanks+1;
+            if(aCurrTrans->getStartTime()+1 > listScaleTime.back()){
+                listScaleTime.push_back(aCurrTrans->getStartTime()+1);
+            }
+            if (isBlankTooBig){
+                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+            } else {
+                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+            }
+        }
+        else if ( aBlanks > 0 ){
+            listScale.push_back(aBlanks);
+            tempString << tempBlanks;
+            if(aCurrTrans->getStartTime() > listScaleTime.back()){
+                listScaleTime.push_back(aCurrTrans->getStartTime());
+            }
+            if (isBlankTooBig){
+                writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+            } else {
+                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+            }
+        }
 
+        unsigned int aLength = aCurrTrans->getPenalties();
+        if ( aLength != 0 ) {
+          listScaleTime.push_back(listScaleTime.back()+aLength);
+          if (endTimeOfCore >= 250 && aLength > 10){
+              tempReduce += aLength - 10;
+              aLength = 10;
+          }
+          listScale.push_back(aLength);
+          std::ostringstream title;
+          title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
+          writeHTMLColumn( myfile, aLength, "not", title.str() );
+        }
+        aLength = aCurrTrans->getOperationLength();
+
+        // Issue #4
+        TMLTask* task = aCurrTrans->getCommand()->getTask();
+        const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
+        std::string aCurrTransName=aCurrTrans->toShortString();
+        unsigned int indexTrans=aCurrTransName.find_first_of(":");
+        std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+        if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+          if (endTimeOfCore >= 250 && aLength > 10){
+            tempReduce += aLength - 10;
+            aLength = 10;
+          }
+          writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
+          listScale.push_back(aLength);
+          if(aCurrTrans->getStartTime() > listScaleTime.back()){
+             listScaleTime.push_back(aCurrTrans->getStartTime());
+          }
+          if(aCurrTrans->getEndTime() > listScaleTime.back()){
+             listScaleTime.push_back(aCurrTrans->getEndTime());
+          }
+        }
+            if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
+          aCurrTime = _simulatedTime;
+        else
+          aCurrTime = aCurrTrans->getEndTime();
+          }
+        }
+
+        myfile << "</tr>" << std::endl << "<tr>";
+        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
+            if( aLength == 1) {
+              myfile << "<th class=\"notfirst\">";
+            } else {
+              myfile << "<th></th>";
+            }
+        }
+        myfile << "</tr>" << std::endl << "<tr>";
+        myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
+        for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
+          std::ostringstream spanVal;
+          if(aLength < listScaleTime.size())
+            spanVal << listScaleTime[aLength];
+          else
+            spanVal << "";
+          if(aLength+1 >= listScale.size()){
+            if(changeCssClass){
+                writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+            } else
+                writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+          }else {
+            if(changeCssClass){
+                writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+            } else
+                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+            }
+          //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+        }
+
+        myfile << "</tr>" << std::endl << std::endl;
+        myfile << SCHED_HTML_JS_CLEAR << std::endl;
+    }
+    return taskCellClasses;
+}
 void CPU::HW2HTML(std::ofstream& myfile) const {  
   // myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
   myfile << SCHED_HTML_BOARD;

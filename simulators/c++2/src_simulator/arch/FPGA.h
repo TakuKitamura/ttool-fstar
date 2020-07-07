@@ -133,6 +133,7 @@ public:
 	///inline unsigned int getTransNumber() { return _transNumber;}
         inline unsigned int getID () { return _ID;}
 	void HW2HTML(std::ofstream& myfile) ;
+	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ofstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList);
 	void removeTrans(int numberOfTrans);
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
@@ -145,6 +146,7 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	std::string determineHTMLCellClass(unsigned int &nextColor );
+	std::string determineHTMLCellClass(std::map<TMLTask*, std::string> &taskColors, TMLTask* task, unsigned int &nextColor);
 	void scheduleBlank(std::ofstream& myfile);
 protected:
 	///List of all tasks running on the FPGA

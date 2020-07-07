@@ -247,6 +247,7 @@ public:
 
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
+	void timeline2HTML(std::string& iTraceFileName, std::string& iTracetaskList) const;
 
 	///Writes simulation traces in VCD format to an output file
 	/**
