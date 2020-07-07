@@ -813,6 +813,10 @@ public class AvatarDesignPanelTranslator {
         int optypel = statementParserRec(leftState, as, _pragma, tgc);
         int optyper = statementParserRec(rightState, as, _pragma, tgc);
         
+        if (optypel == -1 || optyper == -1) {
+            return -1;
+        }
+        
         UICheckingError ce;
         
         switch(optype) {
