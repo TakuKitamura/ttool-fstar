@@ -487,11 +487,11 @@ public class AvatarDesignPanelTranslator {
         //check the syntax of a single statement
 
         if (!checkSymbols(state)) {
-            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + "  cannot be parsed");
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " cannot be parsed");
             ce.setTDiagramPanel(adp.getAvatarBDPanel());
             ce.setTGComponent(tgc);
             addWarning(ce);
-            TraceManager.addDev("UPPAAL Pragma " + _pragma + "  cannot be parsed");
+            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
             return false;
         }
         
@@ -793,15 +793,15 @@ public class AvatarDesignPanelTranslator {
         
         int index = getOperatorIndex(state);
         
-//        if (index == -1) {
-//            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " missing operator in " + state);
-//            ce.setTDiagramPanel(adp.getAvatarBDPanel());
-//            ce.setTGComponent(tgc);
-//            addWarning(ce);
-//
-//            TraceManager.addDev("Safety Pragma " + _pragma + " missing operator in " + state);
-//            return -1;
-//        }
+        if (index == -1) {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " cannot parse " + state);
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            ce.setTGComponent(tgc);
+            addWarning(ce);
+
+            TraceManager.addDev("Safety Pragma " + _pragma + " cannot parse " + state);
+            return -1;
+        }
         
         char operator = state.charAt(index);
         
