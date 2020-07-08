@@ -95,10 +95,13 @@ public class AvatarExpressionTest {
         block2.addAttribute(y2);
         AvatarAttribute z2 = new AvatarAttribute("z", AvatarType.INTEGER, block2, null);
         block2.addAttribute(z2);
+        AvatarAttribute w2 = new AvatarAttribute("w", AvatarType.INTEGER, block2, null);
+        block2.addAttribute(w2);
         
         x2.setInitialValue("9");
         y2.setInitialValue("7");
         z2.setInitialValue("3");
+        w2.setInitialValue("-12");
     }
     
     @Test
@@ -202,9 +205,12 @@ public class AvatarExpressionTest {
         assertTrue(AvatarExpressionSolver.containsElementAttribute(block2.getAttribute(2)));
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-block2.x / block2.z - not(block1.x + block2.y) * -2 + -(1) <= -(-4 + 7))");
         assertFalse(e3.buildExpression(as));
+        AvatarExpressionSolver e4 = new AvatarExpressionSolver("block1.x + block2.w");
+        assertTrue(e4.buildExpression(as));
         assertTrue(e1.getResult(ss) == 17);
         assertTrue(e2.getResult(ss) == 1);
         assertTrue(e3.getResult(ss) == 0);
+        assertTrue(e4.getResult(ss) == -2);
         
         as.removeConstants();
         as.sortAttributes();
@@ -218,9 +224,12 @@ public class AvatarExpressionTest {
         assertTrue(e2.buildExpression(as));
         e3 = new AvatarExpressionSolver("not(-block2.x / block2.z - not(block1.x + block2.y) * -2 + -(1) <= -(-4 + 7))");
         assertFalse(e3.buildExpression(as));
+        e4 = new AvatarExpressionSolver("block1.x + block2.w");
+        assertTrue(e4.buildExpression(as));
         assertTrue(e1.getResult(ss) == 17);
         assertTrue(e2.getResult(ss) == 1);
-        assertTrue(e3.getResult(ss) == 0);      
+        assertTrue(e3.getResult(ss) == 0);    
+        assertTrue(e4.getResult(ss) == -2);
     }
 
 }

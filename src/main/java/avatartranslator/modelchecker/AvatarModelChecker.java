@@ -137,7 +137,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             initialSpec.removeCompositeStates();
             //TraceManager.addDev("Before clone:\n" + initialSpec);
             spec = initialSpec.advancedClone();
-            spec.removeConstants();
             //TraceManager.addDev("After clone:\n" + spec);
         }
         ignoreEmptyTransitions = true;
@@ -323,10 +322,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             safeties = new ArrayList<SafetyProperty>();
         }
         for (String property : spec.getSafetyPragmas()) {
-            SafetyProperty sp = new SafetyProperty(property, spec);
-            if (!sp.hasError()) {
-                safeties.add(sp);
-            }
+            SafetyProperty sp = new SafetyProperty(property);
+            safeties.add(sp);
         }
         studySafety = safeties.size() > 0;
         return safeties.size();
@@ -337,15 +334,31 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (safeties == null) {
             safeties = new ArrayList<SafetyProperty>();
         }
-        SafetyProperty sp = new SafetyProperty(pragma, spec);
-        if (!sp.hasError()) {
-            safeties.add(sp);
-            studySafety = true;
-            return true;
-        }
-        return false;
+        SafetyProperty sp = new SafetyProperty(pragma);
+        safeties.add(sp);
+        studySafety = true;
+        return true;
     }
-    
+
+
+    private void initSafetyAnalysis() {
+        //post initialization due to constant removal and attributes compression
+        if (studySafety) {
+            Iterator<SafetyProperty> iter = safeties.iterator();
+            while (iter.hasNext()) {
+                SafetyProperty sp = iter.next();
+                sp.analyzeProperty(spec);
+                sp.linkSolverStates();
+                if (sp.hasError()) {
+                    iter.remove();
+                    TraceManager.addDev("Pragma " + sp.getRawProperty() + " cannot be parsed");
+                }
+            }
+            studySafety = safeties.size() > 0;
+        }
+    }
+
+
     public ArrayList<SafetyProperty> getSafeties() {
         return safeties;
     }
@@ -425,8 +438,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         initModelChecking();
         
-        initCounterexample();
-                
+        initSafetyAnalysis();
+        initCounterexample();  
+
         stateLimitRG = false;
         timeLimitRG = false;
         emptyTr = ignoreEmptyTransitions;
@@ -758,7 +772,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.removeConstants();
         spec.sortAttributes();
         spec.setAttributeOptRatio(compressionFactor);
-        initExpressionSolvers();
+        spec.generateAllExpressionSolvers();
 
         prepareTransitions();
         prepareBlocks();
@@ -935,17 +949,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             pendingStates.clear();
         }
         nbOfCurrentComputations = 0;
-    }
-    
-    private void initExpressionSolvers() {        
-        spec.generateAllExpressionSolvers();
-        
-        //To have all the safety functionalities allStates in stateMachines must be filled with states
-        if (studySafety && safeties != null) {
-            for (SafetyProperty sp : safeties) {
-               sp.linkSolverStates();
-            }
-        }
     }
 
 

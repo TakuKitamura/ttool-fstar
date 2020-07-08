@@ -119,18 +119,24 @@ public class SpecificationBlock  {
     	    int i = 0;
             for(AvatarAttribute attr: attrs) {
                 if (i < booleanIndex) {
+                    int val = attr.getInitialValueInInt();
+                    if (optRatio == 2) {
+                        val &= 0xFFFF;
+                    } else if (optRatio == 4){
+                        val &= 0xFF;
+                    }
                     if (i % optRatio == 0) {
-                        values[cpt] = attr.getInitialValueInInt();
+                        values[cpt] = val;
                     } else {
-                        values[cpt] |= attr.getInitialValueInInt() << ((i % optRatio) * (32 / optRatio));
+                        values[cpt] |= val << ((i % optRatio) * (32 / optRatio));
                     }
                     if (i % optRatio + 1 == optRatio || i + 1 == booleanIndex) {
                         cpt++;
                     }
                 } else if (((i - booleanIndex) % 32) == 0) {
-                    values[cpt] = attr.getInitialValueInInt();
+                    values[cpt] = attr.getInitialValueInInt() & 0x1;
                 } else {
-                    values[cpt] |= attr.getInitialValueInInt() << ((i - booleanIndex) % 32);
+                    values[cpt] |= (attr.getInitialValueInInt() & 0x1) << ((i - booleanIndex) % 32);
                     if (((i - booleanIndex) % 32) == 31) {
                         cpt++;
                     }

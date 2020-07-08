@@ -79,10 +79,11 @@ public class SafetyProperty  {
     public boolean result;
     
     
-    public SafetyProperty(String property, AvatarSpecification _spec) {
+    public SafetyProperty(String property) {
         rawProperty = property;
-        analyzeProperty(_spec);
         phase = SpecificationPropertyPhase.NOTCOMPUTED;
+        /* to manually analyze after the AvatarSpecification is ready
+           for model-checking in order to build correct expression solvers */
     }
     
     public SafetyProperty(AvatarBlock block, AvatarStateMachineElement state, int _safetyType) {

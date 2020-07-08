@@ -208,6 +208,13 @@ public class AvatarExpressionAttribute implements AvatarExpressionAttributeInter
         return error == -2;
     }
     
+    public void setBlockIndex(AvatarSpecification spec) {
+        if (blockIndex == -1) {
+            //initialize it
+            blockIndex = spec.getBlockIndex(block);
+        }
+    }
+    
     public AvatarAttribute getConstAttribute() {
         if (error == -2) {
             return block.getConstantWithIndex(accessIndex);
@@ -231,6 +238,11 @@ public class AvatarExpressionAttribute implements AvatarExpressionAttributeInter
         
         value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
         
+        if (mask > 1 && value > (mask >> 1)) {
+            //convert to negative
+            value = ~((value ^ mask) + 1) + 1;
+        }
+        
         return value;
     }
     
@@ -242,6 +254,11 @@ public class AvatarExpressionAttribute implements AvatarExpressionAttributeInter
         }
         
         value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
+        
+        if (mask > 1 && value > (mask >> 1)) {
+            //convert to negative
+            value = ~((value ^ mask) + 1) + 1;
+        }
         
         return value;
     }
@@ -262,6 +279,11 @@ public class AvatarExpressionAttribute implements AvatarExpressionAttributeInter
         
         value = (sb.values[accessIndex] >> shift) & mask;
         
+        if (mask > 1 && value > (mask >> 1)) {
+            //convert to negative
+            value = ~((value ^ mask) + 1) + 1;
+        }
+        
         return value;
     }
     
@@ -274,6 +296,11 @@ public class AvatarExpressionAttribute implements AvatarExpressionAttributeInter
         
         //Cancel offset based on Specification Blocks
         value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> shift) & mask;
+        
+        if (mask > 1 && value > (mask >> 1)) {
+            //convert to negative
+            value = ~(value ^ mask + 1) + 1;
+        }
         
         return value;
     }
@@ -290,12 +317,7 @@ public class AvatarExpressionAttribute implements AvatarExpressionAttributeInter
         if (isState) {
             return;
         }
-                
-//        if (shift == -1) {
-//            sb.values[accessIndex] = value;
-//        } else {
-//            sb.values[accessIndex] ^= ((-(value & 1))^ sb.values[accessIndex]) & (1 << shift);
-//        }
+
         sb.values[accessIndex] = (sb.values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
     }
     
