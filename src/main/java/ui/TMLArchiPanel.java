@@ -135,4 +135,12 @@ public class TMLArchiPanel extends TURTLEPanel {
             tmlap.renameMapping(oldName, newName);
         }
     }
+
+    public boolean addRandomTasks( String []taskNames) {
+        if (tmlap == null) {
+            return false;
+        }
+
+        return tmlap.addRandomTasks(taskNames);
+    }
 }

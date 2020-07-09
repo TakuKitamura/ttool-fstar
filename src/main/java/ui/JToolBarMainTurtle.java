@@ -64,7 +64,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;
 
     // Other
-    JButton genrtlotos, genlotos, genuppaal, gendesign, dse, dseZ3, noc;
+    JButton genrtlotos, genlotos, genuppaal, gendesign, genMapping, dse, dseZ3, noc;
     JButton checkcode, simulation, validation;
     JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
 
@@ -162,6 +162,8 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         avatarSimu = add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
         avatarSimu.addMouseListener(mgui.mouseHandler);
 
+        genMapping = add(mgui.actions[TGUIAction.ACT_GEN_MAPPING]);
+        genMapping.addMouseListener(mgui.mouseHandler);
 
         dse = add(mgui.actions[TGUIAction.ACT_DSE]);
         dse.addMouseListener(mgui.mouseHandler);
@@ -327,6 +329,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     public void showAvatarActions(boolean b) {
 
         //TraceManager.addDev("Show avatar options with b = " + b);
+        genMapping.setVisible(!b);
         dse.setVisible(!b);
         if (dseZ3 != null) {
             dseZ3.setVisible(!b);
@@ -411,6 +414,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         //TraceManager.addDev("Show diplodocus options with b = " + b);
 
+        genMapping.setVisible(b);
         dse.setVisible(b);
         if (dseZ3 != null) {
             dseZ3.setVisible(b);

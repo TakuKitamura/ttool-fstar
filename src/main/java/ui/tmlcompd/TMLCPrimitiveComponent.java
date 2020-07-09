@@ -88,6 +88,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     //public String mappingName;
     protected List<TAttribute> myAttributes;
 
+    private String nameOfArchi;
+
+
     // Issue #31
 //    private int textX = 15; // border for ports
 //    private double dtextX = 0.0;
@@ -897,6 +900,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
 
+
+
     /*public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
       }*/
@@ -920,6 +925,19 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
 
       }*/
+
+    @Override
+    public String toString() {
+        if (nameOfArchi == null) {
+            return super.toString();
+        }
+
+        return nameOfArchi + "__" + getValue();
+    }
+
+    public void setNameOfArchi(String _nameOfArchi) {
+        nameOfArchi = _nameOfArchi;
+    }
 
 
 }

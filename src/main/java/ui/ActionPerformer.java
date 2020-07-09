@@ -169,6 +169,8 @@ public class ActionPerformer {
             mgui.generateAUTS();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_UPPAAL].getActionCommand())) {
             mgui.generateUPPAAL();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_MAPPING].getActionCommand())) {
+            mgui.generateRandomMapping();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE].getActionCommand())) {
             mgui.dse();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE_Z3].getActionCommand())) {

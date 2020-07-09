@@ -1850,4 +1850,17 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 
         return terms;
     }
+
+    public void fillAllTMLCPrimitiveComponent(List<TMLCPrimitiveComponent> allComponents) {
+        for(TGComponent tgc: componentList) {
+            if (tgc instanceof TMLCPrimitiveComponent) {
+                allComponents.add((TMLCPrimitiveComponent)tgc);
+            }
+
+            if (tgc instanceof TMLCCompositeComponent) {
+                allComponents.addAll( ((TMLCCompositeComponent)tgc).getAllPrimitiveComponents());
+            }
+
+        }
+    }
 }

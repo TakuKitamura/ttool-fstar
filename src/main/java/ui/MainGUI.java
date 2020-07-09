@@ -87,6 +87,7 @@ import ui.syscams.SysCAMSCompositeComponent;
 import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
 import ui.tmldd.TMLArchiArtifact;
@@ -6387,6 +6388,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return mainTabbedPane.getTitleAt(index);
     }
 
+
+    public int getIndexOfPanel(TURTLEPanel p) {
+        return tabs.indexOf(p);
+    }
+
     public int getMajorIndexOf(TDiagramPanel tdp) {
         TURTLEPanel tp;
 
@@ -8198,6 +8204,59 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         ErrorGUI.exit(ErrorGUI.ERROR_TAB);
         return false;
     }
+
+    public List<TMLCPrimitiveComponent> getAllTMLCPrimitiveComponents() {
+        List<TMLCPrimitiveComponent> allComponents = new ArrayList<TMLCPrimitiveComponent>();
+
+        for (TURTLEPanel panel: tabs) {
+            if (panel instanceof TMLComponentDesignPanel) {
+                List<TMLCPrimitiveComponent> allComponentsTmp = new ArrayList<TMLCPrimitiveComponent>();
+                ((TMLComponentDesignPanel)panel).fillAllTMLCPrimitiveComponent(allComponentsTmp);
+
+                for(TMLCPrimitiveComponent pc: allComponentsTmp) {
+                    pc.setNameOfArchi(panel.getNameOfTab());
+                }
+                allComponents.addAll(allComponentsTmp);
+            }
+        }
+
+
+        return allComponents;
+    }
+
+
+    public void generateRandomMapping() {
+        // Open dialog window to select tasks
+        TraceManager.addDev("Generate random mapping");
+        List<TMLCPrimitiveComponent> tasksToMap = new LinkedList<TMLCPrimitiveComponent>();
+        List<TMLCPrimitiveComponent> allComponents = getAllTMLCPrimitiveComponents();
+
+        JDialogMappingGeneration jdmg = new JDialogMappingGeneration(frame, tasksToMap, allComponents,
+                "Selection of tasks to be mapped");
+        jdmg.setSize(900, 500);
+        GraphicLib.centerOnParent(jdmg);
+        jdmg.setVisible(true);
+
+        if (jdmg.hasBeenCancelled()) {
+            return;
+        }
+
+
+        String nameOfArchi = getCurrentTURTLEPanel().getNameOfTab();
+        TraceManager.addDev("Name of archi:" + nameOfArchi);
+
+        String []nameOfTasks = new String[tasksToMap.size()];
+        for(int i=0; i<nameOfTasks.length; i++) {
+            nameOfTasks[i] = tasksToMap.get(i).toString();
+        }
+
+        int nbOfMapings = jdmg.getNbOfMappings();
+
+        for(int i=0; i<nbOfMapings; i++) {
+            gtm.generateRandomMapping(nameOfTasks, nameOfArchi, "RandomMapping_" + i);
+        }
+    }
+
 
     public void cloneTab(int index) {
         String s = gtm.makeXMLFromTurtleModeling(index, "_cloned");

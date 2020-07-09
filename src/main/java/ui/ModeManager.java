@@ -141,6 +141,9 @@ public class ModeManager {
             actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
+            if (mgui.getCurrentTURTLEPanel() instanceof TMLArchiPanel) {
+                actions[TGUIAction.ACT_GEN_MAPPING].setEnabled(true);
+            }
             actions[TGUIAction.ACT_DSE].setEnabled(true);
             actions[TGUIAction.ACT_DSE_Z3].setEnabled(true);
             actions[TGUIAction.ACT_REMOVENOC].setEnabled(true);
@@ -233,6 +236,7 @@ public class ModeManager {
             actions[TGUIAction.ACT_SAVE].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+            actions[TGUIAction.ACT_GEN_MAPPING].setEnabled(false);
             actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_DSE_Z3].setEnabled(false);
             actions[TGUIAction.ACT_REMOVENOC].setEnabled(false);
@@ -259,6 +263,7 @@ public class ModeManager {
         case MainGUI.METHO_CHANGED:
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+            actions[TGUIAction.ACT_GEN_MAPPING].setEnabled(false);
             actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_DSE_Z3].setEnabled(false);
             actions[TGUIAction.ACT_REMOVENOC].setEnabled(false);
@@ -281,6 +286,7 @@ public class ModeManager {
         case MainGUI.PANEL_CHANGED:
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+            actions[TGUIAction.ACT_GEN_MAPPING].setEnabled(false);
             actions[TGUIAction.ACT_DSE].setEnabled(false);
             actions[TGUIAction.ACT_DSE_Z3].setEnabled(false);
             actions[TGUIAction.ACT_REMOVENOC].setEnabled(false);
