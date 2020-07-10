@@ -1,0 +1,11 @@
+print dir
+set model resources/test/cli/models/CoffeeMachine_Avatar_Async.xml
+#print The model to be opened is: $model
+action start
+wait 2
+#toto
+action open $model
+wait 4
+action check-syntax
+action avatar-rg-validate -ra -la -s -d ../../../uppaal/
+action quit

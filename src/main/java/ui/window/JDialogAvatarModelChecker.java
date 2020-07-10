@@ -934,7 +934,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                                 RG rg = new RG(file);
                                 rg.data = tr.getReport();
                                 rg.fileName = filename;
-                                rg.name = tr.getQuery();
+                                rg.name = tr.getQuery() + "_" + dateAndTime;
                                 mgui.addRG(rg);
                                 File f = new File(filename);
                                 FileUtils.saveFile(filename, tr.getReport());

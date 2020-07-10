@@ -56,7 +56,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     private AvatarSignal signal;
     private List<String> values;
 	private boolean checkLatency;
-	private List<AvatarExpressionAttribute> actionAttr;
+	private List<AvatarExpressionAttributeInterface> actionAttr;
 
 
 	public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject ) {
@@ -112,10 +112,11 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     
     public boolean buildActionSolver(AvatarBlock block) {
         AvatarExpressionAttribute aea;
+        AvatarExpressionConstant cnst;
         AvatarElement attr;
         boolean res = true;
         
-        actionAttr = new ArrayList<AvatarExpressionAttribute>();
+        actionAttr = new ArrayList<AvatarExpressionAttributeInterface>();
         for (String val : values) {
             attr = AvatarExpressionAttribute.getElement(val, block);
             if (attr != null && AvatarExpressionSolver.containsElementAttribute(attr)) {
@@ -123,7 +124,11 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
             } else {
                 aea = new AvatarExpressionAttribute(block, val);
                 res &= !aea.hasError();
-                if (res) {
+                if (aea.isConstant()) {
+                    AvatarAttribute attribute = aea.getConstAttribute();
+                    cnst = new AvatarExpressionConstant(attribute.getInitialValueInInt());
+                    actionAttr.add(cnst);
+                } else if (res) {
                     AvatarExpressionSolver.addElementAttribute(attr, aea);
                     actionAttr.add(aea);
                 }
@@ -132,7 +137,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
         return res;
     }
     
-    public AvatarExpressionAttribute getExpressionAttribute(int index) {
+    public AvatarExpressionAttributeInterface getExpressionAttribute(int index) {
         return actionAttr.get(index);
     }
 

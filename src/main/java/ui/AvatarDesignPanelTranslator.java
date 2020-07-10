@@ -44,7 +44,6 @@ import myutil.TraceManager;
 import translator.CheckingError;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
-
 import java.util.*;
 
 /**
@@ -487,187 +486,648 @@ public class AvatarDesignPanelTranslator {
     private boolean statementParser(String state, AvatarSpecification as, String _pragma, TGComponent tgc) {
         //check the syntax of a single statement
 
+        if (!checkSymbols(state)) {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " cannot be parsed");
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            ce.setTGComponent(tgc);
+            addWarning(ce);
+            TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed");
+            return false;
+        }
+        
+        state = replaceOperators(state);
+        if (statementParserRec(state, as, _pragma, tgc) == 1) {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " has invalid return type");
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            ce.setTGComponent(tgc);
+            addWarning(ce);
+            TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
+            return false;
+        }
+        
+        return true;
 
         //Divide into simple statements
+        
+//        String[] split = state.split("[|&]+");
+//        //     System.out.println("split " + split[0]);
+//        if (split.length > 1) {
+//            boolean validity = true;
+//            for (String fragment : split) {
+//                if (fragment.length() > 2) {
+//                    validity = validity && statementParser(fragment, as, _pragma, tgc);
+//                }
+//            }
+//            return validity;
+//        }
+//        String number = "[0-9]+";
+//        String bo = "(?i)true|false";
+//        if (state.contains("=") || state.contains("<") || state.contains(">")) {
+//            String state1 = state.split("==|>(=)?|!=|<(=)?")[0];
+//            String state2 = state.split("==|>(=)?|!=|<(=)?")[1];
+//            if (!state1.contains(".")) {
+//                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Pragma " + _pragma + " cannot be parsed: missing '.'");
+//                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                ce.setTGComponent(tgc);
+//                addWarning(ce);
+//
+//                TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
+//                return false;
+//            }
+//            
+//            String block1 = state1.split("\\.", 2)[0];
+//            String attr1 = state1.split("\\.", 2)[1];
+//            if (attr1.contains(".")) {
+//                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+//                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                ce.setTGComponent(tgc);
+//                addWarning(ce);
+//
+//                TraceManager.addDev("Complex Safety Pragma attribute " + attr1 + " must contain __ and not .");
+//                return false;
+//            }
+//
+//            attr1 = attr1.replace(".", "__");
+//            AvatarType p1Type = AvatarType.UNDEFINED;
+//            AvatarBlock bl1 = as.getBlockWithName(block1);
+//            if (bl1 != null) {
+//                //AvatarStateMachine asm = bl1.getStateMachine();
+//                if (bl1.getIndexOfAvatarAttributeWithName(attr1) == -1) {
+//                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
+//                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                    ce.setTGComponent(tgc);
+//                    addWarning(ce);
+//                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute name " + attr1);
+//                    return false;
+//                } else {
+//                    int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
+//                    AvatarAttribute attr = bl1.getAttribute(ind);
+//                    p1Type = attr.getType();
+//                }
+//            } else {
+//                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
+//                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                ce.setTGComponent(tgc);
+//                addWarning(ce);
+//                TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block1);
+//                return false;
+//            }
+//
+//            
+//            if (state2.contains(".")) {
+//                String block2 = state2.split("\\.", 2)[0];
+//                String attr2 = state2.split("\\.", 2)[1];
+//                if (attr2.contains(".")) {
+//                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr2 + " must contain __ and not .");
+//                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                    ce.setTGComponent(tgc);
+//                    addWarning(ce);
+//                    TraceManager.addDev("Complex Safety Pragma attribute " + attr2 + " must contain __ and not .");
+//                    return false;
+//                }
+//
+//                AvatarBlock bl2 = as.getBlockWithName(block2);
+//                if (bl2 != null) {
+//                    if (bl2.getIndexOfAvatarAttributeWithName(attr2) == -1) {
+//                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr2);
+//                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                        ce.setTGComponent(tgc);
+//                        addWarning(ce);
+//                        TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute name " + attr2);
+//                        return false;
+//                    }
+//                    int ind = bl2.getIndexOfAvatarAttributeWithName(attr2);
+//                    AvatarAttribute attr = bl2.getAttribute(ind);
+//                    p1Type = attr.getType();
+//
+//                } else {
+//                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " contains invalid block name " + block2);
+//                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                    ce.setTGComponent(tgc);
+//                    addWarning(ce);
+//                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block2);
+//                    return false;
+//                }
+//            } else {
+//                if (state2.matches(number)) {
+//                    if (p1Type != AvatarType.INTEGER) {
+//                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types");
+//                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                        ce.setTGComponent(tgc);
+//                        addWarning(ce);
+//                        TraceManager.addDev("Safety Pragma " + _pragma + " has incompatible types");
+//                        return false;
+//                    }
+//                } else if (state2.matches(bo)) {
+//                    if (p1Type != AvatarType.BOOLEAN) {
+//                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types");
+//                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                        ce.setTGComponent(tgc);
+//                        addWarning(ce);
+//                        TraceManager.addDev("Safety Pragma " + _pragma + " has incompatible types");
+//                        return false;
+//                    }
+//                } else {
+//                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " cannot be parsed");
+//                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                    ce.setTGComponent(tgc);
+//                    addWarning(ce);
+//                    TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed");
+//                    return false;
+//                }
+//            }
+//        } else {
+//            if (!state.contains(".")) {
+//                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
+//                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                ce.setTGComponent(tgc);
+//                addWarning(ce);
+//                TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
+//                return false;
+//            }
+//            String block1 = state.split("\\.", 2)[0];
+//            String attr1 = state.split("\\.", 2)[1];
+//            if (attr1.contains(".")) {
+//                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex Safety Pragma attribute " + attr1 + " must contain __ and not .");
+//                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                ce.setTGComponent(tgc);
+//                addWarning(ce);
+//                TraceManager.addDev("Complex Safety Pragma attribute " + attr1 + " must contain __ and not .");
+//                return false;
+//            }
+//            AvatarBlock bl1 = as.getBlockWithName(block1);
+//            if (bl1 != null) {
+//                AvatarStateMachine asm = bl1.getStateMachine();
+//                if (bl1.getIndexOfAvatarAttributeWithName(attr1) == -1 && asm.getStateWithName(attr1) == null) {
+//                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
+//                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                    ce.setTGComponent(tgc);
+//                    addWarning(ce);
+//
+//                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
+//                    return false;
+//                }
+//
+//                int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
+//                if (ind != -1) {
+//                    AvatarAttribute attr = bl1.getAttribute(ind);
+//                    if (attr.getType() != AvatarType.BOOLEAN) {
+//                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute");
+//                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                        ce.setTGComponent(tgc);
+//                        addWarning(ce);
+//                        TraceManager.addDev("Safety Pragma " + _pragma + " performs query on non-boolean attribute");
+//                        return false;
+//                    }
+//                }
+//            } else {
+//                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
+//                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+//                ce.setTGComponent(tgc);
+//                addWarning(ce);
+//                TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block1);
+//                return false;
+//            }
+//        }
+//        return true;
+    }
+    
+    private int statementParserRec(String state, AvatarSpecification as, String _pragma, TGComponent tgc) {
+        boolean isNot = false;
+        boolean isNegated = false;
+        
+        state = removeExternalBrackets(state);
 
-        String[] split = state.split("[|&]+");
-        //     System.out.println("split " + split[0]);
-        if (split.length > 1) {
-            boolean validity = true;
-            for (String fragment : split) {
-                if (fragment.length() > 2) {
-                    validity = validity && statementParser(fragment, as, _pragma, tgc);
-                }
+        if (state.startsWith("not(") || state.startsWith("!(")) {
+            state = removeNot(state);
+            isNot = true;
+         }
+        
+         if (state.startsWith("-(")) {
+             state = removeNegated(state);
+             isNegated = true;
+         }
+        
+        if (!state.matches("^.+[\\+\\-<>=:;\\$&\\|\\*/].*$")) {
+            // attribute
+            if (state.startsWith("-") && isNegated != true) {
+                state = removeNegated2(state);
+                isNegated = true;
             }
-            return validity;
+            
+            if (state.equals("true") || state.equals("false")) {
+                if (isNegated) {
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " negation of a boolean value");
+                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                    ce.setTGComponent(tgc);
+                    addWarning(ce);
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
+                    return -1;
+                }
+                return 0;
+            } else if (state.matches("-?\\d+")) {
+                if (isNot) {
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " not of an integer value");
+                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                    ce.setTGComponent(tgc);
+                    addWarning(ce);
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
+                    return -1;
+                }
+                return 1;
+            } else {
+                if (!state.contains(".")) {
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
+                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                    ce.setTGComponent(tgc);
+                    addWarning(ce);
+                    TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
+                    return -1;
+                }
+                String block = state.split("\\.", 2)[0];
+                String attr = state.split("\\.", 2)[1];
+                if (attr.contains(".")) {
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex Safety Pragma attribute " + attr + " must contain __ and not .");
+                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                    ce.setTGComponent(tgc);
+                    addWarning(ce);
+                    TraceManager.addDev("Complex Safety Pragma attribute " + attr + " must contain __ and not .");
+                    return -1;
+                }
+                AvatarBlock bl = as.getBlockWithName(block);
+                if (bl != null) {
+                    AvatarStateMachine asm = bl.getStateMachine();
+                    if (bl.getIndexOfAvatarAttributeWithName(attr) == -1 && asm.getStateWithName(attr) == null) {
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr);
+                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                        ce.setTGComponent(tgc);
+                        addWarning(ce);
+
+                        TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute or state name " + attr);
+                        return -1;
+                    }
+
+                    int ind = bl.getIndexOfAvatarAttributeWithName(attr);
+                    if (ind != -1) {
+                        AvatarAttribute aa = bl.getAttribute(ind);
+                        if (aa.getType() == AvatarType.BOOLEAN) {
+                            return 0;
+                        } else {
+                            return 1;
+                        }
+                    } else {
+                        //state as boolean condition
+                        return 0;
+                    }
+                } else {
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block);
+                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                    ce.setTGComponent(tgc);
+                    addWarning(ce);
+
+                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block);
+                    return -1;
+                }
+            }      
         }
-        String number = "[0-9]+";
-        String bo = "(?i)true|false";
-        if (state.contains("=") || state.contains("<") || state.contains(">")) {
-            String state1 = state.split("==|>(=)?|!=|<(=)?")[0];
-            String state2 = state.split("==|>(=)?|!=|<(=)?")[1];
-            if (!state1.contains(".")) {
-                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Pragma " + _pragma + " cannot be parsed: missing '.'");
+        
+        int index = getOperatorIndex(state);
+        
+        if (index == -1) {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " cannot parse " + state);
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            ce.setTGComponent(tgc);
+            addWarning(ce);
+
+            TraceManager.addDev("Safety Pragma " + _pragma + " cannot parse " + state);
+            return -1;
+        }
+        
+        char operator = state.charAt(index);
+        
+        //split and recur
+        String leftState = state.substring(0, index).trim();
+        String rightState = state.substring(index + 1, state.length()).trim();
+        
+        int optype = getType(operator);
+        int optypel = statementParserRec(leftState, as, _pragma, tgc);
+        int optyper = statementParserRec(rightState, as, _pragma, tgc);
+        
+        if (optypel == -1 || optyper == -1) {
+            return -1;
+        }
+        
+        UICheckingError ce;
+        
+        switch(optype) {
+        case -1:
+            ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " unrecognized " + operator);
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            ce.setTGComponent(tgc);
+            addWarning(ce);
+
+            TraceManager.addDev("Safety Pragma " + _pragma + " unrecognized operator " + operator);
+            return -1;
+        case 1:
+            if (!(optypel == 1 && optyper == 1)) {
+                ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " expected integer attributes around " + operator);
                 ce.setTDiagramPanel(adp.getAvatarBDPanel());
                 ce.setTGComponent(tgc);
                 addWarning(ce);
 
-                TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
-                return false;
+                TraceManager.addDev("Safety Pragma " + _pragma + " expected integer attributes around " + operator);
+                return -1;
             }
-            String block1 = state1.split("\\.", 2)[0];
-            String attr1 = state1.split("\\.", 2)[1];
-            if (attr1.contains(".")) {
-                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr1 + " must contain __ and not .");
+            break;
+        case 0:
+            if (!(optypel == 0 && optyper == 0)) {
+                ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " expected boolean attributes around " + operator);
                 ce.setTDiagramPanel(adp.getAvatarBDPanel());
                 ce.setTGComponent(tgc);
                 addWarning(ce);
 
-                TraceManager.addDev("Complex Safety Pragma attribute " + attr1 + " must contain __ and not .");
-                return false;
+                TraceManager.addDev("Safety Pragma " + _pragma + " expected boolean attributes around " + operator);
+                return -1;
             }
+            break;
+        case 3:
+            if (optypel != optyper) {
+                ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types around " + operator);
+                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                ce.setTGComponent(tgc);
+                addWarning(ce);
 
-            attr1 = attr1.replace(".", "__");
-            AvatarType p1Type = AvatarType.UNDEFINED;
-            AvatarBlock bl1 = as.getBlockWithName(block1);
-            if (bl1 != null) {
-                //AvatarStateMachine asm = bl1.getStateMachine();
-                if (bl1.getIndexOfAvatarAttributeWithName(attr1) == -1) {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr1);
-                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                    ce.setTGComponent(tgc);
-                    addWarning(ce);
-                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute name " + attr1);
-                    return false;
-                } else {
-                    int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
-                    AvatarAttribute attr = bl1.getAttribute(ind);
-                    p1Type = attr.getType();
-                }
+                TraceManager.addDev("Safety Pragma " + _pragma + " has incompatible types around " + operator);
+                return -1;
+            }
+            break;
+        default:
+            break;
+        }
+        
+        return getReturnType(operator);
+    }
+    
+    private String removeNot(String expression) {
+        if (expression.startsWith("not(")) {
+            //not bracket must be closed in the last char
+            int closingIndex = getClosingBracket(expression, 4);
+            
+            if (closingIndex == -1) {
+                return expression;
+            }
+            if (closingIndex == expression.length() - 1) {
+              //not(expression)
+                return expression.substring(4, expression.length() - 1).trim();
+            }
+        } else if (expression.startsWith("!(")) {
+            int closingIndex = getClosingBracket(expression, 2);
+            
+            if (closingIndex == -1) {
+                return expression;
+            }
+            if (closingIndex == expression.length() - 1) {
+                //not(expression)
+                return expression.substring(2, expression.length() - 1).trim();
+            }
+        }
+        return expression;
+    }
+    
+    private String removeNegated(String expression) {
+        if (expression.startsWith("-(")) {
+            //not bracket must be closed in the last char
+            int closingIndex = getClosingBracket(expression, 2);
+            
+            if (closingIndex == -1) {
+                return expression;
+            }
+            if (closingIndex == expression.length() - 1) {
+              //-(expression)
+                return expression.substring(2, expression.length() - 1).trim();
+            }
+        }
+        return expression;
+    }
+    
+    private String removeNegated2(String expression) {
+        if (expression.startsWith("-")) {     
+            return expression.substring(1, expression.length()).trim();
+        }
+        return expression;
+    }
+
+    
+    private String removeExternalBrackets(String expression) {
+        while (expression.startsWith("(") && expression.endsWith(")")) {
+            if (getClosingBracket(expression, 1) == expression.length() - 1) {
+                expression = expression.substring(1, expression.length() - 1).trim();
             } else {
-                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
-                ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                ce.setTGComponent(tgc);
-                addWarning(ce);
-                TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block1);
-                return false;
+                break;
             }
-            if (state2.contains(".")) {
-                String block2 = state2.split("\\.", 2)[0];
-                String attr2 = state2.split("\\.", 2)[1];
-                if (attr2.contains(".")) {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex UPPAAL Pragma attribute " + attr2 + " must contain __ and not .");
-                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                    ce.setTGComponent(tgc);
-                    addWarning(ce);
-                    TraceManager.addDev("Complex Safety Pragma attribute " + attr2 + " must contain __ and not .");
-                    return false;
-                }
-
-                AvatarBlock bl2 = as.getBlockWithName(block2);
-                if (bl2 != null) {
-                    if (bl2.getIndexOfAvatarAttributeWithName(attr2) == -1) {
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute name " + attr2);
-                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                        ce.setTGComponent(tgc);
-                        addWarning(ce);
-                        TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute name " + attr2);
-                        return false;
-                    }
-                    int ind = bl2.getIndexOfAvatarAttributeWithName(attr2);
-                    AvatarAttribute attr = bl2.getAttribute(ind);
-                    p1Type = attr.getType();
-
+        }
+        return expression;
+    }
+    
+    private int getClosingBracket(String expression, int startChar) {
+        int level = 0;
+        char a;
+        for (int i = startChar; i < expression.length(); i++) {
+            a = expression.charAt(i);
+            if (a == ')') {
+                if (level == 0) {
+                    return i;
                 } else {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " contains invalid block name " + block2);
-                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                    ce.setTGComponent(tgc);
-                    addWarning(ce);
-                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block2);
-                    return false;
+                    level--;
                 }
-            } else {
-                if (state2.matches(number)) {
-                    if (p1Type != AvatarType.INTEGER) {
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types");
-                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                        ce.setTGComponent(tgc);
-                        addWarning(ce);
-                        TraceManager.addDev("Safety Pragma " + _pragma + " has incompatible types");
-                        return false;
-                    }
-                } else if (state2.matches(bo)) {
-                    if (p1Type != AvatarType.BOOLEAN) {
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " has incompatible types");
-                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                        ce.setTGComponent(tgc);
-                        addWarning(ce);
-                        TraceManager.addDev("Safety Pragma " + _pragma + " has incompatible types");
-                        return false;
-                    }
-                } else {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " cannot be parsed");
-                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                    ce.setTGComponent(tgc);
-                    addWarning(ce);
-                    TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed");
-                    return false;
-                }
+            } else if (a == '(') {
+                level++;
             }
+        }
+        return -1;
+    }
+    
+    private boolean checkSymbols(String expression) {
+        if (expression.matches(".*\\b\\|\\b.*") || expression.matches(".*\\b&\\b.*") || expression.contains("\\$") ||
+                expression.contains(":") || expression.contains(";")) {
+            return false;
         } else {
-            if (!state.contains(".")) {
-                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
-                ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                ce.setTGComponent(tgc);
-                addWarning(ce);
-                TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
-                return false;
-            }
-            String block1 = state.split("\\.", 2)[0];
-            String attr1 = state.split("\\.", 2)[1];
-            if (attr1.contains(".")) {
-                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Complex Safety Pragma attribute " + attr1 + " must contain __ and not .");
-                ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                ce.setTGComponent(tgc);
-                addWarning(ce);
-                TraceManager.addDev("Complex Safety Pragma attribute " + attr1 + " must contain __ and not .");
-                return false;
-            }
-            AvatarBlock bl1 = as.getBlockWithName(block1);
-            if (bl1 != null) {
-                AvatarStateMachine asm = bl1.getStateMachine();
-                if (bl1.getIndexOfAvatarAttributeWithName(attr1) == -1 && asm.getStateWithName(attr1) == null) {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
-                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                    ce.setTGComponent(tgc);
-                    addWarning(ce);
-
-                    TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid attribute or state name " + attr1);
-                    return false;
+            return true;
+        }
+    }
+    
+    private String replaceOperators(String expression) {
+        expression = expression.replaceAll("\\|\\|", "\\|").trim();
+        expression = expression.replaceAll("&&", "&").trim();
+        expression = expression.replaceAll("==", "=").trim();
+        expression = expression.replaceAll("!=", "\\$").trim();
+        expression = expression.replaceAll(">=", ":").trim();
+        expression = expression.replaceAll("<=", ";").trim(); 
+        expression = expression.replaceAll("\\bor\\b", "\\|").trim();
+        expression = expression.replaceAll("\\band\\b", "&").trim();
+        return expression;
+    }
+    
+    private int getOperatorIndex(String expression) {
+        int index;
+        // find the last executed operator
+        int i, level, priority;
+        boolean subVar = true; //when a subtraction is only one one variable
+        char a;
+        level = 0;
+        priority = 0;
+        for (i = 0, index = -1; i < expression.length(); i++) {
+            a = expression.charAt(i);
+            switch (a) {
+            case '|':
+                if (level == 0) {
+                    index = i;
+                    priority = 5;
                 }
-
-                int ind = bl1.getIndexOfAvatarAttributeWithName(attr1);
-                if (ind != -1) {
-                    AvatarAttribute attr = bl1.getAttribute(ind);
-                    if (attr.getType() != AvatarType.BOOLEAN) {
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " performs query on non-boolean attribute");
-                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                        ce.setTGComponent(tgc);
-                        addWarning(ce);
-                        TraceManager.addDev("Safety Pragma " + _pragma + " performs query on non-boolean attribute");
-                        return false;
-                    }
+                break;
+            case '&':
+                if (level == 0 && priority < 5) {
+                    index = i;
+                    priority = 4;
                 }
-            } else {
-                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "UPPAAL Pragma " + _pragma + " contains invalid block name " + block1);
-                ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                ce.setTGComponent(tgc);
-                addWarning(ce);
-                TraceManager.addDev("Safety Pragma " + _pragma + " contains invalid block name " + block1);
-                return false;
+                break;
+            case '=':
+                if (level == 0 && priority < 4) {
+                    index = i;
+                    priority = 3;
+                }
+                subVar = true;
+                break;
+            case '$':
+                if (level == 0 && priority < 4) {
+                    index = i;
+                    priority = 3;
+                }
+                subVar = true;
+                break;
+            case '<':
+                if (level == 0 && priority < 3) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case '>':
+                if (level == 0 && priority < 3) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case ':':
+                if (level == 0 && priority < 3) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case ';':
+                if (level == 0 && priority < 3) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case '-':
+                if (level == 0 && !subVar && priority < 2) {
+                    index = i;
+                    priority = 1;
+                }
+                break;
+            case '+':
+                if (level == 0 && !subVar && priority < 2) {
+                    index = i;
+                    priority = 1;
+                }
+                break;
+            case '/':
+                if (level == 0  && priority == 0) {
+                    index = i;
+                }
+                break;
+            case '*':
+                if (level == 0  && priority == 0) {
+                    index = i;
+                }
+                break;
+            case '(':
+                level++;
+                subVar = true;
+                break;
+            case ')':
+                level--;
+                subVar = false;
+                break;
+            case ' ':
+                break;
+            default:
+                subVar = false;
+                break;
             }
         }
-        return true;
+        return index;
+    }
+    
+    private int getType(char operator) {
+        int optype;
+        
+        switch (operator) {
+        case '=':
+        case '$':
+            optype = 3; //BOTH sides must have the same type
+            break;
+        case '<':
+        case '>':
+        case ':':
+        case ';':
+        case '-':
+        case '+':
+        case '/':
+        case '*':
+            optype = 1;
+            break;
+        case '|':
+        case '&':
+            optype = 0;
+            break;
+        default:
+            optype = -1; //ERROR
+            break;
+        }
+        
+        return optype;
+    }
+    
+    private int getReturnType(char operator) {
+        int optype;
+        
+        switch (operator) {
+        case '-':
+        case '+':
+        case '/':
+        case '*':
+            optype = 1;
+            break;
+        case '|':
+        case '&':
+        case '=':
+        case '$':
+        case '<':
+        case '>':
+        case ':':
+        case ';':
+            optype = 0;
+            break;
+        default:
+            optype = -1; //ERROR
+            break;
+        }
+        return optype;
     }
 
     private AvatarAttribute createRegularAttribute(AvatarStateMachineOwner _ab, TAttribute _a, String _preName) {
