@@ -112,6 +112,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean studyReinit;
     private SpecificationReinit initState;
     
+    // Internal-action loop
+    private boolean studyActionLoop;
+    private ArrayList<SpecificationActionLoop> actionLoops;
+    
     //Debug counterexample
     private boolean counterexample;
     private boolean counterTraceText;
@@ -376,6 +380,29 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return false;
     }
     
+    public void setInternalActionLoopAnalysis(boolean studyActionLoop) {
+        this.studyActionLoop = studyActionLoop;
+    }
+    
+    
+    public ArrayList<SpecificationActionLoop> getInternalActionLoops() {
+        if (studyActionLoop) {
+            return actionLoops;
+        }
+        return null;
+    }
+    
+    public boolean getInternalActionLoopsResult() {
+        if (studyActionLoop && actionLoops != null) {
+            for (SpecificationActionLoop sal : actionLoops) {
+                if (sal.getResult()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public void setCounterExampleTrace(boolean counterTraceText, boolean counterTraceAUT) {
         this.counterexample = counterTraceText || counterTraceAUT;
         this.counterTraceText = counterTraceText;
@@ -424,7 +451,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR, studyRI, genRG, genTrace;
+        boolean studyS, studyL, studyR, studyRI, studyAL, genRG, genTrace;
         boolean emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
@@ -449,6 +476,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyL = studyLiveness;
         studyS = studySafety;
         studyRI = studyReinit;
+        studyAL = studyActionLoop;
         genRG = computeRG;
         genTrace = counterexample;
         verboseInfo = false;
@@ -460,6 +488,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyLiveness = false;
         studyReachability = false;
         studyReinit = false;
+        studyActionLoop = false;
         counterexample = false;
                 
 
@@ -538,6 +567,32 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studyReinit = false;
         }
         
+        if (studyAL) {
+            studySafety = true;
+            ignoreConcurrenceBetweenInternalActions = true;
+            List<ArrayList<AvatarTransition>> internalLoops = spec.checkStaticInternalLoops();
+            if (!internalLoops.isEmpty()) {
+                actionLoops = new ArrayList<SpecificationActionLoop>();
+                for (ArrayList<AvatarTransition> loop : internalLoops) {
+                    SpecificationActionLoop sap = new SpecificationActionLoop(loop, spec);
+                    if (!sap.hasError()) {
+                        actionLoops.add(sap);
+                        safety = sap.getReachability();
+                        startModelChecking(nbOfThreads);
+                        resetModelChecking();
+                        if (sap.hasProperty()) {
+                            safety = sap.getProperty();
+                            startModelChecking(nbOfThreads);
+                            resetModelChecking();
+                        }
+                        sap.setResult();
+                    }
+                }
+            }
+            ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+            studySafety = false;
+        }
+        
         if (checkNoDeadlocks) {
             //If a complete study with reachability graph generation has been executed,
             //there is no need to study deadlocks again
@@ -581,6 +636,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = studyS;
         studyReachability = studyR;
         studyReinit = studyRI;
+        studyActionLoop = studyAL;
                 
         TraceManager.addDev("Model checking done");
         return true;
@@ -773,10 +829,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.sortAttributes();
         spec.setAttributeOptRatio(compressionFactor);
         spec.generateAllExpressionSolvers();
+        
 
         prepareTransitions();
         prepareBlocks();
-
+        
+        spec.checkStaticInternalLoops();
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");

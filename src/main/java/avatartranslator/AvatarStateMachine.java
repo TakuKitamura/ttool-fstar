@@ -43,6 +43,7 @@ import myutil.TraceManager;
 
 import java.util.*;
 
+
 /**
  * Class AvatarStateMachine
  * State machine, with composite states
@@ -1865,6 +1866,55 @@ public class AvatarStateMachine extends AvatarElement {
         }
 
         return invalids;
+    }
+    
+    
+    public boolean checkStaticInternalLoops(List<ArrayList<AvatarTransition>> loops) {
+        if (allStates == null) {
+            return false;
+        }
+        
+        List<AvatarTransition> trace = new ArrayList<AvatarTransition>();
+        Set<AvatarStateMachineElement> visited= new HashSet<AvatarStateMachineElement>();
+        
+        for (AvatarStateElement state : allStates) {
+            checkStaticInternalLoopsRec(state, state, trace, visited, loops, 0);
+            visited.add(state); //avoid cycles permutations
+        }
+        return true;
+    }
+    
+    
+    public void checkStaticInternalLoopsRec(AvatarStateMachineElement node, AvatarStateMachineElement arrival, List<AvatarTransition> trace, Set<AvatarStateMachineElement> visited, List<ArrayList<AvatarTransition>> loops, int depth) {
+        if (visited.contains(node)) {
+            if (node == arrival) {
+                //valid loop, copy trace to loops
+                loops.add(new ArrayList<AvatarTransition>(trace));
+                return;
+            } else {
+                //not valid loop
+                return;
+            }
+        } else if (node.nexts == null){
+            return;
+        }
+        
+        visited.add(node);
+        for (AvatarStateMachineElement next : node.nexts) {
+            if (next instanceof AvatarTransition) {
+                AvatarTransition at = (AvatarTransition) next;
+                //the state machine should alternate states and transitions
+                if (!(at.getNext(0) instanceof AvatarActionOnSignal)) {
+                    //Choose internal action paths
+                    trace.add(depth, at);
+                    checkStaticInternalLoopsRec(at.getNext(0), arrival, trace, visited, loops, depth + 1);
+                    trace.remove(depth);
+                }
+            }
+        }
+        visited.remove(node);
+        
+        return;
     }
 
 }

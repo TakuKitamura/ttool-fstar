@@ -103,27 +103,8 @@ public class SafetyProperty  {
     	String tmpP = rawProperty.trim();
     	String p;
     	
-    	errorOnProperty = NO_ERROR;
-    
-    	if (tmpP.startsWith("A[]")) {
-    	    safetyType = ALLTRACES_ALLSTATES;
-    	    result = true;
-    	} else if (tmpP.startsWith("A<>")) {
-    	    safetyType = ALLTRACES_ONESTATE;
-    	    result = true;
-    	} else if (tmpP.startsWith("E[]")) {
-    	    safetyType = ONETRACE_ALLSTATES;
-    	    result = false;
-    	} else if (tmpP.startsWith("E<>")) {
-    	    safetyType = ONETRACE_ONESTATE;
-    	    result = false;
-    	} else if (tmpP.contains("-->")){
-    	    safetyType = LEADS_TO;
-    	    result = true;
-    	} else {
-    	    errorOnProperty = BAD_SAFETY_TYPE;
-            result = false;
-            return false;
+    	if (!initType(tmpP)) {
+    	    return false;
     	}
     	
     	if (safetyType != LEADS_TO) {
@@ -137,6 +118,28 @@ public class SafetyProperty  {
     	
     	return (errorOnProperty == NO_ERROR);
     }
+    
+    //for local variables inside a block
+    public boolean analyzeProperty(AvatarBlock block, AvatarSpecification _spec) {
+        String tmpP = rawProperty.trim();
+        String p;
+        
+        if (!initType(tmpP)) {
+            return false;
+        }
+        
+        if (safetyType != LEADS_TO) {
+            p = tmpP.substring(3, tmpP.length()).trim();
+            initSafetyTrace(block, _spec, p);
+        } else {
+            p = tmpP;
+            initSafetyLeads(block, _spec, p);
+        }
+        
+        
+        return (errorOnProperty == NO_ERROR);
+    }
+ 
     
     public void initLead() {
         safetySolver = safetySolverLead;
@@ -238,6 +241,32 @@ public class SafetyProperty  {
         return name;
     }
     
+    private boolean initType(String tmpP) {
+        errorOnProperty = NO_ERROR;
+        
+        if (tmpP.startsWith("A[]")) {
+            safetyType = ALLTRACES_ALLSTATES;
+            result = true;
+        } else if (tmpP.startsWith("A<>")) {
+            safetyType = ALLTRACES_ONESTATE;
+            result = true;
+        } else if (tmpP.startsWith("E[]")) {
+            safetyType = ONETRACE_ALLSTATES;
+            result = false;
+        } else if (tmpP.startsWith("E<>")) {
+            safetyType = ONETRACE_ONESTATE;
+            result = false;
+        } else if (tmpP.contains("-->")){
+            safetyType = LEADS_TO;
+            result = true;
+        } else {
+            errorOnProperty = BAD_SAFETY_TYPE;
+            result = false;
+            return false;
+        }
+        return true;
+    }
+    
     
     private boolean initSafetyTrace(AvatarSpecification _spec, String p) {      
         safetySolver = new AvatarExpressionSolver(p);
@@ -246,6 +275,25 @@ public class SafetyProperty  {
         if (exprRet == false) {
             errorOnProperty = BAD_PROPERTY_STRUCTURE;
         }
+        
+        if (safetySolver.hasState()) {
+            propertyType = BLOCK_STATE;
+        } else {
+            propertyType = BOOL_EXPR;
+        }
+        
+        return exprRet;
+    }
+    
+    private boolean initSafetyTrace(AvatarBlock block, AvatarSpecification _spec, String p) {      
+        safetySolver = new AvatarExpressionSolver(p);
+        boolean exprRet = safetySolver.buildExpression(block);
+        
+        if (exprRet == false) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+        }
+        
+        safetySolver.setBlockIndex(_spec);
         
         if (safetySolver.hasState()) {
             propertyType = BLOCK_STATE;
@@ -286,6 +334,55 @@ public class SafetyProperty  {
             errorOnProperty = BAD_PROPERTY_STRUCTURE;
             return false;
         }
+        
+        if (safetySolver.hasState()) {
+            propertyType = BLOCK_STATE;
+        } else {
+            propertyType = BOOL_EXPR;
+        }
+        
+        if (safetySolverLead.hasState()) {
+            leadType = BLOCK_STATE;
+        } else {
+            leadType = BOOL_EXPR;
+        }
+        
+        return true;
+    }
+    
+    private boolean initSafetyLeads(AvatarBlock block, AvatarSpecification _spec, String p) {
+        String[] pFields;
+        String pp, pq;
+        boolean exprRet;
+        
+        pFields = p.split("-->");
+        if (pFields.length != 2) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+
+        pp = pFields[0].trim();
+        pq = pFields[1].trim();
+        
+        safetySolver = new AvatarExpressionSolver(pp);
+        exprRet = safetySolver.buildExpression(block);
+    
+        if (exprRet == false) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+        
+        safetySolver.setBlockIndex(_spec);
+        
+        safetySolverLead = new AvatarExpressionSolver(pq);
+        exprRet = safetySolverLead.buildExpression(block);
+
+        if (exprRet == false) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+        
+        safetySolverLead.setBlockIndex(_spec);
         
         if (safetySolver.hasState()) {
             propertyType = BLOCK_STATE;
