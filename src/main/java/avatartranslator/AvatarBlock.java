@@ -783,52 +783,55 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     
     public void removeConstantAttributes() {
         AvatarTransition at;
-        List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
-        constants = new LinkedList<AvatarAttribute>();
-
-        for (AvatarAttribute attr : attributes) {
-            boolean toKeep = false;
-            
-            if (attr.isTimer()) {
-                toKeep = true;
-            }
-            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
-                if (elt instanceof AvatarTransition) {
-                    at = (AvatarTransition) elt;
-                    for (AvatarAction aa : at.getActions()) {
-                        if (aa instanceof AvatarActionAssignment) {
-                           if (((AvatarActionAssignment) aa).leftHand.getName().compareTo(attr.name) == 0) {
-                               //assigned
-                               toKeep = true;
-                           }
-                        }
-                    }
-                } else if (elt instanceof AvatarActionOnSignal) {
-                    AvatarSignal sig = ((AvatarActionOnSignal) elt).getSignal();
-                    if (sig != null && sig.isIn()) {
-                        for (String val : ((AvatarActionOnSignal) elt).getValues()) {
-                            if (val.compareTo(attr.name) == 0) {
-                                //assigned
-                                toKeep = true;
+        
+        if (constants == null) {
+            List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
+            constants = new LinkedList<AvatarAttribute>();
+    
+            for (AvatarAttribute attr : attributes) {
+                boolean toKeep = false;
+                
+                if (attr.isTimer()) {
+                    toKeep = true;
+                }
+                for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+                    if (elt instanceof AvatarTransition) {
+                        at = (AvatarTransition) elt;
+                        for (AvatarAction aa : at.getActions()) {
+                            if (aa instanceof AvatarActionAssignment) {
+                               if (((AvatarActionAssignment) aa).leftHand.getName().compareTo(attr.name) == 0) {
+                                   //assigned
+                                   toKeep = true;
+                               }
                             }
                         }
+                    } else if (elt instanceof AvatarActionOnSignal) {
+                        AvatarSignal sig = ((AvatarActionOnSignal) elt).getSignal();
+                        if (sig != null && sig.isIn()) {
+                            for (String val : ((AvatarActionOnSignal) elt).getValues()) {
+                                if (val.compareTo(attr.name) == 0) {
+                                    //assigned
+                                    toKeep = true;
+                                }
+                            }
+                        }
+                    } else if (elt instanceof AvatarRandom) {
+                        if (((AvatarRandom) elt).getVariable().compareTo(attr.name) == 0) {
+                            toKeep = true;
+                        }
                     }
-                } else if (elt instanceof AvatarRandom) {
-                    if (((AvatarRandom) elt).getVariable().compareTo(attr.name) == 0) {
-                        toKeep = true;
+                    if (toKeep) {
+                        break;
                     }
                 }
-                if (toKeep) {
-                    break;
+                if (!toKeep) {
+                    constants.add(attr);
+                } else {
+                    newAttributes.add(attr);
                 }
             }
-            if (!toKeep) {
-                constants.add(attr);
-            } else {
-                newAttributes.add(attr);
-            }
+            attributes = newAttributes;
         }
-        attributes = newAttributes;
     }
 
 

@@ -661,6 +661,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_AVATAR_EXECUTABLE_GENERATION = 340;
 
     // DSE
+    public static final int ACT_GEN_MAPPING = 528;
     public static final int ACT_DSE = 434;
     public static final int ACT_DSE_Z3 = 516;
 
@@ -683,7 +684,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;   
-    public static final int NB_ACTION = 528;
+    public static final int NB_ACTION = 529;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -882,6 +883,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_VIEW_PM_AUT] = new TAction("viewpmaut-command", "Power Management Analysis (last AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last AUT graph)",  "Power Management Analysis on the last generated reachability graph generated in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_AUTPROJ] = new TAction("viewpmautproj-command", "Power Management Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last minimized AUT graph)",  "Power Management Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_SAVED_AUT] = new TAction("viewpmsavedautproj-command", "Power Management Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (saved AUT graph)",  "Power Management Analysis on a graph saved in AUT (Aldebaran) format", 0);
+        actions[ACT_GEN_MAPPING] = new TAction("gen-random-mapping", "Generate a random mapping", IconManager.imgic89, IconManager.imgic89,
+                "Generate Random Mapping", "Generate a mappinh randomly from a set of tasks",0);
         actions[ACT_DSE] = new TAction("auto-dse", "Automated Design Space Exploration", IconManager.imgic89, IconManager.imgic89, "Automated Design Space Exploration", "Find the optimal mapping with brute-force simulations",0);
         actions[ACT_DSE_Z3] = new TAction("auto-dse-z3", "Automated Design Space Exploration with Z3", IconManager.imgic89_z3, IconManager.imgic89_z3, "Automated Design Space Exploration with Z3", "Find the optimal mapping with Z3",0);
 

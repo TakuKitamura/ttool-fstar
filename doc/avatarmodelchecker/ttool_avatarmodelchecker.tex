@@ -197,7 +197,7 @@ To activate the reachability and liveness check for specific states, we need to 
 \\To open the model-checker window, we must first compile the model. To do that, let's click on the "syntax analysis" icon and then on "check syntax". Then, we click on the "safety verification (internal tool)" icon representing a screwdriver and a wrench crossed with the text "RC". The following window should open (see Figure \ref{fig:mcwindow}).
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{images/modelcheckerwindow.jpg}
+\includegraphics[width=\textwidth]{images/modelcheckerwindow.png}
 \caption{Model-checker window}
 \label{fig:mcwindow}
 \end{figure}
@@ -278,11 +278,11 @@ For advanced verification queries and deadlock check, there is the possibility o
 \item \textbf{p --> q}: shows the path that disproves the property starting from a state with p valid.
 \item \textbf{No deadlocks?}: shows a path to a deadlock
 \end{itemize}
-The \textbf{Generate counterexample traces} option writes, in the file indicated in the text field on the right, all the steps to reach a counterexample. State lines show the current state in the state machine for each block in the system. Transition lines show details of the transition taken to reach the next state.
+The \textbf{Generate property AUT graphs trace} option allows us to display the propery traces as a reachability graph, saving it in AUT format. An entry to the graph, with the name of the query, will appear in the \textit{R. Graphs} section in TTool.
 \\\\
-The \textbf{Generate counterexample AUT graphs} option allows us to display the trace as a reachability graph, saving it in AUT format. Entry to the graph, with the name of the query, will appear in the \textit{R. Graphs} section in TTool.
+The \textbf{Generate property text trace} option writes, in the file indicated in the text field on the right, all the steps to reach a property proof. State lines show the current state in the state machine for each block in the system. Transition lines show details of the transition taken to reach the next state.
 \\\\
-Let's do a guidated example to traces generation. Let's open again the "PressureController.xml" model used in the previous section. Let's execute a verification of the only query \textit{MainController.LowPressure --> AlarmManager.AlarmIsOff} activating both the options \textit{Generate counterexample traces} and \textit{Generate counterexample AUT graphs}. Let's press start to execute the verification. If now we open the file \textit{trace*.txt} in which the trace is saved, we can see the name of the trace in the first line, and then states and transitions alternating until the counterexample state that disprove the property. The first state has the state machine pointed to MainController.LowPressure (or to a direct child like MainController.WaitFirstHighPressure). The last state indicates a loop or a state for which the property is prooved to be never satisfied. The AUT graph is visible with the name of the query in the Reachability graphs section as shown in Figure \ref{fig:aut}
+Let's do a guidated example to traces generation. Let's open again the "PressureController.xml" model used in the previous section. Let's execute a verification of the only query \textit{MainController.LowPressure --> AlarmManager.AlarmIsOff} activating both the options \textit{Generate property AUT graphs trace} and \textit{Generate property text trace}. Let's press start to execute the verification. If now we open the file \textit{trace*.txt} in which the trace is saved, we can see the name of the trace in the first line, and then states and transitions alternating until the counterexample state that disprove the property. The first state has the state machine pointed to MainController.LowPressure (or to a direct child like MainController.WaitFirstHighPressure). The last state indicates a loop or a state for which the property is proven to be never satisfied. The AUT graph is visible with the name of the query in the Reachability graphs section as shown in Figure \ref{fig:aut}.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{images/AUTgraphlist.png}

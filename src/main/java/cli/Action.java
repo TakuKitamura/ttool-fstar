@@ -1058,25 +1058,27 @@ public class Action extends Command {
                         System.out.println("\nCounterexample trace could not be saved in " + file + "\n");
                     }
                     
-                    List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
-                    if (autTraces != null) {
-                        int i = 0;
-                        String autfile = FileUtils.removeFileExtension(file);
-                        for (CounterexampleQueryReport tr : autTraces) {
-                            String filename = autfile + "_" + i + ".aut";
-                            try {
-                                RG rg = new RG(file);
-                                rg.data = tr.getReport();
-                                rg.fileName = filename;
-                                rg.name = tr.getQuery();
-                                interpreter.mgui.addRG(rg);
-                                File f = new File(filename);
-                                FileUtils.saveFile(filename, tr.getReport());
-                                System.out.println("Counterexample graph trace " + tr.getQuery() + " saved in " + filename + "\n");
-                            } catch (Exception e) {
-                                System.out.println("Counterexample graph trace "+ tr.getQuery() + " could not be saved in " + filename + "\n");
+                    if (counterTracesAUT) {
+                        List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
+                        if (autTraces != null) {
+                            int i = 0;
+                            String autfile = FileUtils.removeFileExtension(file);
+                            for (CounterexampleQueryReport tr : autTraces) {
+                                String filename = autfile + "_" + i + ".aut";
+                                try {
+                                    RG rg = new RG(file);
+                                    rg.data = tr.getReport();
+                                    rg.fileName = filename;
+                                    rg.name = tr.getQuery() + "_" + dateAndTime;
+                                    interpreter.mgui.addRG(rg);
+                                    File f = new File(filename);
+                                    FileUtils.saveFile(filename, tr.getReport());
+                                    System.out.println("Counterexample graph trace " + tr.getQuery() + " saved in " + filename + "\n");
+                                } catch (Exception e) {
+                                    System.out.println("Counterexample graph trace "+ tr.getQuery() + " could not be saved in " + filename + "\n");
+                                }
+                                i++;
                             }
-                            i++;
                         }
                     }
                 }

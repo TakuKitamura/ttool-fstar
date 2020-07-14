@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="true" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="2">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="true" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="AVATAR Design" nameTab="Design" tabs="Block Diagram$Block0$Block1" >
 <AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<considerTimingOperators value="true" />
+<Validated value="Block1;Block0;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -21,7 +22,7 @@
 <extraparam>
 <isd value="in exchange(int x)" />
 <oso value="out exchange(int x)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="true" size="1" blocking="false" private="true" broadcast="false" lossy="true" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="27" >
@@ -145,7 +146,7 @@
 <SUBCOMPONENT type="-1" id="60" >
 <father id="65" num="3" />
 <cdparam x="623" y="241" />
-<sizeparam width="56" height="30" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="58" height="45" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -158,6 +159,9 @@
 <guard value="[ x&gt;0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -190,6 +194,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -217,9 +224,12 @@
 <TGConnectingPoint num="2" id="75" />
 <TGConnectingPoint num="3" id="76" />
 <extraparam>
-<guard value="[ x &lt; 13]" enabled="true"/>
+<guard value="[ x &lt; 11]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -237,7 +247,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="84" >
 <father id="86" num="0" />
 <cdparam x="421" y="293" />
-<sizeparam width="56" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="58" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -250,6 +260,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -341,8 +354,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="170" >
-<cdparam x="375" y="227" />
-<sizeparam width="87" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="378" y="227" />
+<sizeparam width="80" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -466,7 +479,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="250" >
 <father id="252" num="0" />
 <cdparam x="406" y="460" />
-<sizeparam width="46" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="49" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -479,6 +492,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -540,6 +556,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -570,6 +589,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -600,6 +622,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -630,6 +655,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -648,7 +676,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="291" >
 <father id="293" num="0" />
 <cdparam x="496" y="448" />
-<sizeparam width="50" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="53" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -661,6 +689,9 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -752,8 +783,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="377" >
-<cdparam x="357" y="276" />
-<sizeparam width="95" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="361" y="276" />
+<sizeparam width="87" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />

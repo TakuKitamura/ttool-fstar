@@ -43,10 +43,7 @@ import myutil.TraceManager;
 import org.w3c.dom.Element;
 import ui.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
    * Class TMLArchiDiagramPanel
@@ -284,6 +281,34 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 		    if (tgc instanceof TGComponentPlugin) {
 		    	ll.add(tgc);
 		    }
+        }
+
+        return ll;
+    }
+
+    public List<TGComponent> getListOfMappableExecutionNodes() {
+        List<TGComponent> ll = new LinkedList<TGComponent>();
+        TGComponent tgc;
+        Iterator<TGComponent> iterator = componentList.listIterator();
+
+        while(iterator.hasNext()) {
+            tgc = iterator.next();
+
+            if (tgc instanceof TMLArchiCPUNode) {
+                ll.add( (TMLArchiCPUNode) tgc );
+            }
+
+            if (tgc instanceof TMLArchiHWANode) {
+                TMLArchiHWANode node = (TMLArchiHWANode)tgc;
+
+                if (node.getNbInternalTGComponent() == 0) {
+                    ll.add((TMLArchiHWANode) tgc);
+                }
+            }
+
+            if (tgc instanceof TMLArchiFPGANode) {
+                ll.add( (TMLArchiFPGANode) tgc );
+            }
         }
 
         return ll;
@@ -532,6 +557,9 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
     // Task name is build as diagram__taskname
     public boolean addTaskToNode(String nodeName, String fullTaskName) {
+
+        TraceManager.addDev("Adding task " + fullTaskName + " to " + nodeName);
+
         if (fullTaskName.indexOf("__") == -1) {
             return false;
         }
@@ -558,4 +586,31 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         }
         return false;
     }
+
+
+
+    public boolean addRandomTasks(String []taskNames) {
+        for(String taskName: taskNames) {
+            if (!addRandomTask(taskName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean addRandomTask(String taskName) {
+        List<TGComponent> list = getListOfMappableExecutionNodes();
+        if (list.size() == 0){
+            return false;
+        }
+
+        int max = list.size();
+        Random r = new Random();
+        int nb =  r.nextInt(max);
+
+        return addTaskToNode(list.get(nb).getName(), taskName);
+    }
+
+
 }//End of class

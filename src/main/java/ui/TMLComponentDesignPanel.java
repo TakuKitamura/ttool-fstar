@@ -56,6 +56,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -302,4 +303,10 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         return tmlctdp.getAllOutRequests(nameOfComponent);
     }
 
+    public void fillAllTMLCPrimitiveComponent(List<TMLCPrimitiveComponent> allComponents) {
+        tmlctdp.fillAllTMLCPrimitiveComponent(allComponents);
+    }
+
 }
+
+

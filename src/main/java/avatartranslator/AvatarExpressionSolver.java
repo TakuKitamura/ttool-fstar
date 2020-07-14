@@ -171,6 +171,7 @@ public class AvatarExpressionSolver {
                 AvatarElement ae = AvatarExpressionAttribute.getElement(expression, spec);
                 if (ae != null && attributesMap.containsKey(ae)) {
                     leaf = attributesMap.get(ae);
+                    leaf.setBlockIndex(spec); //might be uninitialized
                     returnVal = true;
                 } else {
                     leaf = new AvatarExpressionAttribute(spec, expression);

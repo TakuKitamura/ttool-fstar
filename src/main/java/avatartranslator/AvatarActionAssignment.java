@@ -100,13 +100,14 @@ public class AvatarActionAssignment implements AvatarAction {
         boolean res;
         actionSolver = new AvatarExpressionSolver(rightHand.getName());
         res = actionSolver.buildExpression(block);
-        if (AvatarExpressionSolver.containsElementAttribute(leftHand)) {
-            leftAttribute = AvatarExpressionSolver.getElementAttribute(leftHand);
+        AvatarElement ae = AvatarExpressionAttribute.getElement(leftHand.getName(), block);
+        if (AvatarExpressionSolver.containsElementAttribute(ae)) {
+            leftAttribute = AvatarExpressionSolver.getElementAttribute(ae);
         } else {
             leftAttribute = new AvatarExpressionAttribute(block, leftHand.getName());
             res &= !leftAttribute.hasError();
             if (res) { 
-                AvatarExpressionSolver.addElementAttribute(leftHand, leftAttribute);
+                AvatarExpressionSolver.addElementAttribute(ae, leftAttribute);
             }
         }
         return res;

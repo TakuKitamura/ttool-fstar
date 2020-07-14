@@ -702,14 +702,14 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
     public void updateAllSignals() {
-        TraceManager.addDev("Updating signals");
+        //TraceManager.addDev("Updating signals");
         try {
             Vector<String> v = getAssociationSignals();
 
 
-            for (String s: v) {
+            /*for (String s: v) {
                 TraceManager.addDev("Assoc: " + s);
-            }
+            }*/
 
             //	
             inSignalsAtOrigin.clear();
@@ -729,7 +729,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             for (int i = 0; i < v.size(); i++) {
 
                 assoc = v.get(i);
-                TraceManager.addDev("assoc=" + assoc);
+                //TraceManager.addDev("assoc=" + assoc);
                 as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
                 as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
                 if ((as1 != null) && (as2 != null)) {

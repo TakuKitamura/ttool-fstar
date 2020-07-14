@@ -1905,7 +1905,7 @@ public class GTURTLEModeling {
 
         if (mgui.isExperimentalOn()) {
 
-            TraceManager.addDev("Avatar spec:" + avatarspec.toString());
+            //TraceManager.addDev("Avatar spec:" + avatarspec.toString());
             //mgui.drawAvatarSpecification(avatarspec);
             //TraceManager.addDev("Avatar spec:" + avatarspec.toString());
             //AvatarSpecification av2 = avatarspec.advancedClone();
@@ -1929,6 +1929,44 @@ public class GTURTLEModeling {
                 mgui.drawAvatarSpecification(avatarspec);
             }
         }
+    }
+
+
+    public boolean generateRandomMapping(String[] tasks, String architectureName, String mappingName) {
+
+        TraceManager.addDev("Getting panel");
+
+        // Get the architecture panel
+        TURTLEPanel tp = mgui.getTURTLEPanel(architectureName);
+        if (tp == null) {
+            return false;
+        }
+
+        // Clone this panel
+        int indexArch = mgui.getIndexOfPanel(tp);
+        if (indexArch < 0) {
+            return false;
+        }
+        mgui.cloneRenameTab(indexArch, mappingName);
+
+        TraceManager.addDev("Select last panel");
+
+        // Select the last Panel
+        TURTLEPanel newTP = mgui.getTabs().get(mgui.getTabs().size()-1);
+
+        if (newTP == null) {
+            TraceManager.addDev("Null selected panel");
+        }
+
+        if (!(newTP instanceof TMLArchiPanel)) {
+            return false;
+        }
+
+        TraceManager.addDev("add Tasks");
+
+        TMLArchiPanel mapping = (TMLArchiPanel) newTP;
+        return mapping.addRandomTasks(tasks);
+
     }
 
     public boolean generateProVerifFromAVATAR(String _path, int _stateReachability, boolean _typed, boolean allowPrivateChannelDuplication, String loopLimit) {
