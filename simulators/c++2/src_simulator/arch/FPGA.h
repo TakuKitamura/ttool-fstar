@@ -133,7 +133,7 @@ public:
 	///inline unsigned int getTransNumber() { return _transNumber;}
         inline unsigned int getID () { return _ID;}
 	void HW2HTML(std::ofstream& myfile) ;
-	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ofstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList);
+	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses1,unsigned int nextCellClassIndex1, std::string& iTracetaskList);
 	void removeTrans(int numberOfTrans);
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}

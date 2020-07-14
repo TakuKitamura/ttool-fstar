@@ -396,7 +396,7 @@ h2 span {\n \
 .t11{background-color: gray;}\n \
 .t12{background-color: fuchsia;}\n \
 .t13{background-color: blue;}\n \
-.t14{background-color: LightGoldenRodYellow;}\n \
+.t14{background-color: darkred;}\n \
 .wrapper {\n \
     width: 256px;\n \
     height: 256px;\n \

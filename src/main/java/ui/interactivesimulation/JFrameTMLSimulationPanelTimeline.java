@@ -9,23 +9,15 @@ import ui.MainGUI;
 import ui.TGComponent;
 
 import javax.swing.*;
-import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
-import java.util.*;
+import java.io.FileWriter;
 
 public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionListener {
 
     public InteractiveSimulationActions[] actions;
-    private static String htmlPaneContent;
-    private JTextPane sdpanel;
+    private JEditorPane sdpanel;
     protected JLabel status;
     private Container framePanel;
     private ProgressMonitor pm;
@@ -37,6 +29,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
     protected JComboBox<String> cpus, busses, mems, tasks, chans;
     private TMLMapping<TGComponent> tmap;
     private JTextField paramMainCommand;
+    private MainCommandsToolBar mctb;
 
     public JFrameTMLSimulationPanelTimeline(Frame _f, MainGUI _mgui,JFrameInteractiveSimulation _jfis, String _title, String _path) {
         super(_title);
@@ -74,7 +67,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         commandTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
         commandTab.addTab("Control", null, jp01, "Main control commands");
 
-        MainCommandsToolBar mctb = new MainCommandsToolBar(jfis);
+        mctb = new MainCommandsToolBar(jfis);
         jp01.add(mctb, BorderLayout.NORTH);
 
         jp02 = new JPanel();
@@ -154,15 +147,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         timelinePane.add(commandTab, BorderLayout.SOUTH);
         framePanel.add(timelinePane, BorderLayout.NORTH);
         // Simulation panel
-        sdpanel = new JTextPane();
+        sdpanel = new JEditorPane();
         sdpanel.setEditable(false);
         sdpanel.setContentType("text/html");
-        File file = new File(filePath);
-        try {
-            sdpanel.setPage(file.toURI().toURL());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        sdpanel.setText(filePath);
 
         JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setWheelScrollingEnabled(true);
@@ -189,6 +177,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         taskIDs = makeTasksIDs();
         chanIDs = makeChanIDs();
     }
+
     public String[] makeCPUIDs() {
         if (tmap == null) {
             return null;
@@ -231,24 +220,6 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
 
     public void close() {
-        try
-        {
-            Files.deleteIfExists(Paths.get(filePath));
-        }
-        catch(NoSuchFileException e)
-        {
-            System.out.println("No such file/directory exists");
-        }
-        catch(DirectoryNotEmptyException e)
-        {
-            System.out.println("Directory is not empty.");
-        }
-        catch(IOException e)
-        {
-            System.out.println("Invalid permissions.");
-        }
-
-        System.out.println("Deletion successful.");
         dispose();
         setVisible(false);
     }
@@ -257,7 +228,6 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         TraceManager.addDev("Saving in html format");
         File file = null;
         JFileChooser jfcimg = new JFileChooser();
-//        jfcimg.setCurrentDirectory(new File(""));
         int returnVal = jfcimg.showSaveDialog(getContentPane());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimg.getSelectedFile();
@@ -278,10 +248,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             return;
         }
         try {
-            FileOutputStream fos = new FileOutputStream(file);
-            htmlPaneContent = sdpanel.getText();
-            fos.write(htmlPaneContent.getBytes());
-            fos.close();
+            FileWriter myWriter = new FileWriter(file);
+            myWriter.write(filePath);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
             JOptionPane.showMessageDialog(getContentPane(), "The capture was correctly performed and saved in " + file.getAbsolutePath(), "Screen capture ok", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             TraceManager.addDev("Error during save trace: " + e.getMessage());
@@ -289,22 +259,15 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             return;
         }
     }
+
     public void setParam(String param) {
         paramMainCommand.setText(param);
     }
+
     public void setContentPaneEnable(boolean x) {
-        commandTab.setEnabled(x);
+        mctb.setActive(x);
     }
-    public void setPaneContent(String filePath) {
-        try {
-            File file = new File(filePath);
-            Document doc = sdpanel.getDocument();
-            doc.putProperty(Document.StreamDescriptionProperty, null);
-            sdpanel.setPage(file.toURI().toURL());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand())) {
@@ -313,5 +276,18 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML].getActionCommand())) {
             saveHTML();
         }
+    }
+
+    public void setServerReply(String content) {
+        try {
+            filePath = content;
+            sdpanel.setText(content);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    public void setStatusBar (String s) {
+        status.setText("Ready ... Time: " + s);
     }
 }

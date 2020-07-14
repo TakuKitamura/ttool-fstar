@@ -593,7 +593,7 @@ std::string FPGA::determineHTMLCellClass(std::map<TMLTask*, std::string> &taskCo
 	return taskColors[ task ];
 }
 
-std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ofstream& myfile,std::map<TMLTask*, std::string> taskCellClasses1,unsigned int nextCellClassIndex1, std::string& iTracetaskList) {
+std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses1,unsigned int nextCellClassIndex1, std::string& iTracetaskList) {
     TransactionList _transactListClone;
     std::string taskList = iTracetaskList.c_str();
     for (int z = 0; z < _transactList.size(); z++) {
@@ -651,9 +651,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ofstream& myfile,std:
                 listScaleTime.push_back(aCurrTrans->getStartTime()+1);
             }
             if (isBlankTooBig){
-                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
             } else {
-                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
             }
         }
         else if ( aBlanks > 0 ){
@@ -663,9 +663,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ofstream& myfile,std:
                 listScaleTime.push_back(aCurrTrans->getStartTime());
             }
             if (isBlankTooBig){
-                writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
             } else {
-                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
             }
         }
 
@@ -679,7 +679,8 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ofstream& myfile,std:
               tempReduce += aLength - 10;
               aLength = 10;
           }
-          writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
+          myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>\n";
+//          writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
           listScale.push_back(aLength);
           if(aCurrTrans->getStartTime() > listScaleTime.back()){
              listScaleTime.push_back(aCurrTrans->getStartTime());
@@ -716,14 +717,18 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ofstream& myfile,std:
           if(aLength+1 >= listScale.size()){
 
             if(changeCssClass){
-                 writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+                 myfile << "<td colspan=\"5\" class=\"sc1\">" << spanVal.str() << "</td>";
+//                 writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
             } else
-                 writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+                 myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
+//                 writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
           } else {
                 if(changeCssClass){
-                    writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+                    myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc1\">" << spanVal.str() << "</td>";
+//                    writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
                 } else
-                     writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+                    myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
+//                     writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
           }
         }
         myfile << "</tr>" << std::endl << std::endl;

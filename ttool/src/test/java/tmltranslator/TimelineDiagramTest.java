@@ -42,6 +42,7 @@ public class TimelineDiagramTest extends AbstractUITest {
     private boolean isReady = false;
     private boolean running = true;
     private Vector<SimulationTransaction> trans;
+    private String ssxml;
     final static String EXPECTED_FILE_GENERATED_TIMELINE = getBaseResourcesDir() + "tmltranslator/expected/expected_get_generated_timeline.txt";
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -66,8 +67,8 @@ public class TimelineDiagramTest extends AbstractUITest {
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
-            for(TURTLEPanel _tab : mainGUI.getTabs()) {
-                if(_tab instanceof TMLArchiPanel) {
+            for (TURTLEPanel _tab : mainGUI.getTabs()) {
+                if (_tab instanceof TMLArchiPanel) {
                     for (TDiagramPanel tdp : _tab.getPanels()) {
                         if (tdp instanceof TMLArchiDiagramPanel) {
                             mainGUI.selectTab(tdp);
@@ -114,7 +115,7 @@ public class TimelineDiagramTest extends AbstractUITest {
             BufferedReader proc_in;
             String str;
             boolean mustRecompileAll;
-            Penalties penalty = new Penalties(SIM_DIR  + "src_simulator");
+            Penalties penalty = new Penalties(SIM_DIR + "src_simulator");
             int changed = penalty.handlePenalties(false);
 
             if (changed == 1) {
@@ -157,36 +158,76 @@ public class TimelineDiagramTest extends AbstractUITest {
                 return;
             }
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
-            // Run the simulator
-            String graphPath = SIM_DIR + "testgraph_" + s + ".html";
+            // Starts simulation
+            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
+            Thread.sleep(1000);
+            // Connects to the simulator, incase of using terminal: "./run.x -server" to start server and "nc localhost 3490" to connect to server
+            rc = new RemoteConnection("localhost");
+            try {
+                rc.connect();
+                isReady = true;
+            } catch (RemoteConnectionException rce) {
+                System.out.println("Could not connect to server.");
+            }
             try {
 
-                String[] params = new String[3];
-
-                params[0] = "./" + SIM_DIR + "run.x";
-                params[1] = "-cmd";
-                params[2] = "1 6 100; 7 4 " + graphPath + " ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2";
-                proc = Runtime.getRuntime().exec(params);
-                //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
-                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-                monitorError(proc);
-
-                while ((str = proc_in.readLine()) != null) {
-                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
-                    System.out.println("executing: " + str);
+                toServer(" 1 6 100", rc);
+                Thread.sleep(5);
+                toServer("7 4 ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2", rc);
+                Thread.sleep(5);
+                while (running) {
+                    String demo = null;
+                    try {
+                        demo = rc.readOneLine();
+                    } catch (RemoteConnectionException e) {
+                        e.printStackTrace();
+                    }
+                    running = analyzeServerAnswer(demo);
                 }
-            } catch (Exception e) {
-                // Probably make is not installed
-                System.out.println("FAILED: executing simulation");
-                return;
-            }
-            File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
-            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            File file1 = new File(graphPath);
-            String content1 = FileUtils.readFileToString(file1, StandardCharsets.UTF_8);
-            assertTrue(content.equals(content1));
 
+                File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
+                String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                assertTrue(content.equals(ssxml));
+                System.out.println("Test done");
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+    private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
+        while (!isReady) {
+            TraceManager.addDev("Server not ready");
+            try {
+                rc.send("13");
+                wait(250);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+        rc.send(s);
+        System.out.println("send " + s);
+    }
+
+    private boolean analyzeServerAnswer(String s) {
+        boolean isRunning = true;
+        int index0 = s.indexOf("<?xml");
+
+        if (index0 != -1) {
+            //
+            ssxml = s.substring(index0, s.length()) + "\n";
+        } else {
+            //
+            ssxml = ssxml + s + "\n";
+        }
+        index0 = ssxml.indexOf("<![CDATA[");
+        int index1 = ssxml.indexOf("]]>");
+        if ((index0 > -1) && (index1 > -1)) {
+            ssxml = ssxml.substring(index0 + 9, index1).trim();
+            isRunning = false;
+        }
+        return isRunning;
+    }
+
 }
+

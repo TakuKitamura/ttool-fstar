@@ -298,7 +298,7 @@ void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
     myfile << "   chart" << _ID << ".update();" << std::endl;
 }
 
-std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ofstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const {
+std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const {
     TransactionList _transactListClone;
     std::string taskList = iTracetaskList.c_str();
     for (int z = 0; z < _transactList.size(); z++) {
@@ -347,9 +347,11 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ofstream
                 listScaleTime.push_back(aCurrTrans->getStartTime()+1);
             }
             if (isBlankTooBig){
-                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+//                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
             } else {
-                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
+//                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
             }
         }
         else if ( aBlanks > 0 ){
@@ -359,25 +361,28 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ofstream
                 listScaleTime.push_back(aCurrTrans->getStartTime());
             }
             if (isBlankTooBig){
-                writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+//                writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
             } else {
-                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
+//                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
             }
         }
 
-          unsigned int aLength = aCurrTrans->getPenalties();
+        unsigned int aLength = aCurrTrans->getPenalties();
 
-          if ( aLength != 0 ) {
-        std::ostringstream title;
-        listScaleTime.push_back(listScaleTime.back()+aLength);
-        if(checkLastTime->getEndTime() >= 250 && aLength >10){
-            tempReduce += aLength - 10;
-            aLength = 10;
+        if ( aLength != 0 ) {
+            std::ostringstream title;
+            listScaleTime.push_back(listScaleTime.back()+aLength);
+            if(checkLastTime->getEndTime() >= 250 && aLength >10){
+                tempReduce += aLength - 10;
+                aLength = 10;
+            }
+            listScale.push_back(aLength);
+            title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
+            myfile << "<td colspan=\"" << aLength << "\" title=\"" << title.str() << "\" class=\"not\"></td>\n";
+//            writeHTMLColumn( myfile, aLength, "not", title.str() );
         }
-        listScale.push_back(aLength);
-        title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
-        writeHTMLColumn( myfile, aLength, "not", title.str() );
-          }
 
           aLength = aCurrTrans->getOperationLength();
 
@@ -392,7 +397,8 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ofstream
                   tempReduce += aLength - 10;
                   aLength = 10;
               }
-              writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
+              myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>\n";
+//              writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
               listScale.push_back(aLength);
               if(aCurrTrans->getStartTime() > listScaleTime.back()){
                  listScaleTime.push_back(aCurrTrans->getStartTime());
@@ -427,14 +433,18 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ofstream
           if(aLength+1 >= listScale.size()){
 
             if(changeCssClass){
-                writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+                myfile << "<td colspan=\"5\" class=\"sc1\">" << spanVal.str() << "</td>";
+//                writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
             } else
-                writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+                myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
+//                writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
           }else {
             if(changeCssClass){
-                writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+                myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc1\">" << spanVal.str() << "</td>";
+//                writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
             } else
-                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+                myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
+//                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
             }
         }
 

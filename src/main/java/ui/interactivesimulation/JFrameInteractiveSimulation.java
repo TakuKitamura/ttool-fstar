@@ -261,7 +261,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private BufferedWriter bw;
 	private int simIndex=0;
     private String listOfTaskToShowInTimeLine = "";
-    private String timelineTempFile = "";
+    private String timelineParam = "";
+    private boolean isServerReply = false;
     
 	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
         super(_title);
@@ -1373,6 +1374,18 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             //
             ssxml = ssxml + s + "\n";
         }
+        index0 = ssxml.indexOf("<![CDATA[");
+        int index1 = ssxml.indexOf("]]>");
+        if ((index0 > -1) && (index1 > -1)) {
+            timelineParam = ssxml.substring(index0+9, index1).trim();
+            if(tmlSimPanelTimeline != null) {
+                tmlSimPanelTimeline.setServerReply(timelineParam);
+            }
+            ssxml = ssxml.replace( timelineParam,"");
+            ssxml = ssxml.replace( "<![CDATA[","");
+            ssxml = ssxml.replace( "]]>","");
+            isServerReply = true;
+        }
 
         index0 = ssxml.indexOf("</siminfo>");
 
@@ -1537,15 +1550,48 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
 	private void updateTimelineTrace() {
         if (tmlSimPanelTimeline != null && tmlSimPanelTimeline.isShowing() && !listOfTaskToShowInTimeLine.equals("")) {
-            tmlSimPanelTimeline.setParam(paramMainCommand.getText().trim());
-            mctb.setEnabled(false);
-            tmlSimPanelTimeline.setContentPaneEnable(false);
-//            System.out.println(timelineTempFile);
-//            System.out.println(listOfTaskToShowInTimeLine);
-            sendCommand( "save-timeline-trace-in-file" + " " + timelineTempFile + " " + listOfTaskToShowInTimeLine );
-            tmlSimPanelTimeline.setPaneContent(timelineTempFile);
-            tmlSimPanelTimeline.setContentPaneEnable(true);
-            mctb.setEnabled(true);
+            Thread t =  new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    commandTab.setEnabled(false);
+                    tmlSimPanelTimeline.setParam(paramMainCommand.getText().trim());
+                    tmlSimPanelTimeline.setContentPaneEnable(false);
+                    mctb.setActive(false);
+                    isServerReply = false;
+                    timelineParam = "";
+                    sendCommand( "show-timeline-trace " + listOfTaskToShowInTimeLine );
+                    Frame f = new JFrame("Updating Data");
+                    JPanel p = new JPanel();
+                    JProgressBar b = new JProgressBar();
+                    // set initial value
+                    b.setValue(0);
+                    int temp = 0;
+                    b.setStringPainted(true);
+                    p.add(b);
+                    f.add(p);
+                    f.setSize(200, 200);
+                    f.setLocationRelativeTo(tmlSimPanelTimeline);
+                    f.setVisible(true);
+                    while (!isServerReply) {
+                        temp++;
+                        b.setValue(temp);
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    f.dispose();
+                    f.setVisible(false);
+                    tmlSimPanelTimeline.setStatusBar(time.getText().trim());
+                    tmlSimPanelTimeline.setContentPaneEnable(true);
+                    mctb.setActive(true);
+                    commandTab.setEnabled(true);
+                    setAll();
+                }
+            });
+            t.start();
+
         }
     }
 
@@ -1561,22 +1607,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         GraphicLib.centerOnParent(jdstmlc);
         jdstmlc.setVisible(true);
         listOfTaskToShowInTimeLine = "";
-        timelineTempFile = "timetimetrace.html";
         for (String taskname : tmlComponentsToValidate) {
             listOfTaskToShowInTimeLine += taskname + ",";
         }
-        final String directory = saveDirName.getText().trim();
-        if ( !directory.isEmpty() ) {
-            if (!directory.endsWith(File.separator))
-                timelineTempFile = directory + File.separator + timelineTempFile;
-            else
-                timelineTempFile = directory + timelineTempFile;
-        }
+
         if (!listOfTaskToShowInTimeLine.equals("")) {
-            sendCommand( "save-timeline-trace-in-file" + " " + timelineTempFile + " " + listOfTaskToShowInTimeLine );
-            tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, this, "Show Trace - Timeline", timelineTempFile);
+            tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, this, "Show Trace - Timeline", timelineParam);
             tmlSimPanelTimeline.setParam(paramMainCommand.getText().trim());
             tmlSimPanelTimeline.setVisible(true);
+            updateTimelineTrace();
         }
         buttonShowTraceTimeline.setEnabled(true);
     }
@@ -3479,6 +3518,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         //TraceManager.addDev("Command:" + command);
 
         if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
+            if (tmlSimPanelTimeline != null) {
+                tmlSimPanelTimeline.dispose();
+                tmlSimPanelTimeline.setVisible(false);
+            }
             close();
         }  else if (command.equals(actions[InteractiveSimulationActions.ACT_START_ALL].getActionCommand()))  {
             setComponents();
@@ -3501,6 +3544,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     }
                     break;
                 }
+            }
+            if (tmlSimPanelTimeline != null) {
+                tmlSimPanelTimeline.setContentPaneEnable(false);
             }
             killSimulator();
             close();

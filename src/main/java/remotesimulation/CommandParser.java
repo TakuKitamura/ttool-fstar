@@ -495,13 +495,11 @@ public class CommandParser {
         commandList.add(sc);
 
         // save-timeline-trace-in-file
-        params = new int[2];
-        paramNames = new String[2];
+        params = new int[1];
+        paramNames = new String[1];
         params[0] = 2;
-        paramNames[0] = "File name";
-        params[1] = 2;
-        paramNames[1] = "Task List";
-        sc = new SimulationCommand("save-timeline-trace-in-file", "stltif", "7 4", params, paramNames, "Saves the current timeline trace of the simulation in a HTML file");
+        paramNames[0] = "Task List";
+        sc = new SimulationCommand("show-timeline-trace", "stlt", "7 4", params, paramNames, "Show the current timeline diagram tracein HTML format");
         commandList.add(sc);
 
         // set-variable
