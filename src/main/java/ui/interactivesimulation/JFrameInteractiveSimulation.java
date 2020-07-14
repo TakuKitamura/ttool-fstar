@@ -3518,10 +3518,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         //TraceManager.addDev("Command:" + command);
 
         if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
-            if (tmlSimPanelTimeline != null) {
-                tmlSimPanelTimeline.dispose();
-                tmlSimPanelTimeline.setVisible(false);
-            }
             close();
         }  else if (command.equals(actions[InteractiveSimulationActions.ACT_START_ALL].getActionCommand()))  {
             setComponents();
