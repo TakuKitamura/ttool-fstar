@@ -79,6 +79,7 @@ public:
 	void drawPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	void HW2HTML(std::ofstream& myfile) const;
+	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const;
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file

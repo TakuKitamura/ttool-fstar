@@ -323,6 +323,88 @@ using std::max;
         ds.hidden=!ds.hidden;\n \
 	});\n"
 
+#define SCHED_HTML_CSS_CONTENT_TIMELINE "table{\n \
+    border-collapse: collapse;\n \
+    empty-cells: show;\n \
+    margin: 0.4cm;\n \
+}\n \
+td{\n \
+    padding: 10px 5px;\n \
+    border: 1px solid black;\n \
+    max-width: 5px;\n \
+}\n \
+th{\n \
+    padding: 5px;\n \
+}\n \
+.sc{\n \
+    border-style: none;\n \
+    padding: 0px;\n \
+    font-size: small;\n \
+    transform: rotate(45deg);\n \
+    transform-origin: left top;\n \
+}\n \
+.sc1{\n \
+    border-style: none;\n \
+    padding: 0px;\n \
+    font-size: small;\n \
+    color: red;\n \
+    transform: rotate(45deg);\n \
+    transform-origin: left top;\n \
+}\n \
+h2 {\n \
+    border-bottom: 1px solid #666;\n \
+}\n \
+h2 span {\n \
+    position: relative;\n \
+    left: -0.3em;\n \
+    bottom: -0.6em;\n \
+    padding: 1px 0.5em;\n \
+    border-style: solid;\n \
+    border-width: 1px 1px 1px 0.8em;\n \
+    border-color: #666 #666 #666 #008;\n \
+    background-color: #ddd;\n \
+}\n \
+.space{border-style: none;}\n \
+.not{background-color: white; text-align: center}\n \
+.notfirst{\n \
+    background-color: white;\n \
+    border-width: 2px;\n \
+    border-color: red;\n \
+    border-style: none solid none none;\n \
+}\n \
+.notmid {\n \
+    background-color: white;\n \
+    text-align: right;\n \
+    border-style: solid none none none;\n \
+}\n \
+.notlast {\n \
+    background-color: white;\n \
+    width: 5px;\n \
+    border-style: none none none none;\n \
+}\n \
+.t0{background-color: yellow;}\n \
+.t1{background-color: purple;}\n \
+.t2{background-color: red;}\n \
+.t3{background-color: silver;}\n \
+.t4{background-color: teal;}\n \
+.t5{background-color: aqua;}\n \
+.t6{background-color: olive;}\n \
+.t7{background-color: navy;}\n \
+.t8{background-color: maroon;}\n \
+.t9{background-color: lime;}\n \
+.t10{background-color: green;}\n \
+.t11{background-color: gray;}\n \
+.t12{background-color: fuchsia;}\n \
+.t13{background-color: blue;}\n \
+.t14{background-color: darkred;}\n \
+.wrapper {\n \
+    width: 256px;\n \
+    height: 256px;\n \
+}\n \
+.clear {\n \
+    clear:both\n \
+}"
+
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
 	empty-cells: show;\n \

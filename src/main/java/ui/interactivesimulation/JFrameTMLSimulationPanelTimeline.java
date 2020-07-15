@@ -1,42 +1,43 @@
 package ui.interactivesimulation;
 
 import myutil.FileUtils;
+import myutil.GraphicLib;
 import myutil.TraceManager;
+import tmltranslator.TMLMapping;
 import ui.ColorManager;
 import ui.MainGUI;
+import ui.TGComponent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.*;
+import java.io.FileWriter;
 
 public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionListener {
 
     public InteractiveSimulationActions[] actions;
-    private Vector<SimulationTransaction> transTransfer;
-    private int indexTrans = 0;
-    private static final int BIG_IDLE = 50;
-    private static int NUMBER_OF_TRANS_TO_SHOW = 200;
-    private static String htmlPaneContent;
-    private JButton buttonPrev;
-    private JButton buttonNext;
-    private JComboBox<Integer> comboBoxUpdateView;
-    private int maxIndexTrans = 0;
-    private JTextPane sdpanel;
+    private JEditorPane sdpanel;
     protected JLabel status;
     private Container framePanel;
     private ProgressMonitor pm;
-
+    private String filePath;
     private MainGUI mgui;
+    private JTabbedPane commandTab;
+    private JFrameInteractiveSimulation jfis;
+    private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
+    protected JComboBox<String> cpus, busses, mems, tasks, chans;
+    private TMLMapping<TGComponent> tmap;
+    private JTextField paramMainCommand;
+    private MainCommandsToolBar mctb;
 
-    public JFrameTMLSimulationPanelTimeline(Frame _f, MainGUI _mgui, Vector<SimulationTransaction> _trans, String _title) {
+    public JFrameTMLSimulationPanelTimeline(Frame _f, MainGUI _mgui,JFrameInteractiveSimulation _jfis, String _title, String _path) {
         super(_title);
         mgui = _mgui;
+        tmap =  mgui.gtm.getTMLMapping();
+        filePath = _path;
+        jfis = _jfis;
         initActions();
-        transTransfer = new Vector<SimulationTransaction>(_trans);
-        maxIndexTrans = (transTransfer.size() - 1) / NUMBER_OF_TRANS_TO_SHOW;
         makeComponents();
     }
 
@@ -53,70 +54,103 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         framePanel.setLayout(new BorderLayout());
 
         // Top panel
+        JPanel timelinePane = new JPanel();
         JPanel topPanel = new JPanel();
-        buttonPrev = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_PREV_TRANS_TIMELINE]);
-        topPanel.add(buttonPrev);
-        buttonNext = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_NEXT_TRANS_TIMELINE]);
-        topPanel.add(buttonNext);
         JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW]);
         topPanel.add(buttonClose);
         JButton buttonHtml = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML]);
         topPanel.add(buttonHtml);
-        JTextField numberTrans = new JTextField("Number of transactions to Show");
-        numberTrans.setEditable(false);
-        topPanel.add(numberTrans);
-        Integer[] numberOfTransToShow = new Integer[] {100, 200, 500, 1000, 2000};
-        comboBoxUpdateView = new JComboBox<Integer>(numberOfTransToShow);
-        switch (NUMBER_OF_TRANS_TO_SHOW){
-            case 100: comboBoxUpdateView.setSelectedIndex(0); break;
-            case 500: comboBoxUpdateView.setSelectedIndex(2); break;
-            case 1000: comboBoxUpdateView.setSelectedIndex(3); break;
-            case 2000: comboBoxUpdateView.setSelectedIndex(4); break;
-            default: comboBoxUpdateView.setSelectedIndex(1); break;
+        timelinePane.add(topPanel,BorderLayout.NORTH);
+        //Main control
+        JPanel jp01, jp02;
+        jp01 = new JPanel(new BorderLayout());
+        commandTab = GraphicLib.createTabbedPaneRegular();//new JTabbedPane();
+        commandTab.addTab("Control", null, jp01, "Main control commands");
+
+        mctb = new MainCommandsToolBar(jfis);
+        jp01.add(mctb, BorderLayout.NORTH);
+
+        jp02 = new JPanel();
+        //jp01.setPreferredSize(new Dimension(375, 400));
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+        jp02.setLayout(gridbag01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.fill = GridBagConstraints.BOTH;
+        c01.gridheight = 1;
+
+        jp02.add(new JLabel("Command parameter: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        paramMainCommand = new JTextField("1", 30);
+        paramMainCommand.setEditable(false);
+        jp02.add(paramMainCommand, c01);
+
+        c01.gridwidth = 1;
+        jp02.add(new JLabel("CPUs and HwA: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        if (cpuIDs == null) {
+            cpus = new JComboBox<String>();
+        } else {
+            cpus = new JComboBox<String>(cpuIDs);
         }
+        jp02.add(cpus, c01);
 
-        comboBoxUpdateView.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    NUMBER_OF_TRANS_TO_SHOW = (Integer) comboBoxUpdateView.getSelectedItem();
-                } catch (Exception e) {
-                    //TraceManager.addDev(nbOfTransactions.getText());
-                    //TraceManager.addDev("Invalid default transaction");
-                    NUMBER_OF_TRANS_TO_SHOW = 200;
-                }
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buttonPrev.setEnabled(false);
-                        buttonNext.setEnabled(false);
-                        maxIndexTrans = (transTransfer.size() - 1) / NUMBER_OF_TRANS_TO_SHOW;
-                        indexTrans = 0;
-                        htmlPaneContent = generateHtmlContent(indexTrans);
-                        sdpanel.setText(htmlPaneContent);
-                        updateButtonState();
-                    }
-                });
-                t.start();
-            }
-        });
-        topPanel.add(comboBoxUpdateView);
-
-        if(transTransfer.size() <= NUMBER_OF_TRANS_TO_SHOW) {
-            buttonPrev.setEnabled(false);
-            buttonNext.setEnabled(false);
+        c01.gridwidth = 1;
+        jp02.add(new JLabel("Buses: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        if (busIDs == null) {
+            busses = new JComboBox<String>();
+        } else {
+            busses = new JComboBox<String>(busIDs);
         }
-        updateButtonState();
+        jp02.add(busses, c01);
 
-        framePanel.add(topPanel, BorderLayout.NORTH);
+        c01.gridwidth = 1;
+        jp02.add(new JLabel("Memories: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        if (memIDs == null) {
+            mems = new JComboBox<String>();
+        } else {
+            mems = new JComboBox<String>(memIDs);
+        }
+        jp02.add(mems, c01);
 
+        c01.gridwidth = 1;
+        jp02.add(new JLabel("Tasks: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        if (taskIDs == null) {
+            tasks = new JComboBox<String>();
+        } else {
+            tasks = new JComboBox<String>(taskIDs);
+        }
+        jp02.add(tasks, c01);
+
+        c01.gridwidth = 1;
+        jp02.add(new JLabel("Channels: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        if (chanIDs == null) {
+            chans = new JComboBox<String>();
+        } else {
+            chans = new JComboBox<String>(chanIDs);
+        }
+        jp02.add(chans, c01);
+
+        jp01.add(jp02, BorderLayout.CENTER);
+
+        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, topPanel, commandTab);
+        //split.setBackground(ColorManager.InteractiveSimulationBackground);
+        timelinePane.add(split, BorderLayout.CENTER);
+        timelinePane.add(commandTab, BorderLayout.SOUTH);
+        framePanel.add(timelinePane, BorderLayout.NORTH);
         // Simulation panel
-        sdpanel = new JTextPane();
+        sdpanel = new JEditorPane();
         sdpanel.setEditable(false);
         sdpanel.setContentType("text/html");
-        htmlPaneContent = generateHtmlContent(0);
-        sdpanel.setText(htmlPaneContent);
+//        sdpanel.setText(filePath);
 
         JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setWheelScrollingEnabled(true);
@@ -128,252 +162,6 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         framePanel.add(status, BorderLayout.SOUTH);
 
         pack();
-
-    }
-    public String generateHtmlContent( int indexTrans) {
-        Vector<SimulationTransaction> trans = new Vector<SimulationTransaction>(transTransfer.subList((0 < NUMBER_OF_TRANS_TO_SHOW * indexTrans) ? NUMBER_OF_TRANS_TO_SHOW * indexTrans : 0 ,(transTransfer.size() - 1 < NUMBER_OF_TRANS_TO_SHOW * indexTrans +NUMBER_OF_TRANS_TO_SHOW) ? transTransfer.size() : NUMBER_OF_TRANS_TO_SHOW * indexTrans +NUMBER_OF_TRANS_TO_SHOW));
-        System.out.println("Sub list from " + ((0 < NUMBER_OF_TRANS_TO_SHOW * indexTrans) ? NUMBER_OF_TRANS_TO_SHOW * indexTrans : 0) + " to " + ((transTransfer.size() - 1 < NUMBER_OF_TRANS_TO_SHOW * indexTrans +NUMBER_OF_TRANS_TO_SHOW) ? transTransfer.size() - 1 : NUMBER_OF_TRANS_TO_SHOW * indexTrans + NUMBER_OF_TRANS_TO_SHOW) + " transize " + trans.size());
-        String htmlContent = "";
-        Map<String, Vector<SimulationTransaction>> map = new HashMap<String, Vector<SimulationTransaction>>();
-        Map<String, String> taskColors = new HashMap<String, String>();
-        int taskIndex = 0;
-        int endTime = 0;
-        for (int i = 0; i < trans.size(); i++) {
-            //HW and task
-            String hwnode = (trans.get(i).deviceName.contains("Bus") ? trans.get(i).deviceName : trans.get(i).deviceName + "_core_" + trans.get(i).coreNumber);
-            if (map.get(hwnode) == null) {
-                map.put(hwnode, new Vector<SimulationTransaction>());
-            }
-            map.get(hwnode).add(trans.get(i));
-            // task color
-            String taskname = trans.get(i).taskName;
-            if (taskColors.get(taskname) == null) {
-                int cellIndex = taskIndex % 15;
-                taskIndex++;
-                String cellClass = "t" + String.valueOf(cellIndex);
-                taskColors.put(taskname, cellClass);
-            }
-        }
-        UIManager.put("ProgressMonitor.progressText", "Processing");
-        pm = new ProgressMonitor(framePanel, "Generating Content", "Task starting", 0, map.size());
-        pm.setMillisToDecideToPopup(100);
-        pm.setMillisToPopup(100);
-        for (String i : map.keySet()) {
-            if (Integer.valueOf(map.get(i).lastElement().endTime) > endTime) endTime = Integer.valueOf(map.get(i).lastElement().endTime);
-        }
-        if (endTime > 2000) endTime = 2000;
-        htmlContent = "<!DOCTYPE html>\n" + "<html>\n";
-        htmlContent += "<head>\n" +
-                "<style>\n";
-        htmlContent += "table{\n" +
-                " \tborder-collapse: collapse;\n" +
-                " \tempty-cells: show;\n" +
-                " \tmargin: 0.4cm;\n" +
-                " }\n" +
-                " td{\n" +
-                " \tpadding: 10px 5px;\n" +
-                " \tborder: 1px solid black;\n" +
-                " \tmax-width: 5px;\n" +
-                " }\n" +
-                " th{\n" +
-                " \tpadding: 5px;\n" +
-                " }\n" +
-                " .sc{\n" +
-                " \tborder-style: none;\n" +
-                " \tpadding: 0px;\n" +
-                " \tfont-size: small;\n" +
-                "     transform: rotate(45deg);\n" +
-                "     transform-origin: left top;\n" +
-                " }\n" +
-                " .sc1{\n" +
-                " \tborder-style: none;\n" +
-                " \tpadding: 0px;\n" +
-                " \tfont-size: small;\n" +
-                " \tcolor: red;\n" +
-                "     transform: rotate(45deg);\n" +
-                "     transform-origin: left top;\n" +
-                " }\n" +
-                " h2 {\n" +
-                " \tborder-bottom: 1px solid #666;\n" +
-                " }\n" +
-                " h2 span {\n" +
-                " \tposition: relative;\n" +
-                " \tleft: -0.3em;\n" +
-                " \tbottom: -0.6em;\n" +
-                " \tpadding: 1px 0.5em;\n" +
-                " \tborder-style: solid;\n" +
-                " \tborder-width: 1px 1px 1px 0.8em;\n" +
-                " \tborder-color: #666 #666 #666 #008;\n" +
-                " \tbackground-color: #ddd;\n" +
-                " }\n" +
-                " .space{border-style: none;}\n" +
-                " .not{background-color: white; text-align: center}\n" +
-                ".notfirst{\n" +
-                " \tbackground-color: white;\n" +
-                " \tborder-width: 2px;\n" +
-                " \tborder-color: red;\n" +
-                " \tborder-style: none solid none none;\n" +
-                " }\n" +
-                " .notmid {\n" +
-                " \tbackground-color: white;\n" +
-                " \ttext-align: right;\n" +
-                " \tborder-style: solid none none none;\n" +
-                " }\n" +
-                " .notlast {\n" +
-                " \tbackground-color: white;\n" +
-                " \twidth: 5px;\n" +
-                " \tborder-style: none none none none;\n" +
-                " }\n" +
-                " .t0{background-color: yellow;}\n" +
-                " \n" +
-                " .t1{background-color: purple;}\n" +
-                " \n" +
-                " .t2{background-color: red;}\n" +
-                " \n" +
-                " .t3{background-color: silver;}\n" +
-                " \n" +
-                " .t4{background-color: teal;}\n" +
-                " \n" +
-                " .t5{background-color: aqua;}\n" +
-                " \n" +
-                " .t6{background-color: olive;}\n" +
-                " \n" +
-                " .t7{background-color: navy;}\n" +
-                "\n" +
-                " .t8{background-color: maroon;}\n" +
-                " \n" +
-                " .t9{background-color: lime;}\n" +
-                " \n" +
-                " .t10{background-color: green;}\n" +
-                " \n" +
-                " .t11{background-color: gray;}\n" +
-                "\n" +
-                " .t12{background-color: fuchsia;}\n" +
-                " \n" +
-                " .t13{background-color: blue;}\n" +
-                " \n" +
-                " .t14{background-color: LightGoldenRodYellow;}\n" +
-                " \n" +
-                " .wrapper {\n" +
-                " \twidth: 256px;\n" +
-                " \theight: 256px;\n" +
-                " }\n" +
-                " \n" +
-                " .clear {\n" +
-                " \tclear:both\n" +
-                " }\n";
-        htmlContent += "</style>\n" +
-                "</head>\n<body>\n<table style=\"float: left;position: relative;\">";
-        htmlContent += "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n" +
-                "<td class=\"notfirst\"></td>\n" +
-                "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align: right\" colspan=\"" + endTime +
-                "\"><b>Time</b></td>\n</tr>\n" +
-                "<tr><th></th><th class=\"notfirst\"></th></tr>\n" +
-                "<div class = \"clear\"></div>";
-        int count = 0;
-        for (String i : map.keySet()) {
-            pm.setNote("Writing content for " + i);
-            //updating ProgressMonitor progress
-            pm.setProgress(count);
-            if (pm.isCanceled()) {
-                htmlContent = "<h1>Process has been terminated by user.</h1>";
-                return htmlContent;
-            }
-            System.out.println("Writing content for " + i);
-            count ++;
-            int rowLength = 0;
-            Vector<String> listScale = new Vector<String>();
-            Vector<String> listScaleTime = new Vector<String>();
-            listScale.add("0");
-            listScaleTime.add("0");
-            htmlContent += "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" + i + "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
-            for (int j = 0; j < map.get(i).size(); j++) {
-
-                if (j == 0 && Integer.valueOf(map.get(i).get(j).startTime) != 0) {
-                    if(Integer.valueOf(map.get(i).get(j).startTime) > BIG_IDLE) {
-                        htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"10\"> <-IDLE " + map.get(i).get(j).startTime + "-> </td>\n";
-                        listScale.add("10");
-                        rowLength += 10;
-                    } else {
-                        htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"" + map.get(i).get(j).startTime + "\"></td>\n";
-                        listScale.add(map.get(i).get(j).startTime);
-                        rowLength += Integer.valueOf(map.get(i).get(j).startTime);
-                    }
-
-                    if (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(listScaleTime.lastElement())) {
-                        listScaleTime.add(map.get(i).get(j).startTime);
-                    }
-                    if (Integer.valueOf(map.get(i).get(j).endTime) > Integer.valueOf(listScaleTime.lastElement())) {
-                        listScaleTime.add(map.get(i).get(j).endTime);
-                    }
-                } else if ((j != 0 && (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(map.get(i).get(j - 1).endTime)))) {
-                    int sub = Integer.valueOf(map.get(i).get(j).startTime) - Integer.valueOf(map.get(i).get(j - 1).endTime);
-                    if (sub > BIG_IDLE) {
-                        htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"10\"> <-IDLE " + String.valueOf(sub) + "-> </td>\n";
-                        listScale.add("10");
-                        rowLength += 10;
-                    } else if (sub > 0) {
-                        htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"" + String.valueOf(sub) + "\"></td>\n";
-                        listScale.add(String.valueOf(sub));
-                        rowLength += sub;
-                    }
-
-                }
-                int sub1 = Integer.valueOf(map.get(i).get(j).endTime) - Integer.valueOf(map.get(i).get(j).startTime);
-                if (sub1 > BIG_IDLE) {
-                    htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"10\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
-                    listScale.add("10");
-                    rowLength += 10;
-                } else if (sub1 > 0) {
-                    htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"" + String.valueOf(sub1) + "\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
-                    listScale.add(String.valueOf(sub1));
-                    rowLength += sub1;
-                }
-
-                if (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(listScaleTime.lastElement())) {
-                    listScaleTime.add(map.get(i).get(j).startTime);
-                }
-                if (Integer.valueOf(map.get(i).get(j).endTime) > Integer.valueOf(listScaleTime.lastElement())) {
-                    listScaleTime.add(map.get(i).get(j).endTime);
-                }
-            }
-            htmlContent += "</tr>\n<tr>";
-            for (int k = 0; k < rowLength + 3; k++) {
-                if( k == 1) {
-                    htmlContent += "<th class=\"notfirst\">";
-                } else {
-                    htmlContent += "<th></th>";
-                }
-            }
-            htmlContent += "</tr>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n" +
-                    "<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>";
-            for (int l = 0; l < listScale.size(); l++) {
-                if (l + 1 >= listScale.size()) {
-                    htmlContent += "<td title=\"" + listScaleTime.get(l) + "\" class = \"sc\" colspan=\"" + "5" + "\">" + listScaleTime.get(l) + "</td>\n";
-                } else {
-                    htmlContent += "<td title=\"" + listScaleTime.get(l) + "\" class = \"sc\" colspan=\"" + listScale.get(l + 1) + "\">" + listScaleTime.get(l) + "</td>\n";
-                }
-            }
-            if( count >= map.size()){
-                htmlContent += "</tr>\n<tr><th>HW</th><th class=\"notfirst\"></th></tr>\n<div class = \"clear\"></div>\n";
-            } else {
-                htmlContent += "</tr>\n<tr><th></th><th class=\"notfirst\"></th></tr>\n<div class = \"clear\"></div>\n";
-            }
-
-
-        }
-        htmlContent += "</table>\n<table>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n" +
-                "<td class=\"notlast\"></td>\n";
-        for (String colors : taskColors.keySet()) {
-            htmlContent += "<td  class = \"" + taskColors.get(colors) + "\" style=\"max-width: unset;min-width: 170px;\">" + colors + "</td>";
-            htmlContent += "<td class=\"space\"></td>";
-        }
-
-        htmlContent += "</tr>\n</table>\n</body>\n" + "</html>";
-//        System.out.println(htmlContent);
-        pm.setNote("Task finished");
-        pm.close();
-        return htmlContent;
     }
 
     private void initActions() {
@@ -382,7 +170,54 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             actions[i] = new InteractiveSimulationActions(i);
             actions[i].addActionListener(this);
         }
+
+        cpuIDs = makeCPUIDs();
+        busIDs = makeBusIDs();
+        memIDs = makeMemIDs();
+        taskIDs = makeTasksIDs();
+        chanIDs = makeChanIDs();
     }
+
+    public String[] makeCPUIDs() {
+        if (tmap == null) {
+            return null;
+        }
+
+        return tmap.getCPUandHwAIDs();
+    }
+
+    public String[] makeBusIDs() {
+        if (tmap == null) {
+            return null;
+        }
+
+        return tmap.getBusIDs();
+    }
+
+    public String[] makeMemIDs() {
+        if (tmap == null) {
+            return null;
+        }
+
+        return tmap.getMemIDs();
+    }
+
+    public String[] makeTasksIDs() {
+        if (tmap == null) {
+            return null;
+        }
+
+        return tmap.getTasksIDs();
+    }
+
+    public String[] makeChanIDs() {
+        if (tmap == null) {
+            return null;
+        }
+
+        return tmap.getChanIDs();
+    }
+
 
     public void close() {
         dispose();
@@ -393,7 +228,6 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         TraceManager.addDev("Saving in html format");
         File file = null;
         JFileChooser jfcimg = new JFileChooser();
-//        jfcimg.setCurrentDirectory(new File(""));
         int returnVal = jfcimg.showSaveDialog(getContentPane());
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimg.getSelectedFile();
@@ -414,9 +248,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             return;
         }
         try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(htmlPaneContent.getBytes());
-            fos.close();
+            FileWriter myWriter = new FileWriter(file);
+            myWriter.write(filePath);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
             JOptionPane.showMessageDialog(getContentPane(), "The capture was correctly performed and saved in " + file.getAbsolutePath(), "Screen capture ok", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             TraceManager.addDev("Error during save trace: " + e.getMessage());
@@ -424,17 +259,15 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             return;
         }
     }
-    private void updateButtonState() {
-        if (indexTrans == 0)
-            buttonPrev.setEnabled(false);
-        else
-            buttonPrev.setEnabled(true);
 
-        if (indexTrans >= maxIndexTrans)
-            buttonNext.setEnabled(false);
-        else
-            buttonNext.setEnabled(true);
+    public void setParam(String param) {
+        paramMainCommand.setText(param);
     }
+
+    public void setContentPaneEnable(boolean x) {
+        mctb.setActive(x);
+    }
+
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand())) {
@@ -443,37 +276,18 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML].getActionCommand())) {
             saveHTML();
         }
-        else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_NEXT_TRANS_TIMELINE].getActionCommand())) {
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    buttonPrev.setEnabled(false);
-                    buttonNext.setEnabled(false);
-                    if (indexTrans < maxIndexTrans) {
-                        indexTrans ++;
-                        htmlPaneContent = generateHtmlContent(indexTrans);
-                        sdpanel.setText(htmlPaneContent);
-                    }
-                    updateButtonState();
-                }
-            });
-            t.start();
+    }
+
+    public void setServerReply(String content) {
+        try {
+            filePath = content;
+            sdpanel.setText(content);
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
-        else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_PREV_TRANS_TIMELINE].getActionCommand())) {
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    buttonPrev.setEnabled(false);
-                    buttonNext.setEnabled(false);
-                    if (indexTrans > 0) {
-                        indexTrans --;
-                        htmlPaneContent = generateHtmlContent(indexTrans);
-                        sdpanel.setText(htmlPaneContent);
-                    }
-                    updateButtonState();
-                }
-            });
-            t.start();
-        }
+    }
+
+    public void setStatusBar (String s) {
+        status.setText("Ready ... Time: " + s);
     }
 }

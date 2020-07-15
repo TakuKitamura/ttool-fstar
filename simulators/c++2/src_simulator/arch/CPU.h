@@ -121,6 +121,7 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	void HW2HTML(std::ofstream& myfile) const;
+	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const;
 	void schedule2HTML(std::ofstream& myfile) const;
 	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 	inline void setCoreNumberGraph(unsigned int n){ _coreNumberGraph=n;}

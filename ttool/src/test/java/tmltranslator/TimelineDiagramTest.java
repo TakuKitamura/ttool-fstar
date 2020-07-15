@@ -42,6 +42,7 @@ public class TimelineDiagramTest extends AbstractUITest {
     private boolean isReady = false;
     private boolean running = true;
     private Vector<SimulationTransaction> trans;
+    private String ssxml;
     final static String EXPECTED_FILE_GENERATED_TIMELINE = getBaseResourcesDir() + "tmltranslator/expected/expected_get_generated_timeline.txt";
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -66,8 +67,8 @@ public class TimelineDiagramTest extends AbstractUITest {
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
-            for(TURTLEPanel _tab : mainGUI.getTabs()) {
-                if(_tab instanceof TMLArchiPanel) {
+            for (TURTLEPanel _tab : mainGUI.getTabs()) {
+                if (_tab instanceof TMLArchiPanel) {
                     for (TDiagramPanel tdp : _tab.getPanels()) {
                         if (tdp instanceof TMLArchiDiagramPanel) {
                             mainGUI.selectTab(tdp);
@@ -114,7 +115,7 @@ public class TimelineDiagramTest extends AbstractUITest {
             BufferedReader proc_in;
             String str;
             boolean mustRecompileAll;
-            Penalties penalty = new Penalties(SIM_DIR  + "src_simulator");
+            Penalties penalty = new Penalties(SIM_DIR + "src_simulator");
             int changed = penalty.handlePenalties(false);
 
             if (changed == 1) {
@@ -168,88 +169,65 @@ public class TimelineDiagramTest extends AbstractUITest {
             } catch (RemoteConnectionException rce) {
                 System.out.println("Could not connect to server.");
             }
+            try {
 
-            toServer(" 1 0", rc);
-            Thread.sleep(5);
-            toServer("22 100", rc);
-            Thread.sleep(5);
-            while (running) {
-                String demo = null;
-                try {
-                    demo = rc.readOneLine();
-                } catch (RemoteConnectionException e) {
-                    e.printStackTrace();
+                toServer(" 1 6 100", rc);
+                Thread.sleep(5);
+                toServer("7 4 ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2", rc);
+                Thread.sleep(5);
+                while (running) {
+                    String demo = null;
+                    try {
+                        demo = rc.readOneLine();
+                    } catch (RemoteConnectionException e) {
+                        e.printStackTrace();
+                    }
+                    running = analyzeServerAnswer(demo);
                 }
-                if (demo.contains("transnb nb=")) {
-                    running = false;
-                }
-                int index0 = demo.indexOf("<transinfo");
 
-                if ((index0 > -1)) {
-                    analyzeServerAnswer(demo, index0);
-                } else {
-                    continue;
-                }
+                File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
+                String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                assertTrue(content.equals(ssxml));
+                System.out.println("Test done");
+
+            }catch (Exception e) {
+                e.printStackTrace();
             }
-
-            System.out.println("Transaction list size: " + trans.size());
-
-            JFrameTMLSimulationPanelTimeline tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mainGUI, trans,
-                    "Show Trace - Timeline");
-//            System.out.println(tmlSimPanelTimeline.generateHtmlContent(0));
-            File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
-            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            assertTrue(content.equals(tmlSimPanelTimeline.generateHtmlContent(0)));
-
         }
     }
-    private synchronized void toServer(String s, RemoteConnection rc) throws RemoteConnectionException {
-        while(!isReady) {
+    private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
+        while (!isReady) {
             TraceManager.addDev("Server not ready");
             try {
                 rc.send("13");
                 wait(250);
             } catch (InterruptedException ie) {
-
+                ie.printStackTrace();
             }
         }
         rc.send(s);
+        System.out.println("send " + s);
     }
 
-    private void  analyzeServerAnswer(String s, int index0) {
-        String val = s.substring(index0+10).trim();
-        Pattern p = Pattern.compile("\"([^\"]*)\"");
-        Matcher m = p.matcher(val);
-        ArrayList<String> splited = new ArrayList<>();
-        while (m.find()) {
-            splited.add(m.group(1));
-        }
-        writeTransValue(splited);
-    }
+    private boolean analyzeServerAnswer(String s) {
+        boolean isRunning = true;
+        int index0 = s.indexOf("<?xml");
 
-    private void writeTransValue(ArrayList<String> val) {
-        if(trans == null) trans = new Vector<SimulationTransaction>();
-        SimulationTransaction st = new SimulationTransaction();
-        st.uniqueID = Long.valueOf(val.get(0));
-        st.nodeType = val.get(1);
-        st.deviceName = val.get(2);
-        st.coreNumber = val.get(3);
-        int index = val.get(4).indexOf(": ");
-        if (index == -1){
-            st.taskName = "Unknown";
-            st.command = val.get(4);
+        if (index0 != -1) {
+            //
+            ssxml = s.substring(index0, s.length()) + "\n";
         } else {
-            st.taskName = val.get(4).substring(0, index).trim();
-            st.command = val.get(4).substring(index+1, val.get(4).length()).trim();
+            //
+            ssxml = ssxml + s + "\n";
         }
-        st.startTime = val.get(5);
-        st.endTime = val.get(6);
-        st.length = val.get(7);
-        st.virtualLength = val.get(8);
-        st.id = val.get(9);
-        st.runnableTime = val.get(10);
-        st.channelName = (val.size() > 11) ? val.get(11) : "Unknown";
-
-        trans.add(st);
+        index0 = ssxml.indexOf("<![CDATA[");
+        int index1 = ssxml.indexOf("]]>");
+        if ((index0 > -1) && (index1 > -1)) {
+            ssxml = ssxml.substring(index0 + 9, index1).trim();
+            isRunning = false;
+        }
+        return isRunning;
     }
+
 }
+
