@@ -622,9 +622,9 @@ public class AvatarSpecification extends AvatarElement {
                 if (ancientGuard == null)
                     continue;
 
-                TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString());
+                //TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString());
                 at.setGuard (ancientGuard.getRealGuard (asme));
-                TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
+                //TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
             }
         }
     }

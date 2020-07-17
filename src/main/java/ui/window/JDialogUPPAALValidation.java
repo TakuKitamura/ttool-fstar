@@ -82,11 +82,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             "for UPPAALVerifierPath and UPPAALVerifierHost configurations.";
 
     static {
-//        for (final String label : ConfigurationTTool.UPPAALPropertyVerifMessage.split(",")) {
-//            if (!label.trim().isEmpty()) {
-//                PROP_VERIFIED_LABELS.add(label.trim());
-//            }
-//        }
+        for (final String label : ConfigurationTTool.UPPAALPropertyVerifMessage.split(",")) {
+            if (!label.trim().isEmpty()) {
+                PROP_VERIFIED_LABELS.add(label.trim());
+            }
+        }
 
         // Handle the case where nothing is defined in the configuration
         if (PROP_VERIFIED_LABELS.isEmpty()) {
