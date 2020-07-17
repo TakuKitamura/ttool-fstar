@@ -1869,11 +1869,12 @@ public class AvatarStateMachine extends AvatarElement {
     }
     
     
-    public boolean checkStaticInternalLoops(List<ArrayList<AvatarTransition>> loops) {
+    public List<ArrayList<AvatarTransition>> checkStaticInternalLoops() {       
         if (allStates == null) {
-            return false;
+            return null;
         }
         
+        List<ArrayList<AvatarTransition>> loops = new ArrayList<ArrayList<AvatarTransition>>();        
         List<AvatarTransition> trace = new ArrayList<AvatarTransition>();
         Set<AvatarStateMachineElement> visited= new HashSet<AvatarStateMachineElement>();
         
@@ -1881,7 +1882,7 @@ public class AvatarStateMachine extends AvatarElement {
             checkStaticInternalLoopsRec(state, state, trace, visited, loops, 0);
             visited.add(state); //avoid cycles permutations
         }
-        return true;
+        return loops;
     }
     
     

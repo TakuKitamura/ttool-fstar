@@ -453,27 +453,6 @@ public class AvatarSpecification extends AvatarElement {
         }
     }
     
-    public List<ArrayList<AvatarTransition>> checkStaticInternalLoops() {
-        List<ArrayList<AvatarTransition>> loops = new ArrayList<ArrayList<AvatarTransition>>();
-        
-        //collect all the possible loops which do not contain signal communication
-        for(AvatarBlock block: blocks) {
-            block.getStateMachine().checkStaticInternalLoops(loops);
-        }
-        
-        return loops;
-        
-//        //check presence of unguarded loops
-//        for (ArrayList<AvatarTransition> trace : loops) {
-//            boolean guarded = false;
-//            for (AvatarTransition at : trace) {
-//                guarded |= at.isGuarded();
-//            }
-//            if (!guarded) {
-//                //no transition has a guard check --> reachability of first state
-//            }
-//        }
-    }
 //
 //    private void renameTimers() {
 //        // Check whether timers have the same name in different blocks
@@ -643,9 +622,9 @@ public class AvatarSpecification extends AvatarElement {
                 if (ancientGuard == null)
                     continue;
 
-                //TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString());
+                TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString());
                 at.setGuard (ancientGuard.getRealGuard (asme));
-                //TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
+                TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
             }
         }
     }

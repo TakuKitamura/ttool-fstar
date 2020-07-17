@@ -570,22 +570,44 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (studyAL) {
             studySafety = true;
             ignoreConcurrenceBetweenInternalActions = true;
-            List<ArrayList<AvatarTransition>> internalLoops = spec.checkStaticInternalLoops();
-            if (!internalLoops.isEmpty()) {
-                actionLoops = new ArrayList<SpecificationActionLoop>();
-                for (ArrayList<AvatarTransition> loop : internalLoops) {
-                    SpecificationActionLoop sap = new SpecificationActionLoop(loop, spec);
+            actionLoops = new ArrayList<SpecificationActionLoop>();
+            List<ArrayList<AvatarTransition>> internalLoops;
+            for(AvatarBlock block : spec.getListOfBlocks()) {
+                internalLoops = block.getStateMachine().checkStaticInternalLoops();    
+                if (internalLoops != null && internalLoops.isEmpty() == false) {
+//                    for (ArrayList<AvatarTransition> loop : internalLoops) {
+//                        SpecificationActionLoop sap = new SpecificationActionLoop(loop, spec);
+//                        if (!sap.hasError()) {
+//                            actionLoops.add(sap);
+//                            safety = sap.getReachability();
+//                            startModelChecking(nbOfThreads);
+//                            resetModelChecking();
+//                            if (sap.hasProperty()) {
+//                                safety = sap.getProperty();
+//                                startModelChecking(nbOfThreads);
+//                                resetModelChecking();
+//                            }
+//                            sap.setResult();
+//                        }
+//                    }
+                    SpecificationActionLoop sap = new SpecificationActionLoop(internalLoops, spec);
                     if (!sap.hasError()) {
                         actionLoops.add(sap);
-                        safety = sap.getReachability();
-                        startModelChecking(nbOfThreads);
-                        resetModelChecking();
-                        if (sap.hasProperty()) {
-                            safety = sap.getProperty();
+                        do {
+                            safety = sap.getReachability();
                             startModelChecking(nbOfThreads);
                             resetModelChecking();
-                        }
+                            if (sap.hasProperty()) {
+                                safety = sap.getProperty();
+                                startModelChecking(nbOfThreads);
+                                resetModelChecking();
+                            }
+                            if (sap.setCover()) {
+                                break;
+                            }
+                        } while (sap.increasePointer());
                         sap.setResult();
+
                     }
                 }
             }
@@ -833,8 +855,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         prepareTransitions();
         prepareBlocks();
-        
-        spec.checkStaticInternalLoops();
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
