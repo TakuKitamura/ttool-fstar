@@ -114,6 +114,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     // Internal-action loop
     private boolean studyActionLoop;
+    private int partialHash;
     private ArrayList<SpecificationActionLoop> actionLoops;
     
     //Debug counterexample
@@ -159,6 +160,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         freeIntermediateStateCoding = true;
         verboseInfo = true;
         compressionFactor = 1;
+        partialHash = -1;
     }
 
     public AvatarSpecification getInitialSpec() {
@@ -545,7 +547,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                             iter.remove();
                         }
                     }
-                    System.out.println("Dimensions of lead states to elaborate: " + safetyLeadStates.size());
+//                    System.out.println("Dimensions of lead states to elaborate: " + safetyLeadStates.size());
                     safetyLeadStates = null;
                 }
                 if (!stoppedBeforeEnd) {
@@ -572,6 +574,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ignoreConcurrenceBetweenInternalActions = true;
             actionLoops = new ArrayList<SpecificationActionLoop>();
             List<ArrayList<AvatarTransition>> internalLoops;
+            int i = 0;
             for(AvatarBlock block : spec.getListOfBlocks()) {
                 internalLoops = block.getStateMachine().checkStaticInternalLoops();    
                 if (internalLoops != null && internalLoops.isEmpty() == false) {
@@ -590,28 +593,56 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 //                            sap.setResult();
 //                        }
 //                    }
-                    SpecificationActionLoop sap = new SpecificationActionLoop(internalLoops, spec);
-                    if (!sap.hasError()) {
+                    SpecificationActionLoop sap = new SpecificationActionLoop(internalLoops);
+//                    sap.init(spec);
+//                    if (!sap.hasError()) {
+//                        actionLoops.add(sap);
+//                        do {
+//                            safety = sap.getReachability();
+//                            startModelChecking(nbOfThreads);
+//                            resetModelChecking();
+//                            if (sap.hasProperty()) {
+//                                safety = sap.getProperty();
+//                                startModelChecking(nbOfThreads);
+//                                resetModelChecking();
+//                            }
+//                            if (sap.setCover()) {
+//                                break;
+//                            }
+//                        } while (sap.increasePointer());
+//                        sap.setResult();
+//
+//                    }
+                    sap.initLeadsTo(spec);
+                    if(!sap.hasError()) {
                         actionLoops.add(sap);
-                        do {
-                            safety = sap.getReachability();
-                            startModelChecking(nbOfThreads);
+                        safety = sap.getPropertyLeadsTo();
+                        safetyLeadStates = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
+                        ignoreEmptyTransitions = false;
+                        partialHash = i; //restrict the hashing to only the current block
+                        startModelChecking(nbOfThreads);
+                        partialHash = -1;
+                        safety.initLead();
+                        Iterator<Map.Entry<Integer,SpecificationState>> iter = safetyLeadStates.entrySet().iterator();
+                        while (iter.hasNext()) {
+                            SpecificationState state = iter.next().getValue();
                             resetModelChecking();
-                            if (sap.hasProperty()) {
-                                safety = sap.getProperty();
-                                startModelChecking(nbOfThreads);
-                                resetModelChecking();
-                            }
-                            if (sap.setCover()) {
+                            startModelChecking(state, nbOfThreads);
+                            if (safety.result == false) {
                                 break;
+                            } else {
+                                //free memory
+                                iter.remove();
                             }
-                        } while (sap.increasePointer());
-                        sap.setResult();
-
+                        }
+                        safetyLeadStates = null;
+                        sap.setResultLeadsTo();
                     }
                 }
+                i++;
             }
             ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+            ignoreEmptyTransitions = emptyTr;
             studySafety = false;
         }
         
@@ -2178,7 +2209,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         if (!ignoreConcurrenceBetweenInternalActions) {
                             state = reduceCombinatorialExplosionProperty(state);
                         }
-                        safetyLeadStates.put(state.getHash(state.getBlockValues()), state);
+                        if (partialHash == -1) {
+                            safetyLeadStates.put(state.getHash(state.getBlockValues()), state);
+                        } else {
+                            safetyLeadStates.put(state.getPartialHash(partialHash), state);
+                        }
                         newState.property = false;
                     }
                     addToPending = 1;

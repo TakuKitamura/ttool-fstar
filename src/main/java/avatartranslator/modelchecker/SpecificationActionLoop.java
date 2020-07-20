@@ -23,16 +23,15 @@ public class SpecificationActionLoop {
     private int pointer;
 
     
-    public SpecificationActionLoop(List<ArrayList<AvatarTransition>> paths, AvatarSpecification spec) {
+    public SpecificationActionLoop(List<ArrayList<AvatarTransition>> paths) {
         //this.path = path;
         this.error = false;
         pointer = 0;
         internalLoops = paths;
-        init(spec);
     }
     
     
-    private void init(AvatarSpecification spec) {
+    public void init(AvatarSpecification spec) {
         Map<AvatarStateMachineElement, Set<AvatarTransition>> map = new HashMap<>();
         
         for (List<AvatarTransition> list : internalLoops) {
@@ -89,8 +88,36 @@ public class SpecificationActionLoop {
             }
             i++;
         }
-
+    }
+    
+    
+    public void initLeadsTo(AvatarSpecification spec) {
+        Set<AvatarStateMachineElement> stateSet = new HashSet<>();
         
+        for (List<AvatarTransition> list : internalLoops) {       
+            for (AvatarTransition at : list) {
+                stateSet.add(at.getNext(0));
+            }
+        }
+        
+        properties = new SafetyProperty[1];
+        
+        AvatarBlock block = (AvatarBlock) internalLoops.get(0).get(0).getBlock();
+        
+        int i = 0;
+        StringBuilder formula = new StringBuilder();
+        for (AvatarStateMachineElement el : stateSet) {
+            if (i != 0) {
+                formula.append("||");
+            }
+            formula.append(el.getName());
+            i++;
+        }
+        
+        SafetyProperty property = new SafetyProperty(formula.toString() + "-->!(" + formula.toString() + ")");
+        property.analyzeProperty(block, spec);
+        error |= property.hasError();
+        properties[0] = property;
     }
     
     public boolean hasError() {
@@ -116,6 +143,10 @@ public class SpecificationActionLoop {
             return properties[pointer];
         }
         return null;
+    }
+    
+    public SafetyProperty getPropertyLeadsTo() {
+        return properties[0];
     }
     
     public boolean increasePointer() {
@@ -166,6 +197,10 @@ public class SpecificationActionLoop {
         }
     }
     
+    public void setResultLeadsTo() {
+        result = !properties[0].result;
+    }
+    
     public boolean getResult() {
         return result;
     }
@@ -175,6 +210,8 @@ public class SpecificationActionLoop {
         
         if(internalLoops == null) {
             return "";
+        } else if (cover == null) {
+            return "In block " + internalLoops.get(0).get(0).getBlock().getName();
         }
         
         int i = 0;

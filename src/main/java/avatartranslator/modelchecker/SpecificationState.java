@@ -95,6 +95,10 @@ public class SpecificationState implements Comparable<SpecificationState>  {
         }
         return hashValue;
     }
+    
+    public int getPartialHash(int index) {
+        return Arrays.hashCode(blocks[index].values);
+    }
 
     public void setInit(AvatarSpecification _spec, boolean _ignoreEmptyTransitions) {
         int cpt = 0;
