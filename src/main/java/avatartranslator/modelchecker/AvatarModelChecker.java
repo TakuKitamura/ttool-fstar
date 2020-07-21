@@ -453,7 +453,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR, studyRI, studyAL, genRG, genTrace;
+        boolean studyS, studyL, studyR, studyRI, genRG, genTrace;
         boolean emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
@@ -478,7 +478,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyL = studyLiveness;
         studyS = studySafety;
         studyRI = studyReinit;
-        studyAL = studyActionLoop;
         genRG = computeRG;
         genTrace = counterexample;
         verboseInfo = false;
@@ -490,7 +489,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyLiveness = false;
         studyReachability = false;
         studyReinit = false;
-        studyActionLoop = false;
         counterexample = false;
                 
 
@@ -569,30 +567,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studyReinit = false;
         }
         
-        if (studyAL) {
+        if (studyActionLoop) {
             studySafety = true;
             ignoreConcurrenceBetweenInternalActions = true;
+            counterexample = genTrace;
             actionLoops = new ArrayList<SpecificationActionLoop>();
             List<ArrayList<AvatarTransition>> internalLoops;
             int i = 0;
             for(AvatarBlock block : spec.getListOfBlocks()) {
                 internalLoops = block.getStateMachine().checkStaticInternalLoops();    
                 if (internalLoops != null && internalLoops.isEmpty() == false) {
-//                    for (ArrayList<AvatarTransition> loop : internalLoops) {
-//                        SpecificationActionLoop sap = new SpecificationActionLoop(loop, spec);
-//                        if (!sap.hasError()) {
-//                            actionLoops.add(sap);
-//                            safety = sap.getReachability();
-//                            startModelChecking(nbOfThreads);
-//                            resetModelChecking();
-//                            if (sap.hasProperty()) {
-//                                safety = sap.getProperty();
-//                                startModelChecking(nbOfThreads);
-//                                resetModelChecking();
-//                            }
-//                            sap.setResult();
-//                        }
-//                    }
                     SpecificationActionLoop sap = new SpecificationActionLoop(internalLoops);
 //                    sap.init(spec);
 //                    if (!sap.hasError()) {
@@ -621,14 +605,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         ignoreEmptyTransitions = false;
                         partialHash = i; //restrict the hashing to only the current block
                         startModelChecking(nbOfThreads);
-                        partialHash = -1;
                         safety.initLead();
                         Iterator<Map.Entry<Integer,SpecificationState>> iter = safetyLeadStates.entrySet().iterator();
                         while (iter.hasNext()) {
                             SpecificationState state = iter.next().getValue();
                             resetModelChecking();
+                            resetCounterexample();
                             startModelChecking(state, nbOfThreads);
                             if (safety.result == false) {
+                                generateCounterexample();
                                 break;
                             } else {
                                 //free memory
@@ -637,11 +622,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         }
                         safetyLeadStates = null;
                         sap.setResultLeadsTo();
+                        resetModelChecking();
                     }
+                    partialHash = -1;
                 }
                 i++;
             }
             ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+            counterexample = false;
             ignoreEmptyTransitions = emptyTr;
             studySafety = false;
         }
@@ -689,7 +677,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = studyS;
         studyReachability = studyR;
         studyReinit = studyRI;
-        studyActionLoop = studyAL;
                 
         TraceManager.addDev("Model checking done");
         return true;
@@ -1081,7 +1068,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (counterexample && counterTrace.hasCounterexample()) {
             counterTrace.buildTrace(states, traceStates);
             if (counterTraceText) {
-                if (studySafety) {
+                if (studyActionLoop) {
+                    counterTraceReport.append("Trace for NO internal action loops\n");
+                    counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+                } else if (studySafety) {
                     counterTraceReport.append("Trace for " + safety.getRawProperty() + "\n");
                     counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
                 } else if (deadlockStop) {
@@ -1090,7 +1080,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
             }
             if (counterTraceAUT) {
-                if (studySafety) {
+                if (studyActionLoop) {
+                    counterTrace.generateTraceAUT("No internal action loops? Block " + spec.getListOfBlocks().get(partialHash).getName(), states);
+                } else if (studySafety) {
                     counterTrace.generateTraceAUT(safety.getRawProperty(), states);
                 } else if (deadlockStop) {
                     counterTrace.generateTraceAUT("No Deadlocks?", states);
