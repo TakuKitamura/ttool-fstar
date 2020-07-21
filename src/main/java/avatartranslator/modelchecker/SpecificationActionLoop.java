@@ -3,6 +3,7 @@ package avatartranslator.modelchecker;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +34,13 @@ public class SpecificationActionLoop {
     
     public void init(AvatarSpecification spec) {
         Map<AvatarStateMachineElement, Set<AvatarTransition>> map = new HashMap<>();
+        
+        removeForLoops();
+        
+        if (internalLoops.size() == 0) {
+            error = true;
+            return;
+        }
         
         for (List<AvatarTransition> list : internalLoops) {
             AvatarStateMachineElement state = list.get(list.size() -1).getNext(0); //loop state
@@ -93,6 +101,13 @@ public class SpecificationActionLoop {
     
     public void initLeadsTo(AvatarSpecification spec) {
         Set<AvatarStateMachineElement> stateSet = new HashSet<>();
+        
+        removeForLoops();
+        
+        if (internalLoops.size() == 0) {
+            error = true;
+            return;
+        }
         
         for (List<AvatarTransition> list : internalLoops) {       
             for (AvatarTransition at : list) {
@@ -228,6 +243,18 @@ public class SpecificationActionLoop {
         
         return s.toString();
     }
+    
+    private void removeForLoops() {
+        Iterator<ArrayList<AvatarTransition>> iter = internalLoops.iterator();
+        while(iter.hasNext()) {
+            List<AvatarTransition> list = iter.next();
+            if (list.size() == 1 && list.get(0).getName().startsWith("Transition2ForRandom__")) {
+                //remove random for cycle
+                iter.remove();
+            }
+        }
+    }
+
     
 //    public static void findIntersectionSets(List<ArrayList<AvatarTransition>> internalLoops) {
 //        if (internalLoops == null || internalLoops.size() <= 1) {
