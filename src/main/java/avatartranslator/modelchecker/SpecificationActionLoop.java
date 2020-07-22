@@ -226,7 +226,20 @@ public class SpecificationActionLoop {
         if(internalLoops == null) {
             return "";
         } else if (cover == null) {
-            return "In block " + internalLoops.get(0).get(0).getBlock().getName();
+            s.append("In block " + internalLoops.get(0).get(0).getBlock().getName() + " : ");
+            boolean first = true;
+            for (List<AvatarTransition> list : internalLoops) {
+                if (!first) {
+                    s.append(", or ");
+                }
+                first = false;
+                s.append(list.get(list.size() - 1).getNext(0).getName());
+                for (AvatarTransition at : list) {
+                    s.append(" --> " + at.getNext(0).getName());
+                }
+            }
+            s.append(" lead to a infinite internal loop\n");
+            return s.toString();
         }
         
         int i = 0;

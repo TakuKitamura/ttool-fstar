@@ -330,7 +330,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         
         // Internal action loop
         cbasic.gridwidth = GridBagConstraints.REMAINDER;
-        actionLoop = new JCheckBox("No internal action loops? (test)", checkActionLoopSelected);
+        actionLoop = new JCheckBox("No internal action loops?", checkActionLoopSelected);
         actionLoop.addActionListener(this);
         jpbasic.add(actionLoop, cbasic);
 
@@ -888,9 +888,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     jta.append("Internal action loops:\n");
                     for (SpecificationActionLoop sal : al) {
                         if (sal.getResult()) {
-                            jta.append(sal.toString() + "\n");
+                            jta.append(sal.toString());
                         }
                     }
+                    jta.append("\n");
                 }
             }
 
