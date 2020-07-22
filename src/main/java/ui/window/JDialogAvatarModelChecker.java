@@ -82,6 +82,7 @@ import java.util.concurrent.TimeUnit;
 public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface {
     private final static String[] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
     private final static Color[] COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
+    private final static String[] WORD_BITS = {"32 bits", "16 bits", "8 bits"};
 
 
     public final static int REACHABILITY_ALL = 1;
@@ -114,6 +115,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static String stateLimitValue;
     protected static boolean limitTimeSelected = false;
     protected static String timeLimitValue;
+    protected static int wordRepresentationSelected = 1;
 
     protected MainGUI mgui;
 
@@ -144,6 +146,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JButton close;
     protected JButton show;
     protected JButton display;
+    protected JComboBox wordRepresentationBox;
 
     //protected JRadioButton exe, exeint;
     //protected ButtonGroup exegroup;
@@ -272,14 +275,30 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             jp01.add(generateDesign, c01);
         }
 
+        c01.gridwidth = 1;
+
         ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
         ignoreEmptyTransitions.addActionListener(this);
         jp01.add(ignoreEmptyTransitions, c01);
+        
+        c01.anchor = GridBagConstraints.EAST;
+        c01.fill = GridBagConstraints.NONE;
+        jp01.add(new JLabel("Word size: "), c01);
+        
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c01.anchor = GridBagConstraints.WEST;
+        c01.fill = GridBagConstraints.HORIZONTAL;
+        wordRepresentationBox = new JComboBox(WORD_BITS);
+        wordRepresentationBox.setSelectedIndex(wordRepresentationSelected);
+        wordRepresentationBox.addActionListener(this);
+        jp01.add(wordRepresentationBox, c01);
+
+
         ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
         ignoreConcurrenceBetweenInternalActions.addActionListener(this);
         jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
-        ignoreInternalStates = new JCheckBox("Ignore states between internal actions",
-                ignoreInternalStatesSelected);
+
+        ignoreInternalStates = new JCheckBox("Ignore states between internal actions", ignoreInternalStatesSelected);
         ignoreInternalStates.addActionListener(this);
         jp01.add(ignoreInternalStates, c01);
         
@@ -737,7 +756,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             timer.scheduleAtFixedRate(mcm, 0, 500);
 
             // Setting options
-            amc.setCompressionFactor(2);
+            amc.setCompressionFactor(wordRepresentationSelected << 1);
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
@@ -1116,6 +1135,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         checkNoDeadSelected = noDeadlocks.isSelected();
         checkReinitSelected = reinit.isSelected();
         checkActionLoopSelected = actionLoop.isSelected();
+        wordRepresentationSelected = wordRepresentationBox.getSelectedIndex();
 
         if (noReachability.isSelected()) {
             reachabilitySelected = REACHABILITY_NONE;

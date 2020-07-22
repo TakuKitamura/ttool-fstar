@@ -235,6 +235,7 @@ To start the CTL query verification, let's compile again and let's open the mode
 In this section we will explain all the features and options that are present in the AVATAR model-checker. For a reference to the model-checking window, please refer to figure \ref{fig:mcwindow}.
 \\\\The model-checker allows to generate a reachability graph and to prove properties. Starting from the top, the first section contains graph generations options. In particular:
 \begin{itemize}
+	\item \textbf{Word size}: the words can be represented on 32, 16 or 8 bits.
 	\item \textbf{Do not display empty transitions as internal states}: in the reachability graph generation, states are not created for empty transitions (no action, no time, no choice). In practice, empty transition states are collapsed together. This option does not affect the verification. Option on by default.
 	\item \textbf{Ignore concurrency between internal actions}: this option allows to ignore a full concurrency study. It is very useful to limit the state explosion of the model due to all the concurrencies among its states. It is so suggested to keep it selected to have a faster verification. This option, however, affects only in the \textit{leadsto} study, and the reachability graph generation. \textbf{Important}: basic concurrency it is evaluated also with this optimization selected. Basic concurrency means that concurrency is normally evaluated until states with multiple transitions, or if statement, or signals communication are encounted. In normal usage, you should not need to deselect this option (example in the next section \ref{sec:cb}). Option on by default.
 	\item \textbf{Ignore states between internal actions}: This option allows to ignore intermediate states between actions that can be directly executed. this optimization helps decreasing the number of states in the reachability graph generation. If  \textit{Ignore concurrency between internal actions} is not selected, this option automatically deactivated. We suggest to keep this option selected for verification as it would not affect the result. Option on by default.
@@ -245,6 +246,7 @@ The next section contains options for basic properties verification:
 \begin{itemize}
 	\item \textbf{No deadlocks}: it checks that the model is deadlock free
 	\item \textbf{Reinitialization}: it checks that, for all the paths, the model will eventually restart to the initial state
+	\item \textbf{No internal action loops}: it checks that in states machines, there are not possible infinite loops which have no interractions (signal communications) with the environment (other blocks). This check helps to detect if a system stops interracting with the environment during its execution.
 	\item \textbf{Reachability}: it checks for states reachability
 	\item \textbf{Liveness}: it checks for states liveness
 \end{itemize}
@@ -266,6 +268,7 @@ Expression \texttt{p} and \texttt{q} may be on states or variables. The format u
 	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: there exists a path in which there is at least one state in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
 	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
 	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
+	\item \textit{A<> Sensor.iter == Main.dataSize - 1}: all the paths reach the condition where Sensor.iter is equal to Main.dataSize - 1.
 \end{itemize}
 
 \subsection{Traces generation} \label{sec:tg}
@@ -275,8 +278,9 @@ For advanced verification queries and deadlock check, there is the possibility o
 \item \textbf{A<> p}: shows the path that disproves the property
 \item \textbf{E[] p}: shows the path that proves the property
 \item \textbf{E<> p}: shows the path that proves the property
-\item \textbf{p --> q}: shows the path that disproves the property starting from a state with p valid.
+\item \textbf{p --> q}: shows the path that disproves the property starting from a state with p valid
 \item \textbf{No deadlocks?}: shows a path to a deadlock
+\item \textbf{No internal action loops?}: shows an infinite loop that has no interraction with the environment
 \end{itemize}
 The \textbf{Generate property AUT graphs trace} option allows us to display the propery traces as a reachability graph, saving it in AUT format. An entry to the graph, with the name of the query, will appear in the \textit{R. Graphs} section in TTool.
 \\\\
