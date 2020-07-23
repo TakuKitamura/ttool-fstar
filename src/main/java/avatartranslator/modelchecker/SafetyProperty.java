@@ -142,9 +142,29 @@ public class SafetyProperty  {
  
     
     public void initLead() {
+        AvatarExpressionSolver tmp;
+        int type;
+        tmp = safetySolver;
         safetySolver = safetySolverLead;
+        safetySolverLead = tmp;
         safetyType = ALLTRACES_ONESTATE;
+        type = propertyType;
         propertyType = leadType;
+        leadType = type;
+        result = true;
+    }
+    
+    public void restoreLead() {
+        //to be used only after initLead()
+        AvatarExpressionSolver tmp;
+        int type;
+        tmp = safetySolver;
+        safetySolver = safetySolverLead;
+        safetySolverLead = tmp;
+        safetyType = LEADS_TO;
+        type = propertyType;
+        propertyType = leadType;
+        leadType = type;
         result = true;
     }
 

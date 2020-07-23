@@ -900,8 +900,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             
             if (checkActionLoopSelected) {
                 boolean result = amc.getInternalActionLoopsResult();
-                jta.append("\nNo internal action loops?\n" + "-> " + result + "\n");
-                
+                String s;
+                if (result) {
+                    s = "property is satisfied";
+                } else {
+                    s = "property is NOT satisfied";
+                }            
+                jta.append("\nNo internal action loops?\n" + "-> " + s + "\n");
                 if (!result) {
                     ArrayList<SpecificationActionLoop> al = amc.getInternalActionLoops();
                     jta.append("Internal action loops:\n");
