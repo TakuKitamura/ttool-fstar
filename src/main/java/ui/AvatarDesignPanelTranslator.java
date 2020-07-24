@@ -423,6 +423,11 @@ public class AvatarDesignPanelTranslator {
         //Todo: check types
         //Todo: handle complex types
         _pragma = _pragma.trim();
+        
+        //remove expected result letter from the start if present
+        if (_pragma.matches("^[TtFf].*")) {
+            _pragma = _pragma.substring(1).trim();
+        }
 
         if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))) {
             //not a query

@@ -43,10 +43,10 @@ import avatartranslator.*;
 
 /**
    * Class SafetyProperty
-   * Coding of a safety property
+   * Coding of a safety or liveness property
    * Creation: 22/11/2017
-   * @version 1.0 22/11/2017
-   * @author Ludovic APVRILLE
+   * @version 1.0 24/08/2020
+   * @author Ludovic APVRILLE, Alessandro TEMPIA CALVINO
  */
 public class SafetyProperty  {
 
@@ -77,10 +77,11 @@ public class SafetyProperty  {
     public int propertyType;
     public int leadType;
     public boolean result;
-    
+    public boolean expectedResult;
     
     public SafetyProperty(String property) {
         rawProperty = property;
+        expectedResult = true;
         phase = SpecificationPropertyPhase.NOTCOMPUTED;
         /* to manually analyze after the AvatarSpecification is ready
            for model-checking in order to build correct expression solvers */
@@ -94,6 +95,7 @@ public class SafetyProperty  {
         propertyType = BLOCK_STATE;
         safetyType = _safetyType;
         result = true;
+        expectedResult = true;
         phase = SpecificationPropertyPhase.NOTCOMPUTED;
         rawProperty = "Element " + state.getExtendedName() + " of block " + block.getName();
         this.state = state;
@@ -102,6 +104,8 @@ public class SafetyProperty  {
     public boolean analyzeProperty(AvatarSpecification _spec) {
     	String tmpP = rawProperty.trim();
     	String p;
+    	
+    	tmpP = checkExpectedResult(tmpP);
     	
     	if (!initType(tmpP)) {
     	    return false;
@@ -123,6 +127,8 @@ public class SafetyProperty  {
     public boolean analyzeProperty(AvatarBlock block, AvatarSpecification _spec) {
         String tmpP = rawProperty.trim();
         String p;
+        
+        tmpP = checkExpectedResult(tmpP);
         
         if (!initType(tmpP)) {
             return false;
@@ -205,12 +211,13 @@ public class SafetyProperty  {
     
     
     public void setComputed() {
-        if (result) {
+        if (result == expectedResult) {
             phase = SpecificationPropertyPhase.SATISFIED;
         } else {
             phase = SpecificationPropertyPhase.NONSATISFIED;
         }
     }
+    
     
     public AvatarStateMachineElement getState() {
         return state;
@@ -259,6 +266,18 @@ public class SafetyProperty  {
             break;
         }
         return name;
+    }
+    
+    private String checkExpectedResult(String tmpP) {
+        if (tmpP.startsWith("T") || tmpP.startsWith("t")) {
+            expectedResult = true;
+            return tmpP.substring(1).trim();
+        } else if (tmpP.startsWith("F") || tmpP.startsWith("f")) {
+            expectedResult = false;
+            return tmpP.substring(1).trim();
+        }
+        
+        return tmpP;
     }
     
     private boolean initType(String tmpP) {

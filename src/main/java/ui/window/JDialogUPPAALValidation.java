@@ -152,6 +152,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected java.util.List<String> customQueries;
     public Map<String, Integer> verifMap;
     protected int status = -1;
+    private boolean expectedResult;
 
     /*
      * Creates new form
@@ -619,6 +620,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
         rshc = new RshClient(host);
         RshClient rshctmp = rshc;
+        
+        expectedResult = true;
+
 
         try {
             // checking UPPAAL installation
@@ -795,7 +799,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 for (JCheckBox j : customChecks) {
                     if (j.isSelected()) {
                         jta.append(j.getText() + "\n");
-                        String translation = translateCustomQuery(j.getText());
+                        String translation = checkExpectedResult(j.getText()); 
+                        translation = translateCustomQuery(translation);
                         jta.append(translation);
                         status = -1;
                         workQuery(translation, fn, trace_id, rshc);
@@ -858,6 +863,20 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
         mode = NOT_STARTED;
         setButtons();
+    }
+    
+    private String checkExpectedResult(String query) {
+        query = query.trim();
+        expectedResult = true;
+        
+        if (query.startsWith("T") || query.startsWith("t")) {
+            return query.substring(1).trim();
+        } else if (query.startsWith("F") || query.startsWith("f")) {
+            expectedResult = false;
+            return query.substring(1).trim();
+        }
+        
+        return query;
     }
 
 
@@ -979,16 +998,26 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             // Issue #35: Different labels for UPPAAL 4.1.19
             else if (checkAnalysisResult(data, PROP_VERIFIED_LABELS)) {
                 //            else if (data.indexOf("Property is satisfied") >-1){
-                jta.append("-> property is satisfied\n");
-                status = 1;
+                if (expectedResult) {
+                    jta.append("-> property is satisfied\n");
+                    status = 1;
+                } else {
+                    jta.append("-> property is NOT satisfied\n");
+                    status = 0;
+                }
                 ret = 1;
             }
             // Issue #35: Different labels for UPPAAL 4.1.19
             else if (checkAnalysisResult(data, PROP_NOT_VERIFIED_LABELS)) {
                 //            else if (data.indexOf("Property is NOT satisfied") > -1) {
-                jta.append("-> property is NOT satisfied\n");
-                status = 0;
-                ret = 0;
+                if (!expectedResult) {
+                    jta.append("-> property is satisfied\n");
+                    status = 1;
+                } else {
+                    jta.append("-> property is NOT satisfied\n");
+                    status = 0;
+                }
+                ret = 1;
             } else {
                 jta.append("ERROR -> property could not be studied\n");
                 status = 2;

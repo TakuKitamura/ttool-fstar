@@ -177,7 +177,7 @@ public class ModelCheckerValidator {
             
             if (dStudy) {
                 System.out.println("Deadlock Study");
-                uResult = workQuery(gtm, rshc, "A[] not deadlock", fn);
+                uResult = workQuery(gtm, rshc, "A[] not deadlock", fn, true);
                 if (!((uResult == 0 && amc.getNbOfDeadlocks() > 0) || (uResult == 1 && amc.getNbOfDeadlocks() == 0))) {
                     diff.append("No Deadlock: amc = " + (amc.getNbOfDeadlocks() == 0) + "; uppaal = " + (uResult == 1) + "\n");
                     equal = false;
@@ -193,7 +193,7 @@ public class ModelCheckerValidator {
                     index = s.indexOf('$');
                     if ((index != -1)) {
                         query = s.substring(0, index);
-                        uResult = workQuery(gtm, rshc, "E<> " + query, fn);
+                        uResult = workQuery(gtm, rshc, "E<> " + query, fn, true);
                         match = false;
                         for (SpecificationReachability sr : reachabilities) {
                             if (sr.ref1 instanceof AvatarStateMachineElement) {
@@ -228,7 +228,7 @@ public class ModelCheckerValidator {
                     index = s.indexOf('$');
                     if ((index != -1)) {
                         query = s.substring(0, index);
-                        uResult = workQuery(gtm, rshc, "A<> " + query, fn);
+                        uResult = workQuery(gtm, rshc, "A<> " + query, fn, true);
                         match = false;
                         for (SafetyProperty sp : livenesses) {
                             Object o = sp.getState().getReferenceObject();
@@ -255,8 +255,8 @@ public class ModelCheckerValidator {
             if (sStudy) {
                 ArrayList<SafetyProperty> safeties = amc.getSafeties();
                 for (SafetyProperty sp : safeties) {
-                    query = translateCustomQuery(gtm, spec, sp.getRawProperty());
-                    uResult = workQuery(gtm, rshc, query, fn);
+                    query = translateCustomQuery(gtm, spec, removeExpectedResult(sp.getRawProperty()));
+                    uResult = workQuery(gtm, rshc, query, fn, sp.expectedResult);
                     if (!(uResult == 1 && sp.getPhase() == SpecificationPropertyPhase.SATISFIED ||
                             uResult == 0 && sp.getPhase() == SpecificationPropertyPhase.NONSATISFIED)) {
                         diff.append("Safety " + sp.getRawProperty() + ": amc = " + (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) + "; uppaal = " + (uResult == 1) + "\n");
@@ -285,10 +285,19 @@ public class ModelCheckerValidator {
     }
     
     
+    private static String removeExpectedResult(String query) {
+        if (query.matches("^[TtFf].*")) {
+            return query.substring(1).trim();
+        } else {
+            return query;
+        }
+    }
+    
+    
     // return: -1: error
     // return: 0: property is NOt satisfied
     // return: 1: property is satisfied
-    private static int workQuery(GTURTLEModeling gtm, RshClient rshc, String query, String fn) throws LauncherException {
+    private static int workQuery(GTURTLEModeling gtm, RshClient rshc, String query, String fn, boolean expectedResult) throws LauncherException {
 
         int ret;
         //TraceManager.addDev("Working on query: " + query);
@@ -307,11 +316,19 @@ public class ModelCheckerValidator {
         }
         // Issue #35: Different labels for UPPAAL 4.1.19
         else if (checkAnalysisResult(data, PROP_VERIFIED_LABELS)) {
-            ret = 1;
+            if (expectedResult) {
+                ret = 1;
+            } else {
+                ret = 0;
+            }
         }
         // Issue #35: Different labels for UPPAAL 4.1.19
         else if (checkAnalysisResult(data, PROP_NOT_VERIFIED_LABELS)) {
-            ret = 0;
+            if (!expectedResult) {
+                ret = 1;
+            } else {
+                ret = 0;
+            }
         } else {
            ret = -1;
         }
