@@ -263,12 +263,16 @@ The query syntax for CTL formulas, for expressions \texttt{p} and \texttt{q}, is
 	\item \textbf{E<> p}:  there exists a path in which property p will eventually be true (other common notation \textbf{EF p})
 	\item \textbf{p --> q}: whenever p is true, then q will eventually be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq)})
 \end{itemize}
-Expression \texttt{p} and \texttt{q} may be on states or variables. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic C code like boolean operators (||, \&\&, and, or). Variables can be negated or inverted (not(variable)). Examples:
+Expression \texttt{p} and \texttt{q} may contain condition on states and/or variables. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic boolean (||, \&\&, and, or) and integer (==, >, >=, <, <=, +, -, *, /) operators. Variables can be negated or inverted (not(var), !(var), -var). States are considered as a boolean variable.
+\\\\
+Before the pragma, the letter \textit{T} or \textit{F} may be inserted to specify if the expected result of the pragma is true, in the former case, or false, in the latter. The pragma will be considered satisfied if the result is equivalent to the expected one.
+\\\\
+Here there are few examples of valid pragmas:
 \begin{itemize}
 	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: there exists a path in which there is at least one state in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
-	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
+	\item \textit{F A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25. The expected result is false.
 	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
-	\item \textit{A<> Sensor.iter == Main.dataSize - 1}: all the paths reach the condition where Sensor.iter is equal to Main.dataSize - 1.
+	\item \textit{T A<> Sensor.iter == Main.dataSize - 1}: all the paths reach the condition where Sensor.iter is equal to Main.dataSize - 1.
 \end{itemize}
 
 \subsection{Traces generation} \label{sec:tg}
@@ -459,12 +463,14 @@ Safety properties are solved by finding loops or terminal conditions (deadlocks)
 	\item \textbf{A<> p}: if the property is true for a state, stop the search on that path. If a false loop or a false deadlock is found, the property is false. If no false loops or false deadlocks are found, the property is true.
 	\item \textbf{E[] p}:  if the property is false for a state, stop the search on that path. If a true loop or a true deadlock is found , the property is true. If no true loops or false deadlocks are found, the property is false.
 	\item \textbf{E<> p}:  if during the reachability graph creation, $p$ is true in a new state,  then the property is true.
-	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the safetyLeadStates array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<>p} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false.
+	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the safetyLeadStates array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<> q} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false.
 \end{itemize}
 
 \subsection{Handling combinatory explosion}
-The exploration space of states explodes easily in many models. That's why proving properties is hard. The basic idea of liveness is to find a counter example to prove it wrong. So, we want to detect a cycle (or a path that ends to a deadlock) for which the state we want to check is not live. If the states space explodes, an exploration in breadth will not be effective as the number of nodes increases too much before proving or disproving any property, the space will be too big to be explored.\\
-
-Moreover, loops are found analyzing a path in depth. So, the check is executed in a depth first search-like manner, instead of a breadth first search implemented for other types of studies, like reachability. It will allow us to search through a path for a property to be true or false having a result within a manageable states  space most of the times. As soon as a property is (un)satisfied the search can continue through another path or stop. In the implementation, each thread follows a path to disprove the liveness. As soon as the property is unsatisfied, the check can stop. As soon as the property is satisfied, the search in that path can stop, and another one is fetched.\\
+The exploration space of states explodes easily in many models. That's why proving properties is hard. The basic idea of liveness is to find a counter example to prove it wrong. So, we want to detect a cycle (or a path that ends to a deadlock) for which the state we want to check is not live. If the states space explodes, an exploration in breadth will not be effective as the number of nodes increases too much before proving or disproving any property, the space will be too big to be explored.
+\\\\
+Moreover, loops are found analyzing a path in depth. So, the check is executed in a depth first search-like manner, instead of a breadth first search implemented for other types of studies, like reachability. It will allow us to search through a path for a property to be true or false having a result within a manageable states  space most of the times. As soon as a property is (un)satisfied the search can continue through another path or stop. In the implementation, each thread follows a path to disprove the liveness. As soon as the property is unsatisfied, the check can stop. As soon as the property is satisfied, the search in that path can stop, and another one is fetched.
+\\\\
+To limit the states explosion, it is advisable to merge action nodes together when possible.
 
 \end{document}
