@@ -269,12 +269,12 @@ public class SafetyProperty  {
     }
     
     private String checkExpectedResult(String tmpP) {
-        if (tmpP.startsWith("T") || tmpP.startsWith("t")) {
+        if (tmpP.startsWith("T ") || tmpP.startsWith("t ")) {
             expectedResult = true;
-            return tmpP.substring(1).trim();
-        } else if (tmpP.startsWith("F") || tmpP.startsWith("f")) {
+            return tmpP.substring(2).trim();
+        } else if (tmpP.startsWith("F ") || tmpP.startsWith("f ")) {
             expectedResult = false;
-            return tmpP.substring(1).trim();
+            return tmpP.substring(2).trim();
         }
         
         return tmpP;

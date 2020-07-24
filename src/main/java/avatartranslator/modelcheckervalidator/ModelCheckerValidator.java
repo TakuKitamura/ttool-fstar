@@ -286,8 +286,8 @@ public class ModelCheckerValidator {
     
     
     private static String removeExpectedResult(String query) {
-        if (query.matches("^[TtFf].*")) {
-            return query.substring(1).trim();
+        if (query.matches("^[TtFf]\\s.*")) {
+            return query.substring(2).trim();
         } else {
             return query;
         }

@@ -869,11 +869,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         query = query.trim();
         expectedResult = true;
         
-        if (query.startsWith("T") || query.startsWith("t")) {
-            return query.substring(1).trim();
-        } else if (query.startsWith("F") || query.startsWith("f")) {
+        if (query.startsWith("T ") || query.startsWith("t ")) {
+            return query.substring(2).trim();
+        } else if (query.startsWith("F ") || query.startsWith("f ")) {
             expectedResult = false;
-            return query.substring(1).trim();
+            return query.substring(2).trim();
         }
         
         return query;
