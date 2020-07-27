@@ -442,6 +442,12 @@ For nonempty transitions, in general, the execution procedure is the same as the
 \section{Reachability of States}
 The reachability condition of states is checked while creating the reachability graph. The array \texttt{reachabilities} contains the states elements to be checked. Every time a transition is executed, from state $s_t$ to state $s_{t+1}$, $s_{t+1}$ is checked for reachability. When all the states elements in \texttt{reachabilities} have been reached or the reachability graph is completed, the reachability study finishes.
 
+\subsection{Deadlocks}
+Deadlocks are seached while building the reachability graph. If a state with no availabe transitions is encounted, the model-checker is stopped using the flag \textit{propertyDone}. The deadlock study is bypassed if another previous study finds deadlocks.
+
+\subsection{Reinitialization}
+The model-checker contains an option to test if the system always reaches the initial state for each execution trace. This is verified as a liveness of the \textit{State 0} represented by \texttt{SpecificationReinit}.
+
 \section{Safety and Liveness}
 \subsection{Definitions}
 In the model also safety and liveness conditions could be proved. In particular, imagining a structure in time of the model, as a tree, the following CTL and LTL formulas are supported:
@@ -455,15 +461,22 @@ In the model also safety and liveness conditions could be proved. In particular,
 with \textit{p} and \textit{q} properties. \textbf{Properties are written as expressions on variables or states of the AVATAR model}.
 
 \subsection{Handling of safety and liveness properties by the AVATAR model checker}
-Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is a AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be use to obtain the expressions result.\\
-
-Safety properties are solved by finding loops or terminal conditions (deadlocks) in the model. For each property type we now explain how the modelchecker behaves.
+Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is a AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be use to obtain the expressions result.
+\\\\
+Safety properties are solved by finding loops or terminal conditions (deadlocks) in the model. For each property type we now explain how the modelchecker behaves:
 \begin{itemize}
 	\item \textbf{A[] p}: if during the reachability graph creation, $p$ is false is a new state new state has p false, then the property is false.
 	\item \textbf{A<> p}: if the property is true for a state, stop the search on that path. If a false loop or a false deadlock is found, the property is false. If no false loops or false deadlocks are found, the property is true.
 	\item \textbf{E[] p}:  if the property is false for a state, stop the search on that path. If a true loop or a true deadlock is found , the property is true. If no true loops or false deadlocks are found, the property is false.
 	\item \textbf{E<> p}:  if during the reachability graph creation, $p$ is true in a new state,  then the property is true.
-	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the safetyLeadStates array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<> q} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false.
+	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the \textit{safetyLeadStates} array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<> q} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false. The model-checking is bounded in order to reduce the exploration space in case of false pragmas. It allows also to prove false properties on infinite graphs. The bound is defined on the number of states matching property \texttt{p} in the current execution. When the number of states is greater than a threshold, the model-checker is paused, the current situation is saved, and the verification of \textit{q} starts from the retrieved states. If the property cannot be proved by these states, the model-checker on \textit{p} is resumed and a new bigger threshold is defined.
+\end{itemize}
+The main methods involved in the properties verification process are:
+\begin{itemize}
+	\item \texttt{executeSafetyRun}: it execute a safety property and it retrieves the result on the current model. It has options to ignoreConcurrence, emptyTransitions and to use partialHashing in the leadsTo verification (more details in the internal action loops section).
+	\item \texttt{evaluateSafetyOfProperty}: given the current and old state, this methods checks if the property is satisfied, still satisfied or not satisfied. It returns the result which is assigned in the flag \textit{property} of a SpecificationState.
+	\item \texttt{actionOnProperty}: it select an action based on the type of verification, the current result of the property, and if the node exists already (possible loop). If the general result can be concluded, the flag \textit{propertyDone} is set to stop the execution of the model-checker.
+	\item \texttt{checkPropertyOnDeadlock}: given the current state with no executable transitions (deadlock), it execute an action depending on the type of CTL query.
 \end{itemize}
 
 \subsection{Handling combinatory explosion}
@@ -472,5 +485,7 @@ The exploration space of states explodes easily in many models. That's why provi
 Moreover, loops are found analyzing a path in depth. So, the check is executed in a depth first search-like manner, instead of a breadth first search implemented for other types of studies, like reachability. It will allow us to search through a path for a property to be true or false having a result within a manageable states  space most of the times. As soon as a property is (un)satisfied the search can continue through another path or stop. In the implementation, each thread follows a path to disprove the liveness. As soon as the property is unsatisfied, the check can stop. As soon as the property is satisfied, the search in that path can stop, and another one is fetched.
 \\\\
 To limit the states explosion, it is advisable to merge action nodes together when possible.
+
+\section{Internal action loops}
 
 \end{document}

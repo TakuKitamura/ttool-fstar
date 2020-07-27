@@ -458,7 +458,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR, studyRI, genRG, genTrace;
+        boolean studyS, studyL, studyR, studyRI, studyAL, genRG, genTrace;
         boolean emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
@@ -483,6 +483,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyL = studyLiveness;
         studyS = studySafety;
         studyRI = studyReinit;
+        studyAL = studyActionLoop;
         genRG = computeRG;
         genTrace = counterexample;
         verboseInfo = false;
@@ -494,6 +495,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyLiveness = false;
         studyReachability = false;
         studyReinit = false;
+        studyActionLoop = false;
         counterexample = false;
                 
 
@@ -533,7 +535,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studyReinit = false;
         }
         
-        if (studyActionLoop) {
+        if (studyAL) {
+            studyActionLoop = true;
             studySafety = true;
             ignoreConcurrenceBetweenInternalActions = true;
             counterexample = genTrace;
@@ -557,6 +560,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             counterexample = false;
             ignoreEmptyTransitions = emptyTr;
             studySafety = false;
+            studyActionLoop = false;
         }
         
         if (checkNoDeadlocks) {
@@ -641,10 +645,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             List<SpecificationState> pendingStatesSave = null;
             long stateIDSave = 0;
             boolean loop = true;
+            boolean trace = counterexample;
             
             leadsToBound = true;
             leadsToBoundSize = 1;
             exitOnBound = false;
+            counterexample = false;
+
             startModelChecking(nbOfThreads);
             
             //multiple pass model-checking: stop and resume states exploration to prove liveness properties
@@ -664,6 +671,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 safety.initLead();
                 ignoreEmptyTransitions = emptyTr;
                 ignoreConcurrenceBetweenInternalActions = true;
+                counterexample = trace;
                 Iterator<Map.Entry<Integer,SpecificationState>> iter = safetyLeadStates.entrySet().iterator();
                 while (iter.hasNext()) {
                     SpecificationState state = iter.next().getValue();
@@ -691,6 +699,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     leadsToBound = true;
                     leadsToBoundSize = leadsToBoundSize << 4;
                     exitOnBound = false;
+                    counterexample = false;
                     resumeModelChecking(nbOfThreads);
                 }
             }
@@ -1092,7 +1101,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private void resetCounterexample() {
         if (counterexample) {
             counterTrace.reset();
-            traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+            traceStates = Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
             verboseInfo = true;
         }
     }
