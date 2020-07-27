@@ -424,6 +424,11 @@ public class AvatarDesignPanelTranslator {
         //Todo: handle complex types
         _pragma = _pragma.trim();
         
+        if (_pragma.compareTo("") == 0) {
+            // empty pragma
+            return false;
+        }
+        
         //remove expected result letter from the start if present
         if (_pragma.matches("^[TtFf]\\s.*")) {
             _pragma = _pragma.substring(2).trim();
