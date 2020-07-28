@@ -479,7 +479,7 @@ void Simulator::timeline2HTML(std::string& iTracetaskList, std::ostringstream& m
 //        myfile << "<h1>Task to show: " << iTracetaskList.c_str() <<"</h1>\n";
     myfile << "<table style=\"float: left;position: relative;\"><tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n"
            << "<td class=\"notfirst\"></td>\n"
-           << "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align: right\"colspan=\"1000\"><b>Time</b></td>\n</tr>\n"
+           << "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align:right\"colspan=\"500\"><b>Time</b></td>\n</tr>\n"
            << "<tr><th></th><th class=\"notfirst\"></th></tr>\n"
            << "<div class = \"clear\"></div>" << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){

@@ -1583,7 +1583,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     }
                     f.dispose();
                     f.setVisible(false);
-                    tmlSimPanelTimeline.setStatusBar(time.getText().trim());
+                    tmlSimPanelTimeline.setStatusBar(status.getText().trim(), time.getText().trim(), info.getText().trim());
                     tmlSimPanelTimeline.setContentPaneEnable(true);
                     mctb.setActive(true);
                     commandTab.setEnabled(true);
@@ -2044,7 +2044,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         String busname;
         String busid;
         String state;
-        String usedEnergy;
+//        String usedEnergy;
         boolean transInfo = false;
 
         int k;
@@ -2370,7 +2370,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             contdel = null;
                             busname = null;
                             busid = null;
-                            usedEnergy = null;
+//                            usedEnergy = null;
 
                             id = elt.getAttribute("id");
                             name = elt.getAttribute("name");
@@ -2380,12 +2380,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 //
                                 util = node0.getTextContent();
                             }
-                            nl = elt.getElementsByTagName("energy");
-                            if ((nl != null) && (nl.getLength() > 0)) {
-                                node0 = nl.item(0);
-                                //
-                                usedEnergy = node0.getTextContent();
-                            }
+//                            nl = elt.getElementsByTagName("energy");
+//                            if ((nl != null) && (nl.getLength() > 0)) {
+//                                node0 = nl.item(0);
+//                                //
+//                                usedEnergy = node0.getTextContent();
+//                            }
 
                             //
                             nl = elt.getElementsByTagName("contdel");
@@ -2403,7 +2403,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
 
                             if ((id != null) && (util != null)) {
-                                updateCPUState(id, util, usedEnergy, contdel, busname, busid);
+                                updateCPUState(id, util, contdel, busname, busid);
                             }
                         }
 
@@ -3382,7 +3382,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         }
     }
 
-    private void updateCPUState(String _id, String _utilization, String _usedEnergy, String contdel, String busName, String busID) {
+    private void updateCPUState(String _id, String _utilization, String contdel, String busName, String busID) {
         Integer i = getInteger(_id);
         int row;
         String info;
@@ -3391,9 +3391,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             try {
                 valueTable.remove(i);
                 info = "Utilization: " + _utilization;
-                if (_usedEnergy != null) {
-                    info += "; used energy: " +  _usedEnergy;
-                }
+//                if (_usedEnergy != null) {
+//                    info += "; used energy: " +  _usedEnergy;
+//                }
                 if ((contdel != null) && (busName != null) && (busID != null)) {
                     info += "; Cont. delay on " + busName + " (" + busID + "): " + contdel;
                 }
@@ -3401,11 +3401,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 //
                 row = (rowTable.get(i)).intValue();
                 cputm.fireTableCellUpdated(row, 2);
-                if (_usedEnergy == null) {
-                    mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), -1);
-                } else {
-                    mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), getLong(_usedEnergy).longValue());
-                }
+//                if (_usedEnergy == null) {
+//                    mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), -1);
+//                } else {
+//                    mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), getLong(_usedEnergy).longValue());
+//                }
             } catch (Exception e) {
                 TraceManager.addDev("Exception updateCPUState: " + e.getMessage() + " id=" + _id + " util=" + _utilization);
             }

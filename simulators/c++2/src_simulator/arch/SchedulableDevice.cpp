@@ -311,7 +311,7 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
     if ( _transactListClone.size() == 0 ) {
         std::cout << "Device never activated" << std::endl;
     } else {
-        myfile << "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;
+        myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad() << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;
 //        std::map<TMLTask*, std::string> taskCellClasses;
 //        unsigned int nextCellClassIndex = 0;
         TMLTime aCurrTime = 0;
