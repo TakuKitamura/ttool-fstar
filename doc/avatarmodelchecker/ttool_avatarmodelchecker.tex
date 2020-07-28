@@ -443,7 +443,7 @@ For nonempty transitions, in general, the execution procedure is the same as the
 The reachability condition of states is checked while creating the reachability graph. The array \texttt{reachabilities} contains the states elements to be checked. Every time a transition is executed, from state $s_t$ to state $s_{t+1}$, $s_{t+1}$ is checked for reachability. When all the states elements in \texttt{reachabilities} have been reached or the reachability graph is completed, the reachability study finishes.
 
 \subsection{Deadlocks}
-Deadlocks are seached while building the reachability graph. If a state with no availabe transitions is encounted, the model-checker is stopped using the flag \textit{propertyDone}. The deadlock study is bypassed if another previous study finds deadlocks.
+Deadlocks are searched while building the reachability graph. If a state with no available transitions is encountered, the model-checker is stopped using the flag \textit{propertyDone}. The deadlock study is bypassed if another previous study finds deadlocks.
 
 \subsection{Reinitialization}
 The model-checker contains an option to test if the system always reaches the initial state for each execution trace. This is verified as a liveness of the \textit{State 0} represented by \texttt{SpecificationReinit}.
@@ -456,27 +456,27 @@ In the model also safety and liveness conditions could be proved. In particular,
 	\item \textbf{A<> p}: property p will eventually be true for each path (other common notation \textbf{AF p})
 	\item \textbf{E[] p}: there exists at least one path in which property p is always true (other common notation \textbf{EG p})
 	\item \textbf{E<> p}:  there exists a path in which property p will eventually be true (other common notation \textbf{EF p})
-	\item \textbf{p --> q}: whenever p is true, then q will be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq}))
+	\item \textbf{p --> q}: whenever p is true, then q will be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq}) called \textit{leadsTo})
 \end{itemize}
 with \textit{p} and \textit{q} properties. \textbf{Properties are written as expressions on variables or states of the AVATAR model}.
 
 \subsection{Handling of safety and liveness properties by the AVATAR model checker}
-Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is a AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be use to obtain the expressions result.
+Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is an AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be used to obtain the expressions result.
 \\\\
 Safety properties are solved by finding loops or terminal conditions (deadlocks) in the model. For each property type we now explain how the modelchecker behaves:
 \begin{itemize}
-	\item \textbf{A[] p}: if during the reachability graph creation, $p$ is false is a new state new state has p false, then the property is false.
+	\item \textbf{A[] p}: if during the reachability graph creation a new state has $p$ false, then the property is false.
 	\item \textbf{A<> p}: if the property is true for a state, stop the search on that path. If a false loop or a false deadlock is found, the property is false. If no false loops or false deadlocks are found, the property is true.
 	\item \textbf{E[] p}:  if the property is false for a state, stop the search on that path. If a true loop or a true deadlock is found , the property is true. If no true loops or false deadlocks are found, the property is false.
 	\item \textbf{E<> p}:  if during the reachability graph creation, $p$ is true in a new state,  then the property is true.
-	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the \textit{safetyLeadStates} array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<> q} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false. The model-checking is bounded in order to reduce the exploration space in case of false pragmas. It allows also to prove false properties on infinite graphs. The bound is defined on the number of states matching property \texttt{p} in the current execution. When the number of states is greater than a threshold, the model-checker is paused, the current situation is saved, and the verification of \textit{q} starts from the retrieved states. If the property cannot be proved by these states, the model-checker on \textit{p} is resumed and a new bigger threshold is defined.
+	\item \textbf{p --> q}: every time \texttt{p} is true, save the SpecificationState in the \textit{safetyLeadStates} array. Then, for each node in \textit{safetyLeadStates} start a liveness check \texttt{A<> q} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false. The model-checking is bounded in order to reduce the exploration space in case of false pragmas. It allows also to prove false properties on infinite graphs. The bound is defined on the number of states matching property \texttt{p} in the current execution. When the number of states is greater than a threshold, the model-checker is paused, the current situation is saved, and the verification of \textit{q} starts from the retrieved states. If the property cannot be proved by these states, the model-checker on \textit{p} is resumed and a new grater threshold is defined.
 \end{itemize}
 The main methods involved in the properties verification process are:
 \begin{itemize}
-	\item \texttt{executeSafetyRun}: it execute a safety property and it retrieves the result on the current model. It has options to ignoreConcurrence, emptyTransitions and to use partialHashing in the leadsTo verification (more details in the internal action loops section).
-	\item \texttt{evaluateSafetyOfProperty}: given the current and old state, this methods checks if the property is satisfied, still satisfied or not satisfied. It returns the result which is assigned in the flag \textit{property} of a SpecificationState.
-	\item \texttt{actionOnProperty}: it select an action based on the type of verification, the current result of the property, and if the node exists already (possible loop). If the general result can be concluded, the flag \textit{propertyDone} is set to stop the execution of the model-checker.
-	\item \texttt{checkPropertyOnDeadlock}: given the current state with no executable transitions (deadlock), it execute an action depending on the type of CTL query.
+	\item \texttt{executeSafetyRun}: it executes a safety property and it retrieves the result on the current model. It has options to ignoreConcurrence, emptyTransitions and to use partialHashing in the leadsTo verification (more details in the internal action loops section \ref{sec:il}).
+	\item \texttt{evaluateSafetyOfProperty}: given the current and old state, this method checks if the property is satisfied, still satisfied or not satisfied. It returns the result which is assigned to the flag \textit{property} of a SpecificationState.
+	\item \texttt{actionOnProperty}: it selects an action based on the type of verification, the current result of the property, and if the node exists already (possible loop). If the general result can be concluded, the flag \textit{propertyDone} is set to stop the execution of the model-checker.
+	\item \texttt{checkPropertyOnDeadlock}: given the current state with no executable transitions (deadlock), it executes an action depending on the type of CTL query.
 \end{itemize}
 
 \subsection{Handling combinatory explosion}
@@ -486,6 +486,25 @@ Moreover, loops are found analyzing a path in depth. So, the check is executed i
 \\\\
 To limit the states explosion, it is advisable to merge action nodes together when possible.
 
-\section{Internal action loops}
+\section{Internal action loops} \label{sec:il}
+Internal action loops are used to check conditions when the system stops interracting with the environment. This condition may happen when there are action loops, which do not contain any signal communication, in the state machine of the blocks. If a state machine contains this type of loops, we want to verify that an exit condition is always reached (live).
+\\\\
+The internal loops are detected statically through a strong connected components  search executed by the method \texttt{checkStaticInternalLoops} in the AvatarStateMachine class. The method returns a list of all the action loops which are described by a list of transitions.
+\\\\
+The verification of internal action loops is then managed in the \textit{SpecificationActionLoop} class. The check is verified using a \textit{leadsTo} pragma built as follows:
+\begin{itemize}
+	\item if no static loops are detected, a block is free from internal action loops
+	\item if the loops contains transitions from a random block, the loop is removed as the exit condition is guaranteed by construction
+	\item all the states contained in the loops are collected
+	\item a \textit{leadsTo} query \textbf{p --> q} is built with \textbf{p} equal to the logic \textit{OR} of all the states collected and with \textbf{q} equal to the not of \textbf{p}. This pragma verifies that once entered into a state contained in a possible action loop, in a subsequent moment, a state not contained in a action loop is always reached.
+	\item the pragma is verified by the model-checker. If the result is false, the block contains at least one infinite action loop trace
+	\item these operations are repeated for each block in the system
+\end{itemize}
+For instance, if a static loop contains the states \textit{Collect, Elaborate, Fail, Retry} the pragma created would be \textit{Collect || Elaborate || Fail || Retry --> !(Collect || Elaborate || Fail || Retry)}.
 
+\section{Verification traces}
+Verification traces are extracted using the class \textit{CounterexampleTrace}. For each state created during the model-checking a \textit{CounterexampleTraceState} is created saving the current state pointer for each block and a pointer to a father. All the "counter" states
+are insertred in the map \textit{traceStates}. The final verification state is extracted by the method \textit{evaluateSafetyOfProperty} or \textit{checkPropertyOnDeadlock}. That state represents a point of a loop, of a deadlock, or of a reachability.
+\\\\
+The verification trace is constructed in the \textit{CounterexampleTrace} class using the method \textit{buildTrace}.
 \end{document}
