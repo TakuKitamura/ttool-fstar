@@ -606,6 +606,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = studyS;
         studyReachability = studyR;
         studyReinit = studyRI;
+        studyActionLoop = studyAL;
                 
         TraceManager.addDev("Model checking done");
         return true;
