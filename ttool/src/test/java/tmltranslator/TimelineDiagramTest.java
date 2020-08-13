@@ -184,7 +184,7 @@ public class TimelineDiagramTest extends AbstractUITest {
                     }
                     running = analyzeServerAnswer(demo);
                 }
-
+                System.out.println(ssxml);
                 File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
                 String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
                 assertTrue(content.equals(ssxml));

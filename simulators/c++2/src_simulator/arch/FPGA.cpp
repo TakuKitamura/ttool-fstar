@@ -74,7 +74,7 @@ void FPGA::streamBenchmarks(std::ostream& s) const{
   std::cout<<"test fpga stramBenchmarks"<<std::endl;
   s << TAG_FPGAo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl;
   if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
-  s << TAG_ENERGYo << ( (_simulatedTime)*_static_consumPerCycle) + ((_busyCycles)*_dynamic_consumPerCycle) << TAG_ENERGYc;
+//  s << TAG_ENERGYo << ( (_simulatedTime)*_static_consumPerCycle) + ((_busyCycles)*_dynamic_consumPerCycle) << TAG_ENERGYc;
   std::cout<< "power consumption "<< ((_simulatedTime)*_static_consumPerCycle) + ((_busyCycles)*_dynamic_consumPerCycle)<< std::endl;
   for(BusMasterList::const_iterator i=_busMasterList.begin(); i != _busMasterList.end(); ++i) (*i)->streamBenchmarks(s);
   s << TAG_FPGAc;
@@ -607,9 +607,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
         std::cout << "Device never activated" << std::endl;
     } else {
         if(_startFlagHTML == true){
-            myfile << "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;
+            myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;
         } else {
-            myfile << "<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n"<< std::endl;
+            myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n"<< std::endl;
         }
         TMLTime aCurrTime = 0;
         unsigned int taskOccurTime = 0;

@@ -6,9 +6,14 @@ import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 import ui.ColorManager;
 import ui.MainGUI;
+import ui.TDiagramPanel;
 import ui.TGComponent;
+import ui.TGState;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -18,7 +23,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
     public InteractiveSimulationActions[] actions;
     private JEditorPane sdpanel;
-    protected JLabel status;
+    private JLabel status, time, info;;
     private Container framePanel;
     private ProgressMonitor pm;
     private String filePath;
@@ -30,6 +35,16 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
     private TMLMapping<TGComponent> tmap;
     private JTextField paramMainCommand;
     private MainCommandsToolBar mctb;
+    private JScrollPane jsp;
+    private String zoomIndex = "";
+    private String toolTipText = null;
+    private enum TransType{
+        NONE,
+        WRITE,
+        READ,
+        SEND,
+        WAIT
+    };
 
     public JFrameTMLSimulationPanelTimeline(Frame _f, MainGUI _mgui,JFrameInteractiveSimulation _jfis, String _title, String _path) {
         super(_title);
@@ -60,6 +75,36 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         topPanel.add(buttonClose);
         JButton buttonHtml = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML]);
         topPanel.add(buttonHtml);
+        JTextField zoomIn = new JTextField("Zoom In:");
+        zoomIn.setEditable(false);
+        topPanel.add(zoomIn);
+        String[] zoomFactor = new String[] {"50%","75%","100%", "125%", "150%", "175%", "200%"};
+        JComboBox comboBoxUpdateView = new JComboBox<String>(zoomFactor);
+        comboBoxUpdateView.setSelectedIndex(2);
+
+        comboBoxUpdateView.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                try {
+                    zoomIndex = (String) comboBoxUpdateView.getSelectedItem();
+                } catch (Exception e) {
+                    //TraceManager.addDev(nbOfTransactions.getText());
+                    //TraceManager.addDev("Invalid default transaction");
+                    zoomIndex = "100%";
+                }
+                sdpanel.getDocument().putProperty("ZOOM_FACTOR", new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
+                System.out.println("Scale: " + new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
+                if(filePath.length() < 10000) {
+                    sdpanel.setText(filePath);
+                    sdpanel.setCaretPosition(0);
+                    jsp.getVerticalScrollBar().setValue(0);
+                    jsp.getHorizontalScrollBar().setValue(0);
+                }
+                jsp.repaint();
+            }
+        });
+        topPanel.add(comboBoxUpdateView);
         timelinePane.add(topPanel,BorderLayout.NORTH);
         //Main control
         JPanel jp01, jp02;
@@ -147,19 +192,98 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         timelinePane.add(commandTab, BorderLayout.SOUTH);
         framePanel.add(timelinePane, BorderLayout.NORTH);
         // Simulation panel
-        sdpanel = new JEditorPane();
+        sdpanel = new JEditorPane() {
+        @Override
+        public String getToolTipText(MouseEvent evt) {
+            toolTipText = null;
+            int pos = viewToModel(evt.getPoint());
+            if (pos >= 0) {
+                HTMLDocument hdoc = (HTMLDocument) sdpanel.getDocument();
+                javax.swing.text.Element e = hdoc.getCharacterElement(pos);
+                AttributeSet a = e.getAttributes();
+                if (a != null) {
+                    String href = (String) a.getAttribute(HTML.Attribute.TITLE);
+                    if (href != null) {
+                        toolTipText = href;
+                    }
+                }
+            }
+            return toolTipText;
+        }
+    };
+        sdpanel.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
+                    if (toolTipText != null) {
+                        String diag = "";
+                        String tab = "";
+                        int index1 = -1;
+                        int index = toolTipText.indexOf(": ");
+                        if(index != -1) {
+                            tab = toolTipText.substring(0, index);
+                            index1 = tab.indexOf("__");
+                        }
+                        if (index1 != -1) {
+                            diag = tab.substring(0, index1);
+                            tab = tab.substring(index1+2, tab.length());
+                            System.out.println(diag + "\n" + tab);
+                        }
+                        mgui.openTMLTaskActivityDiagram(diag, tab);
+                        mgui.getFrame().toFront();
+                        mgui.getFrame().requestFocus();
+                        mgui.getFrame().repaint();
+                        TDiagramPanel tp =  mgui.getCurrentTDiagramPanel();
+                        for (int z = 0; z < tp.getComponentList().size(); z++) {
+//                            System.out.println(tp.getComponentList().get(z).toString());
+                            String temp = tp.getComponentList().get(z).toString();
+                            TransType typeTooltip = getTypeOfTransactions(toolTipText);
+                            TransType typeTemp = getTypeOfTransactions(temp);
+                            int indexTemp1 = temp.indexOf(": ");
+                            int indexTemp2 = temp.indexOf("(");
+                            if (indexTemp1 != -1 && indexTemp2 != -1) {
+                                temp = temp.substring(indexTemp1 + 2, indexTemp2);
+                            }
+                            if (toolTipText.toLowerCase().contains(temp.toLowerCase()) && typeTooltip == typeTemp) {
+                                tp.getComponentList().get(z).setState(TGState.POINTED);
+                            } else {
+                                tp.getComponentList().get(z).setState(TGState.NORMAL);
+                            }
+                        }
+                    }
+                }
+            }
+        });
         sdpanel.setEditable(false);
         sdpanel.setContentType("text/html");
-//        sdpanel.setText(filePath);
+        sdpanel.setEditorKit(new LargeHTMLEditorKit());
+        ToolTipManager.sharedInstance().registerComponent(sdpanel);
 
-        JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setWheelScrollingEnabled(true);
         jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         framePanel.add(jsp, BorderLayout.CENTER);
 
         // statusBar
-        status = createStatusBar();
-        framePanel.add(status, BorderLayout.SOUTH);
+        jp02 = new JPanel();
+        //infos.add(jp02, BorderLayout.SOUTH);
+        framePanel.add(jp02, BorderLayout.SOUTH);
+        jp02.add(new JLabel("Status:"));
+        status = new JLabel("Unknown");
+        status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+        jp02.add(status);
+        jp02.add(new JLabel(" "));
+        jp02.add(new JLabel("Time:"));
+        time = new JLabel("Unknown");
+        time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+        jp02.add(time);
+        jp02.add(new JLabel(" "));
+        jp02.add(new JLabel("Sim. interrupt reason:"));
+        info = new JLabel("Unknown");
+        info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+        jp02.add(info);
+
 
         pack();
     }
@@ -282,12 +406,38 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         try {
             filePath = content;
             sdpanel.setText(content);
+            sdpanel.setCaretPosition(0);
+            jsp.getVerticalScrollBar().setValue(0);
+            jsp.getHorizontalScrollBar().setValue(0);
+            jsp.repaint();
         } catch (Exception e) {
             System.out.println(e.toString());
         }
     }
 
-    public void setStatusBar (String s) {
-        status.setText("Ready ... Time: " + s);
+    public void setStatusBar (String s, String s1, String s2) {
+        status.setText(s);
+        time.setText(s1);
+        info.setText(s2);
+        if (s.equals("Terminated")){
+            status.setForeground(ColorManager.InteractiveSimulationText_TERM);
+            time.setForeground(ColorManager.InteractiveSimulationText_TERM);
+            info.setForeground(ColorManager.InteractiveSimulationText_TERM);
+        } else  if (s.equals("Busy")) {
+            status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+            time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+            info.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+        } else {
+            status.setForeground(ColorManager.InteractiveSimulationText_READY);
+            time.setForeground(ColorManager.InteractiveSimulationText_READY);
+            info.setForeground(ColorManager.InteractiveSimulationText_READY);
+        }
+    }
+    public TransType getTypeOfTransactions(String trans) {
+        if (trans.toLowerCase().contains("write")) return TransType.WRITE;
+        else if (trans.toLowerCase().contains("read")) return TransType.READ;
+        else if (trans.toLowerCase().contains("send")) return TransType.SEND;
+        else if (trans.toLowerCase().contains("wait")) return TransType.WAIT;
+        return TransType.NONE;
     }
 }
