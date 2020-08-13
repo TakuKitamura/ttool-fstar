@@ -423,6 +423,16 @@ public class AvatarDesignPanelTranslator {
         //Todo: check types
         //Todo: handle complex types
         _pragma = _pragma.trim();
+        
+        if (_pragma.compareTo("") == 0) {
+            // empty pragma
+            return false;
+        }
+        
+        //remove expected result letter from the start if present
+        if (_pragma.matches("^[TtFf]\\s.*")) {
+            _pragma = _pragma.substring(2).trim();
+        }
 
         if (_pragma.contains("=") && !(_pragma.contains("==") || _pragma.contains("<=") || _pragma.contains(">=") || _pragma.contains("!="))) {
             //not a query
@@ -455,10 +465,10 @@ public class AvatarDesignPanelTranslator {
             String state1 = _pragma.split("-->")[0];
             String state2 = _pragma.split("-->")[1];
             //    System.out.println("checking... " + state1 + " " + state2);
-            if (!state1.contains(".") || !state2.contains(".")) {
-                TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
-                return false;
-            }
+//            if (!state1.contains(".") || !state2.contains(".")) {
+//                TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed: missing '.'");
+//                return false;
+//            }
             if (!statementParser(state1, as, _pragma, tgc)) {
                 return false;
             }
@@ -477,6 +487,10 @@ public class AvatarDesignPanelTranslator {
 
 
         } else {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Pragma " + _pragma + " cannot be parsed: wrong or missing CTL header");
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            ce.setTGComponent(tgc);
+            addWarning(ce);
             TraceManager.addDev("Safety Pragma " + _pragma + " cannot be parsed");
             return false;
         }
@@ -496,16 +510,19 @@ public class AvatarDesignPanelTranslator {
         }
         
         state = replaceOperators(state);
-        if (statementParserRec(state, as, _pragma, tgc) == 1) {
+        int returnVal = statementParserRec(state, as, _pragma, tgc);
+        if (returnVal == 1) {
             UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Safety Pragma " + _pragma + " has invalid return type");
             ce.setTDiagramPanel(adp.getAvatarBDPanel());
             ce.setTGComponent(tgc);
             addWarning(ce);
             TraceManager.addDev("UPPAAL Pragma " + _pragma + " improperly formatted");
             return false;
+        } else if (returnVal == -1) {
+            return false;
+        } else {
+            return true;
         }
-        
-        return true;
 
         //Divide into simple statements
         
@@ -693,6 +710,7 @@ public class AvatarDesignPanelTranslator {
     }
     
     private int statementParserRec(String state, AvatarSpecification as, String _pragma, TGComponent tgc) {
+        //returns -1 for errors, 0 for boolean result type, and 1 for int result type
         boolean isNot = false;
         boolean isNegated = false;
         

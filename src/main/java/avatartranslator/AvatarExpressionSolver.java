@@ -760,6 +760,17 @@ public class AvatarExpressionSolver {
         }
     }
     
+    public void setBlockIndex(AvatarSpecification spec) {
+        if (isLeaf) {
+            if (isImmediateValue == IMMEDIATE_NO) {
+                leaf.setBlockIndex(spec);
+            }
+        } else {
+            left.setBlockIndex(spec);
+            right.setBlockIndex(spec);
+        }
+    }
+    
     
     public static boolean containsElementAttribute(AvatarElement ae) {
         if (attributesMap != null) {

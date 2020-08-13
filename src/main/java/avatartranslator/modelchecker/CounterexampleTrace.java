@@ -266,6 +266,8 @@ public class CounterexampleTrace {
         s.insert(0 ,"des(0," + (trace.size() - 1) + "," + statesID.size() + ")\n");
         
         CounterexampleQueryReport cr = new CounterexampleQueryReport(null, query, s.toString());
+        cr.setNbOfStates(statesID.size());
+        cr.setNbOfTransitions(trace.size() - 1);
         autTraces.add(cr);
     }
     

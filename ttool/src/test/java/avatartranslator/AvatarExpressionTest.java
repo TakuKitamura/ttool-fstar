@@ -126,12 +126,15 @@ public class AvatarExpressionTest {
         assertTrue(e9.buildExpression());
         AvatarExpressionSolver e10 = new AvatarExpressionSolver("true && 0 >= 1 || false");
         assertTrue(e10.buildExpression());
+        AvatarExpressionSolver e11 = new AvatarExpressionSolver("8/2*(2+2)");
+        assertTrue(e11.buildExpression());
         assertTrue(e1.getResult() == 1);
         assertTrue(e2.getResult() == 1);
         assertTrue(e3.getResult() == 0);
         assertTrue(e5.getResult() == 1);
         assertTrue(e9.getResult() == 1);
         assertTrue(e10.getResult() == 0);
+        assertTrue(e11.getResult() == 16);
     }
     
     @Test

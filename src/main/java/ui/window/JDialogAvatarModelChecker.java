@@ -44,6 +44,7 @@ import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
 import avatartranslator.modelchecker.CounterexampleQueryReport;
 import avatartranslator.modelchecker.SafetyProperty;
+import avatartranslator.modelchecker.SpecificationActionLoop;
 import avatartranslator.modelchecker.SpecificationReachability;
 import avatartranslator.modelchecker.SpecificationPropertyPhase;
 import myutil.*;
@@ -81,6 +82,7 @@ import java.util.concurrent.TimeUnit;
 public class JDialogAvatarModelChecker extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface {
     private final static String[] INFOS = {"Not started", "Running", "Stopped by user", "Finished"};
     private final static Color[] COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
+    private final static String[] WORD_BITS = {"32 bits", "16 bits", "8 bits"};
 
 
     public final static int REACHABILITY_ALL = 1;
@@ -105,6 +107,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean safetySelected = false;
     protected static boolean checkNoDeadSelected = false;
     protected static boolean checkReinitSelected = false;
+    protected static boolean checkActionLoopSelected = false;
     protected static boolean limitStatesSelected = false;
     protected static boolean generateCountertraceSelected = false;
     protected static boolean generateCountertraceAUTSelected = false;
@@ -112,6 +115,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static String stateLimitValue;
     protected static boolean limitTimeSelected = false;
     protected static String timeLimitValue;
+    protected static int wordRepresentationSelected = 1;
 
     protected MainGUI mgui;
 
@@ -142,6 +146,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JButton close;
     protected JButton show;
     protected JButton display;
+    protected JComboBox wordRepresentationBox;
 
     //protected JRadioButton exe, exeint;
     //protected ButtonGroup exegroup;
@@ -159,6 +164,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JTextField timeLimitField;
     protected JCheckBox noDeadlocks;
     protected JCheckBox reinit;
+    protected JCheckBox actionLoop;
     protected JCheckBox safety;
     protected JCheckBox countertrace;
     protected JCheckBox countertraceAUT;
@@ -269,14 +275,30 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             jp01.add(generateDesign, c01);
         }
 
+        c01.gridwidth = 1;
+
         ignoreEmptyTransitions = new JCheckBox("Do not display empty transitions as internal actions", ignoreEmptyTransitionsSelected);
         ignoreEmptyTransitions.addActionListener(this);
         jp01.add(ignoreEmptyTransitions, c01);
+        
+        c01.anchor = GridBagConstraints.EAST;
+        c01.fill = GridBagConstraints.NONE;
+        jp01.add(new JLabel("Word size: "), c01);
+        
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c01.anchor = GridBagConstraints.WEST;
+        c01.fill = GridBagConstraints.HORIZONTAL;
+        wordRepresentationBox = new JComboBox(WORD_BITS);
+        wordRepresentationBox.setSelectedIndex(wordRepresentationSelected);
+        wordRepresentationBox.addActionListener(this);
+        jp01.add(wordRepresentationBox, c01);
+
+
         ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
         ignoreConcurrenceBetweenInternalActions.addActionListener(this);
         jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
-        ignoreInternalStates = new JCheckBox("Ignore states between internal actions",
-                ignoreInternalStatesSelected);
+
+        ignoreInternalStates = new JCheckBox("Ignore states between internal actions", ignoreInternalStatesSelected);
         ignoreInternalStates.addActionListener(this);
         jp01.add(ignoreInternalStates, c01);
         
@@ -321,10 +343,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         
         
         // Reinit
-        cbasic.gridwidth = GridBagConstraints.REMAINDER;
         reinit = new JCheckBox("Reinitialization?", checkReinitSelected);
         reinit.addActionListener(this);
         jpbasic.add(reinit, cbasic);
+        
+        // Internal action loop
+        cbasic.gridwidth = GridBagConstraints.REMAINDER;
+        actionLoop = new JCheckBox("No internal action loops?", checkActionLoopSelected);
+        actionLoop.addActionListener(this);
+        jpbasic.add(actionLoop, cbasic);
 
         
         // Reachability
@@ -729,12 +756,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             timer.scheduleAtFixedRate(mcm, 0, 500);
 
             // Setting options
-            amc.setCompressionFactor(2);
+            amc.setCompressionFactor(wordRepresentationSelected << 1);
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
             amc.setCheckNoDeadlocks(checkNoDeadSelected);
             amc.setReinitAnalysis(checkReinitSelected);
+            amc.setInternalActionLoopAnalysis(checkActionLoopSelected);
             amc.setCounterExampleTrace(generateCountertraceSelected, generateCountertraceAUTSelected);
 
             // Reachability
@@ -838,7 +866,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             // Starting model checking
             testGo();
 
-            if (livenessSelected == LIVENESS_NONE && safetySelected == false && checkNoDeadSelected == false) {
+            if (livenessSelected == LIVENESS_NONE && safetySelected == false && checkNoDeadSelected == false && checkActionLoopSelected == false) {
                 amc.startModelChecking();
             } else {
                 amc.startModelCheckingProperties();
@@ -868,6 +896,27 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             
             if (checkReinitSelected) {
                 jta.append("\nReinitialization?\n" + "-> " + amc.reinitToString() + "\n");
+            }
+            
+            if (checkActionLoopSelected) {
+                boolean result = amc.getInternalActionLoopsResult();
+                String s;
+                if (result) {
+                    s = "property is satisfied";
+                } else {
+                    s = "property is NOT satisfied";
+                }            
+                jta.append("\nNo internal action loops?\n" + "-> " + s + "\n");
+                if (!result) {
+                    ArrayList<SpecificationActionLoop> al = amc.getInternalActionLoops();
+                    jta.append("Internal action loops:\n");
+                    for (SpecificationActionLoop sal : al) {
+                        if (sal.getResult()) {
+                            jta.append(sal.toString());
+                        }
+                    }
+                    jta.append("\n");
+                }
             }
 
             if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)) {
@@ -934,6 +983,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                                 RG rg = new RG(file);
                                 rg.data = tr.getReport();
                                 rg.fileName = filename;
+                                rg.nbOfStates = tr.getNbOfStates();
+                                rg.nbOfTransitions = tr.getNbOfTransitions();
                                 rg.name = tr.getQuery() + "_" + dateAndTime;
                                 mgui.addRG(rg);
                                 File f = new File(filename);
@@ -1090,6 +1141,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         ignoreInternalStatesSelected = ignoreInternalStates.isSelected();
         checkNoDeadSelected = noDeadlocks.isSelected();
         checkReinitSelected = reinit.isSelected();
+        checkActionLoopSelected = actionLoop.isSelected();
+        wordRepresentationSelected = wordRepresentationBox.getSelectedIndex();
 
         if (noReachability.isSelected()) {
             reachabilitySelected = REACHABILITY_NONE;
@@ -1115,9 +1168,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
         }
         
-        countertrace.setEnabled(safety.isSelected() || noDeadlocks.isSelected());
-        countertraceAUT.setEnabled(safety.isSelected() || noDeadlocks.isSelected());
-        countertraceField.setEnabled(countertrace.isSelected());
+        countertrace.setEnabled(safety.isSelected() || noDeadlocks.isSelected() || actionLoop.isSelected());
+        countertraceAUT.setEnabled(safety.isSelected() || noDeadlocks.isSelected() || actionLoop.isSelected());
+        countertraceField.setEnabled(countertrace.isSelected() || countertraceAUT.isSelected());
         generateCountertraceSelected = countertrace.isSelected();
         generateCountertraceAUTSelected = countertraceAUT.isSelected();
 
@@ -1129,7 +1182,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         switch (mode) {
             case NOT_STARTED:
-                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || checkNoDeadSelected || checkReinitSelected || graphSelected || graphSelectedDot) {
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || checkNoDeadSelected || checkReinitSelected || checkActionLoopSelected || graphSelected || graphSelectedDot) {
                     start.setEnabled(true);
                 } else {
                     if (safetySelected) {

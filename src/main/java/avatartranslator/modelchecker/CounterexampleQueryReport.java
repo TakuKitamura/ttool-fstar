@@ -4,6 +4,8 @@ public class CounterexampleQueryReport {
     private String name;
     private String query;
     private String report;
+    private int nbOfStates;
+    private int nbOfTransitions;
     
     public CounterexampleQueryReport(String name) {
         this.name = name;
@@ -35,5 +37,22 @@ public class CounterexampleQueryReport {
     public void setReport(String report) {
         this.report = report;
     }
+
+    public int getNbOfStates() {
+        return nbOfStates;
+    }
+
+    public void setNbOfStates(int nbOfStates) {
+        this.nbOfStates = nbOfStates;
+    }
+
+    public int getNbOfTransitions() {
+        return nbOfTransitions;
+    }
+
+    public void setNbOfTransitions(int nbOfTransitions) {
+        this.nbOfTransitions = nbOfTransitions;
+    }
+
 
 }

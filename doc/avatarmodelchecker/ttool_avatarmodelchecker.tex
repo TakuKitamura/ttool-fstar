@@ -235,6 +235,7 @@ To start the CTL query verification, let's compile again and let's open the mode
 In this section we will explain all the features and options that are present in the AVATAR model-checker. For a reference to the model-checking window, please refer to figure \ref{fig:mcwindow}.
 \\\\The model-checker allows to generate a reachability graph and to prove properties. Starting from the top, the first section contains graph generations options. In particular:
 \begin{itemize}
+	\item \textbf{Word size}: the words can be represented on 32, 16 or 8 bits.
 	\item \textbf{Do not display empty transitions as internal states}: in the reachability graph generation, states are not created for empty transitions (no action, no time, no choice). In practice, empty transition states are collapsed together. This option does not affect the verification. Option on by default.
 	\item \textbf{Ignore concurrency between internal actions}: this option allows to ignore a full concurrency study. It is very useful to limit the state explosion of the model due to all the concurrencies among its states. It is so suggested to keep it selected to have a faster verification. This option, however, affects only in the \textit{leadsto} study, and the reachability graph generation. \textbf{Important}: basic concurrency it is evaluated also with this optimization selected. Basic concurrency means that concurrency is normally evaluated until states with multiple transitions, or if statement, or signals communication are encounted. In normal usage, you should not need to deselect this option (example in the next section \ref{sec:cb}). Option on by default.
 	\item \textbf{Ignore states between internal actions}: This option allows to ignore intermediate states between actions that can be directly executed. this optimization helps decreasing the number of states in the reachability graph generation. If  \textit{Ignore concurrency between internal actions} is not selected, this option automatically deactivated. We suggest to keep this option selected for verification as it would not affect the result. Option on by default.
@@ -245,6 +246,7 @@ The next section contains options for basic properties verification:
 \begin{itemize}
 	\item \textbf{No deadlocks}: it checks that the model is deadlock free
 	\item \textbf{Reinitialization}: it checks that, for all the paths, the model will eventually restart to the initial state
+	\item \textbf{No internal action loops}: it checks that in states machines, there are not possible infinite loops which have no interractions (signal communications) with the environment (other blocks). This check helps to detect if a system stops interracting with the environment during its execution.
 	\item \textbf{Reachability}: it checks for states reachability
 	\item \textbf{Liveness}: it checks for states liveness
 \end{itemize}
@@ -261,11 +263,16 @@ The query syntax for CTL formulas, for expressions \texttt{p} and \texttt{q}, is
 	\item \textbf{E<> p}:  there exists a path in which property p will eventually be true (other common notation \textbf{EF p})
 	\item \textbf{p --> q}: whenever p is true, then q will eventually be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq)})
 \end{itemize}
-Expression \texttt{p} and \texttt{q} may be on states or variables. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic C code like boolean operators (||, \&\&, and, or). Variables can be negated or inverted (not(variable)). Examples:
+Expression \texttt{p} and \texttt{q} may contain condition on states and/or variables. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic boolean (||, \&\&, and, or) and integer (==, >, >=, <, <=, +, -, *, /) operators. Variables can be negated or inverted (not(var), !(var), -var). States are considered as a boolean variable.
+\\\\
+Before the pragma, the letter \textit{T} or \textit{F} may be inserted to specify if the expected result of the pragma is true, in the former case, or false, in the latter. The pragma will be considered satisfied if the result is equivalent to the expected one.
+\\\\
+Here there are few examples of valid pragmas:
 \begin{itemize}
 	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: there exists a path in which there is at least one state in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
-	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
+	\item \textit{F A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25. The expected result is false.
 	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
+	\item \textit{T A<> Sensor.iter == Main.dataSize - 1}: all the paths reach the condition where Sensor.iter is equal to Main.dataSize - 1.
 \end{itemize}
 
 \subsection{Traces generation} \label{sec:tg}
@@ -275,8 +282,9 @@ For advanced verification queries and deadlock check, there is the possibility o
 \item \textbf{A<> p}: shows the path that disproves the property
 \item \textbf{E[] p}: shows the path that proves the property
 \item \textbf{E<> p}: shows the path that proves the property
-\item \textbf{p --> q}: shows the path that disproves the property starting from a state with p valid.
+\item \textbf{p --> q}: shows the path that disproves the property starting from a state with p valid
 \item \textbf{No deadlocks?}: shows a path to a deadlock
+\item \textbf{No internal action loops?}: shows an infinite loop that has no interraction with the environment
 \end{itemize}
 The \textbf{Generate property AUT graphs trace} option allows us to display the propery traces as a reachability graph, saving it in AUT format. An entry to the graph, with the name of the query, will appear in the \textit{R. Graphs} section in TTool.
 \\\\
@@ -434,6 +442,12 @@ For nonempty transitions, in general, the execution procedure is the same as the
 \section{Reachability of States}
 The reachability condition of states is checked while creating the reachability graph. The array \texttt{reachabilities} contains the states elements to be checked. Every time a transition is executed, from state $s_t$ to state $s_{t+1}$, $s_{t+1}$ is checked for reachability. When all the states elements in \texttt{reachabilities} have been reached or the reachability graph is completed, the reachability study finishes.
 
+\subsection{Deadlocks}
+Deadlocks are searched while building the reachability graph. If a state with no available transitions is encountered, the model-checker is stopped using the flag \textit{propertyDone}. The deadlock study is bypassed if another previous study finds deadlocks.
+
+\subsection{Reinitialization}
+The model-checker contains an option to test if the system always reaches the initial state for each execution trace. This is verified as a liveness of the \textit{State 0} represented by \texttt{SpecificationReinit}.
+
 \section{Safety and Liveness}
 \subsection{Definitions}
 In the model also safety and liveness conditions could be proved. In particular, imagining a structure in time of the model, as a tree, the following CTL and LTL formulas are supported:
@@ -442,25 +456,56 @@ In the model also safety and liveness conditions could be proved. In particular,
 	\item \textbf{A<> p}: property p will eventually be true for each path (other common notation \textbf{AF p})
 	\item \textbf{E[] p}: there exists at least one path in which property p is always true (other common notation \textbf{EG p})
 	\item \textbf{E<> p}:  there exists a path in which property p will eventually be true (other common notation \textbf{EF p})
-	\item \textbf{p --> q}: whenever p is true, then q will be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq}))
+	\item \textbf{p --> q}: whenever p is true, then q will be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq}) called \textit{leadsTo})
 \end{itemize}
 with \textit{p} and \textit{q} properties. \textbf{Properties are written as expressions on variables or states of the AVATAR model}.
 
 \subsection{Handling of safety and liveness properties by the AVATAR model checker}
-Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is a AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be use to obtain the expressions result.\\
-
-Safety properties are solved by finding loops or terminal conditions (deadlocks) in the model. For each property type we now explain how the modelchecker behaves.
+Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is an AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be used to obtain the expressions result.
+\\\\
+Safety properties are solved by finding loops or terminal conditions (deadlocks) in the model. For each property type we now explain how the modelchecker behaves:
 \begin{itemize}
-	\item \textbf{A[] p}: if during the reachability graph creation, $p$ is false is a new state new state has p false, then the property is false.
+	\item \textbf{A[] p}: if during the reachability graph creation a new state has $p$ false, then the property is false.
 	\item \textbf{A<> p}: if the property is true for a state, stop the search on that path. If a false loop or a false deadlock is found, the property is false. If no false loops or false deadlocks are found, the property is true.
 	\item \textbf{E[] p}:  if the property is false for a state, stop the search on that path. If a true loop or a true deadlock is found , the property is true. If no true loops or false deadlocks are found, the property is false.
 	\item \textbf{E<> p}:  if during the reachability graph creation, $p$ is true in a new state,  then the property is true.
-	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the safetyLeadStates array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<>p} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false.
+	\item \textbf{p --> q}: every time \texttt{p} is true, save the SpecificationState in the \textit{safetyLeadStates} array. Then, for each node in \textit{safetyLeadStates} start a liveness check \texttt{A<> q} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false. The model-checking is bounded in order to reduce the exploration space in case of false pragmas. It allows also to prove false properties on infinite graphs. The bound is defined on the number of states matching property \texttt{p} in the current execution. When the number of states is greater than a threshold, the model-checker is paused, the current situation is saved, and the verification of \textit{q} starts from the retrieved states. If the property cannot be proved by these states, the model-checker on \textit{p} is resumed and a new grater threshold is defined.
+\end{itemize}
+The main methods involved in the properties verification process are:
+\begin{itemize}
+	\item \texttt{executeSafetyRun}: it executes a safety property and it retrieves the result on the current model. It has options to ignoreConcurrence, emptyTransitions and to use partialHashing in the leadsTo verification (more details in the internal action loops section \ref{sec:il}).
+	\item \texttt{evaluateSafetyOfProperty}: given the current and old state, this method checks if the property is satisfied, still satisfied or not satisfied. It returns the result which is assigned to the flag \textit{property} of a SpecificationState.
+	\item \texttt{actionOnProperty}: it selects an action based on the type of verification, the current result of the property, and if the node exists already (possible loop). If the general result can be concluded, the flag \textit{propertyDone} is set to stop the execution of the model-checker.
+	\item \texttt{checkPropertyOnDeadlock}: given the current state with no executable transitions (deadlock), it executes an action depending on the type of CTL query.
 \end{itemize}
 
 \subsection{Handling combinatory explosion}
-The exploration space of states explodes easily in many models. That's why proving properties is hard. The basic idea of liveness is to find a counter example to prove it wrong. So, we want to detect a cycle (or a path that ends to a deadlock) for which the state we want to check is not live. If the states space explodes, an exploration in breadth will not be effective as the number of nodes increases too much before proving or disproving any property, the space will be too big to be explored.\\
+The exploration space of states explodes easily in many models. That's why proving properties is hard. The basic idea of liveness is to find a counterexample to prove it wrong. So, we want to detect a cycle (or a path that ends to a deadlock) for which the state we want to check is not live. If the states space explodes, an exploration in breadth will not be effective as the number of nodes increases too much before proving or disproving any property, the space will be too big to be explored.
+\\\\
+Moreover, loops are found analyzing a path in depth. So, the check is executed in a depth first search-like manner, instead of a breadth first search implemented for other types of studies, like reachability. It will allow us to search through a path for a property to be true or false having a result within a manageable state-space most of the time. As soon as a property is (un)satisfied the search can continue through another path or stop. In the implementation, each thread follows a path to disprove the liveness. As soon as the property is unsatisfied, the check can stop. As soon as the property is satisfied, the search in that path can stop, and another one is fetched.
+\\\\
+To limit the state's explosion, it is advisable to merge action nodes when possible. This happens inside the method \textit{computeAllInternalStatesFrom} where all the possible executable action transitions are executed and merged into one state. During the \textit{leadsTo} verification also \textit{reduceCombinatorialExplosionProperty} is also used to execute and merge transitions keeping a property valid in order to reduce the number of states added in the structure \textit{safetyLeadStates}.
 
-Moreover, loops are found analyzing a path in depth. So, the check is executed in a depth first search-like manner, instead of a breadth first search implemented for other types of studies, like reachability. It will allow us to search through a path for a property to be true or false having a result within a manageable states  space most of the times. As soon as a property is (un)satisfied the search can continue through another path or stop. In the implementation, each thread follows a path to disprove the liveness. As soon as the property is unsatisfied, the check can stop. As soon as the property is satisfied, the search in that path can stop, and another one is fetched.\\
+\section{Internal action loops} \label{sec:il}
+Internal action loops are used to check conditions when the system stops interracting with the environment. This condition may happen when there are action loops, which do not contain any signal communication, in the state machine of the blocks. If a state machine contains this type of loops, we want to verify that an exit condition is always reached (live).
+\\\\
+The internal loops are detected statically through a strong connected components  search executed by the method \texttt{checkStaticInternalLoops} in the AvatarStateMachine class. The method returns a list of all the action loops which are described by a list of transitions.
+\\\\
+The verification of internal action loops is then managed in the \textit{SpecificationActionLoop} class. The check is verified using a \textit{leadsTo} pragma built as follows:
+\begin{itemize}
+	\item if no static loops are detected, a block is free from internal action loops
+	\item if the loops contains transitions from a random block, the loop is removed as the exit condition is guaranteed by construction
+	\item all the states contained in the loops are collected
+	\item a \textit{leadsTo} query \textbf{p --> q} is built with \textbf{p} equal to the logic \textit{OR} of all the states collected and with \textbf{q} equal to the not of \textbf{p}. This pragma verifies that once entered into a state contained in a possible action loop, in a subsequent moment, a state not contained in a action loop is always reached.
+	\item the pragma is verified by the model-checker. If the result is false, the block contains at least one infinite action loop trace
+	\item these operations are repeated for each block in the system
+\end{itemize}
+For instance, if a static loop contains the states \textit{Collect, Elaborate, Fail, Retry} the pragma created would be \textit{Collect || Elaborate || Fail || Retry --> !(Collect || Elaborate || Fail || Retry)}.
 
+\section{Verification traces}
+Verification traces are extracted using the class \textit{CounterexampleTrace}. For each state created during the model-checking a \textit{CounterexampleTraceState} is associated with it to save the current state pointer for each block and a pointer to a father. All the "counter" states are inserted in the map \textit{traceStates}. The final verification state is extracted by the method \textit{evaluateSafetyOfProperty} or \textit{checkPropertyOnDeadlock}. That state represents a point of a loop, of a deadlock, or a reachability.
+\\\\
+The verification trace is constructed in the \textit{CounterexampleTrace} class using the method \textit{buildTrace}. The start point is the last state \textit{counterexampleState} which ended the verification. If the verification ends with a reachability or a deadlock, so it does not contain a loop, the trace is simply created visiting each father starting from \textit{counterexampleState} until \textit{state 0}. If instead, the verification ends with a loop, we have to eventually manipulate the data since the recorded trace using the fathers may not include a loop. If visiting each father from \textit{counterexampleState} a loop is detected, the trace is already well constructed. If instead, it does not contain a loop, a loop is searched using a deep first search starting from the loop point (the state with the same hash value of \textit{counterexampleState}). Then, the trace visiting each father starting from the loop point is appended to the previously detected cycle.
+\\\\
+In the class \textit{AvatarModelChecker} the data structures are allocated in the method \textit{initCounterexample}. The method \textit{resetCounterexample} must be used before starting a new verification to clear the data structures and to prepare the corresponding variables. Finally, the method \textit{generateCounterexample} is used to generate the traces after a verification run if a counterexample has been detected.
 \end{document}

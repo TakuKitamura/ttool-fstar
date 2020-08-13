@@ -42,6 +42,7 @@ package cli;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.modelchecker.AvatarModelChecker;
 import avatartranslator.modelchecker.CounterexampleQueryReport;
+import avatartranslator.modelchecker.SpecificationActionLoop;
 import avatartranslator.modelcheckervalidator.ModelCheckerValidator;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -851,12 +852,14 @@ public class Action extends Command {
                     + "-la\tliveness of all states\n"
                     + "-s\tsafety pragmas verification\n"
                     + "-q \"QUERY\"\tquery a safety pragma\n"
-                    + "-d\tno deadlocks verification\n"
+                    + "-d\tno deadlocks check\n"
+                    + "-i\ttest model reinitialization\n"
+                    + "-a\tno internal actions loops check\n"
                     + "-n NUM\tmaximum states created (Only for a non verification study)\n"
                     + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
                     + "-c\tconsider full concurrency between actions\n"
-                    + "-v FILE\tsave counterexample traces for pragmas in FILE"
-                    + "-va FILE\tsave counterexample traces and AUT graph for pragmas in FILE";
+                    + "-vt FILE\tsave verification traces in FILE"
+                    + "-va FILE\tsave verification traces as AUT graph in FILE";
             }
 
             public String getExample() {
@@ -878,6 +881,7 @@ public class Action extends Command {
                 //String graphPath = commands[commands.length - 1];
                 String graphPath = "";
                 String counterPath = "";
+                String counterPathAUT = "";
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
@@ -896,6 +900,8 @@ public class Action extends Command {
                 boolean livenessAnalysis = false;
                 boolean safetyAnalysis = false;
                 boolean noDeadlocks = false;
+                boolean reinit = false;
+                boolean actionLoop = false;
                 for (int i = 0; i < commands.length; i++) {
                     //specification
                     switch (commands[i]) {
@@ -961,9 +967,19 @@ public class Action extends Command {
                             safetyAnalysis = true;
                             break;
                         case "-d":
-                            //safety
+                            //deadlock
                             amc.setCheckNoDeadlocks(true);
                             noDeadlocks = true;
+                            break;
+                        case "-i":
+                            //reinitialization
+                            amc.setReinitAnalysis(true);
+                            reinit = true;
+                            break;
+                        case "-a":
+                            //internal action loops
+                            amc.setInternalActionLoopAnalysis(true);
+                            actionLoop = true;
                             break;
                         case "-n":
                             //state limit followed by a number
@@ -994,7 +1010,6 @@ public class Action extends Command {
                         case "-v":
                             if (i != commands.length - 1) {
                                 counterPath = commands[++i];
-                                amc.setCounterExampleTrace(true, false);
                                 counterTraces = true;
                             } else {
                                 return Interpreter.BAD;
@@ -1002,9 +1017,7 @@ public class Action extends Command {
                             break;
                         case "-va":
                             if (i != commands.length - 1) {
-                                counterPath = commands[++i];
-                                amc.setCounterExampleTrace(true, true);
-                                counterTraces = true;
+                                counterPathAUT = commands[++i];
                                 counterTracesAUT = true;
                             } else {
                                 return Interpreter.BAD;
@@ -1015,6 +1028,8 @@ public class Action extends Command {
                     }
                 }
                 TraceManager.addDev("Starting model checking");
+                amc.setCounterExampleTrace(counterTraces, counterTracesAUT);
+
                 if (livenessAnalysis || safetyAnalysis || noDeadlocks) {
                     amc.startModelCheckingProperties();
                 } else {
@@ -1025,6 +1040,21 @@ public class Action extends Command {
                         " links:" + amc.getNbOfLinks() + "\n");
                 if (noDeadlocks) {
                     interpreter.print("No Deadlocks:\n" + amc.deadlockToString());
+                }
+                if (reinit) {
+                    interpreter.print("Reinitialization?:\n" + amc.reinitToString());
+                }
+                if (actionLoop) {
+                    boolean result = amc.getInternalActionLoopsResult();
+                    interpreter.print("No internal action loops?:\n" + result);
+                    if (!result) {
+                        ArrayList<SpecificationActionLoop> al = amc.getInternalActionLoops();
+                        for (SpecificationActionLoop sal : al) {
+                            if (sal.getResult()) {
+                                interpreter.print(sal.toString());
+                            }
+                        }
+                    }
                 }
                 if (reachabilityAnalysis) {
                     interpreter.print("Reachability Analysis:\n" + amc.reachabilityToStringGeneric());
@@ -1059,6 +1089,11 @@ public class Action extends Command {
                     }
                     
                     if (counterTracesAUT) {
+                        if (counterPathAUT.indexOf("$") != -1) {
+                            file = Conversion.replaceAllChar(counterPathAUT, '$', dateAndTime);
+                        } else {
+                            file = counterPathAUT;
+                        }
                         List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
                         if (autTraces != null) {
                             int i = 0;
