@@ -135,7 +135,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     	//g.drawString(textDiagramRef, x, y);
     	drawSingleString(g, textDiagramRef, x, y);
     	//validation and their strings
-    	GestionOfValidations(g, f);
+    	ManagementOfValidations(g, f);
     }
     
     private void setFontStyleWhenPointerIsOnMe(Graphics g, int fontStyle, boolean pointerOnMe, Font font, int index) {
@@ -143,7 +143,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         	g.setFont(font.deriveFont(fontStyle));
     }
     
-    private void GestionOfValidations(Graphics g, Font f) {
+    private void ManagementOfValidations(Graphics g, Font f) {
         if (validations == null) {
             if (getFather() instanceof DiplodocusMethodologyDiagramReference) {
                 ((DiplodocusMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
@@ -155,6 +155,9 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
             valMaxX = new int[validations.length];
         }
         int widthText = g.getFontMetrics().stringWidth(value);
+        if (getFather() == null) {
+            return;
+        }
         int widthFather = getFather().getWidth();
         int curWidth = Math.max(width, myWidth);
         int currentMaxWidthX = widthFather + x - 2 * (X_MARGIN);

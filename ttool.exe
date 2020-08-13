@@ -2,6 +2,6 @@
 
 java -version
 cd bin;
-java -cp . -Xmx1024m -jar ttool.jar -config config.xml -experimental -debug -avatar -uppaal -launcher -openlast
+java -cp . -Xmx4096m -jar ttool.jar -config config.xml -experimental -debug -avatar -uppaal -launcher -interact -openlast
 
  
