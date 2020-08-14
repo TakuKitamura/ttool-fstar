@@ -11,6 +11,33 @@
 <Validated value="Block1;Block0;" />
 <Ignored value="" />
 
+<COMPONENT type="303" id="527" >
+<cdparam x="371" y="436" />
+<sizeparam width="221" height="45" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="UPPAAL Pragma" value="F A[] Block0.x &gt;= 10" />
+<TGConnectingPoint num="0" id="528" />
+<TGConnectingPoint num="1" id="529" />
+<TGConnectingPoint num="2" id="530" />
+<TGConnectingPoint num="3" id="531" />
+<TGConnectingPoint num="4" id="532" />
+<TGConnectingPoint num="5" id="533" />
+<TGConnectingPoint num="6" id="534" />
+<TGConnectingPoint num="7" id="535" />
+<TGConnectingPoint num="8" id="536" />
+<TGConnectingPoint num="9" id="537" />
+<TGConnectingPoint num="10" id="538" />
+<TGConnectingPoint num="11" id="539" />
+<TGConnectingPoint num="12" id="540" />
+<TGConnectingPoint num="13" id="541" />
+<TGConnectingPoint num="14" id="542" />
+<TGConnectingPoint num="15" id="543" />
+<extraparam>
+<Line value="F A[] Block0.x &gt;= 10" />
+</extraparam>
+</COMPONENT>
+
 <CONNECTOR type="5002" id="2" >
 <cdparam x="422" y="247" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
