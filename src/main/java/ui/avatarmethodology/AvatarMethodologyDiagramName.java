@@ -58,7 +58,7 @@ import java.awt.*;
  * @version 1.0 26/08/2014
  * @author Ludovic APVRILLE
  */
-public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent { 
+public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     //protected boolean emptyText;
     
     public final static int X_MARGIN = 5;
@@ -105,7 +105,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         minWidth = 10;
         nbInternalTGComponent = 0;
         
-        moveable = true;
+        moveable = false;
         editable = true;
         removable = false;
         
@@ -136,8 +136,12 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	g.setFont(font.deriveFont(fontStyle));
     }
     
-    private void manageValidations(Graphics g, Font font)
-    {
+    private void manageValidations(Graphics g, Font font)  {
+
+    	if (getFather() == null) {
+    		return;
+		}
+
         int widthText = g.getFontMetrics().stringWidth(value);
         int widthFather = getFather().getWidth();
         int curWidth = Math.max(width, myWidth);
@@ -189,7 +193,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	makeScale(g, widthText);
         if (pointerIsOnMe) //Issue #31: The rectangle was not around the text when zoom: with scale it works better
         	//g.drawRect(x - 2, y - 12, curWidth + 5, 15);
-        	g.drawRect(x - 2, y - scale(15), curWidth + 5, scale(15));
+        	g.drawRect(x - 2, y - scale(12), curWidth + 5, scale(15));
     }
     
     @Override
