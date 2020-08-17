@@ -435,8 +435,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	}
         }
 
-        if (indexOnMe > -1)
-        {
+        if (indexOnMe > -1) {
         	AvatarMethodologyDiagramReference ref = ((AvatarMethodologyDiagramReference)(getFather()));
         	ref.makeCall(value, indexOnMe);
         } 
@@ -466,8 +465,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     }
     
     @Override
-    public void rescale(double scaleFactor)
-    {
+    public void rescale(double scaleFactor) {
 		if ((valMinX != null) && (valMinX.length > 0)) 
 		{
 			for (int i = 0; i < valMinX.length; i++) 

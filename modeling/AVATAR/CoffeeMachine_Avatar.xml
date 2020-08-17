@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="2" LAST_SELECTED_SUB_TAB="0">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="1" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="Avatar Requirement" nameTab="AVATAR Requirements" >
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1900" minY="10" maxY="1400" zoom="1.0" >
@@ -1327,7 +1327,7 @@
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="303" id="716" >
-<cdparam x="54" y="427" />
+<cdparam x="54" y="426" />
 <sizeparam width="646" height="214" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -4248,185 +4248,6 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 
 
 </AVATARStateMachineDiagramPanel>
-
-</Modeling>
-
-
-
-
-<Modeling type="Avatar Methodology" nameTab="AVATAR_Methodology" >
-<AvatarMethodologyDiagramPanel name="AVATAR_Methodology" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
-<COMPONENT type="5605" id="2407" >
-<cdparam x="200" y="400" />
-<sizeparam width="180" height="70" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="TGComponent" value="Properties" />
-<TGConnectingPoint num="0" id="2403" />
-<TGConnectingPoint num="1" id="2404" />
-<TGConnectingPoint num="2" id="2405" />
-<TGConnectingPoint num="3" id="2406" />
-</COMPONENT>
-
-<COMPONENT type="5606" id="2412" >
-<cdparam x="550" y="500" />
-<sizeparam width="300" height="70" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="TGComponent" value="Prototyping" />
-<TGConnectingPoint num="0" id="2408" />
-<TGConnectingPoint num="1" id="2409" />
-<TGConnectingPoint num="2" id="2410" />
-<TGConnectingPoint num="3" id="2411" />
-</COMPONENT>
-
-<COMPONENT type="5604" id="2419" >
-<cdparam x="450" y="400" />
-<sizeparam width="300" height="70" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="TGComponent" value="Design" />
-<TGConnectingPoint num="0" id="2414" />
-<TGConnectingPoint num="1" id="2415" />
-<TGConnectingPoint num="2" id="2416" />
-<TGConnectingPoint num="3" id="2417" />
-<TGConnectingPoint num="4" id="2418" />
-</COMPONENT>
-<SUBCOMPONENT type="5607" id="2413" >
-<father id="2419" num="0" />
-<cdparam x="455" y="440" />
-<sizeparam width="10" height="10" minWidth="10" minHeight="5" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="455" maxX="455" minY="440" maxY="440" />
-<infoparam name="value " value="AVATAR Design" />
-</SUBCOMPONENT>
-
-<COMPONENT type="5603" id="2425" >
-<cdparam x="350" y="300" />
-<sizeparam width="200" height="70" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="TGComponent" value="Analysis" />
-<TGConnectingPoint num="0" id="2420" />
-<TGConnectingPoint num="1" id="2421" />
-<TGConnectingPoint num="2" id="2422" />
-<TGConnectingPoint num="3" id="2423" />
-<TGConnectingPoint num="4" id="2424" />
-</COMPONENT>
-
-<COMPONENT type="5602" id="2432" >
-<cdparam x="250" y="200" />
-<sizeparam width="200" height="70" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="TGComponent" value="Requirements" />
-<TGConnectingPoint num="0" id="2426" />
-<TGConnectingPoint num="1" id="2427" />
-<TGConnectingPoint num="2" id="2428" />
-<TGConnectingPoint num="3" id="2429" />
-<TGConnectingPoint num="4" id="2430" />
-<TGConnectingPoint num="5" id="2431" />
-</COMPONENT>
-
-<COMPONENT type="5601" id="2437" >
-<cdparam x="150" y="100" />
-<sizeparam width="200" height="70" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="TGComponent" value="Assumptions" />
-<TGConnectingPoint num="0" id="2433" />
-<TGConnectingPoint num="1" id="2434" />
-<TGConnectingPoint num="2" id="2435" />
-<TGConnectingPoint num="3" id="2436" />
-</COMPONENT>
-
-<CONNECTOR type="5608" id="2439" >
-<cdparam x="270" y="270" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
-<TGConnectingPoint num="0" id="2438" />
-<P1  x="270" y="270" id="2428" />
-<P2  x="236" y="400" id="2403" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR>
-<CONNECTOR type="5608" id="2443" >
-<cdparam x="510" y="470" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
-<TGConnectingPoint num="0" id="2441" />
-<TGConnectingPoint num="1" id="2442" />
-<P1  x="510" y="470" id="2415" />
-<P2  x="550" y="535" id="2408" />
-<Point x="510" y="535" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="2440" >
-<father id="2443" num="0" />
-<cdparam x="510" y="535" />
-<sizeparam width="8" height="8" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="point " value="null" />
-</SUBCOMPONENT>
-
-<CONNECTOR type="5608" id="2447" >
-<cdparam x="410" y="370" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
-<TGConnectingPoint num="0" id="2445" />
-<TGConnectingPoint num="1" id="2446" />
-<P1  x="410" y="370" id="2421" />
-<P2  x="450" y="435" id="2414" />
-<Point x="410" y="435" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="2444" >
-<father id="2447" num="0" />
-<cdparam x="410" y="435" />
-<sizeparam width="8" height="8" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="point " value="null" />
-</SUBCOMPONENT>
-
-<CONNECTOR type="5608" id="2451" >
-<cdparam x="310" y="270" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
-<TGConnectingPoint num="0" id="2449" />
-<TGConnectingPoint num="1" id="2450" />
-<P1  x="310" y="270" id="2427" />
-<P2  x="350" y="335" id="2420" />
-<Point x="310" y="335" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="2448" >
-<father id="2451" num="0" />
-<cdparam x="310" y="335" />
-<sizeparam width="8" height="8" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="point " value="null" />
-</SUBCOMPONENT>
-
-<CONNECTOR type="5608" id="2455" >
-<cdparam x="210" y="170" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
-<TGConnectingPoint num="0" id="2453" />
-<TGConnectingPoint num="1" id="2454" />
-<P1  x="210" y="170" id="2433" />
-<P2  x="250" y="235" id="2426" />
-<Point x="210" y="235" />
-<AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="2452" >
-<father id="2455" num="0" />
-<cdparam x="210" y="235" />
-<sizeparam width="8" height="8" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="point " value="null" />
-</SUBCOMPONENT>
-
-
-</AvatarMethodologyDiagramPanel>
 
 </Modeling>
 

@@ -32,3 +32,6 @@
 ---communicationmapping communicationmapping communication mapping
 - avatar avatar software embedded systems safety security
 -- requirements requirements satified satisfy derivereqt
+-- avatarsoftwaredesign software_design avatar blocks software design
+--- avatarbd avatar_block_diagram design software blocks
+---- avatarsafetypragmas safety_properties safety properties pragmas ctl
