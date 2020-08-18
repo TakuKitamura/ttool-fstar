@@ -126,7 +126,7 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
         minWidth = 10;
         nbInternalTGComponent = 0;
 
-        moveable = true;
+        moveable = false;
         editable = true;
         removable = false;
 

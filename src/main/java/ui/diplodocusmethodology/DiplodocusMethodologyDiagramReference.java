@@ -412,6 +412,8 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
             dn = new  DiplodocusMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
             //makeValidationInfos(dn);
             dn.setValue(s);
+            dn.setFather(this);
+            //dn.resizeWithFather();
             addInternalComponent(dn, index);
             index ++;
         }
@@ -519,7 +521,9 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
 
     @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+        TraceManager.addDev("Adding internal TG component");
         tgc.setFather(this);
+        //tgc.resizeWithFather();
         addInternalComponent(tgc, 0);
         //tgc.setDrawingZone(true);
         return true;

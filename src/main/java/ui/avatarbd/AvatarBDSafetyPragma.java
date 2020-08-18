@@ -274,7 +274,8 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
         AvatarBDPanel abdp = (AvatarBDPanel) tdp;
         Map<String, List<String>> blockAttributeMap = abdp.getBlockStrings(true, true, true);
-        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value, blockAttributeMap);
+        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, getTDiagramPanel().getMainGUI(), "Setting the safety pragmas", value,
+                blockAttributeMap);
         //jdn.setLocation(200, 150);
         jdn.setSize(500, 500);
         GraphicLib.centerOnParent(jdn);

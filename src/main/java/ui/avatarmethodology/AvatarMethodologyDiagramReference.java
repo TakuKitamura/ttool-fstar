@@ -375,6 +375,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
             dn = new  AvatarMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
             //makeValidationInfos(dn);
             dn.setValue(s);
+            dn.setFather(this);
             addInternalComponent(dn, index);
             index ++;
         }
@@ -482,7 +483,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
     }
 
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
-    
+
     /**
      * Permits to know if tgc is an instance of AvatarMethodologyDiagramName
      * @param tgc

@@ -120,8 +120,9 @@ public class TGHelpButton extends JButton {
                     helpDialog.setLocationHelpWindow(but);
                 } else {
                     if(!helpDialog.isVisible()) {
-                        helpDialog = new JDialogTGComponentHelp(mgui, he);
+                        //helpDialog = new JDialogTGComponentHelp(mgui, he);
                         helpDialog.setLocationHelpWindow(but);
+                        helpDialog.setVisible(true);
                     } else{
                         helpDialog.setVisible(false);
                     }

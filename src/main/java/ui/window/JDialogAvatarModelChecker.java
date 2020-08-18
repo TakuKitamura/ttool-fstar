@@ -233,6 +233,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         setButtons();
     }
 
+    @SuppressWarnings("unchecked")
     protected void initComponents() {
 
         Container c = getContentPane();
@@ -288,6 +289,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         c01.anchor = GridBagConstraints.WEST;
         c01.fill = GridBagConstraints.HORIZONTAL;
+
         wordRepresentationBox = new JComboBox(WORD_BITS);
         wordRepresentationBox.setSelectedIndex(wordRepresentationSelected);
         wordRepresentationBox.addActionListener(this);

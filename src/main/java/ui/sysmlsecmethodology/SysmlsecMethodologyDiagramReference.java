@@ -422,6 +422,7 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
             dn = new  SysmlsecMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
             //makeValidationInfos(dn);
             dn.setValue(s);
+            dn.setFather(this);
             addInternalComponent(dn, index);
             index ++;
         }

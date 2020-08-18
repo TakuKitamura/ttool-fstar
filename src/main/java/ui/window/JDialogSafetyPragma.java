@@ -38,6 +38,10 @@
 
 package ui.window;
 
+import help.HelpEntry;
+import help.HelpManager;
+import myutil.TraceManager;
+import ui.MainGUI;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -79,11 +83,16 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JPopupMenu helpPopup;
     private Map<String, List<String>> blockAttributeMap;
 
+    private JDialogTGComponentHelp helpDialog;
+
+    protected MainGUI mgui;
+
     /*
      * Creates new form
      */
-    public JDialogSafetyPragma(Frame f, String title, String _text, Map<String, List<String>> blockAttributeMap) {
+    public JDialogSafetyPragma(Frame f, MainGUI _mgui, String title, String _text, Map<String, List<String>> blockAttributeMap) {
         super(f, title, true);
+        mgui = _mgui;
         text = _text;
         this.blockAttributeMap = blockAttributeMap;
 
@@ -404,12 +413,34 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     }
 
     public void help() {
+        if (mgui == null) {
+            TraceManager.addDev("Null mgui");
+        }
+        HelpManager hm = mgui.getHelpManager();
+        HelpEntry he = hm.getHelpEntryWithHTMLFile("avatarsafetypragmas.html");
+        if(helpDialog == null) {
+            helpDialog = new JDialogTGComponentHelp(mgui, he);
+            helpDialog.setLocationHelpWindow(help);
+            helpDialog.setSize(500, 500);
+        } else {
+            if(!helpDialog.isVisible()) {
+                //helpDialog = new JDialogTGComponentHelp(mgui, he);
+                helpDialog.setLocationHelpWindow(help);
+                helpDialog.setVisible(true);
+            } else{
+                helpDialog.setVisible(false);
+            }
+        }
+    }
+
+
+    /*public void help() {
         if (!helpPopup.isVisible()) {
             helpPopup.show(help, 20, 20);
         } else {
             helpPopup.setVisible(false);
         }
-    }
+    }*/
 
     public String getText() {
         return text;

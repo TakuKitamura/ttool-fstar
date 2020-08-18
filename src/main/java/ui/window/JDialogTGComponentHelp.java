@@ -53,7 +53,7 @@ public class JDialogTGComponentHelp extends JDialog implements ActionListener {
 
         framePanel.add(helpPanel, BorderLayout.CENTER);
 
-        helpBut = new JButton("Help", IconManager.imgic32);
+        helpBut = new JButton("Open general help window", IconManager.imgic32);
 
         helpManager = new HelpManager();
         if(helpManager.loadEntries()) {

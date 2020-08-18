@@ -114,7 +114,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         minWidth = 10;
         nbInternalTGComponent = 0;
 
-        moveable = true;
+        moveable = false;
         editable = true;
         removable = false;
 
@@ -125,8 +125,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     
     //Issue #31: Factorisation with isTextReadable included into a new function: drawSingleString
     @Override
-    public void internalDrawing(Graphics g)
-    {
+    public void internalDrawing(Graphics g) {
 //    	if (!isTextReadable(g))
 //    		return;
     	// Strings
@@ -200,7 +199,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
 //        if (onMe)
 //            g.drawRect(x-2, y-12, myWidth+4, 15);
         if (pointerIsOnMe)
-        	g.drawRect(x - 2, y - scale(15), curWidth +  4, scale(15));
+        	g.drawRect(x - 2, y - scale(12), curWidth +  4, scale(15));
     
 	}
 
