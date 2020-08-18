@@ -1274,7 +1274,7 @@
 
 
 <Modeling type="AVATAR Design" nameTab="AVATAR Design" tabs="Block Diagram$CoffeeButton$TeaButton$CoffeeMachine$Wallet" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="6" maxX="896" minY="6" maxY="576" zoom="0.6400000000000001" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
@@ -1283,12 +1283,12 @@
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="695" >
-<cdparam x="321" y="567" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="205" y="362" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="640" maxHeight="1280" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block1 to Block0" value="" />
 <TGConnectingPoint num="0" id="694" />
-<P1  x="560" y="351" id="773" />
-<P2  x="560" y="377" id="806" />
+<P1  x="357" y="224" id="773" />
+<P2  x="357" y="241" id="806" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in pushCoffeeButton()" />
@@ -1297,12 +1297,12 @@
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="697" >
-<cdparam x="275" y="114" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="176" y="72" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="640" maxHeight="1280" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="696" />
-<P1  x="306" y="109" id="728" />
-<P2  x="445" y="108" id="802" />
+<P1  x="195" y="69" id="728" />
+<P2  x="284" y="69" id="802" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <iso value="in getCoin(int nbOfCoins)" />
@@ -1313,12 +1313,12 @@
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="699" >
-<cdparam x="623" y="565" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="398" y="361" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="640" maxHeight="1280" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block1 to Block0" value="" />
 <TGConnectingPoint num="0" id="698" />
-<P1  x="790" y="350" id="748" />
-<P2  x="790" y="377" id="807" />
+<P1  x="505" y="223" id="748" />
+<P2  x="505" y="241" id="807" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in pushTeaButton()" />
@@ -1327,12 +1327,12 @@
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="303" id="716" >
-<cdparam x="54" y="426" />
-<sizeparam width="646" height="214" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="33" y="272" />
+<sizeparam width="441" height="148" minWidth="51" minHeight="6" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<cdrectangleparam minX="9" maxX="1399" minY="9" maxY="899" />
 <infoparam name="UPPAAL Pragma" value="A[] CoffeeMachine.nbOfCoins&lt;=2
-E&lt;&gt; CoffeeMachine.nbOfCoins&gt;0
+T E&lt;&gt; CoffeeMachine.nbOfCoins&gt;0
 E&lt;&gt; CoffeeMachine.nbOfCoins&gt;1
 E[] CoffeeMachine.nbOfCoins&lt;2
 
@@ -1340,11 +1340,11 @@ A[] Wallet.nbOfCoins&lt;3
 A[] Wallet.nbOfCoins&gt;=0
 E[] Wallet.nbOfCoins&gt;=1
 
-CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered
+F CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered
 CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered &amp;&amp; CoffeeMachine.TeaDelivered
 CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered || CoffeeMachine.TeaDelivered
 CoffeeMachine.Beverage --&gt; CoffeeMachine.WaitingForFirstCoin 
-CoffeeMachine.WaitingForFirstCoin --&gt; CoffeeMachine.EjectState
+F CoffeeMachine.WaitingForFirstCoin --&gt; CoffeeMachine.EjectState
 CoffeeMachine.WaitingForFirstCoin --&gt; CoffeeMachine.EjectState || CoffeeMachine.WaitingForSecondCoin
 
 CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
@@ -1367,7 +1367,7 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 <TGConnectingPoint num="15" id="715" />
 <extraparam>
 <Line value="A[] CoffeeMachine.nbOfCoins&lt;=2" />
-<Line value="E&lt;&gt; CoffeeMachine.nbOfCoins&gt;0" />
+<Line value="T E&lt;&gt; CoffeeMachine.nbOfCoins&gt;0" />
 <Line value="E&lt;&gt; CoffeeMachine.nbOfCoins&gt;1" />
 <Line value="E[] CoffeeMachine.nbOfCoins&lt;2" />
 <Line value="" />
@@ -1375,11 +1375,11 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 <Line value="A[] Wallet.nbOfCoins&gt;=0" />
 <Line value="E[] Wallet.nbOfCoins&gt;=1" />
 <Line value="" />
-<Line value="CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered" />
+<Line value="F CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered" />
 <Line value="CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered &amp;&amp; CoffeeMachine.TeaDelivered" />
 <Line value="CoffeeMachine.Beverage --&gt; CoffeeMachine.CoffeeDelivered || CoffeeMachine.TeaDelivered" />
 <Line value="CoffeeMachine.Beverage --&gt; CoffeeMachine.WaitingForFirstCoin " />
-<Line value="CoffeeMachine.WaitingForFirstCoin --&gt; CoffeeMachine.EjectState" />
+<Line value="F CoffeeMachine.WaitingForFirstCoin --&gt; CoffeeMachine.EjectState" />
 <Line value="CoffeeMachine.WaitingForFirstCoin --&gt; CoffeeMachine.EjectState || CoffeeMachine.WaitingForSecondCoin" />
 <Line value="" />
 <Line value="CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2" />
@@ -1387,10 +1387,10 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 </COMPONENT>
 
 <COMPONENT type="5000" id="741" >
-<cdparam x="106" y="55" />
-<sizeparam width="200" height="218" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="67" y="35" />
+<sizeparam width="128" height="139" minWidth="3" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<cdrectangleparam minX="9" maxX="1399" minY="9" maxY="899" />
 <infoparam name="Block0" value="Wallet" />
 <TGConnectingPoint num="0" id="717" />
 <TGConnectingPoint num="1" id="718" />
@@ -1430,10 +1430,10 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 </COMPONENT>
 
 <COMPONENT type="5000" id="816" >
-<cdparam x="445" y="19" />
-<sizeparam width="461" height="358" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="284" y="12" />
+<sizeparam width="295" height="229" minWidth="3" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<cdrectangleparam minX="9" maxX="1399" minY="9" maxY="899" />
 <infoparam name="Block0" value="CoffeeMachine" />
 <TGConnectingPoint num="0" id="792" />
 <TGConnectingPoint num="1" id="793" />
@@ -1478,10 +1478,10 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="766" >
 <father id="816" num="0" />
-<cdparam x="696" y="248" />
-<sizeparam width="189" height="102" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="445" y="158" />
+<sizeparam width="120" height="65" minWidth="3" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="272" minY="0" maxY="256" />
+<cdrectangleparam minX="0" maxX="175" minY="0" maxY="164" />
 <infoparam name="Block1" value="TeaButton" />
 <TGConnectingPoint num="0" id="742" />
 <TGConnectingPoint num="1" id="743" />
@@ -1516,10 +1516,10 @@ CoffeeMachine.CoffeeDelivered --&gt; CoffeeMachine.nbOfCoins&lt;2
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="791" >
 <father id="816" num="1" />
-<cdparam x="465" y="249" />
-<sizeparam width="190" height="102" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="297" y="159" />
+<sizeparam width="121" height="65" minWidth="3" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="271" minY="0" maxY="256" />
+<cdrectangleparam minX="0" maxX="174" minY="0" maxY="164" />
 <infoparam name="Block1" value="CoffeeButton" />
 <TGConnectingPoint num="0" id="767" />
 <TGConnectingPoint num="1" id="768" />

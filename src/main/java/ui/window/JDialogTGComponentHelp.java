@@ -13,11 +13,12 @@ import java.awt.event.ActionListener;
 
 public class JDialogTGComponentHelp extends JDialog implements ActionListener {
 
-    MainGUI mainGUI;
-    HelpEntry helpEntry;
-    HelpManager helpManager;
-    JButton helpBut;
-    JEditorPane pane;
+    protected MainGUI mainGUI;
+    protected HelpEntry helpEntry;
+    protected HelpManager helpManager;
+    protected JButton helpBut;
+    protected JEditorPane pane;
+    protected JScrollPane jsp;
 
 
     public JDialogTGComponentHelp(MainGUI _mgui, HelpEntry _he) {
@@ -112,5 +113,12 @@ public class JDialogTGComponentHelp extends JDialog implements ActionListener {
         }
         //TraceManager.addDev("help window location ==> (x,y) = " + "(" + dx+ "," + dy + ")" );
         setLocation(dx, dy);
+    }
+
+    public void scrollToTop() {
+        if (jsp != null) {
+            jsp.getHorizontalScrollBar().setValue(0);
+            jsp.getVerticalScrollBar().setValue(0);
+        }
     }
 }
