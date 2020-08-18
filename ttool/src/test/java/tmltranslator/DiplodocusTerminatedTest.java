@@ -18,25 +18,22 @@ import ui.AbstractUITest;
 import ui.TDiagramPanel;
 import ui.TMLArchiPanel;
 import ui.TURTLEPanel;
-import ui.interactivesimulation.JFrameTMLSimulationPanelTimeline;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiDiagramPanel;
 
-
-import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertTrue;
 
-public class TimelineDiagramTest extends AbstractUITest {
+public class DiplodocusTerminatedTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_TIMELINE = {"timelineDiagram"};
+    final String [] MODELS_TERMINATE = {"terminatedTest"};
     private String SIM_DIR;
     private RemoteConnection rc;
     private boolean isReady = false;
@@ -50,7 +47,7 @@ public class TimelineDiagramTest extends AbstractUITest {
 
     }
 
-    public TimelineDiagramTest() {
+    public DiplodocusTerminatedTest() {
         super();
     }
 
@@ -60,9 +57,9 @@ public class TimelineDiagramTest extends AbstractUITest {
     }
 
     @Test
-    public void testCompareTimelineGeneratedContent() throws Exception {
-        for (int i = 0; i < MODELS_TIMELINE.length; i++) {
-            String s = MODELS_TIMELINE[i];
+    public void testIsSimulationTerminated() throws Exception {
+        for (int i = 0; i < MODELS_TERMINATE.length; i++) {
+            String s = MODELS_TERMINATE[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
@@ -171,9 +168,7 @@ public class TimelineDiagramTest extends AbstractUITest {
             }
             try {
 
-                toServer(" 1 6 100", rc);
-                Thread.sleep(5);
-                toServer("7 4 ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2", rc);
+                toServer(" 1 0", rc);
                 Thread.sleep(5);
                 while (running) {
                     String demo = null;
@@ -185,18 +180,18 @@ public class TimelineDiagramTest extends AbstractUITest {
                     running = analyzeServerAnswer(demo);
                 }
                 System.out.println(ssxml);
-                File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
-                String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                String content = "Simulation completed";
                 assertTrue(content.equals(ssxml));
                 System.out.println("Test done");
                 if (rc != null) {
                     try {
                         rc.disconnect();
                     } catch (RemoteConnectionException rce) {
-                       rce.printStackTrace();
+                        rce.printStackTrace();
                     }
                     rc = null;
                 }
+
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -227,10 +222,10 @@ public class TimelineDiagramTest extends AbstractUITest {
             //
             ssxml = ssxml + s + "\n";
         }
-        index0 = ssxml.indexOf("<![CDATA[");
-        int index1 = ssxml.indexOf("]]>");
+        index0 = ssxml.indexOf("<brkreason>");
+        int index1 = ssxml.indexOf("</brkreason>");
         if ((index0 > -1) && (index1 > -1)) {
-            ssxml = ssxml.substring(index0 + 9, index1).trim();
+            ssxml = ssxml.substring(index0 + 11, index1).trim();
             isRunning = false;
         }
         return isRunning;
