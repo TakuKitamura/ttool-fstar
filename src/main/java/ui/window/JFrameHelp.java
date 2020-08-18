@@ -58,6 +58,8 @@ import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -126,10 +128,27 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         pane.setEditorKit(kit);
         pane.setEditable(false);
         StyleSheet styleSheet = kit.getStyleSheet();
-        styleSheet.addRule("body {color:#000; font-family:times; margin: 4px; }");
-        styleSheet.addRule("h1 {color: blue; margin-top: 20px;}");
-        styleSheet.addRule("h2 {color: #ff0000; margin-top: 20px;}");
-        styleSheet.addRule("h3 {color: green; margin-top: 15px;}");
+
+        // Load help.css
+
+        URL url = HelpManager.getURL("help.css");
+        try {
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(url.openStream()));
+            String line;
+
+            while ((line = in.readLine()) != null) {
+                styleSheet.addRule(line);
+            }
+        } catch (Exception e) {
+            styleSheet.addRule("body {color:#000; font-family:times; margin: 4px; }");
+            styleSheet.addRule("h1 {color: blue; margin-top: 20px;}");
+            styleSheet.addRule("h2 {color: #ff0000; margin-top: 20px;}");
+            styleSheet.addRule("h3 {color: green; margin-top: 15px;}");
+        }
+
+
+
 
 
 
