@@ -191,9 +191,10 @@ public class TimelineDiagramTest extends AbstractUITest {
                 System.out.println("Test done");
                 if (rc != null) {
                     try {
+                        rc.send("0");
                         rc.disconnect();
                     } catch (RemoteConnectionException rce) {
-                       rce.printStackTrace();
+                        rce.printStackTrace();
                     }
                     rc = null;
                 }

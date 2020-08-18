@@ -40,7 +40,6 @@ public class DiplodocusTerminatedTest extends AbstractUITest {
     private boolean running = true;
     private Vector<SimulationTransaction> trans;
     private String ssxml;
-    final static String EXPECTED_FILE_GENERATED_TIMELINE = getBaseResourcesDir() + "tmltranslator/expected/expected_get_generated_timeline.txt";
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
@@ -185,6 +184,7 @@ public class DiplodocusTerminatedTest extends AbstractUITest {
                 System.out.println("Test done");
                 if (rc != null) {
                     try {
+                        rc.send("0");
                         rc.disconnect();
                     } catch (RemoteConnectionException rce) {
                         rce.printStackTrace();
