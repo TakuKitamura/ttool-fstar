@@ -289,14 +289,6 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
         }
 
         myfile << "</tr>" << std::endl << "<tr>";
-        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
-            if( aLength == 1) {
-              myfile << "<th class=\"notfirst\">";
-            } else {
-              myfile << "<th></th>";
-            }
-        }
-        myfile << "</tr>" << std::endl << "<tr>";
         myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
         for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
           std::ostringstream spanVal;
@@ -321,7 +313,14 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
             }
           //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
         }
-
+        myfile << "</tr>" << std::endl << "<tr>";
+        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
+            if( aLength == 1) {
+              myfile << "<th class=\"notfirst\">";
+            } else {
+              myfile << "<th></th>";
+            }
+        }
         myfile << "</tr>" << std::endl << std::endl;
         myfile << SCHED_HTML_JS_CLEAR << std::endl;
     }

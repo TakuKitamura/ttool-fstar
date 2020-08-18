@@ -411,16 +411,6 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
           // }
         }
 
-
-        myfile << "</tr>" << std::endl << "<tr>";
-
-        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
-            if( aLength == 1) {
-              myfile << "<th class=\"notfirst\">";
-            } else {
-              myfile << "<th></th>";
-            }
-        }
         myfile << "</tr>" << std::endl << "<tr>";
         myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
 
@@ -447,7 +437,14 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
 //                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
             }
         }
-
+        myfile << "</tr>" << std::endl << "<tr>";
+        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
+            if( aLength == 1) {
+              myfile << "<th class=\"notfirst\">";
+            } else {
+              myfile << "<th></th>";
+            }
+        }
         myfile << "</tr>" << std::endl;
         myfile << SCHED_HTML_JS_CLEAR << std::endl;
     }

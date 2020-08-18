@@ -695,44 +695,46 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
           aCurrTime = aCurrTrans->getEndTime();
           }
         }
+        if(listScale.size() > 1) {
+                    myfile << "</tr>" << std::endl << "<tr>";
+                    myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
 
-        myfile << "</tr>" << std::endl << "<tr>";
+                    for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
+                      std::ostringstream spanVal;
+                      if(aLength < listScaleTime.size())
+                        spanVal << listScaleTime[aLength];
+                      else
+                        spanVal << "";
+                      if(aLength+1 >= listScale.size()){
 
-        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
-            if( aLength == 1) {
-              myfile << "<th class=\"notfirst\">";
-            } else {
-              myfile << "<th></th>";
-            }
+                        if(changeCssClass){
+                             myfile << "<td colspan=\"5\" class=\"sc1\">" << spanVal.str() << "</td>";
+            //                 writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+                        } else
+                             myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
+            //                 writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+                      } else {
+                            if(changeCssClass){
+                                myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc1\">" << spanVal.str() << "</td>";
+            //                    writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+                            } else
+                                myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
+            //                     writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+                      }
+                    }
+                    myfile << "</tr>" << std::endl << "<tr>";
+
+                    for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
+                        if( aLength == 1) {
+                          myfile << "<th class=\"notfirst\">";
+                        } else {
+                          myfile << "<th></th>";
+                        }
+                    }
+                    myfile << "</tr>" << std::endl << std::endl;
+                    myfile << SCHED_HTML_JS_CLEAR << std::endl;
         }
-        myfile << "</tr>" << std::endl << "<tr>";
-        myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
 
-        for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
-          std::ostringstream spanVal;
-          if(aLength < listScaleTime.size())
-            spanVal << listScaleTime[aLength];
-          else
-            spanVal << "";
-          if(aLength+1 >= listScale.size()){
-
-            if(changeCssClass){
-                 myfile << "<td colspan=\"5\" class=\"sc1\">" << spanVal.str() << "</td>";
-//                 writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
-            } else
-                 myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
-//                 writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
-          } else {
-                if(changeCssClass){
-                    myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc1\">" << spanVal.str() << "</td>";
-//                    writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
-                } else
-                    myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
-//                     writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
-          }
-        }
-        myfile << "</tr>" << std::endl << std::endl;
-        myfile << SCHED_HTML_JS_CLEAR << std::endl;
     }
     return taskCellClasses1;
 }

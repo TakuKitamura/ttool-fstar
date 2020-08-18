@@ -503,7 +503,7 @@ void Simulator::timeline2HTML(std::string& iTracetaskList, std::ostringstream& m
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
         taskCellClasses = (*j)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
     }
-    myfile << "</tr>\n<tr><th>HW</th><th class=\"notfirst\"></th></tr>\n<div class = \"clear\"></div>\n";
+    myfile << "</tr>\n<tr><th></th><th class=\"notfirst\"></th></tr>\n<div class = \"clear\"></div>\n";
     myfile << "</table>\n<table>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notlast\"></td>\n<td class=\"notlast\"></td>\n";
     for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
         TMLTask* task = (*taskColIt).first;
@@ -1408,14 +1408,19 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
           aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
           _simTerm=runToNextBreakpoint(oLastTrans);
           int tempDaemon = 0;
+          bool checkTerminated = false;
           if (!_simComp->getNonDaemonTaskList().empty()) {
              for (TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i) {
-                if((*i)->getState()==3){
+             //the simulation terminated when all tasks are terminated or suspended
+                if((*i)->getState()==3 || (*i)->getState()==0){
                     tempDaemon ++;
+                    if ((*i)->getState()==3) {
+                        checkTerminated = true;
+                    }
                 }
              }
           }
-          if (tempDaemon < _simComp->getNonDaemonTaskList().size()) {
+          if (tempDaemon < _simComp->getNonDaemonTaskList().size() && !checkTerminated) {
              _simTerm = false;
           }
           std::cout << "End Run to next breakpoint." << std::endl;

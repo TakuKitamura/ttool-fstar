@@ -131,7 +131,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         jp02.add(new JLabel("Command parameter: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         paramMainCommand = new JTextField("1", 30);
-        paramMainCommand.setEditable(false);
+//        paramMainCommand.setEditable(false);
         jp02.add(paramMainCommand, c01);
 
         c01.gridwidth = 1;
@@ -386,6 +386,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
     public void setParam(String param) {
         paramMainCommand.setText(param);
+    }
+
+    public String getParam() {
+        return paramMainCommand.getText().trim();
     }
 
     public void setContentPaneEnable(boolean x) {

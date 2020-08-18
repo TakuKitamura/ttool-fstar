@@ -2773,6 +2773,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     public void sendCommandWithPositiveInt(String command) {
         String param = paramMainCommand.getText().trim();
+        if (tmlSimPanelTimeline != null && tmlSimPanelTimeline.isFocused()) {
+            param = tmlSimPanelTimeline.getParam();
+            paramMainCommand.setText(param);
+        }
         if (isAPositiveInt(param)) {
             sendCommand(command + " " + param);
         } else {
