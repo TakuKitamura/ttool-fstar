@@ -684,7 +684,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
     public void addSignal(String signal, boolean in, boolean origin) {
-        TraceManager.addDev("Adding signal " + signal + " isIn:" + in + " origin:" + origin);
+        //TraceManager.addDev("Adding signal " + signal + " isIn:" + in + " origin:" + origin);
         if (in) {
             if (origin) {
                 inSignalsAtOrigin.add(signal);

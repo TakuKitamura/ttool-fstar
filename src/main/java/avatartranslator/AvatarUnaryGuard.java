@@ -78,10 +78,10 @@ public class AvatarUnaryGuard extends AvatarComposedGuard {
     }
 
     public AvatarComposedGuard getOpposite () {
-        if (this.unary.equals ("not")) {
+        /*if (this.unary.equals ("not")) {
             return this.guard;
-        }
-        return new AvatarUnaryGuard ("not", "(", ")", this);
+        }*/
+        return new AvatarUnaryGuard ("", "(", ") == false ", this);
     }
 
     public String getAsString (AvatarSyntaxTranslator translator) {

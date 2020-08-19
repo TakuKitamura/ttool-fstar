@@ -47,7 +47,8 @@ package avatartranslator;
 public abstract class AvatarComposedGuard extends AvatarGuard {
     
 	public AvatarComposedGuard getOpposite () {
-        return new AvatarUnaryGuard ("not", "(", ")", this);
+        //return new AvatarUnaryGuard ("not", "(", ")", this);
+        return new AvatarUnaryGuard ("", "(", ") == false", this);
     }
 
     public abstract AvatarComposedGuard clone ();

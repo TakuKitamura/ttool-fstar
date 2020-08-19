@@ -1638,6 +1638,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //String guard = _at.getGuard().toString();
         //String s = Conversion.replaceAllString(guard, "[", "").trim();
         //s = Conversion.replaceAllString(s, "]", "").trim();
+
+        //TraceManager.addDev("Guard=" + _at.getGuard());
+
         return (_at.getGuardSolver().getResult(_sb) == 0) ?  false : true;
         //return evaluateBoolExpression(s, _block, _sb);
     }
