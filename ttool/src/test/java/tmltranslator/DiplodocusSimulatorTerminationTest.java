@@ -2,7 +2,6 @@ package tmltranslator;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import myutil.FileUtils;
 import myutil.TraceManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -24,14 +23,13 @@ import ui.tmldd.TMLArchiDiagramPanel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import static org.junit.Assert.assertTrue;
 
-public class DiplodocusTerminatedTest extends AbstractUITest {
+public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
     final String [] MODELS_TERMINATE = {"terminatedTest"};
     private String SIM_DIR;
@@ -46,7 +44,7 @@ public class DiplodocusTerminatedTest extends AbstractUITest {
 
     }
 
-    public DiplodocusTerminatedTest() {
+    public DiplodocusSimulatorTerminationTest() {
         super();
     }
 
@@ -167,7 +165,7 @@ public class DiplodocusTerminatedTest extends AbstractUITest {
             }
             try {
 
-                toServer(" 1 0", rc);
+                toServer(" 1 6 500", rc);
                 Thread.sleep(5);
                 while (running) {
                     String demo = null;

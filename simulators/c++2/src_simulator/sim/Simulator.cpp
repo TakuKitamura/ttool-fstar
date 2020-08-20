@@ -465,26 +465,30 @@ void Simulator::timeline2HTML(std::string& iTracetaskList, std::ostringstream& m
 
     std::map<TMLTask*, std::string> taskCellClasses;
 
-    myfile << "<!DOCTYPE html>\n"; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
-    myfile << "<html>\n"; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
-    myfile << SCHED_HTML_BEG_HEAD; // <head>\n
-    myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
-    myfile << SCHED_HTML_CSS_CONTENT_TIMELINE << std::endl;
-    myfile << SCHED_HTML_END_STYLE; // <style>\n";
-    myfile << SCHED_HTML_BEG_TITLE; // <title>
+    myfile << "<!DOCTYPE html>"; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
+    myfile << "<html>"; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
+    myfile << "<head>"; // <head>\n
+    myfile << "<style>"; // <style>\n";
+    myfile << SCHED_HTML_CSS_CONTENT_TIMELINE;
+    myfile << "</style>"; // <style>\n";
+    myfile << "<title>"; // <title>
     myfile << "Timeline Diagram";
-    myfile << SCHED_HTML_END_TITLE; // </title>\n
-    myfile << SCHED_HTML_END_HEAD; // </head>\n
+    myfile << "</title>"; // </title>\n
+    myfile << "</head>"; // </head>\n
     myfile << SCHED_HTML_BEG_BODY; // <body>\n
 //        myfile << "<h1>Task to show: " << iTracetaskList.c_str() <<"</h1>\n";
-    myfile << "<table style=\"float: left;position: relative;\"><tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n"
-           << "<td class=\"notfirst\"></td>\n"
-           << "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align:right\"colspan=\"500\"><b>Time</b></td>\n</tr>\n"
-           << "<tr><th></th><th class=\"notfirst\"></th></tr>\n"
-           << "<div class = \"clear\"></div>" << std::endl;
+    myfile << "<table style=\"float: left;position: relative;\"><tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>"
+           << "<td class=\"notfirst\"></td>"
+           << "<td style=\"border-style: solid none none none; border-width: 2px;border-color: red;text-align:right\"colspan=\"500\"><b>Time</b></td></tr>"
+           << "<tr><th></th><th class=\"notfirst\"></th></tr>"
+           << "<div class = \"clear\"></div>";
+    unsigned int maxScale = 0;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
         for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
             taskCellClasses = (*i)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
+            if((*i)->getMaxScale() > maxScale) {
+                maxScale = (*i)->getMaxScale();
+            }
             (*i)->setCycleTime((*i)->getCycleTime()+1);
         }
         if((*i)->getAmoutOfCore() == 1)
@@ -496,23 +500,61 @@ void Simulator::timeline2HTML(std::string& iTracetaskList, std::ostringstream& m
         for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
             (*j)->setHtmlCurrTask(*i);
             taskCellClasses = (*j)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
+            if((*j)->getMaxScale() > maxScale) {
+                maxScale = (*j)->getMaxScale();
+            }
             (*j)->setStartFlagHTML(false);
         }
     }
 
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
         taskCellClasses = (*j)->HWTIMELINE2HTML(myfile, taskCellClasses, taskCellClasses.size(), iTracetaskList);
+        if((*j)->getMaxScale() > maxScale) {
+            maxScale = (*j)->getMaxScale();
+        }
     }
-    myfile << "</tr>\n<tr><th></th><th class=\"notfirst\"></th></tr>\n<div class = \"clear\"></div>\n";
-    myfile << "</table>\n<table>\n<tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notlast\"></td>\n<td class=\"notlast\"></td>\n";
+
+    myfile << "</tr><tr><th></th><th class=\"notfirst\"></th></tr><div class = \"clear\"></div>";
+    for ( unsigned int aLength = 0; aLength < maxScale; aLength++ ) {
+        if( aLength == 1) {
+          myfile << "<th class=\"notfirst\">";
+        } else {
+          myfile << "<th></th>";
+        }
+    }
+    myfile << "</table><table><tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td><td class=\"notlast\"></td><td class=\"notlast\"></td>";
     for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
         TMLTask* task = (*taskColIt).first;
         // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
         myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;min-width: 170px;\">" << task->toString() << "</td><td class=\"space\"></td>";
     }
-    myfile << "</tr>\n</table>\n";
-    myfile << SCHED_HTML_END_BODY; // </body>\n
-    myfile << SCHED_HTML_END_HTML; // </html>\n
+    myfile << "</tr><tr><td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td><td class=\"notlast\"></td><td class=\"notlast\"></td>";
+    for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+        TMLTask* task = (*taskColIt).first;
+        std::string str = getTaskCellStatus(task->getState());
+        std::size_t pos = str.find(":");
+        if(pos != std::string::npos){
+            std::string str1 = str.substr (0, pos);
+            std::string str2 = str.substr (pos + 1);
+            myfile << "<td style=\"border-style: none none none none;\"></td><td style=\"max-width: unset;min-width: 170px;border-style: none none none none;color:" << str2 << "\"><b>" <<  str1 << "</b></td><td class=\"space\"></td>";
+        }
+    }
+    myfile << "</tr></table>";
+    myfile << "</body>"; // </body>\n
+    myfile << "</html>"; // </html>\n
+}
+std::string Simulator::getTaskCellStatus(int i) const {
+    switch (i){
+        case 2:
+            return "Running:green";
+        case 1:
+            return "Runnable:blue";
+        case 0:
+            return "Suspended:orange";
+        case 3:
+            return "Terminated:red";
+    }
+    return "Unknown:gray";
 }
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
 #ifdef DEBUG_HTML
@@ -1412,9 +1454,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
           if (!_simComp->getNonDaemonTaskList().empty()) {
              for (TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i) {
              //the simulation terminated when all tasks are terminated or suspended
-                if((*i)->getState()==3 || (*i)->getState()==0){
+                if((*i)->getState() == 3 || (*i)->getState() == 0){
                     tempDaemon ++;
-                    if ((*i)->getState()==3) {
+                    if ((*i)->getState() == 3) {
                         checkTerminated = true;
                     }
                 }

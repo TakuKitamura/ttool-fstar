@@ -43,7 +43,6 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 
-#define BUFFER_SIZE 1000
 class CurrentComponents;
 class Simulator;
 class ServerIF;

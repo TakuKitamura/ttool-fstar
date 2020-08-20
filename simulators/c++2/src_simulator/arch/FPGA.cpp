@@ -607,9 +607,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
         std::cout << "Device never activated" << std::endl;
     } else {
         if(_startFlagHTML == true){
-            myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;
+            myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
         } else {
-            myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n"<< std::endl;
+            myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
         }
         TMLTime aCurrTime = 0;
         unsigned int taskOccurTime = 0;
@@ -651,9 +651,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
                 listScaleTime.push_back(aCurrTrans->getStartTime()+1);
             }
             if (isBlankTooBig){
-                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
             } else {
-                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>";
             }
         }
         else if ( aBlanks > 0 ){
@@ -663,9 +663,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
                 listScaleTime.push_back(aCurrTrans->getStartTime());
             }
             if (isBlankTooBig){
-                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
             } else {
-                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>";
             }
         }
 
@@ -679,7 +679,7 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
               tempReduce += aLength - 10;
               aLength = 10;
           }
-          myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>\n";
+          myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>";
 //          writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
           listScale.push_back(aLength);
           if(aCurrTrans->getStartTime() > listScaleTime.back()){
@@ -696,8 +696,8 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
           }
         }
         if(listScale.size() > 1) {
-                    myfile << "</tr>" << std::endl << "<tr>";
-                    myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
+                    myfile << "</tr>" << "<tr>";
+                    myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
 
                     for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
                       std::ostringstream spanVal;
@@ -722,16 +722,19 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
             //                     writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
                       }
                     }
-                    myfile << "</tr>" << std::endl << "<tr>";
+                    myfile << "</tr>" << "<tr>";
 
-                    for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
+                    for ( unsigned int aLength = 0; aLength < 3; aLength++ ) {
                         if( aLength == 1) {
                           myfile << "<th class=\"notfirst\">";
                         } else {
                           myfile << "<th></th>";
                         }
                     }
-                    myfile << "</tr>" << std::endl << std::endl;
+                    if (aCurrTime - tempReduce + 2 > maxScale) {
+                        maxScale = aCurrTime - tempReduce + 2;
+                    }
+                    myfile << "</tr>";
                     myfile << SCHED_HTML_JS_CLEAR << std::endl;
         }
 

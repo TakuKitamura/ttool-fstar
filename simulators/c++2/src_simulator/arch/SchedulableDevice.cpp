@@ -298,7 +298,7 @@ void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
     myfile << "   chart" << _ID << ".update();" << std::endl;
 }
 
-std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const {
+std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) {
     TransactionList _transactListClone;
     std::string taskList = iTracetaskList.c_str();
     for (int z = 0; z < _transactList.size(); z++) {
@@ -311,7 +311,7 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
     if ( _transactListClone.size() == 0 ) {
         std::cout << "Device never activated" << std::endl;
     } else {
-        myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad() << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>" << std::endl;
+        myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad() << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
 //        std::map<TMLTask*, std::string> taskCellClasses;
 //        unsigned int nextCellClassIndex = 0;
         TMLTime aCurrTime = 0;
@@ -347,10 +347,10 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
                 listScaleTime.push_back(aCurrTrans->getStartTime()+1);
             }
             if (isBlankTooBig){
-                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
 //                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
             } else {
-                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>";
 //                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
             }
         }
@@ -361,10 +361,10 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
                 listScaleTime.push_back(aCurrTrans->getStartTime());
             }
             if (isBlankTooBig){
-                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
 //                writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
             } else {
-                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>";
 //                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
             }
         }
@@ -380,7 +380,7 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
             }
             listScale.push_back(aLength);
             title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
-            myfile << "<td colspan=\"" << aLength << "\" title=\"" << title.str() << "\" class=\"not\"></td>\n";
+            myfile << "<td colspan=\"" << aLength << "\" title=\"" << title.str() << "\" class=\"not\"></td>";
 //            writeHTMLColumn( myfile, aLength, "not", title.str() );
         }
 
@@ -397,7 +397,7 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
                   tempReduce += aLength - 10;
                   aLength = 10;
               }
-              myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>\n";
+              myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>";
 //              writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
               listScale.push_back(aLength);
               if(aCurrTrans->getStartTime() > listScaleTime.back()){
@@ -411,8 +411,8 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
           // }
         }
 
-        myfile << "</tr>" << std::endl << "<tr>";
-        myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td>\n<td class=\"notfirst\"></td>\n<td class=\"notlast\"></td>\n";
+        myfile << "</tr>" << "<tr>";
+        myfile << "<td width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
 
         for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
           std::ostringstream spanVal;
@@ -437,15 +437,18 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
 //                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
             }
         }
-        myfile << "</tr>" << std::endl << "<tr>";
-        for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce + 2; aLength++ ) {
+        myfile << "</tr>" << "<tr>";
+        for ( unsigned int aLength = 0; aLength < 3; aLength++ ) {
             if( aLength == 1) {
               myfile << "<th class=\"notfirst\">";
             } else {
               myfile << "<th></th>";
             }
         }
-        myfile << "</tr>" << std::endl;
+        if (aCurrTime - tempReduce + 2 > maxScale) {
+            maxScale = aCurrTime - tempReduce + 2;
+        }
+        myfile << "</tr>";
         myfile << SCHED_HTML_JS_CLEAR << std::endl;
     }
     return taskCellClasses;

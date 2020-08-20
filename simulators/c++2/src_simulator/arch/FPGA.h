@@ -134,6 +134,7 @@ public:
         inline unsigned int getID () { return _ID;}
 	void HW2HTML(std::ofstream& myfile) ;
 	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses1,unsigned int nextCellClassIndex1, std::string& iTracetaskList);
+	inline unsigned int getMaxScale() { return maxScale; }
 	void removeTrans(int numberOfTrans);
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
@@ -196,6 +197,7 @@ protected:
 	bool _startFlagHTML;
 	bool _endFlagHTML;
 	unsigned int _reconfigNumber;
+	unsigned int maxScale;
 	TMLTime _maxEndTime;
 	unsigned int nextCellClassIndex;
  	std::map<TMLTask*, std::string> taskCellClasses;	
