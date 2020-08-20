@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -48,12 +48,7 @@ import ui.util.IconManager;
 import ui.window.JDialogSignalAssociation;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Polygon;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -84,21 +79,21 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected boolean asynchronous;
     protected boolean synchronous;
     protected boolean AMS;
-    
+
     protected int sizeOfFIFO;
     protected boolean blockingFIFO;
     protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
     protected boolean isBroadcast = false;
     protected boolean isLossy = false;
-   
+
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        
+
         myImageIcon = IconManager.imgic202;
         value = "";
         editable = true;
 
-       // oldScaleFactor = tdp.getZoom();
+        // oldScaleFactor = tdp.getZoom();
         inSignalsAtOrigin = new LinkedList<String>();
         inSignalsAtDestination = new LinkedList<String>();
         outSignalsAtOrigin = new LinkedList<String>();
@@ -127,12 +122,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         //g.drawLine(x1, y1, x2, y2);
         Color col = g.getColor();
         int cz = (int) (tdp.getZoom() * c);
-		
-	if (isAMS()) {
-	    g.setColor(Color.GRAY);
+
+        if (isAMS()) {
+            g.setColor(Color.GRAY);
         }
-	
-        if (isAsynchronous()&&!(isAMS())) {
+
+        if (isAsynchronous()) {
             g.setColor(Color.WHITE);
         }
 
@@ -152,11 +147,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         }
 
         if (isLossy) {
-         //   int czz = (int) (cz * 1.4);
+            //   int czz = (int) (cz * 1.4);
             int x3 = p1.getX();
             int y3 = p1.getY();
-            g.drawImage(IconManager.img5072, x3 -cz, y3 + cz/2, null);
-            g.drawImage(IconManager.img5072, x2 -cz, y2 + cz/2, null);
+            g.drawImage(IconManager.img5072, x3 - cz, y3 + cz / 2, null);
+            g.drawImage(IconManager.img5072, x2 - cz, y2 + cz / 2, null);
         }
 
 
@@ -316,7 +311,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
 
-     public AvatarBDInterface getAvatarBDInterface1() {
+    public AvatarBDInterface getAvatarBDInterface1() {
         return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p1));
     }
 
@@ -326,7 +321,6 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     }
 
 
-    
     @Override
     public boolean editOndoubleClick(JFrame frame) {
         // Gets the two concerned blocks
@@ -358,7 +352,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             assoc = v.get(i);
             as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
             as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-            
+
             if ((as1 != null) && (as2 != null)) {
                 index = assoc.indexOf("->");
                 if (index > -1) {
@@ -375,11 +369,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         ((AvatarBDPanel) tdp).updateSignalAttachement(block1, this);
 
         asynchronous = jdas.isAsynchronous();
+        synchronous = jdas.isSynchronous();
         blockingFIFO = jdas.isBlocking();
         isPrivate = jdas.isPrivate();
         isBroadcast = jdas.isBroadcast();
         isLossy = jdas.isLossy();
-	AMS = jdas.isAMS();
+        AMS = jdas.isAMS();
 
         try {
             sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
@@ -420,12 +415,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         }
         sb.append("<FIFOType asynchronous=\"");
         sb.append(asynchronous);
+        sb.append("\" synchronousCH=\"" + synchronous);
         sb.append("\" size=\"" + sizeOfFIFO);
         sb.append("\" blocking=\"" + blockingFIFO);
         sb.append("\" private=\"" + isPrivate);
         sb.append("\" broadcast=\"" + isBroadcast);
         sb.append("\" lossy=\"" + isLossy);
-	sb.append("\" ams=\"" + AMS);
+        sb.append("\" ams=\"" + AMS);
         sb.append("\" />\n");
 
         sb.append("</extraparam>\n");
@@ -438,7 +434,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             NodeList nli;
             Node n1, n2;
             Element elt;
-            String val, val1, val2, val3, val4, val5, val6;
+            String val, val1, val2, val3, val4, val5, val6, val7;
             sizeOfFIFO = 4;
             blockingFIFO = false;
             asynchronous = false;
@@ -486,17 +482,19 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                             }
                             if (elt.getTagName().equals("FIFOType")) {
                                 val = elt.getAttribute("asynchronous");
+                                val7 = elt.getAttribute("synchronousCH");
                                 val1 = elt.getAttribute("size");
                                 val2 = elt.getAttribute("blocking");
                                 val3 = elt.getAttribute("private");
                                 val4 = elt.getAttribute("broadcast");
                                 val5 = elt.getAttribute("lossy");
-				val6 = elt.getAttribute("ams");
+                                val6 = elt.getAttribute("ams");
 
-				//     if ((val != null) && (!(val.equals("null")))) {
-				if ((val != null) && (!(val.equals("null")))){			
+                                //     if ((val != null) && (!(val.equals("null")))) {
+                                if ((val != null) && (!(val.equals("null")))) {
                                     asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
-
+                                    //TraceManager.addDev("Found asynchronous=" + val);
+                                    //synchronous = !asynchronous;
                                 }
 
                                 if ((val1 != null) && (!(val1.equals("null")))) {
@@ -533,9 +531,22 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 } else {
                                     isLossy = false;
                                 }
-				if ((val6 != null) && (!(val6.equals("null")))) {
-                                    AMS = val6.trim().toLowerCase().compareTo("true") == 0;				   				  
 
+                                if ((val7 != null) && (!(val7.equals("null")))) {
+                                    //TraceManager.addDev("Found synchronous=" + val7);
+                                    synchronous = val7.trim().toLowerCase().compareTo("true") == 0;
+                                } else {
+                                    //TraceManager.addDev("Synchronous not found");
+                                    //synchronous = !asynchronous;
+                                }
+
+
+                                if ((val6 != null) && (!(val6.equals("null")))) {
+                                    AMS = val6.trim().toLowerCase().compareTo("true") == 0;
+                                    if (AMS) {
+                                        synchronous = false;
+                                        asynchronous = false;
+                                    }
                                 } else {
                                     AMS = false;
                                 }
@@ -546,8 +557,14 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException(e);
         }
+        if ((asynchronous == false) && (synchronous == false) && (AMS == false)) {
+            synchronous = true;
+        }
+        //TraceManager.addDev("synchronous=" + synchronous);
+        //TraceManager.addDev("asynchronous=" + asynchronous);
+        //TraceManager.addDev("AMS=" + AMS);
     }
 
     @Override
@@ -765,19 +782,19 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return asynchronous;
     }
 
-     public boolean isSynchronous() {
+    public boolean isSynchronous() {
         return synchronous;
     }
 
     public boolean isAMS() {
         return AMS;
     }
-   
+
     public void setAsynchronous(boolean asy) {
         asynchronous = asy;
     }
 
-     public void setSynchronous(boolean sy) {
+    public void setSynchronous(boolean sy) {
         synchronous = sy;
     }
 

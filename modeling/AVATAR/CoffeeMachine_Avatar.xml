@@ -1293,7 +1293,7 @@
 <extraparam>
 <isd value="in pushCoffeeButton()" />
 <oso value="out push()" />
-<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="697" >
@@ -1309,7 +1309,7 @@
 <osd value="out ejectCoin(int nbOfCoins)" />
 <isd value="in getCoin(int nbOfCoins)" />
 <oso value="out putCoin(int nbOfCoins)" />
-<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronous="true" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="699" >
@@ -1323,7 +1323,7 @@
 <extraparam>
 <isd value="in pushTeaButton()" />
 <oso value="out push()" />
-<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="303" id="716" >
