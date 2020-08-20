@@ -42,6 +42,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import avatartranslator.modelchecker.SpecificationBlock;
 import compiler.tmlparser.ParseException;
 import compiler.tmlparser.SimpleNode;
 import compiler.tmlparser.TMLExprParser;
@@ -81,19 +82,29 @@ public class AvatarSyntaxChecker  {
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
         }
 
+        /*AvatarExpressionSolver e1 = new AvatarExpressionSolver(act);
+
+        if (e1.buildExpression()) {
+            return 1;
+        }
+
+        return 0;*/
+
+
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
-        //TraceManager.addDev("Evaluating (modified) guard:" + act);
-        boolean result = bee.getResultOf(act);
+        TraceManager.addDev("Evaluating (modified) guard:" + act);
+        boolean result = bee.getResultOfWithIntExpr(act);
         if (bee.getError() != null) {
             TraceManager.addDev("Error: " + bee.getError() + " result=" + result);
             return -1;
         }
 
+
         return 0;
         // END of NEW
 
-        //return parse(_as, _ab, "guard", _guard);
+        //return parse(_as, _ab, "guard", act);
     }
 
     /*
@@ -151,6 +162,27 @@ public class AvatarSyntaxChecker  {
 
     }
 
+    public static int newIsAValidBoolExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
+        if (_expr.trim().length() == 0) {
+            return 0;
+        }
+
+        String tmp = _expr.replaceAll(" ", "").trim();
+        String act = tmp;
+
+        for(AvatarAttribute aa: _ab.getAttributes()) {
+            act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValueTF());
+        }
+
+        AvatarExpressionSolver e1 = new AvatarExpressionSolver(act);
+
+        if (e1.buildExpression()) {
+            return 1;
+        }
+        return 0;
+    }
+
+
     public static int isAValidBoolExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
         if (_expr.trim().length() == 0) {
             return 0;
@@ -162,6 +194,7 @@ public class AvatarSyntaxChecker  {
         for(AvatarAttribute aa: _ab.getAttributes()) {
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValueTF());
         }
+
 
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
@@ -216,7 +249,7 @@ public class AvatarSyntaxChecker  {
      *              return -2 in case of error in second pass
      *              return -3 in case a variable has not been declared
      */
-    public static int parse(AvatarSpecification _as, AvatarBlock _ab, String _parseCmd, String _action) {
+    public static int parse(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _parseCmd, String _action) {
         TMLExprParser parser;
         SimpleNode root;
         int i;
@@ -250,9 +283,9 @@ public class AvatarSyntaxChecker  {
             _parseCmd = "action" + _parseCmd.substring(3, _parseCmd.length()); 
         }
 
-        for(i=0; i<_ab.attributeNb(); i++) {
+        /*for(i=0; i<_ab.attributeNb(); i++) {
             modif = AvatarSpecification.putAttributeValueInString(modif, _ab.getAttribute(i));
-        }
+        }*/
 
         parser = new TMLExprParser(new StringReader(_parseCmd + " " + modif));
         try {

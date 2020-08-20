@@ -45,6 +45,7 @@
 
 package avatartranslator;
 
+import myutil.BoolExpressionEvaluator;
 import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import org.junit.Test;
@@ -67,13 +68,14 @@ public class AvatarIntegerExprParsingAndEvaluationTests {
 
     AvatarGuard res;
     AvatarBlock block;
+    AvatarSpecification as;
 
     public AvatarIntegerExprParsingAndEvaluationTests () {
         //  super ("AvatarGuards", false);
     }
     @Before
     public void test () {
-        AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
+        as = new AvatarSpecification("avatarspecification", null);
 
         block = new AvatarBlock("myblock", as, null);
         as.addBlock(block);
@@ -115,6 +117,9 @@ public class AvatarIntegerExprParsingAndEvaluationTests {
         assertTrue((result == expectedResult) == expectedBool);
     }
 
+
+
+
     @Test
     public void testIntExpr(){
         testExpr("x = x + y", 15.0, true);
@@ -137,8 +142,8 @@ public class AvatarIntegerExprParsingAndEvaluationTests {
 
         testExpr("x  = x*((x + y)*z + (x+z)/z)/x", 36, true);
 
-
     }
+
 
 
 
