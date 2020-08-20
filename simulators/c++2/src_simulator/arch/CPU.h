@@ -121,7 +121,8 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	void HW2HTML(std::ofstream& myfile) const;
-	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList) const;
+	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList);
+	inline unsigned int getMaxScale() { return maxScale; }
 	void schedule2HTML(std::ofstream& myfile) const;
 	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 	inline void setCoreNumberGraph(unsigned int n){ _coreNumberGraph=n;}
@@ -136,6 +137,7 @@ protected:
 	///Amount of cores
 	unsigned int amountOfCore; 
 	unsigned int _coreNumberGraph;
+    unsigned int maxScale;
 	///Dirty flag of the current scheduling decision
 	//bool _schedulingNeeded;
 	
