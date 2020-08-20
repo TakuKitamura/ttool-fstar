@@ -165,7 +165,7 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
             }
             try {
 
-                toServer(" 1 0", rc);
+                toServer(" 1 6 500", rc);
                 Thread.sleep(5);
                 while (running) {
                     String demo = null;
