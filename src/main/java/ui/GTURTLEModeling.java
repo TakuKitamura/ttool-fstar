@@ -9259,6 +9259,8 @@ public class GTURTLEModeling {
                         //TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
 
                         conn.setAsynchronous(ar.isAsynchronous());
+                        conn.setSynchronous(!ar.isAsynchronous());
+                        conn.setAMS(false);
                         conn.setBlocking(ar.isBlocking());
                         conn.setPrivate(ar.isPrivate());
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
