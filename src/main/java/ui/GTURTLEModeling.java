@@ -39,13 +39,14 @@
 package ui;
 
 import avatartranslator.*;
-import avatartranslator.AvatarSpecification;
 import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
 import avatartranslator.toturtle.AVATAR2TURTLE;
 import avatartranslator.touppaal.AVATAR2UPPAAL;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import ddtranslator.DDSyntaxException;
+import ddtranslator.DDTranslator;
 import graph.RG;
 import launcher.LauncherException;
 import launcher.RemoteExecutionThread;
@@ -60,7 +61,11 @@ import org.xml.sax.SAXException;
 import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifSpec;
 import req.ebrdd.EBRDD;
+import sddescription.HMSC;
+import sddescription.MSC;
 import sddescription.SDExchange;
+import sdtranslator.SDTranslationException;
+import sdtranslator.SDTranslator;
 import tmatrix.RequirementModeling;
 import tmltranslator.*;
 import tmltranslator.modelcompiler.TMLModelCompiler;
@@ -69,9 +74,10 @@ import tmltranslator.toautomata.TML2AUTviaLOTOS;
 import tmltranslator.toavatar.FullTML2Avatar;
 import tmltranslator.toavatarsec.TML2Avatar;
 import tmltranslator.tosystemc.TML2SystemC;
+import tmltranslator.toturtle.Mapping2TIF;
+import tmltranslator.toturtle.TML2TURTLE;
 import tmltranslator.touppaal.RelationTMLUPPAAL;
 import tmltranslator.touppaal.TML2UPPAAL;
-import tmltranslator.toturtle.*;
 import tpndescription.TPN;
 import translator.*;
 import translator.totpn.TURTLE2TPN;
@@ -81,24 +87,22 @@ import ui.ad.TActivityDiagramPanel;
 import ui.atd.AttackTreeDiagramPanel;
 import ui.avatarad.AvatarADPanel;
 import ui.avatarbd.*;
-import ui.avatarbd.AvatarBDLibraryFunction;
-import ui.avatarbd.AvatarBDPanel;
-import ui.avatarbd.AvatarBDStateMachineOwner;
 import ui.avatarcd.AvatarCDPanel;
 import ui.avatardd.ADDDiagramPanel;
 import ui.avatarmad.AvatarMADPanel;
 import ui.avatarmethodology.AvatarMethodologyDiagramPanel;
 import ui.avatarpd.AvatarPDPanel;
 import ui.avatarrd.AvatarRDPanel;
-import ui.avatarsmd.AvatarSMDPanel;
-import ui.avatarsmd.AvatarSMDState;
-import ui.cd.*;
-import ui.dd.*;
 import ui.avatarsmd.*;
+import ui.cd.TCDTClass;
+import ui.cd.TCDTObject;
+import ui.cd.TClassDiagramPanel;
+import ui.dd.TDDArtifact;
+import ui.dd.TDDNode;
+import ui.dd.TDeploymentDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
-import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.ftd.FaultTreeDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
@@ -108,7 +112,9 @@ import ui.oscd.TURTLEOSClassDiagramPanel;
 import ui.procsd.ProCSDComponent;
 import ui.procsd.ProactiveCSDPanel;
 import ui.prosmd.ProactiveSMDPanel;
+import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
 import ui.tmlad.*;
 import ui.tmlcd.TMLTaskDiagramPanel;
@@ -122,11 +128,7 @@ import ui.ucd.UseCaseDiagramPanel;
 import ui.util.DefaultText;
 import ui.util.IconManager;
 import ui.window.JFrameSimulationTrace;
-import ui.req.*;
 import uppaaldesc.UPPAALSpec;
-import sddescription.*;
-import sdtranslator.*;
-import ddtranslator.*;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -135,8 +137,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -310,14 +310,14 @@ public class GTURTLEModeling {
         if (newTrace.hasFile()) {
             // We have to remove identical traces
             LinkedList<SimulationTrace> ll = new LinkedList<>();
-            for(SimulationTrace trace: simulationTraces) {
+            for (SimulationTrace trace : simulationTraces) {
                 if (trace.hasFile()) {
                     if (trace.getFullPath().compareTo(newTrace.getFullPath()) == 0) {
                         ll.add(trace);
                     }
                 }
             }
-            for(SimulationTrace trace: ll) {
+            for (SimulationTrace trace : ll) {
                 simulationTraces.remove(trace);
             }
         }
@@ -808,8 +808,8 @@ public class GTURTLEModeling {
         //Check if a path between two tasks uses firewallnode
         boolean secure = true;
         List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-        HwExecutionNode node1 =  map.getHwNodeOf(t1);
-        HwExecutionNode node2 =  map.getHwNodeOf(t2);
+        HwExecutionNode node1 = map.getHwNodeOf(t1);
+        HwExecutionNode node2 = map.getHwNodeOf(t2);
         List<HwNode> found = new ArrayList<HwNode>();
         List<HwNode> done = new ArrayList<HwNode>();
         List<HwNode> path = new ArrayList<HwNode>();
@@ -875,7 +875,7 @@ public class GTURTLEModeling {
         List<HwNode> done = new ArrayList<HwNode>();
         //List<HwNode> path = new ArrayList<HwNode>();
 
-        HwExecutionNode node1 =  map.getHwNodeOf(t1);
+        HwExecutionNode node1 = map.getHwNodeOf(t1);
 
         //Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
         for (HwLink link : links) {
@@ -1586,7 +1586,7 @@ public class GTURTLEModeling {
         HwExecutionNode node;
         List<TMLTask> tasks = map.getMappedTasks();
         TMLTask task;
-        for(int i=0; i<nodes.size(); i++) {
+        for (int i = 0; i < nodes.size(); i++) {
             node = nodes.get(i);
             task = tasks.get(i);
             if ((node != null) && (task != null)) {
@@ -1958,7 +1958,7 @@ public class GTURTLEModeling {
         TraceManager.addDev("Select last panel");
 
         // Select the last Panel
-        TURTLEPanel newTP = mgui.getTabs().get(mgui.getTabs().size()-1);
+        TURTLEPanel newTP = mgui.getTabs().get(mgui.getTabs().size() - 1);
 
         if (newTP == null) {
             TraceManager.addDev("Null selected panel");
@@ -6287,7 +6287,7 @@ public class GTURTLEModeling {
         nameTab = elt.getAttribute("nameTab");
 
         //indexDesign = mgui.createSysmlsecMethodology(nameTab);
-		indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
+        indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
 
         diagramNl = node.getChildNodes();
 
@@ -7979,7 +7979,7 @@ public class GTURTLEModeling {
 
         } catch (Exception e) {
             TraceManager.addError("Exception XML Component " + e.getMessage() + "trace=" + e.getStackTrace());
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException(e);
         }
         return tgc;
     }
@@ -8745,8 +8745,6 @@ public class GTURTLEModeling {
             mgui.setMode(MainGUI.GEN_DESIGN_OK);
 
 
-
-
             return true;
         }
     }
@@ -9031,7 +9029,7 @@ public class GTURTLEModeling {
             locMap.put(asme, timerReset);
         }
 
-        if (asme instanceof AvatarState ) {
+        if (asme instanceof AvatarState) {
             //check if empty checker state
 			/* if (asme.getName().contains("signalstate_")){
 			//don't add the state, ignore next transition,
@@ -9129,6 +9127,247 @@ public class GTURTLEModeling {
 
     public void drawPanel(AvatarSpecification avspec, AvatarDesignPanel adp) {
         //
+
+
+        // Check Errors in AVSPEC
+        TraceManager.addDev("Checking syntax of avatar spec.");
+        ArrayList<AvatarError> list = AvatarSyntaxChecker.checkSyntax(avspec);
+        for (AvatarError error : list) {
+            TraceManager.addDev("Error: " + error.toString());
+        }
+        TraceManager.addDev("Check done. " + checkingErrors.size() + " errors found");
+
+        // Go for drawing!
+        hasCrypto = false;
+        //Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
+        Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
+        if (adp == null) {
+            return;
+        }
+        if (avspec == null) {
+            return;
+        }
+        AvatarBDPanel abd = adp.abdp;
+
+        //Find all blocks, create nested blocks starting from top left
+        int xpos = 10;
+        int ypos = 40;
+
+        //Create blocks recursively, starting from top level ones with no father
+        //Lowest level blocks should be 100x100, next should be 100x(number of children*100+50)...etc,
+        //Find level #, 0 refers to no father, etc
+        Map<AvatarBlock, Integer> blockLevelMap = new HashMap<AvatarBlock, Integer>();
+        Map<AvatarBlock, Integer> blockSizeMap = new HashMap<AvatarBlock, Integer>();
+        Map<AvatarBlock, Integer> blockIncMap = new HashMap<AvatarBlock, Integer>();
+        int maxLevel = 0;
+        for (AvatarBlock ab : avspec.getListOfBlocks()) {
+            int level = 0;
+            AvatarBlock block = ab;
+            while (block.getFather() != null) {
+                if (blockSizeMap.containsKey(block.getFather())) {
+                    blockSizeMap.put(block.getFather(), blockSizeMap.get(block.getFather()) + 1);
+                } else {
+                    blockSizeMap.put(block.getFather(), 1);
+                    blockIncMap.put(block.getFather(), 10);
+                }
+                level++;
+                block = block.getFather();
+            }
+            if (level > maxLevel) {
+                maxLevel = level;
+            }
+            if (!blockSizeMap.containsKey(block)) {
+                blockSizeMap.put(block, 0);
+                blockIncMap.put(block, 10);
+            }
+            blockLevelMap.put(ab, level);
+        }
+
+
+        for (int level = 0; level < maxLevel + 1; level++) {
+            for (AvatarBlock ab : avspec.getListOfBlocks()) {
+                if (blockLevelMap.get(ab) == level) {
+                    if (level == 0) {
+                        AvatarBDBlock bl = new AvatarBDBlock(xpos, ypos, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, null, abd);
+                        abd.addComponent(bl, xpos, ypos, false, true);
+                        bl.resize(100 * blockSizeMap.get(ab) + 100, 100 + (maxLevel - level) * 50);
+                        drawBlockProperties(ab, bl);
+                        AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+                        buildStateMachine(ab, bl, smp);
+                        //TraceManager.addDev("Putting in block")
+                        blockMap.put(bl.getValue().split("__")[bl.getValue().split("__").length - 1], bl);
+                        xpos += 100 * blockSizeMap.get(ab) + 200;
+                    } else {
+
+                        AvatarBDBlock father = blockMap.get(ab.getFather().getName().split("__")[ab.getFather().getName().split("__").length - 1]);
+                        //
+                        if (father == null) {
+                            //
+                            continue;
+                        }
+                        AvatarBDBlock bl = new AvatarBDBlock(father.getX() + blockIncMap.get(ab.getFather()), father.getY() + 10, abd.getMinX(), abd.getMaxX(), abd.getMinY(), abd.getMaxY(), false, father, abd);
+                        abd.addComponent(bl, father.getX() + blockIncMap.get(ab.getFather()), father.getY() + 10, false, true);
+                        int size = 100;
+                        if (blockSizeMap.containsKey(ab)) {
+                            size = 100 * blockSizeMap.get(ab) + 50;
+                        }
+                        bl.resize(size, 100 + (maxLevel - level) * 50);
+                        drawBlockProperties(ab, bl);
+                        abd.attach(bl);
+                        AvatarSMDPanel smp = adp.getAvatarSMDPanel(bl.getValue());
+                        buildStateMachine(ab, bl, smp);
+                        blockMap.put(bl.getValue().split("__")[bl.getValue().split("__").length - 1], bl);
+                        blockIncMap.put(ab.getFather(), blockIncMap.get(ab.getFather()) + size + 10);
+                    }
+                }
+            }
+        }
+
+        for(String s: blockMap.keySet()) {
+            TraceManager.addDev("Key:" + s);
+        }
+
+
+        for (AvatarRelation ar : avspec.getRelations()) {
+            String bl1 = ar.block1.getName();
+            String bl2 = ar.block2.getName();
+
+            /*TraceManager.addDev("bl1=" + bl1 + " bl2=" + bl2);
+
+            AvatarBDBlock ab1 = blockMap.get(bl1);
+            AvatarBDBlock ab2 = blockMap.get(bl2);
+
+            if (ab1 == null) {
+                TraceManager.addDev("Null ab1 block");
+                break;
+            }
+
+            if (ab2 == null) {
+                TraceManager.addDev("Null ab2 block");
+                break;
+            }*/
+
+            bl1 = getLastKeyword(bl1);
+            bl2 = getLastKeyword(bl2);
+
+            Vector<Point> points = new Vector<Point>();
+
+            TGConnectingPoint p1 = blockMap.get(bl1).findFirstFreeTGConnectingPoint(true, true);
+            p1.setFree(false);
+
+            TGConnectingPoint p2 = blockMap.get(bl2).findFirstFreeTGConnectingPoint(true, true);
+            p2.setFree(false);
+
+            if (bl2.equals(bl1)) {
+                //Add 2 point so the connection looks square
+                Point p = new Point(p1.getX(), p1.getY() - 10);
+                points.add(p);
+                p = new Point(p2.getX(), p2.getY() - 10);
+                points.add(p);
+            }
+            AvatarBDPortConnector conn = new AvatarBDPortConnector(0, 0, 0, 0, 0, 0, true, null, abd, p1, p2, points);
+            abd.addComponent(conn, 0, 0, false, true);
+            conn.setAsynchronous(ar.isAsynchronous());
+            conn.setSynchronous(!ar.isAsynchronous());
+            conn.setAMS(false);
+            conn.setBlocking(ar.isBlocking());
+            conn.setPrivate(ar.isPrivate());
+            conn.setSizeOfFIFO(ar.getSizeOfFIFO());
+
+            for (int indexSig = 0; indexSig < ar.getSignals1().size(); indexSig++) {
+
+                //TraceManager.addDev("Adding signal 1: " + ar.getSignal1(i).toString() + " of block " + ar.block1.getName());
+                conn.addSignal(ar.getSignal1(indexSig).toString(), ar.getSignal1(indexSig).getInOut() == 0, ar.block1.getName().contains(bl1));
+                //TraceManager.addDev("Adding signal 2:" + ar.getSignal2(i).toString() + " of block " + ar.block2.getName());
+                conn.addSignal(ar.getSignal2(indexSig).toString(), ar.getSignal2(indexSig).getInOut() == 0, !ar.block2.getName().contains(bl2));
+
+                conn.updateAllSignals();
+            }
+
+            conn.updateAllSignals();
+        }
+
+        ypos += 100;
+
+
+        //Add Pragmas
+        AvatarBDPragma pragma = new AvatarBDPragma(xpos, ypos, xpos, xpos * 2, ypos, ypos * 2, false, null, abd);
+        //  String[] arr = new String[avspec.getPragmas().size()];
+        String s = "";
+        // int i=0;
+        for (
+                AvatarPragma p : avspec.getPragmas())
+
+        {
+
+            //    arr[i] = p.getName();
+            String t = "";
+            String[] split = p.getName().split(" ");
+            if (p.getName().contains("#Confidentiality")) {
+                for (String str : split) {
+                    if (str.contains(".")) {
+                        String tmp = str.split("\\.")[0];
+                        String tmp2 = str.split("\\.")[1];
+                        t = t.concat(tmp.split("__")[tmp.split("__").length - 1] + "." + tmp2.split("__")[tmp2.split("__").length - 1] + " ");
+                    } else {
+                        t = t.concat(str + " ");
+                    }
+                }
+            } else if (p.getName().contains("Authenticity")) {
+                t = p.getName();
+            } else if (p.getName().contains("Initial")) {
+                t = p.getName();
+            } else {
+                t = p.getName();
+            }
+            s = s.concat(t + "\n");
+            //  i++;
+        }
+        pragma.setValue(s);
+        pragma.makeValue();
+        abd.addComponent(pragma, xpos, ypos, false, true);
+        //Add message and key datatype if there is a cryptoblock
+
+        xpos = 50;
+        ypos += 200;
+        if (hasCrypto)  {
+            AvatarBDDataType message = new AvatarBDDataType(xpos, ypos, xpos, xpos * 2, ypos, ypos * 2, false, null, abd);
+            message.setValue("Message");
+
+            abd.addComponent(message, xpos, ypos, false, true);
+            message.resize(200, 100);
+            xpos += 400;
+
+            AvatarBDDataType key = new AvatarBDDataType(xpos, ypos, xpos, xpos * 2, ypos, ypos * 2, false, null, abd);
+            key.setValue("Key");
+            TAttribute attr = new TAttribute(2, "data", "0", 8);
+            message.addAttribute(attr);
+            key.addAttribute(attr);
+            key.resize(200, 100);
+            abd.addComponent(key, xpos, ypos, false, true);
+        }
+
+    }
+
+    public String getLastKeyword(String s) {
+        return s.split("__")[s.split("__").length - 1];
+    }
+
+    public void drawPanelOld(AvatarSpecification avspec, AvatarDesignPanel adp) {
+        //
+
+
+        // Check Errors in AVSPEC
+        TraceManager.addDev("Checking syntax of avatar spec.");
+        ArrayList<AvatarError> list = AvatarSyntaxChecker.checkSyntax(avspec);
+        for (AvatarError error : list) {
+            TraceManager.addDev("Error: " + error.toString());
+        }
+        TraceManager.addDev("Check done. " + checkingErrors.size() + " errors found");
+
+        // Go for drawing!
+
+
         hasCrypto = false;
         Map<String, Set<String>> originDestMap = new HashMap<String, Set<String>>();
         Map<String, AvatarBDBlock> blockMap = new HashMap<String, AvatarBDBlock>();
@@ -9254,7 +9493,17 @@ public class GTURTLEModeling {
 
                 //Add Relations to connector
                 for (AvatarRelation ar : avspec.getRelations()) {
-                    if (ar.block1.getName().contains(bl1) && ar.block2.getName().contains(bl2) || ar.block1.getName().contains(bl2) && ar.block2.getName().contains(bl1)) {
+
+                    // Equal or endWith "__" + name
+                    // One must be equal
+                    // if (ar.block1.getName().equals(bl1) || ar.block1.getName().equals(bl2) || ar.block2.getName().equals(bl1) || ar.block1.getName
+                    //         ().equals(bl2)) {
+
+                    if (ar.block1.getName().endsWith(bl1) && ar.block2.getName().endsWith(bl2) || ar.block1.getName().endsWith(bl2) && ar
+                            .block2.getName()
+                            .endsWith(bl1)) {
+                        TraceManager.addDev("Adding relations between " + bl1 + "/" + bl2 + " block1=" + ar.block1.getName() + " block2=" + ar
+                                .block2.getName());
                         //TraceManager.addDev("Trying adding signal relations to connector");
                         //TGConnectingPoint p1= blockMap.get(bl1).getFreeTGConnectingPoint(blockMap.get(bl1).getX(), blockMap.get(bl1).getY());
 
@@ -9369,14 +9618,14 @@ public class GTURTLEModeling {
         //Remove the empty check states
 
         AvatarStartState start = asm.getStartState();
-		
+
         addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
         //Add transitions
         for (AvatarTransition t : tranSourceMap.keySet()) {
-            if (tranSourceMap.get(t) == null || tranDestMap.get(t) == null || locMap.get(tranDestMap.get(t)) ==null) {
+            if (tranSourceMap.get(t) == null || tranDestMap.get(t) == null || locMap.get(tranDestMap.get(t)) == null) {
                 continue;
             }
-			
+
             int x = tranSourceMap.get(t).getX() + tranSourceMap.get(t).getWidth() / 2;
             int y = tranSourceMap.get(t).getY() + tranSourceMap.get(t).getHeight();
 

@@ -64,6 +64,118 @@ public class AvatarSyntaxChecker  {
     public AvatarSyntaxChecker() {
     }
 
+
+
+    public static ArrayList<AvatarError> checkSyntax(AvatarSpecification avspec) {
+        ArrayList<AvatarError> errors = new ArrayList<>();
+
+        errors.addAll(checkSignalRelations(avspec));
+
+        return errors;
+    }
+
+    public static ArrayList<AvatarError> checkSignalRelations(AvatarSpecification avspec) {
+        ArrayList<AvatarError> errors = new ArrayList<>();
+
+        List<AvatarSignal> signals1, signals2;
+        // Check relations are corrects
+        for (AvatarRelation relation : avspec.getRelations()) {
+            signals1 = relation.getSignals1();
+            signals2 = relation.getSignals2();
+
+            AvatarBlock block1, block2;
+            block1 = relation.block1;
+            block2 = relation.block2;
+
+            if (block1 == null) {
+                AvatarError error = new AvatarError(avspec);
+                error.relation = relation;
+                error.error = 4;
+                errors.add(error);
+            }
+
+            if (block2 == null) {
+                AvatarError error = new AvatarError(avspec);
+                error.relation = relation;
+                error.error = 5;
+                errors.add(error);
+            }
+
+            if (signals1.size() != signals2.size()) {
+                AvatarError error = new AvatarError(avspec);
+                error.relation = relation;
+                error.error = 0;
+                errors.add(error);
+            } else {
+                // Compare signals characteristics
+                AvatarSignal sig1, sig2;
+                for(int i=0; i<signals1.size(); i++) {
+                    sig1 = signals1.get(i);
+                    sig2 = signals2.get(i);
+
+                    // In vs out
+                    if (sig1.isIn() && sig2.isIn()) {
+                        AvatarError error = new AvatarError(avspec);
+                        error.relation = relation;
+                        error.firstAvatarElement = sig1;
+                        error.secondAvatarElement = sig2;
+                        error.error = 1;
+                        errors.add(error);
+                    } else if (sig1.isOut() && sig2.isOut()) {
+                        AvatarError error = new AvatarError(avspec);
+                        error.relation = relation;
+                        error.firstAvatarElement = sig1;
+                        error.secondAvatarElement = sig2;
+                        error.error = 2;
+                        errors.add(error);
+                    }
+
+                    // Attributes
+                    //TraceManager.addDev("Checking attributes compatibility");
+                    if (!(sig1.isCompatibleWith(sig2))) {
+                        AvatarError error = new AvatarError(avspec);
+                        error.relation = relation;
+                        error.firstAvatarElement = sig1;
+                        error.secondAvatarElement = sig2;
+                        error.error = 3;
+                        errors.add(error);
+                    }
+
+                    // Both signals exist in their respective block
+                    if (block1 != null) {
+                        AvatarSignal as = block1.getSignalByName(sig1.getSignalName());
+                        if (as == null) {
+                            AvatarError error = new AvatarError(avspec);
+                            error.relation = relation;
+                            error.block = block1;
+                            error.firstAvatarElement = sig1;
+                            error.error = 6;
+                            errors.add(error);
+                        }
+                    }
+
+                    if (block2 != null) {
+                        AvatarSignal as = block2.getSignalByName(sig2.getSignalName());
+                        if (as == null) {
+                            AvatarError error = new AvatarError(avspec);
+                            error.relation = relation;
+                            error.block = block2;
+                            error.firstAvatarElement = sig2;
+                            error.error = 6;
+                            errors.add(error);
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+        return errors;
+    }
+
+
+
     public static int isAValidGuard(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _guard) {
         //TraceManager.addDev("Evaluating (non modified) guard:" + _guard);
 
@@ -93,7 +205,7 @@ public class AvatarSyntaxChecker  {
 
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
-        TraceManager.addDev("Evaluating (modified) guard:" + act);
+        //TraceManager.addDev("Evaluating (modified) guard:" + act);
         boolean result = bee.getResultOfWithIntExpr(act);
         if (bee.getError() != null) {
             TraceManager.addDev("Error: " + bee.getError() + " result=" + result);

@@ -1607,7 +1607,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             if (as.getId().compareTo(_id) == 0)
                 return as;
         }
-        TraceManager.addDev("Not found");
+        TraceManager.addDev("Signal " + _id + " not found in block " + this.getBlockName());
         return null;
     }
 
