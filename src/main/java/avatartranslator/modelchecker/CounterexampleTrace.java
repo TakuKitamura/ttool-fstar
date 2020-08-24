@@ -107,26 +107,28 @@ public class CounterexampleTrace {
                     trace.add(0, cs);
                 }
             } else {
-                //registered path does not contain a loop
-                cs = loopPoint;
-                trace.add(cs);
-                while (cs.father != null) {
-                    cs = cs.father;
-                    trace.add(0, cs);
-                }
+                //registered path does not contain a loop   
                 List<SpecificationState> loopTrace = findLoopTrace(states.get(loopPoint.hash));
                 if (loopTrace != null) {
+                    //use first part of registered one
+                    cs = loopPoint;
+                    trace.add(cs);
+                    while (cs.father != null) {
+                        cs = cs.father;
+                        trace.add(0, cs);
+                    }
                     //integrate
                     for (SpecificationState ss : loopTrace) {
                         trace.add(counterstates.get(ss.hashValue));
                     }
                 } else {
-                    //continue normally
-                    int pos = trace.size();
+                    //no loop found, normal trace
                     cs = counterexampleState;
-                    while (cs.father != loopPoint) {
+                    trace.clear();
+                    trace.add(cs);
+                    while (cs.father != null) {
                         cs = cs.father;
-                        trace.add(pos, cs);
+                        trace.add(0, cs);
                     }
                 }
             }
