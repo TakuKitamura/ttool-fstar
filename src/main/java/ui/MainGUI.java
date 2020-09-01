@@ -5057,7 +5057,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         TraceManager.addDev("Execute avatar model checker");
         TURTLEPanel tdp = getCurrentTURTLEPanel();
         if (tdp instanceof TMLComponentDesignPanel) {
-            gtm.generateFullAvatarFromTML();
+            boolean ret = gtm.generateFullAvatarFromTML();
+
+            if (!ret) {
+                return;
+            }
+
         }
 
         if (gtm.getAvatarSpecification() == null) {

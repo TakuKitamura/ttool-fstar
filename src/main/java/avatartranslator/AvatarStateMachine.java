@@ -505,7 +505,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Assumes no after clause on composite relation
     public void removeCompositeStates(AvatarBlock _block) {
-        TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
+        //TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
         /*LinkedList<AvatarState> lists =*/
         List<AvatarStartState> compositeStateToBeRemoved = removeAllInternalStartStates();
@@ -1653,7 +1653,7 @@ public class AvatarStateMachine extends AvatarElement {
                     if (at.getNext(0) instanceof AvatarStateElement) {
                         if (at.isEmpty() && at.hasNonDeterministicGuard()) {
                             if ((_canOptimize) && (!(elt.isCheckable()))) {
-                                TraceManager.addDev("State found:" + elt);
+                                //TraceManager.addDev("State found:" + elt);
                                 foundState1 = (AvatarStateElement) elt;
                                 foundAt = at;
                                 foundState2 = (AvatarStateElement) (at.getNext(0));
@@ -1670,14 +1670,14 @@ public class AvatarStateMachine extends AvatarElement {
         if (foundState1 != null) {
             if (foundState1 == foundState2) {
                 // We simply remove the transition
-                TraceManager.addDev("Found same state -> removing the transitions");
+                //TraceManager.addDev("Found same state -> removing the transitions");
                 removeElement(foundAt);
                 // removing from the next of foundState1
                 foundState1.removeNext(foundAt);
 
             } else {
                 // Must remove state1 and at, and link all previous of state 1 to state2
-                TraceManager.addDev("Found 2 states state1=" + foundState1.getName() + " state2=" + foundState2.getName());
+                //TraceManager.addDev("Found 2 states state1=" + foundState1.getName() + " state2=" + foundState2.getName());
                 for (AvatarStateMachineElement elt : getPreviousElementsOf(foundState1)) {
                     elt.replaceAllNext(foundState1, foundState2);
                 }

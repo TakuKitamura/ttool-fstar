@@ -706,16 +706,21 @@ public class FullTML2Avatar {
 
         for (TMLEvent event : tmlmodel.getEvents()) {
 
-            TraceManager.addDev("Handling Event:" + event.getName() + " 1:" + taskBlockMap.get(event.getOriginTask()) + " 2:" + taskBlockMap.get
-                    (event.getDestinationTask()));
+            TraceManager.addDev("Handling Event:" + event.getName() + " 1:" + taskBlockMap.get(event.getOriginTask()).getName() + " 2:" + taskBlockMap
+                    .get
+                    (event.getDestinationTask()).getName());
 
             // For each event, we create a FIFO, and so a double relation
 
 
             AvatarRelation ar = new AvatarRelation(event.getName(), taskBlockMap.get(event.getOriginTask()), taskBlockMap.get(event.getDestinationTask()),
                     event.getReferenceObject());
+
             AvatarSignal sigOut = signalOutMap.get(event.getName());
             AvatarSignal sigIn = signalInMap.get(event.getName());
+
+            TraceManager.addDev("Relation for event " + event.getName() + " sigout:" + sigOut.getSignalName() + " sigin:" + sigIn.getSignalName());
+
             AvatarSignal sigNotified = signalInMap.get(event.getName() + NOTIFIED);
             ar.addSignals(sigOut, sigIn);
 
@@ -1765,7 +1770,7 @@ public class FullTML2Avatar {
             TMLChoice c = (TMLChoice) ae;
             for (int i = 0; i < c.getNbGuard(); i++) {
                 tran = new AvatarTransition(block, "__after_" + ae.getName() + "_" + i, ae.getReferenceObject());
-                //tran.setGuard(c.getGuard(i));
+                tran.setGuard(c.getGuard(i));
                 as.addNext(tran);
                 List<AvatarStateMachineElement> nexts = translateState(ae.getNextElement(i), block);
                 if (nexts.size() > 0) {
@@ -1792,7 +1797,7 @@ public class FullTML2Avatar {
             return elementList;
 
         } else {
-            TraceManager.addDev("undefined tml element " + ae);
+            TraceManager.addDev("Undefined tml element " + ae);
         }
 
         List<AvatarStateMachineElement> nexts = translateState(ae.getNextElement(0), block);

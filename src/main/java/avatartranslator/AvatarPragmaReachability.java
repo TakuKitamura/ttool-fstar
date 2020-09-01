@@ -74,8 +74,7 @@ public class AvatarPragmaReachability extends AvatarPragma {
     }
 
     @Override
-    public AvatarPragmaReachability advancedClone(AvatarSpecification avspec)
-    {
+    public AvatarPragmaReachability advancedClone(AvatarSpecification avspec) {
         // !!! Should never be called !!!
         return null;
     }

@@ -102,7 +102,8 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     private JButton removeButton;
 
     /* Creates new form  */
-    public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector<String> _signalAssociation, AvatarBDPortConnector _connector, String _title) {
+    public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector<String> _signalAssociation,
+                                    AvatarBDPortConnector _connector, String _title) {
         super(_f, _title, true);
         block1 = _block1;
         block2 = _block2;
@@ -257,6 +258,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         synchronous = new JRadioButton("synchronous");
         synchronous.setToolTipText("The sender and receiver must synchronize to exchange a message");
         synchronous.addActionListener(this);
+
         panel3.add(synchronous, c3);
         isBroadcast = new JCheckBox("Broadcast channel");
         isBroadcast.setSelected(connector.isBroadcast());
@@ -267,7 +269,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         asynchronous.addActionListener(this);
         panel3.add(asynchronous, c3);
 
-	AMS = new JRadioButton("AMS");
+	    AMS = new JRadioButton("AMS");
         AMS.setToolTipText("Communication with analog component");
         AMS.addActionListener(this);
         panel3.add(AMS, c3);
@@ -276,17 +278,16 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
 	
         bt.add(synchronous);
         bt.add(asynchronous);
-	bt.add(AMS);
+	    bt.add(AMS);
 	
-        asynchronous.setSelected(connector.isAsynchronous()&&!(connector.isAMS()));
-        synchronous.setSelected(!(connector.isAsynchronous())&&!(connector.isAMS()));
-		AMS.setSelected((!connector.isAsynchronous())&&!(connector.isSynchronous()));
+        asynchronous.setSelected(connector.isAsynchronous());
+        synchronous.setSelected(connector.isSynchronous());
+		AMS.setSelected(connector.isAMS());
 	
         isLossy = new JCheckBox("Lossy channel");
         isLossy.setToolTipText("A lossy channel randomly losses messages");
         isLossy.setSelected(connector.isLossy());
         panel3.add(isLossy, c3);
-	
 
 
         c3.gridwidth = 3;
@@ -528,6 +529,8 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     public boolean isAMS() {
         return AMS.isSelected();
     }
+
+    public boolean isSynchronous() {return synchronous.isSelected();}
     
     public String getSizeOfFIFO() {
         return sizeOfFIFO.getText();

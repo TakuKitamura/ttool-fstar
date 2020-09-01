@@ -65,9 +65,11 @@ public class AvatarGuardTests {
 
     AvatarGuard res;
     AvatarBlock A,B;
+
     public AvatarGuardTests () {
         //  super ("AvatarGuards", false);
     }
+
     @Before
     public void test () {
         AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
@@ -156,6 +158,21 @@ public class AvatarGuardTests {
 
     @Test
     public void testDuoGuardCreation(){
+
+        res= AvatarGuard.createFromString(A, "key1==key2+1");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+
+
+        res= AvatarGuard.createFromString(A, "key1==(key2+1)");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+
+        System.out.println("1+1");
+        res= AvatarGuard.createFromString(A, "key1==(1+1)");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+
+        res= AvatarGuard.createFromString(A, "key11==(key2 / 1)");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+
         res= AvatarGuard.createFromString(A, "test==test2");
         assertTrue(res instanceof AvatarSimpleGuardDuo);
         res= AvatarGuard.createFromString(A, "key1==key2");
@@ -205,6 +222,13 @@ public class AvatarGuardTests {
         assertTrue(res instanceof AvatarBinaryGuard);
         res= AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
         assertTrue(res instanceof AvatarBinaryGuard);
+
+        res= AvatarGuard.createFromString(A, "((key1==key1+1) or (key2==1+2)) and (m__a==m__b)");
+        assertTrue(res instanceof AvatarBinaryGuard);
+
+        res= AvatarGuard.createFromString(A, "(key1+1)");
+        assertFalse(res instanceof AvatarBinaryGuard);
+        assertTrue(res instanceof AvatarUnaryGuard);
     }
 
 

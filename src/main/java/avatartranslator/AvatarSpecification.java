@@ -491,7 +491,7 @@ public class AvatarSpecification extends AvatarElement {
     		if (ar.isAsynchronous()) {
     			// Must be removed
     			int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
-    			TraceManager.addDev("***************************** Size of FIFO:" + size);
+    			//TraceManager.addDev("***************************** Size of FIFO:" + size);
     			size = Math.max(1, size);
     			FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
     		}
@@ -622,7 +622,7 @@ public class AvatarSpecification extends AvatarElement {
                 if (ancientGuard == null)
                     continue;
 
-                //TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString());
+                //TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString() + " type:" + ancientGuard.getClass().toString());
                 at.setGuard (ancientGuard.getRealGuard (asme));
                 //TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
             }

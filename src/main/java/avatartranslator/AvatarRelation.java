@@ -156,6 +156,14 @@ public class AvatarRelation extends AvatarElement {
         return signals1.size();
     }
 
+    public List<AvatarSignal> getSignals1() {
+        return signals1;
+    }
+
+    public List<AvatarSignal> getSignals2() {
+        return signals2;
+    }
+
     public AvatarSignal getSignal1(int _index) {
         return signals1.get(_index);
     }

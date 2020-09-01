@@ -713,7 +713,7 @@ public class BoolExpressionEvaluator {
     }
 
     public boolean getResultOf(String _expr) {
-        //TraceManager.addDev("Evaluating bool expr: " + _expr);
+        TraceManager.addDev("Evaluating bool expr: " + _expr);
 
         String origin = _expr;
         _expr = Conversion.replaceAllString(_expr, "not", "!").trim();
@@ -1669,6 +1669,8 @@ public class BoolExpressionEvaluator {
 
         if (getError() != null) {
             TraceManager.addDev("Error: " + getError());
+            //TraceManager.addDev("Error in parsing");
+            //TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
         }
 
         if (res instanceof Boolean) {

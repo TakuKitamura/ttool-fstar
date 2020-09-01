@@ -83,7 +83,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JPopupMenu helpPopup;
     private Map<String, List<String>> blockAttributeMap;
 
-    private JDialogTGComponentHelp helpDialog;
+    //private JDialogTGComponentHelp helpDialog;
 
     protected MainGUI mgui;
 
@@ -416,21 +416,26 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         if (mgui == null) {
             TraceManager.addDev("Null mgui");
         }
+
         HelpManager hm = mgui.getHelpManager();
         HelpEntry he = hm.getHelpEntryWithHTMLFile("avatarsafetypragmas.html");
-        if(helpDialog == null) {
+        mgui.openHelpFrame(he);
+
+        /*if(helpDialog == null) {
             helpDialog = new JDialogTGComponentHelp(mgui, he);
             helpDialog.setLocationHelpWindow(help);
-            helpDialog.setSize(500, 500);
+            helpDialog.setSize(700, 600);
+            helpDialog.scrollToTop();
         } else {
             if(!helpDialog.isVisible()) {
                 //helpDialog = new JDialogTGComponentHelp(mgui, he);
                 helpDialog.setLocationHelpWindow(help);
+
                 helpDialog.setVisible(true);
             } else{
                 helpDialog.setVisible(false);
             }
-        }
+        }*/
     }
 
 

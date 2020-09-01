@@ -87,7 +87,7 @@ public class AvatarTuple extends AvatarLeftHand {
             if (!illFormed) {
                 // Every argument was correctly parsed
                 result = argsTuple;
-               TraceManager.addDev("Successfully parsed tuple \"" + toParse.substring (indexLParen+1, indexRParen) + "\"");
+               //TraceManager.addDev("Successfully parsed tuple \"" + toParse.substring (indexLParen+1, indexRParen) + "\"");
             } else {
                 TraceManager.addDev("Illformed expression ...");
             }
