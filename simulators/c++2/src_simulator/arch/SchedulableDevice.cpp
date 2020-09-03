@@ -76,6 +76,7 @@ std::ostream& SchedulableDevice::writeObject(std::ostream &os){
 void SchedulableDevice::reset() {
 	_endSchedule=0;
 	_simulatedTime=0;
+	maxScale = 0;
 }
 
 ///Destructor
@@ -397,7 +398,11 @@ std::map<TMLTask*, std::string> SchedulableDevice::HWTIMELINE2HTML(std::ostrings
                   tempReduce += aLength - 10;
                   aLength = 10;
               }
-              myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>";
+              std::string aCurrFullTransName = aCurrTrans->toString();
+              unsigned int indexTrans1 = aCurrFullTransName.find("len:");
+              unsigned int indexTrans2 = aCurrFullTransName.find("params:");
+              std::string transName = aCurrTransName.substr(0, indexTrans + 1) + " " + aCurrFullTransName.substr(0, indexTrans1) + " --Attributes " + aCurrFullTransName.substr(indexTrans2, aCurrFullTransName.length());
+              myfile << "<td colspan=\"" << aLength << "\" title=\"" << transName << "\" class=\""<< cellClass <<"\">"<< aCurrContent <<"</td>";
 //              writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
               listScale.push_back(aLength);
               if(aCurrTrans->getStartTime() > listScaleTime.back()){

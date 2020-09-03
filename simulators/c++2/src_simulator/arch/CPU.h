@@ -102,6 +102,7 @@ public:
 	virtual void reset(){
 		SchedulableDevice::reset();
 		_lastTransaction=0;
+		resetMaxScale();
 		//_schedulingNeeded=false;
 	}
 	virtual std::string toString() const =0;
@@ -123,6 +124,7 @@ public:
 	void HW2HTML(std::ofstream& myfile) const;
 	std::map<TMLTask*, std::string> HWTIMELINE2HTML(std::ostringstream& myfile,std::map<TMLTask*, std::string> taskCellClasses,unsigned int nextCellClassIndex, std::string& iTracetaskList);
 	inline unsigned int getMaxScale() { return maxScale; }
+	inline void resetMaxScale() { maxScale = 0; }
 	void schedule2HTML(std::ofstream& myfile) const;
 	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 	inline void setCoreNumberGraph(unsigned int n){ _coreNumberGraph=n;}
