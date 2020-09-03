@@ -370,35 +370,48 @@ public class AvatarExpressionSolver {
     }
     
     private boolean checkNot() {
-        if (expression.startsWith("not(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
+        boolean notStart1, notStart2;
+        
+        notStart1 = expression.startsWith("not(");
+        notStart2 = expression.startsWith("!(");
+        
+        while (notStart1 || notStart2) {
+            if (notStart1) {
+                //not bracket must be closed in the last char
+                int closingIndex = getClosingBracket(4);
+                
+                if (closingIndex == -1) {
+                    return false;
+                }
+                if (closingIndex == expression.length() - 1) {
+                  //not(expression)
+                    isNot = !isNot;
+                    expression = expression.substring(4, expression.length() - 1).trim();
+                } else {
+                    return true;
+                }
+            } else if (notStart2) {
+                int closingIndex = getClosingBracket(2);
+                
+                if (closingIndex == -1) {
+                    return false;
+                }
+                if (closingIndex == expression.length() - 1) {
+                    //not(expression)
+                    isNot = !isNot;
+                    expression = expression.substring(2, expression.length() - 1).trim();
+                } else {
+                    return true;
+                }
             }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(4, expression.length() - 1).trim();
-            }
-        } else if (expression.startsWith("!(")) {
-            int closingIndex = getClosingBracket(2);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-                //not(expression)
-                isNot = true;
-                expression = expression.substring(2, expression.length() - 1).trim();
-            }
+            notStart1 = expression.startsWith("not(");
+            notStart2 = expression.startsWith("!(");
         }
         return true;
     }
     
     private boolean checkNegated() {
-        if (expression.startsWith("-(")) {
+        while (expression.startsWith("-(")) {
             //not bracket must be closed in the last char
             int closingIndex = getClosingBracket(2);
             
@@ -407,8 +420,10 @@ public class AvatarExpressionSolver {
             }
             if (closingIndex == expression.length() - 1) {
               //-(expression)
-                isNegated = true;
+                isNegated = !isNegated;
                 expression = expression.substring(2, expression.length() - 1).trim();
+            } else {
+                return true;
             }
         }
         return true;
