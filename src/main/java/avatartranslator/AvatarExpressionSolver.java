@@ -929,7 +929,7 @@ public class AvatarExpressionSolver {
         return optype;
     }
     
-    private int getReturnType() {
+    public int getReturnType() {
         int optype;
         
         if (isLeaf) {
