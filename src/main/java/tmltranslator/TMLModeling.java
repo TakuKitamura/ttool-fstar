@@ -2238,7 +2238,7 @@ public class  TMLModeling<E> {
         for(TMLTask t: allTasks) {
             tasks.add(t);
         }
-        
+
         TMLTask[] returnedTasks = new TMLTask[addedTasks.size()];
 
         int cpt;
