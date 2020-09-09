@@ -16,6 +16,33 @@
   <![endif]-->
 </head>
 <body>
-<p>The CPU node abstracts a CPU. It simulation semantics …</p>
+<h1 id="cpu">CPU</h1>
+<p>CPU nodes abstract multi-core processors.</p>
+<h2 id="main-attributes">Main attributes</h2>
+<p>They have the following attributes.</p>
+<ul>
+<li><a href="file://cpuname.html">CPU name</a></li>
+<li><a href="file://schedulingpolicy.html">Scheduling policy</a></li>
+<li><a href="file://slicetime.html">Slice time</a> (given in milliseconds)</li>
+<li><a href="file://numbercores.html">Nb of cores</a></li>
+<li><a href="file://datasize.html">Data size</a></li>
+<li><a href="file://pipelinesize.html">Pipeline size</a></li>
+<li><a href="file://taskswitchingtime.html">Task switching time</a></li>
+<li><a href="file://misbranchingprediction.html">Percentage of mis branching prediction</a></li>
+<li><a href="file://cachemiss.html">Percentage of cache miss</a></li>
+<li><a href="file://goidletime.html">Go idle time</a></li>
+<li><a href="file://maxconsecutivecycles.html">Max consecutive cycles before going idle</a></li>
+<li><a href="file://execi.html">ExecI execution cycles</a></li>
+<li><a href="file://execc.html">ExecC execution cycles</a></li>
+<li><a href="file://clockdivider.html">Clock divider</a></li>
+</ul>
+<p>The latter attributes are taken into account by the DIPLODOCUS simulator to determine how software tasks executed on a processor behave.</p>
+<h2 id="other-attributes">Other attributes</h2>
+<p>The following attributes are also defined in CPUs:</p>
+<ul>
+<li><p><a href="file://encryption.html">Encryption</a></p></li>
+<li><p><a href="file://operation.html">Operation</a></p></li>
+<li><p><a href="file://cpuextension.html">Extension construct</a></p></li>
+</ul>
 </body>
 </html>

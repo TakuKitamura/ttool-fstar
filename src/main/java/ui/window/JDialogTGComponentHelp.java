@@ -48,6 +48,7 @@ public class JDialogTGComponentHelp extends JDialog implements ActionListener {
         } else {
             pane.setText("No Help available");
         }
+        pane.setCaretPosition(0);
         JScrollPane jsp = new JScrollPane(pane);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         helpPanel.add(jsp, BorderLayout.CENTER);
@@ -68,9 +69,13 @@ public class JDialogTGComponentHelp extends JDialog implements ActionListener {
         jp.add(helpBut);
         framePanel.add(jp, BorderLayout.SOUTH);
 
-        setSize(300, 200);
+        //scrollToTop();
+
+        setSize(500, 300);
 
         setVisible(true);
+
+
 
     }
 

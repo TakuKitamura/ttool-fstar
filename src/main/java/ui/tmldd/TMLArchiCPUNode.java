@@ -219,7 +219,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         int tmp;
         String tmpName;
         JDialogCPUNode dialog = new JDialogCPUNode(getTDiagramPanel().getMainGUI(), frame, "Setting CPU attributes", this, MECType, transactionsTemp);
-        dialog.setSize(500, 450);
+        dialog.setSize(600, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         // dialog.show(); // blocked until dialog has been closed
         dialog.setVisible(true);

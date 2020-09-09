@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>TTool help</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="avatar-safety-pragmas">AVATAR Safety pragmas</h1>
+<p>A safety pragma expresses a property that is expected to be verified by the internal model checker or by UPPAAL.</p>
+<p>A safety pragma is as follows, with p and q being properties:</p>
+<ul>
+<li>[T/F] A/E []/&lt;&gt; p</li>
+<li>[T/F] p –&gt; q</li>
+</ul>
+<p>Example: T A&lt;&gt; Block1.x &gt; 0 means that the attribute “x” of block “Block1” is always strictly positive.</p>
+<h2 id="a-p">A[] p</h2>
+<p>“A” means <em>on All paths</em> and “[]” means in <em>all states</em>. “A[] p” therefore means that “p” is expected to be satisfied in all states of all paths.</p>
+<center>
+<img src="file:../help/ctlaall_small.png" />
+</center>
+<h2 id="ap">A&lt;&gt;p</h2>
+<p>“A” means <em>on All paths</em> and “&lt;&gt;” means in <em>at least one state</em>. “A&lt;&gt; p” therefore means that “p” is expected to be satisfied in at least one state of all paths.</p>
+<center>
+<img src="file:../help/ctlaone_small.png" />
+</center>
+<h2 id="e-properties">E[] properties</h2>
+<p>“E” means <em>on one paths</em> and “[]” means in <em>all states</em>. “E&lt;&gt; p” therefore means that “p” is expected to be satisfied in at least all states of at least one path.</p>
+<center>
+<img src="file:../help/ctleall_small.png" />
+</center>
+<h2 id="e-properties-1">E&lt;&gt; properties</h2>
+<center>
+<img src="file:../help/ctleall_small.png" />
+</center>
+<h2 id="leads-to-properties">“Leads to” properties</h2>
+<p>“p –&gt; q” means that whenever p is encoutred in a state s, all paths starting from state s must have a state in which q is satisfied.</p>
+<center>
+<img src="file:../help/ctlleadsto_small.png" />
+</center>
+<h2 id="true-false">True / False</h2>
+<p>A pragma may start with “T” or “F”. “T” stands for True and “F” for False. T or F precise if the pragma is expected to be true or false during verification. - If a pragma starts with a “T” and is satisfied, then a green check is added on its left side. - if a pragma starts with a “T” and is not satisfied, then a red cross is added on its left side. - If a pragma starts with a “F” and is satisfied, then a red cross is added on its left side. - if a pragma starts with a “F” and is not satisfied, then a green check is added on its left side.</p>
+<p>Adding “T” or “F” before at the beginning of a pragma is <strong>optional</strong>. A pragma with no “T” or “F” is assumed to start with a “T”.</p>
+<h2 id="p-properties">“p” properties</h2>
+<p>A pragma termines with a property. A property is a boolean expression. The following operators can be used between sub-boolean expressions: - “&amp;&amp;”, “||”</p>
+<p>A boolean expression can: - State that a given state s of a block b has been reached: b.s - Use boolean or integer attributes of blocks, comparing them with operators such as : “==”, “&lt;”, “&gt;”, “&gt;=”, “&lt;=”</p>
+<h2 id="examples">Examples</h2>
+<p>The following figures gives the pragmas that are given in the CoffeeMachine use case available on the model repository of TTool.</p>
+<ul>
+<li><p>A[] CoffeeMachine.nbOfCoins&lt;=2</p></li>
+<li><p>T E&lt;&gt; CoffeeMachine.nbOfCoins&gt;0</p></li>
+<li><p>E&lt;&gt; CoffeeMachine.nbOfCoins&gt;1</p></li>
+<li><p>E[] CoffeeMachine.nbOfCoins&lt;2</p></li>
+<li><p>A[] Wallet.nbOfCoins&lt;3</p></li>
+<li><p>A[] Wallet.nbOfCoins&gt;=0</p></li>
+<li><p>E[] Wallet.nbOfCoins&gt;=1</p></li>
+<li><p>F CoffeeMachine.Beverage –&gt; CoffeeMachine.CoffeeDelivered</p></li>
+<li><p>CoffeeMachine.Beverage –&gt; CoffeeMachine.CoffeeDelivered &amp;&amp; CoffeeMachine.TeaDelivered</p></li>
+<li><p>CoffeeMachine.Beverage –&gt; CoffeeMachine.CoffeeDelivered || CoffeeMachine.TeaDelivered</p></li>
+<li><p>CoffeeMachine.Beverage –&gt; CoffeeMachine.WaitingForFirstCoin</p></li>
+<li><p>F CoffeeMachine.WaitingForFirstCoin –&gt; CoffeeMachine.EjectState</p></li>
+<li><p>CoffeeMachine.WaitingForFirstCoin –&gt; CoffeeMachine.EjectState || CoffeeMachine.WaitingForSecondCoin</p></li>
+<li><p>CoffeeMachine.CoffeeDelivered –&gt; CoffeeMachine.nbOfCoins&lt;2</p></li>
+</ul>
+<p>After verifying them with TTool’s internal model checker, we obtain the following:</p>
+<center>
+<img src="file:../help/pragmas_cm.png" />
+</center>
+</body>
+</html>

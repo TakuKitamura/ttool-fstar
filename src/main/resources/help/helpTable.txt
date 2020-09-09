@@ -16,7 +16,7 @@
 ----datasize data_size data size cpu
 ----pipelinesize pipeline_size pipeline size cpu
 ----taskswitchingtime task_switching_time task switching time cpu
-----misbrandingprediction mis-branding_prediction mis branding prediction cpu
+----misbranchingprediction mis-branching_prediction mis branching prediction cpu
 ----cachemiss cache_miss cache miss cpu
 ----goidletime go_idle_time go idle time cpu
 ----maxconsecutivecycles max_consecutive_cycles_before_idle max consecutive cycles before idle cpu
@@ -26,6 +26,8 @@
 ----encryption encryption encryption cpu
 ----operation operation operation cpu
 ----cpuextension cpu_extension_construct cpu extension construct
+--- fpga fpga processor hardware execution node
+
 
 -- mapping mapping tasks communication mapping
 ---taskmapping taskmapping tasks mapping
