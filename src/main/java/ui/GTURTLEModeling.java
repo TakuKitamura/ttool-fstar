@@ -7649,6 +7649,7 @@ public class GTURTLEModeling {
             int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
             int myMinX = -1, myMaxX = -1, myMinY = -1, myMaxY = -1;
             String myName = null, myValue = null;
+            String customData = null;
             Vector<Point> tgcpList = new Vector<Point>();
             Point p;
             int i, x, y;
@@ -7698,6 +7699,8 @@ public class GTURTLEModeling {
                     } else if (elt.getTagName().equals("infoparam")) {
                         myName = elt.getAttribute("name");
                         myValue = elt.getAttribute("value");
+                    } else if (elt.getTagName().equals("custom")) {
+                        customData = elt.getAttribute("data");
                     } else if (elt.getTagName().equals("hidden")) {
                         hidden = elt.getAttribute("value").equals("true");
                     } else if (elt.getTagName().equals("enabled")) {
@@ -7796,6 +7799,10 @@ public class GTURTLEModeling {
 
             if (myName != null) {
                 tgc.setName(myName);
+            }
+
+            if (customData != null) {
+                tgc.setCustomData(customData);
             }
 
 

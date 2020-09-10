@@ -117,6 +117,8 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     protected TGComponent father;
     private boolean moveWithFather = true;
 
+    protected String customData = ""; // Used for e.g. plugins to save custom information
+
     protected TGComponent reference;
 
     private int id;
@@ -2818,6 +2820,16 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         repaint = true;
     }
 
+    public void setCustomData(String _custom) {
+        customData = _custom;
+    }
+
+    public String getCustomData() {
+        return customData;
+    }
+
+
+
     public void setValueWithChange(String v) {
         value = v;
         tdp.actionOnValueChanged(this);
@@ -3175,6 +3187,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         }
         sb.append(translateCDRectangleParam());
         sb.append(translateNameValue());
+        sb.append(translateCustomData());
         sb.append(translateConnectingPoints());
         sb.append(translateJavaCode());
         sb.append(translateInternalComment());
@@ -3184,6 +3197,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         sb.append(translateMasterMutex());
         sb.append(translateBreakpoint());
         sb.append(translateExtraParam());
+
         if (b) {
             sb.append(XML_TAIL);
         } else {
@@ -3283,6 +3297,15 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         s = s + GTURTLEModeling.transformString(name) + "\" value=\"";
         s = s + GTURTLEModeling.transformString(value);
         return s + "\" />\n";
+    }
+
+    protected String translateCustomData() {
+        if ((customData != null) && (customData.length() > 0)) {
+            String s = "<custom data=\"";
+            s = s + GTURTLEModeling.transformString(customData);
+            return s + "\" />\n";
+        }
+        return "";
     }
 
     protected String translateJavaCode() {
