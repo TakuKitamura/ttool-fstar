@@ -40,6 +40,10 @@
 package ui.window;
 
 import myutil.GraphicLib;
+import myutil.Plugin;
+import myutil.PluginManager;
+import myutil.TraceManager;
+import tmltranslator.TMLMapping;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
 import ui.MainGUI;
@@ -61,7 +65,7 @@ import java.util.*;
  * @author Ludovic APVRILLE
  * @version 2.0 05/03/2019
  */
-public class JDialogFPGANode extends JDialogBase implements ActionListener {
+public class JDialogFPGANode extends JDialogBase implements ActionListener, Runnable {
 
     public static final String[] helpStrings = {"fpga.html"};
 
@@ -73,8 +77,16 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
     //   private Frame frame;
     private TMLArchiFPGANode node;
 
+    private String[] labels;
+    private JTextField[] extraVals;
 
     protected TGTextFieldWithHelp nodeName;
+
+    protected LinkedList<JButton> schedulingButtons;
+    protected LinkedList<Plugin> schedulingPlugins;
+
+    protected Plugin selectedPlugin; // Plugin being called
+
 
     // Panel2
     protected TGTextFieldWithHelp byteDataSize, goIdleTime, maxConsecutiveIdleCycles, clockRatio, execiTime, execcTime,
@@ -213,6 +225,26 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         panel2.add(scheduling, c2);
         scheduling.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
+        schedulingButtons = new LinkedList<>();
+        schedulingPlugins = new LinkedList<>();
+
+        LinkedList<Plugin> list = PluginManager.pluginManager.getPluginFPGAScheduling();
+        for (Plugin p : list) {
+            TraceManager.addDev("Found plugin=" + p.getName());
+            String desc = p.getFPGASchedulingIdentifier();
+            if (desc != null) {
+                TraceManager.addDev("Found plugin=" + p.getName() + " desc=" + desc);
+                JButton buttonPlugin = new JButton(desc);
+                buttonPlugin.addActionListener(this);
+                schedulingButtons.add(buttonPlugin);
+                schedulingPlugins.add(p);
+                c2.gridwidth = 1;
+                panel2.add(new JLabel("Compute schedule with plugin:"), c2);
+                c2.gridwidth = GridBagConstraints.REMAINDER;
+                panel2.add(buttonPlugin, c2);
+            }
+        }
+
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
@@ -222,7 +254,6 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
 
-
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
@@ -230,6 +261,69 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
+
+        String ret = "";
+        list = PluginManager.pluginManager.getPluginFPGAScheduling();
+        for (Plugin p : list) {
+            TraceManager.addDev("Found plugin=" + p.getName());
+            String desc = p.getFPGASchedulingIdentifier();
+            if (desc != null) {
+                String tmp = p.executeStaticRetStringOneStringMethod(p.getClassFPGAScheduling(),
+                        "hasCustomData", "TMLArchiFPGANode");
+                if (tmp != null) {
+                    ret += tmp;
+                    if ((ret.length() > 0) && (!(ret.endsWith("|")))) {
+                        ret += "|";
+                    }
+                }
+            }
+        }
+
+
+        if ((ret != null) && (ret.length() > 0)) {
+
+            GridBagLayout gridbag3 = new GridBagLayout();
+            GridBagConstraints c3 = new GridBagConstraints();
+            JPanel panel3 = new JPanel();
+            panel3.setLayout(gridbag3);
+            panel3.setBorder(new javax.swing.border.TitledBorder("Extra attributes"));
+            //panel2.setPreferredSize(new Dimension(400, 300));
+
+            c3.gridwidth = 1;
+            c3.gridheight = 1;
+            c3.weighty = 1.0;
+            c3.weightx = 1.0;
+            c3.fill = GridBagConstraints.HORIZONTAL;
+
+
+            String custom = node.getCustomData();
+            if (custom == null) {
+                custom = "";
+            }
+            String[] customs = custom.split("\\|");
+            String[] rets= ret.split("\\|");
+            extraVals = new JTextField[rets.length];
+            labels = new String[rets.length];
+
+            for(int i=0; i<rets.length; i++) {
+                c3.gridwidth = 1;
+                JLabel lab = new JLabel(rets[i]);
+                panel3.add(new JLabel(rets[i] + ":"), c3);
+                labels[i] = rets[i];
+                c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+                extraVals[i] = new JTextField();
+                for (int j=0; j<customs.length-1; j++) {
+                    if (customs[j].compareTo(rets[i]) == 0) {
+                        extraVals[i].setText(customs[j+1]);
+                        break;
+                    }
+                }
+                panel3.add(extraVals[i], c3);
+            }
+            c.add(panel3, c0);
+
+        }
+
 
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -257,6 +351,19 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         } else if (command.equals("Cancel")) {
             cancelDialog();
         }
+
+        // Checking plugin buttons
+        int cpt = 0;
+        for(JButton but: schedulingButtons) {
+            if (but.getActionCommand().compareTo(command) == 0) {
+                selectedPlugin = schedulingPlugins.get(cpt);
+                Thread t = new Thread(this);
+                t.start();
+            }
+            cpt++;
+        }
+
+
     }
 
     public void closeDialog() {
@@ -319,6 +426,65 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
     public String getClockRatio() {
         return clockRatio.getText();
+    }
+
+    public String getCustomData() {
+        String ret = "";
+
+        if ((labels == null) || (extraVals == null)) {
+            return ret;
+        }
+
+        for(int i=0; i<labels.length; i++) {
+            ret += labels[i] + "|" + extraVals[i].getText() + "|";
+        }
+
+        return ret;
+    }
+
+    // Make the right call in the Selected Plugin
+    public void run() {
+        TraceManager.addDev("Calling the selected plugin: " + selectedPlugin.getFPGASchedulingIdentifier());
+
+         // Getting the XML of the system
+        if (!mgui.checkModelingSyntax(true)) {
+            TraceManager.addDev("Syntax is incorrect. ");
+        }
+
+        TraceManager.addDev("Syntax ok");
+
+
+
+        TMLMapping<?> tmap = mgui.gtm.getTMLMapping();
+
+        if (tmap == null) {
+            TraceManager.addDev("Invalid mapping");
+            return;
+        }
+
+        String XML = tmap.toXML();
+
+        TraceManager.addDev("Got an XML");
+
+        selectedPlugin.executeStaticRetVoidOneStringMethod(selectedPlugin.getClassFPGAScheduling(),
+                "setFPGAName", nodeName.getText());
+
+        TraceManager.addDev("FPGA name set");
+
+        selectedPlugin.executeStaticRetVoidOneStringMethod(selectedPlugin.getClassFPGAScheduling(),
+                "setCustomData", node.getCustomData());
+
+        // precompute
+        TraceManager.addDev("Precompute");
+        String ret = selectedPlugin.executeStaticRetStringOneStringMethod(selectedPlugin.getClassFPGAScheduling(),
+                "precomputeData", XML);
+        //node.setCustomData(ret);
+
+
+        ret = selectedPlugin.executeStaticRetStringOneStringMethod(selectedPlugin.getClassFPGAScheduling(), "computeScheduling",
+                XML);
+
+
     }
 
 

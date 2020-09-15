@@ -71,6 +71,10 @@ public class PluginManager {
         }
     }
 
+    public  ArrayList<Plugin> getPlugins() {
+        return plugins;
+    }
+
     public Plugin getPluginAvatarCodeGenerator() {
         for (Plugin plugin : plugins) {
             if (plugin.hasAvatarCodeGenerator()) {
@@ -86,6 +90,17 @@ public class PluginManager {
         LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
         for (Plugin plugin : plugins) {
             if (plugin.hasDiplodocusCodeGenerator()) {
+                lplugins.add(plugin);
+                //TraceManager.addDev("     Found diplodocus code generator plugin");
+            }
+        }
+        return lplugins;
+    }
+
+    public LinkedList<Plugin> getPluginFPGAScheduling() {
+        LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+        for (Plugin plugin : plugins) {
+            if (plugin.hasFPGAScheduling()) {
                 lplugins.add(plugin);
                 //TraceManager.addDev("     Found diplodocus code generator plugin");
             }

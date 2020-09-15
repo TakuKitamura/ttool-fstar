@@ -92,6 +92,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_DIPLODOCUS_DOCUMENTATION = 242;
     public static final int ACT_SYSMLSEC_DOCUMENTATION = 426;
     public static final int ACT_ABOUT = 518;
+    public static final int ACT_ABOUT_PLUGINS = 529;
     public static final int ACT_INTEGRATED_HELP = 4;
     public static final int ACT_ENHANCE = 160;
     public static final int ACT_TTOOL_CONFIGURATION = 323;
@@ -684,7 +685,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;   
-    public static final int NB_ACTION = 529;
+    public static final int NB_ACTION = 530;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -927,6 +928,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_DOC_REQ] = new TAction("gen-doc-req", "SysML requirements documentation", IconManager.imgic28, IconManager.imgic28, "SysML requirements documentation",  "SysML requirements documentation is displayed in an array, and may be further automatically generated in html format", 0);
 
         actions[ACT_ABOUT] = new TAction("about-command", "About", IconManager.imgic30, IconManager.imgic31, "About", "TTool information", 0);
+        actions[ACT_ABOUT_PLUGINS] = new TAction("about-plugins-command", "About plugins", IconManager.imgic30, IconManager.imgic31, "About " +
+                "plugins", "Installed plugins", 0);
         actions[ACT_INTEGRATED_HELP] = new TAction("integrated-help", "Integrated help", IconManager.imgic30, IconManager.imgic31, "Integrated help", "TTool internal help", 0);
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TTool's website", IconManager.imgic30, IconManager.imgic31, "TTool's website", "Various information (e.g., documentation) on TTool", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "AVATAR online help", IconManager.imgic30, IconManager.imgic31, "AVATAR online help", "AVATAR online help", 0);

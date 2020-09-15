@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package myutil;
 
 import javax.swing.*;
@@ -61,6 +60,7 @@ public class Plugin {
     private HashMap<String, Class> listOfClasses;
     private Class classAvatarCodeGenerator;
     private Class classDiplodocusCodeGenerator;
+    private Class classFPGAScheduling;
     private Class classGraphicalComponent;
     private Class classCommandLineInterface;
 
@@ -110,8 +110,26 @@ public class Plugin {
         return false;
     }
 
+    public boolean hasFPGAScheduling() {
+        String ret = executeRetStringMethod(removeJar(name), "hasFPGAScheduling");
+        if (ret != null) {
+            TraceManager.addDev("classFPGAScheduling=" + getClass(ret));
+            classFPGAScheduling = getClass(ret);
+            return true;
+        }
+
+        return false;
+    }
+
     public String getDiplodocusCodeGeneratorIdentifier() {
         String desc = executeRetStringMethod(classDiplodocusCodeGenerator, "getIdentifier");
+        return desc;
+    }
+
+
+    public String getFPGASchedulingIdentifier() {
+        TraceManager.addDev("Calling method getFPGASchedulingIdentifier in class " + classFPGAScheduling + " of plugin " + getName());
+        String desc = executeRetStringMethod(classFPGAScheduling, "getFPGASchedulingIdentifier");
         return desc;
     }
 
@@ -204,6 +222,10 @@ public class Plugin {
 
     public Class getClassDiplodocusCodeGenerator() {
         return classDiplodocusCodeGenerator;
+    }
+
+    public Class getClassFPGAScheduling() {
+        return classFPGAScheduling;
     }
 
 
@@ -358,6 +380,25 @@ public class Plugin {
             TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
             e.printStackTrace( System.out );
             return null;
+        }
+    }
+
+    public static void executeStaticRetVoidOneStringMethod(Class<?> c, String _methodName, String value)  {
+        try {
+            Class[] cArg = new Class[1];
+            cArg[0] = String.class;
+            //TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName() + ">");
+            Method m = c.getMethod(_methodName, cArg);
+
+            if (m == null) {
+                TraceManager.addDev("Null method in executeRetVoidMethod with Class parameter");
+                return;
+            }
+            m.invoke(null, value);
+        } catch (Exception e) {
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
+            e.printStackTrace( System.out );
+            return;
         }
     }
 

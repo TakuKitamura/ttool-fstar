@@ -354,9 +354,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     // Thread for autosave
     private PeriodicBehaviorThread pbt;   
-  
-    // Plugin management
-    // public static PluginManager pluginManager;
+
 
     private boolean hidden = false;
 
@@ -380,8 +378,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         currentInvariant = null;
 
         pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
-
-        // PluginManager.pluginManager = new PluginManager();
 
     }
 
@@ -3575,6 +3571,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         GraphicLib.centerOnParent(jft, 740, 800);
         jft.setVisible(true);
 
+    }
+
+
+    public void aboutPlugins() {
+        JFramePluginText jft = new JFramePluginText("Plugins", IconManager.imgic324);
+        jft.setIconImage(IconManager.img8);
+        GraphicLib.centerOnParent(jft, 740, 800);
+        jft.setVisible(true);
     }
 
     public void showTToolConfiguration() {
