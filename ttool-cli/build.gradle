@@ -27,7 +27,7 @@ dependencies {
     compile name: 'commons-io-2.5'
     compile name: 'jsoup-1.8.1'
     compile name: 'gs-core-1.3'
-    compile name: 'json-java.jar'
+    compile name: 'json-java'
     
   compile name: 'batik-codec'
     compile name: 'batik-constants'
