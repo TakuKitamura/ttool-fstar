@@ -28,6 +28,7 @@ dependencies {
     compile name: 'batik-dom'
     compile name: 'batik-awt-util'
     compile name: 'xml-apis'
+    compile name: 'json-java'
 
     compile name:'jautomata-core'
     compile name:'com.microsoft.z3'

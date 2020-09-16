@@ -1,2 +1,2 @@
 Main-Class: RunDSE
-Class-Path: com.microsoft.z3.jar
+Class-Path: com.microsoft.z3.jar json-java.jar
