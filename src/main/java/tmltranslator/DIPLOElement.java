@@ -52,6 +52,7 @@ import myutil.TraceManager;
 public class DIPLOElement {
 	
 	protected static int ID=0;
+	protected String customData="";
 	
     private int myID;
     
@@ -70,5 +71,11 @@ public class DIPLOElement {
 	public static void resetID() {
 		TraceManager.addDev("Reset DIPLOID");
 		ID = 0;
+	}
+
+	public String getCustomData() { return customData;};
+
+	public void setCustomData(String _customData) {
+		customData = _customData;
 	}
 }

@@ -85,7 +85,8 @@ public class HwFPGA extends HwExecutionNode {
     
 	@Override
     public String toXML() {
-        String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize +
+        String s =
+                "<FPGA name=\"" + name + "\" customData=\"" + getCustomData() + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize +
                 "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
         s +=  "\" capacity=\"" + capacity + "\" scheduling=\"" + scheduling + "\" mappingPenalty=\"" +
                 mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";

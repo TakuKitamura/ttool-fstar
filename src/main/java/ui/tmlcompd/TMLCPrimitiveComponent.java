@@ -463,7 +463,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
                 "Setting attributes of " + value, "Attribute", operation, isDaemon, isPeriodic, periodValue,
-                unit, getValue());
+                unit, getValue(), customData);
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 750, 575);
@@ -477,6 +477,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         isPeriodic = jda.isPeriodic();
         periodValue = jda.getPeriodValue();
         unit = jda.getUnit();
+        customData = jda.getCustomData();
 
         if ((isPeriodic) && (!periodValue.matches("-?\\d+"))) {
             TraceManager.addDev("Invalid period: " + periodValue);

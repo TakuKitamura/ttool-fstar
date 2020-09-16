@@ -509,6 +509,7 @@ public class GTMLModeling {
                 }
 
                 tmlt = new TMLTask(makeName(tgc, tmlto.getValue()), tmlto, tmladp);
+                tmlt.setCustomData(tmlto.getCustomData());
                 listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
                 tmlt.setExit(tmlto.isExit());
@@ -548,6 +549,7 @@ public class GTMLModeling {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
+                tmlt.setCustomData(tmlcpc.getCustomData());
                 tmlt.addOperation(tmlcpc.getOperation());
                 tmlt.setDaemon(tmlcpc.isDaemon());
                 tmlt.setAttacker(tmlcpc.isAttacker());
@@ -2802,6 +2804,7 @@ public class GTMLModeling {
                     names.add(node.getName());
                     cpu = new HwCPU(node.getName());
                     cpu.nbOfCores = node.getNbOfCores();
+                    cpu.setCustomData(node.getCustomData());
                     cpu.byteDataSize = node.getByteDataSize();
                     cpu.pipelineSize = node.getPipelineSize();
                     cpu.goIdleTime = node.getGoIdleTime();
@@ -2834,6 +2837,7 @@ public class GTMLModeling {
                 } else {
                     names.add(fpgaNode.getName());
                     fpga = new HwFPGA(fpgaNode.getName());
+                    fpga.setCustomData(fpgaNode.getCustomData());
                     fpga.capacity = fpgaNode.getCapacity();
                     fpga.byteDataSize = fpgaNode.getByteDataSize();
                     fpga.mappingPenalty = fpgaNode.getMappingPenalty();
@@ -2886,6 +2890,7 @@ public class GTMLModeling {
                 } else {
                     names.add(hwanode.getName());
                     hwa = new HwA(hwanode.getName());
+                    hwa.setCustomData(hwanode.getCustomData());
                     hwa.byteDataSize = hwanode.getByteDataSize();
                     hwa.execiTime = hwanode.getExeciTime();
                     hwa.clockRatio = hwanode.getClockRatio();
@@ -2908,6 +2913,7 @@ public class GTMLModeling {
                 } else {
                     names.add(busnode.getName());
                     bus = new HwBus(busnode.getName());
+                    bus.setCustomData(busnode.getCustomData());
                     bus.byteDataSize = busnode.getByteDataSize();
                     bus.pipelineSize = busnode.getPipelineSize();
                     bus.arbitration = busnode.getArbitrationPolicy();
@@ -2955,6 +2961,7 @@ public class GTMLModeling {
                     names.add(crossbarnode.getName());
                     crossbar = new HwCrossbar(crossbarnode.getName());
                     crossbar.byteDataSize = crossbarnode.getByteDataSize();
+                    crossbar.setCustomData(crossbarnode.getCustomData());
                     /*crossbar.pipelineSize = crossbarnode.getPipelineSize();
                       crossbar.arbitration = crossbarnode.getArbitrationPolicy();
                       crossbar.clockRatio = crossbarnode.getClockRatio();
@@ -2976,8 +2983,8 @@ public class GTMLModeling {
                     checkingErrors.add(ce);
                 } else {
                     names.add(bridgenode.getName());
-
                     bridge = new HwBridge(bridgenode.getName());
+                    bridge.setCustomData(bridgenode.getCustomData());
                     bridge.bufferByteSize = bridgenode.getBufferByteDataSize();
                     bridge.clockRatio = bridgenode.getClockRatio();
                     listE.addCor(bridge, bridgenode);

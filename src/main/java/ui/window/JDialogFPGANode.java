@@ -39,10 +39,7 @@
 
 package ui.window;
 
-import myutil.GraphicLib;
-import myutil.Plugin;
-import myutil.PluginManager;
-import myutil.TraceManager;
+import myutil.*;
 import tmltranslator.TMLMapping;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
@@ -54,8 +51,15 @@ import ui.tmldd.TMLArchiFPGANode;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+
 
 /**
  * Class JDialogFPGA
@@ -83,9 +87,11 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
     protected TGTextFieldWithHelp nodeName;
 
     protected LinkedList<JButton> schedulingButtons;
+    protected LinkedList<JLabel> schedulingLabels;
     protected LinkedList<Plugin> schedulingPlugins;
 
     protected Plugin selectedPlugin; // Plugin being called
+    protected JLabel selectedLabel;
 
 
     // Panel2
@@ -226,6 +232,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         scheduling.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         schedulingButtons = new LinkedList<>();
+        schedulingLabels = new LinkedList<>();
         schedulingPlugins = new LinkedList<>();
 
         LinkedList<Plugin> list = PluginManager.pluginManager.getPluginFPGAScheduling();
@@ -238,10 +245,17 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
                 buttonPlugin.addActionListener(this);
                 schedulingButtons.add(buttonPlugin);
                 schedulingPlugins.add(p);
+                JLabel labelPlugin = new JLabel("Not yet computed");
+                schedulingLabels.add(labelPlugin);
+
                 c2.gridwidth = 1;
                 panel2.add(new JLabel("Compute schedule with plugin:"), c2);
                 c2.gridwidth = GridBagConstraints.REMAINDER;
                 panel2.add(buttonPlugin, c2);
+                c2.gridwidth = 1;
+                panel2.add(new JLabel("Result of " + desc), c2);
+                c2.gridwidth = GridBagConstraints.REMAINDER;
+                panel2.add(labelPlugin, c2);
             }
         }
 
@@ -357,6 +371,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         for(JButton but: schedulingButtons) {
             if (but.getActionCommand().compareTo(command) == 0) {
                 selectedPlugin = schedulingPlugins.get(cpt);
+                selectedLabel = schedulingLabels.get(cpt);
                 Thread t = new Thread(this);
                 t.start();
             }
@@ -451,9 +466,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
             TraceManager.addDev("Syntax is incorrect. ");
         }
 
-        TraceManager.addDev("Syntax ok");
-
-
+        //TraceManager.addDev("Syntax ok");
 
         TMLMapping<?> tmap = mgui.gtm.getTMLMapping();
 
@@ -464,12 +477,12 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
 
         String XML = tmap.toXML();
 
-        TraceManager.addDev("Got an XML");
+        //TraceManager.addDev("Got an XML");
 
         selectedPlugin.executeStaticRetVoidOneStringMethod(selectedPlugin.getClassFPGAScheduling(),
                 "setFPGAName", nodeName.getText());
 
-        TraceManager.addDev("FPGA name set");
+        //TraceManager.addDev("FPGA name set");
 
         selectedPlugin.executeStaticRetVoidOneStringMethod(selectedPlugin.getClassFPGAScheduling(),
                 "setCustomData", node.getCustomData());
@@ -481,8 +494,51 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         //node.setCustomData(ret);
 
 
-        ret = selectedPlugin.executeStaticRetStringOneStringMethod(selectedPlugin.getClassFPGAScheduling(), "computeScheduling",
-                XML);
+        ret = selectedPlugin.executeRetStringMethod(selectedPlugin.getClassFPGAScheduling(), "computeScheduling");
+
+        if (ret.startsWith("error")) {
+            scheduling.setText(ret);
+            return;
+        }
+
+        // ret contains a json in the form of e.g.
+        // {makespan:1821,slots:[[Application__A0, Application__A1],[Application__A4, Application__A2, Application__A3],[Application__A5,
+        // Application__A6, Application__A7],[Application__A10, Application__A8, Application__A9]]}
+
+        JSONObject jo = new JSONObject(ret);
+        TraceManager.addDev("Solution: " + jo.toString());
+
+        try {
+            int makespan = jo.getInt("makespan");
+            if ((selectedLabel != null) ) {
+                selectedLabel.setText("makespan: " + makespan + " ms");
+            }
+        } catch (Exception e) {
+            selectedLabel.setText("No makespan computed");
+        }
+
+        String solution = "";
+        try {
+            JSONArray solutions = jo.getJSONArray("slots");
+            for (int i=0; i <solutions.length(); i++) {
+                JSONArray intSol = (JSONArray)(solutions.get(i));
+                //TraceManager.addDev("intSol:" + intSol.toString());
+                String partial = intSol.toString();
+                partial = Conversion.replaceAllString(partial, "[", "");
+                partial = Conversion.replaceAllString(partial, "]", "");
+                partial = Conversion.replaceAllString(partial, "\"", "");
+                partial = Conversion.replaceAllString(partial, ",", " ");
+                if (i != 0 ) {
+                    solution += " ; ";
+                }
+                solution += partial.trim();
+            }
+            scheduling.setText(solution);
+
+        } catch (Exception e) {
+                TraceManager.addDev("Exception when parsing solution:" + e.getMessage());
+        }
+
 
 
     }

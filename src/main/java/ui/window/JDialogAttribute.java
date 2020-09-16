@@ -41,6 +41,9 @@
 
 package ui.window;
 
+import myutil.Plugin;
+import myutil.PluginManager;
+import myutil.TraceManager;
 import ui.util.IconManager;
 import ui.TAttribute;
 
@@ -108,11 +111,16 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected JButton downButton;
     protected JButton removeButton;
 
+    // Custom data
+    private String customData;
+    private String[] labels;
+    private JTextField[] extraVals;
+
     
     /* Creates new form  */
     public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f,
                             String title, String attrib, String _operation, boolean _isDaemon,
-                            boolean _isPeriodic, String _periodValue, String _unit, String name) {
+                            boolean _isPeriodic, String _periodValue, String _unit, String name, String customData) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -126,6 +134,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         this.isPeriodic = _isPeriodic;
         this.periodValue = _periodValue;
         this.unit = _unit;
+        this.customData = customData;
         
         attributes = new LinkedList<TAttribute> ();
         
@@ -231,6 +240,60 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         addButton = new JButton("Add / Modify " + attrib);
         addButton.addActionListener(this);
         panel1.add(addButton, c1);
+
+        // Custom data
+        String ret = "";
+        LinkedList<Plugin> list = PluginManager.pluginManager.getPluginFPGAScheduling();
+        for (Plugin p : list) {
+            TraceManager.addDev("Found plugin=" + p.getName());
+            String desc = p.getFPGASchedulingIdentifier();
+            if (desc != null) {
+                String tmp = p.executeStaticRetStringOneStringMethod(p.getClassFPGAScheduling(),
+                        "hasCustomData", "Task");
+                if (tmp != null) {
+                    ret += tmp;
+                    if ((ret.length() > 0) && (!(ret.endsWith("|")))) {
+                        ret += "|";
+                    }
+                }
+            }
+        }
+
+
+        if ((ret != null) && (ret.length() > 0)) {
+
+            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+            panel1.add(new JLabel(""), c1);
+            panel1.add(new JLabel("Custom attributes"), c1);
+
+            String custom = customData;
+            if (custom == null) {
+                custom = "";
+            }
+            String[] customs = custom.split("\\|");
+            String[] rets = ret.split("\\|");
+            extraVals = new JTextField[rets.length];
+            labels = new String[rets.length];
+
+            for (int i = 0; i < rets.length; i++) {
+                c1.gridwidth = 1;
+                JLabel lab = new JLabel(rets[i]);
+                panel1.add(new JLabel(rets[i] + ":"), c1);
+                labels[i] = rets[i];
+                c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+                extraVals[i] = new JTextField();
+                for (int j = 0; j < customs.length - 1; j++) {
+                    if (customs[j].compareTo(rets[i]) == 0) {
+                        extraVals[i].setText(customs[j + 1]);
+                        break;
+                    }
+                }
+                panel1.add(extraVals[i], c1);
+            }
+        }
+
+
+
         
         // 1st line panel2
         listAttribute = new JList<TAttribute> (attributes.toArray (new TAttribute[0]));
@@ -634,6 +697,20 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
             return nameField.getText().trim();
         }
         return "";
+    }
+
+    public String getCustomData() {
+        String ret = "";
+
+        if ((labels == null) || (extraVals == null)) {
+            return ret;
+        }
+
+        for(int i=0; i<labels.length; i++) {
+            ret += labels[i] + "|" + extraVals[i].getText() + "|";
+        }
+
+        return ret;
     }
     
 }

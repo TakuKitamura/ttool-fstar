@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":webcrawler-client:main" external.linked.project.path="$MODULE_DIR$/../../../../webcrawler/client" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="ttool" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
+    <output url="file://$MODULE_DIR$/../../../../webcrawler/client/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../src/main/java/myutil">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../src/main/java/myutil" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../src/main/java/ui/util">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../src/main/java/ui/util" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../src/main/java/web/crawler">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../src/main/java/web/crawler" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../webcrawler/client/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../webcrawler/client/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../webcrawler/client/src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :commons-io-2.5:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :derbyclient-10.9.1.0:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :derbynet:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :dom4j-1.6.1:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :derby:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :JavaPlot:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :commons-codec-1.10:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :jsoup-1.8.1:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :jaxen-1.1.6:" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: :opencloud:" level="project" />
+  </component>
+</module>

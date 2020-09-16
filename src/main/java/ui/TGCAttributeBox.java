@@ -199,7 +199,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame,
                 "Setting " + attributeText + "s of " + father.getValue(), attributeText,
-                null, false, false, "", "",null);
+                null, false, false, "", "",null, customData);
         setJDialogOptions(jda);
     //    jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 650, 375);

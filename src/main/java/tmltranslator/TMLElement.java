@@ -53,6 +53,7 @@ import java.util.*;
 public class TMLElement extends DIPLOElement {
     protected Object referenceObject;
     protected String name;
+
     
     public TMLElement(String _name, Object _referenceObject) {
         name = _name;
@@ -74,6 +75,8 @@ public class TMLElement extends DIPLOElement {
 	public String getNameExtension() {
 		return "";
 	}
+
+
 	
 	public void prefixName(String _prefix) {
 		name = _prefix + name;

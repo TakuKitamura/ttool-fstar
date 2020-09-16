@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":webcrawler-server:test" external.linked.project.path="$MODULE_DIR$/../../../../webcrawler/server" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="ttool" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
+    <output-test url="file://$MODULE_DIR$/../../../../webcrawler/server/out/test/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../webcrawler/server/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../webcrawler/server/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../webcrawler/server/src/test/resources" type="java-test-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="webcrawler-server_main" />
+    <orderEntry type="library" name="Gradle: :commons-io-2.5:" level="project" />
+    <orderEntry type="library" name="Gradle: :derbyclient-10.9.1.0:" level="project" />
+    <orderEntry type="library" name="Gradle: :derbynet:" level="project" />
+    <orderEntry type="library" name="Gradle: :dom4j-1.6.1:" level="project" />
+    <orderEntry type="library" name="Gradle: :derby:" level="project" />
+    <orderEntry type="library" name="Gradle: :JavaPlot:" level="project" />
+    <orderEntry type="library" name="Gradle: :jaxen-1.1.6:" level="project" />
+    <orderEntry type="library" name="Gradle: :opencloud:" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="webcrawler-server_main" />
+</module>

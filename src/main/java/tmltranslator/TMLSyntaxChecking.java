@@ -818,13 +818,13 @@ public class TMLSyntaxChecking {
         // Then we find the corresponding CPUs
         for (TMLTask task : tasks) {
             //We collect all the CPUs
-            TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
+            //TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
             for (HwExecutionNode origin : mapping.getAllHwExecutionNodesOfTask(task)) {
                 // And then we check the paths between node and all the nodes of ch
                 for (HwCommunicationNode destination : mapping.getAllCommunicationNodesOfChannel(ch)) {
-                    TraceManager.addDev("Computing path between " + origin.getName() + " and " + destination.getName());
+                    //TraceManager.addDev("Computing path between " + origin.getName() + " and " + destination.getName());
                     if (!mapping.checkPath(origin, destination)) {
-                        TraceManager.addDev("Checking checkPathToMemoryFromCPU: Adding error");
+                        //TraceManager.addDev("Checking checkPathToMemoryFromCPU: Adding error");
                         addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
                         return;
                     }

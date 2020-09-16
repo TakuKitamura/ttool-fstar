@@ -469,6 +469,7 @@ public class TMLTask extends TMLElement {
     public String toXML() {
         String s = new String("<TASK name=\"" + name);
         s += "\" priority=\"" + priority + "\" ";
+        s += " customData=\"" + getCustomData() + "\" ";
         s += " isDaemon=\"" + isDaemon() + "\" ";
         s += " isPeriodic=\"" + isPeriodic() + "\" ";
         s += " periodValue=\"" + getPeriodValue() + "\" ";

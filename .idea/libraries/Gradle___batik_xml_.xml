@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: :batik-xml:">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/batik-xml.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

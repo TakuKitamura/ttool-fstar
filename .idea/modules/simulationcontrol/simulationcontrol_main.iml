@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":simulationcontrol:main" external.linked.project.path="$MODULE_DIR$/../../../simulationcontrol" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="ttool" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
+    <output url="file://$MODULE_DIR$/../../../simulationcontrol/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../simulationcontrol/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../simulationcontrol/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../simulationcontrol/src/main/resources" type="java-resource" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../src/main/java/remotesimulation">
+      <sourceFolder url="file://$MODULE_DIR$/../../../src/main/java/remotesimulation" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

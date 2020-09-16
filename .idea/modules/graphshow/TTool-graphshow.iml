@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":graphshow" external.linked.project.path="$MODULE_DIR$/../../../graphshow" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="ttool" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../graphshow">
+      <excludeFolder url="file://$MODULE_DIR$/../../../graphshow/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../graphshow/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../graphshow/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="graphminimize_main" target="1.7" />
+      <module name="graphminimize_test" target="1.7" />
+      <module name="graphshow_main" target="1.7" />
+      <module name="graphshow_test" target="1.7" />
+      <module name="launcher_main" target="1.7" />
+      <module name="launcher_test" target="1.7" />
+      <module name="rundse_main" target="1.7" />
+      <module name="rundse_test" target="1.7" />
+      <module name="simulationcontrol_main" target="1.7" />
+      <module name="simulationcontrol_test" target="1.7" />
+      <module name="tiftranslator_main" target="1.7" />
+      <module name="tiftranslator_test" target="1.7" />
+      <module name="tmltranslator_main" target="1.7" />
+      <module name="tmltranslator_test" target="1.7" />
+      <module name="ttool-ttool_main" target="1.7" />
+      <module name="ttool-ttool_test" target="1.7" />
+      <module name="webcrawler-client_main" target="1.7" />
+      <module name="webcrawler-client_test" target="1.7" />
+      <module name="webcrawler-server_main" target="1.7" />
+      <module name="webcrawler-server_test" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
