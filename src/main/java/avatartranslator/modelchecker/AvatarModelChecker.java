@@ -81,6 +81,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     // Options
+    private boolean depthSearch;
     private boolean ignoreEmptyTransitions;
     private boolean ignoreConcurrenceBetweenInternalActions;
     private boolean ignoreInternalStates;
@@ -147,6 +148,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             spec = initialSpec.advancedClone();
             //TraceManager.addDev("After clone:\n" + spec);
         }
+        depthSearch = false;
         ignoreEmptyTransitions = true;
         ignoreConcurrenceBetweenInternalActions = true;
         ignoreInternalStates = true;
@@ -212,6 +214,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public void setFreeIntermediateStateCoding(boolean _b) {
         freeIntermediateStateCoding = _b;
+    }
+    
+    public void setSearchType(int searchType) {
+        depthSearch = searchType == 1;
     }
 
     public void setIgnoreEmptyTransitions(boolean _b) {
@@ -459,7 +465,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public boolean startModelCheckingProperties() {
         boolean studyS, studyL, studyR, studyRI, studyAL, genRG, genTrace;
-        boolean emptyTr, ignoreConcurrence;
+        boolean depthS, emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
         if (spec == null) {
@@ -477,6 +483,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         stateLimitRG = false;
         timeLimitRG = false;
+        depthS = depthSearch;
         emptyTr = ignoreEmptyTransitions;
         ignoreConcurrence = ignoreConcurrenceBetweenInternalActions;
         studyR = studyReachability;
@@ -529,9 +536,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         if (studyRI) {
             studyReinit = true;
+            depthSearch = true;
             startModelChecking(nbOfThreads);
             deadlocks += nbOfDeadlocks;
             resetModelChecking();
+            depthSearch = depthS;
             studyReinit = false;
         }
         
@@ -568,6 +577,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             //there is no need to study deadlocks again
             if (deadlocks == 0 || genTrace) {
                 deadlockStop = true;
+                depthSearch = true;
                 counterexample = genTrace;
                 ignoreConcurrenceBetweenInternalActions = true;
                 resetCounterexample();
@@ -577,6 +587,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 resetModelChecking();
                 ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 counterexample = false;
+                depthSearch = depthS;
                 deadlockStop = false;
             }
         }
@@ -1312,7 +1323,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (studySafety) {
                     actionOnProperty(newState, i, similar, _ss);
                 } else {
-                    pendingStates.add(newState);
+                    if (depthSearch && i == 0) {
+                        pendingStates.add(0, newState);
+                    } else {
+                        pendingStates.add(newState);
+                    }
                     if (counterexample && deadlockStop) {
                         //Register counterexample trace
                         actionOnProperty(newState, i, similar, _ss);
@@ -1419,7 +1434,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     if (studySafety) {
                         actionOnProperty(newState, 0, similar, _ss);
                     } else {
-                        pendingStates.add(newState);
+                        if (depthSearch) {
+                            pendingStates.add(0, newState);
+                        } else {
+                            pendingStates.add(newState);
+                        }
                         if (counterexample && deadlockStop) {
                             //Register counterexample trace
                             actionOnProperty(newState, 0, similar, _ss);
@@ -1512,7 +1531,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     if (studySafety) {
                         actionOnProperty(newState, 0, similar, _ss);
                     } else {
-                        pendingStates.add(newState);
+                        if (depthSearch) {
+                            pendingStates.add(0, newState);
+                        } else {
+                            pendingStates.add(newState);
+                        }
                         if (counterexample && deadlockStop) {
                             //Register counterexample trace
                             actionOnProperty(newState, 0, similar, _ss);

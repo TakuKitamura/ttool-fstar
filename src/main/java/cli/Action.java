@@ -854,6 +854,7 @@ public class Action extends Command {
                     + "-q \"QUERY\"\tquery a safety pragma\n"
                     + "-d\tno deadlocks check\n"
                     + "-i\ttest model reinitialization\n"
+                    + "-dfs\tDFS search preferred over BFS\n"
                     + "-a\tno internal actions loops check\n"
                     + "-n NUM\tmaximum states created (Only for a non verification study)\n"
                     + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
@@ -975,6 +976,10 @@ public class Action extends Command {
                             //reinitialization
                             amc.setReinitAnalysis(true);
                             reinit = true;
+                            break;
+                        case "-dfs":
+                            //internal action loops
+                            amc.setSearchType(1);
                             break;
                         case "-a":
                             //internal action loops
