@@ -607,6 +607,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
     @Override
     public void run() {
+        long timeBeg = 0;
 
         //  String cmd1 = "";
         // String data1;
@@ -650,6 +651,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
               workQuery("A[] not deadlock", fileName, trace_id, rshc);
               trace_id++;
               }*/
+
+            timeBeg = System.currentTimeMillis();
 
             if (deadlockA.isSelected() && (mode != NOT_STARTED)) {
                 jta.append("\n\n--------------------------------------------\n");
@@ -812,6 +815,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 mgui.modelBacktracingUPPAAL(verifMap);
             }
 
+            long timeEnd = System.currentTimeMillis();
+            TraceManager.addDev("************** Overall time: " + (timeEnd - timeBeg) + " ms");
+
             //Removing files
             deleteFile(fn + ".xml");
             deleteFile(fn + ".q");
@@ -860,6 +866,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 return;
             }
         }
+
+
+
 
         mode = NOT_STARTED;
         setButtons();

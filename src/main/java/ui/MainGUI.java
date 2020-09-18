@@ -5076,7 +5076,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(),
                 SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
-        GraphicLib.centerOnParent(jmc, 650, 850);
+        GraphicLib.centerOnParent(jmc, 800, 850);
         jmc.setVisible(true);
     }
 

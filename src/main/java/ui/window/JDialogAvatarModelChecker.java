@@ -749,7 +749,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         //   hasError = false;
 
-        TraceManager.addDev("Thread started");
+        TraceManager.addDev("Model checker started");
+        long timeBeg = System.currentTimeMillis();
+
         //   File testFile;
         try {
             reinitValues();
@@ -890,6 +892,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
             
             TraceManager.addDev("Model checking done");
+
+
+
             //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
             /*if (generateDesignSelected) {
@@ -1016,6 +1021,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 }
             }
 
+            long timeEnd = System.currentTimeMillis();
+            TraceManager.addDev("Overall time: " + (timeEnd - timeBeg) + " ms");
+
             if (saveGraphAUT.isSelected()) {
                 graphAUT = amc.toAUT();
                 graphMode = GRAPH_OK;
@@ -1065,6 +1073,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         
         amc = null;
+
+
 
         jta.append("\n\nReady to process next command\n");
 
