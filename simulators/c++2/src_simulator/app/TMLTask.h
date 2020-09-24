@@ -241,7 +241,7 @@ public:
 	void schedule2HTML(std::ofstream& myfile) const;
 	bool getIsDaemon() {return _isDaemon;};
 	bool getIsFirstTranExecuted() {return _isFirstTranExecuted;};
-	inline bool setIsFirstTranExecuted(bool x) {_isFirstTranExecuted = x;};
+	inline void setIsFirstTranExecuted(bool x) {_isFirstTranExecuted = x;};
 protected:
 	///ID of the task
 	ID _ID;

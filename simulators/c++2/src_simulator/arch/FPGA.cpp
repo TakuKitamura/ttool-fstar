@@ -243,7 +243,7 @@ std::cout<<"fpga addTransaction"<<std::endl;
       _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
     if(_reconfigNumber>0) {
         if(!_nextTransaction->getCommand()->getTask()->getIsFirstTranExecuted()) {
-            _nextTransaction->setStartTime(_maxEndTime+_reconfigNumber*_reconfigTime);
+            _nextTransaction->setStartTime(_maxEndTime + _reconfigNumber * _reconfigTime);
             _nextTransaction->getCommand()->getTask()->setIsFirstTranExecuted(true);
         }
     }
