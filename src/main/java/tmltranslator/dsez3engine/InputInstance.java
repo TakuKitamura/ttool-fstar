@@ -1,3 +1,9 @@
+/* Copyright or (C) 2017-2020 Nokia
+ * Copyright or (C) GET / ENST, Telecom-Paris
+ * Licensed under the BSD 3 Clause license
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
 package tmltranslator.dsez3engine;
 
 import myutil.TraceManager;
