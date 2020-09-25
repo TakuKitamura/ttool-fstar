@@ -60,10 +60,10 @@ public class DiplodocusDelayTest extends AbstractUITest {
 
     // test for reconfiguration of FPGA
     final String [] MODELS_FPGA_RECONFIG = {"fpga_reconfig1", "fpga_reconfig2", "fpga_reconfig3", "fpga_reconfig4", "fpga_reconfig5"};
-    final int [] NB_Of_FPGA_STATES = {14, 14, 15, 14, 15};
-    final int [] NB_Of_FPGA_TRANSTIONS = {13, 13, 14, 13, 14};
-    final int [] MIN_FPGA_CYCLES = {48, 43, 46, 40, 43};
-    final int [] MAX_FPGA_CYCLES = {48, 43, 46, 40, 43};
+    final int [] NB_Of_FPGA_STATES = {20, 20, 20, 20, 20};
+    final int [] NB_Of_FPGA_TRANSTIONS = {19, 19, 19, 19, 19};
+    final int [] MIN_FPGA_CYCLES = {90, 83, 77, 70, 75};
+    final int [] MAX_FPGA_CYCLES = {90, 83, 77, 70, 75};
     private String SIM_DIR;
 
 
