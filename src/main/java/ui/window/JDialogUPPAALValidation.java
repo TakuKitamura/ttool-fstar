@@ -596,7 +596,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 jta.append("Using default size");
             }
 
-            //TraceManager.addDev("spec=" + spec);
+            TraceManager.addDev("spec=" + spec);
         }
 
         t = new Thread(this);

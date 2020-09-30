@@ -17,7 +17,7 @@ dependencies {
     compileOnly name: 'commons-codec-1.10'
     compileOnly name: 'commons-io-2.5'
     compileOnly name: 'jsoup-1.8.1'
-    compileOnly name: 'gs-core-1.3'
+    compileOnly name: 'gs-core-2.0'
     
     compile name: 'batik-codec'
     compile name: 'batik-constants'
