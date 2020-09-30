@@ -42,9 +42,15 @@ package graph;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import myutil.TraceManager;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AbstractEdge;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.MultiNode;
+import org.graphstream.ui.swing.SwingGraphRenderer;
+import org.graphstream.ui.swing_viewer.DefaultView;
+import org.graphstream.ui.swing_viewer.SwingViewer;
+import org.graphstream.ui.swing_viewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.ViewerListener;
 import org.graphstream.ui.view.ViewerPipe;
@@ -75,11 +81,11 @@ import java.util.logging.Logger;
 public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable {
 
     protected AUTGraph graph;
-    protected Viewer viewer;
+    protected SwingViewer viewer;
     protected MultiGraph vGraph;
     protected boolean loop;
-    protected MultiNode firstNode;
-    protected ArrayList<AbstractEdge> edges;
+    protected Node firstNode;
+    protected ArrayList<Edge> edges;
     protected boolean exitOnClose = false;
 
     // see http://graphstream-project.org/doc/Advanced-Concepts/GraphStream-CSS-Reference/
@@ -87,7 +93,17 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
 
     protected static String STYLE_SHEET = "node {fill-color: #B1CAF1; text-color: black; size: 11px, 11px;} node.init " +
             "{fill-color:green; text-color: black; size: 15px, 15px;} node.deadlock {fill-color: red; text-color: white; size: 15px," +
-            "15px;} edge {text-color: blue; shape: cubic-curve;} edge.external {text-color: red; text-style: bold} ";
+            "15px;} edge {text-color: blue; shape: cubic-curve;} edge.defaultedge {text-color: blue; shape: cubic-curve;} edge.external " +
+            "{text-color: red; text-style: bold} ";
+
+    protected static String STYLE_SHEET2 = "graph {  canvas-color: white; fill-mode: gradient-vertical; fill-color: white, #004; padding: 20px;  } " +
+            "node { shape: circle; size-mode: dyn-size; size: 10px; fill-mode: gradient-radial; fill-color: #FFFC, #FFF0; stroke-mode: none; " +
+            "shadow-mode: gradient-radial; shadow-color: #FFF5, #FFF0; shadow-width: 5px; shadow-offset: 0px, 0px; } " +
+            "node: clicked { fill-color: #F00A, #F000;  } node: selected { fill-color: #00FA, #00F0;  } " +
+            "edge { shape: angle; size: 1px; fill-color: red; fill-mode: plain; arrow-shape: circle; } " +
+            "edge.defaultedge { shape: curve-cubic; size: 1px; fill-color: #FFF3; fill-mode: plain; arrow-shape: none; } " +
+            "edge.external { shape: L-square-line; size: 3px; fill-color: #AAA3; fill-mode: plain; arrow-shape: circle; } " +
+            "sprite { shape: circle; fill-mode: gradient-radial; fill-color: #FFF8, #FFF0; }";
 
     /*public static String STYLE_SHEET =
             "node {" +
@@ -113,8 +129,8 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
 
 
     public void display() {
-        MultiNode node;
-        AbstractEdge edge;
+        Node node;
+        Edge edge;
 
         Logger l0 = Logger.getLogger("");
         try {
@@ -127,30 +143,33 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         vGraph = new MultiGraph("TTool graph");
-        if ((ConfigurationTTool.RGStyleSheet != null) && (ConfigurationTTool.RGStyleSheet.trim().length() > 0)) {
+        /*if ((ConfigurationTTool.RGStyleSheet != null) && (ConfigurationTTool.RGStyleSheet.trim().length() > 0)) {
             TraceManager.addDev("Adding stylesheet:" + ConfigurationTTool.RGStyleSheet + "\n\nvs default:" + STYLE_SHEET);
             vGraph.addAttribute("ui.stylesheet", ConfigurationTTool.RGStyleSheet);
         } else {
             vGraph.addAttribute("ui.stylesheet", STYLE_SHEET);
-        }
+        }*/
+        vGraph.setAttribute("ui.stylesheet", STYLE_SHEET);
+
+
         //vGraph.addAttribute("layout.weight", 0.5);
         int cpt = 0;
         graph.computeStates();
         for (AUTState state : graph.getStates()) {
             node = vGraph.addNode("" + state.id);
-            node.addAttribute("ui.label", "" + state.id);
+            node.setAttribute("ui.label", "" + state.id);
             if (state.getNbOutTransitions() == 0) {
-                node.addAttribute("ui.class", "deadlock");
+                node.setAttribute("ui.class", "deadlock");
             }
             if (cpt == 0) {
-                node.addAttribute("ui.class", "init");
+                node.setAttribute("ui.class", "init");
                 firstNode = node;
             }
             cpt++;
         }
         cpt = 0;
-        TraceManager.addDev("Here we are!");
-        edges = new ArrayList<AbstractEdge>(graph.getTransitions().size());
+        //TraceManager.addDev("Here we are!");
+        edges = new ArrayList<Edge>(graph.getTransitions().size());
         HashSet<AUTTransition> transitionsMet = new HashSet<>();
         for (AUTTransition transition : graph.getTransitions()) {
             edge = vGraph.addEdge("" + cpt, "" + transition.origin, "" + transition.destination, true);
@@ -158,19 +177,23 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
               String tmp = Conversion.replaceAllChar(transition.transition, '(', "$");
               tmp = Conversion.replaceAllChar(tmp, ')', "$");
               TraceManager.addDev("Transition=" + tmp);*/
-            edge.addAttribute("ui.label", graph.getCompoundString(transition, transitionsMet));
-            edge.addAttribute("ui.class", "defaultedge");
-            edge.addAttribute("layout.weight", 0.4);
-            if (!(transition.transition.startsWith("i("))) {
+            edge.setAttribute("ui.label", graph.getCompoundString(transition, transitionsMet));
+            //edge.addAttribute("ui.class", "edge");
+            //edge.addAttribute("shape", "cubic-curve");
+            //edge.addAttribute("arrow-shape", "circle");
+            //edge.addAttribute("layout.weight", 0.4);
+            /*if (!(transition.transition.startsWith("i("))) {
                 edge.addAttribute("ui.class", "external");
-            }
+            } else {
+                edge.addAttribute("ui.class", "defaultedge");
+            }*/
             edges.add(edge);
             cpt++;
         }
         //viewer = vGraph.display();
         //viewer = new Viewer(vGraph, Viewer.ThreadingModel.GRAPH_IN_SWING_THREAD);
 
-        viewer = new Viewer(vGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        viewer = new SwingViewer(vGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         //SwingUtilities.invokeLater(new InitializeApplication(viewer, vGraph));
         viewer.enableAutoLayout();
         //View   vi = viewer.addDefaultView(true);
@@ -259,8 +282,8 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
 
     public void displaySwing() {
         vGraph = new MultiGraph("mg");
-        vGraph.addAttribute("ui.stylesheet", STYLE_SHEET);
-        viewer = new Viewer(vGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        vGraph.setAttribute("ui.stylesheet", STYLE_SHEET);
+        viewer = new SwingViewer(vGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         SwingUtilities.invokeLater(new InitializeApplication(viewer, vGraph, graph));
     }
 
@@ -287,15 +310,26 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
                 + e.getClickCount() + ")");
     }
 
+
+    public void mouseOver(java.lang.String id){}
+
+
+
+    public void mouseLeft(java.lang.String id){}
+
+
+
+
+
     class InitializeApplication extends JFrame implements Runnable {
         private static final long serialVersionUID = -804177406404724792L;
         protected MultiGraph vGraph;
-        protected Viewer viewer;
+        protected SwingViewer viewer;
         protected AUTGraph graph;
-        protected MultiNode firstNode;
+        protected Node firstNode;
 
 
-        public InitializeApplication(Viewer viewer, MultiGraph vGraph, AUTGraph autgraph) {
+        public InitializeApplication(SwingViewer viewer, MultiGraph vGraph, AUTGraph autgraph) {
             this.viewer = viewer;
             this.vGraph = vGraph;
             this.graph = autgraph;
@@ -303,16 +337,16 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
 
         public void run() {
             int cpt = 0;
-            MultiNode node;
-            AbstractEdge edge;
+            Node node;
+            Edge edge;
             for (AUTState state : graph.getStates()) {
                 node = vGraph.addNode("" + state.id);
-                node.addAttribute("ui.label", "" + state.id);
+                node.setAttribute("ui.label", "" + state.id);
                 if (state.getNbOutTransitions() == 0) {
-                    node.addAttribute("ui.class", "deadlock");
+                    node.setAttribute("ui.class", "deadlock");
                 }
                 if (cpt == 0) {
-                    node.addAttribute("ui.class", "init");
+                    node.setAttribute("ui.class", "init");
                     firstNode = node;
                 }
                 cpt++;
@@ -329,18 +363,19 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
                   String tmp = Conversion.replaceAllChar(transition.transition, '(', "$");
                   tmp = Conversion.replaceAllChar(tmp, ')', "$");
                   TraceManager.addDev("Transition=" + tmp);*/
-                edge.addAttribute("ui.label", transition.transition);
-                edge.addAttribute("ui.class", "classic");
+                edge.setAttribute("ui.label", transition.transition);
+                edge.setAttribute("ui.class", "classic");
                 if (!(transition.transition.startsWith("i("))) {
-                    edge.addAttribute("ui.class", "external");
+                    edge.setAttribute("ui.class", "external");
                 }
                 cpt++;
 
             }
 
             viewer.enableAutoLayout();
-
-            add(viewer.addDefaultView(true), BorderLayout.CENTER);
+            DefaultView dv = new DefaultView(viewer, "Graph", new SwingGraphRenderer());
+            //ViewPanel vp = viewer.addDefaultView(true, new SwingGraphRenderer());
+            add(dv, BorderLayout.CENTER);
             setDefaultCloseOperation(EXIT_ON_CLOSE);
             setSize(800, 600);
             setVisible(true);
@@ -350,10 +385,10 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
 
     class BasicFrame extends JFrame implements ActionListener {
         protected MultiGraph vGraph;
-        protected Viewer viewer;
+        protected SwingViewer viewer;
         protected JPanel viewerPanel;
         protected AUTGraph graph;
-        protected ArrayList<AbstractEdge> edges;
+        protected ArrayList<Edge> edges;
 
         protected JButton close;
         protected JButton screenshot;
@@ -367,7 +402,8 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         private AUTGraphDisplay autD;
 
 
-        public BasicFrame(AUTGraphDisplay autD, Viewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<AbstractEdge> _edges, boolean _exitOnClose) {
+        public BasicFrame(AUTGraphDisplay autD, SwingViewer viewer, MultiGraph vGraph, AUTGraph autgraph, ArrayList<Edge> _edges,
+                          boolean _exitOnClose) {
             this.autD = autD;
             this.viewer = viewer;
             this.vGraph = vGraph;
@@ -382,8 +418,9 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         }
 
         public void makeComponents() {
-            viewerPanel = viewer.addDefaultView(false);
-            add(viewerPanel, BorderLayout.CENTER);
+            DefaultView dv = new DefaultView(viewer, "Graph", new SwingGraphRenderer());
+            //viewerPanel = viewer.addDefaultView(false);
+            add(dv, BorderLayout.CENTER);
             //add(viewer, BorderLayout.CENTER );
             close = new JButton("Close", IconManager.imgic27);
             close.addActionListener(this);
@@ -524,9 +561,9 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
             for (AUTTransition transition : graph.getTransitions()) {
                 if (transition.transition.startsWith("i(")) {
                     if (internalActions.isSelected()) {
-                        edges.get(cpt).addAttribute("ui.label", transition.transition);
+                        edges.get(cpt).setAttribute("ui.label", transition.transition);
                     } else {
-                        edges.get(cpt).addAttribute("ui.label", "");
+                        edges.get(cpt).setAttribute("ui.label", "");
                     }
                 }
                 cpt++;
@@ -541,9 +578,9 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
             for (AUTTransition transition : graph.getTransitions()) {
                 if (transition.transition.contains("?")) {
                     if (readActions.isSelected()) {
-                        edges.get(cpt).addAttribute("ui.label", transition.transition);
+                        edges.get(cpt).setAttribute("ui.label", transition.transition);
                     } else {
-                        edges.get(cpt).addAttribute("ui.label", "");
+                        edges.get(cpt).setAttribute("ui.label", "");
                     }
                 }
                 cpt++;
@@ -553,7 +590,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         public void manageHigherQuality() {
             viewer.disableAutoLayout();
             if (higherQuality.isSelected()) {
-                vGraph.addAttribute("ui.quality");
+                vGraph.setAttribute("ui.quality");
             } else {
                 vGraph.removeAttribute("ui.quality");
             }
@@ -566,7 +603,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         public void manageAntialiasing() {
             viewer.disableAutoLayout();
             if (antialiasing.isSelected()) {
-                vGraph.addAttribute("ui.antialias");
+                vGraph.setAttribute("ui.antialias");
             } else {
                 vGraph.removeAttribute("ui.antialias");
             }
