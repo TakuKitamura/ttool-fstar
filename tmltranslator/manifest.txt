@@ -1,2 +1,2 @@
 Main-Class: TMLTranslator
-Class-Path: com.microsoft.z3.jar commons-io-2.5.jar commons-math3-3.6.1.jar commons-codec-1.10.jar json-java.jar
+Class-Path: com.microsoft.z3.jar commons-io-2.5.jar commons-math3-3.6.1.jar commons-codec-1.10.jar json-java.jar gs-core-2.0.jar
