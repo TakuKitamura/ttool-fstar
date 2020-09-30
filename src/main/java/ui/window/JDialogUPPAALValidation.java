@@ -608,6 +608,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     @Override
     public void run() {
         long timeBeg = 0;
+        long timeSendSpecBeg = 0;
 
         //  String cmd1 = "";
         // String data1;
@@ -619,6 +620,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         String fn;
         int result;
 
+        timeSendSpecBeg = System.currentTimeMillis();
         rshc = new RshClient(host);
         RshClient rshctmp = rshc;
         
@@ -816,6 +818,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
 
             long timeEnd = System.currentTimeMillis();
+            TraceManager.addDev("************** Send spec time: " + (timeBeg - timeSendSpecBeg) + " ms");
             TraceManager.addDev("************** Overall time: " + (timeEnd - timeBeg) + " ms");
 
             //Removing files

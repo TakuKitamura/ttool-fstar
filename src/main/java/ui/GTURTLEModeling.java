@@ -664,6 +664,8 @@ public class GTURTLEModeling {
     }
 
     public boolean generateUPPAALFromAVATAR(String _path) {
+        long timeBeg, timeEnd;
+        timeBeg = System.currentTimeMillis();
         if (avatarspec == null) {
             TraceManager.addDev("Null avatar spec");
             return false;
@@ -680,11 +682,14 @@ public class GTURTLEModeling {
         //uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
         try {
             avatar2uppaal.saveInFile(_path);
+            timeEnd = System.currentTimeMillis();
+            TraceManager.addDev("Total time toUPPAAL: " + (timeEnd-timeBeg) + " ms");
             return true;
         } catch (FileException fe) {
             TraceManager.addError("Exception: " + fe.getMessage());
             return false;
         }
+
     }
 
     public AvatarSpecification getAvatarSpecification() {
