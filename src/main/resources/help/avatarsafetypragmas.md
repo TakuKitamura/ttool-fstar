@@ -43,7 +43,7 @@ means that the attribute "x" of block "Block1" is always strictly positive.
 ## E<> properties
 
 <center>
-![](file:../help/ctleall_small.png)
+![](file:../help/ctleone_small.png)
 </center>
 
 
