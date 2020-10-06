@@ -63,6 +63,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private AvatarSpecification initialSpec;
     private AvatarSpecification spec;
     private int nbOfThreads = DEFAULT_NB_OF_THREADS;
+    private int maxNbOfThreads = Integer.MAX_VALUE;
     private int nbOfCurrentComputations;
     private boolean stoppedBeforeEnd;
     private boolean stoppedConditionReached;
@@ -211,6 +212,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         stateID ++;
         return tmp;
 	}*/
+
+
 
     public void setFreeIntermediateStateCoding(boolean _b) {
         freeIntermediateStateCoding = _b;
@@ -635,7 +638,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         startModelChecking(nbOfThreads);
         TraceManager.addDev("Model checking done");
     }
-    
+
+    public void setMaxNbOfThreads(int _maxNbOfThreads) {
+        maxNbOfThreads = _maxNbOfThreads;
+    }
+
 
     public boolean hasBeenStoppedBeforeCompletion() {
         return stoppedBeforeEnd;
@@ -929,6 +936,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         prepareBlocks();
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
+        nbOfThreads = Math.min(nbOfThreads, maxNbOfThreads);
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
     }
@@ -962,7 +970,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
         }
 
-        TraceManager.addDev("Threads terminated");
+        //TraceManager.addDev("Threads terminated");
 
         // Set to non reachable not computed elements
         if ((studyReachability) && (!stoppedBeforeEnd)) {

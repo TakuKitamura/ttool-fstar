@@ -118,6 +118,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static String timeLimitValue;
     protected static int wordRepresentationSelected = 1;
     protected static int searchTypeSelected = 0;
+    protected static String maxNbOfThreads = "";
 
     protected MainGUI mgui;
 
@@ -174,6 +175,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JTextField countertraceField;
     protected JButton checkUncheckAllPragmas;
     protected java.util.List<JCheckBox> customChecks;
+    protected JTextField maxNbOfThreadsText;
+
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
@@ -182,7 +185,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JScrollPane jsp;
 
     // Information
-    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, nbOfDeadlocks, nbOfReachabilities, nbOfReachabilitiesNotFound, info;
+    protected JLabel nbOfStates, nbOfLinks, nbOfPendingStates, elapsedTime, nbOfStatesPerSecond, nbOfDeadlocks,
+            nbOfReachabilities, nbOfReachabilitiesNotFound, info;
 
 
     private Thread t;
@@ -195,7 +199,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     /*
      * Creates new form
      */
-    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir, boolean _showLiveness) {
+    public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir,
+                                     boolean _showLiveness) {
         super(title);
 
         mgui = _mgui;
@@ -308,6 +313,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         wordRepresentationBox.setSelectedIndex(wordRepresentationSelected);
         wordRepresentationBox.addActionListener(this);
         jp01.add(wordRepresentationBox, c01);
+
+        c01.gridwidth = 1;
+        jp01.add(new JLabel("Max nb of threads:"), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER;
+        maxNbOfThreadsText = new JTextField(maxNbOfThreads);
+        jp01.add(maxNbOfThreadsText, c01);
 
 
         ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
@@ -685,6 +696,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             stopProcess();
         }
         dispose();
+        maxNbOfThreads = maxNbOfThreadsText.getText();
         if (timer != null) {
             timer.cancel();
             timer.purge();
@@ -749,6 +761,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         //   hasError = false;
 
+        int nbOfThreads = Integer.MAX_VALUE;
+        try {
+            nbOfThreads = Integer.decode(maxNbOfThreadsText.getText());
+        }  catch(Exception e) {
+
+        }
+
         TraceManager.addDev("Model checker started");
         long timeBeg = System.currentTimeMillis();
 
@@ -758,6 +777,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             jta.append("Starting the model checker\n");
 
             amc = new AvatarModelChecker(spec);
+
+            if (nbOfThreads < Integer.MAX_VALUE) {
+                TraceManager.addDev("Setting the nb of thrads to:" + nbOfThreads);
+                amc.setMaxNbOfThreads(nbOfThreads);
+            }
 
             if (generateDesignSelected) {
                 TraceManager.addDev("Drawing non modified avatar spec");
