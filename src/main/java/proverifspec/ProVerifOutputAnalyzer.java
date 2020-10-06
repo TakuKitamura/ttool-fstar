@@ -43,6 +43,10 @@ package proverifspec;
 
 import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;
+//import com.sun.org.apache.xpath.internal.operations.String;
+import common.ConfigurationTTool;
+import myutil.FileUtils;
+import myutil.TraceManager;
 
 import java.io.Reader;
 import java.io.BufferedReader;
@@ -130,12 +134,17 @@ public class ProVerifOutputAnalyzer {
         Pattern procPattern = Pattern.compile(" *\\{\\d+\\}(.*)");
 
         try {
+            StringBuffer sb = new StringBuffer("");
 
             // Loop through every line in the output
             while ((str = bReader.readLine()) != null)
             {
+                sb.append(str + "\n");
+
                 if (str.isEmpty())
                     continue;
+
+                //TraceManager.addDev("Analyzing trace:" + str);
 
                 Matcher m = procPattern.matcher(str);
 
@@ -379,6 +388,17 @@ public class ProVerifOutputAnalyzer {
                 }
 
                 previous = str;
+            }
+
+            // Write trace to a file.
+            int c = (int)(Math.random() * 100000);
+            TraceManager.addDev("Saving trace in file " + sb.length() + " bytes in " + ConfigurationTTool.ProVerifCodeDirectory + "trace_" + c +
+                    ".txt");
+            try {
+                FileUtils.saveFile(ConfigurationTTool.ProVerifCodeDirectory + "trace_" + c + ".txt", sb.toString());
+                TraceManager.addDev("Saving trace in file done");
+            } catch (Exception e) {
+                TraceManager.addDev("Saving trace in file failed");
             }
 
 

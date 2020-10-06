@@ -78,6 +78,7 @@ public class ProVerifResultTrace {
         ProVerifResultTrace.blockNamePattern = Pattern.compile("let \\(=sessionID,=call" + AVATAR2ProVerif.ATTR_DELIM + "(.+?)" + AVATAR2ProVerif.ATTR_DELIM + ".*");
     }
 
+    /////// OutStep ///////
     private class OutStep implements ProVerifResultTraceStep {
         private String from;
         private String to;
@@ -101,14 +102,15 @@ public class ProVerifResultTrace {
             this.to = to;
         }
 
-        public boolean isToAttacker()
-        {
+        public boolean isToAttacker() {
+            if (to == null) {
+                return false;
+            }
             return this.to.equals("Attacker");
         }
 
         @Override
-        public String describeAsString(AvatarDesignPanel adp)
-        {
+        public String describeAsString(AvatarDesignPanel adp) {
             return "MSG " + this.from + " -- " + this.channel + " --> " + this.to + " : " + ProVerifResultTrace.this.replaceAllAttributeNames(adp, this.message).replaceAll(",", ", ");
         }
 
@@ -191,8 +193,7 @@ public class ProVerifResultTrace {
         }
     }
 
-    public ProVerifResultTrace(List<String> proverifProcess)
-    {
+    public ProVerifResultTrace(List<String> proverifProcess) {
         this.proverifProcess = proverifProcess;
         this.trace = new LinkedList<ProVerifResultTraceStep> ();
         this.attackerNamesMap = new HashMap<String, Integer> ();
@@ -204,11 +205,10 @@ public class ProVerifResultTrace {
         return this.trace;
     }
 
-    public void addTraceStep(String str)
-    {
+    public void addTraceStep(String str) {
+        TraceManager.addDev("Adding this step:" + str);
         Matcher m = tracePattern.matcher(str);
-        if (m.matches())
-        {
+        if (m.matches()) {
             this.finalizeStep();
             this.buffer = new StringBuilder();
             str = m.group(1);
@@ -217,8 +217,7 @@ public class ProVerifResultTrace {
         this.buffer.append(str);
     }
 
-    private String replaceAttributeName(AvatarDesignPanel adp, String str)
-    {
+    private String replaceAttributeName(AvatarDesignPanel adp, String str) {
         Matcher m = ProVerifResultTrace.attrPattern.matcher(str);
         if (m.matches())
         {
@@ -380,13 +379,12 @@ public class ProVerifResultTrace {
         return null;
     }
 
-    private String consumePrecondition(String str)
-    {
+    private String consumePrecondition(String str) {
+        //TraceManager.addDev("Consume precondition:" + str);
         try {
             Pattern p = Pattern.compile("The message (.+?) that the attacker may have by (.+?) may be received at input \\{(.+?)\\}\\.(.*)");
             Matcher m = p.matcher(str);
-            if (m.matches())
-            {
+            if (m.matches()) {
                 String msgName = m.group(1);
 
                 if (msgName.startsWith("chControlEnc")
@@ -403,13 +401,10 @@ public class ProVerifResultTrace {
                 }
 
                 boolean foundAStep = false;
-                for (ProVerifResultTraceStep step: this.trace)
-                {
-                    if (step instanceof OutStep)
-                    {
+                for (ProVerifResultTraceStep step: this.trace) {
+                    if (step instanceof OutStep) {
                         OutStep out = (OutStep) step;
-                        if (out.messageEquals(msgName) && out.isToAttacker())
-                        {
+                        if (out.messageEquals(msgName) && out.isToAttacker()) {
                             foundAStep = true;
                             out.setTo(this.getBlockNameFromLine(Integer.parseInt(m.group(3))));
                             break;
@@ -449,15 +444,13 @@ public class ProVerifResultTrace {
         return null;
     }
 
-    private void finalizeStep()
-    {
+    private void finalizeStep() {
         if (this.buffer == null)
             return;
 
         String str = this.buffer.toString();
         String newStr = str;
-        while (newStr != null)
-        {
+        while (newStr != null) {
             str = newStr;
             newStr = this.consumePrecondition(newStr);
         }

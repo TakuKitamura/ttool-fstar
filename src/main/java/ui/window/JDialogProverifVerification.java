@@ -898,7 +898,11 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                     this.pvoa = mgui.gtm.getProVerifOutputAnalyzer();
                     this.pvoa.addListener(this);
                 }
-                this.pvoa.analyzeOutput(reader, typedLanguage.isSelected());
+                //try {
+                    this.pvoa.analyzeOutput(reader, typedLanguage.isSelected());
+                /*} catch (Exception e) {
+                    TraceManager.addDev("Traces could not be analyzed: " + e.getMessage());
+                }*/
 
                 mgui.modelBacktracingProVerif(pvoa);
 
@@ -916,7 +920,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             System.err.println(e.getMessage() + " : Can't generate proverif file.");
         } catch (Exception e) {
             mode = STOPPED;
-            throw e;
+            TraceManager.addDev("General exception in ProVerif proof or trace generation: " + e.getMessage());
+            //throw e;
         }
 
 
