@@ -241,9 +241,12 @@ std::cout<<"fpga addTransaction"<<std::endl;
     //std::cout<<"end schedule is ~~~~~~~"<<_endSchedule<<std::endl;
     if(_endSchedule == 0 && (!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))) 
       _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
-    if(_reconfigNumber>0)
-      _nextTransaction->setStartTime(_maxEndTime+_reconfigNumber*_reconfigTime);
-//      _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
+    if(_reconfigNumber>0) {
+        if(!_nextTransaction->getCommand()->getTask()->getIsFirstTranExecuted()) {
+            _nextTransaction->setStartTime(_maxEndTime + _reconfigNumber * _reconfigTime);
+            _nextTransaction->getCommand()->getTask()->setIsFirstTranExecuted(true);
+        }
+    }
     else{
       _endSchedule=0;
       
@@ -376,7 +379,11 @@ void FPGA::reset(){
   _lastTransaction=0;
   _masterNextTransaction=0;
   _busyCycles=0;
+  _maxEndTime = 0;
   maxScale = 0;
+  for(TaskList::const_iterator i = _taskList.begin(); i!= _taskList.end(); ++i){
+    (*i)->setIsFirstTranExecuted(false);
+  }
 }
 
 void FPGA::schedule2TXT(std::ofstream& myfile) const{
@@ -609,7 +616,7 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
     } else {
         if(_startFlagHTML == true){
             myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "</td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
-        } else {
+        } else if (_htmlCurrTask->getEndLastTransaction() > 0) {
             myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(_htmlCurrTask) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;border-style: none none none none;\"></td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";
         }
         TMLTime aCurrTime = 0;
@@ -637,8 +644,8 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
         bool isBlankTooBig = false;
         std::ostringstream tempString;
         int tempBlanks;
-        if(_htmlCurrTask->getEndLastTransaction() >= 250 && aBlanks >10) {
-            int newBlanks = 10;
+        if(_htmlCurrTask->getEndLastTransaction() >= MIN_RESIZE_THRESHOLD && aBlanks > MIN_RESIZE_TRANS) {
+            int newBlanks = MIN_RESIZE_TRANS;
             tempBlanks = aBlanks;
             tempReduce += aBlanks - newBlanks;
             aBlanks = newBlanks;
@@ -676,9 +683,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
         unsigned int indexTrans=aCurrTransName.find_first_of(":");
         std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
         if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
-          if(_htmlCurrTask->getEndLastTransaction() >= 250 && aLength >10){
-              tempReduce += aLength - 10;
-              aLength = 10;
+          if(_htmlCurrTask->getEndLastTransaction() >= MIN_RESIZE_THRESHOLD && aLength > MIN_RESIZE_TRANS){
+              tempReduce += aLength - MIN_RESIZE_TRANS;
+              aLength = MIN_RESIZE_TRANS;
           }
           std::string aCurrFullTransName = aCurrTrans->toString();
           unsigned int indexTrans1 = aCurrFullTransName.find("len:");
