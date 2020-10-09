@@ -240,8 +240,6 @@ public:
 	unsigned int getNextCellIndex() const {return _nextCellIndex;}
 	void schedule2HTML(std::ofstream& myfile) const;
 	bool getIsDaemon() {return _isDaemon;};
-	bool getIsFirstTranExecuted() {return _isFirstTranExecuted;};
-	inline void setIsFirstTranExecuted(bool x) {_isFirstTranExecuted = x;};
 protected:
 	///ID of the task
 	ID _ID;
@@ -266,7 +264,6 @@ protected:
 	///Number of cores assigned to the task
 	unsigned int _noOfFPGAs;
 	bool _isDaemon;
-	bool _isFirstTranExecuted;
 	unsigned int _nextCellIndex;
 
 #ifdef ADD_COMMENTS

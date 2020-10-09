@@ -45,7 +45,8 @@ ReconfigScheduler::ReconfigScheduler(const std::string& iName, Priority iPrio, c
 
 ReconfigScheduler::ReconfigScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources, const std::string iTaskOrder): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _taskOrder(iTaskOrder), _nextTransaction(0), _lastSource(0), _tempWorkloadList(0), _indexMark(0), _reconfigNumber(0) {
 }
-
+Priority previousRank = 0;
+Priority currentRank = 0;
 TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
   std::cout<<"reconfig scheduler"<<std::endl;
 	TaskList::iterator i;
@@ -99,9 +100,9 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
         }
 
 	  }
-//    _workloadList.sort(sortByPriority);
+    _workloadList.sort(sortByPriority);//very importance
     Priority aHighestPrioPast=-1;
-	for(WorkloadList::iterator i = _workloadList.begin(); i != _workloadList.end(); ++i){
+	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 #ifdef DEBUG_FPGA
 	  std::cout<<"schedule for"<<std::endl;
 #endif
@@ -110,6 +111,7 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	  if(aTempTrans==0) std::cout<< (*i)->toString() + "temp trans is 0"<<std::endl;
       else {
         std::cout<<(*i)->toString() + "temp trans is "<<aTempTrans->toShortString()<<std::endl;
+        currentRank = (*i)->getPriority();
       }
 #ifdef DEBUG_FPGA
 	  if(aTempTrans==0) std::cout<<"temp trans is 0"<<std::endl;
@@ -118,32 +120,48 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	  if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
 
 	    aRunnableTime=aTempTrans->getRunnableTime();
-      //Past
-        if ((*i)->getPriority() < aHighestPrioPast || ((*i)->getPriority() == aHighestPrioPast && aRunnableTime < aLowestRunnableTimePast)) {
-            aHighestPrioPast = (*i)->getPriority();
-            aLowestRunnableTimePast = aRunnableTime;
-            aMarkerPast = aTempTrans;
-            aSourcePast = *i;
-        }
-
+	    if (aRunnableTime<=iEndSchedule){
+	      //Past
+            if ((*i)->getPriority()<aHighestPrioPast || ((*i)->getPriority()==aHighestPrioPast && aRunnableTime<aLowestRunnableTimePast)){
+                aHighestPrioPast=(*i)->getPriority();
+                aLowestRunnableTimePast=aRunnableTime;
+                aMarkerPast=aTempTrans;
+                aSourcePast=*i;
+            }
+	    }else{
+	      //Future
+            if(aRunnableTime<aTransTimeFuture){
+                aTransTimeFuture=aRunnableTime;
+                aMarkerFuture=aTempTrans;
+                aSourceFuture=*i;
+            }
+	    }
 #ifdef DEBUG_FPGA
 	    std::cout<<"erase"<<std::endl;
 #endif
+	    break;
 	  }
+
 	}
 	if (aMarkerPast==0){
-	    _nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction(iEndSchedule);;
-	    _lastSource=aSourceFuture; //NEW
-	} else{
-	    _nextTransaction=aSourcePast->getNextTransaction(iEndSchedule);;
-	    _lastSource=aSourcePast; //NEW
-	    _reconfigNumber = aSourcePast->getPriority();
+	  _nextTransaction=aMarkerFuture;
+	  _lastSource=aSourceFuture; //NEW
+	}else{
+	  _nextTransaction=aMarkerPast;
+	  _lastSource=aSourcePast; //NEW
 	}
+	if (currentRank != previousRank){
+        ++_reconfigNumber;
+	}
+	previousRank = currentRank;
 
 #ifdef DEBUG_FPGA
 	std::cout<<"end order scheduler"<<std::endl;
 #endif
 	return _reconfigNumber;
+	  
+	
+     
 }
 
 ReconfigScheduler::~ReconfigScheduler(){
@@ -155,5 +173,4 @@ ReconfigScheduler::~ReconfigScheduler(){
 void ReconfigScheduler::reset(){
 	WorkloadSource::reset();
 	_nextTransaction=0;
-	_reconfigNumber = 0;
 }
