@@ -1,3 +1,4 @@
 ========= Scheduling for device: FPGA0 =========
-Application__Task4: Read 20,Application__ch t:299 l:8 (vl:8) params: Ch: Application__ch
+Application__Task3: Write 20,Application__ch t:355 l:2 (vl:8) params: Ch: Application__ch
 ========= Scheduling for device: Bus0_0 =========
+Application__Task3: Write 20,Application__ch t:355 l:2 (vl:8) params: Ch: Application__ch

@@ -288,8 +288,6 @@ using std::max;
 #define NB_HTML_COLORS 15
 #define SHOW_PIE_CHART  "ShowPie"
 #define BUFFER_SIZE 2000 //maximum length of a command sent to server
-#define MIN_RESIZE_THRESHOLD 250 //if task has more than MIN_RESIZE_THRESHOLD cycles then reduce the length of blanks and transactions
-#define MIN_RESIZE_TRANS 10 // if trans or blank size > MIN_RESIZE_TRANS then reduce to 50
 
 #define SCHED_HTML_JS_FUNCTION "= function() {\n \
 		var r = Math.floor(Math.random() * 255);\n \
