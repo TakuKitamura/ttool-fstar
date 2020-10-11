@@ -28,8 +28,8 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
     final String [] MODELS_PARSE_HTML = {"parseFPGA_HTML"};
     final static String EXPECTED_FILE_REMOVE_ALL_TRANS = getBaseResourcesDir() + "tmltranslator/expected/expected_remove_all_trans.txt";
-    final int [] FULL_DATA_TRANSACTION = {21, 20, 1179, 1179};
-    final int [] REMOVE_DATA_TRANSACTION = {8, 7, 1179, 1179};
+    final int [] FULL_DATA_TRANSACTION = {20, 19, 476, 476};
+    final int [] REMOVE_DATA_TRANSACTION = {8, 7, 476, 476};
     private String SIM_DIR;
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
