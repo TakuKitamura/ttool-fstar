@@ -208,8 +208,15 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
         bool isBlankTooBig = false;
         std::ostringstream tempString;
         int tempBlanks;
-        if(endTimeOfCore >= 250 && aBlanks > 10) {
-            int newBlanks = 10;
+        if(endTimeOfCore >= MIN_RESIZE_THRESHOLD && aBlanks > MIN_RESIZE_TRANS) {
+            int newBlanks = 0;
+            if (aBlanks > 100000) {
+                newBlanks = (int) aBlanks/100;
+            } else if (aBlanks > 250) {
+                newBlanks = (int) aBlanks/20;
+            } else {
+                newBlanks = 10;
+            }
             tempBlanks = aBlanks;
             tempReduce += aBlanks - newBlanks;
             aBlanks = newBlanks;
@@ -248,9 +255,17 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
         unsigned int aLength = aCurrTrans->getPenalties();
         if ( aLength != 0 ) {
           listScaleTime.push_back(listScaleTime.back()+aLength);
-          if (endTimeOfCore >= 250 && aLength > 10){
-              tempReduce += aLength - 10;
-              aLength = 10;
+          if (endTimeOfCore >= MIN_RESIZE_THRESHOLD && aLength > MIN_RESIZE_TRANS){
+              int tempLength = 0;
+              if (aLength > 100000) {
+                  tempLength = (int) aLength/100;
+              } else if (aLength > 250) {
+                  tempLength = (int) aLength/20;
+              } else {
+                  tempLength = 10;
+              }
+              tempReduce += aLength - tempLength;
+              aLength = tempLength;
           }
           listScale.push_back(aLength);
           std::ostringstream title;
@@ -267,9 +282,17 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
         unsigned int indexTrans=aCurrTransName.find_first_of(":");
         std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
         if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
-          if (endTimeOfCore >= 250 && aLength > 10){
-            tempReduce += aLength - 10;
-            aLength = 10;
+          if (endTimeOfCore >= MIN_RESIZE_THRESHOLD && aLength > MIN_RESIZE_TRANS){
+              int tempLength = 0;
+              if (aLength > 100000) {
+                  tempLength = (int) aLength/100;
+              } else if (aLength > 250) {
+                  tempLength = (int) aLength/20;
+              } else {
+                  tempLength = 10;
+              }
+              tempReduce += aLength - tempLength;
+              aLength = tempLength;
           }
           std::string aCurrFullTransName = aCurrTrans->toString();
           unsigned int indexTrans1 = aCurrFullTransName.find("len:");
