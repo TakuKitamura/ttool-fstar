@@ -168,7 +168,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     protected JButton stop;
     protected JButton close;
     private JPopupMenu popup;
-    JPanel listPanel;
+    protected JPanel listPanel;
 
 
     // Security generation buttons
@@ -886,7 +886,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                 }
 
                 cmd += pathCode;
-                //jta.append("" +  mgui.gtm.getCheckingWarnings().size() + " warning(s)\n");
+                TraceManager.addDev("Executing command:" + cmd);
+
                 testGo();
 
                 this.rshc = new RshClient(hostProVerif);

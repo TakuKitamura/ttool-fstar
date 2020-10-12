@@ -71,11 +71,12 @@ public class ProVerifResultTrace {
     private Map<String, Integer> attackerNamesMap;
 
 
-    static
-    {
+    static {
         ProVerifResultTrace.attrPattern = Pattern.compile("\\b((\\w+?)" + AVATAR2ProVerif.ATTR_DELIM + ")?(\\w+?)(" + AVATAR2ProVerif.ATTR_DELIM + "[0-9_]+?)?(_\\d+)?\\b(\\[[^\\]]*\\])?");
         ProVerifResultTrace.tracePattern = Pattern.compile("^\\d+\\. (.*)$");
-        ProVerifResultTrace.blockNamePattern = Pattern.compile("let \\(=sessionID,=call" + AVATAR2ProVerif.ATTR_DELIM + "(.+?)" + AVATAR2ProVerif.ATTR_DELIM + ".*");
+        //ProVerifResultTrace.blockNamePattern =
+          //  Pattern.compile("let \\(=sessionID,=call" + AVATAR2ProVerif.ATTR_DELIM + "(.+?)" + AVATAR2ProVerif.ATTR_DELIM + ".*");
+        ProVerifResultTrace.blockNamePattern = Pattern.compile("let \\(=sessionID(?:_\\d*)?,=call" + AVATAR2ProVerif.ATTR_DELIM + "(.+?)" + AVATAR2ProVerif.ATTR_DELIM + ".*");
     }
 
     /////// OutStep ///////
@@ -103,9 +104,9 @@ public class ProVerifResultTrace {
         }
 
         public boolean isToAttacker() {
-            if (to == null) {
+            /*if (to == null) {
                 return false;
-            }
+            }*/
             return this.to.equals("Attacker");
         }
 
@@ -206,7 +207,7 @@ public class ProVerifResultTrace {
     }
 
     public void addTraceStep(String str) {
-        TraceManager.addDev("Adding this step:" + str);
+        //TraceManager.addDev("Adding this step:" + str);
         Matcher m = tracePattern.matcher(str);
         if (m.matches()) {
             this.finalizeStep();
