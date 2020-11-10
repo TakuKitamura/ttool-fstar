@@ -59,6 +59,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     public static final int VIEW_COMM_PATTERN = 4;
     public static final int VIEW_PORT_INTERFACE = 2;
     public static final int VIEW_SECURITY_MAPPING = 1;
+    public HashMap<TGComponent,List<PairOfTGC>> listOfCP;
 
     private int masterClockFrequency = 200; // in MHz
 
@@ -113,6 +114,26 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
           }*/
         return false;
     }
+    public void handleCPOnDoubleClick(TGComponent node) {
+        if (node != null && node instanceof TMLArchiCPNode) {
+            listOfCP = getListOfCPNodes();
+        } else if (node != null) {
+            for (TGComponent node1 : listOfCP.keySet()) {
+                Vector <String> tempList = new Vector<>();
+                boolean isContain = false;
+                for (int i = 0; i < listOfCP.get(node1).size(); i++) {
+                    tempList.add(listOfCP.get(node1).get(i).getName() + " " + listOfCP.get(node1).get(i).getTGC().getName());
+                    if(listOfCP.get(node1).get(i).getTGC() == node) isContain = true;
+                }
+                if (!isContain)
+                    continue;
+                else
+                    ((TMLArchiCPNode) node1).setMappedUnits(tempList);
+            }
+        } else {
+            System.out.println(" Nothing is selected");
+        }
+    }
     
 	public void replaceArchComponent(TGComponent tgc, TGComponent newtgc){
 		fatherOfRemoved = tgc.getFather();
@@ -156,6 +177,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         /*if (tgc instanceof TCDTClass) {
           return actionOnDoubleClick(tgc);
           }*/
+        listOfCP = getListOfCPNodes();
         return false;
     }
 
@@ -253,6 +275,30 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
       return true;
       }*/
+
+    public HashMap<TGComponent, List<PairOfTGC>> getListOfCPNodes() {
+        HashMap<TGComponent,List<PairOfTGC>> listOfCP = new HashMap<TGComponent,List<PairOfTGC>>();
+        List<TGComponent> ll = new LinkedList<TGComponent>();
+        TGComponent tgc;
+        Iterator<TGComponent> iterator = componentList.listIterator();
+        while(iterator.hasNext()) {
+            tgc = iterator.next();
+
+            if (tgc instanceof TMLArchiCPNode) {
+                listOfCP.put(tgc, new ArrayList<PairOfTGC>());
+                for (String name : ((TMLArchiCPNode) tgc).getMappedUnits()) {
+                    for (int j = 0; j < componentList.size(); j++) {
+                        if (name.contains(componentList.get(j).getName())) {
+                            PairOfTGC temp = new PairOfTGC(componentList.get(j),name.substring(0,name.indexOf(":")+1));
+                            listOfCP.get(tgc).add(temp);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return listOfCP;
+    }
 
     public List<TGComponent> getListOfNodes() {
         List<TGComponent> ll = new LinkedList<TGComponent>();
@@ -611,6 +657,19 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
         return addTaskToNode(list.get(nb).getName(), taskName);
     }
-
+    public class PairOfTGC {
+        private TGComponent tgc;
+        private String name;
+        public PairOfTGC(TGComponent _tgc, String _name) {
+            tgc = _tgc;
+            name = _name;
+        }
+        public TGComponent getTGC() {
+            return tgc;
+        }
+        public String getName() {
+            return name;
+        }
+    }
 
 }//End of class
