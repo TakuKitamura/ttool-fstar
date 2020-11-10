@@ -36,6 +36,10 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
     private String SIM_DIR;
     private TMLArchiCPNode tgCP;
     private TMLArchiBUSNode tgBus;
+    private TMLArchiCPUNode tgCPU;
+    private TMLArchiDiagramPanel tmlap;
+    final String CPU_INSTANCE = "CP.ControllerInstance : ";
+    final String BUS_INSTANCE = "CP.TransferInstance : ";
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
@@ -57,48 +61,69 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
-            String previousMapping = "";
+            String initialMapping = "";
             String currMapping = "";
-            String oldName = "";
-            String newName = "";
             for(TURTLEPanel _tab : mainGUI.getTabs()) {
                 if(_tab instanceof TMLArchiPanel) {
                     for (TDiagramPanel tdp : _tab.getPanels()) {
                         if (tdp instanceof TMLArchiDiagramPanel) {
+                            tmlap = (TMLArchiDiagramPanel)tdp;
                             mainGUI.selectTab(tdp);
                             for (TGComponent tg : tdp.getComponentList()) {
                                 if (tg instanceof TMLArchiCPNode) {
                                     tgCP = (TMLArchiCPNode)tg;
                                     Vector <String> tempList = new Vector<>(((TMLArchiCPNode) tg).getMappedUnits());
                                     for (String mapped : tempList) {
-                                        previousMapping += mapped + ", ";
+                                        // the initial mapping of the model, including one Bus named "Bus012 and one CPU named "Src"
+                                        initialMapping += mapped + ", ";
                                     }
                                 }
 
                                 if (tg instanceof TMLArchiBUSNode) {
                                     tgBus = (TMLArchiBUSNode)tg;
-                                    oldName = tgBus.getName();
-                                    newName = tgBus.getName()+"newName";
-                                    tgBus.setName(newName);
-                                    ((TMLArchiDiagramPanel) tdp).handleCPOnDoubleClick(tgBus);
-                                    Vector <String> tempList1 = new Vector<>(tgCP.getMappedUnits());
-                                    for (String mapped : tempList1) {
-                                        currMapping += mapped + ", ";
+                                }
+                                if (tg instanceof TMLArchiCPUNode) {
+                                    for( TGComponent tgc : tmlap.listOfCP.keySet()) {
+                                        for (int k = 0; k < tmlap.listOfCP.get(tgc).size(); k++) {
+                                            if (tg == tmlap.listOfCP.get(tgc).get(k).getTGC()) tgCPU = (TMLArchiCPUNode)tg;
+                                        }
                                     }
                                 }
                             }
-                            boolean check = previousMapping.contains(oldName);
-                            assertTrue(check);
-                            if (check) System.out.println("Success: " + previousMapping + ", " + oldName);
-                            check = currMapping.contains(newName);
-                            assertTrue(check);
-                            if (check) System.out.println("Success: " + currMapping + ", " + newName);
                             break;
                         }
                     }
                     break;
                 }
             }
+            //Before renaming HW, check if the current contains current Bus and CPU
+            assertTrue(initialMapping.contains(BUS_INSTANCE + tgBus.getName()));// Bus with initial name
+            assertTrue(initialMapping.contains(CPU_INSTANCE + tgCPU.getName()));// CPU with initial name
+            //After renaming, the HWs should still appear in the CP mapping with the new name
+            //Rename and check for Bus first:
+            String newBusName = tgBus.getName()+"newBusName";
+            tgBus.setName(newBusName);
+            tmlap.handleCPOnDoubleClick(tgBus);
+            Vector <String> tempList = new Vector<>(tgCP.getMappedUnits());
+            for (String mapped : tempList) {
+                //Current mapping, after renaming
+                currMapping += mapped + ", ";
+            }
+            assertTrue(currMapping.contains(BUS_INSTANCE + tgBus.getName()));// The same Bus with the new name
+            assertTrue(currMapping.contains(CPU_INSTANCE + tgCPU.getName()));// The same CPU with name unchanged
+            //Rename and check for CPU:
+            String newCPUName = tgCPU.getName()+"newCPUName";
+            tgCPU.setName(newCPUName);
+            tmlap.handleCPOnDoubleClick(tgCPU);
+            Vector <String> tempList1 = new Vector<>(tgCP.getMappedUnits());
+            currMapping = "";
+            for (String mapped : tempList1) {
+                //Current mapping, after renaming
+                currMapping += mapped + ", ";
+            }
+            assertTrue(currMapping.contains(BUS_INSTANCE + tgBus.getName()));// The same Bus with the new name
+            assertTrue(currMapping.contains(CPU_INSTANCE + tgCPU.getName()));// The same CPU with the new name
+
             mainGUI.checkModelingSyntax(true);
             TMLMapping tmap = mainGUI.gtm.getTMLMapping();
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
