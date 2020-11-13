@@ -505,6 +505,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         // {makespan:1821,slots:[[Application__A0, Application__A1],[Application__A4, Application__A2, Application__A3],[Application__A5,
         // Application__A6, Application__A7],[Application__A10, Application__A8, Application__A9]]}
 
+        TraceManager.addDev("Received JSON String: " + ret);
         JSONObject jo = new JSONObject(ret);
         TraceManager.addDev("Solution: " + jo.toString());
 
