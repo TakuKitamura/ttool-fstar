@@ -506,7 +506,35 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         // Application__A6, Application__A7],[Application__A10, Application__A8, Application__A9]]}
 
         TraceManager.addDev("Received JSON String: " + ret);
-        JSONObject jo = new JSONObject(ret);
+
+        // For instance: {"scheduling": [[Application__A0, Application__A1, Application__A4], [Application__A5, Application__A2, Application__A3,
+        // Application__A6], [Application__A8, Application__A9, Application__A7], [Application__A10]], "makespan": 0.001537]}
+        try {
+            int indexBegTab = ret.indexOf("[[");
+            int indexEndTab = ret.indexOf("]]");
+
+            if ((indexBegTab > 0) && (indexEndTab > 0)) {
+                String partial = ret.substring(indexBegTab + 2, indexEndTab);
+                partial = Conversion.replaceAllString(partial, "], [", " ; ");
+                partial = Conversion.replaceAllString(partial, ",", " ");
+                scheduling.setText(partial);
+            }
+
+            int indexBegMakespan = ret.indexOf("makespan");
+            if (indexBegMakespan > 0) {
+                String time = ret.substring(indexBegMakespan + 10);
+                int indexEndMakespan = time.indexOf("]");
+                if (indexEndMakespan == -1) {
+                    indexEndMakespan = time.indexOf("}");
+                }
+                time = time.substring(0, indexEndMakespan);
+                selectedLabel.setText("makespan: " + time + " ms");
+            }
+
+
+
+        // Old JSON solution
+        /*JSONObject jo = new JSONObject(ret);
         TraceManager.addDev("Solution: " + jo.toString());
 
         try {
@@ -534,7 +562,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
                 }
                 solution += partial.trim();
             }
-            scheduling.setText(solution);
+            scheduling.setText(solution);*/
+
 
         } catch (Exception e) {
                 TraceManager.addDev("Exception when parsing solution:" + e.getMessage());
