@@ -135,9 +135,9 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	    _nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction(iEndSchedule);;
 	    _lastSource=aSourceFuture; //NEW
 	} else{
-	    _nextTransaction=aSourcePast->getNextTransaction(iEndSchedule);;
+	    _nextTransaction=(aSourcePast==0)? 0 : aSourcePast->getNextTransaction(iEndSchedule);;
 	    _lastSource=aSourcePast; //NEW
-	    _reconfigNumber = aSourcePast->getPriority();
+	    _reconfigNumber = (aSourcePast==0)? 0 : aSourcePast->getPriority();
 	}
 
 #ifdef DEBUG_FPGA
