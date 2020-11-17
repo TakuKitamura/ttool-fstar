@@ -283,7 +283,8 @@ public class AVATAR2CPOSIX {
         if (includeUserCode) {
             String tmp = block.getGlobalCode();
             if (tmp != null) {
-                taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
+                taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR +
+                        "// End of header code defined in the model" + CR + CR);
             }
         }
 

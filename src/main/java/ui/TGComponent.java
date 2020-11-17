@@ -2922,7 +2922,10 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             ActionStateErrorHighlight aseh = (ActionStateErrorHighlight) this;
             aseh.setStateAction(0);
         }
-        ((TMLArchiDiagramPanel)tdp).handleCPOnDoubleClick(this);
+
+        if (tdp instanceof TMLArchiDiagramPanel) {
+            ((TMLArchiDiagramPanel) tdp).handleCPOnDoubleClick(this);
+        }
         return b;
     }
 
