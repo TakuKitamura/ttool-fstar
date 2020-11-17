@@ -2926,6 +2926,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         if (tdp instanceof TMLArchiDiagramPanel) {
             ((TMLArchiDiagramPanel) tdp).handleCPOnDoubleClick(this);
         }
+
         return b;
     }
 

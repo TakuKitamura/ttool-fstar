@@ -241,9 +241,28 @@ std::cout<<"fpga addTransaction"<<std::endl;
     //std::cout<<"end schedule is ~~~~~~~"<<_endSchedule<<std::endl;
     if(_endSchedule == 0 && (!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))) 
       _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
-    if(_reconfigNumber>0) {
+
+    unsigned int _highestRank = 1000;
+    for(TaskList::const_iterator i = _taskList.begin(); i!= _taskList.end(); ++i){
+          if((*i)->getPriority() < _highestRank) {
+              _highestRank = (*i)->getPriority();
+              if(_highestRank == 0)
+                  break;
+          }
+    }
+    unsigned int _tempReconfigNumber = _reconfigNumber - _highestRank;
+    if(_tempReconfigNumber == 0 && _reconfigNumber > 0) {
+        std::string _tempTranName = _nextTransaction->toShortString();
+        if(!_nextTransaction->getCommand()->getTask()->getIsFirstTranExecuted() && (_tempTranName.find("Read") == std::string::npos
+        && _tempTranName.find("Wait") == std::string::npos && _tempTranName.find("Notified") == std::string::npos)) {
+            unsigned int _tempStartTime = _nextTransaction->getStartTime();
+            _nextTransaction->setStartTime(_tempStartTime + _reconfigNumber * _reconfigTime);
+            _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+        }
+        _nextTransaction->getCommand()->getTask()->setIsFirstTranExecuted(true);
+    } else if(_tempReconfigNumber>0) {
         if(!_nextTransaction->getCommand()->getTask()->getIsFirstTranExecuted()) {
-            _nextTransaction->setStartTime(_maxEndTime + _reconfigNumber * _reconfigTime);
+            _nextTransaction->setStartTime(_maxEndTime + _tempReconfigNumber * _reconfigTime);
             _nextTransaction->getCommand()->getTask()->setIsFirstTranExecuted(true);
         }
     }

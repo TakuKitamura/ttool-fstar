@@ -1,31 +1,16 @@
-package tmltranslator;
+package ui.tmlcp;
 
-import common.ConfigurationTTool;
-import common.SpecConfigTTool;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import req.ebrdd.EBRDD;
-import tepe.TEPE;
-import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
-import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
-import tmltranslator.tomappingsystemc2.Penalties;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import ui.*;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiBUSNode;
 import ui.tmldd.TMLArchiCPNode;
 import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiDiagramPanel;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import static org.junit.Assert.assertTrue;
@@ -40,11 +25,13 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
     private TMLArchiDiagramPanel tmlap;
     final String CPU_INSTANCE = "CP.ControllerInstance : ";
     final String BUS_INSTANCE = "CP.TransferInstance : ";
+
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
 
     }
+
     public CommunicationPatternRenamingHardwareTest() {
         super();
     }
@@ -53,6 +40,7 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
     public void setUp() throws Exception {
         SIM_DIR = getBaseResourcesDir() + "../../../../simulators/c++2/";
     }
+
     @Test
     public void testCommunicationPatternRenameHW() throws Exception {
         for (int i = 0; i < MODELS_CP_HW.length; i++) {
@@ -82,6 +70,7 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
                                 if (tg instanceof TMLArchiBUSNode) {
                                     tgBus = (TMLArchiBUSNode)tg;
                                 }
+
                                 if (tg instanceof TMLArchiCPUNode) {
                                     for( TGComponent tgc : tmlap.listOfCP.keySet()) {
                                         for (int k = 0; k < tmlap.listOfCP.get(tgc).size(); k++) {
@@ -99,6 +88,7 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
             //Before renaming HW, check if the current contains current Bus and CPU
             assertTrue(initialMapping.contains(BUS_INSTANCE + tgBus.getName()));// Bus with initial name
             assertTrue(initialMapping.contains(CPU_INSTANCE + tgCPU.getName()));// CPU with initial name
+
             //After renaming, the HWs should still appear in the CP mapping with the new name
             //Rename and check for Bus first:
             String newBusName = tgBus.getName()+"newBusName";
@@ -111,6 +101,7 @@ public class CommunicationPatternRenamingHardwareTest extends AbstractUITest {
             }
             assertTrue(currMapping.contains(BUS_INSTANCE + tgBus.getName()));// The same Bus with the new name
             assertTrue(currMapping.contains(CPU_INSTANCE + tgCPU.getName()));// The same CPU with name unchanged
+
             //Rename and check for CPU:
             String newCPUName = tgCPU.getName()+"newCPUName";
             tgCPU.setName(newCPUName);

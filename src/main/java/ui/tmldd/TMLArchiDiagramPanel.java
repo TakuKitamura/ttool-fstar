@@ -114,6 +114,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
           }*/
         return false;
     }
+
     public void handleCPOnDoubleClick(TGComponent node) {
         if (node != null && node instanceof TMLArchiCPNode) {
             listOfCP = getListOfCPNodes();
@@ -657,6 +658,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
         return addTaskToNode(list.get(nb).getName(), taskName);
     }
+
     public class PairOfTGC {
         private TGComponent tgc;
         private String name;
