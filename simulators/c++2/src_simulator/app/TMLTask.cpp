@@ -78,6 +78,8 @@ TMLTask::~TMLTask(){
 	}
 #endif
 	if (_comment!=0) delete [] _comment;
+	if(_cpus != 0) delete[] _cpus; // free the allocation of cpu array
+	if(_fpgas != 0) delete[] _fpgas; // free the allocation of fpga array
 }
 
 std::string TMLTask::toShortString() const{
