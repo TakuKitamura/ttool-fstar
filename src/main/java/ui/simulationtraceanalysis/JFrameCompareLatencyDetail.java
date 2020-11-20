@@ -19,6 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -31,7 +32,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -100,6 +100,8 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     List<TMLComponentDesignPanel> cpanels;
     public DirectedGraphTranslator dgraph;
 
+    JCheckBox taintFirstOp, considerRules;
+
     // private DirectedGraphTranslator dgraph;
     public JFrameCompareLatencyDetail(latencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
             TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b) {
@@ -133,7 +135,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         mainConstraint.fill = GridBagConstraints.HORIZONTAL;
 
         buttonShowDGraph1 = new JButton(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH_FILE_1]);
-        buttonDetailedAnalysis = new JButton(actions[LatencyDetailedAnalysisActions.ACT_DETAILED_ANALYSIS]);
+        buttonDetailedAnalysis = new JButton(actions[LatencyDetailedAnalysisActions.ACT_LATENCY]);
         buttonShowDGraph2 = new JButton(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH_FILE_2]);
         buttonClose = new JButton(actions[LatencyDetailedAnalysisActions.ACT_STOP_AND_CLOSE_ALL]);
 
@@ -475,7 +477,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         try {
             dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis, this, map, cpanels, 1);
             dgraph1 = dgraph;
-            jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices" + dgraph.getGraphEdgeSet() + "Edges was generated.\n");
+            jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
             // buttonSaveDGraph.setEnabled(true);
             buttonShowDGraph1.setEnabled(true);
             jta.append("Browse the second simulation trace to generate the second graph \n");
@@ -547,7 +549,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             this.revalidate();
             this.repaint();
 
-            jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices" + dgraph.getGraphEdgeSet() + "Edges was generated.\n");
+            jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
 
         } catch (Exception e) {
             jta.append("An Error has Accord \n");
@@ -645,7 +647,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                 }
 
             }
-        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DETAILED_ANALYSIS].getActionCommand())) {
+        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY].getActionCommand())) {
             jta.append("Simulation Trace 1 : the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n"
                     + tasksDropDownCombo2.getSelectedItem() + " is studied \n");
 
@@ -666,11 +668,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                     String task3 = tasksDropDownCombo3.getSelectedItem().toString();
                     String task4 = tasksDropDownCombo4.getSelectedItem().toString();
 
+                    // Boolean taint = taintFirstOp.isSelected();
+
+                    // Boolean considerAddedRules = considerRules.isSelected();
+
                     Vector<SimulationTransaction> transFile1, transFile2;
                     transFile1 = parseFile(file1);
                     transFile2 = parseFile(file2);
 
-                    latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, true);
+                    latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, true, false, false);
 
                 }
             };
@@ -710,6 +716,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             t.start();
 
         }
+        
 
     }
 
@@ -749,9 +756,9 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     }
 
     public void latencyDetailedAnalysis(String task1, String task2, String task3, String task4, Vector<SimulationTransaction> transFile1,
-            Vector<SimulationTransaction> transFile2, boolean b) {
+            Vector<SimulationTransaction> transFile2, boolean b, boolean taint, boolean considerAddedRules) {
 
-        tableData = dgraph1.latencyDetailedAnalysis(task1, task2, transFile1);
+        tableData = dgraph1.latencyDetailedAnalysis(task1, task2, transFile1, taint, considerAddedRules);
 
 //        DefaultTableModel model = new DefaultTableModel();
 
@@ -775,7 +782,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
          * });
          */
 
-        tableData2 = dgraph2.latencyDetailedAnalysis(task3, task4, transFile2);
+        tableData2 = dgraph2.latencyDetailedAnalysis(task3, task4, transFile2, taint, considerAddedRules);
 
 //        DefaultTableModel model2 = new DefaultTableModel();
 

@@ -38,13 +38,16 @@
 
 package ui.simulationtraceanalysis;
 
-import ui.util.IconManager;
-import ui.TAction;
-
-import javax.swing.*;
-import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
+import javax.swing.event.EventListenerList;
+
+import ui.TAction;
+import ui.util.IconManager;
 
 /**
  * Class LatencyDetailedAnalysisActions: actions related to the latency detail
@@ -62,14 +65,24 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_STOP_AND_CLOSE_ALL = 2;
     public static final int ACT_SAVE_TRACE_GRAPHML = 3;
     public static final int ACT_LOAD_SIMULATION_TRACES = 4;
-    public static final int ACT_DETAILED_ANALYSIS = 5;
+    public static final int ACT_LATENCY = 5;
     public static final int ACT_Import_ANALYSIS = 6;
-    
+
     public static final int ACT_SHOW_GRAPH_FILE_1 = 7;
     public static final int ACT_SHOW_GRAPH_FILE_2 = 8;
     public static final int ACT_COMPARE_IN_DETAILS = 9;
+    public static final int ACT_CHECK_PATH = 10;
 
-    public static final int NB_ACTION = 10;
+    public static final int ACT_ADD_RULE = 11;
+    public static final int ACT_VIEW_RULE = 12;
+
+    public static final int ACT_STOP_AND_CLOSE_RULE = 13;
+    public static final int ACT_DELETE_SELECTED_RULE = 14;
+    public static final int ACT_DELETE_ALL_RULE = 15;
+    public static final int ACT_LATENCY_PRECISE_ANALYSIS=16;
+    public static final int NB_ACTION = 17;
+    
+
 
     private static final TAction[] actions = new TAction[NB_ACTION];
 
@@ -117,20 +130,38 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "Terminate Latency Analysis", "Terminate Latency Analysis window", 'T');
         actions[ACT_LOAD_SIMULATION_TRACES] = new TAction("load_simulation_traces", "Load Simulation Traces", IconManager.imgic29,
                 IconManager.imgic29, "Load Simulation Traces", "Load Simulation Traces", 'T');
-        actions[ACT_DETAILED_ANALYSIS] = new TAction("start_detailed_analysis", "Detailed Analysis", IconManager.imgic29, IconManager.imgic29,
-                "show detailed analysis tables", "show detailed analysis tables", 'T');
+        actions[ACT_LATENCY] = new TAction("start_latency_calculation",  "Calculate Latency", IconManager.imgic29, IconManager.imgic29,
+                "show latency tables", "show latency tables", 'T');
         actions[ACT_Import_ANALYSIS] = new TAction("import-trace", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
                 "import Directed Graph", "Import Directed Graph", 'S');
-        
+
         actions[ACT_SHOW_GRAPH_FILE_1] = new TAction("show_graph_file_1", "Show Directed Graph 1", IconManager.imgic341, IconManager.imgic341,
                 "Show Directed Graph", "Show Directed Graph", 'S');
-        
+
         actions[ACT_SHOW_GRAPH_FILE_2] = new TAction("show_graph_file_2", "Show Directed Graph 2", IconManager.imgic341, IconManager.imgic341,
                 "Show Directed Graph", "Show Directed Graph", 'S');
-        
+
         actions[ACT_COMPARE_IN_DETAILS] = new TAction("compare_in_details", "Compare In Detials", IconManager.imgic53, IconManager.imgic53,
                 "Compare In Detials", "Compare In Detials", 'S');
 
+        actions[ACT_LATENCY_PRECISE_ANALYSIS] = new TAction("precise_latency_analysis", "Precise Analysis", IconManager.imgic53, IconManager.imgic53,
+                "Precise Latency Analysis", "Precise Latency Analysis", 'S');
+        
+        actions[ACT_CHECK_PATH] = new TAction("check_path", "Check Path Between Operators", IconManager.imgic53, IconManager.imgic53,
+                "Check Path Between Operators", "Check Path Between Operators", 'C');
+
+        actions[ACT_ADD_RULE] = new TAction("add_rule", "ADD Rule", IconManager.imgic53, IconManager.imgic53, "ADD Rule", "ADD Rule", 'C');
+
+        actions[ACT_VIEW_RULE] = new TAction("view_rules", "View Rules", IconManager.imgic29, IconManager.imgic29, "View Rules", "View Rules", 'T');
+
+        actions[ACT_STOP_AND_CLOSE_RULE] = new TAction("stop-and-close-all", "Terminate Rules Management", IconManager.imgic27, IconManager.imgic27,
+                "Terminate Rules Management", "Terminate Rules Management window", 'T');
+
+        actions[ACT_DELETE_SELECTED_RULE] = new TAction("delete_selected_rules", "Delete Selected Rules", IconManager.imgic53, IconManager.imgic53,
+                "Delete Selected Rules", "Delete Selected Rules", 'C');
+
+        actions[ACT_DELETE_ALL_RULE] = new TAction("delete_all_rules", "Delete All Rules", IconManager.imgic53, IconManager.imgic53,
+                "Delete All Rules", "Delete All Rules", 'C');
 
     }
 

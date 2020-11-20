@@ -40,10 +40,6 @@ package ui.simulationtraceanalysis;
 
 import javax.swing.JButton;
 
-import ui.interactivesimulation.InteractiveSimulationActions;
-import ui.interactivesimulation.InteractiveSimulationBar;
-import ui.interactivesimulation.JFrameInteractiveSimulation;
-
 //import java.awt.*;
 //import java.awt.event.*;
 

@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,9 +18,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import common.ConfigurationTTool;
 import myutil.GraphicLib;
-import myutil.PluginManager;
 import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 import ui.MainGUI;
@@ -335,7 +331,7 @@ public class latencyDetailedAnalysisMain {
 
                 // mode
                 // mainGUI_compare.setMode(NOT_OPENED);
-                PluginManager.pluginManager = new PluginManager();
+                // PluginManager.pluginManager = new PluginManager();
 
                 // if (testCall) {
                 // mainGUI_compare.openProjectFromFile(new

@@ -39,41 +39,27 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
-import tmltranslator.HwLink;
-import tmltranslator.TMLMapping;
-import ui.TGComponent;
-import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
 
 /**
@@ -92,6 +78,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
     public static JTable taskNames, hardwareNames;
     private Object[][] dataDetailedByTask, dataDetailedByTask2;
     private String[] columnNames;
+    private Thread t,t1;
     
     private JPanel jp02;
     public Object[][] getDataDetailedByTask() {
@@ -139,19 +126,40 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
         JPanel jp04 = new JPanel(new BorderLayout());
         if (firstTable) {
+            t = new Thread() {
+                public void run() {
+                    dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
 
-            dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
+                    dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
 
-            dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
+                }
+            };
+
+            t.start();
+           
 
         } else {
-            dgraph1.getRowDetailsMinMax(row);
-            dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
+            
+            t = new Thread() {
+                public void run() {
+                    dgraph1.getRowDetailsMinMax(row);
+                    dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
 
-            dgraph2.getRowDetailsMinMax(row2);
-            dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
+                    dgraph2.getRowDetailsMinMax(row2);
+                    dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
+
+
+                }
+            };
+
+            t.start();
+            
+        }
+        
+        while (t.getState() != Thread.State.TERMINATED) {
 
         }
+        
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
             @Override
             public Class getColumnClass(int column) {
@@ -246,15 +254,39 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         columnByHWNames[4] = "End Time ";
 
         if (firstTable) {
+            
+            t1 = new Thread() {
+                public void run() {
+                    dataHWDelayByTask = dgraph1.getTaskHWByRowDetails(row);
+                    dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetails(row2);
 
-            dataHWDelayByTask = dgraph1.getTaskHWByRowDetails(row);
-            dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetails(row2);
+                }
+            };
+
+            t1.start();
+
+            
 
         } else {
-            dataHWDelayByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
-            dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
+           
+            
+            t1 = new Thread() {
+                public void run() {
+                    dataHWDelayByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
+                    dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
+
+                }
+            };
+
+            t1.start();
         }
 
+        
+        while (t1.getState() != Thread.State.TERMINATED) {
+
+        }
+        
+        
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
             @Override
             public Class getColumnClass(int column) {

@@ -197,7 +197,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         cld.setDgraph2(dgraph2);
 
-        cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, false);
+        cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, false, false, false);
 
         cld.setVisible(false);
 

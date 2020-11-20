@@ -1,4 +1,4 @@
-package ui.GraphLatencyAnalysis;
+package ui.GraphLatencyTainting;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -17,17 +17,17 @@ import ui.simulationtraceanalysis.DirectedGraphTranslator;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
-public class GraphLatencyAnalysis extends AbstractUITest {
+public class GraphLatencyAnalysisTainting extends AbstractUITest {
 
-    private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
-    private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
+    private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/tainting.xml";
+    private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphLatencyAnalysisTainting.xml";
 
-    private static final String mappingDiagName = "Architecture2";
+    private static final String mappingDiagName = "Architecture";
     private Vector<SimulationTransaction> transFile1;
     private Vector<String> dropDown;
 
-    private static final String t1 = "Application2__task4:sendevent:evt1__44";
-    private static final String t2 = "Application2__task22:readchannel:comm_0__26";
+    private static final String t1 = "f__send:writechannel:data__47";
+    private static final String t2 = "f__compute:readchannel:datakk__37";
     private static String task1;
     private static String task2;
     private static DirectedGraphTranslator dgt;
@@ -51,7 +51,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         }
 
         mainGUI.checkModelingSyntax(panel, true);
-        SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, simulationTracePath);
+        SimulationTrace file2 = new SimulationTrace("tainting", 6, simulationTracePath);
         latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
 
         latencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
@@ -77,18 +77,19 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         int graphsize = dgt.getGraphsize();
 
-        assertTrue(graphsize == 40);
+        assertTrue(graphsize == 34);
 
         dropDown = latencyDetailedAnalysis.getCheckedTransactions();
 
-        assertTrue(dropDown.size() == 3);
+        assertTrue(dropDown.size() == 2);
 
         transFile1 = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + simulationTracePath));
 
-        // transFile1 = mainGUI.getLatencyDetailedAnalysis() .parseFile(new File(
+        // transFile1 =
+        // latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(
         // simulationTracePath));
 
-        assertTrue(transFile1.size() == 175);
+        assertTrue(transFile1.size() > 0);
 
         int i = dropDown.indexOf(t1);
         int j = dropDown.indexOf(t2);
@@ -96,25 +97,27 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         task1 = dropDown.get(i);
         task2 = dropDown.get(j);
 
-        allLatencies = dgt.latencyDetailedAnalysis(task1, task2, transFile1, false, false);
+        allLatencies = dgt.latencyDetailedAnalysis(task1, task2, transFile1, true, false);
 
-        assertTrue(allLatencies.length == 10);
+        assertTrue(allLatencies.length == 1);
+
+        assertTrue(allLatencies[0][4] == Integer.valueOf(105));
 
         minMaxArray = dgt.latencyMinMaxAnalysis(task1, task2, transFile1);
         dgt.getRowDetailsMinMax(1);
-        taskHWByRowDetails = dgt.getTasksByRowMinMax(1);
+        taskHWByRowDetails = dgt.getTasksByRowMinMax(0);
 
         assertTrue(minMaxArray.length > 0);
 
-        assertTrue(taskHWByRowDetails.length == 15);
-        taskHWByRowDetails = dgt.getTaskHWByRowDetailsMinMax(1);
-        assertTrue(taskHWByRowDetails.length == 13);
+        assertTrue(taskHWByRowDetails.length == 12);
+        taskHWByRowDetails = dgt.getTaskHWByRowDetailsMinMax(0);
+        assertTrue(taskHWByRowDetails.length == 6);
 
-        detailedLatency = dgt.getTaskByRowDetails(7);
-        assertTrue(detailedLatency.length == 15);
+        detailedLatency = dgt.getTaskByRowDetails(0);
+        assertTrue(detailedLatency.length == 12);
 
-        detailedLatency = dgt.getTaskHWByRowDetails(7);
-        assertTrue(detailedLatency.length == 14);
+        detailedLatency = dgt.getTaskHWByRowDetails(0);
+        assertTrue(detailedLatency.length == 6);
 
     }
 
