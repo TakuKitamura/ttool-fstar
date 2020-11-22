@@ -76,10 +76,10 @@ SimComponents::~SimComponents(){
 		delete (*i);
 	}
 
-    for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
-        //free tasks before terminate simulator
-        delete (*i);
-    }
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		//free tasks before terminate simulator
+		delete (*i);
+	}
 
 #ifdef EBRDD_ENABLED
 	for(EBRDDList::iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
