@@ -210,18 +210,22 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         int nbOfInternal = 30;
 
         for(int i=0; i<nbOfInternal; i ++) {
-            double ratio = ((i)/(double)(nbOfInternal));//+(spacePt*tdp.getZoom()/height);
-            SDPortForMessage port = new SDPortForMessage(100, 200+ (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            double ratio = ((i+1)/(double)(nbOfInternal+3));//+(spacePt*tdp.getZoom()/height);
+            SDPortForMessage port = new SDPortForMessage(100, (int)(y + ratio*height), tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
+                    tdp.getMaxY(), false, null, tdp);
 
             //tdp.addComponent(port, x+width/2, y+100, true, true);
 
-            //TraceManager.addDev("Adding internal components");
-            if (!addSwallowedTGComponent(port, x+width/2, (int)(5*spacePt*tdp.getZoom()) + (int)(y + ratio*height))) {
+
+            //TraceManager.addDev("\nAdding internal components");
+            //TraceManager.addDev("Adding point at y=" +  (int)(y + ratio*height) + " with y=" + y + " height=" + height + " ratio=" + ratio);
+            if (!addSwallowedTGComponent(port, x+width/2, (int)(y + ratio*height))) {
                 TraceManager.addDev("Adding PortForMessage failed");
             } else {
                 port.wasSwallowed();
             }
-            port.setMoveCd(0, (int)(10*spacePt*tdp.getZoom()) + (int)(ratio*height), false);
+            //port.setMoveCd(0,  (int)(ratio*height), false);
+            //TraceManager.addDev("x=" + port.getX() + " y=" + port.getY());
             //TraceManager.addDev("Nb of internal components:" + nbInternalTGComponent);
         }
     }
@@ -317,7 +321,8 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         // Choose its position
         int realY = Math.max(y, getY() + spacePt());
         realY = Math.min(realY, getY() + height + spacePt());
-        int realX = tgc.getX();
+        //TraceManager.addDev("RealY=" + realY);
+        int realX;
 
 
         // Make it an internal component
@@ -327,37 +332,42 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
         // Set its coordinates
         if ((tgc instanceof SDAbsoluteTimeConstraint) || (tgc instanceof SDRelativeTimeConstraint) || (tgc instanceof SDTimeInterval)){
-            realX = getX() + (width/2) - tgc.getWidth();
+            setCDRectangleOfSwallowed(tgc);
+            realX = getX() + (width/2);
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //tgc.setCdRectangle(0, -50, 0, 50);
             tgc.setCd(realX, realY);
         }
 
         if ((tgc instanceof SDActionState) || (tgc instanceof SDCoregion)|| (tgc instanceof SDGuard) || (tgc instanceof SDPortForMessage)) {
-            realX = getX()+(width/2);
+            setCDRectangleOfSwallowed(tgc);
+            realX = getX() + (width/2);
             //tgc.setCdRectangle((width/2), (width/2), spacePt, height-spacePt-tgc.getHeight());
             tgc.setCd(realX, realY);
         }
 
         if (tgc instanceof SDTimerSetting) {
-            realX = getX()+(width/2) ;
+            setCDRectangleOfSwallowed(tgc);
+            realX = getX()+(width/2);
             //tgc.setCdRectangle((width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
             tgc.setCd(realX, realY);
         }
 
         if (tgc instanceof SDTimerExpiration) {
+            setCDRectangleOfSwallowed(tgc);
             realX = getX() + (width/2) ;
             //tgc.setCdRectangle((width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
             tgc.setCd(realX, realY);
         }
 
         if (tgc instanceof SDTimerCancellation) {
+            setCDRectangleOfSwallowed(tgc);
             realX = getX()+(width/2) ;
             //tgc.setCdRectangle((width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
             tgc.setCd(realX, realY);
         }
 
-        setCDRectangleOfSwallowed(tgc);
+
 
         // coregions -> in the middle !
 
@@ -534,7 +544,8 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
             tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt(), height- spacePt());
         }
 
-        if ((tgc instanceof SDActionState) || (tgc instanceof SDGuard) || (tgc instanceof SDCoregion) || (tgc instanceof SDTimeInterval) || (tgc instanceof SDPortForMessage)) {
+        if ((tgc instanceof SDActionState) || (tgc instanceof SDGuard) || (tgc instanceof SDCoregion) || (tgc instanceof SDTimeInterval) ||
+                (tgc instanceof SDPortForMessage)) {
             tgc.setCdRectangle((width/2), (width/2), spacePt(), height- spacePt() -tgc.getHeight());
         }
 
