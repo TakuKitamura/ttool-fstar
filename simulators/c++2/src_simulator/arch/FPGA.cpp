@@ -56,7 +56,6 @@ FPGA::FPGA(    ID iID,
 	       unsigned int iCyclesPerExeci, 
 	       unsigned int iCyclesPerExecc ) : SchedulableDevice(iID, iName, iScheduler)
 					      ,_reconfigTime(iReconfigTime)
-					      ,_masterNextTransaction(0)
 					      ,_lastTransaction(0)
 					      ,_changeIdleModeCycles(iChangeIdleModeCycles)
 					      ,_cyclesBeforeIdle(iCyclesBeforeIdle)

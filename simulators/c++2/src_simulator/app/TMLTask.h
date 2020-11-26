@@ -242,8 +242,6 @@ public:
 	bool getIsDaemon() {return _isDaemon;};
 	bool getIsFirstTranExecuted() {return _isFirstTranExecuted;};
 	inline void setIsFirstTranExecuted(bool x) {_isFirstTranExecuted = x;};
-	bool getIsFPGAExist() {return _isFPGAExist;};
-	bool getIsCPUExist() {return _isCPUExist;};
 protected:
 	///ID of the task
 	ID _ID;
@@ -268,6 +266,7 @@ protected:
 	///Number of cores assigned to the task
 	unsigned int _noOfFPGAs;
 	bool _isDaemon;
+	bool _isFirstTranExecuted;
 	unsigned int _nextCellIndex;
 
 #ifdef ADD_COMMENTS
@@ -313,9 +312,6 @@ protected:
 	HashAlgo _stateHash;
 	const char* _liveVarList;
 	bool _hashInvalidated;
-	bool _isFirstTranExecuted;
-	bool _isCPUExist;
-	bool _isFPGAExist;
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass );
