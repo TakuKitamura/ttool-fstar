@@ -1066,8 +1066,14 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
 	  std::cout << "kernel:simulate: dependent Task found" << std::endl;
 #endif
-	  depCPU=depTask->getCPU();
-	  depFPGA=depTask->getFPGA();
+	  if(depTask->getIsCPUExist())
+	      depCPU=depTask->getCPU();
+	  else
+	      depCPU = 0;
+	  if(depTask->getIsFPGAExist())
+	      depFPGA=depTask->getFPGA();
+	  else
+	      depFPGA = 0;
 	  
 	  if(depCPU){
 #ifdef DEBUG_SIMULATE
@@ -1119,7 +1125,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_SIMULATE
 	    std::cout<<"lets start fpga"<<std::endl;
 #endif
-	    if (depFPGA!=deviceLET){
+	    if (depFPGA != 0 && depFPGA != deviceLET){
 #ifdef DEBUG_KERNEL
 	      std::cout << "kernel:simulate: Tasks running on different FPGAs" << std::endl;
 #endif
@@ -1412,7 +1418,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   std::cout<<"decodeCommand"<<std::endl;
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
   //std::cout << iCmd << std::endl;
-  unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
+  unsigned int aCmd = 0, aParam1 = 0, aParam2 = 0, anErrorCode = 0;
   //std::string anIssuedCmd(iCmd);
   std::istringstream aInpStream(iCmd);
   //std::cout << "Not crashed. II\n";
