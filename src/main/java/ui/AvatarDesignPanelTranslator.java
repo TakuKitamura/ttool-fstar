@@ -2508,40 +2508,42 @@ public class AvatarDesignPanelTranslator {
             // Issue #69
             //TraceManager.addDev("Found connector in block " + block.getOwnerName() + " between " +
               //      connector.getTGComponent1() + " and " + connector.getTGComponent2());
-            if (prunedConectors.contains(connector)) {
-                TraceManager.addDev("******************************** PRUNED connector: " + connector);
-            } else {
-                //TraceManager.addDev("Must handle connector: " + connector);
-                FindNextEnabledAvatarSMDConnectingPointVisitor visitor = new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
-                connector.getTGConnectingPointP1().acceptBackward(visitor);
-                final TGConnectingPoint conPoint1 = visitor.getEnabledComponentPoint();
+            if (connector instanceof AvatarSMDConnector) {
+                if (prunedConectors.contains(connector)) {
+                    TraceManager.addDev("******************************** PRUNED connector: " + connector);
+                } else {
+                    //TraceManager.addDev("Must handle connector: " + connector);
+                    FindNextEnabledAvatarSMDConnectingPointVisitor visitor =
+                            new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
+                    connector.getTGConnectingPointP1().acceptBackward(visitor);
+                    final TGConnectingPoint conPoint1 = visitor.getEnabledComponentPoint();
 
-                if (conPoint1 != null) {
-                    visitor = new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
-                    connector.getTGConnectingPointP2().acceptForward(visitor);
-                    final TGConnectingPoint conPoint2 = visitor.getEnabledComponentPoint();
+                    if (conPoint1 != null) {
+                        visitor = new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
+                        connector.getTGConnectingPointP2().acceptForward(visitor);
+                        final TGConnectingPoint conPoint2 = visitor.getEnabledComponentPoint();
 
-                    if (conPoint2 != null) {
-                        final TGComponent tgc1 = (TGComponent) conPoint1.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP1() );
-                        final TGComponent tgc2 = (TGComponent) conPoint2.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP2() );
-                        //                TGComponent tgc1 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP1());
-                        //                TGComponent tgc2 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP2());
-                        if (tgc1 == null || tgc2 == null) {
-                            TraceManager.addDev("TGCs nulls in Avatar translation");
-                        } else {
-                            final AvatarStateMachineElement element1 = (AvatarStateMachineElement) (listE.getObject(tgc1));
-                            final AvatarStateMachineElement element2 = (AvatarStateMachineElement) (listE.getObject(tgc2));
+                        if (conPoint2 != null) {
+                            final TGComponent tgc1 = (TGComponent) conPoint1.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP1() );
+                            final TGComponent tgc2 = (TGComponent) conPoint2.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP2() );
+                            //                TGComponent tgc1 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP1());
+                            //                TGComponent tgc2 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP2());
+                            if (tgc1 == null || tgc2 == null) {
+                                TraceManager.addDev("TGCs nulls in Avatar translation");
+                            } else {
+                                final AvatarStateMachineElement element1 = (AvatarStateMachineElement) (listE.getObject(tgc1));
+                                final AvatarStateMachineElement element2 = (AvatarStateMachineElement) (listE.getObject(tgc2));
 
                             /*if (element1 == null || element2 == null) {
                                 TraceManager.addDev("**************** ERROR: one of the two elements is NULL");
                             }*/
 
-                            if (element1 != null && element2 != null) {
-                                final AvatarSMDConnector avatarSmdConnector = (AvatarSMDConnector) connector;
+                                if (element1 != null && element2 != null) {
+                                    final AvatarSMDConnector avatarSmdConnector = (AvatarSMDConnector) connector;
 
-                                //TraceManager.addDev("Handling connector");
+                                    //TraceManager.addDev("Handling connector");
 
-                                //if (asm.findEmptyTransition(element1, element2) == null) {
+                                    //if (asm.findEmptyTransition(element1, element2) == null) {
                                     //TraceManager.addDev("-- Empty transition");
                                     final AvatarTransition at = new AvatarTransition(_ab, "avatar transition", connector);
                                     createTransitionInfo(at, avatarSmdConnector);
@@ -2654,7 +2656,8 @@ public class AvatarDesignPanelTranslator {
                                         ce.setTGComponent(connector);
                                         addCheckingError(ce);
                                     }
-                                //}
+                                    //}
+                                }
                             }
                         }
                     }
