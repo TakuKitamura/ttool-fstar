@@ -193,6 +193,13 @@ public class AvatarExpressionTest {
         assertTrue(AvatarExpressionSolver.indexOfVariable("x==xx", "x") == 0);
         assertTrue(AvatarExpressionSolver.indexOfVariable("x+1==xx", "x") == 0);
 
+        System.out.println("Solver: " + AvatarExpressionSolver.replaceVariable("x==y", "x", "z"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("x==y", "x", "z").equals("z==y"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("xx==y", "x", "z").equals("xx==y"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("xx==x", "x", "z").equals("xx==z"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("(foo==foo1)", "foo", "foo").equals("(foo==foo1)"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("(foo==foo1)", "foo", "foo1").equals("(foo1==foo1)"));
+
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
         assertTrue(e1.buildExpression(block1));
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-x / y - 15 * z + 1 == -31");
