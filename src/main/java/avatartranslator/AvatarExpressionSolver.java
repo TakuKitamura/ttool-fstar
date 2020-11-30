@@ -965,4 +965,58 @@ public class AvatarExpressionSolver {
         return optype;
     }
 
+    public static int indexOfVariable(String expr, String variable) {
+        int index;
+        String tmp = expr;
+        int removed = 0;
+        System.out.println("\nHandling expr: " + expr);
+
+        while ((index = tmp.indexOf(variable)) > -1) {
+            char c1, c2;
+            if (index > 0) {
+                c1 = tmp.charAt(index - 1);
+            } else {
+                c1 = ' ';
+            }
+
+            if (index+variable.length() < tmp.length())
+                c2 = tmp.charAt(index+variable.length());
+            else
+                c2 = ' ';
+
+            System.out.println("tmp=" + tmp + " c1=" + c1 + " c2=" + c2);
+
+            if (!(Character.isLetterOrDigit(c1) || (c1 == '_'))) {
+                if (!(Character.isLetterOrDigit(c2) || (c2 == '_'))) {
+                    System.out.println("Found at index=" + index + " returnedIndex=" + (index+removed));
+                    return index + removed;
+                }
+            }
+            tmp = tmp.substring(index+variable.length(), tmp.length());
+            System.out.println("tmp=" + tmp);
+            removed = index+variable.length();
+            if (tmp.length() == 0) {
+                return -1;
+            }
+            // We cut until we find a non alphanumerical character
+            while( Character.isLetterOrDigit(tmp.charAt(0)) || (tmp.charAt(0) == '_')) {
+                tmp = tmp.substring(1, tmp.length());
+                if (tmp.length() == 0) {
+                    return -1;
+                }
+                removed ++;
+            }
+            System.out.println("after remove: tmp=" + tmp);
+
+        }
+        return -1;
+    }
+
+    public static String replaceVariable(String expr, String oldVariable, String newVariable) {
+        int index;
+        String tmp = expr;
+
+        return tmp;
+    }
+
 }
