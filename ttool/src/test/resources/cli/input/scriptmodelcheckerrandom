@@ -1,0 +1,11 @@
+print dir
+set model resources/test/cli/models/testMCRandom.xml
+#print The model to be opened is: $model
+action start
+wait 2
+#toto
+action open $model
+wait 4
+action check-syntax
+action avatar-rg -g rgmodelcheckerrandom.aut
+action quit

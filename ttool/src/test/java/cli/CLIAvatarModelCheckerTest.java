@@ -115,6 +115,10 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
 
 	}
+
+
+
+
 	
 	@Test
     public void testStateLimitCoffeeMachine() {
@@ -335,6 +339,44 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
         String expectedOutput = myutil.FileUtils.loadFileData(f);
 
         assertEquals(expectedOutput, outputResult.toString()+"\n");
+    }
+
+    @Test
+    public void testAdvancedRandom() {
+	    System.out.println("advanced random model checker test");
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelcheckerrandom";
+        String script;
+
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
+        interpret.interpret();
+        System.out.println("Graph generated");
+
+        // Must now load the graph
+        filePath = "rgmodelcheckerrandom.aut";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(data.length() > 0);
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        graph.computeStates();
+
+        System.out.println("random Cstates=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
+        assertTrue(graph.getNbOfStates() == 6);
+        assertTrue(graph.getNbOfTransitions() == 5);
+
+
     }
 
 }

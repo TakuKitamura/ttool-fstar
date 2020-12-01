@@ -435,22 +435,30 @@ public class AvatarStateMachine extends AvatarElement {
                 String maxExpr = random.getMaxValue();
                 String var = random.getVariable();
 
-                // If minExpr contains var then use __tmpMin instead of var in minExpr
-                // Same for maxExpr
-                AvatarExpressionSolver solveForMin = new AvatarExpressionSolver(minExpr);
-                solveForMin.buildExpression();
-
+                String maxExprToBeUsed = "";
 
 
 
 
                 // Creating elements
                 AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
+
+                // If maxExpr contains var then use __tmpMax instead of var in maxExpr
+
+
+                if (AvatarExpressionSolver.indexOfVariable(maxExpr, var) > -1) {
+                    _block.addIntegerAttribute("tmpMaxRandom__");
+                    maxExprToBeUsed = "tmpMaxRandom__";
+                    at1.addAction("tmpMaxRandom__ = " + maxExpr);
+                } else {
+                    maxExprToBeUsed = maxExpr;
+                }
+
                 at1.addAction(random.getVariable() + "=" + minExpr);
                 AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
-                at2.setGuard("[" + random.getVariable() + " < " + maxExpr + "]");
+                at2.setGuard("[" + random.getVariable() + " < " + maxExprToBeUsed + "]");
                 at2.addAction(random.getVariable() + "=" + random.getVariable() + " + 1");
                 AvatarTransition at3 = new AvatarTransition(_block, "Transition3ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarState afterRandom = new AvatarState("StateAfterRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
