@@ -110,8 +110,8 @@
 <Modeling type="Avatar Analysis" nameTab="Analysis" >
 <UseCaseDiagramPanel name="Use Case Diagram 0" minX="10" maxX="1900" minY="10" maxY="1400" zoom="1.0" >
 <COMPONENT type="701" id="89" >
-<cdparam x="1075" y="186" />
-<sizeparam width="143" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1068" y="186" />
+<sizeparam width="157" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Use case" value="HandleAccessRequests" />
@@ -145,8 +145,8 @@
 </COMPONENT>
 
 <COMPONENT type="701" id="114" >
-<cdparam x="1097" y="475" />
-<sizeparam width="77" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1094" y="475" />
+<sizeparam width="83" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Use case" value="InformPilots" />
@@ -220,8 +220,8 @@
 </COMPONENT>
 
 <COMPONENT type="701" id="172" >
-<cdparam x="808" y="468" />
-<sizeparam width="76" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="807" y="468" />
+<sizeparam width="79" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Use case" value="InformCrew" />
@@ -255,8 +255,8 @@
 </COMPONENT>
 
 <COMPONENT type="701" id="197" >
-<cdparam x="1109" y="271" />
-<sizeparam width="81" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1105" y="271" />
+<sizeparam width="88" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Use case" value="ReleaseLock" />
@@ -290,8 +290,8 @@
 </COMPONENT>
 
 <COMPONENT type="701" id="222" >
-<cdparam x="1151" y="335" />
-<sizeparam width="67" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1148" y="335" />
+<sizeparam width="73" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Use case" value="ForceLock" />
@@ -525,8 +525,8 @@
 </COMPONENT>
 
 <COMPONENT type="701" id="412" >
-<cdparam x="836" y="338" />
-<sizeparam width="109" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="831" y="338" />
+<sizeparam width="118" height="40" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Use case" value="ManageDoorLock" />
@@ -764,7 +764,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="454" y="283" id="521" />
-<P2  x="836" y="358" id="389" />
+<P2  x="831" y="358" id="389" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="110" id="558" >
@@ -779,7 +779,7 @@
 <cdparam x="1218" y="355" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="1218" y="355" id="200" />
+<P1  x="1221" y="355" id="200" />
 <P2  x="1386" y="355" id="292" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -803,8 +803,8 @@
 <cdparam x="945" y="358" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="&lt;&lt;include&gt;&gt;" />
-<P1  x="945" y="358" id="390" />
-<P2  x="1097" y="495" id="91" />
+<P1  x="949" y="358" id="390" />
+<P2  x="1094" y="495" id="91" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="110" id="563" >
@@ -827,24 +827,24 @@
 <cdparam x="1001" y="216" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="&lt;&lt;include&gt;&gt;" />
-<P1  x="945" y="358" id="390" />
-<P2  x="1151" y="355" id="199" />
+<P1  x="949" y="358" id="390" />
+<P2  x="1148" y="355" id="199" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="111" id="566" >
 <cdparam x="1001" y="216" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="&lt;&lt;include&gt;&gt;" />
-<P1  x="945" y="358" id="390" />
-<P2  x="1109" y="291" id="174" />
+<P1  x="949" y="358" id="390" />
+<P2  x="1105" y="291" id="174" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="111" id="567" >
 <cdparam x="1065" y="218" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="&lt;&lt;include&gt;&gt;" />
-<P1  x="945" y="358" id="390" />
-<P2  x="1075" y="206" id="66" />
+<P1  x="949" y="358" id="390" />
+<P2  x="1068" y="206" id="66" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="110" id="568" >
@@ -852,14 +852,14 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="1386" y="320" id="290" />
-<P2  x="1190" y="291" id="175" />
+<P2  x="1193" y="291" id="175" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="110" id="569" >
 <cdparam x="1272" y="288" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="1218" y="206" id="67" />
+<P1  x="1225" y="206" id="67" />
 <P2  x="1371" y="206" id="324" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -877,7 +877,7 @@
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="" />
+<Validated value="Person;DoorAndLockButton;OnboardPersons;FirstOfficer;Passenger;Crew;Captain;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="571" >
@@ -908,7 +908,7 @@
 </CONNECTOR>
 <COMPONENT type="303" id="588" >
 <cdparam x="302" y="473" />
-<sizeparam width="845" height="123" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="882" height="123" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
 <infoparam name="UPPAAL Pragma" value="E&lt;&gt; Passenger.isInCockpit ==true&amp;&amp;DoorAndLockButton.inside==1
@@ -948,7 +948,7 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 
 <COMPONENT type="301" id="605" >
 <cdparam x="17" y="474" />
-<sizeparam width="237" height="87" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="255" height="87" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="To add a person, clone e.g. &quot;Captain&quot;
@@ -4050,44 +4050,43 @@ in DoorAndLockButton
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="Person;DoorAndLockButton;Keyboard;FirstOfficer;Passenger;Crew;OnboardPersons;Captain;" />
+<Validated value="Person;DoorAndLockButton;Keyboard;OnboardPersons;Captain;Passenger;Crew;FirstOfficer;" />
 <Ignored value="" />
 
+<COMPONENT type="302" id="3570" >
+<cdparam x="322" y="646" />
+<sizeparam width="200" height="30" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
+<infoparam name="Proverif Pragma" value="#confidentiality Keyboard.codeValue" />
+<TGConnectingPoint num="0" id="3571" />
+<TGConnectingPoint num="1" id="3572" />
+<TGConnectingPoint num="2" id="3573" />
+<TGConnectingPoint num="3" id="3574" />
+<TGConnectingPoint num="4" id="3575" />
+<TGConnectingPoint num="5" id="3576" />
+<TGConnectingPoint num="6" id="3577" />
+<TGConnectingPoint num="7" id="3578" />
+<TGConnectingPoint num="8" id="3579" />
+<TGConnectingPoint num="9" id="3580" />
+<TGConnectingPoint num="10" id="3581" />
+<TGConnectingPoint num="11" id="3582" />
+<TGConnectingPoint num="12" id="3583" />
+<TGConnectingPoint num="13" id="3584" />
+<TGConnectingPoint num="14" id="3585" />
+<TGConnectingPoint num="15" id="3586" />
+<extraparam>
+<Line value="#confidentiality Keyboard.codeValue" />
+</extraparam>
+</COMPONENT>
+
 <CONNECTOR type="5002" id="1924" >
-<cdparam x="1648" y="259" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="" />
-<TGConnectingPoint num="0" id="1923" />
-<P1  x="801" y="219" id="2016" />
-<P2  x="782" y="219" id="2135" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<iso value="in code(int codeValue)" />
-<osd value="out typeCode(int codeValue)" />
-<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="5002" id="1926" >
-<cdparam x="1055" y="131" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="" />
-<TGConnectingPoint num="0" id="1925" />
-<P1  x="1051" y="219" id="2017" />
-<P2  x="1070" y="184" id="1993" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<isd value="in emergencyCall()" />
-<oso value="out emergencyCall()" />
-<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
-</extraparam>
-</CONNECTOR>
-<CONNECTOR type="5002" id="1928" >
 <cdparam x="781" y="135" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
-<TGConnectingPoint num="0" id="1927" />
+<TGConnectingPoint num="0" id="1923" />
 <P1  x="782" y="114" id="2142" />
-<P2  x="1070" y="82" id="1991" />
+<P2  x="1074" y="86" id="1991" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in lock()" />
@@ -4102,6 +4101,34 @@ in DoorAndLockButton
 <oso value="out close()" />
 <oso value="out enterCockpit()" />
 <oso value="out leaveCockit()" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="5002" id="1926" >
+<cdparam x="1055" y="131" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="" />
+<TGConnectingPoint num="0" id="1925" />
+<P1  x="1051" y="219" id="2017" />
+<P2  x="1074" y="188" id="1993" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<isd value="in emergencyCall()" />
+<oso value="out emergencyCall()" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="5002" id="1928" >
+<cdparam x="1648" y="259" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="" />
+<TGConnectingPoint num="0" id="1927" />
+<P1  x="801" y="219" id="2016" />
+<P2  x="782" y="219" id="2135" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<iso value="in code(int codeValue)" />
+<osd value="out typeCode(int codeValue)" />
 <FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
@@ -4126,8 +4153,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="303" id="1954" >
-<cdparam x="303" y="474" />
-<sizeparam width="845" height="123" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="324" y="475" />
+<sizeparam width="882" height="123" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
 <infoparam name="UPPAAL Pragma" value="E&lt;&gt; Passenger.isInCockpit ==true&amp;&amp;DoorAndLockButton.inside==1
@@ -4166,8 +4193,8 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 </COMPONENT>
 
 <COMPONENT type="301" id="1971" >
-<cdparam x="55" y="474" />
-<sizeparam width="237" height="87" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="36" y="471" />
+<sizeparam width="255" height="87" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="To add a person, clone e.g. &quot;Captain&quot;
@@ -4206,7 +4233,7 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5005" id="1980" >
-<cdparam x="1073" y="249" />
+<cdparam x="1077" y="255" />
 <sizeparam width="217" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
@@ -4235,7 +4262,7 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5000" id="2005" >
-<cdparam x="1070" y="31" />
+<cdparam x="1074" y="35" />
 <sizeparam width="212" height="205" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
@@ -4320,120 +4347,6 @@ in DoorAndLockButton
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5000" id="2055" >
-<cdparam x="67" y="305" />
-<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
-<infoparam name="Block0" value="FirstOfficer" />
-<TGConnectingPoint num="0" id="2031" />
-<TGConnectingPoint num="1" id="2032" />
-<TGConnectingPoint num="2" id="2033" />
-<TGConnectingPoint num="3" id="2034" />
-<TGConnectingPoint num="4" id="2035" />
-<TGConnectingPoint num="5" id="2036" />
-<TGConnectingPoint num="6" id="2037" />
-<TGConnectingPoint num="7" id="2038" />
-<TGConnectingPoint num="8" id="2039" />
-<TGConnectingPoint num="9" id="2040" />
-<TGConnectingPoint num="10" id="2041" />
-<TGConnectingPoint num="11" id="2042" />
-<TGConnectingPoint num="12" id="2043" />
-<TGConnectingPoint num="13" id="2044" />
-<TGConnectingPoint num="14" id="2045" />
-<TGConnectingPoint num="15" id="2046" />
-<TGConnectingPoint num="16" id="2047" />
-<TGConnectingPoint num="17" id="2048" />
-<TGConnectingPoint num="18" id="2049" />
-<TGConnectingPoint num="19" id="2050" />
-<TGConnectingPoint num="20" id="2051" />
-<TGConnectingPoint num="21" id="2052" />
-<TGConnectingPoint num="22" id="2053" />
-<TGConnectingPoint num="23" id="2054" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
-</extraparam>
-</COMPONENT>
-
-<COMPONENT type="5000" id="2080" >
-<cdparam x="542" y="232" />
-<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
-<infoparam name="Block0" value="Passenger" />
-<TGConnectingPoint num="0" id="2056" />
-<TGConnectingPoint num="1" id="2057" />
-<TGConnectingPoint num="2" id="2058" />
-<TGConnectingPoint num="3" id="2059" />
-<TGConnectingPoint num="4" id="2060" />
-<TGConnectingPoint num="5" id="2061" />
-<TGConnectingPoint num="6" id="2062" />
-<TGConnectingPoint num="7" id="2063" />
-<TGConnectingPoint num="8" id="2064" />
-<TGConnectingPoint num="9" id="2065" />
-<TGConnectingPoint num="10" id="2066" />
-<TGConnectingPoint num="11" id="2067" />
-<TGConnectingPoint num="12" id="2068" />
-<TGConnectingPoint num="13" id="2069" />
-<TGConnectingPoint num="14" id="2070" />
-<TGConnectingPoint num="15" id="2071" />
-<TGConnectingPoint num="16" id="2072" />
-<TGConnectingPoint num="17" id="2073" />
-<TGConnectingPoint num="18" id="2074" />
-<TGConnectingPoint num="19" id="2075" />
-<TGConnectingPoint num="20" id="2076" />
-<TGConnectingPoint num="21" id="2077" />
-<TGConnectingPoint num="22" id="2078" />
-<TGConnectingPoint num="23" id="2079" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
-</extraparam>
-</COMPONENT>
-
-<COMPONENT type="5000" id="2105" >
-<cdparam x="303" y="227" />
-<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
-<infoparam name="Block0" value="Crew" />
-<TGConnectingPoint num="0" id="2081" />
-<TGConnectingPoint num="1" id="2082" />
-<TGConnectingPoint num="2" id="2083" />
-<TGConnectingPoint num="3" id="2084" />
-<TGConnectingPoint num="4" id="2085" />
-<TGConnectingPoint num="5" id="2086" />
-<TGConnectingPoint num="6" id="2087" />
-<TGConnectingPoint num="7" id="2088" />
-<TGConnectingPoint num="8" id="2089" />
-<TGConnectingPoint num="9" id="2090" />
-<TGConnectingPoint num="10" id="2091" />
-<TGConnectingPoint num="11" id="2092" />
-<TGConnectingPoint num="12" id="2093" />
-<TGConnectingPoint num="13" id="2094" />
-<TGConnectingPoint num="14" id="2095" />
-<TGConnectingPoint num="15" id="2096" />
-<TGConnectingPoint num="16" id="2097" />
-<TGConnectingPoint num="17" id="2098" />
-<TGConnectingPoint num="18" id="2099" />
-<TGConnectingPoint num="19" id="2100" />
-<TGConnectingPoint num="20" id="2101" />
-<TGConnectingPoint num="21" id="2102" />
-<TGConnectingPoint num="22" id="2103" />
-<TGConnectingPoint num="23" id="2104" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
-</extraparam>
-</COMPONENT>
-
 <COMPONENT type="5000" id="2155" >
 <cdparam x="32" y="10" />
 <sizeparam width="750" height="419" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -4476,9 +4389,126 @@ in DoorAndLockButton
 <Signal value="out typeCode(int codeValue)" attached="true" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5000" id="2130" >
+<SUBCOMPONENT type="5000" id="2055" >
 <father id="2155" num="0" />
-<cdparam x="66" y="196" />
+<cdparam x="536" y="183" />
+<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
+<infoparam name="Block0" value="Passenger" />
+<TGConnectingPoint num="0" id="2031" />
+<TGConnectingPoint num="1" id="2032" />
+<TGConnectingPoint num="2" id="2033" />
+<TGConnectingPoint num="3" id="2034" />
+<TGConnectingPoint num="4" id="2035" />
+<TGConnectingPoint num="5" id="2036" />
+<TGConnectingPoint num="6" id="2037" />
+<TGConnectingPoint num="7" id="2038" />
+<TGConnectingPoint num="8" id="2039" />
+<TGConnectingPoint num="9" id="2040" />
+<TGConnectingPoint num="10" id="2041" />
+<TGConnectingPoint num="11" id="2042" />
+<TGConnectingPoint num="12" id="2043" />
+<TGConnectingPoint num="13" id="2044" />
+<TGConnectingPoint num="14" id="2045" />
+<TGConnectingPoint num="15" id="2046" />
+<TGConnectingPoint num="16" id="2047" />
+<TGConnectingPoint num="17" id="2048" />
+<TGConnectingPoint num="18" id="2049" />
+<TGConnectingPoint num="19" id="2050" />
+<TGConnectingPoint num="20" id="2051" />
+<TGConnectingPoint num="21" id="2052" />
+<TGConnectingPoint num="22" id="2053" />
+<TGConnectingPoint num="23" id="2054" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
+<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="2080" >
+<father id="2155" num="1" />
+<cdparam x="300" y="184" />
+<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
+<infoparam name="Block0" value="Crew" />
+<TGConnectingPoint num="0" id="2056" />
+<TGConnectingPoint num="1" id="2057" />
+<TGConnectingPoint num="2" id="2058" />
+<TGConnectingPoint num="3" id="2059" />
+<TGConnectingPoint num="4" id="2060" />
+<TGConnectingPoint num="5" id="2061" />
+<TGConnectingPoint num="6" id="2062" />
+<TGConnectingPoint num="7" id="2063" />
+<TGConnectingPoint num="8" id="2064" />
+<TGConnectingPoint num="9" id="2065" />
+<TGConnectingPoint num="10" id="2066" />
+<TGConnectingPoint num="11" id="2067" />
+<TGConnectingPoint num="12" id="2068" />
+<TGConnectingPoint num="13" id="2069" />
+<TGConnectingPoint num="14" id="2070" />
+<TGConnectingPoint num="15" id="2071" />
+<TGConnectingPoint num="16" id="2072" />
+<TGConnectingPoint num="17" id="2073" />
+<TGConnectingPoint num="18" id="2074" />
+<TGConnectingPoint num="19" id="2075" />
+<TGConnectingPoint num="20" id="2076" />
+<TGConnectingPoint num="21" id="2077" />
+<TGConnectingPoint num="22" id="2078" />
+<TGConnectingPoint num="23" id="2079" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="2105" >
+<father id="2155" num="2" />
+<cdparam x="59" y="305" />
+<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
+<infoparam name="Block0" value="FirstOfficer" />
+<TGConnectingPoint num="0" id="2081" />
+<TGConnectingPoint num="1" id="2082" />
+<TGConnectingPoint num="2" id="2083" />
+<TGConnectingPoint num="3" id="2084" />
+<TGConnectingPoint num="4" id="2085" />
+<TGConnectingPoint num="5" id="2086" />
+<TGConnectingPoint num="6" id="2087" />
+<TGConnectingPoint num="7" id="2088" />
+<TGConnectingPoint num="8" id="2089" />
+<TGConnectingPoint num="9" id="2090" />
+<TGConnectingPoint num="10" id="2091" />
+<TGConnectingPoint num="11" id="2092" />
+<TGConnectingPoint num="12" id="2093" />
+<TGConnectingPoint num="13" id="2094" />
+<TGConnectingPoint num="14" id="2095" />
+<TGConnectingPoint num="15" id="2096" />
+<TGConnectingPoint num="16" id="2097" />
+<TGConnectingPoint num="17" id="2098" />
+<TGConnectingPoint num="18" id="2099" />
+<TGConnectingPoint num="19" id="2100" />
+<TGConnectingPoint num="20" id="2101" />
+<TGConnectingPoint num="21" id="2102" />
+<TGConnectingPoint num="22" id="2103" />
+<TGConnectingPoint num="23" id="2104" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="2130" >
+<father id="2155" num="3" />
+<cdparam x="51" y="182" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
@@ -4544,7 +4574,7 @@ in DoorAndLockButton
 </CONNECTOR><SUBCOMPONENT type="-1" id="2162" >
 <father id="2164" num="0" />
 <cdparam x="442" y="318" />
-<sizeparam width="84" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="92" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5410,7 +5440,7 @@ in DoorAndLockButton
 
 <COMPONENT type="301" id="2412" >
 <cdparam x="823" y="27" />
-<sizeparam width="123" height="15" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="132" height="15" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="System is blocked
@@ -5437,8 +5467,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2423" >
-<cdparam x="234" y="351" />
-<sizeparam width="49" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="232" y="351" />
+<sizeparam width="53" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5456,8 +5486,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2434" >
-<cdparam x="272" y="182" />
-<sizeparam width="110" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="268" y="182" />
+<sizeparam width="119" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5641,8 +5671,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2591" >
-<cdparam x="387" y="608" />
-<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="382" y="608" />
+<sizeparam width="108" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5660,8 +5690,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2602" >
-<cdparam x="526" y="611" />
-<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="522" y="611" />
+<sizeparam width="107" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5679,8 +5709,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2613" >
-<cdparam x="464" y="379" />
-<sizeparam width="49" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="462" y="379" />
+<sizeparam width="53" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5698,8 +5728,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2624" >
-<cdparam x="687" y="603" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="684" y="603" />
+<sizeparam width="61" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5800,8 +5830,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2708" >
-<cdparam x="611" y="384" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="608" y="384" />
+<sizeparam width="60" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -5819,8 +5849,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="2719" >
-<cdparam x="465" y="202" />
-<sizeparam width="63" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="462" y="202" />
+<sizeparam width="69" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6180,7 +6210,7 @@ in DoorAndLockButton
 </CONNECTOR><SUBCOMPONENT type="-1" id="2908" >
 <father id="2910" num="0" />
 <cdparam x="1267" y="482" />
-<sizeparam width="137" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="149" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6444,7 +6474,7 @@ in DoorAndLockButton
 </CONNECTOR><SUBCOMPONENT type="-1" id="2964" >
 <father id="2966" num="0" />
 <cdparam x="385" y="517" />
-<sizeparam width="107" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="111" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6677,7 +6707,7 @@ in DoorAndLockButton
 </CONNECTOR><SUBCOMPONENT type="-1" id="3013" >
 <father id="3015" num="0" />
 <cdparam x="932" y="396" />
-<sizeparam width="355" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="385" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6700,8 +6730,8 @@ in DoorAndLockButton
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="3026" >
-<cdparam x="1196" y="520" />
-<sizeparam width="158" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1190" y="520" />
+<sizeparam width="170" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6719,8 +6749,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3037" >
-<cdparam x="961" y="420" />
-<sizeparam width="164" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="954" y="420" />
+<sizeparam width="178" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6738,8 +6768,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3048" >
-<cdparam x="839" y="420" />
-<sizeparam width="55" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="836" y="420" />
+<sizeparam width="61" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6757,8 +6787,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3059" >
-<cdparam x="732" y="423" />
-<sizeparam width="41" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="730" y="423" />
+<sizeparam width="45" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6776,8 +6806,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3070" >
-<cdparam x="632" y="423" />
-<sizeparam width="47" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="629" y="423" />
+<sizeparam width="53" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6795,8 +6825,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3081" >
-<cdparam x="531" y="412" />
-<sizeparam width="47" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="528" y="412" />
+<sizeparam width="52" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6814,8 +6844,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3092" >
-<cdparam x="395" y="418" />
-<sizeparam width="91" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="390" y="418" />
+<sizeparam width="100" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -6916,8 +6946,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5103" id="3176" >
-<cdparam x="249" y="418" />
-<sizeparam width="91" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="245" y="418" />
+<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -7154,7 +7184,7 @@ in DoorAndLockButton
 <SUBCOMPONENT type="-1" id="3275" >
 <father id="3281" num="4" />
 <cdparam x="343" y="332" />
-<sizeparam width="39" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="44" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -7286,7 +7316,7 @@ in DoorAndLockButton
 </CONNECTOR><SUBCOMPONENT type="-1" id="3307" >
 <father id="3309" num="0" />
 <cdparam x="464" y="350" />
-<sizeparam width="191" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="207" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -7309,8 +7339,8 @@ in DoorAndLockButton
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="3320" >
-<cdparam x="426" y="370" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="422" y="370" />
+<sizeparam width="111" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -7411,8 +7441,8 @@ in DoorAndLockButton
 </COMPONENT>
 
 <COMPONENT type="5104" id="3404" >
-<cdparam x="382" y="222" />
-<sizeparam width="114" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="377" y="222" />
+<sizeparam width="125" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -7525,39 +7555,360 @@ in DoorAndLockButton
 </AVATARStateMachineDiagramPanel>
 
 <AVATARStateMachineDiagramPanel name="FirstOfficer" minX="10" maxX="2500" minY="10" maxY="1500" >
-<COMPONENT type="5100" id="3481" >
-<cdparam x="400" y="50" />
+<CONNECTOR type="5102" id="3486" >
+<cdparam x="433" y="182" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="3485" />
+<P1  x="431" y="170" id="3495" />
+<P2  x="412" y="232" id="3505" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="3484" >
+<father id="3486" num="0" />
+<cdparam x="422" y="207" />
+<sizeparam width="10" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="3480" />
+<TGConnectingPoint num="1" id="3481" />
+<TGConnectingPoint num="2" id="3482" />
+<TGConnectingPoint num="3" id="3483" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<CONNECTOR type="5102" id="3493" >
+<cdparam x="404" y="102" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="3492" />
+<P1  x="404" y="102" id="3507" />
+<P2  x="431" y="136" id="3494" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="3491" >
+<father id="3493" num="0" />
+<cdparam x="418" y="124" />
+<sizeparam width="10" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="3487" />
+<TGConnectingPoint num="1" id="3488" />
+<TGConnectingPoint num="2" id="3489" />
+<TGConnectingPoint num="3" id="3490" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="5112" id="3504" >
+<cdparam x="236" y="141" />
+<sizeparam width="391" height="24" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Library function call" value="Person (isInCockpit, knowsEmergencyCode, code)" />
+<TGConnectingPoint num="0" id="3494" />
+<TGConnectingPoint num="1" id="3495" />
+<TGConnectingPoint num="2" id="3496" />
+<TGConnectingPoint num="3" id="3497" />
+<TGConnectingPoint num="4" id="3498" />
+<TGConnectingPoint num="5" id="3499" />
+<TGConnectingPoint num="6" id="3500" />
+<TGConnectingPoint num="7" id="3501" />
+<TGConnectingPoint num="8" id="3502" />
+<TGConnectingPoint num="9" id="3503" />
+<extraparam>
+<LibraryFunction name="Person" />
+<Parameter id="isInCockpit" />
+<Parameter id="knowsEmergencyCode" />
+<Parameter id="code" />
+<Signal value="out lock()" />
+<Signal value="out unlock()" />
+<Signal value="out open()" />
+<Signal value="out close()" />
+<Signal value="out enterCockpit()" />
+<Signal value="out leaveCockit()" />
+<Signal value="out typeCode(int codeValue)" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5101" id="3506" >
+<cdparam x="402" y="237" />
+<sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="3505" />
+</COMPONENT>
+
+<COMPONENT type="5100" id="3508" >
+<cdparam x="397" y="82" />
 <sizeparam width="15" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="3480" />
+<TGConnectingPoint num="0" id="3507" />
 </COMPONENT>
 
 
 </AVATARStateMachineDiagramPanel>
 
 <AVATARStateMachineDiagramPanel name="Crew" minX="10" maxX="2500" minY="10" maxY="1500" >
-<COMPONENT type="5100" id="3483" >
-<cdparam x="400" y="50" />
+<CONNECTOR type="5102" id="3515" >
+<cdparam x="616" y="216" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="3514" />
+<P1  x="614" y="204" id="3524" />
+<P2  x="595" y="266" id="3534" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="3513" >
+<father id="3515" num="0" />
+<cdparam x="605" y="241" />
+<sizeparam width="10" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="3509" />
+<TGConnectingPoint num="1" id="3510" />
+<TGConnectingPoint num="2" id="3511" />
+<TGConnectingPoint num="3" id="3512" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<CONNECTOR type="5102" id="3522" >
+<cdparam x="587" y="136" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="3521" />
+<P1  x="587" y="136" id="3536" />
+<P2  x="614" y="170" id="3523" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="3520" >
+<father id="3522" num="0" />
+<cdparam x="601" y="158" />
+<sizeparam width="10" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="3516" />
+<TGConnectingPoint num="1" id="3517" />
+<TGConnectingPoint num="2" id="3518" />
+<TGConnectingPoint num="3" id="3519" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="5112" id="3533" >
+<cdparam x="419" y="175" />
+<sizeparam width="391" height="24" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Library function call" value="Person (isInCockpit, knowsEmergencyCode, code)" />
+<TGConnectingPoint num="0" id="3523" />
+<TGConnectingPoint num="1" id="3524" />
+<TGConnectingPoint num="2" id="3525" />
+<TGConnectingPoint num="3" id="3526" />
+<TGConnectingPoint num="4" id="3527" />
+<TGConnectingPoint num="5" id="3528" />
+<TGConnectingPoint num="6" id="3529" />
+<TGConnectingPoint num="7" id="3530" />
+<TGConnectingPoint num="8" id="3531" />
+<TGConnectingPoint num="9" id="3532" />
+<extraparam>
+<LibraryFunction name="Person" />
+<Parameter id="isInCockpit" />
+<Parameter id="knowsEmergencyCode" />
+<Parameter id="code" />
+<Signal value="out lock()" />
+<Signal value="out unlock()" />
+<Signal value="out open()" />
+<Signal value="out close()" />
+<Signal value="out enterCockpit()" />
+<Signal value="out leaveCockit()" />
+<Signal value="out typeCode(int codeValue)" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5101" id="3535" >
+<cdparam x="585" y="271" />
+<sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="3534" />
+</COMPONENT>
+
+<COMPONENT type="5100" id="3537" >
+<cdparam x="580" y="116" />
 <sizeparam width="15" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="3482" />
+<TGConnectingPoint num="0" id="3536" />
 </COMPONENT>
 
 
 </AVATARStateMachineDiagramPanel>
 
 <AVATARStateMachineDiagramPanel name="Passenger" minX="10" maxX="2500" minY="10" maxY="1500" >
-<COMPONENT type="5100" id="3485" >
-<cdparam x="400" y="50" />
+<CONNECTOR type="5102" id="3544" >
+<cdparam x="439" y="116" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="3543" />
+<P1  x="439" y="116" id="3567" />
+<P2  x="466" y="150" id="3554" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="3542" >
+<father id="3544" num="0" />
+<cdparam x="453" y="138" />
+<sizeparam width="10" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="3538" />
+<TGConnectingPoint num="1" id="3539" />
+<TGConnectingPoint num="2" id="3540" />
+<TGConnectingPoint num="3" id="3541" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<CONNECTOR type="5102" id="3551" >
+<cdparam x="468" y="196" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="3550" />
+<P1  x="466" y="184" id="3555" />
+<P2  x="447" y="246" id="3565" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="3549" >
+<father id="3551" num="0" />
+<cdparam x="457" y="221" />
+<sizeparam width="10" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="3545" />
+<TGConnectingPoint num="1" id="3546" />
+<TGConnectingPoint num="2" id="3547" />
+<TGConnectingPoint num="3" id="3548" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="5112" id="3564" >
+<cdparam x="271" y="155" />
+<sizeparam width="391" height="24" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Library function call" value="Person (isInCockpit, knowsEmergencyCode, code)" />
+<TGConnectingPoint num="0" id="3554" />
+<TGConnectingPoint num="1" id="3555" />
+<TGConnectingPoint num="2" id="3556" />
+<TGConnectingPoint num="3" id="3557" />
+<TGConnectingPoint num="4" id="3558" />
+<TGConnectingPoint num="5" id="3559" />
+<TGConnectingPoint num="6" id="3560" />
+<TGConnectingPoint num="7" id="3561" />
+<TGConnectingPoint num="8" id="3562" />
+<TGConnectingPoint num="9" id="3563" />
+<extraparam>
+<LibraryFunction name="Person" />
+<Parameter id="isInCockpit" />
+<Parameter id="knowsEmergencyCode" />
+<Parameter id="code" />
+<Signal value="out lock()" />
+<Signal value="out unlock()" />
+<Signal value="out open()" />
+<Signal value="out close()" />
+<Signal value="out enterCockpit()" />
+<Signal value="out leaveCockit()" />
+<Signal value="out typeCode(int codeValue)" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5101" id="3566" >
+<cdparam x="437" y="251" />
+<sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="3565" />
+</COMPONENT>
+
+<COMPONENT type="5100" id="3568" >
+<cdparam x="432" y="96" />
 <sizeparam width="15" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="3484" />
+<TGConnectingPoint num="0" id="3567" />
 </COMPONENT>
 
 

@@ -1548,13 +1548,25 @@ public class AvatarDesignPanelTranslator {
         TraceManager.addDev("Searching for attribute:" + _name);
         TAttribute ta = adp.getAvatarBDPanel().getAttribute(_name, _ab.getName());
         if (ta == null) {
+            // Must search among attributes of the created block
+            AvatarAttribute aatmp =  _ab.getAvatarAttributeWithName(_name);
+            if (aatmp != null) {
+                _aaos.addValue(aatmp.getName());
+                return;
+            }
+
+
             UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
             // TODO: adapt
             // ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(_tdp);
             ce.setTGComponent(_tgc);
             addCheckingError(ce);
-            TraceManager.addDev("not found");
+            TraceManager.addDev("not found " + _name + " in block " + _ab.getName()  + ". Attributes are:");
+            for(AvatarAttribute aa: _ab.getAttributes()) {
+                TraceManager.addDev("\t" + aa.getName());
+            }
+            TraceManager.addDev("\n");
             return;
         }
 
