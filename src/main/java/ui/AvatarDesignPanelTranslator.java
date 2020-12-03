@@ -1543,7 +1543,9 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    private void manageAttribute(String _name, AvatarStateMachineOwner _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc, String _idOperator) {
+    private void manageAttribute(String _name, AvatarStateMachineOwner _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc,
+                                 String _idOperator) {
+        TraceManager.addDev("Searching for attribute:" + _name);
         TAttribute ta = adp.getAvatarBDPanel().getAttribute(_name, _ab.getName());
         if (ta == null) {
             UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
@@ -1587,6 +1589,7 @@ public class AvatarDesignPanelTranslator {
     private void translateAvatarSMDSendSignal(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDSendSignal asmdss) throws CheckingError {
         AvatarStateMachine asm = _ab.getStateMachine();
         avatartranslator.AvatarSignal atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
+
         if (atas == null)
             throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
 
@@ -1627,26 +1630,30 @@ public class AvatarDesignPanelTranslator {
                 throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdss.getValue());
 
             for (int i = 0; i < asmdss.getNbOfValues(); i++) {
-                String tmp = asmdss.getValue(i);
+                String tmp = modifyString(asmdss.getValue(i));
                 if (tmp.isEmpty())
                     throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Empty parameter in signal expression: " + asmdss.getValue());
 
                 this.manageAttribute(tmp, _ab, aaos, tdp, asmdss, asmdss.getValue());
             }
 
-            if (aaos.getNbOfValues() != atas.getListOfAttributes().size())
+            if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+                TraceManager.addDev("nb of values: " + aaos.getNbOfValues() + " size of list: " + atas.getListOfAttributes().size());
                 throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
-
+            }
             // Checking expressions passed as parameter
             for (int i = 0; i < aaos.getNbOfValues(); i++) {
                 String theVal = aaos.getValue(i);
                 if (atas.getListOfAttributes().get(i).isInt()) {
-                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0)
-                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, modifyString(theVal)) < 0)
+                        //TraceManager.addDev("theVal=" + modifyString(theVal));
+                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue()
+                                + " -> value at index #" + i + " does not match definition");
                 } else {
                     // We assume it is a bool attribute
-                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0)
-                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, modifyString(theVal)) < 0)
+                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue()
+                                + " -> value at index #" + i + " does not match definition");
                 }
             }
 

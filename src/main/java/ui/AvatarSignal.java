@@ -105,6 +105,7 @@ public class AvatarSignal extends AvatarMethod {
             _content = Conversion.replaceAllString(_content, "#", "(");
             _content = Conversion.replaceAllString(_content, ",", "#int ");
             _content = Conversion.replaceAllString(_content, "#", ",");
+            _content = Conversion.replaceAllString(_content, ".", "");
         }
         TraceManager.addDev("content:" + _content);
         return (isAValidMethod(_content) != null);
@@ -230,7 +231,9 @@ public class AvatarSignal extends AvatarMethod {
     }
 
     public static String getValue(String _value, int _index) {
+
         int nbOfValues = getNbOfValues(_value);
+
         if (nbOfValues < 1) {
             return null;
         }

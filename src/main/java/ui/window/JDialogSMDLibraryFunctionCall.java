@@ -120,13 +120,18 @@ public class JDialogSMDLibraryFunctionCall extends JDialogBase implements Action
         if (this.libraryFunction != null) {
             this.parameters = new TAttribute [this.libraryFunction.getParameters ().size ()];
             int i=0;
-            for (TAttribute attr: this.functionCall.getParameters ())
-                this.parameters[i++] = attr;
+            for (TAttribute attr: this.functionCall.getParameters ()) {
+                if (i<this.libraryFunction.getParameters ().size ())
+                    this.parameters[i++] = attr;
+            }
 
             this.signals = new AvatarSignal [this.libraryFunction.getSignals ().size ()];
             i=0;
-            for (AvatarSignal signal: this.functionCall.getSignals ())
-                this.signals[i++] = signal;
+            for (AvatarSignal signal: this.functionCall.getSignals ()) {
+                if (i<this.libraryFunction.getSignals ().size ()) {
+                    this.signals[i++] = signal;
+                }
+            }
 
             this.returnAttributes = new TAttribute [this.libraryFunction.getReturnAttributes ().size ()];
             i=0;

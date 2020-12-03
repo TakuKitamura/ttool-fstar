@@ -51,6 +51,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.AvatarSignal;
 import ui.BasicErrorHighlight;
 import ui.CheckableAccessibility;
@@ -378,11 +379,13 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /*
 
     // Return -1 in case of error
     public int getNbOfValues() {
+		//TraceManager.addDev("value=" + value + " Nb of values " + AvatarSignal.getNbOfValues(value) + "");
         return AvatarSignal.getNbOfValues(value);
     }
 
     // Return null in case of error
     public String getValue(int _index) {
+    	TraceManager.addDev("Getting value " + _index + "");
         return AvatarSignal.getValue(value, _index);
     }
 
