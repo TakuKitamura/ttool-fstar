@@ -30,19 +30,19 @@
 </COMPONENT>
 <SUBCOMPONENT type="5607" id="6" >
 <father id="13" num="0" />
-<cdparam x="366" y="488" />
-<sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="366" maxX="366" minY="488" maxY="488" />
-<infoparam name="value " value="Design_lossy" />
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5607" id="7" >
-<father id="13" num="1" />
 <cdparam x="366" y="473" />
 <sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="366" maxX="366" minY="473" maxY="473" />
 <infoparam name="value " value="Design_unlossy" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5607" id="7" >
+<father id="13" num="1" />
+<cdparam x="366" y="488" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="366" maxX="366" minY="488" maxY="488" />
+<infoparam name="value " value="Design_lossy" />
 </SUBCOMPONENT>
 
 <COMPONENT type="5603" id="21" >
@@ -59,19 +59,19 @@
 </COMPONENT>
 <SUBCOMPONENT type="5607" id="14" >
 <father id="21" num="0" />
-<cdparam x="264" y="395" />
-<sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="264" maxX="264" minY="395" maxY="395" />
-<infoparam name="value " value="Analysis_lossy" />
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5607" id="15" >
-<father id="21" num="1" />
 <cdparam x="264" y="380" />
 <sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="264" maxX="264" minY="380" maxY="380" />
 <infoparam name="value " value="Analysis_unlossy" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5607" id="15" >
+<father id="21" num="1" />
+<cdparam x="264" y="395" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="264" maxX="264" minY="395" maxY="395" />
+<infoparam name="value " value="Analysis_lossy" />
 </SUBCOMPONENT>
 
 <COMPONENT type="5602" id="29" >
@@ -664,7 +664,7 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="274" />
-<P1  x="175" y="105" id="366" />
+<P1  x="175" y="105" id="392" />
 <P2  x="445" y="214" id="317" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -673,7 +673,7 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="276" />
-<P1  x="175" y="158" id="385" />
+<P1  x="175" y="158" id="359" />
 <P2  x="379" y="125" id="341" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -682,7 +682,7 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="278" />
-<P1  x="175" y="95" id="359" />
+<P1  x="175" y="95" id="385" />
 <P2  x="379" y="95" id="338" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -845,11 +845,11 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="369" >
 <father id="420" num="0" />
-<cdparam x="75" y="75" />
+<cdparam x="75" y="138" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="114" minY="0" maxY="240" />
-<infoparam name="TGComponent" value="INconreq" />
+<infoparam name="TGComponent" value="INconconf" />
 <TGConnectingPoint num="0" id="357" />
 <TGConnectingPoint num="1" id="358" />
 <TGConnectingPoint num="2" id="359" />
@@ -885,11 +885,11 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="395" >
 <father id="420" num="2" />
-<cdparam x="75" y="138" />
+<cdparam x="75" y="75" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="114" minY="0" maxY="240" />
-<infoparam name="TGComponent" value="INconconf" />
+<infoparam name="TGComponent" value="INconreq" />
 <TGConnectingPoint num="0" id="383" />
 <TGConnectingPoint num="1" id="384" />
 <TGConnectingPoint num="2" id="385" />
@@ -2728,8 +2728,8 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <cdparam x="32" y="20" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from actor to Use case" value="null" />
-<P1  x="72704" y="92160" id="1576" />
-<P2  x="159744" y="92160" id="1543" />
+<P1  x="2326528" y="2949120" id="1576" />
+<P2  x="5111808" y="2949120" id="1543" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -3171,13 +3171,13 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <Actor data="false" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="603" id="1806" >
+<SUBCOMPONENT type="604" id="1806" >
 <father id="1865" num="0" />
-<cdparam x="219" y="344" />
+<cdparam x="219" y="448" />
 <sizeparam width="15" height="25" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="18" maxX="18" minY="-2" maxY="478" />
-<infoparam name="setting timer" value="{timer=ATST1, duration=10}" />
+<infoparam name="timer cancellation" value="{timer=ATST1}" />
 <TGConnectingPoint num="0" id="1798" />
 <TGConnectingPoint num="1" id="1799" />
 <TGConnectingPoint num="2" id="1800" />
@@ -3187,16 +3187,16 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <TGConnectingPoint num="6" id="1804" />
 <TGConnectingPoint num="7" id="1805" />
 <extraparam>
-<Interval timer="ATST1" duration="10" />
+<Interval timer="ATST1" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="604" id="1815" >
+<SUBCOMPONENT type="603" id="1815" >
 <father id="1865" num="1" />
-<cdparam x="219" y="448" />
+<cdparam x="219" y="344" />
 <sizeparam width="15" height="25" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="18" maxX="18" minY="-2" maxY="478" />
-<infoparam name="timer cancellation" value="{timer=ATST1}" />
+<infoparam name="setting timer" value="{timer=ATST1, duration=10}" />
 <TGConnectingPoint num="0" id="1807" />
 <TGConnectingPoint num="1" id="1808" />
 <TGConnectingPoint num="2" id="1809" />
@@ -3206,7 +3206,7 @@ or timer ATST1 expires, an error indication is given to the the flight crew.
 <TGConnectingPoint num="6" id="1813" />
 <TGConnectingPoint num="7" id="1814" />
 <extraparam>
-<Interval timer="ATST1" />
+<Interval timer="ATST1" duration="10" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3781,13 +3781,13 @@ CC is lost
 <Actor data="false" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="603" id="2181" >
+<SUBCOMPONENT type="605" id="2181" >
 <father id="2265" num="0" />
-<cdparam x="214" y="334" />
+<cdparam x="214" y="497" />
 <sizeparam width="15" height="25" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="18" maxX="18" minY="-2" maxY="728" />
-<infoparam name="setting timer" value="{timer=ATST1, duration=10}" />
+<infoparam name="timer expiration" value="{timer=ATST1}" />
 <TGConnectingPoint num="0" id="2173" />
 <TGConnectingPoint num="1" id="2174" />
 <TGConnectingPoint num="2" id="2175" />
@@ -3797,16 +3797,16 @@ CC is lost
 <TGConnectingPoint num="6" id="2179" />
 <TGConnectingPoint num="7" id="2180" />
 <extraparam>
-<Interval timer="ATST1" duration="10" />
+<Interval timer="ATST1" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="605" id="2190" >
+<SUBCOMPONENT type="603" id="2190" >
 <father id="2265" num="1" />
-<cdparam x="214" y="497" />
+<cdparam x="214" y="334" />
 <sizeparam width="15" height="25" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="18" maxX="18" minY="-2" maxY="728" />
-<infoparam name="timer expiration" value="{timer=ATST1}" />
+<infoparam name="setting timer" value="{timer=ATST1, duration=10}" />
 <TGConnectingPoint num="0" id="2182" />
 <TGConnectingPoint num="1" id="2183" />
 <TGConnectingPoint num="2" id="2184" />
@@ -3816,7 +3816,7 @@ CC is lost
 <TGConnectingPoint num="6" id="2188" />
 <TGConnectingPoint num="7" id="2189" />
 <extraparam>
-<Interval timer="ATST1" />
+<Interval timer="ATST1" duration="10" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4274,7 +4274,7 @@ CC is lost
 <osd value="out CC()" />
 <isd value="in CR()" />
 <oso value="out CR()" />
-<FIFOType asynchronous="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="true" synchronousCH="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR><SUBCOMPONENT type="-1" id="2486" >
 <father id="2491" num="0" />
@@ -4306,7 +4306,7 @@ CC is lost
 <osd value="out INconind()" />
 <isd value="in INconresp()" />
 <oso value="out INconresp()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2495" >
@@ -4322,7 +4322,7 @@ CC is lost
 <osd value="out INconconf()" />
 <isd value="in INconreq()" />
 <oso value="out INconreq()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="301" id="2512" >
@@ -6599,7 +6599,7 @@ CC is lost
 <isd value="in DR()" />
 <oso value="out CR()" />
 <oso value="out DR()" />
-<FIFOType asynchronous="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="true" synchronousCH="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR><SUBCOMPONENT type="-1" id="3692" >
 <father id="3697" num="0" />
@@ -6633,7 +6633,7 @@ CC is lost
 <extraparam>
 <iso value="in CC()" />
 <osd value="out CC()" />
-<FIFOType asynchronous="true" size="1" blocking="false" private="true" broadcast="false" lossy="true" ams="false" />
+<FIFOType asynchronous="true" synchronousCH="false" size="1" blocking="false" private="true" broadcast="false" lossy="true" ams="false" />
 </extraparam>
 </CONNECTOR><SUBCOMPONENT type="-1" id="3698" >
 <father id="3703" num="0" />
@@ -6667,7 +6667,7 @@ CC is lost
 <osd value="out INerror_ground()" />
 <isd value="in INconresp()" />
 <oso value="out INconresp()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="3707" >
@@ -6685,7 +6685,7 @@ CC is lost
 <osd value="out INerror()" />
 <isd value="in INconreq()" />
 <oso value="out INconreq()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="303" id="3724" >

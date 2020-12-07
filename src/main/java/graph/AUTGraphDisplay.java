@@ -181,7 +181,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
               String tmp = Conversion.replaceAllChar(transition.transition, '(', "$");
               tmp = Conversion.replaceAllChar(tmp, ')', "$");
               TraceManager.addDev("Transition=" + tmp);*/
-            edge.setAttribute("ui.label", graph.getCompoundString(transition, transitionsMet));
+            edge.setAttribute("ui.label", graph.removeOTime(graph.removeSameSignal(graph.getCompoundString(transition, transitionsMet))));
             //edge.addAttribute("ui.class", "edge");
             //edge.addAttribute("shape", "cubic-curve");
             //edge.addAttribute("arrow-shape", "circle");
