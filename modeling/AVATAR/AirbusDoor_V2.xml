@@ -1104,11 +1104,11 @@ in DoorAndLockButton
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="664" >
 <father id="764" num="0" />
-<cdparam x="64" y="322" />
+<cdparam x="65" y="217" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="FirstOfficer" />
+<infoparam name="Block0" value="Captain" />
 <TGConnectingPoint num="0" id="640" />
 <TGConnectingPoint num="1" id="641" />
 <TGConnectingPoint num="2" id="642" />
@@ -1142,11 +1142,11 @@ in DoorAndLockButton
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="689" >
 <father id="764" num="1" />
-<cdparam x="534" y="247" />
+<cdparam x="299" y="249" />
 <sizeparam width="225" height="134" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="285" />
-<infoparam name="Block0" value="Passenger" />
+<infoparam name="Block0" value="Crew" />
 <TGConnectingPoint num="0" id="665" />
 <TGConnectingPoint num="1" id="666" />
 <TGConnectingPoint num="2" id="667" />
@@ -1175,16 +1175,16 @@ in DoorAndLockButton
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="714" >
 <father id="764" num="2" />
-<cdparam x="299" y="249" />
+<cdparam x="534" y="247" />
 <sizeparam width="225" height="134" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="285" />
-<infoparam name="Block0" value="Crew" />
+<infoparam name="Block0" value="Passenger" />
 <TGConnectingPoint num="0" id="690" />
 <TGConnectingPoint num="1" id="691" />
 <TGConnectingPoint num="2" id="692" />
@@ -1213,16 +1213,16 @@ in DoorAndLockButton
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="739" >
 <father id="764" num="3" />
-<cdparam x="65" y="217" />
+<cdparam x="64" y="322" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="Captain" />
+<infoparam name="Block0" value="FirstOfficer" />
 <TGConnectingPoint num="0" id="715" />
 <TGConnectingPoint num="1" id="716" />
 <TGConnectingPoint num="2" id="717" />
@@ -4430,11 +4430,11 @@ in DoorAndLockButton
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="2090" >
 <father id="2190" num="0" />
-<cdparam x="557" y="237" />
+<cdparam x="72" y="236" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="Passenger" />
+<infoparam name="Block0" value="Captain" />
 <TGConnectingPoint num="0" id="2066" />
 <TGConnectingPoint num="1" id="2067" />
 <TGConnectingPoint num="2" id="2068" />
@@ -4462,18 +4462,18 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
 <Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2115" >
 <father id="2190" num="1" />
-<cdparam x="321" y="238" />
+<cdparam x="80" y="359" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="Crew" />
+<infoparam name="Block0" value="FirstOfficer" />
 <TGConnectingPoint num="0" id="2091" />
 <TGConnectingPoint num="1" id="2092" />
 <TGConnectingPoint num="2" id="2093" />
@@ -4501,18 +4501,18 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
 <Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
 <Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2140" >
 <father id="2190" num="2" />
-<cdparam x="80" y="359" />
+<cdparam x="321" y="238" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="FirstOfficer" />
+<infoparam name="Block0" value="Crew" />
 <TGConnectingPoint num="0" id="2116" />
 <TGConnectingPoint num="1" id="2117" />
 <TGConnectingPoint num="2" id="2118" />
@@ -4540,18 +4540,18 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
 <Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
 <Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2165" >
 <father id="2190" num="3" />
-<cdparam x="72" y="236" />
+<cdparam x="557" y="237" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="Captain" />
+<infoparam name="Block0" value="Passenger" />
 <TGConnectingPoint num="0" id="2141" />
 <TGConnectingPoint num="1" id="2142" />
 <TGConnectingPoint num="2" id="2143" />
@@ -4579,8 +4579,8 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
 <Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>

@@ -372,6 +372,7 @@ $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $< $@
 	@mkdir -p $(TTOOL_TARGET_MACOS)/TTool/bin
 	@$(TAR) xzf $(TTOOL_PRIVATE)/stocks/proverif_macos.tar.gz -C $(TTOOL_TARGET_MACOS)
+	@mv proverif* proverif
 	@$(TAR) xzf $(TTOOL_PRIVATE)/stocks/uppaal_macos.tar.gz -C $(TTOOL_TARGET_MACOS)
 	@mv $(TTOOL_TARGET_MACOS)/uppaal* $(TTOOL_TARGET_MACOS)/uppaal
 	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config_macosx.xml
