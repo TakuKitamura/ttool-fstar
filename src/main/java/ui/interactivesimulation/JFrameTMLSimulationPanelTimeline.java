@@ -42,9 +42,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
     private JScrollPane jsp;
     private String zoomIndex = "";
     private String toolTipText = null;
-    private int X = 0, Y = 0, Y_AXIS_START = 0, maxPos =0, minPos = 0;;
+    private int X = 0, Y = 0, Y_AXIS_START = 0, maxPos = 0, minPos = 0;
     private HashMap<Integer, Integer> timeMarkedPosition;
-    private enum TransType{
+
+    private enum TransType {
         NONE,
         WRITE,
         READ,
@@ -100,8 +101,8 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     zoomIndex = "100%";
                 }
                 sdpanel.getDocument().putProperty("ZOOM_FACTOR", new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
-                System.out.println("Scale: " + new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
-                if(filePath.length() < 10000) {
+                TraceManager.addDev("Scale: " + new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
+                if (filePath.length() < 10000) {
                     sdpanel.setText(filePath);
                     sdpanel.setCaretPosition(0);
                     jsp.getVerticalScrollBar().setValue(0);
@@ -242,7 +243,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     if (pos >= 0) {
 
                         try {
-                            if(timeMarkedPosition.keySet().contains(pos) && Math.abs(modelToView(pos).x - X) < 3) {
+                            if (timeMarkedPosition.keySet().contains(pos) && Math.abs(modelToView(pos).x - X) < 3) {
                                 g2.drawString("Time: " + timeMarkedPosition.get(pos), X, Y);
                                 g2.dispose();
                             } else if (!timeMarkedPosition.keySet().contains(pos)) {
@@ -264,7 +265,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                             }
 
                         } catch (BadLocationException e) {
-                            System.out.println("Calculating time value ...");
+                            TraceManager.addDev("Position not found.");
                         }
                     }
                 }
@@ -282,14 +283,14 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                         String tab = "";
                         int index1 = -1;
                         int index = toolTipText.indexOf(": ");
-                        if(index != -1) {
+                        if (index != -1) {
                             tab = toolTipText.substring(0, index);
                             index1 = tab.indexOf("__");
                         }
                         if (index1 != -1) {
                             diag = tab.substring(0, index1);
                             tab = tab.substring(index1+2, tab.length());
-                            System.out.println(diag + "\n" + tab);
+//                            TraceManager.addDev(diag + "\n" + tab);
                         }
                         mgui.openTMLTaskActivityDiagram(diag, tab);
                         mgui.getFrame().toFront();
@@ -297,15 +298,16 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                         mgui.getFrame().repaint();
                         TDiagramPanel tp =  mgui.getCurrentTDiagramPanel();
                         for (int z = 0; z < tp.getComponentList().size(); z++) {
-//                            System.out.println(tp.getComponentList().get(z).toString());
                             String temp = tp.getComponentList().get(z).toString();
                             TransType typeTooltip = getTypeOfTransactions(toolTipText);
                             TransType typeTemp = getTypeOfTransactions(temp);
                             int indexTemp1 = temp.indexOf(": ");
                             int indexTemp2 = temp.indexOf("(");
+
                             if (indexTemp1 != -1 && indexTemp2 != -1) {
                                 temp = temp.substring(indexTemp1 + 2, indexTemp2);
                             }
+
                             if (toolTipText.toLowerCase().contains(temp.toLowerCase()) && typeTooltip == typeTemp) {
                                 tp.getComponentList().get(z).setState(TGState.POINTED);
                             } else {
@@ -451,7 +453,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             FileWriter myWriter = new FileWriter(file);
             myWriter.write(filePath);
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            TraceManager.addDev("Successfully wrote to the file.");
             JOptionPane.showMessageDialog(getContentPane(), "The capture was correctly performed and saved in " + file.getAbsolutePath(), "Screen capture ok", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             TraceManager.addDev("Error during save trace: " + e.getMessage());
@@ -484,7 +486,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
     private void collectTimeStamp() {
         //for store all element
-        if(sdpanel != null && sdpanel.getDocument() != null) {
+        if (sdpanel != null && sdpanel.getDocument() != null) {
             timeMarkedPosition = new HashMap<>();
             HTMLDocument hdoc = (HTMLDocument) sdpanel.getDocument();
             ElementIterator iterator = new ElementIterator(hdoc);
@@ -505,10 +507,10 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     if (num > maxPos) maxPos = num;
                     if (num < minPos) minPos = num;
                     timeMarkedPosition.put(startOffset,num);
-                } catch (NumberFormatException err) {
+                } catch (NumberFormatException e) {
                     // not an integer.
-                } catch (BadLocationException badLocationException) {
-                    System.out.println("Some content was not retrieved.");
+                } catch (BadLocationException e) {
+                    TraceManager.addDev("Some content was not retrieved: " + e.getMessage());
                 }
             }
         }
@@ -524,7 +526,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             jsp.getHorizontalScrollBar().setValue(0);
             jsp.repaint();
         } catch (Exception e) {
-            e.printStackTrace();
+            TraceManager.addDev("Error during writing html content: " + e.getMessage());
         }
     }
 
@@ -532,7 +534,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         status.setText(s);
         time.setText(s1);
         info.setText(s2);
-        if (s.equals("Terminated")){
+        if (s.equals("Terminated")) {
             status.setForeground(ColorManager.InteractiveSimulationText_TERM);
             time.setForeground(ColorManager.InteractiveSimulationText_TERM);
             info.setForeground(ColorManager.InteractiveSimulationText_TERM);
