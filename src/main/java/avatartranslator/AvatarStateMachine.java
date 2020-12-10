@@ -428,41 +428,37 @@ public class AvatarStateMachine extends AvatarElement {
                 previous = getPreviousElementOf(elt);
                 next = elt.getNext(0);
                 toRemove.add(elt);
-//
-//                // Creating elements
-//                AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
-//                AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
-//                
-//                for (int i = Integer.parseInt(random.getMinValue()); i <= Integer.parseInt(random.getMaxValue()); i++) {
-//                    AvatarTransition at1 = new AvatarTransition(_block, "TransitionForRandom__" + random.getVariable() + "=" + i + "__" + elt.getName() + "__" + id, elt.getReferenceObject());
-//                    at1.addAction(random.getVariable() + "=" + i);
-//                    toAdd.add(at1);
-//                    beforeRandom.addNext(at1);
-//                    at1.addNext(randomState);
-//                }
-//                
-//                // Adding elements
-//                toAdd.add(beforeRandom);
-//                toAdd.add(randomState);
-//
-//                // Linking elements
-//                if (previous != null) {
-//                    previous.removeAllNexts();
-//                    previous.addNext(beforeRandom);
-//                }
-//                randomState.addNext(next);
-//
-//                id++;
-//
-//            }
+
+                // Is the variable of random used in expression?
+                // If yes, they must be removed. If not, we can directly use the expressions.
+                String minExpr = random.getMinValue();
+                String maxExpr = random.getMaxValue();
+                String var = random.getVariable();
+
+                String maxExprToBeUsed = "";
+
+
+
 
                 // Creating elements
                 AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
-                at1.addAction(random.getVariable() + "=" + random.getMinValue());
+
+                // If maxExpr contains var then use __tmpMax instead of var in maxExpr
+
+
+                if (AvatarExpressionSolver.indexOfVariable(maxExpr, var) > -1) {
+                    _block.addIntegerAttribute("tmpMaxRandom__");
+                    maxExprToBeUsed = "tmpMaxRandom__";
+                    at1.addAction("tmpMaxRandom__ = " + maxExpr);
+                } else {
+                    maxExprToBeUsed = maxExpr;
+                }
+
+                at1.addAction(random.getVariable() + "=" + minExpr);
                 AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
-                at2.setGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
+                at2.setGuard("[" + random.getVariable() + " < " + maxExprToBeUsed + "]");
                 at2.addAction(random.getVariable() + "=" + random.getVariable() + " + 1");
                 AvatarTransition at3 = new AvatarTransition(_block, "Transition3ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
                 AvatarState afterRandom = new AvatarState("StateAfterRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());

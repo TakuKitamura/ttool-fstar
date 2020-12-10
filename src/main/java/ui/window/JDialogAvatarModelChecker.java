@@ -314,6 +314,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         wordRepresentationBox.addActionListener(this);
         jp01.add(wordRepresentationBox, c01);
 
+        TraceManager.addDev("hello");
+
         c01.gridwidth = 1;
         jp01.add(new JLabel("Max nb of threads:"), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER;

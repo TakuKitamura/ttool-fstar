@@ -182,7 +182,24 @@ public class AvatarExpressionTest {
         int[] attributes = {2, 3, 7, 0, 1};
         
         AvatarExpressionSolver.emptyAttributesMap();
-        
+
+        String expr = "x + y";
+        assertTrue(AvatarExpressionSolver.indexOfVariable(expr, "x") == 0);
+        assertTrue(AvatarExpressionSolver.indexOfVariable(expr, "y") == 4);
+        assertTrue(AvatarExpressionSolver.indexOfVariable(expr, "z") == -1);
+        assertTrue(AvatarExpressionSolver.indexOfVariable("xx+xxx", "x") == -1);
+        assertTrue(AvatarExpressionSolver.indexOfVariable("xx==xxx", "x") == -1);
+        assertTrue(AvatarExpressionSolver.indexOfVariable("xx==x", "x") == 4);
+        assertTrue(AvatarExpressionSolver.indexOfVariable("x==xx", "x") == 0);
+        assertTrue(AvatarExpressionSolver.indexOfVariable("x+1==xx", "x") == 0);
+
+        System.out.println("Solver: " + AvatarExpressionSolver.replaceVariable("x==y", "x", "z"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("x==y", "x", "z").equals("z==y"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("xx==y", "x", "z").equals("xx==y"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("xx==x", "x", "z").equals("xx==z"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("(foo==foo1)", "foo", "foo").equals("(foo==foo1)"));
+        assertTrue(AvatarExpressionSolver.replaceVariable("(foo==foo1)", "foo", "foo1").equals("(foo1==foo1)"));
+
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
         assertTrue(e1.buildExpression(block1));
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-x / y - 15 * z + 1 == -31");
@@ -234,9 +251,10 @@ public class AvatarExpressionTest {
         SpecificationState ss = new SpecificationState();
         ss.setInit(as, false);
         AvatarExpressionSolver.emptyAttributesMap();
-        
+
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("block1.x + block2.y");
         assertTrue(e1.buildExpression(as));
+
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-block1.x / block1.y - 15 * block2.z + 1 == -46");
         assertTrue(AvatarExpressionSolver.containsElementAttribute(block1.getAttribute(0)));
         assertTrue(AvatarExpressionSolver.containsElementAttribute(block2.getAttribute(1)));
@@ -272,5 +290,7 @@ public class AvatarExpressionTest {
         assertTrue(e3.getResult(ss) == 0);    
         assertTrue(e4.getResult(ss) == -2);
     }
+
+
 
 }

@@ -923,7 +923,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             spec.removeEmptyTransitions(!(studyReachability || studyLiveness || studySafety));
         }
 
-        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
+        //TraceManager.addDev("\nPreparing Avatar specification :" + spec.toString() + "\n\n");
+
         prepareStates();
         
         spec.removeConstants();

@@ -449,8 +449,10 @@ public class AvatarSMDLibraryFunctionCall extends AvatarSMDBasicCanBeDisabledCom
            (this.parameters.size () != this.libraryFunction.getParameters ().size () ||
             this.signals.size () != this.libraryFunction.getSignals().size () ||
             this.returnAttributes.size () != this.libraryFunction.getReturnAttributes().size ())) {
-            throw new MalformedModelingException ();
+            //throw new MalformedModelingException ();
         }
+
+
     }
 
     @Override

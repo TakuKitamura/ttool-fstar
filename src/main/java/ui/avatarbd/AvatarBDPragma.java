@@ -54,8 +54,8 @@ import ui.window.JDialogPragma;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * Class Pragma
@@ -71,8 +71,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     protected List<String> models;
     protected List<String> properties;
     public List<String> syntaxErrors;
-//    protected int textX = 25;
-//    protected int textY = 5;
+
     protected int marginY = 20;
     protected int marginX = 20;
     protected int limit = 15;
@@ -102,7 +101,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     public AvatarBDPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
+
         textX = 25;
         textY = 5;
         width = 200;
@@ -110,7 +109,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         minWidth = 80;
         minHeight = 10;
         initScaling(200, 30);
-        
+
         models = new LinkedList<String>();
         properties = new LinkedList<String>();
         authStrongMap = new HashMap<String, Integer>();
@@ -164,28 +163,12 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
-        Font fold = f;
 
-        /*if (!tdp.isScaled()) {
-          graphics = g;
-          }*/
-
-//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-//            currentFontSize = tdp.getFontSize() + 1;
-//            //
-//            //            myFont = f.deriveFont((float)currentFontSize);
-//            //myFontB = myFont.deriveFont(Font.BOLD);
-//
-//            if (rescaled) {
-//                rescaled = false;
-//            }
-//        }
 
         if (values == null) {
             makeValue();
         }
 
-//        int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
         /* !!! WARNING !!!
@@ -206,15 +189,14 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
             for (int i = 0; i < values.length; i++)
                 desiredWidth = Math.max(desiredWidth, this.tdp.stringWidth(g, values[i]) + marginX + textX);
 
-            //	currentFontSize= 5;
-//            int desiredHeight = ((models.size() + properties.size() + 4) * currentFontSize) + textY + 1;
+            int desiredHeight = (properties.size() + 3 + models.size()) * currentFontSize + textY + 1;
 
-            //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
-
-//            if ((desiredWidth != width) || (desiredHeight != height)) {
-//                resize(desiredWidth, desiredHeight);
-//            }
+            if ((desiredWidth != width) || (desiredHeight != height)) {
+                resize(desiredWidth, desiredHeight);
+            }
         }
+
+        // Must compute its width and height
 
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
@@ -242,8 +224,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         int i = 1;
         Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize() * 7 / 6);
         g.setFont(heading);
+        currentFontSize = this.tdp.getFontSize() * 7 / 6;
         drawSingleString(g, "Security features", x + textX, y + textY + currentFontSize);
-        g.setFont(fold);
+        g.setFont(f);
+        currentFontSize = f.getSize();
         for (String s : models) {
             pragmaLocMap.put(s, y + textY + (i + 1) * currentFontSize);
             drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
@@ -259,20 +243,19 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         // FIXME: why the empty string ? 
         //I forget...
         //FIXME: issue #31 without the f.getSize it would glitch
-        currentFontSize = f.getSize();
         drawSingleString(g, " ", x + textX, y + textY + (i + 1) * currentFontSize);
         i++;
         g.drawLine(x, y + textY / 2 + i * currentFontSize, x + width, y + textY / 2 + i * currentFontSize);
         g.setFont(heading);
         drawSingleString(g, "Security Property", x + textX, y + textY + (i + 1) * currentFontSize);
-        g.setFont(fold);
+        g.setFont(f);
         i++;
 //		
         for (String s : properties) {
             if (authStrongMap.containsKey(s) || authWeakMap.containsKey(s)) {
                 g.setFont(new Font("tmp", Font.PLAIN, 7));
                 drawConfidentialityVerification(s, g, x + lockX, y + lockY + (i + 1) * currentFontSize);
-                g.setFont(fold);
+                g.setFont(f);
             }
             drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             pragmaLocMap.put(s, y + textY + i * currentFontSize);
@@ -286,11 +269,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
             i++;
         }
 
-/*        for (int i = 0; i<values.length; i++) {
-            //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
-            drawSingleString(g, values[i], x + textX, y + textY + (i+1)* currentFontSize);
-        }
-*/
+
+
+
         g.setColor(c);
     }
 

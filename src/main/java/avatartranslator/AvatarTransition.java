@@ -272,7 +272,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public void addAction(String _action) {
         //TraceManager.addDev("****************************  String expr to be added: " + _action);
         AvatarAction aa = AvatarTerm.createActionFromString(block, _action);
-        //TraceManager.addDev("****************************  Adding Avatar action from String : " + aa);
+        TraceManager.addDev("****************************  Adding Avatar action from String : " + aa);
         if (aa != null)
             actions.add(aa);
     }
@@ -500,6 +500,26 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public String getNiceName() {
+        String s = " weight:" + getProbability() + " ";
+        if (isGuarded())
+            s += " guard=" + guard;
+
+        if (hasDelay())
+            s += " delay(" + minDelay + ", " + maxDelay + ")";
+
+        if (actions.size() > 0) {
+            s+= " actions: ";
+            for (AvatarAction act: actions) {
+                s += " " + act;
+            }
+        }
+
+        return s;
+
+        //return "Empty transition" + s;
+    }
+
+    public String getNiceNameOld() {
         String s = " weight:" + getProbability();
         if (isGuarded())
             return "Transition (guard=" + guard + ", ...)" + s;
@@ -513,6 +533,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
         return "Empty transition" + s;
     }
+
 
     public void translate(AvatarTranslator translator, Object arg) {
         translator.translateTransition(this, arg);

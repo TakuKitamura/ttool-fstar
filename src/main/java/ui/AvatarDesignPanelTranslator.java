@@ -1543,16 +1543,30 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    private void manageAttribute(String _name, AvatarStateMachineOwner _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc, String _idOperator) {
+    private void manageAttribute(String _name, AvatarStateMachineOwner _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc,
+                                 String _idOperator) {
+        TraceManager.addDev("Searching for attribute:" + _name);
         TAttribute ta = adp.getAvatarBDPanel().getAttribute(_name, _ab.getName());
         if (ta == null) {
+            // Must search among attributes of the created block
+            AvatarAttribute aatmp =  _ab.getAvatarAttributeWithName(_name);
+            if (aatmp != null) {
+                _aaos.addValue(aatmp.getName());
+                return;
+            }
+
+
             UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
             // TODO: adapt
             // ce.setAvatarBlock(_ab);
             ce.setTDiagramPanel(_tdp);
             ce.setTGComponent(_tgc);
             addCheckingError(ce);
-            TraceManager.addDev("not found");
+            TraceManager.addDev("not found " + _name + " in block " + _ab.getName()  + ". Attributes are:");
+            for(AvatarAttribute aa: _ab.getAttributes()) {
+                TraceManager.addDev("\t" + aa.getName());
+            }
+            TraceManager.addDev("\n");
             return;
         }
 
@@ -1587,6 +1601,7 @@ public class AvatarDesignPanelTranslator {
     private void translateAvatarSMDSendSignal(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDSendSignal asmdss) throws CheckingError {
         AvatarStateMachine asm = _ab.getStateMachine();
         avatartranslator.AvatarSignal atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
+
         if (atas == null)
             throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
 
@@ -1627,26 +1642,30 @@ public class AvatarDesignPanelTranslator {
                 throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdss.getValue());
 
             for (int i = 0; i < asmdss.getNbOfValues(); i++) {
-                String tmp = asmdss.getValue(i);
+                String tmp = modifyString(asmdss.getValue(i));
                 if (tmp.isEmpty())
                     throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Empty parameter in signal expression: " + asmdss.getValue());
 
                 this.manageAttribute(tmp, _ab, aaos, tdp, asmdss, asmdss.getValue());
             }
 
-            if (aaos.getNbOfValues() != atas.getListOfAttributes().size())
+            if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+                TraceManager.addDev("nb of values: " + aaos.getNbOfValues() + " size of list: " + atas.getListOfAttributes().size());
                 throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
-
+            }
             // Checking expressions passed as parameter
             for (int i = 0; i < aaos.getNbOfValues(); i++) {
                 String theVal = aaos.getValue(i);
                 if (atas.getListOfAttributes().get(i).isInt()) {
-                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0)
-                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, modifyString(theVal)) < 0)
+                        //TraceManager.addDev("theVal=" + modifyString(theVal));
+                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue()
+                                + " -> value at index #" + i + " does not match definition");
                 } else {
                     // We assume it is a bool attribute
-                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0)
-                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, modifyString(theVal)) < 0)
+                        throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue()
+                                + " -> value at index #" + i + " does not match definition");
                 }
             }
 
@@ -2508,40 +2527,42 @@ public class AvatarDesignPanelTranslator {
             // Issue #69
             //TraceManager.addDev("Found connector in block " + block.getOwnerName() + " between " +
               //      connector.getTGComponent1() + " and " + connector.getTGComponent2());
-            if (prunedConectors.contains(connector)) {
-                TraceManager.addDev("******************************** PRUNED connector: " + connector);
-            } else {
-                //TraceManager.addDev("Must handle connector: " + connector);
-                FindNextEnabledAvatarSMDConnectingPointVisitor visitor = new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
-                connector.getTGConnectingPointP1().acceptBackward(visitor);
-                final TGConnectingPoint conPoint1 = visitor.getEnabledComponentPoint();
+            if (connector instanceof AvatarSMDConnector) {
+                if (prunedConectors.contains(connector)) {
+                    TraceManager.addDev("******************************** PRUNED connector: " + connector);
+                } else {
+                    //TraceManager.addDev("Must handle connector: " + connector);
+                    FindNextEnabledAvatarSMDConnectingPointVisitor visitor =
+                            new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
+                    connector.getTGConnectingPointP1().acceptBackward(visitor);
+                    final TGConnectingPoint conPoint1 = visitor.getEnabledComponentPoint();
 
-                if (conPoint1 != null) {
-                    visitor = new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
-                    connector.getTGConnectingPointP2().acceptForward(visitor);
-                    final TGConnectingPoint conPoint2 = visitor.getEnabledComponentPoint();
+                    if (conPoint1 != null) {
+                        visitor = new FindNextEnabledAvatarSMDConnectingPointVisitor(prunedConectors, componentsToBeTranslated);
+                        connector.getTGConnectingPointP2().acceptForward(visitor);
+                        final TGConnectingPoint conPoint2 = visitor.getEnabledComponentPoint();
 
-                    if (conPoint2 != null) {
-                        final TGComponent tgc1 = (TGComponent) conPoint1.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP1() );
-                        final TGComponent tgc2 = (TGComponent) conPoint2.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP2() );
-                        //                TGComponent tgc1 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP1());
-                        //                TGComponent tgc2 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP2());
-                        if (tgc1 == null || tgc2 == null) {
-                            TraceManager.addDev("TGCs nulls in Avatar translation");
-                        } else {
-                            final AvatarStateMachineElement element1 = (AvatarStateMachineElement) (listE.getObject(tgc1));
-                            final AvatarStateMachineElement element2 = (AvatarStateMachineElement) (listE.getObject(tgc2));
+                        if (conPoint2 != null) {
+                            final TGComponent tgc1 = (TGComponent) conPoint1.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP1() );
+                            final TGComponent tgc2 = (TGComponent) conPoint2.getFather();//tdp.getComponentToWhichBelongs( connector.getTGConnectingPointP2() );
+                            //                TGComponent tgc1 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP1());
+                            //                TGComponent tgc2 = asmdp.getComponentToWhichBelongs (asmdco.getTGConnectingPointP2());
+                            if (tgc1 == null || tgc2 == null) {
+                                TraceManager.addDev("TGCs nulls in Avatar translation");
+                            } else {
+                                final AvatarStateMachineElement element1 = (AvatarStateMachineElement) (listE.getObject(tgc1));
+                                final AvatarStateMachineElement element2 = (AvatarStateMachineElement) (listE.getObject(tgc2));
 
                             /*if (element1 == null || element2 == null) {
                                 TraceManager.addDev("**************** ERROR: one of the two elements is NULL");
                             }*/
 
-                            if (element1 != null && element2 != null) {
-                                final AvatarSMDConnector avatarSmdConnector = (AvatarSMDConnector) connector;
+                                if (element1 != null && element2 != null) {
+                                    final AvatarSMDConnector avatarSmdConnector = (AvatarSMDConnector) connector;
 
-                                //TraceManager.addDev("Handling connector");
+                                    //TraceManager.addDev("Handling connector");
 
-                                //if (asm.findEmptyTransition(element1, element2) == null) {
+                                    //if (asm.findEmptyTransition(element1, element2) == null) {
                                     //TraceManager.addDev("-- Empty transition");
                                     final AvatarTransition at = new AvatarTransition(_ab, "avatar transition", connector);
                                     createTransitionInfo(at, avatarSmdConnector);
@@ -2654,7 +2675,8 @@ public class AvatarDesignPanelTranslator {
                                         ce.setTGComponent(connector);
                                         addCheckingError(ce);
                                     }
-                                //}
+                                    //}
+                                }
                             }
                         }
                     }

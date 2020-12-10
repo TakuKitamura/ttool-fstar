@@ -37,3 +37,4 @@
 -- avatarsoftwaredesign software_design avatar blocks software design
 --- avatarbd avatar_block_diagram design software blocks
 ---- avatarsafetypragmas safety_properties safety properties pragmas ctl
+---- reachabilitygraph reachability_graph reachability graph display show nodes edges node edge

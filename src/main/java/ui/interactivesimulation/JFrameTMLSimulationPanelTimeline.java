@@ -12,12 +12,16 @@ import ui.TGState;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.ElementIterator;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 
 public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionListener {
 
@@ -38,6 +42,8 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
     private JScrollPane jsp;
     private String zoomIndex = "";
     private String toolTipText = null;
+    private int X = 0, Y = 0, Y_AXIS_START = 0, maxPos =0, minPos = 0;;
+    private HashMap<Integer, Integer> timeMarkedPosition;
     private enum TransType{
         NONE,
         WRITE,
@@ -191,26 +197,81 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         timelinePane.add(split, BorderLayout.CENTER);
         timelinePane.add(commandTab, BorderLayout.SOUTH);
         framePanel.add(timelinePane, BorderLayout.NORTH);
+
         // Simulation panel
         sdpanel = new JEditorPane() {
-        @Override
-        public String getToolTipText(MouseEvent evt) {
-            toolTipText = null;
-            int pos = viewToModel(evt.getPoint());
-            if (pos >= 0) {
-                HTMLDocument hdoc = (HTMLDocument) sdpanel.getDocument();
-                javax.swing.text.Element e = hdoc.getCharacterElement(pos);
-                AttributeSet a = e.getAttributes();
-                if (a != null) {
-                    String href = (String) a.getAttribute(HTML.Attribute.TITLE);
-                    if (href != null) {
-                        toolTipText = href;
+            @Override
+            public String getToolTipText(MouseEvent evt) {
+                toolTipText = null;
+                int pos = viewToModel(evt.getPoint());
+                if (pos >= 0) {
+                    HTMLDocument hdoc = (HTMLDocument) sdpanel.getDocument();
+                    javax.swing.text.Element e = hdoc.getCharacterElement(pos);
+                    AttributeSet a = e.getAttributes();
+                    if (a != null) {
+                        String href = (String) a.getAttribute(HTML.Attribute.TITLE);
+                        if (href != null) {
+                            toolTipText = href;
+                        }
                     }
                 }
+                return toolTipText;
             }
-            return toolTipText;
-        }
-    };
+
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (timeMarkedPosition != null) {
+                    Graphics2D g2 = (Graphics2D) g;
+                    float dash[] = { 10.0f };
+                    g2.setStroke(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
+                    g2.setColor(new Color(2, 68, 2));
+                    if (Y_AXIS_START != 0) {
+                        int drawPoint = 0;
+                        try {
+                            drawPoint = modelToView(Y_AXIS_START).y;
+                        } catch (BadLocationException e) {
+                            drawPoint = 130;
+                        }
+                        g2.drawLine(X, drawPoint, X, drawPoint + sdpanel.getHeight());
+                    } else {
+                        g2.drawLine(X, 130, X, 130 + sdpanel.getHeight());
+                    }
+
+                    int pos = viewToModel(new Point(X,Y));
+                    if (pos >= 0) {
+
+                        try {
+                            if(timeMarkedPosition.keySet().contains(pos) && Math.abs(modelToView(pos).x - X) < 3) {
+                                g2.drawString("Time: " + timeMarkedPosition.get(pos), X, Y);
+                                g2.dispose();
+                            } else if (!timeMarkedPosition.keySet().contains(pos)) {
+                                int postStart = pos - 1;
+                                int postEnd = pos + 1;
+                                while (!timeMarkedPosition.keySet().contains(postStart) && postStart > minPos) {
+                                    postStart --;
+                                }
+
+                                while (!timeMarkedPosition.keySet().contains(postEnd) && postEnd < maxPos) {
+                                    postEnd ++;
+                                }
+
+                                if (timeMarkedPosition.keySet().contains(postStart) && timeMarkedPosition.keySet().contains(postEnd) && timeMarkedPosition.get(postStart) < timeMarkedPosition.get(postEnd)) {
+                                    int value = timeMarkedPosition.get(postStart) + (int)(((float)(timeMarkedPosition.get(postEnd) - timeMarkedPosition.get(postStart))/(modelToView(postEnd).x - modelToView(postStart).x)) * (X - modelToView(postStart).x));
+                                    g2.drawString("Time: " + value, X, Y);
+                                    g2.dispose();
+                                }
+                            }
+
+                        } catch (BadLocationException e) {
+                            System.out.println("Calculating time value ...");
+                        }
+                    }
+                }
+
+            }
+        };
+
         sdpanel.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -255,6 +316,22 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 }
             }
         });
+
+        sdpanel.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent mouseEvent) {
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                X = e.getX();
+                Y = e.getY();
+                repaint();
+                return;
+            }
+        });
+
         sdpanel.setEditable(false);
         sdpanel.setContentType("text/html");
         sdpanel.setEditorKit(new LargeHTMLEditorKit());
@@ -283,7 +360,6 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         info = new JLabel("Unknown");
         info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
         jp02.add(info);
-
 
         pack();
     }
@@ -406,16 +482,49 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         }
     }
 
+    private void collectTimeStamp() {
+        //for store all element
+        if(sdpanel != null && sdpanel.getDocument() != null) {
+            timeMarkedPosition = new HashMap<>();
+            HTMLDocument hdoc = (HTMLDocument) sdpanel.getDocument();
+            ElementIterator iterator = new ElementIterator(hdoc);
+            Element element;
+            maxPos = 0;
+            minPos = Integer.MAX_VALUE;
+            Y_AXIS_START = 0;
+            while ((element = iterator.next()) != null) {
+                int startOffset = element.getStartOffset();
+                int endOffset = element.getEndOffset();
+                int length = endOffset - startOffset;
+                try {
+                    String temp = hdoc.getText(startOffset, length);
+                    if (temp.equals("Time")) {
+                        Y_AXIS_START = startOffset;
+                    }
+                    int num = Integer.parseInt(temp);
+                    if (num > maxPos) maxPos = num;
+                    if (num < minPos) minPos = num;
+                    timeMarkedPosition.put(startOffset,num);
+                } catch (NumberFormatException err) {
+                    // not an integer.
+                } catch (BadLocationException badLocationException) {
+                    System.out.println("Some content was not retrieved.");
+                }
+            }
+        }
+    }
+
     public void setServerReply(String content) {
         try {
             filePath = content;
             sdpanel.setText(content);
             sdpanel.setCaretPosition(0);
+            collectTimeStamp();
             jsp.getVerticalScrollBar().setValue(0);
             jsp.getHorizontalScrollBar().setValue(0);
             jsp.repaint();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -437,6 +546,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             info.setForeground(ColorManager.InteractiveSimulationText_READY);
         }
     }
+
     public TransType getTypeOfTransactions(String trans) {
         if (trans.toLowerCase().contains("write")) return TransType.WRITE;
         else if (trans.toLowerCase().contains("read")) return TransType.READ;

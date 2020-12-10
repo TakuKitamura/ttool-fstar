@@ -4964,7 +4964,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 SpecConfigTTool.AVATARExecutableCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand,
                 ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand, ConfigurationTTool.AVATARExecutableSoclibTraceFile);
         // jgen.setSize(500, 450);
-        GraphicLib.centerOnParent(jgen, 700, 600);
+        GraphicLib.centerOnParent(jgen, 800, 800);
         jgen.setVisible(true);
         dtree.toBeUpdated();
     }

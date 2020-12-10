@@ -497,7 +497,7 @@ public class AUTGraph implements myutil.Graph {
                 if (cpt > 0) {
                     ret += " OR ";
                 } else {
-                    cpt ++;
+                    cpt++;
                 }
                 ret += tr.transition;
             }
@@ -505,6 +505,45 @@ public class AUTGraph implements myutil.Graph {
         return ret;
     }
 
+    public static String removeSameSignal(String input) {
+        int indexE = input.indexOf("!");
+        int indexQ = input.indexOf("?");
+        int indexP = input.indexOf("(");
+
+        if ((indexE == -1) || (indexQ == -1) || (indexP == -1) ) {
+            return input;
+        }
+
+        if (indexQ < indexE) {
+            return input;
+        }
+
+        if (indexP < indexQ) {
+            return input;
+        }
+
+        String tmpE = input.substring(indexE+1, indexQ-1);
+        String tmpQ = input.substring(indexQ+1, indexP);
+
+        TraceManager.addDev("tmpE=" + tmpE + " tmpQ=" + tmpQ);
+
+        if (tmpE.compareTo(tmpQ) != 0) {
+            return input;
+        }
+
+
+        return "!" + input.substring(indexQ, input.length());
+    }
+
+    public  static String removeOTime(String input) {
+        if (input.endsWith("[0...0]")) {
+            return input.substring(0, input.length()-7);
+        } else {
+            return input;
+        }
+
+
+    }
 
 
     public void minimizeRemoveInternal(boolean tauOnly) {
