@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<siminfo>
+<global>
+<msg>Simulator status notification</msg><error>0</error>
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Wait f__sendData__f__sendData params:" starttime="60" endtime="72" length="1" virtuallength="1" id="38" runnableTime="60" ch="f__sendData__f__sendData" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Read 4,f__data" starttime="72" endtime="76" length="4" virtuallength="4" id="37" runnableTime="72" ch="f__data" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 10" starttime="76" endtime="86" length="10" virtuallength="10" id="25" runnableTime="76" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 5" starttime="86" endtime="91" length="5" virtuallength="5" id="21" runnableTime="86" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 10" starttime="91" endtime="101" length="10" virtuallength="10" id="32" runnableTime="91" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 20" starttime="101" endtime="122" length="21" virtuallength="20" id="31" runnableTime="101" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 20" starttime="122" endtime="143" length="21" virtuallength="20" id="31" runnableTime="122" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 20" starttime="143" endtime="164" length="21" virtuallength="20" id="31" runnableTime="143" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 20" starttime="164" endtime="185" length="21" virtuallength="20" id="31" runnableTime="164" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Write 4,f__dataC" starttime="185" endtime="186" length="1" virtuallength="4" id="28" runnableTime="185" ch="f__dataC" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__receive: Execi 20" starttime="186" endtime="207" length="21" virtuallength="20" id="23" runnableTime="186" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Read 4,f__dataC" starttime="207" endtime="212" length="4" virtuallength="4" id="53" runnableTime="186" ch="f__dataC" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 30" starttime="212" endtime="244" length="32" virtuallength="30" id="46" runnableTime="212" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 3" starttime="244" endtime="247" length="3" virtuallength="3" id="42" runnableTime="244" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 15" starttime="247" endtime="263" length="16" virtuallength="15" id="41" runnableTime="247" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 30" starttime="263" endtime="295" length="32" virtuallength="30" id="46" runnableTime="263" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 3" starttime="295" endtime="298" length="3" virtuallength="3" id="42" runnableTime="295" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 15" starttime="298" endtime="314" length="16" virtuallength="15" id="41" runnableTime="298" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 30" starttime="314" endtime="346" length="32" virtuallength="30" id="46" runnableTime="314" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 3" starttime="346" endtime="349" length="3" virtuallength="3" id="42" runnableTime="346" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 15" starttime="349" endtime="365" length="16" virtuallength="15" id="41" runnableTime="349" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 30" starttime="365" endtime="397" length="32" virtuallength="30" id="46" runnableTime="365" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 3" starttime="397" endtime="400" length="3" virtuallength="3" id="42" runnableTime="397" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 15" starttime="400" endtime="407" length="7" virtuallength="7" id="41" runnableTime="400" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 15" starttime="407" endtime="415" length="8" virtuallength="8" id="41" runnableTime="407" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 30" starttime="415" endtime="447" length="32" virtuallength="30" id="46" runnableTime="415" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execi 3" starttime="447" endtime="450" length="3" virtuallength="3" id="42" runnableTime="447" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 15" starttime="450" endtime="466" length="16" virtuallength="15" id="41" runnableTime="450" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: IdleDL in f__compute len:1 progress:0 ID:47" starttime="468" endtime="469" length="1" virtuallength="1" id="47" runnableTime="468" />
+<transinfo  uniqueid="1" deviceid="0" devicename="CPU_R_1" corenumber="0" command="f__compute: Execc 10" starttime="469" endtime="479" length="10" virtuallength="10" id="51" runnableTime="469" />
+<transinfo  uniqueid="2" deviceid="0" devicename="CPU_S_1" corenumber="0" command="f__send: IdleDL in f__send len:1 progress:0 ID:65" starttime="1" endtime="22" length="1" virtuallength="1" id="65" runnableTime="1" />
+<transinfo  uniqueid="2" deviceid="0" devicename="CPU_S_1" corenumber="0" command="f__send: Execi 20" starttime="22" endtime="43" length="21" virtuallength="20" id="63" runnableTime="22" />
+<transinfo  uniqueid="2" deviceid="0" devicename="CPU_S_1" corenumber="0" command="f__send: Execi 15" starttime="43" endtime="59" length="16" virtuallength="15" id="58" runnableTime="43" />
+<transinfo  uniqueid="2" deviceid="0" devicename="CPU_S_1" corenumber="0" command="f__send: Send f__sendData__f__sendData(evtFB) len:8 content:0 params:" starttime="59" endtime="60" length="1" virtuallength="1" id="67" runnableTime="59" ch="f__sendData__f__sendData" />
+<transinfo  uniqueid="2" deviceid="0" devicename="CPU_S_1" corenumber="0" command="f__send: Write 4,f__data" starttime="60" endtime="61" length="1" virtuallength="4" id="69" runnableTime="60" ch="f__data" />
+<transinfo  uniqueid="2" deviceid="0" devicename="CPU_S_1" corenumber="0" command="f__send: Execc 5" starttime="61" endtime="66" length="5" virtuallength="5" id="60" runnableTime="61" />
+<transinfo  uniqueid="4" deviceid="0" devicename="Bus0_0" corenumber="0" command="f__send: Write 4,f__data" starttime="60" endtime="61" length="1" virtuallength="4" id="69" runnableTime="60" ch="f__data" />
+<transinfo  uniqueid="4" deviceid="0" devicename="Bus0_0" corenumber="0" command="f__receive: Write 4,f__dataC" starttime="185" endtime="186" length="1" virtuallength="4" id="28" runnableTime="185" ch="f__dataC" />
+<model>/home/maysam/aquas-tpt/PhD_Maysam/manuscript/source/loopseqgraph.xml / DIPLODOCUS architecture and mapping Diagram</model>
+</global>
+</siminfo>
+

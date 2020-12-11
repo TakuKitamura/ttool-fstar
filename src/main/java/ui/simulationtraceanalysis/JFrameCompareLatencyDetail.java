@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -55,24 +56,24 @@ import ui.interactivesimulation.SimulationTransactionParser;
 
 public class JFrameCompareLatencyDetail extends JFrame implements ActionListener {
 
-    protected JButton buttonClose, buttonShowDGraph1, buttonShowDGraph2, buttonDetailedAnalysis, buttonCompareInDetails;
-    public LatencyDetailedAnalysisActions[] actions;
+    private JButton buttonClose, buttonShowDGraph1, buttonShowDGraph2, buttonDetailedAnalysis, buttonCompareInDetails;
+    private LatencyDetailedAnalysisActions[] actions;
     private DirectedGraphTranslator dgraph1, dgraph2;
 
     private JPanel loadxml, commandTab, jp05, graphAnalysisResult, jp03, jp04, loadmodel, progressBarpanel;
-    protected JTextArea jta;
-    protected JScrollPane jsp;
+    private JTextArea jta;
+    private JScrollPane jsp;
     private JTabbedPane resultTab;
 
     private JComboBox<String> tasksDropDownCombo1 = new JComboBox<String>();
     private JComboBox<String> tasksDropDownCombo2 = new JComboBox<String>();
     private JComboBox<String> tasksDropDownCombo3 = new JComboBox<String>();
     private JComboBox<String> tasksDropDownCombo4 = new JComboBox<String>();
-    public Vector<String> checkedTransactionsFile1 = new Vector<String>();
-    public Vector<String> checkedTransactionsFile2 = new Vector<String>();
+    private Vector<String> checkedTransactionsFile1 = new Vector<String>();
+    private Vector<String> checkedTransactionsFile2 = new Vector<String>();
     private Vector<String> checkedTransactionsFile = new Vector<String>();
 
-    public static JTable table11, table12, table21, table22;
+    private static JTable table11, table12, table21, table22;
     private String[] columnNames = new String[5];
     private String[] columnMinMaxNames = new String[5];
     private Object[][] dataDetailedByTask;
@@ -83,7 +84,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     private File file1, file2;
     private JFileChooser fc, fc2;
     private boolean visible;
-    public Thread t, t1;
+    // private Thread t, t1;
 
     private Object[][] tableData2MinMax, tableData1MinMax, tableData2, tableData = null;
 
@@ -94,22 +95,25 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     private JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis;
     private JFrameCompareLatencyDetail jFrameCompareLatencyDetail;
 
-    JProgressBar pbar;
-    JLabel pBarLabel;
-    TMLMapping<TGComponent> map;
-    List<TMLComponentDesignPanel> cpanels;
-    public DirectedGraphTranslator dgraph;
+    private JProgressBar pbar;
 
-    JCheckBox taintFirstOp, considerRules;
+    private JLabel pBarLabel;
+    private TMLMapping<TGComponent> map;
+    private List<TMLComponentDesignPanel> cpanels;
+    private DirectedGraphTranslator dgraph;
+
+    private ThreadingClass tc;
+    private JCheckBox taintFirstOp, considerRules;
 
     // private DirectedGraphTranslator dgraph;
     public JFrameCompareLatencyDetail(latencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
-            TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b) {
+            TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b, ThreadingClass tc1)
+            throws InterruptedException {
 
-        super("Latency Detailed Comparision");
+        super("Latency Comparision");
 
         this.setVisible(b);
-
+        tc = tc1;
         mainGUI = mgui;
         map = map1;
         cpanels = cpanels1;
@@ -461,24 +465,42 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         this.pack();
         this.setVisible(b);
+        tc.setCld(this);
+        tc.setMap(map);
 
-        t = new Thread() {
-            public void run() {
-                generateDirectedGraph(map, cpanels);
+        tc.start(10);
+        tc.run();
+        // tc.getT().join();
 
-            }
+        // tc.generateDirectedGraph1(map, cpanels);
 
-        };
-
-        t.start();
+        /*
+         * t = new Thread() { public void run() { generateDirectedGraph(map, cpanels);
+         * 
+         * }
+         * 
+         * };
+         * 
+         * t.start();
+         */
     }
 
-    private void generateDirectedGraph(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
+    protected void generateDirectedGraph1(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
         try {
             dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis, this, map, cpanels, 1);
             dgraph1 = dgraph;
             jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
             // buttonSaveDGraph.setEnabled(true);
+
+            if (dgraph.getWarnings().size() > 0) {
+                jta.append("Warnings: \n ");
+
+                for (int i = 0; i < dgraph.getWarnings().size(); i++) {
+                    jta.append("    - " + dgraph.getWarnings().get(i) + "\n ");
+                }
+
+            }
+
             buttonShowDGraph1.setEnabled(true);
             jta.append("Browse the second simulation trace to generate the second graph \n");
             browse.setEnabled(true);
@@ -502,32 +524,39 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
     }
 
-    private void generateDirectedGraph2(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
+    protected void generateDirectedGraph2(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
         // TODO Auto-generated method stub
         try {
             dgraph = null;
 
-            jFrameCompareLatencyDetail = this;
+            // jFrameCompareLatencyDetail = this;
 
-            t1 = new Thread() {
-                public void run() {
-                    dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis, jFrameCompareLatencyDetail, map, cpanels, 1);
+            // dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis,
+            // jFrameCompareLatencyDetail, map, cpanels, 1);
 
-                }
+            /*
+             * t1 = new Thread() { public void run() { dgraph = new
+             * DirectedGraphTranslator(jFrameLatencyDetailedAnalysis,
+             * jFrameCompareLatencyDetail, map, cpanels, 1);
+             * 
+             * }
+             * 
+             * };
+             */
 
-            };
+            // t1.start();
 
-            t1.start();
+            // while (t1.getState() != Thread.State.TERMINATED) {
 
-            while (t1.getState() != Thread.State.TERMINATED) {
+            // }
 
-            }
+            // if (t1.getState() == Thread.State.TERMINATED) {
 
-            if (t1.getState() == Thread.State.TERMINATED) {
+            dgraph = tc.getDgraph();
 
-                dgraph2 = dgraph;
+            // }
 
-            }
+            dgraph2 = dgraph;
             String[] checkTransactionStrTable = new String[checkedTransactionsFile2.size()];
             int idx = 0;
             for (String str : checkedTransactionsFile2) {
@@ -540,6 +569,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
             tasksDropDownCombo3.setModel(aModel);
             tasksDropDownCombo4.setModel(aModel1);
+
+            if (dgraph.getWarnings().size() > 0) {
+                jta.append("Warnings: \n ");
+
+                for (int i = 0; i < dgraph.getWarnings().size(); i++) {
+                    jta.append("    - " + dgraph.getWarnings().get(i) + "\n ");
+                }
+
+            }
 
             buttonShowDGraph2.setEnabled(true);
             buttonDetailedAnalysis.setEnabled(true);
@@ -567,24 +605,23 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         // TraceManager.addDev("Command:" + command);
 
         if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH_FILE_1].getActionCommand())) {
-            Thread t1 = new Thread() {
-                public void run() {
-                    dgraph1.showGraph(dgraph1);
+            /*
+             * Thread t1 = new Thread() { public void run() { dgraph1.showGraph(dgraph1);
+             * 
+             * } };
+             * 
+             * t1.start();
+             */
 
-                }
-            };
-
-            t1.start();
+            tc.setDgraph(dgraph1);
+            tc.start(14);
+            tc.run();
 
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH_FILE_2].getActionCommand())) {
-            Thread t2 = new Thread() {
-                public void run() {
-                    dgraph2.showGraph(dgraph2);
 
-                }
-            };
-
-            t2.start();
+            tc.setDgraph2(dgraph2);
+            tc.start(17);
+            tc.run();
 
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand())) {
             // jta.setText("");
@@ -611,7 +648,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
                 // Object obj = filefc;
 
-                latencyDetailedAnalysisMain.checkedTransactionsFile = new Vector<String>();
+                latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
                 SimulationTrace STfile2 = new SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
                 secondFile.setText(filefc.getAbsolutePath());
 
@@ -626,8 +663,8 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                         e.printStackTrace();
                     }
 
-                    checkedTransactionsFile2 = latencyDetailedAnalysisMain.checkedTransactionsFile;
-                    map = latencyDetailedAnalysisMain.map1;
+                    checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
+                    map = latencyDetailedAnalysisMain.getMap1();
                     cpanels = latencyDetailedAnalysisMain.getCpanels1();
 
                     this.toFront();
@@ -636,14 +673,29 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                     this.pack();
                     this.revalidate();
                     this.repaint();
-                    Thread t3 = new Thread() {
-                        public void run() {
-                            generateDirectedGraph2(map, cpanels);
-                        }
 
-                    };
+                    tc.setCld(this);
+                    tc.setMap(map);
+                    // tc.setCld(jFrameCompareLatencyDetail);
+                    tc.setjFrameLDA(jFrameLatencyDetailedAnalysis);
 
-                    t3.start();
+                    tc.start(15);
+                    tc.run();
+                    // try {
+                    // tc.getT().join();
+                    // } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    // e.printStackTrace();
+                    // }
+
+                    /*
+                     * Thread t3 = new Thread() { public void run() { generateDirectedGraph2(map,
+                     * cpanels); }
+                     * 
+                     * };
+                     * 
+                     * t3.start();
+                     */
                 }
 
             }
@@ -658,65 +710,85 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             // pbar.setIndeterminate(true);
             // pbar.setMinimum(0);
             // pbar.setMaximum(1);
-            updateBar(0);
-            Thread t = new Thread() {
-                public void run() {
+            // updateBar(0);
+            // Thread t = new Thread() {
+            // public void run() {
 
-                    String task1 = tasksDropDownCombo1.getSelectedItem().toString();
-                    String task2 = tasksDropDownCombo2.getSelectedItem().toString();
+            String task1 = tasksDropDownCombo1.getSelectedItem().toString();
+            String task2 = tasksDropDownCombo2.getSelectedItem().toString();
 
-                    String task3 = tasksDropDownCombo3.getSelectedItem().toString();
-                    String task4 = tasksDropDownCombo4.getSelectedItem().toString();
+            String task3 = tasksDropDownCombo3.getSelectedItem().toString();
+            String task4 = tasksDropDownCombo4.getSelectedItem().toString();
 
-                    // Boolean taint = taintFirstOp.isSelected();
+            // Boolean taint = taintFirstOp.isSelected();
 
-                    // Boolean considerAddedRules = considerRules.isSelected();
+            // Boolean considerAddedRules = considerRules.isSelected();
 
-                    Vector<SimulationTransaction> transFile1, transFile2;
-                    transFile1 = parseFile(file1);
-                    transFile2 = parseFile(file2);
+            Vector<SimulationTransaction> transFile1, transFile2;
+            transFile1 = parseFile(file1);
+            transFile2 = parseFile(file2);
 
-                    latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, true, false, false);
+            tc.latencyDetailedAnalysis(this, task1, task2, task3, task4, transFile1, transFile2);
+            tc.start(18);
+            tc.run();
+            // }
+            // };
 
-                }
-            };
+            // t.start();
 
-            t.start();
+            // while (t.getState() != Thread.State.TERMINATED) {
 
-            while (t.getState() != Thread.State.TERMINATED) {
+            // }
+            // try {
+            // t.join();
+            // } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            // }
 
-            }
+            // if (t.getState() == Thread.State.TERMINATED) {
 
-            if (t.getState() == Thread.State.TERMINATED) {
+            // pbar.setIndeterminate(false);
 
-                // pbar.setIndeterminate(false);
+            // updateBar(1);
 
-                updateBar(1);
-
-            }
+            // }
 
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_COMPARE_IN_DETAILS].getActionCommand())) {
             jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
                     + " is studied \n");
-            Thread t = new Thread() {
-                public void run() {
-
-                    int row1 = table11.getSelectedRow();
-                    int row2 = table12.getSelectedRow();
-                    int row3 = table21.getSelectedRow();
-                    int row4 = table22.getSelectedRow();
-
-                    int selectedIndex = resultTab.getSelectedIndex();
-
-                    compareLatencyInDetails(row1, row2, row3, row4, selectedIndex);
-                }
-
-            };
-
-            t.start();
+            int selectedIndex = resultTab.getSelectedIndex();
+            if ((table11.getSelectedRowCount() > 0 && table12.getSelectedRowCount() > 0 && selectedIndex == 0)
+                    || (table21.getSelectedRowCount() > 0 && table22.getSelectedRowCount() > 0 && selectedIndex == 1)) {
+                int row1 = table11.getSelectedRow();
+                int row2 = table12.getSelectedRow();
+                int row3 = table21.getSelectedRow();
+                int row4 = table22.getSelectedRow();
+                // int selectedIndex = resultTab.getSelectedIndex();
+                tc.compareLatencyInDetails(this, row1, row2, row3, row4, selectedIndex);
+                tc.start(19);
+                tc.run();
+            } else {
+                jta.append("Please select a row from each table to proceed \n");
+            }
+            /*
+             * Thread t = new Thread() { public void run() {
+             * 
+             * int row1 = table11.getSelectedRow(); int row2 = table12.getSelectedRow(); int
+             * row3 = table21.getSelectedRow(); int row4 = table22.getSelectedRow();
+             * 
+             * int selectedIndex = resultTab.getSelectedIndex();
+             * 
+             * try { compareLatencyInDetails(row1, row2, row3, row4, selectedIndex); } catch
+             * (InterruptedException e) { // TODO Auto-generated catch block
+             * e.printStackTrace(); } }
+             * 
+             * };
+             * 
+             * t.start();
+             */
 
         }
-        
 
     }
 
@@ -890,19 +962,19 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
     }
 
-    private void compareLatencyInDetails(int row1, int row2, int row3, int row4, int selectedIndex) {
+    protected void compareLatencyInDetails(int row1, int row2, int row3, int row4, int selectedIndex) throws InterruptedException {
         // TODO Auto-generated method stub
 
         if (selectedIndex == 0) {
 
             jta.append("the latency for row : " + row1 + ": and row: " + row2 + " will be studied\n");
 
-            new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row1, row2, true);
+            new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row1, row2, true, tc);
 
         } else if (selectedIndex == 1) {
             jta.append("the latency for row : " + row3 + ": and row: " + row4 + " will be studied\n");
 
-            new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row3, row4, false);
+            new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row3, row4, false, tc);
 
         } else {
 
@@ -945,5 +1017,29 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         pbar.setValue(newValue);
 
     }
+
+    public JProgressBar getPbar() {
+        return pbar;
+    }
+
+    public void setPbar(JProgressBar pbar) {
+        this.pbar = pbar;
+    }
+
+    public DirectedGraphTranslator getDgraph() {
+        return dgraph;
+    }
+
+    public void setDgraph(DirectedGraphTranslator dgraph) {
+        this.dgraph = dgraph;
+    }
+
+    // public Thread getT() {
+    // return t;
+    // }
+
+    // public void setT(Thread t) {
+    // this.t = t;
+    // }
 
 }

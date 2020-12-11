@@ -50,7 +50,7 @@ import javax.swing.SwingConstants;
  * @author Maysam Zoor
  */
 public abstract class LatencyDetailedAnalysisBar extends JToolBar {
-    protected JFrameLatencyDetailedAnalysis jflda;
+    private JFrameLatencyDetailedAnalysis jflda;
 
     public LatencyDetailedAnalysisBar(JFrameLatencyDetailedAnalysis _jflda) {
         super();
@@ -60,9 +60,16 @@ public abstract class LatencyDetailedAnalysisBar extends JToolBar {
         setButtons();
     }
 
+    
     // asbtract operations
     protected abstract void setButtons();
 
     protected abstract void setActive(boolean b);
+    
+    public JFrameLatencyDetailedAnalysis getJflda() {
+        return jflda;
+    }
+
+   
 
 } // Class

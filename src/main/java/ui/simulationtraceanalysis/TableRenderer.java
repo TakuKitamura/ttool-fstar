@@ -12,14 +12,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 class TableRenderer extends DefaultTableCellRenderer {
 
     private int row, col;
-    Color randomColour;
-    boolean colorCell = true;
+    private Color randomColour;
+    private boolean colorCell = true;
 
     private Vector<Object> allCommands = new Vector<Object>();
     private Vector<Color> allColors = new Vector<Color>();
-    List<String> onPathBehaviors = new Vector<String>();
-    List<String> offPathBehaviors = new Vector<String>();
-    List<String> offPathBehaviorCausingDelay = new Vector<String>();
+    private List<String> onPathBehaviors = new Vector<String>();
+    private List<String> offPathBehaviors = new Vector<String>();
+    private List<String> offPathBehaviorCausingDelay = new Vector<String>();
 
     public TableRenderer(List<String> onPathBehavior, List<String> offPathBehaviorCausingDelay, List<String> offPathBehavior) {
 

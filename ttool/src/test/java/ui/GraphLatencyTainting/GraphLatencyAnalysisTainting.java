@@ -4,7 +4,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +21,18 @@ import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
 public class GraphLatencyAnalysisTainting extends AbstractUITest {
 
-    private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/tainting.xml";
-    private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphLatencyAnalysisTainting.xml";
+    private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
+
+    private static final String simulationTracePath = INPUT_PATH + "/tainting.xml";
+
+    private static final String modelPath = INPUT_PATH + "/GraphLatencyAnalysisTainting.xml";
 
     private static final String mappingDiagName = "Architecture";
     private Vector<SimulationTransaction> transFile1;
     private Vector<String> dropDown;
 
-    private static final String t1 = "f__send:writechannel:data__47";
-    private static final String t2 = "f__compute:readchannel:datakk__37";
+    private static final int t1 = 47;
+    private static final int t2 = 37;
     private static String task1;
     private static String task2;
     private static DirectedGraphTranslator dgt;
@@ -35,9 +40,10 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
     private static Object[][] allLatencies, minMaxArray, taskHWByRowDetails, detailedLatency;
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
     private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
 
     @Before
-    public void GraphLatencyAnalysis() {
+    public void GraphLatencyAnalysis() throws InterruptedException {
 
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
         // mainGUI.openProjectFromFile(new File( modelPath));
@@ -60,12 +66,15 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
 
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
-            if (latencyDetailedAnalysis.graphStatus() == Thread.State.TERMINATED) {
-                dgt = latencyDetailedAnalysis.getDgraph();
+
+            try {
+                latencyDetailedAnalysis.getT().join();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
-                dgt = latencyDetailedAnalysis.getDgraph();
-            }
+            dgt = latencyDetailedAnalysis.getDgraph();
+
         }
 
     }
@@ -79,23 +88,26 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
 
         assertTrue(graphsize == 34);
 
-        dropDown = latencyDetailedAnalysis.getCheckedTransactions();
+        checkedDropDown = latencyDetailedAnalysis.getCheckedT();
 
-        assertTrue(dropDown.size() == 2);
+        assertTrue(checkedDropDown.size() == 2);
 
         transFile1 = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + simulationTracePath));
 
-        // transFile1 =
-        // latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(
-        // simulationTracePath));
-
         assertTrue(transFile1.size() > 0);
 
-        int i = dropDown.indexOf(t1);
-        int j = dropDown.indexOf(t2);
+        for (Entry<String, Integer> cT : checkedDropDown.entrySet()) {
 
-        task1 = dropDown.get(i);
-        task2 = dropDown.get(j);
+            int id = cT.getValue();
+            String taskName = cT.getKey();
+            if (id == t1) {
+                task1 = taskName;
+
+            } else if (id == t2) {
+                task2 = taskName;
+
+            }
+        }
 
         allLatencies = dgt.latencyDetailedAnalysis(task1, task2, transFile1, true, false);
 

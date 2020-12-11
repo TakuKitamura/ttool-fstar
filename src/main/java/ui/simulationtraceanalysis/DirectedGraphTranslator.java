@@ -84,11 +84,11 @@ public class DirectedGraphTranslator extends JApplet {
     // private TMLMapping<TGComponent> tmap;
     // private TMLComponentDesignPanel tmlcdp;
 
-    private TMLTask task, task1, task2;
+    private TMLTask taskAc, task1, task2;
 
-    protected TMLActivity activity;
-    int nodeNbProgressBar = 0;
-    int nodeNb = 0;
+    private TMLActivity activity;
+    private int nodeNbProgressBar = 0;
+    private int nodeNb = 0;
 
     // List<HwNode> path;
 
@@ -97,14 +97,6 @@ public class DirectedGraphTranslator extends JApplet {
     private ArrayList<String> SummaryCommMapping;
 
     private Graph<vertex, DefaultEdge> g;
-
-    public Graph<vertex, DefaultEdge> getG() {
-        return g;
-    }
-
-    public void setG(Graph<vertex, DefaultEdge> g) {
-        this.g = g;
-    }
 
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
     private List<TMLComponentDesignPanel> cpanels;
@@ -150,35 +142,37 @@ public class DirectedGraphTranslator extends JApplet {
     private Object[][] dataByTaskBYRow;
     private Object[][] dataByTaskHWBYRow;
 
-    HashMap<Integer, Vector<SimulationTransaction>> dataByTaskR = new HashMap<Integer, Vector<SimulationTransaction>>();
-    HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
-    HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRow = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
+    private HashMap<Integer, Vector<SimulationTransaction>> dataByTaskR = new HashMap<Integer, Vector<SimulationTransaction>>();
+    private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
+    private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRow = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
 
-    HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
-    HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
+    private HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
+    private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
     private final JFrame frame = new JFrame("The Sys-ML Model As Directed Graph");
 
-    List<Integer> times1 = new ArrayList<Integer>();
-    List<Integer> times2 = new ArrayList<Integer>();
+    private List<Integer> times1 = new ArrayList<Integer>();
+    private List<Integer> times2 = new ArrayList<Integer>();
 
-    Vector<SimulationTransaction> transFile;
-    String idTask1;
-    String idTask2;
-    String task2DeviceName = "";
-    String task1DeviceName = "";
-    ArrayList<String> devicesToBeConsidered = new ArrayList<String>();
+    private Vector<SimulationTransaction> transFile;
+    private String idTask1;
+    private String idTask2;
+    private String task2DeviceName = "";
+    private String task1DeviceName = "";
+    private ArrayList<String> devicesToBeConsidered = new ArrayList<String>();
 
-    Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
-    Vector<SimulationTransaction> delayDueTosimTraces = new Vector<SimulationTransaction>();
+    private Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
+    private Vector<SimulationTransaction> delayDueTosimTraces = new Vector<SimulationTransaction>();
 
-    HashMap<String, ArrayList<SimulationTransaction>> relatedsimTraceswithTaint = new HashMap<String, ArrayList<SimulationTransaction>>();
+    private HashMap<String, ArrayList<SimulationTransaction>> relatedsimTraceswithTaint = new HashMap<String, ArrayList<SimulationTransaction>>();
 
-    JFrameLatencyDetailedAnalysis frameLatencyDetailedAnalysis;
-    JFrameCompareLatencyDetail frameCompareLatencyDetail;
-    int callingFrame;
-    int nbOfNodes = 0;
+    private JFrameLatencyDetailedAnalysis frameLatencyDetailedAnalysis;
+    private JFrameCompareLatencyDetail frameCompareLatencyDetail;
+    private int callingFrame;
+    private int nbOfNodes = 0;
 
-    List<String> usedLabels = new ArrayList<String>();
+    private List<String> usedLabels = new ArrayList<String>();
+    private List<String> warnings = new ArrayList<String>();
+
     private static Random random = new Random();
 
     private static final String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
@@ -186,7 +180,7 @@ public class DirectedGraphTranslator extends JApplet {
     private static final String data = CHAR_LOWER + CHAR_UPPER;
     // List<vertex> gVertecies = new ArrayList<vertex>();
 
-    HashMap<String, ArrayList<ArrayList<Integer>>> runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
+    private HashMap<String, ArrayList<ArrayList<Integer>>> runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
 
     private HashMap<String, List<String>> allForLoopNextValues = new HashMap<String, List<String>>();
     private HashMap<vertex, List<vertex>> allChoiceValues = new HashMap<vertex, List<vertex>>();
@@ -201,6 +195,17 @@ public class DirectedGraphTranslator extends JApplet {
     private HashMap<vertex, List<vertex>> ruleAddedEdges = new HashMap<vertex, List<vertex>>();
 
     private HashMap<vertex, List<vertex>> ruleAddedEdgesChannels = new HashMap<vertex, List<vertex>>();
+    private HashMap<String, Integer> cpuIDs = new HashMap<String, Integer>();
+    private HashMap<String, List<String>> forLoopNextValues = new HashMap<String, List<String>>();
+
+    private int opCount;
+
+    private HashMap<String, List<String>> sendEvt = new HashMap<String, List<String>>();
+    private HashMap<String, List<String>> waitEvt = new HashMap<String, List<String>>();
+
+    private HashMap<String, String> sendData = new HashMap<String, String>();
+    private HashMap<String, String> receiveData = new HashMap<String, String>();
+    private String taskStartName = "";
 
     @SuppressWarnings("deprecation")
     public DirectedGraphTranslator(JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis, JFrameCompareLatencyDetail jframeCompareLatencyDetail,
@@ -221,42 +226,18 @@ public class DirectedGraphTranslator extends JApplet {
             frameLatencyDetailedAnalysis = jFrameLatencyDetailedAnalysis;
         } else if (callingFrame == 1) {
             frameCompareLatencyDetail = jframeCompareLatencyDetail;
-            // frameCompareLatencyDetail.pack();
-            // frameCompareLatencyDetail.revalidate();
-            // frameCompareLatencyDetail.repaint();
 
         }
         DrawDirectedGraph();
-
-        /*
-         * JGraphXAdapter<String, DefaultEdge> graphAdapter = new JGraphXAdapter<String,
-         * DefaultEdge>(g);
-         * 
-         * mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
-         * 
-         * layout.setInterHierarchySpacing(100); layout.setInterRankCellSpacing(100);
-         * layout.setIntraCellSpacing(100);
-         * 
-         * layout.execute(graphAdapter.getDefaultParent());
-         * 
-         * scrollPane.setViewportView(new mxGraphComponent(graphAdapter));
-         * 
-         * scrollPane.setVisible(true);
-         * 
-         * scrollPane.revalidate(); scrollPane.repaint(); frame = new
-         * JFrame("The Sys-ML Model As Directed Graph"); frame.add(scrollPane);
-         * frame.pack();
-         */
-        // frame.setVisible(false);
 
     }
 
     // The main function to add the vertices and edges according to the model
 
-    public vertex vertex(String name) {
+    public vertex vertex(String name, int id) {
         // TODO Auto-generated method stub
 
-        vertex v = new vertex(name);
+        vertex v = new vertex(name, id);
         return v;
     }
 
@@ -266,6 +247,475 @@ public class DirectedGraphTranslator extends JApplet {
         nodeNbProgressBar = tmap.getArch().getBUSs().size() + tmap.getArch().getHwBridge().size() + tmap.getArch().getHwA().size()
                 + tmap.getArch().getMemories().size() + tmap.getArch().getCPUs().size();
 
+        expectedNumberofVertex();
+
+        if (callingFrame == 0)
+
+        {
+            frameLatencyDetailedAnalysis.getPbar().setMaximum(nodeNbProgressBar);
+            frameLatencyDetailedAnalysis.getPbar().setMinimum(0);
+
+        }
+        if (callingFrame == 1)
+
+        {
+            frameCompareLatencyDetail.getPbar().setMaximum(nodeNbProgressBar);
+            frameCompareLatencyDetail.getPbar().setMinimum(0);
+        }
+
+        nbOfNodes = 0;
+
+        // HashMap<String, HashSet<String>> cpuTasks;
+        HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
+        HashMap<String, HashSet<TMLElement>> memorychannel = new HashMap<String, HashSet<TMLElement>>();
+
+        HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
+
+        // HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String,
+        // HashSet<TMLTask>>();
+
+        g = new DefaultDirectedGraph<>(DefaultEdge.class);
+
+        buschannel = addBUSs();
+        bridgechannel = addBridge();
+        addHwAs();
+        memorychannel = addMemories();
+        addBuschannel(buschannel);
+        addBridgechannel(bridgechannel);
+        addMemorychannel(memorychannel);
+        addUnmappedchannel();
+        addCPUs();
+        addLinkEdges();
+        addFlowEdges();
+        addSendEventWaitEventEdges();
+        addReadWriteChannelEdges();
+        addForkreadEdges();
+        addJoinreadEdges();
+        addWriteReadChannelEdges();
+        addSeqEdges();
+        addunOrderedSeqEdges();
+        addRequestEdges();
+
+    }
+
+    private void addUnmappedchannel() {
+        // TODO Auto-generated method stub
+        DiploSimulatorCodeGenerator gen = new DiploSimulatorCodeGenerator(tmap);
+        for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
+            List<HwCommunicationNode> pathNodes = gen.determineRoutingPath(tmap.getHwNodeOf(ch.getOriginTask()),
+                    tmap.getHwNodeOf(ch.getDestinationTask()), ch);
+
+            if (!g.vertexSet().contains(getvertex(ch.getName()))) {
+                vertex v2 = vertex(ch.getName(), ch.getID());
+                g.addVertex(v2);
+
+                // gVertecies.add(vertex(ch.getName()));
+                getvertex(ch.getName()).setType(vertex.TYPE_CHANNEL);
+                getvertex(ch.getName()).setTaintFixedNumber(0);
+                updatemainBar(ch.getName());
+
+            }
+
+            if (!pathNodes.isEmpty()) {
+                for (HwCommunicationNode node : pathNodes) {
+
+                    if (channelPaths.containsKey(ch.getName())) {
+                        if (!channelPaths.get(ch.getName()).contains(node.getName())) {
+                            channelPaths.get(ch.getName()).add(node.getName());
+                        }
+                    } else {
+                        ArrayList<String> pathNodeNames = new ArrayList<String>();
+                        pathNodeNames.add(node.getName());
+                        channelPaths.put(ch.getName(), pathNodeNames);
+                    }
+                    vertex v1 = vertex(node.getName(), node.getID());
+
+                    vertex v2 = vertex(ch.getName(), ch.getID());
+
+                    if (!g.containsEdge(v1, v2)) {
+                        g.addEdge(v1, v2);
+                    }
+
+                }
+
+            }
+
+        }
+
+        SummaryCommMapping = tmap.getSummaryCommMapping();
+
+    }
+
+    private void addCPUs() {
+        // TODO Auto-generated method stub
+        HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
+        HashMap<String, HashSet<String>> cpuTasks;
+        for (HwNode node : tmap.getArch().getCPUs()) {
+            cpuTask = new HashMap<String, HashSet<TMLTask>>();
+            cpuIDs.put(node.getName(), node.getID());
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+
+                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
+
+            }
+
+            cpuTasks = getCPUTaskMap(cpuTask);
+
+        }
+
+    }
+
+    private void addMemorychannel(HashMap<String, HashSet<TMLElement>> memorychannel) {
+        // TODO Auto-generated method stub
+        for (Entry<String, HashSet<TMLElement>> entry : memorychannel.entrySet()) {
+            String busName = entry.getKey();
+            HashSet<TMLElement> busChList = entry.getValue();
+
+            for (TMLElement busCh : busChList) {
+
+                String ChannelName = busCh.getName();
+                vertex v = vertex(ChannelName, busCh.getID());
+
+                if (!g.containsVertex(getvertex(ChannelName))) {
+                    g.addVertex(v);
+                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
+                    // gVertecies.add(vertex(ChannelName));
+                    getvertex(ChannelName).setTaintFixedNumber(0);
+                    updatemainBar("ChannelName");
+
+                }
+
+                g.addEdge(getvertex(busName), getvertex(ChannelName));
+            }
+
+        }
+
+    }
+
+    private void addBridgechannel(HashMap<String, HashSet<TMLElement>> bridgechannel) {
+        // TODO Auto-generated method stub
+
+        for (Entry<String, HashSet<TMLElement>> entry : bridgechannel.entrySet()) {
+            String busName = entry.getKey();
+            HashSet<TMLElement> busChList = entry.getValue();
+
+            for (TMLElement busCh : busChList) {
+
+                String ChannelName = busCh.getName();
+                vertex v = vertex(ChannelName, busCh.getID());
+
+                if (!g.containsVertex(getvertex(ChannelName))) {
+                    g.addVertex(v);
+                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
+                    // gVertecies.add(vertex(ChannelName));
+
+                    getvertex(ChannelName).setTaintFixedNumber(0);
+
+                    updatemainBar("ChannelName");
+
+                }
+
+                g.addEdge(getvertex(busName), getvertex(ChannelName));
+            }
+
+        }
+
+    }
+
+    private void addBuschannel(HashMap<String, HashSet<TMLElement>> buschannel) {
+        // TODO Auto-generated method stub
+        for (Entry<String, HashSet<TMLElement>> entry : buschannel.entrySet()) {
+            String busName = entry.getKey();
+            HashSet<TMLElement> busChList = entry.getValue();
+
+            for (TMLElement busCh : busChList) {
+
+                String ChannelName = busCh.getName();
+
+                vertex v = vertex(ChannelName, busCh.getID());
+
+                if (!g.containsVertex(v)) {
+                    g.addVertex(v);
+
+                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
+                    // gVertecies.add(vertex(ChannelName));
+                    getvertex(ChannelName).setTaintFixedNumber(0);
+                    updatemainBar("ChannelName");
+
+                }
+
+                g.addEdge(getvertex(busName), getvertex(ChannelName));
+
+                // TMLChannel tmlch = (TMLChannel) busCh;
+
+                // String writeChannel = tmlch.getDestinationTask().getName() + "__" +
+                // "writechannel:" + tmlch.getDestinationPort();
+                // String readChannel;
+
+            }
+
+        }
+
+    }
+
+    private HashMap<String, HashSet<TMLElement>> addMemories() {
+
+        HashMap<String, HashSet<TMLElement>> memorychannel = new HashMap<String, HashSet<TMLElement>>();
+        for (HwNode node : tmap.getArch().getMemories()) {
+
+            vertex v = vertex(node.getName(), node.getID());
+
+            if (!g.containsVertex(v)) {
+                g.addVertex(v);
+                updatemainBar("getMemories");
+
+            }
+
+            if (tmap.getLisMappedChannels(node).size() > 0) {
+                memorychannel.put(node.getName(), tmap.getLisMappedChannels(node));
+
+            }
+
+        }
+
+        return memorychannel;
+    }
+
+    private void addHwAs() {
+        // TODO Auto-generated method stub
+        HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
+        HashMap<String, HashSet<String>> cpuTasks;
+        for (HwA node : tmap.getArch().getHwA()) {
+
+            cpuTask = new HashMap<String, HashSet<TMLTask>>();
+            cpuIDs.put(node.getName(), node.getID());
+
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+
+                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
+
+            }
+
+            cpuTasks = getCPUTaskMap(cpuTask);
+
+        }
+
+    }
+
+    private HashMap<String, HashSet<TMLElement>> addBridge() {
+        // TODO Auto-generated method stub
+
+        HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
+
+        for (HwNode node : tmap.getArch().getHwBridge()) {
+
+            vertex v = vertex(node.getName(), node.getID());
+
+            if (!g.containsVertex(v)) {
+                g.addVertex(v);
+
+                updatemainBar("getHwBridge");
+
+            }
+
+            if (tmap.getLisMappedChannels(node).size() > 0) {
+                bridgechannel.put(node.getName(), tmap.getLisMappedChannels(node));
+
+            }
+
+        }
+        return bridgechannel;
+
+    }
+
+    private HashMap<String, HashSet<TMLElement>> addBUSs() {
+        // TODO Auto-generated method stub
+        HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
+        for (HwNode node : tmap.getArch().getBUSs()) {
+
+            vertex v = vertex(node.getName(), node.getID());
+
+            if (!g.containsVertex(v)) {
+                g.addVertex(v);
+
+                updatemainBar("getBUSs");
+
+            }
+
+            if (tmap.getLisMappedChannels(node).size() > 0) {
+                buschannel.put(node.getName(), tmap.getLisMappedChannels(node));
+
+            }
+
+        }
+
+        return buschannel;
+
+    }
+
+    private void addLinkEdges() {
+        // TODO Auto-generated method stub
+        for (HwLink link : links) {
+
+            vertex vlink1 = vertex(link.hwnode.getName(), link.hwnode.getID());
+            vertex vlink2 = vertex(link.bus.getName(), link.bus.getID());
+
+            if (g.containsVertex(getvertex(link.hwnode.getName())) && g.containsVertex(getvertex(link.bus.getName()))) {
+
+                g.addEdge(vlink1, vlink2);
+                g.addEdge(vlink2, vlink1);
+            }
+
+        }
+
+    }
+
+    private void addFlowEdges() {
+        // TODO Auto-generated method stub
+        if (addedEdges.size() > 0) {
+            for (Entry<String, String> edge : addedEdges.entrySet()) {
+                g.addEdge(getvertex(edge.getKey()), getvertex(edge.getValue()));
+
+            }
+        }
+
+    }
+
+    private void addSendEventWaitEventEdges() {
+        // TODO Auto-generated method stub
+        if (sendEventWaitEventEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : sendEventWaitEventEdges.entrySet()) {
+
+                for (String waitEventEdge : edge.getValue())
+
+                    g.addEdge(getvertex(edge.getKey()), getvertex(waitEventEdge));
+
+            }
+        }
+
+    }
+
+    private void addReadWriteChannelEdges() {
+        // TODO Auto-generated method stub
+        if (readWriteChannelEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : readWriteChannelEdges.entrySet()) {
+
+                for (String readChannelEdge : edge.getValue()) {
+
+                    g.addEdge(getvertex(edge.getKey()), getvertex(readChannelEdge));
+
+                    getvertex(edge.getKey()).setTaintFixedNumber(getvertex(edge.getKey()).getTaintFixedNumber() + 1);
+
+                }
+            }
+        }
+
+    }
+
+    private void addForkreadEdges() {
+        // TODO Auto-generated method stub
+        if (forkreadEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : forkreadEdges.entrySet()) {
+
+                HashSet<String> writech = forkwriteEdges.get(edge.getKey());
+
+                for (String readChannelEdge : edge.getValue()) {
+
+                    for (String wch : writech) {
+
+                        g.addEdge(getvertex(readChannelEdge), getvertex(wch));
+
+                    }
+                }
+            }
+        }
+    }
+
+    // draw the vertices and edges for the tasks mapped to the CPUs
+
+    private void addJoinreadEdges() {
+        // TODO Auto-generated method stub
+        if (joinreadEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : joinreadEdges.entrySet()) {
+
+                HashSet<String> writech = joinwriteEdges.get(edge.getKey());
+
+                for (String readChannelEdge : edge.getValue()) {
+
+                    for (String wch : writech) {
+
+                        g.addEdge(getvertex(readChannelEdge), getvertex(wch));
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void addWriteReadChannelEdges() {
+        // TODO Auto-generated method stub
+        if (writeReadChannelEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : writeReadChannelEdges.entrySet()) {
+
+                for (String readChannelEdge : edge.getValue()) {
+
+                    g.addEdge(getvertex(edge.getKey()), getvertex(readChannelEdge));
+                    getvertex(readChannelEdge).setTaintFixedNumber(getvertex(readChannelEdge).getTaintFixedNumber() + 1);
+
+                }
+            }
+
+        }
+
+    }
+
+    private void addRequestEdges() {
+        // TODO Auto-generated method stub
+        if (requestEdges.size() > 0) {
+
+            for (Entry<String, HashSet<String>> edge : requestEdges.entrySet()) {
+
+                for (String requestsingleEdges : edge.getValue()) {
+
+                    g.addEdge(getvertex(edge.getKey()), getvertex(requestsingleEdges));
+
+                }
+
+            }
+
+        }
+
+    }
+
+    private void addunOrderedSeqEdges() {
+        // TODO Auto-generated method stub
+        if (unOrderedSequenceEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : unOrderedSequenceEdges.entrySet()) {
+
+                for (String sequenceEdge : edge.getValue())
+
+                    g.addEdge(getvertex(edge.getKey()), getvertex(sequenceEdge));
+
+            }
+        }
+
+    }
+
+    private void addSeqEdges() {
+        if (sequenceEdges.size() > 0) {
+            for (Entry<String, HashSet<String>> edge : sequenceEdges.entrySet()) {
+
+                for (String sequenceEdge : edge.getValue())
+
+                    g.addEdge(getvertex(edge.getKey()), getvertex(sequenceEdge));
+
+            }
+        }
+
+    }
+
+    private void expectedNumberofVertex() {
         for (HwA node : tmap.getArch().getHwA()) {
 
             if (tmap.getLisMappedTasks(node).size() > 0) {
@@ -314,7 +764,6 @@ public class DirectedGraphTranslator extends JApplet {
 
             }
         }
-
         HashSet<String> mappedcomm = new HashSet<String>();
 
         for (HwNode node : tmap.getArch().getBUSs()) {
@@ -376,344 +825,7 @@ public class DirectedGraphTranslator extends JApplet {
 
         }
 
-        if (callingFrame == 0)
-
-        {
-            frameLatencyDetailedAnalysis.pbar.setMaximum(nodeNbProgressBar);
-            frameLatencyDetailedAnalysis.pbar.setMinimum(0);
-
-        }
-        if (callingFrame == 1)
-
-        {
-            frameCompareLatencyDetail.pbar.setMaximum(nodeNbProgressBar);
-            frameCompareLatencyDetail.pbar.setMinimum(0);
-        }
-
-        nbOfNodes = 0;
-
-        HashMap<String, HashSet<String>> cpuTasks;
-        HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
-        HashMap<String, HashSet<TMLElement>> memorychannel = new HashMap<String, HashSet<TMLElement>>();
-
-        HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
-
-        HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-
-        g = new DefaultDirectedGraph<>(DefaultEdge.class);
-
-        for (HwNode node : tmap.getArch().getBUSs()) {
-
-            if (!g.containsVertex(vertex(node.getName()))) {
-                g.addVertex(vertex(node.getName()));
-
-                updatemainBar("getBUSs");
-
-            }
-
-            if (tmap.getLisMappedChannels(node).size() > 0) {
-                buschannel.put(node.getName(), tmap.getLisMappedChannels(node));
-
-            }
-
-        }
-
-        for (HwNode node : tmap.getArch().getHwBridge()) {
-
-            if (!g.containsVertex(vertex(node.getName()))) {
-                g.addVertex(vertex(node.getName()));
-
-                updatemainBar("getHwBridge");
-
-            }
-
-            if (tmap.getLisMappedChannels(node).size() > 0) {
-                bridgechannel.put(node.getName(), tmap.getLisMappedChannels(node));
-
-            }
-
-        }
-
-        for (HwA node : tmap.getArch().getHwA()) {
-
-            cpuTask = new HashMap<String, HashSet<TMLTask>>();
-
-            if (tmap.getLisMappedTasks(node).size() > 0) {
-
-                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
-
-            }
-
-            cpuTasks = getCPUTaskMap(cpuTask);
-
-            // if (tmap.getLisMappedChannels(node).size() > 0) {
-            // bridgechannel.put(node.getName(), tmap.getLisMappedChannels(node));
-
-            // }
-
-        }
-
-        for (HwNode node : tmap.getArch().getMemories()) {
-
-            if (!g.containsVertex(vertex(node.getName()))) {
-                g.addVertex(vertex(node.getName()));
-
-                updatemainBar("getMemories");
-
-            }
-
-            if (tmap.getLisMappedChannels(node).size() > 0) {
-                memorychannel.put(node.getName(), tmap.getLisMappedChannels(node));
-
-            }
-
-        }
-
-        for (Entry<String, HashSet<TMLElement>> entry : buschannel.entrySet()) {
-            String busName = entry.getKey();
-            HashSet<TMLElement> busChList = entry.getValue();
-
-            for (TMLElement busCh : busChList) {
-
-                String ChannelName = busCh.getName();
-
-                if (!g.containsVertex(vertex(ChannelName))) {
-                    g.addVertex(vertex(ChannelName));
-                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
-                    // gVertecies.add(vertex(ChannelName));
-                    getvertex(ChannelName).setTaintFixedNumber(0);
-                    updatemainBar("ChannelName");
-
-                }
-
-                g.addEdge(getvertex(busName), getvertex(ChannelName));
-
-                // TMLChannel tmlch = (TMLChannel) busCh;
-
-                // String writeChannel = tmlch.getDestinationTask().getName() + "__" +
-                // "writechannel:" + tmlch.getDestinationPort();
-                // String readChannel;
-
-            }
-
-        }
-
-        for (Entry<String, HashSet<TMLElement>> entry : bridgechannel.entrySet()) {
-            String busName = entry.getKey();
-            HashSet<TMLElement> busChList = entry.getValue();
-
-            for (TMLElement busCh : busChList) {
-
-                String ChannelName = busCh.getName();
-                if (!g.containsVertex(vertex(ChannelName))) {
-                    g.addVertex(vertex(ChannelName));
-                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
-                    // gVertecies.add(vertex(ChannelName));
-
-                    getvertex(ChannelName).setTaintFixedNumber(0);
-
-                    updatemainBar("ChannelName");
-
-                }
-
-                g.addEdge(getvertex(busName), getvertex(ChannelName));
-            }
-
-        }
-
-        for (Entry<String, HashSet<TMLElement>> entry : memorychannel.entrySet()) {
-            String busName = entry.getKey();
-            HashSet<TMLElement> busChList = entry.getValue();
-
-            for (TMLElement busCh : busChList) {
-
-                String ChannelName = busCh.getName();
-                if (!g.containsVertex(vertex(ChannelName))) {
-                    g.addVertex(vertex(ChannelName));
-                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
-                    // gVertecies.add(vertex(ChannelName));
-                    getvertex(ChannelName).setTaintFixedNumber(0);
-                    updatemainBar("ChannelName");
-
-                }
-
-                g.addEdge(getvertex(busName), getvertex(ChannelName));
-            }
-
-        }
-
-        DiploSimulatorCodeGenerator gen = new DiploSimulatorCodeGenerator(tmap);
-        for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
-            List<HwCommunicationNode> pathNodes = gen.determineRoutingPath(tmap.getHwNodeOf(ch.getOriginTask()),
-                    tmap.getHwNodeOf(ch.getDestinationTask()), ch);
-
-            if (!g.vertexSet().contains(getvertex(ch.getName()))) {
-
-                g.addVertex(vertex(ch.getName()));
-
-                // gVertecies.add(vertex(ch.getName()));
-                getvertex(ch.getName()).setType(vertex.TYPE_CHANNEL);
-                getvertex(ch.getName()).setTaintFixedNumber(0);
-                updatemainBar(ch.getName());
-
-            }
-
-            if (!pathNodes.isEmpty()) {
-                for (HwCommunicationNode node : pathNodes) {
-
-                    if (channelPaths.containsKey(ch.getName())) {
-                        if (!channelPaths.get(ch.getName()).contains(node.getName())) {
-                            channelPaths.get(ch.getName()).add(node.getName());
-                        }
-                    } else {
-                        ArrayList<String> pathNodeNames = new ArrayList<String>();
-                        pathNodeNames.add(node.getName());
-                        channelPaths.put(ch.getName(), pathNodeNames);
-                    }
-
-                    if (!g.containsEdge(vertex(node.getName()), vertex(ch.getName()))) {
-                        g.addEdge(getvertex(node.getName()), getvertex(ch.getName()));
-                    }
-
-                }
-
-            }
-
-        }
-
-        SummaryCommMapping = tmap.getSummaryCommMapping();
-
-        for (HwNode node : tmap.getArch().getCPUs()) {
-            cpuTask = new HashMap<String, HashSet<TMLTask>>();
-            if (tmap.getLisMappedTasks(node).size() > 0) {
-
-                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
-
-            }
-
-            cpuTasks = getCPUTaskMap(cpuTask);
-
-        }
-
-        for (HwLink link : links) {
-
-            if (g.containsVertex(vertex(link.hwnode.getName())) && g.containsVertex(vertex(link.bus.getName()))) {
-
-                g.addEdge(getvertex(link.hwnode.getName()), getvertex(link.bus.getName()));
-                g.addEdge(getvertex(link.bus.getName()), getvertex(link.hwnode.getName()));
-            }
-
-        }
-
-        if (addedEdges.size() > 0) {
-            for (Entry<String, String> edge : addedEdges.entrySet()) {
-                g.addEdge(getvertex(edge.getKey()), getvertex(edge.getValue()));
-
-            }
-        }
-
-        if (sendEventWaitEventEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : sendEventWaitEventEdges.entrySet()) {
-
-                for (String waitEventEdge : edge.getValue())
-
-                    g.addEdge(getvertex(edge.getKey()), getvertex(waitEventEdge));
-
-            }
-        }
-        if (readWriteChannelEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : readWriteChannelEdges.entrySet()) {
-
-                for (String readChannelEdge : edge.getValue()) {
-
-                    g.addEdge(getvertex(edge.getKey()), getvertex(readChannelEdge));
-
-                    getvertex(edge.getKey()).setTaintFixedNumber(getvertex(edge.getKey()).getTaintFixedNumber() + 1);
-
-                }
-            }
-        }
-
-        if (forkreadEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : forkreadEdges.entrySet()) {
-
-                HashSet<String> writech = forkwriteEdges.get(edge.getKey());
-
-                for (String readChannelEdge : edge.getValue()) {
-
-                    for (String wch : writech) {
-
-                        g.addEdge(getvertex(readChannelEdge), getvertex(wch));
-
-                    }
-                }
-            }
-        }
-        if (joinreadEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : joinreadEdges.entrySet()) {
-
-                HashSet<String> writech = joinwriteEdges.get(edge.getKey());
-
-                for (String readChannelEdge : edge.getValue()) {
-
-                    for (String wch : writech) {
-
-                        g.addEdge(getvertex(readChannelEdge), getvertex(wch));
-
-                    }
-                }
-            }
-        }
-        if (writeReadChannelEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : writeReadChannelEdges.entrySet()) {
-
-                for (String readChannelEdge : edge.getValue()) {
-
-                    g.addEdge(getvertex(edge.getKey()), getvertex(readChannelEdge));
-                    getvertex(readChannelEdge).setTaintFixedNumber(getvertex(readChannelEdge).getTaintFixedNumber() + 1);
-
-                }
-            }
-
-        }
-
-        if (sequenceEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : sequenceEdges.entrySet()) {
-
-                for (String sequenceEdge : edge.getValue())
-
-                    g.addEdge(getvertex(edge.getKey()), getvertex(sequenceEdge));
-
-            }
-        }
-
-        if (unOrderedSequenceEdges.size() > 0) {
-            for (Entry<String, HashSet<String>> edge : unOrderedSequenceEdges.entrySet()) {
-
-                for (String sequenceEdge : edge.getValue())
-
-                    g.addEdge(getvertex(edge.getKey()), getvertex(sequenceEdge));
-
-            }
-        }
-
-        if (requestEdges.size() > 0) {
-
-            for (Entry<String, HashSet<String>> edge : requestEdges.entrySet()) {
-
-                for (String requestsingleEdges : edge.getValue()) {
-
-                    g.addEdge(getvertex(edge.getKey()), getvertex(requestsingleEdges));
-
-                }
-
-            }
-
-        }
-
     }
-
-    // draw the vertices and edges for the tasks mapped to the CPUs
 
     private void updatemainBar(String string) {
 
@@ -741,379 +853,78 @@ public class DirectedGraphTranslator extends JApplet {
         for (Entry<String, HashSet<TMLTask>> entry : cpuTask.entrySet()) {
 
             String key = entry.getKey();
+            int keyID = cpuIDs.get(key);
+
             HashSet<TMLTask> value = entry.getValue();
             Vector<TMLActivityElement> multiNexts = new Vector<TMLActivityElement>();
 
             // Map <String, String> sendEvt;
-            HashMap<String, List<String>> sendEvt = new HashMap<String, List<String>>();
-            HashMap<String, List<String>> waitEvt = new HashMap<String, List<String>>();
+            sendEvt = new HashMap<String, List<String>>();
+            waitEvt = new HashMap<String, List<String>>();
 
-            HashMap<String, String> sendData = new HashMap<String, String>();
-            HashMap<String, String> receiveData = new HashMap<String, String>();
+            sendData = new HashMap<String, String>();
+            receiveData = new HashMap<String, String>();
 
             // HashMap<String, List<String>> sendEvt = new HashMap<String, List<String>>();
 
             // GEt List of all requests
 
-            for (TMLTask task : value) {
-
-                if (task.isRequested()) {
-                    TMLRequest requestToTask = task.getRequest();
-
-                    requestToTask.getReferenceObject();
-
-                    requestToTask.getDestinationTask();
-
-                    requestToTask.getOriginTasks().get(0);
-
-                    requestToTask.ports.get(0).getName();
-                    requestToTask.getExtendedName();
-
-                    String destinationRequest = requestToTask.getDestinationTask().getName() + "__"
-                            + requestToTask.getDestinationTask().getActivityDiagram().get(0).getName() + "__"
-                            + requestToTask.getDestinationTask().getActivityDiagram().get(0).getID();
-
-                    String destinationRequestName = requestToTask.getDestinationTask().getName();
-
-                    for (TMLTask originTask : requestToTask.getOriginTasks()) {
-
-                        String requestOriginTaskName = originTask.getName();
-
-                        if (requestsOriginDestination.containsKey(requestOriginTaskName)) {
-                            if (!requestsOriginDestination.get(requestOriginTaskName).contains(destinationRequestName)) {
-                                requestsOriginDestination.get(requestOriginTaskName).add(destinationRequestName);
-                            }
-                        } else {
-                            ArrayList<String> destinationRequestNames = new ArrayList<String>();
-                            destinationRequestNames.add(destinationRequestName);
-                            requestsOriginDestination.put(requestOriginTaskName, destinationRequestNames);
-                        }
-
-                    }
-
-                    for (TMLCPrimitivePort requestsPort : requestToTask.ports) {
-
-                        String requestsPortName = requestsPort.getPortName();
-
-                        if (requestsPorts.containsKey(task.getName())) {
-                            if (!requestsPorts.get(task.getName()).contains(requestsPortName)) {
-                                requestsPorts.get(task.getName()).add(requestsPortName);
-                            }
-                        } else {
-                            ArrayList<String> requestsPortNames = new ArrayList<String>();
-                            requestsPortNames.add(requestsPortName);
-                            requestsPorts.put(task.getName(), requestsPortNames);
-                        }
-
-                    }
-
-                    if (requestsDestination.containsKey(destinationRequestName)) {
-                        if (!requestsDestination.get(destinationRequestName).contains(destinationRequest)) {
-                            requestsDestination.get(destinationRequestName).add(destinationRequest);
-                        }
-                    } else {
-                        ArrayList<String> destinationRequestNames = new ArrayList<String>();
-                        destinationRequestNames.add(destinationRequest);
-                        requestsDestination.put(destinationRequestName, destinationRequestNames);
-                    }
-
-                }
-
-            }
+            requestedTask(value);
 
             for (TMLTask task : value) {
-
-                /*
-                 * for (TMLComponentDesignPanel dpPanel : getCpanels()) { String[] taskpanel =
-                 * task.getName().split("__");
-                 * 
-                 * if (dpPanel.getNameOfTab().equals(taskpanel[0])) { tmlcdp = dpPanel; }
-                 * 
-                 * }
-                 */
+                int taskID = task.getID();
+                String taskName = task.getName();
                 // get the names and params of send events per task and their corresponding wait
                 // events
-                for (TMLSendEvent sendEvent : task.getSendEvents()) {
-                    TMLCPrimitivePort sendingPortdetails = sendEvent.getEvent().port;
-                    TMLCPrimitivePort receivePortdetails = sendEvent.getEvent().port2;
+                taskAc=task;
+                sendEventsNames();
 
-                    String sendingPortparams = sendEvent.getAllParams();
-
-                    TMLTask destinationTasks = sendEvent.getEvent().getDestinationTask();
-
-                    sendEvt.put("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")", new ArrayList<String>());
-
-                    for (TMLWaitEvent wait_sendEvent : destinationTasks.getWaitEvents()) {
-                        String receivePortparams = wait_sendEvent.getAllParams();
-
-                        sendEvt.get("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")")
-                                .add("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")");
-
-                    }
-
-                }
                 // get the names of read channels per task and their corresponding write
                 // channels
 
-                for (TMLReadChannel readChannel : task.getReadChannels()) {
+                readChannelNames();
 
-                    int i = readChannel.getNbOfChannels();
-
-                    // name = _ch.getOriginPorts().get(0).getName(); //return the name of the source
-                    // port of the channel
-
-                    for (int j = 0; j < i; j++) {
-
-                        String sendingDataPortdetails = "";
-                        String receiveDataPortdetails = "";
-
-                        if ((readChannel.getChannel(j)).originalDestinationTasks.size() > 0) {
-
-                            String[] checkchannel;
-                            if (readChannel.getChannel(j).getOriginPort().getName().contains("FORKPORTORIGIN")) {
-
-                                checkchannel = readChannel.getChannel(j).getOriginPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-                                    sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN",
-                                            "FORKCHANNEL");
-
-                                } else if (checkchannel.length <= 2) {
-
-                                    sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN", "");
-
-                                    sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
-                                    ;
-
-                                }
-
-                            } else if (readChannel.getChannel(j).getOriginPort().getName().contains("JOINPORTORIGIN")) {
-
-                                checkchannel = readChannel.getChannel(j).getOriginPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-                                    sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN",
-                                            "JOINCHANNEL");
-
-                                } else if ((checkchannel.length) <= 2) {
-                                    sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN", "");
-
-                                    sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
-
-                                }
-                            } else {
-                                sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName();
-                            }
-                            if (readChannel.getChannel(j).getDestinationPort().getName().contains("FORKPORTDESTINATION")) {
-
-                                checkchannel = readChannel.getChannel(j).getDestinationPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-
-                                    receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION",
-                                            "FORKCHANNEL");
-                                } else if (checkchannel.length <= 2) {
-
-                                    receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION",
-                                            "");
-
-                                    receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
-                                }
-
-                            } else if (readChannel.getChannel(j).getDestinationPort().getName().contains("JOINPORTDESTINATION")) {
-
-                                checkchannel = readChannel.getChannel(j).getDestinationPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-
-                                    receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("JOINPORTDESTINATION",
-                                            "JOINCHANNEL");
-                                } else if (checkchannel.length <= 2) {
-
-                                    receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("JOINPORTDESTINATION",
-                                            "");
-
-                                    receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
-                                }
-                            } else {
-                                receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName();
-                            }
-                        } else {
-
-                            sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName();
-                            receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName();
-                        }
-
-                        if (!sendingDataPortdetails.equals(receiveDataPortdetails)) {
-                            receiveData.put(receiveDataPortdetails, sendingDataPortdetails);
-
-                        }
-
-                    }
-
-                }
                 // get the names of write channels per task and their corresponding read
                 // channels
-                for (TMLWriteChannel writeChannel : task.getWriteChannels()) {
 
-                    int i = writeChannel.getNbOfChannels();
+                writeChannelNames();
 
-                    for (int j = 0; j < i; j++) {
-
-                        String sendingDataPortdetails = "";
-                        String receiveDataPortdetails = "";
-
-                        if ((writeChannel.getChannel(j)).originalDestinationTasks.size() > 0) {
-                            String[] checkchannel;
-
-                            if (writeChannel.getChannel(j).getOriginPort().getName().contains("FORKPORTORIGIN")) {
-
-                                checkchannel = writeChannel.getChannel(j).getOriginPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-                                    sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN",
-                                            "FORKCHANNEL");
-                                    ;
-
-                                } else if (checkchannel.length < 2) {
-
-                                    sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN", "");
-                                    ;
-
-                                    sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
-                                    ;
-
-                                }
-
-                            } else if (writeChannel.getChannel(j).getOriginPort().getName().contains("JOINPORTORIGIN")) {
-
-                                checkchannel = writeChannel.getChannel(j).getOriginPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-
-                                    sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN",
-                                            "JOINCHANNEL");
-
-                                } else if (checkchannel.length <= 2) {
-                                    sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN", "");
-
-                                    sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
-                                    ;
-
-                                }
-
-                            } else {
-                                sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName();
-                            }
-
-                            if (writeChannel.getChannel(j).getDestinationPort().getName().contains("FORKPORTDESTINATION")) {
-
-                                checkchannel = writeChannel.getChannel(j).getDestinationPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-
-                                    receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION",
-                                            "FORKCHANNEL");
-                                } else if (checkchannel.length <= 2) {
-
-                                    receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION",
-                                            "");
-
-                                    receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
-                                }
-
-                            } else if (writeChannel.getChannel(j).getDestinationPort().getName().contains("JOINPORTDESTINATION")) {
-
-                                checkchannel = writeChannel.getChannel(j).getDestinationPort().getName().split("_S_");
-
-                                if (checkchannel.length > 2) {
-
-                                    receiveDataPortdetails = "JOINCHANNEL_S_" + checkchannel[1] + "__" + checkchannel[2];
-
-                                } else if (checkchannel.length <= 2) {
-                                    receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName().replace("JOINPORTDESTINATION",
-                                            "");
-
-                                    receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
-                                }
-
-                            } else {
-                                receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName();
-
-                            }
-
-                        } else {
-
-                            // writeChannel.getChannel(j);
-                            sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName();
-                            receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName();
-                        }
-
-                        if (!sendingDataPortdetails.equals(receiveDataPortdetails)) {
-
-                            sendData.put(sendingDataPortdetails, receiveDataPortdetails);
-                        }
-
-                    }
-                }
                 // get the names and params of wait events per task and their corresponding send
                 // events
-
-                for (TMLWaitEvent waitEvent : task.getWaitEvents()) {
-                    // TMLCPrimitivePort portdetails = waitEvent.getEvent().port;
-                    TMLCPrimitivePort sendingPortdetails = waitEvent.getEvent().port;
-                    TMLCPrimitivePort receivePortdetails = waitEvent.getEvent().port2;
-
-                    String receivePortparams = waitEvent.getAllParams();
-
-                    // tmlcdp.tmlctdp.getAllPortsConnectedTo(portdetails);
-
-                    waitEvt.put("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")", new ArrayList<String>());
-
-                    TMLTask originTasks = waitEvent.getEvent().getOriginTask();
-
-                    for (TMLSendEvent wait_sendEvent : originTasks.getSendEvents()) {
-
-                        String sendingPortparams = wait_sendEvent.getAllParams();
-
-                        waitEvt.get("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")")
-                                .add("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")");
-
-                    }
-
-                }
+                waitEventNames();
 
                 // add the name of the task as a vertex
 
                 if (!g.vertexSet().contains(getvertex(key))) {
-                    g.addVertex(vertex(key));
+                    g.addVertex(vertex(key, keyID));
                     updatemainBar(key);
                 }
-                if (!g.vertexSet().contains(getvertex(task.getName()))) {
-                    g.addVertex(vertex(task.getName()));
-                    updatemainBar(task.getName());
+                if (!g.vertexSet().contains(getvertex(taskName))) {
+                    g.addVertex(vertex(taskName, taskID));
+                    updatemainBar(taskName);
                 }
 
-                g.addEdge(getvertex(key), getvertex(task.getName()));
+                g.addEdge(getvertex(key), getvertex(taskName));
 
                 activity = task.getActivityDiagram();
-                int count = 1;
+                opCount = 1;
                 currentElement = activity.getFirst();
-                String taskStartName = "";
-                String taskEndName = "";
+                taskStartName = "";
+                // int taskStartid;
 
-                HashMap<String, List<String>> forLoopNextValues = new HashMap<String, List<String>>();
+                forLoopNextValues = new HashMap<String, List<String>>();
 
                 // loop over all the activites corresponding to a task
-                while (count <= activity.nElements()) {
+                while (opCount <= activity.nElements()) {
 
                     String eventName = null;
-                    String preEventName;
+
+                    // int eventid = currentElement.getID();
 
                     if (currentElement.getName().equals("Stop after infinite loop")) {
-                        count++;
+                        opCount++;
 
-                        if (count <= activity.nElements()) {
+                        if (opCount <= activity.nElements()) {
                             if (currentElement.getNexts().size() == 1) {
 
                                 currentElement = currentElement.getNexts().firstElement();
@@ -1131,66 +942,72 @@ public class DirectedGraphTranslator extends JApplet {
                         }
                     } else if (currentElement.getName().equals("startOfFork") || currentElement.getName().equals("junctionOfFork")
                             || currentElement.getName().equals("startOfJoin") || currentElement.getName().equals("junctionOfJoin")) {
-                        count++;
+                        opCount++;
 
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
-                    } else if (task.getName().startsWith("FORKTASK_S_") && currentElement.getName().equals("ReadOfFork")) {
+                    } else if (taskName.startsWith("FORKTASK_S_") && currentElement.getName().equals("ReadOfFork")) {
 
-                        if (!g.containsVertex(getvertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()))) {
-                            g.addVertex(vertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()));
+                        String name = ((TMLReadChannel) (currentElement)).getChannel(0).getName();
+                        int id = ((TMLReadChannel) (currentElement)).getChannel(0).getID();
+                        if (!g.containsVertex(getvertex(name))) {
+                            g.addVertex(vertex(name, id));
 
                         }
 
-                        g.addEdge(getvertex(task.getName()), getvertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()));
+                        g.addEdge(getvertex(taskName), getvertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()));
 
                         HashSet<String> readForkVertex = new HashSet<String>();
                         readForkVertex.add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
 
-                        if (forkreadEdges.containsKey(task.getName())) {
+                        if (forkreadEdges.containsKey(taskName)) {
 
-                            if (!forkreadEdges.get(task.getName()).contains(((TMLReadChannel) (currentElement)).getChannel(0).getName())) {
-                                forkreadEdges.get(task.getName()).add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
+                            if (!forkreadEdges.get(taskName).contains(((TMLReadChannel) (currentElement)).getChannel(0).getName())) {
+                                forkreadEdges.get(taskName).add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
                             }
 
                         } else {
 
-                            forkreadEdges.put(task.getName(), readForkVertex);
+                            forkreadEdges.put(taskName, readForkVertex);
 
                         }
 
-                        count++;
+                        opCount++;
 
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
 
-                    } else if (task.getName().startsWith("FORKTASK_S_") && currentElement.getName().startsWith("WriteOfFork_S")) {
+                    } else if (taskName.startsWith("FORKTASK_S_") && currentElement.getName().startsWith("WriteOfFork_S")) {
 
-                        if (!g.containsVertex(getvertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()))) {
-                            g.addVertex(vertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()));
+                        String vName = ((TMLWriteChannel) (currentElement)).getChannel(0).getName();
+                        int vid = ((TMLWriteChannel) (currentElement)).getChannel(0).getID();
+
+                        vertex v = getvertex(vName);
+                        if (!g.containsVertex(v)) {
+                            g.addVertex(vertex(vName, vid));
 
                         }
 
                         HashSet<String> writeForkVertex = new HashSet<String>();
                         writeForkVertex.add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
 
-                        if (forkwriteEdges.containsKey(task.getName())) {
+                        if (forkwriteEdges.containsKey(taskName)) {
 
-                            if (!forkwriteEdges.get(task.getName()).contains(((TMLWriteChannel) (currentElement)).getChannel(0).getName())) {
-                                forkwriteEdges.get(task.getName()).add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
+                            if (!forkwriteEdges.get(taskName).contains(((TMLWriteChannel) (currentElement)).getChannel(0).getName())) {
+                                forkwriteEdges.get(taskName).add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
                             }
 
                         } else {
 
-                            forkwriteEdges.put(task.getName(), writeForkVertex);
+                            forkwriteEdges.put(taskName, writeForkVertex);
 
                         }
 
-                        // g.addEdge(getvertex(task.getName()),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
+                        // g.addEdge(getvertex(taskName),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
-                        count++;
+                        opCount++;
 
                         currentElement = currentElement.getNexts().firstElement();
 
@@ -1198,73 +1015,73 @@ public class DirectedGraphTranslator extends JApplet {
 
                     } else if (currentElement.getName().equals("stopOfFork") || currentElement.getName().equals("stop2OfFork")
                             || currentElement.getName().equals("stopOfJoin")) {
-                        count++;
+                        opCount++;
 
                         continue;
-                    } else if (task.getName().startsWith("JOINTASK_S_") && currentElement.getName().startsWith("ReadOfJoin")) {
-                        if (!g.containsVertex(getvertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()))) {
-                            g.addVertex(vertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()));
+                    } else if (taskName.startsWith("JOINTASK_S_") && currentElement.getName().startsWith("ReadOfJoin")) {
+
+                        String vName = ((TMLReadChannel) (currentElement)).getChannel(0).getName();
+                        int vid = ((TMLReadChannel) (currentElement)).getChannel(0).getID();
+
+                        if (!g.containsVertex(getvertex(vName))) {
+                            g.addVertex(vertex(vName, vid));
 
                         }
 
                         HashSet<String> writeForkVertex = new HashSet<String>();
                         writeForkVertex.add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
 
-                        if (joinreadEdges.containsKey(task.getName())) {
+                        if (joinreadEdges.containsKey(taskName)) {
 
-                            if (!joinreadEdges.get(task.getName()).contains(((TMLReadChannel) (currentElement)).getChannel(0).getName())) {
+                            if (!joinreadEdges.get(taskName).contains(((TMLReadChannel) (currentElement)).getChannel(0).getName())) {
                                 joinreadEdges.get(task.getName()).add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
                             }
 
                         } else {
 
-                            joinreadEdges.put(task.getName(), writeForkVertex);
+                            joinreadEdges.put(taskName, writeForkVertex);
 
                         }
 
                         // g.addEdge(getvertex(task.getName()),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
-                        count++;
+                        opCount++;
 
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
-                    } else if (task.getName().startsWith("JOINTASK_S_") && currentElement.getName().equals("WriteOfJoin")) {
+                    } else if (taskName.startsWith("JOINTASK_S_") && currentElement.getName().equals("WriteOfJoin")) {
 
-                        if (!g.containsVertex(getvertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()))) {
-                            g.addVertex(vertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()));
+                        String vName = ((TMLWriteChannel) (currentElement)).getChannel(0).getName();
+                        int vid = ((TMLWriteChannel) (currentElement)).getChannel(0).getID();
+
+                        if (!g.containsVertex(getvertex(vName))) {
+                            g.addVertex(vertex(vName, vid));
 
                         }
 
-                        g.addEdge(getvertex(task.getName()), getvertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()));
+                        g.addEdge(getvertex(taskName), getvertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()));
 
                         HashSet<String> readForkVertex = new HashSet<String>();
                         readForkVertex.add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
 
-                        if (joinwriteEdges.containsKey(task.getName())) {
+                        if (joinwriteEdges.containsKey(taskName)) {
 
-                            if (!joinwriteEdges.get(task.getName()).contains(((TMLWriteChannel) (currentElement)).getChannel(0).getName())) {
-                                joinwriteEdges.get(task.getName()).add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
+                            if (!joinwriteEdges.get(taskName).contains(((TMLWriteChannel) (currentElement)).getChannel(0).getName())) {
+                                joinwriteEdges.get(taskName).add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
                             }
 
                         } else {
 
-                            joinwriteEdges.put(task.getName(), readForkVertex);
+                            joinwriteEdges.put(taskName, readForkVertex);
 
                         }
 
-                        count++;
+                        opCount++;
 
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
-
-                    } else if (currentElement.getReferenceObject() instanceof TMLADRandom) {
-
-                        eventName = task.getName() + "__" + currentElement.getName() + "__" + currentElement.getID();
-
-                    } else {
-                        eventName = task.getName() + "__" + currentElement.getReferenceObject().toString() + "__" + currentElement.getID();
 
                     }
 
@@ -1278,533 +1095,22 @@ public class DirectedGraphTranslator extends JApplet {
 
                     }
 
+                    eventName = getEventName(taskName, currentElement);
+
                     // in case an end was encountered , the previous activities should be checked:
                     // in
                     // case it is an end for a loop or sequence speavial edges should be added
 
                     if (currentElement.getReferenceObject() instanceof TMLADStopState) {
 
-                        taskEndName = task.getName() + "__" + currentElement.getName() + "__" + currentElement.getID();
-
-                        if (activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADRandom) {
-                            preEventName = task.getName() + "__" + activity.getPrevious(currentElement).getName() + "__"
-                                    + activity.getPrevious(currentElement).getID();
-
-                        } else {
-                            preEventName = task.getName() + "__" + activity.getPrevious(currentElement).getReferenceObject().toString() + "__"
-                                    + activity.getPrevious(currentElement).getID();
-
-                        }
-
-                        g.addVertex(vertex(taskEndName));
-                        // gVertecies.add(vertex(taskEndName));
-                        getvertex(eventName).setType(vertex.TYPE_END);
-                        getvertex(eventName).setTaintFixedNumber(1);
-                        // allTasks.add(taskEndName);
-
-                        if (!(activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADSequence)) {
-                            g.addEdge(getvertex(preEventName), getvertex(taskEndName));
-
-                        }
-
-                        @SuppressWarnings({ "unchecked", "rawtypes" })
-                        AllDirectedPaths<vertex, DefaultEdge> allPaths = new AllDirectedPaths<vertex, DefaultEdge>(g);
-                        if (orderedSequenceList.size() > 0) {
-
-                            int noForLoop = 0;
-                            // get path from sequence to end
-                            for (Entry<String, ArrayList<String>> sequenceListEntry : orderedSequenceList.entrySet()) {
-
-                                int directlyConnectedSeq = 0;
-
-                                if (g.containsVertex(vertex(sequenceListEntry.getKey()))) {
-
-                                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(sequenceListEntry.getKey()),
-                                            getvertex(taskEndName), false, g.vertexSet().size());
-
-                                    for (Entry<String, ArrayList<String>> othersequenceListEntryValue : orderedSequenceList.entrySet()) {
-
-                                        for (int i = 0; i < path.size(); i++) {
-
-                                            if (!othersequenceListEntryValue.getKey().equals(sequenceListEntry.getKey())) {
-
-                                                if (path.get(i).getVertexList().contains(getvertex(othersequenceListEntryValue.getKey()))) {
-
-                                                    directlyConnectedSeq++;
-
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    if (path.size() > 0 && sequenceListEntry.getValue().size() > 0 && directlyConnectedSeq == 0) {
-
-                                        for (int i = 0; i < path.size(); i++) {
-
-                                            for (String sequenceListEntryValue : sequenceListEntry.getValue()) {
-
-                                                if (g.containsVertex(getvertex(sequenceListEntryValue))) {
-
-                                                    if (path.get(i).getVertexList().contains(getvertex(sequenceListEntryValue))) {
-
-                                                        if (forLoopNextValues.size() > 0) {
-
-                                                            for (Entry<String, List<String>> forloopListEntry : forLoopNextValues.entrySet()) {
-
-                                                                if ((path.get(i).getVertexList()
-                                                                        .contains(getvertex(forloopListEntry.getValue().get(0)))
-                                                                        && getvertex(forloopListEntry.getValue().get(0))
-                                                                                .getId() != sequenceListEntry.getKey())
-
-                                                                        || path.get(i).getVertexList().contains(getvertex(sequenceListEntry.getValue()
-                                                                                .get(sequenceListEntry.getValue().size() - 1)))) {
-
-                                                                    noForLoop++;
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (forEverLoopList.size() > 0) {
-
-                                                            for (String forloopListEntry : forEverLoopList) {
-
-                                                                if (path.get(i).getVertexList().contains(getvertex(forloopListEntry))) {
-
-                                                                    noForLoop++;
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (noForLoop == 0) {
-
-                                                            int nextIndex = sequenceListEntry.getValue().indexOf(sequenceListEntryValue) + 1;
-
-                                                            if (nextIndex < sequenceListEntry.getValue().size()) {
-
-                                                                HashSet<String> endSequenceVertex = new HashSet<String>();
-                                                                endSequenceVertex.add(sequenceListEntry.getValue().get(nextIndex));
-
-                                                                if (sequenceEdges.containsKey(taskEndName)) {
-
-                                                                    if (!sequenceEdges.get(taskEndName)
-                                                                            .contains(sequenceListEntry.getValue().get(nextIndex))) {
-                                                                        sequenceEdges.get(taskEndName)
-                                                                                .add(sequenceListEntry.getValue().get(nextIndex));
-                                                                    }
-
-                                                                } else {
-
-                                                                    sequenceEdges.put(eventName, endSequenceVertex);
-
-                                                                }
-
-                                                            } else if (nextIndex == sequenceListEntry.getValue().size()
-                                                                    && orderedSequenceList.size() > 1) {
-
-                                                                for (Entry<String, ArrayList<String>> othersequenceListEntryValue : orderedSequenceList
-                                                                        .entrySet()) {
-
-                                                                    if (!othersequenceListEntryValue.getKey().equals(sequenceListEntry.getKey())) {
-
-                                                                        int connectedSeq = 0;
-
-                                                                        List<GraphPath<vertex, DefaultEdge>> pathBetweenSeq = allPaths.getAllPaths(
-                                                                                getvertex(othersequenceListEntryValue.getKey()),
-                                                                                getvertex(taskEndName), false, g.vertexSet().size());
-
-                                                                        for (int j = 0; j < pathBetweenSeq.size(); j++) {
-
-                                                                            for (Entry<String, ArrayList<String>> adjacentsequenceListEntryValue : orderedSequenceList
-                                                                                    .entrySet()) {
-                                                                                if (!adjacentsequenceListEntryValue.getKey()
-                                                                                        .equals(sequenceListEntry.getKey())
-                                                                                        && !adjacentsequenceListEntryValue.getKey()
-                                                                                                .equals(othersequenceListEntryValue.getKey())) {
-
-                                                                                    if (path.get(i).getVertexList().contains(
-                                                                                            getvertex(adjacentsequenceListEntryValue.getKey()))) {
-
-                                                                                        connectedSeq++;
-
-                                                                                    }
-
-                                                                                }
-                                                                            }
-
-                                                                        }
-
-                                                                        if (connectedSeq == 0 && pathBetweenSeq.size() > 0) {
-
-                                                                            for (String othersequenceListValue : othersequenceListEntryValue
-                                                                                    .getValue()) {
-
-                                                                                List<GraphPath<vertex, DefaultEdge>> pathToNextValue = allPaths
-                                                                                        .getAllPaths(getvertex(othersequenceListValue),
-                                                                                                getvertex(taskEndName), false, g.vertexSet().size());
-
-                                                                                if (pathToNextValue.size() > 0)
-
-                                                                                {
-
-                                                                                    int nextAdjIndex = othersequenceListEntryValue.getValue()
-                                                                                            .indexOf(othersequenceListValue) + 1;
-
-                                                                                    if (nextAdjIndex < othersequenceListEntryValue.getValue()
-                                                                                            .size()) {
-
-                                                                                        HashSet<String> nextSequenceVertex = new HashSet<String>();
-                                                                                        nextSequenceVertex.add(othersequenceListEntryValue.getValue()
-                                                                                                .get(nextAdjIndex));
-
-                                                                                        if (sequenceEdges.containsKey(taskEndName)) {
-
-                                                                                            if (!sequenceEdges.get(taskEndName)
-                                                                                                    .contains(othersequenceListEntryValue.getValue()
-                                                                                                            .get(nextAdjIndex))) {
-                                                                                                sequenceEdges.get(taskEndName)
-                                                                                                        .add(othersequenceListEntryValue.getValue()
-                                                                                                                .get(nextAdjIndex));
-                                                                                            }
-
-                                                                                        } else {
-
-                                                                                            sequenceEdges.put(eventName, nextSequenceVertex);
-
-                                                                                        }
-                                                                                    }
-
-                                                                                }
-
-                                                                            }
-
-                                                                        }
-
-                                                                    }
-
-                                                                }
-                                                            }
-
-                                                        }
-
-                                                    }
-
-                                                }
-
-                                            }
-
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-                        }
-
-                        if (unOrderedSequenceList.size() > 0) {
-
-                            // get path from sequence to end
-                            for (Entry<String, ArrayList<String>> sequenceListEntry : unOrderedSequenceList.entrySet()) {
-
-                                if (g.containsVertex(vertex(sequenceListEntry.getKey()))) {
-
-                                    int noForLoop = 0;
-
-                                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(sequenceListEntry.getKey()),
-                                            getvertex(taskEndName), false, g.vertexSet().size());
-
-                                    for (int i = 0; i < path.size(); i++) {
-
-                                        if (path.size() > 0 && sequenceListEntry.getValue().size() > 0) {
-
-                                            if (forLoopNextValues.size() > 0) {
-
-                                                for (Entry<String, List<String>> forloopListEntry : forLoopNextValues.entrySet()) {
-
-                                                    if (path.get(i).getVertexList().contains(getvertex(forloopListEntry.getKey()))) {
-
-                                                        if (path.get(i).getVertexList().contains(getvertex(forloopListEntry.getValue().get(0))))
-
-                                                        {
-                                                            noForLoop++;
-
-                                                        }
-
-                                                    }
-                                                }
-                                            }
-
-                                            if (forEverLoopList.size() > 0) {
-
-                                                for (String forloopListEntry : forEverLoopList) {
-
-                                                    if (path.get(i).getVertexList().contains(getvertex(forloopListEntry))) {
-
-                                                        noForLoop++;
-                                                    }
-                                                }
-                                            }
-
-                                            for (Entry<String, ArrayList<String>> seqEntry : orderedSequenceList.entrySet()) {
-
-                                                if (path.get(i).getVertexList().contains(getvertex(seqEntry.getKey()))) {
-
-                                                    if (path.get(i).getVertexList()
-                                                            .contains(getvertex(seqEntry.getValue().get(seqEntry.getValue().size() - 1))))
-
-                                                    {
-
-                                                    } else {
-                                                        noForLoop++;
-                                                    }
-
-                                                }
-
-                                            }
-
-                                            if (noForLoop == 0) {
-
-                                                HashSet<String> endSequenceVertex = new HashSet<String>();
-                                                endSequenceVertex.add(sequenceListEntry.getKey());
-
-                                                if (unOrderedSequenceEdges.containsKey(taskEndName)) {
-
-                                                    if (!unOrderedSequenceEdges.get(taskEndName).contains(sequenceListEntry.getKey())) {
-                                                        unOrderedSequenceEdges.get(taskEndName).add(sequenceListEntry.getKey());
-                                                    }
-
-                                                } else {
-
-                                                    unOrderedSequenceEdges.put(eventName, endSequenceVertex);
-
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // add if sequence on path of multiple for
-
-                        if (forLoopNextValues.size() > 0) {
-
-                            for (Entry<String, List<String>> forloopListEntry : forLoopNextValues.entrySet()) {
-
-                                if (g.containsVertex(vertex(forloopListEntry.getValue().get(0)))) {
-
-                                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(forloopListEntry.getValue().get(0)),
-                                            getvertex(taskEndName), false, g.vertexSet().size());
-
-                                    for (int i = 0; i < path.size(); i++) {
-                                        int forloopCount = 0;
-
-                                        for (Entry<String, List<String>> forEntry : forLoopNextValues.entrySet()) {
-
-                                            if (!forloopListEntry.getKey().equals(forEntry.getKey())) {
-                                                if (path.get(i).getVertexList().contains(getvertex(forEntry.getKey()))) {
-
-                                                    forloopCount++;
-
-                                                }
-
-                                            }
-
-                                        }
-
-                                        for (Entry<String, ArrayList<String>> seqEntry : orderedSequenceList.entrySet()) {
-
-                                            if (path.get(i).getVertexList().contains(getvertex(seqEntry.getKey()))) {
-
-                                                if (path.get(i).getVertexList()
-                                                        .contains(getvertex(seqEntry.getValue().get(seqEntry.getValue().size() - 1))))
-
-                                                {
-
-                                                } else {
-                                                    forloopCount++;
-                                                }
-
-                                            }
-
-                                        }
-
-                                        for (Entry<String, ArrayList<String>> unOrderedseqEntry : unOrderedSequenceList.entrySet()) {
-
-                                            if (path.get(i).getVertexList().contains(getvertex(unOrderedseqEntry.getKey()))) {
-                                                forloopCount++;
-
-                                                HashSet<String> forLoopName = new HashSet<String>();
-                                                forLoopName.add(forloopListEntry.getKey());
-
-                                                if (unOrderedSequenceEdges.containsKey(unOrderedseqEntry.getKey())) {
-
-                                                    if (unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).contains(forloopListEntry.getKey())) {
-                                                        unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).add(forloopListEntry.getKey());
-                                                    }
-
-                                                } else {
-
-                                                    unOrderedSequenceEdges.put(unOrderedseqEntry.getKey(), forLoopName);
-
-                                                }
-
-                                            }
-
-                                        }
-                                        String forvertexName = forloopListEntry.getKey();
-                                        if (forloopCount == 0 && !g.containsEdge(getvertex(taskEndName), getvertex(forvertexName))) {
-
-                                            addedEdges.put(taskEndName, forvertexName);
-
-                                        }
-                                    }
-
-                                }
-
-                                if (g.containsVertex(vertex(forloopListEntry.getValue().get(1))) && forLoopNextValues.size() > 1) {
-
-                                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(forloopListEntry.getValue().get(1)),
-                                            getvertex(taskEndName), false, g.vertexSet().size());
-
-                                    if (path.size() > 0) {
-
-                                        for (Entry<String, List<String>> previousForLoop : forLoopNextValues.entrySet()) {
-                                            if (g.containsVertex(vertex(previousForLoop.getValue().get(0)))
-                                                    && !previousForLoop.getKey().equals(forloopListEntry.getKey())) {
-
-                                                List<GraphPath<vertex, DefaultEdge>> previousForpath = allPaths.getAllPaths(
-                                                        getvertex(previousForLoop.getValue().get(0)), getvertex(taskEndName), false,
-                                                        g.vertexSet().size());
-
-                                                for (int i = 0; i < previousForpath.size(); i++) {
-                                                    int forloopCount = 0;
-
-                                                    for (Entry<String, List<String>> forEntry : forLoopNextValues.entrySet()) {
-
-                                                        if (previousForpath.get(i).getVertexList().contains(getvertex(forEntry.getKey()))
-                                                                && !forloopListEntry.getKey().equals(forEntry.getKey())) {
-
-                                                            forloopCount++;
-
-                                                        }
-
-                                                    }
-
-                                                    String forvertexName = previousForLoop.getKey();
-                                                    if (forloopCount == 0
-
-                                                            && !g.containsEdge(vertex(taskEndName), vertex(forvertexName))) {
-
-                                                        addedEdges.put(taskEndName, forvertexName);
-
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
-                        if (!forEverLoopList.isEmpty())
-
-                        {
-
-                            for (String loopforEver : forEverLoopList) {
-
-                                List<GraphPath<vertex, DefaultEdge>> pathforloopforever = allPaths.getAllPaths(getvertex(loopforEver),
-                                        getvertex(taskEndName), false, g.vertexSet().size());
-
-                                if (pathforloopforever.size() > 0) {
-
-                                    for (int i = 0; i < pathforloopforever.size(); i++) {
-                                        int forloopCount = 0;
-
-                                        for (Entry<String, List<String>> previousForLoop : forLoopNextValues.entrySet()) {
-
-                                            if (pathforloopforever.get(i).getVertexList().contains(getvertex(previousForLoop.getValue().get(0)))) {
-
-                                                forloopCount++;
-
-                                            }
-                                        }
-
-                                        for (Entry<String, ArrayList<String>> seqEntry : orderedSequenceList.entrySet()) {
-
-                                            if (pathforloopforever.get(i).getVertexList().contains(getvertex(seqEntry.getKey()))) {
-
-                                                if (pathforloopforever.get(i).getVertexList()
-                                                        .contains(getvertex(seqEntry.getValue().get(seqEntry.getValue().size() - 1))))
-
-                                                {
-
-                                                } else {
-                                                    forloopCount++;
-                                                }
-
-                                            }
-
-                                        }
-
-                                        for (Entry<String, ArrayList<String>> unOrderedseqEntry : unOrderedSequenceList.entrySet()) {
-
-                                            if (pathforloopforever.get(i).getVertexList().contains(getvertex(unOrderedseqEntry.getKey()))) {
-                                                forloopCount++;
-
-                                                HashSet<String> forLoopName = new HashSet<String>();
-                                                forLoopName.add(loopforEver);
-
-                                                if (unOrderedSequenceEdges.containsKey(unOrderedseqEntry.getKey())) {
-
-                                                    if (unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).contains(loopforEver)) {
-                                                        unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).add(loopforEver);
-                                                    }
-
-                                                } else {
-
-                                                    unOrderedSequenceEdges.put(unOrderedseqEntry.getKey(), forLoopName);
-
-                                                }
-
-                                            }
-                                        }
-
-                                        if (forloopCount == 0) {
-
-                                            addedEdges.put(taskEndName, loopforEver);
-
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-
-                        count++;
+                        addStopVertex(taskName);
 
                     }
 
                     // start activity is added as a vertex
                     if (currentElement.getReferenceObject() instanceof TMLADStartState) {
 
-                        taskStartName = task.getName() + "__" + currentElement.getName() + "__" + currentElement.getID();
-
-                        g.addVertex(vertex(taskStartName));
-                        // gVertecies.add(vertex(taskStartName));
-                        getvertex(taskStartName).setType(vertex.TYPE_START);
-                        getvertex(taskStartName).setTaintFixedNumber(1);
-                        g.addEdge(getvertex(task.getName()), getvertex(taskStartName));
-
-                        count++;
-
-                        if (!nameIDTaskList.containsKey(currentElement.getID())) {
-                            nameIDTaskList.put(String.valueOf(currentElement.getID()), eventName);
-                        }
+                        addStartVertex(taskName);
 
                     }
 
@@ -1843,412 +1149,8 @@ public class DirectedGraphTranslator extends JApplet {
                             || currentElement.getReferenceObject() instanceof TMLADDecrypt
                             || currentElement.getReferenceObject() instanceof TMLADEncrypt) {
 
-                        if (activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADRandom) {
-                            preEventName = task.getName() + "__" + activity.getPrevious(currentElement).getName() + "__"
-                                    + activity.getPrevious(currentElement).getID();
+                        addcurrentElementVertex(taskName, taskStartName);
 
-                        } else {
-                            preEventName = task.getName() + "__" + activity.getPrevious(currentElement).getReferenceObject().toString() + "__"
-                                    + activity.getPrevious(currentElement).getID();
-
-                        }
-
-                        if (((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecI
-                                || activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecC)
-                                && activity.getPrevious(currentElement).getValue().equals("0"))
-                                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADDelay)
-                                        && ((TMLADDelay) activity.getPrevious(currentElement).getReferenceObject()).getDelayValue().equals("0"))
-
-                                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADDelayInterval)
-                                        && (((TMLADDelayInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue()
-                                                .equals("0")
-                                                && ((TMLADDelayInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
-                                                        .equals("0")))
-
-                                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecCInterval)
-                                        && (((TMLADExecCInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue()
-                                                .equals("0")
-                                                && ((TMLADExecCInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
-                                                        .equals("0"))
-
-                                        || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecIInterval)
-                                                && (((TMLADExecIInterval) activity.getPrevious(currentElement).getReferenceObject())
-                                                        .getMinDelayValue().equals("0")
-                                                        && ((TMLADExecIInterval) activity.getPrevious(currentElement).getReferenceObject())
-                                                                .getMaxDelayValue().equals("0")))))
-
-                        {
-
-                            if (activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject() instanceof TMLADRandom) {
-                                preEventName = task.getName() + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getName() + "__"
-                                        + activity.getPrevious(activity.getPrevious(currentElement)).getID();
-
-                            } else {
-                                preEventName = task.getName() + "__"
-                                        + activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject().toString() + "__"
-                                        + activity.getPrevious(activity.getPrevious(currentElement)).getID();
-
-                            }
-
-                        }
-
-                        if (!nameIDTaskList.containsKey(currentElement.getID())) {
-                            nameIDTaskList.put(String.valueOf(currentElement.getID()), eventName);
-                        }
-
-                        if (g.containsVertex(getvertex(preEventName))) {
-
-                            g.addVertex(vertex(eventName));
-                            // gVertecies.add(vertex(eventName));
-
-                            g.addEdge(getvertex(preEventName), getvertex(eventName));
-                            count++;
-
-                        } else if ((activity.getPrevious(currentElement).getName().equals("start")) && g.containsVertex(vertex(taskStartName))) {
-
-                            g.addVertex(vertex(eventName));
-                            // gVertecies.add(vertex(eventName));
-                            g.addEdge(getvertex(taskStartName), getvertex(eventName));
-                            count++;
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADSendEvent
-                                || currentElement.getReferenceObject() instanceof TMLADWaitEvent
-                                || currentElement.getReferenceObject() instanceof TMLADSendRequest
-                                || currentElement.getReferenceObject() instanceof TMLADNotifiedEvent
-                                || currentElement.getReferenceObject() instanceof TMLADReadChannel
-                                || currentElement.getReferenceObject() instanceof TMLADWriteChannel
-                                || (currentElement.getReferenceObject() instanceof TMLADExecI && !currentElement.getValue().equals("0"))
-                                || (currentElement.getReferenceObject() instanceof TMLADExecC && !currentElement.getValue().equals("0"))
-                                || (currentElement.getReferenceObject() instanceof TMLADDelay
-                                        && !((TMLADDelay) currentElement.getReferenceObject()).getDelayValue().equals("0"))
-                                || (currentElement.getReferenceObject() instanceof TMLADDelayInterval
-                                        && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                                        && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-
-                                || (currentElement.getReferenceObject() instanceof TMLADExecCInterval
-                                        && !((TMLADExecCInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                                        && ((TMLADExecCInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                                || (currentElement.getReferenceObject() instanceof TMLADExecIInterval
-                                        && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                                        && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                                || currentElement.getReferenceObject() instanceof TMLADEncrypt
-                                || currentElement.getReferenceObject() instanceof TMLADDecrypt
-                                || currentElement.getReferenceObject() instanceof TMLADReadRequestArg) {
-
-                            allLatencyTasks.add(eventName);
-                            getvertex(eventName).setType(vertex.TYPE_TRANSACTION);
-                            getvertex(eventName).setTaintFixedNumber(1);
-
-                        } else if (currentElement.getReferenceObject() instanceof TMLADRandom) {
-                            getvertex(eventName).setType(vertex.TYPE_CTRL);
-                            getvertex(eventName).setTaintFixedNumber(1);
-                        } else if (currentElement.getReferenceObject() instanceof TMLADSelectEvt) {
-                            getvertex(eventName).setType(vertex.TYPE_CTRL);
-                            getvertex(eventName).setTaintFixedNumber(1);
-
-                        } else if (currentElement.getReferenceObject() instanceof TMLADActionState) {
-                            getvertex(eventName).setType(vertex.TYPE_CTRL);
-                            getvertex(eventName).setTaintFixedNumber(1);
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADForEverLoop) {
-                            forEverLoopList.add(eventName);
-
-                            getvertex(eventName).setType(vertex.TYPE_FOR_EVER_LOOP);
-
-                            getvertex(eventName).setTaintFixedNumber(Integer.MAX_VALUE);
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADChoice) {
-
-                            getvertex(eventName).setType(vertex.TYPE_CHOICE);
-                            getvertex(eventName).setTaintFixedNumber(1);
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADSendRequest) {
-
-                            if (requestsOriginDestination.containsKey(task.getName())) {
-
-                                for (String destinationTask : requestsOriginDestination.get(task.getName())) {
-
-                                    if (requestsPorts.containsKey(destinationTask)) {
-
-                                        for (String portNames : requestsPorts.get(destinationTask)) {
-
-                                            String[] requestName = currentElement.getReferenceObject().toString().split(":");
-
-                                            String[] portname = requestName[1].split("[(]");
-
-                                            if (portname[0].replaceAll(" ", "").equals(portNames.replaceAll(" ", ""))) {
-
-                                                for (String destinationTaskstartname : requestsDestination.get(destinationTask)) {
-
-                                                    if (requestEdges.containsKey(eventName)) {
-
-                                                        if (!requestEdges.get(eventName).contains(destinationTaskstartname)) {
-                                                            requestEdges.get(eventName).add(destinationTaskstartname);
-                                                        }
-
-                                                    } else {
-
-                                                        HashSet<String> destinationTaskoriginstart = new HashSet<String>();
-                                                        destinationTaskoriginstart.add(destinationTaskstartname);
-
-                                                        requestEdges.put(eventName, destinationTaskoriginstart);
-
-                                                    }
-
-                                                }
-
-                                            }
-
-                                        }
-
-                                    }
-
-                                }
-
-                            }
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADSendEvent) {
-
-                            if (sendEvt.containsKey(currentElement.getReferenceObject().toString().replaceAll(" ", ""))) {
-
-                                List<String> recieveEvt = sendEvt.get(currentElement.getReferenceObject().toString().replaceAll(" ", ""));
-
-                                for (vertex vertex : g.vertexSet()) {
-
-                                    String[] vertexName = vertex.toString().split("__");
-
-                                    for (String n : recieveEvt) {
-
-                                        if (vertexName.length >= 3) {
-
-                                            if ((n.replaceAll(" ", "").equals((vertexName[2].toString().replaceAll(" ", ""))))) {
-
-                                                HashSet<String> waitEventVertex = new HashSet<String>();
-                                                waitEventVertex.add(vertex.toString());
-
-                                                if (sendEventWaitEventEdges.containsKey(eventName)) {
-
-                                                    if (!sendEventWaitEventEdges.get(eventName).contains(vertex.toString())) {
-                                                        sendEventWaitEventEdges.get(eventName).add(vertex.toString());
-                                                    }
-
-                                                } else {
-
-                                                    sendEventWaitEventEdges.put(eventName, waitEventVertex);
-
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADWaitEvent) {
-
-                            if (waitEvt.containsKey(currentElement.getReferenceObject().toString().replaceAll(" ", ""))) {
-
-                                List<String> sendevent = waitEvt.get(currentElement.getReferenceObject().toString().replaceAll(" ", ""));
-
-                                for (vertex vertex : g.vertexSet()) {
-
-                                    String[] vertexName = vertex.toString().split("__");
-
-                                    for (String n : sendevent) {
-                                        if (vertexName.length >= 3) {
-
-                                            if ((n.replaceAll(" ", "").equals((vertexName[2].toString().replaceAll(" ", ""))))) {
-
-                                                HashSet<String> waitEventVertex = new HashSet<String>();
-                                                waitEventVertex.add(eventName);
-
-                                                if (sendEventWaitEventEdges.containsKey(vertex.toString())) {
-                                                    if (!sendEventWaitEventEdges.get(vertex.toString()).contains(eventName)) {
-
-                                                        sendEventWaitEventEdges.get(vertex.toString()).add(eventName);
-                                                    }
-
-                                                } else {
-
-                                                    sendEventWaitEventEdges.put(vertex.toString(), waitEventVertex);
-
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADWriteChannel) {
-
-                            writeChannelTransactions.add(eventName);
-
-                            String[] name = eventName.split("__");
-
-                            String[] removewrite = name[2].split(":");
-
-                            String[] portname = removewrite[1].split("[(]");
-
-                            String chwriteName = (name[0] + "__" + portname[0]).replaceAll(" ", "");
-
-                            String portNameNoSpaces = portname[0].replaceAll(" ", "");
-
-                            if (sendData.containsKey(portNameNoSpaces)) {
-                                String sendDatachannels;
-
-                                if (((TMLWriteChannel) currentElement).getChannel(0).getName().contains("FORKCHANNEL")
-                                        || ((TMLWriteChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("FORKTASK")
-                                        || ((TMLWriteChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("FORKTASK")
-                                        || ((TMLWriteChannel) currentElement).getChannel(0).getName().contains("JOINCHANNEL")
-                                        || ((TMLWriteChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("JOINTASK")
-                                        || ((TMLWriteChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("JOINTASK")
-
-                                ) {
-                                    sendDatachannels = sendData.get(portNameNoSpaces);
-                                } else {
-                                    // sendDatachannels = name[0] + "__" + sendData.get(portNameNoSpaces) + "__" +
-                                    // name[0] + "__" + portNameNoSpaces;
-                                    sendDatachannels = name[0] + "__" + portNameNoSpaces + "__" + name[0] + "__" + sendData.get(portNameNoSpaces);
-                                }
-
-                                // String sendDatachannels = name[0] + "__" + portNameNoSpaces + "__" + name[0]
-                                // + "__" + sendData.get(portNameNoSpaces);
-
-                                // if (sendDatachannels.contains("FORKPORTORIGIN")) {
-                                // sendDatachannels= sendDatachannels.replace("FORKPORTORIGIN", "FORKCHANNEL");
-//
-                                // }
-
-                                HashSet<String> writeChVertex = new HashSet<String>();
-                                writeChVertex.add(sendDatachannels);
-
-                                if (writeReadChannelEdges.containsKey(eventName)) {
-
-                                    if (!writeReadChannelEdges.get(eventName).contains(sendDatachannels)) {
-                                        writeReadChannelEdges.get(eventName).add(sendDatachannels);
-                                    }
-
-                                } else {
-
-                                    writeReadChannelEdges.put(eventName, writeChVertex);
-
-                                }
-                                // getvertex(sendDatachannels).setTaintFixedNumber(getvertex(sendDatachannels).getTaintFixedNumber()
-                                // + 1);
-
-                            }
-
-                            else {
-                                HashSet<String> writeChVertex = new HashSet<String>();
-                                writeChVertex.add(chwriteName);
-
-                                if (writeReadChannelEdges.containsKey(eventName)) {
-
-                                    if (!writeReadChannelEdges.get(eventName).contains(chwriteName)) {
-                                        writeReadChannelEdges.get(eventName).add(chwriteName);
-                                    }
-
-                                } else {
-
-                                    writeReadChannelEdges.put(eventName, writeChVertex);
-
-                                }
-
-                                // getvertex(chwriteName).setTaintFixedNumber(getvertex(chwriteName).getTaintFixedNumber()
-                                // + 1);
-                            }
-
-                        }
-
-                        if (currentElement.getReferenceObject() instanceof TMLADReadChannel) {
-
-                            readChannelTransactions.add(eventName);
-
-                            String[] name = eventName.split("__");
-
-                            String[] removewrite = name[2].split(":");
-
-                            String[] portname = removewrite[1].split("[(]");
-
-                            String chwriteName = (name[0] + "__" + portname[0]).replaceAll(" ", "");
-
-                            String portNameNoSpaces = portname[0].replaceAll(" ", "");
-
-                            if (receiveData.containsKey(portNameNoSpaces)) {
-                                String sendDatachannels;
-
-                                if (((TMLReadChannel) currentElement).getChannel(0).getName().contains("FORKCHANNEL")
-                                        || ((TMLReadChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("FORKTASK")
-                                        || ((TMLReadChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("FORKTASK")
-                                        || ((TMLReadChannel) currentElement).getChannel(0).getName().contains("JOINCHANNEL")
-                                        || ((TMLReadChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("JOINTASK")
-                                        || ((TMLReadChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("JOINTASK")) {
-                                    sendDatachannels = receiveData.get(portNameNoSpaces);
-                                } else {
-                                    sendDatachannels = name[0] + "__" + receiveData.get(portNameNoSpaces) + "__" + name[0] + "__" + portNameNoSpaces;
-
-                                }
-
-                                HashSet<String> readChVertex = new HashSet<String>();
-                                readChVertex.add(eventName);
-
-                                if (readWriteChannelEdges.containsKey(sendDatachannels)) {
-
-                                    if (!readWriteChannelEdges.get(sendDatachannels).contains(eventName)) {
-                                        readWriteChannelEdges.get(sendDatachannels).add(eventName);
-                                    }
-
-                                } else {
-
-                                    readWriteChannelEdges.put(sendDatachannels, readChVertex);
-
-                                }
-
-                                // getvertex(sendDatachannels).setTaintFixedNumber(getvertex(sendDatachannels).getTaintFixedNumber()
-                                // + 1);
-
-                                /*
-                                 * if (g.containsVertex(chwriteName))
-                                 * 
-                                 * { g.addEdge(chwriteName, eventName); }
-                                 */
-
-                            } else {
-                                HashSet<String> readChVertex = new HashSet<String>();
-                                readChVertex.add(eventName);
-
-                                if (readWriteChannelEdges.containsKey(chwriteName)) {
-
-                                    if (!readWriteChannelEdges.get(chwriteName).contains(eventName)) {
-                                        readWriteChannelEdges.get(chwriteName).add(eventName);
-                                    }
-
-                                } else {
-
-                                    readWriteChannelEdges.put(chwriteName, readChVertex);
-
-                                }
-
-                                //
-                            }
-
-                        }
                     }
 
                     // check if the next activity :add to an array:
@@ -2260,228 +1162,12 @@ public class DirectedGraphTranslator extends JApplet {
                         currentElement = currentElement.getNexts().firstElement();
 
                     } else if (!multiNexts.isEmpty()) {
-
-                        if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop
-                                || currentElement.getReferenceObject() instanceof TMLADForLoop) {
-
-                            if (currentElement.getNexts().size() > 1) {
-
-                                List<TGConnectingPoint> points = new ArrayList<TGConnectingPoint>();
-                                List<TGConnector> getOutputConnectors = new ArrayList<TGConnector>();
-                                if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop) {
-                                    points = Arrays.asList(((TMLADForStaticLoop) (currentElement.getReferenceObject())).getConnectingPoints());
-
-                                    getOutputConnectors = ((TMLADForStaticLoop) (currentElement.getReferenceObject())).getOutputConnectors();
-
-                                    String loopValue = ((TMLADForStaticLoop) (currentElement.getReferenceObject())).getValue();
-
-                                    getvertex(eventName).setType(vertex.TYPE_STATIC_FOR_LOOP);
-
-                                    if ((loopValue != null) && (loopValue.length() > 0)) {
-
-                                        if ((loopValue.matches("\\d*"))) {
-                                            getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
-                                        } else {
-                                            for (TMLAttribute att : task.getAttributes()) {
-
-                                                if (loopValue.contains(att.getName())) {
-                                                    loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
-                                                }
-
-                                            }
-                                            getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
-
-                                        }
-                                    }
-
-                                } else if (currentElement.getReferenceObject() instanceof TMLADForLoop) {
-                                    points = Arrays.asList(((TMLADForLoop) (currentElement.getReferenceObject())).getConnectingPoints());
-
-                                    getOutputConnectors = ((TMLADForLoop) (currentElement.getReferenceObject())).getOutputConnectors();
-                                    // String loopValue = ((TMLADForLoop)
-                                    // (currentElement.getReferenceObject())).getValue();
-
-                                    getvertex(eventName).setType(vertex.TYPE_FOR_LOOP);
-                                    String cond = ((TMLADForLoop) (currentElement.getReferenceObject())).getCondition();
-
-                                    if (cond.contains("<=")) {
-
-                                        String[] val = cond.split("<=");
-
-                                        String loopValue = val[2].toString();
-                                        if ((loopValue != null) && (loopValue.length() > 0)) {
-
-                                            if ((loopValue.matches("\\d*"))) {
-                                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
-                                            } else {
-                                                for (TMLAttribute att : task.getAttributes()) {
-
-                                                    if (loopValue.contains(att.getName())) {
-                                                        loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
-                                                    }
-
-                                                }
-
-                                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
-
-                                            }
-                                        }
-
-                                    } else if (cond.contains("<")) {
-
-                                        String[] val = cond.split("<");
-
-                                        String loopValue = val[1].toString();
-                                        if ((loopValue != null) && (loopValue.length() > 0)) {
-
-                                            if ((loopValue.matches("\\d*"))) {
-                                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
-                                            } else {
-                                                for (TMLAttribute att : task.getAttributes()) {
-
-                                                    if (loopValue.contains(att.getName())) {
-                                                        loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
-                                                    }
-
-                                                }
-                                                if ((loopValue.matches("\\d*"))) {
-                                                    getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
-                                                }
-                                                {
-                                                    frameLatencyDetailedAnalysis
-                                                            .error(loopValue + " Expression in For Loop is not supported by Tainting");
-                                                }
-
-                                            }
-
-                                        }
-
-                                    }
-
-                                }
-
-                                TGConnector inputConnector = null, outputConnector = null;
-
-                                for (TGConnector connector : getOutputConnectors) {
-
-                                    if (connector.getTGConnectingPointP1() == points.get(1)) {
-                                        inputConnector = connector;
-
-                                    } else if (connector.getTGConnectingPointP1() == points.get(2)) {
-                                        outputConnector = connector;
-                                    }
-
-                                }
-
-                                List<String> afterloopActivity = new ArrayList<String>(2);
-
-                                String insideLoop = "", outsideLoop = "";
-
-                                for (TMLActivityElement ae : currentElement.getNexts()) {
-
-                                    List<TGConnector> cg = (((TGComponent) ae.getReferenceObject()).getInputConnectors());
-
-                                    for (TGConnector afterloopcg : cg) {
-
-                                        if (afterloopcg == inputConnector) {
-
-                                            if (ae.getReferenceObject() instanceof TMLADRandom) {
-
-                                                insideLoop = task.getName() + "__" + ae.getName() + "__" + ae.getID();
-
-                                            } else {
-
-                                                insideLoop = task.getName() + "__" + ae.getReferenceObject().toString() + "__" + ae.getID();
-
-                                            }
-
-                                        } else if (afterloopcg == outputConnector) {
-
-                                            if (ae.getReferenceObject() instanceof TMLADRandom) {
-
-                                                outsideLoop = task.getName() + "__" + ae.getName() + "__" + ae.getID();
-
-                                            } else {
-
-                                                outsideLoop = task.getName() + "__" + ae.getReferenceObject().toString() + "__" + ae.getID();
-
-                                            }
-
-                                        }
-                                    }
-
-                                }
-
-                                afterloopActivity.add(0, insideLoop);
-                                afterloopActivity.add(1, outsideLoop);
-                                forLoopNextValues.put(eventName, afterloopActivity);
-
-                            }
-
-                        } else if (currentElement.getReferenceObject() instanceof TMLADSequence) {
-
-                            getvertex(eventName).setType(vertex.TYPE_SEQ);
-                            getvertex(eventName).setTaintFixedNumber(1);
-                            String nextEventName = "";
-
-                            for (TMLActivityElement seqListnextElement : currentElement.getNexts()) {
-                                if (seqListnextElement.getReferenceObject() instanceof TMLADRandom) {
-                                    nextEventName = task.getName() + "__" + seqListnextElement.getName() + "__" + seqListnextElement.getID();
-
-                                } else {
-                                    nextEventName = task.getName() + "__" + seqListnextElement.getReferenceObject().toString() + "__"
-                                            + seqListnextElement.getID();
-
-                                }
-
-                                if (orderedSequenceList.containsKey(eventName)) {
-                                    if (!orderedSequenceList.get(eventName).contains(nextEventName)) {
-                                        orderedSequenceList.get(eventName).add(nextEventName);
-                                    }
-                                } else {
-                                    ArrayList<String> seqListNextValues = new ArrayList<String>();
-                                    seqListNextValues.add(nextEventName);
-                                    orderedSequenceList.put(eventName, seqListNextValues);
-                                }
-
-                            }
-
-                        } else if (currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
-
-                            getvertex(eventName).setType(vertex.TYPE_UNORDER_SEQ);
-                            getvertex(eventName).setTaintFixedNumber(1);
-
-                            String nextEventName = "";
-
-                            for (TMLActivityElement seqListnextElement : currentElement.getNexts()) {
-                                if (seqListnextElement.getReferenceObject() instanceof TMLADRandom) {
-                                    nextEventName = task.getName() + "__" + seqListnextElement.getName() + "__" + seqListnextElement.getID();
-
-                                } else {
-                                    nextEventName = task.getName() + "__" + seqListnextElement.getReferenceObject().toString() + "__"
-                                            + seqListnextElement.getID();
-
-                                }
-
-                                if (unOrderedSequenceList.containsKey(eventName)) {
-                                    if (!unOrderedSequenceList.get(eventName).contains(nextEventName)) {
-                                        unOrderedSequenceList.get(eventName).add(nextEventName);
-                                    }
-                                } else {
-                                    ArrayList<String> seqListNextValues = new ArrayList<String>();
-                                    seqListNextValues.add(nextEventName);
-                                    unOrderedSequenceList.put(eventName, seqListNextValues);
-                                }
-
-                            }
-
-                        }
-
-                        List<TGConnector> cg = (((TGComponent) currentElement.getReferenceObject()).getInputConnectors());
-
+                        
+                        trackMultiNexts(taskName,eventName);
                         currentElement = multiNexts.get(0);
 
                         multiNexts.remove(0);
+
 
                     }
 
@@ -2494,7 +1180,1630 @@ public class DirectedGraphTranslator extends JApplet {
         }
 
         return cpuTaskMap;
+    }
 
+    private void trackMultiNexts(String taskName, String eventName) {
+        // TODO Auto-generated method stub
+        
+
+        if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop
+                || currentElement.getReferenceObject() instanceof TMLADForLoop) {
+
+            if (currentElement.getNexts().size() > 1) {
+
+                List<TGConnectingPoint> points = new ArrayList<TGConnectingPoint>();
+                List<TGConnector> getOutputConnectors = new ArrayList<TGConnector>();
+                if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop) {
+                    points = Arrays.asList(((TMLADForStaticLoop) (currentElement.getReferenceObject())).getConnectingPoints());
+
+                    getOutputConnectors = ((TMLADForStaticLoop) (currentElement.getReferenceObject())).getOutputConnectors();
+
+                    String loopValue = ((TMLADForStaticLoop) (currentElement.getReferenceObject())).getValue();
+
+                    getvertex(eventName).setType(vertex.TYPE_STATIC_FOR_LOOP);
+
+                    if ((loopValue != null) && (loopValue.length() > 0)) {
+
+                        if ((loopValue.matches("\\d*"))) {
+                            getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+                        } else {
+                            for (TMLAttribute att : taskAc.getAttributes()) {
+
+                                if (loopValue.contains(att.getName())) {
+                                    loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
+                                }
+
+                            }
+                            getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+
+                        }
+                    }
+
+                } else if (currentElement.getReferenceObject() instanceof TMLADForLoop) {
+                    points = Arrays.asList(((TMLADForLoop) (currentElement.getReferenceObject())).getConnectingPoints());
+
+                    getOutputConnectors = ((TMLADForLoop) (currentElement.getReferenceObject())).getOutputConnectors();
+                    // String loopValue = ((TMLADForLoop)
+                    // (currentElement.getReferenceObject())).getValue();
+
+                    getvertex(eventName).setType(vertex.TYPE_FOR_LOOP);
+                    String cond = ((TMLADForLoop) (currentElement.getReferenceObject())).getCondition();
+
+                    if (cond.contains("<=")) {
+
+                        String[] val = cond.split("<=");
+
+                        String loopValue = val[2].toString();
+                        if ((loopValue != null) && (loopValue.length() > 0)) {
+
+                            if ((loopValue.matches("\\d*"))) {
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+                            } else {
+                                for (TMLAttribute att : taskAc.getAttributes()) {
+
+                                    if (loopValue.contains(att.getName())) {
+                                        loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
+                                    }
+
+                                }
+
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+
+                            }
+                        }
+
+                    } else if (cond.contains("<")) {
+
+                        String[] val = cond.split("<");
+
+                        String loopValue = val[1].toString();
+                        if ((loopValue != null) && (loopValue.length() > 0)) {
+
+                            if ((loopValue.matches("\\d*"))) {
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+                            } else {
+                                for (TMLAttribute att : taskAc.getAttributes()) {
+
+                                    if (loopValue.contains(att.getName())) {
+                                        loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
+                                    }
+
+                                }
+                                if ((loopValue.matches("\\d*"))) {
+                                    getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+                                }
+                                {
+                                    frameLatencyDetailedAnalysis
+                                            .error(loopValue + " Expression in For Loop is not supported by Tainting");
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                TGConnector inputConnector = null, outputConnector = null;
+
+                for (TGConnector connector : getOutputConnectors) {
+
+                    if (connector.getTGConnectingPointP1() == points.get(1)) {
+                        inputConnector = connector;
+
+                    } else if (connector.getTGConnectingPointP1() == points.get(2)) {
+                        outputConnector = connector;
+                    }
+
+                }
+
+                List<String> afterloopActivity = new ArrayList<String>(2);
+
+                String insideLoop = "", outsideLoop = "";
+
+                for (TMLActivityElement ae : currentElement.getNexts()) {
+
+                    List<TGConnector> cg = (((TGComponent) ae.getReferenceObject()).getInputConnectors());
+
+                    for (TGConnector afterloopcg : cg) {
+
+                        if (afterloopcg == inputConnector) {
+
+                            if (ae.getReferenceObject() instanceof TMLADRandom) {
+
+                                insideLoop = taskName + "__" + ae.getName() + "__" + ae.getID();
+
+                            } else if (ae.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+                                insideLoop = taskName + "__" + "unOrderedSequence" + "__" + ae.getID();
+
+                            } else {
+
+                                insideLoop = taskName + "__" + ae.getReferenceObject().toString() + "__" + ae.getID();
+
+                            }
+
+                        } else if (afterloopcg == outputConnector) {
+
+                            if (ae.getReferenceObject() instanceof TMLADRandom) {
+
+                                outsideLoop = taskName + "__" + ae.getName() + "__" + ae.getID();
+
+                            } else if (ae.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+                                outsideLoop = taskName + "__" + "unOrderedSequence" + "__" + ae.getID();
+
+                            } else {
+
+                                outsideLoop = taskName + "__" + ae.getReferenceObject().toString() + "__" + ae.getID();
+
+                            }
+
+                        }
+                    }
+
+                }
+
+                afterloopActivity.add(0, insideLoop);
+                afterloopActivity.add(1, outsideLoop);
+                forLoopNextValues.put(eventName, afterloopActivity);
+
+            }
+
+        } else if (currentElement.getReferenceObject() instanceof TMLADSequence) {
+
+            getvertex(eventName).setType(vertex.TYPE_SEQ);
+            getvertex(eventName).setTaintFixedNumber(1);
+            String nextEventName = "";
+
+            for (TMLActivityElement seqListnextElement : currentElement.getNexts()) {
+                if (seqListnextElement.getReferenceObject() instanceof TMLADRandom) {
+                    nextEventName = taskName + "__" + seqListnextElement.getName() + "__" + seqListnextElement.getID();
+
+                } else if (seqListnextElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+                    nextEventName = taskName + "__" + "unOrderedSequence" + "__" + seqListnextElement.getID();
+
+                } else {
+                    nextEventName = taskName + "__" + seqListnextElement.getReferenceObject().toString() + "__"
+                            + seqListnextElement.getID();
+
+                }
+
+                if (orderedSequenceList.containsKey(eventName)) {
+                    if (!orderedSequenceList.get(eventName).contains(nextEventName)) {
+                        orderedSequenceList.get(eventName).add(nextEventName);
+                    }
+                } else {
+                    ArrayList<String> seqListNextValues = new ArrayList<String>();
+                    seqListNextValues.add(nextEventName);
+                    orderedSequenceList.put(eventName, seqListNextValues);
+                }
+
+            }
+
+        } else if (currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+            getvertex(eventName).setType(vertex.TYPE_UNORDER_SEQ);
+            getvertex(eventName).setTaintFixedNumber(1);
+
+            String nextEventName = "";
+
+            for (TMLActivityElement seqListnextElement : currentElement.getNexts()) {
+                if (seqListnextElement.getReferenceObject() instanceof TMLADRandom) {
+                    nextEventName = taskName + "__" + seqListnextElement.getName() + "__" + seqListnextElement.getID();
+
+                } else if (seqListnextElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+                    nextEventName = taskName + "__" + "unOrderedSequence" + "__" + seqListnextElement.getID();
+
+                } else {
+                    nextEventName = taskName + "__" + seqListnextElement.getReferenceObject().toString() + "__"
+                            + seqListnextElement.getID();
+
+                }
+
+                if (unOrderedSequenceList.containsKey(eventName)) {
+                    if (!unOrderedSequenceList.get(eventName).contains(nextEventName)) {
+                        unOrderedSequenceList.get(eventName).add(nextEventName);
+                    }
+                } else {
+                    ArrayList<String> seqListNextValues = new ArrayList<String>();
+                    seqListNextValues.add(nextEventName);
+                    unOrderedSequenceList.put(eventName, seqListNextValues);
+                }
+
+            }
+
+        }
+
+        List<TGConnector> cg = (((TGComponent) currentElement.getReferenceObject()).getInputConnectors());
+
+        
+        
+    }
+
+    private void addStartVertex(String taskName) {
+        // TODO Auto-generated method stub
+        taskStartName = taskName + "__" + currentElement.getName() + "__" + currentElement.getID();
+        vertex startv = vertex(taskStartName, currentElement.getID());
+
+        g.addVertex(startv);
+        // gVertecies.add(vertex(taskStartName));
+        getvertex(taskStartName).setType(vertex.TYPE_START);
+        getvertex(taskStartName).setTaintFixedNumber(1);
+        g.addEdge(getvertex(taskName), getvertex(taskStartName));
+
+        opCount++;
+
+        if (!nameIDTaskList.containsKey(currentElement.getID())) {
+            nameIDTaskList.put(String.valueOf(currentElement.getID()), taskStartName);
+
+        }
+    }
+
+    private void waitEventNames() {
+        // TODO Auto-generated method stub
+        for (TMLWaitEvent waitEvent : taskAc.getWaitEvents()) {
+            // TMLCPrimitivePort portdetails = waitEvent.getEvent().port;
+            TMLCPrimitivePort sendingPortdetails = waitEvent.getEvent().port;
+            TMLCPrimitivePort receivePortdetails = waitEvent.getEvent().port2;
+
+            if (!sendingPortdetails.isBlocking()) {
+                warnings.add(
+                        "send event port:" + sendingPortdetails.getPortName() + " is non-blocking. Use tainting for an accurate latency analysis");
+            }
+            if (sendingPortdetails.isFinite()) {
+                warnings.add("send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis ");
+            }
+            String receivePortparams = waitEvent.getAllParams();
+
+            // tmlcdp.tmlctdp.getAllPortsConnectedTo(portdetails);
+
+            waitEvt.put("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")", new ArrayList<String>());
+
+            TMLTask originTasks = waitEvent.getEvent().getOriginTask();
+
+            for (TMLSendEvent wait_sendEvent : originTasks.getSendEvents()) {
+
+                String sendingPortparams = wait_sendEvent.getAllParams();
+
+                waitEvt.get("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")")
+                        .add("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")");
+
+            }
+
+        }
+
+    }
+
+    private void writeChannelNames() {
+        // TODO Auto-generated method stub
+
+        for (TMLWriteChannel writeChannel : taskAc.getWriteChannels()) {
+
+            int i = writeChannel.getNbOfChannels();
+
+            for (int j = 0; j < i; j++) {
+
+                String sendingDataPortdetails = "";
+                String receiveDataPortdetails = "";
+
+                if ((writeChannel.getChannel(j)).originalDestinationTasks.size() > 0) {
+                    String[] checkchannel;
+
+                    if (writeChannel.getChannel(j).getOriginPort().getName().contains("FORKPORTORIGIN")) {
+
+                        checkchannel = writeChannel.getChannel(j).getOriginPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+                            sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN", "FORKCHANNEL");
+                            ;
+
+                        } else if (checkchannel.length < 2) {
+
+                            sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN", "");
+                            ;
+
+                            sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
+                            ;
+
+                        }
+
+                    } else if (writeChannel.getChannel(j).getOriginPort().getName().contains("JOINPORTORIGIN")) {
+
+                        checkchannel = writeChannel.getChannel(j).getOriginPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+
+                            sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN", "JOINCHANNEL");
+
+                        } else if (checkchannel.length <= 2) {
+                            sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN", "");
+
+                            sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
+                            ;
+
+                        }
+
+                    } else {
+                        sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName();
+                    }
+
+                    if (writeChannel.getChannel(j).getDestinationPort().getName().contains("FORKPORTDESTINATION")) {
+
+                        checkchannel = writeChannel.getChannel(j).getDestinationPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+
+                            receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION",
+                                    "FORKCHANNEL");
+                        } else if (checkchannel.length <= 2) {
+
+                            receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION", "");
+
+                            receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
+                        }
+
+                    } else if (writeChannel.getChannel(j).getDestinationPort().getName().contains("JOINPORTDESTINATION")) {
+
+                        checkchannel = writeChannel.getChannel(j).getDestinationPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+
+                            receiveDataPortdetails = "JOINCHANNEL_S_" + checkchannel[1] + "__" + checkchannel[2];
+
+                        } else if (checkchannel.length <= 2) {
+                            receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName().replace("JOINPORTDESTINATION", "");
+
+                            receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
+                        }
+
+                    } else {
+                        receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName();
+
+                    }
+
+                } else {
+
+                    // writeChannel.getChannel(j);
+                    sendingDataPortdetails = writeChannel.getChannel(j).getOriginPort().getName();
+                    receiveDataPortdetails = writeChannel.getChannel(j).getDestinationPort().getName();
+                }
+
+                if (!sendingDataPortdetails.equals(receiveDataPortdetails)) {
+
+                    sendData.put(sendingDataPortdetails, receiveDataPortdetails);
+                }
+
+            }
+        }
+
+    }
+
+    private void readChannelNames() {
+        // TODO Auto-generated method stub
+
+        for (TMLReadChannel readChannel : taskAc.getReadChannels()) {
+
+            int i = readChannel.getNbOfChannels();
+
+            // name = _ch.getOriginPorts().get(0).getName(); //return the name of the source
+            // port of the channel
+
+            for (int j = 0; j < i; j++) {
+
+                String sendingDataPortdetails = "";
+                String receiveDataPortdetails = "";
+
+                if ((readChannel.getChannel(j)).originalDestinationTasks.size() > 0) {
+
+                    String[] checkchannel;
+                    if (readChannel.getChannel(j).getOriginPort().getName().contains("FORKPORTORIGIN")) {
+
+                        checkchannel = readChannel.getChannel(j).getOriginPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+                            sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN", "FORKCHANNEL");
+
+                        } else if (checkchannel.length <= 2) {
+
+                            sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("FORKPORTORIGIN", "");
+
+                            sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
+                            ;
+
+                        }
+
+                    } else if (readChannel.getChannel(j).getOriginPort().getName().contains("JOINPORTORIGIN")) {
+
+                        checkchannel = readChannel.getChannel(j).getOriginPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+                            sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN", "JOINCHANNEL");
+
+                        } else if ((checkchannel.length) <= 2) {
+                            sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName().replace("JOINPORTORIGIN", "");
+
+                            sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
+
+                        }
+                    } else {
+                        sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName();
+                    }
+                    if (readChannel.getChannel(j).getDestinationPort().getName().contains("FORKPORTDESTINATION")) {
+
+                        checkchannel = readChannel.getChannel(j).getDestinationPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+
+                            receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION",
+                                    "FORKCHANNEL");
+                        } else if (checkchannel.length <= 2) {
+
+                            receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("FORKPORTDESTINATION", "");
+
+                            receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
+                        }
+
+                    } else if (readChannel.getChannel(j).getDestinationPort().getName().contains("JOINPORTDESTINATION")) {
+
+                        checkchannel = readChannel.getChannel(j).getDestinationPort().getName().split("_S_");
+
+                        if (checkchannel.length > 2) {
+
+                            receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("JOINPORTDESTINATION",
+                                    "JOINCHANNEL");
+                        } else if (checkchannel.length <= 2) {
+
+                            receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName().replace("JOINPORTDESTINATION", "");
+
+                            receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
+                        }
+                    } else {
+                        receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName();
+                    }
+                } else {
+
+                    sendingDataPortdetails = readChannel.getChannel(j).getOriginPort().getName();
+                    receiveDataPortdetails = readChannel.getChannel(j).getDestinationPort().getName();
+                }
+
+                if (!sendingDataPortdetails.equals(receiveDataPortdetails)) {
+                    receiveData.put(receiveDataPortdetails, sendingDataPortdetails);
+
+                }
+
+                TMLCPrimitivePort sp = null, rp = null;
+
+                if (readChannel.getChannel(j).getOriginPort().getReferenceObject() instanceof TMLCPrimitivePort) {
+
+                    rp = (TMLCPrimitivePort) readChannel.getChannel(j).getOriginPort().getReferenceObject();
+
+                }
+
+                if (readChannel.getChannel(j).getOriginPort().getReferenceObject() instanceof TMLCPrimitivePort) {
+
+                    sp = (TMLCPrimitivePort) readChannel.getChannel(j).getDestinationPort().getReferenceObject();
+
+                }
+
+                if (sp != null && rp != null) {
+
+                    if (!sp.isBlocking() && !rp.isBlocking()) {
+                        warnings.add("send data port:" + sp.getPortName() + " and read data port:" + rp.getPortName()
+                                + " are non-blocking. Use tainting for an accurate latency analysis.");
+
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+    private void sendEventsNames() {
+        // TODO Auto-generated method stub
+        for (TMLSendEvent sendEvent : taskAc.getSendEvents()) {
+            TMLCPrimitivePort sendingPortdetails = sendEvent.getEvent().port;
+            TMLCPrimitivePort receivePortdetails = sendEvent.getEvent().port2;
+
+            String sendingPortparams = sendEvent.getAllParams();
+
+            TMLTask destinationTasks = sendEvent.getEvent().getDestinationTask();
+
+            sendEvt.put("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")", new ArrayList<String>());
+
+            for (TMLWaitEvent wait_sendEvent : destinationTasks.getWaitEvents()) {
+                String receivePortparams = wait_sendEvent.getAllParams();
+
+                sendEvt.get("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")")
+                        .add("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")");
+
+            }
+
+        }
+
+    }
+
+    private void requestedTask(HashSet<TMLTask> value) {
+        // TODO Auto-generated method stub
+        for (TMLTask task : value) {
+
+            if (task.isRequested()) {
+                TMLRequest requestToTask = task.getRequest();
+
+                requestToTask.getReferenceObject();
+
+                requestToTask.getDestinationTask();
+
+                requestToTask.getOriginTasks().get(0);
+
+                requestToTask.ports.get(0).getName();
+                requestToTask.getExtendedName();
+
+                String destinationRequest = requestToTask.getDestinationTask().getName() + "__"
+                        + requestToTask.getDestinationTask().getActivityDiagram().get(0).getName() + "__"
+                        + requestToTask.getDestinationTask().getActivityDiagram().get(0).getID();
+
+                String destinationRequestName = requestToTask.getDestinationTask().getName();
+
+                for (TMLTask originTask : requestToTask.getOriginTasks()) {
+
+                    String requestOriginTaskName = originTask.getName();
+
+                    if (requestsOriginDestination.containsKey(requestOriginTaskName)) {
+                        if (!requestsOriginDestination.get(requestOriginTaskName).contains(destinationRequestName)) {
+                            requestsOriginDestination.get(requestOriginTaskName).add(destinationRequestName);
+                        }
+                    } else {
+                        ArrayList<String> destinationRequestNames = new ArrayList<String>();
+                        destinationRequestNames.add(destinationRequestName);
+                        requestsOriginDestination.put(requestOriginTaskName, destinationRequestNames);
+                    }
+
+                }
+
+                for (TMLCPrimitivePort requestsPort : requestToTask.ports) {
+
+                    String requestsPortName = requestsPort.getPortName();
+
+                    if (requestsPorts.containsKey(task.getName())) {
+                        if (!requestsPorts.get(task.getName()).contains(requestsPortName)) {
+                            requestsPorts.get(task.getName()).add(requestsPortName);
+                        }
+                    } else {
+                        ArrayList<String> requestsPortNames = new ArrayList<String>();
+                        requestsPortNames.add(requestsPortName);
+                        requestsPorts.put(task.getName(), requestsPortNames);
+                    }
+
+                }
+
+                if (requestsDestination.containsKey(destinationRequestName)) {
+                    if (!requestsDestination.get(destinationRequestName).contains(destinationRequest)) {
+                        requestsDestination.get(destinationRequestName).add(destinationRequest);
+                    }
+                } else {
+                    ArrayList<String> destinationRequestNames = new ArrayList<String>();
+                    destinationRequestNames.add(destinationRequest);
+                    requestsDestination.put(destinationRequestName, destinationRequestNames);
+                }
+
+            }
+
+        }
+
+    }
+
+    private void addcurrentElementVertex(String taskName, String taskStartName) {
+        // TODO Auto-generated method stub
+
+        String preEventName;
+
+        int preEventid;
+        String eventName = getEventName(taskName, currentElement);
+
+        int eventid = currentElement.getID();
+
+        if (activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADRandom) {
+            preEventName = taskName + "__" + activity.getPrevious(currentElement).getName() + "__" + activity.getPrevious(currentElement).getID();
+            preEventid = activity.getPrevious(currentElement).getID();
+
+        } else if (activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+            preEventName = taskName + "__" + "unOrderedSequence" + "__" + activity.getPrevious(currentElement).getID();
+            preEventid = activity.getPrevious(currentElement).getID();
+
+        } else {
+            preEventName = taskName + "__" + activity.getPrevious(currentElement).getReferenceObject().toString() + "__"
+                    + activity.getPrevious(currentElement).getID();
+            preEventid = activity.getPrevious(currentElement).getID();
+
+        }
+
+        if (((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecI
+                || activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecC)
+                && activity.getPrevious(currentElement).getValue().equals("0"))
+                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADDelay)
+                        && ((TMLADDelay) activity.getPrevious(currentElement).getReferenceObject()).getDelayValue().equals("0"))
+
+                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADDelayInterval)
+                        && (((TMLADDelayInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue().equals("0")
+                                && ((TMLADDelayInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue().equals("0")))
+
+                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecCInterval)
+                        && (((TMLADExecCInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue().equals("0")
+                                && ((TMLADExecCInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue().equals("0"))
+
+                        || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecIInterval)
+                                && (((TMLADExecIInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue().equals("0")
+                                        && ((TMLADExecIInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
+                                                .equals("0")))))
+
+        {
+
+            if (activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject() instanceof TMLADRandom) {
+                preEventName = taskName + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getName() + "__"
+                        + activity.getPrevious(activity.getPrevious(currentElement)).getID();
+                preEventid = activity.getPrevious(activity.getPrevious(currentElement)).getID();
+
+            } else if (activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject() instanceof TMLADUnorderedSequence) {
+                preEventName = taskName + "__" + "unOrderedSequence" + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getID();
+                preEventid = activity.getPrevious(activity.getPrevious(currentElement)).getID();
+
+            } else {
+                preEventName = taskName + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject().toString() + "__"
+                        + activity.getPrevious(activity.getPrevious(currentElement)).getID();
+                preEventid = activity.getPrevious(activity.getPrevious(currentElement)).getID();
+
+            }
+
+        }
+
+        if (!nameIDTaskList.containsKey(currentElement.getID())) {
+            nameIDTaskList.put(String.valueOf(currentElement.getID()), eventName);
+        }
+
+        if (g.containsVertex(getvertex(preEventName))) {
+
+            vertex v = vertex(eventName, eventid);
+
+            vertex preV = vertex(preEventName, preEventid);
+
+            g.addVertex(v);
+            // gVertecies.add(vertex(eventName));
+
+            g.addEdge(preV, v);
+            opCount++;
+
+        } else if ((activity.getPrevious(currentElement).getName().equals("start")) && g.containsVertex(getvertex(taskStartName))) {
+            vertex v = vertex(eventName, eventid);
+
+            g.addVertex(v);
+            // gVertecies.add(vertex(eventName));
+            g.addEdge(getvertex(taskStartName), getvertex(eventName));
+            opCount++;
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADSendEvent || currentElement.getReferenceObject() instanceof TMLADWaitEvent
+                || currentElement.getReferenceObject() instanceof TMLADSendRequest
+                || currentElement.getReferenceObject() instanceof TMLADNotifiedEvent
+                || currentElement.getReferenceObject() instanceof TMLADReadChannel || currentElement.getReferenceObject() instanceof TMLADWriteChannel
+                || (currentElement.getReferenceObject() instanceof TMLADExecI && !currentElement.getValue().equals("0"))
+                || (currentElement.getReferenceObject() instanceof TMLADExecC && !currentElement.getValue().equals("0"))
+                || (currentElement.getReferenceObject() instanceof TMLADDelay
+                        && !((TMLADDelay) currentElement.getReferenceObject()).getDelayValue().equals("0"))
+                || (currentElement.getReferenceObject() instanceof TMLADDelayInterval
+                        && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
+                        && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
+
+                || (currentElement.getReferenceObject() instanceof TMLADExecCInterval
+                        && !((TMLADExecCInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
+                        && ((TMLADExecCInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
+                || (currentElement.getReferenceObject() instanceof TMLADExecIInterval
+                        && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
+                        && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
+                || currentElement.getReferenceObject() instanceof TMLADEncrypt || currentElement.getReferenceObject() instanceof TMLADDecrypt
+                || currentElement.getReferenceObject() instanceof TMLADReadRequestArg) {
+
+            allLatencyTasks.add(eventName);
+            getvertex(eventName).setType(vertex.TYPE_TRANSACTION);
+            getvertex(eventName).setTaintFixedNumber(1);
+
+        } else if (currentElement.getReferenceObject() instanceof TMLADRandom) {
+            getvertex(eventName).setType(vertex.TYPE_CTRL);
+            getvertex(eventName).setTaintFixedNumber(1);
+        } else if (currentElement.getReferenceObject() instanceof TMLADSelectEvt) {
+            getvertex(eventName).setType(vertex.TYPE_CTRL);
+            getvertex(eventName).setTaintFixedNumber(1);
+
+        } else if (currentElement.getReferenceObject() instanceof TMLADActionState) {
+            getvertex(eventName).setType(vertex.TYPE_CTRL);
+            getvertex(eventName).setTaintFixedNumber(1);
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADForEverLoop) {
+            forEverLoopList.add(eventName);
+
+            getvertex(eventName).setType(vertex.TYPE_FOR_EVER_LOOP);
+
+            getvertex(eventName).setTaintFixedNumber(Integer.MAX_VALUE);
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADChoice) {
+
+            getvertex(eventName).setType(vertex.TYPE_CHOICE);
+            getvertex(eventName).setTaintFixedNumber(1);
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADSendRequest) {
+
+            if (requestsOriginDestination.containsKey(taskName)) {
+
+                for (String destinationTask : requestsOriginDestination.get(taskName)) {
+
+                    if (requestsPorts.containsKey(destinationTask)) {
+
+                        for (String portNames : requestsPorts.get(destinationTask)) {
+
+                            String[] requestName = currentElement.getReferenceObject().toString().split(":");
+
+                            String[] portname = requestName[1].split("[(]");
+
+                            if (portname[0].replaceAll(" ", "").equals(portNames.replaceAll(" ", ""))) {
+
+                                for (String destinationTaskstartname : requestsDestination.get(destinationTask)) {
+
+                                    if (requestEdges.containsKey(eventName)) {
+
+                                        if (!requestEdges.get(eventName).contains(destinationTaskstartname)) {
+                                            requestEdges.get(eventName).add(destinationTaskstartname);
+                                        }
+
+                                    } else {
+
+                                        HashSet<String> destinationTaskoriginstart = new HashSet<String>();
+                                        destinationTaskoriginstart.add(destinationTaskstartname);
+
+                                        requestEdges.put(eventName, destinationTaskoriginstart);
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADSendEvent) {
+
+            if (sendEvt.containsKey(currentElement.getReferenceObject().toString().replaceAll(" ", ""))) {
+
+                List<String> recieveEvt = sendEvt.get(currentElement.getReferenceObject().toString().replaceAll(" ", ""));
+
+                for (vertex vertex : g.vertexSet()) {
+
+                    String[] vertexName = vertex.toString().split("__");
+
+                    for (String n : recieveEvt) {
+
+                        if (vertexName.length >= 3) {
+
+                            if ((n.replaceAll(" ", "").equals((vertexName[2].toString().replaceAll(" ", ""))))) {
+
+                                HashSet<String> waitEventVertex = new HashSet<String>();
+                                waitEventVertex.add(vertex.toString());
+
+                                if (sendEventWaitEventEdges.containsKey(eventName)) {
+
+                                    if (!sendEventWaitEventEdges.get(eventName).contains(vertex.toString())) {
+                                        sendEventWaitEventEdges.get(eventName).add(vertex.toString());
+                                    }
+
+                                } else {
+
+                                    sendEventWaitEventEdges.put(eventName, waitEventVertex);
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADWaitEvent) {
+
+            if (waitEvt.containsKey(currentElement.getReferenceObject().toString().replaceAll(" ", ""))) {
+
+                List<String> sendevent = waitEvt.get(currentElement.getReferenceObject().toString().replaceAll(" ", ""));
+
+                for (vertex vertex : g.vertexSet()) {
+
+                    String[] vertexName = vertex.toString().split("__");
+
+                    for (String n : sendevent) {
+                        if (vertexName.length >= 3) {
+
+                            if ((n.replaceAll(" ", "").equals((vertexName[2].toString().replaceAll(" ", ""))))) {
+
+                                HashSet<String> waitEventVertex = new HashSet<String>();
+                                waitEventVertex.add(eventName);
+
+                                if (sendEventWaitEventEdges.containsKey(vertex.toString())) {
+                                    if (!sendEventWaitEventEdges.get(vertex.toString()).contains(eventName)) {
+
+                                        sendEventWaitEventEdges.get(vertex.toString()).add(eventName);
+                                    }
+
+                                } else {
+
+                                    sendEventWaitEventEdges.put(vertex.toString(), waitEventVertex);
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADWriteChannel) {
+
+            writeChannelTransactions.add(eventName);
+
+            String[] name = eventName.split("__");
+
+            String[] removewrite = name[2].split(":");
+
+            String[] portname = removewrite[1].split("[(]");
+
+            String chwriteName = (name[0] + "__" + portname[0]).replaceAll(" ", "");
+
+            String portNameNoSpaces = portname[0].replaceAll(" ", "");
+
+            if (sendData.containsKey(portNameNoSpaces)) {
+                String sendDatachannels;
+
+                if (((TMLWriteChannel) currentElement).getChannel(0).getName().contains("FORKCHANNEL")
+                        || ((TMLWriteChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("FORKTASK")
+                        || ((TMLWriteChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("FORKTASK")
+                        || ((TMLWriteChannel) currentElement).getChannel(0).getName().contains("JOINCHANNEL")
+                        || ((TMLWriteChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("JOINTASK")
+                        || ((TMLWriteChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("JOINTASK")
+
+                ) {
+                    sendDatachannels = sendData.get(portNameNoSpaces);
+                } else {
+                    // sendDatachannels = name[0] + "__" + sendData.get(portNameNoSpaces) + "__" +
+                    // name[0] + "__" + portNameNoSpaces;
+                    sendDatachannels = name[0] + "__" + portNameNoSpaces + "__" + name[0] + "__" + sendData.get(portNameNoSpaces);
+                }
+
+                // String sendDatachannels = name[0] + "__" + portNameNoSpaces + "__" + name[0]
+                // + "__" + sendData.get(portNameNoSpaces);
+
+                // if (sendDatachannels.contains("FORKPORTORIGIN")) {
+                // sendDatachannels= sendDatachannels.replace("FORKPORTORIGIN", "FORKCHANNEL");
+//
+                // }
+
+                HashSet<String> writeChVertex = new HashSet<String>();
+                writeChVertex.add(sendDatachannels);
+
+                if (writeReadChannelEdges.containsKey(eventName)) {
+
+                    if (!writeReadChannelEdges.get(eventName).contains(sendDatachannels)) {
+                        writeReadChannelEdges.get(eventName).add(sendDatachannels);
+                    }
+
+                } else {
+
+                    writeReadChannelEdges.put(eventName, writeChVertex);
+
+                }
+                // getvertex(sendDatachannels).setTaintFixedNumber(getvertex(sendDatachannels).getTaintFixedNumber()
+                // + 1);
+
+            }
+
+            else {
+                HashSet<String> writeChVertex = new HashSet<String>();
+                writeChVertex.add(chwriteName);
+
+                if (writeReadChannelEdges.containsKey(eventName)) {
+
+                    if (!writeReadChannelEdges.get(eventName).contains(chwriteName)) {
+                        writeReadChannelEdges.get(eventName).add(chwriteName);
+                    }
+
+                } else {
+
+                    writeReadChannelEdges.put(eventName, writeChVertex);
+
+                }
+
+                // getvertex(chwriteName).setTaintFixedNumber(getvertex(chwriteName).getTaintFixedNumber()
+                // + 1);
+            }
+
+        }
+
+        if (currentElement.getReferenceObject() instanceof TMLADReadChannel) {
+
+            readChannelTransactions.add(eventName);
+
+            String[] name = eventName.split("__");
+
+            String[] removewrite = name[2].split(":");
+
+            String[] portname = removewrite[1].split("[(]");
+
+            String chwriteName = (name[0] + "__" + portname[0]).replaceAll(" ", "");
+
+            String portNameNoSpaces = portname[0].replaceAll(" ", "");
+
+            if (receiveData.containsKey(portNameNoSpaces)) {
+                String sendDatachannels;
+
+                if (((TMLReadChannel) currentElement).getChannel(0).getName().contains("FORKCHANNEL")
+                        || ((TMLReadChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("FORKTASK")
+                        || ((TMLReadChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("FORKTASK")
+                        || ((TMLReadChannel) currentElement).getChannel(0).getName().contains("JOINCHANNEL")
+                        || ((TMLReadChannel) currentElement).getChannel(0).getDestinationTask().getName().startsWith("JOINTASK")
+                        || ((TMLReadChannel) currentElement).getChannel(0).getOriginTask().getName().startsWith("JOINTASK")) {
+                    sendDatachannels = receiveData.get(portNameNoSpaces);
+                } else {
+                    sendDatachannels = name[0] + "__" + receiveData.get(portNameNoSpaces) + "__" + name[0] + "__" + portNameNoSpaces;
+
+                }
+
+                HashSet<String> readChVertex = new HashSet<String>();
+                readChVertex.add(eventName);
+
+                if (readWriteChannelEdges.containsKey(sendDatachannels)) {
+
+                    if (!readWriteChannelEdges.get(sendDatachannels).contains(eventName)) {
+                        readWriteChannelEdges.get(sendDatachannels).add(eventName);
+                    }
+
+                } else {
+
+                    readWriteChannelEdges.put(sendDatachannels, readChVertex);
+
+                }
+
+                // getvertex(sendDatachannels).setTaintFixedNumber(getvertex(sendDatachannels).getTaintFixedNumber()
+                // + 1);
+
+                /*
+                 * if (g.containsVertex(chwriteName))
+                 * 
+                 * { g.addEdge(chwriteName, eventName); }
+                 */
+
+            } else {
+                HashSet<String> readChVertex = new HashSet<String>();
+                readChVertex.add(eventName);
+
+                if (readWriteChannelEdges.containsKey(chwriteName)) {
+
+                    if (!readWriteChannelEdges.get(chwriteName).contains(eventName)) {
+                        readWriteChannelEdges.get(chwriteName).add(eventName);
+                    }
+
+                } else {
+
+                    readWriteChannelEdges.put(chwriteName, readChVertex);
+
+                }
+
+                //
+            }
+
+        }
+
+    }
+
+    private void addStopVertex(String taskName) {
+        // TODO Auto-generated method stub
+
+        String taskEndName = "";
+        int taskEndid;
+        int preEventid;
+        String preEventName;
+        String eventName = null;
+
+        eventName = getEventName(taskName, currentElement);
+
+        taskEndid = currentElement.getID();
+        taskEndName = taskName + "__" + currentElement.getName() + "__" + taskEndid;
+
+        preEventid = activity.getPrevious(currentElement).getID();
+        if (activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADRandom) {
+            preEventName = taskName + "__" + activity.getPrevious(currentElement).getName() + "__" + preEventid;
+
+        } else if (currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+            preEventName = taskName + "__" + "unOrderedSequence" + "__" + preEventid;
+
+        } else {
+            preEventName = taskName + "__" + activity.getPrevious(currentElement).getReferenceObject().toString() + "__" + preEventid;
+
+        }
+
+        vertex taskEndVertex = vertex(taskEndName, taskEndid);
+
+        g.addVertex(taskEndVertex);
+        // gVertecies.add(vertex(taskEndName));
+        getvertex(eventName).setType(vertex.TYPE_END);
+        getvertex(eventName).setTaintFixedNumber(1);
+        // allTasks.add(taskEndName);
+
+        if (!(activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADSequence)) {
+            g.addEdge(getvertex(preEventName), getvertex(taskEndName));
+
+        }
+
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        AllDirectedPaths<vertex, DefaultEdge> allPaths = new AllDirectedPaths<vertex, DefaultEdge>(g);
+        if (orderedSequenceList.size() > 0) {
+
+            int noForLoop = 0;
+            // get path from sequence to end
+            for (Entry<String, ArrayList<String>> sequenceListEntry : orderedSequenceList.entrySet()) {
+
+                int directlyConnectedSeq = 0;
+
+                if (g.containsVertex(getvertex(sequenceListEntry.getKey()))) {
+
+                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(sequenceListEntry.getKey()), getvertex(taskEndName),
+                            false, g.vertexSet().size());
+
+                    for (Entry<String, ArrayList<String>> othersequenceListEntryValue : orderedSequenceList.entrySet()) {
+
+                        for (int i = 0; i < path.size(); i++) {
+
+                            if (!othersequenceListEntryValue.getKey().equals(sequenceListEntry.getKey())) {
+
+                                if (path.get(i).getVertexList().contains(getvertex(othersequenceListEntryValue.getKey()))) {
+
+                                    directlyConnectedSeq++;
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (path.size() > 0 && sequenceListEntry.getValue().size() > 0 && directlyConnectedSeq == 0) {
+
+                        for (int i = 0; i < path.size(); i++) {
+
+                            for (String sequenceListEntryValue : sequenceListEntry.getValue()) {
+
+                                if (g.containsVertex(getvertex(sequenceListEntryValue))) {
+
+                                    if (path.get(i).getVertexList().contains(getvertex(sequenceListEntryValue))) {
+
+                                        if (forLoopNextValues.size() > 0) {
+
+                                            for (Entry<String, List<String>> forloopListEntry : forLoopNextValues.entrySet()) {
+
+                                                if ((path.get(i).getVertexList().contains(getvertex(forloopListEntry.getValue().get(0)))
+                                                        && getvertex(forloopListEntry.getValue().get(0)).getName() != sequenceListEntry.getKey())
+
+                                                        || path.get(i).getVertexList().contains(getvertex(
+                                                                sequenceListEntry.getValue().get(sequenceListEntry.getValue().size() - 1)))) {
+
+                                                    noForLoop++;
+                                                }
+                                            }
+                                        }
+
+                                        if (forEverLoopList.size() > 0) {
+
+                                            for (String forloopListEntry : forEverLoopList) {
+
+                                                if (path.get(i).getVertexList().contains(getvertex(forloopListEntry))) {
+
+                                                    noForLoop++;
+                                                }
+                                            }
+                                        }
+
+                                        if (noForLoop == 0) {
+
+                                            int nextIndex = sequenceListEntry.getValue().indexOf(sequenceListEntryValue) + 1;
+
+                                            if (nextIndex < sequenceListEntry.getValue().size()) {
+
+                                                HashSet<String> endSequenceVertex = new HashSet<String>();
+                                                endSequenceVertex.add(sequenceListEntry.getValue().get(nextIndex));
+
+                                                if (sequenceEdges.containsKey(taskEndName)) {
+
+                                                    if (!sequenceEdges.get(taskEndName).contains(sequenceListEntry.getValue().get(nextIndex))) {
+                                                        sequenceEdges.get(taskEndName).add(sequenceListEntry.getValue().get(nextIndex));
+                                                    }
+
+                                                } else {
+
+                                                    sequenceEdges.put(eventName, endSequenceVertex);
+
+                                                }
+
+                                            } else if (nextIndex == sequenceListEntry.getValue().size() && orderedSequenceList.size() > 1) {
+
+                                                for (Entry<String, ArrayList<String>> othersequenceListEntryValue : orderedSequenceList.entrySet()) {
+
+                                                    if (!othersequenceListEntryValue.getKey().equals(sequenceListEntry.getKey())) {
+
+                                                        int connectedSeq = 0;
+
+                                                        List<GraphPath<vertex, DefaultEdge>> pathBetweenSeq = allPaths.getAllPaths(
+                                                                getvertex(othersequenceListEntryValue.getKey()), getvertex(taskEndName), false,
+                                                                g.vertexSet().size());
+
+                                                        for (int j = 0; j < pathBetweenSeq.size(); j++) {
+
+                                                            for (Entry<String, ArrayList<String>> adjacentsequenceListEntryValue : orderedSequenceList
+                                                                    .entrySet()) {
+                                                                if (!adjacentsequenceListEntryValue.getKey().equals(sequenceListEntry.getKey())
+                                                                        && !adjacentsequenceListEntryValue.getKey()
+                                                                                .equals(othersequenceListEntryValue.getKey())) {
+
+                                                                    if (path.get(i).getVertexList()
+                                                                            .contains(getvertex(adjacentsequenceListEntryValue.getKey()))) {
+
+                                                                        connectedSeq++;
+
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                        if (connectedSeq == 0 && pathBetweenSeq.size() > 0) {
+
+                                                            for (String othersequenceListValue : othersequenceListEntryValue.getValue()) {
+
+                                                                List<GraphPath<vertex, DefaultEdge>> pathToNextValue = allPaths.getAllPaths(
+                                                                        getvertex(othersequenceListValue), getvertex(taskEndName), false,
+                                                                        g.vertexSet().size());
+
+                                                                if (pathToNextValue.size() > 0)
+
+                                                                {
+
+                                                                    int nextAdjIndex = othersequenceListEntryValue.getValue()
+                                                                            .indexOf(othersequenceListValue) + 1;
+
+                                                                    if (nextAdjIndex < othersequenceListEntryValue.getValue().size()) {
+
+                                                                        HashSet<String> nextSequenceVertex = new HashSet<String>();
+                                                                        nextSequenceVertex
+                                                                                .add(othersequenceListEntryValue.getValue().get(nextAdjIndex));
+
+                                                                        if (sequenceEdges.containsKey(taskEndName)) {
+
+                                                                            if (!sequenceEdges.get(taskEndName).contains(
+                                                                                    othersequenceListEntryValue.getValue().get(nextAdjIndex))) {
+                                                                                sequenceEdges.get(taskEndName).add(
+                                                                                        othersequenceListEntryValue.getValue().get(nextAdjIndex));
+                                                                            }
+
+                                                                        } else {
+
+                                                                            sequenceEdges.put(eventName, nextSequenceVertex);
+
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                            }
+
+                                                        }
+
+                                                    }
+
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+
+        }
+
+        if (unOrderedSequenceList.size() > 0) {
+
+            // get path from sequence to end
+            for (Entry<String, ArrayList<String>> sequenceListEntry : unOrderedSequenceList.entrySet()) {
+
+                if (g.containsVertex(getvertex(sequenceListEntry.getKey()))) {
+
+                    int noForLoop = 0;
+
+                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(sequenceListEntry.getKey()), getvertex(taskEndName),
+                            false, g.vertexSet().size());
+
+                    for (int i = 0; i < path.size(); i++) {
+
+                        if (path.size() > 0 && sequenceListEntry.getValue().size() > 0) {
+
+                            if (forLoopNextValues.size() > 0) {
+
+                                for (Entry<String, List<String>> forloopListEntry : forLoopNextValues.entrySet()) {
+
+                                    if (path.get(i).getVertexList().contains(getvertex(forloopListEntry.getKey()))) {
+
+                                        if (path.get(i).getVertexList().contains(getvertex(forloopListEntry.getValue().get(0))))
+
+                                        {
+                                            noForLoop++;
+
+                                        }
+
+                                    }
+                                }
+                            }
+
+                            if (forEverLoopList.size() > 0) {
+
+                                for (String forloopListEntry : forEverLoopList) {
+
+                                    if (path.get(i).getVertexList().contains(getvertex(forloopListEntry))) {
+
+                                        noForLoop++;
+                                    }
+                                }
+                            }
+
+                            for (Entry<String, ArrayList<String>> seqEntry : orderedSequenceList.entrySet()) {
+
+                                if (path.get(i).getVertexList().contains(getvertex(seqEntry.getKey()))) {
+
+                                    if (path.get(i).getVertexList().contains(getvertex(seqEntry.getValue().get(seqEntry.getValue().size() - 1))))
+
+                                    {
+
+                                    } else {
+                                        noForLoop++;
+                                    }
+
+                                }
+
+                            }
+
+                            if (noForLoop == 0) {
+
+                                // if (unOrderedSequenceEdges.containsKey(taskEndName)) {
+
+                                // if
+                                // (!unOrderedSequenceEdges.get(taskEndName).contains(sequenceListEntry.getKey()))
+                                // {
+                                // unOrderedSequenceEdges.get(taskEndName).add(sequenceListEntry.getKey());
+                                // }
+
+                                // } else {
+
+                                // unOrderedSequenceEdges.put(eventName, endSequenceVertex);
+
+                                for (String seqEntry : sequenceListEntry.getValue()) {
+                                    GraphPath<vertex, DefaultEdge> pathToEnd = null;
+                                    if (g.containsVertex(getvertex(seqEntry))) {
+                                        pathToEnd = DijkstraShortestPath.findPathBetween(g, getvertex(seqEntry), getvertex(eventName));
+
+                                    }
+
+                                    if (pathToEnd == null) {
+                                        if (unOrderedSequenceEdges.containsKey(taskEndName)) {
+
+                                            if (!unOrderedSequenceEdges.get(taskEndName).contains(sequenceListEntry.getKey())) {
+                                                unOrderedSequenceEdges.get(taskEndName).add(seqEntry);
+                                            }
+
+                                        } else {
+
+                                            HashSet<String> endSequenceVertex = new HashSet<String>();
+                                            endSequenceVertex.add(seqEntry);
+
+                                            unOrderedSequenceEdges.put(eventName, endSequenceVertex);
+
+                                        }
+                                    }
+                                }
+
+                                // }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // add if sequence on path of multiple for
+
+        if (forLoopNextValues.size() > 0) {
+
+            for (Entry<String, List<String>> forloopListEntry : forLoopNextValues.entrySet()) {
+
+                if (g.containsVertex(getvertex(forloopListEntry.getValue().get(0)))) {
+
+                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(forloopListEntry.getValue().get(0)),
+                            getvertex(taskEndName), false, g.vertexSet().size());
+
+                    for (int i = 0; i < path.size(); i++) {
+                        int forloopCount = 0;
+
+                        for (Entry<String, List<String>> forEntry : forLoopNextValues.entrySet()) {
+
+                            if (!forloopListEntry.getKey().equals(forEntry.getKey())) {
+                                if (path.get(i).getVertexList().contains(getvertex(forEntry.getKey()))) {
+
+                                    forloopCount++;
+
+                                }
+
+                            }
+
+                        }
+
+                        for (Entry<String, ArrayList<String>> seqEntry : orderedSequenceList.entrySet()) {
+
+                            if (path.get(i).getVertexList().contains(getvertex(seqEntry.getKey()))) {
+
+                                if (path.get(i).getVertexList().contains(getvertex(seqEntry.getValue().get(seqEntry.getValue().size() - 1))))
+
+                                {
+
+                                } else {
+                                    forloopCount++;
+                                }
+
+                            }
+
+                        }
+
+                        /*
+                         * for (Entry<String, ArrayList<String>> unOrderedseqEntry :
+                         * unOrderedSequenceList.entrySet()) {
+                         * 
+                         * if
+                         * (path.get(i).getVertexList().contains(getvertex(unOrderedseqEntry.getKey())))
+                         * { forloopCount++;
+                         * 
+                         * HashSet<String> forLoopName = new HashSet<String>();
+                         * forLoopName.add(forloopListEntry.getKey());
+                         * 
+                         * 
+                         * //GraphPath<vertex, DefaultEdge> pathToEnd = null;
+                         * 
+                         * if (unOrderedSequenceEdges.containsKey(taskEndName)) {
+                         * 
+                         * if
+                         * (!unOrderedSequenceEdges.get(taskEndName).contains(forloopListEntry.getKey())
+                         * ) { unOrderedSequenceEdges.get(taskEndName).add(forloopListEntry.getKey()); }
+                         * 
+                         * } else {
+                         * 
+                         * // HashSet<String> endSequenceVertex = new HashSet<String>(); //
+                         * endSequenceVertex.add(unOrderedseqEntry);
+                         * 
+                         * unOrderedSequenceEdges.put(eventName, forLoopName);
+                         * 
+                         * }
+                         * 
+                         * 
+                         * 
+                         * /* if (unOrderedSequenceEdges.containsKey(unOrderedseqEntry.getKey())) {
+                         * 
+                         * if (unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).contains(
+                         * forloopListEntry.getKey())) {
+                         * unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).add(forloopListEntry.
+                         * getKey()); }
+                         * 
+                         * } else {
+                         * 
+                         * unOrderedSequenceEdges.put(unOrderedseqEntry.getKey(), forLoopName);
+                         * 
+                         * }
+                         * 
+                         * 
+                         * }
+                         * 
+                         * }
+                         */
+                        String forvertexName = forloopListEntry.getKey();
+                        if (forloopCount == 0 && !g.containsEdge(getvertex(taskEndName), getvertex(forvertexName))) {
+
+                            addedEdges.put(taskEndName, forvertexName);
+
+                        }
+                    }
+
+                }
+
+                if (g.containsVertex(getvertex(forloopListEntry.getValue().get(1))) && forLoopNextValues.size() > 1) {
+
+                    List<GraphPath<vertex, DefaultEdge>> path = allPaths.getAllPaths(getvertex(forloopListEntry.getValue().get(1)),
+                            getvertex(taskEndName), false, g.vertexSet().size());
+
+                    if (path.size() > 0) {
+
+                        for (Entry<String, List<String>> previousForLoop : forLoopNextValues.entrySet()) {
+                            if (g.containsVertex(getvertex(previousForLoop.getValue().get(0)))
+                                    && !previousForLoop.getKey().equals(forloopListEntry.getKey())) {
+
+                                List<GraphPath<vertex, DefaultEdge>> previousForpath = allPaths.getAllPaths(
+                                        getvertex(previousForLoop.getValue().get(0)), getvertex(taskEndName), false, g.vertexSet().size());
+
+                                for (int i = 0; i < previousForpath.size(); i++) {
+                                    int forloopCount = 0;
+
+                                    for (Entry<String, List<String>> forEntry : forLoopNextValues.entrySet()) {
+
+                                        if (previousForpath.get(i).getVertexList().contains(getvertex(forEntry.getKey()))
+                                                && !forloopListEntry.getKey().equals(forEntry.getKey())) {
+
+                                            forloopCount++;
+
+                                        }
+
+                                    }
+
+                                    String forvertexName = previousForLoop.getKey();
+                                    if (forloopCount == 0
+
+                                            && !g.containsEdge(getvertex(taskEndName), getvertex(forvertexName))) {
+
+                                        addedEdges.put(taskEndName, forvertexName);
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (!forEverLoopList.isEmpty())
+
+        {
+
+            for (String loopforEver : forEverLoopList) {
+
+                List<GraphPath<vertex, DefaultEdge>> pathforloopforever = allPaths.getAllPaths(getvertex(loopforEver), getvertex(taskEndName), false,
+                        g.vertexSet().size());
+
+                if (pathforloopforever.size() > 0) {
+
+                    for (int i = 0; i < pathforloopforever.size(); i++) {
+                        int forloopCount = 0;
+
+                        for (Entry<String, List<String>> previousForLoop : forLoopNextValues.entrySet()) {
+
+                            if (pathforloopforever.get(i).getVertexList().contains(getvertex(previousForLoop.getValue().get(0)))) {
+
+                                forloopCount++;
+
+                            }
+                        }
+
+                        for (Entry<String, ArrayList<String>> seqEntry : orderedSequenceList.entrySet()) {
+
+                            if (pathforloopforever.get(i).getVertexList().contains(getvertex(seqEntry.getKey()))) {
+
+                                if (pathforloopforever.get(i).getVertexList()
+                                        .contains(getvertex(seqEntry.getValue().get(seqEntry.getValue().size() - 1))))
+
+                                {
+
+                                } else {
+                                    forloopCount++;
+                                }
+
+                            }
+
+                        }
+
+                        /*
+                         * for (Entry<String, ArrayList<String>> unOrderedseqEntry :
+                         * unOrderedSequenceList.entrySet()) {
+                         * 
+                         * if (pathforloopforever.get(i).getVertexList().contains(getvertex(
+                         * unOrderedseqEntry.getKey()))) { forloopCount++;
+                         * 
+                         * HashSet<String> forLoopName = new HashSet<String>();
+                         * forLoopName.add(loopforEver);
+                         * 
+                         * if (unOrderedSequenceEdges.containsKey(unOrderedseqEntry.getKey())) {
+                         * 
+                         * if
+                         * (unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).contains(loopforEver)
+                         * ) { unOrderedSequenceEdges.get(unOrderedseqEntry.getKey()).add(loopforEver);
+                         * }
+                         * 
+                         * } else {
+                         * 
+                         * unOrderedSequenceEdges.put(unOrderedseqEntry.getKey(), forLoopName);
+                         * 
+                         * }
+                         * 
+                         * } }
+                         */
+
+                        if (forloopCount == 0) {
+
+                            addedEdges.put(taskEndName, loopforEver);
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+        opCount++;
+
+    }
+
+    private String getEventName(String taskName, TMLActivityElement currentElement2) {
+
+        String eventName = null;
+
+        if (currentElement.getReferenceObject() instanceof TMLADRandom) {
+
+            eventName = taskName + "__" + currentElement2.getName() + "__" + currentElement2.getID();
+
+        } else if (currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+
+            eventName = taskName + "__" + "unOrderedSequence" + "__" + currentElement2.getID();
+
+        } else {
+            eventName = taskName + "__" + currentElement2.getReferenceObject().toString() + "__" + currentElement2.getID();
+
+        }
+
+        return eventName;
     }
 
     // get graph size
@@ -2551,11 +2860,11 @@ public class DirectedGraphTranslator extends JApplet {
 
                 String name;
                 for (vertex v : g.vertexSet()) {
-                    if (v.getId().equals(vertex.getId())) {
+                    if (v.getName().equals(vertex.getName())) {
 
-                        name = vertex.getId().toString().replaceAll("\\s+", "");
-                        name = vertex.getId().replaceAll("\\(", "\\u0028");
-                        name = vertex.getId().replaceAll("\\)", "\\u0029");
+                        name = vertex.getName().toString().replaceAll("\\s+", "");
+                        name = vertex.getName().replaceAll("\\(", "\\u0028");
+                        name = vertex.getName().replaceAll("\\)", "\\u0029");
                         return name;
                     }
                 }
@@ -2569,8 +2878,8 @@ public class DirectedGraphTranslator extends JApplet {
             @Override
             public String getName(vertex arg0) {
                 for (vertex v : g.vertexSet()) {
-                    if (v.getId().equals(arg0.getId())) {
-                        return arg0.getId();
+                    if (v.getName().equals(arg0.getName())) {
+                        return arg0.getName();
                     }
                 }
                 return null;
@@ -2841,7 +3150,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (bus1.equals(busName) && st.channelName.equals(ChannelName)) {
                             tasknameCheckID = ChannelName;
-                            taskname = getvertex(ChannelName).getId();
+                            taskname = getvertex(ChannelName).getName();
 
                         }
                     }
@@ -2864,7 +3173,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 taskname = tasknameCheck.toString();
 
-                                tasknameCheckID = tasknameCheck.getId();
+                                tasknameCheckID = tasknameCheck.getName();
 
                                 if (taskname.equals(task12) && task1DeviceName.equals(st.deviceName)) {
 
@@ -3063,16 +3372,12 @@ public class DirectedGraphTranslator extends JApplet {
 
                         }
 
-                        System.out.println("Added taint vallue to :" + v + " is :" + labelToaAddtoV);
-
                     }
 
                 }
 
                 Boolean hasLabelAstask12 = false;
                 hasLabelAstask12 = considerVertex(task12, taskname, st.virtualLength, st.command);
-
-                System.out.println("considerVertex: " + j + "--" + taskname);
 
                 // remove rules edges
 
@@ -3250,10 +3555,6 @@ public class DirectedGraphTranslator extends JApplet {
 
                 // }
 
-            }
-
-            for (vertex v : g.vertexSet()) {
-                System.out.println("v: " + v.getId() + "labels" + v.getLabel() + "max: " + v.getMaxTaintFixedNumber());
             }
 
             int i = 0;
@@ -3623,8 +3924,11 @@ public class DirectedGraphTranslator extends JApplet {
             }
 
             if (str2[1].trim().matches("\\d*")) {
-                if (v.getSampleNumber() != Integer.parseInt(str2[1].trim())) {
-                    v.setSampleNumber(Integer.parseInt(str2[1].trim()));
+
+                int snbr = Integer.parseInt(str2[1].trim());
+
+                if (v.getSampleNumber() != snbr) {
+                    v.setSampleNumber(snbr);
                 }
             }
 
@@ -3780,7 +4084,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                     vertex vFor1 = getvertex(nextvertexOfLoop.getValue().get(1));
 
-                                    if (v.getId().equals(previousV.getId())) {
+                                    if (v.getName().equals(previousV.getName())) {
                                         consideredNbr = v.getTaintConsideredNumber().get(labelConsidered);
                                         consideredNbr++;
 
@@ -4458,7 +4762,18 @@ public class DirectedGraphTranslator extends JApplet {
     protected vertex getvertex(String task12) {
 
         for (vertex v : g.vertexSet()) {
-            if (v.getId().equals(task12)) {
+            if (v.getName().equals(task12)) {
+                return v;
+            }
+        }
+        return null;
+
+    }
+
+    protected vertex getvertexFromID(int id) {
+
+        for (vertex v : g.vertexSet()) {
+            if (v.getId() == (id)) {
                 return v;
             }
         }
@@ -4494,9 +4809,6 @@ public class DirectedGraphTranslator extends JApplet {
 
         currentVertex.getMaxTaintFixedNumber().put(label.toString(), currentVertex.getTaintFixedNumber());
 
-        // System.out.println("taint vallsue of :" + currentVertex + " is :" +
-        // label.toString());
-
         return;
     }
 
@@ -4516,9 +4828,9 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     // fill the detailed latency table once a row is selected
-    public Object[][] getTaskByRowDetails(int row) {
+    public String[][] getTaskByRowDetails(int row) {
 
-        Object[][] dataByTaskRowDetails = new Object[dataByTaskR.get(row).size()][5];
+        String[][] dataByTaskRowDetails = new String[dataByTaskR.get(row).size()][5];
 
         int i = 0;
 
@@ -4527,8 +4839,8 @@ public class DirectedGraphTranslator extends JApplet {
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
 
             dataByTaskRowDetails[i][2] = st.deviceName;
-            dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
-            dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
+            dataByTaskRowDetails[i][3] = st.startTime;
+            dataByTaskRowDetails[i][4] = st.endTime;
             i++;
         }
 
@@ -5255,7 +5567,7 @@ public class DirectedGraphTranslator extends JApplet {
                     if (Graphs.vertexHasPredecessors(g, n)) {
                         for (vertex writenode : Graphs.predecessorListOf(g, n)) {
 
-                            if (writeChannelTransactions.contains(writenode.getId())) {
+                            if (writeChannelTransactions.contains(writenode.getName())) {
                                 hasWriteVertex = true;
                                 break;
                             }
@@ -5320,6 +5632,18 @@ public class DirectedGraphTranslator extends JApplet {
         return message;
     }
 
+    public Boolean edgeExists(int vID1, int vID2) {
+
+        vertex v1 = getvertexFromID(vID1);
+        vertex v2 = getvertexFromID(vID2);
+
+        if (g.containsEdge(v1, v2)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public HashMap<vertex, List<vertex>> getRuleAddedEdges() {
         return ruleAddedEdges;
     }
@@ -5334,6 +5658,18 @@ public class DirectedGraphTranslator extends JApplet {
 
     public HashMap<vertex, List<vertex>> getRuleAddedEdgesChannels() {
         return ruleAddedEdgesChannels;
+    }
+
+    public Graph<vertex, DefaultEdge> getG() {
+        return g;
+    }
+
+    public void setG(Graph<vertex, DefaultEdge> g) {
+        this.g = g;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
     }
 
 }

@@ -79,10 +79,8 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_STOP_AND_CLOSE_RULE = 13;
     public static final int ACT_DELETE_SELECTED_RULE = 14;
     public static final int ACT_DELETE_ALL_RULE = 15;
-    public static final int ACT_LATENCY_PRECISE_ANALYSIS=16;
+    public static final int ACT_LATENCY_PRECISE_ANALYSIS = 16;
     public static final int NB_ACTION = 17;
-    
-
 
     private static final TAction[] actions = new TAction[NB_ACTION];
 
@@ -130,7 +128,7 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "Terminate Latency Analysis", "Terminate Latency Analysis window", 'T');
         actions[ACT_LOAD_SIMULATION_TRACES] = new TAction("load_simulation_traces", "Load Simulation Traces", IconManager.imgic29,
                 IconManager.imgic29, "Load Simulation Traces", "Load Simulation Traces", 'T');
-        actions[ACT_LATENCY] = new TAction("start_latency_calculation",  "Calculate Latency", IconManager.imgic29, IconManager.imgic29,
+        actions[ACT_LATENCY] = new TAction("start_latency_calculation", "Calculate Latency", IconManager.imgic29, IconManager.imgic29,
                 "show latency tables", "show latency tables", 'T');
         actions[ACT_Import_ANALYSIS] = new TAction("import-trace", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
                 "import Directed Graph", "Import Directed Graph", 'S');
@@ -146,7 +144,7 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
 
         actions[ACT_LATENCY_PRECISE_ANALYSIS] = new TAction("precise_latency_analysis", "Precise Analysis", IconManager.imgic53, IconManager.imgic53,
                 "Precise Latency Analysis", "Precise Latency Analysis", 'S');
-        
+
         actions[ACT_CHECK_PATH] = new TAction("check_path", "Check Path Between Operators", IconManager.imgic53, IconManager.imgic53,
                 "Check Path Between Operators", "Check Path Between Operators", 'C');
 

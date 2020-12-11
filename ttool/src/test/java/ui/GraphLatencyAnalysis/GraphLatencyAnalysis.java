@@ -4,7 +4,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,15 +21,21 @@ import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
 public class GraphLatencyAnalysis extends AbstractUITest {
 
-    private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
-    private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
+    private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
+
+    private static final String simulationTracePath = INPUT_PATH + "/graphTestSimulationTrace.xml";
+    private static final String modelPath = INPUT_PATH + "/GraphTestModel.xml";
 
     private static final String mappingDiagName = "Architecture2";
     private Vector<SimulationTransaction> transFile1;
-    private Vector<String> dropDown;
+    // private Vector<String> dropDown;
+    private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
 
-    private static final String t1 = "Application2__task4:sendevent:evt1__44";
-    private static final String t2 = "Application2__task22:readchannel:comm_0__26";
+    private String t1;
+    private String t2;
+    private static final int t1ID = 44;
+    private static final int t2ID = 26;
+
     private static String task1;
     private static String task2;
     private static DirectedGraphTranslator dgt;
@@ -37,7 +45,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
     private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
 
     @Before
-    public void GraphLatencyAnalysis() {
+    public void GraphLatencyAnalysis() throws InterruptedException {
 
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
         // mainGUI.openProjectFromFile(new File( modelPath));
@@ -60,12 +68,19 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
-            if (latencyDetailedAnalysis.graphStatus() == Thread.State.TERMINATED) {
-                dgt = latencyDetailedAnalysis.getDgraph();
+            try {
+                latencyDetailedAnalysis.getT().join();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
-                dgt = latencyDetailedAnalysis.getDgraph();
-            }
+
+            // if (latencyDetailedAnalysis.graphStatus() == Thread.State.TERMINATED) {
+            dgt = latencyDetailedAnalysis.getDgraph();
+            // }
+            // while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
+            // dgt = latencyDetailedAnalysis.getDgraph();
+            // }
         }
 
     }
@@ -79,9 +94,10 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         assertTrue(graphsize == 40);
 
-        dropDown = latencyDetailedAnalysis.getCheckedTransactions();
+        // dropDown = latencyDetailedAnalysis.getCheckedTransactions();
+        checkedDropDown = latencyDetailedAnalysis.getCheckedT();
 
-        assertTrue(dropDown.size() == 3);
+        assertTrue(checkedDropDown.size() == 3);
 
         transFile1 = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + simulationTracePath));
 
@@ -90,11 +106,24 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         assertTrue(transFile1.size() == 175);
 
-        int i = dropDown.indexOf(t1);
-        int j = dropDown.indexOf(t2);
+        for (Entry<String, Integer> cT : checkedDropDown.entrySet()) {
 
-        task1 = dropDown.get(i);
-        task2 = dropDown.get(j);
+            int id = cT.getValue();
+            String taskName = cT.getKey();
+            if (id == t1ID) {
+                task1 = taskName;
+
+            } else if (id == t2ID) {
+                task2 = taskName;
+
+            }
+        }
+
+        // int i = dropDown.indexOf(checkedDropDown.get);
+        // int j = dropDown.indexOf(t2);
+
+        // task1 = dropDown.get(i);
+        // task2 = dropDown.get(j);
 
         allLatencies = dgt.latencyDetailedAnalysis(task1, task2, transFile1, false, false);
 
