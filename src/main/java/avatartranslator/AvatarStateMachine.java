@@ -1645,18 +1645,23 @@ public class AvatarStateMachine extends AvatarElement {
         for (AvatarStateMachineElement elt : elements) {
             if ((elt instanceof AvatarStateElement) && (!(elt instanceof AvatarStartState))) {
                 if (elt.getNexts().size() == 1) {
-                    AvatarTransition at = (AvatarTransition) (elt.getNext(0));
-                    if (at.getNext(0) instanceof AvatarStateElement) {
-                        if (at.isEmpty() && at.hasNonDeterministicGuard()) {
-                            if ((_canOptimize) && (!(elt.isCheckable()))) {
-                                //TraceManager.addDev("State found:" + elt);
-                                foundState1 = (AvatarStateElement) elt;
-                                foundAt = at;
-                                foundState2 = (AvatarStateElement) (at.getNext(0));
-                                break;
-                            }
+                    if ((elt.getNext(0) instanceof AvatarTransition)) {
+                        AvatarTransition at = (AvatarTransition) (elt.getNext(0));
+                        if (at.getNext(0) instanceof AvatarStateElement) {
+                            if (at.isEmpty() && at.hasNonDeterministicGuard()) {
+                                if ((_canOptimize) && (!(elt.isCheckable()))) {
+                                    //TraceManager.addDev("State found:" + elt);
+                                    foundState1 = (AvatarStateElement) elt;
+                                    foundAt = at;
+                                    foundState2 = (AvatarStateElement) (at.getNext(0));
+                                    break;
+                                }
 
+                            }
                         }
+                    } else {
+                        TraceManager.addDev("Malformed spec: " + elt.getName() + " is followed by " + elt.getName());
+
                     }
                 }
             }

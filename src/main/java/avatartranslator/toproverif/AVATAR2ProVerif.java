@@ -109,6 +109,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
     private final static int    MAX_INT = 50;
 
+    private final static String SEC_TRANS = "Security verification: ";
+
     private ProVerifSpec spec;
     private AvatarSpecification avspec;
 
@@ -424,9 +426,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             //TraceManager.addDev("ConstantGuard");
             AvatarConstantGuard constant = (AvatarConstantGuard) _guard;
             if (constant.getConstant () == AvatarConstant.TRUE)
-                return "true";
+                return "TRUE";
             if (constant.getConstant () == AvatarConstant.FALSE)
-                return "false";
+                return "FALSE";
         }
 
         return null;
@@ -1187,7 +1189,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 _lastInstr = _lastInstr.setNextInstr (new ProVerifProcITE (tmp));
             } else {
                 TraceManager.addDev ("!!!       Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
-                UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty guard");
+                UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR,
+                        SEC_TRANS + "Guard: " + _asme.getGuard() + " in block " + arg.block.getName() + " is not supported. Replacing by an empty " +
+                        "guard");
                 //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                 warnings.add(ce);
@@ -1275,10 +1279,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                     }
                 }
                 if (proVerifRightHand != null && proVerifLeftHand.size () > 0)
-                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (proVerifLeftHand.toArray (new ProVerifVar[proVerifLeftHand.size ()]), proVerifRightHand));
+                    _lastInstr = _lastInstr.setNextInstr (new ProVerifProcLet (proVerifLeftHand.toArray (new ProVerifVar[proVerifLeftHand.size ()]),
+                            modifyExprProVerif(proVerifRightHand)));
                 else {
                     TraceManager.addDev ("!!!       Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
-                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
+                    UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR,
+                            SEC_TRANS + "Assignment: " + action.toString () + " in block " + arg.block.getName() + " is not supported. Removing it.");
                     //ce.setTDiagramPanel(((AvatarDesignPanel)(avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                     ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                     warnings.add(ce);
@@ -1463,5 +1469,12 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     public void translateLibraryFunctionCall(AvatarLibraryFunctionCall _asme, Object _arg) {
         /* should not happen */
         this.translateNext (_asme.getNext(0), _arg);
+    }
+
+    public String modifyExprProVerif(String input) {
+        String ret = AvatarExpressionSolver.replaceVariable(input, "true", "TRUE");
+        ret = AvatarExpressionSolver.replaceVariable(ret, "false", "FALSE");
+
+        return ret;
     }
 }
