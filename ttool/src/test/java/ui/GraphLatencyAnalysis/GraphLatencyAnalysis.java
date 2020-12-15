@@ -31,10 +31,8 @@ public class GraphLatencyAnalysis extends AbstractUITest {
     // private Vector<String> dropDown;
     private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
 
-    private String t1;
-    private String t2;
-    private static final int t1ID = 44;
-    private static final int t2ID = 26;
+    private static final int operator1ID = 44;
+    private static final int operator2ID = 26;
 
     private static String task1;
     private static String task2;
@@ -110,10 +108,10 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == t1ID) {
+            if (id == operator1ID) {
                 task1 = taskName;
 
-            } else if (id == t2ID) {
+            } else if (id == operator2ID) {
                 task2 = taskName;
 
             }

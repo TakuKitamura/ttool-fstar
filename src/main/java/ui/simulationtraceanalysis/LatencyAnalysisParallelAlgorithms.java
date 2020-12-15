@@ -16,10 +16,10 @@ import ui.TGComponent;
 import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
 
-public class ThreadingClass implements Runnable {
+public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private Thread t;
-    private String threadName;
-    private Integer n;
+    // private String threadName;
+    private int algorithmId;
     private JFrameLatencyDetailedAnalysis jFrameLDA;
     private JFrameCompareLatencyDetail cld;
     private TMLMapping<TGComponent> tmap;
@@ -42,103 +42,99 @@ public class ThreadingClass implements Runnable {
 
     private String task1, task2, task3, task4;
 
-    public ThreadingClass(String name, latencyDetailedAnalysisMain latencyDetailedAnalysisMain) {
-        threadName = name;
+    public LatencyAnalysisParallelAlgorithms(latencyDetailedAnalysisMain latencyDetailedAnalysisMain) {
         main = latencyDetailedAnalysisMain;
-        // jFrameLDA = jFrameLatencyDetailedAnalysis;
 
     }
 
     public void run() {
 
-        if (threadName == "Thread-1") {
-            if (n == 1) {
-                jFrameLDA.generateDirectedGraph(tmap, cpanels);
+        if (algorithmId == 1) {
+            jFrameLDA.generateDirectedGraph(tmap, cpanels);
 
-            } else if (n == 2) {
-                dataDetailedByTask = dgraph.getTaskByRowDetails(row);
+        } else if (algorithmId == 2) {
+            dataDetailedByTask = dgraph.getTaskByRowDetails(row);
 
-            } else if (n == 3) {
-                dataDetailedByTask = dgraph.getTaskByRowDetailsMinMaxTaint(row);
-            } else if (n == 4) {
-                dgraph.getRowDetailsMinMax(row);
-                dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
-            } else if (n == 5) {
-                dataDetailedByTask = dgraph.getTaskHWByRowDetails(row);
-            } else if (n == 6) {
-                dataDetailedByTask = dgraph.getTaskHWByRowDetailsMinMaxTaint(row);
-            } else if (n == 7) {
-                dataDetailedByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
-            } else if (n == 8) {
+        } else if (algorithmId == 3) {
+            dataDetailedByTask = dgraph.getTaskByRowDetailsMinMaxTaint(row);
+        } else if (algorithmId == 4) {
+            dgraph.getRowDetailsMinMax(row);
+            dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
+        } else if (algorithmId == 5) {
+            dataDetailedByTask = dgraph.getTaskHWByRowDetails(row);
+        } else if (algorithmId == 6) {
+            dataDetailedByTask = dgraph.getTaskHWByRowDetailsMinMaxTaint(row);
+        } else if (algorithmId == 7) {
+            dataDetailedByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
+        } else if (algorithmId == 8) {
 
-                try {
-                    main.latencyDetailedAnalysisForXML(mainGUI, selectedST, b, compare, j);
-                } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            } else if (n == 9) {
-                try {
-
-                    main.compareLatencyForXML(mainGUI, selectedST, b);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            } else if (n == 10) {
-                cld.generateDirectedGraph1(map, cpanels);
-            } else if (n == 11) {
-                try {
-                    jFrameLDA.preciselatencyAnalysis(row);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            } else if (n == 12) {
-                jFrameLDA.showgraphFrame();
-            } else if (n == 13) {
-                jFrameLDA.latencyDetailedAnalysis();
-            } else if (n == 14) {
-                dgraph.showGraph(dgraph);
-            } else if (n == 15) {
-                dgraph = new DirectedGraphTranslator(jFrameLDA, cld, map, cpanels, 1);
-
-                generateDirectedGraph2(map, cpanels);
-            } else if (n == 16) {
-
-                cld.generateDirectedGraph2(map, cpanels);
-            } else if (n == 17) {
-                dgraph2.showGraph(dgraph2);
-            } else if (n == 18) {
-                cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, true, false, false);
-            } else if (n == 19) {
-                try {
-                    cld.compareLatencyInDetails(row1, row2, row3, row4, selectedIndex);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            } else if (n == 20) {
-                dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
-
-                dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
-            } else if (n == 21) {
-                dgraph1.getRowDetailsMinMax(row);
-                dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
-
-                dgraph2.getRowDetailsMinMax(row2);
-                dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
-            } else if (n == 22) {
-                dataDetailedByTask = dgraph1.getTaskHWByRowDetails(row);
-
-                dataDetailedByTask2 = dgraph2.getTaskHWByRowDetails(row2);
-            } else if (n == 23) {
-                dgraph1.getRowDetailsMinMax(row);
-                dataDetailedByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
-
-                dgraph2.getRowDetailsMinMax(row2);
-                dataDetailedByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
+            try {
+                main.latencyDetailedAnalysisForXML(mainGUI, selectedST, b, compare, j);
+            } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
+        } else if (algorithmId == 9) {
+            try {
+
+                main.compareLatencyForXML(mainGUI, selectedST, b);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (algorithmId == 10) {
+            cld.generateDirectedGraph1(map, cpanels);
+        } else if (algorithmId == 11) {
+            try {
+                jFrameLDA.preciselatencyAnalysis(row);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (algorithmId == 12) {
+            jFrameLDA.showgraphFrame();
+        } else if (algorithmId == 13) {
+            jFrameLDA.latencyDetailedAnalysis();
+        } else if (algorithmId == 14) {
+            dgraph.showGraph(dgraph);
+        } else if (algorithmId == 15) {
+            dgraph = new DirectedGraphTranslator(jFrameLDA, cld, map, cpanels, 1);
+
+            generateDirectedGraph2(map, cpanels);
+        } else if (algorithmId == 16) {
+
+            cld.generateDirectedGraph2(map, cpanels);
+        } else if (algorithmId == 17) {
+            dgraph2.showGraph(dgraph2);
+        } else if (algorithmId == 18) {
+            cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, true, false, false);
+        } else if (algorithmId == 19) {
+            try {
+                cld.compareLatencyInDetails(row1, row2, row3, row4, selectedIndex);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (algorithmId == 20) {
+            dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
+
+            dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
+        } else if (algorithmId == 21) {
+            dgraph1.getRowDetailsMinMax(row);
+            dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
+
+            dgraph2.getRowDetailsMinMax(row2);
+            dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
+        } else if (algorithmId == 22) {
+            dataDetailedByTask = dgraph1.getTaskHWByRowDetails(row);
+
+            dataDetailedByTask2 = dgraph2.getTaskHWByRowDetails(row2);
+        } else if (algorithmId == 23) {
+            dgraph1.getRowDetailsMinMax(row);
+            dataDetailedByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
+
+            dgraph2.getRowDetailsMinMax(row2);
+            dataDetailedByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
         }
 
     }
@@ -153,13 +149,13 @@ public class ThreadingClass implements Runnable {
         run();
     }
 
-    public void start(int x) {
-        n = x;
+    public void start(int id) {
+        algorithmId = id;
 
         if (t == null) {
             t = new Thread(this);
             t.start();
-            t.setName(threadName);
+
         }
     }
 

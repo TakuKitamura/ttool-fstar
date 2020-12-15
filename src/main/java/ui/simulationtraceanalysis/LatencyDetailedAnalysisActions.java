@@ -128,7 +128,7 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "Terminate Latency Analysis", "Terminate Latency Analysis window", 'T');
         actions[ACT_LOAD_SIMULATION_TRACES] = new TAction("load_simulation_traces", "Load Simulation Traces", IconManager.imgic29,
                 IconManager.imgic29, "Load Simulation Traces", "Load Simulation Traces", 'T');
-        actions[ACT_LATENCY] = new TAction("start_latency_calculation", "Calculate Latency", IconManager.imgic29, IconManager.imgic29,
+        actions[ACT_LATENCY] = new TAction("start_latency_Computation", "Compute Latency", IconManager.imgic29, IconManager.imgic29,
                 "show latency tables", "show latency tables", 'T');
         actions[ACT_Import_ANALYSIS] = new TAction("import-trace", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
                 "import Directed Graph", "Import Directed Graph", 'S');
@@ -139,8 +139,8 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
         actions[ACT_SHOW_GRAPH_FILE_2] = new TAction("show_graph_file_2", "Show Directed Graph 2", IconManager.imgic341, IconManager.imgic341,
                 "Show Directed Graph", "Show Directed Graph", 'S');
 
-        actions[ACT_COMPARE_IN_DETAILS] = new TAction("compare_in_details", "Compare In Detials", IconManager.imgic53, IconManager.imgic53,
-                "Compare In Detials", "Compare In Detials", 'S');
+        actions[ACT_COMPARE_IN_DETAILS] = new TAction("compare_in_details", "Compare In Details", IconManager.imgic53, IconManager.imgic53,
+                "Compare In Details", "Compare In Details", 'S');
 
         actions[ACT_LATENCY_PRECISE_ANALYSIS] = new TAction("precise_latency_analysis", "Precise Analysis", IconManager.imgic53, IconManager.imgic53,
                 "Precise Latency Analysis", "Precise Latency Analysis", 'S');
@@ -148,7 +148,7 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
         actions[ACT_CHECK_PATH] = new TAction("check_path", "Check Path Between Operators", IconManager.imgic53, IconManager.imgic53,
                 "Check Path Between Operators", "Check Path Between Operators", 'C');
 
-        actions[ACT_ADD_RULE] = new TAction("add_rule", "ADD Rule", IconManager.imgic53, IconManager.imgic53, "ADD Rule", "ADD Rule", 'C');
+        actions[ACT_ADD_RULE] = new TAction("add_rule", "Add Rule", IconManager.imgic53, IconManager.imgic53, "Add Rule", "Add Rule", 'C');
 
         actions[ACT_VIEW_RULE] = new TAction("view_rules", "View Rules", IconManager.imgic29, IconManager.imgic29, "View Rules", "View Rules", 'T');
 

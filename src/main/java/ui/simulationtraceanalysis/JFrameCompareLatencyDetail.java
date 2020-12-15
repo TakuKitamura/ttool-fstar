@@ -102,13 +102,13 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     private List<TMLComponentDesignPanel> cpanels;
     private DirectedGraphTranslator dgraph;
 
-    private ThreadingClass tc;
+    private LatencyAnalysisParallelAlgorithms tc;
     private JCheckBox taintFirstOp, considerRules;
 
     // private DirectedGraphTranslator dgraph;
     public JFrameCompareLatencyDetail(latencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
-            TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b, ThreadingClass tc1)
-            throws InterruptedException {
+            TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b,
+            LatencyAnalysisParallelAlgorithms tc1) throws InterruptedException {
 
         super("Latency Comparision");
 
@@ -453,13 +453,8 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setViewportBorder(BorderFactory.createLineBorder(ColorManager.InteractiveSimulationBackground));
 
-        // jsp.setColumnHeaderView(100);
-        // jsp.setRowHeaderView(30);
-
         jsp.setMaximumSize(new Dimension(800, 500));
-        // JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop,
-        // jsp);
-        // split.setBackground(ColorManager.InteractiveSimulationBackground);
+
         jp05.setMaximumSize(new Dimension(800, 500));
         jp05.add(jsp, BorderLayout.CENTER);
 
@@ -470,19 +465,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         tc.start(10);
         tc.run();
-        // tc.getT().join();
 
-        // tc.generateDirectedGraph1(map, cpanels);
-
-        /*
-         * t = new Thread() { public void run() { generateDirectedGraph(map, cpanels);
-         * 
-         * }
-         * 
-         * };
-         * 
-         * t.start();
-         */
     }
 
     protected void generateDirectedGraph1(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
@@ -529,32 +512,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         try {
             dgraph = null;
 
-            // jFrameCompareLatencyDetail = this;
-
-            // dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis,
-            // jFrameCompareLatencyDetail, map, cpanels, 1);
-
-            /*
-             * t1 = new Thread() { public void run() { dgraph = new
-             * DirectedGraphTranslator(jFrameLatencyDetailedAnalysis,
-             * jFrameCompareLatencyDetail, map, cpanels, 1);
-             * 
-             * }
-             * 
-             * };
-             */
-
-            // t1.start();
-
-            // while (t1.getState() != Thread.State.TERMINATED) {
-
-            // }
-
-            // if (t1.getState() == Thread.State.TERMINATED) {
-
             dgraph = tc.getDgraph();
-
-            // }
 
             dgraph2 = dgraph;
             String[] checkTransactionStrTable = new String[checkedTransactionsFile2.size()];
@@ -605,13 +563,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         // TraceManager.addDev("Command:" + command);
 
         if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH_FILE_1].getActionCommand())) {
-            /*
-             * Thread t1 = new Thread() { public void run() { dgraph1.showGraph(dgraph1);
-             * 
-             * } };
-             * 
-             * t1.start();
-             */
 
             tc.setDgraph(dgraph1);
             tc.start(14);
@@ -644,9 +595,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File filefc = fc.getSelectedFile();
-                // file2.setText(file.getPath());
-
-                // Object obj = filefc;
 
                 latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
                 SimulationTrace STfile2 = new SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
@@ -681,21 +629,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
                     tc.start(15);
                     tc.run();
-                    // try {
-                    // tc.getT().join();
-                    // } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    // e.printStackTrace();
-                    // }
 
-                    /*
-                     * Thread t3 = new Thread() { public void run() { generateDirectedGraph2(map,
-                     * cpanels); }
-                     * 
-                     * };
-                     * 
-                     * t3.start();
-                     */
                 }
 
             }
@@ -705,14 +639,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
             jta.append("Simulation Trace 2 : the Latency Between: \n " + tasksDropDownCombo3.getSelectedItem() + " and \n"
                     + tasksDropDownCombo4.getSelectedItem() + " is studied \n");
-
-            // pBarLabel.setText("Generating Detailed Latency");
-            // pbar.setIndeterminate(true);
-            // pbar.setMinimum(0);
-            // pbar.setMaximum(1);
-            // updateBar(0);
-            // Thread t = new Thread() {
-            // public void run() {
 
             String task1 = tasksDropDownCombo1.getSelectedItem().toString();
             String task2 = tasksDropDownCombo2.getSelectedItem().toString();
@@ -731,28 +657,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             tc.latencyDetailedAnalysis(this, task1, task2, task3, task4, transFile1, transFile2);
             tc.start(18);
             tc.run();
-            // }
-            // };
-
-            // t.start();
-
-            // while (t.getState() != Thread.State.TERMINATED) {
-
-            // }
-            // try {
-            // t.join();
-            // } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            // e.printStackTrace();
-            // }
-
-            // if (t.getState() == Thread.State.TERMINATED) {
-
-            // pbar.setIndeterminate(false);
-
-            // updateBar(1);
-
-            // }
 
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_COMPARE_IN_DETAILS].getActionCommand())) {
             jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
@@ -771,22 +675,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             } else {
                 jta.append("Please select a row from each table to proceed \n");
             }
-            /*
-             * Thread t = new Thread() { public void run() {
-             * 
-             * int row1 = table11.getSelectedRow(); int row2 = table12.getSelectedRow(); int
-             * row3 = table21.getSelectedRow(); int row4 = table22.getSelectedRow();
-             * 
-             * int selectedIndex = resultTab.getSelectedIndex();
-             * 
-             * try { compareLatencyInDetails(row1, row2, row3, row4, selectedIndex); } catch
-             * (InterruptedException e) { // TODO Auto-generated catch block
-             * e.printStackTrace(); } }
-             * 
-             * };
-             * 
-             * t.start();
-             */
 
         }
 
@@ -840,20 +728,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         table11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        /*
-         * table11.getSelectionModel().addListSelectionListener(new
-         * ListSelectionListener() { public void valueChanged(ListSelectionEvent e) { if
-         * (!e.getValueIsAdjusting()) { int row = table11.getSelectedRow(); Thread t =
-         * new Thread() { public void run() { new JFrameLatencyDetailedPopup(dgraph1,
-         * row, true); } };
-         * 
-         * t.start();
-         * 
-         * } }
-         * 
-         * });
-         */
-
         tableData2 = dgraph2.latencyDetailedAnalysis(task3, task4, transFile2, taint, considerAddedRules);
 
 //        DefaultTableModel model2 = new DefaultTableModel();
@@ -863,19 +737,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         table12 = new JTable(tableData2, columnNames);
 
         table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        /*
-         * table12.getSelectionModel().addListSelectionListener(new
-         * ListSelectionListener() { public void valueChanged(ListSelectionEvent e) { if
-         * (!e.getValueIsAdjusting()) { int row = table12.getSelectedRow(); Thread t =
-         * new Thread() { public void run() { new JFrameLatencyDetailedPopup(dgraph2,
-         * row, true); } };
-         * 
-         * t.start();
-         * 
-         * } }
-         * 
-         * });
-         */
 
         tableData1MinMax = dgraph1.latencyMinMaxAnalysis(task1, task2, transFile1);
 
@@ -886,19 +747,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         table21 = new JTable(tableData1MinMax, columnMinMaxNames);
 
         table21.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        /*
-         * table21.getSelectionModel().addListSelectionListener(new
-         * ListSelectionListener() { public void valueChanged(ListSelectionEvent e) { if
-         * (!e.getValueIsAdjusting()) { int row = table21.getSelectedRow(); Thread t =
-         * new Thread() { public void run() { new JFrameLatencyDetailedPopup(dgraph1,
-         * row, false); } };
-         * 
-         * t.start();
-         * 
-         * } }
-         * 
-         * });
-         */
 
         tableData2MinMax = dgraph2.latencyMinMaxAnalysis(task3, task4, transFile2);
 
@@ -909,19 +757,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         table22 = new JTable(tableData2MinMax, columnMinMaxNames);
 
         table22.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        /*
-         * table22.getSelectionModel().addListSelectionListener(new
-         * ListSelectionListener() { public void valueChanged(ListSelectionEvent e) { if
-         * (!e.getValueIsAdjusting()) { int row = table22.getSelectedRow(); Thread t =
-         * new Thread() { public void run() { new JFrameLatencyDetailedPopup(dgraph2,
-         * row, false); } };
-         * 
-         * t.start();
-         * 
-         * } }
-         * 
-         * });
-         */
 
         table22.repaint();
         table22.revalidate();

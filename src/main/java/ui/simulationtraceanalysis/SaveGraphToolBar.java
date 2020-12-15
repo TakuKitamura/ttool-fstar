@@ -53,29 +53,28 @@ import javax.swing.JButton;
  */
 public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
 
-   
     protected void setActive(boolean b) {
-        getJflda().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
-        getJflda().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
-        getJflda().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
+        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
+        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
+        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
 
     }
 
     protected void setButtons() {
         JButton button;
 
-        button = this.add(getJflda().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG]);
+        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG]);
         // button.addMouseListener(jflda.mouseHandler);
 
         this.addSeparator();
 
-        button = this.add(getJflda().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
+        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
         this.addSeparator();
 
-        button = this.add(getJflda().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
+        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
 
     }
-    
+
     protected SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
         super(_jflda);
     }

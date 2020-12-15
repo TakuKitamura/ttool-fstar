@@ -83,8 +83,8 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
     private Object[][] dataHWDelayByTask;
 
-    public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable, Boolean taint, ThreadingClass th)
-            throws InterruptedException {
+    public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable, Boolean taint,
+            LatencyAnalysisParallelAlgorithms th) throws InterruptedException {
 
         super("Precise Latency By Row");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -101,21 +101,12 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         JPanel jp04 = new JPanel(new BorderLayout());
         if (firstTable) {
 
-            // t = new Thread() {
-            // public void run() {
-
             th.setDgraph(dgraph);
             th.setRow(row);
             th.start(2);
             th.run();
-            // th.getT().join();
 
             dataDetailedByTask = th.getDataDetailedByTask();
-
-            // }
-            // };
-
-            // t.start();
 
         } else {
             if (taint) {
@@ -129,15 +120,6 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                 dataDetailedByTask = th.getDataDetailedByTask();
 
-                // t = new Thread() {
-                // public void run() {
-                // dataDetailedByTask = dgraph.getTaskByRowDetailsMinMaxTaint(row);
-
-                // }
-                // };
-
-                // t.start();
-
             } else {
 
                 th.setDgraph(dgraph);
@@ -145,25 +127,12 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                 th.start(4);
                 th.run();
-                // th.getT().join();
 
                 dataDetailedByTask = th.getDataDetailedByTask();
-
-                /*
-                 * t = new Thread() { public void run() { dgraph.getRowDetailsMinMax(row);
-                 * 
-                 * dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
-                 * 
-                 * } };
-                 * 
-                 * t.start();
-                 */
 
             }
 
         }
-
-        // th.getT().join();
 
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
             @Override
@@ -184,8 +153,6 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 }
             }
         };
-
-        // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
 
         JTable taskNames = new JTable(model);
         taskNames.setAutoCreateRowSorter(true);
@@ -211,15 +178,6 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
             // th.getT().join();
 
             dataHWDelayByTask = th.getDataDetailedByTask();
-            // dataHWDelayByTask = th.getTaskHWByRowDetails(dgraph,row);
-            /*
-             * t1 = new Thread() { public void run() { dataHWDelayByTask =
-             * dgraph.getTaskHWByRowDetails(row);
-             * 
-             * } };
-             * 
-             * t1.start();
-             */
 
         } else {
 
@@ -230,19 +188,8 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                 th.start(6);
                 th.run();
-                // th.getT().join();
 
                 dataHWDelayByTask = th.getDataDetailedByTask();
-                // dataHWDelayByTask = th.getTaskHWByRowDetailsMinMaxTaint(dgraph,row);
-
-                /*
-                 * t1 = new Thread() { public void run() { dataHWDelayByTask =
-                 * dgraph.getTaskHWByRowDetailsMinMaxTaint(row);
-                 * 
-                 * } };
-                 * 
-                 * t1.start();
-                 */
 
             } else {
 
@@ -251,24 +198,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                 th.start(7);
                 th.run();
-                // th.getT().join();
 
                 dataHWDelayByTask = th.getDataDetailedByTask();
-                // dataHWDelayByTask = th.getTaskHWByRowDetailsMinMax(dgraph,row);
-
-                /*
-                 * t1 = new Thread() { public void run() { dataHWDelayByTask =
-                 * dgraph.getTaskHWByRowDetailsMinMax(row);
-                 * 
-                 * } };
-                 * 
-                 * t1.start();
-                 */
 
             }
         }
-
-        // th.getT().join();
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
             @Override

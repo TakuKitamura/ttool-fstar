@@ -138,7 +138,7 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
 
         columnByTaskNames[0] = "Operator 2";
         columnByTaskNames[1] = "After ";
-        columnByTaskNames[2] = "Oerator 1 ";
+        columnByTaskNames[2] = "Operator 1 ";
 
         ruleAddedEdgesChannels = dgraph.getRuleAddedEdgesChannels();
 
@@ -190,7 +190,7 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
         jta.append("Here are all the added rules...\n");
-        jta.append("Select a row and press delete to remove it. \n");
+        jta.append("Select a row and press \"Delete Selected Rules\" to remove it. \n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);

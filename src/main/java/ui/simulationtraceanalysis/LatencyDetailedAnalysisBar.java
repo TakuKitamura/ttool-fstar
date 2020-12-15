@@ -50,26 +50,23 @@ import javax.swing.SwingConstants;
  * @author Maysam Zoor
  */
 public abstract class LatencyDetailedAnalysisBar extends JToolBar {
-    private JFrameLatencyDetailedAnalysis jflda;
+    private JFrameLatencyDetailedAnalysis latencyDetailedAnalysisF;
 
     public LatencyDetailedAnalysisBar(JFrameLatencyDetailedAnalysis _jflda) {
         super();
-        jflda = _jflda;
+        latencyDetailedAnalysisF = _jflda;
         setOrientation(SwingConstants.HORIZONTAL);
         setFloatable(true);
         setButtons();
     }
 
-    
     // asbtract operations
     protected abstract void setButtons();
 
     protected abstract void setActive(boolean b);
-    
-    public JFrameLatencyDetailedAnalysis getJflda() {
-        return jflda;
-    }
 
-   
+    public JFrameLatencyDetailedAnalysis getLatencyDetailedAnalysisF() {
+        return latencyDetailedAnalysisF;
+    }
 
 } // Class

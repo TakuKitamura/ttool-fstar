@@ -31,8 +31,8 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
     private Vector<SimulationTransaction> transFile1;
     private Vector<String> dropDown;
 
-    private static final int t1 = 47;
-    private static final int t2 = 37;
+    private static final int operator1ID = 47;
+    private static final int operator2ID = 37;
     private static String task1;
     private static String task2;
     private static DirectedGraphTranslator dgt;
@@ -100,10 +100,10 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
 
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == t1) {
+            if (id == operator1ID) {
                 task1 = taskName;
 
-            } else if (id == t2) {
+            } else if (id == operator2ID) {
                 task2 = taskName;
 
             }

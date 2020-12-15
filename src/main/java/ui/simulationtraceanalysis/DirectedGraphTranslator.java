@@ -876,7 +876,7 @@ public class DirectedGraphTranslator extends JApplet {
                 String taskName = task.getName();
                 // get the names and params of send events per task and their corresponding wait
                 // events
-                taskAc=task;
+                taskAc = task;
                 sendEventsNames();
 
                 // get the names of read channels per task and their corresponding write
@@ -1162,12 +1162,11 @@ public class DirectedGraphTranslator extends JApplet {
                         currentElement = currentElement.getNexts().firstElement();
 
                     } else if (!multiNexts.isEmpty()) {
-                        
-                        trackMultiNexts(taskName,eventName);
+
+                        trackMultiNexts(taskName, eventName);
                         currentElement = multiNexts.get(0);
 
                         multiNexts.remove(0);
-
 
                     }
 
@@ -1184,10 +1183,8 @@ public class DirectedGraphTranslator extends JApplet {
 
     private void trackMultiNexts(String taskName, String eventName) {
         // TODO Auto-generated method stub
-        
 
-        if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop
-                || currentElement.getReferenceObject() instanceof TMLADForLoop) {
+        if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop || currentElement.getReferenceObject() instanceof TMLADForLoop) {
 
             if (currentElement.getNexts().size() > 1) {
 
@@ -1273,8 +1270,7 @@ public class DirectedGraphTranslator extends JApplet {
                                     getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                                 }
                                 {
-                                    frameLatencyDetailedAnalysis
-                                            .error(loopValue + " Expression in For Loop is not supported by Tainting");
+                                    frameLatencyDetailedAnalysis.error(loopValue + " Expression in For Loop is not supported by Tainting");
                                 }
 
                             }
@@ -1366,8 +1362,7 @@ public class DirectedGraphTranslator extends JApplet {
                     nextEventName = taskName + "__" + "unOrderedSequence" + "__" + seqListnextElement.getID();
 
                 } else {
-                    nextEventName = taskName + "__" + seqListnextElement.getReferenceObject().toString() + "__"
-                            + seqListnextElement.getID();
+                    nextEventName = taskName + "__" + seqListnextElement.getReferenceObject().toString() + "__" + seqListnextElement.getID();
 
                 }
 
@@ -1399,8 +1394,7 @@ public class DirectedGraphTranslator extends JApplet {
                     nextEventName = taskName + "__" + "unOrderedSequence" + "__" + seqListnextElement.getID();
 
                 } else {
-                    nextEventName = taskName + "__" + seqListnextElement.getReferenceObject().toString() + "__"
-                            + seqListnextElement.getID();
+                    nextEventName = taskName + "__" + seqListnextElement.getReferenceObject().toString() + "__" + seqListnextElement.getID();
 
                 }
 
@@ -1420,8 +1414,6 @@ public class DirectedGraphTranslator extends JApplet {
 
         List<TGConnector> cg = (((TGComponent) currentElement.getReferenceObject()).getInputConnectors());
 
-        
-        
     }
 
     private void addStartVertex(String taskName) {

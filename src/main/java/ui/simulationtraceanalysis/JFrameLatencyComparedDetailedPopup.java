@@ -81,12 +81,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
     // private Thread t, t1;
 
     private JPanel jp02;
-    private ThreadingClass tc;
+    private LatencyAnalysisParallelAlgorithms tc;
 
     private Object[][] dataHWDelayByTask, dataHWDelayByTask2;
 
     public JFrameLatencyComparedDetailedPopup(DirectedGraphTranslator dgraph1, DirectedGraphTranslator dgraph2, int row, int row2, boolean firstTable,
-            ThreadingClass tc2) throws InterruptedException {
+            LatencyAnalysisParallelAlgorithms tc2) throws InterruptedException {
 
         super("Detailed Latency By Row");
         tc = tc2;
@@ -139,45 +139,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             dataDetailedByTask2 = tc.getDataDetailedByTask2();
 
         }
-
-        // if (firstTable) {
-        /*
-         * t = new Thread() { public void run() { if (firstTable) { dataDetailedByTask =
-         * dgraph1.getTaskByRowDetails(row);
-         * 
-         * dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2); } else {
-         * 
-         * dgraph1.getRowDetailsMinMax(row); dataDetailedByTask =
-         * dgraph1.getTasksByRowMinMax(row);
-         * 
-         * dgraph2.getRowDetailsMinMax(row2); dataDetailedByTask2 =
-         * dgraph2.getTasksByRowMinMax(row2);
-         * 
-         * }
-         * 
-         * } };
-         * 
-         * t.start();
-         */
-
-        // } else {
-
-        /// t = new Thread() {
-        // public void run() {
-        // dgraph1.getRowDetailsMinMax(row);
-        // dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
-
-        // dgraph2.getRowDetailsMinMax(row2);
-        // dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
-
-        // }
-        // };
-
-        // t.start();
-
-        // }
-
-        // t.join();
 
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
             @Override
@@ -239,8 +200,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             }
         };
 
-        // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
-
         JTable taskNames12 = new JTable(model12);
         taskNames12.setAutoCreateRowSorter(true);
         scrollPane12 = new JScrollPane(taskNames12, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -254,8 +213,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 1;
         c02.gridy = 0;
         c02.fill = GridBagConstraints.BOTH;
-
-        // c02.fill = GridBagConstraints.BOTH;
 
         framePanel.add(scrollPane12, c02);
 
@@ -283,38 +240,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             dataHWDelayByTask2 = tc.getDataDetailedByTask2();
 
         }
-
-        // if (firstTable) {
-
-        /*
-         * t1 = new Thread() {
-         * 
-         * public void run() { if (firstTable) { dataHWDelayByTask =
-         * dgraph1.getTaskHWByRowDetails(row); dataHWDelayByTask2 =
-         * dgraph2.getTaskHWByRowDetails(row2); } else {
-         * 
-         * dataHWDelayByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
-         * dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
-         * 
-         * } } };
-         * 
-         * t1.start();
-         */
-
-        // } else {
-
-        // t1 = new Thread() {
-        // public void run() {
-        // dataHWDelayByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
-        // dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
-
-        // }
-        // };
-
-        // t1.start();
-        /// }
-
-        // t1.join();
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
             @Override
@@ -350,7 +275,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 0;
         c02.gridy = 1;
         c02.fill = GridBagConstraints.BOTH;
-        // c02.fill = GridBagConstraints.BOTH;
 
         framePanel.add(scrollPane13, c02);
 
@@ -388,7 +312,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 1;
         c02.gridy = 1;
         c02.fill = GridBagConstraints.BOTH;
-        // c02.fill = GridBagConstraints.BOTH;
 
         framePanel.add(scrollPane14, c02);
 

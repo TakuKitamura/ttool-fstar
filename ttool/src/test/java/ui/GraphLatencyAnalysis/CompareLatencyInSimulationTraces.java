@@ -22,7 +22,7 @@ import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.DirectedGraphTranslator;
 import ui.simulationtraceanalysis.JFrameCompareLatencyDetail;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
-import ui.simulationtraceanalysis.ThreadingClass;
+import ui.simulationtraceanalysis.LatencyAnalysisParallelAlgorithms;
 import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
 public class CompareLatencyInSimulationTraces extends AbstractUITest {
@@ -39,10 +39,10 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
     private Vector<String> checkedTransactionsFile2 = new Vector<String>();
 
-    private static final int t1 = 44;
-    private static final int t2 = 26;
-    private static final int t3 = 40;
-    private static final int t4 = 28;
+    private static final int operator1ID = 44;
+    private static final int operator2ID = 26;
+    private static final int operator3ID = 40;
+    private static final int operator4ID = 28;
     private DirectedGraphTranslator dgraph1, dgraph2;
     private static String task1, task2, task3, task4;
     private JFrameCompareLatencyDetail cld;
@@ -82,7 +82,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         try {
             latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT1, false, true, 1);
-            latencyDetailedAnalysisMain.setTc(new ThreadingClass("Thread-1", latencyDetailedAnalysisMain));
+            latencyDetailedAnalysisMain.setTc(new LatencyAnalysisParallelAlgorithms(latencyDetailedAnalysisMain));
 
             cld = new JFrameCompareLatencyDetail(latencyDetailedAnalysisMain, mainGUI, checkedTransactionsFile1,
                     latencyDetailedAnalysisMain.getMap1(), latencyDetailedAnalysisMain.getCpanels1(), simT1, false,
@@ -147,10 +147,10 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == t1) {
+            if (id == operator1ID) {
                 task1 = taskName;
 
-            } else if (id == t2) {
+            } else if (id == operator2ID) {
                 task2 = taskName;
 
             }
@@ -160,10 +160,10 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == t3) {
+            if (id == operator3ID) {
                 task3 = taskName;
 
-            } else if (id == t4) {
+            } else if (id == operator4ID) {
                 task4 = taskName;
 
             }

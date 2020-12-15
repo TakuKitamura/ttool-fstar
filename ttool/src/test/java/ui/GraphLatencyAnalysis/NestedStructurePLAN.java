@@ -34,8 +34,8 @@ public class NestedStructurePLAN extends AbstractUITest {
     private Vector<SimulationTransaction> transFile1;
     private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
 
-    private static final int t1ID = 69;
-    private static final int t2ID = 53;
+    private static final int operator1ID = 69;
+    private static final int operator2ID = 53;
     private static String task1;
     private static String task2;
 
@@ -165,10 +165,10 @@ public class NestedStructurePLAN extends AbstractUITest {
 
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == t1ID) {
+            if (id == operator1ID) {
                 task1 = taskName;
 
-            } else if (id == t2ID) {
+            } else if (id == operator2ID) {
                 task2 = taskName;
 
             }
