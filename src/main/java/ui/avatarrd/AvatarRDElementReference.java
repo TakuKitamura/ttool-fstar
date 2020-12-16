@@ -56,14 +56,14 @@ import java.awt.*;
  * @version 1.0 23/02/2016
  * @author Ludovic APVRILLE
  */
-public class AvatarRDElementReference extends TGCScalableWithInternalComponent implements TGAutoAdjust {
+public class AvatarRDElementReference extends TGCScalableWithInternalComponent {
     public String oldValue;
 //    protected int textX = 5;
 //    protected int textY = 22;
     protected int lineHeight = 30;
     private double dlineHeight = 0.0;
     //protected int startFontSize = 10;
-    protected Graphics graphics;
+    //protected Graphics graphics;
     //protected int iconSize = 30;
 
 //    private Font myFont, myFontB;
@@ -141,8 +141,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
     }
 
     @Override
-    public void internalDrawing(Graphics g)
-    {
+    public void internalDrawing(Graphics g) {
     	// Rectangle and Filling
     	g.drawRect(x, y, width, height);
 
@@ -257,12 +256,16 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
                     return false;
                 }
 
-
-                int fontSize = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                /*int fontSize;
+                if (graphics != null) {
+                    fontSize = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                } else {
+                    fontSize = 10;
+                }
                 minDesiredWidth = Math.max(fontSize, minWidth);
                 if (minDesiredWidth != width) {
                     newSizeForSon(null);
-                }
+                }*/
                 setValue(s);
 
             }
@@ -302,8 +305,8 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
         String ret =  getValue() + ELEMENT_REFERENCE;
         return ret;
     }
-    @Override
-    public void autoAdjust(int mode) {
+
+    /*public void autoAdjust(int mode) {
         //
 
         if (graphics == null) {
@@ -326,12 +329,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
         int w1 = graphics.getFontMetrics().stringWidth(value);
         int w2 = Math.max(w0, w1) + (2 * iconSize);
         graphics.setFont(f0);
-        /*int w3 = graphics.getFontMetrics().stringWidth("Diagram=\"" + diagramText + "\"") + textX;
-          int w4 = graphics.getFontMetrics().stringWidth("Violated_Action=\"" + violatedAction + "\"") + textX;
-          graphics.setFont(f);
 
-          w2 = Math.max(w2, w3);
-          w2 = Math.max(w2, w4);*/
         if (mode == 1) {
             resize(w2, lineHeight);
             return;
@@ -341,6 +339,6 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
 
         resize(w2, h);
 
-    }
+    }*/
 
 }
