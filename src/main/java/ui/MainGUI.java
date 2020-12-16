@@ -9682,16 +9682,26 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void compareLatencyForXML(SimulationTrace selectedST, boolean b) {
-        
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(1,this,selectedST,b,false,0);        
-      
+
+        try {
+            latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(1, this, selectedST, b, false, 0);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
-    public void latencyDetailedAnalysisForXML(SimulationTrace selectedST, boolean b, boolean compare, int j) throws XPathExpressionException, ParserConfigurationException, SAXException, IOException  {
-        
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(2,this,selectedST,b ,compare,j);
-        
-        
+    public void latencyDetailedAnalysisForXML(SimulationTrace selectedST, boolean b, boolean compare, int j)
+            throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+
+        try {
+            latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(2, this, selectedST, b, compare, j);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
   
