@@ -3,12 +3,12 @@ package ui.simulationtraceanalysis;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Map.Entry;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,7 +20,9 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import common.ConfigurationTTool;
 import myutil.GraphicLib;
+import myutil.PluginManager;
 import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 import ui.MainGUI;
@@ -38,46 +40,54 @@ public class latencyDetailedAnalysisMain {
 
     // public DirectedGraphTranslator dgraph;
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
-    private Vector<String> checkedTransactionsFile2 = new Vector<String>();
-    private Vector<String> checkedTransactionsFile = new Vector<String>();
-    private HashMap<String, Integer> checkedT1 = new HashMap<String, Integer>();
-
-    private HashMap<String, Integer> checkedT2 = new HashMap<String, Integer>();
-    private MainGUI mainGUI_compare2, mainGUI_compare;
+    public Vector<String> checkedTransactionsFile2 = new Vector<String>();
+    public Vector<String> checkedTransactionsFile = new Vector<String>();
+    public MainGUI mainGUI_compare2, mainGUI_compare;
 
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
-    private JFrameCompareLatencyDetail cld;
+    JFrameCompareLatencyDetail cld;
 
-    // private Thread t, t1;
-    private TMLMapping<TGComponent> map1;
+    private Thread t, t1;
+    public TMLMapping<TGComponent> map1;
+    public List<TMLComponentDesignPanel> cpanels1;
 
-    private List<TMLComponentDesignPanel> cpanels1;
-
-    private LatencyAnalysisParallelAlgorithms tc;
-
-    public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
-            throws InterruptedException {
-
-        setTc(new LatencyAnalysisParallelAlgorithms(this));
+    public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j) {
 
         if (callerId == 2) {
 
-            tc.setMainGUI(mainGUI);
-            tc.setSelectedST(selectedST);
-            tc.setB(b);
-            tc.setJ(j);
-            tc.setCompare(compare);
-            tc.start(8);
+            t = new Thread() {
+                public void run() {
+                    try {
+                        latencyDetailedAnalysisForXML(mainGUI, selectedST, b, compare, j);
+                    } catch (XPathExpressionException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (ParserConfigurationException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (SAXException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            t.start();
 
         } else if (callerId == 1) {
 
-            tc.setMainGUI(mainGUI);
-            tc.setSelectedST(selectedST);
-            tc.setB(b);
-            tc.setJ(j);
-            tc.setCompare(compare);
-            tc.start(9);
+            t1 = new Thread() {
+                public void run() {
 
+                    compareLatencyForXML(mainGUI, selectedST, b);
+
+                }
+            };
+
+            t1.start();
         }
 
     }
@@ -137,50 +147,18 @@ public class latencyDetailedAnalysisMain {
 
                     map1 = map;
                     setCpanels1(cpanels);
+                    // dgraph = new DirectedGraphTranslator(latencyDetailedAnalysis,cld,map,
+                    // cpanels,1);
 
                     for (TGComponent tgc1 : map.getTMLModeling().getCheckedComps().keySet()) {
                         String compName = map.getTMLModeling().getCheckedComps().get(tgc1);
-                        // TraceManager.addDev(compName + "__" + tgc1.getDIPLOID());
-                        checkedT1.put(compName + "__" + tgc1.getDIPLOID(), tgc1.getDIPLOID());
-                        // checkedTransactionsFile.add(compName + "__" + tgc1.getDIPLOID());
+                        TraceManager.addDev(compName + "__" + tgc1.getDIPLOID());
 
-                    }
-
-                    for (Entry<String, Integer> cT : checkedT1.entrySet()) {
-
-                        String name = cT.getKey();
-                        int id = cT.getValue();
-
-                        if (!checkedTransactionsFile.contains(name)) {
-                            if (checkedTransactionsFile.size() > 0) {
-
-                                Boolean inserted = false;
-
-                                for (int j = 0; j < checkedTransactionsFile.size(); j++) {
-
-                                    if (id < checkedT1.get(checkedTransactionsFile.get(j)) && !checkedTransactionsFile.contains(name))
-
-                                    {
-                                        checkedTransactionsFile.insertElementAt(name, j);
-
-                                        inserted = true;
-
-                                    }
-
-                                }
-
-                                if (!inserted) {
-                                    checkedTransactionsFile.insertElementAt(name, checkedTransactionsFile.size());
-                                }
-                            } else {
-                                checkedTransactionsFile.add(name);
-                            }
-
-                        }
+                        checkedTransactionsFile.add(compName + "__" + tgc1.getDIPLOID());
 
                     }
                 } else {
-                    latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels, selectedST, tc);
+                    latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels, selectedST);
                     latencyDetailedAnalysis.setIconImage(IconManager.img9);
                     GraphicLib.centerOnParent(latencyDetailedAnalysis, 900, 600);
                     latencyDetailedAnalysis.setVisible(b);
@@ -203,49 +181,14 @@ public class latencyDetailedAnalysisMain {
 
                         for (TGComponent tgc : map.getTMLModeling().getCheckedComps().keySet()) {
                             String compName = map.getTMLModeling().getCheckedComps().get(tgc);
-                            // TraceManager.addDev(compName + "__" + tgc.getDIPLOID());
+                            TraceManager.addDev(compName + "__" + tgc.getDIPLOID());
 
-                            checkedT2.put(compName + "__" + tgc.getDIPLOID(), tgc.getDIPLOID());
-                            // checkedTransactionsFile.add(compName + "__" + tgc1.getDIPLOID());
-
-                        }
-
-                        for (Entry<String, Integer> cT : checkedT2.entrySet()) {
-
-                            String name = cT.getKey();
-                            int id = cT.getValue();
-
-                            if (!checkedTransactionsFile.contains(name)) {
-                                if (checkedTransactionsFile.size() > 0) {
-
-                                    Boolean inserted = false;
-
-                                    for (int j = 0; j < checkedTransactionsFile.size(); j++) {
-
-                                        if (id < checkedT2.get(checkedTransactionsFile.get(j)) && !checkedTransactionsFile.contains(name))
-
-                                        {
-                                            checkedTransactionsFile.insertElementAt(name, j);
-
-                                            inserted = true;
-
-                                        }
-
-                                    }
-
-                                    if (!inserted) {
-                                        checkedTransactionsFile.insertElementAt(name, checkedTransactionsFile.size());
-                                    }
-                                } else {
-                                    checkedTransactionsFile.add(name);
-                                }
-
-                            }
+                            checkedTransactionsFile.add(compName + "__" + tgc.getDIPLOID());
 
                         }
 
                     } else {
-                        latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels, selectedST, tc);
+                        latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels, selectedST);
                         latencyDetailedAnalysis.setIconImage(IconManager.img9);
                         GraphicLib.centerOnParent(latencyDetailedAnalysis, 900, 600);
                         latencyDetailedAnalysis.setVisible(b);
@@ -261,7 +204,7 @@ public class latencyDetailedAnalysisMain {
 
     }
 
-    public void compareLatencyForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b) throws InterruptedException {
+    public void compareLatencyForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b) {
 
         final DirectedGraphTranslator dgraph1, dgraph2;
         try {
@@ -285,7 +228,47 @@ public class latencyDetailedAnalysisMain {
             e1.printStackTrace();
         }
 
-        cld = new JFrameCompareLatencyDetail(this, mainGUI, checkedTransactionsFile1, map1, cpanels1, selectedST, true, tc);
+        cld = new JFrameCompareLatencyDetail(this, mainGUI, checkedTransactionsFile1, map1, cpanels1, selectedST, true);
+
+        /*
+         * if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) { fc = new
+         * JFileChooser(ConfigurationTTool.SystemCCodeDirectory); } else { fc = new
+         * JFileChooser(); }
+         * 
+         * FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files",
+         * "xml"); fc.setFileFilter(filter);
+         * 
+         * int returnVal = fc.showOpenDialog(mainGUI.frame);
+         * 
+         * if (returnVal == JFileChooser.APPROVE_OPTION) { File filefc =
+         * fc.getSelectedFile(); // file2.setText(file.getPath());
+         * 
+         * // Object obj = filefc;
+         * 
+         * checkedTransactionsFile = new Vector<String>(); SimulationTrace file2 = new
+         * SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
+         * 
+         * if (file2 instanceof SimulationTrace) {
+         * 
+         * try { latencyDetailedAnalysisForXML(mainGUI, file2, false, true, 2); } catch
+         * (XPathExpressionException | ParserConfigurationException | SAXException |
+         * IOException e) { // TODO Auto-generated catch block e.printStackTrace(); }
+         * 
+         * while (dgraph.getGraphsize() == 0) {
+         * 
+         * }
+         * 
+         * if (dgraph.getGraphsize() > 0) { dgraph2 = dgraph; checkedTransactionsFile2 =
+         * checkedTransactionsFile; JFrameCompareLatencyDetail cld = new
+         * JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1,
+         * checkedTransactionsFile2, selectedST, file2, true);
+         * 
+         * mainGUI_compare2.closeTurtleModeling();
+         * 
+         * } }
+         * 
+         * }
+         */
 
     }
 
@@ -326,11 +309,46 @@ public class latencyDetailedAnalysisMain {
                 mainGUI_compare = null;
                 mainGUI_compare = new MainGUI(false, false, false, false, false, false, false, false, false, false, true, false, false);
                 mainGUI_compare.build();
+                // mainGUI_compare.dtree = new JDiagramTree(mainGUI_compare);
+                // mainGUI_compare.frame = new JFrame("TTool");
+                // mainGUI_compare.panelForTab = new JPanel();
+                // mainGUI_compare.panelForTab.setLayout(new BorderLayout());
+                // Actions
+                // mainGUI_compare.initActions();
 
+                // mainGUI_compare.actions = new TGUIAction[TGUIAction.NB_ACTION];
+                // for (int i = 0; i < TGUIAction.NB_ACTION; i++) {
+                // mainGUI_compare.actions[i] = new TGUIAction(i);
+                // mainGUI_compare.actions[i].addActionListener(mainGUI_compare);
+                // }
+                // mainGUI_compare.actionsLast = new
+                // TGUIAction[ConfigurationTTool.NB_LAST_OPEN_FILE];
+                // for (int j2 = 0; j2 < mainGUI_compare.actionsLast.length; j2++) {
+                // mainGUI_compare.actionsLast[j2] = new TGUIAction(TGUIAction.ACT_OPEN_LAST,
+                // "Open recent: " + ConfigurationTTool.LastOpenFiles[j]);
+                // mainGUI_compare.actionsLast[j2].addActionListener(mainGUI_compare);
+
+                // }
+                // if (mainGUI_compare.jmenubarturtle != null) {
+                // mainGUI_compare.jmenubarturtle.makeFileMenu(mainGUI_compare);
+                // }
+
+                // mode
+                // mainGUI_compare.setMode(NOT_OPENED);
+                PluginManager.pluginManager = new PluginManager();
+
+                // if (testCall) {
+                // mainGUI_compare.openProjectFromFile(new
+                // File("/home/maysam/eclipse/TTool/ttool/src/test/resources/ui/graphLatencyAnalysis/input/GraphTestModelSecure.xml"));
+
+                // } else {
                 mainGUI_compare.openProjectFromFile(new File(fileName));
+                // }
 
                 mainGUI_compare.frame.setVisible(false);
                 mainGUI_compare2 = mainGUI_compare;
+
+                // checkModelingSyntax(mainGUI_test.tabs.get(1), true);
 
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
@@ -429,7 +447,7 @@ public class latencyDetailedAnalysisMain {
                 TURTLEPanel selectedTab = jdmc.getSelectedTab();
                 if (selectedTab != null) {
 
-                    mainGUI_compare.checkModelingSyntax(selectedTab, true);
+                    mainGUI.checkModelingSyntax(selectedTab, true);
                     if (compare) {
 
                         latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
@@ -468,6 +486,14 @@ public class latencyDetailedAnalysisMain {
         return systemPropResDir;
     }
 
+    public Thread getT() {
+        return t;
+    }
+
+    public Thread getT1() {
+        return t1;
+    }
+
     public List<TMLComponentDesignPanel> getCpanels1() {
         return cpanels1;
     }
@@ -476,23 +502,4 @@ public class latencyDetailedAnalysisMain {
         this.cpanels1 = cpanels1;
     }
 
-    public TMLMapping<TGComponent> getMap1() {
-        return map1;
-    }
-
-    public void setTc(LatencyAnalysisParallelAlgorithms tc) {
-        this.tc = tc;
-    }
-
-    public LatencyAnalysisParallelAlgorithms getTc() {
-        return tc;
-    }
-
-    public HashMap<String, Integer> getCheckedT1() {
-        return checkedT1;
-    }
-
-    public HashMap<String, Integer> getCheckedT2() {
-        return checkedT2;
-    }
 }

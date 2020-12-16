@@ -39,27 +39,41 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
+import tmltranslator.HwLink;
+import tmltranslator.TMLMapping;
+import ui.TGComponent;
+import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
 
 /**
@@ -74,22 +88,28 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
     private String[] columnByTaskNames = new String[5];
     private String[] columnByHWNames = new String[5];
-    private JScrollPane scrollPane11, scrollPane12, scrollPane13, scrollPane14, scrollPane15, scrollPane16;
+    JScrollPane scrollPane11, scrollPane12, scrollPane13, scrollPane14,scrollPane15,scrollPane16;
     public static JTable taskNames, hardwareNames;
     private Object[][] dataDetailedByTask, dataDetailedByTask2;
     private String[] columnNames;
-    // private Thread t, t1;
-
+    
     private JPanel jp02;
-    private LatencyAnalysisParallelAlgorithms tc;
+    public Object[][] getDataDetailedByTask() {
+        return dataDetailedByTask;
+    }
+
+    public Object[][] getDataHWDelayByTask() {
+        return dataHWDelayByTask;
+    }
 
     private Object[][] dataHWDelayByTask, dataHWDelayByTask2;
 
-    public JFrameLatencyComparedDetailedPopup(DirectedGraphTranslator dgraph1, DirectedGraphTranslator dgraph2, int row, int row2, boolean firstTable,
-            LatencyAnalysisParallelAlgorithms tc2) throws InterruptedException {
+    public JFrameLatencyComparedDetailedPopup(DirectedGraphTranslator dgraph1, DirectedGraphTranslator dgraph2, int row, int row2,
+            boolean firstTable) {
 
         super("Detailed Latency By Row");
-        tc = tc2;
+        
+
         GridBagLayout gridbagmain = new GridBagLayout();
 
         GridBagConstraints mainConstraint = new GridBagConstraints();
@@ -97,17 +117,20 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         Container framePanel = getContentPane();
         framePanel.setLayout(gridbagmain);
 
+        
         GridBagLayout gridbag02 = new GridBagLayout();
         GridBagConstraints c02 = new GridBagConstraints();
         // Save
         jp02 = new JPanel(gridbag02);
-
+        
+        
         mainConstraint.gridx = 0;
-        mainConstraint.gridy = 0;
+        mainConstraint.gridy = 0;          
         mainConstraint.fill = GridBagConstraints.HORIZONTAL;
-        // framePanel.setBackground(Color.red);
+        //framePanel.setBackground(Color.red);
         framePanel.add(jp02, mainConstraint);
-
+        
+        
         columnByTaskNames[0] = "Transaction List";
         columnByTaskNames[1] = "Transaction Diagram Name ";
         columnByTaskNames[2] = "Hardware ";
@@ -115,31 +138,20 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         columnByTaskNames[4] = "End Time ";
 
         JPanel jp04 = new JPanel(new BorderLayout());
-
-        tc.setDgraph1(dgraph1);
-        tc.setDgraph2(dgraph2);
-        tc.setRow(row);
-        tc.setRow2(row2);
-
         if (firstTable) {
 
-            tc.start(20);
-            tc.run();
-            // tc.getT().join();
-            dataDetailedByTask = tc.getDataDetailedByTask();
+            dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
 
-            dataDetailedByTask2 = tc.getDataDetailedByTask2();
+            dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
+
         } else {
+            dgraph1.getRowDetailsMinMax(row);
+            dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
 
-            tc.start(21);
-            tc.run();
-            // tc.getT().join();
-            dataDetailedByTask = tc.getDataDetailedByTask();
-
-            dataDetailedByTask2 = tc.getDataDetailedByTask2();
+            dgraph2.getRowDetailsMinMax(row2);
+            dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
 
         }
-
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
             @Override
             public Class getColumnClass(int column) {
@@ -167,7 +179,8 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane11 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane11.setVisible(true);
-
+        
+        
         c02.gridheight = 1;
         c02.weighty = 1.0;
         c02.weightx = 1.0;
@@ -175,10 +188,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 0;
         c02.gridy = 0;
         c02.fill = GridBagConstraints.BOTH;
+        
+       
+        //c02.fill = GridBagConstraints.BOTH;
 
-        // c02.fill = GridBagConstraints.BOTH;
 
-        framePanel.add(scrollPane11, c02);
+        framePanel.add(scrollPane11,c02);
 
         DefaultTableModel model12 = new DefaultTableModel(dataDetailedByTask2, columnByTaskNames) {
             @Override
@@ -200,6 +215,8 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             }
         };
 
+        // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
+
         JTable taskNames12 = new JTable(model12);
         taskNames12.setAutoCreateRowSorter(true);
         scrollPane12 = new JScrollPane(taskNames12, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -213,8 +230,14 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 1;
         c02.gridy = 0;
         c02.fill = GridBagConstraints.BOTH;
+        
+        
+       
+       // c02.fill = GridBagConstraints.BOTH;
 
-        framePanel.add(scrollPane12, c02);
+
+        framePanel.add(scrollPane12,c02);
+       
 
         columnByHWNames[0] = "Task on Same device";
         columnByHWNames[1] = "Transaction Diagram Name ";
@@ -224,21 +247,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
         if (firstTable) {
 
-            tc.start(22);
-            tc.run();
-            // tc.getT().join();
-            dataHWDelayByTask = tc.getDataDetailedByTask();
+            dataHWDelayByTask = dgraph1.getTaskHWByRowDetails(row);
+            dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetails(row2);
 
-            dataHWDelayByTask2 = tc.getDataDetailedByTask2();
         } else {
-
-            tc.start(23);
-            tc.run();
-            // tc.getT().join();
-            dataHWDelayByTask = tc.getDataDetailedByTask();
-
-            dataHWDelayByTask2 = tc.getDataDetailedByTask2();
-
+            dataHWDelayByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
+            dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
         }
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
@@ -267,7 +281,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane13.setVisible(true);
-
+       
         c02.gridheight = 1;
         c02.weighty = 1.0;
         c02.weightx = 1.0;
@@ -275,8 +289,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 0;
         c02.gridy = 1;
         c02.fill = GridBagConstraints.BOTH;
+        //c02.fill = GridBagConstraints.BOTH;
 
-        framePanel.add(scrollPane13, c02);
+
+        framePanel.add(scrollPane13,c02);
 
         DefaultTableModel model3 = new DefaultTableModel(dataHWDelayByTask2, columnByHWNames) {
             @Override
@@ -304,7 +320,8 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane14 = new JScrollPane(hardwareNames2, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane14.setVisible(true);
-
+       
+        
         c02.gridheight = 1;
         c02.weighty = 1.0;
         c02.weightx = 1.0;
@@ -312,24 +329,30 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridx = 1;
         c02.gridy = 1;
         c02.fill = GridBagConstraints.BOTH;
+       // c02.fill = GridBagConstraints.BOTH;
 
-        framePanel.add(scrollPane14, c02);
+
+        framePanel.add(scrollPane14,c02);
+
 
         scrollPane15 = new JScrollPane(LatencyTable(dgraph1, row, firstTable), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane15.setVisible(true);
-
+        
         c02.gridheight = 1;
         c02.weighty = 1.0;
         c02.weightx = 1.0;
         c02.gridwidth = 2;
         c02.gridx = 0;
         c02.gridy = 3;
-        c02.fill = GridBagConstraints.BOTH;
+        c02.fill = GridBagConstraints.BOTH;     
+       
 
-        framePanel.add(scrollPane15, c02);
 
+        framePanel.add(scrollPane15,c02);
+        
+        
         scrollPane16 = new JScrollPane(LatencyTable(dgraph2, row2, firstTable), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
@@ -340,9 +363,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridwidth = 2;
         c02.gridx = 0;
         c02.gridy = 4;
-        c02.fill = GridBagConstraints.BOTH;
+        c02.fill = GridBagConstraints.BOTH;     
+       
 
-        framePanel.add(scrollPane16, c02);
+
+        framePanel.add(scrollPane16,c02);
 
         this.pack();
         this.setVisible(true);
@@ -356,7 +381,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
     }
 
     public JTable LatencyTable(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
-
+        
         List<String> onPathBehavior = new ArrayList<String>();
         List<String> offPathBehavior = new ArrayList<String>();
         List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
@@ -364,24 +389,17 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         int maxTime = -1;
 
         int minTime = Integer.MAX_VALUE;
-        int tmpEnd, tmpStart;
 
         Vector<String> deviceNames1 = new Vector<String>();
 
         if (firstTable) {
 
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
-
-                tmpEnd = Integer.parseInt(st.endTime);
-
-                if (tmpEnd > maxTime) {
-                    maxTime = tmpEnd;
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
                 }
-
-                tmpStart = Integer.parseInt(st.startTime);
-
-                if (tmpStart < minTime) {
-                    minTime = tmpStart;
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
                 }
                 if (!deviceNames1.contains(st.deviceName)) {
                     deviceNames1.add(st.deviceName);
@@ -391,16 +409,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             }
 
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
-
-                tmpEnd = Integer.parseInt(st.endTime);
-
-                if (tmpEnd > maxTime) {
-                    maxTime = tmpEnd;
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
                 }
-                tmpStart = Integer.parseInt(st.startTime);
-
-                if (tmpStart < minTime) {
-                    minTime = tmpStart;
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
                 }
                 if (!deviceNames1.contains(st.deviceName)) {
                     deviceNames1.add(st.deviceName);
@@ -501,17 +514,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             // min/max table row selected
 
             for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
-
-                tmpEnd = Integer.parseInt(st.endTime);
-
-                if (tmpEnd > maxTime) {
-                    maxTime = tmpEnd;
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
                 }
-
-                tmpStart = Integer.parseInt(st.startTime);
-
-                if (tmpStart < minTime) {
-                    minTime = tmpStart;
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
                 }
                 if (!deviceNames1.contains(st.deviceName)) {
                     deviceNames1.add(st.deviceName);
@@ -521,15 +528,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             }
 
             for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
-
-                tmpEnd = Integer.parseInt(st.endTime);
-                if (tmpEnd > maxTime) {
-                    maxTime = tmpEnd;
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
                 }
-                tmpStart = Integer.parseInt(st.startTime);
-
-                if (tmpStart < minTime) {
-                    minTime = tmpStart;
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
                 }
                 if (!deviceNames1.contains(st.deviceName)) {
                     deviceNames1.add(st.deviceName);
@@ -571,7 +574,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
             }
             HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
-
+            
             for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
 
                 for (String dName : deviceNames1) {
@@ -583,7 +586,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
                             ;
-
+                            
                             boolean causeDelay = false;
 
                             if (delayTime.containsKey(st.deviceName)) {
@@ -672,13 +675,4 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         return table;
 
     }
-
-    public Object[][] getDataDetailedByTask() {
-        return dataDetailedByTask;
-    }
-
-    public Object[][] getDataHWDelayByTask() {
-        return dataHWDelayByTask;
-    }
-
 }

@@ -3,6 +3,7 @@ package ui.simulationtraceanalysis;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JTable;
@@ -12,21 +13,21 @@ import javax.swing.table.DefaultTableCellRenderer;
 class TableRenderer extends DefaultTableCellRenderer {
 
     private int row, col;
-    private Color randomColour;
-    private boolean colorCell = true;
+    Color randomColour;
+    boolean colorCell = true;
 
     private Vector<Object> allCommands = new Vector<Object>();
     private Vector<Color> allColors = new Vector<Color>();
-    private List<String> onPathBehaviors = new Vector<String>();
-    private List<String> offPathBehaviors = new Vector<String>();
-    private List<String> offPathBehaviorCausingDelay = new Vector<String>();
+    List<String> onPathBehaviors = new Vector<String>();
+    List<String> offPathBehaviors= new Vector<String>();
+    List<String> offPathBehaviorCausingDelay = new Vector<String>();
 
     public TableRenderer(List<String> onPathBehavior, List<String> offPathBehaviorCausingDelay, List<String> offPathBehavior) {
 
-        this.onPathBehaviors = new Vector<String>();
+        this.onPathBehaviors =  new Vector<String>();
         this.offPathBehaviorCausingDelay = new Vector<String>();
         this.offPathBehaviors = new Vector<String>();
-
+        
         this.onPathBehaviors = onPathBehavior;
         this.offPathBehaviorCausingDelay = offPathBehaviorCausingDelay;
         this.offPathBehaviors = offPathBehavior;
@@ -51,7 +52,7 @@ class TableRenderer extends DefaultTableCellRenderer {
                 randomColour = Color.red;
             } else if (offPathBehaviors.contains(value.toString() + table.getColumnName(column))) {
                 randomColour = Color.orange;
-                // randomColour = Color.red;
+               // randomColour = Color.red;
             }
         } else {
             this.colorCell = false;
