@@ -39,40 +39,25 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
-import tmltranslator.HwLink;
-import tmltranslator.TMLMapping;
-import ui.TGComponent;
-import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
 
 /**
@@ -87,28 +72,22 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
     private String[] columnByTaskNames = new String[5];
     private String[] columnByHWNames = new String[5];
-    JScrollPane scrollPane12, scrollPane13, scrollPane14;
-    public static JTable taskNames, hardwareNames;
+    private JScrollPane scrollPane12, scrollPane13, scrollPane14;
+    private static JTable taskNames, hardwareNames;
     private Object[][] dataDetailedByTask;
     private String[] columnNames;
-    List<String> onPathBehavior = new ArrayList<String>();
-    List<String> offPathBehavior = new ArrayList<String>();
-    List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
-
-    public Object[][] getDataDetailedByTask() {
-        return dataDetailedByTask;
-    }
-
-    public Object[][] getDataHWDelayByTask() {
-        return dataHWDelayByTask;
-    }
+    private List<String> onPathBehavior = new ArrayList<String>();
+    private List<String> offPathBehavior = new ArrayList<String>();
+    private List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
+    // private Thread t, t1;
 
     private Object[][] dataHWDelayByTask;
 
-    public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
+    public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable, Boolean taint,
+            LatencyAnalysisParallelAlgorithms th) throws InterruptedException {
 
-        super("Detailed Latency By Row");
-
+        super("Precise Latency By Row");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         GridLayout myLayout = new GridLayout(3, 1);
 
         this.setLayout(myLayout);
@@ -122,14 +101,39 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         JPanel jp04 = new JPanel(new BorderLayout());
         if (firstTable) {
 
-            dataDetailedByTask = dgraph.getTaskByRowDetails(row);
+            th.setDgraph(dgraph);
+            th.setRow(row);
+            th.start(2);
+            th.run();
+
+            dataDetailedByTask = th.getDataDetailedByTask();
 
         } else {
-            dgraph.getRowDetailsMinMax(row);
+            if (taint) {
 
-            dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
+                th.setDgraph(dgraph);
+                th.setRow(row);
+
+                th.start(3);
+                th.run();
+                // th.getT().join();
+
+                dataDetailedByTask = th.getDataDetailedByTask();
+
+            } else {
+
+                th.setDgraph(dgraph);
+                th.setRow(row);
+
+                th.start(4);
+                th.run();
+
+                dataDetailedByTask = th.getDataDetailedByTask();
+
+            }
 
         }
+
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
             @Override
             public Class getColumnClass(int column) {
@@ -150,8 +154,6 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
             }
         };
 
-        // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
-
         JTable taskNames = new JTable(model);
         taskNames.setAutoCreateRowSorter(true);
         scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -168,10 +170,38 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         if (firstTable) {
 
-            dataHWDelayByTask = dgraph.getTaskHWByRowDetails(row);
+            th.setDgraph(dgraph);
+            th.setRow(row);
+
+            th.start(5);
+            th.run();
+            // th.getT().join();
+
+            dataHWDelayByTask = th.getDataDetailedByTask();
 
         } else {
-            dataHWDelayByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
+
+            if (taint) {
+
+                th.setDgraph(dgraph);
+                th.setRow(row);
+
+                th.start(6);
+                th.run();
+
+                dataHWDelayByTask = th.getDataDetailedByTask();
+
+            } else {
+
+                th.setDgraph(dgraph);
+                th.setRow(row);
+
+                th.start(7);
+                th.run();
+
+                dataHWDelayByTask = th.getDataDetailedByTask();
+
+            }
         }
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
@@ -205,17 +235,24 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         int maxTime = -1;
 
         int minTime = Integer.MAX_VALUE;
+        int tmpEnd, tmpStart, length;
 
         Vector<String> deviceNames1 = new Vector<String>();
 
         if (firstTable) {
 
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
-                if (Integer.parseInt(st.endTime) > maxTime) {
-                    maxTime = Integer.parseInt(st.endTime);
+
+                tmpEnd = Integer.parseInt(st.endTime);
+
+                if (tmpEnd > maxTime) {
+                    maxTime = tmpEnd;
                 }
-                if (Integer.parseInt(st.startTime) < minTime) {
-                    minTime = Integer.parseInt(st.startTime);
+
+                tmpStart = Integer.parseInt(st.startTime);
+
+                if (tmpStart < minTime) {
+                    minTime = tmpStart;
                 }
                 if (!deviceNames1.contains(st.deviceName)) {
                     deviceNames1.add(st.deviceName);
@@ -225,11 +262,17 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
             }
 
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
-                if (Integer.parseInt(st.endTime) > maxTime) {
-                    maxTime = Integer.parseInt(st.endTime);
+
+                tmpEnd = Integer.parseInt(st.endTime);
+
+                if (tmpEnd > maxTime) {
+                    maxTime = tmpEnd;
                 }
-                if (Integer.parseInt(st.startTime) < minTime) {
-                    minTime = Integer.parseInt(st.startTime);
+
+                tmpStart = Integer.parseInt(st.startTime);
+
+                if (tmpStart < minTime) {
+                    minTime = tmpStart;
                 }
                 if (!deviceNames1.contains(st.deviceName)) {
                     deviceNames1.add(st.deviceName);
@@ -256,7 +299,9 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                     if (st.deviceName.equals(dName)) {
 
-                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                        length = Integer.parseInt(st.length);
+
+                        for (int i = 0; i < length; i++) {
 
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
@@ -279,7 +324,9 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                     if (st.deviceName.equals(dName)) {
 
-                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                        length = Integer.parseInt(st.length);
+
+                        for (int i = 0; i < length; i++) {
 
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
@@ -294,10 +341,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                                         ArrayList<ArrayList<Integer>> timeList = entry.getValue();
 
                                         for (int j = 0; j < timeList.size(); j++) {
-                                            
+
                                             if (Integer.valueOf(st.startTime) >= timeList.get(j).get(0)
                                                     && Integer.valueOf(st.startTime) <= timeList.get(j).get(1)) {
-                                               
+
                                                 causeDelay = true;
 
                                             }
@@ -327,34 +374,101 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 ;
             }
         } else {
+
+            Vector<SimulationTransaction> minMaxTasksByRow;
+            List<SimulationTransaction> minMaxHWByRowDetails;
+
             // min/max table row selected
 
-            for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
-                if (Integer.parseInt(st.endTime) > maxTime) {
-                    maxTime = Integer.parseInt(st.endTime);
-                }
-                if (Integer.parseInt(st.startTime) < minTime) {
-                    minTime = Integer.parseInt(st.startTime);
-                }
-                if (!deviceNames1.contains(st.deviceName)) {
-                    deviceNames1.add(st.deviceName);
+            if (taint) {
+
+                minMaxTasksByRow = dgraph.getMinMaxTasksByRowTainted(row);
+                minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetailsTainted(row);
+
+                for (SimulationTransaction st : minMaxTasksByRow) {
+
+                    tmpEnd = Integer.parseInt(st.endTime);
+
+                    if (tmpEnd > maxTime) {
+                        maxTime = tmpEnd;
+                    }
+
+                    tmpStart = Integer.parseInt(st.startTime);
+
+                    if (tmpStart < minTime) {
+                        minTime = tmpStart;
+                    }
+                    if (!deviceNames1.contains(st.deviceName)) {
+                        deviceNames1.add(st.deviceName);
+
+                    }
 
                 }
 
-            }
+                for (SimulationTransaction st : minMaxHWByRowDetails) {
 
-            for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
-                if (Integer.parseInt(st.endTime) > maxTime) {
-                    maxTime = Integer.parseInt(st.endTime);
-                }
-                if (Integer.parseInt(st.startTime) < minTime) {
-                    minTime = Integer.parseInt(st.startTime);
-                }
-                if (!deviceNames1.contains(st.deviceName)) {
-                    deviceNames1.add(st.deviceName);
+                    tmpEnd = Integer.parseInt(st.endTime);
+
+                    if (tmpEnd > maxTime) {
+                        maxTime = tmpEnd;
+                    }
+
+                    tmpStart = Integer.parseInt(st.startTime);
+
+                    if (tmpStart < minTime) {
+                        minTime = tmpStart;
+                    }
+                    if (!deviceNames1.contains(st.deviceName)) {
+                        deviceNames1.add(st.deviceName);
+
+                    }
 
                 }
 
+            } else {
+
+                minMaxTasksByRow = dgraph.getMinMaxTasksByRow(row);
+                minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetails(row);
+
+                for (SimulationTransaction st : minMaxTasksByRow) {
+
+                    tmpEnd = Integer.parseInt(st.endTime);
+
+                    if (tmpEnd > maxTime) {
+                        maxTime = tmpEnd;
+                    }
+
+                    tmpStart = Integer.parseInt(st.startTime);
+
+                    if (tmpStart < minTime) {
+                        minTime = tmpStart;
+                    }
+                    if (!deviceNames1.contains(st.deviceName)) {
+                        deviceNames1.add(st.deviceName);
+
+                    }
+
+                }
+
+                for (SimulationTransaction st : minMaxHWByRowDetails) {
+
+                    tmpEnd = Integer.parseInt(st.endTime);
+
+                    if (tmpEnd > maxTime) {
+                        maxTime = tmpEnd;
+                    }
+
+                    tmpStart = Integer.parseInt(st.startTime);
+
+                    if (tmpStart < minTime) {
+                        minTime = tmpStart;
+                    }
+                    if (!deviceNames1.contains(st.deviceName)) {
+                        deviceNames1.add(st.deviceName);
+
+                    }
+
+                }
             }
 
             int timeInterval = (maxTime - minTime);
@@ -369,13 +483,15 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
 
-            for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
+            for (SimulationTransaction st : minMaxTasksByRow) {
 
                 for (String dName : deviceNames1) {
 
                     if (st.deviceName.equals(dName)) {
 
-                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                        length = Integer.parseInt(st.length);
+
+                        for (int i = 0; i < length; i++) {
 
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
@@ -389,16 +505,18 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 }
 
             }
-            
+
             HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
 
-            for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
+            for (SimulationTransaction st : minMaxHWByRowDetails) {
 
                 for (String dName : deviceNames1) {
 
                     if (st.deviceName.equals(dName)) {
 
-                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                        length = Integer.parseInt(st.length);
+
+                        for (int i = 0; i < length; i++) {
 
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
@@ -465,30 +583,38 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         for (int c = 0; c < ncols; c++) {
             TableColumn tc = tcm.getColumn(c);
             tc.setCellRenderer(tr);
+
         }
 
-        for (int column = 0; column < table.getColumnCount(); column++) {
-            TableColumn tableColumn = table.getColumnModel().getColumn(column);
-            int preferredWidth = 100 + tableColumn.getMinWidth();
-            int maxWidth = tableColumn.getMaxWidth();
+        // set the column width for small tables/ performance issue with big tables
+        if (ncols < 1000) {
 
-            for (int row1 = 0; row1 < table.getRowCount(); row1++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row1, column);
-                Component c = table.prepareRenderer(cellRenderer, row1, column);
-                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
-                preferredWidth = Math.max(preferredWidth, width);
+            for (int c = 0; c < ncols; c++) {
+                TableColumn tc = tcm.getColumn(c);
+                tc.setCellRenderer(tr);
+                tc.setPreferredWidth(100);
 
-                // We've exceeded the maximum width, no need to check other rows
+                TableColumn tableColumn = table.getColumnModel().getColumn(c);
+                int preferredWidth = 100 + tableColumn.getMinWidth();
+                int maxWidth = tableColumn.getMaxWidth();
 
-                if (preferredWidth >= maxWidth) {
-                    preferredWidth = maxWidth;
-                    break;
+                for (int row1 = 0; row1 < table.getRowCount(); row1++) {
+                    TableCellRenderer cellRenderer = table.getCellRenderer(row1, c);
+                    Component c1 = table.prepareRenderer(cellRenderer, row1, c);
+                    int width = c1.getPreferredSize().width + table.getIntercellSpacing().width;
+                    preferredWidth = Math.max(preferredWidth, width);
+
+                    // We've exceeded the maximum width, no need to check other rows
+
+                    if (preferredWidth >= maxWidth) {
+                        preferredWidth = maxWidth;
+                        break;
+                    }
                 }
+
+                tableColumn.setPreferredWidth(preferredWidth);
             }
-
-            tableColumn.setPreferredWidth(preferredWidth);
         }
-
         scrollPane14 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane14.setVisible(true);
@@ -496,6 +622,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         this.pack();
         this.setVisible(true);
+
         // TODO Auto-generated constructor stub
     }
 
@@ -503,6 +630,14 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
     public void tableChanged(TableModelEvent e) {
         // TODO Auto-generated method stub
 
+    }
+
+    public Object[][] getDataDetailedByTask() {
+        return dataDetailedByTask;
+    }
+
+    public Object[][] getDataHWDelayByTask() {
+        return dataHWDelayByTask;
     }
 
 }

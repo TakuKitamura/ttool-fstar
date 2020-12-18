@@ -40,10 +40,6 @@ package ui.simulationtraceanalysis;
 
 import javax.swing.JButton;
 
-import ui.interactivesimulation.InteractiveSimulationActions;
-import ui.interactivesimulation.InteractiveSimulationBar;
-import ui.interactivesimulation.JFrameInteractiveSimulation;
-
 //import java.awt.*;
 //import java.awt.event.*;
 
@@ -57,29 +53,30 @@ import ui.interactivesimulation.JFrameInteractiveSimulation;
  */
 public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
 
-    public SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
-        super(_jflda);
-    }
-
     protected void setActive(boolean b) {
-        jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
-        jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
-        jflda.actions[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
+        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
+        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
+        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
 
     }
 
     protected void setButtons() {
         JButton button;
 
-        button = this.add(jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG]);
+        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG]);
         // button.addMouseListener(jflda.mouseHandler);
 
         this.addSeparator();
 
-        button = this.add(jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
+        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
         this.addSeparator();
 
-        button = this.add(jflda.actions[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
+        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
 
     }
+
+    protected SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
+        super(_jflda);
+    }
+
 } // Class
