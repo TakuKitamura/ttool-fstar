@@ -1446,6 +1446,81 @@ and do the same for the FPGA component.
 \item Finally, in the same method, have a look to the case \texttt{if (node instanceof HwCPU)} and do the same for FPGA. To make the comparison easier, capitalize the name of the FPGA parameters. 
 \end{itemize}   
 
+
+\newpage
+\section{Command-Line Interface}
+
+TTool can be used with a command-line interface in three ways. This command line interface makes it possible to pilot TTool from a terminal. Type "help" to list all possible commands and then "help command" to get the help of a specific command. Some commands be used independently from the graphical interface, i.e. they can be even used without the Graphical interface being started, while some others require the graphical interface to be started. If the graphical interface has been started, you can control the mouse from the CLI or enter keys (or you can also use your keyboard and mouse, as usual).
+\begin{enumerate}
+\item You can interact with TTool from the command line 
+\item You can start an interactive TTool session (without the graphical interface to be started)
+\item You can execute a script written in the TTool scripting language
+\end{enumerate}
+
+The three next subsections are dedicated to points 1 to 3, respectively.
+
+\subsection{Command line Interface in TTool}
+
+First compile TTool as follows:
+
+\begin{lstlisting}
+$ make ttoolnotest
+\end{lstlisting}
+Then edit your TTool starting script and add the "-interact" option to the TTool starting line or script, for instance:
+\begin{lstlisting}
+$ cd bin&&java -Xmx4096m -jar ttool.jar   -launcher -config config.xml
+-experimental  -debug -interact -openlast
+\end{lstlisting}
+
+
+\subsection{Interactive sessions}
+This section explains how to start a TTool shell without starting the TTool main window. You first need to compile the TTool interpreter.
+
+\begin{lstlisting}
+$ make ttool-cli&&make install
+\end{lstlisting}
+Then you can start the TTool shell  as follows:
+\begin{lstlisting}
+$ cd bin
+$ java -Xmx2048m -jar ttool-cli.jar  -show -interact
+\end{lstlisting}
+
+\subsection{Scripting TTool}
+A TTool script expects to contain one valid command per line. Empty lines as well as comments (lines starting with "\#") are also supported. To run a script, you first need to compile the interpreter:
+
+\begin{lstlisting}
+$ make ttool-cli&&make install
+\end{lstlisting}
+Then you can start interpreting a script as follows:
+\begin{lstlisting}
+$ cd bin
+$ java -Xmx2048m -jar ttool-cli.jar  -show mylovelyscript
+\end{lstlisting}
+
+Basic scripts are given in TTool/modeling/scripts. For instance, the following scripts opens a model, starts the AVATAR model-checker on this model and saves the generated reachability graph is a file.
+
+\begin{lstlisting}
+set model ./../modeling/AVATAR/CoffeeMachine_Avatar.xml
+#print The model to be opened is: $model
+action start
+wait 2
+#A comment
+action open $model
+wait 4
+action check-syntax
+action avatar-rg rg?.aut
+action quit
+\end{lstlisting}
+
+
+\subsection{Coding commands in TTool}
+First of all, remember when coding graphical functions that they should be easily accessible from CLI. So, rather think of how to program a CLI tool with a graphical interface rather than adding a command line interface to a graphical interface.
+
+The  \texttt{cli/} package implements the interactive shell, the script interpreter, but also defines general commands. Note that all commands of TGUIAction can be used from the CLI by using their unique \texttt{ActionCommand} String.
+
+\subsection{Testing CLI commands}
+Tests for CLI commands can be found in \texttt{ttool/src/test/java/cli}.
+
 \newpage
 \section{Plugin}
 

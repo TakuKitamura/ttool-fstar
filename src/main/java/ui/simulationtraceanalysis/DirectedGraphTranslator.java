@@ -145,7 +145,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     private HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
-    private final JFrame frame = new JFrame("The Sys-ML Model As Directed Graph");
+    private final JFrame frame = new JFrame("Directed Graph of the Mapping model");
 
     private List<Integer> times1 = new ArrayList<Integer>();
     private List<Integer> times2 = new ArrayList<Integer>();
