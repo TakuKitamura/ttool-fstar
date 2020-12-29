@@ -17,6 +17,7 @@ public class vertex {
     protected static final int TYPE_UNORDER_SEQ = 8;
     protected static final int TYPE_TRANSACTION = 9;
     protected static final int TYPE_CTRL = 10;
+    protected static final int TYPE_SELECT_EVT = 11;
 
     private String name;
     private int id; // identifier

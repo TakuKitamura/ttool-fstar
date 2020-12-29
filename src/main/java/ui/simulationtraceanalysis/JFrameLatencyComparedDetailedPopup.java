@@ -158,6 +158,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
                     return Integer.class;
                 }
             }
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
 
         // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
@@ -181,6 +186,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         framePanel.add(scrollPane11, c02);
 
         DefaultTableModel model12 = new DefaultTableModel(dataDetailedByTask2, columnByTaskNames) {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -242,6 +252,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         }
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+            
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -279,6 +295,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         framePanel.add(scrollPane13, c02);
 
         DefaultTableModel model3 = new DefaultTableModel(dataHWDelayByTask2, columnByHWNames) {
+            
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+            
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -628,7 +650,17 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
         }
 
-        JTable table = new JTable(dataDetailedByTask, columnNames);
+        DefaultTableModel tableModel = new DefaultTableModel(dataDetailedByTask, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+       
+        
+        JTable table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

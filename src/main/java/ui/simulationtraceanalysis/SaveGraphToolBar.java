@@ -56,7 +56,7 @@ public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
     protected void setActive(boolean b) {
         getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
         getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
-        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
+      //  getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
 
     }
 
@@ -71,7 +71,7 @@ public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
         button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
         this.addSeparator();
 
-        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
+      //  button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
 
     }
 

@@ -58,6 +58,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Thread.State;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.Map.Entry;
@@ -84,6 +85,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 //import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -104,13 +106,19 @@ import common.SpecConfigTTool;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
 import myutil.TraceManager;
+import tmltranslator.TMLActivity;
 import tmltranslator.TMLMapping;
+import tmltranslator.TMLTask;
+import ui.CheckableLatency;
 import ui.ColorManager;
 import ui.SimulationTrace;
 import ui.TGComponent;
+import ui.TGTextFieldWithHelp;
 import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.interactivesimulation.SimulationTransactionParser;
+import ui.tmlad.TMLADExecI;
+import ui.tmlad.TMLActivityDiagramPanel;
 
 /**
  * Class JFrameLatencyDetailedAnalysis: this class opens the frame showing the
@@ -129,9 +137,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private JTabbedPane commandTab, resultTab;/* , resultTabDetailed; */
     private JPanel loadxml, commands, jp01, jp02, /* activities, */ graphAnalysisResult, jp03, jp04, jp05, jp06, progressBarpanel, addRules; // ,graphAnalysisResultDetailed;
     private JButton buttonClose, buttonShowDGraph, buttonSaveDGraph, buttonBrowse, latencybutton, buttonCheckPath, addRulebutton, viewRulesbutton,
-            preciseAnalysisbutton;
+            preciseAnalysisbutton, showAllOp;
 
     private Vector<String> checkedTransactions = new Vector<String>();
+    private Vector<String> allTasks = new Vector<String>();
     private HashMap<String, Integer> checkedT = new HashMap<String, Integer>();
 
     private JTextField saveDirName;
@@ -143,6 +152,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private JComboBox<String> tasksDropDownCombo4 = new JComboBox<String>();
 
     private JComboBox<String> tasksDropDownCombo5 = new JComboBox<String>();
+
+    private JComboBox<String> tasksDropDownCombo6 = new JComboBox<String>();
+
+    private JComboBox<String> tasksDropDownCombo7 = new JComboBox<String>();
 
     private Vector<String> readChannelTransactions = new Vector<String>();
     private Vector<String> writeChannelTransactions = new Vector<String>();
@@ -165,23 +178,29 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private JTextField file1;
     private File file;
     private static Vector<SimulationTransaction> transFile1;
-
+    private JLabel task2,taskL;
     private DirectedGraphTranslator dgraph;
 
     private JScrollPane scrollPane11, scrollPane12;// , scrollPane13;
 
     private LatencyAnalysisParallelAlgorithms tc;
+    private Boolean allop = false;
+    private TMLMapping<TGComponent> tmap1;
+
+    public static final String[] helpStrings = { "considerrule.html", "taint.html", "addRule.html" };
 
     // @SuppressWarnings("deprecation")
 
     private JProgressBar pbar;
     private JFrameCompareLatencyDetail jframeCompareLatencyDetail;
     private JCheckBox taintFirstOp, considerRules;
+    protected TGTextFieldWithHelp checkRuleHelp, taintHelp, ruleHelp;
 
     public JFrameLatencyDetailedAnalysis(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels, SimulationTrace selectedST,
             LatencyAnalysisParallelAlgorithms tc1) {
         super("Precise Latency Analysis");
         initActions();
+        tmap1 = tmap;
         fillCheckedTrans(tmap);
         tc = tc1;
 
@@ -221,7 +240,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         jp.add(buttonClose);
 
-        latencybutton.setEnabled(true);
+        latencybutton.setEnabled(false);
         buttonShowDGraph.setEnabled(false);
         preciseAnalysisbutton.setEnabled(false);
 
@@ -324,12 +343,23 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 0;
-        c01.gridy = 1;
+        c01.gridy = 2;
         // c01.fill = GridBagConstraints.BOTH;
 
         JLabel tasksLabel = new JLabel("Study Latency Between ", JLabel.LEFT);
         loadxml.add(tasksLabel, c01);
 
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 0;
+        c01.gridy = 1;
+        // c01.fill = GridBagConstraints.BOTH;
+
+        taskL = new JLabel("Select Task 1 ", JLabel.LEFT);
+        loadxml.add(taskL, c01);
+        
         file1 = new JTextField(40);
         file1.setMinimumSize(new Dimension(300, 30));
         file1.setText(selectedST.getFullPath());
@@ -350,6 +380,15 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.gridwidth = 1;
         c01.gridx = 1;
         c01.gridy = 1;
+        tasksDropDownCombo6 = new JComboBox<String>(checkedTransactions);
+        loadxml.add(tasksDropDownCombo6, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 1;
+        c01.gridy =2;
         tasksDropDownCombo1 = new JComboBox<String>(checkedTransactions);
         loadxml.add(tasksDropDownCombo1, c01);
 
@@ -359,6 +398,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.gridwidth = 1;
         c01.gridx = 2;
         c01.gridy = 1;
+        task2 = new JLabel("And task 2 ", JLabel.LEFT);
+     
+        loadxml.add(task2, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 0.2;
+        c01.gridwidth = 1;
+        c01.gridx = 2;
+        c01.gridy = 2;
         JLabel op2 = new JLabel("And ", JLabel.LEFT);
         loadxml.add(op2, c01);
 
@@ -367,12 +416,37 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 4;
-        c01.gridy = 1;
+        c01.gridy = 2;
 
         tasksDropDownCombo2 = new JComboBox<String>(checkedTransactions);
 
         loadxml.add(tasksDropDownCombo2, c01);
 
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 4;
+        c01.gridy = 1;
+
+        tasksDropDownCombo7 = new JComboBox<String>(checkedTransactions);
+
+        loadxml.add(tasksDropDownCombo7, c01);
+        
+        task2.setVisible(false);
+        taskL.setVisible(false);
+        tasksDropDownCombo6.setVisible(false);
+        tasksDropDownCombo7.setVisible(false);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 5;
+        c01.gridy = 2;
+
+        showAllOp = new JButton(actions[LatencyDetailedAnalysisActions.ACT_SHOW_ALL_OP]);
+        loadxml.add(showAllOp, c01);
         /*
          * c01.gridheight = 1; c01.weighty = 1.0; c01.weightx = 1.0; c01.gridwidth = 1;
          * c01.gridx = 0; c01.gridy = 3;
@@ -386,34 +460,56 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 0;
-        c01.gridy = 3;
+        c01.gridy = 4;
 
         considerRules = new JCheckBox("Consider Rules");
+
         loadxml.add(considerRules, c01);
+        checkRuleHelp = new TGTextFieldWithHelp("", 0);
+        checkRuleHelp.setEditable(false);
+        // loadxml.add(sliceTime, c01);
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 1;
+        c01.gridy = 4;
+        c01.anchor = GridBagConstraints.WEST;
+        checkRuleHelp.makeEndHelpButton(helpStrings[0], tc.getMainGUI(), tc.getMainGUI().getHelpManager(), loadxml, c01);
 
         c01.gridheight = 1;
         c01.weighty = 1.0;
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 1;
-        c01.gridy = 3;
+        c01.gridy = 4;
+        c01.anchor = GridBagConstraints.EAST;
 
         taintFirstOp = new JCheckBox("Taint First Operator ");
         loadxml.add(taintFirstOp, c01);
+
+        taintHelp = new TGTextFieldWithHelp("", 0);
+        taintHelp.setEditable(false);
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 2;
+        c01.gridy = 4;
+        c01.anchor = GridBagConstraints.WEST;
+        taintHelp.makeEndHelpButton(helpStrings[1], tc.getMainGUI(), tc.getMainGUI().getHelpManager(), loadxml, c01);
 
         c01.gridheight = 1;
         c01.weighty = 1.0;
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 3;
-        c01.gridy = 3;
+        c01.gridy = 4;
 
         GridBagLayout gridbag05 = new GridBagLayout();
         GridBagConstraints c05 = new GridBagConstraints();
         // Save
         jp06 = new JPanel(gridbag05);
-
-        commandTab.addTab("Add Rules", null, jp06, "Add Rules");
 
         JLabel tasksRules = new JLabel("ADD Rule :  ", JLabel.LEFT);
 
@@ -475,10 +571,26 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 4;
-        c01.gridy = 1;
+        c01.gridy = 2;
 
         jp06.add(viewRulesbutton, c01);
 
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 0;
+        c01.gridy = 0;
+
+        ruleHelp = new TGTextFieldWithHelp("", 0);
+        ruleHelp.setEditable(false);
+
+        c01.anchor = GridBagConstraints.EAST;
+        ruleHelp.makeEndHelpButton(helpStrings[2], tc.getMainGUI(), tc.getMainGUI().getHelpManager(), jp06, c01);
+
+        JScrollPane scrollPane = new JScrollPane(jp06);
+
+        commandTab.addTab("Add Rules", null, scrollPane, "Add Rules");
         GridBagLayout gridbag04 = new GridBagLayout();
         GridBagConstraints c04 = new GridBagConstraints();
         // Save
@@ -528,7 +640,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c04.weighty = 1.0;
         c04.weightx = 1.0;
         c04.gridx = 0;
-        c04.gridy = 1;
+        c04.gridy = 2;
         c04.gridwidth = GridBagConstraints.REMAINDER; // end row
         c04.fill = GridBagConstraints.HORIZONTAL;
         c04.gridheight = 1;
@@ -551,8 +663,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         dataDetailedByTask = new Object[0][0];
 
         jp03 = new JPanel(new BorderLayout());
+        DefaultTableModel tableModel = new DefaultTableModel(dataDetailedByTask, columnNames) {
 
-        table11 = new JTable(dataDetailedByTask, columnNames);
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table11 = new JTable(tableModel);
+
         scrollPane11 = new JScrollPane(table11, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane11.setVisible(true);
         jp03.add(scrollPane11, BorderLayout.CENTER);
@@ -566,7 +686,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         dataDetailedMinMax = new Object[0][0];
 
         jp04 = new JPanel(new BorderLayout());
-        table12 = new JTable(dataDetailedMinMax, columnMinMaxNames);
+
+        DefaultTableModel tableModel2 = new DefaultTableModel(dataDetailedMinMax, columnMinMaxNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table12 = new JTable(tableModel2);
         scrollPane12 = new JScrollPane(table12, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane12.setVisible(true);
         jp04.add(scrollPane12, BorderLayout.CENTER);
@@ -645,12 +774,17 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             tasksDropDownCombo3.setModel(aModel);
             tasksDropDownCombo4.setModel(aModel1);
 
+            if (pbar.getValue() == pbar.getMaximum()) {
+                updateBar(0);
+
+            }
+            latencybutton.setEnabled(true);
             this.pack();
             this.revalidate();
             this.repaint();
 
         } catch (Exception e) {
-            jta.append("An Error has Accord \n");
+            jta.append("An error has occurred \n");
             jta.append(e.getMessage() + "\n");
             // buttonSaveDGraph.setEnabled(false);
             buttonShowDGraph.setEnabled(false);
@@ -668,7 +802,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
     @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
@@ -697,10 +831,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 }
 
             } catch (ExportException e) {
-                jta.append("An Error has Accord \n");
+                jta.append("An error has occurred \n");
                 jta.append(e.getMessage() + "\n");
             } catch (IOException e) {
-                jta.append("An Error has Accord \n");
+                jta.append("An error has occurred \n");
                 jta.append(e.getMessage() + "\n");
             }
 
@@ -728,10 +862,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 }
 
             } catch (ExportException e) {
-                jta.append("An Error has Accord \n");
+                jta.append("An error has occurred \n");
                 jta.append(e.getMessage() + "\n");
             } catch (IOException e) {
-                jta.append("An Error has Accord \n");
+                jta.append("An error has occurred \n");
                 jta.append(e.getMessage() + "\n");
             }
 
@@ -748,6 +882,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY].getActionCommand())) {
             jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
                     + " is studied \n");
+            latencybutton.setEnabled(false);
+
+            this.pack();
+            this.revalidate();
+            this.repaint();
 
             if (taintFirstOp.isSelected()) {
                 jta.append("operator 1 is tainted \n ");
@@ -840,15 +979,193 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             new JFrameListOfRules(dgraph);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY_PRECISE_ANALYSIS].getActionCommand())) {
 
-            int row1 = table11.getSelectedRow();
-            tc.setjFrameLDA(this);
-            tc.setRow(row1);
-            tc.start(11);
-            tc.run();
-            // tc.getT().join();
+            int row1 = 0;
+            String noLatValue = null;
+            int selectedIndex = resultTab.getSelectedIndex();
+            if (selectedIndex == 0) {
+                row1 = table11.getSelectedRow();
+                if (row1 > -1) {
+                    noLatValue = table11.getValueAt(row1, 4).toString();
+                } else {
+                    jta.append("Please select a row before precise analysis" + " \n");
+
+                }
+
+            } else if (selectedIndex == 1) {
+                row1 = table12.getSelectedRow();
+                if (row1 > -1) {
+
+                    noLatValue = table12.getValueAt(row1, 4).toString();
+                } else {
+                    jta.append("Please select a row before precise analysis" + " \n");
+
+                }
+
+            }
+
+            if (noLatValue.startsWith("Assumption Does Not Hold;")) {
+                jta.append("Can not run latency when the one-to-one assumption does not hold" + " \n");
+
+            } else {
+                tc.setjFrameLDA(this);
+                tc.setRow(row1);
+                tc.start(11);
+                tc.run();
+                // tc.getT().join();
+            }
+        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SHOW_ALL_OP].getActionCommand())) {
+
+            if (!allop) {
+
+                
+                for (TMLTask tmltask : tmap1.getTMLModeling().getTasks()) {
+                    
+                    allTasks.add(tmltask.getName());
+
+          }
+
+              
+                ComboBoxModel<String> taskModel = new DefaultComboBoxModel<String>(allTasks);
+              
+                tasksDropDownCombo6.setModel(taskModel);
+                tasksDropDownCombo6.addActionListener( actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP] );
+                ComboBoxModel<String> taskModel2 = new DefaultComboBoxModel<String>(allTasks);
+                tasksDropDownCombo7.setModel(taskModel2);
+              
+                ComboBoxModel<String> aModel1 = new DefaultComboBoxModel<String>(checkedTransactions);
+
+               
+                tasksDropDownCombo2.setModel(aModel1);
+
+                allop = true;
+                showAllOp.setLabel("Show checkpoints operators");
+                jta.append("show latency checkpoints operators" + " \n");
+
+                task2.setVisible(true);
+                taskL.setVisible(true);
+                tasksDropDownCombo6.setVisible(true);
+                tasksDropDownCombo7.setVisible(true);
+                this.pack();
+                this.revalidate();
+                this.repaint();
+
+            } else {
+                checkedTransactions = new Vector<String>();
+                checkedT = new HashMap<String, Integer>();
+                fillCheckedTrans(tmap1);
+                ComboBoxModel<String> aModel = new DefaultComboBoxModel<String>(checkedTransactions);
+                ComboBoxModel<String> aModel1 = new DefaultComboBoxModel<String>(checkedTransactions);
+
+                tasksDropDownCombo1.setModel(aModel);
+
+                tasksDropDownCombo2.setModel(aModel1);
+                task2.setVisible(false);
+                taskL.setVisible(false);
+                tasksDropDownCombo6.setVisible(false);
+                tasksDropDownCombo7.setVisible(false);
+
+                this.pack();
+                this.revalidate();
+                this.repaint();
+
+                allop = false;
+                showAllOp.setLabel("Show all operators");
+                jta.append("show latency all operators" + " \n");
+
+            }
+
+        }else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP].getActionCommand())) {
+            
+            for (TMLTask tmltask : tmap1.getTMLModeling().getTasks()) {
+                
+                TMLActivity activity;
+                checkedTransactions = new Vector<String>();
+                allTasks = new Vector<String>();
+                checkedT = new HashMap<String, Integer>();
+             
+                int opCount = 0;
+                
+                if (tmltask.equals(tasksDropDownCombo6.getSelectedItem()))
+                {
+                    activity = tmltask.getActivityDiagram();
+
+                    activity = tmltask.getActivityDiagram();
+                    TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
+                    List<TGComponent> list = tadp.getComponentList();
+                    Iterator<TGComponent> iterator = list.listIterator();
+                    TGComponent tgc;
+                    opCount = 0;
+
+                    iterator = list.listIterator();
+                    while (iterator.hasNext()) {
+                        tgc = iterator.next();
+                        String compName = "";
+                        if (tgc.isEnabled()) {
+                            if (tgc instanceof CheckableLatency) {
+
+                                compName = tmltask.getName() + ":" + tgc.getName();
+                                compName = compName.replaceAll(" ", "");
+
+                                if (tgc.getValue().contains("(")) {
+                                    compName = compName + ":" + tgc.getValue().split("\\(")[0];
+                                } else {
+                                    if (tgc instanceof TMLADExecI) {
+                                        compName = ((TMLADExecI) tgc).getDelayValue();
+                                    }
+                                }
+                                checkedT.put(compName + "__" + tgc.getDIPLOID(), tgc.getDIPLOID());
+
+                            }
+                        }
+
+                    }
+                    
+                }
+           
+                
+           
+            }
+            for (Entry<String, Integer> cT : checkedT.entrySet()) {
+
+                String name = cT.getKey();
+                int id = cT.getValue();
+
+                if (!checkedTransactions.contains(name)) {
+                    if (checkedTransactions.size() > 0) {
+                        Boolean inserted = false;
+
+                        for (int j = 0; j < checkedTransactions.size(); j++) {
+
+                            if (id < checkedT.get(checkedTransactions.get(j)) && !checkedTransactions.contains(name))
+
+                            {
+                                checkedTransactions.insertElementAt(name, j);
+                                inserted = true;
+
+                            }
+
+                        }
+
+                        if (!inserted) {
+                            checkedTransactions.insertElementAt(name, checkedTransactions.size());
+                        }
+                    } else {
+                        checkedTransactions.add(name);
+
+                    }
+
+                }
+
+            }
+            
+            ComboBoxModel<String> aModel = new DefaultComboBoxModel<String>(checkedTransactions);
+            tasksDropDownCombo1.setModel(aModel);
+
 
         }
 
+        
+        
     }
 
     protected void preciselatencyAnalysis(int row1) throws InterruptedException {
@@ -862,10 +1179,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             row = table11.getSelectedRow();
 
             if (row >= 0) {
+
                 try {
-                    new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc);
+                    new JFrameLatencyDetailedPopup(dgraph, row, true, taint, tc);
                 } catch (Exception e) {
-                    jta.append("An Error has Accord \n");
+                    jta.append("An error has occurred \n");
                     jta.append(e.getMessage() + "\n");
                 }
             } else {
@@ -878,7 +1196,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 try {
                     new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc);
                 } catch (Exception e) {
-                    jta.append("An Error has Accord \n");
+                    jta.append("An error has occurred \n");
                     jta.append(e.getMessage() + "\n");
                 }
             } else {
@@ -912,6 +1230,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     protected void latencyDetailedAnalysis() {
         try {
+            preciseAnalysisbutton.setEnabled(false);
             String task1 = tasksDropDownCombo1.getSelectedItem().toString();
             String task2 = tasksDropDownCombo2.getSelectedItem().toString();
 
@@ -923,11 +1242,23 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
             table11.removeAll();
 
-            table11 = new JTable(tableData, columnNames);
+            DefaultTableModel tableModel = new DefaultTableModel(tableData, columnNames) {
+
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            table11 = new JTable(tableModel);
 
             table11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-            preciseAnalysisbutton.setEnabled(true);
+            table11.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                public void valueChanged(ListSelectionEvent e) {
+                    preciseAnalysisbutton.setEnabled(true);
+                }
+            });
 
             Object[][] tableData2 = null;
 
@@ -937,18 +1268,46 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
                 table12.removeAll();
 
-                table12 = new JTable(tableData2, columnMinMaxNames);
+                DefaultTableModel tableModel2 = new DefaultTableModel(tableData2, columnMinMaxNames) {
+
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+
+                table12 = new JTable(tableModel2);
 
                 table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                table12.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                    public void valueChanged(ListSelectionEvent e) {
+                        preciseAnalysisbutton.setEnabled(true);
+                    }
+                });
 
             } else {
                 tableData2 = dgraph.latencyMinMaxAnalysis(task1, task2, transFile1);
 
                 table12.removeAll();
 
-                table12 = new JTable(tableData2, columnMinMaxNames);
+                DefaultTableModel tableModel2 = new DefaultTableModel(tableData2, columnMinMaxNames) {
+
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+
+                table12 = new JTable(tableModel2);
+
+                // table12 = new JTable(tableData2, columnMinMaxNames);
 
                 table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                table12.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                    public void valueChanged(ListSelectionEvent e) {
+                        preciseAnalysisbutton.setEnabled(true);
+                    }
+                });
 
             }
 
@@ -969,13 +1328,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             scrollPane11.repaint();
 
             // scrollPane11.setVisible(true);
+            jta.append("Latency has been computed...Please refer to the tables in the Latency Analysis section for the results \n");
 
+            latencybutton.setEnabled(true);
             this.pack();
             this.setVisible(true);
 
         } catch (Exception e) {
-            jta.append("An Error has Accord \n");
+            jta.append("An error has occurred \n");
             jta.append(e.getMessage() + "\n");
+            latencybutton.setEnabled(true);
         }
 
     }
@@ -991,7 +1353,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             jta.append("Refer to the generatd dialog to view the graph.\n");
 
         } catch (Exception e) {
-            jta.append("An Error has Accord \n");
+            jta.append("An error has occurred \n");
             jta.append(e.getMessage() + "\n");
         }
 

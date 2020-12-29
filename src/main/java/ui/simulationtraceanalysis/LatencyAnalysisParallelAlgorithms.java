@@ -33,6 +33,8 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private latencyDetailedAnalysisMain main;
 
     private MainGUI mainGUI;
+    
+
     private SimulationTrace selectedST;
     private boolean b;
     private boolean compare;
@@ -266,5 +268,8 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         row4 = row44;
         selectedIndex = selectedIndex1;
 
+    }
+    public MainGUI getMainGUI() {
+        return mainGUI;
     }
 }

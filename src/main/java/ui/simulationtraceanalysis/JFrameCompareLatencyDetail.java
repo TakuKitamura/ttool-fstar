@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -45,6 +46,7 @@ import org.xml.sax.SAXException;
 import common.ConfigurationTTool;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
+import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 import ui.ColorManager;
 import ui.MainGUI;
@@ -317,7 +319,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         framePanel.add(progressBarpanel, mainConstraint);
 
         graphAnalysisResult = new JPanel(new BorderLayout());
-        graphAnalysisResult.setBorder(new javax.swing.border.TitledBorder("Latency Detailed Analysis "));
+        graphAnalysisResult.setBorder(new javax.swing.border.TitledBorder("Latency Analysis "));
         mainConstraint.gridheight = 1;
         // .weighty =0.5;
         // mainConstraint.weightx = 0.5;
@@ -346,7 +348,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         jp03 = new JPanel(new BorderLayout());
         jp03.setLayout(gridbag01);
 
-        table11 = new JTable(dataDetailedByTask, columnNames);
+        DefaultTableModel tableModel1 = new DefaultTableModel(dataDetailedByTask, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table11 = new JTable(tableModel1);
         // table11.setBackground(Color.red);
         scrollPane11 = new JScrollPane(table11, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         // scrollPane11.setBackground(Color.red);
@@ -362,7 +372,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         jp03.add(scrollPane11, c01);
 
-        table12 = new JTable(dataDetailedByTask, columnNames);
+        DefaultTableModel tableModel2 = new DefaultTableModel(dataDetailedByTask, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table12 = new JTable(tableModel2);
         // table12.setBackground(Color.blue);
         scrollPane12 = new JScrollPane(table12, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         // scrollPane11.setBackground(Color.blue);
@@ -390,7 +408,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         dataDetailedMinMax = new Object[0][0];
 
-        table21 = new JTable(dataDetailedMinMax, columnMinMaxNames);
+        DefaultTableModel tableModel3 = new DefaultTableModel(dataDetailedMinMax, columnMinMaxNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table21 = new JTable(tableModel3);
         scrollPane21 = new JScrollPane(table21, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane21.setVisible(b);
         c01.gridheight = 1;
@@ -403,7 +429,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         jp04.add(scrollPane21, c01);
 
-        table22 = new JTable(dataDetailedMinMax, columnMinMaxNames);
+        DefaultTableModel tableModel4 = new DefaultTableModel(dataDetailedMinMax, columnMinMaxNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table22 = new JTable(tableModel4);
         // table12.setBackground(Color.blue);
         scrollPane22 = new JScrollPane(table22, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
@@ -420,7 +454,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         jp04.add(scrollPane22, c01);
 
         resultTab = GraphicLib.createTabbedPaneRegular();// new JTabbedPane();
-        resultTab.addTab("Latency detailed By Tasks", null, jp03, "Latency detailed By Tasks ");
+        resultTab.addTab("Latency Values", null, jp03, "Latency detailed By Tasks ");
         resultTab.addTab("Min/Max Latency", null, jp04, "Min and Max Latency");
 
         graphAnalysisResult.add(resultTab, BorderLayout.CENTER);
@@ -485,11 +519,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             }
 
             buttonShowDGraph1.setEnabled(true);
+            if (pbar.getValue()==pbar.getMaximum()) {
+                updateBar(0);
+                
+            }
             jta.append("Browse the second simulation trace to generate the second graph \n");
             browse.setEnabled(true);
 
         } catch (Exception e) {
-            jta.append("An Error has Accord \n");
+            jta.append("An error has occurred \n");
             jta.append(e.getMessage() + "\n");
             // buttonSaveDGraph.setEnabled(false);
             buttonShowDGraph1.setEnabled(false);
@@ -540,7 +578,10 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             buttonShowDGraph2.setEnabled(true);
             buttonDetailedAnalysis.setEnabled(true);
             buttonCompareInDetails.setEnabled(true);
-
+            if (pbar.getValue()==pbar.getMaximum()) {
+              updateBar(0);
+                
+            }
             this.pack();
             this.revalidate();
             this.repaint();
@@ -548,7 +589,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
 
         } catch (Exception e) {
-            jta.append("An Error has Accord \n");
+            jta.append("An error has occurred \n");
             jta.append(e.getMessage() + "\n");
             // buttonSaveDGraph.setEnabled(false);
             buttonShowDGraph2.setEnabled(false);
@@ -579,59 +620,64 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             dispose();
             setVisible(false);
         } else if (evt.getSource() == browse) {
+            try {
+                pBarLabel.setText("Progress of Graph 2 Generation");
 
-            pBarLabel.setText("Progress of Graph 2 Generation");
-
-            updateBar(0);
-            if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
-                fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
-            } else {
-                fc = new JFileChooser();
-            }
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
-            fc.setFileFilter(filter);
-            int returnVal = fc.showOpenDialog(mainGUI.frame);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File filefc = fc.getSelectedFile();
-
-                latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
-                SimulationTrace STfile2 = new SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
-                secondFile.setText(filefc.getAbsolutePath());
-
-                if (STfile2 instanceof SimulationTrace) {
-
-                    file2 = new File(STfile2.getFullPath());
-
-                    try {
-                        latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, STfile2, false, true, 2);
-                    } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                    checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
-                    map = latencyDetailedAnalysisMain.getMap1();
-                    cpanels = latencyDetailedAnalysisMain.getCpanels1();
-
-                    this.toFront();
-                    this.requestFocus();
-
-                    this.pack();
-                    this.revalidate();
-                    this.repaint();
-
-                    tc.setCld(this);
-                    tc.setMap(map);
-                    // tc.setCld(jFrameCompareLatencyDetail);
-                    tc.setjFrameLDA(jFrameLatencyDetailedAnalysis);
-
-                    tc.start(15);
-                    tc.run();
-
+                updateBar(0);
+                if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
+                    fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
+                } else {
+                    fc = new JFileChooser();
                 }
 
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
+                fc.setFileFilter(filter);
+                int returnVal = fc.showOpenDialog(mainGUI.frame);
+
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File filefc = fc.getSelectedFile();
+
+                    latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
+                    SimulationTrace STfile2 = new SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
+                    secondFile.setText(filefc.getAbsolutePath());
+
+                    if (STfile2 instanceof SimulationTrace) {
+
+                        file2 = new File(STfile2.getFullPath());
+
+                        try {
+                            latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, STfile2, false, true, 2);
+                        } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
+                        map = latencyDetailedAnalysisMain.getMap1();
+                        cpanels = latencyDetailedAnalysisMain.getCpanels1();
+
+                        this.toFront();
+                        this.requestFocus();
+
+                        this.pack();
+                        this.revalidate();
+                        this.repaint();
+
+                        tc.setCld(this);
+                        tc.setMap(map);
+                        // tc.setCld(jFrameCompareLatencyDetail);
+                        tc.setjFrameLDA(jFrameLatencyDetailedAnalysis);
+
+                        tc.start(15);
+                        tc.run();
+
+                    }
+
+                }
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                // e1.printStackTrace();
+                TraceManager.addDev("Error: " + e1.getMessage());
             }
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY].getActionCommand())) {
             jta.append("Simulation Trace 1 : the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n"
@@ -687,7 +733,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             // jta.append("Refer to the generatd dialog to view the graph.\n");
 
         } catch (Exception e) {
-            // jta.append("An Error has Accord \n");
+            // jta.append("An Error has occurred \n");
             // jta.append(e.getMessage() + "\n");
         }
 
@@ -724,7 +770,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         table11.removeAll();
 
-        table11 = new JTable(tableData, columnNames);
+        DefaultTableModel tableModel1 = new DefaultTableModel(tableData, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table11 = new JTable(tableModel1);
 
         table11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -734,7 +788,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         table12.removeAll();
 
-        table12 = new JTable(tableData2, columnNames);
+        DefaultTableModel tableModel2 = new DefaultTableModel(tableData2, columnNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table12 = new JTable(tableModel2);
 
         table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -744,7 +806,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         table21.removeAll();
 
-        table21 = new JTable(tableData1MinMax, columnMinMaxNames);
+        DefaultTableModel tableModel3 = new DefaultTableModel(tableData1MinMax, columnMinMaxNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table21 = new JTable(tableModel3);
 
         table21.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -754,7 +824,15 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         table22.removeAll();
 
-        table22 = new JTable(tableData2MinMax, columnMinMaxNames);
+        DefaultTableModel tableModel4 = new DefaultTableModel(tableData2MinMax, columnMinMaxNames) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table22 = new JTable(tableModel4);
 
         table22.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -789,6 +867,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         scrollPane11.repaint();
 
         // scrollPane11.setVisible(true);
+        jta.append("Latency has been computed...Please refer to the tables in the Latency Analysis section for the results \n");
 
         this.pack();
         this.setVisible(b);

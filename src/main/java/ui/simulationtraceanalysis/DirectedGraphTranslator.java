@@ -40,6 +40,9 @@ package ui.simulationtraceanalysis;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphComponent;
+
+import avatartranslator.AvatarStateMachineElement;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
@@ -55,6 +58,8 @@ import ui.TGComponent;
 import ui.TGConnectingPoint;
 import ui.TGConnector;
 import ui.TMLComponentDesignPanel;
+import ui.ad.TADComponentWithSubcomponents;
+import ui.ad.TADComponentWithoutSubcomponents;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmlad.*;
 import ui.tmlcompd.TMLCPrimitivePort;
@@ -78,8 +83,6 @@ import java.util.Map.Entry;
  * @author Maysam Zoor
  */
 public class DirectedGraphTranslator extends JApplet {
-
-  
 
     private TMLTask taskAc, task1, task2;
 
@@ -145,7 +148,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     private HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
-    private final JFrame frame = new JFrame("Directed Graph of the Mapping model");
+    private final JFrame frame = new JFrame("The Sys-ML Model As Directed Graph");
 
     private List<Integer> times1 = new ArrayList<Integer>();
     private List<Integer> times2 = new ArrayList<Integer>();
@@ -305,7 +308,7 @@ public class DirectedGraphTranslator extends JApplet {
             if (!g.vertexSet().contains(getvertex(ch.getName()))) {
                 vertex v2 = vertex(ch.getName(), ch.getID());
                 g.addVertex(v2);
-
+                updatemainBar("v");
                 // gVertecies.add(vertex(ch.getName()));
                 getvertex(ch.getName()).setType(vertex.TYPE_CHANNEL);
                 getvertex(ch.getName()).setTaintFixedNumber(0);
@@ -375,6 +378,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.containsVertex(getvertex(ChannelName))) {
                     g.addVertex(v);
+                    updatemainBar("v");
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
                     getvertex(ChannelName).setTaintFixedNumber(0);
@@ -403,6 +407,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.containsVertex(getvertex(ChannelName))) {
                     g.addVertex(v);
+                    updatemainBar("v");
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
 
@@ -433,7 +438,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.containsVertex(v)) {
                     g.addVertex(v);
-
+                    updatemainBar("v");
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
                     getvertex(ChannelName).setTaintFixedNumber(0);
@@ -950,6 +955,7 @@ public class DirectedGraphTranslator extends JApplet {
                         int id = ((TMLReadChannel) (currentElement)).getChannel(0).getID();
                         if (!g.containsVertex(getvertex(name))) {
                             g.addVertex(vertex(name, id));
+                            updatemainBar("v");
 
                         }
 
@@ -984,6 +990,7 @@ public class DirectedGraphTranslator extends JApplet {
                         vertex v = getvertex(vName);
                         if (!g.containsVertex(v)) {
                             g.addVertex(vertex(vName, vid));
+                            updatemainBar("v");
 
                         }
 
@@ -1013,7 +1020,7 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (currentElement.getName().equals("stopOfFork") || currentElement.getName().equals("stop2OfFork")
                             || currentElement.getName().equals("stopOfJoin")) {
                         opCount++;
-
+                        // currentElement = currentElement.getNexts().firstElement();
                         continue;
                     } else if (taskName.startsWith("JOINTASK_S_") && currentElement.getName().startsWith("ReadOfJoin")) {
 
@@ -1022,6 +1029,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (!g.containsVertex(getvertex(vName))) {
                             g.addVertex(vertex(vName, vid));
+                            updatemainBar("v");
 
                         }
 
@@ -1054,6 +1062,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (!g.containsVertex(getvertex(vName))) {
                             g.addVertex(vertex(vName, vid));
+                            updatemainBar("v");
 
                         }
 
@@ -1082,8 +1091,6 @@ public class DirectedGraphTranslator extends JApplet {
 
                     }
 
-                    updatemainBar(eventName);
-
                     if (currentElement.getNexts().size() > 1) {
                         for (TMLActivityElement ae : currentElement.getNexts()) {
                             multiNexts.add(ae);
@@ -1105,7 +1112,7 @@ public class DirectedGraphTranslator extends JApplet {
                     }
 
                     // start activity is added as a vertex
-                    if (currentElement.getReferenceObject() instanceof TMLADStartState) {
+                    else if (currentElement.getReferenceObject() instanceof TMLADStartState) {
 
                         addStartVertex(taskName);
 
@@ -1114,37 +1121,11 @@ public class DirectedGraphTranslator extends JApplet {
                     // the below activities are added as vertex with the required edges
                     // these activities can be used to check later for latency
 
-                    else if (currentElement.getReferenceObject() instanceof TMLADSendEvent
-                            || currentElement.getReferenceObject() instanceof TMLADWaitEvent
-                            || currentElement.getReferenceObject() instanceof TMLADForLoop
-                            || currentElement.getReferenceObject() instanceof TMLADForStaticLoop
-                            || currentElement.getReferenceObject() instanceof TMLADChoice
-                            || currentElement.getReferenceObject() instanceof TMLADForEverLoop
-                            || (currentElement.getReferenceObject() instanceof TMLADExecI && !currentElement.getValue().equals("0"))
-                            || (currentElement.getReferenceObject() instanceof TMLADExecC && !currentElement.getValue().equals("0"))
-                            || (currentElement.getReferenceObject() instanceof TMLADDelay
-                                    && !((TMLADDelay) currentElement.getReferenceObject()).getDelayValue().equals("0"))
-                            || currentElement.getReferenceObject() instanceof TMLADSendRequest
-                            || currentElement.getReferenceObject() instanceof TMLADReadRequestArg
-                            || currentElement.getReferenceObject() instanceof TMLADActionState
-                            || (currentElement.getReferenceObject() instanceof TMLADDelayInterval
-                                    && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                                    && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                            || (currentElement.getReferenceObject() instanceof TMLADExecCInterval
-                                    && !((TMLADExecCInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                                    && !((TMLADExecCInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                            || (currentElement.getReferenceObject() instanceof TMLADExecIInterval
-                                    && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                                    && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                            || currentElement.getReferenceObject() instanceof TMLADNotifiedEvent
-                            || currentElement.getReferenceObject() instanceof TMLADRandom
-                            || currentElement.getReferenceObject() instanceof TMLADReadChannel
-                            || currentElement.getReferenceObject() instanceof TMLADWriteChannel
-                            || currentElement.getReferenceObject() instanceof TMLADSequence
-                            || currentElement.getReferenceObject() instanceof TMLADUnorderedSequence
-                            || currentElement.getReferenceObject() instanceof TMLADSelectEvt
-                            || currentElement.getReferenceObject() instanceof TMLADDecrypt
-                            || currentElement.getReferenceObject() instanceof TMLADEncrypt) {
+                    else if (currentElement.getReferenceObject() instanceof TADComponentWithoutSubcomponents
+                            || currentElement.getReferenceObject() instanceof TADComponentWithSubcomponents
+                            || currentElement.getReferenceObject() instanceof TMLADActionState)
+
+                    {
 
                         addcurrentElementVertex(taskName, taskStartName);
 
@@ -1419,6 +1400,7 @@ public class DirectedGraphTranslator extends JApplet {
         vertex startv = vertex(taskStartName, currentElement.getID());
 
         g.addVertex(startv);
+        updatemainBar("v");
         // gVertecies.add(vertex(taskStartName));
         getvertex(taskStartName).setType(vertex.TYPE_START);
         getvertex(taskStartName).setTaintFixedNumber(1);
@@ -1439,30 +1421,31 @@ public class DirectedGraphTranslator extends JApplet {
             TMLCPrimitivePort sendingPortdetails = waitEvent.getEvent().port;
             TMLCPrimitivePort receivePortdetails = waitEvent.getEvent().port2;
 
-            if (!sendingPortdetails.isBlocking()) {
+            if (sendingPortdetails != null && !sendingPortdetails.isBlocking()) {
                 warnings.add(
                         "send event port:" + sendingPortdetails.getPortName() + " is non-blocking. Use tainting for an accurate latency analysis");
             }
-            if (sendingPortdetails.isFinite()) {
+            if (sendingPortdetails != null && sendingPortdetails.isFinite()) {
                 warnings.add("send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis ");
             }
             String receivePortparams = waitEvent.getAllParams();
 
             // tmlcdp.tmlctdp.getAllPortsConnectedTo(portdetails);
+            if (sendingPortdetails != null && receivePortdetails != null) {
+                waitEvt.put("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")", new ArrayList<String>());
 
-            waitEvt.put("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")", new ArrayList<String>());
+                TMLTask originTasks = waitEvent.getEvent().getOriginTask();
 
-            TMLTask originTasks = waitEvent.getEvent().getOriginTask();
+                for (TMLSendEvent wait_sendEvent : originTasks.getSendEvents()) {
 
-            for (TMLSendEvent wait_sendEvent : originTasks.getSendEvents()) {
+                    String sendingPortparams = wait_sendEvent.getAllParams();
 
-                String sendingPortparams = wait_sendEvent.getAllParams();
+                    waitEvt.get("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")")
+                            .add("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")");
 
-                waitEvt.get("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")")
-                        .add("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")");
+                }
 
             }
-
         }
 
     }
@@ -1702,15 +1685,17 @@ public class DirectedGraphTranslator extends JApplet {
             String sendingPortparams = sendEvent.getAllParams();
 
             TMLTask destinationTasks = sendEvent.getEvent().getDestinationTask();
+            if (sendingPortdetails != null && receivePortdetails != null) {
+                sendEvt.put("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")", new ArrayList<String>());
 
-            sendEvt.put("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")", new ArrayList<String>());
-
+            
             for (TMLWaitEvent wait_sendEvent : destinationTasks.getWaitEvents()) {
                 String receivePortparams = wait_sendEvent.getAllParams();
 
                 sendEvt.get("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")")
                         .add("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")");
 
+            }
             }
 
         }
@@ -1813,44 +1798,64 @@ public class DirectedGraphTranslator extends JApplet {
 
         }
 
-        if (((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecI
-                || activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecC)
-                && activity.getPrevious(currentElement).getValue().equals("0"))
-                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADDelay)
-                        && ((TMLADDelay) activity.getPrevious(currentElement).getReferenceObject()).getDelayValue().equals("0"))
-
-                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADDelayInterval)
-                        && (((TMLADDelayInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue().equals("0")
-                                && ((TMLADDelayInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue().equals("0")))
-
-                || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecCInterval)
-                        && (((TMLADExecCInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue().equals("0")
-                                && ((TMLADExecCInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue().equals("0"))
-
-                        || ((activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADExecIInterval)
-                                && (((TMLADExecIInterval) activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue().equals("0")
-                                        && ((TMLADExecIInterval) activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
-                                                .equals("0")))))
-
-        {
-
-            if (activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject() instanceof TMLADRandom) {
-                preEventName = taskName + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getName() + "__"
-                        + activity.getPrevious(activity.getPrevious(currentElement)).getID();
-                preEventid = activity.getPrevious(activity.getPrevious(currentElement)).getID();
-
-            } else if (activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject() instanceof TMLADUnorderedSequence) {
-                preEventName = taskName + "__" + "unOrderedSequence" + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getID();
-                preEventid = activity.getPrevious(activity.getPrevious(currentElement)).getID();
-
-            } else {
-                preEventName = taskName + "__" + activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject().toString() + "__"
-                        + activity.getPrevious(activity.getPrevious(currentElement)).getID();
-                preEventid = activity.getPrevious(activity.getPrevious(currentElement)).getID();
-
-            }
-
-        }
+        /*
+         * if (((activity.getPrevious(currentElement).getReferenceObject() instanceof
+         * TMLADExecI || activity.getPrevious(currentElement).getReferenceObject()
+         * instanceof TMLADExecC) &&
+         * activity.getPrevious(currentElement).getValue().equals("0")) ||
+         * ((activity.getPrevious(currentElement).getReferenceObject() instanceof
+         * TMLADDelay) && ((TMLADDelay)
+         * activity.getPrevious(currentElement).getReferenceObject()).getDelayValue().
+         * equals("0"))
+         * 
+         * || ((activity.getPrevious(currentElement).getReferenceObject() instanceof
+         * TMLADDelayInterval) && (((TMLADDelayInterval)
+         * activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue()
+         * .equals("0") && ((TMLADDelayInterval)
+         * activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
+         * .equals("0")))
+         * 
+         * || ((activity.getPrevious(currentElement).getReferenceObject() instanceof
+         * TMLADExecCInterval) && (((TMLADExecCInterval)
+         * activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue()
+         * .equals("0") && ((TMLADExecCInterval)
+         * activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
+         * .equals("0"))
+         * 
+         * || ((activity.getPrevious(currentElement).getReferenceObject() instanceof
+         * TMLADExecIInterval) && (((TMLADExecIInterval)
+         * activity.getPrevious(currentElement).getReferenceObject()).getMinDelayValue()
+         * .equals("0") && ((TMLADExecIInterval)
+         * activity.getPrevious(currentElement).getReferenceObject()).getMaxDelayValue()
+         * .equals("0")))))
+         * 
+         * {
+         * 
+         * if (activity.getPrevious(activity.getPrevious(currentElement)).
+         * getReferenceObject() instanceof TMLADRandom) { preEventName = taskName + "__"
+         * + activity.getPrevious(activity.getPrevious(currentElement)).getName() + "__"
+         * + activity.getPrevious(activity.getPrevious(currentElement)).getID();
+         * preEventid =
+         * activity.getPrevious(activity.getPrevious(currentElement)).getID();
+         * 
+         * } else if (activity.getPrevious(activity.getPrevious(currentElement)).
+         * getReferenceObject() instanceof TMLADUnorderedSequence) { preEventName =
+         * taskName + "__" + "unOrderedSequence" + "__" +
+         * activity.getPrevious(activity.getPrevious(currentElement)).getID();
+         * preEventid =
+         * activity.getPrevious(activity.getPrevious(currentElement)).getID();
+         * 
+         * } else { preEventName = taskName + "__" +
+         * activity.getPrevious(activity.getPrevious(currentElement)).getReferenceObject
+         * ().toString() + "__" +
+         * activity.getPrevious(activity.getPrevious(currentElement)).getID();
+         * preEventid =
+         * activity.getPrevious(activity.getPrevious(currentElement)).getID();
+         * 
+         * }
+         * 
+         * }
+         */
 
         if (!nameIDTaskList.containsKey(currentElement.getID())) {
             nameIDTaskList.put(String.valueOf(currentElement.getID()), eventName);
@@ -1863,6 +1868,7 @@ public class DirectedGraphTranslator extends JApplet {
             vertex preV = vertex(preEventName, preEventid);
 
             g.addVertex(v);
+            updatemainBar("v");
             // gVertecies.add(vertex(eventName));
 
             g.addEdge(preV, v);
@@ -1872,6 +1878,7 @@ public class DirectedGraphTranslator extends JApplet {
             vertex v = vertex(eventName, eventid);
 
             g.addVertex(v);
+            updatemainBar("v");
             // gVertecies.add(vertex(eventName));
             g.addEdge(getvertex(taskStartName), getvertex(eventName));
             opCount++;
@@ -1882,21 +1889,11 @@ public class DirectedGraphTranslator extends JApplet {
                 || currentElement.getReferenceObject() instanceof TMLADSendRequest
                 || currentElement.getReferenceObject() instanceof TMLADNotifiedEvent
                 || currentElement.getReferenceObject() instanceof TMLADReadChannel || currentElement.getReferenceObject() instanceof TMLADWriteChannel
-                || (currentElement.getReferenceObject() instanceof TMLADExecI && !currentElement.getValue().equals("0"))
-                || (currentElement.getReferenceObject() instanceof TMLADExecC && !currentElement.getValue().equals("0"))
-                || (currentElement.getReferenceObject() instanceof TMLADDelay
-                        && !((TMLADDelay) currentElement.getReferenceObject()).getDelayValue().equals("0"))
-                || (currentElement.getReferenceObject() instanceof TMLADDelayInterval
-                        && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                        && !((TMLADDelayInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-
-                || (currentElement.getReferenceObject() instanceof TMLADExecCInterval
-                        && !((TMLADExecCInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                        && ((TMLADExecCInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                || (currentElement.getReferenceObject() instanceof TMLADExecIInterval
-                        && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMinDelayValue().equals("0")
-                        && !((TMLADExecIInterval) currentElement.getReferenceObject()).getMaxDelayValue().equals("0"))
-                || currentElement.getReferenceObject() instanceof TMLADEncrypt || currentElement.getReferenceObject() instanceof TMLADDecrypt
+                || (currentElement.getReferenceObject() instanceof TMLADExecI) || (currentElement.getReferenceObject() instanceof TMLADExecC)
+                || (currentElement.getReferenceObject() instanceof TMLADDelay) || (currentElement.getReferenceObject() instanceof TMLADDelayInterval)
+                || (currentElement.getReferenceObject() instanceof TMLADExecCInterval)
+                || (currentElement.getReferenceObject() instanceof TMLADExecIInterval) || currentElement.getReferenceObject() instanceof TMLADEncrypt
+                || currentElement.getReferenceObject() instanceof TMLADDecrypt
                 || currentElement.getReferenceObject() instanceof TMLADReadRequestArg) {
 
             allLatencyTasks.add(eventName);
@@ -1907,7 +1904,7 @@ public class DirectedGraphTranslator extends JApplet {
             getvertex(eventName).setType(vertex.TYPE_CTRL);
             getvertex(eventName).setTaintFixedNumber(1);
         } else if (currentElement.getReferenceObject() instanceof TMLADSelectEvt) {
-            getvertex(eventName).setType(vertex.TYPE_CTRL);
+            getvertex(eventName).setType(vertex.TYPE_SELECT_EVT);
             getvertex(eventName).setTaintFixedNumber(1);
 
         } else if (currentElement.getReferenceObject() instanceof TMLADActionState) {
@@ -2244,6 +2241,7 @@ public class DirectedGraphTranslator extends JApplet {
         vertex taskEndVertex = vertex(taskEndName, taskEndid);
 
         g.addVertex(taskEndVertex);
+        updatemainBar("v");
         // gVertecies.add(vertex(taskEndName));
         getvertex(eventName).setType(vertex.TYPE_END);
         getvertex(eventName).setTaintFixedNumber(1);
@@ -3674,6 +3672,28 @@ public class DirectedGraphTranslator extends JApplet {
 
             for (SimulationTransaction st : transFile1) {
 
+                if (st.command.contains("SelectEvent params:") && getvertexFromID(Integer.valueOf(st.id)).getType() == 11) {
+                    st.command = st.command.replace("SelectEvent params:", "Wait" + st.channelName);
+
+                    int selectID = Integer.valueOf(st.id);
+
+                    vertex selectV = getvertexFromID(Integer.valueOf(selectID));
+
+                    String[] chName = st.channelName.toString().split("__");
+
+                    int waitEvntName = chName.length;
+
+                    String waitEvnt = chName[waitEvntName - 1];
+
+                    for (vertex nextV : Graphs.successorListOf(g, selectV)) {
+
+                        if (nextV.getName().contains(waitEvnt)) {
+                            st.id = String.valueOf(nextV.getId());
+                        }
+                    }
+
+                }
+
                 if (st.id.equals(idTask1) && !times1.contains(Integer.valueOf(st.startTime))) {
                     Task1Traces.add(st);
                     task1DeviceName = st.deviceName;
@@ -3682,7 +3702,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                 }
 
-                if (st.id.equals(idTask2) && !times2.contains(Integer.valueOf(st.startTime))) {
+                if (st.id.equals(idTask2) && !times2.contains(Integer.valueOf(st.endTime))) {
                     Task2Traces.add(st);
                     task2DeviceName = st.deviceName;
                     times2.add(Integer.valueOf(st.endTime));
@@ -3717,18 +3737,39 @@ public class DirectedGraphTranslator extends JApplet {
                     // if (Integer.valueOf(st.startTime) >= times1.get(i) &&
                     // Integer.valueOf(st.startTime) < times2.get(i)) {
 
-                    if (!(Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) < times1.get(i))
-                            && !(Integer.valueOf(st.startTime) > times2.get(i) && Integer.valueOf(st.endTime) > times2.get(i))) {
+                    if (!(Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) <= times1.get(i))
+                            && !(Integer.valueOf(st.startTime) >= times2.get(i) && Integer.valueOf(st.endTime) > times2.get(i))) {
 
                         // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
                         // < maxTime) {
+
+                        if (st.command.contains("SelectEvent params:") && getvertexFromID(Integer.valueOf(st.id)).getType() == 11) {
+                            st.command = st.command.replace("SelectEvent params:", "Wait" + st.channelName);
+
+                            int selectID = Integer.valueOf(st.id);
+
+                            vertex selectV = getvertexFromID(Integer.valueOf(selectID));
+
+                            String[] chName = st.channelName.toString().split("__");
+
+                            int waitEvntName = chName.length;
+
+                            String waitEvnt = chName[waitEvntName - 1];
+
+                            for (vertex nextV : Graphs.successorListOf(g, selectV)) {
+
+                                if (nextV.getName().contains(waitEvnt)) {
+                                    st.id = String.valueOf(nextV.getId());
+                                }
+                            }
+                        }
 
                         if (Integer.valueOf(st.endTime) > times2.get(i)) {
                             st.endTime = times2.get(i).toString();
                             st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(st.startTime)).toString();
                         }
 
-                        if (Integer.valueOf(st.startTime) < times1.get(i)) {
+                        if (Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) != times1.get(i)) {
                             st.startTime = Integer.valueOf(times1.get(i)).toString();
                             st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(times1.get(i))).toString();
                         }

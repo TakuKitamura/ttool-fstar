@@ -57,27 +57,31 @@ public class latencyDetailedAnalysisMain {
 
     public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
             throws InterruptedException {
+        try {
+            setTc(new LatencyAnalysisParallelAlgorithms(this));
 
-        setTc(new LatencyAnalysisParallelAlgorithms(this));
+            if (callerId == 2) {
 
-        if (callerId == 2) {
+                tc.setMainGUI(mainGUI);
+                tc.setSelectedST(selectedST);
+                tc.setB(b);
+                tc.setJ(j);
+                tc.setCompare(compare);
+                tc.start(8);
 
-            tc.setMainGUI(mainGUI);
-            tc.setSelectedST(selectedST);
-            tc.setB(b);
-            tc.setJ(j);
-            tc.setCompare(compare);
-            tc.start(8);
+            } else if (callerId == 1) {
 
-        } else if (callerId == 1) {
+                tc.setMainGUI(mainGUI);
+                tc.setSelectedST(selectedST);
+                tc.setB(b);
+                tc.setJ(j);
+                tc.setCompare(compare);
+                tc.start(9);
 
-            tc.setMainGUI(mainGUI);
-            tc.setSelectedST(selectedST);
-            tc.setB(b);
-            tc.setJ(j);
-            tc.setCompare(compare);
-            tc.start(9);
-
+            }
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            TraceManager.addDev("Error: " + e1.getMessage());
         }
 
     }
@@ -128,6 +132,7 @@ public class latencyDetailedAnalysisMain {
                                 }
                             } catch (Exception e) {
                                 // Just in case the mentionned panel is not a TML design Panel
+                                TraceManager.addDev("Error: " + e.getMessage());
                             }
 
                         }
@@ -273,16 +278,20 @@ public class latencyDetailedAnalysisMain {
 
         } catch (XPathExpressionException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+
+            TraceManager.addDev("Error: " + e1.getMessage());
         } catch (ParserConfigurationException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            // e1.printStackTrace();
+            TraceManager.addDev("Error: " + e1.getMessage());
         } catch (SAXException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            // e1.printStackTrace();
+            TraceManager.addDev("Error: " + e1.getMessage());
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            // e1.printStackTrace();
+            TraceManager.addDev("Error: " + e1.getMessage());
         }
 
         cld = new JFrameCompareLatencyDetail(this, mainGUI, checkedTransactionsFile1, map1, cpanels1, selectedST, true, tc);
@@ -291,94 +300,124 @@ public class latencyDetailedAnalysisMain {
 
     public void latencyDetailedAnalysisForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
             throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        String xml = ""; // Populated XML String....
 
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        try {
+            String xml = ""; // Populated XML String....
 
-        DocumentBuilder builder = domFactory.newDocumentBuilder();
-        Document dDoc = builder.parse(selectedST.getFullPath());
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 
-        XPath xPath = XPathFactory.newInstance().newXPath();
+            DocumentBuilder builder = domFactory.newDocumentBuilder();
+            Document dDoc = builder.parse(selectedST.getFullPath());
 
-        String modelNode = (String) xPath.evaluate("/siminfo/global/model", dDoc, XPathConstants.STRING);
-        TURTLEPanel panel = null;
-        Vector<TURTLEPanel> allTabs = new Vector<TURTLEPanel>();
+            XPath xPath = XPathFactory.newInstance().newXPath();
 
-        if (j == 1) {
-            mainGUI_compare = mainGUI;
+            String modelNode = (String) xPath.evaluate("/siminfo/global/model", dDoc, XPathConstants.STRING);
+            TURTLEPanel panel = null;
+            Vector<TURTLEPanel> allTabs = new Vector<TURTLEPanel>();
 
-        } else if (j == 2) {
-            String fileName = null;
+            if (j == 1) {
+                mainGUI_compare = mainGUI;
 
-            Document dDoc1 = null;
+            } else if (j == 2) {
+                String fileName = null;
+
+                Document dDoc1 = null;
+
+                if (modelNode.contains("DIPLODOCUS architecture and mapping Diagram")) {
+
+                    fileName = modelNode.replace(" / DIPLODOCUS architecture and mapping Diagram", "");
+                }
+
+                if (modelNode.contains("TML Component Task Diagram")) {
+
+                    fileName = modelNode.replace(" / TML Component Task Diagram", "");
+                }
+
+                try {
+                    mainGUI_compare = null;
+                    mainGUI_compare = new MainGUI(false, false, false, false, false, false, false, false, false, false, true, false, false);
+                    mainGUI_compare.build();
+
+                    mainGUI_compare.openProjectFromFile(new File(fileName));
+
+                    mainGUI_compare.frame.setVisible(false);
+                    mainGUI_compare2 = mainGUI_compare;
+
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    //e1.printStackTrace();
+                    TraceManager.addDev("Error: " + e1.getMessage());
+                }
+            }
 
             if (modelNode.contains("DIPLODOCUS architecture and mapping Diagram")) {
 
-                fileName = modelNode.replace(" / DIPLODOCUS architecture and mapping Diagram", "");
-            }
+                for (int i = 0; i < mainGUI_compare.tabs.size(); i++) {
 
-            if (modelNode.contains("TML Component Task Diagram")) {
+                    if (mainGUI_compare.tabs.get(i) instanceof TMLArchiPanel) {
 
-                fileName = modelNode.replace(" / TML Component Task Diagram", "");
-            }
+                        allTabs.add(mainGUI_compare.tabs.get(i));
 
-            try {
-                mainGUI_compare = null;
-                mainGUI_compare = new MainGUI(false, false, false, false, false, false, false, false, false, false, true, false, false);
-                mainGUI_compare.build();
-
-                mainGUI_compare.openProjectFromFile(new File(fileName));
-
-                mainGUI_compare.frame.setVisible(false);
-                mainGUI_compare2 = mainGUI_compare;
-
-            } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        }
-
-        if (modelNode.contains("DIPLODOCUS architecture and mapping Diagram")) {
-
-            for (int i = 0; i < mainGUI_compare.tabs.size(); i++) {
-
-                if (mainGUI_compare.tabs.get(i) instanceof TMLArchiPanel) {
-
-                    allTabs.add(mainGUI_compare.tabs.get(i));
+                    }
 
                 }
 
-            }
+                if (allTabs.size() == 1) {
+                    mainGUI_compare.checkModelingSyntax(allTabs.get(0), true);
+                    TURTLEPanel selectedTab = allTabs.get(0);
 
-            if (allTabs.size() == 1) {
-                mainGUI_compare.checkModelingSyntax(allTabs.get(0), true);
-                TURTLEPanel selectedTab = allTabs.get(0);
+                    if (compare) {
 
-                if (compare) {
+                        latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
 
-                    latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
+                    } else {
+                        latencyDetailedAnalysis(selectedST, selectedTab, b, false, mainGUI_compare);
 
-                } else {
-                    latencyDetailedAnalysis(selectedST, selectedTab, b, false, mainGUI_compare);
+                    }
+
+                    mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
+
+                } else if (allTabs.size() > 1) {
+
+                    JDialogToChosePanel jdmc = new JDialogToChosePanel(mainGUI_compare.frame, allTabs, "Choosing panel to validate");
+                    // if (b) {
+                    GraphicLib.centerOnParent(jdmc);
+                    jdmc.setVisible(true); // blocked until dialog has been closed
+
+                    // }
+                    mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
+                    TURTLEPanel selectedTab = jdmc.getSelectedTab();
+                    if (selectedTab != null) {
+
+                        mainGUI_compare.checkModelingSyntax(selectedTab, true);
+
+                        if (compare) {
+
+                            latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
+
+                        } else {
+                            latencyDetailedAnalysis(selectedST, selectedTab, b, false, mainGUI_compare);
+                        }
+                        mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
+
+                    }
+                }
+
+            } else if (modelNode.contains("TML Component Task Diagram")) {
+
+                for (int i = 0; i < mainGUI_compare.tabs.size(); i++) {
+                    panel = mainGUI_compare.tabs.get(i);
+
+                    if (mainGUI_compare.tabs.get(i) instanceof TMLComponentDesignPanel) {
+                        allTabs.add(mainGUI_compare.tabs.get(i));
+                    }
 
                 }
 
-                mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
+                if (allTabs.size() == 1) {
+                    mainGUI_compare.checkModelingSyntax(allTabs.get(0), true);
 
-            } else if (allTabs.size() > 1) {
-
-                JDialogToChosePanel jdmc = new JDialogToChosePanel(mainGUI_compare.frame, allTabs, "Choosing panel to validate");
-                // if (b) {
-                GraphicLib.centerOnParent(jdmc);
-                jdmc.setVisible(true); // blocked until dialog has been closed
-
-                // }
-                mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
-                TURTLEPanel selectedTab = jdmc.getSelectedTab();
-                if (selectedTab != null) {
-
-                    mainGUI_compare.checkModelingSyntax(selectedTab, true);
-
+                    TURTLEPanel selectedTab = allTabs.get(0);
                     if (compare) {
 
                         latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
@@ -388,62 +427,39 @@ public class latencyDetailedAnalysisMain {
                     }
                     mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
 
-                }
-            }
+                } else if (allTabs.size() > 1) {
 
-        } else if (modelNode.contains("TML Component Task Diagram")) {
+                    JDialogToChosePanel jdmc = new JDialogToChosePanel(mainGUI_compare.frame, allTabs, "Choosing panel to validate");
 
-            for (int i = 0; i < mainGUI_compare.tabs.size(); i++) {
-                panel = mainGUI_compare.tabs.get(i);
+                    // if (b) {
+                    GraphicLib.centerOnParent(jdmc);
+                    jdmc.setVisible(true); // blocked until dialog has been closed
 
-                if (mainGUI_compare.tabs.get(i) instanceof TMLComponentDesignPanel) {
-                    allTabs.add(mainGUI_compare.tabs.get(i));
-                }
+                    // }
 
-            }
-
-            if (allTabs.size() == 1) {
-                mainGUI_compare.checkModelingSyntax(allTabs.get(0), true);
-
-                TURTLEPanel selectedTab = allTabs.get(0);
-                if (compare) {
-
-                    latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
-
-                } else {
-                    latencyDetailedAnalysis(selectedST, selectedTab, b, false, mainGUI_compare);
-                }
-                mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
-
-            } else if (allTabs.size() > 1) {
-
-                JDialogToChosePanel jdmc = new JDialogToChosePanel(mainGUI_compare.frame, allTabs, "Choosing panel to validate");
-
-                // if (b) {
-                GraphicLib.centerOnParent(jdmc);
-                jdmc.setVisible(true); // blocked until dialog has been closed
-
-                // }
-
-                mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
-                TURTLEPanel selectedTab = jdmc.getSelectedTab();
-                if (selectedTab != null) {
-
-                    mainGUI_compare.checkModelingSyntax(selectedTab, true);
-                    if (compare) {
-
-                        latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
-
-                    } else {
-                        latencyDetailedAnalysis(selectedST, selectedTab, b, false, mainGUI_compare);
-                    }
                     mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
+                    TURTLEPanel selectedTab = jdmc.getSelectedTab();
+                    if (selectedTab != null) {
 
+                        mainGUI_compare.checkModelingSyntax(selectedTab, true);
+                        if (compare) {
+
+                            latencyDetailedAnalysis(selectedST, selectedTab, b, true, mainGUI_compare);
+
+                        } else {
+                            latencyDetailedAnalysis(selectedST, selectedTab, b, false, mainGUI_compare);
+                        }
+                        mainGUI_compare.setMode(mainGUI_compare.MODEL_CHANGED);
+
+                    }
                 }
+
             }
-
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            // e1.printStackTrace();
+            TraceManager.addDev("Error: " + e1.getMessage());
         }
-
     }
 
     public Vector<String> getCheckedTransactionsFile() {
