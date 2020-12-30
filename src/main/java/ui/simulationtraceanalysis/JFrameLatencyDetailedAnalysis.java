@@ -178,7 +178,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private JTextField file1;
     private File file;
     private static Vector<SimulationTransaction> transFile1;
-    private JLabel task2,taskL;
+    private JLabel task2, taskL;
     private DirectedGraphTranslator dgraph;
 
     private JScrollPane scrollPane11, scrollPane12;// , scrollPane13;
@@ -359,7 +359,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         taskL = new JLabel("Select Task 1 ", JLabel.LEFT);
         loadxml.add(taskL, c01);
-        
+
         file1 = new JTextField(40);
         file1.setMinimumSize(new Dimension(300, 30));
         file1.setText(selectedST.getFullPath());
@@ -388,7 +388,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.weightx = 1.0;
         c01.gridwidth = 1;
         c01.gridx = 1;
-        c01.gridy =2;
+        c01.gridy = 2;
         tasksDropDownCombo1 = new JComboBox<String>(checkedTransactions);
         loadxml.add(tasksDropDownCombo1, c01);
 
@@ -399,7 +399,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.gridx = 2;
         c01.gridy = 1;
         task2 = new JLabel("And task 2 ", JLabel.LEFT);
-     
+
         loadxml.add(task2, c01);
 
         c01.gridheight = 1;
@@ -432,7 +432,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         tasksDropDownCombo7 = new JComboBox<String>(checkedTransactions);
 
         loadxml.add(tasksDropDownCombo7, c01);
-        
+
         task2.setVisible(false);
         taskL.setVisible(false);
         tasksDropDownCombo6.setVisible(false);
@@ -1017,25 +1017,29 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
             if (!allop) {
 
-                
                 for (TMLTask tmltask : tmap1.getTMLModeling().getTasks()) {
-                    
+
                     allTasks.add(tmltask.getName());
 
-          }
+                }
 
-              
                 ComboBoxModel<String> taskModel = new DefaultComboBoxModel<String>(allTasks);
-              
                 tasksDropDownCombo6.setModel(taskModel);
-                tasksDropDownCombo6.addActionListener( actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP] );
+                tasksDropDownCombo6.addActionListener(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP]);
+
                 ComboBoxModel<String> taskModel2 = new DefaultComboBoxModel<String>(allTasks);
                 tasksDropDownCombo7.setModel(taskModel2);
-              
-                ComboBoxModel<String> aModel1 = new DefaultComboBoxModel<String>(checkedTransactions);
+                tasksDropDownCombo7.addActionListener(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP2]);
 
-               
+                ComboBoxModel<String> aModel1 = new DefaultComboBoxModel<String>(checkedTransactions);
                 tasksDropDownCombo2.setModel(aModel1);
+
+                tasksDropDownCombo1.setModel(getAlloperators((String) tasksDropDownCombo6.getItemAt(0)));
+                tasksDropDownCombo2.setModel(getAlloperators((String) tasksDropDownCombo7.getItemAt(0)));
+
+                // ComboBoxModel<String> aModel2 = new
+                // DefaultComboBoxModel<String>(checkedTransactions);
+                // tasksDropDownCombo1.setModel(aModel2);
 
                 allop = true;
                 showAllOp.setLabel("Show checkpoints operators");
@@ -1074,98 +1078,101 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
             }
 
-        }else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP].getActionCommand())) {
-            
-            for (TMLTask tmltask : tmap1.getTMLModeling().getTasks()) {
-                
-                TMLActivity activity;
-                checkedTransactions = new Vector<String>();
-                allTasks = new Vector<String>();
-                checkedT = new HashMap<String, Integer>();
-             
-                int opCount = 0;
-                
-                if (tmltask.equals(tasksDropDownCombo6.getSelectedItem()))
-                {
-                    activity = tmltask.getActivityDiagram();
+        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP].getActionCommand())) {
 
-                    activity = tmltask.getActivityDiagram();
-                    TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
-                    List<TGComponent> list = tadp.getComponentList();
-                    Iterator<TGComponent> iterator = list.listIterator();
-                    TGComponent tgc;
-                    opCount = 0;
+            tasksDropDownCombo1.setModel(getAlloperators((String) tasksDropDownCombo6.getSelectedItem()));
 
-                    iterator = list.listIterator();
-                    while (iterator.hasNext()) {
-                        tgc = iterator.next();
-                        String compName = "";
-                        if (tgc.isEnabled()) {
-                            if (tgc instanceof CheckableLatency) {
+        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP2].getActionCommand())) {
 
-                                compName = tmltask.getName() + ":" + tgc.getName();
-                                compName = compName.replaceAll(" ", "");
-
-                                if (tgc.getValue().contains("(")) {
-                                    compName = compName + ":" + tgc.getValue().split("\\(")[0];
-                                } else {
-                                    if (tgc instanceof TMLADExecI) {
-                                        compName = ((TMLADExecI) tgc).getDelayValue();
-                                    }
-                                }
-                                checkedT.put(compName + "__" + tgc.getDIPLOID(), tgc.getDIPLOID());
-
-                            }
-                        }
-
-                    }
-                    
-                }
-           
-                
-           
-            }
-            for (Entry<String, Integer> cT : checkedT.entrySet()) {
-
-                String name = cT.getKey();
-                int id = cT.getValue();
-
-                if (!checkedTransactions.contains(name)) {
-                    if (checkedTransactions.size() > 0) {
-                        Boolean inserted = false;
-
-                        for (int j = 0; j < checkedTransactions.size(); j++) {
-
-                            if (id < checkedT.get(checkedTransactions.get(j)) && !checkedTransactions.contains(name))
-
-                            {
-                                checkedTransactions.insertElementAt(name, j);
-                                inserted = true;
-
-                            }
-
-                        }
-
-                        if (!inserted) {
-                            checkedTransactions.insertElementAt(name, checkedTransactions.size());
-                        }
-                    } else {
-                        checkedTransactions.add(name);
-
-                    }
-
-                }
-
-            }
-            
-            ComboBoxModel<String> aModel = new DefaultComboBoxModel<String>(checkedTransactions);
-            tasksDropDownCombo1.setModel(aModel);
-
+            tasksDropDownCombo2.setModel(getAlloperators((String) tasksDropDownCombo7.getSelectedItem()));
 
         }
 
-        
-        
+    }
+
+    private ComboBoxModel<String> getAlloperators(String dropdown) {
+
+        TMLActivity activity;
+        checkedTransactions = new Vector<String>();
+        allTasks = new Vector<String>();
+        checkedT = new HashMap<String, Integer>();
+
+        for (TMLTask tmltask : tmap1.getTMLModeling().getTasks()) {
+
+            int opCount = 0;
+
+            if (tmltask.getName().equals(dropdown)) {
+
+                activity = tmltask.getActivityDiagram();
+                TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
+                List<TGComponent> list = tadp.getComponentList();
+                Iterator<TGComponent> iterator = list.listIterator();
+                TGComponent tgc;
+                opCount = 0;
+
+                iterator = list.listIterator();
+                while (iterator.hasNext()) {
+                    tgc = iterator.next();
+                    String compName = "";
+                    if (tgc.isEnabled()) {
+                        if (tgc instanceof CheckableLatency) {
+
+                            compName = tmltask.getName() + ":" + tgc.getName();
+                            compName = compName.replaceAll(" ", "");
+
+                            if (tgc.getValue().contains("(")) {
+                                compName = compName + ":" + tgc.getValue().split("\\(")[0];
+                            } else {
+                                if (tgc instanceof TMLADExecI) {
+                                    compName = ((TMLADExecI) tgc).getDelayValue();
+                                }
+                            }
+                            checkedT.put(compName + "__" + tgc.getDIPLOID(), tgc.getDIPLOID());
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+        for (Entry<String, Integer> cT : checkedT.entrySet()) {
+
+            String name = cT.getKey();
+            int id = cT.getValue();
+
+            if (!checkedTransactions.contains(name)) {
+                if (checkedTransactions.size() > 0) {
+                    Boolean inserted = false;
+
+                    for (int j = 0; j < checkedTransactions.size(); j++) {
+
+                        if (id < checkedT.get(checkedTransactions.get(j)) && !checkedTransactions.contains(name))
+
+                        {
+                            checkedTransactions.insertElementAt(name, j);
+                            inserted = true;
+
+                        }
+
+                    }
+
+                    if (!inserted) {
+                        checkedTransactions.insertElementAt(name, checkedTransactions.size());
+                    }
+                } else {
+                    checkedTransactions.add(name);
+
+                }
+
+            }
+
+        }
+
+        ComboBoxModel<String> aModel = new DefaultComboBoxModel<String>(checkedTransactions);
+        return aModel;
+
     }
 
     protected void preciselatencyAnalysis(int row1) throws InterruptedException {

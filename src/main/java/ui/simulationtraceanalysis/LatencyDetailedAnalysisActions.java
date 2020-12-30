@@ -82,8 +82,9 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_LATENCY_PRECISE_ANALYSIS = 16;
     public static final int ACT_SHOW_ALL_OP = 17;
     public static final int ACT_LOAD_ALL_OP = 18;
+    public static final int ACT_LOAD_ALL_OP2 = 19;
     
-    public static final int NB_ACTION = 19;
+    public static final int NB_ACTION = 20;
 
     private static final TAction[] actions = new TAction[NB_ACTION];
 
@@ -166,6 +167,8 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
         actions[ACT_SHOW_ALL_OP] = new TAction("show-operators", "Show All Operators", IconManager.imgic29, IconManager.imgic29,
                 "Show All Operators", "Show All Operators", 'T');
         actions[ACT_LOAD_ALL_OP] = new TAction("load-operators", "Load Task Operators", IconManager.imgic29, IconManager.imgic29,
+                "Load Task Operators", "Load Task Operators", 'T');
+        actions[ACT_LOAD_ALL_OP2] = new TAction("load-operators_list2", "Load Task Operators", IconManager.imgic29, IconManager.imgic29,
                 "Load Task Operators", "Load Task Operators", 'T');
 
         
