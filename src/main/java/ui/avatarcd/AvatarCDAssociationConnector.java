@@ -54,7 +54,7 @@ import java.util.Vector;
  * @version 1.0 31/08/2011
  * @author Ludovic APVRILLE
  */
-public  class AvatarCDAssociationConnector extends TGConnectorWithCommentConnectionPoints {
+public  class AvatarCDAssociationConnector extends TGConnectorWithMultiplicity {
     int w, h;
     
     public AvatarCDAssociationConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
