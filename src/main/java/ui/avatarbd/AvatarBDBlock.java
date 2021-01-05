@@ -1256,7 +1256,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 s = elt.getAttribute("data");
                                 String tmp3 = elt.getAttribute("color");
                                 //TraceManager.addDev("stereotype=" + s + " color=" + tmp3);
-                                int rgb = ColorManager.AVATAR_REQUIREMENT_TOP.getRGB();
+                                int rgb = ColorManager.AVATAR_BLOCK.getRGB();
                                 try {
                                     rgb = Integer.decode(tmp3).intValue();
                                 } catch (Exception e) {

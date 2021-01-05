@@ -54,33 +54,35 @@ import ui.window.JDialogAssumption;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
    * Class AvatarMADAssumption
    * Avatar assumption: to be used in Modeling Assumptions diagram of AVATAR
    * Creation: 27/08/2013
-   * @version 1.0 27/08/2013
+   * @version 2.0 05/01/2021
    * @author Ludovic APVRILLE
  */
 public class AvatarMADAssumption extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
+
+    // Stereotypes
+
+
+
     public String oldValue;
-    //protected int textX = 5;
-    //protected int textY = 22;
+
     protected int lineHeight = 30;
     private double dlineHeight = 0.0;
-    //protected int reqType = 0;
-    // 0: normal, 1: formal, 2: security
-    //protected int startFontSize = 10;
     protected Graphics graphics;
-    //protected int iconSize = 30;
-
-//    private Font myFont, myFontB;
-  //  private int maxFontSize = 30;
-//    private int minFontSize = 4;
     private int currentFontSize = -1;
-//    private boolean displayText = true;
 
-    public final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>"};
+
+    public static java.util.List<String> ASSUMPTION_TYPE_STR  = new ArrayList<String>(Arrays.asList("System Assumption", "Environment Assumption"));
+    public static List<Color> ASSUMPTION_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_ASSUMPTION_TOP,
+            ColorManager.AVATAR_ASSUMPTION_TOP));
+    private int typeStereotype = 0; // <<System>> by default
 
 
     public final static String[] DURABILITY_TYPE = {"Undefined", "Permanent", "Temporary"};
@@ -97,7 +99,6 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
     protected String text;
     protected String []texts;
-    protected int type = 0;
     protected int durability = 0;
     protected int source = 0;
     protected int status = 0;
@@ -206,7 +207,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
         
         //Filling
-        g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
+        g.setColor(ASSUMPTION_TYPE_COLOR.get(typeStereotype));
         g.fillRect(x+1, y+1, width-1, lineHeight-1);
         g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
         g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
@@ -218,7 +219,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         
         //Strings titles
         currentFontSize = font.getSize();
-        drawLimitedString(g, ASSUMPTION_TYPE_STR[type], x, y + currentFontSize , width, 1);
+        drawLimitedString(g, "<<" + ASSUMPTION_TYPE_STR.get(typeStereotype) + ">>", x, y + currentFontSize , width, 1);
         g.setFont(font.deriveFont(Font.PLAIN));
         drawLimitedString(g, value, x, y + currentFontSize * 2, width, 1);
         
@@ -270,7 +271,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     @Override
     public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
 
-        JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(), getAssumptionName(), text, type, durability, source, status, limitation);
+        JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(),
+                getAssumptionName(), text, typeStereotype, durability, source, status, limitation);
      //   jda.setSize(750, 550);
         GraphicLib.centerOnParent(jda, 750, 550 );
         jda.setVisible(true);
@@ -284,11 +286,19 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         text = jda.getText();
         makeValue();
 
-        type = jda.getAssumptionType();
+
         durability = jda.getDurability();
         source = jda.getSource();
         status = jda.getStatus();
         limitation = jda.getLimitation();
+
+        // Stereotype
+        TraceManager.addDev("Selecting stereotype");
+        //typeStereotype = jda.getAssumptionType();
+        String stereo = jda.getStereotype().trim();
+        TraceManager.addDev("Selecting stereotype: " + stereo);
+        int rgb = jda.getColor();
+        addStereotype(stereo, rgb);
 
 
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
@@ -316,6 +326,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                 newSizeForSon(null);
             }
             setValue(s);
+
+
         }
 
 
@@ -372,7 +384,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
             }
         }
         sb.append("<type data=\"");
-        sb.append(type);
+        sb.append(typeStereotype);
+        sb.append("\" color=\"" + ASSUMPTION_TYPE_COLOR.get(typeStereotype).getRGB());
         sb.append("\" />\n");
         sb.append("<durability data=\"");
         sb.append(durability);
@@ -423,17 +436,24 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                             } else if (elt.getTagName().equals("type")) {
                                 //
                                 s = elt.getAttribute("data");
+                                String tmp3 = elt.getAttribute("color");
+                                int rgb = ColorManager.AVATAR_ASSUMPTION_TOP.getRGB();
+                                try {
+                                    rgb = Integer.decode(tmp3).intValue();
+                                } catch (Exception e) {
+                                }
+
                                 if (s.equals("null")) {
-                                    type = 0;
+                                    typeStereotype = 0;
                                 } else {
                                     try {
-                                        type = Integer.decode(s).intValue();
+                                        typeStereotype = Integer.decode(s).intValue();
                                     } catch (Exception e) {
-                                        type = 0;
+                                        addStereotype(s, rgb);
                                     }
                                 }
-                                if ((type > (ASSUMPTION_TYPE_STR.length-1)) || (type < 0)) {
-                                    type = 0;
+                                if ((typeStereotype > (ASSUMPTION_TYPE_STR.size()-1)) || (typeStereotype < 0)) {
+                                    typeStereotype = 0;
                                 }
 
                             } else if (elt.getTagName().equals("durability")) {
@@ -449,7 +469,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                     }
                                 }
                                 if ((durability > (DURABILITY_TYPE.length-1)) || (durability < 0)) {
-                                    type = 0;
+                                    durability = 0;
                                 }
 
                             } else if (elt.getTagName().equals("source")) {
@@ -631,6 +651,42 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
           resize(w4, h);*/
 
+    }
+
+    public boolean addStereotype(String s, int rgb) {
+        TraceManager.addDev("Adding stereotype for " + s + " with color " + rgb);
+        int index = -1;
+        String sLower = s.toLowerCase();
+        for (int i = 0; i < ASSUMPTION_TYPE_STR.size(); i++) {
+            if (ASSUMPTION_TYPE_STR.get(i).toLowerCase().compareTo(sLower) == 0) {
+                index = i;
+                break;
+            }
+        }
+
+        // Found stereotype
+        if (index != -1) {
+            //TraceManager.addDev("Found stereotype");
+            typeStereotype = index;
+            if (index > 0) {
+                //TraceManager.addDev("Setting new color");
+                ASSUMPTION_TYPE_COLOR.set(index, new Color(rgb));
+            }
+            return false;
+
+
+
+
+
+            // Must add a new stereotype
+        } else {
+            //TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
+            ASSUMPTION_TYPE_STR.add(s);
+            ASSUMPTION_TYPE_COLOR.add(new Color(rgb));
+            typeStereotype = ASSUMPTION_TYPE_STR.size() - 1;
+            //TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
+            return true;
+        }
     }
 
 }

@@ -41,6 +41,7 @@
 
 package ui.window;
 
+import ui.ColorManager;
 import ui.util.IconManager;
 import ui.avatarmad.AvatarMADAssumption;
 
@@ -48,6 +49,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -58,13 +62,19 @@ import java.awt.event.ActionListener;
  * @author Ludovic APVRILLE
  */
 public class JDialogAssumption extends JDialogBase implements ActionListener  {
-    
-	
+
+
+
     private boolean regularClose;
 
     private String name;
     private int type, durability, source, status, limitation;
     private String text;
+
+    private JButton selectStereotype;
+    private JTextField stereotype;
+    private JButton colorButton;
+    private JButton useDefaultColor;
     
     // Panel1
     private JComboBox<String> typeBox;
@@ -114,7 +124,7 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
        
         panel1.setBorder(new javax.swing.border.TitledBorder("Main attributes"));
        
-        panel1.setPreferredSize(new Dimension(300, 450));
+        panel1.setPreferredSize(new Dimension(450, 450));
 
         JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
@@ -128,12 +138,33 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
         c1.fill = GridBagConstraints.HORIZONTAL;
         
         c1.gridwidth = 1;
-        JLabel label = new JLabel("Type:");
+        JLabel label = new JLabel("Stereotype:");
         panel1.add(label, c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox<>(AvatarMADAssumption.ASSUMPTION_TYPE_STR);
+        typeBox = new JComboBox<>(AvatarMADAssumption.ASSUMPTION_TYPE_STR.toArray(new String[0]));
         typeBox.setSelectedIndex(type);
         panel1.add(typeBox, c1);
+
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        selectStereotype = new JButton("Select stereotype");
+        panel1.add(selectStereotype, c1);
+        selectStereotype.setEnabled(AvatarMADAssumption.ASSUMPTION_TYPE_STR.size() > 0);
+        selectStereotype.addActionListener(this);
+
+        // Text of stereotype
+        stereotype = new JTextField(AvatarMADAssumption.ASSUMPTION_TYPE_STR.get(type), 30);
+        panel1.add(stereotype, c1);
+        colorButton = new JButton();
+        colorButton.setBackground(AvatarMADAssumption.ASSUMPTION_TYPE_COLOR.get(type));
+        colorButton.addActionListener(this);
+        c1.gridwidth = GridBagConstraints.REMAINDER;
+        c1.fill = GridBagConstraints.BOTH;
+        panel1.add(colorButton, c1);
+
+        useDefaultColor = new JButton("Use default color");
+        useDefaultColor.setBackground(AvatarMADAssumption.ASSUMPTION_TYPE_COLOR.get(0));
+        useDefaultColor.addActionListener(this);
+        panel1.add(useDefaultColor, c1);
         
         c1.gridwidth = 1;
         label = new JLabel("Name:");
@@ -230,7 +261,29 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
             closeDialog();
         } else if (command.equals("Cancel")) {
             cancelDialog();
+        } else if (evt.getSource() == selectStereotype)  {
+            selectStereotype();
+        } else if (evt.getSource() == colorButton)  {
+            selectColor();
+        } else if (evt.getSource() == useDefaultColor)  {
+            selectDefaultColor();
         }
+    }
+
+    public void selectColor() {
+        Color newColor = JColorChooser.showDialog
+                (null, "Background color of top box", colorButton.getBackground());
+        colorButton.setBackground(newColor);
+    }
+
+    public void selectDefaultColor() {
+        colorButton.setBackground(AvatarMADAssumption.ASSUMPTION_TYPE_COLOR.get(0));
+    }
+
+    public void selectStereotype() {
+        int index = typeBox.getSelectedIndex();
+        stereotype.setText(AvatarMADAssumption.ASSUMPTION_TYPE_STR.get(index));
+        colorButton.setBackground( AvatarMADAssumption.ASSUMPTION_TYPE_COLOR.get(index));
     }
     
     
@@ -274,6 +327,14 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
     
     public int getLimitation() {
         return limitationBox.getSelectedIndex();
+    }
+
+    public String getStereotype() {
+        return stereotype.getText();
+    }
+
+    public int getColor() {
+        return colorButton.getBackground().getRGB();
     }
     
    
