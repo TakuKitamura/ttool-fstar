@@ -247,7 +247,7 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
 
     }*/
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = name;
 
         JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");

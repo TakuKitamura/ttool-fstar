@@ -184,7 +184,7 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 	}
 	
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 	//
         String oldName = name;
 		String tmp;

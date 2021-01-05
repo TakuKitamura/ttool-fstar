@@ -863,7 +863,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		return TGComponentManager.ELN_TDF_VOLTAGE_SOURCE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentVoltageSourceTDF jde = new JDialogELNComponentVoltageSourceTDF(this);
 		jde.setVisible(true);
 		return true;

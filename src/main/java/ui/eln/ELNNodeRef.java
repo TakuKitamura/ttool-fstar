@@ -379,7 +379,7 @@ public class ELNNodeRef extends TGCScalableWithInternalComponent implements Acti
 		return TGComponentManager.ELN_NODE_REF;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNNodeRef jde = new JDialogELNNodeRef(this);
 		jde.setVisible(true);
 		return true;

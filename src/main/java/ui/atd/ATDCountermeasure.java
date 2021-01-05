@@ -258,7 +258,7 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
     }
 
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
 

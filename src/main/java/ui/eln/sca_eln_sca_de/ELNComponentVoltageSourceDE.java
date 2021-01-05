@@ -886,7 +886,7 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		return TGComponentManager.ELN_DE_VOLTAGE_SOURCE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentVoltageSourceDE jde = new JDialogELNComponentVoltageSourceDE(this);
 		jde.setVisible(true);
 		return true;

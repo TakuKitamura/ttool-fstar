@@ -247,7 +247,7 @@ public class AvatarPDBoolEq extends AvatarPDToggle implements ConstraintListInte
 //
     
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
 		
 		//String text = getName() + ": ";
 		String s;

@@ -145,7 +145,7 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String text = "Static for loop : ";
         String s = (String)JOptionPane.showInputDialog(frame, text,
                                                        "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,

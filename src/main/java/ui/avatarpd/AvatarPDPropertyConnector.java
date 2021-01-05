@@ -148,7 +148,7 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
     }
 	
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
       //  String oldValue = value;
 		JDialogAvatarPropertyConnector jdapc = new JDialogAvatarPropertyConnector(frame, getValue().compareTo("not") == 0);
 	//	jdapc.setSize(300, 200);

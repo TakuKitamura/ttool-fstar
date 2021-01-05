@@ -143,7 +143,7 @@ public class SDTimerCancellation extends TGCScalableWithoutInternalComponent imp
         value = "{timer=" + timer + "}";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = timer;
         String text = getName() + ": ";
         if (hasFather()) {

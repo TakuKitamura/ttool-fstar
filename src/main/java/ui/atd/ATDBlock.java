@@ -225,7 +225,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         return name;
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
 
         //String text = getName() + ": ";

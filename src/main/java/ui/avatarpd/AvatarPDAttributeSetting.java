@@ -239,7 +239,7 @@ public class AvatarPDAttributeSetting extends AvatarPDToggle implements Constrai
 //    }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         //String tmp;
         //boolean error = false;
 

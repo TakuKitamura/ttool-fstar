@@ -113,7 +113,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
     	JDialogVersioningConnector jdvc = new JDialogVersioningConnector(frame, oldVersion, newVersion);
      //   jdvc.setSize(400, 300);
         GraphicLib.centerOnParent(jdvc, 400, 300);

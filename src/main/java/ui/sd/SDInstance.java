@@ -182,7 +182,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = name;
 
         JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");

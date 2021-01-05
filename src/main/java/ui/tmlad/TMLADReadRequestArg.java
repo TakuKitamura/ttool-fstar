@@ -194,7 +194,7 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 	}
 	
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		String [] labels = new String[nParam];
 		String [] values = new String[nParam];
 		for(int i=0; i<nParam; i++) {

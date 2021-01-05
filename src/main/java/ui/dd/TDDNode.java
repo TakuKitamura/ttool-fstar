@@ -156,7 +156,7 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
         return nodeName;
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldSte = getStereotype();
         String oldName = getNodeName();
         String[] array = new String[2];

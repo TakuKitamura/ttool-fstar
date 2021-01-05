@@ -211,7 +211,7 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
         }
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         try {
             if (methodEditOnDoubleClick == null) {
                 createInstance();

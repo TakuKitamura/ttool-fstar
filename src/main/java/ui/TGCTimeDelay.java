@@ -132,7 +132,7 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
 		}
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldMin = getMinDelay();
         String oldMax = getMaxDelay();
 		String oldUnit = getUnit();

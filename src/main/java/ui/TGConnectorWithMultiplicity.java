@@ -89,7 +89,7 @@ public abstract class TGConnectorWithMultiplicity extends TGConnectorWithComment
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String [] labels = new String[2];
         String [] values = new String[2];
 

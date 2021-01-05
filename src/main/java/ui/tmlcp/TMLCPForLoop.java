@@ -150,7 +150,7 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String[] labels = new String[3];
         String[] values = new String[3];
         labels[0] = "Initialisation of variable";

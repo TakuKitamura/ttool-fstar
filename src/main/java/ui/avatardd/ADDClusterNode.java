@@ -181,7 +181,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 	}
 
     @Override
-	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+	public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
 		int i;
 		MainGUI mgui = getTDiagramPanel().getMainGUI();
 

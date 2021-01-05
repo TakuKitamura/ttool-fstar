@@ -245,7 +245,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 //    }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         oldValue = value;
 
         if ((displayText) && (_y <= (y + lineHeight))) {

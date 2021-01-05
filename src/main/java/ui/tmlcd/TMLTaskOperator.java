@@ -211,7 +211,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         oldValue = value;
         
         String text = getName() + ": ";

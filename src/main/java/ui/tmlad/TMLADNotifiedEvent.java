@@ -187,7 +187,7 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String [] labels = new String[2];
         String [] values = new String[2];
         labels[0] = "Event name";

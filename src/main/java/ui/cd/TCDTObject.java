@@ -237,7 +237,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
         }
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldFirstName = firstName;
         TCDTClass oldMasterTClass = masterTClass;
         

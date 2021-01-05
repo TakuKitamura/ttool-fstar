@@ -1039,7 +1039,7 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 		return TGComponentManager.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentVoltageControlledCurrentSource jde = new JDialogELNComponentVoltageControlledCurrentSource(
 				this);
 		jde.setVisible(true);

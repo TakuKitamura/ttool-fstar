@@ -126,7 +126,7 @@ public class EBRDDForLoop extends TGCWithoutInternalComponent implements Embedde
         g.drawString(value, x + (width - w) / 2 , y + textY);
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String [] labels = new String[3];
         String [] values = new String[3];
         labels[0] = "Initialisation of variables";

@@ -81,7 +81,7 @@ public class SysCAMSPortConnector extends TGConnector implements /* Issue #31 Sc
 	}
 
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogSysCAMSConnector jde = new JDialogSysCAMSConnector(this);
 		jde.setVisible(true);
 		return true;

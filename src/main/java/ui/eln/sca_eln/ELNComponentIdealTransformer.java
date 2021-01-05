@@ -887,7 +887,7 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 		return TGComponentManager.ELN_IDEAL_TRANSFORMER;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentIdealTransformer jde = new JDialogELNComponentIdealTransformer(this);
 		jde.setVisible(true);
 		return true;

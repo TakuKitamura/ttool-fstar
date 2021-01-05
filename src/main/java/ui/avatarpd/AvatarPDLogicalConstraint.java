@@ -224,7 +224,7 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
 
     
     
-     public boolean editOndoubleClick(JFrame frame) {
+     public boolean editOnDoubleClick(JFrame frame) {
 //		String tmp;
 //		boolean error = false;
 		

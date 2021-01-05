@@ -208,7 +208,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
         g.setFont(f);
     }
     
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         oldValue = value;
         
 		if ((displayText) && (_y <= (y + lineHeight))) {

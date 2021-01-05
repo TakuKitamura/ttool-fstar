@@ -144,7 +144,7 @@ public abstract class TGConnectorMessageSD extends TGConnector {
 
 
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         //
         String text = getName() + ": ";
         if (hasFather()) {

@@ -519,7 +519,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 		return TGComponentManager.ELN_RESISTOR;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentResistor jde = new JDialogELNComponentResistor(this);
 		jde.setVisible(true);
 		return true;

@@ -145,7 +145,7 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
         value = "{timer=" + timer + ", duration=" + duration + "}";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldMin = getTimer();
         String oldMax = getDuration();
         String[] array = new String[2];

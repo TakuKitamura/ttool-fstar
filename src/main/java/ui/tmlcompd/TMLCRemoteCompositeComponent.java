@@ -282,7 +282,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
     }
 	
 	@Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
 		
 		// On the icon?
 		if (iconIsDrawn && (tmlcc != null)) {

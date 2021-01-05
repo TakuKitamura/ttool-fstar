@@ -180,7 +180,7 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
         return cluster_index;
 	}*/
 	
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 			boolean error = false;
 			String errors = "";
 			int tmp;

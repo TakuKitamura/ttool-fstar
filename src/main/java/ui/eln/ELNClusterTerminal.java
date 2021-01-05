@@ -266,7 +266,7 @@ public class ELNClusterTerminal extends TGCScalableWithInternalComponent impleme
 		}
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNClusterTerminal jde = new JDialogELNClusterTerminal(this);
 		jde.setVisible(true);
 		return true;

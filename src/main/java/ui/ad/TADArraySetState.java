@@ -124,7 +124,7 @@ public class TADArraySetState extends TADComponentWithoutSubcomponents/* Issue #
     }
 
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         
         JDialogArraySet jdas = new JDialogArraySet(frame, array, index, expr, "Setting value of an array location");

@@ -831,7 +831,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		return TGComponentManager.ELN_TDF_CURRENT_SOURCE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentCurrentSourceTDF jde = new JDialogELNComponentCurrentSourceTDF(this);
 		jde.setVisible(true);
 		return true;

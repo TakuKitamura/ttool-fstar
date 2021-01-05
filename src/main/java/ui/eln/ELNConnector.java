@@ -88,7 +88,7 @@ public class ELNConnector extends TGConnector /* Issue #31 implements ScalableTG
 	}
 
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNConnector jde = new JDialogELNConnector(this);
 		jde.setVisible(true);
 		return true;

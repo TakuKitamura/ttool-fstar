@@ -287,7 +287,7 @@ public class TMLADReadCAMS extends TADComponentWithoutSubcomponents/* Issue #69 
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         TabInfo tab1 = new TabInfo("Name and samples");
         String[] labels = new String[2];
         String[] values = new String[2];

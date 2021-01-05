@@ -220,7 +220,7 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicCanBeDisabledComponent /
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         List<String> timers = tdp.getMGUI().getAllTimers();
         TraceManager.addDev("Nb of timers:" + timers.size());
 

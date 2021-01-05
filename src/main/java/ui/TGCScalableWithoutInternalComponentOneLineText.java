@@ -95,7 +95,7 @@ public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGC
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {

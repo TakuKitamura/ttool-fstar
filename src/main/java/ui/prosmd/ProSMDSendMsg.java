@@ -130,8 +130,8 @@ public class ProSMDSendMsg extends TGCOneLineText {
     }
     
   
-    public boolean editOndoubleClick(JFrame frame) {
-        super.editOndoubleClick(frame);
+    public boolean editOnDoubleClick(JFrame frame) {
+        super.editOnDoubleClick(frame);
 	String oldViaPort = viaPort;
     String text = "Via port: ";
     

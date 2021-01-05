@@ -149,7 +149,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
     }
     
     
-     public boolean editOndoubleClick(JFrame frame) {
+     public boolean editOnDoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
 		String oldValue = value;

@@ -91,7 +91,7 @@ public  class ADDConnector extends TGConnector  {
 	}
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         /*JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
 		dialog.setSize(350, 300);
         GraphicLib.centerOnParent(dialog);

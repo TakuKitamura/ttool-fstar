@@ -156,7 +156,7 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
         return null;
     }
 	
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		boolean error = false;
 		String errors = "";
 		String val;

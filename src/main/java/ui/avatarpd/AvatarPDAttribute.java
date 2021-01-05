@@ -250,7 +250,7 @@ public class AvatarPDAttribute extends AvatarPDToggle implements SwallowedTGComp
     }
     
     @Override
-	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+	public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
 		
 		//String text = getName() + ": ";
 		if (_y < y + toggleHeight) {

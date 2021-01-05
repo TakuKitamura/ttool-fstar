@@ -235,7 +235,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
 
     @Override
-    public boolean editOndoubleClick( JFrame frame ) {
+    public boolean editOnDoubleClick(JFrame frame ) {
         boolean error = false;
         String errors = "";
         String tmpName;

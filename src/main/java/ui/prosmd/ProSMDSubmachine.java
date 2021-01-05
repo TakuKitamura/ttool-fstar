@@ -171,7 +171,7 @@ public class  ProSMDSubmachine extends TGCOneLineText implements ActionListener 
        
     	if (e.getActionCommand().equals("rename"))
     	{
-    		super.editOndoubleClick(null);
+    		super.editOnDoubleClick(null);
     	}
     	
     }
@@ -203,7 +203,7 @@ public void setCode(String id) {
 }
     
 
-	public boolean editOndoubleClick(JFrame frame) {	
+	public boolean editOnDoubleClick(JFrame frame) {
 		return tdp.getGUI().selectTab(value);
 	}
 

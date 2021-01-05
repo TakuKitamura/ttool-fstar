@@ -164,7 +164,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		return null;
 	}
 
-	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+	public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
 		// On the name ?
 		if (_y <= (y + currentFontSize + textX)) {
 			oldValue = value;

@@ -133,12 +133,12 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         AvatarSMDTransitionInfo info = getAvatarSMDTransitionInfo();
         if (info == null) {
             return false;
         }
-        return info.editOndoubleClick(frame);
+        return info.editOnDoubleClick(frame);
     }
 
     @Override

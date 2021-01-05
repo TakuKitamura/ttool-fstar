@@ -389,7 +389,7 @@ public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         List<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
         //TraceManager.addDev("Nb of signals:" + signals.size());
 		List<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();

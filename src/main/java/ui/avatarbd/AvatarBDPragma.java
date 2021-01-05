@@ -378,7 +378,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
 
         JDialogPragma jdn = new JDialogPragma(frame, "Setting the security pragmas", value);

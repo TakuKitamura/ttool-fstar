@@ -493,7 +493,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         List<TAttribute> attributes = tdp.getMGUI().getAllAttributes();
         List<AvatarMethod> methods = tdp.getMGUI().getAllMethods();
         JDialogAvatarTransition jdat = new JDialogAvatarTransition(	frame, 

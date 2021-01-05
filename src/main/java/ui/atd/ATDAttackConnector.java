@@ -160,7 +160,7 @@ public class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints /
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + "Connector";
         String s = (String)JOptionPane.showInputDialog(frame, text,

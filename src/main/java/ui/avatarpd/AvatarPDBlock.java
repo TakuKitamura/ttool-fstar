@@ -480,7 +480,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     }
     
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		
 		oldValue = value;
 		

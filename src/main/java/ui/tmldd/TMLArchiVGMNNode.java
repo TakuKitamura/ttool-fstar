@@ -210,7 +210,7 @@ public class TMLArchiVGMNNode extends TMLArchiCommunicationNode implements Swall
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
         int tmp;

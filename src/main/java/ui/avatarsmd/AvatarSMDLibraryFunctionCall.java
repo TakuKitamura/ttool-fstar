@@ -189,7 +189,7 @@ public class AvatarSMDLibraryFunctionCall extends AvatarSMDBasicCanBeDisabledCom
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         JDialogSMDLibraryFunctionCall dialog = new JDialogSMDLibraryFunctionCall (
                 this,
                 frame,

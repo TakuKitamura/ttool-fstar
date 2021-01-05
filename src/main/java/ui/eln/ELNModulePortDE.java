@@ -282,7 +282,7 @@ public class ELNModulePortDE extends TGCScalableWithInternalComponent implements
 		}
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNModulePortDE jde = new JDialogELNModulePortDE(this);
 		jde.setVisible(true);
 		return true;

@@ -164,7 +164,7 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         return null;
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
 		JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
         null,

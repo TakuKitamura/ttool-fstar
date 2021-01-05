@@ -142,7 +142,7 @@ public class SDTimerExpiration extends TGCWithoutInternalComponent implements Sw
         value = "{timer=" + timer + "}";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = timer;
         String text = getName() + ": ";
         if (hasFather()) {

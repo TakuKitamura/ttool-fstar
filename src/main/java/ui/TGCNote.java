@@ -203,7 +203,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = this.value;
 
         JDialogNote jdn = new JDialogNote(frame, "Setting the note", value);

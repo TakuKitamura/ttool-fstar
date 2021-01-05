@@ -222,7 +222,7 @@ public class TADTimeLimitedOfferWithLatency extends TADComponentWithSubcomponent
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {

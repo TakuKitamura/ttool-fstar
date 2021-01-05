@@ -343,7 +343,7 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
         g.setFont(f);
     }
 
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         ArrayList<TGComponent> comps = tdp.getMainGUI().getAllRequirements();
         ArrayList<String> allRequirements = new ArrayList<>(comps.size());
         ArrayList<AvatarRDRequirement> realComps = new ArrayList<>(comps.size());

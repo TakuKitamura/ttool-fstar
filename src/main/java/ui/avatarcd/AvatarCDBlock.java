@@ -337,7 +337,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         }
      * */
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 
         oldValue = getStereotype() + "/" + getValue();
 

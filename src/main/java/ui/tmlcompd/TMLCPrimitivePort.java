@@ -584,7 +584,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         //
         //String oldValue = valueOCL;
         int oldSample = maxSamples;

@@ -85,7 +85,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 	}
     
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, 
 																			null,
 																			frame,

@@ -823,7 +823,7 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		return TGComponentManager.ELN_DE_CURRENT_SINK;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentCurrentSinkDE jde = new JDialogELNComponentCurrentSinkDE(this);
 		jde.setVisible(true);
 		return true;

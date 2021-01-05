@@ -142,7 +142,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         if (isChannel) {
 //            String oldValue = value;
             String[] labels = new String[1];

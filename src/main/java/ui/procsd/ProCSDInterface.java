@@ -256,7 +256,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	  {
 		  return new LinkedList<>(myMessages);
 	  }
-	    public boolean editOndoubleClick(JFrame frame) {
+	    public boolean editOnDoubleClick(JFrame frame) {
 	       
 	    	//Changed from JDialogAttribute, by Solange
 	        JDialogAttributeProCSD dialog = new JDialogAttributeProCSD(myMessages, new LinkedList<TAttribute> (), frame, "Setting messages of this interface" , "message");

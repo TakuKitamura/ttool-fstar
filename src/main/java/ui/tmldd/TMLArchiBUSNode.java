@@ -239,7 +239,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
         int tmp;

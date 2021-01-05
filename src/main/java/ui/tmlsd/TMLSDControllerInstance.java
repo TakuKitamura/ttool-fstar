@@ -88,7 +88,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 	}
     
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogTMLCPControllerInstance jdab = new JDialogTMLCPControllerInstance( 	myAttributes,
 																					null,
 																					frame,

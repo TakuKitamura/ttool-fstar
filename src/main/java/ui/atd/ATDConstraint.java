@@ -177,7 +177,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements S
        }*/
 
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 //        String tmp;
 //        boolean error = false;
 

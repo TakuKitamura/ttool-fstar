@@ -731,7 +731,7 @@ public class ELNComponentIndependentCurrentSource extends TGCScalableWithInterna
 		return TGComponentManager.ELN_INDEPENDENT_CURRENT_SOURCE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentIndependentCurrentSource jde = new JDialogELNComponentIndependentCurrentSource(this);
 		jde.setVisible(true);
 		return true;

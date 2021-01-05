@@ -74,7 +74,7 @@ public abstract class TGCWithOneLineText extends TGCWithInternalComponent{
         }
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         //
         String text = getName() + ": ";
         if (hasFather()) {

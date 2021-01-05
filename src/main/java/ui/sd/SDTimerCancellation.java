@@ -144,7 +144,7 @@ public class SDTimerCancellation extends TGCWithoutInternalComponent implements 
         value = "{timer=" + timer + "}";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = timer;
         String text = getName() + ": ";
         if (hasFather()) {

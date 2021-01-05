@@ -95,7 +95,7 @@ public class TMLOperationBox extends TGCWithoutInternalComponent {
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {

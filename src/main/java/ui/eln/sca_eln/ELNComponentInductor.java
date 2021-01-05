@@ -564,7 +564,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 		return TGComponentManager.ELN_INDUCTOR;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentInductor jde = new JDialogELNComponentInductor(this);
 		jde.setVisible(true);
 		return true;

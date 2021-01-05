@@ -184,7 +184,7 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 	}
 	
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		String oldValue = value;
 		String text = getName() + ": ";
 		if (hasFather()) {

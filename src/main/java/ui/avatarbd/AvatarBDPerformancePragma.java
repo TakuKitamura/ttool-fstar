@@ -323,7 +323,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
       }*/
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
 
         JDialogPerformancePragma jdn = new JDialogPerformancePragma(frame, "Setting the performance pragmas", value);

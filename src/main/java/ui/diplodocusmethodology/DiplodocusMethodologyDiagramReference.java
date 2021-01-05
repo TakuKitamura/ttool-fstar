@@ -282,7 +282,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         addDiagramReference(frame);
         return true;
         // On the name ?

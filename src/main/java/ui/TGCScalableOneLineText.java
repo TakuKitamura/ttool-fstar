@@ -99,7 +99,7 @@ public class TGCScalableOneLineText extends TGCScalableWithoutInternalComponent 
         return null;
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {

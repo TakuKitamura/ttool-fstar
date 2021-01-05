@@ -424,7 +424,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     }
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) 
+    public boolean editOnDoubleClick(JFrame frame)
     {
         if (indexOnMe == -1) {
         	// Opening the diagram

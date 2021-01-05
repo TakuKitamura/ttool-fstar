@@ -260,7 +260,7 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
     }
     
     
-     public boolean editOndoubleClick(JFrame frame) {
+     public boolean editOnDoubleClick(JFrame frame) {
 //		String tmp;
 //		boolean error = false;
 		

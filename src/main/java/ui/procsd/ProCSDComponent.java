@@ -232,7 +232,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {	
+	public boolean editOnDoubleClick(JFrame frame) {
 		//if this comp is specified in a ProActiveCompSpecPanel 
 		//we select this panel
 		ProActiveCompSpecificationCSDPanel specPanel=this.getMyDesignPanel();
@@ -461,7 +461,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 		}
 		
 		if (e.getActionCommand().equals("design component in a new diagram")) {
-			if (!this.editOndoubleClick(this.tdp.getGUI().frame))
+			if (!this.editOnDoubleClick(this.tdp.getGUI().frame))
 			{
 			ProactiveDesignPanel pdp=(ProactiveDesignPanel)tdp.getGUI().getCurrentTURTLEPanel();
 			ProActiveCompSpecificationCSDPanel myPanel=pdp.addProActiveCompSpecificationPanel(this.value);

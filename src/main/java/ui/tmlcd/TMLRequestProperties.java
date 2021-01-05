@@ -128,7 +128,7 @@ public class TMLRequestProperties extends TGCWithoutInternalComponent {
         //
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = valueOCL;
         JDialogParam jda = new JDialogParam(reqName, list[0].getType(), list[1].getType(), list[2].getType(), frame, "Setting properties");
       //  jda.setSize(350, 350);

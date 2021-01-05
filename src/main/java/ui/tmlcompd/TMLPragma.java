@@ -241,7 +241,7 @@ public class TMLPragma extends TGCScalableWithoutInternalComponent {
 
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
 
         JDialogTMLPragma jdp = new JDialogTMLPragma(frame, "Setting the pragmas", value);

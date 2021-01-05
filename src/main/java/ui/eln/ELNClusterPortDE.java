@@ -271,7 +271,7 @@ public class ELNClusterPortDE extends TGCScalableWithInternalComponent implement
 		}
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNClusterPortDE jde = new JDialogELNClusterPortDE(this);
 		jde.setVisible(true);
 		return true;

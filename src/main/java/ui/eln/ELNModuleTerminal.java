@@ -277,7 +277,7 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 		}
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNModuleTerminal jde = new JDialogELNModuleTerminal(this);
 		jde.setVisible(true);
 		return true;

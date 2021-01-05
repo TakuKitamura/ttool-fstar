@@ -132,7 +132,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         if (isChannel) {
             String oldValue = value;
             String[] labels = new String[1];

@@ -210,7 +210,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
         calculateMyDesiredSize();
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame,
                 "Setting variables", attributeText, null, false,

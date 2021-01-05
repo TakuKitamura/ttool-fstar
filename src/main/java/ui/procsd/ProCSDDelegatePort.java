@@ -223,7 +223,7 @@ public class ProCSDDelegatePort extends ProCSDPort implements SwallowedTGCompone
         return value;
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {

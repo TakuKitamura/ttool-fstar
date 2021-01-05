@@ -218,7 +218,7 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicCanBeDisabledComponent /* I
 	}
     
 	@Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 		List<String> timers = tdp.getMGUI().getAllTimers();
 		TraceManager.addDev("Nb of timers:" + timers.size());
 		

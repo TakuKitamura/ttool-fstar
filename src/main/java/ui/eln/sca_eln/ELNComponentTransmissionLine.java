@@ -691,7 +691,7 @@ public class ELNComponentTransmissionLine extends TGCScalableWithInternalCompone
 		return TGComponentManager.ELN_TRANSMISSION_LINE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentTransmissionLine jde = new JDialogELNComponentTransmissionLine(this);
 		jde.setVisible(true);
 		return true;

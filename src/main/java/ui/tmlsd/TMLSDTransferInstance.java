@@ -88,7 +88,7 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 	}
     
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogTMLCPTransferInstance jdab = new JDialogTMLCPTransferInstance( 	myAttributes, 
 																				null, 
 																				frame,

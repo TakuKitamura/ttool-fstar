@@ -372,7 +372,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         // On the name ?
         if ((((limitName == -1) && (displayText) && (_y <= (y + 2 * currentFontSize)))) || ((displayText) && (_y < limitName))) {
             oldValue = value;

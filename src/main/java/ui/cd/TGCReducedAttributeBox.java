@@ -197,7 +197,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
     }
     
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         TCDTObject to = (TCDTObject)(getFather());
         TCDTClass tc = to.getMasterTClass();
         if (tc == null) {

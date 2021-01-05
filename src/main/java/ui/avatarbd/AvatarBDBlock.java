@@ -831,7 +831,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         int textX = (int) (this.textX * this.tdp.getZoom());
 
         if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {

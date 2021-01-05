@@ -133,7 +133,7 @@ public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #
     }
 	
     @Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         
         JDialogArrayGet jdag = new JDialogArrayGet(frame, variable, array, index, "Getting value from an array");

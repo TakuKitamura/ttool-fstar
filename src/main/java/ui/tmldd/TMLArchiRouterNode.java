@@ -186,7 +186,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
         int tmp;

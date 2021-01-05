@@ -203,7 +203,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         JDialogArchiKey dialog = new JDialogArchiKey(frame, "Setting channel artifact attributes", this);
         GraphicLib.centerOnParent(dialog, 700, 600);
         dialog.setVisible( true ); // blocked until dialog has been closed

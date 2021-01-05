@@ -148,7 +148,7 @@ public class SDTimerSetting extends TGCWithoutInternalComponent implements Swall
         value = "{timer=" + timer + ", duration=" + duration + "}";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldMin = getTimer();
         String oldMax = getDuration();
         String[] array = new String[2];

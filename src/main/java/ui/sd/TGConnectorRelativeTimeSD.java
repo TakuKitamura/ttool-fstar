@@ -118,7 +118,7 @@ public  class TGConnectorRelativeTimeSD extends TGConnector {
         value = "{" + minConstraint + ".." + maxConstraint + "}";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldMin = getMinConstraint();
         String oldMax = getMaxConstraint();
         String[] array = new String[2];

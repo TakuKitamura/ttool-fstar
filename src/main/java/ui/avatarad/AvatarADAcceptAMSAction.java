@@ -161,7 +161,7 @@ public class AvatarADAcceptAMSAction extends  AvatarADBasicCanBeDisabledComponen
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
 
         //String text = getName() + ": ";

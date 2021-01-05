@@ -98,7 +98,7 @@ public class TCDOperationBox extends TGCWithoutInternalComponent {
         }
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		oldValue = value;
 		String text = getName() + ": ";
 		if (hasFather()) {

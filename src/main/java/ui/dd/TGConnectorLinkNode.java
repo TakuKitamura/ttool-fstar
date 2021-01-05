@@ -99,7 +99,7 @@ public  class TGConnectorLinkNode extends TGConnector {
         
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         //
         String oldDelay = delay;
         String oldLossRate = lossRate;

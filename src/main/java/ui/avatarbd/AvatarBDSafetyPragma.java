@@ -269,7 +269,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
       }*/
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
 
         AvatarBDPanel abdp = (AvatarBDPanel) tdp;

@@ -401,7 +401,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         //TraceManager.addDev("icon is drawn? " + iconIsDrawn);
         //if (iconIsDrawn) {

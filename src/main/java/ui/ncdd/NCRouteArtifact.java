@@ -142,7 +142,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 	}
 
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
 

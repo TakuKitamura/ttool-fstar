@@ -150,7 +150,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         return monitored;
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
         int tmp;

@@ -891,7 +891,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 		return TGComponentManager.ELN_TDF_VOLTAGE_SINK;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentVoltageSinkTDF jde = new JDialogELNComponentVoltageSinkTDF(this);
 		jde.setVisible(true);
 		return true;

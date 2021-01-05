@@ -241,7 +241,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
 		JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
         null,

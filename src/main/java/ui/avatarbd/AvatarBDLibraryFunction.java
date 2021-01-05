@@ -591,7 +591,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         int paddingHorizontal = (int) (AvatarBDLibraryFunction.paddingHorizontal * this.tdp.getZoom());
         if (this.iconIsDrawn && GraphicLib.isInRectangle(
                 _x,

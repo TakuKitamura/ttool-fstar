@@ -149,7 +149,7 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String[] labels = new String[1];
         String[] values = new String[1];
         labels[0] = "Security Pattern";

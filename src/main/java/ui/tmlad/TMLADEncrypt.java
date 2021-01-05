@@ -208,7 +208,7 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String[] values = new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key, algorithm};
         String[] nonces = tdp.getMGUI().getAllNonce();
         String[] keys = tdp.getMGUI().getAllKeys().toArray(new String[0]);

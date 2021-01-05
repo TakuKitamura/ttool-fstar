@@ -176,7 +176,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 
 
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		boolean error = false;
 		String errors = "";
 		int tmp;

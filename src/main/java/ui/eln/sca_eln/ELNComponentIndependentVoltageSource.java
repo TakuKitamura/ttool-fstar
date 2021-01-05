@@ -703,7 +703,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 		return TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentIndependentVoltageSource jde = new JDialogELNComponentIndependentVoltageSource(this);
 		jde.setVisible(true);
 		return true;

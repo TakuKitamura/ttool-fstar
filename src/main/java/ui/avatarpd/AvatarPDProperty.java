@@ -289,7 +289,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
         //
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, kind, not);
      //   jdap.setSize(300, 280);

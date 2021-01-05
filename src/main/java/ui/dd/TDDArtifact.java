@@ -150,7 +150,7 @@ public class TDDArtifact extends TGCWithoutInternalComponent implements Swallowe
     }
     
     
-     public boolean editOndoubleClick(JFrame frame) {
+     public boolean editOnDoubleClick(JFrame frame) {
         //
 
         boolean ret = true;

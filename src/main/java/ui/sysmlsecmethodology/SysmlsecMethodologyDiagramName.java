@@ -294,7 +294,7 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
         return null;
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 
         if (indexOnMe == -1) {
             // Opening the diagram

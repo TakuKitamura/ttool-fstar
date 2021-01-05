@@ -141,7 +141,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
     }
     
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 		//
         String text = getName() + ": ";
         if (hasFather()) {

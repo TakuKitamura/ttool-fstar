@@ -200,7 +200,7 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
 	}*/
 
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		String text = "Reference to a SD: ";
 		if( hasFather() ) {
 			text = getTopLevelName() + " / " + text;

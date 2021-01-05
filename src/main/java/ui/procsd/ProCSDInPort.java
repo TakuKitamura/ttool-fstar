@@ -275,7 +275,7 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
         return value;
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {
@@ -401,7 +401,7 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
     	//
     	if (e.getActionCommand().equals("rotate")) this.rotate(0);
     	// Added by Solange
-    	if (e.getActionCommand().equals("rename")) temp=this.editOndoubleClick(tdp.getGUI().getFrame());
+    	if (e.getActionCommand().equals("rename")) temp=this.editOnDoubleClick(tdp.getGUI().getFrame());
     	    	
     }
 

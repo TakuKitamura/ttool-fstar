@@ -141,7 +141,7 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
         //
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = valueOCL;
         int oldSample = maxSamples;
         JDialogParamFIFO jda = new JDialogParamFIFO(eventName, list[0].getType(), list[1].getType(), list[2].getType(), isFinite, isBlocking, ""+maxSamples, frame, "Setting properties");

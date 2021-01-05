@@ -2906,9 +2906,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     public final boolean doubleClick(JFrame frame, int _x, int _y) {
         boolean b;
         if (multieditable) {
-            b = editOndoubleClick(frame, _x, _y);
+            b = editOnDoubleClick(frame, _x, _y);
         } else if (editable) {
-            b = editOndoubleClick(frame);
+            b = editOnDoubleClick(frame);
         } else {
             return false;
         }
@@ -2953,12 +2953,12 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         //TraceManager.addDev("I am removed:" + value);
     }
 
-    protected boolean editOndoubleClick(JFrame frame) {
+    protected boolean editOnDoubleClick(JFrame frame) {
         //  TraceManager.addDev("editOn....");
         return tdp.actionOnDoubleClick(this);
     }
 
-    protected boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    protected boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         //  TraceManager.addDev("editOn....");
         return tdp.actionOnDoubleClick(this);
     }

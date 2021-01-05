@@ -326,7 +326,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         g.setFont(f);
     }
 
-    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
         // On the name ?
         oldValue = value;
 

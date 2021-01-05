@@ -197,7 +197,7 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 		return technicalLatency;
 	}
     
-   	public boolean editOndoubleClick(JFrame frame) {
+   	public boolean editOnDoubleClick(JFrame frame) {
         //
         String oldName = name;
 		String tmp;

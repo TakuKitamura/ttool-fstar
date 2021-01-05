@@ -287,7 +287,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
 

@@ -174,7 +174,7 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
 

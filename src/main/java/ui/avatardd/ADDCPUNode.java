@@ -183,7 +183,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         return name;
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
         int tmp;

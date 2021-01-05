@@ -118,7 +118,7 @@ public class TGCTimeInterval extends TGCScalableWithoutInternalComponent{
         value = "[" + minDelay + ", " + maxDelay + "]";
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldMin = getMinDelay();
         String oldMax = getMaxDelay();
         String[] array = new String[2];

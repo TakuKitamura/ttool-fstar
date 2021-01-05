@@ -195,7 +195,7 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
         }    
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame,
                 "Setting " + attributeText + "s of " + father.getValue(), attributeText,

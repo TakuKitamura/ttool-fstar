@@ -199,7 +199,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
 
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 //        String tmp;
 //        boolean error = false;
 

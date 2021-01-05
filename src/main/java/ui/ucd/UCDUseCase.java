@@ -171,7 +171,7 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     } 
     
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
 //        boolean error = false;
 //		String errors = "";
 //		int tmp;

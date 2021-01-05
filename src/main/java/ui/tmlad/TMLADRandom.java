@@ -139,7 +139,7 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
     }
 	
 	@Override
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
         boolean error = false;
 		String errors = "";
 	//	int tmp;

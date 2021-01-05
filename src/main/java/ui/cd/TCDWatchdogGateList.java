@@ -164,7 +164,7 @@ public class TCDWatchdogGateList extends TGCWithoutInternalComponent {
         }
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         if (t1 ==null) {
             JOptionPane.showMessageDialog(frame, "This composition operator is not connected to an association connecting two TClasses", "Edit error", JOptionPane.INFORMATION_MESSAGE);
             return false;

@@ -522,7 +522,7 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 		return TGComponentManager.ELN_CAPACITOR;
 	}
 
-	public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOnDoubleClick(JFrame frame) {
 		JDialogELNComponentCapacitor jde = new JDialogELNComponentCapacitor(this);
 		jde.setVisible(true);
 		return true;

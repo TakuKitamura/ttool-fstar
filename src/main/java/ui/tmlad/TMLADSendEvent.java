@@ -293,7 +293,7 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
     }
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         String[] labels = new String[nParam + 1];
         String[] values = new String[nParam + 1];
         labels[0] = "Event name";

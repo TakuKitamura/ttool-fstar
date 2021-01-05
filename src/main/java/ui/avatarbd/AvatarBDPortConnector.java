@@ -322,7 +322,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
 
     @Override
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
         // Gets the two concerned blocks
 
         AvatarBDBlock block1 = getAvatarBDBlock1();
