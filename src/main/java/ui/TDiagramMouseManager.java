@@ -418,6 +418,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 if (tgc.doubleClick(tdp.getGUI().getFrame(), e.getX(), e.getY())) {
                     //TraceManager.addDev("Change4");
                     tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
+                    //TraceManager.addDev("repaint in mouse manager");
                     tdp.repaint();
                 }
             }

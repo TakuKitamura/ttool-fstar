@@ -1771,6 +1771,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (e.getSource() == edit) {
             if (componentPopup.doubleClick(mgui.getFrame(), 0, 0)) {
                 getGUI().changeMade(this, CHANGE_VALUE_COMPONENT);
+                //TraceManager.addDev("repaint in diagram panel");
                 repaint();
             }
             return;

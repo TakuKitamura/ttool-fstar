@@ -267,6 +267,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent {
                     newSizeForSon(null);
                 }*/
                 setValue(s);
+                return true;
 
             }
             return false;
