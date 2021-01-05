@@ -60,6 +60,11 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public abstract class TGConnectorWithMultiplicity extends TGConnectorWithCommentConnectionPoints {
+
+    public final static int MULTIPLICITY_X = 5;
+    public final static int MULTIPLICITY_Y = 5;
+
+
     protected String originMultiplicity, destinationMultiplicity;
 
     public TGConnectorWithMultiplicity(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
@@ -85,13 +90,16 @@ public abstract class TGConnectorWithMultiplicity extends TGConnectorWithComment
 
     @Override
     public boolean editOndoubleClick(JFrame frame) {
-        String [] labels = {"origin", "destination"};
+        String [] labels = new String[2];
         String [] values = new String[2];
+
+        labels[0] = "origin (" + getTGComponent1().getName() + ")";
+        labels[1] = "destination (" + getTGComponent2().getName() + ")";
         values[0] = originMultiplicity;
         values[1] = destinationMultiplicity;
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Multiplicity", 2, labels, values);
-        GraphicLib.centerOnParent(jdms, 500, 300);
+        GraphicLib.centerOnParent(jdms, 300, 200);
         jdms.setVisible(true); // blocked until dialog has been closed
 
         if (jdms.hasBeenSet()) {
@@ -143,6 +151,36 @@ public abstract class TGConnectorWithMultiplicity extends TGConnectorWithComment
         } catch (Exception e) {
             throw new MalformedModelingException(e);
         }
+    }
+
+    protected void internalDrawing(Graphics g) {
+        super.internalDrawing(g);
+
+        int length = g.getFontMetrics().stringWidth(originMultiplicity);
+        int modifierX = getModifierX(getTGComponent1(), getTGConnectingPointP1(), length);
+        int modifierY = getModifierY(getTGComponent1(), getTGConnectingPointP1(), g.getFont().getSize());
+
+        g.drawString(originMultiplicity, getTGConnectingPointP1().getX() + modifierX, getTGConnectingPointP1().getY() + modifierY);
+
+        length = g.getFontMetrics().stringWidth(destinationMultiplicity);
+        modifierX = getModifierX(getTGComponent2(), getTGConnectingPointP2(), length);
+        modifierY = getModifierY(getTGComponent2(), getTGConnectingPointP2(), g.getFont().getSize());
+
+        g.drawString(destinationMultiplicity, getTGConnectingPointP2().getX() + modifierX, getTGConnectingPointP2().getY() + modifierY);
+    }
+
+    protected int getModifierX(TGComponent tgc, TGConnectingPoint p, int length) {
+        if (p.getX() <= tgc.getX()+width/2) {
+            return -MULTIPLICITY_X - length;
+        }
+        return MULTIPLICITY_X;
+    }
+
+    protected int getModifierY(TGComponent tgc, TGConnectingPoint p, int fontSize) {
+        if (p.getY() <= tgc.getY()+height/2) {
+            return -MULTIPLICITY_Y - fontSize;
+        }
+        return MULTIPLICITY_Y + fontSize;
     }
 
 }
