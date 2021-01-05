@@ -51,7 +51,7 @@ import java.util.Vector;
 * @version 1.0 05/01/2021
 * @author Ludovic APVRILLE
  */
-public  class AvatarCDAggregationConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
+public  class AvatarCDAggregationConnector extends TGConnectorWithMultiplicity /* Issue #31 implements ScalableTGComponent*/ {
     protected int d = 20;
 	protected int D = 26;
     //protected int widthValue, heightValue, maxWidthValue, h;
@@ -155,31 +155,9 @@ public  class AvatarCDAggregationConnector extends TGConnectorWithCommentConnect
 		
         return null;
     }
-	
-//	Issue #31 Now managed in upper class 
-//    public void rescale(double scaleFactor){
-//		//
-//		int xx, yy;
-//		
-//		for(int i=0; i<nbInternalTGComponent; i++) {
-//			xx = tgcomponent[i].getX();
-//			yy = tgcomponent[i].getY();
-//			//
-//			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-//			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-//			xx = (int)(tgcomponent[i].dx);
-//			tgcomponent[i].dx = tgcomponent[i].dx - xx;
-//			yy = (int)(tgcomponent[i].dy);
-//			tgcomponent[i].dy = tgcomponent[i].dy - yy;
-//			
-//			tgcomponent[i].setCd(xx, yy);
-//			
-//			//
-//        }
-//		
-//		oldScaleFactor = scaleFactor;
-//		rescaled = true;
-//	}
+
+
+
     
 	@Override
     public int getType() {
