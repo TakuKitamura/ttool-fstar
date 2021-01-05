@@ -114,12 +114,14 @@ public class AvatarSMDReceiveAMSSignal extends AvatarSMDBasicCanBeDisabledCompon
         removable = true;
         
         name = "Receive AMS signal";
-		value = "sig()";
+		value = "amsSig()";
         //makeValue();
         
         myImageIcon = IconManager.imgic908;
 		latencyVals = new ConcurrentHashMap<String, String>();
 		//latencyVals.put("sendChannel: sensorData", "15");
+
+		TraceManager.addDev("Adding signal AMS receive");
     }
     
 	public void addLatency(String name, String num){

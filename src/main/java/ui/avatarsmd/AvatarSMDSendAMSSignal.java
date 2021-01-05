@@ -112,7 +112,7 @@ public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
         removable = true;
 
         name = "Send AMS signal";
-        value = "sig()";
+        value = "amsSig()";
 	
         //makeValue();
 

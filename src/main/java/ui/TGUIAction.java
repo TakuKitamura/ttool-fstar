@@ -1338,7 +1338,7 @@ public class TGUIAction extends AbstractAction {
 
         actions[ASMD_SEND_AMSSIGNAL] = new TAction("add-ams-sendsignal", "Send AMS signal", IconManager.imgic2015, IconManager.imgic2015, "Send AMS signal",
                 "Add an AMS send signal operator to the currently opened AVATAR state machine diagram", 0);
-        actions[ASMD_RECEIVE_AMSSIGNAL] = new TAction("add-asmd-receivesignal", "Receive AMS signal", IconManager.imgic2017, IconManager.imgic2017,
+        actions[ASMD_RECEIVE_AMSSIGNAL] = new TAction("add-ams-receivesignal", "Receive AMS signal", IconManager.imgic2017, IconManager.imgic2017,
                 "Receive AMS signal", "Add an AMS receive signal operator to the currently opened AVATAR state machine diagram", 0);
 
         // TODO: change icon
