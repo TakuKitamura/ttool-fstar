@@ -180,7 +180,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         if (currentHeight < height) {
             //g.drawLine(x, y+h, x+width, y+h);
             g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
-            g.fill3DRect(x + 1, y + currentHeight, width - 1, height - 1 - currentHeight, true);
+            g.fill3DRect(x + 1, y + currentHeight+1, width - 1, height - 1 - currentHeight, true);
             g.setColor(c);
         }
     }

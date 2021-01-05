@@ -514,6 +514,7 @@ public class TGComponentManager {
     public static final int ACD_ACTOR_BOX = 5402;
     public static final int ACD_COMPOSITION_CONNECTOR = 5403;
     public static final int ACD_ASSOCIATION_CONNECTOR = 5404;
+    public static final int ACD_AGGREGATION_CONNECTOR = 5405;
 
     // AVATAR AD -> starts at 5500
     public static final int AAD_ASSOCIATION_CONNECTOR = 5500;
@@ -1783,6 +1784,8 @@ public class TGComponentManager {
             return ACD_ACTOR_BOX;
         } else if (tgc instanceof AvatarCDCompositionConnector) {
             return ACD_COMPOSITION_CONNECTOR;
+        } else if (tgc instanceof AvatarCDAggregationConnector) {
+            return ACD_AGGREGATION_CONNECTOR;
         } else if (tgc instanceof AvatarCDAssociationConnector) {
             return ACD_ASSOCIATION_CONNECTOR;
 
@@ -2448,6 +2451,10 @@ public class TGComponentManager {
             // AVATAR CD
             case ACD_COMPOSITION_CONNECTOR:
                 tgc = new AvatarCDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case ACD_AGGREGATION_CONNECTOR:
+                tgc = new AvatarCDAggregationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2,
+                        listPoint);
                 break;
             case ACD_ASSOCIATION_CONNECTOR:
                 tgc = new AvatarCDAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
