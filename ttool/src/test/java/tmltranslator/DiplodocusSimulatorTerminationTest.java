@@ -17,7 +17,6 @@ import ui.AbstractUITest;
 import ui.TDiagramPanel;
 import ui.TMLArchiPanel;
 import ui.TURTLEPanel;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiDiagramPanel;
 
 import java.io.BufferedReader;
@@ -25,7 +24,6 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import static org.junit.Assert.assertTrue;
 
@@ -36,12 +34,12 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
     private RemoteConnection rc;
     private boolean isReady = false;
     private boolean running = true;
-    private Vector<SimulationTransaction> trans;
     private String ssxml;
+    static String CPP_DIR = "../../../../simulators/c++2/";
+
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
-
     }
 
     public DiplodocusSimulatorTerminationTest() {
@@ -50,12 +48,12 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
 
     @Before
     public void setUp() throws Exception {
-        SIM_DIR = getBaseResourcesDir() + "../../../../simulators/c++2/";
+        SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test
+    @Test(timeout = 600000) // 10 minutes
     public void testIsSimulationTerminated() throws Exception {
-        /*for (int i = 0; i < MODELS_TERMINATE.length; i++) {
+        for (int i = 0; i < MODELS_TERMINATE.length; i++) {
             String s = MODELS_TERMINATE[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
@@ -72,6 +70,7 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
                     break;
                 }
             }
+
             mainGUI.checkModelingSyntax(true);
             TMLMapping tmap = mainGUI.gtm.getTMLMapping();
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
@@ -94,7 +93,7 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
 
             // Putting sim files
             System.out.println("SIM executing: sim lib code copying for " + s);
-            ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() + "../../../../simulators/c++2/";
+            ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() + CPP_DIR;
             boolean simFiles = SpecConfigTTool.checkAndCreateSystemCDir(SIM_DIR);
 
             System.out.println("SIM executing: sim lib code copying done with result " + simFiles);
@@ -151,6 +150,7 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
                 System.out.println("FAILED: executing: " + "make -C " + SIM_DIR);
                 return;
             }
+
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
             // Starts simulation
             Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
@@ -163,18 +163,18 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
             } catch (RemoteConnectionException rce) {
                 System.out.println("Could not connect to server.");
             }
-            try {
 
+            try {
                 toServer(" 1 6 500", rc);
                 Thread.sleep(5);
                 while (running) {
-                    String demo = null;
+                    String line = null;
                     try {
-                        demo = rc.readOneLine();
+                        line = rc.readOneLine();
                     } catch (RemoteConnectionException e) {
                         e.printStackTrace();
                     }
-                    running = analyzeServerAnswer(demo);
+                    running = analyzeServerAnswer(line);
                 }
                 System.out.println(ssxml);
                 String content = "Simulation completed";
@@ -193,7 +193,7 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
     private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
