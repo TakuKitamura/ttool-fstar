@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="3" LAST_SELECTED_SUB_TAB="3">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="Avatar MAD" nameTab="MADs" >
 <AvatarMADPanel name="Modeling Assumptions Diagram" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
@@ -45,7 +45,7 @@
 <textline data="From a security perspective, we assume that" />
 <textline data="persons of the system do not exchange the code" />
 <textline data="they know to request the cockpit door opening" />
-<type data="0" />
+<type data="0" dataStr="System Assumption" color="-8138275" />
 <durability data="0" />
 <source data="0" />
 <status data="0" />
@@ -92,7 +92,7 @@
 <TGConnectingPoint num="30" id="63" />
 <extraparam>
 <textline data="We assume that there is at least one person aboard" />
-<type data="0" />
+<type data="0" dataStr="System Assumption" color="-8138275" />
 <durability data="0" />
 <source data="0" />
 <status data="0" />
@@ -140,7 +140,7 @@
 <extraparam>
 <textline data="It is not possible to enter in the cockpit by another way " />
 <textline data="than the door" />
-<type data="0" />
+<type data="0" dataStr="System Assumption" color="-8138275" />
 <durability data="1" />
 <source data="3" />
 <status data="1" />
@@ -1891,7 +1891,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1198" />
-<P1  x="757" y="349" id="1480" />
+<P1  x="757" y="349" id="1455" />
 <P2  x="715" y="303" id="1354" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -1906,7 +1906,7 @@
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1200" />
 <P1  x="715" y="205" id="1361" />
-<P2  x="757" y="134" id="1455" />
+<P2  x="757" y="134" id="1480" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in lock()" />
@@ -2042,11 +2042,11 @@ in DoorAndLockButton
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="1249" >
 <father id="1374" num="0" />
-<cdparam x="558" y="184" />
-<sizeparam width="136" height="190" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="71" y="280" />
+<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="527" minY="0" maxY="200" />
-<infoparam name="Block0" value="KeyboardFailure" />
+<cdrectangleparam minX="0" maxX="438" minY="0" maxY="292" />
+<infoparam name="Block0" value="Captain" />
 <TGConnectingPoint num="0" id="1225" />
 <TGConnectingPoint num="1" id="1226" />
 <TGConnectingPoint num="2" id="1227" />
@@ -2074,16 +2074,18 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="codeValue" value="1" type="8" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="1274" >
 <father id="1374" num="1" />
-<cdparam x="319" y="175" />
-<sizeparam width="217" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="71" y="386" />
+<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="446" minY="0" maxY="292" />
-<infoparam name="Block0" value="Passenger" />
+<cdrectangleparam minX="0" maxX="438" minY="0" maxY="292" />
+<infoparam name="Block0" value="FirstOfficer" />
 <TGConnectingPoint num="0" id="1250" />
 <TGConnectingPoint num="1" id="1251" />
 <TGConnectingPoint num="2" id="1252" />
@@ -2111,8 +2113,8 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
 <Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>
@@ -2157,11 +2159,11 @@ in DoorAndLockButton
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="1324" >
 <father id="1374" num="3" />
-<cdparam x="71" y="386" />
-<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="319" y="175" />
+<sizeparam width="217" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="438" minY="0" maxY="292" />
-<infoparam name="Block0" value="FirstOfficer" />
+<cdrectangleparam minX="0" maxX="446" minY="0" maxY="292" />
+<infoparam name="Block0" value="Passenger" />
 <TGConnectingPoint num="0" id="1300" />
 <TGConnectingPoint num="1" id="1301" />
 <TGConnectingPoint num="2" id="1302" />
@@ -2189,18 +2191,18 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
 <Attribute access="0" id="code" value="" type="5" typeOther="Code" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="1349" >
 <father id="1374" num="4" />
-<cdparam x="71" y="280" />
-<sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="558" y="184" />
+<sizeparam width="136" height="190" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="438" minY="0" maxY="292" />
-<infoparam name="Block0" value="Captain" />
+<cdrectangleparam minX="0" maxX="527" minY="0" maxY="200" />
+<infoparam name="Block0" value="KeyboardFailure" />
 <TGConnectingPoint num="0" id="1325" />
 <TGConnectingPoint num="1" id="1326" />
 <TGConnectingPoint num="2" id="1327" />
@@ -2228,9 +2230,7 @@ in DoorAndLockButton
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="isInCockpit" value="true" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
-<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
+<Attribute access="0" id="codeValue" value="1" type="8" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2432,11 +2432,11 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="1469" >
 <father id="1519" num="0" />
-<cdparam x="757" y="83" />
-<sizeparam width="250" height="205" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="757" y="299" />
+<sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="751" minY="0" maxY="285" />
-<infoparam name="Block0" value="DoorAndLockButton" />
+<cdrectangleparam minX="0" maxX="751" minY="0" maxY="290" />
+<infoparam name="Block0" value="Keyboard" />
 <TGConnectingPoint num="0" id="1445" />
 <TGConnectingPoint num="1" id="1446" />
 <TGConnectingPoint num="2" id="1447" />
@@ -2461,6 +2461,68 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 <TGConnectingPoint num="21" id="1466" />
 <TGConnectingPoint num="22" id="1467" />
 <TGConnectingPoint num="23" id="1468" />
+<extraparam>
+<blockType data="cryptoblock" color="-4072719" />
+<CryptoBlock value="true" />
+<Attribute access="0" id="codeValue" value="" type="8" typeOther="" />
+<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
+<Attribute access="0" id="m" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="sk" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="m1" value="" type="5" typeOther="Message" />
+<Method value="Message aencrypt(Message msg, Key k)" />
+<Method value="Message adecrypt(Message msg, Key k)" />
+<Method value="Key pk(Key k)" />
+<Method value="Message sign(Message msg, Key k)" />
+<Method value="bool verifySign(Message msg1, Message sig, Key k)" />
+<Method value="Message cert(Key k, Message msg)" />
+<Method value="bool verifyCert(Message cert, Key k)" />
+<Method value="Key getpk(Message cert)" />
+<Method value="Message sencrypt(Message msg, Key k)" />
+<Method value="Message sdecrypt(Message msg, Key k)" />
+<Method value="Key DH(Key pubK, Key privK)" />
+<Method value="Message hash(Message msg)" />
+<Method value="Message MAC(Message msg, Key k)" />
+<Method value="bool verifyMAC(Message msg, Key k, Message macmsg)" />
+<Method value="Message concat2(Message msg1, Message msg2)" />
+<Method value="Message concat3(Message msg1, Message msg2, Message msg3)" />
+<Method value="Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)" />
+<Method value="get2(Message msg, Message msg1, Message msg2)" />
+<Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
+<Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
+<Signal value="in code(int codeValue)" attached="true" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="1494" >
+<father id="1519" num="1" />
+<cdparam x="757" y="83" />
+<sizeparam width="250" height="205" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="751" minY="0" maxY="285" />
+<infoparam name="Block0" value="DoorAndLockButton" />
+<TGConnectingPoint num="0" id="1470" />
+<TGConnectingPoint num="1" id="1471" />
+<TGConnectingPoint num="2" id="1472" />
+<TGConnectingPoint num="3" id="1473" />
+<TGConnectingPoint num="4" id="1474" />
+<TGConnectingPoint num="5" id="1475" />
+<TGConnectingPoint num="6" id="1476" />
+<TGConnectingPoint num="7" id="1477" />
+<TGConnectingPoint num="8" id="1478" />
+<TGConnectingPoint num="9" id="1479" />
+<TGConnectingPoint num="10" id="1480" />
+<TGConnectingPoint num="11" id="1481" />
+<TGConnectingPoint num="12" id="1482" />
+<TGConnectingPoint num="13" id="1483" />
+<TGConnectingPoint num="14" id="1484" />
+<TGConnectingPoint num="15" id="1485" />
+<TGConnectingPoint num="16" id="1486" />
+<TGConnectingPoint num="17" id="1487" />
+<TGConnectingPoint num="18" id="1488" />
+<TGConnectingPoint num="19" id="1489" />
+<TGConnectingPoint num="20" id="1490" />
+<TGConnectingPoint num="21" id="1491" />
+<TGConnectingPoint num="22" id="1492" />
+<TGConnectingPoint num="23" id="1493" />
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
@@ -2497,68 +2559,6 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 <Signal value="in enterCockpit()" attached="true" />
 <Signal value="in leaveCockpit()" attached="true" />
 <Signal value="in emergencyCall()" attached="false" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="1494" >
-<father id="1519" num="1" />
-<cdparam x="757" y="299" />
-<sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="751" minY="0" maxY="290" />
-<infoparam name="Block0" value="Keyboard" />
-<TGConnectingPoint num="0" id="1470" />
-<TGConnectingPoint num="1" id="1471" />
-<TGConnectingPoint num="2" id="1472" />
-<TGConnectingPoint num="3" id="1473" />
-<TGConnectingPoint num="4" id="1474" />
-<TGConnectingPoint num="5" id="1475" />
-<TGConnectingPoint num="6" id="1476" />
-<TGConnectingPoint num="7" id="1477" />
-<TGConnectingPoint num="8" id="1478" />
-<TGConnectingPoint num="9" id="1479" />
-<TGConnectingPoint num="10" id="1480" />
-<TGConnectingPoint num="11" id="1481" />
-<TGConnectingPoint num="12" id="1482" />
-<TGConnectingPoint num="13" id="1483" />
-<TGConnectingPoint num="14" id="1484" />
-<TGConnectingPoint num="15" id="1485" />
-<TGConnectingPoint num="16" id="1486" />
-<TGConnectingPoint num="17" id="1487" />
-<TGConnectingPoint num="18" id="1488" />
-<TGConnectingPoint num="19" id="1489" />
-<TGConnectingPoint num="20" id="1490" />
-<TGConnectingPoint num="21" id="1491" />
-<TGConnectingPoint num="22" id="1492" />
-<TGConnectingPoint num="23" id="1493" />
-<extraparam>
-<blockType data="cryptoblock" color="-4072719" />
-<CryptoBlock value="true" />
-<Attribute access="0" id="codeValue" value="" type="8" typeOther="" />
-<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
-<Attribute access="0" id="m" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="sk" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="m1" value="" type="5" typeOther="Message" />
-<Method value="Message aencrypt(Message msg, Key k)" />
-<Method value="Message adecrypt(Message msg, Key k)" />
-<Method value="Key pk(Key k)" />
-<Method value="Message sign(Message msg, Key k)" />
-<Method value="bool verifySign(Message msg1, Message sig, Key k)" />
-<Method value="Message cert(Key k, Message msg)" />
-<Method value="bool verifyCert(Message cert, Key k)" />
-<Method value="Key getpk(Message cert)" />
-<Method value="Message sencrypt(Message msg, Key k)" />
-<Method value="Message sdecrypt(Message msg, Key k)" />
-<Method value="Key DH(Key pubK, Key privK)" />
-<Method value="Message hash(Message msg)" />
-<Method value="Message MAC(Message msg, Key k)" />
-<Method value="bool verifyMAC(Message msg, Key k, Message macmsg)" />
-<Method value="Message concat2(Message msg1, Message msg2)" />
-<Method value="Message concat3(Message msg1, Message msg2, Message msg3)" />
-<Method value="Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Method value="get2(Message msg, Message msg1, Message msg2)" />
-<Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
-<Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Signal value="in code(int codeValue)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6188,7 +6188,7 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="3042" />
-<P1  x="839" y="296" id="3199" />
+<P1  x="839" y="296" id="3224" />
 <P2  x="802" y="303" id="3081" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -6203,7 +6203,7 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="3044" />
 <P1  x="802" y="205" id="3088" />
-<P2  x="1094" y="139" id="3224" />
+<P2  x="1094" y="139" id="3199" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in lock()" />
@@ -6573,11 +6573,11 @@ in DoorAndLockButton
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="3213" >
 <father id="3263" num="0" />
-<cdparam x="839" y="246" />
-<sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1094" y="88" />
+<sizeparam width="212" height="205" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="1037" minY="0" maxY="298" />
-<infoparam name="Block0" value="Keyboard" />
+<cdrectangleparam minX="0" maxX="1075" minY="0" maxY="293" />
+<infoparam name="Block0" value="DoorAndLockButton" />
 <TGConnectingPoint num="0" id="3189" />
 <TGConnectingPoint num="1" id="3190" />
 <TGConnectingPoint num="2" id="3191" />
@@ -6602,68 +6602,6 @@ in DoorAndLockButton
 <TGConnectingPoint num="21" id="3210" />
 <TGConnectingPoint num="22" id="3211" />
 <TGConnectingPoint num="23" id="3212" />
-<extraparam>
-<blockType data="cryptoblock" color="-4072719" />
-<CryptoBlock value="true" />
-<Attribute access="0" id="codeValue" value="" type="8" typeOther="" />
-<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
-<Attribute access="0" id="m" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="sk" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="m1" value="" type="5" typeOther="Message" />
-<Method value="Message aencrypt(Message msg, Key k)" />
-<Method value="Message adecrypt(Message msg, Key k)" />
-<Method value="Key pk(Key k)" />
-<Method value="Message sign(Message msg, Key k)" />
-<Method value="bool verifySign(Message msg1, Message sig, Key k)" />
-<Method value="Message cert(Key k, Message msg)" />
-<Method value="bool verifyCert(Message cert, Key k)" />
-<Method value="Key getpk(Message cert)" />
-<Method value="Message sencrypt(Message msg, Key k)" />
-<Method value="Message sdecrypt(Message msg, Key k)" />
-<Method value="Key DH(Key pubK, Key privK)" />
-<Method value="Message hash(Message msg)" />
-<Method value="Message MAC(Message msg, Key k)" />
-<Method value="bool verifyMAC(Message msg, Key k, Message macmsg)" />
-<Method value="Message concat2(Message msg1, Message msg2)" />
-<Method value="Message concat3(Message msg1, Message msg2, Message msg3)" />
-<Method value="Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Method value="get2(Message msg, Message msg1, Message msg2)" />
-<Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
-<Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Signal value="in code(int codeValue)" attached="true" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3238" >
-<father id="3263" num="1" />
-<cdparam x="1094" y="88" />
-<sizeparam width="212" height="205" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="1075" minY="0" maxY="293" />
-<infoparam name="Block0" value="DoorAndLockButton" />
-<TGConnectingPoint num="0" id="3214" />
-<TGConnectingPoint num="1" id="3215" />
-<TGConnectingPoint num="2" id="3216" />
-<TGConnectingPoint num="3" id="3217" />
-<TGConnectingPoint num="4" id="3218" />
-<TGConnectingPoint num="5" id="3219" />
-<TGConnectingPoint num="6" id="3220" />
-<TGConnectingPoint num="7" id="3221" />
-<TGConnectingPoint num="8" id="3222" />
-<TGConnectingPoint num="9" id="3223" />
-<TGConnectingPoint num="10" id="3224" />
-<TGConnectingPoint num="11" id="3225" />
-<TGConnectingPoint num="12" id="3226" />
-<TGConnectingPoint num="13" id="3227" />
-<TGConnectingPoint num="14" id="3228" />
-<TGConnectingPoint num="15" id="3229" />
-<TGConnectingPoint num="16" id="3230" />
-<TGConnectingPoint num="17" id="3231" />
-<TGConnectingPoint num="18" id="3232" />
-<TGConnectingPoint num="19" id="3233" />
-<TGConnectingPoint num="20" id="3234" />
-<TGConnectingPoint num="21" id="3235" />
-<TGConnectingPoint num="22" id="3236" />
-<TGConnectingPoint num="23" id="3237" />
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
@@ -6700,6 +6638,68 @@ in DoorAndLockButton
 <Signal value="in enterCockpit()" attached="true" />
 <Signal value="in leaveCockpit()" attached="true" />
 <Signal value="in emergencyCall()" attached="false" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="3238" >
+<father id="3263" num="1" />
+<cdparam x="839" y="246" />
+<sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="1037" minY="0" maxY="298" />
+<infoparam name="Block0" value="Keyboard" />
+<TGConnectingPoint num="0" id="3214" />
+<TGConnectingPoint num="1" id="3215" />
+<TGConnectingPoint num="2" id="3216" />
+<TGConnectingPoint num="3" id="3217" />
+<TGConnectingPoint num="4" id="3218" />
+<TGConnectingPoint num="5" id="3219" />
+<TGConnectingPoint num="6" id="3220" />
+<TGConnectingPoint num="7" id="3221" />
+<TGConnectingPoint num="8" id="3222" />
+<TGConnectingPoint num="9" id="3223" />
+<TGConnectingPoint num="10" id="3224" />
+<TGConnectingPoint num="11" id="3225" />
+<TGConnectingPoint num="12" id="3226" />
+<TGConnectingPoint num="13" id="3227" />
+<TGConnectingPoint num="14" id="3228" />
+<TGConnectingPoint num="15" id="3229" />
+<TGConnectingPoint num="16" id="3230" />
+<TGConnectingPoint num="17" id="3231" />
+<TGConnectingPoint num="18" id="3232" />
+<TGConnectingPoint num="19" id="3233" />
+<TGConnectingPoint num="20" id="3234" />
+<TGConnectingPoint num="21" id="3235" />
+<TGConnectingPoint num="22" id="3236" />
+<TGConnectingPoint num="23" id="3237" />
+<extraparam>
+<blockType data="cryptoblock" color="-4072719" />
+<CryptoBlock value="true" />
+<Attribute access="0" id="codeValue" value="" type="8" typeOther="" />
+<Attribute access="0" id="code" value="" type="5" typeOther="Code" />
+<Attribute access="0" id="m" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="sk" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="m1" value="" type="5" typeOther="Message" />
+<Method value="Message aencrypt(Message msg, Key k)" />
+<Method value="Message adecrypt(Message msg, Key k)" />
+<Method value="Key pk(Key k)" />
+<Method value="Message sign(Message msg, Key k)" />
+<Method value="bool verifySign(Message msg1, Message sig, Key k)" />
+<Method value="Message cert(Key k, Message msg)" />
+<Method value="bool verifyCert(Message cert, Key k)" />
+<Method value="Key getpk(Message cert)" />
+<Method value="Message sencrypt(Message msg, Key k)" />
+<Method value="Message sdecrypt(Message msg, Key k)" />
+<Method value="Key DH(Key pubK, Key privK)" />
+<Method value="Message hash(Message msg)" />
+<Method value="Message MAC(Message msg, Key k)" />
+<Method value="bool verifyMAC(Message msg, Key k, Message macmsg)" />
+<Method value="Message concat2(Message msg1, Message msg2)" />
+<Method value="Message concat3(Message msg1, Message msg2, Message msg3)" />
+<Method value="Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)" />
+<Method value="get2(Message msg, Message msg1, Message msg2)" />
+<Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
+<Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
+<Signal value="in code(int codeValue)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 

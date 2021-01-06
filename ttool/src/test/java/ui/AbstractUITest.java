@@ -9,10 +9,6 @@ import myutil.PluginManager;
 import test.AbstractTest;
 
 public abstract class AbstractUITest extends AbstractTest {
-
-
-
-
 	
 	protected MainGUI mainGUI = null;
 	
@@ -32,6 +28,10 @@ public abstract class AbstractUITest extends AbstractTest {
 	protected void openModel( final String fileName ) {
 		final String fullFileName = fileName + XML_EXT;
 		mainGUI.openProjectFromFile( new File( INPUT_DIR + fullFileName ) );
+	}
+
+	protected void openModelFullName( final String fileName ) {
+		mainGUI.openProjectFromFile( new File( fileName ) );
 	}
     
 	protected TMLArchiPanel findArchiPanel( final String name ) {

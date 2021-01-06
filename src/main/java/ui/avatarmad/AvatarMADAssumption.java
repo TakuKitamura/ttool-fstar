@@ -274,7 +274,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(),
                 getAssumptionName(), text, typeStereotype, durability, source, status, limitation);
      //   jda.setSize(750, 550);
-        GraphicLib.centerOnParent(jda, 750, 550 );
+        GraphicLib.centerOnParent(jda, 650, 500 );
         jda.setVisible(true);
 
         if (!jda.isRegularClose()) {
@@ -385,6 +385,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         }
         sb.append("<type data=\"");
         sb.append(typeStereotype);
+        sb.append("\" dataStr=\"" + ASSUMPTION_TYPE_STR.get(typeStereotype));
         sb.append("\" color=\"" + ASSUMPTION_TYPE_COLOR.get(typeStereotype).getRGB());
         sb.append("\" />\n");
         sb.append("<durability data=\"");
@@ -436,6 +437,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                             } else if (elt.getTagName().equals("type")) {
                                 //
                                 s = elt.getAttribute("data");
+                                String dataStr = elt.getAttribute("dataStr");
                                 String tmp3 = elt.getAttribute("color");
                                 int rgb = ColorManager.AVATAR_ASSUMPTION_TOP.getRGB();
                                 try {
@@ -449,11 +451,18 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                     try {
                                         typeStereotype = Integer.decode(s).intValue();
                                     } catch (Exception e) {
-                                        addStereotype(s, rgb);
+                                        typeStereotype = 0;
                                     }
                                 }
-                                if ((typeStereotype > (ASSUMPTION_TYPE_STR.size()-1)) || (typeStereotype < 0)) {
+
+                                if (typeStereotype < 0) {
                                     typeStereotype = 0;
+                                }
+
+                                if ((dataStr != null) || (dataStr.length() == 0)) {
+                                    //if ((typeStereotype >= 2)) {
+                                        addStereotype(dataStr, rgb);
+                                    //}
                                 }
 
                             } else if (elt.getTagName().equals("durability")) {
@@ -674,19 +683,23 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
             }
             return false;
 
-
-
-
-
             // Must add a new stereotype
         } else {
-            //TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
+            TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
             ASSUMPTION_TYPE_STR.add(s);
             ASSUMPTION_TYPE_COLOR.add(new Color(rgb));
             typeStereotype = ASSUMPTION_TYPE_STR.size() - 1;
             //TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
             return true;
         }
+    }
+
+    public String getStereotype() {
+        return ASSUMPTION_TYPE_STR.get(typeStereotype);
+    }
+
+    public int getColorRGB() {
+        return ASSUMPTION_TYPE_COLOR.get(typeStereotype).getRGB();
     }
 
 }

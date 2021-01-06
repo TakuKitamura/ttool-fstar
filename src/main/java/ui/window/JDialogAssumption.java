@@ -119,17 +119,17 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+
         JPanel panel1 = new JPanel();
         panel1.setLayout(gridbag1);
        
-        panel1.setBorder(new javax.swing.border.TitledBorder("Main attributes"));
-       
-        panel1.setPreferredSize(new Dimension(450, 450));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Stereotype"));
+        //panel1.setPreferredSize(new Dimension(250, 200));
 
         JPanel panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Other attributes:"));
-        panel2.setPreferredSize(new Dimension(300, 450));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Other attributes"));
+        //panel2.setPreferredSize(new Dimension(250, 200));
         
         //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.gridheight = 1;
@@ -154,7 +154,7 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
         // Text of stereotype
         stereotype = new JTextField(AvatarMADAssumption.ASSUMPTION_TYPE_STR.get(type), 30);
         panel1.add(stereotype, c1);
-        colorButton = new JButton();
+        colorButton = new JButton("Select stereotype color");
         colorButton.setBackground(AvatarMADAssumption.ASSUMPTION_TYPE_COLOR.get(type));
         colorButton.addActionListener(this);
         c1.gridwidth = GridBagConstraints.REMAINDER;
@@ -165,18 +165,25 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
         useDefaultColor.setBackground(AvatarMADAssumption.ASSUMPTION_TYPE_COLOR.get(0));
         useDefaultColor.addActionListener(this);
         panel1.add(useDefaultColor, c1);
+
+        JPanel panel1S = new JPanel();
+        gridbag1 = new GridBagLayout();
+        c1 = new GridBagConstraints();
+        c1.fill = GridBagConstraints.BOTH;
+        panel1S.setLayout(gridbag1);
+        panel1S.setBorder(new javax.swing.border.TitledBorder("Name and description"));
+        //panel1S.setPreferredSize(new Dimension(550, 450));
         
         c1.gridwidth = 1;
         label = new JLabel("Name:");
-        panel1.add(label, c1);
+        panel1S.add(label, c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nameField = new JTextField(name, 40);
-        panel1.add(nameField, c1);
+        nameField = new JTextField(name, 50);
+        panel1S.add(nameField, c1);
         
         c1.gridheight = 7;
         
-        c1.fill = GridBagConstraints.BOTH;
-        
+        //c1.fill = GridBagConstraints.BOTH;
         jta = new JTextArea();
         jta.setEditable(true);
         jta.setMargin(new Insets(10, 10, 10, 10));
@@ -186,7 +193,10 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
        
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         //jsp.setPreferredSize(new Dimension(300, 250));
-        panel1.add(jsp, c1);
+        //c1.fill = GridBagConstraints.HORIZONTAL;
+        panel1S.add(jsp, c1);
+
+
         //}
         
         // Panel2
@@ -231,29 +241,28 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
         
         // main panel;
         c0.gridwidth = 1;
-        c0.gridheight = 10;
+        c0.gridheight = 20;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
-        
+        c0.fill = GridBagConstraints.BOTH;
+
+        //c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel1, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        //c0.fill = GridBagConstraints.BOTH;
+        c0.gridwidth = GridBagConstraints.REMAINDER;
         c.add(panel2, c0);
+        //c0.fill = GridBagConstraints.BOTH;
+        c0.gridheight = 20;
+        //c0.gridwidth = GridBagConstraints.REMAINDER;
+        c.add(panel1S, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
         
         initButtons(c0, c, this);   
     }
     
     public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-        
-        
         String command = evt.getActionCommand();
         
         // Compare the action command to the known actions.
