@@ -18,19 +18,13 @@ import ui.AbstractUITest;
 import ui.TDiagramPanel;
 import ui.TMLArchiPanel;
 import ui.TURTLEPanel;
-import ui.interactivesimulation.JFrameTMLSimulationPanelTimeline;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiDiagramPanel;
 
 
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertTrue;
 
@@ -41,13 +35,13 @@ public class TimelineDiagramTest extends AbstractUITest {
     private RemoteConnection rc;
     private boolean isReady = false;
     private boolean running = true;
-    private Vector<SimulationTransaction> trans;
     private String ssxml;
     final static String EXPECTED_FILE_GENERATED_TIMELINE = getBaseResourcesDir() + "tmltranslator/expected/expected_get_generated_timeline.txt";
+    static String CPP_DIR = "../../../../simulators/c++2/";
+
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
-
     }
 
     public TimelineDiagramTest() {
@@ -56,12 +50,12 @@ public class TimelineDiagramTest extends AbstractUITest {
 
     @Before
     public void setUp() throws Exception {
-        SIM_DIR = getBaseResourcesDir() + "../../../../simulators/c++2/";
+        SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test
+    @Test(timeout = 600000) // 10 minutes
     public void testCompareTimelineGeneratedContent() throws Exception {
-        /*for (int i = 0; i < MODELS_TIMELINE.length; i++) {
+        for (int i = 0; i < MODELS_TIMELINE.length; i++) {
             String s = MODELS_TIMELINE[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
@@ -78,6 +72,7 @@ public class TimelineDiagramTest extends AbstractUITest {
                     break;
                 }
             }
+
             mainGUI.checkModelingSyntax(true);
             TMLMapping tmap = mainGUI.gtm.getTMLMapping();
             TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
@@ -100,7 +95,7 @@ public class TimelineDiagramTest extends AbstractUITest {
 
             // Putting sim files
             System.out.println("SIM executing: sim lib code copying for " + s);
-            ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() + "../../../../simulators/c++2/";
+            ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() + CPP_DIR;
             boolean simFiles = SpecConfigTTool.checkAndCreateSystemCDir(SIM_DIR);
 
             System.out.println("SIM executing: sim lib code copying done with result " + simFiles);
@@ -141,8 +136,8 @@ public class TimelineDiagramTest extends AbstractUITest {
             }
 
             System.out.println("executing: " + "make -C " + SIM_DIR);
-            try {
 
+            try {
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
@@ -157,6 +152,7 @@ public class TimelineDiagramTest extends AbstractUITest {
                 System.out.println("FAILED: executing: " + "make -C " + SIM_DIR);
                 return;
             }
+
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
             // Starts simulation
             Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
@@ -169,20 +165,20 @@ public class TimelineDiagramTest extends AbstractUITest {
             } catch (RemoteConnectionException rce) {
                 System.out.println("Could not connect to server.");
             }
-            try {
 
+            try {
                 toServer(" 1 6 100", rc);
                 Thread.sleep(5);
                 toServer("7 4 ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2", rc);
                 Thread.sleep(5);
                 while (running) {
-                    String demo = null;
+                    String line = null;
                     try {
-                        demo = rc.readOneLine();
+                        line = rc.readOneLine();
                     } catch (RemoteConnectionException e) {
                         e.printStackTrace();
                     }
-                    running = analyzeServerAnswer(demo);
+                    running = analyzeServerAnswer(line);
                 }
                 System.out.println(ssxml);
                 File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
@@ -198,11 +194,12 @@ public class TimelineDiagramTest extends AbstractUITest {
                     }
                     rc = null;
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
+
     private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
         while (!isReady) {
             TraceManager.addDev("Server not ready");
