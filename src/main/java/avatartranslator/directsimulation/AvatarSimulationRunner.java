@@ -61,6 +61,8 @@ import java.util.Vector;
 public class AvatarSimulationRunner {
 
    private AvatarSpecification as;
+   private boolean stop;
+   private AvatarSpecificationSimulation ass;
 
    public ArrayList<AvatarSpecificationSimulation> listOfSimulations;
 
@@ -69,6 +71,8 @@ public class AvatarSimulationRunner {
     }
 
     public synchronized void runXSimulation(int nbOfSimulations, AvatarSimulationRunnerListener listener) {
+        stop = false;
+
         if (nbOfSimulations < 1) {
             return;
         }
@@ -78,9 +82,12 @@ public class AvatarSimulationRunner {
         for (int simulationIndex=0; simulationIndex<nbOfSimulations; simulationIndex++) {
             //TraceManager.addDev("Simulation #" + simulationIndex);
             listener.setSimulationDone(simulationIndex);
-            AvatarSpecificationSimulation ass = new AvatarSpecificationSimulation(as, null);
+            ass = new AvatarSpecificationSimulation(as, null);
             listOfSimulations.add(ass);
             ass.runSimulationToCompletion();
+            if (stop) {
+                break;
+            }
         }
     }
 
@@ -123,6 +130,14 @@ public class AvatarSimulationRunner {
             values[i] = listOfSimulations.get(i).getClockValue();
         }
         return values;
+    }
+
+    public void stopSimulation() {
+        stop = true;
+        if (ass != null) {
+            Thread t = new Thread(() -> ass.killSimulation());
+            t.start();
+        }
     }
 
 

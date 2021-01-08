@@ -80,6 +80,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     // Graphical components
     private JButton runSimulations;
     private JTextField nbOfSimulationsText;
+    private JButton stopSimulationsButton;
 
 
     private JLabel simulationsDone;
@@ -95,6 +96,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     // Simulation data structures
     private int totalNbOfSimulations;
     private AvatarSimulationRunner sr;
+    Thread simuExecutor;
 
 
 
@@ -125,6 +127,10 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         add(nbOfSimulationsText, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER;
         add(new JLabel("simulations"), c2);
+        stopSimulationsButton = new JButton("Stop simulation");
+        stopSimulationsButton.addActionListener(this);
+        stopSimulationsButton.setEnabled(false);
+        add(stopSimulationsButton, c2);
 
         add(new JLabel(""), c2);
         add(new JLabel("Simulation progression"), c2);
@@ -162,6 +168,8 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
             runSimulations();
         } else if (ae.getSource() == showSimulationTimeHistogram) {
             showTimeHistogram();
+        } else if (ae.getSource() == stopSimulationsButton) {
+            stopSimulation();
         }
     }
 
@@ -208,7 +216,22 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         frame.setSize(500, 500);
         frame.setContentPane(panel);
         frame.setVisible(true);
-        TraceManager.addDev("Frame is now visible");
+        //TraceManager.addDev("Frame is now visible");
+    }
+
+    private void stopSimulation () {
+        TraceManager.addDev("Stopping simulation");
+        if (sr != null) {
+            Thread t = new Thread(() -> sr.stopSimulation());
+            t.start();
+        }
+        stopSimulationsButton.setEnabled(false);
+        sr = null;
+        simulationsDone.setText("-");
+        totalSimulations.setText("-");
+        runSimulations.setEnabled(true);
+        reinitStats();
+        //TraceManager.addDev("End of stop");
     }
 
 
@@ -229,16 +252,19 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
             return;
         }
 
+        reinitStats();
+
+        //TraceManager.addDev("Going to start simulations");
+
         runSimulations.setEnabled(false);
         sr = new AvatarSimulationRunner(mgui.gtm.getAvatarSpecification());
 
         totalNbOfSimulations = nbOfsimulations;
         totalSimulations.setText(""+nbOfsimulations);
 
-        Thread simuExecutor = new Thread(() -> sr.runXSimulation(nbOfsimulations, this));
+        simuExecutor = new Thread(() -> sr.runXSimulation(nbOfsimulations, this));
         simuExecutor.start();
-
-
+        stopSimulationsButton.setEnabled(true);
 
     }
 
@@ -255,11 +281,20 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         showSimulationTimeHistogram.setEnabled(true);
     }
 
+    public void reinitStats() {
+        minSimulationTime.setText("-");
+        averageSimulationTime.setText("-");
+        maxSimulationTime.setText("-");
+        showSimulationTimeHistogram.setEnabled(false);
+    }
+
 
     @Override
     public void setSimulationDone(int nb) {
+        //TraceManager.addDev("Simulation done for n=" + nb);
         simulationsDone.setText(""+(nb+1));
         if (nb >= (totalNbOfSimulations-1)) {
+            stopSimulationsButton.setEnabled(false);
             runSimulations.setEnabled(true);
             printStats();
         }
