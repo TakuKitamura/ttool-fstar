@@ -52,6 +52,10 @@ import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.io.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import tmltranslator.*;
 import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
 import ui.TGComponent;
@@ -66,6 +70,21 @@ import ui.tmlcompd.TMLCPrimitivePort;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -196,6 +215,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     private HashMap<vertex, List<vertex>> ruleAddedEdgesChannels = new HashMap<vertex, List<vertex>>();
     private HashMap<String, Integer> cpuIDs = new HashMap<String, Integer>();
+    private HashMap<String, Integer> fpgaIDs = new HashMap<String, Integer>();
     private HashMap<String, List<String>> forLoopNextValues = new HashMap<String, List<String>>();
 
     private int opCount;
@@ -206,6 +226,10 @@ public class DirectedGraphTranslator extends JApplet {
     private HashMap<String, String> sendData = new HashMap<String, String>();
     private HashMap<String, String> receiveData = new HashMap<String, String>();
     private String taskStartName = "";
+
+    private List<SimulationTransaction> onPath = new ArrayList<SimulationTransaction>();
+    private List<SimulationTransaction> offPath = new ArrayList<SimulationTransaction>();
+    private List<SimulationTransaction> offPathDelay = new ArrayList<SimulationTransaction>();
 
     @SuppressWarnings("deprecation")
     public DirectedGraphTranslator(JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis, JFrameCompareLatencyDetail jframeCompareLatencyDetail,
@@ -346,6 +370,8 @@ public class DirectedGraphTranslator extends JApplet {
 
     }
 
+   
+
     private void addCPUs() {
         // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
@@ -358,8 +384,9 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
 
             }
-
-            cpuTasks = getCPUTaskMap(cpuTask);
+            if (cpuTask.size() > 0) {
+                cpuTasks = getCPUTaskMap(cpuTask);
+            }
 
         }
 
@@ -497,8 +524,9 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
 
             }
-
-            cpuTasks = getCPUTaskMap(cpuTask);
+            if (cpuTask.size() > 0) {
+                cpuTasks = getCPUTaskMap(cpuTask);
+            }
 
         }
 
@@ -1688,14 +1716,13 @@ public class DirectedGraphTranslator extends JApplet {
             if (sendingPortdetails != null && receivePortdetails != null) {
                 sendEvt.put("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")", new ArrayList<String>());
 
-            
-            for (TMLWaitEvent wait_sendEvent : destinationTasks.getWaitEvents()) {
-                String receivePortparams = wait_sendEvent.getAllParams();
+                for (TMLWaitEvent wait_sendEvent : destinationTasks.getWaitEvents()) {
+                    String receivePortparams = wait_sendEvent.getAllParams();
 
-                sendEvt.get("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")")
-                        .add("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")");
+                    sendEvt.get("sendevent:" + sendingPortdetails.getPortName() + "(" + sendingPortparams + ")")
+                            .add("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")");
 
-            }
+                }
             }
 
         }
@@ -3595,8 +3622,8 @@ public class DirectedGraphTranslator extends JApplet {
 
                     for (SimulationTransaction st : relatedsimTraceswithTaint.get(labeli)) {
 
-                        if (!(Integer.valueOf(st.startTime) < s1 && Integer.valueOf(st.endTime) < s1)
-                                && !(Integer.valueOf(st.startTime) > s2 && Integer.valueOf(st.endTime) > s2)) {
+                        if (!(Integer.valueOf(st.startTime) < s1 && Integer.valueOf(st.endTime) <= s1)
+                                && !(Integer.valueOf(st.startTime) >= s2 && Integer.valueOf(st.endTime) > s2)) {
 
                             // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
                             // < maxTime) {
@@ -3606,7 +3633,7 @@ public class DirectedGraphTranslator extends JApplet {
                                 st.length = Integer.valueOf(Integer.valueOf(s2) - Integer.valueOf(st.startTime)).toString();
                             }
 
-                            if (Integer.valueOf(st.startTime) < s1) {
+                            if (Integer.valueOf(st.startTime) < s1 && Integer.valueOf(st.endTime) != s1) {
                                 st.startTime = Integer.valueOf(s1).toString();
                                 st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(s1)).toString();
                             }
@@ -3636,8 +3663,8 @@ public class DirectedGraphTranslator extends JApplet {
 
                 for (SimulationTransaction st : delayDueTosimTraces) {
 
-                    if (!(Integer.valueOf(st.startTime) < times1.get(row) && Integer.valueOf(st.endTime) < times1.get(row))
-                            && !(Integer.valueOf(st.startTime) > times2.get(row) && Integer.valueOf(st.endTime) > times2.get(row))) {
+                    if (!(Integer.valueOf(st.startTime) < times1.get(row) && Integer.valueOf(st.endTime) <= times1.get(row))
+                            && !(Integer.valueOf(st.startTime) >= times2.get(row) && Integer.valueOf(st.endTime) > times2.get(row))) {
 
                         // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
                         // < maxTime) {
@@ -3897,6 +3924,289 @@ public class DirectedGraphTranslator extends JApplet {
         }
 
         return dataByTask;
+
+    }
+
+    public void saveDetailsToXML(String outputFile) {
+
+        DocumentBuilder builder;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+            Document dom = builder.newDocument();
+
+            Element root2 = dom.createElement("Transactions");
+            dom.appendChild(root2); // write DOM to XML file
+
+            Element root1 = dom.createElement("Mandatory");
+            root2.appendChild(root1); // write DOM to XML file
+
+            for (int i = 0; i < onPath.size(); i++) {
+
+                SimulationTransaction st = onPath.get(i);
+
+                // first create root element
+                Element root = dom.createElement("st");
+                root1.appendChild(root);
+
+                // set `id` attribute to root element
+                Attr attr = dom.createAttribute("id");
+                attr.setValue(st.id);
+                root.setAttributeNode(attr);
+
+                // now create child elements (name, email, phone)
+                Element operator = dom.createElement("operator");
+                operator.setTextContent(st.command);
+                Element start = dom.createElement("starttime");
+                start.setTextContent(st.startTime);
+                Element et = dom.createElement("endtime");
+                et.setTextContent(st.endTime);
+                Element l = dom.createElement("length");
+                l.setTextContent(st.length);
+
+                // add child nodes to root node
+                root.appendChild(operator);
+                root.appendChild(start);
+                root.appendChild(et);
+                root.appendChild(l);
+
+            }
+
+            Element root3 = dom.createElement("NoContention");
+            root2.appendChild(root3); // write DOM to XML file
+
+            for (int i = 0; i < offPath.size(); i++) {
+
+                SimulationTransaction st = offPath.get(i);
+
+                // first create root element
+                Element root5 = dom.createElement("st");
+                root3.appendChild(root5);
+
+                // set `id` attribute to root element
+                Attr attr = dom.createAttribute("id");
+                attr.setValue(st.id);
+                root5.setAttributeNode(attr);
+
+                // now create child elements (name, email, phone)
+                Element operator = dom.createElement("operator");
+                operator.setTextContent(st.command);
+                Element start = dom.createElement("starttime");
+                start.setTextContent(st.startTime);
+                Element et = dom.createElement("endtime");
+                et.setTextContent(st.endTime);
+                Element l = dom.createElement("length");
+                l.setTextContent(st.length);
+
+                // add child nodes to root node
+                root5.appendChild(operator);
+                root5.appendChild(start);
+                root5.appendChild(et);
+                root5.appendChild(l);
+
+            }
+
+            Element root4 = dom.createElement("Contention");
+            root2.appendChild(root4); // write DOM to XML file
+
+            for (int i = 0; i < offPathDelay.size(); i++) {
+
+                SimulationTransaction st = offPathDelay.get(i);
+
+                // first create root element
+                Element root6 = dom.createElement("st");
+                root4.appendChild(root6);
+
+                // set `id` attribute to root element
+                Attr attr = dom.createAttribute("id");
+                attr.setValue(st.id);
+                root6.setAttributeNode(attr);
+
+                // now create child elements (name, email, phone)
+                Element operator = dom.createElement("operator");
+                operator.setTextContent(st.command);
+                Element start = dom.createElement("starttime");
+                start.setTextContent(st.startTime);
+                Element et = dom.createElement("endtime");
+                et.setTextContent(st.endTime);
+                Element l = dom.createElement("length");
+                l.setTextContent(st.length);
+
+                // add child nodes to root node
+                root6.appendChild(operator);
+                root6.appendChild(start);
+                root6.appendChild(et);
+                root6.appendChild(l);
+
+            }
+            Transformer tr;
+            try {
+                tr = TransformerFactory.newInstance().newTransformer();
+                tr.setOutputProperty(OutputKeys.INDENT, "yes");
+                try {
+                    tr.transform(new DOMSource(dom), new StreamResult(new File(outputFile)));
+                } catch (TransformerException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            } catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public void saveLAtencyValuesToXML(String outputFile) {
+
+        DocumentBuilder builder;
+        try {
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+            Document dom = builder.newDocument();
+
+            Element root1 = dom.createElement("LatencyTable");
+            dom.appendChild(root1);
+
+            for (int id = 0; id < dataByTask.length; id++) {
+
+                String starttime = String.valueOf(dataByTask[id][1]);
+                String endtime = String.valueOf(dataByTask[id][3]);
+                String latency = String.valueOf(dataByTask[id][4]);
+
+                String op1 = String.valueOf(dataByTask[id][0]);
+                String op2 = String.valueOf(dataByTask[id][2]);
+
+                // first create root element
+                Element root = dom.createElement("Row");
+                root1.appendChild(root);
+
+                // set `id` attribute to root element
+                Attr attr = dom.createAttribute("id");
+                attr.setValue(String.valueOf(id));
+                root.setAttributeNode(attr);
+
+                // now create child elements (name, email, phone)
+                Element operator1 = dom.createElement("op1");
+                operator1.setTextContent(op1);
+                Element operator2 = dom.createElement("op2");
+                operator2.setTextContent(op2);
+                Element st = dom.createElement("starttime");
+                st.setTextContent(starttime);
+                Element et = dom.createElement("endtime");
+                et.setTextContent(endtime);
+                Element lat = dom.createElement("latency");
+                lat.setTextContent(latency);
+
+                // add child nodes to root node
+                root.appendChild(operator1);
+                root.appendChild(st);
+                root.appendChild(operator2);
+                root.appendChild(et);
+                root.appendChild(lat);
+
+            }
+
+            // for (int id = 0; id < dataByTaskMinMax.length; id++) {
+
+            String starttime = String.valueOf(dataByTaskMinMax[0][1]);
+            String endtime = String.valueOf(dataByTaskMinMax[0][3]);
+            String latency = String.valueOf(dataByTaskMinMax[0][4]);
+
+            String op1 = String.valueOf(dataByTaskMinMax[0][0]);
+            String op2 = String.valueOf(dataByTaskMinMax[0][2]);
+
+            // first create root element
+            Element root = dom.createElement("Min");
+            root1.appendChild(root);
+
+            // set `id` attribute to root element
+            // Attr attr = dom.createAttribute("id");
+            // attr.setValue(String.valueOf(0));
+            // root.setAttributeNode(attr);
+
+            // now create child elements (name, email, phone)
+            Element operator1 = dom.createElement("op1");
+            operator1.setTextContent(op1);
+            Element operator2 = dom.createElement("op2");
+            operator2.setTextContent(op2);
+            Element st = dom.createElement("starttime");
+            st.setTextContent(starttime);
+            Element et = dom.createElement("endtime");
+            et.setTextContent(endtime);
+            Element lat = dom.createElement("latency");
+            lat.setTextContent(latency);
+
+            // add child nodes to root node
+            root.appendChild(operator1);
+            root.appendChild(st);
+            root.appendChild(operator2);
+            root.appendChild(et);
+            root.appendChild(lat);
+
+            String starttimeMax = String.valueOf(dataByTaskMinMax[1][1]);
+            String endtimeMax = String.valueOf(dataByTaskMinMax[1][3]);
+            String latencyMax = String.valueOf(dataByTaskMinMax[1][4]);
+
+            String op1Max = String.valueOf(dataByTaskMinMax[1][0]);
+            String op2Max = String.valueOf(dataByTaskMinMax[1][2]);
+
+            // first create root element
+            Element rootMax = dom.createElement("Max");
+            root1.appendChild(rootMax);
+
+            // set `id` attribute to root element
+            // Attr attrMax = dom.createAttribute("id");
+            // attrMax.setValue(String.valueOf(1));
+            // root1.setAttributeNode(attrMax);
+
+            // now create child elements
+            Element operator1Max = dom.createElement("op1");
+            operator1Max.setTextContent(op1Max);
+            Element operator2Max = dom.createElement("op2");
+            operator2Max.setTextContent(op2Max);
+            Element stMax = dom.createElement("starttime");
+            stMax.setTextContent(starttimeMax);
+            Element etMax = dom.createElement("endtime");
+            etMax.setTextContent(endtimeMax);
+            Element latMax = dom.createElement("latency");
+            latMax.setTextContent(latencyMax);
+
+            // add child nodes to root node
+            rootMax.appendChild(operator1Max);
+            rootMax.appendChild(stMax);
+            rootMax.appendChild(operator2Max);
+            rootMax.appendChild(etMax);
+            rootMax.appendChild(latMax);
+
+            // }
+
+            // write DOM to XML file
+            Transformer tr;
+            try {
+                tr = TransformerFactory.newInstance().newTransformer();
+                tr.setOutputProperty(OutputKeys.INDENT, "yes");
+                try {
+                    tr.transform(new DOMSource(dom), new StreamResult(new File(outputFile)));
+                } catch (TransformerException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            } catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
@@ -5700,6 +6010,30 @@ public class DirectedGraphTranslator extends JApplet {
 
     public List<String> getWarnings() {
         return warnings;
+    }
+
+    public List<SimulationTransaction> getOnPath() {
+        return onPath;
+    }
+
+    public void setOnPath(List<SimulationTransaction> onPath) {
+        this.onPath = onPath;
+    }
+
+    public List<SimulationTransaction> getOffPath() {
+        return offPath;
+    }
+
+    public void setOffPath(List<SimulationTransaction> offPath) {
+        this.offPath = offPath;
+    }
+
+    public List<SimulationTransaction> getOffPathDelay() {
+        return offPathDelay;
+    }
+
+    public void setOffPathDelay(List<SimulationTransaction> offPathDelay) {
+        this.offPathDelay = offPathDelay;
     }
 
 }

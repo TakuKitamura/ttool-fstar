@@ -1034,8 +1034,8 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 ComboBoxModel<String> aModel1 = new DefaultComboBoxModel<String>(checkedTransactions);
                 tasksDropDownCombo2.setModel(aModel1);
 
-                tasksDropDownCombo1.setModel(getAlloperators((String) tasksDropDownCombo6.getItemAt(0)));
-                tasksDropDownCombo2.setModel(getAlloperators((String) tasksDropDownCombo7.getItemAt(0)));
+                tasksDropDownCombo1.setModel(getAlloperators(tasksDropDownCombo6.getItemAt(0)));
+                tasksDropDownCombo2.setModel(getAlloperators(tasksDropDownCombo7.getItemAt(0)));
 
                 // ComboBoxModel<String> aModel2 = new
                 // DefaultComboBoxModel<String>(checkedTransactions);
@@ -1080,17 +1080,17 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP].getActionCommand())) {
 
-            tasksDropDownCombo1.setModel(getAlloperators((String) tasksDropDownCombo6.getSelectedItem()));
+            tasksDropDownCombo1.setModel(getAlloperators(tasksDropDownCombo6.getSelectedItem()));
 
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP2].getActionCommand())) {
 
-            tasksDropDownCombo2.setModel(getAlloperators((String) tasksDropDownCombo7.getSelectedItem()));
+            tasksDropDownCombo2.setModel(getAlloperators(tasksDropDownCombo7.getSelectedItem()));
 
         }
 
     }
 
-    private ComboBoxModel<String> getAlloperators(String dropdown) {
+    private ComboBoxModel<String> getAlloperators(Object object) {
 
         TMLActivity activity;
         checkedTransactions = new Vector<String>();
@@ -1101,7 +1101,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
             int opCount = 0;
 
-            if (tmltask.getName().equals(dropdown)) {
+            if (tmltask.getName().equals(object)) {
 
                 activity = tmltask.getActivityDiagram();
                 TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
@@ -1188,7 +1188,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             if (row >= 0) {
 
                 try {
-                    new JFrameLatencyDetailedPopup(dgraph, row, true, taint, tc);
+                    new JFrameLatencyDetailedPopup(dgraph, row, true, taint, tc,true);
                 } catch (Exception e) {
                     jta.append("An error has occurred \n");
                     jta.append(e.getMessage() + "\n");
@@ -1201,7 +1201,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             row = table12.getSelectedRow();
             if (row >= 0) {
                 try {
-                    new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc);
+                    new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc,true);
                 } catch (Exception e) {
                     jta.append("An error has occurred \n");
                     jta.append(e.getMessage() + "\n");
@@ -1482,6 +1482,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     public HashMap<String, Integer> getCheckedT() {
         return checkedT;
+    }
+
+    public TMLMapping<TGComponent> getTmap1() {
+        return tmap1;
     }
 
 }

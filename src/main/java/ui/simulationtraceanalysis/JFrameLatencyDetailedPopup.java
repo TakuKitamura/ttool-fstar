@@ -84,7 +84,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
     private Object[][] dataHWDelayByTask;
 
     public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable, Boolean taint,
-            LatencyAnalysisParallelAlgorithms th) throws InterruptedException {
+            LatencyAnalysisParallelAlgorithms th, boolean visible) throws InterruptedException {
 
         super("Precise Latency By Row");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -164,7 +164,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         taskNames.setAutoCreateRowSorter(true);
         scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        scrollPane12.setVisible(true);
+        scrollPane12.setVisible(visible);
 
         this.add(scrollPane12);
 
@@ -241,7 +241,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        scrollPane13.setVisible(true);
+        scrollPane13.setVisible(visible);
         this.add(scrollPane13);
 
         int maxTime = -1;
@@ -293,12 +293,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             }
 
-            int timeInterval=0;
-            if (maxTime>-1 && minTime<Integer.MAX_VALUE )
-            {
+            int timeInterval = 0;
+            if (maxTime > -1 && minTime < Integer.MAX_VALUE) {
                 timeInterval = (maxTime - minTime);
-            } 
-            
+            }
+
             columnNames = new String[timeInterval + 1];
 
             columnNames[0] = "Device Name";
@@ -325,8 +324,12 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                             ;
 
                             onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                            if (!dgraph.getOnPath().contains(st)) {
+                                dgraph.getOnPath().add(st);
+                            }
 
                         }
+
                     }
 
                 }
@@ -375,8 +378,15 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                             if (causeDelay) {
                                 offPathBehaviorCausingDelay.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+
+                                if (!dgraph.getOffPathDelay().contains(st)) {
+                                    dgraph.getOffPathDelay().add(st);
+                                }
                             } else {
                                 offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                                if (!dgraph.getOffPath().contains(st)) {
+                                    dgraph.getOffPath().add(st);
+                                }
                             }
 
                         }
@@ -488,13 +498,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 }
             }
 
-            int timeInterval=0;
-            if (maxTime>-1 && minTime<Integer.MAX_VALUE )
-            {
+            int timeInterval = 0;
+            if (maxTime > -1 && minTime < Integer.MAX_VALUE) {
                 timeInterval = (maxTime - minTime);
-            } 
-            
-             
+            }
+
             columnNames = new String[timeInterval + 1];
 
             columnNames[0] = "Device Name";
@@ -521,7 +529,9 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                             ;
 
                             onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
-
+                            if (!dgraph.getOnPath().contains(st)) {
+                                dgraph.getOnPath().add(st);
+                            }
                         }
                     }
 
@@ -571,8 +581,16 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                             if (causeDelay) {
                                 offPathBehaviorCausingDelay.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                                if (!dgraph.getOffPathDelay().contains(st)) {
+                                    dgraph.getOffPathDelay().add(st);
+                                }
+
                             } else {
                                 offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+
+                                if (!dgraph.getOffPath().contains(st)) {
+                                    dgraph.getOffPath().add(st);
+                                }
                             }
 
                         }
@@ -649,11 +667,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         }
         scrollPane14 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-        scrollPane14.setVisible(true);
+        scrollPane14.setVisible(visible);
         this.add(scrollPane14);
 
         this.pack();
-        this.setVisible(true);
+        this.setVisible(visible);
 
         // TODO Auto-generated constructor stub
     }
