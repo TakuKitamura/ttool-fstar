@@ -34,5 +34,6 @@
     </orderEntry>
     <orderEntry type="library" name="Gradle: json-java" level="project" />
     <orderEntry type="library" name="libs" level="project" />
+    <orderEntry type="library" name="jfreechart-1.6.0" level="project" />
   </component>
 </module>

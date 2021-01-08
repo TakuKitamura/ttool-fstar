@@ -40,6 +40,7 @@
 package cli;
 
 import avatartranslator.AvatarSpecification;
+import avatartranslator.directsimulation.AvatarSpecificationSimulation;
 import avatartranslator.modelchecker.AvatarModelChecker;
 import avatartranslator.modelchecker.CounterexampleQueryReport;
 import avatartranslator.modelchecker.SpecificationActionLoop;
@@ -97,6 +98,7 @@ public class Action extends Command {
     private final static String DIPLO_UPPAAL = "diplodocus-uppaal";
     private final static String DIPLO_REMOVE_NOC = "diplodocus-remove-noc";
 
+
     private final static String NAVIGATE_PANEL_TO_LEFT = "navigate-panel-to-left";
     private final static String NAVIGATE_PANEL_TO_RIGHT = "navigate-panel-to-right";
 
@@ -106,7 +108,10 @@ public class Action extends Command {
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
     private final static String AVATAR_UPPAAL_VALIDATE = "avatar-rg-validate";
+    private final static String AVATAR_SIMULATION_TO_BRK = "avatar-simulation-to-brk";
 
+
+    private AvatarSpecificationSimulation ass;
 
     public Action() {
 
@@ -751,6 +756,12 @@ public class Action extends Command {
             }
         };
 
+
+
+
+
+
+        // PANEL manipulation
         Command selectPanel = new Command() {
             public String getCommand() {
                 return SELECT_PANEL;
@@ -1259,6 +1270,58 @@ public class Action extends Command {
             }
         };
 
+        // AVATAR
+        Command avatarSimulationToBrk = new Command() {
+            public String getCommand() {
+                return AVATAR_SIMULATION_TO_BRK;
+            }
+
+            public String getShortCommand() {
+                return "astb";
+            }
+
+            public String getDescription() {
+                return "Simulate an avatar design until a breakpoint or the end";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                AvatarSpecification as = interpreter.mgui.gtm.getAvatarSpecification();
+
+                if (as == null) {
+                    return "No model for simulation";
+                }
+
+                ass = new AvatarSpecificationSimulation(as, null);
+                ass.runSimulationToCompletion();
+
+                /*Thread t = new Thread() {
+                    public void run() {
+                        ass.runSimulation();
+                    }
+                };
+
+                t.start();
+                ass.goSimulation();
+                try {
+                    while(ass.getState() != ass.TERMINATED) {
+                        Thread.currentThread().sleep(25);
+                        //TraceManager.addDev("Waiting for termination");
+                    };
+                    ass.killSimulation();
+                    t.join();
+                } catch (InterruptedException ie) {}*/
+
+                TraceManager.addUser("Simulation terminated. End time=" + ass.getClockValue());
+
+
+                return null;
+            }
+        };
+
 
 
         Command generic = new Generic();
@@ -1289,6 +1352,7 @@ public class Action extends Command {
         addAndSortSubcommand(movePanelToTheRightPanel);
         addAndSortSubcommand(selectPanel);
         addAndSortSubcommand(compareUppaal);
+        addAndSortSubcommand(avatarSimulationToBrk);
         addAndSortSubcommand(generic);
 
     }

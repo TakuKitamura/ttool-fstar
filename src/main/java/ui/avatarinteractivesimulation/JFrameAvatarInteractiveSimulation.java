@@ -542,6 +542,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         jp01.add(jp02, BorderLayout.CENTER);
 
+        AvatarSimulationStatisticsPanel assp = new AvatarSimulationStatisticsPanel(mgui);
+        commandTab.addTab("Statistics", null, assp, "Run x simulations and perform statistics");
+
+
         // Benchmark commands
         /*jp01 = new JPanel(new BorderLayout());
 
@@ -1287,6 +1291,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
         actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].setEnabled(b);
         actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+        actions[AvatarInteractiveSimulationActions.ACT_SAVE_CSV].setEnabled(b);
         actions[AvatarInteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
         actions[AvatarInteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
         actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN].setEnabled(b);
@@ -1842,6 +1847,67 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         //ass.printExecutedTransactions();
     }
 
+    public void actSaveCSV() {
+        TraceManager.addDev("Saving in CSV format");
+        String fileName = saveFileName.getText().trim();
+
+        if (fileName.length() == 0) {
+            fileName += "simulationtrace_fromttool.csv";
+        }
+
+        if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
+            fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+        } else {
+            // Using model directory
+            String path = mgui.getModelFileFullPath();
+            fileName = path.substring(0, path.lastIndexOf(File.separator) + 1) + fileName;
+            TraceManager.addDev("New Filename = " + fileName);
+        }
+
+
+        boolean ok = true;
+
+        try {
+            ok = FileUtils.checkFileForSave(new File(fileName));
+        } catch (Exception e) {
+            TraceManager.addDev("Exception=" + e.getMessage());
+            ok = false;
+        }
+
+        if (!ok) {
+            JOptionPane.showMessageDialog(this,
+                    "The capture could not be performed: the file name or path is not valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+
+        try {
+            FileUtils.saveFile(fileName, ass.toCSV());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "The simulation trace in text format could not be saved: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        /*JOptionPane.showMessageDialog(this,
+                "Simulation trace was saved in " + fileName,
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);*/
+
+        String shortFileName;
+        File f = new File(fileName);
+        shortFileName = f.getName();
+        SimulationTrace st = new SimulationTrace(shortFileName, SimulationTrace.TXT_AVATAR, fileName);
+        mgui.addSimulationTrace(st);
+
+        //ass.printExecutedTransactions();
+    }
+
 
     public void actSaveSvg() {
         TraceManager.addDev("Saving in svg format");
@@ -2117,6 +2183,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand())) {
             actSaveTxt();
+            return;
+
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_CSV].getActionCommand())) {
+            actSaveCSV();
             return;
 
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand())) {

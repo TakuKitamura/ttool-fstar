@@ -56,6 +56,9 @@ import java.util.Vector;
  * @version 1.0 13/12/2010
  */
 public class AvatarSpecificationSimulation {
+
+    public final static String COMMA = ", ";
+
     public static int MAX_TRANSACTION_IN_A_ROW = 1000;
 
     public static int MAX_TRANSACTIONS = 100000;
@@ -227,6 +230,25 @@ public class AvatarSpecificationSimulation {
 
     // Control function
 
+    public void runSimulationToCompletion() {
+        Thread t = new Thread() {
+            public void run() {
+                runSimulation();
+            }
+        };
+
+        t.start();
+        goSimulation();
+        try {
+            while(getState() != TERMINATED) {
+                Thread.currentThread().sleep(25);
+                //TraceManager.addDev("Waiting for termination");
+            };
+            killSimulation();
+            t.join();
+        } catch (InterruptedException ie) {}
+    }
+
     public void runSimulation() {
         int index[];
         Vector<AvatarSimulationPendingTransaction> selectedTransactions;
@@ -350,18 +372,18 @@ public class AvatarSpecificationSimulation {
                     break;
 
                 case TERMINATED:
-                    TraceManager.addDev("-> -> TERMINATED");
+                    //TraceManager.addDev("-> -> TERMINATED");
                     waitForResetOrNewState();
                     break;
 
                 case KILLED:
-                    TraceManager.addDev("-> -> KILLED");
-                    TraceManager.addDev("Simulation killed");
+                    //TraceManager.addDev("-> -> KILLED");
+                    //TraceManager.addDev("Simulation killed");
                     return;
 
                 default:
                     TraceManager.addDev("-> -> UNKNOWN");
-                    TraceManager.addDev("Unknown state");
+                    //TraceManager.addDev("Unknown state");
                     setState(KILLED);
             }
 
@@ -1586,4 +1608,64 @@ public class AvatarSpecificationSimulation {
 
         return found;
     }
+
+    public String toCSV() {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("ID, block, element ID, linked transaction ID, initial clock value, final clock value, duration, attributes, actions\n");
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            append(sb, ast.id);
+            append(sb, ast.block);
+            append(sb, ast.executedElement);
+            append(sb, ast.linkedTransaction);
+            append(sb, ast.initialClockValue);
+            append(sb, ast.clockValueWhenFinished);
+            append(sb, ast.duration);
+            append(sb, ast.getAttributesString());
+            sb.append(ast.getActionsString());
+            sb.append("\n");
+        }
+
+
+        return sb.toString();
+    }
+
+    public void append(StringBuffer sb, String s) {
+        if ((s == null) || (s.length() ==0)) {
+            sb.append("null" + COMMA);
+        } else {
+            sb.append(s + COMMA);
+        }
+    }
+
+    public void append(StringBuffer sb, long s) {
+        sb.append(s + COMMA);
+    }
+
+    public void append(StringBuffer sb, AvatarBlock b) {
+        if (b == null) {
+            sb.append("__Unknown" + COMMA);
+        } else {
+            sb.append(b.getName() + COMMA);
+        }
+    }
+
+    public void append(StringBuffer sb, AvatarStateMachineElement asme) {
+        if (asme == null) {
+            sb.append("-1" + COMMA);
+        } else {
+            sb.append(asme.getID() + COMMA);
+        }
+    }
+
+    public void append(StringBuffer sb, AvatarSimulationTransaction ast) {
+        if (ast == null) {
+            sb.append("-1" + COMMA);
+        } else {
+            sb.append(ast.bunchid + COMMA);
+        }
+    }
+
+
+
 }
