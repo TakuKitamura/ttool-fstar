@@ -50,6 +50,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 
+
         if (panel == null) {
             System.out.println("NULL Panel");
         } else {
@@ -57,8 +58,15 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         }
 
         mainGUI.checkModelingSyntax(panel, true);
+        
+      
         SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, simulationTracePath);
         latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
+        latencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
+      
+        
+      //  latencyDetailedAnalysisMain.setTc();
+
 
         latencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
 
@@ -138,7 +146,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         assertTrue(taskHWByRowDetails.length == 13);
 
         detailedLatency = dgt.getTaskByRowDetails(7);
-        assertTrue(detailedLatency.length == 15);
+        assertTrue(detailedLatency.length == 14);
 
         detailedLatency = dgt.getTaskHWByRowDetails(7);
         assertTrue(detailedLatency.length == 14);

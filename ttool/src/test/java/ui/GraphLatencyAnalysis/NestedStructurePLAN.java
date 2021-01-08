@@ -57,7 +57,7 @@ public class NestedStructurePLAN extends AbstractUITest {
         mainGUI.checkModelingSyntax(panel, true);
         SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, simulationTracePathFile);
         latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
-
+        latencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
         latencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
 
         latencyDetailedAnalysis = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
