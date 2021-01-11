@@ -21,8 +21,9 @@ import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
 public class GraphLatencyAnalysisTainting extends AbstractUITest {
 
-    private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
+    // private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
 
+    private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String simulationTracePath = INPUT_PATH + "/tainting.xml";
 
     private static final String modelPath = INPUT_PATH + "/GraphLatencyAnalysisTainting.xml";
@@ -46,7 +47,6 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
     public void GraphLatencyAnalysis() throws InterruptedException {
 
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
-        // mainGUI.openProjectFromFile(new File( modelPath));
 
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 
@@ -129,7 +129,7 @@ public class GraphLatencyAnalysisTainting extends AbstractUITest {
         assertTrue(detailedLatency.length == 12);
 
         detailedLatency = dgt.getTaskHWByRowDetails(0);
-        assertTrue(detailedLatency.length == 6);
+        assertTrue(detailedLatency.length == 3);
 
     }
 
