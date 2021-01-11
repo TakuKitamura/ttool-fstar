@@ -44,7 +44,9 @@ package ui.avatarinteractivesimulation;
 
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
+import myutil.DataElement;
 import myutil.GraphicLib;
+import myutil.JFrameStatistics;
 import myutil.TraceManager;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -65,6 +67,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Vector;
 
 /**
@@ -92,7 +95,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     private JLabel averageSimulationTime;
     private JLabel maxSimulationTime;
 
-    private JButton showSimulationTimeHistogram;
+    private JButton showSimulationTimeHistogram, showStats;
 
 
     // Simulation data structures
@@ -162,6 +165,11 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         showSimulationTimeHistogram.setEnabled(false);
         showSimulationTimeHistogram.addActionListener(this);
 
+        showStats = new JButton("Show statistics");
+        add(showStats, c2);
+        showStats.setEnabled(false);
+        showStats.addActionListener(this);
+
 
     }
 
@@ -170,9 +178,42 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
             runSimulations();
         } else if (ae.getSource() == showSimulationTimeHistogram) {
             showTimeHistogram();
+        } else if (ae.getSource() == showStats) {
+            showStats();
         } else if (ae.getSource() == stopSimulationsButton) {
             stopSimulation();
         }
+    }
+
+    private void showStats() {
+        // Extracting and filling data
+        Thread stats = new Thread(() -> {
+            // Simulation time
+            ArrayList<DataElement> elts = new ArrayList<DataElement>();
+
+            DataElement simulationTime = new DataElement("Simulation time");
+            simulationTime.data = sr.getSimulationTimes();
+            elts.add(simulationTime);
+
+            // Block
+            for(AvatarBlock ab: sr.getBlocksOfTransactions()) {
+                DataElement deBlock = new DataElement("Block " + ab.getName());
+                elts.add(deBlock);
+
+                // Time of last transaction
+                DataElement de = new DataElement("Time of last transaction of Block " + ab.getName());
+                deBlock.addChild(de);
+                de.data = sr.getTimesOfLastTransactionOfBlock(ab);
+            }
+
+
+
+            // Opening stat window
+            JFrameStatistics stats1 = new JFrameStatistics("Simulation stats", elts);
+            stats1.setSize(800,600);
+            stats1.setVisible(true);
+        });
+        stats.start();
     }
 
     private void showTimeHistogram() {
@@ -204,7 +245,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
 
         HistogramDataset dataset = new HistogramDataset();
         double []values = sr.getSimulationTimes();
-        dataset.addSeries("key", values, 20);
+        dataset.addSeries("Time value", values, 20);
 
         JFreeChart histogram = ChartFactory.createHistogram("Histogram: Simulation times",
                 "Simulation times", "Frequency", dataset);
@@ -241,8 +282,6 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         if (mgui.gtm.getAvatarSpecification() == null) {
             return;
         }
-
-
 
         int nbOfsimulations;
 
@@ -285,6 +324,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         maxSimulationTime.setText(""+maxSimTime);
 
         showSimulationTimeHistogram.setEnabled(true);
+        showStats.setEnabled(true);
     }
 
     public void reinitStats() {
@@ -292,6 +332,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         averageSimulationTime.setText("-");
         maxSimulationTime.setText("-");
         showSimulationTimeHistogram.setEnabled(false);
+        showStats.setEnabled(false);
     }
 
 

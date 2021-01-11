@@ -44,6 +44,7 @@ import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.Vector;
 
 
@@ -1665,6 +1666,19 @@ public class AvatarSpecificationSimulation {
             sb.append(ast.bunchid + COMMA);
         }
     }
+
+    public long getTimeOfLastTransactionOfBlock(AvatarBlock ab) {
+        long lastTime = 0;
+
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            if (ast.block == ab) {
+                lastTime = ast.clockValueWhenFinished;
+            }
+        }
+
+        return lastTime;
+    }
+
 
 
 

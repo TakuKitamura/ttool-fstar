@@ -44,10 +44,7 @@ import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import myutil.TraceManager;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class AvatarSimulationRunner
@@ -138,6 +135,22 @@ public class AvatarSimulationRunner {
             Thread t = new Thread(() -> ass.killSimulation());
             t.start();
         }
+    }
+
+    public List<AvatarBlock> getBlocksOfTransactions() {
+        return as.getListOfBlocks();
+    }
+
+    public double[] getTimesOfLastTransactionOfBlock(AvatarBlock ab) {
+        double [] timeLastTransaction = new double[listOfSimulations.size()];
+
+        int i = 0;
+        for(AvatarSpecificationSimulation ass: listOfSimulations) {
+            timeLastTransaction[i] = (double)( ass.getTimeOfLastTransactionOfBlock(ab) );
+            i++;
+        }
+
+        return timeLastTransaction;
     }
 
 
