@@ -75,6 +75,8 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public class AvatarSimulationStatisticsPanel extends JPanel implements ActionListener, AvatarSimulationRunnerListener {
+    private static String NB_OF_SIMULATIONS = "100";
+
     private MainGUI mgui;
 
     // Graphical components
@@ -96,7 +98,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     // Simulation data structures
     private int totalNbOfSimulations;
     private AvatarSimulationRunner sr;
-    Thread simuExecutor;
+    private Thread simuExecutor;
 
 
 
@@ -123,7 +125,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         runSimulations = new JButton("Execute");
         runSimulations.addActionListener(this);
         add(runSimulations, c2);
-        nbOfSimulationsText = new JTextField("100", 10);
+        nbOfSimulationsText = new JTextField(NB_OF_SIMULATIONS, 10);
         add(nbOfSimulationsText, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER;
         add(new JLabel("simulations"), c2);
@@ -240,6 +242,8 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
             return;
         }
 
+
+
         int nbOfsimulations;
 
         try {
@@ -251,6 +255,8 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         if (nbOfsimulations < 1) {
             return;
         }
+
+        NB_OF_SIMULATIONS = nbOfSimulationsText.getText();
 
         reinitStats();
 
