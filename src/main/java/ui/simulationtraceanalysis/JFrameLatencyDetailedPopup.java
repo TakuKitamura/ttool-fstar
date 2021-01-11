@@ -39,7 +39,10 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +51,9 @@ import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -88,7 +93,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         super("Precise Latency By Row");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        GridLayout myLayout = new GridLayout(3, 1);
+        GridLayout myLayout = new GridLayout(4, 1);
 
         this.setLayout(myLayout);
 
@@ -99,6 +104,9 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         columnByTaskNames[4] = "End Time ";
 
         JPanel jp04 = new JPanel(new BorderLayout());
+
+        jp04.setBorder(new javax.swing.border.TitledBorder("Mandatory Transactions"));
+
         if (firstTable) {
 
             th.setDgraph(dgraph);
@@ -166,7 +174,9 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         scrollPane12.setVisible(visible);
 
-        this.add(scrollPane12);
+        jp04.add(scrollPane12);
+
+        this.add(jp04);
 
         columnByHWNames[0] = "Task on Same device";
         columnByHWNames[1] = "Transaction Diagram Name ";
@@ -235,14 +245,17 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 }
             }
         };
+        JPanel jp05 = new JPanel(new BorderLayout());
 
+        jp05.setBorder(new javax.swing.border.TitledBorder("Non-Mandatory Transactions"));
         JTable hardwareNames = new JTable(model2);
         hardwareNames.setAutoCreateRowSorter(true);
 
         scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane13.setVisible(visible);
-        this.add(scrollPane13);
+        jp05.add(scrollPane13);
+        this.add(jp05);
 
         int maxTime = -1;
 
@@ -255,6 +268,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
 
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
+
                 tmpEnd = Integer.parseInt(st.endTime);
 
                 if (tmpEnd > maxTime) {
@@ -266,8 +284,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 if (tmpStart < minTime) {
                     minTime = tmpStart;
                 }
-                if (!deviceNames1.contains(st.deviceName)) {
-                    deviceNames1.add(st.deviceName);
+
+                String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+                if (!deviceNames1.contains(deviceNameandcore)) {
+                    deviceNames1.add(deviceNameandcore);
 
                 }
 
@@ -276,6 +296,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
 
                 tmpEnd = Integer.parseInt(st.endTime);
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
 
                 if (tmpEnd > maxTime) {
                     maxTime = tmpEnd;
@@ -286,8 +310,9 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 if (tmpStart < minTime) {
                     minTime = tmpStart;
                 }
-                if (!deviceNames1.contains(st.deviceName)) {
-                    deviceNames1.add(st.deviceName);
+                String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+                if (!deviceNames1.contains(deviceNameandcore)) {
+                    deviceNames1.add(deviceNameandcore);
 
                 }
 
@@ -310,10 +335,16 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
             dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
 
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
 
                 for (String dName : deviceNames1) {
 
-                    if (st.deviceName.equals(dName)) {
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (deviceNameandcore.equals(dName)) {
 
                         length = Integer.parseInt(st.length);
 
@@ -340,9 +371,16 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
 
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
+
                 for (String dName : deviceNames1) {
 
-                    if (st.deviceName.equals(dName)) {
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (deviceNameandcore.equals(dName)) {
 
                         length = Integer.parseInt(st.length);
 
@@ -354,10 +392,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                             boolean causeDelay = false;
 
-                            if (delayTime.containsKey(st.deviceName)) {
+                            if (delayTime.containsKey(deviceNameandcore)) {
 
                                 for (Entry<String, ArrayList<ArrayList<Integer>>> entry : delayTime.entrySet()) {
-                                    if (entry.getKey().equals(st.deviceName)) {
+                                    if (entry.getKey().equals(deviceNameandcore)) {
                                         ArrayList<ArrayList<Integer>> timeList = entry.getValue();
 
                                         for (int j = 0; j < timeList.size(); j++) {
@@ -415,6 +453,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 for (SimulationTransaction st : minMaxTasksByRow) {
 
                     tmpEnd = Integer.parseInt(st.endTime);
+                    if (st.coreNumber == null) {
+                        st.coreNumber = "0";
+
+                    }
 
                     if (tmpEnd > maxTime) {
                         maxTime = tmpEnd;
@@ -425,8 +467,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-                    if (!deviceNames1.contains(st.deviceName)) {
-                        deviceNames1.add(st.deviceName);
+
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (!deviceNames1.contains(deviceNameandcore)) {
+                        deviceNames1.add(deviceNameandcore);
 
                     }
 
@@ -445,8 +490,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-                    if (!deviceNames1.contains(st.deviceName)) {
-                        deviceNames1.add(st.deviceName);
+
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (!deviceNames1.contains(deviceNameandcore)) {
+                        deviceNames1.add(deviceNameandcore);
 
                     }
 
@@ -458,6 +506,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetails(row);
 
                 for (SimulationTransaction st : minMaxTasksByRow) {
+                    if (st.coreNumber == null) {
+                        st.coreNumber = "0";
+
+                    }
 
                     tmpEnd = Integer.parseInt(st.endTime);
 
@@ -470,14 +522,21 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-                    if (!deviceNames1.contains(st.deviceName)) {
-                        deviceNames1.add(st.deviceName);
+
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (!deviceNames1.contains(deviceNameandcore)) {
+                        deviceNames1.add(deviceNameandcore);
 
                     }
 
                 }
 
                 for (SimulationTransaction st : minMaxHWByRowDetails) {
+                    if (st.coreNumber == null) {
+                        st.coreNumber = "0";
+
+                    }
 
                     tmpEnd = Integer.parseInt(st.endTime);
 
@@ -490,8 +549,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-                    if (!deviceNames1.contains(st.deviceName)) {
-                        deviceNames1.add(st.deviceName);
+
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (!deviceNames1.contains(deviceNameandcore)) {
+                        deviceNames1.add(deviceNameandcore);
 
                     }
 
@@ -516,9 +578,16 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             for (SimulationTransaction st : minMaxTasksByRow) {
 
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
+
                 for (String dName : deviceNames1) {
 
-                    if (st.deviceName.equals(dName)) {
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (deviceNameandcore.equals(dName)) {
 
                         length = Integer.parseInt(st.length);
 
@@ -543,9 +612,15 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             for (SimulationTransaction st : minMaxHWByRowDetails) {
 
-                for (String dName : deviceNames1) {
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
 
-                    if (st.deviceName.equals(dName)) {
+                }
+
+                for (String dName : deviceNames1) {
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+
+                    if (deviceNameandcore.equals(dName)) {
 
                         length = Integer.parseInt(st.length);
 
@@ -557,10 +632,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                             boolean causeDelay = false;
 
-                            if (delayTime.containsKey(st.deviceName)) {
+                            if (delayTime.containsKey(deviceNameandcore)) {
 
                                 for (Entry<String, ArrayList<ArrayList<Integer>>> entry : delayTime.entrySet()) {
-                                    if (entry.getKey().equals(st.deviceName)) {
+                                    if (entry.getKey().equals(deviceNameandcore)) {
                                         ArrayList<ArrayList<Integer>> timeList = entry.getValue();
 
                                         for (int j = 0; j < timeList.size(); j++) {
@@ -669,6 +744,89 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         scrollPane14.setVisible(visible);
         this.add(scrollPane14);
+
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 0;
+        c01.gridy = 0;
+        JLabel pBarLabel0 = new JLabel("Table Lenged: ");
+        JPanel lengedpanel = new JPanel(gridbag01);
+        lengedpanel.add(pBarLabel0, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 2;
+        c01.gridy = 0;
+
+        JLabel pBarLabel = new JLabel("Mandatory Transaction", JLabel.RIGHT);
+
+        lengedpanel.add(pBarLabel, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 1;
+        c01.gridy = 0;
+
+        JLabel pBarLabel2 = new JLabel("    ", JLabel.LEFT);
+        pBarLabel2.setOpaque(true);
+        pBarLabel2.setBackground(Color.GREEN);
+        lengedpanel.add(pBarLabel2, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 4;
+        c01.gridy = 0;
+
+        JLabel pBarLabel3 = new JLabel("Non-Mandatory Transactions Causing Contention", JLabel.RIGHT);
+
+        lengedpanel.add(pBarLabel3, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 3;
+        c01.gridy = 0;
+
+        JLabel pBarLabel4 = new JLabel("    ", JLabel.LEFT);
+        pBarLabel4.setOpaque(true);
+        pBarLabel4.setBackground(Color.RED);
+        lengedpanel.add(pBarLabel4, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 6;
+        c01.gridy = 0;
+
+        JLabel pBarLabel5 = new JLabel("Non-Mandatory Transactions No-Contention", JLabel.RIGHT);
+
+        lengedpanel.add(pBarLabel5, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 5;
+        c01.gridy = 0;
+
+        JLabel pBarLabel6 = new JLabel("    ", JLabel.LEFT);
+        pBarLabel6.setOpaque(true);
+        pBarLabel6.setBackground(Color.ORANGE);
+        lengedpanel.add(pBarLabel6, c01);
+        this.add(lengedpanel);
 
         this.pack();
         this.setVisible(visible);

@@ -1,0 +1,32 @@
+#model 
+set model ./../ttool/src/test/resources/ui/graphLatencyAnalysis/input/GraphTestModel.xml
+#simulation trace
+set sim ./../ttool/src/test/resources/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml
+#model panel
+set panel Architecture2
+#latency table output destination
+set latXML latOutput.xml
+#precise row latency analysis output destination
+set staXML staOutput.xml
+#indicated if the row is in the min max table or not
+set minmax true
+#indicated if the tainting is used or not
+set taint true
+# start ttool
+action start
+wait 2
+#open model
+action open $model
+wait 4
+#generate graph for specific panel in the model
+plan graph $sim $panel
+# list all operators id
+plan listAllOp
+# run latency analysis between two operators and save results in xml
+plan lat 44 26 $taint $latXML
+# run precise analysis for one row an save the results in xml
+plan planR 1 $minmax $staXML
+
+
+
+

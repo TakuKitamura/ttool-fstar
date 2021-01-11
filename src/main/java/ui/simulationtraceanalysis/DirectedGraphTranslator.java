@@ -177,6 +177,8 @@ public class DirectedGraphTranslator extends JApplet {
     private String idTask2;
     private String task2DeviceName = "";
     private String task1DeviceName = "";
+    private String task2CoreNbr = "";
+    private String task1CoreNbr = "";
     private ArrayList<String> devicesToBeConsidered = new ArrayList<String>();
 
     private Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
@@ -203,6 +205,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     private HashMap<String, List<String>> allForLoopNextValues = new HashMap<String, List<String>>();
     private HashMap<vertex, List<vertex>> allChoiceValues = new HashMap<vertex, List<vertex>>();
+    private HashMap<vertex, List<vertex>> allSelectEvtValues = new HashMap<vertex, List<vertex>>();
 
     private HashMap<vertex, List<vertex>> allSeqValues = new HashMap<vertex, List<vertex>>();
     private HashMap<vertex, List<vertex>> allRandomSeqValues = new HashMap<vertex, List<vertex>>();
@@ -369,8 +372,6 @@ public class DirectedGraphTranslator extends JApplet {
         SummaryCommMapping = tmap.getSummaryCommMapping();
 
     }
-
-   
 
     private void addCPUs() {
         // TODO Auto-generated method stub
@@ -953,7 +954,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                     if (currentElement.getName().equals("Stop after infinite loop")) {
                         opCount++;
-
+                        updatemainBar("v");
                         if (opCount <= activity.nElements()) {
                             if (currentElement.getNexts().size() == 1) {
 
@@ -973,7 +974,7 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (currentElement.getName().equals("startOfFork") || currentElement.getName().equals("junctionOfFork")
                             || currentElement.getName().equals("startOfJoin") || currentElement.getName().equals("junctionOfJoin")) {
                         opCount++;
-
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1005,7 +1006,7 @@ public class DirectedGraphTranslator extends JApplet {
                         }
 
                         opCount++;
-
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1040,7 +1041,7 @@ public class DirectedGraphTranslator extends JApplet {
                         // g.addEdge(getvertex(taskName),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
                         opCount++;
-
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1048,6 +1049,7 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (currentElement.getName().equals("stopOfFork") || currentElement.getName().equals("stop2OfFork")
                             || currentElement.getName().equals("stopOfJoin")) {
                         opCount++;
+                        updatemainBar("v");
                         // currentElement = currentElement.getNexts().firstElement();
                         continue;
                     } else if (taskName.startsWith("JOINTASK_S_") && currentElement.getName().startsWith("ReadOfJoin")) {
@@ -1079,6 +1081,7 @@ public class DirectedGraphTranslator extends JApplet {
                         // g.addEdge(getvertex(task.getName()),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
                         opCount++;
+                        updatemainBar("v");
 
                         currentElement = currentElement.getNexts().firstElement();
 
@@ -1112,13 +1115,79 @@ public class DirectedGraphTranslator extends JApplet {
                         }
 
                         opCount++;
-
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
 
-                    }
+                    } else if (taskName.startsWith("FORKTASK_S") && currentElement.getName().startsWith("WriteEvtOfFork_S")) {
 
+                        String vName = ((TMLSendEvent) (currentElement)).getEvent().getName();
+                        int vid = ((TMLSendEvent) (currentElement)).getEvent().getID();
+
+                        vertex v = getvertex(vName);
+                        if (!g.containsVertex(v)) {
+                            g.addVertex(vertex(vName, vid));
+                            updatemainBar("v");
+
+                        }
+
+                        HashSet<String> writeForkVertex = new HashSet<String>();
+                        writeForkVertex.add(((TMLSendEvent) (currentElement)).getEvent().getName());
+
+                        if (forkwriteEdges.containsKey(taskName)) {
+
+                            if (!forkwriteEdges.get(taskName).contains(((TMLSendEvent) (currentElement)).getEvent().getName())) {
+                                forkwriteEdges.get(taskName).add(((TMLSendEvent) (currentElement)).getEvent().getName());
+                            }
+
+                        } else {
+
+                            forkwriteEdges.put(taskName, writeForkVertex);
+
+                        }
+
+                        // g.addEdge(getvertex(taskName),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
+
+                        opCount++;
+                        updatemainBar("v");
+                        currentElement = currentElement.getNexts().firstElement();
+
+                        continue;
+
+                    } else if (taskName.startsWith("FORKTASK_S") && currentElement.getName().equals("WaitOfFork")) {
+
+                        String name = ((TMLWaitEvent) (currentElement)).getEvent().getName();
+                        int id = ((TMLWaitEvent) (currentElement)).getEvent().getID();
+                        if (!g.containsVertex(getvertex(name))) {
+                            g.addVertex(vertex(name, id));
+                            updatemainBar("v");
+
+                        }
+
+                        g.addEdge(getvertex(taskName), getvertex(((TMLWaitEvent) (currentElement)).getEvent().getName()));
+
+                        HashSet<String> readForkVertex = new HashSet<String>();
+                        readForkVertex.add(((TMLWaitEvent) (currentElement)).getEvent().getName());
+
+                        if (forkreadEdges.containsKey(taskName)) {
+
+                            if (!forkreadEdges.get(taskName).contains(((TMLWaitEvent) (currentElement)).getEvent().getName())) {
+                                forkreadEdges.get(taskName).add(((TMLWaitEvent) (currentElement)).getEvent().getName());
+                            }
+
+                        } else {
+
+                            forkreadEdges.put(taskName, readForkVertex);
+
+                        }
+
+                        opCount++;
+                        updatemainBar("v");
+                        currentElement = currentElement.getNexts().firstElement();
+
+                        continue;
+                    }
                     if (currentElement.getNexts().size() > 1) {
                         for (TMLActivityElement ae : currentElement.getNexts()) {
                             multiNexts.add(ae);
@@ -1458,7 +1527,11 @@ public class DirectedGraphTranslator extends JApplet {
             }
             String receivePortparams = waitEvent.getAllParams();
 
-            // tmlcdp.tmlctdp.getAllPortsConnectedTo(portdetails);
+            String[] checkchannel;
+
+            String sendingDataPortdetails = "";
+            String receiveDataPortdetails = "";
+
             if (sendingPortdetails != null && receivePortdetails != null) {
                 waitEvt.put("waitevent:" + receivePortdetails.getPortName() + "(" + receivePortparams + ")", new ArrayList<String>());
 
@@ -1473,9 +1546,91 @@ public class DirectedGraphTranslator extends JApplet {
 
                 }
 
-            }
-        }
+            } else {
+                String sendingPortparams = null;
+                if (waitEvent.getEvent().getOriginPort().getName().contains("FORKPORTORIGIN")) {
 
+                    checkchannel = waitEvent.getEvent().getOriginPort().getName().split("_S_");
+
+                    if (checkchannel.length > 2) {
+                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace("FORKPORTORIGIN", "FORKEVENT");
+                        sendingPortparams = waitEvent.getEvent().getParams().toString();
+
+                    } else if (checkchannel.length <= 2) {
+
+                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace("FORKPORTORIGIN", "");
+
+                        sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
+                        sendingPortparams = waitEvent.getEvent().getParams().toString();
+
+                    }
+
+                } else if (waitEvent.getEvent().getOriginPort().getName().contains("JOINPORTORIGIN")) {
+
+                    checkchannel = waitEvent.getEvent().getOriginPort().getName().split("_S_");
+
+                    if (checkchannel.length > 2) {
+                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace("JOINPORTORIGIN", "JOINEVENT");
+                        sendingPortparams = waitEvent.getEvent().getParams().toString();
+
+                    } else if ((checkchannel.length) <= 2) {
+                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace("JOINPORTORIGIN", "");
+
+                        sendingDataPortdetails = sendingDataPortdetails.replace("_S_", "");
+                        sendingPortparams = waitEvent.getEvent().getParams().toString();
+
+                    }
+                } else {
+                    sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName();
+                    sendingPortparams = waitEvent.getEvent().getParams().toString();
+
+                }
+                if (waitEvent.getEvent().getDestinationPort().getName().contains("FORKPORTDESTINATION")) {
+
+                    checkchannel = waitEvent.getEvent().getDestinationPort().getName().split("_S_");
+
+                    if (checkchannel.length > 2) {
+
+                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace("FORKPORTDESTINATION", "FORKEVENT");
+                        receivePortparams = waitEvent.getEvent().getParams().toString();
+                    } else if (checkchannel.length <= 2) {
+
+                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace("FORKPORTDESTINATION", "");
+
+                        receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
+                        receivePortparams = waitEvent.getEvent().getParams().toString();
+                    }
+
+                } else if (waitEvent.getEvent().getDestinationPort().getName().contains("JOINPORTDESTINATION")) {
+
+                    checkchannel = waitEvent.getEvent().getDestinationPort().getName().split("_S_");
+
+                    if (checkchannel.length > 2) {
+
+                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace("JOINPORTDESTINATION", "JOINEVENT");
+                    } else if (checkchannel.length <= 2) {
+
+                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace("JOINPORTDESTINATION", "");
+
+                        receiveDataPortdetails = receiveDataPortdetails.replace("_S_", "");
+                        receivePortparams = waitEvent.getEvent().getParams().toString();
+                    }
+                } else {
+                    receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName();
+                    receivePortparams = waitEvent.getEvent().getParams().toString();
+                }
+
+                if (sendingDataPortdetails != null && receiveDataPortdetails != null) {
+                    waitEvt.put("waitevent:" + receiveDataPortdetails + "(" + receivePortparams + ")", new ArrayList<String>());
+
+                    waitEvt.get("waitevent:" + receiveDataPortdetails + "(" + receivePortparams + ")")
+                            .add("sendevent:" + sendingDataPortdetails + "(" + sendingPortparams + ")");
+
+                }
+
+            }
+
+        }
     }
 
     private void writeChannelNames() {
@@ -1707,6 +1862,8 @@ public class DirectedGraphTranslator extends JApplet {
     private void sendEventsNames() {
         // TODO Auto-generated method stub
         for (TMLSendEvent sendEvent : taskAc.getSendEvents()) {
+
+            // int i = sendEvent.getEvents().size();
             TMLCPrimitivePort sendingPortdetails = sendEvent.getEvent().port;
             TMLCPrimitivePort receivePortdetails = sendEvent.getEvent().port2;
 
@@ -3087,10 +3244,16 @@ public class DirectedGraphTranslator extends JApplet {
 
             for (SimulationTransaction st : transFile1) {
 
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
+
                 if (task1DeviceName.isEmpty()) {
                     if (st.id.equals(idTask1)) {
 
                         task1DeviceName = st.deviceName;
+                        task1CoreNbr = st.coreNumber;
 
                     }
                 }
@@ -3099,6 +3262,8 @@ public class DirectedGraphTranslator extends JApplet {
                     if (st.id.equals(idTask2)) {
 
                         task2DeviceName = st.deviceName;
+
+                        task2CoreNbr = st.coreNumber;
 
                     }
                 }
@@ -3111,6 +3276,11 @@ public class DirectedGraphTranslator extends JApplet {
             }
             int j = 0;
             for (SimulationTransaction st : transFile1) {
+
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
 
                 // ADD rules as edges
                 if (considerAddedRules) {
@@ -3140,6 +3310,44 @@ public class DirectedGraphTranslator extends JApplet {
                 String taskname = "";
 
                 String tasknameCheckID = "";
+
+                if (st.command.contains("SelectEvent params:")) {
+                    st.command = st.command.replace("SelectEvent", "Wait: " + st.channelName);
+
+                    String[] chN = st.channelName.split("__");
+
+                    String eventN = chN[chN.length - 1];
+
+                    vertex v = getvertexFromID(Integer.valueOf(st.id));
+                    String vName = v.getName();
+
+                    if (Graphs.vertexHasSuccessors(g, v)) {
+                        for (vertex vsec : Graphs.successorListOf(g, v)) {
+
+                            if (vsec.getName().contains("wait event: " + eventN + "(")) {
+                                st.id = String.valueOf(vsec.getId());
+                            }
+
+                        }
+
+                    }
+
+                } else if (st.command.contains("Wait reqChannel_")) {
+                    vertex v = getvertexFromID(Integer.valueOf(st.id));
+                    if (v.getType() == vertex.TYPE_START) {
+                        if (Graphs.vertexHasSuccessors(g, v)) {
+
+                            for (vertex vbefore : Graphs.successorListOf(g, v)) {
+
+                                if (vbefore.getName().startsWith("getReqArg")) {
+                                    st.id = String.valueOf(vbefore.getId());
+                                }
+
+                            }
+
+                        }
+                    }
+                }
 
                 for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
                     String ChannelName = entry.getKey();
@@ -3189,7 +3397,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 tasknameCheckID = tasknameCheck.getName();
 
-                                if (taskname.equals(task12) && task1DeviceName.equals(st.deviceName)) {
+                                if (taskname.equals(task12) && task1DeviceName.equals(st.deviceName) && task1CoreNbr.equals(st.coreNumber)) {
 
                                     addTaint(tasknameCheck);
 
@@ -3447,6 +3655,8 @@ public class DirectedGraphTranslator extends JApplet {
                             }
 
                             task2DeviceName = st.deviceName;
+
+                            task2CoreNbr = st.coreNumber;
                             times2.add(Integer.valueOf(st.endTime));
                             Collections.sort(times2);
 
@@ -3469,30 +3679,34 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (!(st.runnableTime).equals(st.startTime)) {
 
-                            if (runnableTimePerDevice.containsKey(st.deviceName)) {
+                            String dName = st.deviceName + "_" + st.coreNumber;
 
-                                if (!runnableTimePerDevice.get(st.deviceName).contains(timeValues)) {
-                                    runnableTimePerDevice.get(st.deviceName).add(timeValues);
+                            if (runnableTimePerDevice.containsKey(dName)) {
+
+                                if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
+                                    runnableTimePerDevice.get(dName).add(timeValues);
                                 }
                             } else {
 
                                 ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
                                 timeValuesList.add(timeValues);
 
-                                runnableTimePerDevice.put(st.deviceName, timeValuesList);
+                                runnableTimePerDevice.put(dName, timeValuesList);
 
                             }
 
                         }
                     }
 
-                    else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                    else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                            || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                             || devicesToBeConsidered.contains(deviceName))) {
                         delayDueTosimTraces.add(st);
 
                     }
 
                 } else {
+
                     if (!taskname.equals(null) && !taskname.equals("")) {
 
                         GraphPath<vertex, DefaultEdge> pathExistsTestwithTask1 = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
@@ -3518,6 +3732,8 @@ public class DirectedGraphTranslator extends JApplet {
                                 }
 
                                 task2DeviceName = st.deviceName;
+
+                                task2CoreNbr = st.coreNumber;
                                 times2.add(Integer.valueOf(st.endTime));
                                 Collections.sort(times2);
 
@@ -3540,23 +3756,26 @@ public class DirectedGraphTranslator extends JApplet {
 
                             if (!(st.runnableTime).equals(st.startTime)) {
 
-                                if (runnableTimePerDevice.containsKey(st.deviceName)) {
+                                String dName = st.deviceName + "_" + st.coreNumber;
 
-                                    if (!runnableTimePerDevice.get(st.deviceName).contains(timeValues)) {
-                                        runnableTimePerDevice.get(st.deviceName).add(timeValues);
+                                if (runnableTimePerDevice.containsKey(dName)) {
+
+                                    if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
+                                        runnableTimePerDevice.get(dName).add(timeValues);
                                     }
                                 } else {
 
                                     ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
                                     timeValuesList.add(timeValues);
 
-                                    runnableTimePerDevice.put(st.deviceName, timeValuesList);
+                                    runnableTimePerDevice.put(dName, timeValuesList);
 
                                 }
 
                             }
 
-                        } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                        } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                 || devicesToBeConsidered.contains(deviceName))) {
                             delayDueTosimTraces.add(st);
 
@@ -3699,6 +3918,11 @@ public class DirectedGraphTranslator extends JApplet {
 
             for (SimulationTransaction st : transFile1) {
 
+                if (st.coreNumber == null) {
+                    st.coreNumber = "0";
+
+                }
+
                 if (st.command.contains("SelectEvent params:") && getvertexFromID(Integer.valueOf(st.id)).getType() == 11) {
                     st.command = st.command.replace("SelectEvent params:", "Wait" + st.channelName);
 
@@ -3719,11 +3943,26 @@ public class DirectedGraphTranslator extends JApplet {
                         }
                     }
 
+                } else if (st.command.contains("Wait reqChannel_")) {
+                    vertex v = getvertexFromID(Integer.valueOf(st.id));
+                    if (v.getType() == vertex.TYPE_START) {
+                        if (Graphs.vertexHasSuccessors(g, v)) {
+
+                            for (vertex vbefore : Graphs.successorListOf(g, v)) {
+                                if (vbefore.getName().startsWith("getReqArg")) {
+                                    st.id = String.valueOf(vbefore.getId());
+                                }
+
+                            }
+
+                        }
+                    }
                 }
 
                 if (st.id.equals(idTask1) && !times1.contains(Integer.valueOf(st.startTime))) {
                     Task1Traces.add(st);
                     task1DeviceName = st.deviceName;
+                    task1CoreNbr = st.coreNumber;
                     times1.add(Integer.valueOf(st.startTime));
                     Collections.sort(times1);
 
@@ -3732,6 +3971,7 @@ public class DirectedGraphTranslator extends JApplet {
                 if (st.id.equals(idTask2) && !times2.contains(Integer.valueOf(st.endTime))) {
                     Task2Traces.add(st);
                     task2DeviceName = st.deviceName;
+                    task2CoreNbr = st.coreNumber;
                     times2.add(Integer.valueOf(st.endTime));
                     Collections.sort(times1);
                 }
@@ -3787,6 +4027,20 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 if (nextV.getName().contains(waitEvnt)) {
                                     st.id = String.valueOf(nextV.getId());
+                                }
+                            }
+                        } else if (st.command.contains("Wait reqChannel_")) {
+                            vertex v = getvertexFromID(Integer.valueOf(st.id));
+                            if (v.getType() == vertex.TYPE_START) {
+                                if (Graphs.vertexHasSuccessors(g, v)) {
+
+                                    for (vertex vbefore : Graphs.successorListOf(g, v)) {
+                                        if (vbefore.getName().startsWith("getReqArg")) {
+                                            st.id = String.valueOf(vbefore.getId());
+                                        }
+
+                                    }
+
                                 }
                             }
                         }
@@ -3848,26 +4102,29 @@ public class DirectedGraphTranslator extends JApplet {
                                     timeValues.add(0, Integer.valueOf(st.runnableTime));
                                     timeValues.add(1, Integer.valueOf(st.startTime));
 
+                                    String dName = st.deviceName + "_" + st.coreNumber;
+
                                     if (!(st.runnableTime).equals(st.startTime)) {
 
-                                        if (runnableTimePerDevice.containsKey(st.deviceName)) {
+                                        if (runnableTimePerDevice.containsKey(dName)) {
 
-                                            if (!runnableTimePerDevice.get(st.deviceName).contains(timeValues)) {
-                                                runnableTimePerDevice.get(st.deviceName).add(timeValues);
+                                            if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
+                                                runnableTimePerDevice.get(dName).add(timeValues);
                                             }
                                         } else {
 
                                             ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
                                             timeValuesList.add(timeValues);
 
-                                            runnableTimePerDevice.put(st.deviceName, timeValuesList);
+                                            runnableTimePerDevice.put(dName, timeValuesList);
 
                                         }
 
                                     }
                                 }
 
-                                else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                                else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                        || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                         || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                                     delayDueTosimTraces.add(st);
 
@@ -3888,7 +4145,8 @@ public class DirectedGraphTranslator extends JApplet {
                                         || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0) {
                                     relatedsimTraces.add(st);
 
-                                } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                                } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                        || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                         || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                                     delayDueTosimTraces.add(st);
 
@@ -3921,6 +4179,7 @@ public class DirectedGraphTranslator extends JApplet {
                 // dataByTask[i][6] = totalTime;
 
             }
+
         }
 
         return dataByTask;
@@ -4291,6 +4550,42 @@ public class DirectedGraphTranslator extends JApplet {
                     if (previousV.getType() == vertex.TYPE_CHOICE) {
 
                         for (Entry<vertex, List<vertex>> vChoice : allChoiceValues.entrySet()) {
+
+                            if (previousV.equals(vChoice.getKey())) {
+
+                                if (v1.getLabel().contains(v.getLabel().get(i)) && consideredNbr < v.getMaxTaintFixedNumber().get(labelConsidered)) {
+
+                                    if (v.getVirtualLengthAdded() == v.getSampleNumber()) {
+
+                                        consideredNbr = vChoice.getKey().getTaintConsideredNumber().get(labelConsidered);
+                                        consideredNbr++;
+
+                                        vChoice.getKey().getTaintConsideredNumber().put(labelConsidered, consideredNbr);
+
+                                        consideredNbr = v.getTaintConsideredNumber().get(labelConsidered);
+                                        consideredNbr++;
+
+                                        v.getTaintConsideredNumber().put(labelConsidered, consideredNbr);
+
+                                        Label = labelConsidered;
+                                        hasLabelAstask12 = true;
+
+                                        v.setVirtualLengthAdded(0);
+                                    } else {
+                                        Label = labelConsidered;
+                                        hasLabelAstask12 = true;
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                    }
+                    if (previousV.getType() == vertex.TYPE_SELECT_EVT) {
+
+                        for (Entry<vertex, List<vertex>> vChoice : allSelectEvtValues.entrySet()) {
 
                             if (previousV.equals(vChoice.getKey())) {
 
@@ -4779,6 +5074,55 @@ public class DirectedGraphTranslator extends JApplet {
 
             allChoiceValues.put(subV, subChoice);
 
+        } else if (subV.getType() == vertex.TYPE_SELECT_EVT) {
+
+            if (!subV.getLabel().contains(label)) {
+                subV.addLabel(label);
+                subV.getMaxTaintFixedNumber().put(label, i * subV.getTaintFixedNumber());
+            }
+            List<vertex> subChoice = new ArrayList<vertex>();
+
+            for (vertex subCh : Graphs.successorListOf(g, subV)) {
+
+                subChoice.add(subCh);
+
+                if (!subCh.equals(v1)) {
+
+                    if (subCh.getLabel().contains(label)) {
+                        if (subCh.getMaxTaintFixedNumber().containsKey(label)) {
+                            if (subCh.getMaxTaintFixedNumber().get(label) != subV.getMaxTaintFixedNumber().get(label)) {
+                                subCh.getMaxTaintFixedNumber().put(label, subV.getMaxTaintFixedNumber().put(label,
+                                        subV.getMaxTaintFixedNumber().get(label) * subCh.getTaintFixedNumber()));
+
+                                subCh.getMaxTaintFixedNumber().put(label, subCh.getMaxTaintFixedNumber().get(label) * subV.getTaintFixedNumber());
+                            }
+
+                        }
+
+                    } else {
+                        subCh.addLabel(label);
+                        subCh.getMaxTaintFixedNumber().put(label, subV.getMaxTaintFixedNumber().get(label) * subCh.getTaintFixedNumber());
+                    }
+
+                    if (subCh.getType() != vertex.TYPE_TRANSACTION) {
+
+                        if (NonTransV.containsKey(subV)) {
+                            NonTransV.get(subV).add(subCh);
+                        } else {
+
+                            List<vertex> lv = new ArrayList<vertex>();
+                            lv.add(subCh);
+                            NonTransV.put(subV, lv);
+
+                        }
+
+                    }
+                }
+
+            }
+
+            allSelectEvtValues.put(subV, subChoice);
+
         } else if (subV.getType() == vertex.TYPE_END) {
 
             if (subV.getLabel().contains(label)) {
@@ -5178,7 +5522,7 @@ public class DirectedGraphTranslator extends JApplet {
             dataByTaskRowDetails[i][0] = st.command;
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
 
-            dataByTaskRowDetails[i][2] = st.deviceName;
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
             dataByTaskRowDetails[i][3] = st.startTime;
             dataByTaskRowDetails[i][4] = st.endTime;
             i++;
@@ -5218,7 +5562,7 @@ public class DirectedGraphTranslator extends JApplet {
             dataByTaskRowDetails[i][0] = st.command;
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
 
-            dataByTaskRowDetails[i][2] = st.deviceName;
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
             dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
             dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
             i++;
@@ -5259,7 +5603,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             dataByTaskRowDetails[i][0] = st.command;
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
-            dataByTaskRowDetails[i][2] = st.deviceName;
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
             dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
             dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
 
@@ -5479,17 +5823,19 @@ public class DirectedGraphTranslator extends JApplet {
 
                             if (!(st.runnableTime).equals(st.startTime)) {
 
-                                if (runnableTimePerDevice.containsKey(st.deviceName)) {
+                                String dName = st.deviceName + "_" + st.coreNumber;
 
-                                    if (!runnableTimePerDevice.get(st.deviceName).contains(timeValues)) {
-                                        runnableTimePerDevice.get(st.deviceName).add(timeValues);
+                                if (runnableTimePerDevice.containsKey(dName)) {
+
+                                    if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
+                                        runnableTimePerDevice.get(dName).add(timeValues);
                                     }
                                 } else {
 
                                     ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
                                     timeValuesList.add(timeValues);
 
-                                    runnableTimePerDevice.put(st.deviceName, timeValuesList);
+                                    runnableTimePerDevice.put(dName, timeValuesList);
 
                                 }
 
@@ -5497,7 +5843,8 @@ public class DirectedGraphTranslator extends JApplet {
 
                         }
 
-                        else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                        else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                 || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                             delayDueTosimTraces.add(st);
 
@@ -5520,7 +5867,8 @@ public class DirectedGraphTranslator extends JApplet {
                                 || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0) {
                             relatedsimTraces.add(st);
 
-                        } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                        } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                 || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                             delayDueTosimTraces.add(st);
 
@@ -5547,7 +5895,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             dataByTaskRowDetails[i][0] = st.command;
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
-            dataByTaskRowDetails[i][2] = st.deviceName;
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
             dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
             dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
             i++;
@@ -5754,7 +6102,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             dataByTaskRowDetails[i][0] = st.command;
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
-            dataByTaskRowDetails[i][2] = st.deviceName;
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
             dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
             dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
             i++;
@@ -5774,7 +6122,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             dataByTaskRowDetails[i][0] = st.command;
             dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
-            dataByTaskRowDetails[i][2] = st.deviceName;
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
             dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
             dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
 
