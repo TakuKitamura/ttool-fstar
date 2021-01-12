@@ -1,2 +1,2 @@
 Main-Class: launcher.Main
-Class-Path: ./commons-codec-1.10.jar ./commons-math3-3.6.1.jar
+Class-Path: ./commons-codec-1.10.jar ./commons-math3-3.6.1.jar ./jfreechart-1.6.0.jar

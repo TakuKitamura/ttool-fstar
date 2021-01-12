@@ -1,2 +1,2 @@
 Main-Class: web.crawler.Server
-Class-Path: ./commons-io-2.5.jar ./commons-io-2.5-javadoc.jar ./derbyclient-10.9.1.0.jar ./derbynet.jar ./dom4j-1.6.1.jar ./derby.jar ./JavaPlot.jar ./jaxen-1.1.6.jar ./opencloud.jar ./commons-math3-3.6.1.jar
+Class-Path: ./commons-io-2.5.jar ./commons-io-2.5-javadoc.jar ./derbyclient-10.9.1.0.jar ./derbynet.jar ./dom4j-1.6.1.jar ./derby.jar ./JavaPlot.jar ./jaxen-1.1.6.jar ./opencloud.jar ./commons-math3-3.6.1.jar ./jfreechart-1.6.0.jar

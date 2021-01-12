@@ -1,2 +1,2 @@
 Main-Class: web.crawler.Client
-Class-Path: ./commons-math3-3.6.1.jar
+Class-Path: ./commons-math3-3.6.1.jar ./jfreechart-1.6.0.jar
