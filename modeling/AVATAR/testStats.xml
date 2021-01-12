@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="1">
+
+<Modeling type="AVATAR Design" nameTab="Design" tabs="Design$Block0" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
+<MainCode value="void __user_init() {"/>
+<MainCode value="}"/>
+<Optimized value="true" />
+<considerTimingOperators value="true" />
+<Validated value="Block0;" />
+<Ignored value="" />
+
+<COMPONENT type="5000" id="4675" >
+<cdparam x="234" y="40" />
+<sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="Block0" value="Block0" />
+<TGConnectingPoint num="0" id="4676" />
+<TGConnectingPoint num="1" id="4677" />
+<TGConnectingPoint num="2" id="4678" />
+<TGConnectingPoint num="3" id="4679" />
+<TGConnectingPoint num="4" id="4680" />
+<TGConnectingPoint num="5" id="4681" />
+<TGConnectingPoint num="6" id="4682" />
+<TGConnectingPoint num="7" id="4683" />
+<TGConnectingPoint num="8" id="4684" />
+<TGConnectingPoint num="9" id="4685" />
+<TGConnectingPoint num="10" id="4686" />
+<TGConnectingPoint num="11" id="4687" />
+<TGConnectingPoint num="12" id="4688" />
+<TGConnectingPoint num="13" id="4689" />
+<TGConnectingPoint num="14" id="4690" />
+<TGConnectingPoint num="15" id="4691" />
+<TGConnectingPoint num="16" id="4692" />
+<TGConnectingPoint num="17" id="4693" />
+<TGConnectingPoint num="18" id="4694" />
+<TGConnectingPoint num="19" id="4695" />
+<TGConnectingPoint num="20" id="4696" />
+<TGConnectingPoint num="21" id="4697" />
+<TGConnectingPoint num="22" id="4698" />
+<TGConnectingPoint num="23" id="4699" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Attribute access="0" id="x" value="" type="8" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+
+</AVATARBlockDiagramPanel>
+
+<AVATARStateMachineDiagramPanel name="Block0" minX="10" maxX="2500" minY="10" maxY="1500" >
+<CONNECTOR type="5102" id="4714" >
+<cdparam x="409" y="124" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="4715" />
+<P1  x="409" y="124" id="4713" />
+<P2  x="409" y="180" id="4703" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="4716" >
+<father id="4714" num="0" />
+<cdparam x="416" y="152" />
+<sizeparam width="61" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="4717" />
+<TGConnectingPoint num="1" id="4718" />
+<TGConnectingPoint num="2" id="4719" />
+<TGConnectingPoint num="3" id="4720" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="x" enabled="true"/>
+<afterMax value="x" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="5108" id="4711" >
+<cdparam x="331" y="99" />
+<sizeparam width="157" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="TGComponent" value="null" />
+<TGConnectingPoint num="0" id="4712" />
+<TGConnectingPoint num="1" id="4713" />
+<extraparam>
+<Data variable="x" minValue="0" maxValue="100" functionId="5" extraAttribute1="20" extraAttribute2="30" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5101" id="4702" >
+<cdparam x="399" y="185" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="4703" />
+</COMPONENT>
+
+<COMPONENT type="5100" id="4700" >
+<cdparam x="400" y="50" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="4701" />
+</COMPONENT>
+
+<CONNECTOR type="5102" id="4704" >
+<cdparam x="407" y="70" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="4705" />
+<P1  x="407" y="70" id="4701" />
+<P2  x="409" y="94" id="4712" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="4706" >
+<father id="4704" num="0" />
+<cdparam x="407" y="102" />
+<sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="4707" />
+<TGConnectingPoint num="1" id="4708" />
+<TGConnectingPoint num="2" id="4709" />
+<TGConnectingPoint num="3" id="4710" />
+<extraparam>
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
+
+</AVATARStateMachineDiagramPanel>
+
+</Modeling>
+
+
+
+
+</TURTLEGMODELING>
