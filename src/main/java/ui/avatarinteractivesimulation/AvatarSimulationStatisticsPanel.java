@@ -233,7 +233,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
 
             }
 
-            
+
             // Opening stat window
             JFrameStatistics stats1 = new JFrameStatistics("Simulation stats", elts);
             stats1.setSize(1200,800);

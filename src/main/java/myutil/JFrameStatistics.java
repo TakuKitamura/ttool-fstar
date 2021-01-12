@@ -47,6 +47,7 @@ import myutilsvg.SVGGeneration;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 import ui.*;
@@ -159,9 +160,17 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
             return;
         }
 
-        // Tab already exist?
 
-        String title = "Histogram of " + de.toString()  + ": value";
+
+        showHistogram(de);
+        showPieChart(de);
+
+    }
+
+    public void showHistogram(DataElement de) {
+        String title = "Histogram of " + de.toString();
+
+        // Tab already exist?
         if (mainPane.indexOfTab(title) > -1) {
             mainPane.setSelectedIndex(mainPane.indexOfTab(title));
             return;
@@ -174,8 +183,53 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         JFreeChart histogram = ChartFactory.createHistogram("Histogram: " + de.toString(),
                 de.toString(), "Frequency", dataset);
 
-        // Adding histogram to tabbed pane
         ChartPanel myChart = new ChartPanel(histogram);
+        // Adding histogram to tabbed pane
+        addChart(title, myChart);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void showPieChart(DataElement de) {
+        String title = "PieChart of " + de.toString() ;
+
+        // Tab already exist?
+        if (mainPane.indexOfTab(title) > -1) {
+            mainPane.setSelectedIndex(mainPane.indexOfTab(title));
+            return;
+        }
+
+        DefaultPieDataset dataset = new DefaultPieDataset( );
+
+        HashMap<Double, Integer> map = new HashMap<>();
+        for(int i=0; i<de.data.length; i++) {
+            if (map.containsKey(de.data[i])) {
+                Integer myInt = map.get(de.data[i]);
+                map.put(de.data[i], new Integer(myInt.intValue()+1));
+            } else {
+                map.put(de.data[i], 0);
+            }
+        }
+
+        for(Double d: map.keySet()) {
+            dataset.setValue(d, map.get(d));
+        }
+
+
+        JFreeChart pieChart = ChartFactory.createPieChart(
+                title,   // chart title
+                dataset,          // data
+                true,             // include legend
+                true,
+                false);
+
+        ChartPanel myChart = new ChartPanel(pieChart);
+        addChart(title, myChart);
+
+
+    }
+
+    public void addChart(String title, ChartPanel myChart) {
         myChart.setMouseWheelEnabled(true);
         mainPane.addTab(title, myChart);
         ButtonTabComponent ctb = new ButtonTabComponent(mainPane);
