@@ -39,12 +39,16 @@
 
 package avatartranslator.directsimulation;
 
+import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
+import myutil.DataElement;
 import myutil.TraceManager;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class AvatarSimulationRunner
@@ -151,6 +155,26 @@ public class AvatarSimulationRunner {
         }
 
         return timeLastTransaction;
+    }
+
+    public ArrayList<Double> getDataTimesOfAttributesOfBlock(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute) {
+        ArrayList<Double> listOfDoubles = new ArrayList<>();
+
+        for(AvatarSpecificationSimulation ass: listOfSimulations) {
+            ass.fillValuesOfTimesOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
+        }
+
+        return listOfDoubles;
+    }
+
+    public ArrayList<Double> getLastValueAndTimeOfAttributesOfBlock(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute) {
+        ArrayList<Double> listOfDoubles = new ArrayList<>();
+
+        for(AvatarSpecificationSimulation ass: listOfSimulations) {
+            ass.fillLastValueAndTimeOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
+        }
+
+        return listOfDoubles;
     }
 
 

@@ -44,6 +44,7 @@ import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Vector;
 
@@ -1679,7 +1680,55 @@ public class AvatarSpecificationSimulation {
         return lastTime;
     }
 
+    public void fillValuesOfTimesOfBlockAttribute(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, ArrayList<Double> toBeFilled) {
+        String initialValue = aa.getInitialValue();
+        int oldValue = 0;
+        if ((initialValue != null) && (initialValue.length() > 0)) {
+            oldValue = Integer.decode(initialValue);
+        }
 
+        toBeFilled.add(new Double(oldValue));
+        toBeFilled.add(new Double(0));
+
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            if (ast.block == ab) {
+                int newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                if (newValue != oldValue) {
+                    oldValue = newValue;
+                    //TraceManager.addDev("Block " + ab.getName() + " / " + aa.getName() + ". Adding value " + newValue + " at time " +
+                     //       ast.clockValueWhenFinished);
+                    toBeFilled.add(new Double(newValue));
+                    toBeFilled.add(new Double(ast.clockValueWhenFinished));
+                }
+            }
+        }
+    }
+
+    public void fillLastValueAndTimeOfBlockAttribute(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, ArrayList<Double> toBeFilled) {
+        String initialValue = aa.getInitialValue();
+        int oldValue = 0;
+        if ((initialValue != null) && (initialValue.length() > 0)) {
+            oldValue = Integer.decode(initialValue);
+        }
+
+        long oldTime = 0;
+
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            if (ast.block == ab) {
+                int newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                if (newValue != oldValue) {
+                    oldValue = newValue;
+                    oldTime = ast.clockValueWhenFinished;
+                    //TraceManager.addDev("Block " + ab.getName() + " / " + aa.getName() + ". Adding value " + newValue + " at time " +
+                    //       ast.clockValueWhenFinished);
+
+                }
+            }
+        }
+
+        toBeFilled.add(new Double(oldValue));
+        toBeFilled.add(new Double(oldTime));
+    }
 
 
 }

@@ -48,6 +48,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
 import ui.interactivesimulation.LatencyTableModel;
@@ -167,7 +168,8 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         }
 
         HistogramDataset dataset = new HistogramDataset();
-        dataset.addSeries(title, de.data, 20);
+        dataset.setType(HistogramType.FREQUENCY);
+        dataset.addSeries(title, de.data, 100);
 
         JFreeChart histogram = ChartFactory.createHistogram("Histogram: " + de.toString(),
                 de.toString(), "Frequency", dataset);

@@ -204,13 +204,39 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                 DataElement de = new DataElement("Time of last transaction of Block " + ab.getName());
                 deBlock.addChild(de);
                 de.data = sr.getTimesOfLastTransactionOfBlock(ab);
+
+                // Variables values and time
+                int cpt = 0;
+                for (AvatarAttribute aa: ab.getAttributes()) {
+
+                    de = new DataElement(aa.getName() + " (all values)");
+                    deBlock.addChild(de);
+                    ArrayList<Double> dataAndTimes = sr.getDataTimesOfAttributesOfBlock(ab, aa, cpt);
+                    de.data = new double[dataAndTimes.size()/2];
+                    de.times = new long[dataAndTimes.size()/2];
+                    for(int i=0; i<de.data.length; i++) {
+                        de.data[i] = dataAndTimes.get(2*i).doubleValue();
+                        de.times[i] = dataAndTimes.get(2*i+1).longValue();
+                    }
+
+                    de = new DataElement(aa.getName() + " (last values)");
+                    deBlock.addChild(de);
+                    dataAndTimes = sr.getLastValueAndTimeOfAttributesOfBlock(ab, aa, cpt);
+                    de.data = new double[dataAndTimes.size()/2];
+                    de.times = new long[dataAndTimes.size()/2];
+                    for(int i=0; i<de.data.length; i++) {
+                        de.data[i] = dataAndTimes.get(2*i).doubleValue();
+                        de.times[i] = dataAndTimes.get(2*i+1).longValue();
+                    }
+                    cpt ++;
+                }
+
             }
 
-
-
+            
             // Opening stat window
             JFrameStatistics stats1 = new JFrameStatistics("Simulation stats", elts);
-            stats1.setSize(800,600);
+            stats1.setSize(1200,800);
             stats1.setVisible(true);
         });
         stats.start();
