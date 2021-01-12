@@ -487,9 +487,10 @@ void Simulator::timeline2HTML(std::string& iTracetaskList, std::ostringstream& m
             }
             (*i)->setCycleTime((*i)->getCycleTime()+1);
         }
-        if((*i)->getAmoutOfCore() == 1)
-            (*i)->setCycleTime(0);
-        }
+//        if((*i)->getAmoutOfCore() == 1)
+//            (*i)->setCycleTime(0);
+        (*i)->setCycleTime(0);
+    }
 
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){
         (*j)->setStartFlagHTML(true);
@@ -574,11 +575,11 @@ std::cout<<"schedule2HTML--------------------------------------*****************
   if ( !ends_with( iTraceFileName, EXT_HTML ) ) {
     iTraceFileName.append( EXT_HTML );
   }
-  
+
 
   std::ofstream myfile(iTraceFileName.c_str());
    //myfile<<"model name: "<<iTraceFileName.c_str();
- 
+
 
   if (myfile.is_open()) {
     // DB: Issue #4
@@ -597,21 +598,21 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     }
 
     const std::string ext( EXT_HTML );
-    const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS; 
+    const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS;
     //const std::string jsFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_JS;
     //myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
     //const std::string jsFullFileName =  iTraceFileName.substr( 0, indexSlash + 1 ) + jsFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
     //std::ofstream jsfile( jsFullFileName.c_str() );
-    
+
     //myfile<<"full name is "<<cssFullFileName<<std::endl;
     if ( cssfile.is_open() ) {
       cssfile << SCHED_HTML_CSS_CONTENT;
       cssfile.close();
 
       myfile << SCHED_HTML_CSS_BEG_LINK;
-      myfile << cssFileName;     
+      myfile << cssFileName;
       myfile << SCHED_HTML_CSS_END_LINK;
     }
     else {
@@ -626,12 +627,12 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_END_TITLE; // </title>\n
     myfile << SCHED_HTML_END_HEAD; // </head>\n
     myfile << SCHED_HTML_BEG_BODY; // <body>\n
-    
+
     myfile << "<ul>\n";
     myfile << "<li>Model name: "<< _simComp->getModelName() << "</li><br>\n"; //name of model
     myfile << "<li> Date: " << asctime(aTimeinfo) << "</li>\n"; //date and time
     myfile << "</ul>\n";
-    
+
     // myfile << SCHED_HTML_JS_DIV_SUB_BEGIN;
     // myfile << SCHED_HTML_JS_TYPE;
     // myfile << SCHED_HTML_JS_CONTENT1;
@@ -654,7 +655,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       myfile << SCHED_HTML_JS_LINK2 << SCHED_HTML_END_JS << std::endl;
     }
     myfile << SCHED_HTML_BEGIN_JS << std::endl;
-    
+
     myfile << SCHED_HTML_JS_WINDOW;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->drawPieChart(myfile);
@@ -669,7 +670,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
        (*j)->drawPieChart(myfile);
     }
-       
+
     myfile << "var " << SHOW_PIE_CHART << " = false;" << std::endl;
     myfile << "$(\"#button\").click(function() {\n";
     myfile << "    " << SHOW_PIE_CHART << "=!" << SHOW_PIE_CHART << std::endl;
@@ -683,29 +684,29 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       (*j)->buttonPieChart(myfile);
     }
     myfile << "     });" << std::endl << "}" << std::endl;
-    
+
     myfile << SCHED_HTML_END_JS << std::endl; //<script>
     // myfile << SCHED_HTML_END_JS;
     //myfile << SCHED_HTML_JS_LINK;
     //myfile << SCHED_HTML_END_JS;
     //jsfile.close();
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
-        
+
     myfile << SCHED_HTML_TITLE_HW << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         //std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
-	(*i)->HW2HTML(myfile);
-	//(*i)->showPieChart(myfile);
-	(*i)->setCycleTime((*i)->getCycleTime()+1);
-	
-      }
-        if((*i)->getAmoutOfCore() == 1)
-	   (*i)->setCycleTime(0);
-	(*i)->setCycleTime(0);
-    }   
+	      (*i)->HW2HTML(myfile);
+	      //(*i)->showPieChart(myfile);
+	      (*i)->setCycleTime((*i)->getCycleTime()+1);
 
-    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
+      }
+//        if((*i)->getAmoutOfCore() == 1)
+//	   (*i)->setCycleTime(0);
+	  (*i)->setCycleTime(0);
+    }
+
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){
       (*j)->setStartFlagHTML(true);
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
       	(*j)->setHtmlCurrTask(*i);
@@ -720,18 +721,18 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       myfile << SCHED_HTML_JS_CLEAR << std::endl;
     }
 
-    
-     
+
+
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      (*j)->HW2HTML(myfile);     
+      (*j)->HW2HTML(myfile);
       // (*j)->showPieChart(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
-   
+
     myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
     myfile << SCHED_HTML_JS_BUTTON << std::endl;
     myfile << SCHED_HTML_JS_TABLE_END << std::endl;
-     
+
      for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->showPieChart(myfile);
     }
@@ -759,12 +760,12 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_TITLE_DEVICE << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
-	(*i)->schedule2HTML(myfile);
-	(*i)->setCycleTime((*i)->getCycleTime()+1);
-	
+	    (*i)->schedule2HTML(myfile);
+	    (*i)->setCycleTime((*i)->getCycleTime()+1);
       }
-      if((*i)->getAmoutOfCore() == 1)
-	(*i)->setCycleTime(0);
+//      if((*i)->getAmoutOfCore() == 1)
+//          (*i)->setCycleTime(0);
+	  (*i)->setCycleTime(0);
     }   
      for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
       (*j)->setStartFlagHTML(true);

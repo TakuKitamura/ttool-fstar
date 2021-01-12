@@ -750,6 +750,9 @@ void MultiCoreCPU::reset(){
   _nextTransaction=0;
   _lastTransaction=0;
   _masterNextTransaction=0;
+  if (!multiCore.empty())
+    multiCore.clear();
+  initCore();
   _busyCycles=0;
 }
 

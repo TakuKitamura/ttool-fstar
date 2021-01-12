@@ -86,7 +86,6 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     private int cacheMiss = HwCPU.DEFAULT_CACHE_MISS;
     private int encryption = HwCPU.ENCRYPTION_NONE;
     private String operation = "";
-    private  List<SimulationTransaction> transactionsTemp;
 
     public TMLArchiCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -199,15 +198,6 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
     }
 
-    public void resetTransactionsList() {
-        if(transactionsTemp != null)
-            transactionsTemp.removeAll(transactionsTemp);
-    }
-
-    public void transferList(Vector <SimulationTransaction> _trans) {
-        transactionsTemp = new ArrayList<SimulationTransaction>(_trans);
-    }
-
     public String getNodeName() {
         return name;
     }
@@ -218,7 +208,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         String errors = "";
         int tmp;
         String tmpName;
-        JDialogCPUNode dialog = new JDialogCPUNode(getTDiagramPanel().getMainGUI(), frame, "Setting CPU attributes", this, MECType, transactionsTemp);
+        JDialogCPUNode dialog = new JDialogCPUNode(getTDiagramPanel().getMainGUI(), frame, "Setting CPU attributes", this, MECType, transactions);
         dialog.setSize(600, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         // dialog.show(); // blocked until dialog has been closed
