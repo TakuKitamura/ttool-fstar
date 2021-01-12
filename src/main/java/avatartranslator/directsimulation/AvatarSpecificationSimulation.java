@@ -233,9 +233,13 @@ public class AvatarSpecificationSimulation {
     // Control function
 
     public void runSimulationToCompletion() {
+        runSimulationToCompletion(-1);
+    }
+
+    public void runSimulationToCompletion(int maxNbOfTransactions) {
         Thread t = new Thread() {
             public void run() {
-                runSimulation();
+                runSimulation(maxNbOfTransactions);
             }
         };
 
@@ -252,6 +256,10 @@ public class AvatarSpecificationSimulation {
     }
 
     public void runSimulation() {
+        runSimulation(-1);
+    }
+
+    public void runSimulation(int maxNbOfTransactions) {
         int index[];
         Vector<AvatarSimulationPendingTransaction> selectedTransactions;
 
@@ -360,7 +368,14 @@ public class AvatarSpecificationSimulation {
                             if (asi != null) {
                                 asi.updateTransactionAndTime(allTransactions.size(), clockValue);
                             }
-                            setState(GATHER);
+
+                            //TraceManager.addDev("Nb of transations: " + allTransactions.size() + " max: " + maxNbOfTransactions);
+                            if ((maxNbOfTransactions > 0) && (allTransactions.size() >= maxNbOfTransactions)){
+                                //TraceManager.addDev("Max nb of transactions reached: " + maxNbOfTransactions);
+                                setState(TERMINATED);
+                            } else {
+                                setState(GATHER);
+                            }
                         } else {
                             setState(TERMINATED);
                             TraceManager.addDev("Error when executing transaction");
@@ -502,7 +517,14 @@ public class AvatarSpecificationSimulation {
         notifyAll();
     }
 
-    public synchronized void newStateInSimulation() {
+    public synchronized void  
+     
+     
+     
+     
+
+
+    newStateInSimulation() {
         newState = true;
         notifyAll();
     }
@@ -1683,16 +1705,37 @@ public class AvatarSpecificationSimulation {
     public void fillValuesOfTimesOfBlockAttribute(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, ArrayList<Double> toBeFilled) {
         String initialValue = aa.getInitialValue();
         int oldValue = 0;
-        if ((initialValue != null) && (initialValue.length() > 0)) {
-            oldValue = Integer.decode(initialValue);
+        if (aa.isInt()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                oldValue = Integer.decode(initialValue);
+            }
+        } else if (aa.isBool()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                if (initialValue.compareTo("true") == 0) {
+                    oldValue = 1;
+                } else {
+                    oldValue = 0;
+                }
+            }
         }
+
+
 
         toBeFilled.add(new Double(oldValue));
         toBeFilled.add(new Double(0));
 
         for(AvatarSimulationTransaction ast: allTransactions) {
             if (ast.block == ab) {
-                int newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                int newValue = 0;
+                if (aa.isInt()) {
+                    newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                } else if (aa.isBool()) {
+                    if ((ast.attributeValues.get(indexOfAttribute).compareTo("true")) == 0) {
+                        newValue = 1;
+                    } else {
+                        newValue = 0;
+                    }
+                }
                 if (newValue != oldValue) {
                     oldValue = newValue;
                     //TraceManager.addDev("Block " + ab.getName() + " / " + aa.getName() + ". Adding value " + newValue + " at time " +
@@ -1707,15 +1750,36 @@ public class AvatarSpecificationSimulation {
     public void fillLastValueAndTimeOfBlockAttribute(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, ArrayList<Double> toBeFilled) {
         String initialValue = aa.getInitialValue();
         int oldValue = 0;
-        if ((initialValue != null) && (initialValue.length() > 0)) {
-            oldValue = Integer.decode(initialValue);
+        if (aa.isInt()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                oldValue = Integer.decode(initialValue);
+            }
+        } else if (aa.isBool()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                if (initialValue.compareTo("true") == 0) {
+                    oldValue = 1;
+                } else {
+                    oldValue = 0;
+                }
+            }
         }
+
 
         long oldTime = 0;
 
         for(AvatarSimulationTransaction ast: allTransactions) {
             if (ast.block == ab) {
-                int newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                int newValue = 0;
+                if (aa.isInt()) {
+                    newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                } else if (aa.isBool()) {
+                    if ((ast.attributeValues.get(indexOfAttribute).compareTo("true")) == 0) {
+                        newValue = 1;
+                    } else {
+                        newValue = 0;
+                    }
+                }
+
                 if (newValue != oldValue) {
                     oldValue = newValue;
                     oldTime = ast.clockValueWhenFinished;

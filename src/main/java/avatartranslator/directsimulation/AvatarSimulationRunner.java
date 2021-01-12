@@ -61,6 +61,8 @@ import java.util.List;
 
 public class AvatarSimulationRunner {
 
+   private static int MAX_NB_OF_TRANSACTIONS = 10000;
+
    private AvatarSpecification as;
    private boolean stop;
    private AvatarSpecificationSimulation ass;
@@ -85,7 +87,7 @@ public class AvatarSimulationRunner {
             listener.setSimulationDone(simulationIndex);
             ass = new AvatarSpecificationSimulation(as, null);
             listOfSimulations.add(ass);
-            ass.runSimulationToCompletion();
+            ass.runSimulationToCompletion(MAX_NB_OF_TRANSACTIONS);
             if (stop) {
                 break;
             }

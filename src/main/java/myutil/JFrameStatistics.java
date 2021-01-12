@@ -76,7 +76,8 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class JFrameStatistics extends JFrame implements ActionListener, GenericTree {
-    protected JButton buttonClose;
+    protected JButton buttonClose, buttonCloseAllTabs;
+    protected JCheckBox checkHistogram, checkPieChart;
     protected JScrollPane jsp;
     protected JTabbedPane mainPane;
 
@@ -131,7 +132,17 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         mainPanel.add(split, BorderLayout.CENTER);
 
         JPanel topPanel = new JPanel();
-        buttonClose = new JButton("Close", IconManager.imgic27);
+
+        checkHistogram = new JCheckBox("Use histogram");
+        checkHistogram.setSelected(true);
+        topPanel.add(checkHistogram);
+        checkPieChart = new JCheckBox("Use Pie Chart");
+        checkPieChart.setSelected(true);
+        topPanel.add(checkPieChart);
+        buttonCloseAllTabs = new JButton("Close all tabs", IconManager.imgic27);
+        buttonCloseAllTabs.addActionListener(this);
+        topPanel.add(buttonCloseAllTabs);
+        buttonClose = new JButton("Close Window", IconManager.imgic27);
         buttonClose.addActionListener(this);
         topPanel.add(buttonClose);
         mainPanel.add(topPanel, BorderLayout.SOUTH);
@@ -146,11 +157,17 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == buttonClose) {
             quit();
+        } else if (ae.getSource() == buttonCloseAllTabs) {
+            closeAllTabs();
         }
     }
 
     public void quit() {
         dispose();
+    }
+
+    public void closeAllTabs() {
+        mainPane.removeAll();
     }
 
 
@@ -160,10 +177,13 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
             return;
         }
 
+        if (checkHistogram.isSelected()) {
+            showHistogram(de);
+        }
 
-
-        showHistogram(de);
-        showPieChart(de);
+        if (checkPieChart.isSelected()) {
+            showPieChart(de);
+        }
 
     }
 
