@@ -39,8 +39,6 @@
 
 package myutil;
 
-import ui.GTURTLEModeling;
-
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -79,8 +77,6 @@ public class TreeModelStats implements TreeModel {
         //
         if (parent instanceof GenericTree) {
             return ((GenericTree) parent).getChild(index);
-        } else if (parent instanceof GTURTLEModeling) {
-            return jFStats.getChild(index);
         }
         return null;
     }
@@ -120,7 +116,7 @@ public class TreeModelStats implements TreeModel {
      */
     public boolean isLeaf(Object node) {
         if (node instanceof GenericTree) {
-            return (((GenericTree)node).getChildCount() == 0);
+            return (((GenericTree) node).getChildCount() == 0);
         }
 
         return true;

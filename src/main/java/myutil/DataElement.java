@@ -39,28 +39,7 @@
 
 package myutil;
 
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
-import common.ConfigurationTTool;
-import myutil.*;
-import myutilsvg.SVGGeneration;
-import ui.*;
-import ui.avatarbd.AvatarBDPortConnector;
-import ui.interactivesimulation.LatencyTableModel;
-import ui.interactivesimulation.SimulationLatency;
-import ui.util.IconManager;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Class DataElement
@@ -114,9 +93,6 @@ public class DataElement implements GenericTree {
     public String toString() {
         return title;
     }
-
-
-
 
 
 } // Class

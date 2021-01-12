@@ -39,34 +39,20 @@
 
 package myutil;
 
-import avatartranslator.*;
-import avatartranslator.directsimulation.*;
-import common.ConfigurationTTool;
-import myutil.*;
-import myutilsvg.SVGGeneration;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
-import ui.*;
-import ui.avatarbd.AvatarBDPortConnector;
-import ui.interactivesimulation.LatencyTableModel;
-import ui.interactivesimulation.SimulationLatency;
 import ui.util.IconManager;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.*;
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class JFrameStatistics
@@ -84,11 +70,8 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     protected Thread t;
     protected int threadMode = 0;
     protected boolean go;
-
-    private String title;
-
     ArrayList<DataElement> elements;
-
+    private String title;
 
 
     public JFrameStatistics(String _title, ArrayList<DataElement> _elements) {
@@ -127,7 +110,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         mainPane = new JTabbedPane();
         showStat.add(mainPane);
 
-        JSplitPane split =new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftTreePanel, showStat);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftTreePanel, showStat);
         split.setDividerLocation(0.80);
         mainPanel.add(split, BorderLayout.CENTER);
 
@@ -151,7 +134,6 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         this.add(mainPanel);
 
     }
-
 
 
     public void actionPerformed(ActionEvent ae) {
@@ -211,7 +193,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     @SuppressWarnings("unchecked")
     public void showPieChart(DataElement de) {
-        String title = "PieChart of " + de.toString() ;
+        String title = "PieChart of " + de.toString();
 
         // Tab already exist?
         if (mainPane.indexOfTab(title) > -1) {
@@ -219,19 +201,19 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
             return;
         }
 
-        DefaultPieDataset dataset = new DefaultPieDataset( );
+        DefaultPieDataset dataset = new DefaultPieDataset();
 
         HashMap<Double, Integer> map = new HashMap<>();
-        for(int i=0; i<de.data.length; i++) {
+        for (int i = 0; i < de.data.length; i++) {
             if (map.containsKey(de.data[i])) {
                 Integer myInt = map.get(de.data[i]);
-                map.put(de.data[i], new Integer(myInt.intValue()+1));
+                map.put(de.data[i], new Integer(myInt.intValue() + 1));
             } else {
                 map.put(de.data[i], 0);
             }
         }
 
-        for(Double d: map.keySet()) {
+        for (Double d : map.keySet()) {
             dataset.setValue(d, map.get(d));
         }
 
@@ -253,12 +235,11 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         myChart.setMouseWheelEnabled(true);
         mainPane.addTab(title, myChart);
         ButtonTabComponent ctb = new ButtonTabComponent(mainPane);
-        mainPane.setTabComponentAt(mainPane.getTabCount()-1, ctb);
-        mainPane.setSelectedIndex(mainPane.getTabCount()-1);
+        mainPane.setTabComponentAt(mainPane.getTabCount() - 1, ctb);
+        mainPane.setSelectedIndex(mainPane.getTabCount() - 1);
 
         mainPane.validate();
     }
-
 
 
     // tree
@@ -284,10 +265,6 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     public String toString() {
         return title;
     }
-
-
-
-
 
 
 } // Class
