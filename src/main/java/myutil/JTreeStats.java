@@ -304,9 +304,9 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
         Object o;
 
         if (nodeInfo instanceof DataElement) {
-            if ( ((DataElement)(nodeInfo)).isLeaf()) {
+            //if ( ((DataElement)(nodeInfo)).isLeaf()) {
                 jFStats.showStats((DataElement) nodeInfo);
-            }
+            //}
         }
     }
 

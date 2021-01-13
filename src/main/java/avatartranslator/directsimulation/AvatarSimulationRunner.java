@@ -179,5 +179,16 @@ public class AvatarSimulationRunner {
         return listOfDoubles;
     }
 
+    public ArrayList<Double> getValueAndTimeOfAttributesOfBlockBySimNumber(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, int simuIndex) {
+        ArrayList<Double> listOfDoubles = new ArrayList<>();
+
+        if (simuIndex < listOfSimulations.size()) {
+            AvatarSpecificationSimulation ass = listOfSimulations.get(simuIndex);
+            ass.fillValuesOfTimesOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
+        }
+
+        return listOfDoubles;
+    }
+
 
 }

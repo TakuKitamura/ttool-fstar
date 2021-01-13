@@ -56,11 +56,20 @@ public class DataElement implements GenericTree {
     public String title;
     public double data[];
     public long times[];
+    
+    public ArrayList<DataElement> setOfValues;
 
 
     public DataElement(String _title) {
         title = _title;
         childs = new ArrayList<>();
+    }
+    
+    public void addSetOfValue(DataElement de) {
+        if (setOfValues == null) {
+            setOfValues = new ArrayList<>();
+        }
+        setOfValues.add(de);
     }
 
     public void addChild(DataElement de) {

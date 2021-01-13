@@ -42,9 +42,22 @@ package myutil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.SymbolAxis;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.LookupPaintScale;
+import org.jfree.chart.renderer.xy.XYBlockRenderer;
+import org.jfree.chart.renderer.xy.XYSplineRenderer;
+import org.jfree.chart.title.PaintScaleLegend;
+import org.jfree.chart.ui.RectangleEdge;
+import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
+import org.jfree.data.xy.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -63,7 +76,8 @@ import java.util.HashMap;
  */
 public class JFrameStatistics extends JFrame implements ActionListener, GenericTree {
     protected JButton buttonClose, buttonCloseAllTabs;
-    protected JCheckBox checkHistogram, checkPieChart;
+    protected JCheckBox checkHistogram, checkPieChart, checkTimeValueChart, checkTimeValueBlockChart,
+    checkValueEvolution;
     protected JScrollPane jsp;
     protected JTabbedPane mainPane;
 
@@ -116,15 +130,30 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
         JPanel topPanel = new JPanel();
 
-        checkHistogram = new JCheckBox("Use histogram");
+        checkHistogram = new JCheckBox("Histogram chart");
         checkHistogram.setSelected(true);
         topPanel.add(checkHistogram);
-        checkPieChart = new JCheckBox("Use Pie Chart");
+
+        checkPieChart = new JCheckBox("Pie chart");
         checkPieChart.setSelected(true);
         topPanel.add(checkPieChart);
+
+        checkTimeValueChart = new JCheckBox("Value = f(t) chart");
+        checkTimeValueChart.setSelected(true);
+        topPanel.add(checkTimeValueChart);
+
+        checkTimeValueBlockChart = new JCheckBox("Value = f(t) block chart");
+        checkTimeValueBlockChart.setSelected(true);
+        //topPanel.add(checkTimeValueBlockChart);
+
+        checkValueEvolution = new JCheckBox("Value = f(t) per simulation");
+        checkValueEvolution.setSelected(true);
+        topPanel.add(checkValueEvolution);
+
         buttonCloseAllTabs = new JButton("Close all tabs", IconManager.imgic27);
         buttonCloseAllTabs.addActionListener(this);
         topPanel.add(buttonCloseAllTabs);
+
         buttonClose = new JButton("Close Window", IconManager.imgic27);
         buttonClose.addActionListener(this);
         topPanel.add(buttonClose);
@@ -155,9 +184,6 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     // Showing stats
     public void showStats(DataElement de) {
-        if ((de.data == null) || (de.data.length == 0)) {
-            return;
-        }
 
         if (checkHistogram.isSelected()) {
             showHistogram(de);
@@ -167,9 +193,25 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
             showPieChart(de);
         }
 
+        if (checkTimeValueChart.isSelected()) {
+            showTimeValueChart(de);
+        }
+
+        /*if (checkTimeValueBlockChart.isSelected()) {
+            showTimeValueBlockChart(de);
+        }*/
+
+        if (checkValueEvolution.isSelected()) {
+            showValueEvolutionChart(de);
+        }
+
     }
 
     public void showHistogram(DataElement de) {
+        if ((de.data == null) || (de.data.length == 0)) {
+            return;
+        }
+
         String title = "Histogram of " + de.toString();
 
         // Tab already exist?
@@ -193,6 +235,10 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     @SuppressWarnings("unchecked")
     public void showPieChart(DataElement de) {
+        if ((de.data == null) || (de.data.length == 0)) {
+            return;
+        }
+
         String title = "PieChart of " + de.toString();
 
         // Tab already exist?
@@ -209,7 +255,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
                 Integer myInt = map.get(de.data[i]);
                 map.put(de.data[i], new Integer(myInt.intValue() + 1));
             } else {
-                map.put(de.data[i], 0);
+                map.put(de.data[i], 1);
             }
         }
 
@@ -225,11 +271,183 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
                 true,
                 false);
 
+        PiePlot plot = (PiePlot) pieChart.getPlot();
+        plot.setLabelGenerator(new StandardPieSectionLabelGenerator("({1}) {2}"));
+
         ChartPanel myChart = new ChartPanel(pieChart);
         addChart(title, myChart);
 
 
     }
+
+    @SuppressWarnings("unchecked")
+    public void showTimeValueLineChart(DataElement de) {
+        if ((de.times == null) || (de.data.length != de.times.length)) {
+            return;
+        }
+
+        String title = "Value per Time of " + de.toString();
+
+        // Tab already exist?
+        if (mainPane.indexOfTab(title) > -1) {
+            mainPane.setSelectedIndex(mainPane.indexOfTab(title));
+            return;
+        }
+
+        XYSeries series = new XYSeries("Value per Time");
+
+        for(int i=0; i<de.data.length; i++) {
+            series.add(de.times[i], de.data[i]);
+        }
+
+
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(series);
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Value = f(t) chart", // Title
+                "Time", // x-axis Label
+                "Value", // y-axis Label
+                dataset, // Dataset
+                PlotOrientation.VERTICAL, // Plot Orientation
+                true, // Show Legend
+                true, // Use tooltips
+                false // Configure chart to generate URLs?
+        );
+
+        ChartPanel myChart = new ChartPanel(chart);
+        addChart(title, myChart);
+
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void showTimeValueChart(DataElement de) {
+        if ((de.times == null) || (de.data.length != de.times.length)) {
+            return;
+        }
+
+        String title = "Value per Time of " + de.toString();
+
+        // Tab already exist?
+        if (mainPane.indexOfTab(title) > -1) {
+            mainPane.setSelectedIndex(mainPane.indexOfTab(title));
+            return;
+        }
+
+        XYSeries series = new XYSeries("Value per Time");
+
+        for(int i=0; i<de.data.length; i++) {
+            series.add(de.times[i], de.data[i]);
+        }
+
+
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(series);
+
+        JFreeChart chart = ChartFactory.createScatterPlot(
+                "Value = f(t) chart", // Title
+                "Time", // x-axis Label
+                "Value", // y-axis Label
+                dataset, // Dataset
+                PlotOrientation.VERTICAL, // Plot Orientation
+                true, // Show Legend
+                true, // Use tooltips
+                false // Configure chart to generate URLs?
+        );
+
+
+        ChartPanel myChart = new ChartPanel(chart);
+        addChart(title, myChart);
+
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void showTimeValueBlockChart(DataElement de) {
+        if ((de.times == null) || (de.data.length != de.times.length)) {
+            return;
+        }
+
+        String title = "Block Value per Time of " + de.toString();
+
+        // Tab already exist?
+        if (mainPane.indexOfTab(title) > -1) {
+            mainPane.setSelectedIndex(mainPane.indexOfTab(title));
+            return;
+        }
+
+        TraceManager.addDev("Time value block chart");
+
+        DefaultXYZDataset datasetXYZ = new DefaultXYZDataset();
+        double[] xvalues = new double[de.data.length];
+        double[] yvalues = new double[de.data.length];
+        double[] zvalues = new double[de.data.length];
+        double[][] data = new double[][] {xvalues, yvalues, zvalues};
+
+        for(int i=0; i<de.data.length; i++) {
+            xvalues[i] = de.times[i];
+            yvalues[i] = de.data[i];
+            zvalues[i] = 2.5;
+        }
+
+        datasetXYZ.addSeries("Series 1", data);
+
+        JFreeChart myChart = createChart(datasetXYZ);
+
+        ChartPanel myChartPanel = new ChartPanel(myChart);
+        TraceManager.addDev("Adding XYZChart: " + title);
+        addChart(title, myChartPanel);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void showValueEvolutionChart(DataElement de) {
+
+        if ((de.setOfValues == null) || (de.setOfValues.size() == 0)) {
+            return;
+        }
+
+
+        String title = "Value per Time and per simulation index " + de.toString();
+
+        // Tab already exist?
+        if (mainPane.indexOfTab(title) > -1) {
+            mainPane.setSelectedIndex(mainPane.indexOfTab(title));
+            return;
+        }
+
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        int cpt = 1;
+        for(DataElement deEv: de.setOfValues) {
+            XYSeries series = new XYSeries("Serie " + cpt);
+            //TraceManager.addDev("Handling serie " + cpt);
+            for(int i=0; i<deEv.data.length; i++) {
+                series.add(deEv.times[i], deEv.data[i]);
+                //TraceManager.addDev("ADD Serie " + deEv.times[i] + "," + deEv.data[i]);
+            }
+            dataset.addSeries(series);
+            cpt ++;
+        }
+
+
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                title, // Title
+                "Time", // x-axis Label
+                "Value", // y-axis Label
+                dataset, // Dataset
+                PlotOrientation.VERTICAL, // Plot Orientation
+                true, // Show Legend
+                true, // Use tooltips
+                false // Configure chart to generate URLs?
+        );
+
+        ChartPanel myChart = new ChartPanel(chart);
+        addChart(title, myChart);
+
+    }
+
+
 
     public void addChart(String title, ChartPanel myChart) {
         myChart.setMouseWheelEnabled(true);
@@ -264,6 +482,46 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     public String toString() {
         return title;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static JFreeChart createChart(XYZDataset dataset) {
+        NumberAxis xAxis = new NumberAxis("X");
+        xAxis.setLowerMargin(0.0);
+        xAxis.setUpperMargin(0.0);
+        NumberAxis yAxis = new NumberAxis("Y");
+        yAxis.setAutoRangeIncludesZero(false);
+        yAxis.setInverted(true);
+        yAxis.setLowerMargin(0.0);
+        yAxis.setUpperMargin(0.0);
+        yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        XYBlockRenderer renderer = new XYBlockRenderer();
+        LookupPaintScale paintScale = new LookupPaintScale(0.5, 3.5,
+                Color.black);
+        paintScale.add(0.5, Color.green);
+        paintScale.add(1.5, Color.orange);
+        paintScale.add(2.5, Color.red);
+        renderer.setPaintScale(paintScale);
+        XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
+        plot.setBackgroundPaint(Color.lightGray);
+        plot.setDomainGridlinePaint(Color.white);
+        plot.setRangeGridlinePaint(Color.white);
+        plot.setForegroundAlpha(0.66f);
+        plot.setAxisOffset(new RectangleInsets(5, 5, 5, 5));
+        JFreeChart chart = new JFreeChart("XYBlockChartDemo3", plot);
+        chart.removeLegend();
+        chart.setBackgroundPaint(Color.white);
+        SymbolAxis scaleAxis = new SymbolAxis(null, new String[] {"", "No value",
+                "Freq < 50%", ">= 50%"});
+        scaleAxis.setRange(0.5, 3.5);
+        scaleAxis.setPlot(new PiePlot());
+        scaleAxis.setGridBandsVisible(false);
+        PaintScaleLegend psl = new PaintScaleLegend(paintScale, scaleAxis);
+        psl.setAxisOffset(5.0);
+        psl.setPosition(RectangleEdge.BOTTOM);
+        psl.setMargin(new RectangleInsets(5, 5, 5, 5));
+        chart.addSubtitle(psl);
+        return chart;
     }
 
 

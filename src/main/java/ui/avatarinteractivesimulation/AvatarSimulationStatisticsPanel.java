@@ -228,6 +228,22 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                         de.data[i] = dataAndTimes.get(2*i).doubleValue();
                         de.times[i] = dataAndTimes.get(2*i+1).longValue();
                     }
+
+                    de = new DataElement(aa.getName() + " (individual evolution)");
+                    deBlock.addChild(de);
+                    for(int j=0; j<totalNbOfSimulations; j++) {
+                        dataAndTimes = sr.getValueAndTimeOfAttributesOfBlockBySimNumber(ab, aa, cpt, j);
+                        DataElement deEvolution = new DataElement(aa.getName() + " (evolution #" + j + ")");
+                        deEvolution.data = new double[dataAndTimes.size()/2];
+                        deEvolution.times = new long[dataAndTimes.size()/2];
+                        for(int i=0; i<deEvolution.data.length; i++) {
+                            deEvolution.data[i] = dataAndTimes.get(2*i).doubleValue();
+                            deEvolution.times[i] = dataAndTimes.get(2*i+1).longValue();
+                        }
+                        de.addSetOfValue(deEvolution);
+                        de.addChild(deEvolution);
+                    }
+
                     cpt ++;
                 }
 
@@ -245,29 +261,6 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     private void showTimeHistogram() {
         TraceManager.addDev("Show time histogram");
         JPanel panel = new JPanel(new BorderLayout());
-
-        /*XYSeries series = new XYSeries("XYGraph");
-        series.add(1, 1);
-        series.add(1, 2);
-        series.add(2, 1);
-        series.add(3, 9);
-        series.add(4, 10);
-
-// Add the series to your data set
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(series);
-
-// Generate the graph
-        JFreeChart chart = ChartFactory.createXYLineChart(
-                "XY Chart", // Title
-                "x-axis", // x-axis Label
-                "y-axis", // y-axis Label
-                dataset, // Dataset
-                PlotOrientation.VERTICAL, // Plot Orientation
-                true, // Show Legend
-                true, // Use tooltips
-                false // Configure chart to generate URLs?
-        );*/
 
         HistogramDataset dataset = new HistogramDataset();
         double []values = sr.getSimulationTimes();
