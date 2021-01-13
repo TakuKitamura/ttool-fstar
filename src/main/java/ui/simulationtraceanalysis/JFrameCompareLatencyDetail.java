@@ -106,7 +106,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
     private LatencyAnalysisParallelAlgorithms tc;
     private JCheckBox taintFirstOp, considerRules;
-    
+
     private static final String startTimeColName = "Start Time ";
     private static final String endTimeColName = "End Time ";
     private static final String latencyColName = "Latency ";
@@ -525,9 +525,9 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             }
 
             buttonShowDGraph1.setEnabled(true);
-            if (pbar.getValue()==pbar.getMaximum()) {
+            if (pbar.getValue() == pbar.getMaximum()) {
                 updateBar(0);
-                
+
             }
             jta.append("Browse the second simulation trace to generate the second graph \n");
             browse.setEnabled(true);
@@ -584,9 +584,9 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             buttonShowDGraph2.setEnabled(true);
             buttonDetailedAnalysis.setEnabled(true);
             buttonCompareInDetails.setEnabled(true);
-            if (pbar.getValue()==pbar.getMaximum()) {
-              updateBar(0);
-                
+            if (pbar.getValue() == pbar.getMaximum()) {
+                updateBar(0);
+
             }
             this.pack();
             this.revalidate();

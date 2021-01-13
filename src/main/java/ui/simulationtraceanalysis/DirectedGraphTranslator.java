@@ -167,7 +167,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     private HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
-    private final JFrame frame = new JFrame("The SysML Model As Directed Graph");
+    private final JFrame frame = new JFrame("The Sys-ML Model As Directed Graph");
 
     private List<Integer> times1 = new ArrayList<Integer>();
     private List<Integer> times2 = new ArrayList<Integer>();
@@ -233,31 +233,6 @@ public class DirectedGraphTranslator extends JApplet {
     private List<SimulationTransaction> onPath = new ArrayList<SimulationTransaction>();
     private List<SimulationTransaction> offPath = new ArrayList<SimulationTransaction>();
     private List<SimulationTransaction> offPathDelay = new ArrayList<SimulationTransaction>();
-
-    private static final String selectEventparam = "SelectEvent params:";
-    private static final String selectEvent = "SelectEvent";
-    private static final String transactions = "Transactions";
-    private static final String mandatory = "Mandatory";
-    private static final String operatorLabel = "operator";
-    private static final String startTimeLabel = "starttime";
-    private static final String endTimeLabel = "endtime";
-    private static final String lengthLabel = "length";
-    private static final String noContentionLabel = "NoContention";
-    private static final String contentionLabel = "Contention";
-    private static final String idLabel = "id";
-    private static final String latencyTableLabel = "LatencyTable";
-    private static final String latencyLabel = "Latency";
-    private static final String rowLabel = "Row";
-    private static final String minLabel = "Min";
-    private static final String maxLabel = "Max";
-    private static final String op1 = "op1";
-    private static final String op2 = "op2";
-    private static final String stLAbel = "st";
-    private static final String waitLabel = "Wait";
-    private static final String waitReqLabel = "Wait reqChannel_";
-    private static final String getReqArgLabel = "getReqArg";
-    private static final String waitSt = "Wait: ";
-    private static final String waitEvent = "wait event: ";
 
     @SuppressWarnings("deprecation")
     public DirectedGraphTranslator(JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis, JFrameCompareLatencyDetail jframeCompareLatencyDetail,
@@ -360,11 +335,11 @@ public class DirectedGraphTranslator extends JApplet {
             if (!g.vertexSet().contains(getvertex(ch.getName()))) {
                 vertex v2 = vertex(ch.getName(), ch.getID());
                 g.addVertex(v2);
-                updateMainBar();
+                updatemainBar("v");
                 // gVertecies.add(vertex(ch.getName()));
                 getvertex(ch.getName()).setType(vertex.TYPE_CHANNEL);
                 getvertex(ch.getName()).setTaintFixedNumber(0);
-                updateMainBar();
+                updatemainBar(ch.getName());
 
             }
 
@@ -431,11 +406,11 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.containsVertex(getvertex(ChannelName))) {
                     g.addVertex(v);
-                    updateMainBar();
+                    updatemainBar("v");
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
                     getvertex(ChannelName).setTaintFixedNumber(0);
-                    updateMainBar();
+                    updatemainBar("ChannelName");
 
                 }
 
@@ -460,13 +435,13 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.containsVertex(getvertex(ChannelName))) {
                     g.addVertex(v);
-                    updateMainBar();
+                    updatemainBar("v");
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
 
                     getvertex(ChannelName).setTaintFixedNumber(0);
 
-                    updateMainBar();
+                    updatemainBar("ChannelName");
 
                 }
 
@@ -491,11 +466,11 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.containsVertex(v)) {
                     g.addVertex(v);
-                    updateMainBar();
+                    updatemainBar("v");
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
                     getvertex(ChannelName).setTaintFixedNumber(0);
-                    updateMainBar();
+                    updatemainBar("ChannelName");
 
                 }
 
@@ -522,7 +497,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             if (!g.containsVertex(v)) {
                 g.addVertex(v);
-                updateMainBar();
+                updatemainBar("getMemories");
 
             }
 
@@ -570,7 +545,7 @@ public class DirectedGraphTranslator extends JApplet {
             if (!g.containsVertex(v)) {
                 g.addVertex(v);
 
-                updateMainBar();
+                updatemainBar("getHwBridge");
 
             }
 
@@ -594,7 +569,7 @@ public class DirectedGraphTranslator extends JApplet {
             if (!g.containsVertex(v)) {
                 g.addVertex(v);
 
-                updateMainBar();
+                updatemainBar("getBUSs");
 
             }
 
@@ -883,7 +858,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     }
 
-    private void updateMainBar() {
+    private void updatemainBar(String string) {
 
         nbOfNodes++;
 
@@ -953,11 +928,11 @@ public class DirectedGraphTranslator extends JApplet {
 
                 if (!g.vertexSet().contains(getvertex(key))) {
                     g.addVertex(vertex(key, keyID));
-                    updateMainBar();
+                    updatemainBar(key);
                 }
                 if (!g.vertexSet().contains(getvertex(taskName))) {
                     g.addVertex(vertex(taskName, taskID));
-                    updateMainBar();
+                    updatemainBar(taskName);
                 }
 
                 g.addEdge(getvertex(key), getvertex(taskName));
@@ -979,7 +954,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                     if (currentElement.getName().equals("Stop after infinite loop")) {
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         if (opCount <= activity.nElements()) {
                             if (currentElement.getNexts().size() == 1) {
 
@@ -999,7 +974,7 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (currentElement.getName().equals("startOfFork") || currentElement.getName().equals("junctionOfFork")
                             || currentElement.getName().equals("startOfJoin") || currentElement.getName().equals("junctionOfJoin")) {
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1009,7 +984,7 @@ public class DirectedGraphTranslator extends JApplet {
                         int id = ((TMLReadChannel) (currentElement)).getChannel(0).getID();
                         if (!g.containsVertex(getvertex(name))) {
                             g.addVertex(vertex(name, id));
-                            updateMainBar();
+                            updatemainBar("v");
 
                         }
 
@@ -1031,7 +1006,7 @@ public class DirectedGraphTranslator extends JApplet {
                         }
 
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1044,7 +1019,7 @@ public class DirectedGraphTranslator extends JApplet {
                         vertex v = getvertex(vName);
                         if (!g.containsVertex(v)) {
                             g.addVertex(vertex(vName, vid));
-                            updateMainBar();
+                            updatemainBar("v");
 
                         }
 
@@ -1066,7 +1041,7 @@ public class DirectedGraphTranslator extends JApplet {
                         // g.addEdge(getvertex(taskName),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1074,7 +1049,7 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (currentElement.getName().equals("stopOfFork") || currentElement.getName().equals("stop2OfFork")
                             || currentElement.getName().equals("stopOfJoin")) {
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         // currentElement = currentElement.getNexts().firstElement();
                         continue;
                     } else if (taskName.startsWith("JOINTASK_S_") && currentElement.getName().startsWith("ReadOfJoin")) {
@@ -1084,7 +1059,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (!g.containsVertex(getvertex(vName))) {
                             g.addVertex(vertex(vName, vid));
-                            updateMainBar();
+                            updatemainBar("v");
 
                         }
 
@@ -1106,7 +1081,7 @@ public class DirectedGraphTranslator extends JApplet {
                         // g.addEdge(getvertex(task.getName()),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
 
                         currentElement = currentElement.getNexts().firstElement();
 
@@ -1118,7 +1093,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (!g.containsVertex(getvertex(vName))) {
                             g.addVertex(vertex(vName, vid));
-                            updateMainBar();
+                            updatemainBar("v");
 
                         }
 
@@ -1140,7 +1115,7 @@ public class DirectedGraphTranslator extends JApplet {
                         }
 
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1153,7 +1128,7 @@ public class DirectedGraphTranslator extends JApplet {
                         vertex v = getvertex(vName);
                         if (!g.containsVertex(v)) {
                             g.addVertex(vertex(vName, vid));
-                            updateMainBar();
+                            updatemainBar("v");
 
                         }
 
@@ -1175,7 +1150,7 @@ public class DirectedGraphTranslator extends JApplet {
                         // g.addEdge(getvertex(taskName),getvertex(((TMLWriteChannel)(currentElement)).getChannel(0).getName()));
 
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1186,7 +1161,7 @@ public class DirectedGraphTranslator extends JApplet {
                         int id = ((TMLWaitEvent) (currentElement)).getEvent().getID();
                         if (!g.containsVertex(getvertex(name))) {
                             g.addVertex(vertex(name, id));
-                            updateMainBar();
+                            updatemainBar("v");
 
                         }
 
@@ -1208,7 +1183,7 @@ public class DirectedGraphTranslator extends JApplet {
                         }
 
                         opCount++;
-                        updateMainBar();
+                        updatemainBar("v");
                         currentElement = currentElement.getNexts().firstElement();
 
                         continue;
@@ -1331,12 +1306,10 @@ public class DirectedGraphTranslator extends JApplet {
                         String[] val = cond.split("<=");
 
                         String loopValue = val[2].toString();
-
-                        int loopVal = Integer.valueOf(loopValue);
                         if ((loopValue != null) && (loopValue.length() > 0)) {
 
                             if ((loopValue.matches("\\d*"))) {
-                                getvertex(eventName).setTaintFixedNumber(loopVal);
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                             } else {
                                 for (TMLAttribute att : taskAc.getAttributes()) {
 
@@ -1346,7 +1319,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 }
 
-                                getvertex(eventName).setTaintFixedNumber(loopVal);
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
 
                             }
                         }
@@ -1356,12 +1329,10 @@ public class DirectedGraphTranslator extends JApplet {
                         String[] val = cond.split("<");
 
                         String loopValue = val[1].toString();
-                        int loopVal = Integer.valueOf(loopValue);
-
                         if ((loopValue != null) && (loopValue.length() > 0)) {
 
                             if ((loopValue.matches("\\d*"))) {
-                                getvertex(eventName).setTaintFixedNumber(loopVal);
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                             } else {
                                 for (TMLAttribute att : taskAc.getAttributes()) {
 
@@ -1371,7 +1342,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 }
                                 if ((loopValue.matches("\\d*"))) {
-                                    getvertex(eventName).setTaintFixedNumber(loopVal);
+                                    getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                                 }
                                 {
                                     frameLatencyDetailedAnalysis.error(loopValue + " Expression in For Loop is not supported by Tainting");
@@ -1526,7 +1497,7 @@ public class DirectedGraphTranslator extends JApplet {
         vertex startv = vertex(taskStartName, currentElement.getID());
 
         g.addVertex(startv);
-        updateMainBar();
+        updatemainBar("v");
         // gVertecies.add(vertex(taskStartName));
         getvertex(taskStartName).setType(vertex.TYPE_START);
         getvertex(taskStartName).setTaintFixedNumber(1);
@@ -1549,10 +1520,10 @@ public class DirectedGraphTranslator extends JApplet {
 
             if (sendingPortdetails != null && !sendingPortdetails.isBlocking()) {
                 warnings.add(
-                        "Send event port:" + sendingPortdetails.getPortName() + " is non-blocking. Use tainting for an accurate latency analysis");
+                        "send event port:" + sendingPortdetails.getPortName() + " is non-blocking. Use tainting for an accurate latency analysis");
             }
             if (sendingPortdetails != null && sendingPortdetails.isFinite()) {
-                warnings.add("Send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis ");
+                warnings.add("send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis ");
             }
             String receivePortparams = waitEvent.getAllParams();
 
@@ -1876,7 +1847,7 @@ public class DirectedGraphTranslator extends JApplet {
                 if (sp != null && rp != null) {
 
                     if (!sp.isBlocking() && !rp.isBlocking()) {
-                        warnings.add("Send data port:" + sp.getPortName() + " and read data port:" + rp.getPortName()
+                        warnings.add("send data port:" + sp.getPortName() + " and read data port:" + rp.getPortName()
                                 + " are non-blocking. Use tainting for an accurate latency analysis.");
 
                     }
@@ -2081,7 +2052,9 @@ public class DirectedGraphTranslator extends JApplet {
             vertex preV = vertex(preEventName, preEventid);
 
             g.addVertex(v);
-            updateMainBar();
+            updatemainBar("v");
+            // gVertecies.add(vertex(eventName));
+
             g.addEdge(preV, v);
             opCount++;
 
@@ -2089,7 +2062,7 @@ public class DirectedGraphTranslator extends JApplet {
             vertex v = vertex(eventName, eventid);
 
             g.addVertex(v);
-            updateMainBar();
+            updatemainBar("v");
             // gVertecies.add(vertex(eventName));
             g.addEdge(getvertex(taskStartName), getvertex(eventName));
             opCount++;
@@ -2452,7 +2425,7 @@ public class DirectedGraphTranslator extends JApplet {
         vertex taskEndVertex = vertex(taskEndName, taskEndid);
 
         g.addVertex(taskEndVertex);
-        updateMainBar();
+        updatemainBar("v");
         // gVertecies.add(vertex(taskEndName));
         getvertex(eventName).setType(vertex.TYPE_END);
         getvertex(eventName).setTaintFixedNumber(1);
@@ -3304,9 +3277,6 @@ public class DirectedGraphTranslator extends JApplet {
             int j = 0;
             for (SimulationTransaction st : transFile1) {
 
-                int startTime = Integer.valueOf(st.startTime);
-                int endTime = Integer.valueOf(st.endTime);
-                int id = Integer.valueOf(st.id);
                 if (st.coreNumber == null) {
                     st.coreNumber = "0";
 
@@ -3341,20 +3311,20 @@ public class DirectedGraphTranslator extends JApplet {
 
                 String tasknameCheckID = "";
 
-                if (st.command.contains(selectEventparam)) {
-                    st.command = st.command.replace(selectEvent, waitSt + st.channelName);
+                if (st.command.contains("SelectEvent params:")) {
+                    st.command = st.command.replace("SelectEvent", "Wait: " + st.channelName);
 
                     String[] chN = st.channelName.split("__");
 
                     String eventN = chN[chN.length - 1];
 
-                    vertex v = getvertexFromID(id);
+                    vertex v = getvertexFromID(Integer.valueOf(st.id));
                     String vName = v.getName();
 
                     if (Graphs.vertexHasSuccessors(g, v)) {
                         for (vertex vsec : Graphs.successorListOf(g, v)) {
 
-                            if (vsec.getName().contains(waitEvent + eventN + "(")) {
+                            if (vsec.getName().contains("wait event: " + eventN + "(")) {
                                 st.id = String.valueOf(vsec.getId());
                             }
 
@@ -3362,14 +3332,14 @@ public class DirectedGraphTranslator extends JApplet {
 
                     }
 
-                } else if (st.command.contains(waitReqLabel)) {
-                    vertex v = getvertexFromID(id);
+                } else if (st.command.contains("Wait reqChannel_")) {
+                    vertex v = getvertexFromID(Integer.valueOf(st.id));
                     if (v.getType() == vertex.TYPE_START) {
                         if (Graphs.vertexHasSuccessors(g, v)) {
 
                             for (vertex vbefore : Graphs.successorListOf(g, v)) {
 
-                                if (vbefore.getName().startsWith(getReqArgLabel)) {
+                                if (vbefore.getName().startsWith("getReqArg")) {
                                     st.id = String.valueOf(vbefore.getId());
                                 }
 
@@ -3421,7 +3391,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         if (isNumeric(taskToAddid)) {
 
-                            if (Integer.valueOf(taskToAddid).equals(id)) {
+                            if (Integer.valueOf(taskToAddid).equals(Integer.valueOf(st.id))) {
 
                                 taskname = tasknameCheck.toString();
 
@@ -3442,7 +3412,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                     }
 
-                                    times1.add(startTime);
+                                    times1.add(Integer.valueOf(st.startTime));
                                     Collections.sort(times1);
 
                                 }
@@ -3687,7 +3657,7 @@ public class DirectedGraphTranslator extends JApplet {
                             task2DeviceName = st.deviceName;
 
                             task2CoreNbr = st.coreNumber;
-                            times2.add(endTime);
+                            times2.add(Integer.valueOf(st.endTime));
                             Collections.sort(times2);
 
                         }
@@ -3705,7 +3675,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                         ArrayList<Integer> timeValues = new ArrayList<Integer>();
                         timeValues.add(0, Integer.valueOf(st.runnableTime));
-                        timeValues.add(1, startTime);
+                        timeValues.add(1, Integer.valueOf(st.startTime));
 
                         if (!(st.runnableTime).equals(st.startTime)) {
 
@@ -3764,7 +3734,7 @@ public class DirectedGraphTranslator extends JApplet {
                                 task2DeviceName = st.deviceName;
 
                                 task2CoreNbr = st.coreNumber;
-                                times2.add(endTime);
+                                times2.add(Integer.valueOf(st.endTime));
                                 Collections.sort(times2);
 
                             }
@@ -3782,7 +3752,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                             ArrayList<Integer> timeValues = new ArrayList<Integer>();
                             timeValues.add(0, Integer.valueOf(st.runnableTime));
-                            timeValues.add(1, startTime);
+                            timeValues.add(1, Integer.valueOf(st.startTime));
 
                             if (!(st.runnableTime).equals(st.startTime)) {
 
@@ -3871,28 +3841,26 @@ public class DirectedGraphTranslator extends JApplet {
 
                     for (SimulationTransaction st : relatedsimTraceswithTaint.get(labeli)) {
 
-                        int startTime = Integer.valueOf(st.startTime);
-                        int endTime = Integer.valueOf(st.endTime);
-
-                        if (!(startTime < s1 && endTime <= s1) && !(startTime >= s2 && endTime > s2)) {
+                        if (!(Integer.valueOf(st.startTime) < s1 && Integer.valueOf(st.endTime) <= s1)
+                                && !(Integer.valueOf(st.startTime) >= s2 && Integer.valueOf(st.endTime) > s2)) {
 
                             // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
                             // < maxTime) {
 
-                            if (endTime > s2) {
-                                st.endTime = String.valueOf(s2);
-                                st.length = String.valueOf(s2 - startTime);
+                            if (Integer.valueOf(st.endTime) > s2) {
+                                st.endTime = Integer.valueOf(s2).toString();
+                                st.length = Integer.valueOf(Integer.valueOf(s2) - Integer.valueOf(st.startTime)).toString();
                             }
 
-                            if (startTime < s1 && endTime != s1) {
-                                st.startTime = String.valueOf(s1);
-                                st.length = String.valueOf(endTime - s1);
+                            if (Integer.valueOf(st.startTime) < s1 && Integer.valueOf(st.endTime) != s1) {
+                                st.startTime = Integer.valueOf(s1).toString();
+                                st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(s1)).toString();
                             }
 
-                            if (startTime < s1 && endTime > s2) {
-                                st.startTime = String.valueOf(s1);
-                                st.endTime = String.valueOf(s2);
-                                st.length = String.valueOf(s2 - s1);
+                            if (Integer.valueOf(st.startTime) < s1 && Integer.valueOf(st.endTime) > s2) {
+                                st.startTime = Integer.valueOf(s1).toString();
+                                st.endTime = Integer.valueOf(s2).toString();
+                                st.length = Integer.valueOf(Integer.valueOf(s2) - Integer.valueOf(s1)).toString();
                             }
                             relatedSTTaint.add(st);
 
@@ -3914,26 +3882,26 @@ public class DirectedGraphTranslator extends JApplet {
 
                 for (SimulationTransaction st : delayDueTosimTraces) {
 
-                    int startTime = Integer.valueOf(st.startTime);
-                    int endTime = Integer.valueOf(st.endTime);
+                    if (!(Integer.valueOf(st.startTime) < times1.get(row) && Integer.valueOf(st.endTime) <= times1.get(row))
+                            && !(Integer.valueOf(st.startTime) >= times2.get(row) && Integer.valueOf(st.endTime) > times2.get(row))) {
 
-                    if (!(startTime < times1.get(row) && endTime <= times1.get(row))
-                            && !(startTime >= times2.get(row) && endTime > times2.get(row))) {
+                        // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
+                        // < maxTime) {
 
-                        if (endTime > times2.get(row)) {
+                        if (Integer.valueOf(st.endTime) > times2.get(row)) {
                             st.endTime = times2.get(row).toString();
-                            st.length = String.valueOf(times2.get(row) - startTime);
+                            st.length = Integer.valueOf(Integer.valueOf(times2.get(row)) - Integer.valueOf(st.startTime)).toString();
                         }
 
-                        if (startTime < times1.get(row)) {
-                            st.startTime = times1.get(row).toString();
-                            st.length = String.valueOf(endTime - times1.get(row));
+                        if (Integer.valueOf(st.startTime) < times1.get(row)) {
+                            st.startTime = Integer.valueOf(times1.get(row)).toString();
+                            st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(times1.get(row))).toString();
                         }
 
-                        if (startTime < times1.get(row) && endTime > times2.get(row)) {
-                            st.startTime = times1.get(row).toString();
+                        if (Integer.valueOf(st.startTime) < times1.get(row) && Integer.valueOf(st.endTime) > times2.get(row)) {
+                            st.startTime = Integer.valueOf(times1.get(row)).toString();
                             st.endTime = times2.get(row).toString();
-                            st.length = String.valueOf(times2.get(row) - times1.get(row));
+                            st.length = Integer.valueOf(Integer.valueOf(times2.get(row)) - Integer.valueOf(times1.get(row))).toString();
                         }
                         delayDueTosimTracesTaint.add(st);
 
@@ -3950,19 +3918,17 @@ public class DirectedGraphTranslator extends JApplet {
 
             for (SimulationTransaction st : transFile1) {
 
-                int startTime = Integer.valueOf(st.startTime);
-                int endTime = Integer.valueOf(st.endTime);
-                int selectID = Integer.valueOf(st.id);
-
                 if (st.coreNumber == null) {
                     st.coreNumber = "0";
 
                 }
 
-                if (st.command.contains(selectEventparam) && getvertexFromID(selectID).getType() == 11) {
-                    st.command = st.command.replace(selectEventparam, waitLabel + st.channelName);
+                if (st.command.contains("SelectEvent params:") && getvertexFromID(Integer.valueOf(st.id)).getType() == 11) {
+                    st.command = st.command.replace("SelectEvent params:", "Wait" + st.channelName);
 
-                    vertex selectV = getvertexFromID(selectID);
+                    int selectID = Integer.valueOf(st.id);
+
+                    vertex selectV = getvertexFromID(Integer.valueOf(selectID));
 
                     String[] chName = st.channelName.toString().split("__");
 
@@ -3977,13 +3943,13 @@ public class DirectedGraphTranslator extends JApplet {
                         }
                     }
 
-                } else if (st.command.contains(waitReqLabel)) {
-                    vertex v = getvertexFromID(selectID);
+                } else if (st.command.contains("Wait reqChannel_")) {
+                    vertex v = getvertexFromID(Integer.valueOf(st.id));
                     if (v.getType() == vertex.TYPE_START) {
                         if (Graphs.vertexHasSuccessors(g, v)) {
 
                             for (vertex vbefore : Graphs.successorListOf(g, v)) {
-                                if (vbefore.getName().startsWith(getReqArgLabel)) {
+                                if (vbefore.getName().startsWith("getReqArg")) {
                                     st.id = String.valueOf(vbefore.getId());
                                 }
 
@@ -3993,20 +3959,20 @@ public class DirectedGraphTranslator extends JApplet {
                     }
                 }
 
-                if (st.id.equals(idTask1) && !times1.contains(startTime)) {
+                if (st.id.equals(idTask1) && !times1.contains(Integer.valueOf(st.startTime))) {
                     Task1Traces.add(st);
                     task1DeviceName = st.deviceName;
                     task1CoreNbr = st.coreNumber;
-                    times1.add(startTime);
+                    times1.add(Integer.valueOf(st.startTime));
                     Collections.sort(times1);
 
                 }
 
-                if (st.id.equals(idTask2) && !times2.contains(endTime)) {
+                if (st.id.equals(idTask2) && !times2.contains(Integer.valueOf(st.endTime))) {
                     Task2Traces.add(st);
                     task2DeviceName = st.deviceName;
                     task2CoreNbr = st.coreNumber;
-                    times2.add(endTime);
+                    times2.add(Integer.valueOf(st.endTime));
                     Collections.sort(times1);
                 }
 
@@ -4033,18 +3999,23 @@ public class DirectedGraphTranslator extends JApplet {
                 runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
 
                 for (SimulationTransaction st : transFile1) {
-
-                    int startTime = Integer.valueOf(st.startTime);
-                    int endTime = Integer.valueOf(st.endTime);
-                    int selectID = Integer.valueOf(st.id);
                     Boolean onPath = false;
 
-                    if (!(startTime < times1.get(i) && endTime <= times1.get(i)) && !(startTime >= times2.get(i) && endTime > times2.get(i))) {
+                    // if (Integer.valueOf(st.startTime) >= times1.get(i) &&
+                    // Integer.valueOf(st.startTime) < times2.get(i)) {
 
-                        if (st.command.contains(selectEventparam) && getvertexFromID(selectID).getType() == 11) {
-                            st.command = st.command.replace(selectEventparam, waitLabel + st.channelName);
+                    if (!(Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) <= times1.get(i))
+                            && !(Integer.valueOf(st.startTime) >= times2.get(i) && Integer.valueOf(st.endTime) > times2.get(i))) {
 
-                            vertex selectV = getvertexFromID(selectID);
+                        // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
+                        // < maxTime) {
+
+                        if (st.command.contains("SelectEvent params:") && getvertexFromID(Integer.valueOf(st.id)).getType() == 11) {
+                            st.command = st.command.replace("SelectEvent params:", "Wait" + st.channelName);
+
+                            int selectID = Integer.valueOf(st.id);
+
+                            vertex selectV = getvertexFromID(Integer.valueOf(selectID));
 
                             String[] chName = st.channelName.toString().split("__");
 
@@ -4058,13 +4029,13 @@ public class DirectedGraphTranslator extends JApplet {
                                     st.id = String.valueOf(nextV.getId());
                                 }
                             }
-                        } else if (st.command.contains(waitReqLabel)) {
-                            vertex v = getvertexFromID(selectID);
+                        } else if (st.command.contains("Wait reqChannel_")) {
+                            vertex v = getvertexFromID(Integer.valueOf(st.id));
                             if (v.getType() == vertex.TYPE_START) {
                                 if (Graphs.vertexHasSuccessors(g, v)) {
 
                                     for (vertex vbefore : Graphs.successorListOf(g, v)) {
-                                        if (vbefore.getName().startsWith(getReqArgLabel)) {
+                                        if (vbefore.getName().startsWith("getReqArg")) {
                                             st.id = String.valueOf(vbefore.getId());
                                         }
 
@@ -4074,20 +4045,20 @@ public class DirectedGraphTranslator extends JApplet {
                             }
                         }
 
-                        if (endTime > times2.get(i)) {
+                        if (Integer.valueOf(st.endTime) > times2.get(i)) {
                             st.endTime = times2.get(i).toString();
-                            st.length = String.valueOf(times2.get(i) - startTime);
+                            st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(st.startTime)).toString();
                         }
 
-                        if (startTime < times1.get(i) && endTime != times1.get(i)) {
-                            st.startTime = String.valueOf(times1.get(i));
-                            st.length = String.valueOf(endTime - times1.get(i));
+                        if (Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) != times1.get(i)) {
+                            st.startTime = Integer.valueOf(times1.get(i)).toString();
+                            st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(times1.get(i))).toString();
                         }
 
-                        if (startTime < times1.get(i) && endTime > times2.get(i)) {
-                            st.startTime = String.valueOf(times1.get(i));
+                        if (Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) > times2.get(i)) {
+                            st.startTime = Integer.valueOf(times1.get(i)).toString();
                             st.endTime = times2.get(i).toString();
-                            st.length = String.valueOf(times2.get(i) - times1.get(i));
+                            st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(times1.get(i))).toString();
                         }
 
                         String taskname = "";
@@ -4101,7 +4072,7 @@ public class DirectedGraphTranslator extends JApplet {
                             String taskToAddid = taskToAdd[taskToAddindex - 1];
                             if (isNumeric(taskToAddid)) {
 
-                                if (Integer.valueOf(taskToAddid).equals(selectID)) {
+                                if (Integer.valueOf(taskToAddid).equals(Integer.valueOf(st.id))) {
 
                                     taskname = tasknameCheck.toString();
                                     break;
@@ -4129,7 +4100,7 @@ public class DirectedGraphTranslator extends JApplet {
                                     relatedsimTraces.add(st);
                                     ArrayList<Integer> timeValues = new ArrayList<Integer>();
                                     timeValues.add(0, Integer.valueOf(st.runnableTime));
-                                    timeValues.add(1, startTime);
+                                    timeValues.add(1, Integer.valueOf(st.startTime));
 
                                     String dName = st.deviceName + "_" + st.coreNumber;
 
@@ -4223,10 +4194,10 @@ public class DirectedGraphTranslator extends JApplet {
 
             Document dom = builder.newDocument();
 
-            Element root2 = dom.createElement(transactions);
+            Element root2 = dom.createElement("Transactions");
             dom.appendChild(root2); // write DOM to XML file
 
-            Element root1 = dom.createElement(mandatory);
+            Element root1 = dom.createElement("Mandatory");
             root2.appendChild(root1); // write DOM to XML file
 
             for (int i = 0; i < onPath.size(); i++) {
@@ -4234,22 +4205,22 @@ public class DirectedGraphTranslator extends JApplet {
                 SimulationTransaction st = onPath.get(i);
 
                 // first create root element
-                Element root = dom.createElement(stLAbel);
+                Element root = dom.createElement("st");
                 root1.appendChild(root);
 
                 // set `id` attribute to root element
-                Attr attr = dom.createAttribute(idLabel);
+                Attr attr = dom.createAttribute("id");
                 attr.setValue(st.id);
                 root.setAttributeNode(attr);
 
-                // now create child elements
-                Element operator = dom.createElement(operatorLabel);
+                // now create child elements (name, email, phone)
+                Element operator = dom.createElement("operator");
                 operator.setTextContent(st.command);
-                Element start = dom.createElement(startTimeLabel);
+                Element start = dom.createElement("starttime");
                 start.setTextContent(st.startTime);
-                Element et = dom.createElement(endTimeLabel);
+                Element et = dom.createElement("endtime");
                 et.setTextContent(st.endTime);
-                Element l = dom.createElement(lengthLabel);
+                Element l = dom.createElement("length");
                 l.setTextContent(st.length);
 
                 // add child nodes to root node
@@ -4260,7 +4231,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             }
 
-            Element root3 = dom.createElement(noContentionLabel);
+            Element root3 = dom.createElement("NoContention");
             root2.appendChild(root3); // write DOM to XML file
 
             for (int i = 0; i < offPath.size(); i++) {
@@ -4268,22 +4239,22 @@ public class DirectedGraphTranslator extends JApplet {
                 SimulationTransaction st = offPath.get(i);
 
                 // first create root element
-                Element root5 = dom.createElement(stLAbel);
+                Element root5 = dom.createElement("st");
                 root3.appendChild(root5);
 
                 // set `id` attribute to root element
-                Attr attr = dom.createAttribute(idLabel);
+                Attr attr = dom.createAttribute("id");
                 attr.setValue(st.id);
                 root5.setAttributeNode(attr);
 
-                // now create child elements
-                Element operator = dom.createElement(operatorLabel);
+                // now create child elements (name, email, phone)
+                Element operator = dom.createElement("operator");
                 operator.setTextContent(st.command);
-                Element start = dom.createElement(startTimeLabel);
+                Element start = dom.createElement("starttime");
                 start.setTextContent(st.startTime);
-                Element et = dom.createElement(endTimeLabel);
+                Element et = dom.createElement("endtime");
                 et.setTextContent(st.endTime);
-                Element l = dom.createElement(lengthLabel);
+                Element l = dom.createElement("length");
                 l.setTextContent(st.length);
 
                 // add child nodes to root node
@@ -4294,7 +4265,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             }
 
-            Element root4 = dom.createElement(contentionLabel);
+            Element root4 = dom.createElement("Contention");
             root2.appendChild(root4); // write DOM to XML file
 
             for (int i = 0; i < offPathDelay.size(); i++) {
@@ -4302,22 +4273,22 @@ public class DirectedGraphTranslator extends JApplet {
                 SimulationTransaction st = offPathDelay.get(i);
 
                 // first create root element
-                Element root6 = dom.createElement(stLAbel);
+                Element root6 = dom.createElement("st");
                 root4.appendChild(root6);
 
                 // set `id` attribute to root element
-                Attr attr = dom.createAttribute(idLabel);
+                Attr attr = dom.createAttribute("id");
                 attr.setValue(st.id);
                 root6.setAttributeNode(attr);
 
-                // now create child elements
-                Element operator = dom.createElement(operatorLabel);
+                // now create child elements (name, email, phone)
+                Element operator = dom.createElement("operator");
                 operator.setTextContent(st.command);
-                Element start = dom.createElement(startTimeLabel);
+                Element start = dom.createElement("starttime");
                 start.setTextContent(st.startTime);
-                Element et = dom.createElement(endTimeLabel);
+                Element et = dom.createElement("endtime");
                 et.setTextContent(st.endTime);
-                Element l = dom.createElement(lengthLabel);
+                Element l = dom.createElement("length");
                 l.setTextContent(st.length);
 
                 // add child nodes to root node
@@ -4358,7 +4329,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             Document dom = builder.newDocument();
 
-            Element root1 = dom.createElement(latencyTableLabel);
+            Element root1 = dom.createElement("LatencyTable");
             dom.appendChild(root1);
 
             for (int id = 0; id < dataByTask.length; id++) {
@@ -4371,24 +4342,24 @@ public class DirectedGraphTranslator extends JApplet {
                 String op2 = String.valueOf(dataByTask[id][2]);
 
                 // first create root element
-                Element root = dom.createElement(rowLabel);
+                Element root = dom.createElement("Row");
                 root1.appendChild(root);
 
                 // set `id` attribute to root element
-                Attr attr = dom.createAttribute(idLabel);
+                Attr attr = dom.createAttribute("id");
                 attr.setValue(String.valueOf(id));
                 root.setAttributeNode(attr);
 
-                // now create child elements
-                Element operator1 = dom.createElement(op1);
+                // now create child elements (name, email, phone)
+                Element operator1 = dom.createElement("op1");
                 operator1.setTextContent(op1);
-                Element operator2 = dom.createElement(op2);
+                Element operator2 = dom.createElement("op2");
                 operator2.setTextContent(op2);
-                Element st = dom.createElement(startTimeLabel);
+                Element st = dom.createElement("starttime");
                 st.setTextContent(starttime);
-                Element et = dom.createElement(endTimeLabel);
+                Element et = dom.createElement("endtime");
                 et.setTextContent(endtime);
-                Element lat = dom.createElement(latencyLabel);
+                Element lat = dom.createElement("latency");
                 lat.setTextContent(latency);
 
                 // add child nodes to root node
@@ -4410,19 +4381,24 @@ public class DirectedGraphTranslator extends JApplet {
             String op2 = String.valueOf(dataByTaskMinMax[0][2]);
 
             // first create root element
-            Element root = dom.createElement(minLabel);
+            Element root = dom.createElement("Min");
             root1.appendChild(root);
 
-            // now create child elements
-            Element operator1 = dom.createElement(op1);
+            // set `id` attribute to root element
+            // Attr attr = dom.createAttribute("id");
+            // attr.setValue(String.valueOf(0));
+            // root.setAttributeNode(attr);
+
+            // now create child elements (name, email, phone)
+            Element operator1 = dom.createElement("op1");
             operator1.setTextContent(op1);
-            Element operator2 = dom.createElement(op2);
+            Element operator2 = dom.createElement("op2");
             operator2.setTextContent(op2);
-            Element st = dom.createElement(startTimeLabel);
+            Element st = dom.createElement("starttime");
             st.setTextContent(starttime);
-            Element et = dom.createElement(endTimeLabel);
+            Element et = dom.createElement("endtime");
             et.setTextContent(endtime);
-            Element lat = dom.createElement(latencyLabel);
+            Element lat = dom.createElement("latency");
             lat.setTextContent(latency);
 
             // add child nodes to root node
@@ -4440,19 +4416,24 @@ public class DirectedGraphTranslator extends JApplet {
             String op2Max = String.valueOf(dataByTaskMinMax[1][2]);
 
             // first create root element
-            Element rootMax = dom.createElement(maxLabel);
+            Element rootMax = dom.createElement("Max");
             root1.appendChild(rootMax);
 
+            // set `id` attribute to root element
+            // Attr attrMax = dom.createAttribute("id");
+            // attrMax.setValue(String.valueOf(1));
+            // root1.setAttributeNode(attrMax);
+
             // now create child elements
-            Element operator1Max = dom.createElement(op1);
+            Element operator1Max = dom.createElement("op1");
             operator1Max.setTextContent(op1Max);
-            Element operator2Max = dom.createElement(op2);
+            Element operator2Max = dom.createElement("op2");
             operator2Max.setTextContent(op2Max);
-            Element stMax = dom.createElement(startTimeLabel);
+            Element stMax = dom.createElement("starttime");
             stMax.setTextContent(starttimeMax);
-            Element etMax = dom.createElement(endTimeLabel);
+            Element etMax = dom.createElement("endtime");
             etMax.setTextContent(endtimeMax);
-            Element latMax = dom.createElement(latencyLabel);
+            Element latMax = dom.createElement("latency");
             latMax.setTextContent(latencyMax);
 
             // add child nodes to root node
@@ -5777,25 +5758,26 @@ public class DirectedGraphTranslator extends JApplet {
         for (SimulationTransaction st : transFile) {
             Boolean onPath = false;
 
-            int startTime = Integer.valueOf(st.startTime);
-            int endTime = Integer.valueOf(st.endTime);
-            int id = Integer.valueOf(st.id);
-            if (!(startTime < minTime && endTime < minTime) && !(startTime > maxTime && endTime > maxTime)) {
+            if (!(Integer.valueOf(st.startTime) < minTime && Integer.valueOf(st.endTime) < minTime)
+                    && !(Integer.valueOf(st.startTime) > maxTime && Integer.valueOf(st.endTime) > maxTime)) {
 
-                if (endTime > maxTime) {
-                    st.endTime = String.valueOf(maxTime);
-                    st.length = String.valueOf(maxTime - startTime);
+                // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
+                // < maxTime) {
+
+                if (Integer.valueOf(st.endTime) > maxTime) {
+                    st.endTime = Integer.valueOf(maxTime).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(maxTime) - Integer.valueOf(st.startTime)).toString();
                 }
 
-                if (startTime < minTime) {
-                    st.startTime = String.valueOf(minTime);
-                    st.length = String.valueOf(endTime - minTime);
+                if (Integer.valueOf(st.startTime) < minTime) {
+                    st.startTime = Integer.valueOf(minTime).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(minTime)).toString();
                 }
 
-                if (startTime < minTime && endTime > maxTime) {
-                    st.startTime = String.valueOf(minTime);
-                    st.endTime = String.valueOf(maxTime);
-                    st.length = String.valueOf(maxTime - minTime);
+                if (Integer.valueOf(st.startTime) < minTime && Integer.valueOf(st.endTime) > maxTime) {
+                    st.startTime = Integer.valueOf(minTime).toString();
+                    st.endTime = Integer.valueOf(maxTime).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(maxTime) - Integer.valueOf(minTime)).toString();
                 }
 
                 String taskname = "";
@@ -5807,7 +5789,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                     String taskToAddid = taskToAdd[taskToAddindex - 1];
                     if (isNumeric(taskToAddid)) {
-                        if (Integer.valueOf(taskToAddid).equals(id)) {
+                        if (Integer.valueOf(taskToAddid).equals(Integer.valueOf(st.id))) {
 
                             taskname = tasknameCheck.toString();
 
@@ -5837,7 +5819,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                             ArrayList<Integer> timeValues = new ArrayList<Integer>();
                             timeValues.add(0, Integer.valueOf(st.runnableTime));
-                            timeValues.add(1, startTime);
+                            timeValues.add(1, Integer.valueOf(st.startTime));
 
                             if (!(st.runnableTime).equals(st.startTime)) {
 
@@ -5992,7 +5974,7 @@ public class DirectedGraphTranslator extends JApplet {
             }
             try {
                 if (times2MinMAx.contains(match)) {
-                    times2MinMAx.remove(match);
+                    times2MinMAx.remove(Integer.valueOf(match));
                 }
             } catch (Exception e) {
             }
