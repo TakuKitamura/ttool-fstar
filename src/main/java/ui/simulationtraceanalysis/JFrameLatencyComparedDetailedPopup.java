@@ -85,6 +85,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
     private Object[][] dataHWDelayByTask, dataHWDelayByTask2;
 
+    private static final String transactionList = "Transaction List ";
+    private static final String transactionDiagramName = "Transaction Diagram Name ";
+    private static final String hardware = "Hardware ";
+    private static final String startTime = "Start Time ";
+    private static final String endTime = "End Time ";
+
     public JFrameLatencyComparedDetailedPopup(DirectedGraphTranslator dgraph1, DirectedGraphTranslator dgraph2, int row, int row2, boolean firstTable,
             LatencyAnalysisParallelAlgorithms tc2) throws InterruptedException {
 
@@ -108,11 +114,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         // framePanel.setBackground(Color.red);
         framePanel.add(jp02, mainConstraint);
 
-        columnByTaskNames[0] = "Transaction List";
-        columnByTaskNames[1] = "Transaction Diagram Name ";
-        columnByTaskNames[2] = "Hardware ";
-        columnByTaskNames[3] = "Start Time";
-        columnByTaskNames[4] = "End Time ";
+        columnByTaskNames[0] = transactionList;
+        columnByTaskNames[1] = transactionDiagramName;
+        columnByTaskNames[2] = hardware;
+        columnByTaskNames[3] = startTime;
+        columnByTaskNames[4] = endTime;
 
         JPanel jp04 = new JPanel(new BorderLayout());
 
@@ -158,7 +164,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
                     return Integer.class;
                 }
             }
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -186,11 +192,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         framePanel.add(scrollPane11, c02);
 
         DefaultTableModel model12 = new DefaultTableModel(dataDetailedByTask2, columnByTaskNames) {
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -227,10 +234,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         framePanel.add(scrollPane12, c02);
 
         columnByHWNames[0] = "Task on Same device";
-        columnByHWNames[1] = "Transaction Diagram Name ";
-        columnByHWNames[2] = "Hardware ";
-        columnByHWNames[3] = "Start Time";
-        columnByHWNames[4] = "End Time ";
+        columnByHWNames[1] = transactionDiagramName;
+        columnByHWNames[2] = hardware;
+        columnByHWNames[3] = startTime;
+        columnByHWNames[4] = endTime;
 
         if (firstTable) {
 
@@ -252,12 +259,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         }
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-            
+
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -295,12 +302,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         framePanel.add(scrollPane13, c02);
 
         DefaultTableModel model3 = new DefaultTableModel(dataHWDelayByTask2, columnByHWNames) {
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-            
+
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
@@ -658,8 +665,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             }
         };
 
-       
-        
         JTable table = new JTable(tableModel);
         table.setFillsViewportHeight(true);
 

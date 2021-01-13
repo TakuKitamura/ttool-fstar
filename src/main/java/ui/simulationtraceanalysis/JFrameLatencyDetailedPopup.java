@@ -88,6 +88,16 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
     private Object[][] dataHWDelayByTask;
 
+    private static final String transactionList = "Transaction List ";
+    private static final String transactionDiagramName = "Transaction Diagram Name ";
+    private static final String hardware = "Hardware ";
+    private static final String startTime = "Start Time ";
+    private static final String endTime = "End Time ";
+    private static final String mandatoryTransactions = "Mandatory Transactions ";
+    private static final String tasksonSameDevice = "Tasks on the Same Device ";
+    private static final String nonMandatoryTransactions = "Non-Mandatory Transactions";
+    private static final String nonMandNoContTran = "Non-Mandatory Transactions No-Contention";
+
     public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable, Boolean taint,
             LatencyAnalysisParallelAlgorithms th, boolean visible) throws InterruptedException {
 
@@ -97,15 +107,15 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         this.setLayout(myLayout);
 
-        columnByTaskNames[0] = "Transaction List";
-        columnByTaskNames[1] = "Transaction Diagram Name ";
-        columnByTaskNames[2] = "Hardware ";
-        columnByTaskNames[3] = "Start Time";
-        columnByTaskNames[4] = "End Time ";
+        columnByTaskNames[0] = transactionList;
+        columnByTaskNames[1] = transactionDiagramName;
+        columnByTaskNames[2] = hardware;
+        columnByTaskNames[3] = startTime;
+        columnByTaskNames[4] = endTime;
 
         JPanel jp04 = new JPanel(new BorderLayout());
 
-        jp04.setBorder(new javax.swing.border.TitledBorder("Mandatory Transactions"));
+        jp04.setBorder(new javax.swing.border.TitledBorder(mandatoryTransactions));
 
         if (firstTable) {
 
@@ -178,11 +188,11 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
         this.add(jp04);
 
-        columnByHWNames[0] = "Task on Same device";
-        columnByHWNames[1] = "Transaction Diagram Name ";
-        columnByHWNames[2] = "Hardware ";
-        columnByHWNames[3] = "Start Time";
-        columnByHWNames[4] = "End Time ";
+        columnByHWNames[0] = tasksonSameDevice;
+        columnByHWNames[1] = transactionDiagramName;
+        columnByHWNames[2] = hardware;
+        columnByHWNames[3] = startTime;
+        columnByHWNames[4] = endTime;
 
         if (firstTable) {
 
@@ -247,7 +257,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         };
         JPanel jp05 = new JPanel(new BorderLayout());
 
-        jp05.setBorder(new javax.swing.border.TitledBorder("Non-Mandatory Transactions"));
+        jp05.setBorder(new javax.swing.border.TitledBorder(nonMandatoryTransactions));
         JTable hardwareNames = new JTable(model2);
         hardwareNames.setAutoCreateRowSorter(true);
 
@@ -371,6 +381,8 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
 
+                int startTime = Integer.valueOf(st.startTime);
+
                 if (st.coreNumber == null) {
                     st.coreNumber = "0";
 
@@ -400,8 +412,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                                         for (int j = 0; j < timeList.size(); j++) {
 
-                                            if (Integer.valueOf(st.startTime) >= timeList.get(j).get(0)
-                                                    && Integer.valueOf(st.startTime) <= timeList.get(j).get(1)) {
+                                            if (startTime >= timeList.get(j).get(0) && startTime <= timeList.get(j).get(1)) {
 
                                                 causeDelay = true;
 
@@ -612,6 +623,8 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
             for (SimulationTransaction st : minMaxHWByRowDetails) {
 
+                int startTime = Integer.valueOf(st.startTime);
+
                 if (st.coreNumber == null) {
                     st.coreNumber = "0";
 
@@ -640,8 +653,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
 
                                         for (int j = 0; j < timeList.size(); j++) {
 
-                                            if (Integer.valueOf(st.startTime) >= timeList.get(j).get(0)
-                                                    && Integer.valueOf(st.startTime) <= timeList.get(j).get(1)) {
+                                            if (startTime >= timeList.get(j).get(0) && startTime <= timeList.get(j).get(1)) {
 
                                                 causeDelay = true;
 
@@ -811,7 +823,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         c01.gridx = 6;
         c01.gridy = 0;
 
-        JLabel pBarLabel5 = new JLabel("Non-Mandatory Transactions No-Contention", JLabel.RIGHT);
+        JLabel pBarLabel5 = new JLabel(nonMandNoContTran, JLabel.RIGHT);
 
         lengedpanel.add(pBarLabel5, c01);
 

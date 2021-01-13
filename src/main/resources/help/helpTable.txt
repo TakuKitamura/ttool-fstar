@@ -41,4 +41,4 @@
 
 - addRule add-rule rule
 - taint taint Taint
-- considerrule consider-rule consider rules
+- considerRule consider-rule consider rules

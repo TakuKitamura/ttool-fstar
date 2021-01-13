@@ -187,7 +187,13 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private Boolean allop = false;
     private TMLMapping<TGComponent> tmap1;
 
-    public static final String[] helpStrings = { "considerrule.html", "taint.html", "addRule.html" };
+    public static final String[] helpStrings = { "considerRule.html", "taint.html", "addRule.html" };
+    private static final String startTimeColName = "Start Time ";
+    private static final String endTimeColName = "End Time ";
+    private static final String latencyColName = "Latency ";
+    private static final String opAColName = "OPERATOR A";
+    private static final String opBColName = "OPERATOR B ";
+    private static final String progressBar = "Progress of Graph Generation";
 
     // @SuppressWarnings("deprecation")
 
@@ -258,7 +264,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.gridy = 0;
         // c01.fill = GridBagConstraints.BOTH;
 
-        JLabel pBarLabel = new JLabel("Progress of Graph Generation", JLabel.LEFT);
+        JLabel pBarLabel = new JLabel(progressBar, JLabel.LEFT);
         progressBarpanel.add(pBarLabel, c01);
 
         c01.gridheight = 1;
@@ -651,11 +657,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         commands.add(commandTab, BorderLayout.NORTH);
 
-        columnNames[0] = "OPERATOR A";
-        columnNames[1] = "Start Time ";
-        columnNames[2] = "OPERATOR B";
-        columnNames[3] = "End Time ";
-        columnNames[4] = "Latency ";
+        columnNames[0] = opAColName;
+        columnNames[1] = startTimeColName;
+        columnNames[2] = opBColName;
+        columnNames[3] = endTimeColName;
+        columnNames[4] = latencyColName;
 
         // columnNames[5] = "Related Tasks Details ";
         // columnNames[6] = "Total time- Related Tasks ";
@@ -677,11 +683,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         scrollPane11.setVisible(true);
         jp03.add(scrollPane11, BorderLayout.CENTER);
 
-        columnMinMaxNames[0] = "OPERATOR A";
-        columnMinMaxNames[1] = "Start Time ";
-        columnMinMaxNames[2] = "OPERATOR B";
-        columnMinMaxNames[3] = "End Time ";
-        columnMinMaxNames[4] = "Latency ";
+        columnMinMaxNames[0] = opAColName;
+        columnMinMaxNames[1] = startTimeColName;
+        columnMinMaxNames[2] = opBColName;
+        columnMinMaxNames[3] = endTimeColName;
+        columnMinMaxNames[4] = latencyColName;
 
         dataDetailedMinMax = new Object[0][0];
 
@@ -880,7 +886,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             dispose();
             setVisible(false);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY].getActionCommand())) {
-            jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
+            jta.append("The Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
                     + " is studied \n");
             latencybutton.setEnabled(false);
 
@@ -889,7 +895,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             this.repaint();
 
             if (taintFirstOp.isSelected()) {
-                jta.append("operator 1 is tainted \n ");
+                jta.append("Operator 1 is tainted \n ");
             }
 
             if (considerRules.isSelected()) {
@@ -1043,7 +1049,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
                 allop = true;
                 showAllOp.setLabel("Show checkpoints operators");
-                jta.append("show latency checkpoints operators" + " \n");
+                jta.append("Show latency checkpoints operators" + " \n");
 
                 task2.setVisible(true);
                 taskL.setVisible(true);
@@ -1074,7 +1080,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
                 allop = false;
                 showAllOp.setLabel("Show all operators");
-                jta.append("show latency all operators" + " \n");
+                jta.append("Show latency all operators" + " \n");
 
             }
 
@@ -1106,13 +1112,12 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 activity = tmltask.getActivityDiagram();
                 TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel) (activity.getReferenceObject());
                 List<TGComponent> list = tadp.getComponentList();
-                Iterator<TGComponent> iterator = list.listIterator();
-                TGComponent tgc;
+                // Iterator<TGComponent> iterator = list.listIterator();
+                // TGComponent tgc;
                 opCount = 0;
 
-                iterator = list.listIterator();
-                while (iterator.hasNext()) {
-                    tgc = iterator.next();
+                for (TGComponent tgc : list) {
+
                     String compName = "";
                     if (tgc.isEnabled()) {
                         if (tgc instanceof CheckableLatency) {
@@ -1188,7 +1193,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             if (row >= 0) {
 
                 try {
-                    new JFrameLatencyDetailedPopup(dgraph, row, true, taint, tc,true);
+                    new JFrameLatencyDetailedPopup(dgraph, row, true, taint, tc, true);
                 } catch (Exception e) {
                     jta.append("An error has occurred \n");
                     jta.append(e.getMessage() + "\n");
@@ -1201,7 +1206,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             row = table12.getSelectedRow();
             if (row >= 0) {
                 try {
-                    new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc,true);
+                    new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc, true);
                 } catch (Exception e) {
                     jta.append("An error has occurred \n");
                     jta.append(e.getMessage() + "\n");
@@ -1350,7 +1355,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     }
 
     public void error(String error) {
-        jta.append("error: " + error + "\n");
+        jta.append("Error: " + error + "\n");
     }
 
     protected void showgraphFrame() {

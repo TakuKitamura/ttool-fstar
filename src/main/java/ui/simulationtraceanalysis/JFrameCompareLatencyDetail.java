@@ -106,6 +106,12 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
     private LatencyAnalysisParallelAlgorithms tc;
     private JCheckBox taintFirstOp, considerRules;
+    
+    private static final String startTimeColName = "Start Time ";
+    private static final String endTimeColName = "End Time ";
+    private static final String latencyColName = "Latency ";
+    private static final String opAColName = "OPERATOR A";
+    private static final String opBColName = "OPERATOR B ";
 
     // private DirectedGraphTranslator dgraph;
     public JFrameCompareLatencyDetail(latencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
@@ -334,11 +340,11 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         framePanel.add(graphAnalysisResult, mainConstraint);
 
-        columnNames[0] = "OPERATOR A";
-        columnNames[1] = "Start Time ";
-        columnNames[2] = "OPERATOR B";
-        columnNames[3] = "End Time ";
-        columnNames[4] = "Delay ";
+        columnNames[0] = opAColName;
+        columnNames[1] = startTimeColName;
+        columnNames[2] = opBColName;
+        columnNames[3] = endTimeColName;
+        columnNames[4] = latencyColName;
 
         // columnNames[5] = "Related Tasks Details ";
         // columnNames[6] = "Total time- Related Tasks ";
@@ -400,11 +406,11 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
         jp04.setLayout(gridbag01);
 
-        columnMinMaxNames[0] = "OPERATOR A";
-        columnMinMaxNames[1] = "Start Time ";
-        columnMinMaxNames[2] = "OPERATOR B";
-        columnMinMaxNames[3] = "End Time ";
-        columnMinMaxNames[4] = "Delay ";
+        columnMinMaxNames[0] = opAColName;
+        columnMinMaxNames[1] = startTimeColName;
+        columnMinMaxNames[2] = opBColName;
+        columnMinMaxNames[3] = endTimeColName;
+        columnMinMaxNames[4] = latencyColName;
 
         dataDetailedMinMax = new Object[0][0];
 
