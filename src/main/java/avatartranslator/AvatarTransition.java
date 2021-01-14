@@ -270,11 +270,12 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public void addAction(String _action) {
-        //TraceManager.addDev("****************************  String expr to be added: " + _action);
+        //TraceManager.addDev("\n****************************  String expr to be added: >" + _action + "<");
         AvatarAction aa = AvatarTerm.createActionFromString(block, _action);
-        TraceManager.addDev("****************************  Adding Avatar action from String : " + aa);
-        if (aa != null)
+        //TraceManager.addDev("****************************  Adding Avatar action from String : " + aa + "\n");
+        if (aa != null) {
             actions.add(aa);
+        }
     }
 
     public void addAction(AvatarAction _action) {

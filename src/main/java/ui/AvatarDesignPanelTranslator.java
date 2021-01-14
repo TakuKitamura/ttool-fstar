@@ -2313,7 +2313,9 @@ public class AvatarDesignPanelTranslator {
                         makeError(error, connector.tdp, block, connector, "transition action", actionText);
                     }
 
+                    //TraceManager.addDev("Action before modifyStringMethodCall :" + actionText);
                     actionText = modifyStringMethodCall(actionText, block.getName());
+                    //TraceManager.addDev("Action after modifyStringMethodCall :" + actionText);
 
                     if (!AvatarBlock.isAValidMethodCall(block, actionText)) {
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed transition method call: " + actionText);
@@ -2323,18 +2325,19 @@ public class AvatarDesignPanelTranslator {
                         ce.setTGComponent(connector);
                         addCheckingError(ce);
                     } else {
+                        //TraceManager.addDev("Adding method call action");
                         transition.addAction(actionText);
                     }
                 } else {
                     // Variable assignment
 
-                    //TraceManager.addDev("Action:" + actionText);
+                    //TraceManager.addDev("Variable Action:" + actionText);
                     error = AvatarSyntaxChecker.isAValidVariableExpr(block.getAvatarSpecification(), block, actionText);
 
                     if (error < 0) {
                         makeError(error, connector.tdp, block, connector, "transition action", actionText);
                     } else {
-                        //TraceManager.addDev("Adding action:" + actionText);
+                        //TraceManager.addDev("Adding regular action:" + actionText);
                         transition.addAction(actionText);
                     }
                 }
@@ -2925,9 +2928,9 @@ public class AvatarDesignPanelTranslator {
         String s = _input.substring(index0 + 1, index1).trim();
         // String output = "";
 
-        if (s.length() == 0) {
+        /*if (s.length() == 0) {
             return _input;
-        }
+        }*/
 
         //TraceManager.addDev("-> -> Analyzing method call " + s);
 
@@ -2958,16 +2961,19 @@ public class AvatarDesignPanelTranslator {
 
         s = _input.substring(0, index0) + "(" + s + ")";
 
+        //TraceManager.addDev("s:>" + s + "<");
         // Managing output parameters
         index0 = s.indexOf("=");
         if (index0 != -1) {
             String param = s.substring(0, index0).trim();
+            //TraceManager.addDev("Analyzing param: " + param);
             TAttribute ta = adp.getAvatarBDPanel().getAttribute(param, _blockName);
             if (ta == null) {
                 TraceManager.addDev("-> -> NULL Param " + param + " in block " + _blockName);
                 s = param + s.substring(index0, s.length());
             } else {
                 if (ta.getType() == TAttribute.OTHER) {
+                    //TraceManager.addDev("Attribute other:" + param);
                     String newparams = "";
                     boolean first = true;
                     for (TAttribute tatmp : adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
