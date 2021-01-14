@@ -180,7 +180,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         mainConstraint.gridy = 2;
         mainConstraint.gridwidth = 1; // end row
         mainConstraint.fill = GridBagConstraints.BOTH;
-        loadxml.setBorder(new javax.swing.border.TitledBorder("chose Latency Operators"));
+        loadxml.setBorder(new javax.swing.border.TitledBorder("Chose Latency Operators"));
         framePanel.add(loadxml, mainConstraint);
         c01.gridheight = 1;
         c01.weighty = 1.0;
@@ -340,7 +340,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        jta.append("Generating the corresponding Directed Graph \nPlease wait...\n");
+        jta.append("Generating the corresponding directed graph.\n Please wait...\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -360,23 +360,24 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         try {
             dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis, this, map, cpanels, 1);
             dgraph1 = dgraph;
-            jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
+            jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet()
+                    + " edges has been successfully generated.\n");
             // buttonSaveDGraph.setEnabled(true);
             if (dgraph.getWarnings().size() > 0) {
                 jta.append("Warnings: \n ");
                 for (int i = 0; i < dgraph.getWarnings().size(); i++) {
-                    jta.append("    - " + dgraph.getWarnings().get(i) + "\n ");
+                    jta.append("    - " + dgraph.getWarnings().get(i) + ".\n ");
                 }
             }
             buttonShowDGraph1.setEnabled(true);
             if (pbar.getValue() == pbar.getMaximum()) {
                 updateBar(0);
             }
-            jta.append("Browse the second simulation trace to generate the second graph \n");
+            jta.append("Browse the second simulation trace to generate the second graph.\n");
             browse.setEnabled(true);
         } catch (Exception e) {
-            jta.append("An error has occurred \n");
-            jta.append(e.getMessage() + "\n");
+            jta.append("An error has occurred.\n");
+            jta.append(e.getMessage() + ".\n");
             // buttonSaveDGraph.setEnabled(false);
             buttonShowDGraph1.setEnabled(false);
         }
@@ -408,9 +409,9 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             tasksDropDownCombo3.setModel(aModel);
             tasksDropDownCombo4.setModel(aModel1);
             if (dgraph.getWarnings().size() > 0) {
-                jta.append("Warnings: \n ");
+                jta.append("Warnings:\n ");
                 for (int i = 0; i < dgraph.getWarnings().size(); i++) {
-                    jta.append("    - " + dgraph.getWarnings().get(i) + "\n ");
+                    jta.append("    - " + dgraph.getWarnings().get(i) + ".\n ");
                 }
             }
             buttonShowDGraph2.setEnabled(true);
@@ -422,10 +423,11 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             this.pack();
             this.revalidate();
             this.repaint();
-            jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
+            jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet()
+                    + " edges has been successfully generated.\n");
         } catch (Exception e) {
-            jta.append("An error has occurred \n");
-            jta.append(e.getMessage() + "\n");
+            jta.append("An error has occurred.\n");
+            jta.append(e.getMessage() + ".\n");
             // buttonSaveDGraph.setEnabled(false);
             buttonShowDGraph2.setEnabled(false);
         }
@@ -495,10 +497,10 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                 TraceManager.addDev("Error: " + e1.getMessage());
             }
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY].getActionCommand())) {
-            jta.append("Simulation Trace 1 : the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n"
-                    + tasksDropDownCombo2.getSelectedItem() + " is studied \n");
-            jta.append("Simulation Trace 2 : the Latency Between: \n " + tasksDropDownCombo3.getSelectedItem() + " and \n"
-                    + tasksDropDownCombo4.getSelectedItem() + " is studied \n");
+            jta.append("Simulation Trace 1: the latency between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n"
+                    + tasksDropDownCombo2.getSelectedItem() + " is under analysis.\n");
+            jta.append("Simulation Trace 2: the latency between: \n " + tasksDropDownCombo3.getSelectedItem() + " and \n"
+                    + tasksDropDownCombo4.getSelectedItem() + "is under analysis.\n");
             String task1 = tasksDropDownCombo1.getSelectedItem().toString();
             String task2 = tasksDropDownCombo2.getSelectedItem().toString();
             String task3 = tasksDropDownCombo3.getSelectedItem().toString();
@@ -512,8 +514,8 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
             tc.start(18);
             tc.run();
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_COMPARE_IN_DETAILS].getActionCommand())) {
-            jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
-                    + " is studied \n");
+            jta.append("The latency between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
+                    + " is under analysis.\n");
             int selectedIndex = resultTab.getSelectedIndex();
             if ((table11.getSelectedRowCount() > 0 && table12.getSelectedRowCount() > 0 && selectedIndex == 0)
                     || (table21.getSelectedRowCount() > 0 && table22.getSelectedRowCount() > 0 && selectedIndex == 1)) {
@@ -526,7 +528,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                 tc.start(19);
                 tc.run();
             } else {
-                jta.append("Please select a row from each table to proceed \n");
+                jta.append("Please select a row from each table to proceed.\n");
             }
         }
     }
@@ -630,7 +632,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         scrollPane11.revalidate();
         scrollPane11.repaint();
         // scrollPane11.setVisible(true);
-        jta.append("Latency has been computed...Please refer to the tables in the Latency Analysis section for the results \n");
+        jta.append("Latency has been computed...Please refer to the tables in the Latency Analysis section for the results.\n");
         this.pack();
         this.setVisible(b);
         // jta.append("Message: " + tableData.length + "\n");
@@ -639,10 +641,10 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     protected void compareLatencyInDetails(int row1, int row2, int row3, int row4, int selectedIndex) throws InterruptedException {
         // TODO Auto-generated method stub
         if (selectedIndex == 0) {
-            jta.append("the latency for row : " + row1 + ": and row: " + row2 + " will be studied\n");
+            jta.append("The latency for row : " + row1 + ": and row: " + row2 + "is under analysis.\n");
             new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row1, row2, true, tc);
         } else if (selectedIndex == 1) {
-            jta.append("the latency for row : " + row3 + ": and row: " + row4 + " will be studied\n");
+            jta.append("The latency for row : " + row3 + ": and row: " + row4 + "is under analysis.\n");
             new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row3, row4, false, tc);
         } else {
             error("Select a panel");
@@ -650,7 +652,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     }
 
     public void error(String error) {
-        jta.append("error: " + error + "\n");
+        jta.append("error: " + error + ".\n");
     }
 
     public Object[][] getTableData2MinMax() {

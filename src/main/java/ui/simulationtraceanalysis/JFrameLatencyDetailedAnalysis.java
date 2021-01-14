@@ -351,7 +351,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         GridBagConstraints c05 = new GridBagConstraints();
         // Save
         jp06 = new JPanel(gridbag05);
-        JLabel tasksRules = new JLabel("ADD Rule :  ", JLabel.LEFT);
+        JLabel tasksRules = new JLabel("Add Rule:  ", JLabel.LEFT);
         c01.gridwidth = 1;
         c01.gridx = 0;
         c01.gridy = 0;
@@ -479,7 +479,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        jta.append("Generating the corresponding Directed Graph \nPlease wait...\n");
+        jta.append("Generating the corresponding Directed Graph.\n Please wait...\n");
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -517,7 +517,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             if (dgraph.getWarnings().size() > 0) {
                 jta.append("Warnings: \n ");
                 for (int i = 0; i < dgraph.getWarnings().size(); i++) {
-                    jta.append("    - " + dgraph.getWarnings().get(i) + "\n ");
+                    jta.append("    - " + dgraph.getWarnings().get(i) + ".\n ");
                 }
             }
             buttonShowDGraph.setEnabled(true);
@@ -535,8 +535,8 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             this.revalidate();
             this.repaint();
         } catch (Exception e) {
-            jta.append("An error has occurred \n");
-            jta.append(e.getMessage() + "\n");
+            jta.append("An error has occurred.\n");
+            jta.append(e.getMessage() + ".\n");
             // buttonSaveDGraph.setEnabled(false);
             buttonShowDGraph.setEnabled(false);
         }
@@ -569,16 +569,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                             filename = directory + param;
                     }
                     dgraph.exportGraphAsImage(filename);
-                    jta.append("Directed graph save in" + filename + ".png \n");
+                    jta.append("Directed graph save in" + filename + ".png.\n");
                 } else {
                     error("Wrong parameter: must be a file name");
                 }
             } catch (ExportException e) {
-                jta.append("An error has occurred \n");
-                jta.append(e.getMessage() + "\n");
+                jta.append("An error has occurred.\n");
+                jta.append(e.getMessage() + ".\n");
             } catch (IOException e) {
-                jta.append("An error has occurred \n");
-                jta.append(e.getMessage() + "\n");
+                jta.append("An error has occurred.\n");
+                jta.append(e.getMessage() + ".\n");
             }
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].getActionCommand())) {
             try {
@@ -593,16 +593,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                             filename = directory + param;
                     }
                     dgraph.exportGraph(filename);
-                    jta.append("Directed graph saved in" + filename + ".graphml \n");
+                    jta.append("Directed graph saved in" + filename + ".graphml.\n");
                 } else {
                     error("Wrong parameter: must be a file name");
                 }
             } catch (ExportException e) {
-                jta.append("An error has occurred \n");
-                jta.append(e.getMessage() + "\n");
+                jta.append("An error has occurred.\n");
+                jta.append(e.getMessage() + ".\n");
             } catch (IOException e) {
-                jta.append("An error has occurred \n");
-                jta.append(e.getMessage() + "\n");
+                jta.append("An error has occurred.\n");
+                jta.append(e.getMessage() + ".\n");
             }
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH].getActionCommand())) {
             tc.setjFrameLDA(this);
@@ -615,16 +615,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             setVisible(false);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY].getActionCommand())) {
             jta.append("The Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
-                    + " is studied \n");
+                    + " is under analysis.\n");
             latencybutton.setEnabled(false);
             this.pack();
             this.revalidate();
             this.repaint();
             if (taintFirstOp.isSelected()) {
-                jta.append("Operator 1 is tainted \n ");
+                jta.append("Operator 1 is tainted.\n ");
             }
             if (considerRules.isSelected()) {
-                jta.append("Rules are considered in the graph \n ");
+                jta.append("Rules are considered in the graph.\n ");
             }
             try {
                 tc.getT().join();
@@ -676,13 +676,13 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             String task1 = tasksDropDownCombo1.getSelectedItem().toString();
             String task2 = tasksDropDownCombo2.getSelectedItem().toString();
             String message = dgraph.checkPath(task1, task2);
-            jta.append(message + " :" + task1 + " and " + task2 + " \n");
+            jta.append(message + " :" + task1 + " and " + task2 + ".\n");
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_ADD_RULE].getActionCommand())) {
             String node1 = tasksDropDownCombo3.getSelectedItem().toString();
             String node2 = tasksDropDownCombo4.getSelectedItem().toString();
             String ruleDirection = tasksDropDownCombo5.getSelectedItem().toString();
             String message = dgraph.addRule(node1, node2, writeChannelTransactions, ruleDirection);
-            jta.append(message + " \n");
+            jta.append(message + ".\n");
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_VIEW_RULE].getActionCommand())) {
             new JFrameListOfRules(dgraph);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LATENCY_PRECISE_ANALYSIS].getActionCommand())) {
@@ -694,18 +694,18 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 if (row1 > -1) {
                     noLatValue = table11.getValueAt(row1, 4).toString();
                 } else {
-                    jta.append("Please select a row before precise analysis" + " \n");
+                    jta.append("Please select a row before precise analysis.\n");
                 }
             } else if (selectedIndex == 1) {
                 row1 = table12.getSelectedRow();
                 if (row1 > -1) {
                     noLatValue = table12.getValueAt(row1, 4).toString();
                 } else {
-                    jta.append("Please select a row before precise analysis" + " \n");
+                    jta.append("Please select a row before precise analysis.\n");
                 }
             }
             if (noLatValue.startsWith("Assumption Does Not Hold;")) {
-                jta.append("Can not run latency when the one-to-one assumption does not hold" + " \n");
+                jta.append("Can not run latency when the one-to-one assumption does not hold.\n");
             } else {
                 tc.setjFrameLDA(this);
                 tc.setRow(row1);
@@ -733,7 +733,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 // tasksDropDownCombo1.setModel(aModel2);
                 allop = true;
                 showAllOp.setLabel("Show checkpoints operators");
-                jta.append("Show latency checkpoints operators" + " \n");
+                jta.append("Show latency checkpoints operators.\n");
                 task2.setVisible(true);
                 taskL.setVisible(true);
                 tasksDropDownCombo6.setVisible(true);
@@ -758,7 +758,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 this.repaint();
                 allop = false;
                 showAllOp.setLabel("Show all operators");
-                jta.append("Show all operators" + " \n");
+                jta.append("Show all operators.\n");
             }
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_ALL_OP].getActionCommand())) {
             tasksDropDownCombo1.setModel(getAlloperators(tasksDropDownCombo6.getSelectedItem()));
@@ -835,11 +835,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 try {
                     new JFrameLatencyDetailedPopup(dgraph, row, true, taint, tc, true);
                 } catch (Exception e) {
-                    jta.append("An error has occurred \n");
-                    jta.append(e.getMessage() + "\n");
+                    jta.append("An error has occurred.\n");
+                    jta.append(e.getMessage() + ".\n");
                 }
             } else {
-                jta.append("Please select a row to analyze \n");
+                jta.append("Please select a row to analyze.\n");
             }
         } else if (selectedIndex == 1) {
             row = table12.getSelectedRow();
@@ -847,11 +847,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 try {
                     new JFrameLatencyDetailedPopup(dgraph, row, false, taint, tc, true);
                 } catch (Exception e) {
-                    jta.append("An error has occurred \n");
-                    jta.append(e.getMessage() + "\n");
+                    jta.append("An error has occurred.\n");
+                    jta.append(e.getMessage() + ".\n");
                 }
             } else {
-                jta.append("Please select a row to analyze \n");
+                jta.append("Please select a row to analyze.\n");
             }
         }
     }
@@ -947,19 +947,19 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             scrollPane11.revalidate();
             scrollPane11.repaint();
             // scrollPane11.setVisible(true);
-            jta.append("Latency has been computed...Please refer to the tables in the Latency Analysis section for the results \n");
+            jta.append("Latency has been computed...Please refer to the tables in the Latency Analysis section for the results.\n");
             latencybutton.setEnabled(true);
             this.pack();
             this.setVisible(true);
         } catch (Exception e) {
-            jta.append("An error has occurred \n");
-            jta.append(e.getMessage() + "\n");
+            jta.append("An error has occurred.\n");
+            jta.append(e.getMessage() + ".\n");
             latencybutton.setEnabled(true);
         }
     }
 
     public void error(String error) {
-        jta.append("Error: " + error + "\n");
+        jta.append("Error: " + error + ".\n");
     }
 
     protected void showgraphFrame() {
@@ -967,8 +967,8 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             dgraph.showGraph(dgraph);
             jta.append("Refer to the generatd dialog to view the graph.\n");
         } catch (Exception e) {
-            jta.append("An error has occurred \n");
-            jta.append(e.getMessage() + "\n");
+            jta.append("An error has occurred.\n");
+            jta.append(e.getMessage() + ".\n");
         }
     }
 
