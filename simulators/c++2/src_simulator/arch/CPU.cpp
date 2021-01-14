@@ -178,7 +178,7 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
             _transactListClone.push_back(_transactList[z]);
         }
     }
-    if ( _transactListClone.size() == 0 ) {
+    if (_transactListClone.size() == 0 || averageLoad(this->_cycleTime) == 0) {
         std::cout << "Device never activated" << std::endl;
     } else {
         myfile << "<tr><td title = \"Average load: " << std::setprecision(2) << averageLoad(this->_cycleTime) << "; Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << "\" width=\"170px\" style=\"max-width: unset;min-width: 170px;background-color: aqua;\">" <<  _name << "_core_" << this->_cycleTime << "</td><td class=\"notfirst\"></td><td class=\"notlast\"></td>";//myfile << "<table>" << std::endl << "<tr>";
@@ -192,8 +192,8 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
         listScaleTime.push_back(0);
         bool changeCssClass = false;
         unsigned int endTimeOfCore = 0;
-        for( unsigned int j = _transactListClone.size()-1; j >= 0; j-- ) {
-            if(  _transactListClone[j]->getTransactCoreNumber() == this->_cycleTime ){
+        for (int j = _transactListClone.size()-1; j >= 0; j--) {
+            if (_transactListClone[j]->getTransactCoreNumber() == this->_cycleTime ) {
                 endTimeOfCore = _transactListClone[j]->getEndTime();
                 break;
             }
@@ -356,7 +356,7 @@ std::map<TMLTask*, std::string> CPU::HWTIMELINE2HTML(std::ostringstream& myfile,
     }
     return taskCellClasses;
 }
-void CPU::HW2HTML(std::ofstream& myfile) const {  
+void CPU::HW2HTML(std::ofstream& myfile) const {
   // myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
   myfile << SCHED_HTML_BOARD;
   myfile << _name << "_core_" << this->_cycleTime << END_TD << "</tr>" << std::endl;
@@ -379,8 +379,8 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
     listScaleTime.push_back(0);
     bool changeCssClass = false;
     unsigned int endTimeOfCore = 0;
-    for( unsigned int j = _transactList.size()-1; j >= 0; j-- ) {
-        if(  _transactList[j]->getTransactCoreNumber() == this->_cycleTime ){
+    for (int j = _transactList.size()-1; j >= 0; j--) {
+        if (_transactList[j]->getTransactCoreNumber() == this->_cycleTime) {
             endTimeOfCore = _transactList[j]->getEndTime();
             break;
         }
@@ -525,8 +525,8 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
     listScaleTime.push_back(0);
     bool changeCssClass = false;
     unsigned int endTimeOfCore = 0;
-    for( unsigned int j = _transactList.size()-1; j >= 0; j-- ) {
-            if(  _transactList[j]->getTransactCoreNumber() == this->_cycleTime ){
+    for (int j = _transactList.size()-1; j >= 0; j--) {
+            if (_transactList[j]->getTransactCoreNumber() == this->_cycleTime) {
                 endTimeOfCore = _transactList[j]->getEndTime();
                 break;
             }

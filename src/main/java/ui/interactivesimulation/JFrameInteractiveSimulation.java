@@ -1338,6 +1338,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         sendCommand(text);
     }
 
+    public void sendTestCmd(String text) {
+	    if (!text.equals("")) {
+	        sendCommand(text);
+        }
+    }
+
     protected void sendCommand(String text) {
         jta.append(">" + text + "\n");
         String command = cp.transformCommandFromUserToSimulator(text);
@@ -2447,30 +2453,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 if (latencyPanel !=null){
                     processLatency();
                 }
-                for(TURTLEPanel _tab : mgui.getTabs()) {
-                    if (_tab instanceof TMLArchiPanel) {
-                        for (TDiagramPanel tdp : _tab.getPanels()) {
-                            if (tdp instanceof TMLArchiDiagramPanel) {
-                                mgui.selectTab(tdp);
-                                for (TGComponent tg : tdp.getComponentList()) {
-                                    if (tg instanceof TMLArchiCPUNode) {
-                                        Vector <SimulationTransaction> _trans = new Vector<SimulationTransaction>();
-                                        TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
-                                        for (int i = 0; i < trans.size(); i++) {
-                                            String temp = trans.get(i).deviceName;
-                                            if (temp.contains(tg.getName())) {
-                                                _trans.add(trans.elementAt(i));
-                                            }
-                                        }
-                                        tmpcpu.transferList(_trans);
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
                 //ttm.setData(trans);
             }
         } catch (Exception e) {
@@ -3528,23 +3510,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             startSimulation();
             //TraceManager.addDev("Start simulation!");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
-            for(TURTLEPanel _tab : mgui.getTabs()) {
-                if (_tab instanceof TMLArchiPanel) {
-                    for (TDiagramPanel tdp : _tab.getPanels()) {
-                        if (tdp instanceof TMLArchiDiagramPanel) {
-                            mgui.selectTab(tdp);
-                            for (TGComponent tg : tdp.getComponentList()) {
-                                if (tg instanceof TMLArchiCPUNode) {
-                                    TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
-                                    tmpcpu.resetTransactionsList();
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
+            mgui.resetTransactions();
             if (tmlSimPanelTimeline != null) {
                 tmlSimPanelTimeline.setContentPaneEnable(false);
             }
@@ -3618,27 +3584,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             if (taskTransactionPanel != null) {
                 taskTransactionPanel.resetTable();
             }
-            if (taskTransactionPanel != null) {
+
+            if (transactionPanel != null) {
                 transactionPanel.resetTable();
             }
 
-            for(TURTLEPanel _tab : mgui.getTabs()) {
-                if (_tab instanceof TMLArchiPanel) {
-                    for (TDiagramPanel tdp : _tab.getPanels()) {
-                        if (tdp instanceof TMLArchiDiagramPanel) {
-                            mgui.selectTab(tdp);
-                            for (TGComponent tg : tdp.getComponentList()) {
-                                if (tg instanceof TMLArchiCPUNode) {
-                                    TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
-                                    tmpcpu.resetTransactionsList();
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
+            mgui.resetTransactions();
             updateTransactions();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");

@@ -1214,6 +1214,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
                                     art.drawTransaction(g);
                                 }
                             }
+                        } else {
+                            //reset transactions list if remove all trans or reset the simulation
+                            transactions = new ArrayList<SimulationTransaction>();
                         }
                         for (int i = 0; i < nbInternalTGComponent; i++) {
                             Object ob = getChild(i);
