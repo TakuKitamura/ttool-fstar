@@ -35,7 +35,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
@@ -49,7 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Vector;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -62,7 +60,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
 import ui.interactivesimulation.SimulationTransaction;
 
 /**
@@ -74,7 +71,6 @@ import ui.interactivesimulation.SimulationTransaction;
  * @author Maysam Zoor
  */
 public class JFrameLatencyDetailedPopup extends JFrame implements TableModelListener {
-
     private String[] columnByTaskNames = new String[5];
     private String[] columnByHWNames = new String[5];
     private JScrollPane scrollPane12, scrollPane13, scrollPane14;
@@ -85,75 +81,55 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
     private List<String> offPathBehavior = new ArrayList<String>();
     private List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
     // private Thread t, t1;
-
     private Object[][] dataHWDelayByTask;
-
-    private static final String transactionList = "Transaction List ";
-    private static final String transactionDiagramName = "Transaction Diagram Name ";
-    private static final String hardware = "Hardware ";
-    private static final String startTime = "Start Time ";
-    private static final String endTime = "End Time ";
-    private static final String mandatoryTransactions = "Mandatory Transactions ";
-    private static final String tasksonSameDevice = "Tasks on the Same Device ";
-    private static final String nonMandatoryTransactions = "Non-Mandatory Transactions";
-    private static final String nonMandNoContTran = "Non-Mandatory Transactions No-Contention";
+    private static final String TRANSACTION_LIST = "Transaction List ";
+    private static final String TRANSACTION_DIAGRAM_NAME = "Transaction Diagram Name ";
+    private static final String HARDWARE = "Hardware ";
+    private static final String START_TIME = "Start Time ";
+    private static final String END_TIME = "End Time ";
+    private static final String MANDATORY_TRANSACTIONS = "Mandatory Transactions ";
+    private static final String TASKS_ON_SAME_DEVICE = "Tasks on the Same Device ";
+    private static final String NON_MANDATORY_TRANSACTIONS = "Non-Mandatory Transactions";
+    private static final String NON_MAND_NO_CONT_TRAN = "Non-Mandatory Transactions No-Contention";
+    private static final String DEVICE_NAME = "Device Name";
+    private static final String ZERO = "0";
 
     public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable, Boolean taint,
             LatencyAnalysisParallelAlgorithms th, boolean visible) throws InterruptedException {
-
         super("Precise Latency By Row");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         GridLayout myLayout = new GridLayout(4, 1);
-
         this.setLayout(myLayout);
-
-        columnByTaskNames[0] = transactionList;
-        columnByTaskNames[1] = transactionDiagramName;
-        columnByTaskNames[2] = hardware;
-        columnByTaskNames[3] = startTime;
-        columnByTaskNames[4] = endTime;
-
+        columnByTaskNames[0] = TRANSACTION_LIST;
+        columnByTaskNames[1] = TRANSACTION_DIAGRAM_NAME;
+        columnByTaskNames[2] = HARDWARE;
+        columnByTaskNames[3] = START_TIME;
+        columnByTaskNames[4] = END_TIME;
         JPanel jp04 = new JPanel(new BorderLayout());
-
-        jp04.setBorder(new javax.swing.border.TitledBorder(mandatoryTransactions));
-
+        jp04.setBorder(new javax.swing.border.TitledBorder(MANDATORY_TRANSACTIONS));
         if (firstTable) {
-
             th.setDgraph(dgraph);
             th.setRow(row);
             th.start(2);
             th.run();
-
             dataDetailedByTask = th.getDataDetailedByTask();
-
         } else {
             if (taint) {
-
                 th.setDgraph(dgraph);
                 th.setRow(row);
-
                 th.start(3);
                 th.run();
                 // th.getT().join();
-
                 dataDetailedByTask = th.getDataDetailedByTask();
-
             } else {
-
                 th.setDgraph(dgraph);
                 th.setRow(row);
-
                 th.start(4);
                 th.run();
-
                 dataDetailedByTask = th.getDataDetailedByTask();
-
             }
-
         }
-
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
-
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -177,61 +153,40 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                 }
             }
         };
-
         JTable taskNames = new JTable(model);
         taskNames.setAutoCreateRowSorter(true);
         scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
         scrollPane12.setVisible(visible);
-
         jp04.add(scrollPane12);
-
         this.add(jp04);
-
-        columnByHWNames[0] = tasksonSameDevice;
-        columnByHWNames[1] = transactionDiagramName;
-        columnByHWNames[2] = hardware;
-        columnByHWNames[3] = startTime;
-        columnByHWNames[4] = endTime;
-
+        columnByHWNames[0] = TASKS_ON_SAME_DEVICE;
+        columnByHWNames[1] = TRANSACTION_DIAGRAM_NAME;
+        columnByHWNames[2] = HARDWARE;
+        columnByHWNames[3] = START_TIME;
+        columnByHWNames[4] = END_TIME;
         if (firstTable) {
-
             th.setDgraph(dgraph);
             th.setRow(row);
-
             th.start(5);
             th.run();
             // th.getT().join();
-
             dataHWDelayByTask = th.getDataDetailedByTask();
-
         } else {
-
             if (taint) {
-
                 th.setDgraph(dgraph);
                 th.setRow(row);
-
                 th.start(6);
                 th.run();
-
                 dataHWDelayByTask = th.getDataDetailedByTask();
-
             } else {
-
                 th.setDgraph(dgraph);
                 th.setRow(row);
-
                 th.start(7);
                 th.run();
-
                 dataHWDelayByTask = th.getDataDetailedByTask();
-
             }
         }
-
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
-
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -256,178 +211,111 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
             }
         };
         JPanel jp05 = new JPanel(new BorderLayout());
-
-        jp05.setBorder(new javax.swing.border.TitledBorder(nonMandatoryTransactions));
+        jp05.setBorder(new javax.swing.border.TitledBorder(NON_MANDATORY_TRANSACTIONS));
         JTable hardwareNames = new JTable(model2);
         hardwareNames.setAutoCreateRowSorter(true);
-
         scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
         scrollPane13.setVisible(visible);
         jp05.add(scrollPane13);
         this.add(jp05);
-
         int maxTime = -1;
-
         int minTime = Integer.MAX_VALUE;
         int tmpEnd, tmpStart, length;
-
         Vector<String> deviceNames1 = new Vector<String>();
-
         if (firstTable) {
-
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
-
                 if (st.coreNumber == null) {
-                    st.coreNumber = "0";
-
+                    st.coreNumber = ZERO;
                 }
-
                 tmpEnd = Integer.parseInt(st.endTime);
-
                 if (tmpEnd > maxTime) {
                     maxTime = tmpEnd;
                 }
-
                 tmpStart = Integer.parseInt(st.startTime);
-
                 if (tmpStart < minTime) {
                     minTime = tmpStart;
                 }
-
                 String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
                 if (!deviceNames1.contains(deviceNameandcore)) {
                     deviceNames1.add(deviceNameandcore);
-
                 }
-
             }
-
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
-
                 tmpEnd = Integer.parseInt(st.endTime);
                 if (st.coreNumber == null) {
-                    st.coreNumber = "0";
-
+                    st.coreNumber = ZERO;
                 }
-
                 if (tmpEnd > maxTime) {
                     maxTime = tmpEnd;
                 }
-
                 tmpStart = Integer.parseInt(st.startTime);
-
                 if (tmpStart < minTime) {
                     minTime = tmpStart;
                 }
                 String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
                 if (!deviceNames1.contains(deviceNameandcore)) {
                     deviceNames1.add(deviceNameandcore);
-
                 }
-
             }
-
             int timeInterval = 0;
             if (maxTime > -1 && minTime < Integer.MAX_VALUE) {
                 timeInterval = (maxTime - minTime);
             }
-
             columnNames = new String[timeInterval + 1];
-
-            columnNames[0] = "Device Name";
+            columnNames[0] = DEVICE_NAME;
             for (int i = 0; i < timeInterval; i++) {
-
                 columnNames[i + 1] = Integer.toString(minTime + i);
-
             }
-
             dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
-
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
                 if (st.coreNumber == null) {
-                    st.coreNumber = "0";
-
+                    st.coreNumber = ZERO;
                 }
-
                 for (String dName : deviceNames1) {
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (deviceNameandcore.equals(dName)) {
-
                         length = Integer.parseInt(st.length);
-
                         for (int i = 0; i < length; i++) {
-
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
                             ;
-
                             onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
                             if (!dgraph.getOnPath().contains(st)) {
                                 dgraph.getOnPath().add(st);
                             }
-
                         }
-
                     }
-
                 }
-
             }
-
             HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
-
             for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
-
                 int startTime = Integer.valueOf(st.startTime);
-
                 if (st.coreNumber == null) {
-                    st.coreNumber = "0";
-
+                    st.coreNumber = ZERO;
                 }
-
                 for (String dName : deviceNames1) {
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (deviceNameandcore.equals(dName)) {
-
                         length = Integer.parseInt(st.length);
-
                         for (int i = 0; i < length; i++) {
-
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
                             ;
-
                             boolean causeDelay = false;
-
                             if (delayTime.containsKey(deviceNameandcore)) {
-
                                 for (Entry<String, ArrayList<ArrayList<Integer>>> entry : delayTime.entrySet()) {
                                     if (entry.getKey().equals(deviceNameandcore)) {
                                         ArrayList<ArrayList<Integer>> timeList = entry.getValue();
-
                                         for (int j = 0; j < timeList.size(); j++) {
-
                                             if (startTime >= timeList.get(j).get(0) && startTime <= timeList.get(j).get(1)) {
-
                                                 causeDelay = true;
-
                                             }
                                         }
-
                                     }
-
                                 }
-
                             }
-
                             if (causeDelay) {
                                 offPathBehaviorCausingDelay.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
-
                                 if (!dgraph.getOffPathDelay().contains(st)) {
                                     dgraph.getOffPathDelay().add(st);
                                 }
@@ -437,329 +325,213 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                                     dgraph.getOffPath().add(st);
                                 }
                             }
-
                         }
                     }
-
                 }
-
             }
-
             for (String dName : deviceNames1) {
                 dataDetailedByTask[deviceNames1.indexOf(dName)][0] = dName;
                 ;
             }
         } else {
-
             Vector<SimulationTransaction> minMaxTasksByRow;
             List<SimulationTransaction> minMaxHWByRowDetails;
-
             // min/max table row selected
-
             if (taint) {
-
                 minMaxTasksByRow = dgraph.getMinMaxTasksByRowTainted(row);
                 minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetailsTainted(row);
-
                 for (SimulationTransaction st : minMaxTasksByRow) {
-
                     tmpEnd = Integer.parseInt(st.endTime);
                     if (st.coreNumber == null) {
-                        st.coreNumber = "0";
-
+                        st.coreNumber = ZERO;
                     }
-
                     if (tmpEnd > maxTime) {
                         maxTime = tmpEnd;
                     }
-
                     tmpStart = Integer.parseInt(st.startTime);
-
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (!deviceNames1.contains(deviceNameandcore)) {
                         deviceNames1.add(deviceNameandcore);
-
                     }
-
                 }
-
                 for (SimulationTransaction st : minMaxHWByRowDetails) {
-
                     tmpEnd = Integer.parseInt(st.endTime);
-
                     if (tmpEnd > maxTime) {
                         maxTime = tmpEnd;
                     }
-
                     tmpStart = Integer.parseInt(st.startTime);
-
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (!deviceNames1.contains(deviceNameandcore)) {
                         deviceNames1.add(deviceNameandcore);
-
                     }
-
                 }
-
             } else {
-
                 minMaxTasksByRow = dgraph.getMinMaxTasksByRow(row);
                 minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetails(row);
-
                 for (SimulationTransaction st : minMaxTasksByRow) {
                     if (st.coreNumber == null) {
-                        st.coreNumber = "0";
-
+                        st.coreNumber = ZERO;
                     }
-
                     tmpEnd = Integer.parseInt(st.endTime);
-
                     if (tmpEnd > maxTime) {
                         maxTime = tmpEnd;
                     }
-
                     tmpStart = Integer.parseInt(st.startTime);
-
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (!deviceNames1.contains(deviceNameandcore)) {
                         deviceNames1.add(deviceNameandcore);
-
                     }
-
                 }
-
                 for (SimulationTransaction st : minMaxHWByRowDetails) {
                     if (st.coreNumber == null) {
-                        st.coreNumber = "0";
-
+                        st.coreNumber = ZERO;
                     }
-
                     tmpEnd = Integer.parseInt(st.endTime);
-
                     if (tmpEnd > maxTime) {
                         maxTime = tmpEnd;
                     }
-
                     tmpStart = Integer.parseInt(st.startTime);
-
                     if (tmpStart < minTime) {
                         minTime = tmpStart;
                     }
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (!deviceNames1.contains(deviceNameandcore)) {
                         deviceNames1.add(deviceNameandcore);
-
                     }
-
                 }
             }
-
             int timeInterval = 0;
             if (maxTime > -1 && minTime < Integer.MAX_VALUE) {
                 timeInterval = (maxTime - minTime);
             }
-
             columnNames = new String[timeInterval + 1];
-
-            columnNames[0] = "Device Name";
+            columnNames[0] = DEVICE_NAME;
             for (int i = 0; i < timeInterval; i++) {
-
                 columnNames[i + 1] = Integer.toString(minTime + i);
-
             }
-
             dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
-
             for (SimulationTransaction st : minMaxTasksByRow) {
-
                 if (st.coreNumber == null) {
-                    st.coreNumber = "0";
-
+                    st.coreNumber = ZERO;
                 }
-
                 for (String dName : deviceNames1) {
-
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (deviceNameandcore.equals(dName)) {
-
                         length = Integer.parseInt(st.length);
-
                         for (int i = 0; i < length; i++) {
-
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
                             ;
-
                             onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
                             if (!dgraph.getOnPath().contains(st)) {
                                 dgraph.getOnPath().add(st);
                             }
                         }
                     }
-
                 }
-
             }
-
             HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
-
             for (SimulationTransaction st : minMaxHWByRowDetails) {
-
                 int startTime = Integer.valueOf(st.startTime);
-
                 if (st.coreNumber == null) {
-                    st.coreNumber = "0";
-
+                    st.coreNumber = ZERO;
                 }
-
                 for (String dName : deviceNames1) {
                     String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
-
                     if (deviceNameandcore.equals(dName)) {
-
                         length = Integer.parseInt(st.length);
-
                         for (int i = 0; i < length; i++) {
-
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
                             ;
-
                             boolean causeDelay = false;
-
                             if (delayTime.containsKey(deviceNameandcore)) {
-
                                 for (Entry<String, ArrayList<ArrayList<Integer>>> entry : delayTime.entrySet()) {
                                     if (entry.getKey().equals(deviceNameandcore)) {
                                         ArrayList<ArrayList<Integer>> timeList = entry.getValue();
-
                                         for (int j = 0; j < timeList.size(); j++) {
-
                                             if (startTime >= timeList.get(j).get(0) && startTime <= timeList.get(j).get(1)) {
-
                                                 causeDelay = true;
-
                                             }
                                         }
-
                                     }
-
                                 }
-
                             }
-
                             if (causeDelay) {
                                 offPathBehaviorCausingDelay.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
                                 if (!dgraph.getOffPathDelay().contains(st)) {
                                     dgraph.getOffPathDelay().add(st);
                                 }
-
                             } else {
                                 offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
-
                                 if (!dgraph.getOffPath().contains(st)) {
                                     dgraph.getOffPath().add(st);
                                 }
                             }
-
                         }
                     }
-
                 }
-
             }
-
             for (String dName : deviceNames1) {
                 dataDetailedByTask[deviceNames1.indexOf(dName)][0] = dName;
                 ;
             }
-
         }
-
         DefaultTableModel model3 = new DefaultTableModel(dataDetailedByTask, columnNames) {
-
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-
         };
-
         JTable table = new JTable(model3);
         table.setFillsViewportHeight(true);
-
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
         table.setAutoCreateRowSorter(true);
-
         TableRenderer tr = new TableRenderer(onPathBehavior, offPathBehaviorCausingDelay, offPathBehavior);
         int ncols = table.getColumnCount();
-
         table.getModel().addTableModelListener(this);
-
         TableColumnModel tcm = table.getColumnModel();
-
         for (int c = 0; c < ncols; c++) {
             TableColumn tc = tcm.getColumn(c);
             tc.setCellRenderer(tr);
-
         }
-
         // set the column width for small tables/ performance issue with big tables
         if (ncols < 1000) {
-
             for (int c = 0; c < ncols; c++) {
                 TableColumn tc = tcm.getColumn(c);
                 tc.setCellRenderer(tr);
                 tc.setPreferredWidth(100);
-
                 TableColumn tableColumn = table.getColumnModel().getColumn(c);
                 int preferredWidth = 100 + tableColumn.getMinWidth();
                 int maxWidth = tableColumn.getMaxWidth();
-
                 for (int row1 = 0; row1 < table.getRowCount(); row1++) {
                     TableCellRenderer cellRenderer = table.getCellRenderer(row1, c);
                     Component c1 = table.prepareRenderer(cellRenderer, row1, c);
                     int width = c1.getPreferredSize().width + table.getIntercellSpacing().width;
                     preferredWidth = Math.max(preferredWidth, width);
-
                     // We've exceeded the maximum width, no need to check other rows
-
                     if (preferredWidth >= maxWidth) {
                         preferredWidth = maxWidth;
                         break;
                     }
                 }
-
                 tableColumn.setPreferredWidth(preferredWidth);
             }
         }
         scrollPane14 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
         scrollPane14.setVisible(visible);
         this.add(scrollPane14);
-
         GridBagLayout gridbag01 = new GridBagLayout();
         GridBagConstraints c01 = new GridBagConstraints();
-
         c01.gridheight = 1;
         c01.weighty = 1.0;
         c01.weightx = 1.0;
@@ -769,87 +541,45 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         JLabel pBarLabel0 = new JLabel("Table Lenged: ");
         JPanel lengedpanel = new JPanel(gridbag01);
         lengedpanel.add(pBarLabel0, c01);
-
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
         c01.gridx = 2;
         c01.gridy = 0;
-
         JLabel pBarLabel = new JLabel("Mandatory Transaction", JLabel.RIGHT);
-
         lengedpanel.add(pBarLabel, c01);
-
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
         c01.gridx = 1;
         c01.gridy = 0;
-
         JLabel pBarLabel2 = new JLabel("    ", JLabel.LEFT);
         pBarLabel2.setOpaque(true);
         pBarLabel2.setBackground(Color.GREEN);
         lengedpanel.add(pBarLabel2, c01);
-
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
         c01.gridx = 4;
         c01.gridy = 0;
-
         JLabel pBarLabel3 = new JLabel("Non-Mandatory Transactions Causing Contention", JLabel.RIGHT);
-
         lengedpanel.add(pBarLabel3, c01);
-
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
         c01.gridx = 3;
         c01.gridy = 0;
-
         JLabel pBarLabel4 = new JLabel("    ", JLabel.LEFT);
         pBarLabel4.setOpaque(true);
         pBarLabel4.setBackground(Color.RED);
         lengedpanel.add(pBarLabel4, c01);
-
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
         c01.gridx = 6;
         c01.gridy = 0;
-
-        JLabel pBarLabel5 = new JLabel(nonMandNoContTran, JLabel.RIGHT);
-
+        JLabel pBarLabel5 = new JLabel(NON_MAND_NO_CONT_TRAN, JLabel.RIGHT);
         lengedpanel.add(pBarLabel5, c01);
-
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
         c01.gridx = 5;
         c01.gridy = 0;
-
         JLabel pBarLabel6 = new JLabel("    ", JLabel.LEFT);
         pBarLabel6.setOpaque(true);
         pBarLabel6.setBackground(Color.ORANGE);
         lengedpanel.add(pBarLabel6, c01);
         this.add(lengedpanel);
-
         this.pack();
         this.setVisible(visible);
-
         // TODO Auto-generated constructor stub
     }
 
     @Override
     public void tableChanged(TableModelEvent e) {
         // TODO Auto-generated method stub
-
     }
 
     public Object[][] getDataDetailedByTask() {
@@ -859,5 +589,4 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
     public Object[][] getDataHWDelayByTask() {
         return dataHWDelayByTask;
     }
-
 }

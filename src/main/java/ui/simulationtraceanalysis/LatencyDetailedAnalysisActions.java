@@ -35,17 +35,14 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
 package ui.simulationtraceanalysis;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.event.EventListenerList;
-
 import ui.TAction;
 import ui.util.IconManager;
 
@@ -59,7 +56,6 @@ import ui.util.IconManager;
  */
 public class LatencyDetailedAnalysisActions extends AbstractAction {
     // Actions
-
     public static final int ACT_SHOW_GRAPH = 0;
     public static final int ACT_SAVE_TRACE_PNG = 1;
     public static final int ACT_STOP_AND_CLOSE_ALL = 2;
@@ -67,15 +63,12 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_LOAD_SIMULATION_TRACES = 4;
     public static final int ACT_LATENCY = 5;
     public static final int ACT_Import_ANALYSIS = 6;
-
     public static final int ACT_SHOW_GRAPH_FILE_1 = 7;
     public static final int ACT_SHOW_GRAPH_FILE_2 = 8;
     public static final int ACT_COMPARE_IN_DETAILS = 9;
     public static final int ACT_CHECK_PATH = 10;
-
     public static final int ACT_ADD_RULE = 11;
     public static final int ACT_VIEW_RULE = 12;
-
     public static final int ACT_STOP_AND_CLOSE_RULE = 13;
     public static final int ACT_DELETE_SELECTED_RULE = 14;
     public static final int ACT_DELETE_ALL_RULE = 15;
@@ -83,15 +76,10 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_SHOW_ALL_OP = 17;
     public static final int ACT_LOAD_ALL_OP = 18;
     public static final int ACT_LOAD_ALL_OP2 = 19;
-    
     public static final int NB_ACTION = 20;
-
     private static final TAction[] actions = new TAction[NB_ACTION];
-
     private EventListenerList listeners;
-
     public static final String JLF_IMAGE_DIR = "";
-
     public static final String LARGE_ICON = "LargeIcon";
 
     public LatencyDetailedAnalysisActions(int id) {
@@ -101,7 +89,6 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
         if (actions[id] == null) {
             return;
         }
-
         putValue(Action.NAME, actions[id].NAME);
         putValue(Action.SMALL_ICON, actions[id].SMALL_ICON);
         putValue(LARGE_ICON, actions[id].LARGE_ICON);
@@ -112,7 +99,6 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
             putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, java.awt.event.InputEvent.CTRL_MASK));
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
-
     }
 
     public void setName(int index, String name) {
@@ -125,7 +111,6 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "Save Directed Graph", "Save Directed Graph", 'S');
         actions[ACT_SAVE_TRACE_GRAPHML] = new TAction("save-trace_as_graphml", "Save Directed Graph as graphml", IconManager.imgic341,
                 IconManager.imgic341, "Save Directed Graph as graphml", "Save Directed Graph as graphml", 'S');
-
         actions[ACT_SHOW_GRAPH] = new TAction("show_graph", "Show Directed Graph", IconManager.imgic53, IconManager.imgic53, "Show Directed Graph",
                 "Show Directed Graph", 'C');
         actions[ACT_STOP_AND_CLOSE_ALL] = new TAction("stop-and-close-all", "Terminate Latency Analysis", IconManager.imgic27, IconManager.imgic27,
@@ -136,45 +121,30 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "show latency tables", "show latency tables", 'T');
         actions[ACT_Import_ANALYSIS] = new TAction("import-trace", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
                 "import Directed Graph", "Import Directed Graph", 'S');
-
         actions[ACT_SHOW_GRAPH_FILE_1] = new TAction("show_graph_file_1", "Show Directed Graph 1", IconManager.imgic341, IconManager.imgic341,
                 "Show Directed Graph", "Show Directed Graph", 'S');
-
         actions[ACT_SHOW_GRAPH_FILE_2] = new TAction("show_graph_file_2", "Show Directed Graph 2", IconManager.imgic341, IconManager.imgic341,
                 "Show Directed Graph", "Show Directed Graph", 'S');
-
         actions[ACT_COMPARE_IN_DETAILS] = new TAction("compare_in_details", "Compare In Details", IconManager.imgic53, IconManager.imgic53,
                 "Compare In Details", "Compare In Details", 'S');
-
         actions[ACT_LATENCY_PRECISE_ANALYSIS] = new TAction("precise_latency_analysis", "Precise Analysis", IconManager.imgic53, IconManager.imgic53,
                 "Precise Latency Analysis", "Precise Latency Analysis", 'S');
-
         actions[ACT_CHECK_PATH] = new TAction("check_path", "Check Path Between Operators", IconManager.imgic53, IconManager.imgic53,
                 "Check Path Between Operators", "Check Path Between Operators", 'C');
-
         actions[ACT_ADD_RULE] = new TAction("add_rule", "Add Rule", IconManager.imgic53, IconManager.imgic53, "Add Rule", "Add Rule", 'C');
-
         actions[ACT_VIEW_RULE] = new TAction("view_rules", "View Rules", IconManager.imgic29, IconManager.imgic29, "View Rules", "View Rules", 'T');
-
         actions[ACT_STOP_AND_CLOSE_RULE] = new TAction("stop-and-close-all", "Terminate Rules Management", IconManager.imgic27, IconManager.imgic27,
                 "Terminate Rules Management", "Terminate Rules Management window", 'T');
-
         actions[ACT_DELETE_SELECTED_RULE] = new TAction("delete_selected_rules", "Delete Selected Rules", IconManager.imgic53, IconManager.imgic53,
                 "Delete Selected Rules", "Delete Selected Rules", 'C');
-
         actions[ACT_DELETE_ALL_RULE] = new TAction("delete_all_rules", "Delete All Rules", IconManager.imgic53, IconManager.imgic53,
                 "Delete All Rules", "Delete All Rules", 'C');
-        actions[ACT_SHOW_ALL_OP] = new TAction("show-operators", "Show All Operators", IconManager.imgic29, IconManager.imgic29,
-                "Show All Operators", "Show All Operators", 'T');
+        actions[ACT_SHOW_ALL_OP] = new TAction("show-operators", "Show All Operators", IconManager.imgic29, IconManager.imgic29, "Show All Operators",
+                "Show All Operators", 'T');
         actions[ACT_LOAD_ALL_OP] = new TAction("load-operators", "Load Task Operators", IconManager.imgic29, IconManager.imgic29,
                 "Load Task Operators", "Load Task Operators", 'T');
         actions[ACT_LOAD_ALL_OP2] = new TAction("load-operators_list2", "Load Task Operators", IconManager.imgic29, IconManager.imgic29,
                 "Load Task Operators", "Load Task Operators", 'T');
-
-        
-        
-        
-        
     }
 
     public String getActionCommand() {
@@ -193,7 +163,6 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
         //
         if (listeners != null) {
             Object[] listenerList = listeners.getListenerList();
-
             // Recreate the ActionEvent and stuff the value of the ACTION_COMMAND_KEY
             ActionEvent e = new ActionEvent(evt.getSource(), evt.getID(), (String) getValue(Action.ACTION_COMMAND_KEY));
             for (int i = 0; i <= listenerList.length - 2; i += 2) {

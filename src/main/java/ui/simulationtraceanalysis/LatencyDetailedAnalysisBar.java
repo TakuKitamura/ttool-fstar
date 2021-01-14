@@ -35,7 +35,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
 package ui.simulationtraceanalysis;
 
 import javax.swing.JToolBar;
@@ -68,5 +67,4 @@ public abstract class LatencyDetailedAnalysisBar extends JToolBar {
     public JFrameLatencyDetailedAnalysis getLatencyDetailedAnalysisF() {
         return latencyDetailedAnalysisF;
     }
-
 } // Class

@@ -35,7 +35,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
@@ -53,7 +52,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -66,9 +64,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-
 import org.jgrapht.Graphs;
-
 import myutil.ScrolledJTextArea;
 import ui.ColorManager;
 
@@ -82,7 +78,6 @@ import ui.ColorManager;
  * 
  */
 public class JFrameListOfRules extends JFrame implements TableModelListener, ActionListener {
-
     private String[] columnByTaskNames = new String[3];
     private HashMap<vertex, List<vertex>> ruleAddedEdges = new HashMap<vertex, List<vertex>>();
     private HashMap<vertex, List<vertex>> ruleAddedEdgesChannels = new HashMap<vertex, List<vertex>>();
@@ -98,59 +93,41 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
     private DefaultTableModel model;
 
     public JFrameListOfRules(DirectedGraphTranslator dgraph) {
-
         super("All Added Rules");
         initActions();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         directedGraph = dgraph;
         GridBagLayout gridbagmain = new GridBagLayout();
-
         GridBagConstraints mainConstraint = new GridBagConstraints();
-
         Container framePanel = getContentPane();
         framePanel.setLayout(gridbagmain);
-
         GridBagLayout gridbag02 = new GridBagLayout();
         GridBagConstraints c02 = new GridBagConstraints();
-
         // Save
         jp = new JPanel();
-
         mainConstraint.gridx = 0;
         mainConstraint.gridy = 0;
         mainConstraint.fill = GridBagConstraints.HORIZONTAL;
-
         // framePanel.setBackground(Color.red);
-
         buttonDeleteRule = new JButton(actions[LatencyDetailedAnalysisActions.ACT_DELETE_SELECTED_RULE]);
         buttonDeleteALLRules = new JButton(actions[LatencyDetailedAnalysisActions.ACT_DELETE_ALL_RULE]);
         buttonClose = new JButton(actions[LatencyDetailedAnalysisActions.ACT_STOP_AND_CLOSE_RULE]);
-
         jp.add(buttonDeleteRule);
         jp.add(buttonDeleteALLRules);
         jp.add(buttonClose);
         // jp.setBackground(Color.red);
         framePanel.add(jp, mainConstraint);
-
         buttonClose.setEnabled(true);
         buttonDeleteRule.setEnabled(false);
-
         columnByTaskNames[0] = "Operator 2";
         columnByTaskNames[1] = "After ";
         columnByTaskNames[2] = "Operator 1 ";
-
         ruleAddedEdgesChannels = dgraph.getRuleAddedEdgesChannels();
-
         fillRuleTables();
-
         scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
         scrollPane12.setVisible(true);
-
         rulesList = new JPanel(new BorderLayout());
         rulesList.setBorder(new javax.swing.border.TitledBorder("All Added Rules "));
-
         // mainConstraint.gridheight = 1;
         // mainConstraint.weighty = 5;
         // mainConstraint.weightx = 5;
@@ -160,11 +137,8 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         mainConstraint.ipady = 200;
         // mainConstraint.ipady = 500;
         mainConstraint.fill = GridBagConstraints.BOTH;
-
         rulesList.add(scrollPane12);
-
         framePanel.add(rulesList, mainConstraint);
-
         jp05 = new JPanel(new BorderLayout());
         mainConstraint.gridheight = 1;
         // .weighty =0.5;
@@ -177,9 +151,7 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         mainConstraint.gridwidth = 1; // end row
         // mainConstraint.gridwidth = GridBagConstraints.REMAINDER; // end row
         mainConstraint.fill = GridBagConstraints.HORIZONTAL;
-
         framePanel.add(jp05, mainConstraint);
-
         jta = new ScrolledJTextArea();
         jta.setBackground(ColorManager.InteractiveSimulationJTABackground);
         jta.setForeground(ColorManager.InteractiveSimulationJTAForeground);
@@ -198,10 +170,8 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         jsp.setVisible(true);
         // jsp.setColumnHeaderView(100);
         // jsp.setRowHeaderView(30);
-
         jp05.setMaximumSize(new Dimension(800, 500));
         jp05.add(jsp, BorderLayout.CENTER);
-
         this.pack();
         this.setVisible(true);
     }
@@ -212,29 +182,20 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         for (Entry<vertex, List<vertex>> v : ruleAddedEdgesChannels.entrySet()) {
             vertex v1 = v.getKey();
             List<vertex> lv = v.getValue();
-
             size = size + lv.size();
         }
-
         tableData = new Object[size][3];
-
         int j = 0;
         for (Entry<vertex, List<vertex>> v : ruleAddedEdgesChannels.entrySet()) {
             vertex v1 = v.getKey();
             List<vertex> lv = v.getValue();
-
             for (int i = 0; i < lv.size(); i++) {
-
                 tableData[j][0] = lv.get(i).getName();
                 tableData[j][1] = "After";
                 tableData[j][2] = v1.getName();
-
                 j++;
-
             }
-
         }
-
         model = new DefaultTableModel(tableData, columnByTaskNames) {
             @Override
             public Class getColumnClass(int column) {
@@ -254,27 +215,19 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
                 }
             }
         };
-
         // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
-
         taskNames = new JTable(model);
         taskNames.setAutoCreateRowSorter(true);
-
         taskNames.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
             public void valueChanged(ListSelectionEvent e) {
                 buttonDeleteRule.setEnabled(true);
-
             }
-
         });
-
     }
 
     @Override
     public void tableChanged(TableModelEvent e) {
         // TODO Auto-generated method stub
-
     }
 
     private void initActions() {
@@ -284,7 +237,6 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
             actions[i].addActionListener(this);
             // actions[i].addKeyListener(this);
         }
-
     }
 
     @Override
@@ -292,124 +244,79 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         // TODO Auto-generated method stub
         String command = evt.getActionCommand();
         // TraceManager.addDev("Command:" + command);
-
         if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_STOP_AND_CLOSE_RULE].getActionCommand())) {
             jta.setText("");
             dispose();
             setVisible(false);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DELETE_ALL_RULE].getActionCommand())) {
-
             directedGraph.setRuleAddedEdges(new HashMap<vertex, List<vertex>>());
             directedGraph.setRuleAddedEdgesChannels(new HashMap<vertex, List<vertex>>());
-
             model.setRowCount(0);
-
             taskNames.setModel(model);
-
             jta.append("All Rules are deleted \n");
-
             model.fireTableDataChanged();
-
             taskNames.revalidate();
             taskNames.repaint();
-
             scrollPane12.revalidate();
             scrollPane12.repaint();
-
             this.revalidate();
             this.pack();
-
             this.repaint();
-
             this.setVisible(true);
-
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DELETE_SELECTED_RULE].getActionCommand())) {
-
             int i = taskNames.getSelectedRow();
-
             vertex v1 = directedGraph.getvertex(model.getValueAt(i, 0).toString());
             vertex v2 = directedGraph.getvertex(model.getValueAt(i, 2).toString());
-
             ruleAddedEdges = directedGraph.getRuleAddedEdges();
-
             // remove rule and its channel
-
             removeRule(v1, v2, i);
-
             model.removeRow(i);
-
             taskNames.setModel(model);
-
             model.fireTableDataChanged();
-
             buttonDeleteRule.setEnabled(false);
-
             taskNames.revalidate();
             taskNames.repaint();
-
             scrollPane12.revalidate();
             scrollPane12.repaint();
-
             this.revalidate();
             this.pack();
-
             this.repaint();
-
             this.setVisible(true);
-
             jta.append("All Rule between: " + v1.getName() + " and " + v2.getName() + " is deleted.\n");
-
         }
-
     }
 
     private void removeRule(vertex v1, vertex v2, int i) {
-
         vertex v1Channel = null, v2Channel = null;
-
         if (v2Channel == null && Graphs.vertexHasSuccessors(directedGraph.getG(), v2)) {
             for (vertex n : Graphs.successorListOf(directedGraph.getG(), v2)) {
                 if (n.getType() == vertex.TYPE_CHANNEL) {
                     v2Channel = n;
                     break;
-
                 }
             }
         }
-
         if (Graphs.vertexHasPredecessors(directedGraph.getG(), v1)) {
             for (vertex n : Graphs.predecessorListOf(directedGraph.getG(), v1)) {
                 if (n.getType() == vertex.TYPE_CHANNEL) {
                     v1Channel = n;
                     break;
-
                 }
             }
         }
-
         if (v1Channel != null && v2Channel != null) {
-
             if (model.getValueAt(i, 1).equals("After")) {
-
                 if (ruleAddedEdges.containsKey(v2Channel)) {
-
                     if (ruleAddedEdges.get(v2Channel).contains(v1Channel)) {
                         ruleAddedEdges.get(v2Channel).remove(v1Channel);
                     }
-
                 }
-
                 if (ruleAddedEdgesChannels.containsKey(v2)) {
-
                     if (ruleAddedEdgesChannels.get(v2).contains(v1)) {
                         ruleAddedEdgesChannels.get(v2).remove(v1);
                     }
-
                 }
-
             }
         }
-
     }
-
 }

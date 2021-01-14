@@ -27,14 +27,14 @@ public class ComparisonOfsimulationTraces extends AbstractUITest {
     private static JFrameCompareSimulationTraces cSimTrace;
     private static JPanelCompareXmlGraph newContentPane;
     private static JFrameShowLatencyDetails showLatencyDetails;
-    private static final String path1 = "/ui/xmlCompare/input/simple.xml";
-    private static final String path2 = "/ui/xmlCompare/input/simplifiedWithSecurity.xml";
+    private static final String PATH1 = "/ui/xmlCompare/input/simple.xml";
+    private static final String PATH2 = "/ui/xmlCompare/input/simplifiedWithSecurity.xml";
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
 
-        STfilePath1 = getBaseResourcesDir() + path1;
-        STfilePath2 = getBaseResourcesDir() + path2;
+        STfilePath1 = getBaseResourcesDir() + PATH1;
+        STfilePath2 = getBaseResourcesDir() + PATH2;
        
         selectedST1 = new SimulationTrace("simple.xml", 6, STfilePath1);
         selectedST2 = new SimulationTrace("simplifiedWithSecurity.xml", 6, STfilePath2);

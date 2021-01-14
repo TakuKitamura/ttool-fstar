@@ -35,14 +35,12 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
 package ui.simulationtraceanalysis;
 
 import javax.swing.JButton;
 
 //import java.awt.*;
 //import java.awt.event.*;
-
 /**
  * Class SaveGraphToolBar: toolbar used to save the directed graph in different
  * formats
@@ -52,31 +50,24 @@ import javax.swing.JButton;
  * @author Maysam Zoor
  */
 public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
-
     protected void setActive(boolean b) {
         getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
         getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
-      //  getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
-
+        // getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
     }
 
     protected void setButtons() {
         JButton button;
-
         button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG]);
         // button.addMouseListener(jflda.mouseHandler);
-
         this.addSeparator();
-
         button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
         this.addSeparator();
-
-      //  button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
-
+        // button =
+        // this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
     }
 
     protected SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
         super(_jflda);
     }
-
-} // Class
+} 
