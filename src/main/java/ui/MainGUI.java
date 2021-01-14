@@ -5150,6 +5150,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         interactiveSimulationSystemC(SpecConfigTTool.SystemCCodeInteractiveExecuteCommand + " -gpath " + SpecConfigTTool.GGraphPath);
     }
 
+    public JFrameInteractiveSimulation getJfis() {
+        if (ConfigurationTTool.SystemCHost == null || ConfigurationTTool.SystemCHost.equals("")) {
+            ConfigurationTTool.SystemCHost = "localhost";
+        }
+        interactiveSimulationSystemC();
+        return this.jfis;
+    }
+
     public void interactiveSimulationSystemC(String executePath) {
         TraceManager.addDev("MainGUI / Execute path=" + executePath);
         List<Point> points = getListOfBreakPoints();

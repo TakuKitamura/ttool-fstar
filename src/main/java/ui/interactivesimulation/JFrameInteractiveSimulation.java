@@ -1338,6 +1338,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         sendCommand(text);
     }
 
+    public void sendTestCmd(String text) {
+	    if (!text.equals("")) {
+	        sendCommand(text);
+        }
+    }
+
     protected void sendCommand(String text) {
         jta.append(">" + text + "\n");
         String command = cp.transformCommandFromUserToSimulator(text);
