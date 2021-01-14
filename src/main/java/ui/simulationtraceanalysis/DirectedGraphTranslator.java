@@ -899,18 +899,19 @@ public class DirectedGraphTranslator extends JApplet {
                     // in case an end was encountered , the previous activities should be checked:
                     // in
                     // case it is an end for a loop or sequence speavial edges should be added
-                    if (currentElement.getReferenceObject() instanceof TMLADStopState) {
+                    if (currentElement.getReferenceObject() != null && currentElement.getReferenceObject() instanceof TMLADStopState) {
                         addStopVertex(taskName);
                     }
                     // start activity is added as a vertex
-                    else if (currentElement.getReferenceObject() instanceof TMLADStartState) {
+                    else if (currentElement.getReferenceObject() != null && currentElement.getReferenceObject() instanceof TMLADStartState) {
                         addStartVertex(taskName);
                     }
                     // the below activities are added as vertex with the required edges
                     // these activities can be used to check later for latency
-                    else if (currentElement.getReferenceObject() instanceof TADComponentWithoutSubcomponents
-                            || currentElement.getReferenceObject() instanceof TADComponentWithSubcomponents
-                            || currentElement.getReferenceObject() instanceof TMLADActionState) {
+                    else if (currentElement.getReferenceObject() != null
+                            && (currentElement.getReferenceObject() instanceof TADComponentWithoutSubcomponents
+                                    || currentElement.getReferenceObject() instanceof TADComponentWithSubcomponents
+                                    || currentElement.getReferenceObject() instanceof TMLADActionState)) {
                         addcurrentElementVertex(taskName, taskStartName);
                     }
                     // check if the next activity :add to an array:
@@ -1128,6 +1129,7 @@ public class DirectedGraphTranslator extends JApplet {
                 String sendingPortparams = null;
                 if (waitEvent.getEvent().getOriginPort().getName().contains(FORK_PORT_ORIGIN)) {
                     checkchannel = waitEvent.getEvent().getOriginPort().getName().split(S_LABEL);
+                    warnings.add("Graph Doesn not support FORK for events. Analysis may fail.");
                     if (checkchannel.length > 2) {
                         sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(FORK_PORT_ORIGIN, FORK_EVENT);
                         sendingPortparams = waitEvent.getEvent().getParams().toString();
@@ -1162,6 +1164,7 @@ public class DirectedGraphTranslator extends JApplet {
                     }
                 } else if (waitEvent.getEvent().getDestinationPort().getName().contains(JOIN_PORT_DESTINATION)) {
                     checkchannel = waitEvent.getEvent().getDestinationPort().getName().split(S_LABEL);
+                    warnings.add("Graph Doesn not support JOIN for events. Analysis may fail.");
                     if (checkchannel.length > 2) {
                         receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(JOIN_PORT_DESTINATION, JOIN_EVENT);
                     } else if (checkchannel.length <= 2) {
