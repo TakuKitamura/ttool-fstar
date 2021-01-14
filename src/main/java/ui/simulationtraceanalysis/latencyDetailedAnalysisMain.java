@@ -47,6 +47,7 @@ public class latencyDetailedAnalysisMain {
 
     public static final String DIPLODOCUS_ARCHI_MAPPING = "DIPLODOCUS architecture and mapping Diagram";
     public static final String TML_COMP_TASK_DIAGRAM = "TML Component Task Diagram";
+    public static final String MODEL_PATH = "/siminfo/global/model";
 
     public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
             throws InterruptedException {
@@ -230,7 +231,7 @@ public class latencyDetailedAnalysisMain {
             DocumentBuilder builder = domFactory.newDocumentBuilder();
             Document dDoc = builder.parse(selectedST.getFullPath());
             XPath xPath = XPathFactory.newInstance().newXPath();
-            String modelNode = (String) xPath.evaluate("/siminfo/global/model", dDoc, XPathConstants.STRING);
+            String modelNode = (String) xPath.evaluate(MODEL_PATH, dDoc, XPathConstants.STRING);
             TURTLEPanel panel = null;
             Vector<TURTLEPanel> allTabs = new Vector<TURTLEPanel>();
             if (j == 1) {

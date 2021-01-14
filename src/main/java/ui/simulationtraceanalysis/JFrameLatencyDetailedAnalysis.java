@@ -511,7 +511,8 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     protected void generateDirectedGraph(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels) {
         try {
             dgraph = new DirectedGraphTranslator(this, jframeCompareLatencyDetail, tmap, cpanels, 0);
-            jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet() + " edges was generated.\n");
+            jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet()
+                    + " edges has been successfully generated.\n");
             // buttonSaveDGraph.setEnabled(true);
             if (dgraph.getWarnings().size() > 0) {
                 jta.append("Warnings: \n ");

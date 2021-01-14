@@ -1108,7 +1108,7 @@ public class DirectedGraphTranslator extends JApplet {
             TMLCPrimitivePort receivePortdetails = waitEvent.getEvent().port2;
             if (sendingPortdetails != null && !sendingPortdetails.isBlocking()) {
                 warnings.add("Analysis may fail because the model contains non blocking sending port: " + sendingPortdetails.getPortName()
-                        + " Use tainting analysis instead.");
+                        + ". Use tainting analysis instead.");
             }
             if (sendingPortdetails != null && sendingPortdetails.isFinite()) {
                 warnings.add("Send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis ");
@@ -1318,7 +1318,7 @@ public class DirectedGraphTranslator extends JApplet {
                 if (sp != null && rp != null) {
                     if (!sp.isBlocking() && !rp.isBlocking()) {
                         warnings.add("Analysis may fail because the model contains non blocking sending port: " + sp.getPortName()
-                                + " and non blocking read data port:" + rp.getPortName() + " Use tainting analysis instead.");
+                                + " and non blocking read data port:" + rp.getPortName() + ". Use tainting analysis instead.");
                     }
                 }
             }

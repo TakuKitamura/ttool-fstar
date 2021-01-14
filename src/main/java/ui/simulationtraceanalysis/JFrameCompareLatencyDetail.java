@@ -156,7 +156,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         c02.gridx = 0;
         c02.gridy = 0;
         c02.anchor = GridBagConstraints.WEST;
-        JLabel xmlLabel = new JLabel("Secound Simulation Traces ", JLabel.LEFT);
+        JLabel xmlLabel = new JLabel("Second Simulation Traces ", JLabel.LEFT);
         loadmodel.add(xmlLabel, c02);
         secondFile.setMinimumSize(new Dimension(300, 30));
         secondFile.setEditable(false);
