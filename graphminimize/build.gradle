@@ -28,6 +28,7 @@ dependencies {
     compile name: 'jautomata-core'
     compileOnly name: 'jna-3.3.0'
     compile name: 'commons-math3-3.6.1'
+    compile name: 'jfreechart-1.6.0'
 }
 
 jar {

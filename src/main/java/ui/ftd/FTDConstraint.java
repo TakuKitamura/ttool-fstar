@@ -129,21 +129,6 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
     public void internalDrawing(Graphics g) {
 
         Font f = g.getFont();
-        //     Font fold = f;
-
-//        if (currentFontSize == -1) {
-//            currentFontSize = f.getSize();
-//        }
-
-//        if ((rescaled) && (!tdp.isScaled())) {
-//
-//            rescaled = false;
-//
-//            float scale = (float) (f.getSize() * tdp.getZoom());
-//            scale = Math.min(maxFontSize, scale);
-//            currentFontSize = (int) scale;
-//            displayText = !(scale < minFontSize);
-//        }
 
         Color c = g.getColor();
         //g.draw3DRect(x, y, width, height, true);
@@ -166,16 +151,16 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
             f = f.deriveFont(currentFontSize);
             g.setFont(f.deriveFont(Font.BOLD));
             int w = g.getFontMetrics().stringWidth(value);
-            drawSingleString(g,value, x + (width - w) / 2, y + currentFontSize + textY);
+            drawSingleString(g,value, x + (width - w) / 2, y + currentFontSize + textY + height/2);
 
 
             g.setFont(f0.deriveFont(f0.getSize() - 2).deriveFont(Font.ITALIC));
             w = g.getFontMetrics().stringWidth(equation);
             if (w >= width) {
                 w = g.getFontMetrics().stringWidth("...");
-                drawSingleString(g,"...", x + (width - w) / 2, y + (2 * currentFontSize) +  textY);
+                drawSingleString(g,"...", x + (width - w) / 2, y + height - textY );
             } else {
-                drawSingleString(g,equation, x + (width - w) / 2, y + (2 * currentFontSize) + textY);
+                drawSingleString(g,equation, x + (width - w) / 2, y + height - textY);
             }
             g.setFont(f0);
         }

@@ -55,3 +55,4 @@ public interface GenericTree {
     Object getChild(int index);
     int getIndexOfChild(Object child);
 }
+

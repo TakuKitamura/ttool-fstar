@@ -22,6 +22,7 @@ dependencies {
     compileOnly name: 'commons-codec-1.10'
     compileOnly name: 'jna-3.3.0'
     compile name: 'commons-math3-3.6.1'
+    compile name: 'jfreechart-1.6.0'
 }
 
 jar {

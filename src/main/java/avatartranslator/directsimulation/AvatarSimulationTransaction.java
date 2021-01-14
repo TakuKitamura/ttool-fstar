@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,13 +31,10 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
 
 
 package avatartranslator.directsimulation;
@@ -50,13 +47,14 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 /**
-   * Class AvatarSimulationTransaction
-   * Avatar: notion of transaction in simulation
-   * Creation: 14/12/2010
-   * @version 1.0 14/12/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSimulationTransaction
+ * Avatar: notion of transaction in simulation
+ * Creation: 14/12/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 14/12/2010
  */
-public class AvatarSimulationTransaction  {
+public class AvatarSimulationTransaction {
 
     public static long ID;
     public static Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements;
@@ -82,7 +80,7 @@ public class AvatarSimulationTransaction  {
     public Vector<String> attributeValues;
     public Vector<String> actions;
 
-    public int x,y; // for graphical representation only
+    public int x, y; // for graphical representation only
     public long stamp;
 
     public AvatarSimulationAsynchronousTransaction sentMessage;
@@ -113,22 +111,22 @@ public class AvatarSimulationTransaction  {
         if (val == null) {
             hashOfAllElements.put(_asme, new Integer(1));
         } else {
-            hashOfAllElements.put(_asme, new Integer(1+val.intValue()));
+            hashOfAllElements.put(_asme, new Integer(1 + val.intValue()));
         }
 
     }
 
     public static void removeExecutedElement(AvatarStateMachineElement _asme) {
         if (!allExecutedElements.contains(_asme)) {
-            return ;
+            return;
         }
 
         Integer val = hashOfAllElements.get(_asme);
         if (val == null) {
-            return ;
+            return;
         }
 
-        hashOfAllElements.put(_asme, new Integer(val.intValue()-1));
+        hashOfAllElements.put(_asme, new Integer(val.intValue() - 1));
 
 
     }
@@ -144,7 +142,7 @@ public class AvatarSimulationTransaction  {
     }
 
     public String toString() {
-        String res = "" + id + " bunchid:" + bunchid + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName();
+        String res = "" + id + " bunchid:" + bunchid + " @" + clockValueWhenFinished + "/ " + duration + ": " + executedElement + " in block " + block.getName();
         if (silent) {
             res += " (silent)";
         }
@@ -156,17 +154,42 @@ public class AvatarSimulationTransaction  {
             }
         }
         res += "\nattributes=";
-        for(String s: attributeValues) {
+        for (String s : attributeValues) {
             res += s + " ";
         }
         if (actions != null) {
             int cpt = 0;
-            res+= "\n";
-            for(String action: actions) {
+            res += "\n";
+            for (String action : actions) {
                 res += "action#" + cpt + ": " + action + " ";
-                cpt ++;
+                cpt++;
             }
         }
+        return res;
+    }
+
+    public String getAttributesString() {
+        String res = "";
+        for (String s : attributeValues) {
+            res += s + " ";
+        }
+        return res;
+    }
+
+    public String getActionsString() {
+        if ((actions == null) || (actions.size() == 0)) {
+            return "null";
+        }
+
+        String res = "";
+
+        int cpt = 0;
+        //res+= "\n";
+        for (String action : actions) {
+            res += "action#" + cpt + ": " + action + " ";
+            cpt++;
+        }
+
         return res;
     }
 

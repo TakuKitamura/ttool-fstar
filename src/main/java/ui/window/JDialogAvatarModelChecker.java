@@ -48,6 +48,7 @@ import avatartranslator.modelchecker.SpecificationActionLoop;
 import avatartranslator.modelchecker.SpecificationReachability;
 import avatartranslator.modelchecker.SpecificationPropertyPhase;
 import myutil.*;
+import org.apache.commons.io.FilenameUtils;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
@@ -84,6 +85,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     private final static Color[] COLORS = {Color.darkGray, Color.magenta, Color.red, Color.blue};
     private final static String[] WORD_BITS = {"32 bits", "16 bits", "8 bits"};
     private final static String[] SEARCH_TYPE = {"BFS", "DFS"};
+    private final static String RG_NAME = "rgavatar$.aut";
+
 
 
     public final static int REACHABILITY_ALL = 1;
@@ -180,6 +183,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
+    protected JButton graphDirButton, graphPathDotButton;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
@@ -207,10 +211,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         spec = _spec;
 
         if (graphDir == null) {
-            graphDir = _graphDir + File.separator + "rgavatar$.aut";
+            graphDir = _graphDir + File.separator + RG_NAME;
         }
         if (graphDirDot == null) {
-            graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
+            graphDirDot = _graphDir + File.separator + RG_NAME;
         }
         
         countertracePath = "trace$.txt";
@@ -529,18 +533,30 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         
         
         // RG
+        copt.gridwidth = GridBagConstraints.REMAINDER; //end row
         saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
         saveGraphAUT.addActionListener(this);
         //saveGraphAUT.addSelectionListener(this);
         jpopt.add(saveGraphAUT, copt);
+        copt.gridwidth = 1;
         graphPath = new JTextField(graphDir);
         jpopt.add(graphPath, copt);
+        copt.gridwidth = GridBagConstraints.REMAINDER; //end row
+        graphDirButton = new JButton("Select another directory", IconManager.imgic22);
+        graphDirButton.addActionListener(this);
+        jpopt.add(graphDirButton, copt);
+
         saveGraphDot = new JCheckBox("Save RG in dotty:", graphSelectedDot);
         saveGraphDot.addActionListener(this);
         //saveGraphDot.setEnebaled(false);
         jpopt.add(saveGraphDot, copt);
+        copt.gridwidth = 1;
         graphPathDot = new JTextField(graphDirDot);
         jpopt.add(graphPathDot, copt);
+        copt.gridwidth = GridBagConstraints.REMAINDER; //end row
+        graphPathDotButton = new JButton("Select another directory", IconManager.imgic22);
+        graphPathDotButton.addActionListener(this);
+        jpopt.add(graphPathDotButton, copt);
         
         c.add(jpopt, BorderLayout.NORTH);
 
@@ -688,9 +704,27 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             setButtons();
         } else if (evt.getSource() == ignoreInternalStates) {
             setButtons();
+        } else if (evt.getSource() == graphDirButton) {
+            selectDirectoryDir(graphPath);
+        } else if (evt.getSource() == graphPathDotButton) {
+            selectDirectoryDir(graphPathDot);
         } else {
             setButtons();
         }
+    }
+
+    public void selectDirectoryDir(JTextField field) {
+        JFileChooser jfc = new JFileChooser(FilenameUtils.getPath(field.getText()));
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        jfc.setAcceptAllFileFilterUsed(false);
+
+        int returnVal = jfc.showDialog(this, "Select directory");
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File directory = jfc.getSelectedFile();
+        field.setText(directory + File.separator + RG_NAME);
     }
 
     public void closeDialog() {
@@ -1183,8 +1217,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected void setButtons() {
         graphSelected = saveGraphAUT.isSelected();
         graphPath.setEnabled(saveGraphAUT.isSelected());
+        graphDirButton.setEnabled(saveGraphAUT.isSelected());
+
         graphSelectedDot = saveGraphDot.isSelected();
         saveGraphDot.setEnabled(saveGraphAUT.isSelected());
+        graphPathDotButton.setEnabled(saveGraphDot.isSelected() && saveGraphAUT.isSelected());
         graphPathDot.setEnabled(saveGraphDot.isSelected() && saveGraphAUT.isSelected());
         if (generateDesign != null) {
             generateDesignSelected = generateDesign.isSelected();

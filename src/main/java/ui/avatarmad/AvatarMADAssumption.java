@@ -319,7 +319,6 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                 return false;
             }
 
-
             int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
             minDesiredWidth = Math.max(size, minWidth);
             if (minDesiredWidth != width) {
@@ -327,15 +326,10 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
             }
             setValue(s);
 
-
         }
 
-
         return true;
-
-        // On the name ?
-
-
+        
     }
 
 

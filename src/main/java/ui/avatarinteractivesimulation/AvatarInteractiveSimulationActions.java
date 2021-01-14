@@ -76,6 +76,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
     public static final int ACT_SAVE_SD_PNG = 10;
     public static final int ACT_SAVE_SVG = 11;
     public static final int ACT_SAVE_TXT = 12;
+    public static final int ACT_SAVE_CSV = 37;
 
     public static final int ACT_PRINT_BENCHMARK = 26;
     public static final int ACT_SAVE_BENCHMARK = 27;
@@ -104,7 +105,8 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
     public static final int ACT_DOWN_ASYNC_MSG = 34;
     public static final int ACT_ADD_LATENCY = 35;
     public static final int ACT_REMOVE_ALL_TRANS = 36;
-    public static final int NB_ACTION = 37;
+
+    public static final int NB_ACTION = 38;
 
 
     private static final TAction[] actions = new TAction[NB_ACTION];
@@ -164,6 +166,9 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
         actions[ACT_SAVE_SD_PNG] = new TAction("save-sd-png", "Save SD trace in PNG format", IconManager.imgic5104, IconManager.imgic5104, "Save SD trace in PNG format", "Save SD trace in PNG format", '0');
         actions[ACT_SAVE_SVG] = new TAction("save-svg", "Save trace in SVG format", IconManager.imgic1328, IconManager.imgic1328, "Save trace in SVG format", "Save trace in SVG format", 'R');
         actions[ACT_SAVE_TXT] = new TAction("save-txt", "Save trace in TXT format", IconManager.imgic1314, IconManager.imgic1314, "Save trace in TXT format", "Save trace in TXT format", 'R');
+        actions[ACT_SAVE_CSV] = new TAction("save-csv", "Save trace in CSV format", IconManager.imgic1334, IconManager.imgic1334, "Save trace in " +
+                "CSV " +
+                "format", "Save trace in CSV format", 'V');
 
         actions[ACT_SAVE_STATE] = new TAction("save-state", "Save simulation state in File", IconManager.imgic341, IconManager.imgic341, "Save simulation state in File", "Save simulation state in File", 'R');
         actions[ACT_RESTORE_STATE] = new TAction("restore-state", "Restore simulation state from File", IconManager.imgic339, IconManager.imgic339, "Restore simulation state from File", "Restore simulation state from File", 'R');

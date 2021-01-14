@@ -50,6 +50,7 @@ import ui.TGConnectingPointWidthHeight;
  * Definition of connecting points on which connectors of use case diagrams can be connected
  * Creation: 18/02/2005
  * @version 1.0 18/02/2005
+ * @version 2.0 14/01/2021
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
@@ -61,7 +62,8 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
     @Override
     public boolean isCompatibleWith(int type) {
         //
-        if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) ||(type == TGComponentManager.CONNECTOR_INCLUDE_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
+        if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) ||(type == TGComponentManager.CONNECTOR_INCLUDE_UCD) ||
+                (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
             //
             return true;
         }
@@ -93,6 +95,17 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
                 return false;
             }
 
+            if ((outPoint.getFather() == getFather()) && (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() == getFather()) && (type == TGComponentManager.CONNECTOR_SPECIA_UCD)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof UCDActor)  && (type == TGComponentManager.CONNECTOR_SPECIA_UCD) && !((getFather() instanceof UCDActor))) {
+                return false;
+            }
 
         }
 

@@ -1,2 +1,2 @@
 Main-Class: RunDSE
-Class-Path: com.microsoft.z3.jar json-java.jar gs-core-2.0.jar gs-ui-swing--2.0.jar
+Class-Path: com.microsoft.z3.jar json-java.jar gs-core-2.0.jar gs-ui-swing--2.0.jar jfreechart-1.6.0.jar

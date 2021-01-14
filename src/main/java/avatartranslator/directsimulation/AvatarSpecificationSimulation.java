@@ -44,6 +44,8 @@ import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Vector;
 
 
@@ -56,6 +58,9 @@ import java.util.Vector;
  * @version 1.0 13/12/2010
  */
 public class AvatarSpecificationSimulation {
+
+    public final static String COMMA = ", ";
+
     public static int MAX_TRANSACTION_IN_A_ROW = 1000;
 
     public static int MAX_TRANSACTIONS = 100000;
@@ -227,7 +232,34 @@ public class AvatarSpecificationSimulation {
 
     // Control function
 
+    public void runSimulationToCompletion() {
+        runSimulationToCompletion(-1);
+    }
+
+    public void runSimulationToCompletion(int maxNbOfTransactions) {
+        Thread t = new Thread() {
+            public void run() {
+                runSimulation(maxNbOfTransactions);
+            }
+        };
+
+        t.start();
+        goSimulation();
+        try {
+            while(getState() != TERMINATED) {
+                Thread.currentThread().sleep(25);
+                //TraceManager.addDev("Waiting for termination");
+            };
+            killSimulation();
+            t.join();
+        } catch (InterruptedException ie) {}
+    }
+
     public void runSimulation() {
+        runSimulation(-1);
+    }
+
+    public void runSimulation(int maxNbOfTransactions) {
         int index[];
         Vector<AvatarSimulationPendingTransaction> selectedTransactions;
 
@@ -336,7 +368,14 @@ public class AvatarSpecificationSimulation {
                             if (asi != null) {
                                 asi.updateTransactionAndTime(allTransactions.size(), clockValue);
                             }
-                            setState(GATHER);
+
+                            //TraceManager.addDev("Nb of transations: " + allTransactions.size() + " max: " + maxNbOfTransactions);
+                            if ((maxNbOfTransactions > 0) && (allTransactions.size() >= maxNbOfTransactions)){
+                                //TraceManager.addDev("Max nb of transactions reached: " + maxNbOfTransactions);
+                                setState(TERMINATED);
+                            } else {
+                                setState(GATHER);
+                            }
                         } else {
                             setState(TERMINATED);
                             TraceManager.addDev("Error when executing transaction");
@@ -350,18 +389,18 @@ public class AvatarSpecificationSimulation {
                     break;
 
                 case TERMINATED:
-                    TraceManager.addDev("-> -> TERMINATED");
+                    //TraceManager.addDev("-> -> TERMINATED");
                     waitForResetOrNewState();
                     break;
 
                 case KILLED:
-                    TraceManager.addDev("-> -> KILLED");
-                    TraceManager.addDev("Simulation killed");
+                    //TraceManager.addDev("-> -> KILLED");
+                    //TraceManager.addDev("Simulation killed");
                     return;
 
                 default:
                     TraceManager.addDev("-> -> UNKNOWN");
-                    TraceManager.addDev("Unknown state");
+                    //TraceManager.addDev("Unknown state");
                     setState(KILLED);
             }
 
@@ -478,7 +517,14 @@ public class AvatarSpecificationSimulation {
         notifyAll();
     }
 
-    public synchronized void newStateInSimulation() {
+    public synchronized void  
+     
+     
+     
+     
+
+
+    newStateInSimulation() {
         newState = true;
         notifyAll();
     }
@@ -1586,4 +1632,167 @@ public class AvatarSpecificationSimulation {
 
         return found;
     }
+
+    public String toCSV() {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("ID, block, element ID, linked transaction ID, initial clock value, final clock value, duration, attributes, actions\n");
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            append(sb, ast.id);
+            append(sb, ast.block);
+            append(sb, ast.executedElement);
+            append(sb, ast.linkedTransaction);
+            append(sb, ast.initialClockValue);
+            append(sb, ast.clockValueWhenFinished);
+            append(sb, ast.duration);
+            append(sb, ast.getAttributesString());
+            sb.append(ast.getActionsString());
+            sb.append("\n");
+        }
+
+
+        return sb.toString();
+    }
+
+    public void append(StringBuffer sb, String s) {
+        if ((s == null) || (s.length() ==0)) {
+            sb.append("null" + COMMA);
+        } else {
+            sb.append(s + COMMA);
+        }
+    }
+
+    public void append(StringBuffer sb, long s) {
+        sb.append(s + COMMA);
+    }
+
+    public void append(StringBuffer sb, AvatarBlock b) {
+        if (b == null) {
+            sb.append("__Unknown" + COMMA);
+        } else {
+            sb.append(b.getName() + COMMA);
+        }
+    }
+
+    public void append(StringBuffer sb, AvatarStateMachineElement asme) {
+        if (asme == null) {
+            sb.append("-1" + COMMA);
+        } else {
+            sb.append(asme.getID() + COMMA);
+        }
+    }
+
+    public void append(StringBuffer sb, AvatarSimulationTransaction ast) {
+        if (ast == null) {
+            sb.append("-1" + COMMA);
+        } else {
+            sb.append(ast.bunchid + COMMA);
+        }
+    }
+
+    public long getTimeOfLastTransactionOfBlock(AvatarBlock ab) {
+        long lastTime = 0;
+
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            if (ast.block == ab) {
+                lastTime = ast.clockValueWhenFinished;
+            }
+        }
+
+        return lastTime;
+    }
+
+    public void fillValuesOfTimesOfBlockAttribute(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, ArrayList<Double> toBeFilled) {
+        String initialValue = aa.getInitialValue();
+        int oldValue = 0;
+        if (aa.isInt()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                oldValue = Integer.decode(initialValue);
+            }
+        } else if (aa.isBool()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                if (initialValue.compareTo("true") == 0) {
+                    oldValue = 1;
+                } else {
+                    oldValue = 0;
+                }
+            }
+        }
+
+
+
+        toBeFilled.add(new Double(oldValue));
+        toBeFilled.add(new Double(0));
+
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            if (ast.block == ab) {
+                int newValue = 0;
+                if (aa.isInt()) {
+                    newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                } else if (aa.isBool()) {
+                    if ((ast.attributeValues.get(indexOfAttribute).compareTo("true")) == 0) {
+                        newValue = 1;
+                    } else {
+                        newValue = 0;
+                    }
+                }
+                if (newValue != oldValue) {
+                    oldValue = newValue;
+                    //TraceManager.addDev("Block " + ab.getName() + " / " + aa.getName() + ". Adding value " + newValue + " at time " +
+                     //       ast.clockValueWhenFinished);
+                    toBeFilled.add(new Double(newValue));
+                    toBeFilled.add(new Double(ast.clockValueWhenFinished));
+                }
+            }
+        }
+    }
+
+    public void fillLastValueAndTimeOfBlockAttribute(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, ArrayList<Double> toBeFilled) {
+        String initialValue = aa.getInitialValue();
+        int oldValue = 0;
+        if (aa.isInt()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                oldValue = Integer.decode(initialValue);
+            }
+        } else if (aa.isBool()) {
+            if ((initialValue != null) && (initialValue.length() > 0)) {
+                if (initialValue.compareTo("true") == 0) {
+                    oldValue = 1;
+                } else {
+                    oldValue = 0;
+                }
+            }
+        }
+
+
+        long oldTime = 0;
+
+        for(AvatarSimulationTransaction ast: allTransactions) {
+            if (ast.block == ab) {
+                int newValue = 0;
+                if (aa.isInt()) {
+                    newValue = Integer.decode(ast.attributeValues.get(indexOfAttribute));
+                } else if (aa.isBool()) {
+                    if ((ast.attributeValues.get(indexOfAttribute).compareTo("true")) == 0) {
+                        newValue = 1;
+                    } else {
+                        newValue = 0;
+                    }
+                }
+
+                if (newValue != oldValue) {
+                    oldValue = newValue;
+                    oldTime = ast.clockValueWhenFinished;
+                    //TraceManager.addDev("Block " + ab.getName() + " / " + aa.getName() + ". Adding value " + newValue + " at time " +
+                    //       ast.clockValueWhenFinished);
+
+                }
+            }
+        }
+
+        toBeFilled.add(new Double(oldValue));
+        toBeFilled.add(new Double(oldTime));
+    }
+
+
 }

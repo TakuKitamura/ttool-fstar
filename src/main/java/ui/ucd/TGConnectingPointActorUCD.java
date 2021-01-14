@@ -49,6 +49,7 @@ import ui.TGConnectingPointWidthHeight;
  * Definition of connecting points on which connectors of actors found in use case diagrams can be connected
  * Creation: 18/02/2005
  * @version 1.0 18/02/2005
+ * @version 2.0 14/01/2020
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointActorUCD extends TGConnectingPointWidthHeight{
@@ -72,13 +73,17 @@ public class TGConnectingPointActorUCD extends TGConnectingPointWidthHeight{
 
         if (outPoint != null) {
 
+
+
+
+            if ((outPoint.getFather() instanceof UCDUseCase)  && (type == TGComponentManager.CONNECTOR_SPECIA_UCD)) {
+                return false;
+            }
+
             if (type == TGComponentManager.CONNECTOR_SPECIA_UCD) {
                 return true;
             }
 
-            if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase)) {
-                return false;
-            }
             if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {
                 return false;
             }
