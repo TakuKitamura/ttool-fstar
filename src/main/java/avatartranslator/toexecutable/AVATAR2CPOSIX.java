@@ -79,7 +79,7 @@ import myutil.TraceManager;
  * Creation: 29/03/2011
  *
  * @author Ludovic APVRILLE
- * @version 1.2 24/03/2016
+ * @version 1.3 15/01/2021
  */
 public class AVATAR2CPOSIX {
 
@@ -151,6 +151,7 @@ public class AVATAR2CPOSIX {
 
         //TraceManager.addDev("Generating task files");
         for (TaskFile taskFile : taskFiles) {
+            TraceManager.addDev("Generating task files: " + (path + GENERATED_PATH + taskFile.getName()));
             FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".h", Conversion.indentString(taskFile.getFullHeaderCode(), 2));
             FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".c", Conversion.indentString(taskFile.getMainCode(), 2));
         }
@@ -296,6 +297,8 @@ public class AVATAR2CPOSIX {
 
         taskFiles.add(taskFile);
     }
+
+
 
     public void defineAllStates(AvatarBlock _block, TaskFile _taskFile) {
         int id = 1;
@@ -469,14 +472,17 @@ public class AVATAR2CPOSIX {
 
         int nbOfMaxParams = _block.getMaxNbOfParams();
         //s+= "request *__req;" + CR;
+        TraceManager.addDev("BLOCK NAME:" + _block.getName());
         for (i = 0; i < _block.getMaxNbOfMultipleBranches(); i++) {
-            s += UNUSED_ATTR + " request __req" + i + ";" + CR;
-            s += UNUSED_ATTR + "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
+            sh += UNUSED_ATTR + " request __req" + i + "__" + _block.getName() + ";" + CR;
+            sh += UNUSED_ATTR + "int *__params" + i + "__" +  _block.getName() + "[" + nbOfMaxParams + "];" + CR;
         }
-        s += UNUSED_ATTR + "setOfRequests __list;" + CR;
+        sh += UNUSED_ATTR + "setOfRequests __list__" + _block.getName() + ";" + CR;
 
-        s += UNUSED_ATTR + "pthread_cond_t __myCond;" + CR;
-        s += UNUSED_ATTR + "request *__returnRequest;" + CR;
+        sh += UNUSED_ATTR + "pthread_cond_t __myCond__" + _block.getName() + ";" + CR;
+        sh += UNUSED_ATTR + "request *__returnRequest__" + _block.getName() + ";" + CR;
+        TraceManager.addDev("ATTRIBUTES OF BLOCK NAME:" + _block.getName() + " sh=" + sh);
+
 
         s += CR + "char * __myname = (char *)arg;" + CR;
 
@@ -484,9 +490,9 @@ public class AVATAR2CPOSIX {
           s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
           }*/
 
-        s += CR + "pthread_cond_init(&__myCond, NULL);" + CR;
+        s += CR + "pthread_cond_init(&__myCond__" + _block.getName() + ", NULL);" + CR;
 
-        s += CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR;
+        s += CR + "fillListOfRequests(&__list__" + _block.getName() + ", __myname, &__myCond__" + _block.getName() +", &__mainMutex);" + CR;
 
         s += "//printf(\"my name = %s\\n\", __myname);" + CR;
 
@@ -609,14 +615,14 @@ public class AVATAR2CPOSIX {
                         AvatarTransition at = (AvatarTransition) (_asme.getNext(i));
 
                         if (at.hasActions()) {
-                            ret += makeImmediateAction(at, i);
+                            ret += makeImmediateAction(_block, at, i);
                         } else {
                             if (at.getNext(0) instanceof AvatarActionOnSignal) {
-                                ret += makeSignalAction(at, i);
+                                ret += makeSignalAction(_block, at, i);
                             } else {
                                 // nothing special to do : immediate choice
                                 TraceManager.addDev("Make immediate action in block" + _block.getName());
-                                ret += makeImmediateAction(at, i);
+                                ret += makeImmediateAction(_block, at, i);
                             }
                         }
                     }
@@ -624,15 +630,15 @@ public class AVATAR2CPOSIX {
 
                 // Make all requests
                 // Test if at least one request in the list!
-                ret += "if (nbOfRequests(&__list) == 0) {" + CR;
+                ret += "if (nbOfRequests(&__list__" + _block.getName() + ") == 0) {" + CR;
                 ret += "debug2Msg(__myname, \"No possible request\");" + CR;
                 ret += "__currentState = STATE__STOP__STATE;" + CR;
                 ret += "break;" + CR;
                 ret += "}" + CR;
 
-                ret += "__returnRequest = executeListOfRequests(&__list);" + CR;
-                ret += "clearListOfRequests(&__list);" + CR;
-                ret += traceRequest();
+                ret += "__returnRequest__" + _block.getName() + " = executeListOfRequests(&__list__" + _block.getName() + ");" + CR;
+                ret += "clearListOfRequests(&__list__" + _block.getName() + ");" + CR;
+                ret += traceRequest(_block);
 
                 // Resulting requests
                 for (i = 0; i < _asme.nbOfNexts(); i++) {
@@ -641,7 +647,7 @@ public class AVATAR2CPOSIX {
                     }
                     AvatarTransition at = (AvatarTransition) (_asme.getNext(i));
                     if (at.hasActions()) {
-                        ret += " if (__returnRequest == &__req" + i + ") {" + CR;
+                        ret += " if (__returnRequest__" + _block.getName() + " == &__req" + i + "__" + _block.getName()  + ") {" + CR;
                         ret += makeActionsOfTransaction(_block, at);
                         /*for(int j=0; j<at.getNbOfAction(); j++) {
                           if (at.isAMethodCall(at.getAction(j))) {
@@ -655,10 +661,12 @@ public class AVATAR2CPOSIX {
                         ret += makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
                     } else {
                         if (at.getNext(0) instanceof AvatarActionOnSignal) {
-                            ret += " if (__returnRequest == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0).getNext(0), false) + CR + "}";
+                            ret += " if (__returnRequest__" + _block.getName() + " == &__req" + i + "__" + _block.getName() +") {" + CR +
+                                    makeBehaviourFromElement(_block, at.getNext(0).getNext(0), false) + CR + "}";
                         } else {
                             // nothing special to do : immediate choice
-                            ret += " if (__returnRequest == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
+                            ret += " if (__returnRequest__" + _block.getName() + " == &__req" + i + "__" + _block.getName() + ") {" + CR +
+                                    makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
                         }
                     }
                     ret += CR;
@@ -680,18 +688,18 @@ public class AVATAR2CPOSIX {
 
         if (_asme instanceof AvatarActionOnSignal) {
             AvatarActionOnSignal aaos = (AvatarActionOnSignal) _asme;
-            ret += makeSignalAction(aaos, 0, false, "", "");
+            ret += makeSignalAction(_block, aaos, 0, false, "", "");
             AvatarSignal as = aaos.getSignal();
             //AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
-            ret += executeOneRequest("__req0");
-            ret += traceRequest();
+            ret += executeOneRequest(_block, "__req0__" + _block.getName());
+            ret += traceRequest(_block);
         }
 
         // Default
         return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
     }
 
-    private String makeSignalAction(AvatarTransition _at, int _index) {
+    private String makeSignalAction(AvatarBlock _block, AvatarTransition _at, int _index) {
         String ret = "";
         AvatarActionOnSignal aaos;
 
@@ -707,11 +715,11 @@ public class AVATAR2CPOSIX {
         }
 
         if (_at.hasDelay()) {
-            ret += makeSignalAction(aaos, _index, true, _at.getMinDelay(), _at.getMaxDelay());
+            ret += makeSignalAction(_block, aaos, _index, true, _at.getMinDelay(), _at.getMaxDelay());
         } else {
-            ret += makeSignalAction(aaos, _index, false, "", "");
+            ret += makeSignalAction(_block, aaos, _index, false, "", "");
         }
-        ret += "addRequestToList(&__list, &__req" + _index + ");" + CR;
+        ret += "addRequestToList(&__list__" + _block.getName() + ", &__req" + _index + "__" + _block.getName() +");" + CR;
 
         if (_at.isGuarded()) {
             ret += "}" + CR;
@@ -720,7 +728,7 @@ public class AVATAR2CPOSIX {
         return ret;
     }
 
-    private String makeSignalAction(AvatarActionOnSignal _aaos, int _index, boolean hasDelay, String minDelay, String maxDelay) {
+    private String makeSignalAction(AvatarBlock _block, AvatarActionOnSignal _aaos, int _index, boolean hasDelay, String minDelay, String maxDelay) {
         String ret = "";
         int i;
 
@@ -741,36 +749,46 @@ public class AVATAR2CPOSIX {
             if (_aaos.isSending()) {
                 // Putting params
                 for (i = 0; i < _aaos.getNbOfValues(); i++) {
-                    ret += "__params" + _index + "[" + i + "] = &" + _aaos.getValue(i) + ";" + CR;
+                    ret += "__params" + _index + "__" + _block.getName() + "[" + i + "] = &" + _aaos.getValue(i) + ";" + CR;
                 }
                 if (ar.isAsynchronous()) {
-                    ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-                    ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                    ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, " +
+                            delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + "__" + _block.getName() + ");" + CR;
+                    ret += "__req" + _index + "__" + _block.getName() + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                 } else {
                     if (ar.isBroadcast()) {
-                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-                        ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                        ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() +
+                                ", SEND_BROADCAST_REQUEST, " + delay + ", " +
+                                _aaos.getNbOfValues() + ", __params" + _index + "__" + _block.getName() + ");" + CR;
+                        ret += "__req" + _index + "__" + _block.getName() + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     } else {
-                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-                        ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                        ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() + ", SEND_SYNC_REQUEST, " +
+                                delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + "__" + _block.getName() + ");" + CR;
+                        ret += "__req" + _index + "__" + _block.getName() + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     }
                 }
 
                 // Receiving
             } else {
                 for (i = 0; i < _aaos.getNbOfValues(); i++) {
-                    ret += "__params" + _index + "[" + i + "] = &" + _aaos.getValue(i) + ";" + CR;
+                    ret += "__params" + _index + "__" +  _block.getName() + "[" + i + "] = &" + _aaos.getValue(i) + ";" + CR;
                 }
                 if (ar.isAsynchronous()) {
-                    ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-                    ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                    ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() +
+                            ", RECEIVE_ASYNC_REQUEST, " + delay + ", " +
+                            _aaos.getNbOfValues() + ", __params" + _index + "__" + _block.getName() + ");" + CR;
+                    ret += "__req" + _index + "__" + _block.getName() + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                 } else {
                     if (ar.isBroadcast()) {
-                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-                        ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                        ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() +
+                                ", RECEIVE_BROADCAST_REQUEST, " + delay + ", " +
+                                _aaos.getNbOfValues() + ", __params" + _index + "__" + _block.getName() + ";" + CR;
+                        ret += "__req" + _index + "__" + _block.getName() + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     } else {
-                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
-                        ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                        ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() +
+                                ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues()
+                                + ", __params" + _index + "__" + _block.getName() + ");" + CR;
+                        ret += "__req" + _index + "__" + _block.getName() + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     }
                 }
             }
@@ -779,7 +797,7 @@ public class AVATAR2CPOSIX {
         return ret;
     }
 
-    private String makeImmediateAction(AvatarTransition _at, int _index) {
+    private String makeImmediateAction(AvatarBlock _block, AvatarTransition _at, int _index) {
         String ret = "";
         if (_at.isGuarded()) {
             String g = modifyGuard(_at.getGuard().toString());
@@ -787,11 +805,14 @@ public class AVATAR2CPOSIX {
         }
 
         if (_at.hasDelay()) {
-            ret += "makeNewRequest(&__req" + _index + ", " + _at.getID() + ", IMMEDIATE, 1, " + reworkDelay(_at.getMinDelay()) + ", " + reworkDelay(_at.getMaxDelay()) + ", 0, __params" + _index + ");" + CR;
+            ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _at.getID() +
+                    ", IMMEDIATE, 1, " + reworkDelay(_at.getMinDelay()) + ", " +
+                    reworkDelay(_at.getMaxDelay()) + ", 0, __params" + _index + "__" + _block.getName() + ");" + CR;
         } else {
-            ret += "makeNewRequest(&__req" + _index + ", " + _at.getID() + ", IMMEDIATE, 0, 0, 0, 0, __params" + _index + ");" + CR;
+            ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _at.getID() +
+                    ", IMMEDIATE, 0, 0, 0, 0, __params" + _index + "__" + _block.getName() +");" + CR;
         }
-        ret += "addRequestToList(&__list, &__req" + _index + ");" + CR;
+        ret += "addRequestToList(&__list__" + _block.getName() + ", &__req" + _index + "__" + _block.getName() +");" + CR;
         if (_at.isGuarded()) {
             ret += "}" + CR;
         }
@@ -800,9 +821,9 @@ public class AVATAR2CPOSIX {
 
     }
 
-    private String executeOneRequest(String var) {
-        String ret = "__returnRequest = executeOneRequest(&__list, &" + var + ");" + CR;
-        ret += "clearListOfRequests(&__list);" + CR;
+    private String executeOneRequest(AvatarBlock _block, String var) {
+        String ret = "__returnRequest__" + _block.getName() + " = executeOneRequest(&__list__" + _block.getName() + ", &" + var + ");" + CR;
+        ret += "clearListOfRequests(&__list__" + _block.getName() + ");" + CR;
         return ret;
     }
 
@@ -961,11 +982,11 @@ public class AVATAR2CPOSIX {
         return "";
     }
 
-    private String traceRequest() {
+    private String traceRequest(AvatarBlock _block) {
         if (!tracing) {
             return "";
         }
-        return "traceRequest(__myname, __returnRequest);" + CR;
+        return "traceRequest(__myname, __returnRequest__" + _block.getName() + ");" + CR;
     }
 
     private String traceVariableModification(String blockName, String varName, String type) {
