@@ -209,7 +209,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         String tmpName;
 
         JDialogFPGANode dialog = new JDialogFPGANode(getTDiagramPanel().getMainGUI(), frame, "Setting FPGA attributes", this);
-        dialog.setSize(500, 450);
+        dialog.setSize(700, 500);
         GraphicLib.centerOnParent(dialog, 500, 450);
         // dialog.show(); // blocked until dialog has been closed
         dialog.setVisible(true);
