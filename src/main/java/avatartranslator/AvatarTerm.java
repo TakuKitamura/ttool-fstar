@@ -129,6 +129,8 @@ public abstract class AvatarTerm extends AvatarElement {
     }
 
     public static AvatarAction createActionFromString (AvatarStateMachineOwner block, String toParse) {
+        //TraceManager.addDev("Parsing >" + toParse + "<");
+
         AvatarAction result = null;
 
         int indexEq = toParse.indexOf("=");
@@ -137,16 +139,26 @@ public abstract class AvatarTerm extends AvatarElement {
             result = AvatarTermFunction.createFromString (block, toParse);
 
         else {
-            // This should be an assignment
+            // This should be an assignment or a function with assignment
             AvatarTerm leftHand = AvatarTerm.createFromString (block, toParse.substring (0, indexEq));
-            AvatarTerm rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
+            AvatarTerm rightHand = AvatarTermFunction.createFromString (block, toParse.substring (indexEq + 1));
 
-            //TraceManager.addDev("right hand of /" + toParse + "/ : >" + rightHand + "<");
+            if (rightHand == null) {
+                //TraceManager.addDev("Not a function?");
+                rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
+            } else {
+                //TraceManager.addDev("Function!");
+            }
+
+            //TraceManager.addDev("right hand of /" + toParse + "/ : >" + rightHand + "< leftHand=" + leftHand + " isLeftHand" + leftHand
+            // .isLeftHand ());
+
+            if (leftHand != null && rightHand != null && leftHand.isLeftHand ()) {
+                //TraceManager.addDev("Creating result");
+                result = new AvatarActionAssignment((AvatarLeftHand) leftHand, rightHand);
+            }
 
 
-            if (leftHand != null && rightHand != null && leftHand.isLeftHand ())
-
-                result = new AvatarActionAssignment ((AvatarLeftHand) leftHand, rightHand);
         }
 
         if (result == null)
