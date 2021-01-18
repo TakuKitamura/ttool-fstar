@@ -290,6 +290,7 @@ using std::max;
 #define BUFFER_SIZE 2000 //maximum length of a command sent to server
 #define MIN_RESIZE_THRESHOLD 250 //if task has more than MIN_RESIZE_THRESHOLD cycles then reduce the length of blanks and transactions
 #define MIN_RESIZE_TRANS 10 // if trans or blank size > MIN_RESIZE_TRANS then reduce to 50
+#define MAX_TRANS_TO_EXECUTED 1000 // if a simulation has a infinitive loop without breakpoint then execute MAX_TRANS_TO_EXECUTED transactions per time
 
 #define SCHED_HTML_JS_FUNCTION "= function() {\n \
 		var r = Math.floor(Math.random() * 255);\n \

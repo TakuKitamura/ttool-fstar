@@ -149,7 +149,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("FPGA name:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
+        c2.gridwidth = 3;
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 50);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c2);
@@ -158,28 +159,32 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        byteDataSize = new TGTextFieldWithHelp("" + node.getByteDataSize(), 15);
+        c2.gridwidth = 3;
+        byteDataSize = new TGTextFieldWithHelp("" + node.getByteDataSize(), 50);
         panel2.add(byteDataSize, c2);
         byteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Overall mapping capacity:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        capacity = new TGTextFieldWithHelp("" + node.getCapacity(), 15);
+        c2.gridwidth = 3;
+        capacity = new TGTextFieldWithHelp("" + node.getCapacity(), 50);
         panel2.add(capacity, c2);
         capacity.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Mapping penalty:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        mappingPenalty = new TGTextFieldWithHelp("" + node.getMappingPenalty(), 15);
+        c2.gridwidth = 3;
+        mappingPenalty = new TGTextFieldWithHelp("" + node.getMappingPenalty(), 50);
         panel2.add(mappingPenalty, c2);
         mappingPenalty.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Reconfiguration time:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        reconfigurationTime = new TGTextFieldWithHelp("" + node.getReconfigurationTime(), 15);
+        c2.gridwidth = 3;
+        reconfigurationTime = new TGTextFieldWithHelp("" + node.getReconfigurationTime(), 50);
         panel2.add(reconfigurationTime, c2);
         reconfigurationTime.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -187,15 +192,17 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("Go idle time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        goIdleTime = new TGTextFieldWithHelp("" + node.getGoIdleTime(), 15);
+        c2.gridwidth = 3;
+        goIdleTime = new TGTextFieldWithHelp("" + node.getGoIdleTime(), 50);
         panel2.add(goIdleTime, c2);
         goIdleTime.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Max consecutive cycles before idle (in cycle):"), c2);
+        panel2.add(new JLabel("Max consecutive cycles before idle:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxConsecutiveIdleCycles = new TGTextFieldWithHelp("" + node.getMaxConsecutiveIdleCycles(), 15);
+        c2.gridwidth = 3;
+        maxConsecutiveIdleCycles = new TGTextFieldWithHelp("" + node.getMaxConsecutiveIdleCycles(), 50);
         panel2.add(maxConsecutiveIdleCycles, c2);
         maxConsecutiveIdleCycles.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -203,7 +210,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("EXECI execution time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execiTime = new TGTextFieldWithHelp("" + node.getExeciTime(), 15);
+        c2.gridwidth = 3;
+        execiTime = new TGTextFieldWithHelp("" + node.getExeciTime(), 50);
         panel2.add(execiTime, c2);
         execiTime.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -211,7 +219,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("EXECC execution time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execcTime = new TGTextFieldWithHelp("" + node.getExeccTime(), 15);
+        c2.gridwidth = 3;
+        execcTime = new TGTextFieldWithHelp("" + node.getExeccTime(), 50);
         panel2.add(execcTime, c2);
         execcTime.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -219,7 +228,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("Operation:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        operation = new TGTextFieldWithHelp(""+node.getOperation(), 15);
+        c2.gridwidth = 3;
+        operation = new TGTextFieldWithHelp(""+node.getOperation(), 50);
         panel2.add(operation, c2);
         operation.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -227,7 +237,9 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("Scheduling:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        scheduling = new TGTextFieldWithHelp(""+node.getScheduling(), 15);
+        c2.gridwidth = 3;
+        scheduling = new TGTextFieldWithHelp(""+node.getScheduling(), 100);
+        scheduling.setToolTipText(node.getScheduling());
         panel2.add(scheduling, c2);
         scheduling.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -263,7 +275,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new TGTextFieldWithHelp("" + node.getClockRatio(), 15);
+        c2.gridwidth = 3;
+        clockRatio = new TGTextFieldWithHelp("" + node.getClockRatio(), 50);
         panel2.add(clockRatio, c2);
         clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -518,6 +531,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener, Runn
                 partial = Conversion.replaceAllString(partial, "], [", " ; ");
                 partial = Conversion.replaceAllString(partial, ",", " ");
                 scheduling.setText(partial);
+                scheduling.setToolTipText(partial);
             }
 
             int indexBegMakespan = ret.indexOf("makespan");

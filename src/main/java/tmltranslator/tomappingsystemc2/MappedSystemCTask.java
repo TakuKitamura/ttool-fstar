@@ -1050,6 +1050,7 @@ public class MappedSystemCTask {
                 functions += "ioParam->getP(" + concatParams + ")" + SCCR;
                 functions += "ss << \"(\"";
                 for (int p = 0; p < nbOfParams; p++) {
+                    if (paramArray[p] == null || paramArray[p].isEmpty()) paramArray[p] = "0";
                     functions += " << " + paramArray[p] + " << " + "\"(" + paramArray[p] + ")\"";
                     if (p < nbOfParams - 1) {
                         functions += " << \",\"";

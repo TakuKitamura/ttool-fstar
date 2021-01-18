@@ -65,6 +65,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
     public static final int ACT_RUN_TO_TIME = 7;
     public static final int ACT_RUN_X_TRANSACTIONS = 8;
     public static final int ACT_RUN_X_COMMANDS = 9;
+    public static final int ACT_RUN_SIMU_MAX_TRANS = 38;
 
     public static final int ACT_RUN_EXPLORATION = 20;
     public static final int ACT_RUN_TO_NEXT_BUS_TRANSFER = 21;
@@ -106,7 +107,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
     public static final int ACT_ADD_LATENCY = 35;
     public static final int ACT_REMOVE_ALL_TRANS = 36;
 
-    public static final int NB_ACTION = 38;
+    public static final int NB_ACTION = 39;
 
 
     private static final TAction[] actions = new TAction[NB_ACTION];
@@ -146,6 +147,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
 
     public void init() {
         actions[ACT_RUN_SIMU] = new TAction("run-simu", "Run simulation", IconManager.imgic1302, IconManager.imgic1302, "Run simulation", "Run simulation until next breakpoint. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_SIMU_MAX_TRANS] = new TAction("run-simu-max-trans", "Run simulation to next breakpoint or max number of trans", IconManager.imgic1302, IconManager.imgic1302, "Run simulation to next breakpoint or max number of trans", "Run simulation until next breakpoint or max transactions are executed. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_STOP_SIMU] = new TAction("stop-simu", "Stop simulation", IconManager.imgic55, IconManager.imgic55, "Stop simulation", "Stop simulation. Works only if the simulator is \"busy\"", 'S');
         actions[ACT_RESET_SIMU] = new TAction("reset-simu", "Reset simulation", IconManager.imgic45, IconManager.imgic45, "Reset simulation", "Reset simulation", 'T');
         actions[ACT_RUN_X_TIME_UNITS] = new TAction("run-x-time-units", "Run x time units", IconManager.imgic1300, IconManager.imgic1300, "Run x time units", "Run simulation for x units of time. Works only if the simulator is \"ready\"", 'R');

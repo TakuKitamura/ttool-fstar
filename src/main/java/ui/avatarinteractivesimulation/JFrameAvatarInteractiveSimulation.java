@@ -1248,6 +1248,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         switch (busyMode) {
             case AvatarSpecificationSimulation.DONT_EXECUTE:
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
@@ -1259,6 +1260,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             case AvatarSpecificationSimulation.GATHER:
             case AvatarSpecificationSimulation.EXECUTE:
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
@@ -1268,6 +1270,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 break;
             case AvatarSpecificationSimulation.TERMINATED:
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
@@ -1279,6 +1282,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             case AvatarSpecificationSimulation.RESET:
             case AvatarSpecificationSimulation.KILLED:
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
@@ -2161,6 +2165,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand())) {
             runSimulation();
             //TraceManager.addDev("Start simulation!");
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].getActionCommand())) {
+            runSimulation();
+
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand())) {
             runXCommands();
 
