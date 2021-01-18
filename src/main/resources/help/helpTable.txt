@@ -38,3 +38,7 @@
 --- avatarbd avatar_block_diagram design software blocks
 ---- avatarsafetypragmas safety_properties safety properties pragmas ctl
 ---- reachabilitygraph reachability_graph reachability graph display show nodes edges node edge
+
+- addRule add-rule rule
+- taint taint Taint
+- considerRule consider-rule consider rules

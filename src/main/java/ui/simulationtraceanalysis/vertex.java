@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class vertex {
-
     protected static final int TYPE_CHANNEL = 11;
     protected static final int TYPE_FOR_EVER_LOOP = 1;
     protected static final int TYPE_STATIC_FOR_LOOP = 2;
@@ -17,21 +16,16 @@ public class vertex {
     protected static final int TYPE_UNORDER_SEQ = 8;
     protected static final int TYPE_TRANSACTION = 9;
     protected static final int TYPE_CTRL = 10;
-
+    protected static final int TYPE_SELECT_EVT = 11;
     private String name;
     private int id; // identifier
-
     private Boolean skipVertex = false; // to skip vertex in case value =0
-
     private List<String> label = new ArrayList<String>();// will be used for store data taint
     private int type; // To know the if the vertex is a for lopp, data channel
     private int taintFixedNumber; // the number of times the taint should be considered
-
     private int sampleNumber; // the number of samples to write or read
     private int virtualLengthAdded; // the number of samples to write or read
-
     private HashMap<String, Integer> taintConsideredNumber = new HashMap<String, Integer>();; // the number of times the taint should be considered
-
     private HashMap<String, Integer> maxTaintFixedNumber = new HashMap<String, Integer>();
 
     public vertex(String name, int id) {
@@ -40,7 +34,6 @@ public class vertex {
         this.label = this.getLabel();
         this.sampleNumber = 0;
         this.virtualLengthAdded = 0;
-
     }
 
     public HashMap<String, Integer> getMaxTaintFixedNumber() {
@@ -85,23 +78,16 @@ public class vertex {
 
     public void addLabel(String l) {
         this.label.add(l);
-
         this.getTaintConsideredNumber().put(l, 0);
     }
 
     public String getLastLabel() {
-
         for (int i = 0; i < this.getLabel().size(); i++) {
             if (this.getMaxTaintFixedNumber().get(this.label.get(i)) == 0) {
-
                 return this.label.get(i);
-
             }
-
         }
-
         return this.label.get(this.label.size() - 1);
-
     }
 
     public int getTaintFixedNumber() {
@@ -147,5 +133,4 @@ public class vertex {
     public int getId() {
         return id;
     }
-
 }

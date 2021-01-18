@@ -3,12 +3,9 @@ package ui.simulationtraceanalysis;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-
 import org.xml.sax.SAXException;
-
 import tmltranslator.TMLMapping;
 import ui.MainGUI;
 import ui.SimulationTrace;
@@ -25,13 +22,9 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private TMLMapping<TGComponent> tmap;
     private List<TMLComponentDesignPanel> cpanels;
     private DirectedGraphTranslator dgraph, dgraph1, dgraph2;
-
     private int row, row1, row2, row3, row4, selectedIndex;
-
     private Object[][] dataDetailedByTask, dataDetailedByTask2;
-
     private latencyDetailedAnalysisMain main;
-
     private MainGUI mainGUI;
     private SimulationTrace selectedST;
     private boolean b;
@@ -39,22 +32,17 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private int j;
     private TMLMapping<TGComponent> map;
     private Vector<SimulationTransaction> transFile1, transFile2;
-
     private String task1, task2, task3, task4;
 
     public LatencyAnalysisParallelAlgorithms(latencyDetailedAnalysisMain latencyDetailedAnalysisMain) {
         main = latencyDetailedAnalysisMain;
-
     }
 
     public void run() {
-
         if (algorithmId == 1) {
             jFrameLDA.generateDirectedGraph(tmap, cpanels);
-
         } else if (algorithmId == 2) {
             dataDetailedByTask = dgraph.getTaskByRowDetails(row);
-
         } else if (algorithmId == 3) {
             dataDetailedByTask = dgraph.getTaskByRowDetailsMinMaxTaint(row);
         } else if (algorithmId == 4) {
@@ -67,7 +55,6 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         } else if (algorithmId == 7) {
             dataDetailedByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
         } else if (algorithmId == 8) {
-
             try {
                 main.latencyDetailedAnalysisForXML(mainGUI, selectedST, b, compare, j);
             } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
@@ -76,7 +63,6 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
             }
         } else if (algorithmId == 9) {
             try {
-
                 main.compareLatencyForXML(mainGUI, selectedST, b);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -99,10 +85,8 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
             dgraph.showGraph(dgraph);
         } else if (algorithmId == 15) {
             dgraph = new DirectedGraphTranslator(jFrameLDA, cld, map, cpanels, 1);
-
             generateDirectedGraph2(map, cpanels);
         } else if (algorithmId == 16) {
-
             cld.generateDirectedGraph2(map, cpanels);
         } else if (algorithmId == 17) {
             dgraph2.showGraph(dgraph2);
@@ -117,26 +101,21 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
             }
         } else if (algorithmId == 20) {
             dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
-
             dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
         } else if (algorithmId == 21) {
             dgraph1.getRowDetailsMinMax(row);
             dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
-
             dgraph2.getRowDetailsMinMax(row2);
             dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
         } else if (algorithmId == 22) {
             dataDetailedByTask = dgraph1.getTaskHWByRowDetails(row);
-
             dataDetailedByTask2 = dgraph2.getTaskHWByRowDetails(row2);
         } else if (algorithmId == 23) {
             dgraph1.getRowDetailsMinMax(row);
             dataDetailedByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
-
             dgraph2.getRowDetailsMinMax(row2);
             dataDetailedByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
         }
-
     }
 
     public Object[][] getDataDetailedByTask2() {
@@ -151,11 +130,9 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
 
     public void start(int id) {
         algorithmId = id;
-
         if (t == null) {
             t = new Thread(this);
             t.start();
-
         }
     }
 
@@ -245,7 +222,6 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
 
     public void latencyDetailedAnalysis(JFrameCompareLatencyDetail jFrameCompareLatencyDetail, String task12, String task22, String task32,
             String task42, Vector<SimulationTransaction> transFile12, Vector<SimulationTransaction> transFile22) {
-
         cld = jFrameCompareLatencyDetail;
         task1 = task12;
         task2 = task22;
@@ -253,7 +229,6 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         task4 = task42;
         transFile1 = transFile12;
         transFile2 = transFile22;
-
     }
 
     public void compareLatencyInDetails(JFrameCompareLatencyDetail jFrameCompareLatencyDetail, int row11, int row22, int row33, int row44,
@@ -265,6 +240,9 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         row3 = row33;
         row4 = row44;
         selectedIndex = selectedIndex1;
+    }
 
+    public MainGUI getMainGUI() {
+        return mainGUI;
     }
 }
