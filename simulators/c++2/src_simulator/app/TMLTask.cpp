@@ -349,13 +349,11 @@ unsigned int TMLTask::getState() const{
 		return TERMINATED;
 	} else if (_currCommand->getCurrTransaction()->getVirtualLength()==0){
 		return SUSPENDED;
-	} else if (_currentCPU !=0 && _currentCPU->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
+	} else if (_isCPUExist && _currentCPU !=0 && _currentCPU->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
 		return RUNNING;
-	}
-	  else if (_currentFPGA !=0 && _currentFPGA->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
+	} else if (_isFPGAExist && _currentFPGA !=0 && _currentFPGA->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
 		return RUNNING;
-	}
-	else{
+	} else {
 		return RUNNABLE;
 	}
 	return UNKNOWN;

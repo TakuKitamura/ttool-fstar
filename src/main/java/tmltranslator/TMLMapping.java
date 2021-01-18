@@ -1047,7 +1047,7 @@ public class TMLMapping<E> {
         toDMA.setTasks(origin, dmaTask);
         fromDMA.setTasks(dmaTask, origin);
         // origin.addSendEventAfterWriteIn(fromOriginToDMA, toDMA, "size");
-        origin.addSendAndReceiveEventAfterWriteIn(fromOriginToDMA, toDMA, fromDMA, "size", "");
+        origin.addSendAndReceiveEventAfterWriteIn(fromOriginToDMA, toDMA, fromDMA, "size", "size");
 
         // We need to create the activity diagram of DMATask
         // We wait for the wait event. Then, we read/write one by one until we have read

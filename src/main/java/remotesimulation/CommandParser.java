@@ -388,6 +388,14 @@ public class CommandParser {
         sc = new SimulationCommand("run-to-next-breakpoint", "rtnb", "1 0", params, paramNames, "Runs the simulation until a breakpoint is met");
         commandList.add(sc);
 
+        // run-to-next-breakpoint-max-trans
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 1;
+        paramNames[0] = "max nb of transactions";
+        sc = new SimulationCommand("run-to-next-breakpoint-max-trans", "rtnbmt", "1 19", params, paramNames, "Runs the simulation until a breakpoint is met or max number of transactions are executed");
+        commandList.add(sc);
+
         // run-to-next-transfer-on-bus
         params = new int[1];
         paramNames = new String[1];

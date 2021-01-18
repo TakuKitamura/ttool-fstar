@@ -62,6 +62,7 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
 
     protected void setActive(boolean b) {
         jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(b);
         //jfais.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
         //jfais.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
         //jfais.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
@@ -98,6 +99,9 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
         this.addSeparator();
 
         button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU]);
+        button.addMouseListener(jfais.mouseHandler);
+
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS]);
         button.addMouseListener(jfais.mouseHandler);
 
         button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU]);

@@ -2097,8 +2097,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             if (node0.getTextContent() != null) {
                                 String val = node0.getTextContent();
                                 TraceManager.addDev("Sim time=" + val);
-                                int valueCycle = Integer.decode(val);
-                                long timeP = ((long)(valueCycle) * 1000 / frequency);
+                                long valueCycle = Long.decode(val);
+                                long timeP = ((valueCycle) * 1000 / frequency);
                                 val = formatString(val);
                                 String timePS = formatString(""+timeP);
                                 val = val + " cycles / " + timePS  + " ns";
@@ -2133,6 +2133,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         if ((nl != null) && (nl.getLength() > 0)) {
                             node0 = nl.item(0);
                             msg = node0.getTextContent();
+                            if (msg != null && msg.contains("run-to-next-breakpoint-max-trans")) {
+                                TraceManager.addDev("Server: " + msg);
+                            }
                         }
 
                         nl = elt.getElementsByTagName("error");
@@ -2659,6 +2662,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             b = true;
         }
         actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+        actions[InteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
@@ -2763,6 +2767,20 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendCommand(command + " " + param);
         } else {
             error("Wrong parameter: must be a positive int");
+        }
+    }
+
+    public void sendCommandWithMaxTrans(String command) {
+        String param = paramMainCommand.getText().trim();
+        if (tmlSimPanelTimeline != null && tmlSimPanelTimeline.isFocused()) {
+                param = tmlSimPanelTimeline.getParam();
+                paramMainCommand.setText(param);
+        }
+        //if param > 0 then send command with param, else send command with default max trans value = 1000
+        if (isAPositiveInt(param)) {
+            sendCommand(command + " " + param);
+        } else {
+            sendCommand(command + " 0");
         }
     }
 
@@ -3520,6 +3538,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             //TraceManager.addDev("Start simulation!");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand()))  {
             sendCommand("run-to-next-breakpoint");
+            updateTimelineTrace();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].getActionCommand()))  {
+            sendCommandWithMaxTrans("run-to-next-breakpoint-max-trans");
             updateTimelineTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].getActionCommand()))  {
             sendCommandWithPositiveInt("run-x-time-units");

@@ -62,6 +62,7 @@ public class MainCommandsToolBar extends InteractiveSimulationBar {
     
     protected void setActive(boolean b) {
 		jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(b);
 		jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
 		jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
 		jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
@@ -90,6 +91,9 @@ public class MainCommandsToolBar extends InteractiveSimulationBar {
 		
 		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU]);
         button.addMouseListener(jfis.mouseHandler);
+
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS]);
+		button.addMouseListener(jfis.mouseHandler);
         
         button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU]);
         button.addMouseListener(jfis.mouseHandler);

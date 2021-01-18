@@ -978,6 +978,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   FPGA* depFPGA;
 
   bool isFinish=true;
+  bool isHanging = false;
+  long countMaxTrans = 0;
 
 
 #ifdef DEBUG_KERNEL
@@ -1177,6 +1179,26 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef LISTENERS_ENABLED
 	NOTIFY_TIME_ADVANCES(transLET->getEndTime());
 #endif
+      }
+      // for run-to-next-breakpoint-max-trans which executes until the next breakpoint or stops after max transactions have been executed
+      if (!isHanging) {
+          if (oLastTrans != NULL && oLastTrans != 0) {
+              countMaxTrans += transLET->getEndTime() - oLastTrans->getEndTime();
+          } else {
+              countMaxTrans += transLET->getEndTime();
+          }
+
+          if (countMaxTrans >= (MAX_TRANS_TO_EXECUTED*1000)) {
+              std::string msgToSend = "Too many transactions are being executed, try to use run-to-next-breakpoint-max-trans instead!";
+              std::cout << msgToSend << std::endl;
+              std::ostringstream aMessage;
+              //send message to server
+              aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << msgToSend << TAG_MSGc << std::endl;
+              writeSimState(aMessage);
+              aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+              _syncInfo->_server->sendReply(aMessage.str());
+              isHanging = true;
+          }
       }
       oLastTrans=transLET;
 #ifdef DEBUG_SIMULATE
@@ -1435,7 +1457,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   aInpStream >> aCmd;
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
   //std::cout << "Decoding command: d" << iCmd << " " << aCmd<<std::endl;
-  TMLTransaction* oLastTrans;
+  TMLTransaction* oLastTrans = 0;
   switch (aCmd){
   case 0: //Quit simulation
     std::cout << "QUIT SIMULATION from Decode Command"  << std::endl;
@@ -1460,7 +1482,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
           std::cout << "Run to next breakpoint." << std::endl;
           aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
           _simTerm=runToNextBreakpoint(oLastTrans);
-          int tempDaemon = 0;
+          unsigned int tempDaemon = 0;
           bool checkTerminated = false;
           if (!_simComp->getNonDaemonTaskList().empty()) {
              for (TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i) {
@@ -1802,6 +1824,19 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         anErrorCode=2;
       }
       std::cout << "End Run until read operation on channel x is performed." << std::endl;
+      break;
+    }
+    case 19: {    //Run to next breakpoint max trans
+      std::cout << "Run to next breakpoint max trans." << std::endl;
+      aGlobMsg << TAG_MSGo << "Run to next breakpoint max trans" << TAG_MSGc << std::endl;
+      int tempParam = 0;
+      aInpStream >> tempParam;
+      std::cout << "tempParam before = " << tempParam << std::endl;
+      if (tempParam <= 0) tempParam = MAX_TRANS_TO_EXECUTED;
+      std::cout << "tempParam after = " << tempParam << std::endl;
+      aGlobMsg << TAG_MSGo << "Created listener run " << tempParam << " transactions" << TAG_MSGc << std::endl;
+      _simTerm = runXTransactions(tempParam, oLastTrans);
+      std::cout << "End Run to next breakpoint max trans." << std::endl;
       break;
     }
     default:
