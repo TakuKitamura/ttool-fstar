@@ -59,6 +59,7 @@ public class ModeManager {
             break;
         case MainGUI.NOT_OPENED:
             mgui.activeActions(false);
+            actions[TGUIAction.ACT_ACTION_MENU].setEnabled(true);
             actions[TGUIAction.ACT_NEW].setEnabled(true);
             actions[TGUIAction.ACT_NEW_PROJECT].setEnabled(true);
             actions[TGUIAction.ACT_OPEN].setEnabled(true);

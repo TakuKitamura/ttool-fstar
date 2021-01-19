@@ -8949,6 +8949,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return statusMap;
     }
 
+    public void popupMainCommand() {
+        mainBar.popupMainCommand();
+    }
+
+
     public String getStatus(String s) {
         if (statusMap == null) {
             return null;

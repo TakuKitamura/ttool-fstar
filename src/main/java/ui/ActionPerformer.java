@@ -57,7 +57,9 @@ public class ActionPerformer {
     public static void actionPerformed(MainGUI mgui, ActionEvent evt, String command, TDiagramPanel tdp1) {
 
         // Compare the action command to the known actions.
-        if (command.equals(mgui.actions[TGUIAction.ACT_NEW].getActionCommand())) {
+        if (command.equals(mgui.actions[TGUIAction.ACT_ACTION_MENU].getActionCommand())) {
+            mgui.popupMainCommand();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW].getActionCommand())) {
             mgui.newProject();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_PROJECT].getActionCommand())) {
             mgui.newProjectDir();

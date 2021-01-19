@@ -55,7 +55,7 @@ public class IconManager {
 
     public static ImageIcon imgic8, imgic9;
     //Added by Solange
-    public static ImageIcon imgic0, imgic1;
+    public static ImageIcon imgic0, imgic1, imgic2;
     public static Image img8, img9;
     public static Image img5072, img5100, img5102, img5200;
     //Added by Solange
@@ -195,7 +195,9 @@ public class IconManager {
     private static String ttoolStringIcon = "starting_logo.gif";
     public static ImageIcon ttoolImageIcon;
     public static Image ttoolImage;
-    
+
+    private static String icon2 = "menu.gif";
+
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
 
@@ -775,6 +777,8 @@ public class IconManager {
         if ( imgic1 != null ) {
         	img1 = imgic1.getImage();
         }
+
+        imgic2 = getIcon(icon2);
 
         imgic13 = getIcon(icon13);
         imgic14 = getIcon(icon14);

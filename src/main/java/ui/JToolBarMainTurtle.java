@@ -49,8 +49,14 @@ import myutil.TraceManager;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.concurrent.CancellationException;
 
 
 /**
@@ -60,17 +66,34 @@ import java.awt.event.ActionListener;
  * @author Ludovic APVRILLE
  */
 public  class JToolBarMainTurtle extends JToolBar implements ActionListener     {
+    private static int COMMON_ACTIONS [] = {TGUIAction.ACT_NEW, TGUIAction.ACT_NEW_PROJECT, TGUIAction.ACT_OPEN,
+            TGUIAction.ACT_OPEN_PROJECT, TGUIAction.ACT_SAVE, -1, TGUIAction.ACT_CUT, TGUIAction.ACT_COPY, TGUIAction.ACT_PASTE,
+            TGUIAction.ACT_DELETE, TGUIAction.MOVE_ENABLED, TGUIAction.FIRST_DIAGRAM, -1, TGUIAction.ACT_BACKWARD, TGUIAction.ACT_FORWARD,
+            -1, TGUIAction.ACT_ZOOM_LESS, TGUIAction.ACT_SHOW_ZOOM, TGUIAction.ACT_ZOOM_MORE, -1, -1, TGUIAction.ACT_MODEL_CHECKING};
+
     // Avatar
-    JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;
+    private JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;
+    private JMenuItem avatarSimuMI, avatarFVUPPAALMI, avatarFVProVerifMI, avatarFVStaticAnalysisMI, avatarCodeGenerationMI, avatarMCMI;
 
     // Other
-    JButton genrtlotos, genlotos, genuppaal, gendesign, genMapping, dse, dseZ3, noc;
-    JButton checkcode, simulation, validation;
-    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
+    private JButton genrtlotos, genlotos, genuppaal, gendesign, genMapping, dse, dseZ3, noc;
+    private JMenuItem genrtlotosMI, genlotosMI, genuppaalMI, gendesignMI, genMappingMI, dseMI, dseZ3MI, nocMI;
+    private JButton checkcode, simulation, validation;
+    private JMenuItem checkcodeMI, simulationMI, validationMI;
+
+    private JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
+    private JMenuItem oneClickrtlotosMI, onclicklotosMI, gensystemcMI, simusystemcMI, gentmlMI, genCMI, genjavaMI, ncMI;
+
+    // Main button
+    private JButton menuButton;
+    private JPopupMenu menu;
+
+    private boolean popupShown;
+
 
     private JTextField search;
 
-    MainGUI mgui;
+    private MainGUI mgui;
 
     public JToolBarMainTurtle(MainGUI _mgui) {
         super();
@@ -81,130 +104,140 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     // Menus
     private void buildToolBar(MainGUI mgui) {
         JButton button;
+        MenuItem m;
 
-        button = add(mgui.actions[TGUIAction.ACT_NEW]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_NEW_PROJECT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_OPEN]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_OPEN_PROJECT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_SAVE]);
-        button.addMouseListener(mgui.mouseHandler);
-        //button = add(mgui.actions[TGUIAction.ACT_SAVE_AS]);
-        //button.addMouseListener(mgui.mouseHandler);
+        menu = new JPopupMenu();
 
-        addSeparator();
+        menu.addPopupMenuListener(new PopupMenuListener() {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                popupShown = true;
+            }
 
-        button = add(mgui.actions[TGUIAction.ACT_IMPORT_LIB]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_EXPORT_LIB]);
-        button.addMouseListener(mgui.mouseHandler);
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
 
-        addSeparator();
+                    @Override
+                    public void run() {
+                        popupShown = false;
+                    }
+                });
+            }
 
-        button = add(mgui.actions[TGUIAction.ACT_CUT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_COPY]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_PASTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_DELETE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.MOVE_ENABLED]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.FIRST_DIAGRAM]);
-        button.addMouseListener(mgui.mouseHandler);
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+        });
 
-        addSeparator();
+        menuButton = add(mgui.actions[TGUIAction.ACT_ACTION_MENU]);
+        menuButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                final boolean shown = popupShown;
+                SwingUtilities.invokeLater(new Runnable() {
 
-        button = add(mgui.actions[TGUIAction.ACT_BACKWARD]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_FORWARD]);
-        button.addMouseListener(mgui.mouseHandler);
+                    @Override
+                    public void run() {
+                        popupShown = shown;
+                    }
+                });
+            }
+        });
 
-        addSeparator();
-
-        button = add(mgui.actions[TGUIAction.ACT_ZOOM_LESS]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_SHOW_ZOOM]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_ZOOM_MORE]);
-        button.addMouseListener(mgui.mouseHandler);
-        //button.setMinimumSize(button.getSize());
 
         addSeparator();
 
-        /*button = add(mgui.actions[TGUIAction.ACT_FIRST_DIAG]);
-          button.addMouseListener(mgui.mouseHandler);
-          button = add(mgui.actions[TGUIAction.ACT_BACK_DIAG]);
-          button.addMouseListener(mgui.mouseHandler);
-          button = add(mgui.actions[TGUIAction.ACT_NEXT_DIAG]);
-          button.addMouseListener(mgui.mouseHandler);
-          button = add(mgui.actions[TGUIAction.ACT_LAST_DIAG]);
-          button.addMouseListener(mgui.mouseHandler);*/
+        int j;
+        for (j=0; j<COMMON_ACTIONS.length; j++) {
+            if (COMMON_ACTIONS[j] == -1) {
+                addSeparator();
+                menu.addSeparator();
+            } else {
+                button = add(mgui.actions[COMMON_ACTIONS[j]]);
+                button.addMouseListener(mgui.mouseHandler);
+                addMenu(mgui.actions[COMMON_ACTIONS[j]]);
+            }
+        }
+
 
         addSeparator();
-        addSeparator();
-
-        button = add(mgui.actions[TGUIAction.ACT_MODEL_CHECKING]);
-        button.addMouseListener(mgui.mouseHandler);
-        addSeparator();
+        menu.addSeparator();
 
         if (MainGUI.experimentalOn) {
             gendesign = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
             gendesign.addMouseListener(mgui.mouseHandler);
+            gendesignMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
         }
 
         addSeparator();
+        menu.addSeparator();
 
         avatarSimu = add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
         avatarSimu.addMouseListener(mgui.mouseHandler);
+        avatarSimuMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
 
         genMapping = add(mgui.actions[TGUIAction.ACT_GEN_MAPPING]);
         genMapping.addMouseListener(mgui.mouseHandler);
+        genMappingMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_MAPPING]);
 
         dse = add(mgui.actions[TGUIAction.ACT_DSE]);
         dse.addMouseListener(mgui.mouseHandler);
+        dseMI = addMenu(mgui.actions[TGUIAction.ACT_DSE]);
 
         if (MainGUI.experimentalOn) {
             dseZ3 = add(mgui.actions[TGUIAction.ACT_DSE_Z3]);
             dseZ3.addMouseListener(mgui.mouseHandler);
+            dseZ3MI = addMenu(mgui.actions[TGUIAction.ACT_DSE_Z3]);
         }
 
         addSeparator();
+        menu.addSeparator();
 
-        //if (MainGUI.experimentalOn) {
+
         avatarMC = add(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER]);
         avatarMC.addMouseListener(mgui.mouseHandler);
-        //}
+        avatarMCMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER]);
+
         avatarFVUPPAAL = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
         avatarFVUPPAAL.addMouseListener(mgui.mouseHandler);
+        avatarFVUPPAALMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
+
         if (MainGUI.uppaalOn) {
             genuppaal = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
             genuppaal.addMouseListener(mgui.mouseHandler);
+            genuppaalMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
         }
+
         if (MainGUI.proverifOn) {
             avatarFVProVerif = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_PROVERIF]);
             avatarFVProVerif.addMouseListener(mgui.mouseHandler);
+            avatarFVProVerifMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_FV_PROVERIF]);
         }
 
         avatarFVStaticAnalysis = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS]);
         avatarFVStaticAnalysis.addMouseListener(mgui.mouseHandler);
+        avatarFVStaticAnalysisMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS]);
+
 
         addSeparator();
+        menu.addSeparator();
 
         avatarCodeGeneration = add(mgui.actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION]);
         avatarCodeGeneration.addMouseListener(mgui.mouseHandler);
+        avatarCodeGenerationMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION]);
 
         addSeparator();
+        menu.addSeparator();
 
         genrtlotos = add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
         genrtlotos.addMouseListener(mgui.mouseHandler);
+        genrtlotosMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
+
         if (MainGUI.systemcOn) {
             genlotos = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
             genlotos.addMouseListener(mgui.mouseHandler);
+            genlotosMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
             /*addSeparator();
               button = add(mgui.actions[TGUIAction.ACT_GEN_AUTS]);
               button.addMouseListener(mgui.mouseHandler);
@@ -213,49 +246,70 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         } else if (MainGUI.lotosOn) {
             genlotos = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
             genlotos.addMouseListener(mgui.mouseHandler);
+            genlotosMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
         }
 
         addSeparator();
+        menu.addSeparator();
 
         checkcode = add(mgui.actions[TGUIAction.ACT_CHECKCODE]);
         checkcode.addMouseListener(mgui.mouseHandler);
+        checkcodeMI = addMenu(mgui.actions[TGUIAction.ACT_CHECKCODE]);
+
         simulation = add(mgui.actions[TGUIAction.ACT_SIMULATION]);
         simulation.addMouseListener(mgui.mouseHandler);
+        simulationMI = addMenu(mgui.actions[TGUIAction.ACT_SIMULATION]);
+
         validation = add(mgui.actions[TGUIAction.ACT_VALIDATION]);
         validation.addMouseListener(mgui.mouseHandler);
+        validationMI = addMenu(mgui.actions[TGUIAction.ACT_VALIDATION]);
 
         addSeparator();
+        menu.addSeparator();
 
         oneClickrtlotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG]);
         oneClickrtlotos.addMouseListener(mgui.mouseHandler);
+        oneClickrtlotosMI = addMenu(mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG]);
+
         if (MainGUI.lotosOn) {
             onclicklotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG]);
             onclicklotos.addMouseListener(mgui.mouseHandler);
+            onclicklotosMI = addMenu(mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG]);
         }
 
         addSeparator();
+        menu.addSeparator();
 
         if (MainGUI.systemcOn) {
             gensystemc = add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
             gensystemc.addMouseListener(mgui.mouseHandler);
+            gensystemcMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
 
             simusystemc = add(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
             simusystemc.addMouseListener(mgui.mouseHandler);
+            simusystemcMI = addMenu(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
             addSeparator();
+            menu.addSeparator();
 
             gentml = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
             gentml.addMouseListener(mgui.mouseHandler);
+            gentmlMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
             addSeparator();
+            menu.addSeparator();
 
             genC = add(mgui.actions[TGUIAction.ACT_GEN_CCODE]);
             genC.addMouseListener(mgui.mouseHandler);
+            genCMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_CCODE]);
             addSeparator();
+            menu.addSeparator();
         }
 
         addSeparator();
+        menu.addSeparator();
 
         genjava = add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
         genjava.addMouseListener(mgui.mouseHandler);
+        genjavaMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
         //button = add(mgui.actions[TGUIAction.ACT_SIMU_JAVA]);
         //button.addMouseListener(mgui.mouseHandler);
 
@@ -264,11 +318,13 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         if (MainGUI.experimentalOn) {
             noc = add(mgui.actions[TGUIAction.ACT_REMOVENOC]);
             noc.addMouseListener(mgui.mouseHandler);
+            nocMI = addMenu(mgui.actions[TGUIAction.ACT_REMOVENOC]);
         }
 
         if (MainGUI.ncOn) {
             nc = add(mgui.actions[TGUIAction.ACT_NC]);
             nc.addMouseListener(mgui.mouseHandler);
+            ncMI = addMenu(mgui.actions[TGUIAction.ACT_NC]);
         }
 
         addSeparator();
@@ -278,6 +334,8 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
             button.addMouseListener(mgui.mouseHandler);
             button.setToolTipText(ConfigurationTTool.ExternalCommand1);
+            JMenuItem mi = addMenu(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
+            mi.setToolTipText(ConfigurationTTool.ExternalCommand1);
             addSeparator();
         }
 
@@ -285,7 +343,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             button = add(mgui.actions[TGUIAction.EXTERNAL_ACTION_2]);
             button.addMouseListener(mgui.mouseHandler);
             button.setToolTipText(ConfigurationTTool.ExternalCommand2);
+            JMenuItem mi = addMenu(mgui.actions[TGUIAction.EXTERNAL_ACTION_2]);
+            mi.setToolTipText(ConfigurationTTool.ExternalCommand2);
             addSeparator();
+            menu.addSeparator();
         }
 
         addSeparator();
@@ -301,7 +362,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
                 public void insertUpdate(DocumentEvent documentEvent) {
                     if ( search.getText().length()>0){
                         internalSearch.setEnabled(true);
-                    }else
+                    } else
                         internalSearch.setEnabled(false);
                 }
 
@@ -309,7 +370,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
                 public void removeUpdate(DocumentEvent documentEvent) {
                     if ( search.getText().length()>0){
                         internalSearch.setEnabled(true);
-                    }else
+                    } else
                         internalSearch.setEnabled(false);
                 }
 
@@ -330,70 +391,133 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         //TraceManager.addDev("Show avatar options with b = " + b);
         genMapping.setVisible(!b);
+        genMappingMI.setVisible(!b);
         dse.setVisible(!b);
+        dseMI.setVisible(!b);
+
         if (dseZ3 != null) {
             dseZ3.setVisible(!b);
+        }
+        if (dseZ3MI != null) {
+            dseZ3MI.setVisible(!b);
         }
 
         if (noc != null) {
             noc.setVisible(!b);
+            nocMI.setVisible(!b);
         }
 
         avatarSimu.setVisible(b);
         avatarFVUPPAAL.setVisible(b);
+        avatarSimuMI.setVisible(b);
+        avatarFVUPPAALMI.setVisible(b);
+
         if (avatarFVProVerif != null) {
             avatarFVProVerif.setVisible(b);
         }
-        //avatarFVStaticAnalysis.setVisible(b);
+        if (avatarFVProVerifMI != null) {
+            avatarFVProVerifMI.setVisible(b);
+        }
+
+
         avatarFVStaticAnalysis.setVisible(b);
         avatarCodeGeneration.setVisible(b);
+        avatarFVStaticAnalysisMI.setVisible(b);
+        avatarCodeGenerationMI.setVisible(b);
 
-        if (genrtlotos != null) {
-            genrtlotos.setVisible(!b);
+        if (genrtlotosMI != null) {
+            genrtlotosMI.setVisible(!b);
         }
 
         if (genlotos != null) {
             genlotos.setVisible(!b);
+        }
+        if (genlotosMI != null) {
+            genlotosMI.setVisible(!b);
         }
 
         if (genuppaal != null) {
             genuppaal.setVisible(!b);
         }
 
+        if (genuppaalMI != null) {
+            genuppaalMI.setVisible(!b);
+        }
+
         if (checkcode != null) {
             checkcode.setVisible(!b);
+        }
+
+        if (checkcodeMI != null) {
+            checkcodeMI.setVisible(!b);
         }
 
         if (simulation != null) {
             simulation.setVisible(!b);
         }
 
+        if (simulationMI != null) {
+            simulationMI.setVisible(!b);
+        }
+
         if (validation != null) {
             validation.setVisible(!b);
+        }
+
+        if (validationMI != null) {
+            validationMI.setVisible(!b);
         }
 
         if (oneClickrtlotos != null) {
             oneClickrtlotos.setVisible(!b);
         }
 
+        if (oneClickrtlotosMI != null) {
+            oneClickrtlotosMI.setVisible(!b);
+        }
+
         if (onclicklotos != null) {
             onclicklotos.setVisible(!b);
+        }
+
+        if (onclicklotosMI != null) {
+            onclicklotosMI.setVisible(!b);
         }
 
         if (gensystemc != null) {
             gensystemc.setVisible(!b);
         }
 
+        if (gensystemcMI != null) {
+            gensystemcMI.setVisible(!b);
+        }
+
         if (simusystemc != null) {
             simusystemc.setVisible(!b);
+        }
+
+        if (simusystemcMI != null) {
+            simusystemcMI.setVisible(!b);
         }
 
         if (gentml != null) {
             gentml.setVisible(!b);
         }
 
+        if (gentmlMI != null) {
+            gentmlMI.setVisible(!b);
+        }
+
         if (genC != null) {
             genC.setVisible(!b);
+        }
+
+        if (genCMI != null) {
+            genCMI.setVisible(!b);
+        }
+
+        if (genjavaMI != null) {
+            genjavaMI.setVisible(!b);
         }
 
         if (genjava != null) {
@@ -404,8 +528,16 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             nc.setVisible(!b);
         }
 
+        if (ncMI != null) {
+            ncMI.setVisible(!b);
+        }
+
         if (gendesign != null) {
             gendesign.setVisible(!b);
+        }
+
+        if (gendesignMI != null) {
+            gendesignMI.setVisible(!b);
         }
 
     }
@@ -416,80 +548,119 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         genMapping.setVisible(b);
         dse.setVisible(b);
+
+        genMappingMI.setVisible(b);
+        dseMI.setVisible(b);
+
         if (dseZ3 != null) {
             dseZ3.setVisible(b);
+        }
+
+        if (dseZ3MI != null) {
+            dseZ3MI.setVisible(b);
         }
 
         if (noc != null) {
             noc.setVisible(b);
         }
 
+        if (nocMI != null) {
+            nocMI.setVisible(b);
+        }
+
         avatarSimu.setVisible(!b);
         avatarFVUPPAAL.setVisible(!b);
         avatarFVStaticAnalysis.setVisible(!b);
+
+        avatarSimuMI.setVisible(!b);
+        avatarFVUPPAALMI.setVisible(!b);
+        avatarFVStaticAnalysisMI.setVisible(!b);
+
         if (avatarFVProVerif != null) {
             avatarFVProVerif.setVisible(b);
         }
+
+        if (avatarFVProVerifMI != null) {
+            avatarFVProVerifMI.setVisible(b);
+        }
+
         avatarCodeGeneration.setVisible(!b);
+        avatarCodeGenerationMI.setVisible(!b);
 
         if (genrtlotos != null) {
             genrtlotos.setVisible(!b);
+            genrtlotosMI.setVisible(!b);
         }
+
 
         if (genlotos != null) {
             genlotos.setVisible(!b);
+            genlotosMI.setVisible(!b);
         }
 
         if (genuppaal != null) {
             genuppaal.setVisible(b);
+            genuppaalMI.setVisible(b);
         }
 
         if (checkcode != null) {
             checkcode.setVisible(!b);
+            checkcodeMI.setVisible(!b);
         }
 
         if (simulation != null) {
             simulation.setVisible(!b);
+            simulationMI.setVisible(!b);
         }
 
         if (validation != null) {
             validation.setVisible(!b);
+            validationMI.setVisible(!b);
         }
 
         if (oneClickrtlotos != null) {
             oneClickrtlotos.setVisible(!b);
+            oneClickrtlotosMI.setVisible(!b);
         }
 
         if (onclicklotos != null) {
             onclicklotos.setVisible(!b);
+            onclicklotosMI.setVisible(!b);
         }
 
         if (gensystemc != null) {
             gensystemc.setVisible(b);
+            gensystemcMI.setVisible(b);
         }
 
         if (simusystemc != null) {
             simusystemc.setVisible(b);
+            simusystemcMI.setVisible(b);
         }
 
         if (gentml != null) {
             gentml.setVisible(b);
+            gentmlMI.setVisible(b);
         }
 
         if (genC != null) {
             genC.setVisible(b);
+            genCMI.setVisible(b);
         }
 
         if (genjava != null) {
             genjava.setVisible(!b);
+            genjavaMI.setVisible(!b);
         }
 
         if (nc != null) {
             nc.setVisible(!b);
+            ncMI.setVisible(!b);
         }
 
         if (gendesign != null) {
             gendesign.setVisible(!b);
+            gendesignMI.setVisible(!b);
         }
 
     }
@@ -517,12 +688,33 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     public void setSearchText( final String text ) {
     	search.setText( text );
     }
-//
-//	public JTextField getSearch() {
-//		return search;
-//	}
-//
-//	public void setSearch(JTextField search) {
-//		this.search = search;
-//	}
+
+    public void popupMainCommand() {
+        if (popupShown) {
+            menu.setVisible(false);
+            popupShown = false;
+            return;
+        }
+
+        // Get the location of the point 'on the screen'
+        Point p = menuButton.getLocationOnScreen();
+        menu.show(this,0,0);
+        menu.setLocation(p.x,p.y + menuButton.getHeight());
+    }
+
+    private JMenuItem addMenu(TGUIAction action) {
+        JMenuItem mi = new JMenuItem(action);
+        addMenuItem(mi, action);
+        return mi;
+    }
+
+    private void addMenuItem(JMenuItem mi, TGUIAction action) {
+        mi.setName(action.getShortDescription());
+        menu.add(mi);
+    }
+
+
+
+
+
 } // Class
