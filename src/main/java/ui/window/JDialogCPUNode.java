@@ -75,7 +75,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
     public static final String[] helpStrings = {"cpuname.html", "schedulingpolicy.html", "slicetime.html",
             "numbercores.html", "datasize.html", "pipelinesize.html", "taskswitchingtime.html",
-            "misbrandingprediction.html", "cachemiss.html", "goidletime.html", "maxconsecutivecycles.html",
+            "misbranchingprediction.html", "cachemiss.html", "goidletime.html", "maxconsecutivecycles.html",
             "execi.html", "execc.html", "clockdivider.html", "encryption.html", "cpuextension.html", "operation.html"};
 
 
@@ -246,7 +246,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         branchingPredictionPenalty = new TGTextFieldWithHelp(""+node.getBranchingPredictionPenalty(), 15);
         panel2.add(branchingPredictionPenalty, c2);
         branchingPredictionPenalty.makeEndHelpButton(helpStrings[7], mgui, mgui.getHelpManager(), panel2, c2);
-
 
 
         c2.gridwidth = 1;

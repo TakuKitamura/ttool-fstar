@@ -155,6 +155,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
         panel2.add(tracemode, c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 
         monitored = new JTextField("", 15);
         panel2.add(monitored, c2);
