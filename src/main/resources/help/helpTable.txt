@@ -27,6 +27,7 @@
 ----operation operation operation cpu
 ----cpuextension cpu_extension_construct cpu extension construct
 --- fpga fpga processor hardware execution node
+--- memory memory storage hardware node
 
 
 -- mapping mapping tasks communication mapping

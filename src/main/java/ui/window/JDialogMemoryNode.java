@@ -40,6 +40,8 @@ package ui.window;
 
 import myutil.GraphicLib;
 import tmltranslator.modelcompiler.Buffer;
+import ui.MainGUI;
+import ui.TGTextFieldWithHelp;
 import ui.tmldd.TMLArchiMemoryNode;
 
 import javax.swing.*;
@@ -60,8 +62,13 @@ import java.util.Vector;
 public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
 
     private static String[] tracemodeTab = {"VCI logger", "VCI stats"};
+    public static final String[] helpStrings = {"memory.html"};
+
+    protected MainGUI mgui;
 
     private boolean regularClose;
+
+
 
     private JPanel panel2, panel3;
  //   private Frame frame;
@@ -71,10 +78,10 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
     private static int selectedTracemode = 0;
 
     // Panel1
-    protected JTextField nodeName;
+    protected TGTextFieldWithHelp nodeName;
 
     // Panel2
-    protected JTextField byteDataSize, memorySize, monitored, clockRatio;
+    protected TGTextFieldWithHelp byteDataSize, memorySize, monitored, clockRatio;
 
     //Panel3: code generation
     protected int bufferType = 0;       //it is the index in the ArrayList of String
@@ -83,9 +90,10 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
     private JTabbedPane tabbedPane;
 
     /* Creates new form  */
-    public JDialogMemoryNode( Frame _frame, String _title, TMLArchiMemoryNode _node, int _bufferType ) {
+    public JDialogMemoryNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiMemoryNode _node, int _bufferType ) {
         super(_frame, _title, true);
-      //  frame = _frame;
+
+        mgui = _mgui;
         node = _node;
         bufferType = _bufferType;
 
@@ -133,10 +141,11 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Memory name:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c1);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridheight = 1;
         c2.weighty = 1.0;
@@ -146,7 +155,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
+        byteDataSize = new TGTextFieldWithHelp(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
 
         c2.gridwidth = 1;
@@ -157,13 +166,13 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         panel2.add(tracemode, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 
-        monitored = new JTextField("", 15);
+        monitored = new TGTextFieldWithHelp("", 15);
         panel2.add(monitored, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new JTextField(""+node.getClockRatio(), 15);
+        clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
 
         //code generation
@@ -180,7 +189,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c3.gridwidth = 1;
         panel3.add( new JLabel( "Memory size (in byte):" ), c3 );
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        memorySize = new JTextField( "" + node.getMemorySize(), 15 );
+        memorySize = new TGTextFieldWithHelp( "" + node.getMemorySize(), 15 );
         panel3.add( memorySize, c3 );
 
         // main panel;
