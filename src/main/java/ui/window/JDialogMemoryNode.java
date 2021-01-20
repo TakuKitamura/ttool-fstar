@@ -144,8 +144,8 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
-        panel2.add(nodeName, c1);
-        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
+        panel2.add(nodeName, c2);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c1);
 
         c2.gridheight = 1;
         c2.weighty = 1.0;
@@ -157,6 +157,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         byteDataSize = new TGTextFieldWithHelp(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
+        byteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
@@ -168,12 +169,14 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
 
         monitored = new TGTextFieldWithHelp("", 15);
         panel2.add(monitored, c2);
+        monitored.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+        clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         //code generation
         c3.gridwidth = 1;
@@ -191,6 +194,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
         memorySize = new TGTextFieldWithHelp( "" + node.getMemorySize(), 15 );
         panel3.add( memorySize, c3 );
+        memorySize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel3, c3);
 
         // main panel;
         c0.gridheight = 10;
@@ -202,8 +206,6 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         tabbedPane.addTab( "Simulation", panel2 );
         tabbedPane.addTab( "Code generation", panel3 );
         tabbedPane.setSelectedIndex(0);
-        /*c.add(panel2, c0);
-          c.add(panel3, c0);*/
         c.add( tabbedPane, c0 );
 
         c0.gridwidth = 1;
