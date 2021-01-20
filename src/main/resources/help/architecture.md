@@ -8,5 +8,9 @@ The architecture is used to capture abstract hardware nodes that can be connecte
 
 ## Storage nodes
 
+- [Memory](file://memory.md)
 
 ## Communication nodes
+
+- [Bus](file://bus.md)
+- [Bridge](file://bridge.md)

@@ -16,23 +16,19 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="memory">Memory</h1>
-<p>Memory nodes are helpful to model storage capabilities of architectures</p>
+<h1 id="bus">Bus</h1>
+<p>Bus nodes connect other nodes together.</p>
 <h2 id="main-attributes">Main attributes</h2>
 <p>They have the following attributes.</p>
 <ul>
 <li>A name</li>
+<li>An arbitration policy capturing how simultaneous trafsre request are handled</li>
 <li>A data size in byte.</li>
-<li>They can be monitored (SoCLiB simulation only) using VCI probes.</li>
+<li>A pipeline size expressing the number of cycles spent by one transfer in this bus</li>
+<li>A slice time, i.e. the maximum number of cycles a transfer can use before being preempted</li>
 <li>A clock divider expresses the relation between the clock of the memory and the main clock of the architecture</li>
-</ul>
-<p>Apart from the monitor attribute, all latter attributes are taken into account by the DIPLODOCUS simulator to determine communication paths.</p>
-<h2 id="other-attributes">Other attributes</h2>
-<h3 id="code-generation">Code generation</h3>
-<p>The following attributes are also defined in Memories:</p>
-<ul>
-<li><p>A memory extension construct: used for specific applications</p></li>
-<li><p>The size of the memory</p></li>
+<li>A bus privacy. A public bus can be spied at, while a private bus cannot. On a public bus, an attacker can reive messages and inject messages.</li>
+<li>A reference attack specifies which attack of attakc trees this bus relates to.</li>
 </ul>
 </body>
 </html>

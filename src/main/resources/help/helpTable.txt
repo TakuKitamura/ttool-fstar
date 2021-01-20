@@ -27,6 +27,8 @@
 ----operation operation operation cpu
 ----cpuextension cpu_extension_construct cpu extension construct
 --- fpga fpga processor hardware execution node
+--- bridge bridge communication hardware node
+--- bus bus communication hardware node arbitration policy
 --- memory memory storage hardware node
 
 

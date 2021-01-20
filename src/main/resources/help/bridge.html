@@ -16,23 +16,15 @@
   <![endif]-->
 </head>
 <body>
-<h1 id="memory">Memory</h1>
-<p>Memory nodes are helpful to model storage capabilities of architectures</p>
+<h1 id="bridge">Bridge</h1>
+<p>A bridge node interconnects two <a href="file://bus.html">Bus</a> nodes.</p>
 <h2 id="main-attributes">Main attributes</h2>
-<p>They have the following attributes.</p>
+<p>A bridge nos has the following attributes.</p>
 <ul>
 <li>A name</li>
-<li>A data size in byte.</li>
-<li>They can be monitored (SoCLiB simulation only) using VCI probes.</li>
+<li>An arbitration policy capturing how simultaneous trafsre request are handled</li>
+<li>A buffer size, i.e. the maximum amount of data (in bytes) that can be stored in the bridge.</li>
 <li>A clock divider expresses the relation between the clock of the memory and the main clock of the architecture</li>
-</ul>
-<p>Apart from the monitor attribute, all latter attributes are taken into account by the DIPLODOCUS simulator to determine communication paths.</p>
-<h2 id="other-attributes">Other attributes</h2>
-<h3 id="code-generation">Code generation</h3>
-<p>The following attributes are also defined in Memories:</p>
-<ul>
-<li><p>A memory extension construct: used for specific applications</p></li>
-<li><p>The size of the memory</p></li>
 </ul>
 </body>
 </html>

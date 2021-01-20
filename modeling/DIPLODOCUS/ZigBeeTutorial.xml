@@ -6405,8 +6405,8 @@ POLLING
 <cdparam x="375" y="115" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="-1073741824" y="-1073741824" id="2508" />
-<P2  x="-1073741824" y="-1073741824" id="2492" />
+<P1  x="0" y="0" id="2508" />
+<P2  x="0" y="0" id="2492" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -7064,8 +7064,8 @@ POLLING
 <cdparam x="294" y="79" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="-2147483648" y="-1073741824" id="2878" />
-<P2  x="-2147483648" y="-1073741824" id="2862" />
+<P1  x="0" y="0" id="2878" />
+<P2  x="0" y="0" id="2862" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -12610,7 +12610,7 @@ sequence diagram.
 </SUBCOMPONENT>
 
 <COMPONENT type="1106" id="5985" >
-<cdparam x="306" y="545" />
+<cdparam x="304" y="546" />
 <sizeparam width="100" height="35" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1900" />
@@ -13633,10 +13633,10 @@ sequence diagram.
 <mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="INTL_MSS" />
 <mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
 <mappingInfo CPname="DMA_transfer" instanceName="DMA_Controller_1" architectureUnit="ADAIF_DMA" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="ADAIF_Bridge, MainBus, MainBridge, Crossbar, ADAIF_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="ADAIF_Bridge, MainBus, MainBridge, Crossbar, ADAIF_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="ADAIF_Bridge, Crossbar, ADAIF_Bus, MAPPER_Bridge, MAPPER_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="ADAIF_Bridge, Crossbar, INTL_Bridge, INTL_Bus, ADAIF_Bus" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="ADAIF_Bridge" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="ADAIF_Bridge" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="ADAIF_Bridge" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="ADAIF_Bridge" />
 <mappedAttributes type="int" name="destinationAddress" value="123" />
 <mappedAttributes type="int" name="sourceAddress" value="123" />
 <mappedAttributes type="int" name="counter" value="123" />
@@ -13684,9 +13684,9 @@ sequence diagram.
 <mappingInfo CPname="DMA_transfer" instanceName="Dst_Storage_Instance_1" architectureUnit="FEP_MSS" />
 <mappingInfo CPname="DMA_transfer" instanceName="CPU_Controller_1" architectureUnit="MainCPU" />
 <mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_2" architectureUnit="INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar, INTL_Bridge, INTL_Bus, FEP_Bridge, FEP_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
-<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus, MainBridge, Crossbar, INTL_Bridge, INTL_Bus" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_3" architectureUnit="Crossbar" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_1" architectureUnit="MainBus" />
+<mappingInfo CPname="DMA_transfer" instanceName="Transfer_Instance_4" architectureUnit="MainBus" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1110" id="6629" >
@@ -13945,7 +13945,7 @@ sequence diagram.
 <cdparam x="355" y="576" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="356" y="580" id="5967" />
+<P1  x="354" y="581" id="5967" />
 <P2  x="231" y="635" id="6158" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -13957,7 +13957,7 @@ sequence diagram.
 <cdparam x="355" y="541" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="{info}" />
-<P1  x="356" y="545" id="5962" />
+<P1  x="354" y="546" id="5962" />
 <P2  x="356" y="497" id="6298" />
 <AutomaticDrawing  data="true" />
 <extraparam>

@@ -41,6 +41,7 @@ package ui.window;
 import myutil.GraphicLib;
 import tmltranslator.modelcompiler.Buffer;
 import ui.MainGUI;
+import ui.TGComboBoxWithHelp;
 import ui.TGTextFieldWithHelp;
 import ui.tmldd.TMLArchiMemoryNode;
 
@@ -85,7 +86,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
 
     //Panel3: code generation
     protected int bufferType = 0;       //it is the index in the ArrayList of String
-    protected JComboBox<String> bufferTypesCB;
+    protected TGComboBoxWithHelp<String> bufferTypesCB;
 
     private JTabbedPane tabbedPane;
 
@@ -140,11 +141,11 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Memory name:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
-        panel2.add(nodeName, c2);
+        c1.gridwidth = 2;
+        panel2.add(nodeName, c1);
         nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c1);
 
         c2.gridheight = 1;
@@ -154,8 +155,8 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         byteDataSize = new TGTextFieldWithHelp(""+node.getByteDataSize(), 15);
+        c2.gridwidth = 2;
         panel2.add(byteDataSize, c2);
         byteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -165,16 +166,14 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
         panel2.add(tracemode, c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-
         monitored = new TGTextFieldWithHelp("", 15);
         panel2.add(monitored, c2);
         monitored.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
+        c2.gridwidth = 2;
         panel2.add(clockRatio, c2);
         clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
@@ -184,14 +183,13 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
         c3.weighty = 1.0;
         c3.weightx = 1.0;
         panel3.add(new JLabel("<html>Memory Extension<br>Construct:</html>"), c3);
-        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        bufferTypesCB = new JComboBox<String>( new Vector<String>( Arrays.asList( Buffer.MEMORY_TYPES ) ) );
+        bufferTypesCB = new TGComboBoxWithHelp<String>( new Vector<String>( Arrays.asList( Buffer.MEMORY_TYPES ) ) );
         bufferTypesCB.setSelectedIndex( bufferType  );
         panel3.add( bufferTypesCB, c3 );
+        bufferTypesCB.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel3, c3);
 
         c3.gridwidth = 1;
         panel3.add( new JLabel( "Memory size (in byte):" ), c3 );
-        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
         memorySize = new TGTextFieldWithHelp( "" + node.getMemorySize(), 15 );
         panel3.add( memorySize, c3 );
         memorySize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel3, c3);

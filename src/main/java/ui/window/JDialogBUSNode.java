@@ -42,6 +42,9 @@
 package ui.window;
 
 import myutil.TraceManager;
+import ui.MainGUI;
+import ui.TGComboBoxWithHelp;
+import ui.TGTextFieldWithHelp;
 import ui.util.IconManager;
 import ui.tmldd.TMLArchiBUSNode;
 
@@ -60,23 +63,28 @@ import java.util.Vector;
  */
 public class JDialogBUSNode extends JDialogBase implements ActionListener  {
 
+    public static final String[] helpStrings = {"bus.html"};
+    protected MainGUI mgui;
+
+
     private boolean regularClose;
 
     private TMLArchiBUSNode node;
 
 
     // Panel1
-    protected JTextField nodeName;
+    protected TGTextFieldWithHelp nodeName;
 
     // Panel2
-    protected JTextField byteDataSize, pipelineSize, clockRatio;
-    private JComboBox<String> arbitrationPolicy, privacy, refAttacks;
-    protected JTextField sliceTime;
+    protected TGTextFieldWithHelp byteDataSize, pipelineSize, clockRatio;
+    private TGComboBoxWithHelp<String> arbitrationPolicy, privacy, refAttacks;
+    protected TGTextFieldWithHelp sliceTime;
     private Vector<String> refs;
 
     /* Creates new form  */
-    public JDialogBUSNode(Frame _frame, String _title, TMLArchiBUSNode _node, Vector<String> _refs) {
+    public JDialogBUSNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiBUSNode _node, Vector<String> _refs) {
         super(_frame, _title, true);
+        mgui = _mgui;
         node = _node;
 		refs= _refs;
         initComponents();
@@ -120,11 +128,11 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         c2.insets = lblInsets;
         //c1.anchor = GridBagConstraints.EAST;
         panel2.add(new JLabel("Bus name:", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c2);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -132,55 +140,54 @@ public class JDialogBUSNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Arbitration policy:", SwingConstants.RIGHT), c2);
-
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        arbitrationPolicy = new JComboBox<>();
+        arbitrationPolicy = new TGComboBoxWithHelp<>();
         arbitrationPolicy.addItem("Round Robin");
         arbitrationPolicy.addItem("Priority Based");
         arbitrationPolicy.addItem("CAN");
         arbitrationPolicy.addItem("Crossbar");
         arbitrationPolicy.setSelectedIndex(node.getArbitrationPolicy());
         panel2.add(arbitrationPolicy, c2);
+        arbitrationPolicy.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
+        byteDataSize = new TGTextFieldWithHelp(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
+        byteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Pipeline size (num. stages):", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
+        pipelineSize = new TGTextFieldWithHelp(""+node.getPipelineSize(), 15);
         panel2.add(pipelineSize, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Slice time (in microseconds):", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        sliceTime = new JTextField(""+node.getSliceTime(), 15);
+        sliceTime = new TGTextFieldWithHelp(""+node.getSliceTime(), 15);
         panel2.add(sliceTime, c2);
+        sliceTime.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new JTextField(""+node.getClockRatio(), 15);
+        clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+        clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Bus Privacy:", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        privacy = new JComboBox<>();
+        privacy = new TGComboBoxWithHelp<>();
         privacy.addItem("Public");
         privacy.addItem("Private");
         privacy.setSelectedIndex(node.getPrivacy());
         panel2.add(privacy, c2);
+        privacy.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Reference Attack:", SwingConstants.RIGHT), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        refAttacks = new JComboBox<>(refs);
+        refAttacks = new TGComboBoxWithHelp<>(refs);
         refAttacks.setSelectedItem(node.getRefAttack());
         panel2.add(refAttacks, c2);
+        refAttacks.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         // main panel;
         /*c0.gridheight = 10;

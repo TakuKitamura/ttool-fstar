@@ -41,6 +41,8 @@
 
 package ui.window;
 
+import ui.MainGUI;
+import ui.TGTextFieldWithHelp;
 import ui.util.IconManager;
 import ui.tmldd.TMLArchiBridgeNode;
 
@@ -62,6 +64,9 @@ import java.awt.event.ActionListener;
  */
 public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
 
+    public static final String[] helpStrings = {"bridge.html"};
+    protected MainGUI mgui;
+
     private boolean regularClose;
 
     private JPanel panel2;
@@ -70,15 +75,15 @@ public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
 
 
     // Panel1
-    protected JTextField nodeName;
+    protected TGTextFieldWithHelp nodeName;
 
     // Panel2
-    protected JTextField bufferByteDataSize, clockRatio;
+    protected TGTextFieldWithHelp bufferByteDataSize, clockRatio;
 
     /* Creates new form  */
-    public JDialogBridgeNode(Frame _frame, String _title, TMLArchiBridgeNode _node) {
+    public JDialogBridgeNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiBridgeNode _node) {
         super(_frame, _title, true);
-        frame = _frame;
+        mgui = _mgui;
         node = _node;
 
         initComponents();
@@ -115,11 +120,11 @@ public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Bridge name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c1);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c1);
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -127,15 +132,15 @@ public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Buffer size (in byte):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        bufferByteDataSize = new JTextField(""+node.getBufferByteDataSize(), 15);
+        bufferByteDataSize = new TGTextFieldWithHelp(""+node.getBufferByteDataSize(), 15);
         panel2.add(bufferByteDataSize, c2);
+        bufferByteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new JTextField(""+node.getClockRatio(), 15);
+        clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+        clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
         // main panel;
         c0.gridheight = 10;

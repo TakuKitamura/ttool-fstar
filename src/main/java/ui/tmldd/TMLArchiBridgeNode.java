@@ -188,8 +188,8 @@ public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements Swa
         int tmp;
         String tmpName;
 
-        JDialogBridgeNode dialog = new JDialogBridgeNode(frame, "Setting bridge attributes", this);
-        GraphicLib.centerOnParent(dialog, 350, 350);
+        JDialogBridgeNode dialog = new JDialogBridgeNode(getTDiagramPanel().getMGUI(), frame, "Setting bridge attributes", this);
+        GraphicLib.centerOnParent(dialog, 450, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {

@@ -1,4 +1,4 @@
-# MEMORY
+# Memory
 
 
 Memory nodes are helpful to model storage capabilities of architectures
