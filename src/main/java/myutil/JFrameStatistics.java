@@ -46,6 +46,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.SymbolAxis;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.LookupPaintScale;
@@ -99,7 +100,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     }
 
     private void makePanelsAndComponents() {
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setIconImage(IconManager.img5100);
         setBackground(Color.WHITE);
 
@@ -227,9 +228,13 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         JFreeChart histogram = ChartFactory.createHistogram("Histogram: " + de.toString(),
                 de.toString(), "Frequency", dataset);
 
+        XYPlot plot = (XYPlot) histogram.getPlot();
+        plot.setDomainPannable(true);
+        plot.setRangePannable(true);
+
         ChartPanel myChart = new ChartPanel(histogram);
         // Adding histogram to tabbed pane
-        addChart(title, myChart);
+        addChart(title, myChart, true);
 
     }
 
@@ -315,8 +320,12 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
                 false // Configure chart to generate URLs?
         );
 
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.setDomainPannable(true);
+        plot.setRangePannable(true);
+
         ChartPanel myChart = new ChartPanel(chart);
-        addChart(title, myChart);
+        addChart(title, myChart, true);
 
 
     }
@@ -356,9 +365,12 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
                 false // Configure chart to generate URLs?
         );
 
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.setDomainPannable(true);
+        plot.setRangePannable(true);
 
         ChartPanel myChart = new ChartPanel(chart);
-        addChart(title, myChart);
+        addChart(title, myChart, true);
 
 
     }
@@ -397,7 +409,12 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
         ChartPanel myChartPanel = new ChartPanel(myChart);
         TraceManager.addDev("Adding XYZChart: " + title);
-        addChart(title, myChartPanel);
+
+        XYPlot plot = (XYPlot) myChart.getPlot();
+        plot.setDomainPannable(true);
+        plot.setRangePannable(true);
+
+        addChart(title, myChartPanel, true);
 
     }
 
@@ -443,15 +460,30 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         );
 
         ChartPanel myChart = new ChartPanel(chart);
-        addChart(title, myChart);
+
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.setDomainPannable(true);
+        plot.setRangePannable(true);
+
+        addChart(title, myChart, true);
 
     }
 
-
-
     public void addChart(String title, ChartPanel myChart) {
+        addChart(title, myChart, false);
+    }
+
+    public void addChart(String title, ChartPanel myChart, boolean draggable) {
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(myChart, BorderLayout.CENTER);
+        if (draggable) {
+            JLabel label = new JLabel("Use CTRL or ALT + mouse drag to move over the chart");
+            panel.add(label, BorderLayout.SOUTH);
+        }
+
         myChart.setMouseWheelEnabled(true);
-        mainPane.addTab(title, myChart);
+        mainPane.addTab(title, panel);
         ButtonTabComponent ctb = new ButtonTabComponent(mainPane);
         mainPane.setTabComponentAt(mainPane.getTabCount() - 1, ctb);
         mainPane.setSelectedIndex(mainPane.getTabCount() - 1);

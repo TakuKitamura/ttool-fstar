@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="6" LAST_SELECTED_SUB_TAB="0">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="5" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="Avatar Requirement" nameTab="Requirements" >
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1400" minY="10" maxY="1400" zoom="1.0" >
@@ -1057,7 +1057,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="632" />
-<P1  x="120" y="239" id="679" />
+<P1  x="120" y="239" id="666" />
 <P2  x="191" y="187" id="648" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1066,7 +1066,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="634" />
-<P1  x="118" y="191" id="666" />
+<P1  x="118" y="191" id="679" />
 <P2  x="191" y="167" id="646" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1156,11 +1156,11 @@ A sensor attached to the door enables detection of
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="676" >
 <father id="714" num="0" />
-<cdparam x="18" y="171" />
+<cdparam x="20" y="219" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="open" />
+<infoparam name="TGComponent" value="closed" />
 <TGConnectingPoint num="0" id="664" />
 <TGConnectingPoint num="1" id="665" />
 <TGConnectingPoint num="2" id="666" />
@@ -1176,11 +1176,11 @@ A sensor attached to the door enables detection of
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="689" >
 <father id="714" num="1" />
-<cdparam x="20" y="219" />
+<cdparam x="18" y="171" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="closed" />
+<infoparam name="TGComponent" value="open" />
 <TGConnectingPoint num="0" id="677" />
 <TGConnectingPoint num="1" id="678" />
 <TGConnectingPoint num="2" id="679" />
@@ -1265,7 +1265,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="755" />
-<P1  x="141" y="80" id="811" />
+<P1  x="141" y="80" id="798" />
 <P2  x="179" y="60" id="768" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1274,7 +1274,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="757" />
-<P1  x="141" y="146" id="793" />
+<P1  x="141" y="146" id="806" />
 <P2  x="175" y="146" id="780" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1376,13 +1376,13 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="22" id="839" />
 <TGConnectingPoint num="23" id="840" />
 </COMPONENT>
-<SUBCOMPONENT type="5304" id="803" >
+<SUBCOMPONENT type="5303" id="803" >
 <father id="841" num="0" />
-<cdparam x="41" y="126" />
-<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="41" y="68" />
+<sizeparam width="100" height="50" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="14" minY="0" maxY="126" />
-<infoparam name="TGComponent" value="ringBell" />
+<cdrectangleparam minX="0" maxX="14" minY="0" maxY="116" />
+<infoparam name="TGComponent" value="remainingTime" />
 <TGConnectingPoint num="0" id="791" />
 <TGConnectingPoint num="1" id="792" />
 <TGConnectingPoint num="2" id="793" />
@@ -1395,14 +1395,17 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="9" id="800" />
 <TGConnectingPoint num="10" id="801" />
 <TGConnectingPoint num="11" id="802" />
+<extraparam>
+<Toggle value="" />
+</extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5303" id="816" >
+<SUBCOMPONENT type="5304" id="816" >
 <father id="841" num="1" />
-<cdparam x="41" y="68" />
-<sizeparam width="100" height="50" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="41" y="126" />
+<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="14" minY="0" maxY="116" />
-<infoparam name="TGComponent" value="remainingTime" />
+<cdrectangleparam minX="0" maxX="14" minY="0" maxY="126" />
+<infoparam name="TGComponent" value="ringBell" />
 <TGConnectingPoint num="0" id="804" />
 <TGConnectingPoint num="1" id="805" />
 <TGConnectingPoint num="2" id="806" />
@@ -1415,9 +1418,6 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="9" id="813" />
 <TGConnectingPoint num="10" id="814" />
 <TGConnectingPoint num="11" id="815" />
-<extraparam>
-<Toggle value="" />
-</extraparam>
 </SUBCOMPONENT>
 
 
@@ -1447,7 +1447,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="846" />
-<P1  x="119" y="400" id="1008" />
+<P1  x="119" y="400" id="1021" />
 <P2  x="175" y="370" id="939" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1456,7 +1456,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="848" />
-<P1  x="121" y="353" id="1021" />
+<P1  x="121" y="353" id="1008" />
 <P2  x="175" y="350" id="937" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1465,7 +1465,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="850" />
-<P1  x="120" y="248" id="970" />
+<P1  x="120" y="248" id="957" />
 <P2  x="189" y="226" id="916" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1474,7 +1474,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="852" />
-<P1  x="122" y="198" id="957" />
+<P1  x="122" y="198" id="970" />
 <P2  x="189" y="216" id="915" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1678,11 +1678,11 @@ A sensor attached to the door enables detection of
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="967" >
 <father id="1005" num="0" />
-<cdparam x="22" y="178" />
+<cdparam x="20" y="228" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="open" />
+<infoparam name="TGComponent" value="closed" />
 <TGConnectingPoint num="0" id="955" />
 <TGConnectingPoint num="1" id="956" />
 <TGConnectingPoint num="2" id="957" />
@@ -1698,11 +1698,11 @@ A sensor attached to the door enables detection of
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="980" >
 <father id="1005" num="1" />
-<cdparam x="20" y="228" />
+<cdparam x="22" y="178" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="closed" />
+<infoparam name="TGComponent" value="open" />
 <TGConnectingPoint num="0" id="968" />
 <TGConnectingPoint num="1" id="969" />
 <TGConnectingPoint num="2" id="970" />
@@ -1750,11 +1750,11 @@ A sensor attached to the door enables detection of
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="1018" >
 <father id="1056" num="0" />
-<cdparam x="19" y="380" />
+<cdparam x="21" y="333" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="99" />
-<infoparam name="TGComponent" value="stopCooking" />
+<infoparam name="TGComponent" value="startCooking" />
 <TGConnectingPoint num="0" id="1006" />
 <TGConnectingPoint num="1" id="1007" />
 <TGConnectingPoint num="2" id="1008" />
@@ -1770,11 +1770,11 @@ A sensor attached to the door enables detection of
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="1031" >
 <father id="1056" num="1" />
-<cdparam x="21" y="333" />
+<cdparam x="19" y="380" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="99" />
-<infoparam name="TGComponent" value="startCooking" />
+<infoparam name="TGComponent" value="stopCooking" />
 <TGConnectingPoint num="0" id="1019" />
 <TGConnectingPoint num="1" id="1020" />
 <TGConnectingPoint num="2" id="1021" />
@@ -2040,7 +2040,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="1" id="1160" />
 <TGConnectingPoint num="2" id="1161" />
 <P1  x="746" y="209" id="1300" />
-<P2  x="864" y="242" id="1671" />
+<P2  x="864" y="242" id="1596" />
 <Point x="832" y="209" />
 <Point x="832" y="241" />
 <AutomaticDrawing  data="true" />
@@ -2068,7 +2068,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="1165" />
 <TGConnectingPoint num="1" id="1166" />
 <TGConnectingPoint num="2" id="1167" />
-<P1  x="836" y="301" id="1646" />
+<P1  x="836" y="301" id="1621" />
 <P2  x="746" y="229" id="1302" />
 <Point x="802" y="301" />
 <Point x="802" y="229" />
@@ -2098,7 +2098,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="1" id="1173" />
 <TGConnectingPoint num="2" id="1174" />
 <TGConnectingPoint num="3" id="1175" />
-<P1  x="543" y="549" id="1472" />
+<P1  x="543" y="549" id="1372" />
 <P2  x="652" y="239" id="1303" />
 <Point x="609" y="549" />
 <Point x="609" y="283" />
@@ -2143,7 +2143,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1179" />
-<P1  x="390" y="342" id="1797" />
+<P1  x="390" y="342" id="1847" />
 <P2  x="651" y="342" id="1268" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2154,7 +2154,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="1182" />
 <TGConnectingPoint num="1" id="1183" />
 <P1  x="492" y="225" id="1254" />
-<P2  x="271" y="189" id="1847" />
+<P2  x="271" y="189" id="1797" />
 <Point x="492" y="189" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1181" >
@@ -2171,7 +2171,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1185" />
-<P1  x="279" y="245" id="1772" />
+<P1  x="279" y="245" id="1872" />
 <P2  x="430" y="245" id="1255" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2180,7 +2180,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1187" />
-<P1  x="492" y="479" id="1495" />
+<P1  x="492" y="479" id="1345" />
 <P2  x="492" y="265" id="1257" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2191,7 +2191,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="1191" />
 <TGConnectingPoint num="1" id="1192" />
 <TGConnectingPoint num="2" id="1193" />
-<P1  x="271" y="145" id="1879" />
+<P1  x="271" y="145" id="1779" />
 <P2  x="621" y="209" id="1299" />
 <Point x="505" y="145" />
 <Point x="505" y="209" />
@@ -2219,7 +2219,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1195" />
 <P1  x="569" y="124" id="1286" />
-<P2  x="271" y="125" id="1877" />
+<P2  x="271" y="125" id="1777" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="133" id="1198" >
@@ -2227,7 +2227,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1197" />
-<P1  x="787" y="123" id="1721" />
+<P1  x="787" y="123" id="1546" />
 <P2  x="694" y="124" id="1287" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2238,7 +2238,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="1201" />
 <TGConnectingPoint num="1" id="1202" />
 <TGConnectingPoint num="2" id="1203" />
-<P1  x="834" y="183" id="1696" />
+<P1  x="834" y="183" id="1571" />
 <P2  x="694" y="144" id="1289" />
 <Point x="753" y="183" />
 <Point x="753" y="144" />
@@ -2323,8 +2323,8 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1218" />
 <TGConnectingPoint num="1" id="1219" />
-<P1  x="499" y="703" id="1397" />
-<P2  x="906" y="498" id="1573" />
+<P1  x="499" y="703" id="1447" />
+<P2  x="906" y="498" id="1698" />
 <Point x="906" y="703" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1217" >
@@ -2343,7 +2343,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="1222" />
 <TGConnectingPoint num="1" id="1223" />
 <P1  x="1253" y="400" id="1319" />
-<P2  x="1141" y="368" id="1622" />
+<P2  x="1141" y="368" id="1647" />
 <Point x="1253" y="367" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1221" >
@@ -2360,7 +2360,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1225" />
-<P1  x="1040" y="420" id="1597" />
+<P1  x="1040" y="420" id="1672" />
 <P2  x="1191" y="420" id="1320" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2370,7 +2370,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1228" />
 <TGConnectingPoint num="1" id="1229" />
-<P1  x="1120" y="480" id="1547" />
+<P1  x="1120" y="480" id="1722" />
 <P2  x="1253" y="440" id="1322" />
 <Point x="1253" y="480" />
 <AutomaticDrawing  data="true" />
@@ -2388,7 +2388,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1231" />
-<P1  x="487" y="811" id="1345" />
+<P1  x="487" y="811" id="1495" />
 <P2  x="427" y="787" id="1343" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2397,7 +2397,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1233" />
-<P1  x="338" y="807" id="1370" />
+<P1  x="338" y="807" id="1470" />
 <P2  x="365" y="787" id="1342" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2407,7 +2407,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1235" />
 <P1  x="396" y="747" id="1332" />
-<P2  x="396" y="723" id="1398" />
+<P2  x="396" y="723" id="1448" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="301" id="1253" >
@@ -2636,12 +2636,12 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="1369" >
 <father id="1544" num="0" />
-<cdparam x="437" y="811" />
-<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="423" y="479" />
+<sizeparam width="139" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="228" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="BusProbing" />
+<cdrectangleparam minX="0" maxX="189" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="CorruptOrFakeMessage" />
 <TGConnectingPoint num="0" id="1345" />
 <TGConnectingPoint num="1" id="1346" />
 <TGConnectingPoint num="2" id="1347" />
@@ -2672,12 +2672,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1394" >
 <father id="1544" num="1" />
-<cdparam x="256" y="807" />
-<sizeparam width="165" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="269" y="529" />
+<sizeparam width="274" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="163" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="HijackingTheRemoteSession" />
+<cdrectangleparam minX="0" maxX="54" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="AttackerInjectWrongFirmwareOnTheDomainBus" />
 <TGConnectingPoint num="0" id="1370" />
 <TGConnectingPoint num="1" id="1371" />
 <TGConnectingPoint num="2" id="1372" />
@@ -2708,12 +2708,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1419" >
 <father id="1544" num="2" />
-<cdparam x="293" y="683" />
-<sizeparam width="206" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="310" y="633" />
+<sizeparam width="135" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="122" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="RemoteControlProtocolVulnerability" />
+<cdrectangleparam minX="0" maxX="193" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="ManInTheMiddleAttack" />
 <TGConnectingPoint num="0" id="1395" />
 <TGConnectingPoint num="1" id="1396" />
 <TGConnectingPoint num="2" id="1397" />
@@ -2739,7 +2739,7 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1417" />
 <TGConnectingPoint num="23" id="1418" />
 <extraparam>
-<info description="Exploit vulnerability or implementation error" root="false" />
+<info description="" root="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1444" >
@@ -2780,12 +2780,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1469" >
 <father id="1544" num="4" />
-<cdparam x="310" y="633" />
-<sizeparam width="135" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="293" y="683" />
+<sizeparam width="206" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="193" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="ManInTheMiddleAttack" />
+<cdrectangleparam minX="0" maxX="122" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="RemoteControlProtocolVulnerability" />
 <TGConnectingPoint num="0" id="1445" />
 <TGConnectingPoint num="1" id="1446" />
 <TGConnectingPoint num="2" id="1447" />
@@ -2811,17 +2811,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1467" />
 <TGConnectingPoint num="23" id="1468" />
 <extraparam>
-<info description="" root="false" />
+<info description="Exploit vulnerability or implementation error" root="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1494" >
 <father id="1544" num="5" />
-<cdparam x="269" y="529" />
-<sizeparam width="274" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="256" y="807" />
+<sizeparam width="165" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="54" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="AttackerInjectWrongFirmwareOnTheDomainBus" />
+<cdrectangleparam minX="0" maxX="163" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="HijackingTheRemoteSession" />
 <TGConnectingPoint num="0" id="1470" />
 <TGConnectingPoint num="1" id="1471" />
 <TGConnectingPoint num="2" id="1472" />
@@ -2852,12 +2852,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1519" >
 <father id="1544" num="6" />
-<cdparam x="423" y="479" />
-<sizeparam width="139" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="437" y="811" />
+<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="189" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="CorruptOrFakeMessage" />
+<cdrectangleparam minX="0" maxX="228" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="BusProbing" />
 <TGConnectingPoint num="0" id="1495" />
 <TGConnectingPoint num="1" id="1496" />
 <TGConnectingPoint num="2" id="1497" />
@@ -2920,12 +2920,12 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="1569" >
 <father id="1769" num="0" />
-<cdparam x="985" y="460" />
-<sizeparam width="135" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="787" y="103" />
+<sizeparam width="360" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="241" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="InjectBogusKeysInOven" />
+<cdrectangleparam minX="0" maxX="16" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="InfectedControllerSendsTooManyMessagesToWirelessInterface" />
 <TGConnectingPoint num="0" id="1545" />
 <TGConnectingPoint num="1" id="1546" />
 <TGConnectingPoint num="2" id="1547" />
@@ -2956,12 +2956,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1594" >
 <father id="1769" num="1" />
-<cdparam x="838" y="458" />
-<sizeparam width="137" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="834" y="163" />
+<sizeparam width="253" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="239" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="FlashYourOwnFirmware" />
+<cdrectangleparam minX="0" maxX="123" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="ExploitVulnerabilitesOrImplementationError" />
 <TGConnectingPoint num="0" id="1570" />
 <TGConnectingPoint num="1" id="1571" />
 <TGConnectingPoint num="2" id="1572" />
@@ -2992,12 +2992,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1619" >
 <father id="1769" num="2" />
-<cdparam x="836" y="400" />
-<sizeparam width="204" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="864" y="222" />
+<sizeparam width="139" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="172" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="FaultyORNoFirmwareAuthentication" />
+<cdrectangleparam minX="0" maxX="237" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="AbortFlashingOperation" />
 <TGConnectingPoint num="0" id="1595" />
 <TGConnectingPoint num="1" id="1596" />
 <TGConnectingPoint num="2" id="1597" />
@@ -3028,12 +3028,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1644" >
 <father id="1769" num="3" />
-<cdparam x="802" y="348" />
-<sizeparam width="339" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="836" y="281" />
+<sizeparam width="235" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="37" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="MaintenanceInstalledModifiedFirmwareToWirelessInterface" />
+<cdrectangleparam minX="0" maxX="141" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="InfectedWirelessInterfaceNotResponding" />
 <TGConnectingPoint num="0" id="1620" />
 <TGConnectingPoint num="1" id="1621" />
 <TGConnectingPoint num="2" id="1622" />
@@ -3059,17 +3059,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1642" />
 <TGConnectingPoint num="23" id="1643" />
 <extraparam>
-<info description="" root="false" />
+<info description="Denial of service" root="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1669" >
 <father id="1769" num="4" />
-<cdparam x="836" y="281" />
-<sizeparam width="235" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="802" y="348" />
+<sizeparam width="339" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="141" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="InfectedWirelessInterfaceNotResponding" />
+<cdrectangleparam minX="0" maxX="37" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="MaintenanceInstalledModifiedFirmwareToWirelessInterface" />
 <TGConnectingPoint num="0" id="1645" />
 <TGConnectingPoint num="1" id="1646" />
 <TGConnectingPoint num="2" id="1647" />
@@ -3095,17 +3095,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1667" />
 <TGConnectingPoint num="23" id="1668" />
 <extraparam>
-<info description="Denial of service" root="false" />
+<info description="" root="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1694" >
 <father id="1769" num="5" />
-<cdparam x="864" y="222" />
-<sizeparam width="139" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="836" y="400" />
+<sizeparam width="204" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="237" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="AbortFlashingOperation" />
+<cdrectangleparam minX="0" maxX="172" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="FaultyORNoFirmwareAuthentication" />
 <TGConnectingPoint num="0" id="1670" />
 <TGConnectingPoint num="1" id="1671" />
 <TGConnectingPoint num="2" id="1672" />
@@ -3136,12 +3136,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1719" >
 <father id="1769" num="6" />
-<cdparam x="834" y="163" />
-<sizeparam width="253" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="838" y="458" />
+<sizeparam width="137" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="123" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="ExploitVulnerabilitesOrImplementationError" />
+<cdrectangleparam minX="0" maxX="239" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="FlashYourOwnFirmware" />
 <TGConnectingPoint num="0" id="1695" />
 <TGConnectingPoint num="1" id="1696" />
 <TGConnectingPoint num="2" id="1697" />
@@ -3172,12 +3172,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1744" >
 <father id="1769" num="7" />
-<cdparam x="787" y="103" />
-<sizeparam width="360" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="985" y="460" />
+<sizeparam width="135" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="16" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="InfectedControllerSendsTooManyMessagesToWirelessInterface" />
+<cdrectangleparam minX="0" maxX="241" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="InjectBogusKeysInOven" />
 <TGConnectingPoint num="0" id="1720" />
 <TGConnectingPoint num="1" id="1721" />
 <TGConnectingPoint num="2" id="1722" />
@@ -3240,12 +3240,12 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="1794" >
 <father id="1919" num="0" />
-<cdparam x="99" y="225" />
-<sizeparam width="180" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="88" y="115" />
+<sizeparam width="183" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="174" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="ExploitVulnerabilitiesInFlashing" />
+<cdrectangleparam minX="0" maxX="171" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="OvenTakesTooLongToRespond" />
 <TGConnectingPoint num="0" id="1770" />
 <TGConnectingPoint num="1" id="1771" />
 <TGConnectingPoint num="2" id="1772" />
@@ -3271,17 +3271,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1792" />
 <TGConnectingPoint num="23" id="1793" />
 <extraparam>
-<info description="blah blah blah" root="false" />
+<info description="Denial of Service Attack" root="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1819" >
 <father id="1919" num="1" />
-<cdparam x="78" y="322" />
-<sizeparam width="312" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="90" y="169" />
+<sizeparam width="181" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="42" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="InfectedWirelessInterfaceShuttingDownCommunication" />
+<cdrectangleparam minX="0" maxX="173" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="GainAccessToWirelessInterface" />
 <TGConnectingPoint num="0" id="1795" />
 <TGConnectingPoint num="1" id="1796" />
 <TGConnectingPoint num="2" id="1797" />
@@ -3348,12 +3348,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1869" >
 <father id="1919" num="3" />
-<cdparam x="90" y="169" />
-<sizeparam width="181" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="78" y="322" />
+<sizeparam width="312" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="173" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="GainAccessToWirelessInterface" />
+<cdrectangleparam minX="0" maxX="42" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="InfectedWirelessInterfaceShuttingDownCommunication" />
 <TGConnectingPoint num="0" id="1845" />
 <TGConnectingPoint num="1" id="1846" />
 <TGConnectingPoint num="2" id="1847" />
@@ -3384,12 +3384,12 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1894" >
 <father id="1919" num="4" />
-<cdparam x="88" y="115" />
-<sizeparam width="183" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="99" y="225" />
+<sizeparam width="180" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="171" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="OvenTakesTooLongToRespond" />
+<cdrectangleparam minX="0" maxX="174" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="ExploitVulnerabilitiesInFlashing" />
 <TGConnectingPoint num="0" id="1870" />
 <TGConnectingPoint num="1" id="1871" />
 <TGConnectingPoint num="2" id="1872" />
@@ -3415,7 +3415,7 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1892" />
 <TGConnectingPoint num="23" id="1893" />
 <extraparam>
-<info description="Denial of Service Attack" root="false" />
+<info description="blah blah blah" root="false" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4619,8 +4619,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2460" />
-<P1  x="468" y="658" id="2696" />
-<P2  x="173" y="657" id="2721" />
+<P1  x="468" y="658" id="2546" />
+<P2  x="173" y="657" id="2696" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in remoteStart(int value)" />
@@ -4668,7 +4668,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2468" />
 <P1  x="476" y="912" id="2623" />
-<P2  x="377" y="911" id="2565" />
+<P2  x="377" y="911" id="2665" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
@@ -4681,7 +4681,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2470" />
-<P1  x="850" y="926" id="2673" />
+<P1  x="850" y="926" id="2573" />
 <P2  x="804" y="912" id="2624" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -4698,7 +4698,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2472" />
 <P1  x="804" y="787" id="2613" />
-<P2  x="835" y="698" id="2639" />
+<P2  x="835" y="698" id="2589" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
@@ -4713,7 +4713,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2474" />
-<P1  x="443" y="757" id="2590" />
+<P1  x="443" y="757" id="2640" />
 <P2  x="476" y="870" id="2614" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -4874,13 +4874,50 @@ or by a maintenance station
 <Signal value="out wirelessChannelWrite(Message msg)" attached="false" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5000" id="2560" >
+<SUBCOMPONENT type="5000" id="2710" >
 <father id="2760" num="0" />
-<cdparam x="491" y="390" />
-<sizeparam width="414" height="148" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="173" y="554" />
+<sizeparam width="921" height="412" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="553" minY="0" maxY="483" />
-<infoparam name="Block0" value="RemoteControl" />
+<cdrectangleparam minX="0" maxX="46" minY="0" maxY="219" />
+<infoparam name="Block0" value="MicroWaveOven" />
+<TGConnectingPoint num="0" id="2686" />
+<TGConnectingPoint num="1" id="2687" />
+<TGConnectingPoint num="2" id="2688" />
+<TGConnectingPoint num="3" id="2689" />
+<TGConnectingPoint num="4" id="2690" />
+<TGConnectingPoint num="5" id="2691" />
+<TGConnectingPoint num="6" id="2692" />
+<TGConnectingPoint num="7" id="2693" />
+<TGConnectingPoint num="8" id="2694" />
+<TGConnectingPoint num="9" id="2695" />
+<TGConnectingPoint num="10" id="2696" />
+<TGConnectingPoint num="11" id="2697" />
+<TGConnectingPoint num="12" id="2698" />
+<TGConnectingPoint num="13" id="2699" />
+<TGConnectingPoint num="14" id="2700" />
+<TGConnectingPoint num="15" id="2701" />
+<TGConnectingPoint num="16" id="2702" />
+<TGConnectingPoint num="17" id="2703" />
+<TGConnectingPoint num="18" id="2704" />
+<TGConnectingPoint num="19" id="2705" />
+<TGConnectingPoint num="20" id="2706" />
+<TGConnectingPoint num="21" id="2707" />
+<TGConnectingPoint num="22" id="2708" />
+<TGConnectingPoint num="23" id="2709" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Signal value="in remoteStart(int value)" attached="false" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="2560" >
+<father id="2710" num="0" />
+<cdparam x="468" y="620" />
+<sizeparam width="334" height="154" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="587" minY="0" maxY="258" />
+<infoparam name="Block0" value="WirelessInterface" />
 <TGConnectingPoint num="0" id="2536" />
 <TGConnectingPoint num="1" id="2537" />
 <TGConnectingPoint num="2" id="2538" />
@@ -4908,9 +4945,9 @@ or by a maintenance station
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
-<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -4933,54 +4970,16 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<globalCode value="" />
-<globalCode value="/* This is my global code !!!! */" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="2735" >
-<father id="2760" num="1" />
-<cdparam x="173" y="554" />
-<sizeparam width="921" height="412" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="46" minY="0" maxY="219" />
-<infoparam name="Block0" value="MicroWaveOven" />
-<TGConnectingPoint num="0" id="2711" />
-<TGConnectingPoint num="1" id="2712" />
-<TGConnectingPoint num="2" id="2713" />
-<TGConnectingPoint num="3" id="2714" />
-<TGConnectingPoint num="4" id="2715" />
-<TGConnectingPoint num="5" id="2716" />
-<TGConnectingPoint num="6" id="2717" />
-<TGConnectingPoint num="7" id="2718" />
-<TGConnectingPoint num="8" id="2719" />
-<TGConnectingPoint num="9" id="2720" />
-<TGConnectingPoint num="10" id="2721" />
-<TGConnectingPoint num="11" id="2722" />
-<TGConnectingPoint num="12" id="2723" />
-<TGConnectingPoint num="13" id="2724" />
-<TGConnectingPoint num="14" id="2725" />
-<TGConnectingPoint num="15" id="2726" />
-<TGConnectingPoint num="16" id="2727" />
-<TGConnectingPoint num="17" id="2728" />
-<TGConnectingPoint num="18" id="2729" />
-<TGConnectingPoint num="19" id="2730" />
-<TGConnectingPoint num="20" id="2731" />
-<TGConnectingPoint num="21" id="2732" />
-<TGConnectingPoint num="22" id="2733" />
-<TGConnectingPoint num="23" id="2734" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Signal value="in remoteStart(int value)" attached="false" />
+<Signal value="out remoteStart(int value)" attached="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2585" >
-<father id="2735" num="0" />
-<cdparam x="196" y="864" />
-<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="2710" num="1" />
+<cdparam x="850" y="832" />
+<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
-<infoparam name="Block0" value="Bell" />
+<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
+<infoparam name="Block0" value="Door" />
 <TGConnectingPoint num="0" id="2561" />
 <TGConnectingPoint num="1" id="2562" />
 <TGConnectingPoint num="2" id="2563" />
@@ -5008,24 +5007,32 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$runBell()" />
-<Signal value="in ring()" attached="false" />
+<Method value="$openM()" />
+<Method value="$closeM()" />
+<Signal value="out closed()" attached="false" />
+<Signal value="out open()" attached="false" />
+<globalCode value="" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
+<globalCode value="const char* openD = &quot;Open Door&quot;;" />
+<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Bell__runBell() {" />
-<globalCode value="  sendDatagram(dring, 18);" />
+<globalCode value="void _userImplemented_Door__openM() {" />
+<globalCode value="  sendDatagram(openD, 10);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Door__closeM() {" />
+<globalCode value="   sendDatagram(closeD, 10);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2610" >
-<father id="2735" num="1" />
-<cdparam x="187" y="676" />
-<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="2710" num="2" />
+<cdparam x="835" y="618" />
+<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
-<infoparam name="Block0" value="ControlPanel" />
+<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
+<infoparam name="Block0" value="Magnetron" />
 <TGConnectingPoint num="0" id="2586" />
 <TGConnectingPoint num="1" id="2587" />
 <TGConnectingPoint num="2" id="2588" />
@@ -5053,14 +5060,25 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
-<Signal value="in LEDOn()" attached="false" />
-<Signal value="in LEDoff()" attached="false" />
-<Signal value="out startButton(int duration)" attached="false" />
+<Attribute access="0" id="power" value="0" type="8" typeOther="" />
+<Method value="$ON()" />
+<Method value="$OFF()" />
+<Signal value="in startM()" attached="false" />
+<Signal value="in stopM()" attached="false" />
+<globalCode value="extern void sendDatagram(char *data, int size);" />
+<globalCode value="" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__ON() {" />
+<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__OFF() {" />
+<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
+<globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2635" >
-<father id="2735" num="2" />
+<father id="2710" num="3" />
 <cdparam x="476" y="787" />
 <sizeparam width="328" height="167" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -5139,12 +5157,12 @@ or by a maintenance station
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2660" >
-<father id="2735" num="3" />
-<cdparam x="835" y="618" />
-<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="2710" num="4" />
+<cdparam x="187" y="676" />
+<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
-<infoparam name="Block0" value="Magnetron" />
+<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
+<infoparam name="Block0" value="ControlPanel" />
 <TGConnectingPoint num="0" id="2636" />
 <TGConnectingPoint num="1" id="2637" />
 <TGConnectingPoint num="2" id="2638" />
@@ -5172,30 +5190,19 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Method value="$ON()" />
-<Method value="$OFF()" />
-<Signal value="in startM()" attached="false" />
-<Signal value="in stopM()" attached="false" />
-<globalCode value="extern void sendDatagram(char *data, int size);" />
-<globalCode value="" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__ON() {" />
-<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__OFF() {" />
-<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
-<globalCode value="}" />
+<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2685" >
-<father id="2735" num="4" />
-<cdparam x="850" y="832" />
-<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="2710" num="5" />
+<cdparam x="196" y="864" />
+<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
-<infoparam name="Block0" value="Door" />
+<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
+<infoparam name="Block0" value="Bell" />
 <TGConnectingPoint num="0" id="2661" />
 <TGConnectingPoint num="1" id="2662" />
 <TGConnectingPoint num="2" id="2663" />
@@ -5223,62 +5230,54 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$openM()" />
-<Method value="$closeM()" />
-<Signal value="out closed()" attached="false" />
-<Signal value="out open()" attached="false" />
-<globalCode value="" />
+<Method value="$runBell()" />
+<Signal value="in ring()" attached="false" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* openD = &quot;Open Door&quot;;" />
-<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
+<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Door__openM() {" />
-<globalCode value="  sendDatagram(openD, 10);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Door__closeM() {" />
-<globalCode value="   sendDatagram(closeD, 10);" />
+<globalCode value="void _userImplemented_Bell__runBell() {" />
+<globalCode value="  sendDatagram(dring, 18);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="2710" >
-<father id="2735" num="5" />
-<cdparam x="468" y="620" />
-<sizeparam width="334" height="154" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="2735" >
+<father id="2760" num="1" />
+<cdparam x="491" y="390" />
+<sizeparam width="414" height="148" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="587" minY="0" maxY="258" />
-<infoparam name="Block0" value="WirelessInterface" />
-<TGConnectingPoint num="0" id="2686" />
-<TGConnectingPoint num="1" id="2687" />
-<TGConnectingPoint num="2" id="2688" />
-<TGConnectingPoint num="3" id="2689" />
-<TGConnectingPoint num="4" id="2690" />
-<TGConnectingPoint num="5" id="2691" />
-<TGConnectingPoint num="6" id="2692" />
-<TGConnectingPoint num="7" id="2693" />
-<TGConnectingPoint num="8" id="2694" />
-<TGConnectingPoint num="9" id="2695" />
-<TGConnectingPoint num="10" id="2696" />
-<TGConnectingPoint num="11" id="2697" />
-<TGConnectingPoint num="12" id="2698" />
-<TGConnectingPoint num="13" id="2699" />
-<TGConnectingPoint num="14" id="2700" />
-<TGConnectingPoint num="15" id="2701" />
-<TGConnectingPoint num="16" id="2702" />
-<TGConnectingPoint num="17" id="2703" />
-<TGConnectingPoint num="18" id="2704" />
-<TGConnectingPoint num="19" id="2705" />
-<TGConnectingPoint num="20" id="2706" />
-<TGConnectingPoint num="21" id="2707" />
-<TGConnectingPoint num="22" id="2708" />
-<TGConnectingPoint num="23" id="2709" />
+<cdrectangleparam minX="0" maxX="553" minY="0" maxY="483" />
+<infoparam name="Block0" value="RemoteControl" />
+<TGConnectingPoint num="0" id="2711" />
+<TGConnectingPoint num="1" id="2712" />
+<TGConnectingPoint num="2" id="2713" />
+<TGConnectingPoint num="3" id="2714" />
+<TGConnectingPoint num="4" id="2715" />
+<TGConnectingPoint num="5" id="2716" />
+<TGConnectingPoint num="6" id="2717" />
+<TGConnectingPoint num="7" id="2718" />
+<TGConnectingPoint num="8" id="2719" />
+<TGConnectingPoint num="9" id="2720" />
+<TGConnectingPoint num="10" id="2721" />
+<TGConnectingPoint num="11" id="2722" />
+<TGConnectingPoint num="12" id="2723" />
+<TGConnectingPoint num="13" id="2724" />
+<TGConnectingPoint num="14" id="2725" />
+<TGConnectingPoint num="15" id="2726" />
+<TGConnectingPoint num="16" id="2727" />
+<TGConnectingPoint num="17" id="2728" />
+<TGConnectingPoint num="18" id="2729" />
+<TGConnectingPoint num="19" id="2730" />
+<TGConnectingPoint num="20" id="2731" />
+<TGConnectingPoint num="21" id="2732" />
+<TGConnectingPoint num="22" id="2733" />
+<TGConnectingPoint num="23" id="2734" />
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
+<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -5301,7 +5300,8 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<Signal value="out remoteStart(int value)" attached="false" />
+<globalCode value="" />
+<globalCode value="/* This is my global code !!!! */" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -10102,8 +10102,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5018" />
-<P1  x="350" y="536" id="5102" />
-<P2  x="322" y="493" id="5252" />
+<P1  x="350" y="536" id="5252" />
+<P2  x="322" y="493" id="5277" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in remoteStart(int value)" />
@@ -10151,7 +10151,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5026" />
 <P1  x="316" y="678" id="5181" />
-<P2  x="296" y="680" id="5223" />
+<P2  x="296" y="680" id="5123" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
@@ -10164,7 +10164,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5028" />
-<P1  x="672" y="696" id="5131" />
+<P1  x="672" y="696" id="5231" />
 <P2  x="644" y="678" id="5182" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -10181,7 +10181,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5030" />
 <P1  x="644" y="616" id="5180" />
-<P2  x="671" y="592" id="5147" />
+<P2  x="671" y="592" id="5197" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
@@ -10196,7 +10196,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5032" />
-<P1  x="294" y="601" id="5198" />
+<P1  x="294" y="601" id="5148" />
 <P2  x="316" y="647" id="5172" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -10357,50 +10357,13 @@ or by a maintenance station
 <Signal value="out wirelessChannelWrite(Message msg)" attached="false" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5000" id="5268" >
-<father id="5318" num="0" />
-<cdparam x="163" y="493" />
-<sizeparam width="637" height="230" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="21" minY="0" maxY="152" />
-<infoparam name="Block0" value="MicroWaveOven" />
-<TGConnectingPoint num="0" id="5244" />
-<TGConnectingPoint num="1" id="5245" />
-<TGConnectingPoint num="2" id="5246" />
-<TGConnectingPoint num="3" id="5247" />
-<TGConnectingPoint num="4" id="5248" />
-<TGConnectingPoint num="5" id="5249" />
-<TGConnectingPoint num="6" id="5250" />
-<TGConnectingPoint num="7" id="5251" />
-<TGConnectingPoint num="8" id="5252" />
-<TGConnectingPoint num="9" id="5253" />
-<TGConnectingPoint num="10" id="5254" />
-<TGConnectingPoint num="11" id="5255" />
-<TGConnectingPoint num="12" id="5256" />
-<TGConnectingPoint num="13" id="5257" />
-<TGConnectingPoint num="14" id="5258" />
-<TGConnectingPoint num="15" id="5259" />
-<TGConnectingPoint num="16" id="5260" />
-<TGConnectingPoint num="17" id="5261" />
-<TGConnectingPoint num="18" id="5262" />
-<TGConnectingPoint num="19" id="5263" />
-<TGConnectingPoint num="20" id="5264" />
-<TGConnectingPoint num="21" id="5265" />
-<TGConnectingPoint num="22" id="5266" />
-<TGConnectingPoint num="23" id="5267" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Signal value="in remoteStart(int value)" attached="false" />
-</extraparam>
-</SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5118" >
-<father id="5268" num="0" />
-<cdparam x="314" y="536" />
-<sizeparam width="146" height="45" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="5318" num="0" />
+<cdparam x="381" y="389" />
+<sizeparam width="414" height="96" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="491" minY="0" maxY="185" />
-<infoparam name="Block0" value="WirelessInterface" />
+<cdrectangleparam minX="0" maxX="244" minY="0" maxY="286" />
+<infoparam name="Block0" value="RemoteControl" />
 <TGConnectingPoint num="0" id="5094" />
 <TGConnectingPoint num="1" id="5095" />
 <TGConnectingPoint num="2" id="5096" />
@@ -10428,9 +10391,9 @@ or by a maintenance station
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
+<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -10453,16 +10416,54 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<Signal value="out remoteStart(int value)" attached="false" />
+<globalCode value="" />
+<globalCode value="/* This is my global code !!!! */" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="5293" >
+<father id="5318" num="1" />
+<cdparam x="163" y="493" />
+<sizeparam width="637" height="230" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="21" minY="0" maxY="152" />
+<infoparam name="Block0" value="MicroWaveOven" />
+<TGConnectingPoint num="0" id="5269" />
+<TGConnectingPoint num="1" id="5270" />
+<TGConnectingPoint num="2" id="5271" />
+<TGConnectingPoint num="3" id="5272" />
+<TGConnectingPoint num="4" id="5273" />
+<TGConnectingPoint num="5" id="5274" />
+<TGConnectingPoint num="6" id="5275" />
+<TGConnectingPoint num="7" id="5276" />
+<TGConnectingPoint num="8" id="5277" />
+<TGConnectingPoint num="9" id="5278" />
+<TGConnectingPoint num="10" id="5279" />
+<TGConnectingPoint num="11" id="5280" />
+<TGConnectingPoint num="12" id="5281" />
+<TGConnectingPoint num="13" id="5282" />
+<TGConnectingPoint num="14" id="5283" />
+<TGConnectingPoint num="15" id="5284" />
+<TGConnectingPoint num="16" id="5285" />
+<TGConnectingPoint num="17" id="5286" />
+<TGConnectingPoint num="18" id="5287" />
+<TGConnectingPoint num="19" id="5288" />
+<TGConnectingPoint num="20" id="5289" />
+<TGConnectingPoint num="21" id="5290" />
+<TGConnectingPoint num="22" id="5291" />
+<TGConnectingPoint num="23" id="5292" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Signal value="in remoteStart(int value)" attached="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5143" >
-<father id="5268" num="1" />
-<cdparam x="672" y="654" />
-<sizeparam width="118" height="56" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="5293" num="0" />
+<cdparam x="169" y="653" />
+<sizeparam width="127" height="54" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="519" minY="0" maxY="174" />
-<infoparam name="Block0" value="Door" />
+<cdrectangleparam minX="0" maxX="510" minY="0" maxY="176" />
+<infoparam name="Block0" value="Bell" />
 <TGConnectingPoint num="0" id="5119" />
 <TGConnectingPoint num="1" id="5120" />
 <TGConnectingPoint num="2" id="5121" />
@@ -10490,32 +10491,24 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$openM()" />
-<Method value="$closeM()" />
-<Signal value="out closed()" attached="false" />
-<Signal value="out open()" attached="false" />
-<globalCode value="" />
+<Method value="$runBell()" />
+<Signal value="in ring()" attached="false" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* openD = &quot;Open Door&quot;;" />
-<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
+<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Door__openM() {" />
-<globalCode value="  sendDatagram(openD, 10);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Door__closeM() {" />
-<globalCode value="   sendDatagram(closeD, 10);" />
+<globalCode value="void _userImplemented_Bell__runBell() {" />
+<globalCode value="  sendDatagram(dring, 18);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5168" >
-<father id="5268" num="2" />
-<cdparam x="671" y="536" />
-<sizeparam width="117" height="112" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="5293" num="1" />
+<cdparam x="170" y="555" />
+<sizeparam width="124" height="92" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="520" minY="0" maxY="118" />
-<infoparam name="Block0" value="Magnetron" />
+<cdrectangleparam minX="0" maxX="513" minY="0" maxY="138" />
+<infoparam name="Block0" value="ControlPanel" />
 <TGConnectingPoint num="0" id="5144" />
 <TGConnectingPoint num="1" id="5145" />
 <TGConnectingPoint num="2" id="5146" />
@@ -10543,25 +10536,14 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Method value="$ON()" />
-<Method value="$OFF()" />
-<Signal value="in startM()" attached="false" />
-<Signal value="in stopM()" attached="false" />
-<globalCode value="extern void sendDatagram(char *data, int size);" />
-<globalCode value="" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__ON() {" />
-<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__OFF() {" />
-<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
-<globalCode value="}" />
+<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5193" >
-<father id="5268" num="3" />
+<father id="5293" num="2" />
 <cdparam x="316" y="585" />
 <sizeparam width="328" height="125" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -10640,12 +10622,12 @@ or by a maintenance station
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5218" >
-<father id="5268" num="4" />
-<cdparam x="170" y="555" />
-<sizeparam width="124" height="92" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="5293" num="3" />
+<cdparam x="671" y="536" />
+<sizeparam width="117" height="112" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="513" minY="0" maxY="138" />
-<infoparam name="Block0" value="ControlPanel" />
+<cdrectangleparam minX="0" maxX="520" minY="0" maxY="118" />
+<infoparam name="Block0" value="Magnetron" />
 <TGConnectingPoint num="0" id="5194" />
 <TGConnectingPoint num="1" id="5195" />
 <TGConnectingPoint num="2" id="5196" />
@@ -10673,19 +10655,30 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
-<Signal value="in LEDOn()" attached="false" />
-<Signal value="in LEDoff()" attached="false" />
-<Signal value="out startButton(int duration)" attached="false" />
+<Attribute access="0" id="power" value="0" type="8" typeOther="" />
+<Method value="$ON()" />
+<Method value="$OFF()" />
+<Signal value="in startM()" attached="false" />
+<Signal value="in stopM()" attached="false" />
+<globalCode value="extern void sendDatagram(char *data, int size);" />
+<globalCode value="" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__ON() {" />
+<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__OFF() {" />
+<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
+<globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5243" >
-<father id="5268" num="5" />
-<cdparam x="169" y="653" />
-<sizeparam width="127" height="54" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="5293" num="4" />
+<cdparam x="672" y="654" />
+<sizeparam width="118" height="56" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="510" minY="0" maxY="176" />
-<infoparam name="Block0" value="Bell" />
+<cdrectangleparam minX="0" maxX="519" minY="0" maxY="174" />
+<infoparam name="Block0" value="Door" />
 <TGConnectingPoint num="0" id="5219" />
 <TGConnectingPoint num="1" id="5220" />
 <TGConnectingPoint num="2" id="5221" />
@@ -10713,54 +10706,62 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$runBell()" />
-<Signal value="in ring()" attached="false" />
+<Method value="$openM()" />
+<Method value="$closeM()" />
+<Signal value="out closed()" attached="false" />
+<Signal value="out open()" attached="false" />
+<globalCode value="" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
+<globalCode value="const char* openD = &quot;Open Door&quot;;" />
+<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Bell__runBell() {" />
-<globalCode value="  sendDatagram(dring, 18);" />
+<globalCode value="void _userImplemented_Door__openM() {" />
+<globalCode value="  sendDatagram(openD, 10);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Door__closeM() {" />
+<globalCode value="   sendDatagram(closeD, 10);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="5293" >
-<father id="5318" num="1" />
-<cdparam x="381" y="389" />
-<sizeparam width="414" height="96" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="5268" >
+<father id="5293" num="5" />
+<cdparam x="314" y="536" />
+<sizeparam width="146" height="45" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="244" minY="0" maxY="286" />
-<infoparam name="Block0" value="RemoteControl" />
-<TGConnectingPoint num="0" id="5269" />
-<TGConnectingPoint num="1" id="5270" />
-<TGConnectingPoint num="2" id="5271" />
-<TGConnectingPoint num="3" id="5272" />
-<TGConnectingPoint num="4" id="5273" />
-<TGConnectingPoint num="5" id="5274" />
-<TGConnectingPoint num="6" id="5275" />
-<TGConnectingPoint num="7" id="5276" />
-<TGConnectingPoint num="8" id="5277" />
-<TGConnectingPoint num="9" id="5278" />
-<TGConnectingPoint num="10" id="5279" />
-<TGConnectingPoint num="11" id="5280" />
-<TGConnectingPoint num="12" id="5281" />
-<TGConnectingPoint num="13" id="5282" />
-<TGConnectingPoint num="14" id="5283" />
-<TGConnectingPoint num="15" id="5284" />
-<TGConnectingPoint num="16" id="5285" />
-<TGConnectingPoint num="17" id="5286" />
-<TGConnectingPoint num="18" id="5287" />
-<TGConnectingPoint num="19" id="5288" />
-<TGConnectingPoint num="20" id="5289" />
-<TGConnectingPoint num="21" id="5290" />
-<TGConnectingPoint num="22" id="5291" />
-<TGConnectingPoint num="23" id="5292" />
+<cdrectangleparam minX="0" maxX="491" minY="0" maxY="185" />
+<infoparam name="Block0" value="WirelessInterface" />
+<TGConnectingPoint num="0" id="5244" />
+<TGConnectingPoint num="1" id="5245" />
+<TGConnectingPoint num="2" id="5246" />
+<TGConnectingPoint num="3" id="5247" />
+<TGConnectingPoint num="4" id="5248" />
+<TGConnectingPoint num="5" id="5249" />
+<TGConnectingPoint num="6" id="5250" />
+<TGConnectingPoint num="7" id="5251" />
+<TGConnectingPoint num="8" id="5252" />
+<TGConnectingPoint num="9" id="5253" />
+<TGConnectingPoint num="10" id="5254" />
+<TGConnectingPoint num="11" id="5255" />
+<TGConnectingPoint num="12" id="5256" />
+<TGConnectingPoint num="13" id="5257" />
+<TGConnectingPoint num="14" id="5258" />
+<TGConnectingPoint num="15" id="5259" />
+<TGConnectingPoint num="16" id="5260" />
+<TGConnectingPoint num="17" id="5261" />
+<TGConnectingPoint num="18" id="5262" />
+<TGConnectingPoint num="19" id="5263" />
+<TGConnectingPoint num="20" id="5264" />
+<TGConnectingPoint num="21" id="5265" />
+<TGConnectingPoint num="22" id="5266" />
+<TGConnectingPoint num="23" id="5267" />
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
-<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -10783,8 +10784,7 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<globalCode value="" />
-<globalCode value="/* This is my global code !!!! */" />
+<Signal value="out remoteStart(int value)" attached="false" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -15507,7 +15507,7 @@ or by a maintenance station
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="" />
+<Validated value="ObserverProp1;RemotelyControlledMicrowave;RemoteControl;MicroWaveOven;Bell;ControlPanel;Controller;Magnetron;Door;WirelessInterface;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="7557" >
@@ -15533,8 +15533,8 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="7558" />
-<P1  x="468" y="658" id="7644" />
-<P2  x="173" y="657" id="7794" />
+<P1  x="468" y="658" id="7794" />
+<P2  x="173" y="657" id="7819" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in remoteStart(int value)" />
@@ -15582,7 +15582,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="7566" />
 <P1  x="476" y="912" id="7721" />
-<P2  x="377" y="911" id="7763" />
+<P2  x="377" y="911" id="7663" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
@@ -15595,7 +15595,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="7568" />
-<P1  x="850" y="926" id="7671" />
+<P1  x="850" y="926" id="7771" />
 <P2  x="804" y="912" id="7722" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -15614,7 +15614,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="7570" />
 <P1  x="804" y="787" id="7711" />
-<P2  x="835" y="698" id="7687" />
+<P2  x="835" y="698" id="7737" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
@@ -15629,7 +15629,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="7572" />
-<P1  x="443" y="757" id="7738" />
+<P1  x="443" y="757" id="7688" />
 <P2  x="476" y="870" id="7712" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -15675,9 +15675,9 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Signal value="in obs_open()" attached="false" />
-<Signal value="in obs_closed()" attached="false" />
-<Signal value="in obs_magnetronStart()" attached="false" />
+<Signal value="in obs_open()" attached="true" />
+<Signal value="in obs_closed()" attached="true" />
+<Signal value="in obs_magnetronStart()" attached="true" />
 </extraparam>
 </COMPONENT>
 
@@ -15786,54 +15786,17 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Signal value="in wirelessChannelRead(Message msg)" attached="false" />
-<Signal value="out wirelessChannelWrite(Message msg)" attached="false" />
+<Signal value="in wirelessChannelRead(Message msg)" attached="true" />
+<Signal value="out wirelessChannelWrite(Message msg)" attached="true" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5000" id="7808" >
-<father id="7858" num="0" />
-<cdparam x="173" y="554" />
-<sizeparam width="921" height="412" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="46" minY="0" maxY="219" />
-<infoparam name="Block0" value="MicroWaveOven" />
-<TGConnectingPoint num="0" id="7784" />
-<TGConnectingPoint num="1" id="7785" />
-<TGConnectingPoint num="2" id="7786" />
-<TGConnectingPoint num="3" id="7787" />
-<TGConnectingPoint num="4" id="7788" />
-<TGConnectingPoint num="5" id="7789" />
-<TGConnectingPoint num="6" id="7790" />
-<TGConnectingPoint num="7" id="7791" />
-<TGConnectingPoint num="8" id="7792" />
-<TGConnectingPoint num="9" id="7793" />
-<TGConnectingPoint num="10" id="7794" />
-<TGConnectingPoint num="11" id="7795" />
-<TGConnectingPoint num="12" id="7796" />
-<TGConnectingPoint num="13" id="7797" />
-<TGConnectingPoint num="14" id="7798" />
-<TGConnectingPoint num="15" id="7799" />
-<TGConnectingPoint num="16" id="7800" />
-<TGConnectingPoint num="17" id="7801" />
-<TGConnectingPoint num="18" id="7802" />
-<TGConnectingPoint num="19" id="7803" />
-<TGConnectingPoint num="20" id="7804" />
-<TGConnectingPoint num="21" id="7805" />
-<TGConnectingPoint num="22" id="7806" />
-<TGConnectingPoint num="23" id="7807" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Signal value="in remoteStart(int value)" attached="false" />
-</extraparam>
-</SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="7658" >
-<father id="7808" num="0" />
-<cdparam x="468" y="620" />
-<sizeparam width="334" height="154" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="7858" num="0" />
+<cdparam x="491" y="390" />
+<sizeparam width="414" height="148" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="587" minY="0" maxY="258" />
-<infoparam name="Block0" value="WirelessInterface" />
+<cdrectangleparam minX="0" maxX="553" minY="0" maxY="483" />
+<infoparam name="Block0" value="RemoteControl" />
 <TGConnectingPoint num="0" id="7634" />
 <TGConnectingPoint num="1" id="7635" />
 <TGConnectingPoint num="2" id="7636" />
@@ -15861,9 +15824,9 @@ or by a maintenance station
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
+<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -15886,16 +15849,54 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<Signal value="out remoteStart(int value)" attached="false" />
+<globalCode value="" />
+<globalCode value="/* This is my global code !!!! */" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="7833" >
+<father id="7858" num="1" />
+<cdparam x="173" y="554" />
+<sizeparam width="921" height="412" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="46" minY="0" maxY="219" />
+<infoparam name="Block0" value="MicroWaveOven" />
+<TGConnectingPoint num="0" id="7809" />
+<TGConnectingPoint num="1" id="7810" />
+<TGConnectingPoint num="2" id="7811" />
+<TGConnectingPoint num="3" id="7812" />
+<TGConnectingPoint num="4" id="7813" />
+<TGConnectingPoint num="5" id="7814" />
+<TGConnectingPoint num="6" id="7815" />
+<TGConnectingPoint num="7" id="7816" />
+<TGConnectingPoint num="8" id="7817" />
+<TGConnectingPoint num="9" id="7818" />
+<TGConnectingPoint num="10" id="7819" />
+<TGConnectingPoint num="11" id="7820" />
+<TGConnectingPoint num="12" id="7821" />
+<TGConnectingPoint num="13" id="7822" />
+<TGConnectingPoint num="14" id="7823" />
+<TGConnectingPoint num="15" id="7824" />
+<TGConnectingPoint num="16" id="7825" />
+<TGConnectingPoint num="17" id="7826" />
+<TGConnectingPoint num="18" id="7827" />
+<TGConnectingPoint num="19" id="7828" />
+<TGConnectingPoint num="20" id="7829" />
+<TGConnectingPoint num="21" id="7830" />
+<TGConnectingPoint num="22" id="7831" />
+<TGConnectingPoint num="23" id="7832" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Signal value="in remoteStart(int value)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="7683" >
-<father id="7808" num="1" />
-<cdparam x="850" y="832" />
-<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="7833" num="0" />
+<cdparam x="196" y="864" />
+<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
-<infoparam name="Block0" value="Door" />
+<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
+<infoparam name="Block0" value="Bell" />
 <TGConnectingPoint num="0" id="7659" />
 <TGConnectingPoint num="1" id="7660" />
 <TGConnectingPoint num="2" id="7661" />
@@ -15923,33 +15924,24 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$openM()" />
-<Method value="$closeM()" />
-<Signal value="out closed()" attached="false" />
-<Signal value="out open()" attached="false" />
-<Signal value="in unlockDoor()" attached="false" />
-<globalCode value="" />
+<Method value="$runBell()" />
+<Signal value="in ring()" attached="true" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* openD = &quot;Open Door&quot;;" />
-<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
+<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Door__openM() {" />
-<globalCode value="  sendDatagram(openD, 10);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Door__closeM() {" />
-<globalCode value="   sendDatagram(closeD, 10);" />
+<globalCode value="void _userImplemented_Bell__runBell() {" />
+<globalCode value="  sendDatagram(dring, 18);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="7708" >
-<father id="7808" num="2" />
-<cdparam x="835" y="618" />
-<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="7833" num="1" />
+<cdparam x="187" y="676" />
+<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
-<infoparam name="Block0" value="Magnetron" />
+<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
+<infoparam name="Block0" value="ControlPanel" />
 <TGConnectingPoint num="0" id="7684" />
 <TGConnectingPoint num="1" id="7685" />
 <TGConnectingPoint num="2" id="7686" />
@@ -15977,25 +15969,14 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Method value="$ON()" />
-<Method value="$OFF()" />
-<Signal value="in startM()" attached="false" />
-<Signal value="in stopM()" attached="false" />
-<globalCode value="extern void sendDatagram(char *data, int size);" />
-<globalCode value="" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__ON() {" />
-<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__OFF() {" />
-<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
-<globalCode value="}" />
+<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="7733" >
-<father id="7808" num="3" />
+<father id="7833" num="2" />
 <cdparam x="476" y="787" />
 <sizeparam width="328" height="167" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -16032,18 +16013,18 @@ or by a maintenance station
 <Attribute access="0" id="remainingTime" value="0" type="8" typeOther="" />
 <Method value="$startCooking(int duration)" />
 <Method value="$durationModified(int duration)" />
-<Signal value="in start(int duration)" attached="false" />
-<Signal value="in closed()" attached="false" />
-<Signal value="in open()" attached="false" />
-<Signal value="out ringBell()" attached="false" />
-<Signal value="out startMagnetron()" attached="false" />
-<Signal value="out stopMagnetron()" attached="false" />
+<Signal value="in start(int duration)" attached="true" />
+<Signal value="in closed()" attached="true" />
+<Signal value="in open()" attached="true" />
+<Signal value="out ringBell()" attached="true" />
+<Signal value="out startMagnetron()" attached="true" />
+<Signal value="out stopMagnetron()" attached="true" />
 <Signal value="out startCooking()" attached="false" />
 <Signal value="out stopCooking()" attached="false" />
-<Signal value="out obs_open()" attached="false" />
-<Signal value="out obs_closed()" attached="false" />
-<Signal value="out obs_magnetronStart()" attached="false" />
-<Signal value="out unlockDoor()" attached="false" />
+<Signal value="out obs_open()" attached="true" />
+<Signal value="out obs_closed()" attached="true" />
+<Signal value="out obs_magnetronStart()" attached="true" />
+<Signal value="out unlockDoor()" attached="true" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
 <globalCode value="const char* dur = &quot;Duration&quot;;" />
@@ -16075,12 +16056,12 @@ or by a maintenance station
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="7758" >
-<father id="7808" num="4" />
-<cdparam x="187" y="676" />
-<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="7833" num="3" />
+<cdparam x="835" y="618" />
+<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
-<infoparam name="Block0" value="ControlPanel" />
+<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
+<infoparam name="Block0" value="Magnetron" />
 <TGConnectingPoint num="0" id="7734" />
 <TGConnectingPoint num="1" id="7735" />
 <TGConnectingPoint num="2" id="7736" />
@@ -16108,19 +16089,30 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
-<Signal value="in LEDOn()" attached="false" />
-<Signal value="in LEDoff()" attached="false" />
-<Signal value="out startButton(int duration)" attached="false" />
+<Attribute access="0" id="power" value="0" type="8" typeOther="" />
+<Method value="$ON()" />
+<Method value="$OFF()" />
+<Signal value="in startM()" attached="true" />
+<Signal value="in stopM()" attached="true" />
+<globalCode value="extern void sendDatagram(char *data, int size);" />
+<globalCode value="" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__ON() {" />
+<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__OFF() {" />
+<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
+<globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="7783" >
-<father id="7808" num="5" />
-<cdparam x="196" y="864" />
-<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="7833" num="4" />
+<cdparam x="850" y="832" />
+<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
-<infoparam name="Block0" value="Bell" />
+<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
+<infoparam name="Block0" value="Door" />
 <TGConnectingPoint num="0" id="7759" />
 <TGConnectingPoint num="1" id="7760" />
 <TGConnectingPoint num="2" id="7761" />
@@ -16148,54 +16140,63 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$runBell()" />
-<Signal value="in ring()" attached="false" />
+<Method value="$openM()" />
+<Method value="$closeM()" />
+<Signal value="out closed()" attached="true" />
+<Signal value="out open()" attached="true" />
+<Signal value="in unlockDoor()" attached="true" />
+<globalCode value="" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
+<globalCode value="const char* openD = &quot;Open Door&quot;;" />
+<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Bell__runBell() {" />
-<globalCode value="  sendDatagram(dring, 18);" />
+<globalCode value="void _userImplemented_Door__openM() {" />
+<globalCode value="  sendDatagram(openD, 10);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Door__closeM() {" />
+<globalCode value="   sendDatagram(closeD, 10);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="7833" >
-<father id="7858" num="1" />
-<cdparam x="491" y="390" />
-<sizeparam width="414" height="148" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="7808" >
+<father id="7833" num="5" />
+<cdparam x="468" y="620" />
+<sizeparam width="334" height="154" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="553" minY="0" maxY="483" />
-<infoparam name="Block0" value="RemoteControl" />
-<TGConnectingPoint num="0" id="7809" />
-<TGConnectingPoint num="1" id="7810" />
-<TGConnectingPoint num="2" id="7811" />
-<TGConnectingPoint num="3" id="7812" />
-<TGConnectingPoint num="4" id="7813" />
-<TGConnectingPoint num="5" id="7814" />
-<TGConnectingPoint num="6" id="7815" />
-<TGConnectingPoint num="7" id="7816" />
-<TGConnectingPoint num="8" id="7817" />
-<TGConnectingPoint num="9" id="7818" />
-<TGConnectingPoint num="10" id="7819" />
-<TGConnectingPoint num="11" id="7820" />
-<TGConnectingPoint num="12" id="7821" />
-<TGConnectingPoint num="13" id="7822" />
-<TGConnectingPoint num="14" id="7823" />
-<TGConnectingPoint num="15" id="7824" />
-<TGConnectingPoint num="16" id="7825" />
-<TGConnectingPoint num="17" id="7826" />
-<TGConnectingPoint num="18" id="7827" />
-<TGConnectingPoint num="19" id="7828" />
-<TGConnectingPoint num="20" id="7829" />
-<TGConnectingPoint num="21" id="7830" />
-<TGConnectingPoint num="22" id="7831" />
-<TGConnectingPoint num="23" id="7832" />
+<cdrectangleparam minX="0" maxX="587" minY="0" maxY="258" />
+<infoparam name="Block0" value="WirelessInterface" />
+<TGConnectingPoint num="0" id="7784" />
+<TGConnectingPoint num="1" id="7785" />
+<TGConnectingPoint num="2" id="7786" />
+<TGConnectingPoint num="3" id="7787" />
+<TGConnectingPoint num="4" id="7788" />
+<TGConnectingPoint num="5" id="7789" />
+<TGConnectingPoint num="6" id="7790" />
+<TGConnectingPoint num="7" id="7791" />
+<TGConnectingPoint num="8" id="7792" />
+<TGConnectingPoint num="9" id="7793" />
+<TGConnectingPoint num="10" id="7794" />
+<TGConnectingPoint num="11" id="7795" />
+<TGConnectingPoint num="12" id="7796" />
+<TGConnectingPoint num="13" id="7797" />
+<TGConnectingPoint num="14" id="7798" />
+<TGConnectingPoint num="15" id="7799" />
+<TGConnectingPoint num="16" id="7800" />
+<TGConnectingPoint num="17" id="7801" />
+<TGConnectingPoint num="18" id="7802" />
+<TGConnectingPoint num="19" id="7803" />
+<TGConnectingPoint num="20" id="7804" />
+<TGConnectingPoint num="21" id="7805" />
+<TGConnectingPoint num="22" id="7806" />
+<TGConnectingPoint num="23" id="7807" />
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
-<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -16218,8 +16219,7 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<globalCode value="" />
-<globalCode value="/* This is my global code !!!! */" />
+<Signal value="out remoteStart(int value)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -21048,7 +21048,7 @@ or by a maintenance station
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="ObserverProp1;RemotelyControlledMicrowave;MicroWaveOven;Bell;ControlPanel;Controller;Magnetron;Door;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="10133" >
@@ -21075,7 +21075,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="10134" />
 <P1  x="476" y="912" id="10229" />
-<P2  x="377" y="911" id="10171" />
+<P2  x="377" y="911" id="10271" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
@@ -21088,7 +21088,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="10136" />
-<P1  x="850" y="927" id="10279" />
+<P1  x="850" y="927" id="10179" />
 <P2  x="804" y="912" id="10230" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -21107,7 +21107,7 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="10138" />
 <P1  x="804" y="787" id="10219" />
-<P2  x="835" y="698" id="10245" />
+<P2  x="835" y="698" id="10195" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
@@ -21122,7 +21122,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="10140" />
-<P1  x="443" y="757" id="10196" />
+<P1  x="443" y="757" id="10246" />
 <P2  x="476" y="870" id="10220" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -21248,11 +21248,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="10191" >
 <father id="10316" num="0" />
-<cdparam x="196" y="864" />
-<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="850" y="833" />
+<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
-<infoparam name="Block0" value="Bell" />
+<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
+<infoparam name="Block0" value="Door" />
 <TGConnectingPoint num="0" id="10167" />
 <TGConnectingPoint num="1" id="10168" />
 <TGConnectingPoint num="2" id="10169" />
@@ -21280,24 +21280,33 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$runBell()" />
-<Signal value="in ring()" attached="true" />
+<Method value="$openM()" />
+<Method value="$closeM()" />
+<Signal value="out closed()" attached="true" />
+<Signal value="out open()" attached="true" />
+<Signal value="in unlockDoor()" attached="true" />
+<globalCode value="" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
+<globalCode value="const char* openD = &quot;Open Door&quot;;" />
+<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
 <globalCode value="" />
-<globalCode value="void __userImplemented__Bell__runBell() {" />
-<globalCode value="  sendDatagram(dring, 18);" />
+<globalCode value="void __userImplemented__Door__openM() {" />
+<globalCode value="  sendDatagram(openD, 10);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void __userImplemented__Door__closeM() {" />
+<globalCode value="   sendDatagram(closeD, 10);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="10216" >
 <father id="10316" num="1" />
-<cdparam x="187" y="676" />
-<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="835" y="618" />
+<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
-<infoparam name="Block0" value="ControlPanel" />
+<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
+<infoparam name="Block0" value="Magnetron" />
 <TGConnectingPoint num="0" id="10192" />
 <TGConnectingPoint num="1" id="10193" />
 <TGConnectingPoint num="2" id="10194" />
@@ -21325,10 +21334,21 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
-<Signal value="in LEDOn()" attached="false" />
-<Signal value="in LEDoff()" attached="false" />
-<Signal value="out startButton(int duration)" attached="true" />
+<Attribute access="0" id="power" value="0" type="8" typeOther="" />
+<Method value="$ON()" />
+<Method value="$OFF()" />
+<Signal value="in startM()" attached="true" />
+<Signal value="in stopM()" attached="true" />
+<globalCode value="extern void sendDatagram(char *data, int size);" />
+<globalCode value="" />
+<globalCode value="" />
+<globalCode value="void __userImplemented__Magnetron__ON() {" />
+<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void __userImplemented__Magnetron__OFF() {" />
+<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
+<globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="10241" >
@@ -21413,11 +21433,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="10266" >
 <father id="10316" num="3" />
-<cdparam x="835" y="618" />
-<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="187" y="676" />
+<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
-<infoparam name="Block0" value="Magnetron" />
+<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
+<infoparam name="Block0" value="ControlPanel" />
 <TGConnectingPoint num="0" id="10242" />
 <TGConnectingPoint num="1" id="10243" />
 <TGConnectingPoint num="2" id="10244" />
@@ -21445,30 +21465,19 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Method value="$ON()" />
-<Method value="$OFF()" />
-<Signal value="in startM()" attached="true" />
-<Signal value="in stopM()" attached="true" />
-<globalCode value="extern void sendDatagram(char *data, int size);" />
-<globalCode value="" />
-<globalCode value="" />
-<globalCode value="void __userImplemented__Magnetron__ON() {" />
-<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void __userImplemented__Magnetron__OFF() {" />
-<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
-<globalCode value="}" />
+<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="10291" >
 <father id="10316" num="4" />
-<cdparam x="850" y="833" />
-<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="196" y="864" />
+<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
-<infoparam name="Block0" value="Door" />
+<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
+<infoparam name="Block0" value="Bell" />
 <TGConnectingPoint num="0" id="10267" />
 <TGConnectingPoint num="1" id="10268" />
 <TGConnectingPoint num="2" id="10269" />
@@ -21496,23 +21505,14 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$openM()" />
-<Method value="$closeM()" />
-<Signal value="out closed()" attached="true" />
-<Signal value="out open()" attached="true" />
-<Signal value="in unlockDoor()" attached="true" />
-<globalCode value="" />
+<Method value="$runBell()" />
+<Signal value="in ring()" attached="true" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* openD = &quot;Open Door&quot;;" />
-<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
+<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
 <globalCode value="" />
-<globalCode value="void __userImplemented__Door__openM() {" />
-<globalCode value="  sendDatagram(openD, 10);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void __userImplemented__Door__closeM() {" />
-<globalCode value="   sendDatagram(closeD, 10);" />
+<globalCode value="void __userImplemented__Bell__runBell() {" />
+<globalCode value="  sendDatagram(dring, 18);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
