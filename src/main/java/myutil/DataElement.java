@@ -103,5 +103,26 @@ public class DataElement implements GenericTree {
         return title;
     }
 
+    public String getCSVData() {
+
+        String ret = "";
+        int i;
+
+        if ((times== null) || (times.length == 0)) {
+            for (i=0; i< data.length; i++) {
+                if (i>0) {
+                    ret += ",";
+                }
+                ret+= data[i];
+            }
+        } else {
+            for (i=0; i< data.length; i++) {
+                ret += times[i] + "," + data[i] + "\n";
+            }
+        }
+
+        return ret;
+    }
+
 
 } // Class

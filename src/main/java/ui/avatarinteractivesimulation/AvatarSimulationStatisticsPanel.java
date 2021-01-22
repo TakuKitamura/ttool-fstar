@@ -302,15 +302,15 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
             return;
         }
 
-        int nbOfsimulations;
+        int nbOfSimulations;
 
         try {
-            nbOfsimulations = new Integer(nbOfSimulationsText.getText()).intValue();
+            nbOfSimulations = new Integer(nbOfSimulationsText.getText()).intValue();
         } catch (Exception e) {
             return;
         }
 
-        if (nbOfsimulations < 1) {
+        if (nbOfSimulations < 1) {
             return;
         }
 
@@ -318,15 +318,13 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
 
         reinitStats();
 
-        //TraceManager.addDev("Going to start simulations");
-
         runSimulations.setEnabled(false);
         sr = new AvatarSimulationRunner(mgui.gtm.getAvatarSpecification());
 
-        totalNbOfSimulations = nbOfsimulations;
-        totalSimulations.setText(""+nbOfsimulations);
+        totalNbOfSimulations = nbOfSimulations;
+        totalSimulations.setText(""+nbOfSimulations);
 
-        simuExecutor = new Thread(() -> sr.runXSimulation(nbOfsimulations, this));
+        simuExecutor = new Thread(() -> sr.runXSimulation(nbOfSimulations, this));
         simuExecutor.start();
         stopSimulationsButton.setEnabled(true);
 

@@ -52,6 +52,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -77,9 +78,11 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
     private TreePath[] m_selectedTreePaths = new TreePath[0];
     //private boolean m_nodeWasSelected = false;
 
-    protected JMenuItem jmiAnalyze;
+    protected JMenuItem showAllSelectedCharts;
+    protected JMenuItem showHistogram, showPieChart, showTimeValueChart, showValueEvolutionChart;
+    protected JMenuItem saveAsCSVMI;
     protected JPopupMenu popupTree;
-    protected JPopupMenu popupTreeST;
+    protected DataElement selectedDataElement;
 
 
     /*
@@ -171,13 +174,40 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
         Object obj = path.getLastPathComponent();
 
         //TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
+        selectedDataElement = null;
 
         if (obj instanceof DataElement) {
+            selectedDataElement = (DataElement)obj;
             if (popupTree == null) {
                 popupTree = new JPopupMenu();
-                jmiAnalyze = new JMenuItem("Add graph from file (.aut)");
-                jmiAnalyze.addActionListener(this);
-                popupTree.add(jmiAnalyze);
+
+                showAllSelectedCharts = new JMenuItem("Show all selected Charts");
+                showAllSelectedCharts.addActionListener(this);
+
+                showHistogram = new JMenuItem("Show Histogram");
+                showHistogram.addActionListener(this);
+
+                showPieChart = new JMenuItem("Show Pie Chart");
+                showPieChart.addActionListener(this);
+
+                showTimeValueChart = new JMenuItem("Show Value = f(t) Chart");
+                showTimeValueChart.addActionListener(this);
+
+                showValueEvolutionChart = new JMenuItem("Show Value = f(t) per Simulation Chart");
+                showValueEvolutionChart.addActionListener(this);
+
+
+                saveAsCSVMI = new JMenuItem("Save data in CSV format");
+                saveAsCSVMI.addActionListener(this);
+
+                popupTree.add(showAllSelectedCharts);
+                popupTree.addSeparator();
+                popupTree.add(showHistogram);
+                popupTree.add(showPieChart);
+                popupTree.add(showTimeValueChart);
+                popupTree.add(showValueEvolutionChart);
+                popupTree.addSeparator();
+                popupTree.add(saveAsCSVMI);
             }
             popupTree.show(tree, x, y);
         }
@@ -305,7 +335,7 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
 
         if (nodeInfo instanceof DataElement) {
             //if ( ((DataElement)(nodeInfo)).isLeaf()) {
-                jFStats.showStats((DataElement) nodeInfo);
+                //jFStats.showStats((DataElement) nodeInfo);
             //}
         }
     }
@@ -313,9 +343,62 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
 
     public void actionPerformed(ActionEvent ae) {
 
-        if (ae.getSource() == jmiAnalyze) {
+        if (ae.getSource() == saveAsCSVMI) {
+            if (selectedDataElement != null) {
+                TraceManager.addDev("Save in CSV format");
 
+                String csvData = selectedDataElement.getCSVData();
+                if ((csvData == null) || (csvData.length() == 0)) {
+                    JOptionPane.showMessageDialog(jFStats,
+                            "Empty data",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+                JFileChooser jfc = new JFileChooser();
+                int returnVal = jfc.showDialog(this, "Select file");
+                if (returnVal != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+
+                File selectedFile = jfc.getSelectedFile();
+
+                if (selectedFile != null) {
+                    try {
+                        FileUtils.saveFile(selectedFile, csvData);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(jFStats,
+                                "Could not save the file: " + e.getMessage(),
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+
+            // Find the related DataElement
+        } else if (ae.getSource() == showAllSelectedCharts) {
+            if (selectedDataElement != null) {
+                jFStats.showStats(selectedDataElement);
+            }
+        } else if (ae.getSource() == showHistogram) {
+            if (selectedDataElement != null) {
+                jFStats.showHistogram(selectedDataElement);
+            }
+        } else if (ae.getSource() == showPieChart) {
+            if (selectedDataElement != null) {
+                jFStats.showPieChart(selectedDataElement);
+            }
+        } else if (ae.getSource() == showTimeValueChart) {
+            if (selectedDataElement != null) {
+                jFStats.showTimeValueChart(selectedDataElement);
+            }
+        } else if (ae.getSource() == showValueEvolutionChart) {
+            if (selectedDataElement != null) {
+                jFStats.showValueEvolutionChart(selectedDataElement);
+            }
         }
+
     }
 
 
