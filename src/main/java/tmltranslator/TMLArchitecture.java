@@ -571,6 +571,16 @@ public class TMLArchitecture {
 
         return hardwareAccList;
     }
+    
+    public List<HwNode> getFPGAs() {
+        List<HwNode> fpgas = new ArrayList<HwNode>();
+        for (HwNode node : hwnodes) {
+            if (node instanceof HwFPGA) {
+                fpgas.add(node);
+            }
+        }
+        return fpgas;
+    }
 
 
 }
