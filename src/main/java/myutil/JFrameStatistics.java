@@ -374,6 +374,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         XYSeries series = new XYSeries("Value per Time");
 
         for(int i=0; i<de.data.length; i++) {
+            TraceManager.addDev("Adding point " + de.times[i] + "," + de.data[i] + " for " + title);
             series.add(de.times[i], de.data[i]);
         }
 

@@ -247,6 +247,41 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                     cpt ++;
                 }
 
+                // States
+                for (AvatarStateMachineElement asme: ab.getStateMachine().getListOfElements()) {
+                    if (asme instanceof AvatarState) {
+                        DataElement stateOccurrence = new DataElement(asme.getExtendedName());
+                        HashMap<Long, Integer> map = new HashMap<>();
+                        // Getting occurences of states for each time
+                        for (AvatarSpecificationSimulation ass : sr.listOfSimulations) {
+                            for (AvatarSimulationTransaction ast : ass.getAllTransactions()) {
+                                if ( (ast.executedElement == asme) || (ast.executedElement.getNext(0) == asme) ){
+                                    Integer occ = map.get(ast.initialClockValue);
+                                    if (occ == null) {
+                                        occ = new Integer(1);
+                                    } else {
+                                        occ = new Integer(occ.intValue() + 1);
+                                    }
+                                    map.put(new Long(ast.initialClockValue), occ);
+                                    TraceManager.addDev("Putting in table " + ast.initialClockValue + " " + occ.intValue());
+                                }
+                            }
+                        }
+                        int size = map.size();
+                        stateOccurrence.data = new double[size];
+                        stateOccurrence.times = new long[size];
+                        cpt = 0;
+                        for(Long l: map.keySet()) {
+                            stateOccurrence.times[cpt] = l;
+                            stateOccurrence.data[cpt] = map.get(l);
+                            TraceManager.addDev("Adding in data element " + l.longValue() + " " + map.get(l).intValue() + " for state " + asme.getExtendedName());
+                            cpt ++;
+                        }
+
+                        //de.addSetOfValue(stateOccurrence);
+                        deBlock.addChild(stateOccurrence);
+                    }
+                }
             }
 
 
