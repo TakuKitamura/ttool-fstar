@@ -576,12 +576,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         this.add(lengedpanel);
         this.pack();
         this.setVisible(visible);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void tableChanged(TableModelEvent e) {
-        // TODO Auto-generated method stub
     }
 
     public Object[][] getDataDetailedByTask() {

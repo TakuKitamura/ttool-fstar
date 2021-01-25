@@ -393,7 +393,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     }
 
     protected void generateDirectedGraph2(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
-        // TODO Auto-generated method stub
         try {
             dgraph = null;
             dgraph = tc.getDgraph();
@@ -435,7 +434,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        // TODO Auto-generated method stub
         String command = evt.getActionCommand();
         // TraceManager.addDev("Command:" + command);
         if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SHOW_GRAPH_FILE_1].getActionCommand())) {
@@ -639,7 +637,6 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     }
 
     protected void compareLatencyInDetails(int row1, int row2, int row3, int row4, int selectedIndex) throws InterruptedException {
-        // TODO Auto-generated method stub
         if (selectedIndex == 0) {
             jta.append("The latency for row : " + row1 + ": and row: " + row2 + "is under analysis.\n");
             new JFrameLatencyComparedDetailedPopup(dgraph1, dgraph2, row1, row2, true, tc);

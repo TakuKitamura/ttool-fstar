@@ -1015,42 +1015,34 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
     }
 
     public Thread getT() {

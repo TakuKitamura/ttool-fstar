@@ -268,7 +268,6 @@ public class DirectedGraphTranslator extends JApplet {
 
     // The main function to add the vertices and edges according to the model
     public vertex vertex(String name, int id) {
-        // TODO Auto-generated method stub
         vertex v = new vertex(name, id);
         return v;
     }
@@ -303,7 +302,7 @@ public class DirectedGraphTranslator extends JApplet {
         addMemorychannel(memorychannel);
         addUnmappedchannel();
         addCPUs();
-        addFPGA();
+        addFPGAs();
         addLinkEdges();
         addFlowEdges();
         addSendEventWaitEventEdges();
@@ -317,7 +316,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addUnmappedchannel() {
-        // TODO Auto-generated method stub
         DiploSimulatorCodeGenerator gen = new DiploSimulatorCodeGenerator(tmap);
         for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
             List<HwCommunicationNode> pathNodes = gen.determineRoutingPath(tmap.getHwNodeOf(ch.getOriginTask()),
@@ -361,9 +359,7 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addCPUs() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-        HashMap<String, HashSet<String>> cpuTasks;
         for (HwNode node : tmap.getArch().getCPUs()) {
             cpuTask = new HashMap<String, HashSet<TMLTask>>();
             cpuIDs.put(node.getName(), node.getID());
@@ -371,15 +367,13 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
             }
             if (cpuTask.size() > 0) {
-                cpuTasks = getCPUTaskMap(cpuTask);
+                getCPUTaskMap(cpuTask);
             }
         }
     }
 
-    private void addFPGA() {
-        // TODO Auto-generated method stub
+    private void addFPGAs() {
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-        HashMap<String, HashSet<String>> cpuTasks;
         for (HwNode node : tmap.getArch().getFPGAs()) {
             cpuTask = new HashMap<String, HashSet<TMLTask>>();
             cpuIDs.put(node.getName(), node.getID());
@@ -387,13 +381,12 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
             }
             if (cpuTask.size() > 0) {
-                cpuTasks = getCPUTaskMap(cpuTask);
+                getCPUTaskMap(cpuTask);
             }
         }
     }
 
     private void addMemorychannel(HashMap<String, HashSet<TMLElement>> memorychannel) {
-        // TODO Auto-generated method stub
         for (Entry<String, HashSet<TMLElement>> entry : memorychannel.entrySet()) {
             String busName = entry.getKey();
             HashSet<TMLElement> busChList = entry.getValue();
@@ -414,7 +407,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addBridgechannel(HashMap<String, HashSet<TMLElement>> bridgechannel) {
-        // TODO Auto-generated method stub
         for (Entry<String, HashSet<TMLElement>> entry : bridgechannel.entrySet()) {
             String busName = entry.getKey();
             HashSet<TMLElement> busChList = entry.getValue();
@@ -435,7 +427,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addBuschannel(HashMap<String, HashSet<TMLElement>> buschannel) {
-        // TODO Auto-generated method stub
         for (Entry<String, HashSet<TMLElement>> entry : buschannel.entrySet()) {
             String busName = entry.getKey();
             HashSet<TMLElement> busChList = entry.getValue();
@@ -470,9 +461,7 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addHwAs() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-        HashMap<String, HashSet<String>> cpuTasks;
         for (HwA node : tmap.getArch().getHwA()) {
             cpuTask = new HashMap<String, HashSet<TMLTask>>();
             cpuIDs.put(node.getName(), node.getID());
@@ -480,13 +469,12 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
             }
             if (cpuTask.size() > 0) {
-                cpuTasks = getCPUTaskMap(cpuTask);
+                getCPUTaskMap(cpuTask);
             }
         }
     }
 
     private HashMap<String, HashSet<TMLElement>> addBridge() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getHwBridge()) {
             if (!g.containsVertex(getvertex(node.getName()))) {
@@ -501,7 +489,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private HashMap<String, HashSet<TMLElement>> addBUSs() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getBUSs()) {
             if (!g.containsVertex(getvertex(node.getName()))) {
@@ -516,7 +503,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addLinkEdges() {
-        // TODO Auto-generated method stub
         for (HwLink link : links) {
             vertex vlink1 = vertex(link.hwnode.getName(), link.hwnode.getID());
             vertex vlink2 = vertex(link.bus.getName(), link.bus.getID());
@@ -528,7 +514,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addFlowEdges() {
-        // TODO Auto-generated method stub
         if (addedEdges.size() > 0) {
             for (Entry<String, String> edge : addedEdges.entrySet()) {
                 vertex v = getvertex(edge.getKey());
@@ -541,7 +526,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addSendEventWaitEventEdges() {
-        // TODO Auto-generated method stub
         if (sendEventWaitEventEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : sendEventWaitEventEdges.entrySet()) {
                 vertex v = getvertex(edge.getKey());
@@ -556,7 +540,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addReadWriteChannelEdges() {
-        // TODO Auto-generated method stub
         if (readWriteChannelEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : readWriteChannelEdges.entrySet()) {
                 Integer id = allChannels.get(edge.getKey());
@@ -573,7 +556,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addForkreadEdges() {
-        // TODO Auto-generated method stub
         if (forkreadEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : forkreadEdges.entrySet()) {
                 HashSet<String> writech = forkwriteEdges.get(edge.getKey());
@@ -594,7 +576,6 @@ public class DirectedGraphTranslator extends JApplet {
 
     // draw the vertices and edges for the tasks mapped to the CPUs
     private void addJoinreadEdges() {
-        // TODO Auto-generated method stub
         if (joinreadEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : joinreadEdges.entrySet()) {
                 HashSet<String> writech = joinwriteEdges.get(edge.getKey());
@@ -614,7 +595,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addWriteReadChannelEdges() {
-        // TODO Auto-generated method stub
         if (writeReadChannelEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : writeReadChannelEdges.entrySet()) {
                 for (String readChannelEdge : edge.getValue()) {
@@ -631,7 +611,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addRequestEdges() {
-        // TODO Auto-generated method stub
         if (requestEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : requestEdges.entrySet()) {
                 vertex v = getvertex(edge.getKey());
@@ -646,7 +625,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addunOrderedSeqEdges() {
-        // TODO Auto-generated method stub
         if (unOrderedSequenceEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : unOrderedSequenceEdges.entrySet()) {
                 vertex v = getvertex(edge.getKey());
@@ -749,10 +727,10 @@ public class DirectedGraphTranslator extends JApplet {
         }
     }
 
-    public HashMap<String, HashSet<String>> getCPUTaskMap(HashMap<String, HashSet<TMLTask>> cpuTask) {
+    public void getCPUTaskMap(HashMap<String, HashSet<TMLTask>> cpuTask) {
         HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
         if (tmap == null) {
-            return cpuTaskMap;
+            return;
         }
         for (Entry<String, HashSet<TMLTask>> entry : cpuTask.entrySet()) {
             String key = entry.getKey();
@@ -1011,11 +989,10 @@ public class DirectedGraphTranslator extends JApplet {
                 }
             }
         }
-        return cpuTaskMap;
+        return;
     }
 
     private void trackMultiNexts(String taskName, String eventName) {
-        // TODO Auto-generated method stub
         if (currentElement.getReferenceObject() != null && currentElement.getReferenceObject() instanceof TMLADForStaticLoop
                 || currentElement.getReferenceObject() instanceof TMLADForLoop) {
             if (currentElement.getNexts().size() > 1) {
@@ -1169,7 +1146,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addStartVertex(String taskName) {
-        // TODO Auto-generated method stub
         taskStartName = taskName + "__" + currentElement.getName() + "__" + currentElement.getID();
         vertex startv = vertex(taskStartName, currentElement.getID());
         g.addVertex(startv);
@@ -1185,7 +1161,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void waitEventNames() {
-        // TODO Auto-generated method stub
         for (TMLWaitEvent waitEvent : taskAc.getWaitEvents()) {
             // TMLCPrimitivePort portdetails = waitEvent.getEvent().port;
             TMLCPrimitivePort sendingPortdetails = waitEvent.getEvent().port;
@@ -1274,7 +1249,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void writeChannelNames() {
-        // TODO Auto-generated method stub
         for (TMLWriteChannel writeChannel : taskAc.getWriteChannels()) {
             int i = writeChannel.getNbOfChannels();
             for (int j = 0; j < i; j++) {
@@ -1338,7 +1312,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void readChannelNames() {
-        // TODO Auto-generated method stub
         for (TMLReadChannel readChannel : taskAc.getReadChannels()) {
             int i = readChannel.getNbOfChannels();
             // name = _ch.getOriginPorts().get(0).getName(); //return the name of the source
@@ -1414,7 +1387,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void sendEventsNames() {
-        // TODO Auto-generated method stub
         for (TMLSendEvent sendEvent : taskAc.getSendEvents()) {
             // int i = sendEvent.getEvents().size();
             TMLCPrimitivePort sendingPortdetails = sendEvent.getEvent().port;
@@ -1433,7 +1405,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void requestedTask(HashSet<TMLTask> value) {
-        // TODO Auto-generated method stub
         for (TMLTask task : value) {
             if (task.isRequested()) {
                 TMLRequest requestToTask = task.getRequest();
@@ -1484,7 +1455,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addcurrentElementVertex(String taskName, String taskStartName) {
-        // TODO Auto-generated method stub
         String preEventName;
         int preEventid;
         String eventName = getEventName(taskName, currentElement);
@@ -1711,7 +1681,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addStopVertex(String taskName) {
-        // TODO Auto-generated method stub
         String taskEndName = "";
         int taskEndid;
         int preEventid;
@@ -2085,7 +2054,6 @@ public class DirectedGraphTranslator extends JApplet {
         ComponentNameProvider<DefaultEdge> edgeLabelProvider = new ComponentNameProvider<DefaultEdge>() {
             @Override
             public String getName(DefaultEdge edge) {
-                // TODO Auto-generated method stub
                 return Double.toString(g.getEdgeWeight(edge));
             }
         };
@@ -3089,7 +3057,6 @@ public class DirectedGraphTranslator extends JApplet {
                 return v.getLabel().get(j);
             }
         }
-        // TODO Auto-generated method stub
         if (v.getLabel().size() - 1 >= 0) {
             return v.getLabel().get(v.getLabel().size() - 1);
         }
@@ -4356,7 +4323,6 @@ public class DirectedGraphTranslator extends JApplet {
         if (message.isEmpty()) {
             message = "Couln't add rule between " + v1 + " and " + v2 + "";
         }
-        // TODO Auto-generated method stub
         return message;
     }
 

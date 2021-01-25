@@ -295,12 +295,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         framePanel.add(scrollPane16, c02);
         this.pack();
         this.setVisible(true);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void tableChanged(TableModelEvent e) {
-        // TODO Auto-generated method stub
     }
 
     public JTable LatencyTable(DirectedGraphTranslator dgraph, int row, boolean firstTable) {

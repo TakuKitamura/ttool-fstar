@@ -32,7 +32,6 @@ import ui.util.IconManager;
 import ui.window.JDialogToChosePanel;
 
 public class latencyDetailedAnalysisMain {
-
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
     private Vector<String> checkedTransactionsFile2 = new Vector<String>();
     private Vector<String> checkedTransactionsFile = new Vector<String>();
@@ -44,7 +43,6 @@ public class latencyDetailedAnalysisMain {
     private TMLMapping<TGComponent> map1;
     private List<TMLComponentDesignPanel> cpanels1;
     private LatencyAnalysisParallelAlgorithms tc;
-
     public static final String DIPLODOCUS_ARCHI_MAPPING = "DIPLODOCUS architecture and mapping Diagram";
     public static final String TML_COMP_TASK_DIAGRAM = "TML Component Task Diagram";
     public static final String MODEL_PATH = "/siminfo/global/model";
@@ -79,6 +77,8 @@ public class latencyDetailedAnalysisMain {
         List<TMLComponentDesignPanel> cpanels;
         TMLComponentDesignPanel compdp;
         TURTLEPanel tp = selectedTab;
+        checkedT1 = new HashMap<String, Integer>();
+        checkedT2 = new HashMap<String, Integer>();
         // tmlap = (TMLArchiPanel) tp;
         if (mainGUI_compare.gtm == null) {
         } else {

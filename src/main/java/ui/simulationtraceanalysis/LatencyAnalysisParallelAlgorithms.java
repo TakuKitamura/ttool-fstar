@@ -123,7 +123,6 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     }
 
     private void generateDirectedGraph2(TMLMapping<TGComponent> map2, List<TMLComponentDesignPanel> cpanels2) {
-        // TODO Auto-generated method stub
         start(16);
         run();
     }
@@ -233,7 +232,6 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
 
     public void compareLatencyInDetails(JFrameCompareLatencyDetail jFrameCompareLatencyDetail, int row11, int row22, int row33, int row44,
             int selectedIndex1) {
-        // TODO Auto-generated method stub
         cld = jFrameCompareLatencyDetail;
         row1 = row11;
         row2 = row22;
