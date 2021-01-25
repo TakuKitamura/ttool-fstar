@@ -103,7 +103,15 @@ public class DataElement implements GenericTree {
         return title;
     }
 
+    public boolean hasCSVData() {
+        return (data != null);
+    }
+
     public String getCSVData() {
+
+        if (data == null) {
+            return "";
+        }
 
         String ret = "";
         int i;
@@ -122,6 +130,25 @@ public class DataElement implements GenericTree {
         }
 
         return ret;
+    }
+
+    public boolean hasCSVSonData() {
+        return (childs != null);
+    }
+
+    public String getCSVDataSons () {
+        if (childs == null) {
+            return "";
+        }
+
+        StringBuffer sb = new StringBuffer("");
+
+        for(DataElement de: childs) {
+            sb.append(de.getCSVData() + "\n");
+            sb.append(de.getCSVDataSons());
+        }
+
+        return sb.toString();
     }
 
 

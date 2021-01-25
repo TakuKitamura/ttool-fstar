@@ -69,20 +69,18 @@ import java.util.Set;
  * @version 1.0 11/01/2021
  */
 public class JTreeStats extends javax.swing.JTree implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable {
+    protected JMenuItem showAllSelectedCharts;
+    protected JMenuItem showHistogram, showPieChart, showTimeValueChart, showValueEvolutionChart;
+    protected JMenuItem saveAsCSVMI, saveSonCSVMI;
+    protected JPopupMenu popupTree;
+    protected DataElement selectedDataElement;
+    //private boolean m_nodeWasSelected = false;
     private boolean toUpdate = false;
     private JFrameStatistics jFStats;
     private TreeModelStats dtm;
-
     //for update
     private Set<TreePath> m_expandedTreePaths = new HashSet<>();
     private TreePath[] m_selectedTreePaths = new TreePath[0];
-    //private boolean m_nodeWasSelected = false;
-
-    protected JMenuItem showAllSelectedCharts;
-    protected JMenuItem showHistogram, showPieChart, showTimeValueChart, showValueEvolutionChart;
-    protected JMenuItem saveAsCSVMI;
-    protected JPopupMenu popupTree;
-    protected DataElement selectedDataElement;
 
 
     /*
@@ -177,7 +175,7 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
         selectedDataElement = null;
 
         if (obj instanceof DataElement) {
-            selectedDataElement = (DataElement)obj;
+            selectedDataElement = (DataElement) obj;
             if (popupTree == null) {
                 popupTree = new JPopupMenu();
 
@@ -196,9 +194,11 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
                 showValueEvolutionChart = new JMenuItem("Show Value = f(t) per Simulation Chart");
                 showValueEvolutionChart.addActionListener(this);
 
-
                 saveAsCSVMI = new JMenuItem("Save data in CSV format");
                 saveAsCSVMI.addActionListener(this);
+
+                saveSonCSVMI = new JMenuItem("Save data of *sons* in CSV format");
+                saveSonCSVMI.addActionListener(this);
 
                 popupTree.add(showAllSelectedCharts);
                 popupTree.addSeparator();
@@ -208,7 +208,18 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
                 popupTree.add(showValueEvolutionChart);
                 popupTree.addSeparator();
                 popupTree.add(saveAsCSVMI);
+                popupTree.add(saveSonCSVMI);
             }
+            showAllSelectedCharts.setEnabled(jFStats.canShowHistogram(selectedDataElement) ||
+                    jFStats.canShowPieChart(selectedDataElement) ||
+                    jFStats.canShowTimeValueChart(selectedDataElement) ||
+                    jFStats.canShowValueEvolutionChart(selectedDataElement) );
+            showHistogram.setEnabled(jFStats.canShowHistogram(selectedDataElement));
+            showPieChart.setEnabled(jFStats.canShowPieChart(selectedDataElement));
+            showTimeValueChart.setEnabled(jFStats.canShowTimeValueChart(selectedDataElement));
+            showValueEvolutionChart.setEnabled(jFStats.canShowValueEvolutionChart(selectedDataElement));
+            saveAsCSVMI.setEnabled(selectedDataElement.hasCSVData());
+            saveSonCSVMI.setEnabled(selectedDataElement.hasCSVSonData());
             popupTree.show(tree, x, y);
         }
 
@@ -335,7 +346,7 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
 
         if (nodeInfo instanceof DataElement) {
             //if ( ((DataElement)(nodeInfo)).isLeaf()) {
-                //jFStats.showStats((DataElement) nodeInfo);
+            //jFStats.showStats((DataElement) nodeInfo);
             //}
         }
     }
@@ -344,37 +355,11 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
     public void actionPerformed(ActionEvent ae) {
 
         if (ae.getSource() == saveAsCSVMI) {
-            if (selectedDataElement != null) {
-                TraceManager.addDev("Save in CSV format");
+            saveCSV();
 
-                String csvData = selectedDataElement.getCSVData();
-                if ((csvData == null) || (csvData.length() == 0)) {
-                    JOptionPane.showMessageDialog(jFStats,
-                            "Empty data",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
+        } else if (ae.getSource() == saveSonCSVMI) {
+            saveSonsCSV();
 
-                JFileChooser jfc = new JFileChooser();
-                int returnVal = jfc.showDialog(this, "Select file");
-                if (returnVal != JFileChooser.APPROVE_OPTION) {
-                    return;
-                }
-
-                File selectedFile = jfc.getSelectedFile();
-
-                if (selectedFile != null) {
-                    try {
-                        FileUtils.saveFile(selectedFile, csvData);
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(jFStats,
-                                "Could not save the file: " + e.getMessage(),
-                                "Error",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
-            }
 
             // Find the related DataElement
         } else if (ae.getSource() == showAllSelectedCharts) {
@@ -399,6 +384,52 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
             }
         }
 
+    }
+
+    public void saveCSV() {
+        if (selectedDataElement != null) {
+            TraceManager.addDev("Save in CSV format");
+            String csvData = selectedDataElement.getCSVData();
+            saveCSVData(csvData);
+        }
+    }
+
+    public void saveSonsCSV() {
+        if (selectedDataElement != null) {
+            TraceManager.addDev("Save sons in CSV format");
+            String csvData = selectedDataElement.getCSVDataSons();
+            saveCSVData(csvData);
+        }
+    }
+
+
+    public void saveCSVData(String csvData) {
+        if ((csvData == null) || (csvData.length() == 0)) {
+            JOptionPane.showMessageDialog(jFStats,
+                    "Empty data",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        JFileChooser jfc = new JFileChooser();
+        int returnVal = jfc.showDialog(this, "Select file");
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File selectedFile = jfc.getSelectedFile();
+
+        if (selectedFile != null) {
+            try {
+                FileUtils.saveFile(selectedFile, csvData);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(jFStats,
+                        "Could not save the file: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
 

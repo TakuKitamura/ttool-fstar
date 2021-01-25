@@ -114,11 +114,14 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
         // Tree panel
         JPanel leftTreePanel = new JPanel();
+        leftTreePanel.setLayout(new GridLayout(1, 1));
         JTreeStats statTree = new JTreeStats(this);
         JScrollPane scrollPane = new JScrollPane(statTree);
-        scrollPane.setPreferredSize(new Dimension(200, 600));
-        scrollPane.setMinimumSize(new Dimension(25, 200));
-        leftTreePanel.add(scrollPane);
+        //scrollPane.setPreferredSize(new Dimension(200, 600));
+        //scrollPane.setMinimumSize(new Dimension(25, 200));
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        leftTreePanel.add(scrollPane, c);
 
         // Stat panel
         JPanel showStat = new JPanel();
@@ -208,8 +211,16 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     }
 
-    public void showHistogram(DataElement de) {
+    public boolean canShowHistogram(DataElement de) {
         if ((de.data == null) || (de.data.length == 0)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void showHistogram(DataElement de) {
+        if (!canShowHistogram(de)) {
             return;
         }
 
@@ -238,9 +249,18 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     }
 
+    public boolean canShowPieChart(DataElement de) {
+        if ((de.data == null) || (de.data.length == 0)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
     @SuppressWarnings("unchecked")
     public void showPieChart(DataElement de) {
-        if ((de.data == null) || (de.data.length == 0)) {
+        if (!canShowPieChart(de)) {
             return;
         }
 
@@ -330,9 +350,16 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     }
 
+    public boolean canShowTimeValueChart(DataElement de) {
+        if ((de.times == null) || (de.data.length != de.times.length)) {
+            return false;
+        }
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     public void showTimeValueChart(DataElement de) {
-        if ((de.times == null) || (de.data.length != de.times.length)) {
+        if (!canShowTimeValueChart(de)) {
             return;
         }
 
@@ -418,13 +445,20 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
 
     }
 
+    public boolean canShowValueEvolutionChart(DataElement de) {
+        if ((de.setOfValues == null) || (de.setOfValues.size() == 0)) {
+            return false;
+        }
+        return true;
+    }
+
+
     @SuppressWarnings("unchecked")
     public void showValueEvolutionChart(DataElement de) {
 
-        if ((de.setOfValues == null) || (de.setOfValues.size() == 0)) {
+        if (!canShowValueEvolutionChart(de)) {
             return;
         }
-
 
         String title = "Value per Time and per simulation index " + de.toString();
 
