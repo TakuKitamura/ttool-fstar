@@ -2133,9 +2133,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         if ((nl != null) && (nl.getLength() > 0)) {
                             node0 = nl.item(0);
                             msg = node0.getTextContent();
-                            if (msg != null && msg.contains("run-to-next-breakpoint-max-trans")) {
-                                TraceManager.addDev("Server: " + msg);
-                            }
+//                            if (msg != null && msg.contains("run-to-next-breakpoint-max-trans")) {
+//                                TraceManager.addDev("Server: " + msg);
+//                            }
                         }
 
                         nl = elt.getElementsByTagName("error");
