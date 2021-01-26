@@ -978,8 +978,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   FPGA* depFPGA;
 
   bool isFinish=true;
-  bool isHanging = false;
-  long countMaxTrans = 0;
+//  bool isHanging = false;
+//  long countMaxTrans = 0;
 
 
 #ifdef DEBUG_KERNEL
@@ -1181,25 +1181,25 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
       }
       // for run-to-next-breakpoint-max-trans which executes until the next breakpoint or stops after max transactions have been executed
-      if (!isHanging) {
-          if (oLastTrans != NULL && oLastTrans != 0) {
-              countMaxTrans += transLET->getEndTime() - oLastTrans->getEndTime();
-          } else {
-              countMaxTrans += transLET->getEndTime();
-          }
-
-          if (countMaxTrans >= (MAX_TRANS_TO_EXECUTED*1000)) {
-              std::string msgToSend = "Too many transactions are being executed, try to use run-to-next-breakpoint-max-trans instead!";
-              std::cout << msgToSend << std::endl;
-              std::ostringstream aMessage;
-              //send message to server
-              aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << msgToSend << TAG_MSGc << std::endl;
-              writeSimState(aMessage);
-              aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
-              _syncInfo->_server->sendReply(aMessage.str());
-              isHanging = true;
-          }
-      }
+//      if (!isHanging) {
+//          if (oLastTrans != NULL && oLastTrans != 0 && transLET != NULL) {
+//              countMaxTrans += transLET->getEndTime() - oLastTrans->getEndTime();
+//          } else if (transLET != NULL) {
+//              countMaxTrans += transLET->getEndTime();
+//          }
+//
+//          if (countMaxTrans >= (MAX_TRANS_TO_EXECUTED*1000)) {
+//              std::string msgToSend = "Too many transactions are being executed, try to use run-to-next-breakpoint-max-trans instead!";
+//              std::cout << msgToSend << std::endl;
+//              std::ostringstream aMessage;
+//              //send message to server
+//              aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << msgToSend << TAG_MSGc << std::endl;
+//              writeSimState(aMessage);
+//              aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+//              _syncInfo->_server->sendReply(aMessage.str());
+//              isHanging = true;
+//          }
+//      }
       oLastTrans=transLET;
 #ifdef DEBUG_SIMULATE
       std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
@@ -1499,7 +1499,10 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
              _simTerm = false;
           }
           std::cout << "End Run to next breakpoint." << std::endl;
-          _end =oLastTrans->printEnd();
+          if (oLastTrans != NULL)
+              _end = oLastTrans->printEnd();
+          else
+              std::cout << "There is no more transactions left to execute." << std::endl;
           break;
       }
     case 1:     //Run up to trans x
