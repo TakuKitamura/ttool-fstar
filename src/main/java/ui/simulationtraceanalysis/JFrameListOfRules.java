@@ -227,7 +227,6 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
 
     @Override
     public void tableChanged(TableModelEvent e) {
-        // TODO Auto-generated method stub
     }
 
     private void initActions() {
@@ -241,7 +240,6 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
 
     @Override
     public void actionPerformed(ActionEvent evt) {
-        // TODO Auto-generated method stub
         String command = evt.getActionCommand();
         // TraceManager.addDev("Command:" + command);
         if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_STOP_AND_CLOSE_RULE].getActionCommand())) {

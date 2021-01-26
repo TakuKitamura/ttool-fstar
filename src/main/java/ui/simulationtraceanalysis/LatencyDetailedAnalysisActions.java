@@ -57,9 +57,9 @@ import ui.util.IconManager;
 public class LatencyDetailedAnalysisActions extends AbstractAction {
     // Actions
     public static final int ACT_SHOW_GRAPH = 0;
-    public static final int ACT_SAVE_TRACE_PNG = 1;
+    public static final int ACT_SAVE_GRAPH_PNG = 1;
     public static final int ACT_STOP_AND_CLOSE_ALL = 2;
-    public static final int ACT_SAVE_TRACE_GRAPHML = 3;
+    public static final int ACT_SAVE_GRAPH_GRAPHML = 3;
     public static final int ACT_LOAD_SIMULATION_TRACES = 4;
     public static final int ACT_LATENCY = 5;
     public static final int ACT_Import_ANALYSIS = 6;
@@ -107,9 +107,9 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     }
 
     public void init() {
-        actions[ACT_SAVE_TRACE_PNG] = new TAction("save-trace_as_PNG", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
+        actions[ACT_SAVE_GRAPH_PNG] = new TAction("save-trace_as_PNG", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
                 "Save Directed Graph", "Save Directed Graph", 'S');
-        actions[ACT_SAVE_TRACE_GRAPHML] = new TAction("save-trace_as_graphml", "Save Directed Graph as graphml", IconManager.imgic341,
+        actions[ACT_SAVE_GRAPH_GRAPHML] = new TAction("save-trace_as_graphml", "Save Directed Graph as graphml", IconManager.imgic341,
                 IconManager.imgic341, "Save Directed Graph as graphml", "Save Directed Graph as graphml", 'S');
         actions[ACT_SHOW_GRAPH] = new TAction("show_graph", "Show Directed Graph", IconManager.imgic53, IconManager.imgic53, "Show Directed Graph",
                 "Show Directed Graph", 'C');

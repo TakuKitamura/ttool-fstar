@@ -336,8 +336,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         } else {
             Vector<SimulationTransaction> minMaxTasksByRow;
             List<SimulationTransaction> minMaxHWByRowDetails;
+            HashMap<String, ArrayList<ArrayList<Integer>>> delayTime;
             // min/max table row selected
             if (taint) {
+                delayTime = dgraph.getTimeDelayedPerRowMinMaxTainted(row);
                 minMaxTasksByRow = dgraph.getMinMaxTasksByRowTainted(row);
                 minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetailsTainted(row);
                 for (SimulationTransaction st : minMaxTasksByRow) {
@@ -372,6 +374,7 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                     }
                 }
             } else {
+                delayTime = dgraph.getRowDelayDetailsByHWMinMax(row);
                 minMaxTasksByRow = dgraph.getMinMaxTasksByRow(row);
                 minMaxHWByRowDetails = dgraph.getTaskMinMaxHWByRowDetails(row);
                 for (SimulationTransaction st : minMaxTasksByRow) {
@@ -439,7 +442,6 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
                     }
                 }
             }
-            HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
             for (SimulationTransaction st : minMaxHWByRowDetails) {
                 int startTime = Integer.valueOf(st.startTime);
                 if (st.coreNumber == null) {
@@ -574,12 +576,10 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         this.add(lengedpanel);
         this.pack();
         this.setVisible(visible);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void tableChanged(TableModelEvent e) {
-        // TODO Auto-generated method stub
     }
 
     public Object[][] getDataDetailedByTask() {

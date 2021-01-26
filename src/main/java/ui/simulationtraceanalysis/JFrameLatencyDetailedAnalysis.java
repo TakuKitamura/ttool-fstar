@@ -556,7 +556,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         // TraceManager.addDev("Command:" + command);
-        if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].getActionCommand())) {
+        if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_PNG].getActionCommand())) {
             try {
                 String filename = "";
                 final String directory = saveDirName.getText().trim();
@@ -580,7 +580,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 jta.append("An error has occurred.\n");
                 jta.append(e.getMessage() + ".\n");
             }
-        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].getActionCommand())) {
+        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_GRAPHML].getActionCommand())) {
             try {
                 String filename = "";
                 final String directory = saveDirName.getText().trim();
@@ -885,7 +885,13 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             Object[][] tableData = null;
             Boolean taint = taintFirstOp.isSelected();
             Boolean considerAddedRules = considerRules.isSelected();
-            tableData = dgraph.latencyDetailedAnalysis(task1, task2, transFile1, taint, considerAddedRules);
+            try {
+                tableData = dgraph.latencyDetailedAnalysis(task1, task2, transFile1, taint, considerAddedRules);
+            } catch (Exception e) {
+                jta.append("An error has occurred.\n");
+                jta.append(e.getMessage() + ".\n");
+                e.getStackTrace()[0].getLineNumber();
+            }
             table11.removeAll();
             DefaultTableModel tableModel = new DefaultTableModel(tableData, columnNames) {
                 @Override
@@ -1009,42 +1015,34 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
     }
 
     public Thread getT() {

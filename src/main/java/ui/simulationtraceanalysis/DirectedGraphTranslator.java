@@ -137,6 +137,7 @@ public class DirectedGraphTranslator extends JApplet {
     private HashMap<Integer, Vector<SimulationTransaction>> dataByTaskR = new HashMap<Integer, Vector<SimulationTransaction>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
     private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRow = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
+    private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRowMinMax = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
     private HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
     private final JFrame frame = new JFrame("The SysML Model As Directed Graph");
@@ -186,6 +187,7 @@ public class DirectedGraphTranslator extends JApplet {
     private List<SimulationTransaction> onPath = new ArrayList<SimulationTransaction>();
     private List<SimulationTransaction> offPath = new ArrayList<SimulationTransaction>();
     private List<SimulationTransaction> offPathDelay = new ArrayList<SimulationTransaction>();
+    private final HashMap<String, Integer> allChannels = new HashMap<String, Integer>();
     private static final String SELECT_EVENT_PARAM = "SelectEvent params:";
     private static final String SELECT_EVENT = "SelectEvent";
     private static final String TRANSACTIONS = "Transactions";
@@ -266,7 +268,6 @@ public class DirectedGraphTranslator extends JApplet {
 
     // The main function to add the vertices and edges according to the model
     public vertex vertex(String name, int id) {
-        // TODO Auto-generated method stub
         vertex v = new vertex(name, id);
         return v;
     }
@@ -301,6 +302,7 @@ public class DirectedGraphTranslator extends JApplet {
         addMemorychannel(memorychannel);
         addUnmappedchannel();
         addCPUs();
+        addFPGAs();
         addLinkEdges();
         addFlowEdges();
         addSendEventWaitEventEdges();
@@ -314,35 +316,41 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addUnmappedchannel() {
-        // TODO Auto-generated method stub
         DiploSimulatorCodeGenerator gen = new DiploSimulatorCodeGenerator(tmap);
         for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
             List<HwCommunicationNode> pathNodes = gen.determineRoutingPath(tmap.getHwNodeOf(ch.getOriginTask()),
                     tmap.getHwNodeOf(ch.getDestinationTask()), ch);
-            if (!g.vertexSet().contains(getvertex(ch.getName()))) {
-                vertex v2 = vertex(ch.getName(), ch.getID());
-                g.addVertex(v2);
+            String channelName = ch.getName() + "__" + ch.getID();
+            if (!g.vertexSet().contains(getvertex(channelName))) {
+                g.addVertex(vertex(channelName, ch.getID()));
+                allChannels.put(ch.getName(), ch.getID());
+                vertex v = getvertex(channelName);
                 updateMainBar();
                 // gVertecies.add(vertex(ch.getName()));
-                getvertex(ch.getName()).setType(vertex.TYPE_CHANNEL);
-                getvertex(ch.getName()).setTaintFixedNumber(0);
+                v.setType(vertex.TYPE_CHANNEL);
+                v.setTaintFixedNumber(0);
                 updateMainBar();
             }
             if (!pathNodes.isEmpty()) {
                 for (HwCommunicationNode node : pathNodes) {
-                    if (channelPaths.containsKey(ch.getName())) {
-                        if (!channelPaths.get(ch.getName()).contains(node.getName())) {
-                            channelPaths.get(ch.getName()).add(node.getName());
+                    if (channelPaths.containsKey(channelName)) {
+                        if (!channelPaths.get(channelName).contains(node.getName())) {
+                            channelPaths.get(channelName).add(node.getName());
                         }
                     } else {
                         ArrayList<String> pathNodeNames = new ArrayList<String>();
                         pathNodeNames.add(node.getName());
-                        channelPaths.put(ch.getName(), pathNodeNames);
+                        channelPaths.put(channelName, pathNodeNames);
                     }
-                    vertex v1 = vertex(node.getName(), node.getID());
-                    vertex v2 = vertex(ch.getName(), ch.getID());
-                    if (!g.containsEdge(v1, v2)) {
-                        g.addEdge(v1, v2);
+                    if (!g.vertexSet().contains(getvertex(node.getName()))) {
+                        g.addVertex(vertex(node.getName(), node.getID()));
+                    }
+                    if (!g.vertexSet().contains(getvertex(channelName))) {
+                        g.addVertex(vertex(channelName, ch.getID()));
+                        allChannels.put(ch.getName(), ch.getID());
+                    }
+                    if (!g.containsEdge(getvertex(node.getName()), getvertex(channelName))) {
+                        g.addEdge(getvertex(node.getName()), getvertex(channelName));
                     }
                 }
             }
@@ -351,9 +359,7 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addCPUs() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-        HashMap<String, HashSet<String>> cpuTasks;
         for (HwNode node : tmap.getArch().getCPUs()) {
             cpuTask = new HashMap<String, HashSet<TMLTask>>();
             cpuIDs.put(node.getName(), node.getID());
@@ -361,42 +367,54 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
             }
             if (cpuTask.size() > 0) {
-                cpuTasks = getCPUTaskMap(cpuTask);
+                getCPUTaskMap(cpuTask);
+            }
+        }
+    }
+
+    private void addFPGAs() {
+        HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
+        for (HwNode node : tmap.getArch().getFPGAs()) {
+            cpuTask = new HashMap<String, HashSet<TMLTask>>();
+            cpuIDs.put(node.getName(), node.getID());
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
+            }
+            if (cpuTask.size() > 0) {
+                getCPUTaskMap(cpuTask);
             }
         }
     }
 
     private void addMemorychannel(HashMap<String, HashSet<TMLElement>> memorychannel) {
-        // TODO Auto-generated method stub
         for (Entry<String, HashSet<TMLElement>> entry : memorychannel.entrySet()) {
             String busName = entry.getKey();
             HashSet<TMLElement> busChList = entry.getValue();
             for (TMLElement busCh : busChList) {
-                String ChannelName = busCh.getName();
-                vertex v = vertex(ChannelName, busCh.getID());
-                if (!g.containsVertex(getvertex(ChannelName))) {
-                    g.addVertex(v);
+                String channelName = busCh.getName() + "__" + busCh.getID();
+                if (!g.containsVertex(getvertex(channelName))) {
+                    g.addVertex(vertex(channelName, busCh.getID()));
+                    allChannels.put(busCh.getName(), busCh.getID());
                     updateMainBar();
-                    getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
+                    getvertex(channelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
-                    getvertex(ChannelName).setTaintFixedNumber(0);
+                    getvertex(channelName).setTaintFixedNumber(0);
                     updateMainBar();
                 }
-                g.addEdge(getvertex(busName), getvertex(ChannelName));
+                g.addEdge(getvertex(busName), getvertex(channelName));
             }
         }
     }
 
     private void addBridgechannel(HashMap<String, HashSet<TMLElement>> bridgechannel) {
-        // TODO Auto-generated method stub
         for (Entry<String, HashSet<TMLElement>> entry : bridgechannel.entrySet()) {
             String busName = entry.getKey();
             HashSet<TMLElement> busChList = entry.getValue();
             for (TMLElement busCh : busChList) {
-                String ChannelName = busCh.getName();
-                vertex v = vertex(ChannelName, busCh.getID());
+                String ChannelName = busCh.getName() + "__" + busCh.getID();
                 if (!g.containsVertex(getvertex(ChannelName))) {
-                    g.addVertex(v);
+                    g.addVertex(vertex(ChannelName, busCh.getID()));
+                    allChannels.put(busCh.getName(), busCh.getID());
                     updateMainBar();
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
@@ -409,15 +427,14 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addBuschannel(HashMap<String, HashSet<TMLElement>> buschannel) {
-        // TODO Auto-generated method stub
         for (Entry<String, HashSet<TMLElement>> entry : buschannel.entrySet()) {
             String busName = entry.getKey();
             HashSet<TMLElement> busChList = entry.getValue();
             for (TMLElement busCh : busChList) {
-                String ChannelName = busCh.getName();
-                vertex v = vertex(ChannelName, busCh.getID());
-                if (!g.containsVertex(v)) {
-                    g.addVertex(v);
+                String ChannelName = busCh.getName() + "__" + busCh.getID();
+                if (!g.containsVertex(getvertex(ChannelName))) {
+                    g.addVertex(vertex(ChannelName, busCh.getID()));
+                    allChannels.put(busCh.getName(), busCh.getID());
                     updateMainBar();
                     getvertex(ChannelName).setType(vertex.TYPE_CHANNEL);
                     // gVertecies.add(vertex(ChannelName));
@@ -432,9 +449,8 @@ public class DirectedGraphTranslator extends JApplet {
     private HashMap<String, HashSet<TMLElement>> addMemories() {
         HashMap<String, HashSet<TMLElement>> memorychannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getMemories()) {
-            vertex v = vertex(node.getName(), node.getID());
-            if (!g.containsVertex(v)) {
-                g.addVertex(v);
+            if (!g.containsVertex(getvertex(node.getName()))) {
+                g.addVertex(vertex(node.getName(), node.getID()));
                 updateMainBar();
             }
             if (tmap.getLisMappedChannels(node).size() > 0) {
@@ -445,9 +461,7 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addHwAs() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-        HashMap<String, HashSet<String>> cpuTasks;
         for (HwA node : tmap.getArch().getHwA()) {
             cpuTask = new HashMap<String, HashSet<TMLTask>>();
             cpuIDs.put(node.getName(), node.getID());
@@ -455,18 +469,16 @@ public class DirectedGraphTranslator extends JApplet {
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
             }
             if (cpuTask.size() > 0) {
-                cpuTasks = getCPUTaskMap(cpuTask);
+                getCPUTaskMap(cpuTask);
             }
         }
     }
 
     private HashMap<String, HashSet<TMLElement>> addBridge() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getHwBridge()) {
-            vertex v = vertex(node.getName(), node.getID());
-            if (!g.containsVertex(v)) {
-                g.addVertex(v);
+            if (!g.containsVertex(getvertex(node.getName()))) {
+                g.addVertex(vertex(node.getName(), node.getID()));
                 updateMainBar();
             }
             if (tmap.getLisMappedChannels(node).size() > 0) {
@@ -477,12 +489,10 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private HashMap<String, HashSet<TMLElement>> addBUSs() {
-        // TODO Auto-generated method stub
         HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getBUSs()) {
-            vertex v = vertex(node.getName(), node.getID());
-            if (!g.containsVertex(v)) {
-                g.addVertex(v);
+            if (!g.containsVertex(getvertex(node.getName()))) {
+                g.addVertex(vertex(node.getName(), node.getID()));
                 updateMainBar();
             }
             if (tmap.getLisMappedChannels(node).size() > 0) {
@@ -493,7 +503,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addLinkEdges() {
-        // TODO Auto-generated method stub
         for (HwLink link : links) {
             vertex vlink1 = vertex(link.hwnode.getName(), link.hwnode.getID());
             vertex vlink2 = vertex(link.bus.getName(), link.bus.getID());
@@ -505,44 +514,60 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addFlowEdges() {
-        // TODO Auto-generated method stub
         if (addedEdges.size() > 0) {
             for (Entry<String, String> edge : addedEdges.entrySet()) {
-                g.addEdge(getvertex(edge.getKey()), getvertex(edge.getValue()));
+                vertex v = getvertex(edge.getKey());
+                vertex v2 = getvertex(edge.getValue());
+                if (v != null && v2 != null) {
+                    g.addEdge(v, v2);
+                }
             }
         }
     }
 
     private void addSendEventWaitEventEdges() {
-        // TODO Auto-generated method stub
         if (sendEventWaitEventEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : sendEventWaitEventEdges.entrySet()) {
-                for (String waitEventEdge : edge.getValue())
-                    g.addEdge(getvertex(edge.getKey()), getvertex(waitEventEdge));
+                vertex v = getvertex(edge.getKey());
+                for (String waitEventEdge : edge.getValue()) {
+                    vertex v2 = getvertex(waitEventEdge);
+                    if (v != null && v2 != null) {
+                        g.addEdge(v, v2);
+                    }
+                }
             }
         }
     }
 
     private void addReadWriteChannelEdges() {
-        // TODO Auto-generated method stub
         if (readWriteChannelEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : readWriteChannelEdges.entrySet()) {
+                Integer id = allChannels.get(edge.getKey());
+                vertex v = getvertex(edge.getKey() + "__" + id);
                 for (String readChannelEdge : edge.getValue()) {
-                    g.addEdge(getvertex(edge.getKey()), getvertex(readChannelEdge));
-                    getvertex(edge.getKey()).setTaintFixedNumber(getvertex(edge.getKey()).getTaintFixedNumber() + 1);
+                    vertex v2 = getvertex(readChannelEdge);
+                    if (v != null && v2 != null) {
+                        g.addEdge(v, v2);
+                        v.setTaintFixedNumber(v.getTaintFixedNumber() + 1);
+                    }
                 }
             }
         }
     }
 
     private void addForkreadEdges() {
-        // TODO Auto-generated method stub
         if (forkreadEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : forkreadEdges.entrySet()) {
                 HashSet<String> writech = forkwriteEdges.get(edge.getKey());
                 for (String readChannelEdge : edge.getValue()) {
-                    for (String wch : writech) {
-                        g.addEdge(getvertex(readChannelEdge), getvertex(wch));
+                    vertex v = getvertex(readChannelEdge);
+                    if (v != null) {
+                        for (String wch : writech) {
+                            vertex v2 = getvertex(wch);
+                            if (v2 != null) {
+                                g.addEdge(v, v2);
+                            }
+                        }
                     }
                 }
             }
@@ -551,13 +576,18 @@ public class DirectedGraphTranslator extends JApplet {
 
     // draw the vertices and edges for the tasks mapped to the CPUs
     private void addJoinreadEdges() {
-        // TODO Auto-generated method stub
         if (joinreadEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : joinreadEdges.entrySet()) {
                 HashSet<String> writech = joinwriteEdges.get(edge.getKey());
                 for (String readChannelEdge : edge.getValue()) {
-                    for (String wch : writech) {
-                        g.addEdge(getvertex(readChannelEdge), getvertex(wch));
+                    vertex v = getvertex(readChannelEdge);
+                    if (v != null) {
+                        for (String wch : writech) {
+                            vertex v2 = getvertex(wch);
+                            if (v2 != null) {
+                                g.addEdge(v, v2);
+                            }
+                        }
                     }
                 }
             }
@@ -565,34 +595,45 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addWriteReadChannelEdges() {
-        // TODO Auto-generated method stub
         if (writeReadChannelEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : writeReadChannelEdges.entrySet()) {
                 for (String readChannelEdge : edge.getValue()) {
-                    g.addEdge(getvertex(edge.getKey()), getvertex(readChannelEdge));
-                    getvertex(readChannelEdge).setTaintFixedNumber(getvertex(readChannelEdge).getTaintFixedNumber() + 1);
+                    Integer id = allChannels.get(readChannelEdge);
+                    vertex v = getvertex(edge.getKey());
+                    vertex v2 = getvertex(readChannelEdge + "__" + id);
+                    if (v != null && v2 != null) {
+                        g.addEdge(v, v2);
+                        v2.setTaintFixedNumber(v2.getTaintFixedNumber() + 1);
+                    }
                 }
             }
         }
     }
 
     private void addRequestEdges() {
-        // TODO Auto-generated method stub
         if (requestEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : requestEdges.entrySet()) {
+                vertex v = getvertex(edge.getKey());
                 for (String requestsingleEdges : edge.getValue()) {
-                    g.addEdge(getvertex(edge.getKey()), getvertex(requestsingleEdges));
+                    vertex v2 = getvertex(requestsingleEdges);
+                    if (v != null && v2 != null) {
+                        g.addEdge(v, v2);
+                    }
                 }
             }
         }
     }
 
     private void addunOrderedSeqEdges() {
-        // TODO Auto-generated method stub
         if (unOrderedSequenceEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : unOrderedSequenceEdges.entrySet()) {
-                for (String sequenceEdge : edge.getValue())
-                    g.addEdge(getvertex(edge.getKey()), getvertex(sequenceEdge));
+                vertex v = getvertex(edge.getKey());
+                for (String sequenceEdge : edge.getValue()) {
+                    vertex v2 = getvertex(sequenceEdge);
+                    if (v != null && v2 != null) {
+                        g.addEdge(v, v2);
+                    }
+                }
             }
         }
     }
@@ -600,8 +641,13 @@ public class DirectedGraphTranslator extends JApplet {
     private void addSeqEdges() {
         if (sequenceEdges.size() > 0) {
             for (Entry<String, HashSet<String>> edge : sequenceEdges.entrySet()) {
-                for (String sequenceEdge : edge.getValue())
-                    g.addEdge(getvertex(edge.getKey()), getvertex(sequenceEdge));
+                vertex v = getvertex(edge.getKey());
+                for (String sequenceEdge : edge.getValue()) {
+                    vertex v2 = getvertex(sequenceEdge);
+                    if (v != null && v2 != null) {
+                        g.addEdge(v, v2);
+                    }
+                }
             }
         }
     }
@@ -681,10 +727,10 @@ public class DirectedGraphTranslator extends JApplet {
         }
     }
 
-    public HashMap<String, HashSet<String>> getCPUTaskMap(HashMap<String, HashSet<TMLTask>> cpuTask) {
+    public void getCPUTaskMap(HashMap<String, HashSet<TMLTask>> cpuTask) {
         HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
         if (tmap == null) {
-            return cpuTaskMap;
+            return;
         }
         for (Entry<String, HashSet<TMLTask>> entry : cpuTask.entrySet()) {
             String key = entry.getKey();
@@ -758,16 +804,17 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (taskName.startsWith(FORK_TASK_S) && currentElement.getName().equals(READ_OF_FORK)) {
                         String name = ((TMLReadChannel) (currentElement)).getChannel(0).getName();
                         int id = ((TMLReadChannel) (currentElement)).getChannel(0).getID();
+                        name = name + "__" + id;
                         if (!g.containsVertex(getvertex(name))) {
                             g.addVertex(vertex(name, id));
                             updateMainBar();
                         }
-                        g.addEdge(getvertex(taskName), getvertex(((TMLReadChannel) (currentElement)).getChannel(0).getName()));
+                        g.addEdge(getvertex(taskName), getvertex(name));
                         HashSet<String> readForkVertex = new HashSet<String>();
-                        readForkVertex.add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
+                        readForkVertex.add(name);
                         if (forkreadEdges.containsKey(taskName)) {
-                            if (!forkreadEdges.get(taskName).contains(((TMLReadChannel) (currentElement)).getChannel(0).getName())) {
-                                forkreadEdges.get(taskName).add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
+                            if (!forkreadEdges.get(taskName).contains(name)) {
+                                forkreadEdges.get(taskName).add(name);
                             }
                         } else {
                             forkreadEdges.put(taskName, readForkVertex);
@@ -779,16 +826,17 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (taskName.startsWith(FORK_TASK_S) && currentElement.getName().startsWith(WRITE_OF_FORK)) {
                         String vName = ((TMLWriteChannel) (currentElement)).getChannel(0).getName();
                         int vid = ((TMLWriteChannel) (currentElement)).getChannel(0).getID();
+                        vName = vName + "__" + vid;
                         vertex v = getvertex(vName);
                         if (!g.containsVertex(v)) {
                             g.addVertex(vertex(vName, vid));
                             updateMainBar();
                         }
                         HashSet<String> writeForkVertex = new HashSet<String>();
-                        writeForkVertex.add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
+                        writeForkVertex.add(vName);
                         if (forkwriteEdges.containsKey(taskName)) {
-                            if (!forkwriteEdges.get(taskName).contains(((TMLWriteChannel) (currentElement)).getChannel(0).getName())) {
-                                forkwriteEdges.get(taskName).add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
+                            if (!forkwriteEdges.get(taskName).contains(vName)) {
+                                forkwriteEdges.get(taskName).add(vName);
                             }
                         } else {
                             forkwriteEdges.put(taskName, writeForkVertex);
@@ -807,15 +855,16 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (taskName.startsWith(JOIN_TASK_S) && currentElement.getName().startsWith(READ_OF_JOIN)) {
                         String vName = ((TMLReadChannel) (currentElement)).getChannel(0).getName();
                         int vid = ((TMLReadChannel) (currentElement)).getChannel(0).getID();
+                        vName = vName + "__" + vid;
                         if (!g.containsVertex(getvertex(vName))) {
                             g.addVertex(vertex(vName, vid));
                             updateMainBar();
                         }
                         HashSet<String> writeForkVertex = new HashSet<String>();
-                        writeForkVertex.add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
+                        writeForkVertex.add(vName);
                         if (joinreadEdges.containsKey(taskName)) {
-                            if (!joinreadEdges.get(taskName).contains(((TMLReadChannel) (currentElement)).getChannel(0).getName())) {
-                                joinreadEdges.get(task.getName()).add(((TMLReadChannel) (currentElement)).getChannel(0).getName());
+                            if (!joinreadEdges.get(taskName).contains(vName)) {
+                                joinreadEdges.get(task.getName()).add(vName);
                             }
                         } else {
                             joinreadEdges.put(taskName, writeForkVertex);
@@ -828,16 +877,17 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (taskName.startsWith(JOIN_TASK_S) && currentElement.getName().equals(WRITE_OF_JOIN)) {
                         String vName = ((TMLWriteChannel) (currentElement)).getChannel(0).getName();
                         int vid = ((TMLWriteChannel) (currentElement)).getChannel(0).getID();
+                        vName = vName + "__" + vid;
                         if (!g.containsVertex(getvertex(vName))) {
                             g.addVertex(vertex(vName, vid));
                             updateMainBar();
                         }
-                        g.addEdge(getvertex(taskName), getvertex(((TMLWriteChannel) (currentElement)).getChannel(0).getName()));
+                        g.addEdge(getvertex(taskName), getvertex(vName));
                         HashSet<String> readForkVertex = new HashSet<String>();
-                        readForkVertex.add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
+                        readForkVertex.add(vName);
                         if (joinwriteEdges.containsKey(taskName)) {
-                            if (!joinwriteEdges.get(taskName).contains(((TMLWriteChannel) (currentElement)).getChannel(0).getName())) {
-                                joinwriteEdges.get(taskName).add(((TMLWriteChannel) (currentElement)).getChannel(0).getName());
+                            if (!joinwriteEdges.get(taskName).contains(vName)) {
+                                joinwriteEdges.get(taskName).add(vName);
                             }
                         } else {
                             joinwriteEdges.put(taskName, readForkVertex);
@@ -849,16 +899,17 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (taskName.startsWith(FORK_TASK_S) && currentElement.getName().startsWith(WRITE_EVT_OF_FORK)) {
                         String vName = ((TMLSendEvent) (currentElement)).getEvent().getName();
                         int vid = ((TMLSendEvent) (currentElement)).getEvent().getID();
+                        vName = vName + "__" + vid;
                         vertex v = getvertex(vName);
                         if (!g.containsVertex(v)) {
                             g.addVertex(vertex(vName, vid));
                             updateMainBar();
                         }
                         HashSet<String> writeForkVertex = new HashSet<String>();
-                        writeForkVertex.add(((TMLSendEvent) (currentElement)).getEvent().getName());
+                        writeForkVertex.add(vName);
                         if (forkwriteEdges.containsKey(taskName)) {
-                            if (!forkwriteEdges.get(taskName).contains(((TMLSendEvent) (currentElement)).getEvent().getName())) {
-                                forkwriteEdges.get(taskName).add(((TMLSendEvent) (currentElement)).getEvent().getName());
+                            if (!forkwriteEdges.get(taskName).contains(vName)) {
+                                forkwriteEdges.get(taskName).add(vName);
                             }
                         } else {
                             forkwriteEdges.put(taskName, writeForkVertex);
@@ -871,16 +922,17 @@ public class DirectedGraphTranslator extends JApplet {
                     } else if (taskName.startsWith(FORK_TASK_S) && currentElement.getName().equals(WAIT_OF_FORK)) {
                         String name = ((TMLWaitEvent) (currentElement)).getEvent().getName();
                         int id = ((TMLWaitEvent) (currentElement)).getEvent().getID();
+                        name = name + "__" + id;
                         if (!g.containsVertex(getvertex(name))) {
                             g.addVertex(vertex(name, id));
                             updateMainBar();
                         }
-                        g.addEdge(getvertex(taskName), getvertex(((TMLWaitEvent) (currentElement)).getEvent().getName()));
+                        g.addEdge(getvertex(taskName), getvertex(name));
                         HashSet<String> readForkVertex = new HashSet<String>();
-                        readForkVertex.add(((TMLWaitEvent) (currentElement)).getEvent().getName());
+                        readForkVertex.add(name);
                         if (forkreadEdges.containsKey(taskName)) {
-                            if (!forkreadEdges.get(taskName).contains(((TMLWaitEvent) (currentElement)).getEvent().getName())) {
-                                forkreadEdges.get(taskName).add(((TMLWaitEvent) (currentElement)).getEvent().getName());
+                            if (!forkreadEdges.get(taskName).contains(name)) {
+                                forkreadEdges.get(taskName).add(name);
                             }
                         } else {
                             forkreadEdges.put(taskName, readForkVertex);
@@ -888,6 +940,13 @@ public class DirectedGraphTranslator extends JApplet {
                         opCount++;
                         updateMainBar();
                         currentElement = currentElement.getNexts().firstElement();
+                        continue;
+                    } else if (currentElement.getReferenceObject() == null) {
+                        opCount++;
+                        updateMainBar();
+                        if (currentElement.getNexts().size() > 0) {
+                            currentElement = currentElement.getNexts().firstElement();
+                        }
                         continue;
                     }
                     if (currentElement.getNexts().size() > 1) {
@@ -917,23 +976,25 @@ public class DirectedGraphTranslator extends JApplet {
                     // check if the next activity :add to an array:
                     // in case of for loop : the first element of inside/outside branches of loop
                     // in case of sequence: add first element of all branches
-                    if (currentElement.getNexts().size() == 1) {
-                        currentElement = currentElement.getNexts().firstElement();
-                    } else if (!multiNexts.isEmpty()) {
-                        trackMultiNexts(taskName, eventName);
-                        currentElement = multiNexts.get(0);
-                        multiNexts.remove(0);
+                    if (currentElement.getReferenceObject() != null) {
+                        if (currentElement.getNexts().size() == 1) {
+                            currentElement = currentElement.getNexts().firstElement();
+                        } else if (!multiNexts.isEmpty()) {
+                            trackMultiNexts(taskName, eventName);
+                            currentElement = multiNexts.get(0);
+                            multiNexts.remove(0);
+                        }
+                        allForLoopNextValues.putAll(forLoopNextValues);
                     }
-                    allForLoopNextValues.putAll(forLoopNextValues);
                 }
             }
         }
-        return cpuTaskMap;
+        return;
     }
 
     private void trackMultiNexts(String taskName, String eventName) {
-        // TODO Auto-generated method stub
-        if (currentElement.getReferenceObject() instanceof TMLADForStaticLoop || currentElement.getReferenceObject() instanceof TMLADForLoop) {
+        if (currentElement.getReferenceObject() != null && currentElement.getReferenceObject() instanceof TMLADForStaticLoop
+                || currentElement.getReferenceObject() instanceof TMLADForLoop) {
             if (currentElement.getNexts().size() > 1) {
                 List<TGConnectingPoint> points = new ArrayList<TGConnectingPoint>();
                 List<TGConnector> getOutputConnectors = new ArrayList<TGConnector>();
@@ -964,26 +1025,26 @@ public class DirectedGraphTranslator extends JApplet {
                     if (cond.contains("<=")) {
                         String[] val = cond.split("<=");
                         String loopValue = val[2].toString();
-                        int loopVal = Integer.valueOf(loopValue);
+                        // int loopVal = Integer.valueOf(loopValue);
                         if ((loopValue != null) && (loopValue.length() > 0)) {
                             if ((loopValue.matches("\\d*"))) {
-                                getvertex(eventName).setTaintFixedNumber(loopVal);
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                             } else {
                                 for (TMLAttribute att : taskAc.getAttributes()) {
                                     if (loopValue.contains(att.getName())) {
                                         loopValue = loopValue.replace(att.getName(), (att.getInitialValue()));
                                     }
                                 }
-                                getvertex(eventName).setTaintFixedNumber(loopVal);
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                             }
                         }
                     } else if (cond.contains("<")) {
                         String[] val = cond.split("<");
                         String loopValue = val[1].toString();
-                        int loopVal = Integer.valueOf(loopValue);
+                        // int loopVal = Integer.valueOf(loopValue);
                         if ((loopValue != null) && (loopValue.length() > 0)) {
                             if ((loopValue.matches("\\d*"))) {
-                                getvertex(eventName).setTaintFixedNumber(loopVal);
+                                getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
                             } else {
                                 for (TMLAttribute att : taskAc.getAttributes()) {
                                     if (loopValue.contains(att.getName())) {
@@ -991,9 +1052,8 @@ public class DirectedGraphTranslator extends JApplet {
                                     }
                                 }
                                 if ((loopValue.matches("\\d*"))) {
-                                    getvertex(eventName).setTaintFixedNumber(loopVal);
-                                }
-                                {
+                                    getvertex(eventName).setTaintFixedNumber(Integer.valueOf(loopValue));
+                                } else {
                                     frameLatencyDetailedAnalysis.error(loopValue + EXPRESSION_NOT_SUPPORTED);
                                 }
                             }
@@ -1036,7 +1096,7 @@ public class DirectedGraphTranslator extends JApplet {
                 afterloopActivity.add(1, outsideLoop);
                 forLoopNextValues.put(eventName, afterloopActivity);
             }
-        } else if (currentElement.getReferenceObject() instanceof TMLADSequence) {
+        } else if (currentElement.getReferenceObject() != null && currentElement.getReferenceObject() instanceof TMLADSequence) {
             getvertex(eventName).setType(vertex.TYPE_SEQ);
             getvertex(eventName).setTaintFixedNumber(1);
             String nextEventName = "";
@@ -1058,7 +1118,7 @@ public class DirectedGraphTranslator extends JApplet {
                     orderedSequenceList.put(eventName, seqListNextValues);
                 }
             }
-        } else if (currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+        } else if (currentElement.getReferenceObject() != null && currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
             getvertex(eventName).setType(vertex.TYPE_UNORDER_SEQ);
             getvertex(eventName).setTaintFixedNumber(1);
             String nextEventName = "";
@@ -1081,11 +1141,11 @@ public class DirectedGraphTranslator extends JApplet {
                 }
             }
         }
-        List<TGConnector> cg = (((TGComponent) currentElement.getReferenceObject()).getInputConnectors());
+        // List<TGConnector> cg = (((TGComponent)
+        // currentElement.getReferenceObject()).getInputConnectors());
     }
 
     private void addStartVertex(String taskName) {
-        // TODO Auto-generated method stub
         taskStartName = taskName + "__" + currentElement.getName() + "__" + currentElement.getID();
         vertex startv = vertex(taskStartName, currentElement.getID());
         g.addVertex(startv);
@@ -1101,17 +1161,16 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void waitEventNames() {
-        // TODO Auto-generated method stub
         for (TMLWaitEvent waitEvent : taskAc.getWaitEvents()) {
             // TMLCPrimitivePort portdetails = waitEvent.getEvent().port;
             TMLCPrimitivePort sendingPortdetails = waitEvent.getEvent().port;
             TMLCPrimitivePort receivePortdetails = waitEvent.getEvent().port2;
             if (sendingPortdetails != null && !sendingPortdetails.isBlocking()) {
                 warnings.add("Analysis may fail because the model contains non blocking sending port: " + sendingPortdetails.getPortName()
-                        + ". Use tainting analysis instead.");
+                        + ". Use tainting analysis instead");
             }
             if (sendingPortdetails != null && sendingPortdetails.isFinite()) {
-                warnings.add("Send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis ");
+                warnings.add("Send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis");
             }
             String receivePortparams = waitEvent.getAllParams();
             String[] checkchannel;
@@ -1127,54 +1186,58 @@ public class DirectedGraphTranslator extends JApplet {
                 }
             } else {
                 String sendingPortparams = null;
-                if (waitEvent.getEvent().getOriginPort().getName().contains(FORK_PORT_ORIGIN)) {
-                    checkchannel = waitEvent.getEvent().getOriginPort().getName().split(S_LABEL);
-                    warnings.add("Graph Doesn not support FORK for events. Analysis may fail.");
-                    if (checkchannel.length > 2) {
-                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(FORK_PORT_ORIGIN, FORK_EVENT);
-                        sendingPortparams = waitEvent.getEvent().getParams().toString();
-                    } else if (checkchannel.length <= 2) {
-                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(FORK_PORT_ORIGIN, "");
-                        sendingDataPortdetails = sendingDataPortdetails.replace(S_LABEL, "");
+                if (waitEvent.getEvent().getOriginPort() != null) {
+                    if (waitEvent.getEvent().getOriginPort().getName().contains(FORK_PORT_ORIGIN)) {
+                        checkchannel = waitEvent.getEvent().getOriginPort().getName().split(S_LABEL);
+                        warnings.add("Graph does not support FORK for events. Analysis may fail");
+                        if (checkchannel.length > 2) {
+                            sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(FORK_PORT_ORIGIN, FORK_EVENT);
+                            sendingPortparams = waitEvent.getEvent().getParams().toString();
+                        } else if (checkchannel.length <= 2) {
+                            sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(FORK_PORT_ORIGIN, "");
+                            sendingDataPortdetails = sendingDataPortdetails.replace(S_LABEL, "");
+                            sendingPortparams = waitEvent.getEvent().getParams().toString();
+                        }
+                    } else if (waitEvent.getEvent().getOriginPort().getName().contains(JOIN_PORT_ORIGIN)) {
+                        checkchannel = waitEvent.getEvent().getOriginPort().getName().split(S_LABEL);
+                        if (checkchannel.length > 2) {
+                            sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(JOIN_PORT_ORIGIN, JOIN_EVENT);
+                            sendingPortparams = waitEvent.getEvent().getParams().toString();
+                        } else if ((checkchannel.length) <= 2) {
+                            sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(JOIN_PORT_ORIGIN, "");
+                            sendingDataPortdetails = sendingDataPortdetails.replace(S_LABEL, "");
+                            sendingPortparams = waitEvent.getEvent().getParams().toString();
+                        }
+                    } else {
+                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName();
                         sendingPortparams = waitEvent.getEvent().getParams().toString();
                     }
-                } else if (waitEvent.getEvent().getOriginPort().getName().contains(JOIN_PORT_ORIGIN)) {
-                    checkchannel = waitEvent.getEvent().getOriginPort().getName().split(S_LABEL);
-                    if (checkchannel.length > 2) {
-                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(JOIN_PORT_ORIGIN, JOIN_EVENT);
-                        sendingPortparams = waitEvent.getEvent().getParams().toString();
-                    } else if ((checkchannel.length) <= 2) {
-                        sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName().replace(JOIN_PORT_ORIGIN, "");
-                        sendingDataPortdetails = sendingDataPortdetails.replace(S_LABEL, "");
-                        sendingPortparams = waitEvent.getEvent().getParams().toString();
-                    }
-                } else {
-                    sendingDataPortdetails = waitEvent.getEvent().getOriginPort().getName();
-                    sendingPortparams = waitEvent.getEvent().getParams().toString();
                 }
-                if (waitEvent.getEvent().getDestinationPort().getName().contains(FORK_PORT_DESTINATION)) {
-                    checkchannel = waitEvent.getEvent().getDestinationPort().getName().split(S_LABEL);
-                    if (checkchannel.length > 2) {
-                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(FORK_PORT_DESTINATION, FORK_EVENT);
-                        receivePortparams = waitEvent.getEvent().getParams().toString();
-                    } else if (checkchannel.length <= 2) {
-                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(FORK_PORT_DESTINATION, "");
-                        receiveDataPortdetails = receiveDataPortdetails.replace(S_LABEL, "");
+                if (waitEvent.getEvent().getDestinationPort() != null) {
+                    if (waitEvent.getEvent().getDestinationPort().getName().contains(FORK_PORT_DESTINATION)) {
+                        checkchannel = waitEvent.getEvent().getDestinationPort().getName().split(S_LABEL);
+                        if (checkchannel.length > 2) {
+                            receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(FORK_PORT_DESTINATION, FORK_EVENT);
+                            receivePortparams = waitEvent.getEvent().getParams().toString();
+                        } else if (checkchannel.length <= 2) {
+                            receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(FORK_PORT_DESTINATION, "");
+                            receiveDataPortdetails = receiveDataPortdetails.replace(S_LABEL, "");
+                            receivePortparams = waitEvent.getEvent().getParams().toString();
+                        }
+                    } else if (waitEvent.getEvent().getDestinationPort().getName().contains(JOIN_PORT_DESTINATION)) {
+                        checkchannel = waitEvent.getEvent().getDestinationPort().getName().split(S_LABEL);
+                        warnings.add("Graph doesn not support JOIN for events. Analysis may fail");
+                        if (checkchannel.length > 2) {
+                            receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(JOIN_PORT_DESTINATION, JOIN_EVENT);
+                        } else if (checkchannel.length <= 2) {
+                            receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(JOIN_PORT_DESTINATION, "");
+                            receiveDataPortdetails = receiveDataPortdetails.replace(S_LABEL, "");
+                            receivePortparams = waitEvent.getEvent().getParams().toString();
+                        }
+                    } else {
+                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName();
                         receivePortparams = waitEvent.getEvent().getParams().toString();
                     }
-                } else if (waitEvent.getEvent().getDestinationPort().getName().contains(JOIN_PORT_DESTINATION)) {
-                    checkchannel = waitEvent.getEvent().getDestinationPort().getName().split(S_LABEL);
-                    warnings.add("Graph Doesn not support JOIN for events. Analysis may fail.");
-                    if (checkchannel.length > 2) {
-                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(JOIN_PORT_DESTINATION, JOIN_EVENT);
-                    } else if (checkchannel.length <= 2) {
-                        receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName().replace(JOIN_PORT_DESTINATION, "");
-                        receiveDataPortdetails = receiveDataPortdetails.replace(S_LABEL, "");
-                        receivePortparams = waitEvent.getEvent().getParams().toString();
-                    }
-                } else {
-                    receiveDataPortdetails = waitEvent.getEvent().getDestinationPort().getName();
-                    receivePortparams = waitEvent.getEvent().getParams().toString();
                 }
                 if (sendingDataPortdetails != null && receiveDataPortdetails != null) {
                     waitEvt.put(WAITEVENT + receiveDataPortdetails + "(" + receivePortparams + ")", new ArrayList<String>());
@@ -1186,7 +1249,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void writeChannelNames() {
-        // TODO Auto-generated method stub
         for (TMLWriteChannel writeChannel : taskAc.getWriteChannels()) {
             int i = writeChannel.getNbOfChannels();
             for (int j = 0; j < i; j++) {
@@ -1250,7 +1312,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void readChannelNames() {
-        // TODO Auto-generated method stub
         for (TMLReadChannel readChannel : taskAc.getReadChannels()) {
             int i = readChannel.getNbOfChannels();
             // name = _ch.getOriginPorts().get(0).getName(); //return the name of the source
@@ -1312,13 +1373,13 @@ public class DirectedGraphTranslator extends JApplet {
                 if (readChannel.getChannel(j).getOriginPort().getReferenceObject() instanceof TMLCPrimitivePort) {
                     rp = (TMLCPrimitivePort) readChannel.getChannel(j).getOriginPort().getReferenceObject();
                 }
-                if (readChannel.getChannel(j).getOriginPort().getReferenceObject() instanceof TMLCPrimitivePort) {
+                if (readChannel.getChannel(j).getDestinationPort().getReferenceObject() instanceof TMLCPrimitivePort) {
                     sp = (TMLCPrimitivePort) readChannel.getChannel(j).getDestinationPort().getReferenceObject();
                 }
                 if (sp != null && rp != null) {
                     if (!sp.isBlocking() && !rp.isBlocking()) {
                         warnings.add("Analysis may fail because the model contains non blocking sending port: " + sp.getPortName()
-                                + " and non blocking read data port:" + rp.getPortName() + ". Use tainting analysis instead.");
+                                + " and non blocking read data port:" + rp.getPortName() + ". Use tainting analysis instead");
                     }
                 }
             }
@@ -1326,7 +1387,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void sendEventsNames() {
-        // TODO Auto-generated method stub
         for (TMLSendEvent sendEvent : taskAc.getSendEvents()) {
             // int i = sendEvent.getEvents().size();
             TMLCPrimitivePort sendingPortdetails = sendEvent.getEvent().port;
@@ -1345,7 +1405,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void requestedTask(HashSet<TMLTask> value) {
-        // TODO Auto-generated method stub
         for (TMLTask task : value) {
             if (task.isRequested()) {
                 TMLRequest requestToTask = task.getRequest();
@@ -1396,7 +1455,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addcurrentElementVertex(String taskName, String taskStartName) {
-        // TODO Auto-generated method stub
         String preEventName;
         int preEventid;
         String eventName = getEventName(taskName, currentElement);
@@ -1533,7 +1591,7 @@ public class DirectedGraphTranslator extends JApplet {
                 }
             }
         }
-        if (currentElement.getReferenceObject() instanceof TMLADWriteChannel) {
+        if (currentElement.getReferenceObject() instanceof TMLADWriteChannel && currentElement instanceof TMLWriteChannel) {
             writeChannelTransactions.add(eventName);
             String[] name = eventName.split("__");
             String[] removewrite = name[2].split(":");
@@ -1623,7 +1681,6 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private void addStopVertex(String taskName) {
-        // TODO Auto-generated method stub
         String taskEndName = "";
         int taskEndid;
         int preEventid;
@@ -1908,12 +1965,14 @@ public class DirectedGraphTranslator extends JApplet {
 
     private String getEventName(String taskName, TMLActivityElement currentElement2) {
         String eventName = null;
-        if (currentElement.getReferenceObject() instanceof TMLADRandom) {
+        if (currentElement2.getReferenceObject() instanceof TMLADRandom) {
             eventName = taskName + "__" + currentElement2.getName() + "__" + currentElement2.getID();
-        } else if (currentElement.getReferenceObject() instanceof TMLADUnorderedSequence) {
+        } else if (currentElement2.getReferenceObject() instanceof TMLADUnorderedSequence) {
             eventName = taskName + "__" + UNORDERED_SEQUENCE + "__" + currentElement2.getID();
-        } else {
+        } else if (currentElement2.getReferenceObject() != null) {
             eventName = taskName + "__" + currentElement2.getReferenceObject().toString() + "__" + currentElement2.getID();
+        } else {
+            eventName = taskName + "__" + currentElement2.getName() + "__" + currentElement2.getID();
         }
         return eventName;
     }
@@ -1995,7 +2054,6 @@ public class DirectedGraphTranslator extends JApplet {
         ComponentNameProvider<DefaultEdge> edgeLabelProvider = new ComponentNameProvider<DefaultEdge>() {
             @Override
             public String getName(DefaultEdge edge) {
-                // TODO Auto-generated method stub
                 return Double.toString(g.getEdgeWeight(edge));
             }
         };
@@ -2035,388 +2093,354 @@ public class DirectedGraphTranslator extends JApplet {
     // between the selected tasks
     public Object[][] latencyDetailedAnalysis(String task12ID, String task22ID, Vector<SimulationTransaction> transFile1, Boolean taint,
             Boolean considerAddedRules) {
-        for (vertex v : g.vertexSet()) {
-            v.setLabel(new ArrayList<String>());
-            v.setMaxTaintFixedNumber(new HashMap<String, Integer>());
-            v.setTaintConsideredNumber(new HashMap<String, Integer>());
-            v.setVirtualLengthAdded(0);
-            v.setSampleNumber(0);
-        }
-        transFile = transFile1;
-        String message = "";
-        String[] task1 = task12ID.split("__");
-        int task1index = task1.length;
-        idTask1 = task1[task1index - 1];
-        String[] task2 = task22ID.split("__");
-        int task2index = task2.length;
-        idTask2 = task2[task2index - 1];
-        String task12 = nameIDTaskList.get(idTask1);
-        String task22 = nameIDTaskList.get(idTask2);
-        vertex v1 = getvertex(task12);
-        Vector<SimulationTransaction> Task1Traces = new Vector<SimulationTransaction>();
-        Vector<SimulationTransaction> Task2Traces = new Vector<SimulationTransaction>();
-        HashMap<String, Vector<String>> Task1TaintedTraces = new LinkedHashMap<String, Vector<String>>();
-        HashMap<String, Vector<String>> Task2TaintedTraces = new LinkedHashMap<String, Vector<String>>();
-        GraphPath<vertex, DefaultEdge> path2 = DijkstraShortestPath.findPathBetween(g, v1, getvertex(task22));
-        times1.clear();
-        times2.clear();
-        if (path2 != null && path2.getLength() > 0) {
-            for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
-                String ChannelName = entry.getKey();
-                ArrayList<String> busChList = entry.getValue();
-                GraphPath<vertex, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, v1, getvertex(ChannelName));
-                GraphPath<vertex, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, getvertex(ChannelName), getvertex(task22));
-                if (pathTochannel != null && pathTochannel.getLength() > 0 && pathFromChannel != null && pathFromChannel.getLength() > 0) {
-                    devicesToBeConsidered.addAll(busChList);
-                }
+        try {
+            for (vertex v : g.vertexSet()) {
+                v.setLabel(new ArrayList<String>());
+                v.setMaxTaintFixedNumber(new HashMap<String, Integer>());
+                v.setTaintConsideredNumber(new HashMap<String, Integer>());
+                v.setVirtualLengthAdded(0);
+                v.setSampleNumber(0);
             }
-        } else {
-            for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
-                String ChannelName = entry.getKey();
-                ArrayList<String> busChList = entry.getValue();
-                GraphPath<vertex, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, v1, getvertex(ChannelName));
-                GraphPath<vertex, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, getvertex(ChannelName), getvertex(task22));
-                if ((pathTochannel != null && pathTochannel.getLength() > 0) || (pathFromChannel != null && pathFromChannel.getLength() > 0)) {
-                    devicesToBeConsidered.addAll(busChList);
-                }
-            }
-        }
-        Collections.sort(transFile1, new Comparator<SimulationTransaction>() {
-            public int compare(SimulationTransaction o1, SimulationTransaction o2) {
-                BigDecimal t1 = new BigDecimal(o1.startTime);
-                BigDecimal t2 = new BigDecimal(o2.startTime);
-                int startTimeEq = t1.compareTo(t2);
-                if (startTimeEq == 0) {
-                    BigDecimal t1End = new BigDecimal(o1.endTime);
-                    BigDecimal t2End = new BigDecimal(o2.endTime);
-                    return t1End.compareTo(t2End);
-                }
-                return startTimeEq;
-            }
-        });
-        if (taint) {
-            for (SimulationTransaction st : transFile1) {
-                if (st.coreNumber == null) {
-                    st.coreNumber = ZERO;
-                }
-                if (task1DeviceName.isEmpty()) {
-                    if (st.id.equals(idTask1)) {
-                        task1DeviceName = st.deviceName;
-                        task1CoreNbr = st.coreNumber;
-                    }
-                }
-                if (task2DeviceName.isEmpty()) {
-                    if (st.id.equals(idTask2)) {
-                        task2DeviceName = st.deviceName;
-                        task2CoreNbr = st.coreNumber;
-                    }
-                }
-                if (!task1DeviceName.isEmpty() && !task2DeviceName.isEmpty()) {
-                    break;
-                }
-            }
-            int j = 0;
-            for (SimulationTransaction st : transFile1) {
-                int startTime = Integer.valueOf(st.startTime);
-                int endTime = Integer.valueOf(st.endTime);
-                int id = Integer.valueOf(st.id);
-                if (st.coreNumber == null) {
-                    st.coreNumber = ZERO;
-                }
-                // ADD rules as edges
-                if (considerAddedRules) {
-                    if (ruleAddedEdges.size() > 0) {
-                        for (Entry<vertex, List<vertex>> rulevertex : ruleAddedEdges.entrySet()) {
-                            vertex fromVertex = rulevertex.getKey();
-                            List<vertex> listOfToV = rulevertex.getValue();
-                            for (vertex toVertex : listOfToV) {
-                                if (g.containsVertex(toVertex) && g.containsVertex(fromVertex)) {
-                                    g.addEdge(fromVertex, toVertex);
-                                }
-                            }
-                        }
-                    }
-                }
-                // if st started and ended before the first call of operator- don't consider it
-                // if (!(Integer.valueOf(st.startTime) < times1.get(0) &&
-                // Integer.valueOf(st.endTime) < times1.get(0))) {
-                String taskname = "";
-                String tasknameCheckID = "";
-                if (st.command.contains(SELECT_EVENT_PARAM)) {
-                    st.command = st.command.replace(SELECT_EVENT, WAIT_ST + st.channelName);
-                    String[] chN = st.channelName.split("__");
-                    String eventN = chN[chN.length - 1];
-                    vertex v = getvertexFromID(id);
-                    String vName = v.getName();
-                    if (Graphs.vertexHasSuccessors(g, v)) {
-                        for (vertex vsec : Graphs.successorListOf(g, v)) {
-                            if (vsec.getName().contains(WAIT_EVENT + eventN + "(")) {
-                                st.id = String.valueOf(vsec.getId());
-                                id = vsec.getId();
-                            }
-                        }
-                    }
-                } else if (st.command.contains(WAIT_REQ_LABEL)) {
-                    vertex v = getvertexFromID(id);
-                    if (v.getType() == vertex.TYPE_START) {
-                        if (Graphs.vertexHasSuccessors(g, v)) {
-                            for (vertex vbefore : Graphs.successorListOf(g, v)) {
-                                if (vbefore.getName().contains(GET_REQ_ARG_LABEL)) {
-                                    st.id = String.valueOf(vbefore.getId());
-                                    id = vbefore.getId();
-                                }
-                            }
-                        }
-                    }
-                }
+            transFile = transFile1;
+            String message = "";
+            String[] task1 = task12ID.split("__");
+            int task1index = task1.length;
+            idTask1 = task1[task1index - 1];
+            String[] task2 = task22ID.split("__");
+            int task2index = task2.length;
+            idTask2 = task2[task2index - 1];
+            String task12 = nameIDTaskList.get(idTask1);
+            String task22 = nameIDTaskList.get(idTask2);
+            vertex v1 = getvertex(task12);
+            Vector<SimulationTransaction> Task1Traces = new Vector<SimulationTransaction>();
+            Vector<SimulationTransaction> Task2Traces = new Vector<SimulationTransaction>();
+            HashMap<String, Vector<String>> Task1TaintedTraces = new LinkedHashMap<String, Vector<String>>();
+            HashMap<String, Vector<String>> Task2TaintedTraces = new LinkedHashMap<String, Vector<String>>();
+            GraphPath<vertex, DefaultEdge> path2 = DijkstraShortestPath.findPathBetween(g, v1, getvertex(task22));
+            times1.clear();
+            times2.clear();
+            if (path2 != null && path2.getLength() > 0) {
                 for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
                     String ChannelName = entry.getKey();
                     ArrayList<String> busChList = entry.getValue();
-                    String bus1 = "";
-                    for (String busName : busChList) {
-                        String[] bus = st.deviceName.split("_");
-                        if (bus.length > 2) {
-                            for (int i = 0; i < bus.length - 1; i++) {
-                                if (i == 0) {
-                                    bus1 = bus[i];
-                                } else {
-                                    bus1 = bus1 + "_" + bus[i];
-                                }
-                            }
-                        } else {
-                            bus1 = bus[0];
-                        }
-                        if (bus1.equals(busName) && st.channelName.equals(ChannelName)) {
-                            tasknameCheckID = ChannelName;
-                            taskname = getvertex(ChannelName).getName();
-                        }
+                    GraphPath<vertex, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, v1, getvertex(ChannelName));
+                    GraphPath<vertex, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, getvertex(ChannelName),
+                            getvertex(task22));
+                    if (pathTochannel != null && pathTochannel.getLength() > 0 && pathFromChannel != null && pathFromChannel.getLength() > 0) {
+                        devicesToBeConsidered.addAll(busChList);
                     }
                 }
-                if (tasknameCheckID.isEmpty()) {
-                    for (vertex tasknameCheck : g.vertexSet()) {
-                        String[] taskToAdd = tasknameCheck.toString().replaceAll(" ", "").split("__");
-                        int taskToAddindex = taskToAdd.length;
-                        String taskToAddid = taskToAdd[taskToAddindex - 1];
-                        if (isNumeric(taskToAddid)) {
-                            if (Integer.valueOf(taskToAddid).equals(id)) {
-                                taskname = tasknameCheck.toString();
-                                tasknameCheckID = tasknameCheck.getName();
-                                if (taskname.equals(task12) && task1DeviceName.equals(st.deviceName) && task1CoreNbr.equals(st.coreNumber)) {
-                                    addTaint(tasknameCheck);
-                                    if (Task1TaintedTraces.containsKey(tasknameCheck.getLastLabel())) {
-                                        Task1TaintedTraces.get(tasknameCheck.getLastLabel()).add(st.startTime);
-                                    } else {
-                                        Vector<String> Task1TracesTD = new Vector<String>();
-                                        Task1TracesTD.add(st.startTime);
-                                        Task1TaintedTraces.put(tasknameCheck.getLastLabel(), Task1TracesTD);
+            } else {
+                for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
+                    String ChannelName = entry.getKey();
+                    ArrayList<String> busChList = entry.getValue();
+                    GraphPath<vertex, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, v1, getvertex(ChannelName));
+                    GraphPath<vertex, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, getvertex(ChannelName),
+                            getvertex(task22));
+                    if ((pathTochannel != null && pathTochannel.getLength() > 0) || (pathFromChannel != null && pathFromChannel.getLength() > 0)) {
+                        devicesToBeConsidered.addAll(busChList);
+                    }
+                }
+            }
+            Collections.sort(transFile1, new Comparator<SimulationTransaction>() {
+                public int compare(SimulationTransaction o1, SimulationTransaction o2) {
+                    BigDecimal t1 = new BigDecimal(o1.startTime);
+                    BigDecimal t2 = new BigDecimal(o2.startTime);
+                    int startTimeEq = t1.compareTo(t2);
+                    if (startTimeEq == 0) {
+                        BigDecimal t1End = new BigDecimal(o1.endTime);
+                        BigDecimal t2End = new BigDecimal(o2.endTime);
+                        return t1End.compareTo(t2End);
+                    }
+                    return startTimeEq;
+                }
+            });
+            if (taint) {
+                for (SimulationTransaction st : transFile1) {
+                    if (st.coreNumber == null) {
+                        st.coreNumber = ZERO;
+                    }
+                    if (task1DeviceName.isEmpty()) {
+                        if (st.id.equals(idTask1)) {
+                            task1DeviceName = st.deviceName;
+                            task1CoreNbr = st.coreNumber;
+                        }
+                    }
+                    if (task2DeviceName.isEmpty()) {
+                        if (st.id.equals(idTask2)) {
+                            task2DeviceName = st.deviceName;
+                            task2CoreNbr = st.coreNumber;
+                        }
+                    }
+                    if (!task1DeviceName.isEmpty() && !task2DeviceName.isEmpty()) {
+                        break;
+                    }
+                }
+                int j = 0;
+                for (SimulationTransaction st : transFile1) {
+                    int startTime = Integer.valueOf(st.startTime);
+                    int endTime = Integer.valueOf(st.endTime);
+                    int id = Integer.valueOf(st.id);
+                    if (st.coreNumber == null) {
+                        st.coreNumber = ZERO;
+                    }
+                    // ADD rules as edges
+                    if (considerAddedRules) {
+                        if (ruleAddedEdges.size() > 0) {
+                            for (Entry<vertex, List<vertex>> rulevertex : ruleAddedEdges.entrySet()) {
+                                vertex fromVertex = rulevertex.getKey();
+                                List<vertex> listOfToV = rulevertex.getValue();
+                                for (vertex toVertex : listOfToV) {
+                                    if (g.containsVertex(toVertex) && g.containsVertex(fromVertex)) {
+                                        g.addEdge(fromVertex, toVertex);
                                     }
-                                    times1.add(startTime);
-                                    Collections.sort(times1);
                                 }
-                                break;
                             }
                         }
                     }
-                }
-                if (Graphs.vertexHasSuccessors(g, getvertex(tasknameCheckID)) && !getvertex(tasknameCheckID).getLabel().isEmpty()) {
-                    for (vertex v : Graphs.successorListOf(g, getvertex(tasknameCheckID))) {
-                        String labelToaAddtoV = getfirstCommonLabel(v, getvertex(tasknameCheckID));
-                        // removed after testing in for loop/ action/choice
-                        /*
-                         * if (Graphs.vertexHasPredecessors(g, getvertex(tasknameCheckID))) { for
-                         * (vertex previousV : Graphs.predecessorListOf(g, getvertex(tasknameCheckID)))
-                         * { if (previousV.getType() == vertex.TYPE_CHOICE) {
-                         * 
-                         * for (Entry<vertex, List<vertex>> vChoice : allChoiceValues.entrySet()) {
-                         * 
-                         * if (previousV.equals(vChoice.getKey())) {
-                         * 
-                         * if (previousV.getLabel().contains(labelToaAddtoV)) {
-                         * 
-                         * for (vertex cVertex : allChoiceValues.get(vChoice.getKey())) {
-                         * 
-                         * if (!cVertex.equals(getvertex(tasknameCheckID))) {
-                         * 
-                         * if (cVertex.getLabel().contains(labelToaAddtoV)) {
-                         * cVertex.getLabel().remove(labelToaAddtoV);
-                         * 
-                         * }
-                         * 
-                         * if (cVertex.getMaxTaintFixedNumber().containsKey(labelToaAddtoV)) {
-                         * cVertex.getMaxTaintFixedNumber().remove(labelToaAddtoV);
-                         * 
-                         * }
-                         * 
-                         * if (cVertex.getTaintConsideredNumber().containsKey(labelToaAddtoV)) {
-                         * cVertex.getTaintConsideredNumber().remove(labelToaAddtoV);
-                         * 
-                         * } } }
-                         * 
-                         * }
-                         * 
-                         * }
-                         * 
-                         * }
-                         * 
-                         * } } }
-                         */
-                        if (v.getType() == vertex.TYPE_CHANNEL || v.getType() == vertex.TYPE_TRANSACTION) {
-                            if (v.getLabel().contains(labelToaAddtoV)) {
-                                if (v.getMaxTaintFixedNumber().containsKey(labelToaAddtoV)) {
-                                    if (v.getMaxTaintFixedNumber().get(labelToaAddtoV) != v.getTaintFixedNumber()) {
-                                        v.getMaxTaintFixedNumber().put(labelToaAddtoV,
-                                                v.getMaxTaintFixedNumber().get(labelToaAddtoV) * v.getTaintFixedNumber());
+                    // if st started and ended before the first call of operator- don't consider it
+                    // if (!(Integer.valueOf(st.startTime) < times1.get(0) &&
+                    // Integer.valueOf(st.endTime) < times1.get(0))) {
+                    String taskname = "";
+                    String tasknameCheckID = "";
+                    if (st.command.contains(SELECT_EVENT_PARAM)) {
+                        st.command = st.command.replace(SELECT_EVENT, WAIT_ST + st.channelName);
+                        String[] chN = st.channelName.split("__");
+                        String eventN = chN[chN.length - 1];
+                        vertex v = getvertexFromID(id);
+                        String vName = v.getName();
+                        if (Graphs.vertexHasSuccessors(g, v)) {
+                            for (vertex vsec : Graphs.successorListOf(g, v)) {
+                                if (vsec.getName().contains(WAIT_EVENT + eventN + "(")) {
+                                    st.id = String.valueOf(vsec.getId());
+                                    id = vsec.getId();
+                                }
+                            }
+                        }
+                    } else if (st.command.contains(WAIT_REQ_LABEL)) {
+                        vertex v = getvertexFromID(id);
+                        if (v.getType() == vertex.TYPE_START) {
+                            if (Graphs.vertexHasSuccessors(g, v)) {
+                                for (vertex vbefore : Graphs.successorListOf(g, v)) {
+                                    if (vbefore.getName().contains(GET_REQ_ARG_LABEL)) {
+                                        st.id = String.valueOf(vbefore.getId());
+                                        id = vbefore.getId();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
+                        String ChannelName = entry.getKey();
+                        ArrayList<String> busChList = entry.getValue();
+                        String bus1 = "";
+                        for (String busName : busChList) {
+                            String[] bus = st.deviceName.split("_");
+                            if (bus.length > 2) {
+                                for (int i = 0; i < bus.length - 1; i++) {
+                                    if (i == 0) {
+                                        bus1 = bus[i];
+                                    } else {
+                                        bus1 = bus1 + "_" + bus[i];
                                     }
                                 }
                             } else {
-                                v.addLabel(labelToaAddtoV);
-                                v.getMaxTaintFixedNumber().put(labelToaAddtoV, v.getTaintFixedNumber());
+                                bus1 = bus[0];
                             }
-                            for (vertex subV : Graphs.successorListOf(g, v)) {
-                                if (!subV.equals(v1)) {
-                                    if (!(subV.getType() == vertex.TYPE_TRANSACTION || subV.getType() == vertex.TYPE_CHANNEL)) {
-                                        HashMap<vertex, List<vertex>> NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
-                                        HashMap<vertex, List<vertex>> NonTransVertexes2 = new LinkedHashMap<vertex, List<vertex>>();
-                                        HashMap<vertex, List<vertex>> NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
-                                        NonTransVertexes.putAll(taintingNonTransVertexes(v, getvertex(tasknameCheckID), v1));
-                                        int addeditems = 0;
-                                        for (Entry<vertex, List<vertex>> e : NonTransVertexes.entrySet()) {
-                                            vertex vet = e.getKey();
-                                            List<vertex> vl = e.getValue();
-                                            for (vertex ver : vl) {
-                                                NonTransVertexes2 = taintingNonTransVertexes(ver, vet, v1);
-                                                NonTransVertexesAdded.putAll(NonTransVertexes2);
-                                                // NonTransVertexes.putAll(taintingNonTransVertexes(ver, vet, v1));
-                                                addeditems = addeditems + NonTransVertexes2.size();
-                                            }
+                            String[] chName = ChannelName.split("__");
+                            String name = chName[0];
+                            for (int i = 1; i < chName.length - 1; i++) {
+                                name = name + "__" + chName[i];
+                            }
+                            if (bus1.equals(busName) && st.channelName.equals(name)) {
+                                tasknameCheckID = ChannelName;
+                                taskname = getvertex(ChannelName).getName();
+                            }
+                        }
+                    }
+                    if (tasknameCheckID.isEmpty()) {
+                        for (vertex tasknameCheck : g.vertexSet()) {
+                            String[] taskToAdd = tasknameCheck.toString().replaceAll(" ", "").split("__");
+                            int taskToAddindex = taskToAdd.length;
+                            String taskToAddid = taskToAdd[taskToAddindex - 1];
+                            if (isNumeric(taskToAddid)) {
+                                if (Integer.valueOf(taskToAddid).equals(id)) {
+                                    taskname = tasknameCheck.toString();
+                                    tasknameCheckID = tasknameCheck.getName();
+                                    if (taskname.equals(task12) && task1DeviceName.equals(st.deviceName) && task1CoreNbr.equals(st.coreNumber)) {
+                                        addTaint(tasknameCheck);
+                                        if (Task1TaintedTraces.containsKey(tasknameCheck.getLastLabel())) {
+                                            Task1TaintedTraces.get(tasknameCheck.getLastLabel()).add(st.startTime);
+                                        } else {
+                                            Vector<String> Task1TracesTD = new Vector<String>();
+                                            Task1TracesTD.add(st.startTime);
+                                            Task1TaintedTraces.put(tasknameCheck.getLastLabel(), Task1TracesTD);
                                         }
-                                        while (addeditems > 0) {
-                                            NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
-                                            NonTransVertexes.putAll(NonTransVertexesAdded);
-                                            NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
+                                        times1.add(startTime);
+                                        Collections.sort(times1);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    vertex taskVertex = getvertex(tasknameCheckID);
+                    if (taskVertex != null && Graphs.vertexHasSuccessors(g, taskVertex) && !taskVertex.getLabel().isEmpty()) {
+                        for (vertex v : Graphs.successorListOf(g, taskVertex)) {
+                            String labelToaAddtoV = getfirstCommonLabel(v, taskVertex);
+                            // removed after testing in for loop/ action/choice
+                            /*
+                             * if (Graphs.vertexHasPredecessors(g, getvertex(tasknameCheckID))) { for
+                             * (vertex previousV : Graphs.predecessorListOf(g, getvertex(tasknameCheckID)))
+                             * { if (previousV.getType() == vertex.TYPE_CHOICE) {
+                             * 
+                             * for (Entry<vertex, List<vertex>> vChoice : allChoiceValues.entrySet()) {
+                             * 
+                             * if (previousV.equals(vChoice.getKey())) {
+                             * 
+                             * if (previousV.getLabel().contains(labelToaAddtoV)) {
+                             * 
+                             * for (vertex cVertex : allChoiceValues.get(vChoice.getKey())) {
+                             * 
+                             * if (!cVertex.equals(getvertex(tasknameCheckID))) {
+                             * 
+                             * if (cVertex.getLabel().contains(labelToaAddtoV)) {
+                             * cVertex.getLabel().remove(labelToaAddtoV);
+                             * 
+                             * }
+                             * 
+                             * if (cVertex.getMaxTaintFixedNumber().containsKey(labelToaAddtoV)) {
+                             * cVertex.getMaxTaintFixedNumber().remove(labelToaAddtoV);
+                             * 
+                             * }
+                             * 
+                             * if (cVertex.getTaintConsideredNumber().containsKey(labelToaAddtoV)) {
+                             * cVertex.getTaintConsideredNumber().remove(labelToaAddtoV);
+                             * 
+                             * } } }
+                             * 
+                             * }
+                             * 
+                             * }
+                             * 
+                             * }
+                             * 
+                             * } } }
+                             */
+                            if (v.getType() == vertex.TYPE_CHANNEL || v.getType() == vertex.TYPE_TRANSACTION) {
+                                if (v.getLabel().contains(labelToaAddtoV)) {
+                                    if (v.getMaxTaintFixedNumber().containsKey(labelToaAddtoV)) {
+                                        if (v.getMaxTaintFixedNumber().get(labelToaAddtoV) != v.getTaintFixedNumber()) {
+                                            v.getMaxTaintFixedNumber().put(labelToaAddtoV,
+                                                    v.getMaxTaintFixedNumber().get(labelToaAddtoV) * v.getTaintFixedNumber());
+                                        }
+                                    }
+                                } else {
+                                    v.addLabel(labelToaAddtoV);
+                                    v.getMaxTaintFixedNumber().put(labelToaAddtoV, v.getTaintFixedNumber());
+                                }
+                                for (vertex subV : Graphs.successorListOf(g, v)) {
+                                    if (!subV.equals(v1)) {
+                                        if (!(subV.getType() == vertex.TYPE_TRANSACTION || subV.getType() == vertex.TYPE_CHANNEL)) {
+                                            HashMap<vertex, List<vertex>> NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
+                                            HashMap<vertex, List<vertex>> NonTransVertexes2 = new LinkedHashMap<vertex, List<vertex>>();
+                                            HashMap<vertex, List<vertex>> NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
+                                            NonTransVertexes.putAll(taintingNonTransVertexes(v, taskVertex, v1));
+                                            int addeditems = 0;
                                             for (Entry<vertex, List<vertex>> e : NonTransVertexes.entrySet()) {
                                                 vertex vet = e.getKey();
                                                 List<vertex> vl = e.getValue();
                                                 for (vertex ver : vl) {
-                                                    NonTransVertexesAdded.putAll(taintingNonTransVertexes(ver, vet, v1));
+                                                    NonTransVertexes2 = taintingNonTransVertexes(ver, vet, v1);
+                                                    NonTransVertexesAdded.putAll(NonTransVertexes2);
                                                     // NonTransVertexes.putAll(taintingNonTransVertexes(ver, vet, v1));
-                                                    addeditems--;
-                                                    addeditems = addeditems + NonTransVertexesAdded.size();
+                                                    addeditems = addeditems + NonTransVertexes2.size();
+                                                }
+                                            }
+                                            while (addeditems > 0) {
+                                                NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
+                                                NonTransVertexes.putAll(NonTransVertexesAdded);
+                                                NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
+                                                for (Entry<vertex, List<vertex>> e : NonTransVertexes.entrySet()) {
+                                                    vertex vet = e.getKey();
+                                                    List<vertex> vl = e.getValue();
+                                                    for (vertex ver : vl) {
+                                                        NonTransVertexesAdded.putAll(taintingNonTransVertexes(ver, vet, v1));
+                                                        // NonTransVertexes.putAll(taintingNonTransVertexes(ver, vet, v1));
+                                                        addeditems--;
+                                                        addeditems = addeditems + NonTransVertexesAdded.size();
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        } else {
-                            HashMap<vertex, List<vertex>> NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
-                            HashMap<vertex, List<vertex>> NonTransVertexes2 = new LinkedHashMap<vertex, List<vertex>>();
-                            HashMap<vertex, List<vertex>> NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
-                            NonTransVertexes.putAll(taintingNonTransVertexes(v, getvertex(tasknameCheckID), v1));
-                            int addeditems = 0;
-                            for (Entry<vertex, List<vertex>> e : NonTransVertexes.entrySet()) {
-                                vertex vet = e.getKey();
-                                List<vertex> vl = e.getValue();
-                                for (vertex ver : vl) {
-                                    NonTransVertexes2 = taintingNonTransVertexes(ver, vet, v1);
-                                    NonTransVertexesAdded.putAll(NonTransVertexes2);
-                                    // NonTransVertexes.putAll(taintingNonTransVertexes(ver, vet, v1));
-                                    addeditems = addeditems + NonTransVertexes2.size();
-                                }
-                            }
-                            while (addeditems > 0) {
-                                NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
-                                NonTransVertexes.putAll(NonTransVertexesAdded);
-                                NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
+                            } else {
+                                HashMap<vertex, List<vertex>> NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
+                                HashMap<vertex, List<vertex>> NonTransVertexes2 = new LinkedHashMap<vertex, List<vertex>>();
+                                HashMap<vertex, List<vertex>> NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
+                                NonTransVertexes.putAll(taintingNonTransVertexes(v, taskVertex, v1));
+                                int addeditems = 0;
                                 for (Entry<vertex, List<vertex>> e : NonTransVertexes.entrySet()) {
                                     vertex vet = e.getKey();
                                     List<vertex> vl = e.getValue();
                                     for (vertex ver : vl) {
-                                        NonTransVertexesAdded.putAll(taintingNonTransVertexes(ver, vet, v1));
+                                        NonTransVertexes2 = taintingNonTransVertexes(ver, vet, v1);
+                                        NonTransVertexesAdded.putAll(NonTransVertexes2);
                                         // NonTransVertexes.putAll(taintingNonTransVertexes(ver, vet, v1));
-                                        addeditems--;
-                                        addeditems = addeditems + NonTransVertexesAdded.size();
+                                        addeditems = addeditems + NonTransVertexes2.size();
+                                    }
+                                }
+                                while (addeditems > 0) {
+                                    NonTransVertexes = new LinkedHashMap<vertex, List<vertex>>();
+                                    NonTransVertexes.putAll(NonTransVertexesAdded);
+                                    NonTransVertexesAdded = new LinkedHashMap<vertex, List<vertex>>();
+                                    for (Entry<vertex, List<vertex>> e : NonTransVertexes.entrySet()) {
+                                        vertex vet = e.getKey();
+                                        List<vertex> vl = e.getValue();
+                                        for (vertex ver : vl) {
+                                            NonTransVertexesAdded.putAll(taintingNonTransVertexes(ver, vet, v1));
+                                            // NonTransVertexes.putAll(taintingNonTransVertexes(ver, vet, v1));
+                                            addeditems--;
+                                            addeditems = addeditems + NonTransVertexesAdded.size();
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-                Boolean hasLabelAstask12 = false;
-                hasLabelAstask12 = considerVertex(task12, taskname, st.virtualLength, st.command);
-                // remove rules edges
-                if (considerAddedRules) {
-                    if (ruleAddedEdges.size() > 0) {
-                        for (Entry<vertex, List<vertex>> rulevertex : ruleAddedEdges.entrySet()) {
-                            vertex fromVertex = rulevertex.getKey();
-                            List<vertex> listOfToV = rulevertex.getValue();
-                            for (vertex toVertex : listOfToV) {
-                                if (g.containsVertex(fromVertex) && g.containsVertex(toVertex) && g.containsEdge(fromVertex, toVertex)) {
-                                    g.removeEdge(fromVertex, toVertex);
+                    Boolean hasLabelAstask12 = false;
+                    if (taskname == "") {
+                        taskname = "";
+                    }
+                    if (taskname != "") {
+                        hasLabelAstask12 = considerVertex(task12, taskname, st.virtualLength, st.command);
+                    }
+                    // remove rules edges
+                    if (considerAddedRules) {
+                        if (ruleAddedEdges.size() > 0) {
+                            for (Entry<vertex, List<vertex>> rulevertex : ruleAddedEdges.entrySet()) {
+                                vertex fromVertex = rulevertex.getKey();
+                                List<vertex> listOfToV = rulevertex.getValue();
+                                for (vertex toVertex : listOfToV) {
+                                    if (g.containsVertex(fromVertex) && g.containsVertex(toVertex) && g.containsEdge(fromVertex, toVertex)) {
+                                        g.removeEdge(fromVertex, toVertex);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                String[] name = st.deviceName.split("_");
-                String deviceName = name[0];
-                // there is a path between task 1 and task 2
-                // if (path2 != null && path2.getLength() > 0) {
-                j++;
-                if (path2 != null && path2.getLength() > 0) {
-                    GraphPath<vertex, DefaultEdge> pathToOrigin = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
-                    GraphPath<vertex, DefaultEdge> pathToDestination = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
-                            getvertex(task22));
-                    if (taskname.equals(task12) || (hasLabelAstask12 && taskname.equals(task22)) || (hasLabelAstask12 && (pathToOrigin != null
-                            && pathToOrigin.getLength() > 0 && pathToDestination != null && pathToDestination.getLength() > 0))) {
-                        if (taskname.equals(task22)) {
-                            if (Task2TaintedTraces.containsKey(taintLabel)) {
-                                Task2TaintedTraces.get(taintLabel).add(st.endTime);
-                            } else {
-                                Vector<String> Task2TracesTD = new Vector<String>();
-                                Task2TracesTD.add(st.endTime);
-                                Task2TaintedTraces.put(taintLabel, Task2TracesTD);
-                            }
-                            task2DeviceName = st.deviceName;
-                            task2CoreNbr = st.coreNumber;
-                            times2.add(endTime);
-                            Collections.sort(times2);
-                        }
-                        if (relatedsimTraceswithTaint.containsKey(taintLabel)) {
-                            relatedsimTraceswithTaint.get(taintLabel).add(st);
-                        } else {
-                            ArrayList<SimulationTransaction> TaskST = new ArrayList<SimulationTransaction>();
-                            TaskST.add(st);
-                            relatedsimTraceswithTaint.put(taintLabel, TaskST);
-                        }
-                        ArrayList<Integer> timeValues = new ArrayList<Integer>();
-                        timeValues.add(0, Integer.valueOf(st.runnableTime));
-                        timeValues.add(1, startTime);
-                        if (!(st.runnableTime).equals(st.startTime)) {
-                            String dName = st.deviceName + "_" + st.coreNumber;
-                            if (runnableTimePerDevice.containsKey(dName)) {
-                                if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
-                                    runnableTimePerDevice.get(dName).add(timeValues);
-                                }
-                            } else {
-                                ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
-                                timeValuesList.add(timeValues);
-                                runnableTimePerDevice.put(dName, timeValuesList);
-                            }
-                        }
-                    } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
-                            || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
-                            || devicesToBeConsidered.contains(deviceName))) {
-                        delayDueTosimTraces.add(st);
-                    }
-                } else {
-                    if (!taskname.equals(null) && !taskname.equals("")) {
-                        GraphPath<vertex, DefaultEdge> pathExistsTestwithTask1 = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
-                        GraphPath<vertex, DefaultEdge> pathExistsTestwithTask2 = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
+                    String[] name = st.deviceName.split("_");
+                    String deviceName = name[0];
+                    // there is a path between task 1 and task 2
+                    // if (path2 != null && path2.getLength() > 0) {
+                    j++;
+                    if (path2 != null && path2.getLength() > 0 && taskname != "") {
+                        GraphPath<vertex, DefaultEdge> pathToOrigin = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
+                        GraphPath<vertex, DefaultEdge> pathToDestination = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
                                 getvertex(task22));
-                        if (taskname.equals(task12) || (hasLabelAstask12 && taskname.equals(task22))
-                                || (hasLabelAstask12 && (pathExistsTestwithTask1 != null && pathExistsTestwithTask1.getLength() > 0
-                                        || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0))) {
+                        if (taskname.equals(task12) || (hasLabelAstask12 && taskname.equals(task22)) || (hasLabelAstask12 && (pathToOrigin != null
+                                && pathToOrigin.getLength() > 0 && pathToDestination != null && pathToDestination.getLength() > 0))) {
                             if (taskname.equals(task22)) {
                                 if (Task2TaintedTraces.containsKey(taintLabel)) {
                                     Task2TaintedTraces.get(taintLabel).add(st.endTime);
@@ -2457,294 +2481,345 @@ public class DirectedGraphTranslator extends JApplet {
                                 || devicesToBeConsidered.contains(deviceName))) {
                             delayDueTosimTraces.add(st);
                         }
+                    } else {
+                        if (!taskname.equals(null) && !taskname.equals("")) {
+                            GraphPath<vertex, DefaultEdge> pathExistsTestwithTask1 = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
+                            GraphPath<vertex, DefaultEdge> pathExistsTestwithTask2 = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
+                                    getvertex(task22));
+                            if (taskname.equals(task12) || (hasLabelAstask12 && taskname.equals(task22))
+                                    || (hasLabelAstask12 && (pathExistsTestwithTask1 != null && pathExistsTestwithTask1.getLength() > 0
+                                            || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0))) {
+                                if (taskname.equals(task22)) {
+                                    if (Task2TaintedTraces.containsKey(taintLabel)) {
+                                        Task2TaintedTraces.get(taintLabel).add(st.endTime);
+                                    } else {
+                                        Vector<String> Task2TracesTD = new Vector<String>();
+                                        Task2TracesTD.add(st.endTime);
+                                        Task2TaintedTraces.put(taintLabel, Task2TracesTD);
+                                    }
+                                    task2DeviceName = st.deviceName;
+                                    task2CoreNbr = st.coreNumber;
+                                    times2.add(endTime);
+                                    Collections.sort(times2);
+                                }
+                                if (relatedsimTraceswithTaint.containsKey(taintLabel)) {
+                                    relatedsimTraceswithTaint.get(taintLabel).add(st);
+                                } else {
+                                    ArrayList<SimulationTransaction> TaskST = new ArrayList<SimulationTransaction>();
+                                    TaskST.add(st);
+                                    relatedsimTraceswithTaint.put(taintLabel, TaskST);
+                                }
+                                ArrayList<Integer> timeValues = new ArrayList<Integer>();
+                                timeValues.add(0, Integer.valueOf(st.runnableTime));
+                                timeValues.add(1, startTime);
+                                if (!(st.runnableTime).equals(st.startTime)) {
+                                    String dName = st.deviceName + "_" + st.coreNumber;
+                                    if (runnableTimePerDevice.containsKey(dName)) {
+                                        if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
+                                            runnableTimePerDevice.get(dName).add(timeValues);
+                                        }
+                                    } else {
+                                        ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
+                                        timeValuesList.add(timeValues);
+                                        runnableTimePerDevice.put(dName, timeValuesList);
+                                    }
+                                }
+                            } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                    || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
+                                    || devicesToBeConsidered.contains(deviceName))) {
+                                delayDueTosimTraces.add(st);
+                            }
+                        }
                     }
+                    // }
+                    // }
                 }
-                // }
-                // }
-            }
-            int i = 0;
-            dataByTask = new Object[Task1TaintedTraces.size()][7];
-            for (Entry<String, Vector<String>> entry : Task1TaintedTraces.entrySet()) {
-                String labeli = entry.getKey();
-                dataByTask[i][0] = task12;
-                dataByTask[i][1] = Task1TaintedTraces.get(labeli).get(0);
-                Boolean haslabelinTask2 = false;
-                for (Entry<String, Vector<String>> entry2 : Task2TaintedTraces.entrySet()) {
-                    if (labeli.equals(entry2.getKey())) {
-                        dataByTask[i][2] = task22;
-                        dataByTask[i][3] = Task2TaintedTraces.get(labeli).get(entry2.getValue().size() - 1);
-                        haslabelinTask2 = true;
+                int i = 0;
+                dataByTask = new Object[Task1TaintedTraces.size()][7];
+                for (Entry<String, Vector<String>> entry : Task1TaintedTraces.entrySet()) {
+                    String labeli = entry.getKey();
+                    dataByTask[i][0] = task12;
+                    dataByTask[i][1] = Task1TaintedTraces.get(labeli).get(0);
+                    Boolean haslabelinTask2 = false;
+                    for (Entry<String, Vector<String>> entry2 : Task2TaintedTraces.entrySet()) {
+                        if (labeli.equals(entry2.getKey())) {
+                            dataByTask[i][2] = task22;
+                            dataByTask[i][3] = Task2TaintedTraces.get(labeli).get(entry2.getValue().size() - 1);
+                            haslabelinTask2 = true;
+                        }
                     }
-                }
-                if (!haslabelinTask2) {
-                    dataByTask[i][2] = NO_TRANSACTION_FOUND;
-                    dataByTask[i][3] = ZERO;
-                }
-                int s1 = Integer.valueOf((String) dataByTask[i][1]);
-                int s2 = Integer.valueOf((String) dataByTask[i][3]);
-                int val = s2 - s1;
-                if (val >= 0) {
-                    dataByTask[i][4] = val;
-                    if (times2.size() <= i) {
-                        times2.add(i, s2);
+                    if (!haslabelinTask2) {
+                        dataByTask[i][2] = NO_TRANSACTION_FOUND;
+                        dataByTask[i][3] = ZERO;
                     }
-                } else {
-                    dataByTask[i][4] = 0;
-                    times2.add(i, 0);
+                    int s1 = Integer.valueOf((String) dataByTask[i][1]);
+                    int s2 = Integer.valueOf((String) dataByTask[i][3]);
+                    int val = s2 - s1;
+                    if (val >= 0) {
+                        dataByTask[i][4] = val;
+                        if (times2.size() <= i) {
+                            times2.add(i, s2);
+                        }
+                    } else {
+                        dataByTask[i][4] = 0;
+                        times2.add(i, 0);
+                    }
+                    dataByTask[i][5] = "";
+                    Vector<SimulationTransaction> relatedSTTaint = new Vector<SimulationTransaction>();
+                    if (relatedsimTraceswithTaint.containsKey(labeli)) {
+                        for (SimulationTransaction st : relatedsimTraceswithTaint.get(labeli)) {
+                            int startTime = Integer.valueOf(st.startTime);
+                            int endTime = Integer.valueOf(st.endTime);
+                            if (!(startTime < s1 && endTime <= s1) && !(startTime >= s2 && endTime > s2)) {
+                                // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
+                                // < maxTime) {
+                                if (endTime > s2) {
+                                    endTime = s2;
+                                    st.endTime = String.valueOf(s2);
+                                    st.length = String.valueOf(s2 - startTime);
+                                }
+                                if (startTime < s1 && endTime != s1) {
+                                    startTime = s1;
+                                    st.startTime = String.valueOf(s1);
+                                    st.length = String.valueOf(endTime - s1);
+                                }
+                                if (startTime < s1 && endTime > s2) {
+                                    endTime = s2;
+                                    startTime = s1;
+                                    st.startTime = String.valueOf(s1);
+                                    st.endTime = String.valueOf(s2);
+                                    st.length = String.valueOf(s2 - s1);
+                                }
+                                relatedSTTaint.add(st);
+                            }
+                        }
+                    }
+                    dataByTaskR.put(i, relatedSTTaint);
+                    timeDelayedPerRow.put(i, runnableTimePerDevice);
+                    i++;
                 }
-                dataByTask[i][5] = "";
-                Vector<SimulationTransaction> relatedSTTaint = new Vector<SimulationTransaction>();
-                if (relatedsimTraceswithTaint.containsKey(labeli)) {
-                    for (SimulationTransaction st : relatedsimTraceswithTaint.get(labeli)) {
+                for (int row = 0; row < dataByTask.length; row++) {
+                    Vector<SimulationTransaction> delayDueTosimTracesTaint = new Vector<SimulationTransaction>();
+                    for (SimulationTransaction st : delayDueTosimTraces) {
                         int startTime = Integer.valueOf(st.startTime);
                         int endTime = Integer.valueOf(st.endTime);
-                        if (!(startTime < s1 && endTime <= s1) && !(startTime >= s2 && endTime > s2)) {
-                            // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
-                            // < maxTime) {
-                            if (endTime > s2) {
-                                endTime = s2;
-                                st.endTime = String.valueOf(s2);
-                                st.length = String.valueOf(s2 - startTime);
+                        if (!(startTime < times1.get(row) && endTime <= times1.get(row))
+                                && !(startTime >= times2.get(row) && endTime > times2.get(row))) {
+                            if (endTime > times2.get(row)) {
+                                endTime = times2.get(row);
+                                st.endTime = times2.get(row).toString();
+                                st.length = String.valueOf(times2.get(row) - startTime);
                             }
-                            if (startTime < s1 && endTime != s1) {
-                                startTime = s1;
-                                st.startTime = String.valueOf(s1);
-                                st.length = String.valueOf(endTime - s1);
+                            if (startTime < times1.get(row)) {
+                                startTime = times1.get(row);
+                                st.startTime = times1.get(row).toString();
+                                st.length = String.valueOf(endTime - times1.get(row));
                             }
-                            if (startTime < s1 && endTime > s2) {
-                                endTime = s2;
-                                startTime = s1;
-                                st.startTime = String.valueOf(s1);
-                                st.endTime = String.valueOf(s2);
-                                st.length = String.valueOf(s2 - s1);
+                            if (startTime < times1.get(row) && endTime > times2.get(row)) {
+                                endTime = times2.get(row);
+                                startTime = times1.get(row);
+                                st.startTime = times1.get(row).toString();
+                                st.endTime = times2.get(row).toString();
+                                st.length = String.valueOf(times2.get(row) - times1.get(row));
                             }
-                            relatedSTTaint.add(st);
+                            delayDueTosimTracesTaint.add(st);
                         }
                     }
+                    dataBydelayedTasks.put(row, delayDueTosimTracesTaint);
                 }
-                dataByTaskR.put(i, relatedSTTaint);
-                timeDelayedPerRow.put(i, runnableTimePerDevice);
-                i++;
-            }
-            for (int row = 0; row < dataByTask.length; row++) {
-                Vector<SimulationTransaction> delayDueTosimTracesTaint = new Vector<SimulationTransaction>();
-                for (SimulationTransaction st : delayDueTosimTraces) {
-                    int startTime = Integer.valueOf(st.startTime);
-                    int endTime = Integer.valueOf(st.endTime);
-                    if (!(startTime < times1.get(row) && endTime <= times1.get(row))
-                            && !(startTime >= times2.get(row) && endTime > times2.get(row))) {
-                        if (endTime > times2.get(row)) {
-                            endTime = times2.get(row);
-                            st.endTime = times2.get(row).toString();
-                            st.length = String.valueOf(times2.get(row) - startTime);
-                        }
-                        if (startTime < times1.get(row)) {
-                            startTime = times1.get(row);
-                            st.startTime = times1.get(row).toString();
-                            st.length = String.valueOf(endTime - times1.get(row));
-                        }
-                        if (startTime < times1.get(row) && endTime > times2.get(row)) {
-                            endTime = times2.get(row);
-                            startTime = times1.get(row);
-                            st.startTime = times1.get(row).toString();
-                            st.endTime = times2.get(row).toString();
-                            st.length = String.valueOf(times2.get(row) - times1.get(row));
-                        }
-                        delayDueTosimTracesTaint.add(st);
-                    }
-                }
-                dataBydelayedTasks.put(row, delayDueTosimTracesTaint);
-            }
-        } else {
-            for (SimulationTransaction st : transFile1) {
-                int startTime = Integer.valueOf(st.startTime);
-                int endTime = Integer.valueOf(st.endTime);
-                int selectID = Integer.valueOf(st.id);
-                if (st.coreNumber == null) {
-                    st.coreNumber = ZERO;
-                }
-                if (st.command.contains(SELECT_EVENT_PARAM) && getvertexFromID(selectID).getType() == 11) {
-                    st.command = st.command.replace(SELECT_EVENT_PARAM, WAIT_LABEL + st.channelName);
-                    vertex selectV = getvertexFromID(selectID);
-                    String[] chName = st.channelName.toString().split("__");
-                    int waitEvntName = chName.length;
-                    String waitEvnt = chName[waitEvntName - 1];
-                    for (vertex nextV : Graphs.successorListOf(g, selectV)) {
-                        if (nextV.getName().contains(waitEvnt)) {
-                            st.id = String.valueOf(nextV.getId());
-                            selectID = nextV.getId();
-                        }
-                    }
-                } else if (st.command.contains(WAIT_REQ_LABEL)) {
-                    vertex v = getvertexFromID(selectID);
-                    if (v.getType() == vertex.TYPE_START) {
-                        if (Graphs.vertexHasSuccessors(g, v)) {
-                            for (vertex vbefore : Graphs.successorListOf(g, v)) {
-                                if (vbefore.getName().contains(GET_REQ_ARG_LABEL)) {
-                                    st.id = String.valueOf(vbefore.getId());
-                                    selectID = vbefore.getId();
-                                }
-                            }
-                        }
-                    }
-                }
-                if (st.id.equals(idTask1) && !times1.contains(startTime)) {
-                    Task1Traces.add(st);
-                    task1DeviceName = st.deviceName;
-                    task1CoreNbr = st.coreNumber;
-                    times1.add(startTime);
-                    Collections.sort(times1);
-                }
-                if (st.id.equals(idTask2) && !times2.contains(endTime)) {
-                    Task2Traces.add(st);
-                    task2DeviceName = st.deviceName;
-                    task2CoreNbr = st.coreNumber;
-                    times2.add(endTime);
-                    Collections.sort(times1);
-                }
-            }
-            // one to one
-            int minIndex = 0;
-            if (times1.size() != times2.size()) {
-                minIndex = Math.min(times1.size(), times2.size());
             } else {
-                minIndex = times1.size();
-            }
-            dataByTask = new Object[minIndex][7];
-            dataByTaskBYRow = new Object[minIndex][2];
-            dataByTaskHWBYRow = new Object[minIndex][2];
-            for (int i = 0; i < minIndex; i++) {
-                HashMap<String, ArrayList<SimulationTransaction>> relatedHWs = new HashMap<String, ArrayList<SimulationTransaction>>();
-                HashMap<String, ArrayList<SimulationTransaction>> relatedTasks = new HashMap<String, ArrayList<SimulationTransaction>>();
-                relatedsimTraces = new Vector<SimulationTransaction>();
-                delayDueTosimTraces = new Vector<SimulationTransaction>();
-                runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
                 for (SimulationTransaction st : transFile1) {
                     int startTime = Integer.valueOf(st.startTime);
                     int endTime = Integer.valueOf(st.endTime);
                     int selectID = Integer.valueOf(st.id);
-                    Boolean onPath = false;
-                    if (!(startTime < times1.get(i) && endTime <= times1.get(i)) && !(startTime >= times2.get(i) && endTime > times2.get(i))) {
-                        if (st.command.contains(SELECT_EVENT_PARAM) && getvertexFromID(selectID).getType() == 11) {
-                            st.command = st.command.replace(SELECT_EVENT_PARAM, WAIT_LABEL + st.channelName);
-                            vertex selectV = getvertexFromID(selectID);
-                            String[] chName = st.channelName.toString().split("__");
-                            int waitEvntName = chName.length;
-                            String waitEvnt = chName[waitEvntName - 1];
-                            for (vertex nextV : Graphs.successorListOf(g, selectV)) {
-                                if (nextV.getName().contains(waitEvnt)) {
-                                    st.id = String.valueOf(nextV.getId());
-                                    selectID = nextV.getId();
-                                }
+                    if (st.coreNumber == null) {
+                        st.coreNumber = ZERO;
+                    }
+                    if (st.command.contains(SELECT_EVENT_PARAM) && getvertexFromID(selectID).getType() == 11) {
+                        st.command = st.command.replace(SELECT_EVENT_PARAM, WAIT_LABEL + st.channelName);
+                        vertex selectV = getvertexFromID(selectID);
+                        String[] chName = st.channelName.toString().split("__");
+                        int waitEvntName = chName.length;
+                        String waitEvnt = chName[waitEvntName - 1];
+                        for (vertex nextV : Graphs.successorListOf(g, selectV)) {
+                            if (nextV.getName().contains(waitEvnt)) {
+                                st.id = String.valueOf(nextV.getId());
+                                selectID = nextV.getId();
                             }
-                        } else if (st.command.contains(WAIT_REQ_LABEL)) {
-                            vertex v = getvertexFromID(selectID);
-                            if (v.getType() == vertex.TYPE_START) {
-                                if (Graphs.vertexHasSuccessors(g, v)) {
-                                    for (vertex vbefore : Graphs.successorListOf(g, v)) {
-                                        if (vbefore.getName().startsWith(GET_REQ_ARG_LABEL)) {
-                                            st.id = String.valueOf(vbefore.getId());
-                                            selectID = vbefore.getId();
-                                        }
+                        }
+                    } else if (st.command.contains(WAIT_REQ_LABEL)) {
+                        vertex v = getvertexFromID(selectID);
+                        if (v.getType() == vertex.TYPE_START) {
+                            if (Graphs.vertexHasSuccessors(g, v)) {
+                                for (vertex vbefore : Graphs.successorListOf(g, v)) {
+                                    if (vbefore.getName().contains(GET_REQ_ARG_LABEL)) {
+                                        st.id = String.valueOf(vbefore.getId());
+                                        selectID = vbefore.getId();
                                     }
-                                }
-                            }
-                        }
-                        if (endTime > times2.get(i)) {
-                            endTime = times2.get(i);
-                            st.endTime = times2.get(i).toString();
-                            st.length = String.valueOf(times2.get(i) - startTime);
-                        }
-                        if (startTime < times1.get(i) && endTime != times1.get(i)) {
-                            startTime = times1.get(i);
-                            st.startTime = String.valueOf(times1.get(i));
-                            st.length = String.valueOf(endTime - times1.get(i));
-                        }
-                        if (startTime < times1.get(i) && endTime > times2.get(i)) {
-                            st.startTime = String.valueOf(times1.get(i));
-                            st.endTime = times2.get(i).toString();
-                            st.length = String.valueOf(times2.get(i) - times1.get(i));
-                            startTime = times1.get(i);
-                            endTime = times2.get(i);
-                        }
-                        String taskname = "";
-                        for (vertex tasknameCheck : g.vertexSet()) {
-                            String[] taskToAdd = tasknameCheck.toString().replaceAll(" ", "").split("__");
-                            int taskToAddindex = taskToAdd.length;
-                            String taskToAddid = taskToAdd[taskToAddindex - 1];
-                            if (isNumeric(taskToAddid)) {
-                                if (Integer.valueOf(taskToAddid).equals(selectID)) {
-                                    taskname = tasknameCheck.toString();
-                                    break;
-                                }
-                            }
-                        }
-                        String[] name = st.deviceName.split("_");
-                        String deviceName = name[0];
-                        // there is a path between task 1 and task 2
-                        if (path2 != null && path2.getLength() > 0) {
-                            if (!taskname.equals(null) && !taskname.equals("")) {
-                                GraphPath<vertex, DefaultEdge> pathToOrigin = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
-                                GraphPath<vertex, DefaultEdge> pathToDestination = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
-                                        getvertex(task22));
-                                if (taskname.equals(task12) || taskname.equals(task22) || (pathToOrigin != null && pathToOrigin.getLength() > 0
-                                        && pathToDestination != null && pathToDestination.getLength() > 0)) {
-                                    relatedsimTraces.add(st);
-                                    ArrayList<Integer> timeValues = new ArrayList<Integer>();
-                                    timeValues.add(0, Integer.valueOf(st.runnableTime));
-                                    timeValues.add(1, startTime);
-                                    String dName = st.deviceName + "_" + st.coreNumber;
-                                    if (!(st.runnableTime).equals(st.startTime)) {
-                                        if (runnableTimePerDevice.containsKey(dName)) {
-                                            if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
-                                                runnableTimePerDevice.get(dName).add(timeValues);
-                                            }
-                                        } else {
-                                            ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
-                                            timeValuesList.add(timeValues);
-                                            runnableTimePerDevice.put(dName, timeValuesList);
-                                        }
-                                    }
-                                } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
-                                        || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
-                                        || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
-                                    delayDueTosimTraces.add(st);
-                                }
-                            }
-                        } else {
-                            if (!taskname.equals(null) && !taskname.equals("")) {
-                                GraphPath<vertex, DefaultEdge> pathExistsTestwithTask1 = DijkstraShortestPath.findPathBetween(g, v1,
-                                        getvertex(taskname));
-                                GraphPath<vertex, DefaultEdge> pathExistsTestwithTask2 = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
-                                        getvertex(task22));
-                                if (pathExistsTestwithTask1 != null && pathExistsTestwithTask1.getLength() > 0
-                                        || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0) {
-                                    relatedsimTraces.add(st);
-                                } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
-                                        || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
-                                        || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
-                                    delayDueTosimTraces.add(st);
                                 }
                             }
                         }
                     }
+                    if (st.id.equals(idTask1) && !times1.contains(startTime)) {
+                        Task1Traces.add(st);
+                        task1DeviceName = st.deviceName;
+                        task1CoreNbr = st.coreNumber;
+                        times1.add(startTime);
+                        Collections.sort(times1);
+                    }
+                    if (st.id.equals(idTask2) && !times2.contains(endTime)) {
+                        Task2Traces.add(st);
+                        task2DeviceName = st.deviceName;
+                        task2CoreNbr = st.coreNumber;
+                        times2.add(endTime);
+                        Collections.sort(times1);
+                    }
                 }
-                dataByTask[i][0] = task12;
-                dataByTask[i][1] = times1.get(i);
-                dataByTask[i][2] = task22;
-                dataByTask[i][3] = times2.get(i);
-                if (times2.get(i) - times1.get(i) >= 0) {
-                    dataByTask[i][4] = times2.get(i) - times1.get(i);
+                // one to one
+                int minIndex = 0;
+                if (times1.size() != times2.size()) {
+                    minIndex = Math.min(times1.size(), times2.size());
                 } else {
-                    dataByTask[i][4] = "Assumption Does Not Hold; Please try Tainting";
+                    minIndex = times1.size();
                 }
-                dataByTask[i][5] = "";
-                dataByTaskR.put(i, relatedsimTraces);
-                dataBydelayedTasks.put(i, delayDueTosimTraces);
-                timeDelayedPerRow.put(i, runnableTimePerDevice);
-                // dataByTask[i][5] = list.getModel();
-                // dataByTask[i][6] = totalTime;
+                dataByTask = new Object[minIndex][7];
+                dataByTaskBYRow = new Object[minIndex][2];
+                dataByTaskHWBYRow = new Object[minIndex][2];
+                for (int i = 0; i < minIndex; i++) {
+                    HashMap<String, ArrayList<SimulationTransaction>> relatedHWs = new HashMap<String, ArrayList<SimulationTransaction>>();
+                    HashMap<String, ArrayList<SimulationTransaction>> relatedTasks = new HashMap<String, ArrayList<SimulationTransaction>>();
+                    relatedsimTraces = new Vector<SimulationTransaction>();
+                    delayDueTosimTraces = new Vector<SimulationTransaction>();
+                    runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
+                    for (SimulationTransaction st : transFile1) {
+                        int startTime = Integer.valueOf(st.startTime);
+                        int endTime = Integer.valueOf(st.endTime);
+                        int selectID = Integer.valueOf(st.id);
+                        Boolean onPath = false;
+                        if (!(startTime < times1.get(i) && endTime <= times1.get(i)) && !(startTime >= times2.get(i) && endTime > times2.get(i))) {
+                            if (st.command.contains(SELECT_EVENT_PARAM) && getvertexFromID(selectID).getType() == 11) {
+                                st.command = st.command.replace(SELECT_EVENT_PARAM, WAIT_LABEL + st.channelName);
+                                vertex selectV = getvertexFromID(selectID);
+                                String[] chName = st.channelName.toString().split("__");
+                                int waitEvntName = chName.length;
+                                String waitEvnt = chName[waitEvntName - 1];
+                                for (vertex nextV : Graphs.successorListOf(g, selectV)) {
+                                    if (nextV.getName().contains(waitEvnt)) {
+                                        st.id = String.valueOf(nextV.getId());
+                                        selectID = nextV.getId();
+                                    }
+                                }
+                            } else if (st.command.contains(WAIT_REQ_LABEL)) {
+                                vertex v = getvertexFromID(selectID);
+                                if (v.getType() == vertex.TYPE_START) {
+                                    if (Graphs.vertexHasSuccessors(g, v)) {
+                                        for (vertex vbefore : Graphs.successorListOf(g, v)) {
+                                            if (vbefore.getName().startsWith(GET_REQ_ARG_LABEL)) {
+                                                st.id = String.valueOf(vbefore.getId());
+                                                selectID = vbefore.getId();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (endTime > times2.get(i)) {
+                                endTime = times2.get(i);
+                                st.endTime = times2.get(i).toString();
+                                st.length = String.valueOf(times2.get(i) - startTime);
+                            }
+                            if (startTime < times1.get(i) && endTime != times1.get(i)) {
+                                startTime = times1.get(i);
+                                st.startTime = String.valueOf(times1.get(i));
+                                st.length = String.valueOf(endTime - times1.get(i));
+                            }
+                            if (startTime < times1.get(i) && endTime > times2.get(i)) {
+                                st.startTime = String.valueOf(times1.get(i));
+                                st.endTime = times2.get(i).toString();
+                                st.length = String.valueOf(times2.get(i) - times1.get(i));
+                                startTime = times1.get(i);
+                                endTime = times2.get(i);
+                            }
+                            String taskname = "";
+                            for (vertex tasknameCheck : g.vertexSet()) {
+                                String[] taskToAdd = tasknameCheck.toString().replaceAll(" ", "").split("__");
+                                int taskToAddindex = taskToAdd.length;
+                                String taskToAddid = taskToAdd[taskToAddindex - 1];
+                                if (isNumeric(taskToAddid)) {
+                                    if (Integer.valueOf(taskToAddid).equals(selectID)) {
+                                        taskname = tasknameCheck.toString();
+                                        break;
+                                    }
+                                }
+                            }
+                            String[] name = st.deviceName.split("_");
+                            String deviceName = name[0];
+                            // there is a path between task 1 and task 2
+                            if (path2 != null && path2.getLength() > 0) {
+                                if (!taskname.equals(null) && !taskname.equals("")) {
+                                    GraphPath<vertex, DefaultEdge> pathToOrigin = DijkstraShortestPath.findPathBetween(g, v1, getvertex(taskname));
+                                    GraphPath<vertex, DefaultEdge> pathToDestination = DijkstraShortestPath.findPathBetween(g, getvertex(taskname),
+                                            getvertex(task22));
+                                    if (taskname.equals(task12) || taskname.equals(task22) || (pathToOrigin != null && pathToOrigin.getLength() > 0
+                                            && pathToDestination != null && pathToDestination.getLength() > 0)) {
+                                        relatedsimTraces.add(st);
+                                        ArrayList<Integer> timeValues = new ArrayList<Integer>();
+                                        timeValues.add(0, Integer.valueOf(st.runnableTime));
+                                        timeValues.add(1, startTime);
+                                        String dName = st.deviceName + "_" + st.coreNumber;
+                                        if (!(st.runnableTime).equals(st.startTime)) {
+                                            if (runnableTimePerDevice.containsKey(dName)) {
+                                                if (!runnableTimePerDevice.get(dName).contains(timeValues)) {
+                                                    runnableTimePerDevice.get(dName).add(timeValues);
+                                                }
+                                            } else {
+                                                ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
+                                                timeValuesList.add(timeValues);
+                                                runnableTimePerDevice.put(dName, timeValuesList);
+                                            }
+                                        }
+                                    } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                            || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
+                                            || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
+                                        delayDueTosimTraces.add(st);
+                                    }
+                                }
+                            } else {
+                                if (!taskname.equals(null) && !taskname.equals("")) {
+                                    GraphPath<vertex, DefaultEdge> pathExistsTestwithTask1 = DijkstraShortestPath.findPathBetween(g, v1,
+                                            getvertex(taskname));
+                                    GraphPath<vertex, DefaultEdge> pathExistsTestwithTask2 = DijkstraShortestPath.findPathBetween(g,
+                                            getvertex(taskname), getvertex(task22));
+                                    if (pathExistsTestwithTask1 != null && pathExistsTestwithTask1.getLength() > 0
+                                            || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0) {
+                                        relatedsimTraces.add(st);
+                                    } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
+                                            || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
+                                            || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
+                                        delayDueTosimTraces.add(st);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    dataByTask[i][0] = task12;
+                    dataByTask[i][1] = times1.get(i);
+                    dataByTask[i][2] = task22;
+                    dataByTask[i][3] = times2.get(i);
+                    if (times2.get(i) - times1.get(i) >= 0) {
+                        dataByTask[i][4] = times2.get(i) - times1.get(i);
+                    } else {
+                        dataByTask[i][4] = "Assumption Does Not Hold; Please try Tainting";
+                    }
+                    dataByTask[i][5] = "";
+                    dataByTaskR.put(i, relatedsimTraces);
+                    dataBydelayedTasks.put(i, delayDueTosimTraces);
+                    timeDelayedPerRow.put(i, runnableTimePerDevice);
+                    // dataByTask[i][5] = list.getModel();
+                    // dataByTask[i][6] = totalTime;
+                }
             }
+        } catch (Exception e) {
+            e.getStackTrace()[0].getLineNumber();
         }
         return dataByTask;
     }
@@ -2902,9 +2977,9 @@ public class DirectedGraphTranslator extends JApplet {
             Element root = dom.createElement(MIN_LABEL);
             root1.appendChild(root);
             // now create child elements
-            Element operator1 = dom.createElement(op1);
+            Element operator1 = dom.createElement(OPERATOR_1);
             operator1.setTextContent(op1);
-            Element operator2 = dom.createElement(op2);
+            Element operator2 = dom.createElement(OPERATOR_2);
             operator2.setTextContent(op2);
             Element st = dom.createElement(START_TIME_LABEL);
             st.setTextContent(starttime);
@@ -2927,9 +3002,9 @@ public class DirectedGraphTranslator extends JApplet {
             Element rootMax = dom.createElement(MAX_LABEL);
             root1.appendChild(rootMax);
             // now create child elements
-            Element operator1Max = dom.createElement(op1);
+            Element operator1Max = dom.createElement(OPERATOR_1);
             operator1Max.setTextContent(op1Max);
-            Element operator2Max = dom.createElement(op2);
+            Element operator2Max = dom.createElement(OPERATOR_2);
             operator2Max.setTextContent(op2Max);
             Element stMax = dom.createElement(START_TIME_LABEL);
             stMax.setTextContent(starttimeMax);
@@ -2982,7 +3057,6 @@ public class DirectedGraphTranslator extends JApplet {
                 return v.getLabel().get(j);
             }
         }
-        // TODO Auto-generated method stub
         if (v.getLabel().size() - 1 >= 0) {
             return v.getLabel().get(v.getLabel().size() - 1);
         }
@@ -3004,11 +3078,11 @@ public class DirectedGraphTranslator extends JApplet {
             }
             if (str2[1].trim().matches("\\d*")) {
                 int snbr = Integer.parseInt(str2[1].trim());
-                if (v.getSampleNumber() != snbr) {
+                if (v != null && v.getSampleNumber() != snbr) {
                     v.setSampleNumber(snbr);
                 }
             }
-            if (v.getVirtualLengthAdded() < v.getSampleNumber()) {
+            if (v != null && v.getVirtualLengthAdded() < v.getSampleNumber()) {
                 v.setVirtualLengthAdded(v.getVirtualLengthAdded() + Integer.parseInt(virtualLength));
             }
         }
@@ -3773,6 +3847,21 @@ public class DirectedGraphTranslator extends JApplet {
         return dataByTaskR.get(rowIndex);
     }
 
+    public HashMap<String, ArrayList<ArrayList<Integer>>> getTimeDelayedPerRowMinMaxTainted(int row) {
+        int maxStartTime = (int) dataByTaskMinMax[row][1];
+        int maxEndTime = (int) dataByTaskMinMax[row][3];
+        int rowIndex = 0;
+        for (int i = 0; i < dataByTask.length; i++) {
+            int s1 = Integer.valueOf((String) dataByTask[i][1]);
+            int s2 = Integer.valueOf((String) dataByTask[i][3]);
+            if (s1 == maxStartTime && s2 == maxEndTime) {
+                rowIndex = i;
+                break;
+            }
+        }
+        return timeDelayedPerRow.get(rowIndex);
+    }
+
     // between selected activities
     public List<SimulationTransaction> getTaskMinMaxHWByRowDetailsTainted(int row) {
         int maxStartTime = (int) dataByTaskMinMax[row][1];
@@ -3797,6 +3886,11 @@ public class DirectedGraphTranslator extends JApplet {
     // fill the detailed latency table once a row is selected
     public HashMap<String, ArrayList<ArrayList<Integer>>> getRowDelayDetailsByHW(int row) {
         return timeDelayedPerRow.get(row);
+    }
+
+    // fill the detailed latency table once a row is selected
+    public HashMap<String, ArrayList<ArrayList<Integer>>> getRowDelayDetailsByHWMinMax(int row) {
+        return timeDelayedPerRowMinMax.get(row);
     }
 
     // fill the detailed latency table once a row is selected from min/max table
@@ -3915,7 +4009,7 @@ public class DirectedGraphTranslator extends JApplet {
                             delayDueTosimTraces.add(st);
                         }
                     }
-                    timeDelayedPerRow.put(row, runnableTimePerDevice);
+                    timeDelayedPerRowMinMax.put(row, runnableTimePerDevice);
                 } else {
                     if (!taskname.equals(null) && !taskname.equals("")) {
                         GraphPath<vertex, DefaultEdge> pathExistsTestwithTask1 = DijkstraShortestPath.findPathBetween(g, getvertex(task12),
@@ -4024,15 +4118,19 @@ public class DirectedGraphTranslator extends JApplet {
         idTask2 = task2[task2index - 1];
         String task12 = nameIDTaskList.get(idTask1);
         String task22 = nameIDTaskList.get(idTask2);
-        times1MinMAx = times1;
-        times2MinMAx = times2;
+        // times1MinMAx = times1;
+        // times2MinMAx = times2;
+        for (int row = 0; row < dataByTask.length; row++) {
+            times1MinMAx.add(Integer.valueOf((String) dataByTask[row][1]));
+            times2MinMAx.add(Integer.valueOf((String) dataByTask[row][3]));
+        }
         HashMap<Integer, ArrayList<Integer>> minTimes = new HashMap<Integer, ArrayList<Integer>>();
         int index = 0;
         for (int time1 : times1MinMAx) {
             int match = Integer.MAX_VALUE;
             // Find the first subsequent transaction
             int time = Integer.MAX_VALUE;
-            if (times2MinMAx.get(index) > 0) {
+            if (times2MinMAx.size() > 0 && times2MinMAx.get(index) > 0) {
                 int time2 = times2MinMAx.get(index);
                 int diff = time2 - time1;
                 if (diff < time && diff >= 0) {
@@ -4225,7 +4323,6 @@ public class DirectedGraphTranslator extends JApplet {
         if (message.isEmpty()) {
             message = "Couln't add rule between " + v1 + " and " + v2 + "";
         }
-        // TODO Auto-generated method stub
         return message;
     }
 
