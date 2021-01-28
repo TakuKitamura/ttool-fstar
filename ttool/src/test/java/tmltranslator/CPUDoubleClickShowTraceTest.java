@@ -155,7 +155,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                 jfis.sendTestCmd("run-x-transactions 10"); // run 10 transactions
                 Thread.sleep(50);
                 jfis.sendTestCmd("lt 1000"); // update transaction list
-                Thread.sleep(1000);
+                Thread.sleep(2000);
                 for (TGComponent tg : currTdp.getComponentList()) {
                     System.out.println("tgc = " + tg.getName());
                     // get the transaction list of each CPUs on the panel, if the trans size > 0 then there will be a trace shown on double click
@@ -163,6 +163,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                         int _ID = tg.getDIPLOID();
                         TraceManager.addDev("Component ID = " + _ID);
                         List<SimulationTransaction> ts = mainGUI.getTransactions(_ID);
+                        Thread.sleep(1000);
                         if (ts != null) {
                             TraceManager.addDev("Trans size = " + ts.size());
                             assertTrue(ts.size() > 0);
