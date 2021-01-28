@@ -200,6 +200,11 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                 DataElement deBlock = new DataElement("Block " + ab.getName());
                 elts.add(deBlock);
 
+                DataElement attributes = new DataElement("Attributes");
+                deBlock.addChild(attributes);
+                DataElement states = new DataElement("States");
+                deBlock.addChild(states);
+
                 // Time of last transaction
                 DataElement de = new DataElement("Time of last transaction of Block " + ab.getName());
                 deBlock.addChild(de);
@@ -208,9 +213,8 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                 // Variables values and time
                 int cpt = 0;
                 for (AvatarAttribute aa: ab.getAttributes()) {
-
-                    de = new DataElement(aa.getName() + " (all values)");
-                    deBlock.addChild(de);
+                    de = new DataElement( aa.getName() + " (all values)");
+                    attributes.addChild(de);
                     ArrayList<Double> dataAndTimes = sr.getDataTimesOfAttributesOfBlock(ab, aa, cpt);
                     de.data = new double[dataAndTimes.size()/2];
                     de.times = new long[dataAndTimes.size()/2];
@@ -219,8 +223,8 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                         de.times[i] = dataAndTimes.get(2*i+1).longValue();
                     }
 
-                    de = new DataElement(aa.getName() + " (last values)");
-                    deBlock.addChild(de);
+                    de = new DataElement( aa.getName() + " (last values)");
+                    attributes.addChild(de);
                     dataAndTimes = sr.getLastValueAndTimeOfAttributesOfBlock(ab, aa, cpt);
                     de.data = new double[dataAndTimes.size()/2];
                     de.times = new long[dataAndTimes.size()/2];
@@ -229,8 +233,8 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                         de.times[i] = dataAndTimes.get(2*i+1).longValue();
                     }
 
-                    de = new DataElement(aa.getName() + " (individual evolution)");
-                    deBlock.addChild(de);
+                    de = new DataElement( aa.getName() + " (individual evolution)");
+                    attributes.addChild(de);
                     for(int j=0; j<totalNbOfSimulations; j++) {
                         dataAndTimes = sr.getValueAndTimeOfAttributesOfBlockBySimNumber(ab, aa, cpt, j);
                         DataElement deEvolution = new DataElement(aa.getName() + " (evolution #" + j + ")");
@@ -253,7 +257,10 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                         DataElement stateOccurrence = new DataElement(asme.getExtendedName());
                         HashMap<Long, Integer> map = new HashMap<>();
                         // Getting occurences of states for each time
+                        int simuIndex = 0;
                         for (AvatarSpecificationSimulation ass : sr.listOfSimulations) {
+                            DataElement stateOccurrenceOneSimulation = new DataElement(asme.getExtendedName() + "_simu #" + (simuIndex+1));
+                            HashMap<Long, Integer> mapOne = new HashMap<>();
                             for (AvatarSimulationTransaction ast : ass.getAllTransactions()) {
                                 if ( (ast.executedElement == asme) || (ast.executedElement.getNext(0) == asme) ){
                                     Integer occ = map.get(ast.initialClockValue);
@@ -263,9 +270,31 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                                         occ = new Integer(occ.intValue() + 1);
                                     }
                                     map.put(new Long(ast.initialClockValue), occ);
-                                    TraceManager.addDev("Putting in table " + ast.initialClockValue + " " + occ.intValue());
+                                    //TraceManager.addDev("Putting in table " + ast.initialClockValue + " " + occ.intValue());
+                                    occ = mapOne.get(ast.initialClockValue);
+                                    if (occ == null) {
+                                        occ = new Integer(1);
+                                    } else {
+                                        occ = new Integer(occ.intValue() + 1);
+                                    }
+                                    mapOne.put(new Long(ast.initialClockValue), occ);
+
                                 }
                             }
+
+                            int size = mapOne.size();
+                            stateOccurrenceOneSimulation.data = new double[size];
+                            stateOccurrenceOneSimulation.times = new long[size];
+                            cpt = 0;
+                            for(Long l: mapOne.keySet()) {
+                                stateOccurrenceOneSimulation.times[cpt] = l;
+                                stateOccurrenceOneSimulation.data[cpt] = mapOne.get(l);
+                                //TraceManager.addDev("Adding in data element " + l.longValue() + " " + map.get(l).intValue() + " for state " + asme
+                                // .getExtendedName());
+                                cpt ++;
+                            }
+                            stateOccurrence.addChild(stateOccurrenceOneSimulation);
+                            simuIndex ++;
                         }
                         int size = map.size();
                         stateOccurrence.data = new double[size];
@@ -274,12 +303,13 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                         for(Long l: map.keySet()) {
                             stateOccurrence.times[cpt] = l;
                             stateOccurrence.data[cpt] = map.get(l);
-                            TraceManager.addDev("Adding in data element " + l.longValue() + " " + map.get(l).intValue() + " for state " + asme.getExtendedName());
+                            //TraceManager.addDev("Adding in data element " + l.longValue() + " " + map.get(l).intValue() + " for state " + asme
+                            // .getExtendedName());
                             cpt ++;
                         }
 
                         //de.addSetOfValue(stateOccurrence);
-                        deBlock.addChild(stateOccurrence);
+                        states.addChild(stateOccurrence);
                     }
                 }
             }
