@@ -59,6 +59,8 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.*;
+import ui.MainGUI;
+import ui.TGHelpButton;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -81,6 +83,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     checkValueEvolution;
     protected JScrollPane jsp;
     protected JTabbedPane mainPane;
+    protected TGHelpButton helpButton;
 
     protected Thread t;
     protected int threadMode = 0;
@@ -88,12 +91,15 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     ArrayList<DataElement> elements;
     private String title;
 
+    protected MainGUI mgui;
 
-    public JFrameStatistics(String _title, ArrayList<DataElement> _elements) {
+
+    public JFrameStatistics(String _title, MainGUI _mgui, ArrayList<DataElement> _elements) {
         super(_title);
 
         elements = _elements;
         title = _title;
+        mgui = _mgui;
 
         makePanelsAndComponents();
 
@@ -133,6 +139,13 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
         mainPanel.add(split, BorderLayout.CENTER);
 
         JPanel topPanel = new JPanel();
+
+        helpButton = new TGHelpButton(IconManager.imgic32, "avatarstatistics.html", mgui, mgui.getHelpManager());
+        helpButton.addToPanel(topPanel);
+
+        JLabel helpInfo = new JLabel("<- click on this icon for help    ");
+        topPanel.add(helpInfo);
+        topPanel.add(new JLabel("    "));
 
         checkHistogram = new JCheckBox("Histogram chart");
         checkHistogram.setSelected(true);

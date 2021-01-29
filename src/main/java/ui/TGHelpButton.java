@@ -108,6 +108,15 @@ public class TGHelpButton extends JButton {
         panel.add(this, c);
     }
 
+    public void addToPanel(JPanel panel) {
+        if (he == null) {
+            return;
+        }
+        buttonClick(this, he, mgui);
+        panel.add(this);
+
+    }
+
 
 
 
