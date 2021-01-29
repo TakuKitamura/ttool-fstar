@@ -1,5 +1,6 @@
 - general TTool general info ttool tool
 -- syntaxchecking syntaxchecking syntax checking model verification
+
 - diplodocus diplodocus hardware software partitioning dse design space exploration
 -- application application functional view diplodocus
 --- channel channel functional view diplodocus
@@ -30,18 +31,16 @@
 --- bridge bridge communication hardware node
 --- bus bus communication hardware node arbitration policy
 --- memory memory storage hardware node
-
-
 -- mapping mapping tasks communication mapping
 ---taskmapping taskmapping tasks mapping
 ---communicationmapping communicationmapping communication mapping
+
 - avatar avatar software embedded systems safety security
 -- requirements requirements satified satisfy derivereqt
 -- avatarsoftwaredesign software_design avatar blocks software design
 --- avatarbd avatar_block_diagram design software blocks
 ---- avatarsafetypragmas safety_properties safety properties pragmas ctl
----- reachabilitygraph reachability_graph reachability graph display show nodes edges node edge
-
-- addRule add-rule rule
-- taint taint Taint
-- considerRule consider-rule consider rules
+--- reachabilitygraph reachability_graph reachability graph display show nodes edges node edge
+--- addRule add-rule rule
+--- taint taint Taint
+--- considerRule consider-rule consider rules
