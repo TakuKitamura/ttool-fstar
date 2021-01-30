@@ -46,7 +46,7 @@ import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 import myutil.DataElement;
 import myutil.GraphicLib;
-import myutil.JFrameStatistics;
+import ui.window.JFrameDataElementStatistics;
 import myutil.TraceManager;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -57,6 +57,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import ui.ColorManager;
 import ui.MainGUI;
+import ui.window.JFrameDataElementStatistics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -316,7 +317,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
 
 
             // Opening stat window
-            JFrameStatistics stats1 = new JFrameStatistics("Simulation stats", mgui, elts);
+            JFrameDataElementStatistics stats1 = new JFrameDataElementStatistics("Simulation stats", mgui, elts);
             stats1.setSize(1200,800);
             stats1.setVisible(true);
         });

@@ -37,9 +37,13 @@
  */
 
 
-package myutil;
+package ui.window;
 
 //import java.awt.*;
+
+import myutil.DataElement;
+import myutil.FileUtils;
+import myutil.TraceManager;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -76,7 +80,7 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
     protected DataElement selectedDataElement;
     //private boolean m_nodeWasSelected = false;
     private boolean toUpdate = false;
-    private JFrameStatistics jFStats;
+    private JFrameDataElementStatistics jFStats;
     private TreeModelStats dtm;
     //for update
     private Set<TreePath> m_expandedTreePaths = new HashSet<>();
@@ -86,7 +90,7 @@ public class JTreeStats extends javax.swing.JTree implements ActionListener, Mou
     /*
      * Creates new form
      */
-    public JTreeStats(JFrameStatistics _jFStats) {
+    public JTreeStats(JFrameDataElementStatistics _jFStats) {
         super(new TreeModelStats(_jFStats));
 
         //TraceManager.addDev("TREE CREATED");

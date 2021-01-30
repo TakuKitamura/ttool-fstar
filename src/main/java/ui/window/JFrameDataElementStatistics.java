@@ -37,8 +37,9 @@
  */
 
 
-package myutil;
+package ui.window;
 
+import myutil.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -77,7 +78,7 @@ import java.util.HashMap;
  *
  * @author Ludovic APVRILLE
  */
-public class JFrameStatistics extends JFrame implements ActionListener, GenericTree {
+public class JFrameDataElementStatistics extends JFrame implements ActionListener, GenericTree {
     protected JButton buttonClose, buttonCloseAllTabs;
     protected JCheckBox checkHistogram, checkPieChart, checkTimeValueChart, checkTimeValueBlockChart,
     checkValueEvolution;
@@ -94,7 +95,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, GenericT
     protected MainGUI mgui;
 
 
-    public JFrameStatistics(String _title, MainGUI _mgui, ArrayList<DataElement> _elements) {
+    public JFrameDataElementStatistics(String _title, MainGUI _mgui, ArrayList<DataElement> _elements) {
         super(_title);
 
         elements = _elements;

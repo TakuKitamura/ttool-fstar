@@ -37,7 +37,9 @@
  */
 
 
-package myutil;
+package ui.window;
+
+import myutil.GenericTree;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -53,11 +55,11 @@ import java.util.Vector;
  * @version 1.0 14/12/2003
  */
 public class TreeModelStats implements TreeModel {
-    private JFrameStatistics jFStats;
+    private JFrameDataElementStatistics jFStats;
     private Vector<TreeModelListener> treeModelListeners = new Vector<>();
 
 
-    public TreeModelStats(JFrameStatistics _jFStats) {
+    public TreeModelStats(JFrameDataElementStatistics _jFStats) {
         //super(_mgui.gtm);
         jFStats = _jFStats;
     }

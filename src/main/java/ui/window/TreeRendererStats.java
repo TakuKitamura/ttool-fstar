@@ -37,7 +37,9 @@
  */
 
 
-package myutil;
+package ui.window;
+
+import myutil.DataElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
