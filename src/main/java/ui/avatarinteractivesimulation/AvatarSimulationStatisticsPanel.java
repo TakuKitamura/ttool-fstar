@@ -45,31 +45,20 @@ package ui.avatarinteractivesimulation;
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 import myutil.DataElement;
-import myutil.GraphicLib;
 import ui.window.JFrameDataElementStatistics;
 import myutil.TraceManager;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import ui.ColorManager;
 import ui.MainGUI;
-import ui.window.JFrameDataElementStatistics;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Vector;
 
 /**
    * Class AvatarSimulationStatisticsPanel
@@ -88,7 +77,6 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     private JTextField nbOfSimulationsText;
     private JButton stopSimulationsButton;
 
-
     private JLabel simulationsDone;
     private JLabel totalSimulations;
 
@@ -96,19 +84,23 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     private JLabel averageSimulationTime;
     private JLabel maxSimulationTime;
 
-    private JButton showSimulationTimeHistogram, showStats;
+    private JButton showStatsOnCurrentSimulation, showStats;
 
 
     // Simulation data structures
     private int totalNbOfSimulations;
     private AvatarSimulationRunner sr;
+    private AvatarSpecification as; // For one simulation
+    private AvatarSpecificationSimulation ass; // For one simulation
     private Thread simuExecutor;
 
 
 
 
-    public AvatarSimulationStatisticsPanel(MainGUI _mgui) {
+    public AvatarSimulationStatisticsPanel(MainGUI _mgui, AvatarSpecification _as, AvatarSpecificationSimulation _ass) {
       mgui = _mgui;
+      as = _as;
+      ass = _ass;
       makeComponents();
     }
 
@@ -161,15 +153,15 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         maxSimulationTime = new JLabel("-");
         add(maxSimulationTime, c2);
 
-        showSimulationTimeHistogram = new JButton("Show simulation time stats");
-        add(showSimulationTimeHistogram, c2);
-        showSimulationTimeHistogram.setEnabled(false);
-        showSimulationTimeHistogram.addActionListener(this);
-
         showStats = new JButton("Show statistics");
         add(showStats, c2);
         showStats.setEnabled(false);
         showStats.addActionListener(this);
+
+        showStatsOnCurrentSimulation = new JButton("Show stats on current simulation");
+        add(showStatsOnCurrentSimulation, c2);
+        showStatsOnCurrentSimulation.setEnabled(true);
+        showStatsOnCurrentSimulation.addActionListener(this);
 
 
     }
@@ -177,12 +169,20 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == runSimulations) {
             runSimulations();
-        } else if (ae.getSource() == showSimulationTimeHistogram) {
-            showTimeHistogram();
+        } else if (ae.getSource() == showStatsOnCurrentSimulation) {
+            showStatsCurrentSimulation();
         } else if (ae.getSource() == showStats) {
             showStats();
         } else if (ae.getSource() == stopSimulationsButton) {
             stopSimulation();
+        }
+    }
+
+    private void showStatsCurrentSimulation() {
+        if ((as != null) && (ass != null)) {
+            sr = new AvatarSimulationRunner(as);
+            sr.setAvatarSpecificationSimulation(ass);
+            showStats();
         }
     }
 
@@ -324,7 +324,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         stats.start();
     }
 
-    private void showTimeHistogram() {
+    /*private void showTimeHistogram() {
         TraceManager.addDev("Show time histogram");
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -345,7 +345,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         frame.setContentPane(panel);
         frame.setVisible(true);
         //TraceManager.addDev("Frame is now visible");
-    }
+    }*/
 
     private void stopSimulation () {
         TraceManager.addDev("Stopping simulation");
@@ -406,7 +406,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         long maxSimTime = sr.getMaxSimulationTime();
         maxSimulationTime.setText(""+maxSimTime);
 
-        showSimulationTimeHistogram.setEnabled(true);
+        showStatsOnCurrentSimulation.setEnabled(true);
         showStats.setEnabled(true);
     }
 
@@ -414,7 +414,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         minSimulationTime.setText("-");
         averageSimulationTime.setText("-");
         maxSimulationTime.setText("-");
-        showSimulationTimeHistogram.setEnabled(false);
+        //showStatsOnCurrentSimulation.setEnabled(false);
         showStats.setEnabled(false);
     }
 

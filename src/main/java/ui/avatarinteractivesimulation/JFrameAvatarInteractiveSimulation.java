@@ -542,7 +542,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         jp01.add(jp02, BorderLayout.CENTER);
 
-        AvatarSimulationStatisticsPanel assp = new AvatarSimulationStatisticsPanel(mgui);
+        AvatarSimulationStatisticsPanel assp = new AvatarSimulationStatisticsPanel(mgui, avspec, ass);
         commandTab.addTab("Statistics", null, assp, "Run x simulations and perform statistics");
 
 

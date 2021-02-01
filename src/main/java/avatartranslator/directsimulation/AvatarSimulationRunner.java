@@ -73,6 +73,12 @@ public class AvatarSimulationRunner {
        as = _as;
     }
 
+    public void setAvatarSpecificationSimulation(AvatarSpecificationSimulation _ass) {
+        listOfSimulations = new ArrayList<>(1);
+        ass = _ass;
+        listOfSimulations.add(ass);
+    }
+
     public synchronized void runXSimulation(int nbOfSimulations, AvatarSimulationRunnerListener listener) {
         stop = false;
 
