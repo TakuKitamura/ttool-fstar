@@ -559,13 +559,13 @@ public class FullTML2Avatar {
 
 
                 if (channel.getType() == TMLChannel.BRBW) {
-                    ar =  new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel
+                    ar = new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel
                             .getDestinationTask()), channel.getReferenceObject());
                     ar.setAsynchronous(true);
                     ar.setSizeOfFIFO(channel.getSize());
                     ar.setBlocking(true);
                 } else if (channel.getType() == TMLChannel.BRNBW) {
-                    ar =  new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel
+                    ar = new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel
                             .getDestinationTask()), channel.getReferenceObject());
                     ar.setAsynchronous(true);
                     ar.setSizeOfFIFO(channel.getSize());
@@ -574,7 +574,7 @@ public class FullTML2Avatar {
                     //Create new block, hope for best
                     if (mc) {
                         fifo = createFifo(channel.getName());
-                        ar =  new AvatarRelation(channel.getName() + "_OUT", taskBlockMap.get(channel.getOriginTask()), fifo, channel
+                        ar = new AvatarRelation(channel.getName() + "_OUT", taskBlockMap.get(channel.getOriginTask()), fifo, channel
                                 .getReferenceObject());
                         ar.setAsynchronous(false);
                     }
@@ -708,7 +708,7 @@ public class FullTML2Avatar {
 
             TraceManager.addDev("Handling Event:" + event.getName() + " 1:" + taskBlockMap.get(event.getOriginTask()).getName() + " 2:" + taskBlockMap
                     .get
-                    (event.getDestinationTask()).getName());
+                            (event.getDestinationTask()).getName());
 
             // For each event, we create a FIFO, and so a double relation
 
@@ -934,7 +934,18 @@ public class FullTML2Avatar {
             //HashMap<Integer, List<AvatarStateMachineElement>> seqs = new HashMap<Integer, List<AvatarStateMachineElement>>();
             AvatarState choiceState = new AvatarState("seqchoice__" + ae.getName().replaceAll(" ", ""), ae.getReferenceObject());
             elementList.add(choiceState);
-            if (ae.getNbNext() == 2) {
+
+            if (ae.getNbNext() == 1) {
+                // We just use the choice state
+                tran = new AvatarTransition(block, "__after_" + ae.getName() + "_0", ae.getReferenceObject());
+                elementList.add(tran);
+                choiceState.addNext(tran);
+                List<AvatarStateMachineElement> set0 = translateState(ae.getNextElement(0), block);
+                tran.addNext(set0.get(0));
+                elementList.addAll(set0);
+                return elementList;
+
+            } else if (ae.getNbNext() == 2) {
                 List<AvatarStateMachineElement> set0 = translateState(ae.getNextElement(0), block);
                 List<AvatarStateMachineElement> set1 = translateState(ae.getNextElement(1), block);
                 //		elementList.addAll(set0);

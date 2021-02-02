@@ -142,7 +142,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public AvatarModelChecker(AvatarSpecification _spec) {
         if (_spec != null) {
             initialSpec = _spec;
-            //TraceManager.addDev("Before clone:\n" + spec);
+            //TraceManager.addDev("Before clone:\n" + spec.toShortString());
+            //TraceManager.addDev("**** Before clone:\n" + initialSpec.toString());
             initialSpec.removeLibraryFunctionCalls();
             initialSpec.removeCompositeStates();
             //TraceManager.addDev("Before clone:\n" + initialSpec);
@@ -1040,35 +1041,39 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         SpecificationState s;
 
         boolean go = true;
-        while (go) {
-            // Pickup a state
-            if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
-                //TraceManager.addDev("In Avatar modelchecher thread: stopped before end or terminated");
-                return;
-            }
-            
-            if (timeLimitReached || propertyDone) {
-                emptyPendingStates();
-                return;
-            }
-            
-            if (leadsToBound && safetyLeadStates.size() >= leadsToBoundSize) {
-                exitOnBound = true;
-                return;
-            }
+        try {
+            while (go) {
+                // Pickup a state
+                if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
+                    //TraceManager.addDev("In Avatar modelchecher thread: stopped before end or terminated");
+                    return;
+                }
 
-            // Pickup a state
-            s = pickupState();
+                if (timeLimitReached || propertyDone) {
+                    emptyPendingStates();
+                    return;
+                }
 
-            if (s == null) {
-                // Terminate
-                go = false;
-            } else {
-                // Handle one given state
-                computeAllStatesFrom(s);
-                // Release the computation
-                releasePickupState(s);
+                if (leadsToBound && safetyLeadStates.size() >= leadsToBoundSize) {
+                    exitOnBound = true;
+                    return;
+                }
+
+                // Pickup a state
+                s = pickupState();
+
+                if (s == null) {
+                    // Terminate
+                    go = false;
+                } else {
+                    // Handle one given state
+                    computeAllStatesFrom(s);
+                    // Release the computation
+                    releasePickupState(s);
+                }
             }
+        } catch (Exception e) {
+            TraceManager.addDev("Error in Thread: " + e.getMessage());
         }
     }
 
@@ -2052,6 +2057,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             aaoss = (AvatarActionOnSignal) (_st.transitions[0].getNext(0));
             aaosr = (AvatarActionOnSignal) (_st.transitions[1].getNext(0));
         } catch (Exception e) {
+            TraceManager.addDev("Exception in transitions: " + e.getMessage());
             return "";
         }
 

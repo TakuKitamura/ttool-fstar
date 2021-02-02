@@ -46,6 +46,8 @@ import graph.AUTTransition;
 import myutil.DijkstraState;
 import myutil.GraphAlgorithms;
 import myutil.TraceManager;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 import tmltranslator.tonetwork.TMAP2Network;
 import tmltranslator.toproverif.TML2ProVerif;
 import ui.CorrespondanceTGElement;
@@ -1913,4 +1915,16 @@ public class TMLMapping<E> {
         }
         return mappedcomm;
     }
+
+    public DefaultDirectedGraph getDependencyGraph() {
+        DefaultDirectedGraph g = new DefaultDirectedGraph<>(DefaultEdge.class);
+        addBuses(g);
+
+        return g;
+    }
+
+    private void addBuses(DefaultDirectedGraph g) {
+
+    }
+
 }

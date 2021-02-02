@@ -189,7 +189,7 @@ public class AvatarStateMachine extends AvatarElement {
         StringBuffer sb = new StringBuffer("State machine Id=" + getID() + "\n");
 
         for (AvatarStateMachineElement element : elements) {
-            sb.append(element.toString() + "\n");
+            sb.append("\t" + element.getClass() + "->" + element.toString() + "\n");
         }
 
         return sb.toString();

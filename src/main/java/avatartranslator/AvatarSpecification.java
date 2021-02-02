@@ -260,9 +260,11 @@ public class AvatarSpecification extends AvatarElement {
     public String toString() {
         //Thread.currentThread().dumpStack();
         StringBuffer sb = new StringBuffer("Blocks:\n");
+        TraceManager.addDev("TS Block");
         for(AvatarBlock block: blocks) {
             sb.append("*** " + block.toString()+"\n");
         }
+        TraceManager.addDev("TS Relations");
         sb.append("\nRelations:\n");
         for(AvatarRelation relation: relations) {
             sb.append("Relation:" + relation.toString() + "\n");
@@ -274,6 +276,8 @@ public class AvatarSpecification extends AvatarElement {
 		for (AvatarConstant constant: constants){
 		    sb.append("Constant:" + constant.toString() + "\n");
 		}
+
+        TraceManager.addDev("TS All done");
 
 		return sb.toString();
     }
