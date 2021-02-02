@@ -51,8 +51,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 
 
@@ -67,12 +67,12 @@ import java.util.Vector;
 public class JDialogSelectTMLComponent extends JDialogBase implements ActionListener, ListSelectionListener {
     public static Vector<TGComponent> validated, ignored;
     private static boolean optimized = true;
+    private boolean considerTimingOperators = false;
 
-    private Vector<TGComponent> val;
-    private Vector<TGComponent> ign, back;
+    private final Vector<TGComponent> val;
+    private final Vector<TGComponent> ign;
+    private final Vector<TGComponent> back;
 
-    //subpanels
-    private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
     private JList<TGComponent> listIgnored;
     private JList<TGComponent> listValidated;
     private JButton allValidated;
@@ -80,21 +80,25 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
     private JButton addOneIgnored;
     private JButton allIgnored;
     protected JCheckBox optimize;
+    private JCheckBox considerTimingOperatorsBox;
 
     /*
      * Creates new form
      */
-    public JDialogSelectTMLComponent(Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title) {
+    public JDialogSelectTMLComponent(Frame f, Vector<TGComponent> _back, Iterable<TGComponent> componentList, String title,
+                                     boolean _optimized, boolean _considerTimingOperators) {
         super(f, title, true);
 
         back = _back;
+        considerTimingOperators = _considerTimingOperators;
+        optimized = _optimized;
 
-        List<TGComponent> pcl = new LinkedList<TGComponent>();
+        Collection<TGComponent> pcl = new LinkedList<>();
         makeComponentList(pcl, componentList);
 
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(pcl);
-            ign = new Vector<TGComponent>();
+            ign = new Vector<>();
         } else {
             val = validated;
             ign = ignored;
@@ -108,12 +112,12 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         pack();
     }
 
-    private void makeComponentList(List<TGComponent> cs, List<TGComponent> lcs) {
+    private void makeComponentList(Collection<TGComponent> cs, Iterable<TGComponent> lcs) {
         TGComponent tgc;
         TMLCCompositeComponent ccomp;
 
-        for (int i = 0; i < lcs.size(); i++) {
-            tgc = lcs.get(i);
+        for (TGComponent lc : lcs) {
+            tgc = lc;
             if (tgc instanceof TMLCCompositeComponent) {
                 ccomp = (TMLCCompositeComponent) tgc;
                 cs.addAll(ccomp.getAllPrimitiveComponents());
@@ -128,12 +132,12 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         }
     }
 
-    private Vector<TGComponent> makeNewVal(List<TGComponent> list) {
-        Vector<TGComponent> v = new Vector<TGComponent>();
+    private Vector<TGComponent> makeNewVal(Iterable<TGComponent> list) {
+        Vector<TGComponent> v = new Vector<>();
         TGComponent tgc;
 
-        for (int i = 0; i < list.size(); i++) {
-            tgc = list.get(i);
+        for (TGComponent tgComponent : list) {
+            tgc = tgComponent;
             //
             if (tgc instanceof TMLCPrimitiveComponent) {
                 v.addElement(tgc);
@@ -142,7 +146,7 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         return v;
     }
 
-    private void checkTask(Vector<? extends TGComponent> tobeChecked, List<TGComponent> source) {
+    private void checkTask(Vector<? extends TGComponent> tobeChecked, Collection<TGComponent> source) {
         TGComponent t;
 
         for (int i = 0; i < tobeChecked.size(); i++) {
@@ -155,11 +159,11 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         }
     }
 
-    public void addNewTask(Vector<TGComponent> added, List<TGComponent> source, Vector<TGComponent> notSource) {
+    private void addNewTask(Vector<TGComponent> added, Iterable<TGComponent> source, Collection<TGComponent> notSource) {
         TGComponent tgc;
 
-        for (int i = 0; i < source.size(); i++) {
-            tgc = source.get(i);
+        for (TGComponent tgComponent : source) {
+            tgc = tgComponent;
 
             if ((tgc instanceof TMLCPrimitiveComponent) && (!added.contains(tgc)) && (!notSource.contains(tgc))) {
                 added.addElement(tgc);
@@ -190,7 +194,8 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         c2.gridheight = 1;
 
         // ignored list
-        panel1 = new JPanel();
+        //subpanels
+        JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         panel1.setBorder(new javax.swing.border.TitledBorder("Ignored components"));
         listIgnored = new JList<TGComponent>(ign);
@@ -204,7 +209,7 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
 
         // central buttons
-        panel3 = new JPanel();
+        JPanel panel3 = new JPanel();
         panel3.setLayout(gridbag1);
 
         c1.weighty = 1.0;
@@ -242,10 +247,10 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         c.add(panel3, c2);
 
         // validated list
-        panel2 = new JPanel();
+        JPanel panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
         panel2.setBorder(new javax.swing.border.TitledBorder("Used components"));
-        listValidated = new JList<TGComponent>(val);
+        listValidated = new JList<>(val);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         listValidated.addListSelectionListener(this);
@@ -258,6 +263,9 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         optimize = new JCheckBox("Optimize TML specification");
         optimize.setSelected(optimized);
         c.add(optimize, c2);
+        considerTimingOperatorsBox = new JCheckBox("Take into account time operators");
+        considerTimingOperatorsBox.setSelected(considerTimingOperators);
+        c.add(considerTimingOperatorsBox, c2);
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.gridwidth = 1; //end row
         initMainButtons(c2, c, this, false, "Check syntax", "Cancel");
@@ -307,24 +315,29 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         }
 
         // Compare the action command to the known actions.
-       if (command.equals("addOneIgnored")) {
-            addOneIgnored();
-        } else if (command.equals("addOneValidated")) {
-            addOneValidated();
-        } else if (command.equals("allValidated")) {
-            allValidated();
-        } else if (command.equals("allIgnored")) {
-            allIgnored();
+        switch (command) {
+            case "addOneIgnored":
+                addOneIgnored();
+                break;
+            case "addOneValidated":
+                addOneValidated();
+                break;
+            case "allValidated":
+                allValidated();
+                break;
+            case "allIgnored":
+                allIgnored();
+                break;
         }
     }
 
 
     private void addOneIgnored() {
         int[] list = listValidated.getSelectedIndices();
-        Vector<TGComponent> v = new Vector<TGComponent>();
+        Vector<TGComponent> v = new Vector<>();
         TGComponent o;
-        for (int i = 0; i < list.length; i++) {
-            o = val.elementAt(list[i]);
+        for (int j : list) {
+            o = val.elementAt(j);
             ign.addElement(o);
             v.addElement(o);
         }
@@ -337,10 +350,10 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
     private void addOneValidated() {
         int[] list = listIgnored.getSelectedIndices();
-        Vector<TGComponent> v = new Vector<TGComponent>();
+        Vector<TGComponent> v = new Vector<>();
         TGComponent o;
-        for (int i = 0; i < list.length; i++) {
-            o = ign.elementAt(list[i]);
+        for (int j : list) {
+            o = ign.elementAt(j);
             val.addElement(o);
             v.addElement(o);
         }
@@ -376,6 +389,7 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         validated = val;
         ignored = ign;
         optimized = optimize.isSelected();
+        considerTimingOperators = considerTimingOperatorsBox.isSelected();
         dispose();
     }
 
@@ -387,25 +401,13 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
         int i1 = listIgnored.getSelectedIndex();
         int i2 = listValidated.getSelectedIndex();
 
-        if (i1 == -1) {
-            addOneValidated.setEnabled(false);
-        } else {
-            addOneValidated.setEnabled(true);
-            //listValidated.clearSelection();
-        }
+        //listValidated.clearSelection();
+        addOneValidated.setEnabled(i1 != -1);
 
-        if (i2 == -1) {
-            addOneIgnored.setEnabled(false);
-        } else {
-            addOneIgnored.setEnabled(true);
-            //listIgnored.clearSelection();
-        }
+        //listIgnored.clearSelection();
+        addOneIgnored.setEnabled(i2 != -1);
 
-        if (ign.size() == 0) {
-            allValidated.setEnabled(false);
-        } else {
-            allValidated.setEnabled(true);
-        }
+        allValidated.setEnabled(ign.size() != 0);
 
         if (val.size() == 0) {
             allIgnored.setEnabled(false);
@@ -423,5 +425,9 @@ public class JDialogSelectTMLComponent extends JDialogBase implements ActionList
 
     public boolean getOptimize() {
         return optimized;
+    }
+
+    public boolean getConsiderTimingOperators() {
+        return considerTimingOperators;
     }
 }

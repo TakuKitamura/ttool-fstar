@@ -1,0 +1,19 @@
+print dir
+set model resources/test/cli/models/testDiploToAvatar.xml
+#print The model to be opened is: $model
+action start
+wait 2
+#toto
+action open $model
+wait 4
+action check-syntax
+action avatar-rg -g rgmodelchecker_diplo_0.aut
+navigate-panel-to-right
+action check-syntax
+action avatar-rg -g rgmodelchecker_diplo_1.aut
+navigate-panel-to-right
+action check-syntax
+action avatar-rg -g rgmodelchecker_diplo_2.aut
+action quit
+action quit
+

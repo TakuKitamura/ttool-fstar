@@ -545,6 +545,17 @@ public class AUTGraph implements myutil.Graph {
 
     }
 
+    public String[] getInternalActions() {
+        HashSet<String> list = new HashSet<>();
+        for (AUTTransition tr : transitions) {
+            if (tr.transition.startsWith("i(")) {
+                list.add(tr.transition);
+            }
+        }
+        String arr[] = new String[list.size()];
+        return list.toArray(arr);
+    }
+
 
     public void minimizeRemoveInternal(boolean tauOnly) {
         String s = "tau";

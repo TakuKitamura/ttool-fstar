@@ -106,6 +106,8 @@ public class GTMLModeling {
 
     private boolean putPrefixName = false;
 
+    private boolean considerTimeOperators = true;
+
     public GTMLModeling(TMLDesignPanel _tmldp, boolean resetList) {
         tmldp = _tmldp;
         table = new Hashtable<String, String>();
@@ -149,6 +151,8 @@ public class GTMLModeling {
     public void putPrefixName(boolean _b) {
         putPrefixName = _b;
     }
+
+    public void setConsiderTimeOperators(boolean _b) {considerTimeOperators = _b;}
 
     public void processAttacker() {
         //
@@ -1688,7 +1692,8 @@ public class GTMLModeling {
                     table,
                     removedChannels,
                     removedEvents,
-                    removedRequests);
+                    removedRequests,
+                    considerTimeOperators);
 //            generateTaskActivityDiagrams(tmltask);
         }
         //TraceManager.addDev( "errors: " + checkingErrors.size() );

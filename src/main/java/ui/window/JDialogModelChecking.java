@@ -102,7 +102,7 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
             ign = ignored;
             this.checkTClasses(val, componentList);
             this.checkTClasses(ign, componentList);
-            addNewTclasses(val, componentList, ign);
+            addNewTClasses(val, componentList, ign);
         }
 
         initComponents();
@@ -129,7 +129,7 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
         }
     }
 
-    public void addNewTclasses(List<TClassInterface> added, List<TGComponent> source, List<TClassInterface> notSource) {
+    public void addNewTClasses(List<TClassInterface> added, List<TGComponent> source, List<TClassInterface> notSource) {
         for (TGComponent tgc : source)
             if ((tgc instanceof TClassInterface) && (!added.contains(tgc)) && (!notSource.contains(tgc)))
                 added.add((TClassInterface) tgc);

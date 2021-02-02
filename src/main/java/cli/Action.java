@@ -111,6 +111,7 @@ public class Action extends Command {
     private final static String AVATAR_SIMULATION_TO_BRK = "avatar-simulation-to-brk";
 
 
+
     private AvatarSpecificationSimulation ass;
 
     public Action() {
@@ -897,7 +898,17 @@ public class Action extends Command {
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
-                    return Interpreter.AVATAR_NO_SPEC;
+                    TMLModeling tmlm = interpreter.mgui.gtm.getTMLModeling();
+                    if (tmlm != null) {
+                        boolean ret = interpreter.mgui.gtm.generateFullAvatarFromTML();
+                        if (!ret) {
+                            return Interpreter.AVATAR_NO_SPEC;
+                        }
+                        avspec = interpreter.mgui.gtm.getAvatarSpecification();
+                        avspec.removeElseGuards();
+                    } else {
+                        return Interpreter.AVATAR_NO_SPEC;
+                    }
                 }
 
                 AvatarModelChecker amc = new AvatarModelChecker(avspec);
@@ -1054,12 +1065,15 @@ public class Action extends Command {
                 
                 System.out.println("Model checking done\nGraph: states:" + amc.getNbOfStates() +
                         " links:" + amc.getNbOfLinks() + "\n");
+
                 if (noDeadlocks) {
                     interpreter.print("No Deadlocks:\n" + amc.deadlockToString());
                 }
+
                 if (reinit) {
                     interpreter.print("Reinitialization?:\n" + amc.reinitToString());
                 }
+
                 if (actionLoop) {
                     boolean result = amc.getInternalActionLoopsResult();
                     interpreter.print("No internal action loops?:\n" + result);
@@ -1072,6 +1086,7 @@ public class Action extends Command {
                         }
                     }
                 }
+
                 if (reachabilityAnalysis) {
                     interpreter.print("Reachability Analysis:\n" + amc.reachabilityToStringGeneric());
                 }
@@ -1142,9 +1157,7 @@ public class Action extends Command {
                     if (graphPath.length() == 0) {
                         graphPath =  System.getProperty("user.dir") + "/" + "rg$.aut";
                     }
-    
-    
-    
+
                     if (graphPath.indexOf("?") != -1) {
                         //System.out.println("Question mark found");
                         autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
@@ -1321,6 +1334,8 @@ public class Action extends Command {
                 return null;
             }
         };
+
+
 
 
 

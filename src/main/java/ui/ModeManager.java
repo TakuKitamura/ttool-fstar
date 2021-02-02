@@ -151,9 +151,10 @@ public class ModeManager {
             actions[TGUIAction.ACT_REMOVENOC].setEnabled(true);
             if (mgui.getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel) {
                 actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
-                if (mgui.isExperimentalOn()) {
+                //if (mgui.isExperimentalOn()) {
                     actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
-                }
+                    actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);
+                //}
             } else {
                 actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
                 actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);

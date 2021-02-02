@@ -8624,7 +8624,9 @@ public class GTURTLEModeling {
         return v;
     }
 
-    public boolean translateTMLComponentDesign(Vector<? extends TGComponent> componentsToTakeIntoAccount, TMLComponentDesignPanel tmlcdp, boolean optimize) {
+    public boolean translateTMLComponentDesign(Vector<? extends TGComponent> componentsToTakeIntoAccount, 
+                                               TMLComponentDesignPanel tmlcdp, 
+                                               boolean optimize, boolean considerTimeOperators) {
         nullifyTMLModeling();
         //      ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
         warnings = new LinkedList<CheckingError>();
@@ -8633,6 +8635,7 @@ public class GTURTLEModeling {
         GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
         gctmlm.putPrefixName(true);
         gctmlm.setComponents(componentsToTakeIntoAccount);
+        gctmlm.setConsiderTimeOperators(considerTimeOperators);
         tmlm = gctmlm.translateToTMLModeling(true);
         //mgui.generateTMLTxt();
         artificialtmap = tmlm.getDefaultMapping();

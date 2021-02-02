@@ -173,10 +173,6 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         addSeparator();
         menu.addSeparator();
 
-        avatarSimu = add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
-        avatarSimu.addMouseListener(mgui.mouseHandler);
-        avatarSimuMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
-
         genMapping = add(mgui.actions[TGUIAction.ACT_GEN_MAPPING]);
         genMapping.addMouseListener(mgui.mouseHandler);
         genMappingMI = addMenu(mgui.actions[TGUIAction.ACT_GEN_MAPPING]);
@@ -194,6 +190,12 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         addSeparator();
         menu.addSeparator();
 
+        avatarSimu = add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
+        avatarSimu.addMouseListener(mgui.mouseHandler);
+        avatarSimuMI = addMenu(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
+
+        addSeparator();
+        menu.addSeparator();
 
         avatarMC = add(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER]);
         avatarMC.addMouseListener(mgui.mouseHandler);
@@ -568,11 +570,11 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             nocMI.setVisible(b);
         }
 
-        avatarSimu.setVisible(!b);
+        avatarSimu.setVisible(b);
+        avatarSimuMI.setVisible(b);
+
         avatarFVUPPAAL.setVisible(!b);
         avatarFVStaticAnalysis.setVisible(!b);
-
-        avatarSimuMI.setVisible(!b);
         avatarFVUPPAALMI.setVisible(!b);
         avatarFVStaticAnalysisMI.setVisible(!b);
 

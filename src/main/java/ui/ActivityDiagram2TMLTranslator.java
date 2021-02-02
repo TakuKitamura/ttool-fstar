@@ -42,6 +42,7 @@ import tmltranslator.TMLType;
 import tmltranslator.TMLWaitEvent;
 import tmltranslator.TMLWriteChannel;
 import translator.CheckingError;
+import ui.ad.TADExec;
 import ui.tmlad.TMLADActionState;
 import ui.tmlad.TMLADChoice;
 import ui.tmlad.TMLADDecrypt;
@@ -86,8 +87,12 @@ public class ActivityDiagram2TMLTranslator {
 												final Map<String, String> table,
 												final List<String> removedChannels,
 												final List<String> removedEvents,
-												final List<String> removedRequests )
+												final List<String> removedRequests,
+												 final boolean considerTimeOperators)
 	throws MalformedTMLDesignException {
+
+		//TraceManager.addDev("*********************** Consider time operators: " + considerTimeOperators);
+
         TMLActivity activity = tmltask.getActivityDiagram();
         TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
 
@@ -218,8 +223,13 @@ public class ActivityDiagram2TMLTranslator {
 		
 		        } else if (tgc instanceof TMLADExecI) {
 		            tmlexeci = new TMLExecI("execi", tgc);
-		            tmlexeci.setAction(modifyString(((TMLADExecI)tgc).getDelayValue()));
-		            tmlexeci.setValue(((TMLADExecI)tgc).getDelayValue());
+		            if (considerTimeOperators) {
+						tmlexeci.setAction(modifyString(((TADExec) tgc).getDelayValue()));
+						tmlexeci.setValue(((TADExec) tgc).getDelayValue());
+					} else {
+						tmlexeci.setAction("0");
+						tmlexeci.setValue("0");
+					}
 		            activity.addElement(tmlexeci);
 		            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		            corrTgElement.addCor(tmlexeci, tgc);
@@ -227,8 +237,13 @@ public class ActivityDiagram2TMLTranslator {
 		        } else if (tgc instanceof TMLADExecIInterval) {
 		            tmlexecii = new TMLExecIInterval("execi", tgc);
 		            tmlexecii.setValue(tgc.getValue());
-		            tmlexecii.setMinDelay(modifyString(((TMLADExecIInterval)tgc).getMinDelayValue()));
-		            tmlexecii.setMaxDelay(modifyString(((TMLADExecIInterval)tgc).getMaxDelayValue()));
+					if (considerTimeOperators) {
+						tmlexecii.setMinDelay(modifyString(((TMLADExecIInterval) tgc).getMinDelayValue()));
+						tmlexecii.setMaxDelay(modifyString(((TMLADExecIInterval) tgc).getMaxDelayValue()));
+					} else {
+						tmlexecii.setMinDelay("0");
+						tmlexecii.setMaxDelay("0");
+					}
 		            activity.addElement(tmlexecii);
 		            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		            corrTgElement.addCor(tmlexecii, tgc);
@@ -255,7 +270,7 @@ public class ActivityDiagram2TMLTranslator {
 		            tmlexecc = new TMLExecC("decrypt_"+((TMLADDecrypt)tgc).securityContext, tgc);
 		            activity.addElement(tmlexecc);
 		            SecurityPattern sp = securityPatterns.get(((TMLADDecrypt)tgc).securityContext);
-		            if (sp ==null){
+		            if (sp == null){
 		                //Throw error for missing security pattern
 		                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADDecrypt)tgc).securityContext + " not found");
 		                ce.setTDiagramPanel(tadp);
@@ -272,24 +287,40 @@ public class ActivityDiagram2TMLTranslator {
 		
 		        } else if (tgc instanceof TMLADExecC) {
 		            tmlexecc = new TMLExecC("execc", tgc);
-		            tmlexecc.setValue(((TMLADExecC)tgc).getDelayValue());
-		            tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));
+		            if (considerTimeOperators) {
+						tmlexecc.setValue(((TMLADExecC) tgc).getDelayValue());
+						tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));
+					} else {
+						tmlexecc.setValue("0");
+						tmlexecc.setAction("0");
+					}
+
 		            activity.addElement(tmlexecc);
 		            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		            corrTgElement.addCor(tmlexecc, tgc);
 		
 		        } else if (tgc instanceof TMLADExecCInterval) {
 		            tmlexecci = new TMLExecCInterval("execci", tgc);
-		            tmlexecci.setMinDelay(modifyString(((TMLADExecCInterval)tgc).getMinDelayValue()));
-		            tmlexecci.setMaxDelay(modifyString(((TMLADExecCInterval)tgc).getMaxDelayValue()));
+		            if (considerTimeOperators) {
+						tmlexecci.setMinDelay(modifyString(((TMLADExecCInterval) tgc).getMinDelayValue()));
+						tmlexecci.setMaxDelay(modifyString(((TMLADExecCInterval) tgc).getMaxDelayValue()));
+					} else {
+						tmlexecci.setMinDelay("0");
+						tmlexecci.setMaxDelay("0");
+					}
 		            activity.addElement(tmlexecci);
 		            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		            corrTgElement.addCor(tmlexecci, tgc);
 		
 		        } else if (tgc instanceof TMLADDelay) {
 		            tmldelay = new TMLDelay("d-delay", tgc);
-		            tmldelay.setMinDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
-		            tmldelay.setMaxDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
+		            if (considerTimeOperators) {
+						tmldelay.setMinDelay(modifyString(((TMLADDelay) tgc).getDelayValue()));
+						tmldelay.setMaxDelay(modifyString(((TMLADDelay) tgc).getDelayValue()));
+					} else {
+						tmldelay.setMinDelay("0");
+						tmldelay.setMaxDelay("0");
+					}
 		            tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
 		            tmldelay.setActiveDelay(((TMLADDelay)tgc).getActiveDelayEnable());
 		            activity.addElement(tmldelay);
@@ -298,8 +329,13 @@ public class ActivityDiagram2TMLTranslator {
 		
 		        } else if (tgc instanceof TMLADDelayInterval) {
 		            tmldelay = new TMLDelay("nd-delay", tgc);
-		            tmldelay.setMinDelay(modifyString(((TMLADDelayInterval)tgc).getMinDelayValue()));
-		            tmldelay.setMaxDelay(modifyString(((TMLADDelayInterval)tgc).getMaxDelayValue()));
+					if (considerTimeOperators) {
+						tmldelay.setMinDelay(modifyString(((TMLADDelayInterval) tgc).getMinDelayValue()));
+						tmldelay.setMaxDelay(modifyString(((TMLADDelayInterval) tgc).getMaxDelayValue()));
+					} else {
+						tmldelay.setMinDelay("0");
+						tmldelay.setMaxDelay("0");
+					}
 		            tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
 					tmldelay.setActiveDelay(((TMLADDelayInterval)tgc).getActiveDelayEnableValue());
 		            activity.addElement(tmldelay);

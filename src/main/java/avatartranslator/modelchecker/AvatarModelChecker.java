@@ -628,14 +628,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     public void startModelChecking() {
-        TraceManager.addDev("String model checking");
+        TraceManager.addDev("Starting model checking");
 
         if (spec == null) {
             return;
         }
-        
+
+        TraceManager.addDev("Init model checking");
         initModelChecking();
-        
+
+        TraceManager.addDev("Real start model checking");
         startModelChecking(nbOfThreads);
         TraceManager.addDev("Model checking done");
     }
@@ -2460,11 +2462,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         StringBuffer sb = new StringBuffer();
         sb.append("des(0," + getNbOfLinks() + "," + getNbOfStates() + ")\n");
 
-        for (SpecificationState state : states.values()) {
-            //TraceManager.addDev("State:" + state.id);
-            if (state.nexts != null) {
-                for (SpecificationLink link : state.nexts) {
-                    sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
+        if (states != null) {
+            for (SpecificationState state : states.values()) {
+                //TraceManager.addDev("State:" + state.id);
+                if (state.nexts != null) {
+                    for (SpecificationLink link : state.nexts) {
+                        sb.append("(" + link.originState.id + ",\"" + link.action + "\"," + link.destinationState.id + ")\n");
+                    }
                 }
             }
         }

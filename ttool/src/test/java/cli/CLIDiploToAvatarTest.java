@@ -48,6 +48,8 @@ package cli;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
+import java.util.ArrayList;
+
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import graph.AUTGraph;
@@ -55,13 +57,17 @@ import org.junit.Test;
 import test.AbstractTest;
 
 
-public class CLIAvatarModelCheckerTest extends AbstractTest implements InterpreterOutputInterface {
+public class CLIDiploToAvatarTest extends AbstractTest implements InterpreterOutputInterface {
 
-    final static String PATH_TO_TEST_FILE = "cli/input/";
-    final static String PATH_TO_EXPECTED_FILE = "cli/expected/";
+    private final static String PATH_TO_TEST_FILE = "cli/input/";
+    private final static String PATH_TO_EXPECTED_FILE = "cli/expected/";
     private StringBuilder outputResult;
+
+    private final int[] statesInfo = {10, 10, 10};
+    private final int[] transitionsInfo = {10, 10, 10};
+
 	
-	public CLIAvatarModelCheckerTest() {
+	public CLIDiploToAvatarTest() {
 	    //
     }
 	
@@ -81,8 +87,8 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
     }
 	
 	@Test
-	public void testTranslationAndModelChecking() {
-	    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker";
+	public void testTranslationFromScript() {
+	    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptdiplotoavatar";
 	    String script;
 	    
 	    outputResult = new StringBuilder();
@@ -95,33 +101,43 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 	    assertTrue(script.length() > 0);
 
 	    boolean show = false;
-        Interpreter interpret = new Interpreter(script, this, show);
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
         interpret.interpret();
 
+        System.out.println("Interpret done");
+
         // Must now load the graph
-        filePath = "rgmodelchecker.aut";
-        f = new File(filePath);
-        assertTrue(myutil.FileUtils.checkFileForOpen(f));
-        String data = myutil.FileUtils.loadFileData(f);
+        for (int i=0; i<3; i++) {
+            System.out.println("Handling graph #" + i);
+            filePath = "rgmodelchecker_diplo_" + i + ".aut";
+            f = new File(filePath);
+            assertTrue(myutil.FileUtils.checkFileForOpen(f));
+            String data = myutil.FileUtils.loadFileData(f);
 
-        assertTrue(data.length() > 0);
-        AUTGraph graph = new AUTGraph();
-        graph.buildGraph(data);
-        graph.computeStates();
+            assertTrue(data.length() > 0);
+            AUTGraph graph = new AUTGraph();
+            graph.buildGraph(data);
+            graph.computeStates();
 
-        System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
-                graph.getNbOfTransitions());
-        assertTrue(graph.getNbOfStates() == 10);
-        assertTrue(graph.getNbOfTransitions() == 10);
+            System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
 
-        // Graph minimization
+            // Minimizing the graph
+            // Getting all actions starting from i
+            AUTGraph newRG = graph.minimize(graph.getInternalActions(), false);
 
+            System.out.println("states=" + newRG.getNbOfStates() + " transitions=" + newRG.getNbOfTransitions());
+
+            assertTrue(newRG.getNbOfStates() == statesInfo[i]);
+            assertTrue(newRG.getNbOfTransitions() == transitionsInfo[i]);
+        }
 
 	}
 
 
+
+
 	
-	@Test
+	/*@Test
     public void testStateLimitCoffeeMachine() {
         String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_n";
         String script;
@@ -378,6 +394,6 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
         assertTrue(graph.getNbOfTransitions() == 5);
 
 
-    }
+    }*/
 
 }

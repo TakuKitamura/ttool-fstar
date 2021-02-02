@@ -535,8 +535,8 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
         HashSet<String> hs = newRG.graph.getAllActions();
         jta.append("\t3. Sorting actions, and setting graphical lists\n");
 
-        sortedListProjected = new ArrayList<String>(hs);
-        sortedListIgnored = new ArrayList<String>();
+        sortedListProjected = new ArrayList<>(hs);
+        sortedListIgnored = new ArrayList<>();
         updateListsFromModels();
 
         jta.append("All done\n");

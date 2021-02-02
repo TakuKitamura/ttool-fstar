@@ -3984,9 +3984,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) tp;
             JDialogSelectTMLComponent.validated = tmlcdp.validated;
             JDialogSelectTMLComponent.ignored = tmlcdp.ignored;
-            Vector<TGComponent> tmlComponentsToValidate = new Vector<TGComponent>();
+            Vector<TGComponent> tmlComponentsToValidate = new Vector<>();
             JDialogSelectTMLComponent jdstmlc = new JDialogSelectTMLComponent(frame, tmlComponentsToValidate, tmlcdp.tmlctdp.getComponentList(),
-                    "Choosing TML components to validate");
+                    "Choosing TML components to validate", true, true);
             if (!automatic) {
                 GraphicLib.centerOnParent(jdstmlc);
                 jdstmlc.setVisible(true); // Blocked until dialog has been closed
@@ -3996,7 +3996,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             if (tmlComponentsToValidate.size() > 0) {
                 tmlcdp.validated = JDialogSelectTMLComponent.validated;
                 tmlcdp.ignored = JDialogSelectTMLComponent.ignored;
-                b = gtm.translateTMLComponentDesign(tmlComponentsToValidate, tmlcdp, jdstmlc.getOptimize());
+                b = gtm.translateTMLComponentDesign(tmlComponentsToValidate, tmlcdp, jdstmlc.getOptimize(),
+                        jdstmlc.getConsiderTimingOperators());
                 expandToWarnings();
                 expandToErrors();
                 if (b) {
@@ -4852,6 +4853,23 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void avatarSimulation() {
         TraceManager.addDev("Avatar simulation");
+
+        TURTLEPanel tdp = getCurrentTURTLEPanel();
+        if (tdp instanceof TMLComponentDesignPanel) {
+            boolean ret = gtm.generateFullAvatarFromTML();
+            gtm.getAvatarSpecification().removeElseGuards();
+
+            if (!ret) {
+                return;
+            }
+
+        }
+
+        if (gtm.getAvatarSpecification() == null) {
+            TraceManager.addDev("Null avatar spec");
+            return;
+        }
+
         jfais = new JFrameAvatarInteractiveSimulation( /* frame, */ this, "Interactive simulation", gtm.getAvatarSpecification());
         jfais.setIconImage(IconManager.img9);
         // jfais.setSize(900, 600);

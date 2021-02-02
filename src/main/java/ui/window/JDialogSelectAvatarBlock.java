@@ -365,25 +365,13 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         int i1 = listIgnored.getSelectedIndex();
         int i2 = listValidated.getSelectedIndex();
 
-        if (i1 == -1) {
-            addOneValidated.setEnabled(false);
-        } else {
-            addOneValidated.setEnabled(true);
-            //listValidated.clearSelection();
-        }
+        //listValidated.clearSelection();
+        addOneValidated.setEnabled(i1 != -1);
 
-        if (i2 == -1) {
-            addOneIgnored.setEnabled(false);
-        } else {
-            addOneIgnored.setEnabled(true);
-            //listIgnored.clearSelection();
-        }
+        //listIgnored.clearSelection();
+        addOneIgnored.setEnabled(i2 != -1);
 
-        if (ign.size() == 0) {
-            allValidated.setEnabled(false);
-        } else {
-            allValidated.setEnabled(true);
-        }
+        allValidated.setEnabled(ign.size() != 0);
 
         if (val.size() == 0) {
             allIgnored.setEnabled(false);
