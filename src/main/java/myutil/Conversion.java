@@ -653,6 +653,19 @@ public class Conversion {
         return s.matches("\\d+");
     }
 
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
+
     public static boolean isId(String s) {
         s = s.trim();
         boolean b1 = (s.substring(0, 1)).matches("[a-zA-Z]");

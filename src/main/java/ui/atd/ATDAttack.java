@@ -39,6 +39,7 @@
 
 package ui.atd;
 
+import myutil.Conversion;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 import org.w3c.dom.Element;
@@ -71,6 +72,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     private String stereotype = "attack";
     private String rootStereotype = "root attack";
     private boolean isRootAttack = false;
+    private int attackCost;
+    private int attackExperience;
 
     private static int maxFontSize = 14;
     private static int minFontSize = 4;
@@ -353,6 +356,13 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
         isRootAttack = dialog.isRootAttack();
 
+        tmp = dialog.getAttackCost();
+        if (Conversion.isInteger(tmp)) {
+            attackCost = Integer.decode(tmp);
+        }
+
+        attackExperience = dialog.getAttackExperience();
+
         if (error) {
             JOptionPane.showMessageDialog(frame,
                     "Name is non-valid",
@@ -382,6 +392,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info description=\"" + description);
         sb.append("\" root=\"" + isRootAttack);
+        sb.append("\" cost=\"" + attackCost);
+        sb.append("\" experience=\"" + attackExperience);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -397,6 +409,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
             String sdescription = null;
             //     String prio;
             String isRoot = null;
+            String cost = null, experience = null;
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -411,12 +424,24 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                             if (elt.getTagName().equals("info")) {
                                 sdescription = elt.getAttribute("description");
                                 isRoot = elt.getAttribute("root");
+                                cost = elt.getAttribute("cost");
+                                experience = elt.getAttribute("experience");
                             }
                             if (sdescription != null) {
                                 description = sdescription;
                             }
                             if (isRoot != null) {
                                 isRootAttack = isRoot.toUpperCase().compareTo("TRUE") == 0;
+                            }
+                            if (cost != null) {
+                                if (Conversion.isInteger(cost)) {
+                                    attackCost = Integer.decode(cost);
+                                }
+                            }
+                            if (experience != null) {
+                                if (Conversion.isInteger(experience)) {
+                                    attackExperience = Integer.decode(experience);
+                                }
                             }
                         }
                     }
@@ -444,6 +469,14 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         String s = "Description = " + description + "\n";
         s += "Id=" + getId();
         return s;
+    }
+
+    public int getAttackExperience() {
+        return attackExperience;
+    }
+
+    public int getAttackCost() {
+        return attackCost;
     }
 
     public boolean isRootAttack() {

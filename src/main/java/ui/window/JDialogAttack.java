@@ -41,6 +41,7 @@
 
 package ui.window;
 
+import attacktrees.Attack;
 import ui.util.IconManager;
 import ui.atd.ATDAttack;
 
@@ -67,7 +68,8 @@ public class JDialogAttack extends JDialogBase implements ActionListener  {
     private Frame frame;
     
     //protected JTextField taskName;
-	protected JTextField name, description;
+	protected JTextField name, description, attackCostField;
+	protected JComboBox<String> attackExperienceBox;
 	protected JCheckBox isRootAttack;
 	
 	private ATDAttack attack;
@@ -128,6 +130,24 @@ public class JDialogAttack extends JDialogBase implements ActionListener  {
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		description = new JTextField(attack.getDescription());
 		panel2.add(description, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Cost:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        attackCostField = new JTextField(""+attack.getAttackCost());
+        panel2.add(attackCostField, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Experience:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        attackExperienceBox = new JComboBox<String>(Attack.EXPERIENCES);
+        if ((attack.getAttackExperience() < Attack.EXPERIENCES.length) &&
+                (attack.getAttackExperience() >= 0)){
+            attackExperienceBox.setSelectedIndex(attack.getAttackExperience());
+        }
+        panel2.add(attackExperienceBox, c1);
 		
         // main panel;
         c0.gridheight = 10;
@@ -179,6 +199,14 @@ public class JDialogAttack extends JDialogBase implements ActionListener  {
 	public boolean isRootAttack() {
 		return isRootAttack.isSelected();
 	}
+
+	public int getAttackExperience() {
+        return attackExperienceBox.getSelectedIndex();
+    }
+
+    public String getAttackCost() {
+        return attackCostField.getText();
+    }
 	
 
     

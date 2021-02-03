@@ -54,7 +54,6 @@ public abstract class AttackElement {
     protected Object referenceObject;
 
     public AttackElement(String _name, Object _referenceObject) {
-
         name = _name;
         referenceObject = _referenceObject;
     }

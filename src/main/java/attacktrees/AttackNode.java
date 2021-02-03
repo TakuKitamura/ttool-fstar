@@ -39,6 +39,9 @@
 
 package attacktrees;
 
+import myutil.TraceManager;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -51,9 +54,9 @@ import java.util.Collections;
  * @version 1.0 10/04/2015
  */
 public abstract class AttackNode extends AttackElement {
-    private Attack resultingAttack; // If no resulting attack -> error!
-    private ArrayList<Attack> inputAttacks;
-    private ArrayList<Integer> inputValues;
+    protected Attack resultingAttack; // If no resulting attack -> error!
+    protected ArrayList<Attack> inputAttacks;
+    protected ArrayList<Integer> inputValues;
     protected String type = "";
 
     public AttackNode(String _name, Object _referenceObject) {
@@ -149,6 +152,28 @@ public abstract class AttackNode extends AttackElement {
 
         inputAttacks = newAttacks;
         inputValues = newInputValues;
+    }
+
+    public Point getMinimalCostAndExperience() {
+
+        TraceManager.addDev("In node: " + this.getClass());
+
+        if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
+            return new Point(0, 0);
+        }
+
+        // Built from the lower attacks. Assume all attacks are necessary
+
+        int attackCost = 0;
+        int attackExperience = Attack.EXPERIENCE_BEGINNER;
+
+        for(Attack attack: inputAttacks) {
+            Point p = attack.getMinimalCostAndExperience();
+            attackCost += p.x;
+            attackExperience = Math.max(attackExperience, p.y);
+        }
+
+        return new Point(attackCost, attackExperience);
     }
 
 }

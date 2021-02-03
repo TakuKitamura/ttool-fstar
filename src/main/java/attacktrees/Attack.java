@@ -39,6 +39,7 @@
 
 package attacktrees;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -50,15 +51,26 @@ import java.util.ArrayList;
  * @version 1.0 10/04/2015
  */
 public class Attack extends AttackElement {
+
+    public final static int EXPERIENCE_BEGINNER = 0;
+    public final static int EXPERIENCE_AVERAGE = 1;
+    public final static int EXPERIENCE_EXPERT = 2;
+
+    public final static String EXPERIENCES [] = {"Beginner", "Average", "Expert"};
+
+
     private AttackNode originNode; // If no origin node -> leaf attack
     private ArrayList<AttackNode> destinationNodes;
     private boolean isRoot;
     private boolean isEnabled = true;
 
+    private int attackCost;
+    private int attackExperience;
+
 
     public Attack(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        destinationNodes = new ArrayList<AttackNode>();
+        destinationNodes = new ArrayList<>();
     }
 
     public boolean isRoot() {
@@ -85,6 +97,22 @@ public class Attack extends AttackElement {
         destinationNodes.add(_node);
     }
 
+    public void setAttackCost(int _attackCost) {
+        attackCost = _attackCost;
+    }
+
+    public void setAttackExperience(int _experience) {
+        attackExperience = _experience;
+    }
+
+    public int getAttackCost() {
+        return attackCost;
+    }
+
+    public int getAttackExperience() {
+        return attackExperience;
+    }
+
 
     public boolean isLeaf() {
         return (originNode == null);
@@ -93,6 +121,17 @@ public class Attack extends AttackElement {
     public boolean isFinal() {
         return destinationNodes.size() == 0;
 
+    }
+
+    public Point getMinimalCostAndExperience() {
+
+        // Leaf attack?
+        if (originNode == null) {
+            return new Point(attackCost, attackExperience);
+        }
+
+        // Intermediate attack. Needs to compute its resulting cost and experience
+        return originNode.getMinimalCostAndExperience();
     }
 
 }

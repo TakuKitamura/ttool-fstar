@@ -39,7 +39,11 @@
 
 package attacktrees;
 
+import myutil.TraceManager;
+
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -149,6 +153,55 @@ public class AttackTree extends AttackElement {
         }
 
         return true;
+    }
+
+
+    public HashMap<Attack, Point> getAllMinimalCostAndExperience() {
+        if ((attacks == null) || (attacks.size() == 0)) {
+            TraceManager.addDev("Null attacks");
+            return null;
+        }
+
+        HashMap<Attack, Point> map = new HashMap<>();
+        for(Attack attack: attacks) {
+            if (attack.isRoot()) {
+                Point p = attack.getMinimalCostAndExperience();
+                if (p != null) {
+                    map.put(attack, p);
+                }
+            }
+        }
+
+        return map;
+
+    }
+
+    public Point getMinimalCostAndExperience() {
+
+        if ((attacks == null) || (attacks.size() == 0)) {
+            TraceManager.addDev("Null attacks");
+            return null;
+        }
+
+        // Must find the root attack
+        Attack rootAttack = null;
+        for(Attack attack: attacks) {
+            if (attack.isRoot()) {
+                rootAttack = attack;
+                break;
+            }
+        }
+
+        if (rootAttack == null) {
+            TraceManager.addDev("No root attack");
+            return null;
+        }
+
+        TraceManager.addDev("Considering root attack:" + rootAttack.getName());
+
+        Point p = rootAttack.getMinimalCostAndExperience();
+
+        return p;
     }
 
 }

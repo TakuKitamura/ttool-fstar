@@ -41,6 +41,10 @@
 
 package attacktrees;
 
+import myutil.TraceManager;
+
+import java.awt.*;
+
 /**
  * Class ORNode
  * Creation: 13/04/2015
@@ -50,9 +54,29 @@ package attacktrees;
 public class ORNode extends BooleanNode {
     
     public ORNode(String _name, Object _referenceObject) {
-	super(_name, _referenceObject);
-	type = "OR";
+        super(_name, _referenceObject);
+        type = "OR";
     }
-    
+
+    public Point getMinimalCostAndExperience() {
+        TraceManager.addDev("In node: " + this.getClass());
+
+        if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
+            return new Point(0, 0);
+        }
+
+        // Built from the lower attacks. Assume all attacks are necessary
+
+        int attackCost = Integer.MAX_VALUE;
+        int attackExperience = Attack.EXPERIENCE_EXPERT;
+
+        for(Attack attack: inputAttacks) {
+            Point p = attack.getMinimalCostAndExperience();
+            attackCost = Math.min(p.x, attackCost);
+            attackExperience = Math.min(attackExperience, p.y);
+        }
+
+        return new Point(attackCost, attackExperience);
+    }
     
 }

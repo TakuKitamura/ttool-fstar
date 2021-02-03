@@ -38,6 +38,8 @@
 
 package ui;
 
+import attacktrees.Attack;
+import attacktrees.AttackTree;
 import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
@@ -8498,6 +8500,18 @@ public class GTURTLEModeling {
         if ((checkingErrors != null) && (checkingErrors.size() > 0)) {
             return false;
         }
+
+        // Compute min cost and experience
+        TraceManager.addDev("Min cost and experience:");
+        AttackTree at = att.getAttackTree();
+        Point p = at.getMinimalCostAndExperience();
+        if (p == null) {
+            TraceManager.addDev("-> Null answer");
+        } else {
+            TraceManager.addDev("-> " + p.getX() + ", " + p.getY() + " [" + Attack.EXPERIENCES[(int)(p.getY())] + "]");
+        }
+
+
         avatarspec = att.generateAvatarSpec();
         //TraceManager.addDev("Avatar spec:" + avatarspec);
         return true;

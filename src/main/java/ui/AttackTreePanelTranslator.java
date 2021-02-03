@@ -75,6 +75,10 @@ public class AttackTreePanelTranslator {
         panels = new LinkedList<TDiagramPanel>();
     }
 
+    public AttackTree getAttackTree() {
+        return at;
+    }
+
     public List<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
@@ -90,8 +94,7 @@ public class AttackTreePanelTranslator {
     public AttackTree translateToAttackTreeDataStructure() {
 
         at = new AttackTree("AttackTree", atp);
-
-
+        
         for (TDiagramPanel panel : atp.panels) {
             if (panel instanceof AttackTreeDiagramPanel) {
                 translate((AttackTreeDiagramPanel) panel);
@@ -132,6 +135,8 @@ public class AttackTreePanelTranslator {
                 att = new Attack(value, atdatt);
                 att.setRoot(atdatt.isRootAttack());
                 att.setEnabled(atdatt.isEnabled());
+                att.setAttackCost(atdatt.getAttackCost());
+                att.setAttackExperience(atdatt.getAttackExperience());
                 at.addAttack(att);
                 listE.addCor(att, comp);
             }
