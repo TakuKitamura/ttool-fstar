@@ -8491,8 +8491,8 @@ public class GTURTLEModeling {
         }
     }
 
-    public boolean translateAttackTreePanel(AttackTreePanel atp) {
-        AttackTreePanelTranslator att = new AttackTreePanelTranslator(atp);
+    public boolean translateAttackTreePanel(AttackTreePanel atp, int index) {
+        AttackTreePanelTranslator att = new AttackTreePanelTranslator(atp, index);
         /*attackTree =*/
         att.translateToAttackTreeDataStructure();
         checkingErrors = att.getCheckingErrors();

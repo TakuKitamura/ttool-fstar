@@ -3786,7 +3786,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         } else if (tp instanceof AttackTreePanel) {
             AttackTreePanel atp = (AttackTreePanel) tp;
-            b = gtm.translateAttackTreePanel(atp);
+            b = gtm.translateAttackTreePanel(atp, getTDiagramPanelIndex());
             expandToWarnings();
             expandToErrors();
             if (b) {
@@ -4850,6 +4850,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
          */
 
     }
+    
+    
+    
+    
+    
+    
+    
 
     public void avatarSimulation() {
         TraceManager.addDev("Avatar simulation");
@@ -7669,6 +7676,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             return tp.panels.elementAt(tp.tabbedPane.getSelectedIndex());
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public int getTDiagramPanelIndex() {
+        try {
+            TURTLEPanel tp = tabs.elementAt(mainTabbedPane.getSelectedIndex());
+            return tp.tabbedPane.getSelectedIndex();
+        } catch (Exception e) {
+            return -1;
         }
     }
 

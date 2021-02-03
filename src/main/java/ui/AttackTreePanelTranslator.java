@@ -55,6 +55,7 @@ import java.util.List;
  */
 public class AttackTreePanelTranslator {
 
+    protected int index;
     protected AttackTree at;
     protected AttackTreePanel atp;
     protected List<CheckingError> checkingErrors, warnings;
@@ -65,6 +66,16 @@ public class AttackTreePanelTranslator {
 
     public AttackTreePanelTranslator(AttackTreePanel _atp) {
         atp = _atp;
+        index = 0;
+        reinit();
+    }
+
+    public AttackTreePanelTranslator(AttackTreePanel _atp, int _index) {
+        atp = _atp;
+        index = _index;
+        if (index < 0) {
+            index = 0;
+        }
         reinit();
     }
 
@@ -94,19 +105,19 @@ public class AttackTreePanelTranslator {
     public AttackTree translateToAttackTreeDataStructure() {
 
         at = new AttackTree("AttackTree", atp);
-        
-        for (TDiagramPanel panel : atp.panels) {
-            if (panel instanceof AttackTreeDiagramPanel) {
-                translate((AttackTreeDiagramPanel) panel);
-                boolean b = at.checkSyntax();
-                if (!b) {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, at.errorOfFaultyElement);
-                    ce.setTGComponent((TGComponent) (at.faultyElement.getReferenceObject()));
-                    ce.setTDiagramPanel(panel);
-                    addCheckingError(ce);
-                }
-                return at;
+
+        TDiagramPanel panel = atp.panels.get(index);
+
+        if ((panel != null) && (panel instanceof AttackTreeDiagramPanel)) {
+            translate((AttackTreeDiagramPanel) panel);
+            boolean b = at.checkSyntax();
+            if (!b) {
+                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, at.errorOfFaultyElement);
+                ce.setTGComponent((TGComponent) (at.faultyElement.getReferenceObject()));
+                ce.setTDiagramPanel(panel);
+                addCheckingError(ce);
             }
+            return at;
         }
 
 
