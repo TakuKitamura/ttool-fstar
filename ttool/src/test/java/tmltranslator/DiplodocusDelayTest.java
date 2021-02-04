@@ -40,8 +40,8 @@ public class DiplodocusDelayTest extends AbstractUITest {
     //model for Delay task with penalties
     final int [] NB_Of_DELAY_STATES_PENALTIES = {42, 42, 42, 42, 32, 32};
     final int [] NB_Of_DELAY_TRANSTIONS_PENALTIES = {41, 41, 41, 41, 31, 31};
-    final int [] MIN_DELAY_CYCLES_PENALTIES = {2590, 2590, 2670, 2670, 2010, 2340};
-    final int [] MAX_DELAY_CYCLES_PENALTIES = {2590, 2590, 2670, 2670, 2010, 2340};
+    final int [] MIN_DELAY_CYCLES_PENALTIES = {2590, 2590, 2660, 2660, 2010, 2340};
+    final int [] MAX_DELAY_CYCLES_PENALTIES = {2590, 2590, 2660, 2660, 2010, 2340};
     // test for read and write active delay parameter
     final String [] MODELS_DELAY_READ_WRITE = {"delayRW"};
     final static String EXPECTED_FILE1 = getBaseResourcesDir() + "tmltranslator/expected/expected_specdelay_readwrite.tml";

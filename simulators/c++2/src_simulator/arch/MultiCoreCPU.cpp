@@ -344,17 +344,42 @@ std::cout<<"addTransaction"<<_name<<std::endl;
    // unsigned int iCoreNumber=getCoreNumber();
     static unsigned int time=0;
     // std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
-    multiCore[coreNumber]=_endSchedule;
+//    multiCore[coreNumber]=_endSchedule;
   //  std::cout<<"cycle time is "<<_cycleTime<<std::endl;
     if (time < amountOfCore -1){
-	  _endSchedule=0;
-	  _nextTransaction->setTransactCoreNumber(coreNumber);
-	  ++coreNumber;
+//	  _endSchedule=0;
+        // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
+        if ((_nextTransaction != NULL  && _lastTransaction != NULL && !(_lastTransaction->getCommand()->getActiveDelay()) && _lastTransaction->getCommand()->isDelayTransaction())) {
+            if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
+                _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
+                multiCore[_lastTransaction->getTransactCoreNumber()] = _endSchedule;
+            } else {
+                _nextTransaction->setTransactCoreNumber(coreNumber);
+                multiCore[coreNumber] = _endSchedule;
+            }
+        } else if (_nextTransaction != NULL) {
+            _nextTransaction->setTransactCoreNumber(coreNumber);
+            multiCore[coreNumber] = _endSchedule;
+        }
+
+        ++coreNumber;
 	 
-     }else {
-	  _nextTransaction->setTransactCoreNumber(coreNumber);
-	  _endSchedule=getMinEndSchedule();
- 	 	
+    } else {
+        // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
+        if ((_nextTransaction != NULL  && _lastTransaction != NULL && !(_lastTransaction->getCommand()->getActiveDelay()) && _lastTransaction->getCommand()->isDelayTransaction())) {
+            if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
+                _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
+                multiCore[_lastTransaction->getTransactCoreNumber()] = _endSchedule;
+            } else {
+                _nextTransaction->setTransactCoreNumber(coreNumber);
+                multiCore[coreNumber] = _endSchedule;
+            }
+        } else if (_nextTransaction != NULL) {
+            _nextTransaction->setTransactCoreNumber(coreNumber);
+            multiCore[coreNumber] = _endSchedule;
+        }
+
+        _endSchedule = getMinEndSchedule();
     }
     time++;
     if(!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))
