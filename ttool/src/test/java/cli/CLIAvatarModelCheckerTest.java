@@ -122,7 +122,7 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
 
 	
-	/*@Test
+	@Test
     public void testStateLimitCoffeeMachine() {
         String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_n";
         String script;
@@ -379,6 +379,6 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
         assertTrue(graph.getNbOfTransitions() == 5);
 
 
-    }*/
+    }
 
 }
