@@ -111,8 +111,9 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
         System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
                 graph.getNbOfTransitions());
-        assertTrue(graph.getNbOfStates() == 10);
-        assertTrue(graph.getNbOfTransitions() == 10);
+        assertTrue(graph.getNbOfStates() == 14);
+        assertTrue(graph.getNbOfTransitions() == 16);
+
 
         // Graph minimization
 
