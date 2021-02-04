@@ -145,7 +145,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     		list.add(""+i);
     	}
     	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	panel2.add(new JLabel("Priority:"), c1);
+    	panel2.add(new JLabel("Priority: (0: highest priority)"), c1);
     	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
     	priority = new JComboBox<String>(list);
     	priority.setSelectedIndex(artifact.getPriority());
