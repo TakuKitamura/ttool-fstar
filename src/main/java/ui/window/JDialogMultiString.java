@@ -243,7 +243,11 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         } else if (inserts != null) {
             for (int i = 0; i < inserts.length; i++) {
                 if (evt.getSource() == inserts[i]) {
-                    texts[i].setText(helps.get(i).getSelectedItem().toString());
+                    if (helps.get(i) != null) {
+                        if (helps.get(i).getSelectedItem() != null) {
+                            texts[i].setText(helps.get(i).getSelectedItem().toString());
+                        }
+                    }
                 }
             }
         }

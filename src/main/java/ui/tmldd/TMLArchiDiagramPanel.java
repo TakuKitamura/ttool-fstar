@@ -119,17 +119,19 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         if (node != null && node instanceof TMLArchiCPNode) {
             listOfCP = getListOfCPNodes();
         } else if (node != null) {
-            for (TGComponent node1 : listOfCP.keySet()) {
-                Vector <String> tempList = new Vector<>();
-                boolean isContain = false;
-                for (int i = 0; i < listOfCP.get(node1).size(); i++) {
-                    tempList.add(listOfCP.get(node1).get(i).getName() + " " + listOfCP.get(node1).get(i).getTGC().getName());
-                    if(listOfCP.get(node1).get(i).getTGC() == node) isContain = true;
+            if (listOfCP != null) {
+                for (TGComponent node1 : listOfCP.keySet()) {
+                    Vector<String> tempList = new Vector<>();
+                    boolean isContain = false;
+                    for (int i = 0; i < listOfCP.get(node1).size(); i++) {
+                        tempList.add(listOfCP.get(node1).get(i).getName() + " " + listOfCP.get(node1).get(i).getTGC().getName());
+                        if (listOfCP.get(node1).get(i).getTGC() == node) isContain = true;
+                    }
+                    if (!isContain)
+                        continue;
+                    else
+                        ((TMLArchiCPNode) node1).setMappedUnits(tempList);
                 }
-                if (!isContain)
-                    continue;
-                else
-                    ((TMLArchiCPNode) node1).setMappedUnits(tempList);
             }
         } else {
             System.out.println(" Nothing is selected");
