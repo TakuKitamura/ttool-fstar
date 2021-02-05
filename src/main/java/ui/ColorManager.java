@@ -151,6 +151,7 @@ public class ColorManager {
     //public static  Color ATD_BLOCK = new Color(196, 232, 195);
     public static  Color ATD_BLOCK = new Color(218, 218, 218);
     public static  Color ATD_ATTACK = new Color(214, 187, 158);
+    public static  Color ATD_ATTACKER_POPULATION = new Color(255, 180, 105);
 
     // Issue # 69: Using default disabled color
     //public static  Color ATD_ATTACK_DISABLED = new Color(214, 206, 198);

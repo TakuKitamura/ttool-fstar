@@ -39,33 +39,64 @@
 
 package attacktrees;
 
-import java.util.ArrayList;
 
+import myutil.Conversion;
 
 /**
- * Class AttackElement
- * Creation: 31/01/2018
+ * Class Attacker
+ * Creation: 04/02/2021
  *
  * @author Ludovic APVRILLE
- * @version 1.0 31/01/2018
+ * @version 1.0 04/02/2021
  */
-public abstract class AttackElement {
-    protected String name;
-    protected Object referenceObject;
+public class AttackerGroup extends AttackElement {
+    public Attacker attacker;
+    public int occurrence;
 
-    public AttackElement(String _name, Object _referenceObject) {
-        name = _name;
-        referenceObject = _referenceObject;
+    public AttackerGroup(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        attacker = new Attacker(_name, _referenceObject);
     }
 
-    public void setName(String _name) {
-        name = _name;
+    public String toString() {
+        String ret = name + " Money: " + attacker.money;
+        if ((attacker.expertise >= 0) && (attacker.expertise < Attack.EXPERIENCES.length)) {
+            ret += " Expertise: " + Attack.EXPERIENCES[attacker.expertise];
+        } else {
+            ret += " Expertise: " + attacker.expertise;
+        }
+
+        ret += " number: " + occurrence;
+        return ret;
     }
 
-    public String getName() {
-        return name;
+    public int getMoney() {
+        return attacker.money;
     }
 
-    public Object getReferenceObject() { return referenceObject; }
+    public int getExpertise() {
+        return attacker.expertise;
+    }
+
+    public int getOccurrence() {
+        return occurrence;
+    }
+
+    public static boolean isValidOccurrence(String _occurence) {
+        if ((_occurence == null) || (_occurence.length() == 0)) {
+            return false;
+        }
+
+        if (!Conversion.isInteger(_occurence)) {
+            return false;
+        }
+
+        int myOccurence = Integer.decode(_occurence);
+        if (myOccurence <= 0) {
+            return false;
+        }
+
+        return true;
+    }
 
 }

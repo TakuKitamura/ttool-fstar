@@ -117,7 +117,7 @@ public class IconManager {
 
     // Attack Tree Diagrams
     public static ImageIcon imgic1070, imgic1072, imgic1074, imgic1076, imgic1078;
-    public static ImageIcon imgic1080, imgic1082, imgic1084;
+    public static ImageIcon imgic1080, imgic1082, imgic1084, imgic1086;
 
     // Fault Tree Diagrams
     public static ImageIcon imgic1400, imgic1402, imgic1404, imgic1406, imgic1408;
@@ -520,6 +520,7 @@ public class IconManager {
     private static String icon1080 = "atdlink.gif";
     private static String icon1082 = "atdcountermeasure.gif";
     private static String icon1084 = "atdcountermeasureconnector.gif";
+    private static String icon1086 = "atdattackerpopulation.gif";
 
     // Fault trees
     private static String icon1400 = "AndFT.png";
@@ -1041,6 +1042,7 @@ public class IconManager {
         imgic1080 = getIcon(icon1080);
         imgic1082 = getIcon(icon1082);
         imgic1084 = getIcon(icon1084);
+        imgic1086 = getIcon(icon1086);
 
         imgic1400 = getIcon(icon1400);
         if (imgic1400 != null) {

@@ -314,6 +314,7 @@ public class TGComponentManager {
     public static final int ATD_ATTACK = 1401;
     public static final int ATD_CONSTRAINT = 1402;
     public static final int ATD_COUNTERMEASURE = 1403;
+    public static final int ATD_ATTACKER_POPULATION = 1404;
 
     public static final int FTD_BLOCK = 6100;
     public static final int FTD_FAULT = 6101;
@@ -1107,6 +1108,9 @@ public class TGComponentManager {
                 break;
             case ATD_ATTACK:
                 tgc = new ATDAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ATD_ATTACKER_POPULATION:
+                tgc = new ATDAttackerPopulation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case ATD_CONSTRAINT:
                 tgc = new ATDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -2084,6 +2088,8 @@ public class TGComponentManager {
             return ATD_BLOCK;
         } else if (tgc instanceof ATDAttack) {
             return ATD_ATTACK;
+        } else if (tgc instanceof ATDAttackerPopulation) {
+            return ATD_ATTACKER_POPULATION;
         } else if (tgc instanceof ATDCountermeasure) {
             return ATD_COUNTERMEASURE;
         } else if (tgc instanceof ATDConstraint) {

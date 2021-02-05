@@ -75,7 +75,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
 	private ArchUnitMEC MECType;
     
   //protected JTextField taskName;
-	protected JComboBox<String> referenceTaskName, priority, operationsListCB;
+  private JComboBox<String> referenceTaskName, priority, operationsListCB;
 	
 	private JTabbedPane tabbedPane;
     

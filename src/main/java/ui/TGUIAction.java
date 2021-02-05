@@ -403,6 +403,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int ATD_BLOCK = 284;
     public static final int ATD_ATTACK = 285;
+    public static final int ATD_ATTACKER_POPULATION = 532;
     public static final int ATD_ATTACK_CONNECTOR = 286;
     public static final int ATD_COMPOSITION_CONNECTOR = 288;
     public static final int ATD_CONSTRAINT = 287;
@@ -688,7 +689,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;   
-    public static final int NB_ACTION = 532;
+    public static final int NB_ACTION = 533;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1289,6 +1290,11 @@ public class TGUIAction extends AbstractAction {
         // Attack Tree Diagrams
         actions[ATD_BLOCK] = new TAction("atd-block", "Add a block", IconManager.imgic1070, IconManager.imgic1070, "Block", "Add a SysML Block to the currently opened attack tree diagram", 0);
         actions[ATD_ATTACK] = new TAction("atd-attack", "Add an attack", IconManager.imgic1072, IconManager.imgic1072, "Attack", "Add an attack (i.e. a SysML value type) to the currently opened attack tree diagram", 0);
+        actions[ATD_ATTACKER_POPULATION] = new TAction("atd-attacker-population", "Add an attack", IconManager.imgic1086,
+                IconManager.imgic1086,
+                "Attacker population",
+                "Add an attack (i.e. a SysML value type) to the currently opened attack tree diagram", 0);
+
         actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
         actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
         actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add a constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);

@@ -39,6 +39,9 @@
 
 package attacktrees;
 
+import myutil.Conversion;
+import ui.TAttribute;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,34 +57,70 @@ import java.util.HashMap;
  */
 public class AttackerPopulation extends AttackElement {
 
-    private HashMap<Attacker, Integer> population;
+    private ArrayList<AttackerGroup> groups;
     
     public AttackerPopulation(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        population = new HashMap<>();
+        groups = new ArrayList<>();
     }
 
     public void addAttacker(Attacker attacker, int nb) {
-        population.put(attacker, new Integer(nb));
+        AttackerGroup ag = new AttackerGroup(attacker.getName() + "_group", attacker.getReferenceObject());
+        ag.attacker = attacker;
+        ag.occurrence = nb;
+        groups.add(ag);
+    }
+
+    public void addAttackerGroup(AttackerGroup _group) {
+        groups.add(_group);
+    }
+
+    public AttackerGroup addAttackerGroup(String _name, String _money, String _expertise, String _occurrence) {
+        if (!Attacker.isValidID(_name)) {
+            return null;
+        }
+
+        if (!Attacker.isValidMoney(_money)) {
+            return null;
+        }
+
+        if (!Attacker.isValidExpertise(_expertise)) {
+            return null;
+        }
+
+        if (!AttackerGroup.isValidOccurrence(_occurrence)) {
+            return null;
+        }
+
+        AttackerGroup ag = new AttackerGroup(_name, getReferenceObject());
+        ag.attacker.money = Integer.decode(_money);
+        ag.attacker.expertise = Integer.decode(_expertise);
+        ag.occurrence = Integer.decode(_occurrence);
+
+        groups.add(ag);
+
+        return ag;
     }
 
     public int getTotalPopulation() {
         int cpt = 0;
-        for(Integer nb: population.values()) {
-            cpt += nb.intValue();
+        for(AttackerGroup ag: groups) {
+            cpt += ag.occurrence;
         }
         return cpt;
     }
 
-    public int getNbOfAttackersWith(int money, int expertise) {
-        int cpt = 0;
-        for(Attacker att: population.keySet()) {
-            if ((att.money >= money) && (att.expertise >= expertise)) {
-                cpt += population.get(att).intValue();
-            }
-        }
-        return cpt;
+    public void setGroup(ArrayList<AttackerGroup> _newGroup) {
+        groups.clear();
+        groups.addAll(_newGroup);
     }
+
+
+
+    public ArrayList<AttackerGroup> getAttackerGroups() {
+        return groups;
+    }
+
 
 
 }

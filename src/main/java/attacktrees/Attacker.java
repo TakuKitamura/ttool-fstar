@@ -39,9 +39,9 @@
 
 package attacktrees;
 
-import java.awt.*;
-import java.util.ArrayList;
 
+import myutil.Conversion;
+import ui.TAttribute;
 
 /**
  * Class Attacker
@@ -57,4 +57,46 @@ public class Attacker extends AttackElement {
     public Attacker(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
+
+    public String toString() {
+        String ret = name + " Money: " + money;
+        if ((expertise > 0) && (expertise < Attack.EXPERIENCES.length)) {
+            ret += " Expertise: " + Attack.EXPERIENCES[expertise];
+        } else {
+            ret += "Expertise: " + expertise;
+        }
+        return ret;
+    }
+
+    public static boolean isValidMoney(String _money) {
+        if ((_money == null) || (_money.length() == 0)) {
+            return false;
+        }
+
+        if (!Conversion.isInteger(_money)) {
+            return false;
+        }
+
+        int myMoney = Integer.decode(_money);
+        return myMoney >= 0;
+    }
+
+    public static boolean isValidID(String _id) {
+        return TAttribute.isAValidId(_id, false, false, false);
+    }
+
+    public static boolean isValidExpertise(String _expertise) {
+        if ((_expertise == null) || (_expertise.length() == 0)) {
+            return false;
+        }
+
+        if (!Conversion.isInteger(_expertise)) {
+            return false;
+        }
+
+        int myExpertise = Integer.decode(_expertise);
+
+        return (myExpertise >= 0) && (myExpertise < Attack.EXPERIENCES.length);
+    }
+
 }

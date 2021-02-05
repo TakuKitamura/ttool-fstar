@@ -74,6 +74,8 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
+        mgui.actions[TGUIAction.ATD_ATTACKER_POPULATION].setEnabled(b);
+
         mgui.actions[TGUIAction.ATD_BLOCK].setEnabled(b);
         mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].setEnabled(b);
 
@@ -111,6 +113,11 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 
         button = this.add(mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.ATD_ATTACKER_POPULATION]);
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
