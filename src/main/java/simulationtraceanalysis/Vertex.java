@@ -1,11 +1,11 @@
-package ui.simulationtraceanalysis;
+package simulationtraceanalysis;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class vertex {
-    protected static final int TYPE_CHANNEL = 11;
+public class Vertex {
+    private static final int TYPE_CHANNEL = 11;
     protected static final int TYPE_FOR_EVER_LOOP = 1;
     protected static final int TYPE_STATIC_FOR_LOOP = 2;
     protected static final int TYPE_FOR_LOOP = 3;
@@ -28,7 +28,7 @@ public class vertex {
     private HashMap<String, Integer> taintConsideredNumber = new HashMap<String, Integer>();; // the number of times the taint should be considered
     private HashMap<String, Integer> maxTaintFixedNumber = new HashMap<String, Integer>();
 
-    public vertex(String name, int id) {
+    public Vertex(String name, int id) {
         this.name = name;
         this.id = id;
         this.label = this.getLabel();
@@ -65,7 +65,7 @@ public class vertex {
     }
 
     public boolean equals(Object o) {
-        return (o instanceof vertex) && (toString().equals(o.toString()));
+        return (o instanceof Vertex) && (toString().equals(o.toString()));
     }
 
     public List<String> getLabel() {
@@ -79,6 +79,10 @@ public class vertex {
     public void addLabel(String l) {
         this.label.add(l);
         this.getTaintConsideredNumber().put(l, 0);
+    }
+
+    public static int getTypeChannel() {
+        return TYPE_CHANNEL;
     }
 
     public String getLastLabel() {

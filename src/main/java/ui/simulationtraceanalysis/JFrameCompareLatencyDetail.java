@@ -10,9 +10,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.BorderFactory;
@@ -44,6 +45,7 @@ import common.ConfigurationTTool;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
 import myutil.TraceManager;
+import simulationtraceanalysis.DependencyGraphTranslator;
 import tmltranslator.TMLMapping;
 import ui.ColorManager;
 import ui.MainGUI;
@@ -56,7 +58,7 @@ import ui.interactivesimulation.SimulationTransactionParser;
 public class JFrameCompareLatencyDetail extends JFrame implements ActionListener {
     private JButton buttonClose, buttonShowDGraph1, buttonShowDGraph2, buttonDetailedAnalysis, buttonCompareInDetails;
     private LatencyDetailedAnalysisActions[] actions;
-    private DirectedGraphTranslator dgraph1, dgraph2;
+    private DependencyGraphTranslator dgraph1, dgraph2;
     private JPanel loadxml, commandTab, jp05, graphAnalysisResult, jp03, jp04, loadmodel, progressBarpanel;
     private JTextArea jta;
     private JScrollPane jsp;
@@ -89,7 +91,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     private JLabel pBarLabel;
     private TMLMapping<TGComponent> map;
     private List<TMLComponentDesignPanel> cpanels;
-    private DirectedGraphTranslator dgraph;
+    private DependencyGraphTranslator dgraph;
     private LatencyAnalysisParallelAlgorithms tc;
     private JCheckBox taintFirstOp, considerRules;
     private static final String START_TIME_COL_NAME = "Start Time ";
@@ -102,7 +104,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     public JFrameCompareLatencyDetail(latencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
             TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b,
             LatencyAnalysisParallelAlgorithms tc1) throws InterruptedException {
-        super("Latency Comparision");
+        super("Latency Comparison");
         this.setVisible(b);
         tc = tc1;
         mainGUI = mgui;
@@ -358,7 +360,26 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
 
     protected void generateDirectedGraph1(TMLMapping<TGComponent> map, List<TMLComponentDesignPanel> cpanels) {
         try {
-            dgraph = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis, this, map, cpanels, 1);
+            dgraph = new DependencyGraphTranslator(map);
+            dgraph.addPropertyChangeListener(new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent e) {
+                    if (e.getPropertyName().equals("progress")) {
+                        int progress = (Integer) e.getNewValue();
+                        // Update the progress bar's value with the value of the progress property.
+                        if (pbar.getValue() == pbar.getMaximum()) {
+                            updateBar(0);
+                        } else {
+                            updateBar(progress);
+                        }
+                        pack();
+                        revalidate();
+                        repaint();
+                    }
+                }
+            });
+            dgraph.DrawDirectedGraph();
+            pbar.setMaximum(dgraph.getNodeNbProgressBar());
+            pbar.setMinimum(0);
             dgraph1 = dgraph;
             jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet()
                     + " edges has been successfully generated.\n");
@@ -531,7 +552,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         }
     }
 
-    private void showgraphFrame(DirectedGraphTranslator dgraph) {
+    private void showgraphFrame(DependencyGraphTranslator dgraph) {
         try {
             dgraph.showGraph(dgraph);
             // jta.append("Refer to the generatd dialog to view the graph.\n");
@@ -668,11 +689,11 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         return tableData;
     }
 
-    public DirectedGraphTranslator getDgraph2() {
+    public DependencyGraphTranslator getDgraph2() {
         return dgraph2;
     }
 
-    public void setDgraph2(DirectedGraphTranslator dgraph2) {
+    public void setDgraph2(DependencyGraphTranslator dgraph2) {
         this.dgraph2 = dgraph2;
     }
 
@@ -688,11 +709,11 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         this.pbar = pbar;
     }
 
-    public DirectedGraphTranslator getDgraph() {
+    public DependencyGraphTranslator getDgraph() {
         return dgraph;
     }
 
-    public void setDgraph(DirectedGraphTranslator dgraph) {
+    public void setDgraph(DependencyGraphTranslator dgraph) {
         this.dgraph = dgraph;
     }
     // public Thread getT() {

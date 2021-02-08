@@ -76,7 +76,10 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_SHOW_ALL_OP = 17;
     public static final int ACT_LOAD_ALL_OP = 18;
     public static final int ACT_LOAD_ALL_OP2 = 19;
-    public static final int NB_ACTION = 20;
+    public static final int ACT_COMPARE_PARSE = 20;
+    public static final int ACT_COMPARE_DIFF = 21;
+    public static final int ACT_COMPARE_CLOSE = 22;
+    public static final int NB_ACTION = 23;
     private static final TAction[] actions = new TAction[NB_ACTION];
     private EventListenerList listeners;
     public static final String JLF_IMAGE_DIR = "";
@@ -145,6 +148,11 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "Load Task Operators", "Load Task Operators", 'T');
         actions[ACT_LOAD_ALL_OP2] = new TAction("load-operators_list2", "Load Task Operators", IconManager.imgic29, IconManager.imgic29,
                 "Load Task Operators", "Load Task Operators", 'T');
+        actions[ACT_COMPARE_CLOSE] = new TAction("stop-and-close-all", "Terminate Compare", IconManager.imgic27, IconManager.imgic27,
+                "Terminate Compare", "Compare", 'T');
+        actions[ACT_COMPARE_PARSE] = new TAction("parse", "Parse", IconManager.imgic53, IconManager.imgic53, "Parse", "Parse", 'C');
+        actions[ACT_COMPARE_DIFF] = new TAction("difference", "View Difference", IconManager.imgic29, IconManager.imgic29, "View Difference",
+                "View Difference", 'T');
     }
 
     public String getActionCommand() {

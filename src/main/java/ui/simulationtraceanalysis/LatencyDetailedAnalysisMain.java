@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.Map.Entry;
+import java.util.Vector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import myutil.GraphicLib;
 import myutil.TraceManager;
+import simulationtraceanalysis.DependencyGraphTranslator;
 import tmltranslator.TMLMapping;
 import ui.MainGUI;
 import ui.SimulationTrace;
@@ -31,7 +32,7 @@ import ui.tmldd.TMLArchiNode;
 import ui.util.IconManager;
 import ui.window.JDialogToChosePanel;
 
-public class latencyDetailedAnalysisMain {
+public class LatencyDetailedAnalysisMain {
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
     private Vector<String> checkedTransactionsFile2 = new Vector<String>();
     private Vector<String> checkedTransactionsFile = new Vector<String>();
@@ -47,7 +48,7 @@ public class latencyDetailedAnalysisMain {
     public static final String TML_COMP_TASK_DIAGRAM = "TML Component Task Diagram";
     public static final String MODEL_PATH = "/siminfo/global/model";
 
-    public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
+    public LatencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
             throws InterruptedException {
         try {
             setTc(new LatencyAnalysisParallelAlgorithms(this));
@@ -199,7 +200,7 @@ public class latencyDetailedAnalysisMain {
     }
 
     public void compareLatencyForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b) throws InterruptedException {
-        final DirectedGraphTranslator dgraph1, dgraph2;
+        final DependencyGraphTranslator dgraph1, dgraph2;
         try {
             checkedTransactionsFile = new Vector<String>();
             latencyDetailedAnalysisForXML(mainGUI, selectedST, false, true, 1);

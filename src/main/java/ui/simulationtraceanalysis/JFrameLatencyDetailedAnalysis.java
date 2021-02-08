@@ -51,16 +51,16 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.Thread.State;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.Map.Entry;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -101,7 +101,7 @@ import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
-import myutil.TraceManager;
+import simulationtraceanalysis.DependencyGraphTranslator;
 import tmltranslator.TMLActivity;
 import tmltranslator.TMLMapping;
 import tmltranslator.TMLTask;
@@ -159,7 +159,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private File file;
     private static Vector<SimulationTransaction> transFile1;
     private JLabel task2, taskL;
-    private DirectedGraphTranslator dgraph;
+    private DependencyGraphTranslator dgraph;
     private JScrollPane scrollPane11, scrollPane12;// , scrollPane13;
     private LatencyAnalysisParallelAlgorithms tc;
     private Boolean allop = false;
@@ -504,13 +504,32 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         pbar.setValue(newValue);
     }
 
-    public DirectedGraphTranslator getDgraph() {
+    public DependencyGraphTranslator getDgraph() {
         return dgraph;
     }
 
     protected void generateDirectedGraph(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels) {
         try {
-            dgraph = new DirectedGraphTranslator(this, jframeCompareLatencyDetail, tmap, cpanels, 0);
+            dgraph = new DependencyGraphTranslator(tmap);
+            pbar.setMaximum(dgraph.getNodeNbProgressBar());
+            pbar.setMinimum(0);
+            dgraph.addPropertyChangeListener(new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent e) {
+                    if (e.getPropertyName().equals("progress")) {
+                        int progress = (Integer) e.getNewValue();
+                        // Update the progress bar's value with the value of the progress property.
+                        if (pbar.getValue() == pbar.getMaximum()) {
+                            updateBar(0);
+                        } else {
+                            updateBar(progress);
+                        }
+                        pack();
+                        revalidate();
+                        repaint();
+                    }
+                }
+            });
+            dgraph.DrawDirectedGraph();
             jta.append("A directed graph with " + dgraph.getGraphsize() + " vertices and " + dgraph.getGraphEdgeSet()
                     + " edges has been successfully generated.\n");
             // buttonSaveDGraph.setEnabled(true);
@@ -518,6 +537,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 jta.append("Warnings: \n ");
                 for (int i = 0; i < dgraph.getWarnings().size(); i++) {
                     jta.append("    - " + dgraph.getWarnings().get(i) + ".\n ");
+                }
+            }
+            if (dgraph.getErrors().size() > 0) {
+                for (int i = 0; i < dgraph.getErrors().size(); i++) {
+                    error(dgraph.getErrors().get(i));
                 }
             }
             buttonShowDGraph.setEnabled(true);
@@ -692,14 +716,22 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             if (selectedIndex == 0) {
                 row1 = table11.getSelectedRow();
                 if (row1 > -1) {
-                    noLatValue = table11.getValueAt(row1, 4).toString();
+                    if (table12.getValueAt(row1, 4) != null) {
+                        noLatValue = table11.getValueAt(row1, 4).toString();
+                    } else {
+                        jta.append("Invaid latency value.\n");
+                    }
                 } else {
                     jta.append("Please select a row before precise analysis.\n");
                 }
             } else if (selectedIndex == 1) {
                 row1 = table12.getSelectedRow();
                 if (row1 > -1) {
-                    noLatValue = table12.getValueAt(row1, 4).toString();
+                    if (table12.getValueAt(row1, 4) != null) {
+                        noLatValue = table12.getValueAt(row1, 4).toString();
+                    } else {
+                        jta.append("Invaid latency value.\n");
+                    }
                 } else {
                     jta.append("Please select a row before precise analysis.\n");
                 }
