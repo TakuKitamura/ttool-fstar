@@ -71,8 +71,12 @@ public class AttackerPopulation extends AttackElement {
         groups.add(ag);
     }
 
-    public void addAttackerGroup(AttackerGroup _group) {
-        groups.add(_group);
+
+    public AttackerGroup addCloneAttackerGroup(AttackerGroup _group) {
+        AttackerGroup ag = new AttackerGroup(_group.getName(), _group.getReferenceObject());
+        ag.setAttributes(_group.getMoney(),_group.getExpertise(), _group.getOccurrence());
+        groups.add(ag);
+        return ag;
     }
 
     public AttackerGroup addAttackerGroup(String _name, String _money, String _expertise, String _occurrence) {
@@ -110,16 +114,39 @@ public class AttackerPopulation extends AttackElement {
         return cpt;
     }
 
+
+
+    public int getTotalAttackers(AttackTree _at) {
+        int cpt = 0;
+        for(AttackerGroup ag: groups) {
+            if (_at.canPerformRootAttack(ag.getMoney(), ag.getExpertise())) {
+                cpt += ag.occurrence;
+            }
+        }
+        return cpt;
+    }
+
     public void setGroup(ArrayList<AttackerGroup> _newGroup) {
         groups.clear();
         groups.addAll(_newGroup);
     }
 
 
-
     public ArrayList<AttackerGroup> getAttackerGroups() {
         return groups;
     }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getName() + ":\n");
+        for(AttackerGroup ag: groups) {
+            sb.append(ag.toString() + "\n");
+        }
+        return sb.toString();
+    }
+
+
+
 
 
 

@@ -39,13 +39,10 @@
 
 package ui.window;
 
-import attacktrees.Attack;
-import attacktrees.Attacker;
-import attacktrees.AttackerGroup;
-import attacktrees.AttackerPopulation;
+import attacktrees.*;
 import myutil.Conversion;
 import myutil.TraceManager;
-import ui.TAttribute;
+import ui.MainGUI;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -64,12 +61,13 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  * @version 2.0 04/02/2021
  */
-public class JDialogAttackerPopulation extends JDialogBase implements ActionListener, ListSelectionListener {
+public class JDialogAttackerPopulation extends JDialogBase implements ActionListener, ListSelectionListener, Runnable {
     protected AttackerPopulation population;
     protected ArrayList<AttackerGroup> groups;
 
     protected JPanel panel1, panel2;
 
+    protected MainGUI mgui;
     protected Frame frame;
 
     protected String attrib = "Attacker group";
@@ -92,14 +90,17 @@ public class JDialogAttackerPopulation extends JDialogBase implements ActionList
     protected JButton upButton;
     protected JButton downButton;
     protected JButton removeButton;
+    protected JButton analyzeButton;
+    protected JTextArea resultArea;
 
     private boolean hasBeenCancelled = true;
 
 
     /* Creates new form  */
-    public JDialogAttackerPopulation(Frame f,
+    public JDialogAttackerPopulation(MainGUI _mgui, Frame f,
                                      String title, AttackerPopulation _population) {
         super(f, title, true);
+        mgui = _mgui;
         frame = f;
         population = _population;
         name = population.getName();
@@ -268,21 +269,39 @@ public class JDialogAttackerPopulation extends JDialogBase implements ActionList
             c.add(panelName, c0);
         }
 
-
         // main panel;
         c0.gridwidth = 1;
-        c0.gridheight = 10;
+        c0.gridheight = 15;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.fill = GridBagConstraints.BOTH;
-
 
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
 
-        c0.gridwidth = 1;
+        // Analysis panel
         c0.gridheight = 1;
+        analyzeButton = new JButton("Analyze");
+        analyzeButton.addActionListener(this);
+        c.add(analyzeButton, c0);
+
+        JPanel jta = new JPanel();
+        jta.setBorder(new javax.swing.border.TitledBorder("Results"));
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        jta.setFont(f);
+        resultArea = new JTextArea();
+        JScrollPane jsp = new JScrollPane(resultArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jsp.setPreferredSize(new Dimension(600, 150));
+        jta.add(jsp);
+        resultArea.append("Click on \"Analyse\" to analyse the current population");
+
+        c0.gridheight = 25;
+        c.add(jta, c0);
+
+
+        c0.gridheight = 1;
+        c0.gridwidth = GridBagConstraints.REMAINDER;
         c0.fill = GridBagConstraints.HORIZONTAL;
 
         initButtons(c0, c, this);
@@ -305,6 +324,9 @@ public class JDialogAttackerPopulation extends JDialogBase implements ActionList
             downAttribute();
         } else if (command.equals("Up")) {
             upAttribute();
+        } else if (evt.getSource() == analyzeButton) {
+            Thread t = new Thread(this);
+            t.start();
         }
     }
 
@@ -437,9 +459,9 @@ public class JDialogAttackerPopulation extends JDialogBase implements ActionList
         } else {
             AttackerGroup a = groups.get(i);
             identifierText.setText(a.getName());
-            moneyText.setText(""+a.getMoney());
+            moneyText.setText("" + a.getMoney());
             expertise.setSelectedIndex(a.getExpertise());
-            nbText.setText(""+a.getOccurrence());
+            nbText.setText("" + a.getOccurrence());
             removeButton.setEnabled(true);
             if (i > 0) {
                 upButton.setEnabled(true);
@@ -476,6 +498,37 @@ public class JDialogAttackerPopulation extends JDialogBase implements ActionList
 
     public boolean hasBeenCancelled() {
         return hasBeenCancelled;
+    }
+
+    // Analysis
+    public void run() {
+        // Must check the syntax of the system
+        resultArea.append("\n\nRunning analysis\n");
+        resultArea.append("\tSyntax checking\n");
+        if (!mgui.checkModelingSyntax(true)) {
+            resultArea.append("\t\t-> KO\n");
+            return;
+        }
+        resultArea.append("\t\t-> OK\n");
+        resultArea.append("\tTree analysis\n");
+        AttackTree at  = mgui.runAttackTreeAnalysis();
+        if (at == null) {
+            resultArea.append("\t\t-> KO\n");
+            return;
+        }
+        resultArea.append("\t\t-> OK\n");
+
+
+
+        AttackerPopulation pop = new AttackerPopulation(population.getName(), population.getReferenceObject());
+        pop.setGroup(groups);
+        int size = pop.getTotalPopulation();
+        int success = pop.getTotalAttackers(at);
+        resultArea.append("\tPopulation analysis\n");
+        resultArea.append("\t\tTotal population: " + size + "\n");
+        resultArea.append("\t\tSuccessful attackers: " + success + "\n");
+        resultArea.append("\t\t% of successful attackers: " + (int)(100.0 * success/size) + "%\n");
+        resultArea.append("\t\tProbability of success: " + ((double)success/size) + "\n");
     }
 
 

@@ -40,6 +40,7 @@ package ui;
 
 import attacktrees.Attack;
 import attacktrees.AttackTree;
+import attacktrees.AttackerPopulation;
 import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;
 import avatartranslator.totpn.AVATAR2TPN;
@@ -8501,20 +8502,29 @@ public class GTURTLEModeling {
             return false;
         }
 
-        // Compute min cost and experience
-        TraceManager.addDev("Min cost and experience:");
-        AttackTree at = att.getAttackTree();
-        Point p = at.getMinimalCostAndExperience();
-        if (p == null) {
-            TraceManager.addDev("-> Null answer");
-        } else {
-            TraceManager.addDev("-> " + p.getX() + ", " + p.getY() + " [" + Attack.EXPERIENCES[(int)(p.getY())] + "]");
+        TraceManager.addDev("Attacker populations:\n");
+        for(AttackerPopulation ap: att.getAttackTree().getAttackerPopulation()) {
+            TraceManager.addDev("Population:\n" + ap.toString() + "\n");
         }
 
 
         avatarspec = att.generateAvatarSpec();
         //TraceManager.addDev("Avatar spec:" + avatarspec);
         return true;
+    }
+
+    public AttackTree getAttackTree(AttackTreePanel atp, int index) {
+        AttackTreePanelTranslator att = new AttackTreePanelTranslator(atp, index);
+        /*attackTree =*/
+        att.translateToAttackTreeDataStructure();
+        checkingErrors = att.getCheckingErrors();
+        warnings = att.getWarnings();
+        if ((checkingErrors != null) && (checkingErrors.size() > 0)) {
+            return null;
+        }
+        return att.getAttackTree();
+
+
     }
 
     public boolean translateFaultTreePanel(FaultTreePanel atp) {

@@ -58,25 +58,25 @@ public class ORNode extends BooleanNode {
         type = "OR";
     }
 
-    public Point getMinimalCostAndExperience() {
-        TraceManager.addDev("In node: " + this.getClass());
+    public boolean canPerformAttack(int _resource, int _experience) {
+
+        //TraceManager.addDev("In node: " + this.getClass());
 
         if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-            return new Point(0, 0);
+            return true;
         }
 
         // Built from the lower attacks. Assume all attacks are necessary
 
-        int attackCost = Integer.MAX_VALUE;
-        int attackExperience = Attack.EXPERIENCE_EXPERT;
-
         for(Attack attack: inputAttacks) {
-            Point p = attack.getMinimalCostAndExperience();
-            attackCost = Math.min(p.x, attackCost);
-            attackExperience = Math.min(attackExperience, p.y);
+            if (attack.canPerformAttack(_resource, _experience)) {
+                return true;
+            }
         }
 
-        return new Point(attackCost, attackExperience);
+        return false;
     }
+
+
     
 }

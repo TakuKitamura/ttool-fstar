@@ -41,6 +41,7 @@ package ui;
 
 import attacktrees.*;
 import avatartranslator.*;
+import myutil.TraceManager;
 import translator.CheckingError;
 import ui.atd.*;
 
@@ -134,6 +135,19 @@ public class AttackTreePanelTranslator {
 
         //Create attacks, nodes
         for (TGComponent comp : allComponents) {
+
+            // Population
+            if (comp instanceof ATDAttackerPopulation) {
+                ATDAttackerPopulation atdap = (ATDAttackerPopulation)comp;
+                AttackerPopulation pop = new AttackerPopulation(atdap.getAttackerPopulation().getName(), comp);
+                for(AttackerGroup ag: atdap.getAttackerPopulation().getAttackerGroups()) {
+                    //TraceManager.addDev("Group: " + ag.toString());
+                    pop.addCloneAttackerGroup(ag);
+                }
+                at.addPopulation(pop);
+            }
+
+            // Attacks
             if (comp instanceof ATDAttack) {
                 ATDAttack atdatt = (ATDAttack) comp;
                 Attack att;

@@ -154,26 +154,24 @@ public abstract class AttackNode extends AttackElement {
         inputValues = newInputValues;
     }
 
-    public Point getMinimalCostAndExperience() {
+    public boolean canPerformAttack(int _resource, int _experience) {
 
-        TraceManager.addDev("In node: " + this.getClass());
+        //TraceManager.addDev("In node: " + this.getClass());
 
         if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-            return new Point(0, 0);
+            return true;
         }
 
         // Built from the lower attacks. Assume all attacks are necessary
 
-        int attackCost = 0;
-        int attackExperience = Attack.EXPERIENCE_BEGINNER;
 
         for(Attack attack: inputAttacks) {
-            Point p = attack.getMinimalCostAndExperience();
-            attackCost += p.x;
-            attackExperience = Math.max(attackExperience, p.y);
+            if (!attack.canPerformAttack(_resource, _experience)) {
+                return false;
+            }
         }
 
-        return new Point(attackCost, attackExperience);
+        return true;
     }
 
 }

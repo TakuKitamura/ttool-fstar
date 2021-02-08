@@ -56,7 +56,7 @@ public class Attack extends AttackElement {
     public final static int EXPERIENCE_AVERAGE = 1;
     public final static int EXPERIENCE_EXPERT = 2;
 
-    public final static String EXPERIENCES [] = {"Beginner", "Average", "Expert"};
+    public final static String EXPERIENCES [] = {"Beginner", "Intermediate", "Expert"};
 
 
     private AttackNode originNode; // If no origin node -> leaf attack
@@ -123,15 +123,15 @@ public class Attack extends AttackElement {
 
     }
 
-    public Point getMinimalCostAndExperience() {
+    public boolean canPerformAttack(int _resource, int _experience) {
 
         // Leaf attack?
         if (originNode == null) {
-            return new Point(attackCost, attackExperience);
+            return (attackCost <= _resource) && (attackExperience <= _experience);
         }
 
         // Intermediate attack. Needs to compute its resulting cost and experience
-        return originNode.getMinimalCostAndExperience();
+        return originNode.canPerformAttack(_resource, _experience);
     }
 
 }

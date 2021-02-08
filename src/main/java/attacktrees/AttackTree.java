@@ -60,11 +60,14 @@ public class AttackTree extends AttackElement {
     public AttackElement faultyElement;
     public String errorOfFaultyElement;
 
+    private ArrayList<AttackerPopulation> populations;
+
 
     public AttackTree(String _name, Object _reference) {
         super(_name, _reference);
-        nodes = new ArrayList<AttackNode>();
-        attacks = new ArrayList<Attack>();
+        nodes = new ArrayList<>();
+        attacks = new ArrayList<>();
+        populations = new ArrayList<>();
     }
 
     public void addNode(AttackNode _node) {
@@ -74,6 +77,8 @@ public class AttackTree extends AttackElement {
     public void addAttack(Attack _attack) {
         attacks.add(_attack);
     }
+
+    public void addPopulation(AttackerPopulation _ap) {populations.add(_ap);}
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
@@ -91,6 +96,8 @@ public class AttackTree extends AttackElement {
     public ArrayList<AttackNode> getAttackNodes() {
         return nodes;
     }
+
+    public ArrayList<AttackerPopulation> getAttackerPopulation() { return populations;}
 
     // Checks:
     // Sequence/after/before nodes have attacks which are ordered (i.e. unique positive number)
@@ -156,32 +163,8 @@ public class AttackTree extends AttackElement {
     }
 
 
-    public HashMap<Attack, Point> getAllMinimalCostAndExperience() {
-        if ((attacks == null) || (attacks.size() == 0)) {
-            TraceManager.addDev("Null attacks");
-            return null;
-        }
 
-        HashMap<Attack, Point> map = new HashMap<>();
-        for(Attack attack: attacks) {
-            if (attack.isRoot()) {
-                Point p = attack.getMinimalCostAndExperience();
-                if (p != null) {
-                    map.put(attack, p);
-                }
-            }
-        }
-
-        return map;
-
-    }
-
-    public Point getMinimalCostAndExperience() {
-
-        if ((attacks == null) || (attacks.size() == 0)) {
-            TraceManager.addDev("Null attacks");
-            return null;
-        }
+    public boolean canPerformRootAttack(int _resource, int _experience) {
 
         // Must find the root attack
         Attack rootAttack = null;
@@ -194,14 +177,33 @@ public class AttackTree extends AttackElement {
 
         if (rootAttack == null) {
             TraceManager.addDev("No root attack");
-            return null;
+            return false;
         }
 
-        TraceManager.addDev("Considering root attack:" + rootAttack.getName());
+        //TraceManager.addDev("Considering root attack:" + rootAttack.getName());
 
-        Point p = rootAttack.getMinimalCostAndExperience();
+        return rootAttack.canPerformAttack(_resource, _experience);
+    }
 
-        return p;
+    public ArrayList<Double> analyse() {
+        ArrayList<Double> ret = new ArrayList<>(populations.size());
+
+        for (AttackerPopulation ap: populations) {
+            double d = ap.getTotalAttackers(this);
+            ret.add(new Double(d/ap.getTotalPopulation()));
+        }
+
+        return ret;
+    }
+
+    public double analyse(String _populationName) {
+        for (AttackerPopulation ap: populations) {
+            if (ap.getName().compareTo(_populationName) == 0) {
+                return ap.getTotalAttackers(this) / ap.getTotalPopulation();
+            }
+        }
+        return -1;
+
     }
 
 

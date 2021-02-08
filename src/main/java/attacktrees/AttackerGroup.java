@@ -41,6 +41,7 @@ package attacktrees;
 
 
 import myutil.Conversion;
+import myutil.TraceManager;
 
 /**
  * Class Attacker
@@ -50,6 +51,8 @@ import myutil.Conversion;
  * @version 1.0 04/02/2021
  */
 public class AttackerGroup extends AttackElement {
+    public static String SEP = "; ";
+
     public Attacker attacker;
     public int occurrence;
 
@@ -59,11 +62,11 @@ public class AttackerGroup extends AttackElement {
     }
 
     public String toString() {
-        String ret = name + " Money: " + attacker.money;
+        String ret = name + SEP + " Money: " + attacker.money + SEP;
         if ((attacker.expertise >= 0) && (attacker.expertise < Attack.EXPERIENCES.length)) {
-            ret += " Expertise: " + Attack.EXPERIENCES[attacker.expertise];
+            ret += " Expertise: " + Attack.EXPERIENCES[attacker.expertise] + SEP;
         } else {
-            ret += " Expertise: " + attacker.expertise;
+            ret += " Expertise: " + attacker.expertise + SEP;
         }
 
         ret += " number: " + occurrence;
@@ -80,6 +83,13 @@ public class AttackerGroup extends AttackElement {
 
     public int getOccurrence() {
         return occurrence;
+    }
+
+    public void setAttributes(int _money, int _expertise, int _occurrence) {
+        TraceManager.addDev("Setting money = " + _money);
+        attacker.money = _money;
+        attacker.expertise = _expertise;
+        occurrence = _occurrence;
     }
 
     public static boolean isValidOccurrence(String _occurence) {

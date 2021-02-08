@@ -55,24 +55,22 @@ public class XORNode extends BooleanNode {
         type = "XOR";
     }
 
-    public Point getMinimalCostAndExperience() {
+    
+    public boolean canPerformAttack(int _resource, int _experience) {
+
         if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-            return new Point(0, 0);
+            return true;
         }
 
         // Built from the lower attacks. Assume all attacks are necessary
-
-        int attackCost = Integer.MAX_VALUE;
-        int attackExperience = Attack.EXPERIENCE_EXPERT;
-
-        for (Attack attack : inputAttacks) {
-            Point p = attack.getMinimalCostAndExperience();
-            attackCost = Math.min(p.x, attackCost);
-            attackExperience = Math.min(attackExperience, p.y);
+        int cpt = 0;
+        for(Attack attack: inputAttacks) {
+            if (attack.canPerformAttack(_resource, _experience)) {
+                cpt ++;
+            }
         }
 
-        return new Point(attackCost, attackExperience);
+        return (cpt == 1);
     }
-
 
 }

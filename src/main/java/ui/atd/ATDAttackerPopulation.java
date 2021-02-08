@@ -138,9 +138,9 @@ public class ATDAttackerPopulation extends TGCScalableWithInternalComponent impl
         String tmp;
         boolean error = false;
 
-        JDialogAttackerPopulation dialog = new JDialogAttackerPopulation(frame, "Setting attackers", population);
+        JDialogAttackerPopulation dialog = new JDialogAttackerPopulation(getTDiagramPanel().getMainGUI(), frame, "Setting attackers", population);
         //     dialog.setSize(450, 350);
-        GraphicLib.centerOnParent(dialog, 850, 350);
+        GraphicLib.centerOnParent(dialog, 950, 650);
         dialog.setVisible(true); // blocked until dialog has been closed
 
         return dialog.hasBeenCancelled();
@@ -218,7 +218,7 @@ public class ATDAttackerPopulation extends TGCScalableWithInternalComponent impl
    }
 
    public String getAttributes() {
-        return "";
+        return population.toString();
    }
 
 

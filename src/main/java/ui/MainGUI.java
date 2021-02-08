@@ -39,6 +39,7 @@
 
 package ui;
 
+import attacktrees.AttackTree;
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -4272,6 +4273,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // dtree.toBeUpdated();
         dtree.forceUpdate();
         return ret;
+    }
+
+    public AttackTree runAttackTreeAnalysis() {
+        AttackTreePanel atp = (AttackTreePanel) getCurrentTURTLEPanel();
+        return gtm.getAttackTree(atp, getTDiagramPanelIndex());
     }
 
     public List<TAttribute> getAllAttributes() {
