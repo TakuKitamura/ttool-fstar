@@ -62,6 +62,10 @@ public class CompareSimulationTrace extends JPanel implements TableModelListener
     private static JTable table;
     private String[] columnNames;
     private Object[][] data;
+    private static final String DEVICE_NAME = "Device Name";
+    private static final String TRACE_NAME = "Trace Name";
+    private static final String TRANS_FILE_2 = "transFile 2";
+    private static final String TRANS_FILE_1 = "transFile 1";
 
     public TableModel JPanelCompareXmlGraph(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2) {
         // super(new GridLayout(1, 0));
@@ -101,8 +105,8 @@ public class CompareSimulationTrace extends JPanel implements TableModelListener
             }
             columnNames = new String[maxTime + 2];
             data = new Object[deviceNames1.size() + deviceNames2.size()][maxTime + 2];
-            columnNames[0] = "Device Name";
-            columnNames[1] = "Trace Name";
+            columnNames[0] = DEVICE_NAME;
+            columnNames[1] = TRACE_NAME;
             for (SimulationTransaction st : transFile1) {
                 for (String dName : deviceNames1) {
                     if (st.deviceName.equals(dName)) {
@@ -118,7 +122,7 @@ public class CompareSimulationTrace extends JPanel implements TableModelListener
                             }
                             data[allDevices.indexOf(dName.concat("1"))][Integer.parseInt(st.startTime) + i + 2] = st.command;
                             ;
-                            data[allDevices.indexOf(dName.concat("1"))][1] = "transFile 1";
+                            data[allDevices.indexOf(dName.concat("1"))][1] = TRANS_FILE_1;
                         }
                     }
                 }
@@ -137,7 +141,7 @@ public class CompareSimulationTrace extends JPanel implements TableModelListener
                                 st.command = writeCommand[0] + " " + sentences2[1];
                             }
                             data[allDevices.indexOf(dName.concat("2"))][Integer.parseInt(st.startTime) + i + 2] = st.command;
-                            data[allDevices.indexOf(dName.concat("2"))][1] = "transFile 2";
+                            data[allDevices.indexOf(dName.concat("2"))][1] = TRANS_FILE_2;
                         }
                     }
                 }

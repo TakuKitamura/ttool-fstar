@@ -25,7 +25,7 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private DependencyGraphTranslator dgraph, dgraph1, dgraph2;
     private int row, row1, row2, row3, row4, selectedIndex;
     private Object[][] dataDetailedByTask, dataDetailedByTask2;
-    private latencyDetailedAnalysisMain main;
+    private LatencyDetailedAnalysisMain main;
     private MainGUI mainGUI;
     private SimulationTrace selectedST;
     private boolean b;
@@ -35,8 +35,8 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private Vector<SimulationTransaction> transFile1, transFile2;
     private String task1, task2, task3, task4;
 
-    public LatencyAnalysisParallelAlgorithms(latencyDetailedAnalysisMain latencyDetailedAnalysisMain) {
-        main = latencyDetailedAnalysisMain;
+    public LatencyAnalysisParallelAlgorithms(LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain) {
+        main = LatencyDetailedAnalysisMain;
     }
 
     public void run() {

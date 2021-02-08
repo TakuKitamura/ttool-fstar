@@ -210,6 +210,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private static final String GET_REQ_ARG_LABEL = "getReqArg";
     private static final String WAIT_ST = "Wait: ";
     private static final String WAIT_EVENT = "Wait event: ";
+    private static final String SEND_EVENT = "Send event: ";
     private static final String STOP_AFTER_INFINITE_LOOP = "Stop after infinite loop";
     private static final String START_OF_FORK = "startOfFork";
     private static final String START_OF_JOIN = "startOfJoin";
@@ -1094,12 +1095,12 @@ public class DependencyGraphTranslator extends SwingWorker {
             String receiveDataPortdetails = "";
             if (sendingPortdetails != null && receivePortdetails != null) {
                 TMLEvent event = waitEvent.getEvent();
-                String nameW = taskAc.getName() + "__" + "Wait event: " + event.getName();
+                String nameW = taskAc.getName() + "__" + WAIT_EVENT + event.getName();
                 dependencyGraphRelations.getWaitEvt().put(nameW, new ArrayList<String>());
                 TMLTask originTasks = waitEvent.getEvent().getOriginTask();
                 for (TMLSendEvent wait_sendEvent : originTasks.getSendEvents()) {
                     event = wait_sendEvent.getEvent();
-                    String nameS = originTasks.getName() + "__" + "Send event: " + event.getName();
+                    String nameS = originTasks.getName() + "__" + SEND_EVENT + event.getName();
                     dependencyGraphRelations.getWaitEvt().get(nameW).add(nameS);
                 }
             } else {
@@ -1165,12 +1166,12 @@ public class DependencyGraphTranslator extends SwingWorker {
                             .add(SENDEVENT + sendingDataPortdetails + "(" + sendingPortparams + ")");
                 } else {
                     TMLEvent event = waitEvent.getEvent();
-                    String nameW = taskAc.getName() + "__" + "Wait event: " + event.getName();
+                    String nameW = taskAc.getName() + "__" + WAIT_EVENT + event.getName();
                     dependencyGraphRelations.getWaitEvt().put(nameW, new ArrayList<String>());
                     TMLTask originTasks = waitEvent.getEvent().getOriginTask();
                     for (TMLSendEvent wait_sendEvent : originTasks.getSendEvents()) {
                         event = wait_sendEvent.getEvent();
-                        String nameS = originTasks.getName() + "__" + "Send event: " + event.getName();
+                        String nameS = originTasks.getName() + "__" + SEND_EVENT + event.getName();
                         dependencyGraphRelations.getWaitEvt().get(nameW).add(nameS);
                     }
                 }
@@ -1317,11 +1318,11 @@ public class DependencyGraphTranslator extends SwingWorker {
         for (TMLSendEvent sendEvent : taskAc.getSendEvents()) {
             TMLTask destinationTasks = sendEvent.getEvent().getDestinationTask();
             TMLEvent event = sendEvent.getEvent();
-            String nameS = taskAc.getName() + "__" + "Send event: " + event.getName();
+            String nameS = taskAc.getName() + "__" + SEND_EVENT + event.getName();
             dependencyGraphRelations.getSendEvt().put(nameS, new ArrayList<String>());
             for (TMLWaitEvent wait_sendEvent : destinationTasks.getWaitEvents()) {
                 event = wait_sendEvent.getEvent();
-                String nameW = destinationTasks.getName() + "__" + "Wait event: " + event.getName();
+                String nameW = destinationTasks.getName() + "__" + WAIT_EVENT + event.getName();
                 dependencyGraphRelations.getSendEvt().get(nameS).add(nameW);
             }
         }
@@ -1906,10 +1907,10 @@ public class DependencyGraphTranslator extends SwingWorker {
         String name = "";
         if (currentElement2 instanceof TMLWaitEvent) {
             TMLEvent event = ((TMLWaitEvent) currentElement2).getEvent();
-            name = taskName + "__" + "Wait event: " + event.getName() + "__" + currentElement2.getID();
+            name = taskName + "__" + WAIT_EVENT + event.getName() + "__" + currentElement2.getID();
         } else if (currentElement2 instanceof TMLSendEvent) {
             TMLEvent event = ((TMLSendEvent) currentElement2).getEvent();
-            name = taskName + "__" + "Send event: " + event.getName() + "__" + currentElement2.getID();
+            name = taskName + "__" + SEND_EVENT + event.getName() + "__" + currentElement2.getID();
         } else {
             name = taskName + "__" + currentElement2.getName().replace(" ", "") + "__" + currentElement2.getID();
         }

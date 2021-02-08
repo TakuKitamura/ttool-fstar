@@ -84,7 +84,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     private Object[][] tableData2MinMax, tableData1MinMax, tableData2, tableData = null;
     private JScrollPane scrollPane11, scrollPane12, scrollPane21, scrollPane22;
     private MainGUI mainGUI;
-    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
     private JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis;
     private JFrameCompareLatencyDetail jFrameCompareLatencyDetail;
     private JProgressBar pbar;
@@ -101,7 +101,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
     private static final String OP_B_COLNAME = "OPERATOR B ";
 
     // private DirectedGraphTranslator dgraph;
-    public JFrameCompareLatencyDetail(latencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
+    public JFrameCompareLatencyDetail(LatencyDetailedAnalysisMain latencyDetailedAnaly, MainGUI mgui, final Vector<String> checkedTransactionsFile1,
             TMLMapping<TGComponent> map1, List<TMLComponentDesignPanel> cpanels1, final SimulationTrace selectedST1, boolean b,
             LatencyAnalysisParallelAlgorithms tc1) throws InterruptedException {
         super("Latency Comparison");
@@ -110,7 +110,7 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
         mainGUI = mgui;
         map = map1;
         cpanels = cpanels1;
-        latencyDetailedAnalysisMain = latencyDetailedAnaly;
+        LatencyDetailedAnalysisMain = latencyDetailedAnaly;
         // dgraph2 = graph2;
         file1 = new File(selectedST1.getFullPath());
         // file2 = new File(selectedST2.getFullPath());
@@ -483,20 +483,20 @@ public class JFrameCompareLatencyDetail extends JFrame implements ActionListener
                 int returnVal = fc.showOpenDialog(mainGUI.frame);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File filefc = fc.getSelectedFile();
-                    latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
+                    LatencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
                     SimulationTrace STfile2 = new SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
                     secondFile.setText(filefc.getAbsolutePath());
                     if (STfile2 instanceof SimulationTrace) {
                         file2 = new File(STfile2.getFullPath());
                         try {
-                            latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, STfile2, false, true, 2);
+                            LatencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, STfile2, false, true, 2);
                         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
-                        checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
-                        map = latencyDetailedAnalysisMain.getMap1();
-                        cpanels = latencyDetailedAnalysisMain.getCpanels1();
+                        checkedTransactionsFile2 = LatencyDetailedAnalysisMain.getCheckedTransactionsFile();
+                        map = LatencyDetailedAnalysisMain.getMap1();
+                        cpanels = LatencyDetailedAnalysisMain.getCpanels1();
                         this.toFront();
                         this.requestFocus();
                         this.pack();
