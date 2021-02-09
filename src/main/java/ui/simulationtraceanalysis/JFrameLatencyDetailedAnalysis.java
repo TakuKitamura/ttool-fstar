@@ -716,7 +716,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             if (selectedIndex == 0) {
                 row1 = table11.getSelectedRow();
                 if (row1 > -1) {
-                    if (table12.getValueAt(row1, 4) != null) {
+                    if (table11.getValueAt(row1, 4) != null) {
                         noLatValue = table11.getValueAt(row1, 4).toString();
                     } else {
                         jta.append("Invaid latency value.\n");
