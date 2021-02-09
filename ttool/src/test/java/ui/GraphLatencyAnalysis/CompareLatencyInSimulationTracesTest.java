@@ -25,7 +25,7 @@ import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.LatencyAnalysisParallelAlgorithms;
 import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
-public class CompareLatencyInSimulationTraces extends AbstractUITest {
+public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String simulationTracePathFile1 = INPUT_PATH + "/graphTestSimulationTrace.xml";
     private static final String simulationTracePathFile2 = INPUT_PATH + "/testFunc.xml";
@@ -51,7 +51,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
     // protected MainGUI mainGUI1 = null;
     private static Object[][] dataDetailedByTask, dataDetailedByTask2, dataHWDelayByTask, dataHWDelayByTask2;
 
-    public CompareLatencyInSimulationTraces() {
+    public CompareLatencyInSimulationTracesTest() {
         super();
     }
 

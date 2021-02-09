@@ -15,7 +15,7 @@ import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.interactivesimulation.JFrameShowLatencyDetails;
 import ui.simulationtraceanalysis.JFrameCompareSimulationTraces;
-public class ComparisonOfsimulationTraces extends AbstractUITest {
+public class ComparisonOfSimulationTracesTest extends AbstractUITest {
     protected static SimulationTrace selectedST1;
     protected static SimulationTrace selectedST2;
     protected static String STfilePath1;

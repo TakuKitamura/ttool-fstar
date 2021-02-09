@@ -20,7 +20,7 @@ import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
-public class NestedStructurePLAN extends AbstractUITest {
+public class NestedStructurePLANTests extends AbstractUITest {
     private static final String mapping_Diag_Name = "Architecture";
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String SIMULATIONTRACE_PATH_FILE = INPUT_PATH + "/loopseqTrace.xml";
