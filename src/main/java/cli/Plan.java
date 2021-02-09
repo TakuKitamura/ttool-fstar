@@ -64,7 +64,7 @@ import ui.TMLArchiPanel;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedPopup;
-import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
+import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 import ui.tmlad.TMLADExecI;
 import ui.tmlad.TMLActivityDiagramPanel;
 
@@ -80,7 +80,7 @@ public class Plan extends Command {
     private static Object[][] allLatencies, minMaxArray, taskHWByRowDetails, detailedLatency;
     private HashMap<String, Integer> checkedT = new HashMap<String, Integer>();
     private Vector<SimulationTransaction> transFile1;
-    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
     private DependencyGraphTranslator dgt, dgraph;;
     private String traceFile;
     private Boolean taint;
@@ -321,16 +321,16 @@ public class Plan extends Command {
         }
         try {
             mgui.checkModelingSyntax(panel, true);
-            latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mgui, file2, false, false, 3);
+            LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(3, mgui, file2, false, false, 3);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             return ("Exception during file loading: " + e.getMessage());
         }
-        latencyDetailedAnalysisMain.getTc().setMainGUI(mgui);
+        LatencyDetailedAnalysisMain.getTc().setMainGUI(mgui);
         // latencyDetailedAnalysisMain.setTc();
         interpreter.print("panel=" + panel);
-        latencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mgui);
-        latencyDetailedAnalysis = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
+        LatencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mgui);
+        latencyDetailedAnalysis = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
             try {
@@ -392,7 +392,7 @@ public class Plan extends Command {
                 task2 = taskName;
             }
         }
-        transFile1 = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(traceFile));
+        transFile1 = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(traceFile));
         allLatencies = dgt.latencyDetailedAnalysis(task1, task2, transFile1, taint, false);
         interpreter.print("lat=" + allLatencies.length);
         if (taint) {
@@ -434,7 +434,7 @@ public class Plan extends Command {
             // detailedLatency = dgt.getTaskHWByRowDetails(id);
             // interpreter.print("detailedLatency.length=" + detailedLatency.length);
             try {
-                new JFrameLatencyDetailedPopup(dgt, id, true, taint, latencyDetailedAnalysisMain.getTc(), false);
+                new JFrameLatencyDetailedPopup(dgt, id, true, taint, LatencyDetailedAnalysisMain.getTc(), false);
                 interpreter.print("dgt.getOffPathBehavior=" + dgt.getOffPath().size());
                 interpreter.print("dgt.getOffPathBehaviorCausingDelay=" + dgt.getOffPathDelay().size());
                 interpreter.print("dgt.getOnPath=" + dgt.getOnPath().size());
@@ -445,7 +445,7 @@ public class Plan extends Command {
             }
         } else {
             try {
-                new JFrameLatencyDetailedPopup(dgt, id, false, taint, latencyDetailedAnalysisMain.getTc(), false);
+                new JFrameLatencyDetailedPopup(dgt, id, false, taint, LatencyDetailedAnalysisMain.getTc(), false);
                 interpreter.print("dgt.getOffPathBehavior=" + dgt.getOffPath().size());
                 interpreter.print("dgt.getOffPathBehaviorCausingDelay=" + dgt.getOffPathDelay().size());
                 interpreter.print("dgt.getOnPath=" + dgt.getOnPath().size());
