@@ -19,7 +19,7 @@ import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
-public class GraphLatencyAnalysisTests extends AbstractUITest {
+public class GraphLatencyAnalysisTest extends AbstractUITest {
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String SIMULATIONTRACE_PATH = INPUT_PATH + "/graphTestSimulationTrace.xml";
     private static final String modelPath = INPUT_PATH + "/GraphTestModel.xml";
