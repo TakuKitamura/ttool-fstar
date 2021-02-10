@@ -64,7 +64,7 @@ public class AttackTreeAnalysisTest extends AbstractUITest {
 
     private static final String PATH_TO_SOURCE_MODEL = "/ui/atd/input/testAttackTreeAnalysis.xml";
 
-    private static final double RESULTS[] = {0.8, 0.6, 0.8};
+    private static final double RESULTS[] = {0.8, 0.6, 0.8, 0.2};
 
 
     public AttackTreeAnalysisTest() {

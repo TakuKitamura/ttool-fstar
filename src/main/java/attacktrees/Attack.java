@@ -123,15 +123,34 @@ public class Attack extends AttackElement {
 
     }
 
-    public boolean canPerformAttack(int _resource, int _experience) {
+    public boolean canPerformAttack(int _resource, int _expertise) {
 
         // Leaf attack?
         if (originNode == null) {
-            return (attackCost <= _resource) && (attackExperience <= _experience);
+            return (attackCost <= _resource) && (attackExperience <= _expertise);
         }
 
         // Intermediate attack. Needs to compute its resulting cost and experience
-        return originNode.canPerformAttack(_resource, _experience);
+        int cost = originNode.getLowestCost(_expertise);
+        if (cost == -1) {
+            // nothing was found
+            return false;
+        } else {
+            return cost <= _resource;
+        }
+    }
+
+    public int getLowestCost(int _expertise) {
+        if (originNode == null) {
+            if (attackExperience <= _expertise) {
+                return attackCost;
+            } else {
+                return -1;
+            }
+        }
+
+        return originNode.getLowestCost(_expertise);
+
     }
 
 }

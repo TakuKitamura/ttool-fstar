@@ -154,24 +154,26 @@ public abstract class AttackNode extends AttackElement {
         inputValues = newInputValues;
     }
 
-    public boolean canPerformAttack(int _resource, int _experience) {
+    public int getLowestCost(int _experience) {
 
         //TraceManager.addDev("In node: " + this.getClass());
 
         if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-            return true;
+            return -1;
         }
 
         // Built from the lower attacks. Assume all attacks are necessary
 
-
+        int cost = 0;
         for(Attack attack: inputAttacks) {
-            if (!attack.canPerformAttack(_resource, _experience)) {
-                return false;
+            int ret = attack.getLowestCost(_experience);
+            if (ret == -1) {
+                return -1;
             }
+            cost += ret;
         }
 
-        return true;
+        return cost;
     }
 
 }

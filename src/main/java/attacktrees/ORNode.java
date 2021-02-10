@@ -58,23 +58,31 @@ public class ORNode extends BooleanNode {
         type = "OR";
     }
 
-    public boolean canPerformAttack(int _resource, int _experience) {
+
+    public int getLowestCost(int _expertise)  {
 
         //TraceManager.addDev("In node: " + this.getClass());
 
         if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-            return true;
+            return -1;
         }
 
         // Built from the lower attacks. Assume all attacks are necessary
 
+        // We task the lowest cost;
+        int cost = Integer.MAX_VALUE;
         for(Attack attack: inputAttacks) {
-            if (attack.canPerformAttack(_resource, _experience)) {
-                return true;
+            int ret = attack.getLowestCost(_expertise);
+            if (ret != -1) {
+                cost = Math.min(cost, ret);
             }
         }
 
-        return false;
+        if (cost == Integer.MAX_VALUE) {
+            return -1; // no solution found
+        }
+
+        return cost;
     }
 
 

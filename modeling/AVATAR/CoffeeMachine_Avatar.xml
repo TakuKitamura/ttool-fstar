@@ -1279,7 +1279,7 @@
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="Wallet;CoffeeMachine;CoffeeButton;TeaButton;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="695" >
