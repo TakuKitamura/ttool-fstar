@@ -1,4 +1,3 @@
-
 For users of TTool: (e.g., for users having a read-only access to the git)
 ------------------- 
 
@@ -20,6 +19,11 @@ make all
 
 If the compilation fails with the following error: 'unmappable character for encoding ASCII', you need to do, before the compilation process:
 export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8
+
+Alternatively, if you wish to compile TTool without running tests (tests can be long to run), do:
+make ttoolnotest
+or
+gradle build -x test
 
 * Installing TTool once compiled
 make install
