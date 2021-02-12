@@ -1538,9 +1538,9 @@ public class TML2Avatar {
             loopLimit = Integer.valueOf(_loopLimit);
         }
         for (TMLChannel channel : tmlmodel.getChannels()) {
-            for (TMLCPrimitivePort p : channel.ports) {
-                channel.checkConf = channel.checkConf || p.checkConf;
-                channel.checkAuth = channel.checkAuth || p.checkAuth;
+            for (TMLPortWithSecurityInformation p : channel.ports) {
+                channel.checkConf = channel.checkConf || p.getCheckConf();
+                channel.checkAuth = channel.checkAuth || p.getCheckAuth();
             }
         }
 

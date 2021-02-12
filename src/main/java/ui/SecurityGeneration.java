@@ -21,11 +21,7 @@ import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
 import proverifspec.ProVerifSpec;
-import tmltranslator.TMLChannel;
-import tmltranslator.TMLMapping;
-import tmltranslator.TMLModeling;
-import tmltranslator.TMLPort;
-import tmltranslator.TMLTask;
+import tmltranslator.*;
 import tmltranslator.toavatarsec.TML2Avatar;
 import ui.tmlad.TGConnectorTMLAD;
 import ui.tmlad.TMLADChoice;
@@ -278,9 +274,9 @@ public class SecurityGeneration implements Runnable {
 		TMLModeling<TGComponent> tmlmodel = map.getTMLModeling();
 		List<TMLChannel> channels = tmlmodel.getChannels();
 		for (TMLChannel channel : channels) {
-			for (TMLCPrimitivePort p : channel.ports) {
-				channel.checkConf = channel.checkConf || p.checkConf;
-				channel.checkAuth = channel.checkAuth || p.checkAuth;
+			for (TMLPortWithSecurityInformation p : channel.ports) {
+				channel.checkConf = channel.checkConf || p.getCheckConf();
+				channel.checkAuth = channel.checkAuth || p.getCheckAuth();
 			}
 		}
 

@@ -64,9 +64,11 @@ public class TMLChannel extends TMLCommunicationElement {
     private int size; // width of the channel i.e. nb of bytes of each sample
     private int type;
     private int max; // Maximum number of samples
-    public TMLCPrimitivePort port;
+
+
+    public TMLPortWithSecurityInformation port;
     //public TMLCPrimitivePort port2;
-    public ArrayList<TMLCPrimitivePort> ports;
+    public ArrayList<TMLPortWithSecurityInformation> ports;
 
     // Used on for 1 -> 1 channel
     protected TMLTask originTask, destinationTask;
@@ -98,7 +100,7 @@ public class TMLChannel extends TMLCommunicationElement {
         destinationTasks = new ArrayList<TMLTask>();
         originPorts = new ArrayList<TMLPort>();
         destinationPorts = new ArrayList<TMLPort>();
-        ports = new ArrayList<TMLCPrimitivePort>();
+        ports = new ArrayList<TMLPortWithSecurityInformation>();
         checkConf = false;
     }
 

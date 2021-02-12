@@ -1,4 +1,5 @@
 package ui.ComparisonOfsimulationTracesInXML;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -15,6 +16,8 @@ import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.interactivesimulation.JFrameShowLatencyDetails;
 import ui.simulationtraceanalysis.JFrameCompareSimulationTraces;
+
+
 public class ComparisonOfSimulationTracesTest extends AbstractUITest {
     protected static SimulationTrace selectedST1;
     protected static SimulationTrace selectedST2;
@@ -25,6 +28,7 @@ public class ComparisonOfSimulationTracesTest extends AbstractUITest {
     private static JFrameShowLatencyDetails showLatencyDetails;
     private static final String PATH1 = "/ui/xmlCompare/input/simple.xml";
     private static final String PATH2 = "/ui/xmlCompare/input/simplifiedWithSecurity.xml";
+
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         STfilePath1 = getBaseResourcesDir() + PATH1;
@@ -32,11 +36,13 @@ public class ComparisonOfSimulationTracesTest extends AbstractUITest {
         selectedST1 = new SimulationTrace("simple.xml", 6, STfilePath1);
         selectedST2 = new SimulationTrace("simplifiedWithSecurity.xml", 6, STfilePath2);
     }
+
     @Test
     public void loadTest() {
         assertNotNull(selectedST1);
         assertNotNull(selectedST2);
     }
+
     @Test
     public void parseXMLTest() throws SAXException, IOException, ParserConfigurationException {
         cSimTrace = new JFrameCompareSimulationTraces(mainGUI, "Compare Simulation simulation", selectedST1, false);
@@ -45,16 +51,12 @@ public class ComparisonOfSimulationTracesTest extends AbstractUITest {
         assertNotNull(cSimTrace.getTransFile1());
         assertNotNull(cSimTrace.getTransFile2());
     }
+
     @Test
     public void diffTest() throws SAXException, IOException, ParserConfigurationException {
         newContentPane = new CompareSimulationTrace();
         newContentPane.JPanelCompareXmlGraph(cSimTrace.getTransFile1(), cSimTrace.getTransFile2());
         assertTrue(newContentPane.getTable().getRowCount() > 0);
     }
-  /*  public void latencyTest() throws SAXException, IOException, ParserConfigurationException {
-        JFrameShowLatencyDetails showLatencyDetails = new JFrameShowLatencyDetails(cSimTrace.getTransFile1(), cSimTrace.getTransFile2(), "CPU1_1",
-                "Request SmartCard", "CPU1_1", "Send end", false);
-        showLatencyDetails.setVisible(false);
-        assertTrue(showLatencyDetails.getTable11().getRowCount() > 0);
-    }*/
+
 }

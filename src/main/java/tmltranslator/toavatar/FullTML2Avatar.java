@@ -41,7 +41,7 @@ import avatartranslator.*;
 import myutil.TraceManager;
 import tmltranslator.*;
 import ui.TGComponent;
-import ui.tmlcompd.TMLCPrimitivePort;
+//import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +59,6 @@ import java.util.regex.Pattern;
  */
 public class FullTML2Avatar {
     private final static String NOTIFIED = "_NOTIFIED";
-
 
     //private TMLMapping<?> tmlmap;
     private TMLModeling<?> tmlmodel;
@@ -106,9 +105,6 @@ public class FullTML2Avatar {
 
     public AvatarSpecification generateAvatarSpec(String _loopLimit) {
 
-        //TraceManager.addDev("security patterns " + tmlmodel.secPatterns);
-        //TraceManager.addDev("keys " + tmlmap.mappedSecurity);
-
 
         //TODO: Make state names readable
         //TODO: Put back numeric guards
@@ -121,7 +117,6 @@ public class FullTML2Avatar {
         attrsToCheck.clear();
         tmlmodel.removeForksAndJoins();
 
-//        System.out.println("MODIFIED model " + tmlmodel);
 
         for (TMLChannel chan : tmlmodel.getChannels()) {
             //System.out.println("chan " + chan);
@@ -142,9 +137,9 @@ public class FullTML2Avatar {
         }
 
         for (TMLChannel channel : tmlmodel.getChannels()) {
-            for (TMLCPrimitivePort p : channel.ports) {
-                channel.checkConf = channel.checkConf || p.checkConf;
-                channel.checkAuth = channel.checkAuth || p.checkAuth;
+            for (TMLPortWithSecurityInformation p : channel.ports) {
+                channel.checkConf = channel.checkConf || p.getCheckConf();
+                channel.checkAuth = channel.checkAuth || p.getCheckAuth();
             }
         }
 

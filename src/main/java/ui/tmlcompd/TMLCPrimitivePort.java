@@ -43,6 +43,7 @@ import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import tmltranslator.TMLPortWithSecurityInformation;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogTMLCompositePort;
@@ -81,7 +82,9 @@ import java.util.Vector;
  * @version 1.0 12/03/2008
  * @author Ludovic APVRILLE
  */
-public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes {
+public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference, WithAttributes,
+        TMLPortWithSecurityInformation {
+
     protected Color myColor;
     protected int orientation;
     protected int oldx, oldy;
@@ -131,7 +134,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public int checkConfStatus;
 
     public int checkSecConfStatus;
-    public String secName="";
+    public String secName = "";
 
     public int checkWeakAuthStatus;
     public int checkStrongAuthStatus;
@@ -1221,4 +1224,45 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             typePort = 2;
         return typePort;
     }
+
+    public int getConfStatus() {
+        return checkConfStatus;
+    }
+    public boolean getCheckConf() {
+        return checkConf;
+    }
+
+    public boolean getCheckAuth() {
+        return checkAuth;
+    }
+
+    public int getCheckStrongAuthStatus() {
+        return checkStrongAuthStatus;
+    }
+
+    public int getCheckWeakAuthStatus() {
+        return checkWeakAuthStatus;
+    }
+
+    public void setConfStatus(int _status) {
+        checkConfStatus= _status;
+    }
+
+    public void setMappingName(String _mappingName) {
+        mappingName = _mappingName;
+    }
+
+    public void setSecName(String _secName) {
+        secName = _secName;
+    }
+
+
+    public void setStrongAuthStatus(int _status) {
+        checkStrongAuthStatus = _status;
+    }
+    public void setWeakAuthStatus(int _status) {
+        checkWeakAuthStatus = _status;
+    }
+
+
 }

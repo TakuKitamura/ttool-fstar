@@ -51,11 +51,8 @@ import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
 import proverifspec.ProVerifResultTrace;
-import ui.TAttribute;
-import ui.tmlcompd.TMLCPrimitiveComponent;
-import ui.tmlcompd.TMLCPrimitivePort;
+//import ui.tmlcompd.TMLCPrimitivePort;
 import ui.TGComponent;
-import ui.tmlcompd.TMLPragma;
 
 import java.util.*;
 
@@ -130,51 +127,6 @@ public class  TMLModeling<E> {
         tmlmapping = new TMLMapping<>(this, new TMLArchitecture(), false);
         tmlmapping.makeMinimumMapping();
         return tmlmapping;
-
-        /*TMLArchitecture tmla = new TMLArchitecture();
-          TMLTask t;
-          TMLChannel ch;
-
-
-
-          HwCPU cpu = new HwCPU("defaultCPU");
-          cpu.byteDataSize = 4;
-          cpu.pipelineSize = 1;
-          cpu.goIdleTime = 0;
-          cpu.taskSwitchingTime = 1;
-          cpu.branchingPredictionPenalty = 0;
-          cpu.execiTime = 1;
-          tmla.addHwNode(cpu);
-
-          ListIterator iterator;
-
-          HwMemory mem = new HwMemory("defaultMemory");
-          tmla.addHwNode(mem);
-
-          HwBus bus = new HwBus("defaultBus");
-          tmla.addHwNode(bus);
-
-          HwLink link0 = new HwLink("CPU_bus");
-          link0.bus = bus;
-          link0.hwnode = cpu;
-          tmla.addHwLink(link0);
-
-          HwLink link1 = new HwLink("Mem_bus");
-          link1.bus = bus;
-          link1.hwnode = mem;
-          tmla.addHwLink(link1);
-
-
-
-          // Channels
-          iterator = getChannels().listIterator();
-          while(iterator.hasNext()) {
-          ch = (TMLChannel)(iterator.next());
-          tmlmapping.addCommToHwCommNode(ch, bus);
-          tmlmapping.addCommToHwCommNode(ch, mem);
-          }
-
-          return tmlmapping;*/
     }
 
     private void init() {
@@ -863,13 +815,13 @@ public class  TMLModeling<E> {
             	if (!found){
             		invalidate=true;
             	}
-                for (TMLCPrimitivePort port:channel.ports){
-                    if (port.checkConf && !invalidate){
-                        port.checkConfStatus = r;
-                        port.mappingName= mappingName;
+                for (TMLPortWithSecurityInformation port: channel.ports){
+                    if (port.getCheckConf() && !invalidate){
+                        port.setConfStatus(r);
+                        port.setMappingName(mappingName);
                         //Add Result Trace also
                         ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        if (trace !=null && port.isOrigin){
+                        if (trace !=null && port.isOrigin()){
                         	port.setResultTrace(trace);
                         	port.setPragmaString(pragma.toString());
                         }
@@ -878,10 +830,10 @@ public class  TMLModeling<E> {
             }
             TMLRequest req = getRequestByName(attr.getName().replaceAll("_reqData",""));
             if (req !=null){
-                for (TMLCPrimitivePort port: req.ports){
-                    if (port.checkConf){
-                        port.checkConfStatus = r;
-                        port.mappingName= mappingName;
+                for (TMLPortWithSecurityInformation port: req.ports){
+                    if (port.getCheckConf()){
+                        port.setConfStatus(r);
+                        port.setMappingName(mappingName);
                     }
                 }
             }
@@ -902,27 +854,16 @@ public class  TMLModeling<E> {
                 for (String channelName: channels) {
                     channel = getChannelByShortName(channelName);
                     if (channel!=null){
-                        for (TMLCPrimitivePort port:channel.ports){
-                            if (port.checkConf){
-                                port.checkSecConfStatus = r;
-                                port.secName= attr.getName();
+                        for (TMLPortWithSecurityInformation port:channel.ports){
+                            if (port.getCheckConf()){
+                                port.setConfStatus(r);
+                                port.setSecName(attr.getName());
                             }
                         }
                     }
                 }
             }
-            /*for (TMLTask t:getTasks()){
-                if (t.getReferenceObject()==null){
-                    continue;
-                }
-                if (t.getReferenceObject() instanceof TMLCPrimitiveComponent && t.getName().equals(attr.getBlock().getName())){
-                    TMLCPrimitiveComponent comp = (TMLCPrimitiveComponent) t.getReferenceObject();
-                    comp.mappingName=mappingName;
-                    for (TAttribute a: comp.getAttributeList ())
-                        if (a.getId().equals(attr.getName()))
-                            a.setConfidentialityVerification(result.isSatisfied() ? TAttribute.CONFIDENTIALITY_OK : TAttribute.CONFIDENTIALITY_KO);
-                }
-            }*/
+
         }
         //
     }
@@ -955,12 +896,12 @@ public class  TMLModeling<E> {
                 	channel= getChannelByDestinationPortName(signalName);
                 }
                 if (channel!=null){
-                    for (TMLCPrimitivePort port:channel.ports){
-                        if (port.checkAuth){
-                            port.checkStrongAuthStatus = 3;
-                            port.mappingName= mappingName;
+                    for (TMLPortWithSecurityInformation port:channel.ports){
+                        if (port.getCheckAuth()){
+                            port.setStrongAuthStatus(3);
+                            port.setMappingName(mappingName);
                             ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        	if (trace !=null && !port.isOrigin){
+                        	if (trace !=null && !port.isOrigin()){
                         		port.setResultTrace(trace);
                         		port.setPragmaString(pragma.toString());
                         	}
@@ -975,10 +916,10 @@ public class  TMLModeling<E> {
                 }
                 TMLRequest req = getRequestByName(signalName);
                 if (req !=null){
-                    for (TMLCPrimitivePort port: req.ports){
-                        if (port.checkAuth){
-                            port.checkStrongAuthStatus = 3;
-                            port.mappingName= mappingName;
+                    for (TMLPortWithSecurityInformation port: req.ports) {
+                        if (port.getCheckAuth()){
+                            port.setStrongAuthStatus(3);
+                            port.setMappingName(mappingName);
                         }
                     }
                 }
@@ -1001,18 +942,18 @@ public class  TMLModeling<E> {
                 }
 
                 signalName = s.split("__decrypt")[0];
-                List<String> channels=secChannelMap.get(signalName);
-                if (channels!=null){
+                List<String> channels = secChannelMap.get(signalName);
+                if (channels != null){
                     for (String channelName:channels){
                         channel = getChannelByShortName(channelName);
-                        if (channel!=null){
-                            for (TMLCPrimitivePort port:channel.ports){
-                                if (port.checkAuth && port.checkStrongAuthStatus==1){
-                                    port.checkStrongAuthStatus = 3;
+                        if (channel != null){
+                            for (TMLPortWithSecurityInformation port: channel.ports){
+                                if (port.getCheckAuth() && port.getCheckStrongAuthStatus() == 1){
+                                    port.setStrongAuthStatus(3);
                                     TraceManager.addDev("not verified " + signalName);
-                                    port.secName= signalName;
+                                    port.setSecName(signalName);
                                     ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        			if (trace !=null && !port.isOrigin){
+                        			if (trace !=null && !port.isOrigin()){
                         				port.setResultTrace(trace);
                         				port.setPragmaString(pragma.toString());
                         			}
@@ -1025,8 +966,8 @@ public class  TMLModeling<E> {
                 //In case of HSM
                 signalName = s.split("__decrypt")[0];
                 signalName = signalName.split("__")[1];
-                channels=secChannelMap.get(signalName);
-                if (channels!=null){
+                channels = secChannelMap.get(signalName);
+                if (channels != null){
                     for (String channelName: channels){
                         if (channelName.contains("retData_") || channelName.contains("data_")){
                             channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
@@ -1038,15 +979,15 @@ public class  TMLModeling<E> {
                             }
                             channel = getChannelByShortName(channelName);
                             if (channel!=null){
-                                for (TMLCPrimitivePort port:channel.ports){
-                                    if (port.checkAuth){
-                                        port.checkWeakAuthStatus = 3;
-                                        port.secName= signalName;
+                                for (TMLPortWithSecurityInformation port: channel.ports){
+                                    if (port.getCheckAuth()) {
+                                        port.setWeakAuthStatus(3);
+                                        port.setSecName(signalName);
                                         ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        				if (trace !=null && !port.isOrigin){
+                        				if (trace !=null && !port.isOrigin()) {
                         					port.setResultTrace(trace);
                         					port.setPragmaString(pragma.toString());
-  					                      }
+                        				}
                                     }
                                 }
                             }
@@ -1060,13 +1001,13 @@ public class  TMLModeling<E> {
                     String signalName = s.split("_chData")[0];
                     signalName = signalName.split("__")[1];
                     TMLChannel channel = getChannelByShortName(signalName);
-                    if (channel!=null){
-                        for (TMLCPrimitivePort port:channel.ports){
-                            if (port.checkAuth){
-                                port.checkWeakAuthStatus = 2;
-                                port.mappingName= mappingName;
+                    if (channel != null){
+                        for (TMLPortWithSecurityInformation port: channel.ports){
+                            if (port.getCheckAuth()){
+                                port.setWeakAuthStatus(2);
+                                port.setMappingName(mappingName);
                                 ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        		if (trace !=null && !port.isOrigin){
+                        		if (trace !=null && !port.isOrigin()){
                         			port.setResultTrace(trace);
                         			port.setPragmaString(pragma.toString());
                         		}
@@ -1081,10 +1022,10 @@ public class  TMLModeling<E> {
                     }
                     TMLRequest req = getRequestByName(signalName);
                     if (req !=null){
-                        for (TMLCPrimitivePort port: req.ports){
-                            if (port.checkAuth){
-                                port.checkWeakAuthStatus = 2;
-                                port.mappingName= mappingName;
+                        for (TMLPortWithSecurityInformation port: req.ports){
+                            if (port.getCheckAuth()){
+                                port.setWeakAuthStatus(2);
+                                port.setMappingName(mappingName);
                             }
                         }
                     }
@@ -1095,7 +1036,7 @@ public class  TMLModeling<E> {
                         }
                     }
                     TMLEvent ev = getEventByName(signalName);
-                    if (ev !=null){
+                    if (ev != null){
                         if (ev.port.checkAuth){
                             ev.port.checkWeakAuthStatus=2;
                             ev.port2.mappingName= mappingName;
@@ -1118,12 +1059,12 @@ public class  TMLModeling<E> {
                         for (String channelName:channels){
                             channel = getChannelByShortName(channelName);
                             if (channel!=null){
-                                for (TMLCPrimitivePort port:channel.ports){
-                                    if (port.checkAuth){
-                                        port.checkWeakAuthStatus = 2;
-                                        port.secName= signalName;
+                                for (TMLPortWithSecurityInformation port:channel.ports){
+                                    if (port.getCheckAuth()){
+                                        port.setWeakAuthStatus(2);
+                                        port.setSecName(signalName);
                                         ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        				if (trace !=null && !port.isOrigin){
+                        				if (trace != null && !port.isOrigin()){
                         					port.setResultTrace(trace);
                 				        	port.setPragmaString(pragma.toString());
  				                       }
@@ -1136,8 +1077,8 @@ public class  TMLModeling<E> {
                     //In case of HSM
                     signalName = s.split("__decrypt")[0];
                     signalName = signalName.split("__")[1];
-                    channels=secChannelMap.get(signalName);
-                    if (channels!=null){
+                    channels = secChannelMap.get(signalName);
+                    if (channels != null){
                         for (String channelName: channels){
                             if (channelName.contains("retData_") || channelName.contains("data_")){
                                 channelName=channelName.replaceAll("retData_","").replaceAll("data_","");
@@ -1149,12 +1090,12 @@ public class  TMLModeling<E> {
                                 }
                                 channel = getChannelByShortName(channelName);
                                 if (channel!=null){
-                                    for (TMLCPrimitivePort port:channel.ports){
-                                        if (port.checkAuth){
-                                            port.checkWeakAuthStatus = 2;
-                                            port.secName= signalName;
+                                    for (TMLPortWithSecurityInformation port: channel.ports){
+                                        if (port.getCheckAuth()){
+                                            port.setWeakAuthStatus(2);
+                                            port.setSecName(signalName);
                                             ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                       						if (trace !=null && !port.isOrigin){
+                       						if (trace != null && !port.isOrigin()){
                         						port.setResultTrace(trace);
                         						port.setPragmaString(pragma.toString());
                         					}
@@ -1176,12 +1117,12 @@ public class  TMLModeling<E> {
                 signalName = signalName.split("__")[1];
                 TMLChannel channel = getChannelByShortName(signalName);
                 if (channel!=null){
-                    for (TMLCPrimitivePort port:channel.ports){
-                        if (port.checkAuth){
-                            port.checkStrongAuthStatus = 2;
-                            port.mappingName= mappingName;
+                    for (TMLPortWithSecurityInformation port: channel.ports){
+                        if (port.getCheckAuth()) {
+                            port.setStrongAuthStatus(2);
+                            port.setMappingName(mappingName);
                             ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        	if (trace !=null && !port.isOrigin){
+                        	if (trace !=null && !port.isOrigin()){
                         		port.setResultTrace(trace);
                         		port.setPragmaString(pragma.toString());
                         	}
@@ -1196,10 +1137,10 @@ public class  TMLModeling<E> {
                 }
                 TMLRequest req = getRequestByName(signalName);
                 if (req !=null){
-                    for (TMLCPrimitivePort port: req.ports){
-                        if (port.checkAuth){
-                            port.checkStrongAuthStatus = 2;
-                            port.mappingName= mappingName;
+                    for (TMLPortWithSecurityInformation port: req.ports){
+                        if (port.getCheckAuth()){
+                            port.setStrongAuthStatus(2);
+                            port.setMappingName(mappingName);
                         }
                     }
                 }
@@ -1227,21 +1168,21 @@ public class  TMLModeling<E> {
                   signalName = signalName.replace(t.getName()+"__","");
                   }
                   }*/
-                signalName=signalName.split("__")[1];
+                signalName = signalName.split("__")[1];
              //   TraceManager.addDev("secpattern " + signalName);
-                List<String> channels=secChannelMap.get(signalName);
+                List<String> channels = secChannelMap.get(signalName);
                // TraceManager.addDev("secpattern channels " + channels);
-                if (channels!=null) {
+                if (channels != null) {
                     for (String channelName: channels) {
                         channel = getChannelByShortName(channelName);
                         if (channel!=null){
-                            for (TMLCPrimitivePort port:channel.ports){
+                            for (TMLPortWithSecurityInformation port: channel.ports){
                              //   TraceManager.addDev("adding to port " + channelName);
-                            	if (port.checkAuth){
-                                    port.checkStrongAuthStatus = 2;
-                                    port.secName= signalName;
+                            	if (port.getCheckAuth()){
+                                    port.setStrongAuthStatus(2);
+                                    port.setSecName(signalName);
                                     ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        			if (trace !=null && !port.isOrigin){
+                        			if (trace !=null && !port.isOrigin()){
                         				port.setResultTrace(trace);
                         				port.setPragmaString(pragma.toString());
                         			}
@@ -1267,13 +1208,13 @@ public class  TMLModeling<E> {
                                 }
                             }
                             channel = getChannelByShortName(channelName);
-                            if (channel!=null){
-                                for (TMLCPrimitivePort port:channel.ports){
-                                    if (port.checkAuth){
-                                        port.checkStrongAuthStatus = 2;
-                                        port.secName= signalName;
+                            if (channel != null){
+                                for (TMLPortWithSecurityInformation port:channel.ports){
+                                    if (port.getCheckAuth()){
+                                        port.setStrongAuthStatus(2);
+                                        port.setSecName(signalName);
                         				ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        				if (trace !=null && !port.isOrigin){
+                        				if (trace !=null && !port.isOrigin()){
                         					port.setResultTrace(trace);
                         					port.setPragmaString(pragma.toString());
                         				}                                        
@@ -1288,34 +1229,37 @@ public class  TMLModeling<E> {
         }
     }
 
-    public void clearBacktracing(){
+    public void clearBacktracing() {
+
         for (TMLChannel channel: getChannels()){
-            for (TMLCPrimitivePort port:channel.ports){
-                if (port.checkConfStatus>1){
-                    port.checkConfStatus=1;
-                    port.mappingName="???";
-                    port.secName="";
+            for (TMLPortWithSecurityInformation port: channel.ports){
+                if (port.getConfStatus() > 1){
+                    port.setConfStatus(1);
+                    port.setMappingName("???");
+                    port.setSecName("");
                 }
-                if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
-                    port.checkStrongAuthStatus = 1;
-                    port.checkWeakAuthStatus=1;
+                if (port.getCheckStrongAuthStatus() > 1 || port.getCheckWeakAuthStatus() > 1){
+                    port.setStrongAuthStatus(1);
+                    port.setWeakAuthStatus(1);
                 }
                 port.setResultTrace(null);
                 port.setPragmaString("");
             }
         }
+
         for (TMLRequest req: getRequests()){
-            for (TMLCPrimitivePort port:req.ports){
-                if (port.checkConfStatus>1){
-                    port.checkConfStatus=1;
-                    port.mappingName="???";
+            for (TMLPortWithSecurityInformation port: req.ports) {
+                if (port.getConfStatus() > 1){
+                    port.setConfStatus(1);
+                    port.setMappingName("???");
                 }
-                if (port.checkStrongAuthStatus>1 || port.checkWeakAuthStatus>1){
-                    port.checkStrongAuthStatus = 1;
-                    port.checkWeakAuthStatus=1;
+                if (port.getCheckStrongAuthStatus() > 1 || port.getCheckWeakAuthStatus() > 1){
+                    port.setStrongAuthStatus(1);
+                    port.setWeakAuthStatus(1);
                 }
             }
         }
+
         for (TMLEvent evt: getEvents()){
             if (evt.port!=null && evt.port2!=null){
                 if (evt.port.checkConfStatus>1){
