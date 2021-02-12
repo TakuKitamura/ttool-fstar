@@ -3,28 +3,31 @@ package ui.GraphLatencyAnalysis;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.HashMap;
-import java.util.Vector;
 import java.util.Map.Entry;
+import java.util.Vector;
+
 import org.junit.Before;
 import org.junit.Test;
-import ui.TMLArchiPanel;
-import ui.interactivesimulation.SimulationTransaction;
-import ui.simulationtraceanalysis.DirectedGraphTranslator;
-import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
-import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
+
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
+import ui.TMLArchiPanel;
+import ui.interactivesimulation.SimulationTransaction;
+import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
+import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
-public class NestedStructurePLAN extends AbstractUITest {
+public class NestedStructurePLANTest extends AbstractUITest {
     private static final String mapping_Diag_Name = "Architecture";
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String SIMULATIONTRACE_PATH_FILE = INPUT_PATH + "/loopseqTrace.xml";
     private static final String MODEL_PATH = INPUT_PATH + "/loopseqgraph.xml";
-    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
-    private static DirectedGraphTranslator dgt;
+    private static DependencyGraphTranslator dgt;
     private Vector<SimulationTransaction> transFile1;
     private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
     private static final int OPERATOR1_ID = 69;
@@ -45,10 +48,10 @@ public class NestedStructurePLAN extends AbstractUITest {
         }
         mainGUI.checkModelingSyntax(panel, true);
         SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, SIMULATIONTRACE_PATH_FILE);
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
-        latencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
-        latencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
-        latencyDetailedAnalysis = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
+        LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
+        LatencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
+        LatencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
+        latencyDetailedAnalysis = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
             try {
@@ -120,7 +123,7 @@ public class NestedStructurePLAN extends AbstractUITest {
         assertTrue(dgt.edgeExists(52, 54));
         assertFalse(dgt.edgeExists(40, 54));
         assertFalse(dgt.edgeExists(40, 42));
-        transFile1 = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + SIMULATIONTRACE_PATH_FILE));
+        transFile1 = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + SIMULATIONTRACE_PATH_FILE));
         assertTrue(transFile1.size() == 38);
         checkedDropDown = latencyDetailedAnalysis.getCheckedT();
         for (Entry<String, Integer> cT : checkedDropDown.entrySet()) {

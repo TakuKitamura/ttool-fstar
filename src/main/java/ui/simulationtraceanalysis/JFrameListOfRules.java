@@ -38,17 +38,14 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -66,6 +63,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import org.jgrapht.Graphs;
 import myutil.ScrolledJTextArea;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulationtraceanalysis.Vertex;
 import ui.ColorManager;
 
 /**
@@ -79,8 +78,8 @@ import ui.ColorManager;
  */
 public class JFrameListOfRules extends JFrame implements TableModelListener, ActionListener {
     private String[] columnByTaskNames = new String[3];
-    private HashMap<vertex, List<vertex>> ruleAddedEdges = new HashMap<vertex, List<vertex>>();
-    private HashMap<vertex, List<vertex>> ruleAddedEdgesChannels = new HashMap<vertex, List<vertex>>();
+    private HashMap<Vertex, List<Vertex>> ruleAddedEdges = new HashMap<Vertex, List<Vertex>>();
+    private HashMap<Vertex, List<Vertex>> ruleAddedEdgesChannels = new HashMap<Vertex, List<Vertex>>();
     private Object[][] tableData;
     private JScrollPane scrollPane12;
     private JButton buttonClose, buttonDeleteRule, buttonDeleteALLRules;
@@ -88,11 +87,11 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
     private JTextArea jta;
     private JPanel jp, jp05, commands, rulesList, rulesList1;
     private JScrollPane jsp;
-    private DirectedGraphTranslator directedGraph;
+    private DependencyGraphTranslator directedGraph;
     private JTable taskNames;
     private DefaultTableModel model;
 
-    public JFrameListOfRules(DirectedGraphTranslator dgraph) {
+    public JFrameListOfRules(DependencyGraphTranslator dgraph) {
         super("All Added Rules");
         initActions();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -122,7 +121,7 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         columnByTaskNames[0] = "Operator 2";
         columnByTaskNames[1] = "After ";
         columnByTaskNames[2] = "Operator 1 ";
-        ruleAddedEdgesChannels = dgraph.getRuleAddedEdgesChannels();
+        ruleAddedEdgesChannels = dgraph.getDependencyGraphRelations().getRuleAddedEdgesChannels();
         fillRuleTables();
         scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane12.setVisible(true);
@@ -179,16 +178,16 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
 // fill table with prevously created rules in the same session
     private void fillRuleTables() {
         int size = 0;
-        for (Entry<vertex, List<vertex>> v : ruleAddedEdgesChannels.entrySet()) {
-            vertex v1 = v.getKey();
-            List<vertex> lv = v.getValue();
+        for (Entry<Vertex, List<Vertex>> v : ruleAddedEdgesChannels.entrySet()) {
+            Vertex v1 = v.getKey();
+            List<Vertex> lv = v.getValue();
             size = size + lv.size();
         }
         tableData = new Object[size][3];
         int j = 0;
-        for (Entry<vertex, List<vertex>> v : ruleAddedEdgesChannels.entrySet()) {
-            vertex v1 = v.getKey();
-            List<vertex> lv = v.getValue();
+        for (Entry<Vertex, List<Vertex>> v : ruleAddedEdgesChannels.entrySet()) {
+            Vertex v1 = v.getKey();
+            List<Vertex> lv = v.getValue();
             for (int i = 0; i < lv.size(); i++) {
                 tableData[j][0] = lv.get(i).getName();
                 tableData[j][1] = "After";
@@ -247,8 +246,8 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
             dispose();
             setVisible(false);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DELETE_ALL_RULE].getActionCommand())) {
-            directedGraph.setRuleAddedEdges(new HashMap<vertex, List<vertex>>());
-            directedGraph.setRuleAddedEdgesChannels(new HashMap<vertex, List<vertex>>());
+            directedGraph.getDependencyGraphRelations().setRuleAddedEdges(new HashMap<Vertex, List<Vertex>>());
+            directedGraph.getDependencyGraphRelations().setRuleAddedEdgesChannels(new HashMap<Vertex, List<Vertex>>());
             model.setRowCount(0);
             taskNames.setModel(model);
             jta.append("All Rules are deleted \n");
@@ -263,9 +262,9 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
             this.setVisible(true);
         } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DELETE_SELECTED_RULE].getActionCommand())) {
             int i = taskNames.getSelectedRow();
-            vertex v1 = directedGraph.getvertex(model.getValueAt(i, 0).toString());
-            vertex v2 = directedGraph.getvertex(model.getValueAt(i, 2).toString());
-            ruleAddedEdges = directedGraph.getRuleAddedEdges();
+            Vertex v1 = directedGraph.getvertex(model.getValueAt(i, 0).toString());
+            Vertex v2 = directedGraph.getvertex(model.getValueAt(i, 2).toString());
+            ruleAddedEdges = directedGraph.getDependencyGraphRelations().getRuleAddedEdges();
             // remove rule and its channel
             removeRule(v1, v2, i);
             model.removeRow(i);
@@ -284,19 +283,19 @@ public class JFrameListOfRules extends JFrame implements TableModelListener, Act
         }
     }
 
-    private void removeRule(vertex v1, vertex v2, int i) {
-        vertex v1Channel = null, v2Channel = null;
+    private void removeRule(Vertex v1, Vertex v2, int i) {
+        Vertex v1Channel = null, v2Channel = null;
         if (v2Channel == null && Graphs.vertexHasSuccessors(directedGraph.getG(), v2)) {
-            for (vertex n : Graphs.successorListOf(directedGraph.getG(), v2)) {
-                if (n.getType() == vertex.TYPE_CHANNEL) {
+            for (Vertex n : Graphs.successorListOf(directedGraph.getG(), v2)) {
+                if (n.getType() == Vertex.getTypeChannel()) {
                     v2Channel = n;
                     break;
                 }
             }
         }
         if (Graphs.vertexHasPredecessors(directedGraph.getG(), v1)) {
-            for (vertex n : Graphs.predecessorListOf(directedGraph.getG(), v1)) {
-                if (n.getType() == vertex.TYPE_CHANNEL) {
+            for (Vertex n : Graphs.predecessorListOf(directedGraph.getG(), v1)) {
+                if (n.getType() == Vertex.getTypeChannel()) {
                     v1Channel = n;
                     break;
                 }

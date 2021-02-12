@@ -73,7 +73,6 @@ import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
-import ui.interactivesimulation.JFrameCompareSimulationTraces;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
@@ -82,7 +81,8 @@ import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
-import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
+import ui.simulationtraceanalysis.JFrameCompareSimulationTraces;
+import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.syscams.SysCAMSCompositeComponent;
 import ui.tmlad.TMLActivityDiagramPanel;
@@ -342,7 +342,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private JFrameCompareSimulationTraces cSimTrace;
     
     
-    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
     
 
 
@@ -9737,7 +9737,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void compareLatencyForXML(SimulationTrace selectedST, boolean b) {
 
         try {
-            latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(1, this, selectedST, b, false, 0);
+            LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(1, this, selectedST, b, false, 0);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -9749,7 +9749,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
 
         try {
-            latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(2, this, selectedST, b, compare, j);
+            LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(2, this, selectedST, b, compare, j);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

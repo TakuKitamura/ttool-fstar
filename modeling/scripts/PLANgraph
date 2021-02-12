@@ -1,0 +1,27 @@
+#map 
+set map ./../tmlcode/spec.tmap
+#save grah file name
+set graphml ./../graphG
+#generate graph for specific tmap
+plan generateGraph $map
+#Export graph in Graphml format
+plan exportGraph $graphml
+#Export graph in png format
+plan saveGraph $graphml
+# show all operators id
+plan showAllOp
+#simulation trace
+set sim ./../simulators/c++2/test.xml
+#indicated if the tainting is used or not
+set taint false
+#latency table output destination
+set latXML latOutput.xml
+# run latency analysis between two operators and save results in xml
+plan computeLatencyValues 19 12 $taint $latXML $sim
+#precise row latency analysis output destination
+set staXML staOutput.xml
+#indicated if the row is in the min max table or not
+set minmax false
+set row 0
+# run precise analysis for one row an save the results in xml
+plan rowArrays $row $minmax $staXML

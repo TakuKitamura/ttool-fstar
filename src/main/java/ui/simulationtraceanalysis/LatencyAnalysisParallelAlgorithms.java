@@ -6,7 +6,9 @@ import java.util.Vector;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.xml.sax.SAXException;
+
 import tmltranslator.TMLMapping;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TGComponent;
@@ -21,10 +23,10 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private JFrameCompareLatencyDetail cld;
     private TMLMapping<TGComponent> tmap;
     private List<TMLComponentDesignPanel> cpanels;
-    private DirectedGraphTranslator dgraph, dgraph1, dgraph2;
+    private DependencyGraphTranslator dgraph, dgraph1, dgraph2;
     private int row, row1, row2, row3, row4, selectedIndex;
     private Object[][] dataDetailedByTask, dataDetailedByTask2;
-    private latencyDetailedAnalysisMain main;
+    private LatencyDetailedAnalysisMain main;
     private MainGUI mainGUI;
     private SimulationTrace selectedST;
     private boolean b;
@@ -34,8 +36,8 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private Vector<SimulationTransaction> transFile1, transFile2;
     private String task1, task2, task3, task4;
 
-    public LatencyAnalysisParallelAlgorithms(latencyDetailedAnalysisMain latencyDetailedAnalysisMain) {
-        main = latencyDetailedAnalysisMain;
+    public LatencyAnalysisParallelAlgorithms(LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain) {
+        main = LatencyDetailedAnalysisMain;
     }
 
     public void run() {
@@ -84,7 +86,8 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         } else if (algorithmId == 14) {
             dgraph.showGraph(dgraph);
         } else if (algorithmId == 15) {
-            dgraph = new DirectedGraphTranslator(jFrameLDA, cld, map, cpanels, 1);
+            dgraph = new DependencyGraphTranslator(map);
+            dgraph.DrawDirectedGraph();
             generateDirectedGraph2(map, cpanels);
         } else if (algorithmId == 16) {
             cld.generateDirectedGraph2(map, cpanels);
@@ -139,7 +142,7 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         return t;
     }
 
-    public void setDgraph2(DirectedGraphTranslator dgraph2) {
+    public void setDgraph2(DependencyGraphTranslator dgraph2) {
         this.dgraph2 = dgraph2;
     }
 
@@ -171,7 +174,7 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         this.cpanels = cpanels;
     }
 
-    public void setDgraph(DirectedGraphTranslator dgraph) {
+    public void setDgraph(DependencyGraphTranslator dgraph) {
         this.dgraph = dgraph;
     }
 
@@ -211,11 +214,11 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
         this.map = map;
     }
 
-    public DirectedGraphTranslator getDgraph() {
+    public DependencyGraphTranslator getDgraph() {
         return dgraph;
     }
 
-    public void setDgraph1(DirectedGraphTranslator dgraph1) {
+    public void setDgraph1(DependencyGraphTranslator dgraph1) {
         this.dgraph1 = dgraph1;
     }
 
