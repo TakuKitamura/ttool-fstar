@@ -2,21 +2,24 @@ package ui.GraphLatencyAnalysis;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.util.HashMap;
-import java.util.Vector;
 import java.util.Map.Entry;
+import java.util.Vector;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;
 import ui.interactivesimulation.SimulationTransaction;
-import ui.simulationtraceanalysis.DirectedGraphTranslator;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
-import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
+import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
-public class GraphLatencyAnalysis extends AbstractUITest {
+public class GraphLatencyAnalysisTest extends AbstractUITest {
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String SIMULATIONTRACE_PATH = INPUT_PATH + "/graphTestSimulationTrace.xml";
     private static final String modelPath = INPUT_PATH + "/GraphTestModel.xml";
@@ -28,10 +31,10 @@ public class GraphLatencyAnalysis extends AbstractUITest {
     private static final int OPERATOR2_ID = 26;
     private static String task1;
     private static String task2;
-    private static DirectedGraphTranslator dgt;
+    private static DependencyGraphTranslator dgt;
     private static Object[][] allLatencies, minMaxArray, taskHWByRowDetails, detailedLatency;
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
-    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
 
     @Before
     public void GraphLatencyAnalysis() throws InterruptedException {
@@ -45,10 +48,10 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         }
         mainGUI.checkModelingSyntax(panel, true);
         SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, SIMULATIONTRACE_PATH);
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
-        latencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
-        latencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
-        latencyDetailedAnalysis = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
+        LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
+        LatencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
+        LatencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
+        latencyDetailedAnalysis = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
             try {
@@ -68,7 +71,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         assertTrue(graphsize == 40);
         checkedDropDown = latencyDetailedAnalysis.getCheckedT();
         assertTrue(checkedDropDown.size() == 3);
-        transFile1 = latencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + SIMULATIONTRACE_PATH));
+        transFile1 = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + SIMULATIONTRACE_PATH));
         assertTrue(transFile1.size() == 175);
         for (Entry<String, Integer> cT : checkedDropDown.entrySet()) {
             int id = cT.getValue();

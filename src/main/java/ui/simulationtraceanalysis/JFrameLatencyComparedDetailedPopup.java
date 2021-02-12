@@ -38,6 +38,7 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -57,6 +59,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.interactivesimulation.SimulationTransaction;
 
 /**
@@ -85,9 +89,20 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
     private static final String END_TIME = "End Time ";
     private static final String TASKS_SAME_DEVICE = "Tasks on Same device";
     private static final String DEVICE_NAME = "Device Name";
+    private static final String MANDATORY_TRANSACTIONS_ST1 = "Mandatory Transactions Trace 1 ";
+    private static final String MANDATORY_TRANSACTIONS_ST2 = "Mandatory Transactions Trace 2";
+    private static final String TASKS_ON_SAME_DEVICE = "Tasks on the Same Device ";
+    private static final String NON_MANDATORY_TRANSACTIONS_ST1 = "Non-Mandatory Transactions  Trace 1";
+    private static final String NON_MANDATORY_TRANSACTIONS_ST2 = "Non-Mandatory Transactions  Trace 2";
+    private static final String NON_MAND_NO_CONT_TRAN = "Non-Mandatory Transactions No-Contention";
+    private static final String ST1 = "Trace 1";
+    private static final String ST2 = "Trace 2";
+    private static final String NON_MAND_CONT_TRAN = "Non-Mandatory Transactions Causing Contention";
+    private static final String TABLE_LENGED = "Table Lenged: ";
+    private static final String MANDATORY_TRANSACTIONS = "Mandatory Transactions ";
 
-    public JFrameLatencyComparedDetailedPopup(DirectedGraphTranslator dgraph1, DirectedGraphTranslator dgraph2, int row, int row2, boolean firstTable,
-            LatencyAnalysisParallelAlgorithms tc2) throws InterruptedException {
+    public JFrameLatencyComparedDetailedPopup(DependencyGraphTranslator dgraph1, DependencyGraphTranslator dgraph2, int row, int row2,
+            boolean firstTable, LatencyAnalysisParallelAlgorithms tc2) throws InterruptedException {
         super("Detailed Latency By Row");
         tc = tc2;
         GridBagLayout gridbagmain = new GridBagLayout();
@@ -108,7 +123,6 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         columnByTaskNames[2] = HARDWARE;
         columnByTaskNames[3] = START_TIME;
         columnByTaskNames[4] = END_TIME;
-        JPanel jp04 = new JPanel(new BorderLayout());
         tc.setDgraph1(dgraph1);
         tc.setDgraph2(dgraph2);
         tc.setRow(row);
@@ -151,10 +165,13 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             }
         };
         // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
+        JPanel jp02 = new JPanel(new BorderLayout());
+        jp02.setBorder(new javax.swing.border.TitledBorder(MANDATORY_TRANSACTIONS_ST1));
         JTable taskNames = new JTable(model);
         taskNames.setAutoCreateRowSorter(true);
         scrollPane11 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane11.setVisible(true);
+        jp02.add(scrollPane11);
         c02.gridheight = 1;
         c02.weighty = 1.0;
         c02.weightx = 1.0;
@@ -163,7 +180,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         c02.gridy = 0;
         c02.fill = GridBagConstraints.BOTH;
         // c02.fill = GridBagConstraints.BOTH;
-        framePanel.add(scrollPane11, c02);
+        framePanel.add(jp02, c02);
         DefaultTableModel model12 = new DefaultTableModel(dataDetailedByTask2, columnByTaskNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -194,8 +211,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane12.setVisible(true);
         c02.gridx = 1;
         c02.gridy = 0;
-        c02.fill = GridBagConstraints.BOTH;
-        framePanel.add(scrollPane12, c02);
+        JPanel jp03 = new JPanel(new BorderLayout());
+        jp03.setBorder(new javax.swing.border.TitledBorder(MANDATORY_TRANSACTIONS_ST2));
+        jp03.add(scrollPane12);
+        framePanel.add(jp03, c02);
         columnByHWNames[0] = TASKS_SAME_DEVICE;
         columnByHWNames[1] = TRANSACTION_DIAGRAM_NAME;
         columnByHWNames[2] = HARDWARE;
@@ -244,8 +263,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane13.setVisible(true);
         c02.gridx = 0;
         c02.gridy = 1;
-        c02.fill = GridBagConstraints.BOTH;
-        framePanel.add(scrollPane13, c02);
+        JPanel jp04 = new JPanel(new BorderLayout());
+        jp04.setBorder(new javax.swing.border.TitledBorder(NON_MANDATORY_TRANSACTIONS_ST1));
+        jp04.add(scrollPane13);
+        framePanel.add(jp04, c02);
         DefaultTableModel model3 = new DefaultTableModel(dataHWDelayByTask2, columnByHWNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -276,23 +297,79 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane14.setVisible(true);
         c02.gridx = 1;
         c02.gridy = 1;
-        c02.fill = GridBagConstraints.BOTH;
-        framePanel.add(scrollPane14, c02);
+        JPanel jp05 = new JPanel(new BorderLayout());
+        jp05.setBorder(new javax.swing.border.TitledBorder(NON_MANDATORY_TRANSACTIONS_ST2));
+        jp05.add(scrollPane14);
+        framePanel.add(jp05, c02);
         scrollPane15 = new JScrollPane(LatencyTable(dgraph1, row, firstTable), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane15.setVisible(true);
-        c02.gridwidth = 2;
         c02.gridx = 0;
         c02.gridy = 3;
+        c02.gridwidth = 2;
         c02.fill = GridBagConstraints.BOTH;
-        framePanel.add(scrollPane15, c02);
+        JPanel jp06 = new JPanel(new BorderLayout());
+        jp06.setBorder(new javax.swing.border.TitledBorder(ST1));
+        jp06.add(scrollPane15);
+        framePanel.add(jp06, c02);
+        // framePanel.add(scrollPane15, c02);
         scrollPane16 = new JScrollPane(LatencyTable(dgraph2, row2, firstTable), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane16.setVisible(true);
         c02.gridx = 0;
         c02.gridy = 4;
-        c02.fill = GridBagConstraints.BOTH;
-        framePanel.add(scrollPane16, c02);
+        c02.gridwidth = 2;
+        JPanel jp07 = new JPanel(new BorderLayout());
+        jp07.setBorder(new javax.swing.border.TitledBorder(ST2));
+        jp07.add(scrollPane16);
+        framePanel.add(jp07, c02);
+        c02.gridx = 0;
+        c02.gridy = 5;
+        c02.gridwidth = 2;
+        // framePanel.add(scrollPane16, c02);
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c02.gridwidth = 2;
+        c01.gridx = 0;
+        c01.gridy = 0;
+        JLabel pBarLabel0 = new JLabel(TABLE_LENGED);
+        JPanel lengedpanel = new JPanel(gridbag01);
+        lengedpanel.add(pBarLabel0, c01);
+        c01.gridx = 2;
+        c01.gridy = 0;
+        JLabel pBarLabel = new JLabel(MANDATORY_TRANSACTIONS, JLabel.RIGHT);
+        lengedpanel.add(pBarLabel, c01);
+        c01.gridx = 1;
+        c01.gridy = 0;
+        JLabel pBarLabel2 = new JLabel("    ", JLabel.LEFT);
+        pBarLabel2.setOpaque(true);
+        pBarLabel2.setBackground(Color.GREEN);
+        lengedpanel.add(pBarLabel2, c01);
+        c01.gridx = 4;
+        c01.gridy = 0;
+        JLabel pBarLabel3 = new JLabel(NON_MAND_CONT_TRAN, JLabel.RIGHT);
+        lengedpanel.add(pBarLabel3, c01);
+        c01.gridx = 3;
+        c01.gridy = 0;
+        JLabel pBarLabel4 = new JLabel("    ", JLabel.LEFT);
+        pBarLabel4.setOpaque(true);
+        pBarLabel4.setBackground(Color.RED);
+        lengedpanel.add(pBarLabel4, c01);
+        c01.gridx = 6;
+        c01.gridy = 0;
+        JLabel pBarLabel5 = new JLabel(NON_MAND_NO_CONT_TRAN, JLabel.RIGHT);
+        lengedpanel.add(pBarLabel5, c01);
+        c01.gridx = 5;
+        c01.gridy = 0;
+        JLabel pBarLabel6 = new JLabel("    ", JLabel.LEFT);
+        pBarLabel6.setOpaque(true);
+        pBarLabel6.setBackground(Color.ORANGE);
+        lengedpanel.add(pBarLabel6, c01);
+        this.add(lengedpanel, c02);
         this.pack();
         this.setVisible(true);
     }
@@ -301,7 +378,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
     public void tableChanged(TableModelEvent e) {
     }
 
-    public JTable LatencyTable(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
+    public JTable LatencyTable(DependencyGraphTranslator dgraph, int row, boolean firstTable) {
         List<String> onPathBehavior = new ArrayList<String>();
         List<String> offPathBehavior = new ArrayList<String>();
         List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
