@@ -59,7 +59,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import simulationtraceanalysis.DependencyGraphTranslator;
+
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.interactivesimulation.SimulationTransaction;
 
 /**

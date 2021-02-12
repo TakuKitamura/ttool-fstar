@@ -6,8 +6,9 @@ import java.util.Vector;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.xml.sax.SAXException;
-import simulationtraceanalysis.DependencyGraphTranslator;
+
 import tmltranslator.TMLMapping;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TGComponent;

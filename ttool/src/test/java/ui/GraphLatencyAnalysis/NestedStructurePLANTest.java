@@ -12,7 +12,7 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
-import simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;

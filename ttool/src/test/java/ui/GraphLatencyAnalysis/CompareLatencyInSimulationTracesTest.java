@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;

@@ -63,8 +63,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import org.jgrapht.Graphs;
 import myutil.ScrolledJTextArea;
-import simulationtraceanalysis.DependencyGraphTranslator;
-import simulationtraceanalysis.Vertex;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulationtraceanalysis.Vertex;
 import ui.ColorManager;
 
 /**
