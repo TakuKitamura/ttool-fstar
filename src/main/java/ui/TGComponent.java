@@ -44,8 +44,10 @@ import myutil.Conversion;
 import myutil.GenericTree;
 import myutil.GraphicLib;
 import myutil.TraceManager;
+import tmltranslator.simulation.SimulationTransaction;
+
 import org.w3c.dom.NodeList;
-import ui.interactivesimulation.SimulationTransaction;
+
 import ui.procsd.ProCSDComponent;
 import ui.procsd.ProCSDPort;
 import ui.tmlad.TMLActivityDiagramPanel;
