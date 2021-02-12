@@ -46,8 +46,6 @@ import java.util.Map.Entry;
 import java.util.Vector;
 import org.jgrapht.io.ExportException;
 import myutil.FileUtils;
-import simulationtraceanalysis.DependencyGraphTranslator;
-import simulationtraceanalysis.PlanArrays;
 import tmltranslator.TMLActivity;
 import tmltranslator.TMLActivityElement;
 import tmltranslator.TMLMapping;
@@ -56,6 +54,8 @@ import tmltranslator.TMLModeling;
 import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.TMLTask;
 import tmltranslator.dsez3engine.OptimizationResult;
+import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulationtraceanalysis.PlanArrays;
 import ui.CheckableLatency;
 import ui.MainGUI;
 import ui.SimulationTrace;
@@ -69,9 +69,8 @@ import ui.tmlad.TMLADExecI;
 import ui.tmlad.TMLActivityDiagramPanel;
 
 /**
- * Class TML Creation: 25/03/2019 Version 2.0 25/03/2019
- *
- * @author Ludovic APVRILLE
+ * 
+ * @author Maysam Zoor
  */
 public class Plan extends Command {
     private final static String TABS = "tabs";
