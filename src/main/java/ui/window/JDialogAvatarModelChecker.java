@@ -39,6 +39,7 @@
 
 package ui.window;
 
+import avatartranslator.AvatarDependencyGraph;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
@@ -106,6 +107,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
     protected static boolean ignoreInternalStatesSelected = true;
     protected static boolean generateDesignSelected = false;
+    protected static boolean generateDependencyGraphSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
     protected static boolean safetySelected = false;
@@ -182,7 +184,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
-            ignoreConcurrenceBetweenInternalActions, generateDesign;
+            ignoreConcurrenceBetweenInternalActions, generateDesign, generateDependencyGraph;
     protected JButton graphDirButton, graphPathDotButton;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
@@ -286,6 +288,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             generateDesign = new JCheckBox("[For testing purpose only] Generate Design", generateDesignSelected);
             generateDesign.addActionListener(this);
             jp01.add(generateDesign, c01);
+        }
+
+        if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
+            generateDependencyGraph = new JCheckBox("[For testing purpose only] Generate dependency graph", generateDependencyGraphSelected);
+            generateDependencyGraph.addActionListener(this);
+            jp01.add(generateDependencyGraph, c01);
         }
 
         c01.gridwidth = 1;
@@ -826,6 +834,16 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 }
             }
 
+            if (generateDependencyGraphSelected) {
+                TraceManager.addDev("Generating dependency graph");
+                AvatarDependencyGraph adg = spec.makeDependencyGraph();
+                RG rg = new RG("Dependency Graph");
+                rg.graph = adg.getGraph();
+                rg.nbOfStates = rg.graph.getNbOfStates();
+                rg.nbOfTransitions = rg.graph.getNbOfTransitions();
+                mgui.addRG(rg);
+            }
+
             endDate = null;
             previousNbOfStates = 0;
             startDate = new Date();
@@ -1225,6 +1243,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         graphPathDot.setEnabled(saveGraphDot.isSelected() && saveGraphAUT.isSelected());
         if (generateDesign != null) {
             generateDesignSelected = generateDesign.isSelected();
+        }
+        if (generateDependencyGraph != null) {
+            generateDependencyGraphSelected = generateDependencyGraph.isSelected();
         }
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();

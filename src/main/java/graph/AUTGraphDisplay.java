@@ -161,11 +161,18 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         graph.computeStates();
         for (AUTState state : graph.getStates()) {
             node = vGraph.addNode("" + state.id);
-            node.setAttribute("ui.label", "" + state.id);
+
+            if (state.info == null) {
+                node.setAttribute("ui.label", "" + state.id);
+            } else {
+                node.setAttribute("ui.label", "" + state.id + "/" + state.info );
+            }
+
             if (state.getNbOutTransitions() == 0) {
                 node.setAttribute("ui.class", "deadlock");
             }
-            if (cpt == 0) {
+
+            if ((cpt ==0) || (state.isOrigin)) {
                 node.setAttribute("ui.class", "init");
                 firstNode = node;
             }

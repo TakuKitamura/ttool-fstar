@@ -53,11 +53,13 @@ import java.util.Random;
  */
 public class AUTState implements Comparable<AUTState> {
 
+	public String info;
     public int id;
     public ArrayList<AUTTransition> inTransitions; // Arriving to that state
     public ArrayList<AUTTransition> outTransitions; // Departing from that state
     public boolean met = false;
     public Object referenceObject;
+    public boolean isOrigin = false;
 
     public AUTState(int _id) {
         id = _id;

@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -41,44 +41,37 @@ package avatartranslator;
 import myutil.Conversion;
 import myutil.TraceManager;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.util.*;
+
 /**
-   * Class AvatarSpecification
-   * Avatar specification
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSpecification
+ * Avatar specification
+ * Creation: 20/05/2010
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 20/05/2010
  */
 public class AvatarSpecification extends AvatarElement {
 
     public final static int UPPAAL_MAX_INT = 32767;
-    
-	public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
-    
+
+    public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
+    public List<String> checkedIDs;
     private List<AvatarBlock> blocks;
     private List<AvatarRelation> relations;
-
     private List<AvatarInterfaceRelation> irelations;
     private List<AvatarAMSInterface> interfaces;
-
     /**
      * The list of all library functions that can be called.
      */
     private List<AvatarLibraryFunction> libraryFunctions;
 
-    private String applicationCode;
-
     //private AvatarBroadcast broadcast;
-
+    private String applicationCode;
     private List<AvatarPragma> pragmas;
     private List<String> safety_pragmas;
-	private List<AvatarPragmaLatency> latency_pragmas;
+    private List<AvatarPragmaLatency> latency_pragmas;
     private List<AvatarConstant> constants;
-	public List<String> checkedIDs;
     private boolean robustnessMade = false;
 
     private Object informationSource; // element from which the spec has been built
@@ -86,26 +79,26 @@ public class AvatarSpecification extends AvatarElement {
 
     public AvatarSpecification(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-        blocks = new LinkedList<AvatarBlock>();
-	interfaces = new LinkedList<AvatarAMSInterface>();
-        relations = new LinkedList<AvatarRelation>();
-        //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
-        pragmas = new LinkedList<AvatarPragma>();
-        constants = new LinkedList<AvatarConstant>();
-        safety_pragmas = new LinkedList<String>();
-		latency_pragmas = new LinkedList<AvatarPragmaLatency>();
-        this.constants.add (AvatarConstant.FALSE);
-        this.constants.add (AvatarConstant.TRUE);
-		checkedIDs= new ArrayList<String>();
-        this.libraryFunctions = new LinkedList<AvatarLibraryFunction> ();
+        blocks = new LinkedList<>();
+        interfaces = new LinkedList<>();
+        relations = new LinkedList<>();
+        pragmas = new LinkedList<>();
+        constants = new LinkedList<>();
+        safety_pragmas = new LinkedList<>();
+        latency_pragmas = new LinkedList<>();
+        this.constants.add(AvatarConstant.FALSE);
+        this.constants.add(AvatarConstant.TRUE);
+        checkedIDs = new ArrayList<>();
+        this.libraryFunctions = new LinkedList<>();
     }
 
-    public List<AvatarLibraryFunction> getListOfLibraryFunctions () {
+
+    public List<AvatarLibraryFunction> getListOfLibraryFunctions() {
         return this.libraryFunctions;
     }
 
-    public void addLibraryFunction (AvatarLibraryFunction libraryFunction) {
-        this.libraryFunctions.add (libraryFunction);
+    public void addLibraryFunction(AvatarLibraryFunction libraryFunction) {
+        this.libraryFunctions.add(libraryFunction);
     }
 
     // For code generation
@@ -134,20 +127,19 @@ public class AvatarSpecification extends AvatarElement {
         return (applicationCode.indexOf("__user_init()") != -1);
     }
 
+    public Object getInformationSource() {
+        return informationSource;
+    }
 
     public void setInformationSource(Object o) {
         informationSource = o;
-    }
-
-    public Object getInformationSource() {
-        return informationSource;
     }
 
     public List<AvatarBlock> getListOfBlocks() {
         return blocks;
     }
 
-     public List<AvatarAMSInterface> getListOfInterfaces() {
+    public List<AvatarAMSInterface> getListOfInterfaces() {
         return interfaces;
     }
 
@@ -172,15 +164,15 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public int getNbOfASMGraphicalElements() {
-    	int cpt = 0;
-    	for(AvatarBlock block: blocks) {
-    		cpt += block.getNbOfASMGraphicalElements();
-    	}
-    	return cpt;
+        int cpt = 0;
+        for (AvatarBlock block : blocks) {
+            cpt += block.getNbOfASMGraphicalElements();
+        }
+        return cpt;
     }
 
     public boolean isASynchronousSignal(AvatarSignal _as) {
-        for(AvatarRelation ar: relations) {
+        for (AvatarRelation ar : relations) {
             if (ar.containsSignal(_as)) {
                 return !(ar.isAsynchronous());
             }
@@ -189,27 +181,37 @@ public class AvatarSpecification extends AvatarElement {
         return false;
     }
 
-    //DG
-    public boolean ASynchronousExist(){
-    	List<AvatarRelation> asynchro = getRelations();
-      
-    	for ( AvatarRelation ar : asynchro )
-    		if (ar.isAsynchronous())
-    			return true;
-      
-    	return false;
+    public AvatarSignal getCorrespondingSignal(AvatarSignal _as) {
+        for (AvatarRelation ar : relations) {
+            if (ar.containsSignal(_as)) {
+                int index = ar.hasSignal(_as);
+                return ar.getInSignal(index);
+            }
+        }
+        return null;
     }
 
-    public boolean AMSExist(){
-    	List<AvatarRelation> ams = getRelations();
-      
-    	for ( AvatarRelation ar : ams )
-    		if (ar.isAMS())
-    			return true;
-      
-    	return false;
+    //DG
+    public boolean ASynchronousExist() {
+        List<AvatarRelation> asynchro = getRelations();
+
+        for (AvatarRelation ar : asynchro)
+            if (ar.isAsynchronous())
+                return true;
+
+        return false;
     }
-    
+
+    public boolean AMSExist() {
+        List<AvatarRelation> ams = getRelations();
+
+        for (AvatarRelation ar : ams)
+            if (ar.isAMS())
+                return true;
+
+        return false;
+    }
+
     // end DG
     public void addBlock(AvatarBlock _block) {
         blocks.add(_block);
@@ -217,14 +219,6 @@ public class AvatarSpecification extends AvatarElement {
 
     public void addInterface(AvatarAMSInterface _interface) {
         interfaces.add(_interface);
-    }
-    
-    public void addRelation(AvatarRelation _relation) {
-        relations.add(_relation);
-    }
-
-     public void addInterfaceRelation(AvatarInterfaceRelation _irelation) {
-        irelations.add(_irelation);
     }
 
     /*public void addBroadcastSignal(AvatarSignal _as) {
@@ -236,6 +230,14 @@ public class AvatarSpecification extends AvatarElement {
       public AvatarBroadcast getBroadcast() {
       return broadcast;
       }*/
+
+    public void addRelation(AvatarRelation _relation) {
+        relations.add(_relation);
+    }
+
+    public void addInterfaceRelation(AvatarInterfaceRelation _irelation) {
+        irelations.add(_irelation);
+    }
 
     public void addPragma(AvatarPragma _pragma) {
         pragmas.add(_pragma);
@@ -250,10 +252,10 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public void addConstant(AvatarConstant _constant) {
-    	//Only add unique constants
-    	if (this.getAvatarConstantWithName(_constant.getName())==null){
-    		constants.add(_constant);
-    	}
+        //Only add unique constants
+        if (this.getAvatarConstantWithName(_constant.getName()) == null) {
+            constants.add(_constant);
+        }
     }
 
     @Override
@@ -261,37 +263,36 @@ public class AvatarSpecification extends AvatarElement {
         //Thread.currentThread().dumpStack();
         StringBuffer sb = new StringBuffer("Blocks:\n");
         TraceManager.addDev("TS Block");
-        for(AvatarBlock block: blocks) {
-            sb.append("*** " + block.toString()+"\n");
+        for (AvatarBlock block : blocks) {
+            sb.append("*** " + block.toString() + "\n");
         }
         TraceManager.addDev("TS Relations");
         sb.append("\nRelations:\n");
-        for(AvatarRelation relation: relations) {
+        for (AvatarRelation relation : relations) {
             sb.append("Relation:" + relation.toString() + "\n");
         }
         sb.append("\nPragmas:\n");
-        for(AvatarPragma pragma: pragmas) {
+        for (AvatarPragma pragma : pragmas) {
             sb.append("Pragma:" + pragma.toString() + "\n");
         }
-		for (AvatarConstant constant: constants){
-		    sb.append("Constant:" + constant.toString() + "\n");
-		}
+        for (AvatarConstant constant : constants) {
+            sb.append("Constant:" + constant.toString() + "\n");
+        }
 
         TraceManager.addDev("TS All done");
 
-		return sb.toString();
+        return sb.toString();
     }
-
 
     public String toShortString() {
         //TraceManager.addDev("To Short String");
         //Thread.currentThread().dumpStack();
         StringBuffer sb = new StringBuffer("Blocks:\n");
-        for(AvatarBlock block: blocks) {
-            sb.append("*** " + block.toShortString()+"\n");
+        for (AvatarBlock block : blocks) {
+            sb.append("*** " + block.toShortString() + "\n");
         }
         sb.append("\nRelations:\n");
-        for(AvatarRelation relation: relations) {
+        for (AvatarRelation relation : relations) {
             sb.append("Relation:" + relation.toString() + "\n");
         }
         /*for (AvatarConstant constant: constants){
@@ -302,30 +303,30 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public AvatarBlock getBlockWithName(String _name) {
-        for(AvatarBlock block: blocks) {
-            if (block.getName().compareTo(_name)== 0) {
+        for (AvatarBlock block : blocks) {
+            if (block.getName().compareTo(_name) == 0) {
                 return block;
             }
         }
 
         return null;
     }
-    
+
     public int getBlockIndex(AvatarBlock _block) {
         int cpt = 0;
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             if (block == _block) {
                 return cpt;
             }
             cpt++;
         }
-        
+
         return -1;
     }
 
     public AvatarAMSInterface getAMSInterfaceWithName(String _name) {
-        for(AvatarAMSInterface interf: interfaces) {
-            if (interf.getName().compareTo(_name)== 0) {
+        for (AvatarAMSInterface interf : interfaces) {
+            if (interf.getName().compareTo(_name) == 0) {
                 return interf;
             }
         }
@@ -334,8 +335,8 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public AvatarConstant getAvatarConstantWithName(String _name) {
-        for(AvatarConstant constant: constants) {
-            if (constant.getName().compareTo(_name)== 0) {
+        for (AvatarConstant constant : constants) {
+            if (constant.getName().compareTo(_name) == 0) {
                 return constant;
             }
         }
@@ -343,24 +344,15 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
-    public static String putAttributeValueInString(String _source, AvatarAttribute _at) {
-        return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getDefaultInitialValue());
-    }
-
-    public static String putRealAttributeValueInString(String _source, AvatarAttribute _at) {
-        return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getInitialValue());
-    }
-    
-    
     /* Generates the Expression Solvers, returns the AvatarStateMachineElement
      * containing the errors */
     public List<AvatarStateMachineElement> generateAllExpressionSolvers() {
         List<AvatarStateMachineElement> errors = new ArrayList<>();
         AvatarTransition at;
         boolean returnVal;
-        
+
         AvatarExpressionSolver.emptyAttributesMap();
-        
+
         for (AvatarBlock block : getListOfBlocks()) {
             AvatarStateMachine asm = block.getStateMachine();
 
@@ -395,31 +387,31 @@ public class AvatarSpecification extends AvatarElement {
                 }
             }
         }
-        
+
         return errors;
     }
 
     public void removeCompositeStates() {
-        for(AvatarBlock block: blocks) {
-	    //TraceManager.addDev("- - - - - - - - Removing composite states of " + block);
+        for (AvatarBlock block : blocks) {
+            //TraceManager.addDev("- - - - - - - - Removing composite states of " + block);
             block.getStateMachine().removeCompositeStates(block);
         }
     }
 
     public void makeFullStates() {
-    	for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             block.getStateMachine().makeFullStates(block);
         }
     }
 
     public void removeRandoms() {
-		for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             block.getStateMachine().removeRandoms(block);
         }
     }
 
     public void removeAllDelays() {
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             block.getStateMachine().removeAllDelays();
         }
     }
@@ -428,35 +420,35 @@ public class AvatarSpecification extends AvatarElement {
         //renameTimers();
 
         List<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
-        for(AvatarBlock block: blocks) {
-        	if (block.hasTimerAttribute()) {
-        		block.removeTimers(this, addedBlocks);
-        	}
+        for (AvatarBlock block : blocks) {
+            if (block.hasTimerAttribute()) {
+                block.removeTimers(this, addedBlocks);
+            }
         }
 
-        for(int i=0; i<addedBlocks.size(); i++) {
+        for (int i = 0; i < addedBlocks.size(); i++) {
             addBlock(addedBlocks.get(i));
         }
     }
-    
+
     public void removeConstants() {
-        for(AvatarBlock block : blocks) {
+        for (AvatarBlock block : blocks) {
             block.removeConstantAttributes();
         }
     }
-    
+
     public void sortAttributes() {
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             block.sortAttributes();
         }
     }
-    
+
     public void setAttributeOptRatio(int attributeOptRatio) {
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             block.setAttributeOptRatio(attributeOptRatio);
         }
     }
-    
+
 //
 //    private void renameTimers() {
 //        // Check whether timers have the same name in different blocks
@@ -484,81 +476,82 @@ public class AvatarSpecification extends AvatarElement {
      * synchronous relations and one block per FIFO
      * The size of the infinite fifo is max 1024
      * and min 1
+     *
      * @param _maxSizeOfInfiniteFifo : the max size of the infinite fifo
      */
     public void removeFIFOs(int _maxSizeOfInfiniteFifo) {
-    	List<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();
-    	List<AvatarRelation> newOnes = new LinkedList<AvatarRelation>();
+        List<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();
+        List<AvatarRelation> newOnes = new LinkedList<AvatarRelation>();
 
-    	int FIFO_ID = 0;
-    	for(AvatarRelation ar: relations) {
-    		if (ar.isAsynchronous()) {
-    			// Must be removed
-    			int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
-    			//TraceManager.addDev("***************************** Size of FIFO:" + size);
-    			size = Math.max(1, size);
-    			FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
-    		}
-    	}
+        int FIFO_ID = 0;
+        for (AvatarRelation ar : relations) {
+            if (ar.isAsynchronous()) {
+                // Must be removed
+                int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
+                //TraceManager.addDev("***************************** Size of FIFO:" + size);
+                size = Math.max(1, size);
+                FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
+            }
+        }
 
-    	for(AvatarRelation ar: oldOnes) {
-    		relations.remove(ar);
-    	}
+        for (AvatarRelation ar : oldOnes) {
+            relations.remove(ar);
+        }
 
-    	for(AvatarRelation ar: newOnes) {
-    		relations.add(ar);
-    	}
+        for (AvatarRelation ar : newOnes) {
+            relations.add(ar);
+        }
     }
 
-    private int removeFIFO(AvatarRelation _ar, int _sizeOfInfiniteFifo, List<AvatarRelation> _oldOnes, List<AvatarRelation> _newOnes, int FIFO_ID ) {
-    	for(int i=0; i<_ar.nbOfSignals(); i++) {
-    		if (_ar.getSignal1(i).isIn()) {
-    			FIFO_ID = removeFIFO(_ar, _ar.getSignal2(i), _ar.getSignal1(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
-    		} else {
-    			FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
-    		}
-    	}
-    	_oldOnes.add(_ar);
-    	return FIFO_ID;
+    private int removeFIFO(AvatarRelation _ar, int _sizeOfInfiniteFifo, List<AvatarRelation> _oldOnes, List<AvatarRelation> _newOnes, int FIFO_ID) {
+        for (int i = 0; i < _ar.nbOfSignals(); i++) {
+            if (_ar.getSignal1(i).isIn()) {
+                FIFO_ID = removeFIFO(_ar, _ar.getSignal2(i), _ar.getSignal1(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+            } else {
+                FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+            }
+        }
+        _oldOnes.add(_ar);
+        return FIFO_ID;
     }
-    
+
     private int removeFIFO(AvatarRelation _ar, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfInfiniteFifo, List<AvatarRelation> _oldOnes, List<AvatarRelation> _newOnes, int FIFO_ID) {
-    	// We create the new block, and the new relation towards the new block
-    	String nameOfBlock = "FIFO__" + _sig1.getName() + "__" + _sig2.getName() + "__" + FIFO_ID;
-    	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo, FIFO_ID);
-    	blocks.add(fifoBlock);
+        // We create the new block, and the new relation towards the new block
+        String nameOfBlock = "FIFO__" + _sig1.getName() + "__" + _sig2.getName() + "__" + FIFO_ID;
+        AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo, FIFO_ID);
+        blocks.add(fifoBlock);
 
-    	// We now need to create the new relation
-    	AvatarRelation newAR1 = new AvatarRelation("FIFO__write_" + FIFO_ID, _ar.block1, fifoBlock, _ar.getReferenceObject());
-    	newAR1.setAsynchronous(false);
-    	newAR1.setPrivate(_ar.isPrivate());
-    	newAR1.addSignals(_sig1, fifoBlock.getSignalByName("write"));
-    	_newOnes.add(newAR1);
+        // We now need to create the new relation
+        AvatarRelation newAR1 = new AvatarRelation("FIFO__write_" + FIFO_ID, _ar.block1, fifoBlock, _ar.getReferenceObject());
+        newAR1.setAsynchronous(false);
+        newAR1.setPrivate(_ar.isPrivate());
+        newAR1.addSignals(_sig1, fifoBlock.getSignalByName("write"));
+        _newOnes.add(newAR1);
 
-    	AvatarRelation newAR2 = new AvatarRelation("FIFO__read_" + FIFO_ID, fifoBlock, _ar.block2, _ar.getReferenceObject());
-    	newAR2.setAsynchronous(false);
-    	newAR2.setPrivate(_ar.isPrivate());
-    	newAR2.addSignals(fifoBlock.getSignalByName("read"), _sig2);
-    	_newOnes.add(newAR2);
+        AvatarRelation newAR2 = new AvatarRelation("FIFO__read_" + FIFO_ID, fifoBlock, _ar.block2, _ar.getReferenceObject());
+        newAR2.setAsynchronous(false);
+        newAR2.setPrivate(_ar.isPrivate());
+        newAR2.addSignals(fifoBlock.getSignalByName("read"), _sig2);
+        _newOnes.add(newAR2);
 
-    	FIFO_ID ++;
-    	return FIFO_ID;
+        FIFO_ID++;
+        return FIFO_ID;
     }
 
     public boolean areSynchronized(AvatarSignal as1, AvatarSignal as2) {
-    	AvatarRelation ar = getAvatarRelationWithSignal(as1);
-    	if (ar == null) {
-    		return false;
-    	}
+        AvatarRelation ar = getAvatarRelationWithSignal(as1);
+        if (ar == null) {
+            return false;
+        }
 
-    	int index1 = ar.getIndexOfSignal(as1);
-    	int index2 = ar.getIndexOfSignal(as2);
+        int index1 = ar.getIndexOfSignal(as1);
+        int index2 = ar.getIndexOfSignal(as2);
 
-    	return (index1 == index2);
+        return (index1 == index2);
     }
 
     public AvatarRelation getAvatarRelationWithSignal(AvatarSignal _as) {
-        for(AvatarRelation ar: relations) {
+        for (AvatarRelation ar : relations) {
             if (ar.hasSignal(_as) > -1) {
                 return ar;
             }
@@ -568,7 +561,7 @@ public class AvatarSpecification extends AvatarElement {
 
     public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
         AvatarStateMachineElement asme;
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             asme = block.getStateMachineElementFromReferenceObject(_o);
             if (asme != null) {
                 return asme;
@@ -578,7 +571,7 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public AvatarBlock getBlockFromReferenceObject(Object _o) {
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             if (block.containsStateMachineElementWithReferenceObject(_o)) {
                 return block;
             }
@@ -589,7 +582,7 @@ public class AvatarSpecification extends AvatarElement {
     public AvatarBlock getBlockWithAttribute(String _attributeName) {
         int index;
 
-        for(AvatarBlock block: blocks) {
+        for (AvatarBlock block : blocks) {
             index = block.getIndexOfAvatarAttributeWithName(_attributeName);
             if (index > -1) {
                 return block;
@@ -599,11 +592,11 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public void removeElseGuards() {
-        for (AvatarBlock block: blocks) {
-            removeElseGuards(block.getStateMachine ());
+        for (AvatarBlock block : blocks) {
+            removeElseGuards(block.getStateMachine());
         }
-        for (AvatarLibraryFunction function: libraryFunctions) {
-            removeElseGuards(function.getStateMachine ());
+        for (AvatarLibraryFunction function : libraryFunctions) {
+            removeElseGuards(function.getStateMachine());
         }
     }
 
@@ -612,22 +605,22 @@ public class AvatarSpecification extends AvatarElement {
         if (asm == null)
             return;
 
-        for (AvatarStateMachineElement asme: asm.getListOfElements ()) {
-            if (! (asme instanceof AvatarState))
+        for (AvatarStateMachineElement asme : asm.getListOfElements()) {
+            if (!(asme instanceof AvatarState))
                 continue;
 
             //TraceManager.addDev("Working with state " + asme.getNiceName());
-            for (AvatarStateMachineElement next: asme.getNexts ()) {
-                if (! (next instanceof AvatarTransition))
+            for (AvatarStateMachineElement next : asme.getNexts()) {
+                if (!(next instanceof AvatarTransition))
                     continue;
                 AvatarTransition at = (AvatarTransition) next;
-                AvatarGuard ancientGuard = at.getGuard ();
+                AvatarGuard ancientGuard = at.getGuard();
 
                 if (ancientGuard == null)
                     continue;
 
                 //TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString() + " type:" + ancientGuard.getClass().toString());
-                at.setGuard (ancientGuard.getRealGuard (asme));
+                at.setGuard(ancientGuard.getRealGuard(asme));
                 //TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
             }
         }
@@ -636,13 +629,13 @@ public class AvatarSpecification extends AvatarElement {
     /**
      * Removes all function calls by inlining them.
      */
-    public void removeLibraryFunctionCalls () {
-        for (AvatarBlock block: this.blocks) {
-            AvatarStateMachine asm = block.getStateMachine ();
+    public void removeLibraryFunctionCalls() {
+        for (AvatarBlock block : this.blocks) {
+            AvatarStateMachine asm = block.getStateMachine();
             if (asm == null)
                 continue;
 
-            asm.removeLibraryFunctionCalls (block);
+            asm.removeLibraryFunctionCalls(block);
         }
 
 
@@ -650,7 +643,7 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public boolean hasLossyChannel() {
-        for(AvatarRelation relation: relations)
+        for (AvatarRelation relation : relations)
             if (relation.isLossy())
                 return true;
 
@@ -659,10 +652,10 @@ public class AvatarSpecification extends AvatarElement {
 
 
     public void removeEmptyTransitions(boolean _canOptimize) {
-	for (AvatarBlock block: this.blocks) {
-            AvatarStateMachine asm = block.getStateMachine ();
+        for (AvatarBlock block : this.blocks) {
+            AvatarStateMachine asm = block.getStateMachine();
             if (asm != null)
-		asm.removeEmptyTransitions (block, _canOptimize);
+                asm.removeEmptyTransitions(block, _canOptimize);
         }
     }
 
@@ -748,79 +741,91 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public AvatarSpecification advancedClone() {
-		AvatarSpecification spec = new AvatarSpecification(this.getName(), this.getReferenceObject());
-		Map<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
-	
-		// Cloning block definition
-		for(AvatarBlock block: blocks) {
-		    AvatarBlock nB = block.advancedClone(spec);
-		    correspondenceBlocks.put(block, nB);
-		    spec.addBlock(nB);
-		}
-	
-		// Handling the clone of fathers
-		for(AvatarBlock block: blocks) {
-		    AvatarBlock father = block.getFather();
-		    if (father != null) {
-				AvatarBlock nb = spec.getBlockWithName(block.getName());
-				if (nb != null) {
-				    AvatarBlock nf = spec.getBlockWithName(father.getName());
-				    if (nf != null) {
-						//TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
-						nb.setFather(nf);
-				    }
-				}
-		    }
-		}
-	
-		// Cloning asm
-		for(AvatarBlock block: blocks) {
-		    AvatarBlock nb = spec.getBlockWithName(block.getName());
-		    block.getStateMachine().advancedClone(nb.getStateMachine(), nb);
-		}
-	
-		// Relations
-		for(AvatarRelation relation: relations) {
-		    AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
-		    if (nR != null) {
-		    	spec.addRelation(nR);
-		    }
-		}
+        AvatarSpecification spec = new AvatarSpecification(this.getName(), this.getReferenceObject());
+        Map<AvatarBlock, AvatarBlock> correspondenceBlocks = new HashMap<AvatarBlock, AvatarBlock>();
+
+        // Cloning block definition
+        for (AvatarBlock block : blocks) {
+            AvatarBlock nB = block.advancedClone(spec);
+            correspondenceBlocks.put(block, nB);
+            spec.addBlock(nB);
+        }
+
+        // Handling the clone of fathers
+        for (AvatarBlock block : blocks) {
+            AvatarBlock father = block.getFather();
+            if (father != null) {
+                AvatarBlock nb = spec.getBlockWithName(block.getName());
+                if (nb != null) {
+                    AvatarBlock nf = spec.getBlockWithName(father.getName());
+                    if (nf != null) {
+                        //TraceManager.addDev("Setting "+ nf.getName() + " as the father of " + nb.getName());
+                        nb.setFather(nf);
+                    }
+                }
+            }
+        }
+
+        // Cloning asm
+        for (AvatarBlock block : blocks) {
+            AvatarBlock nb = spec.getBlockWithName(block.getName());
+            block.getStateMachine().advancedClone(nb.getStateMachine(), nb);
+        }
+
+        // Relations
+        for (AvatarRelation relation : relations) {
+            AvatarRelation nR = relation.advancedClone(correspondenceBlocks);
+            if (nR != null) {
+                spec.addRelation(nR);
+            }
+        }
 	
 		/*for(AvatarPragma pragma: pragmas) {
 		    AvatarPragma nP = pragma.advancedClone();
 		    spec.addPragma(nP);
 		    }*/
-	
-		for(String safetyPragma: safety_pragmas) {
-		    spec.addSafetyPragma(safetyPragma);
-		}
 
-		for(AvatarPragmaLatency latencyPragma: latency_pragmas) {
-		    spec.addLatencyPragma(latencyPragma);
-		}
-	
-		for(AvatarConstant constant: constants) {
-		    AvatarConstant cN = constant.advancedClone();
-		    spec.addConstant(cN);
-		}
-		for (String id:checkedIDs){
-			spec.checkedIDs.add(id);
-		}
+        for (String safetyPragma : safety_pragmas) {
+            spec.addSafetyPragma(safetyPragma);
+        }
 
-		spec.setInformationSource(getInformationSource());
-		spec.addApplicationCode(getApplicationCode());
+        for (AvatarPragmaLatency latencyPragma : latency_pragmas) {
+            spec.addLatencyPragma(latencyPragma);
+        }
 
-		return spec;
+        for (AvatarConstant constant : constants) {
+            AvatarConstant cN = constant.advancedClone();
+            spec.addConstant(cN);
+        }
+        for (String id : checkedIDs) {
+            spec.checkedIDs.add(id);
+        }
+
+        spec.setInformationSource(getInformationSource());
+        spec.addApplicationCode(getApplicationCode());
+
+        return spec;
     }
 
-    public AvatarAttribute getMatchingAttribute (AvatarAttribute aa) {
-        for (AvatarBlock block: this.blocks) {
+    public AvatarAttribute getMatchingAttribute(AvatarAttribute aa) {
+        for (AvatarBlock block : this.blocks) {
             if (block.getName().compareTo(aa.getBlock().getName()) == 0) {
-                return block.getAvatarAttributeWithName (aa.getName ());
+                return block.getAvatarAttributeWithName(aa.getName());
             }
         }
 
         return null;
     }
+
+    public AvatarDependencyGraph makeDependencyGraph() {
+        AvatarDependencyGraph adg = new AvatarDependencyGraph();
+        adg.buildGraph(this);
+
+
+
+        return adg;
+    }
+
+
+
 }

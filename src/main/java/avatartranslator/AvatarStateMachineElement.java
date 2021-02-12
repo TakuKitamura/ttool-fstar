@@ -211,6 +211,10 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     }
 
+    public String toStringExtendedID() {
+        return getExtendedName() + " ID=" + getID();
+    }
+
     @Override
     public String toString() {
         return toString(null);
