@@ -104,15 +104,15 @@ import myutil.ScrolledJTextArea;
 import tmltranslator.TMLActivity;
 import tmltranslator.TMLMapping;
 import tmltranslator.TMLTask;
-import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulation.DependencyGraphTranslator;
+import tmltranslator.simulation.SimulationTransaction;
+import tmltranslator.simulation.SimulationTransactionParser;
 import ui.CheckableLatency;
 import ui.ColorManager;
 import ui.SimulationTrace;
 import ui.TGComponent;
 import ui.TGTextFieldWithHelp;
 import ui.TMLComponentDesignPanel;
-import ui.interactivesimulation.SimulationTransaction;
-import ui.interactivesimulation.SimulationTransactionParser;
 import ui.tmlad.TMLADExecI;
 import ui.tmlad.TMLActivityDiagramPanel;
 

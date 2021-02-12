@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.interactivesimulation;
+package tmltranslator.simulation;
 
 /**
  * Class SimulationTransaction Transaction as defined by the simulation engine

@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 import tmltranslator.TMLMapping;
-import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulation.DependencyGraphTranslator;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TGComponent;

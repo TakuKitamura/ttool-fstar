@@ -8,12 +8,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.simulation.SimulationTransaction;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
 import ui.*;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiDiagramPanel;
 

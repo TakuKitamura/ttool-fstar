@@ -67,12 +67,13 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 import common.ConfigurationTTool;
-import tmltranslator.simulationtraceanalysis.CompareSimulationTrace;
+import tmltranslator.simulation.CompareSimulationTrace;
+import tmltranslator.simulation.SimulationTraceTableRenderer;
+import tmltranslator.simulation.SimulationTransaction;
+import tmltranslator.simulation.SimulationTransactionParser;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.interactivesimulation.InteractiveSimulationActions;
-import ui.interactivesimulation.SimulationTransaction;
-import ui.interactivesimulation.SimulationTransactionParser;
 
 public class JFrameCompareSimulationTraces extends JFrame implements ActionListener, TableModelListener {
     private JButton browse, parse, difference, latencyDetails, latencyAnalysis, close;
@@ -99,7 +100,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
     JPanel latencyPanel = new JPanel(new GridBagLayout());;
     private JComboBox<String> tracesCombo1, tracesCombo2;
     private Thread t, t1;
-    private InteractiveSimulationActions[] actions;
+    private LatencyDetailedAnalysisActions[] actions;
     private JScrollPane scrollPane11;
 
     public JFrameCompareSimulationTraces(MainGUI mgui, String _title, SimulationTrace sST, boolean visible) {
@@ -287,9 +288,9 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
     }
 
     private void initActions() {
-        actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
-        for (int i = 0; i < InteractiveSimulationActions.NB_ACTION; i++) {
-            actions[i] = new InteractiveSimulationActions(i);
+        actions = new LatencyDetailedAnalysisActions[LatencyDetailedAnalysisActions.NB_ACTION];
+        for (int i = 0; i < LatencyDetailedAnalysisActions.NB_ACTION; i++) {
+            actions[i] = new LatencyDetailedAnalysisActions(i);
             actions[i].addActionListener(this);
             // actions[i].addKeyListener(this);
         }

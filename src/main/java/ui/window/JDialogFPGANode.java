@@ -42,10 +42,10 @@ package ui.window;
 import myutil.*;
 import tmltranslator.TMLMapping;
 import tmltranslator.modelcompiler.ArchUnitMEC;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.ColorManager;
 import ui.MainGUI;
 import ui.TGTextFieldWithHelp;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiFPGANode;
 
 import javax.swing.*;

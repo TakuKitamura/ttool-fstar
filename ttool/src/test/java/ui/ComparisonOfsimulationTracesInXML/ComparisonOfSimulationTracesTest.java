@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import tmltranslator.simulationtraceanalysis.CompareSimulationTrace;
+import tmltranslator.simulation.CompareSimulationTrace;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.interactivesimulation.JFrameShowLatencyDetails;

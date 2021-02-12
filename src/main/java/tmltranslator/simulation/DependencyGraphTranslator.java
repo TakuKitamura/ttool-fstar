@@ -35,7 +35,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package tmltranslator.simulationtraceanalysis;
+package tmltranslator.simulation;
 
 import java.awt.Container;
 import java.awt.image.BufferedImage;
@@ -128,10 +128,6 @@ import tmltranslator.TMLTask;
 import tmltranslator.TMLWaitEvent;
 import tmltranslator.TMLWriteChannel;
 import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
-import ui.TGComponent;
-import ui.interactivesimulation.SimulationTransaction;
-import ui.interactivesimulation.SimulationTransactionParser;
-import ui.tmlcompd.TMLCPrimitivePort;
 
 /**
  * Class DirectedGraphTranslator: this class generate the directed graph
@@ -148,7 +144,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private TMLActivityElement currentElement;
     private Graph<Vertex, DefaultEdge> g;
     private final List<HwLink> links;
-    private final TMLMapping<TGComponent> tmap;
+    private final TMLMapping tmap;
     private final HashMap<String, String> addedEdges = new HashMap<String, String>();
     private final Vector<String> allLatencyTasks = new Vector<String>();
     private static JScrollPane scrollPane = new JScrollPane();
@@ -256,7 +252,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private DependencyGraphRelations dependencyGraphRelations = new DependencyGraphRelations();
 
     @SuppressWarnings("deprecation")
-    public DependencyGraphTranslator(TMLMapping<TGComponent> tmap1) {
+    public DependencyGraphTranslator(TMLMapping tmap1) {
         tmap = tmap1;
         links = tmap.getTMLArchitecture().getHwLinks();
         nodeNbProgressBar = 0;
@@ -304,9 +300,10 @@ public class DependencyGraphTranslator extends SwingWorker {
         return;
     }
 
+    @SuppressWarnings("unchecked")
     private void addUnmappedchannel() {
         DiploSimulatorCodeGenerator gen = new DiploSimulatorCodeGenerator(tmap);
-        for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
+        for (TMLChannel ch : (List<TMLChannel>) tmap.getTMLModeling().getChannels()) {
             List<HwCommunicationNode> pathNodes = gen.determineRoutingPath(tmap.getHwNodeOf(ch.getOriginTask()),
                     tmap.getHwNodeOf(ch.getDestinationTask()), ch);
             String channelName = ch.getName() + "__" + ch.getID();
@@ -347,6 +344,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         // SummaryCommMapping = tmap.getSummaryCommMapping();
     }
 
+    @SuppressWarnings("unchecked")
     private void addCPUs() {
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
         for (HwNode node : tmap.getArch().getCPUs()) {
@@ -361,6 +359,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void addFPGAs() {
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
         for (HwNode node : tmap.getArch().getFPGAs()) {
@@ -435,6 +434,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private HashMap<String, HashSet<TMLElement>> addMemories() {
         HashMap<String, HashSet<TMLElement>> memorychannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getMemories()) {
@@ -449,6 +449,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         return memorychannel;
     }
 
+    @SuppressWarnings("unchecked")
     private void addHwAs() {
         HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
         for (HwA node : tmap.getArch().getHwA()) {
@@ -463,6 +464,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private HashMap<String, HashSet<TMLElement>> addBridge() {
         HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getHwBridge()) {
@@ -477,6 +479,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         return bridgechannel;
     }
 
+    @SuppressWarnings("unchecked")
     private HashMap<String, HashSet<TMLElement>> addBUSs() {
         HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
         for (HwNode node : tmap.getArch().getBUSs()) {
@@ -641,11 +644,12 @@ public class DependencyGraphTranslator extends SwingWorker {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void expectedNumberofVertex() {
         for (HwA node : tmap.getArch().getHwA()) {
             if (tmap.getLisMappedTasks(node).size() > 0) {
                 nodeNbProgressBar = tmap.getLisMappedTasks(node).size() + nodeNbProgressBar;
-                for (TMLTask task : tmap.getLisMappedTasks(node)) {
+                for (TMLTask task : (HashSet<TMLTask>) tmap.getLisMappedTasks(node)) {
                     for (TMLActivityElement ae : task.getActivityDiagram().getElements()) {
                         if (ae.getName().equals(STOP_AFTER_INFINITE_LOOP)) {
                         } else {
@@ -658,7 +662,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         for (HwNode node : tmap.getArch().getCPUs()) {
             if (tmap.getLisMappedTasks(node).size() > 0) {
                 nodeNbProgressBar = tmap.getLisMappedTasks(node).size() + nodeNbProgressBar;
-                for (TMLTask task : tmap.getLisMappedTasks(node)) {
+                for (TMLTask task : (HashSet<TMLTask>) tmap.getLisMappedTasks(node)) {
                     for (TMLActivityElement ae : task.getActivityDiagram().getElements()) {
                         if (ae.getName().equals(STOP_AFTER_INFINITE_LOOP)) {
                         } else {
@@ -671,7 +675,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         HashSet<String> mappedcomm = new HashSet<String>();
         for (HwNode node : tmap.getArch().getBUSs()) {
             if (tmap.getLisMappedChannels(node).size() > 0) {
-                for (TMLElement entry : tmap.getLisMappedChannels(node)) {
+                for (TMLElement entry : (HashSet<TMLElement>) tmap.getLisMappedChannels(node)) {
                     if (!mappedcomm.contains(entry.getName())) {
                         mappedcomm.add(entry.getName());
                         nodeNbProgressBar++;
@@ -681,7 +685,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         }
         for (HwNode node : tmap.getArch().getHwBridge()) {
             if (tmap.getLisMappedChannels(node).size() > 0) {
-                for (TMLElement entry : tmap.getLisMappedChannels(node)) {
+                for (TMLElement entry : (HashSet<TMLElement>) tmap.getLisMappedChannels(node)) {
                     if (!mappedcomm.contains(entry.getName())) {
                         mappedcomm.add(entry.getName());
                         nodeNbProgressBar++;
@@ -691,7 +695,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         }
         for (HwNode node : tmap.getArch().getMemories()) {
             if (tmap.getLisMappedChannels(node).size() > 0) {
-                for (TMLElement entry : tmap.getLisMappedChannels(node)) {
+                for (TMLElement entry : (HashSet<TMLElement>) tmap.getLisMappedChannels(node)) {
                     if (!mappedcomm.contains(entry.getName())) {
                         mappedcomm.add(entry.getName());
                         nodeNbProgressBar++;
@@ -699,7 +703,7 @@ public class DependencyGraphTranslator extends SwingWorker {
                 }
             }
         }
-        for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
+        for (TMLChannel ch : (List<TMLChannel>) tmap.getTMLModeling().getChannels()) {
             if (!mappedcomm.contains(ch.getName())) {
                 mappedcomm.add(ch.getName());
                 nodeNbProgressBar++;
@@ -1079,22 +1083,19 @@ public class DependencyGraphTranslator extends SwingWorker {
 
     private void waitEventNames() {
         for (TMLWaitEvent waitEvent : taskAc.getWaitEvents()) {
-            // TMLCPrimitivePort portdetails = waitEvent.getEvent().port;
-            TMLCPrimitivePort sendingPortdetails = waitEvent.getEvent().port;
-            TMLCPrimitivePort receivePortdetails = waitEvent.getEvent().port2;
-            if (sendingPortdetails != null && !sendingPortdetails.isBlocking()) {
-                warnings.add("Analysis may fail because the model contains non blocking sending port: " + sendingPortdetails.getPortName()
+            TMLEvent event = waitEvent.getEvent();
+            if (event.port != null && !event.port.isBlocking()) {
+                warnings.add("Analysis may fail because the model contains non blocking sending port: " + event.port.getPortName()
                         + ". Use tainting analysis instead");
             }
-            if (sendingPortdetails != null && sendingPortdetails.isFinite()) {
-                warnings.add("Send event port:" + sendingPortdetails.getPortName() + " is Finite. Event lost is not supported in latency analysis");
+            if (event.port != null && event.port.isFinite()) {
+                warnings.add("Send event port:" + event.port.getPortName() + " is Finite. Event lost is not supported in latency analysis");
             }
             String receivePortparams = waitEvent.getAllParams();
             String[] checkchannel;
             String sendingDataPortdetails = "";
             String receiveDataPortdetails = "";
-            if (sendingPortdetails != null && receivePortdetails != null) {
-                TMLEvent event = waitEvent.getEvent();
+            if (event.port != null && event.port2 != null) {
                 String nameW = taskAc.getName() + "__" + WAIT_EVENT + event.getName();
                 dependencyGraphRelations.getWaitEvt().put(nameW, new ArrayList<String>());
                 TMLTask originTasks = waitEvent.getEvent().getOriginTask();
@@ -1165,7 +1166,6 @@ public class DependencyGraphTranslator extends SwingWorker {
                     dependencyGraphRelations.getWaitEvt().get(WAITEVENT + receiveDataPortdetails + "(" + receivePortparams + ")")
                             .add(SENDEVENT + sendingDataPortdetails + "(" + sendingPortparams + ")");
                 } else {
-                    TMLEvent event = waitEvent.getEvent();
                     String nameW = taskAc.getName() + "__" + WAIT_EVENT + event.getName();
                     dependencyGraphRelations.getWaitEvt().put(nameW, new ArrayList<String>());
                     TMLTask originTasks = waitEvent.getEvent().getOriginTask();
@@ -1348,8 +1348,8 @@ public class DependencyGraphTranslator extends SwingWorker {
                         dependencyGraphRelations.getRequestsOriginDestination().put(requestOriginTaskName, destinationRequestNames);
                     }
                 }
-                for (TMLCPrimitivePort requestsPort : requestToTask.ports) {
-                    String requestsPortName = requestsPort.getPortName();
+                for (int i = 0; i < requestToTask.ports.size(); i++) {
+                    String requestsPortName = requestToTask.ports.get(i).getPortName();
                     if (dependencyGraphRelations.getRequestsPorts().containsKey(task.getName())) {
                         if (!dependencyGraphRelations.getRequestsPorts().get(task.getName()).contains(requestsPortName)) {
                             dependencyGraphRelations.getRequestsPorts().get(task.getName()).add(requestsPortName);

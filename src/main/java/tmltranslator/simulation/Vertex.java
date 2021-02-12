@@ -1,4 +1,4 @@
-package tmltranslator.simulationtraceanalysis;
+package tmltranslator.simulation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

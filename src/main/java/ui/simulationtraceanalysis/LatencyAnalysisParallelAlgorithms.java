@@ -8,12 +8,12 @@ import javax.xml.xpath.XPathExpressionException;
 import org.xml.sax.SAXException;
 
 import tmltranslator.TMLMapping;
-import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulation.DependencyGraphTranslator;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TGComponent;
 import ui.TMLComponentDesignPanel;
-import ui.interactivesimulation.SimulationTransaction;
 
 public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private Thread t;

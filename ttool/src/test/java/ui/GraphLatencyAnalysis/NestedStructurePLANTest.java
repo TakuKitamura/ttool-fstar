@@ -12,11 +12,11 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
-import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulation.DependencyGraphTranslator;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 

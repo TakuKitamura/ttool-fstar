@@ -46,14 +46,14 @@ import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
 import myutil.TraceManager;
 import tmltranslator.TMLMapping;
-import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
+import tmltranslator.simulation.DependencyGraphTranslator;
+import tmltranslator.simulation.SimulationTransaction;
+import tmltranslator.simulation.SimulationTransactionParser;
 import ui.ColorManager;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TGComponent;
 import ui.TMLComponentDesignPanel;
-import ui.interactivesimulation.SimulationTransaction;
-import ui.interactivesimulation.SimulationTransactionParser;
 
 public class JFrameCompareLatencyDetail extends JFrame implements ActionListener {
     private JButton buttonClose, buttonShowDGraph1, buttonShowDGraph2, buttonDetailedAnalysis, buttonCompareInDetails;
