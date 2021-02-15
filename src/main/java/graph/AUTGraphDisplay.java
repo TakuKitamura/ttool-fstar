@@ -600,6 +600,10 @@ class BasicFrame extends JFrame implements ActionListener {
 
         // default.edge
         //TraceManager.addDev("Old style: " + style);
+        style = modifyTextSize(modifier, style, "node ");
+        style = modifyTextSize(modifier, style, "node.deadlock");
+        style = modifyTextSize(modifier, style, "node.init");
+        style = modifyTextSize(modifier, style, "edge ");
         style = modifyTextSize(modifier, style, "edge.defaultedge");
         //TraceManager.addDev("New style default: " + style);
         // external
