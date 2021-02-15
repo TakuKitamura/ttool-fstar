@@ -469,9 +469,9 @@ class BasicFrame extends JFrame implements ActionListener {
         close.addActionListener(this);
         screenshot = new JButton("Save in png", IconManager.imgic28);
         screenshot.addActionListener(this);
-        fontPlus = new JButton("F+", IconManager.imgic28);
+        fontPlus = new JButton(IconManager.imgic144);
         fontPlus.addActionListener(this);
-        fontMinus = new JButton("F-", IconManager.imgic28);
+        fontMinus = new JButton(IconManager.imgic146);
         fontMinus.addActionListener(this);
         close.addActionListener(this);
         help = new JLabel("Zoom with PageUp/PageDown, move with cursor keys");

@@ -83,6 +83,7 @@ public class IconManager {
     public static ImageIcon imgic110, imgic112, imgic114, imgic116, imgic118;
     public static ImageIcon imgic120, imgic122, imgic124, imgic126, imgic128, imgic130;
     public static ImageIcon imgic132, imgic134, imgic136, imgic138, imgic140;
+    public static ImageIcon imgic144, imgic146;
 
     //Activity Diagram
     public static ImageIcon imgic200, imgic201, imgic202, imgic204, imgic206, imgic208;
@@ -348,6 +349,8 @@ public class IconManager {
     private static String icon138 = "adtogglejava.gif";
     private static String icon140 = "avatarfv.png";
     private static String icon142 = "toolbarButtonGraphics/navigation/Home16.gif";
+    private static String icon144 = "ZoomInFont24.gif";
+    private static String icon146 = "ZoomOutFont24.gif";
 
     private static String icon200 = "toolbarButtonGraphics/general/Properties16.gif";
     private static String icon201 = "toolbarButtonGraphics/general/Properties24.gif";
@@ -900,6 +903,8 @@ public class IconManager {
         imgic138 = getIcon(icon138);
         imgic140 = getIcon(icon140);
         imgic142 = getIcon(icon142);
+        imgic144 = getIcon(icon144);
+        imgic146 = getIcon(icon146);
 
         imgic200 = getIcon(icon200);
         imgic201 = getIcon(icon201);
