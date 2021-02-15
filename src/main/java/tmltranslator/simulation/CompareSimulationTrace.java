@@ -35,18 +35,13 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-package tmltranslator.simulationtraceanalysis;
+package tmltranslator.simulation;
 
 import java.util.Vector;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import ui.interactivesimulation.SimulationTransaction;
-import ui.simulationtraceanalysis.SimulationTraceTableRenderer;
 
 /**
  * Class JPanelCompareXmlGraph : arranges the two simulation traces in a table
@@ -58,7 +53,7 @@ import ui.simulationtraceanalysis.SimulationTraceTableRenderer;
  * 
  * @author Maysam ZOOR
  */
-public class CompareSimulationTrace extends JPanel implements TableModelListener {
+public class CompareSimulationTrace implements TableModelListener {
     private static JTable table;
     private String[] columnNames;
     private Object[][] data;
@@ -156,14 +151,6 @@ public class CompareSimulationTrace extends JPanel implements TableModelListener
             table = new JTable(data, columnNames);
             table.setFillsViewportHeight(true);
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-            SimulationTraceTableRenderer tr = new SimulationTraceTableRenderer();
-            int ncols = table.getColumnCount();
-            table.getModel().addTableModelListener(this);
-            TableColumnModel tcm = table.getColumnModel();
-            for (int c = 0; c < ncols; c++) {
-                TableColumn tc = tcm.getColumn(c);
-                tc.setCellRenderer(tr);
-            }
         }
         return table.getModel();
     }

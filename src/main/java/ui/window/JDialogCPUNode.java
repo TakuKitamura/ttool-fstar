@@ -46,12 +46,12 @@ import help.HelpManager;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.ColorManager;
 import ui.MainGUI;
 import ui.TGComboBoxWithHelp;
 import ui.TGTextFieldWithHelp;
 import ui.util.IconManager;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
 
 import javax.swing.*;

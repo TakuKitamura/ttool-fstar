@@ -44,6 +44,7 @@ package ui.interactivesimulation;
 //import java.io.*;
 
 import myutil.TableSorter;
+import tmltranslator.simulation.SimulationTransaction;
 
 import javax.swing.*;
 import java.awt.*;

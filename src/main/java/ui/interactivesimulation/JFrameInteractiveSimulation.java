@@ -52,6 +52,7 @@ import remotesimulation.CommandParser;
 import remotesimulation.RemoteConnection;
 import remotesimulation.RemoteConnectionException;
 import tmltranslator.*;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.*;
 import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiDiagramPanel;

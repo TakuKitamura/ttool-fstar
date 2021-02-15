@@ -1,4 +1,4 @@
-package ui.simulationtraceanalysis;
+package tmltranslator.simulation;
 
 import java.awt.Color;
 import java.awt.Component;

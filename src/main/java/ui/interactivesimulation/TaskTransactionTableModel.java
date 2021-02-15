@@ -1,6 +1,9 @@
 package ui.interactivesimulation;
 
 import javax.swing.table.AbstractTableModel;
+
+import tmltranslator.simulation.SimulationTransaction;
+
 import java.util.ArrayList;
 import java.util.Vector;
 

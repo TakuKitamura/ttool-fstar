@@ -44,8 +44,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import tmltranslator.HwCPU;
 import tmltranslator.modelcompiler.ArchUnitMEC;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.*;
-import ui.interactivesimulation.SimulationTransaction;
 import ui.util.IconManager;
 import ui.window.JDialogCPUNode;
 

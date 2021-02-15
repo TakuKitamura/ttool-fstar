@@ -2,6 +2,7 @@ package ui.interactivesimulation;
 
 import myutil.TableSorter;
 import tmltranslator.TMLModeling;
+import tmltranslator.simulation.SimulationTransaction;
 import ui.TGComponent;
 
 import javax.swing.*;

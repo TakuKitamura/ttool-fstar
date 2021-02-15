@@ -52,6 +52,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import tmltranslator.simulation.SimulationTransaction;
+
 /**
  * Class JFrameShowLatencyDetails : open the latency popup with all the related
  * tables for the chosen transactions, these tables include the start time and

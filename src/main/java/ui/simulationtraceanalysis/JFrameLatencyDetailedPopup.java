@@ -57,8 +57,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import tmltranslator.simulationtraceanalysis.DependencyGraphTranslator;
-import tmltranslator.simulationtraceanalysis.PlanArrays;
+import tmltranslator.simulation.DependencyGraphTranslator;
+import tmltranslator.simulation.PlanArrays;
 
 /**
  * Class JFrameLatencyDetailedPopup: this class opens the frame showing the

@@ -1,11 +1,10 @@
-package tmltranslator.simulationtraceanalysis;
+package tmltranslator.simulation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Vector;
-import ui.interactivesimulation.SimulationTransaction;
 
 public class PlanArrays {
     private List<String> onPathBehavior = new ArrayList<String>();
