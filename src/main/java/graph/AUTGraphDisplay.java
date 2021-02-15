@@ -90,6 +90,8 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
     protected boolean exitOnClose = false;
     protected BasicFrame bf;
 
+    protected String USED_STYLE_SHEET = "";
+
     // see http://graphstream-project.org/doc/Advanced-Concepts/GraphStream-CSS-Reference/
 
 
@@ -150,8 +152,10 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
         if ((ConfigurationTTool.RGStyleSheet != null) && (ConfigurationTTool.RGStyleSheet.trim().length() > 0)) {
             TraceManager.addDev("Adding stylesheet:" + ConfigurationTTool.RGStyleSheet + "\n\nvs default:" + STYLE_SHEET);
             vGraph.setAttribute("ui.stylesheet", ConfigurationTTool.RGStyleSheet);
+            USED_STYLE_SHEET = ConfigurationTTool.RGStyleSheet;
         } else {
             vGraph.setAttribute("ui.stylesheet", STYLE_SHEET);
+            USED_STYLE_SHEET = STYLE_SHEET;
         }
         //vGraph.setAttribute("ui.stylesheet", STYLE_SHEET);
 
@@ -321,12 +325,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
     }
 
 
-    public void displaySwing() {
-        vGraph = new MultiGraph("mg");
-        vGraph.setAttribute("ui.stylesheet", STYLE_SHEET);
-        viewer = new SwingViewer(vGraph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-        SwingUtilities.invokeLater(new InitializeApplication(viewer, vGraph, graph));
-    }
+
 
     public void mousePressed(MouseEvent e) {
         TraceManager.addDev("Mouse pressed; # of clicks: "
@@ -433,6 +432,7 @@ class BasicFrame extends JFrame implements ActionListener {
 
     protected JButton close;
     protected JButton screenshot;
+    protected JButton fontPlus, fontMinus;
     protected JCheckBox internalActions;
     protected JCheckBox readActions;
     protected JCheckBox higherQuality, antialiasing;
@@ -469,6 +469,10 @@ class BasicFrame extends JFrame implements ActionListener {
         close.addActionListener(this);
         screenshot = new JButton("Save in png", IconManager.imgic28);
         screenshot.addActionListener(this);
+        fontPlus = new JButton("F+", IconManager.imgic28);
+        fontPlus.addActionListener(this);
+        fontMinus = new JButton("F-", IconManager.imgic28);
+        fontMinus.addActionListener(this);
         close.addActionListener(this);
         help = new JLabel("Zoom with PageUp/PageDown, move with cursor keys");
         info = new JLabel("Graph: " + graph.getNbOfStates() + " states, " + graph.getNbOfTransitions() + " transitions");
@@ -498,6 +502,8 @@ class BasicFrame extends JFrame implements ActionListener {
         jp01.add(readActions);
         jp01.add(higherQuality);
         jp01.add(antialiasing);
+        jp01.add(fontMinus);
+        jp01.add(fontPlus);
 
         JPanel infoPanel = new JPanel(new BorderLayout());
         JPanel labelPanel = new JPanel(new BorderLayout());
@@ -527,6 +533,10 @@ class BasicFrame extends JFrame implements ActionListener {
             manageHigherQuality();
         } else if (evt.getSource() == antialiasing) {
             manageAntialiasing();
+        } else if (evt.getSource() == fontPlus) {
+            fontPlus();
+        } else if (evt.getSource() == fontMinus) {
+            fontMinus();
         }
     }
 
@@ -556,6 +566,81 @@ class BasicFrame extends JFrame implements ActionListener {
         } catch (Exception e) {
         }
 
+    }
+
+    public void fontPlus() {
+        setTextSize(1);
+
+
+
+
+        /*if (edges == null) {
+            return;
+        }
+
+
+
+
+        int cpt = 0;
+        for (AUTTransition transition : graph.getTransitions()) {
+            TraceManager.addDev("Attribute of edge:" + edges.get(cpt).getAttribute("text-size"));
+            cpt++;
+        }*/
+    }
+
+    public void fontMinus() {
+        setTextSize(-1);
+    }
+
+    private void setTextSize(int modifier) {
+        String style = USED_STYLE_SHEET;
+        if ((style == null) || (style.length() == 0)) {
+            return;
+        }
+
+        // default.edge
+        //TraceManager.addDev("Old style: " + style);
+        style = modifyTextSize(modifier, style, "edge.defaultedge");
+        //TraceManager.addDev("New style default: " + style);
+        // external
+        style = modifyTextSize(modifier, style, "edge.external");
+        //TraceManager.addDev("New style external: " + style);
+        vGraph.setAttribute("ui.stylesheet", style);
+        USED_STYLE_SHEET = style;
+
+
+    }
+
+    public String modifyTextSize(int modifier, String input, String key) {
+        String ret = input;
+        int indexD = input.indexOf(key);
+        if (indexD != -1) {
+            String before = input.substring(0, indexD);
+
+            String tmp = input.substring(indexD);
+            int indexBB = tmp.indexOf("{");
+            int indexBE = tmp.indexOf("}");
+            int indexT = tmp.indexOf("text-size:");
+            if ((indexT > -1) && (indexBB >-1) && (indexBE > -1) && (indexT>indexBB) && (indexT < indexBE)) {
+                String bef = tmp.substring(0, indexT+10);
+                String textSize = tmp.substring(indexT+10);
+                int indexVirg = textSize.indexOf(";");
+                if (indexVirg > -1) {
+                    String textValue = textSize.substring(0, indexVirg);
+                    String endf = textSize.substring(indexVirg);
+                    int val = Integer.decode(textValue);
+                    val += modifier;
+                    if (val < 1) {
+                        val = 1;
+                    }
+                    //TraceManager.addDev("Value=" + val);
+                    // Rebuild the string
+                    ret = before + bef + val + endf;
+                }
+            }
+
+        }
+        return ret;
     }
 
     public void screenshot() {
