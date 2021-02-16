@@ -77,15 +77,9 @@ public class AvatarSimulationBlock {
 
     public void forceRandom(int _value) {
         forcedRandom = _value;
+        //TraceManager.addDev("Random has been forced to:" + _value);
     }
 
-    /*public void addElapsedTime(int _elapsedTimed) {
-      elapsedTime += _elapsedTimed;
-      }
-
-      public void resetElapsedTime() {
-      elapsedTime = 0;
-      }*/
 
     public AvatarBlock getBlock() {
         return block;
@@ -417,6 +411,7 @@ public class AvatarSimulationBlock {
 
                     if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)) {
                         // Use provided value as random value
+                        //TraceManager.addDev("Force random");
                         valMin = forcedRandom;
                     } else {
                         // randomly select a value according to distribution law
