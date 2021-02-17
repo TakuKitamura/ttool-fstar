@@ -345,7 +345,9 @@ unsigned int TMLTask::getState() const{
 		
 		}
 	}*/
-	if (_currCommand==0 || _currCommand->getCurrTransaction()==0 || dynamic_cast<TMLStopCommand*>(_currCommand)!=0){
+	if(_endLastTransaction == 0) { // when user starts the simulator the status should be RUNABLE, not TERMINATED
+	    return RUNNABLE;
+	} else if (_currCommand==0 || _currCommand->getCurrTransaction()==0 || dynamic_cast<TMLStopCommand*>(_currCommand)!=0){
 		return TERMINATED;
 	} else if (_currCommand->getCurrTransaction()->getVirtualLength()==0){
 		return SUSPENDED;

@@ -65,7 +65,8 @@ TMLTime RRPrioScheduler::schedule(TMLTime iEndSchedule){
             if((!(isDelayTrans->getCommand()->getActiveDelay()) && isDelayTrans->getCommand()->isDelayTransaction())){
                  aSameTaskFound=false;
             }else if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime + anOldTransaction->getOperationLength() + _minSliceSize){
-				std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
+				if (anOldTransaction != 0)
+				    std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
 				aSourcePast=_lastSource;
 				aSameTaskFound=true;
 			}

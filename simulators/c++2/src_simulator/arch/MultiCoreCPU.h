@@ -148,6 +148,7 @@ protected:
 	TMLTime _timePerCycle;
 	///test////
 	unsigned int coreNumber;
+	unsigned int timeCnt; // count the time of mapping transaction to core
 	//first parameter is the core number
 	///second parameter is the end schedule in the core
 	std::map <unsigned int, unsigned int> multiCore;

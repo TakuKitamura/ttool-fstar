@@ -61,7 +61,7 @@ MultiCoreCPU::MultiCoreCPU(ID iID,
 			   unsigned int iCyclesBeforeIdle, 
 			   unsigned int ibyteDataSize,
 			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), 
-							coreNumber(0)
+							coreNumber(0), timeCnt(0)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                  , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
                                                                                                                                                                                                                                                                  , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
@@ -92,6 +92,8 @@ MultiCoreCPU::~MultiCoreCPU(){
 
 ///test///
 void MultiCoreCPU::initCore(){
+  if (timeCnt > 0) timeCnt = 0;
+  if (coreNumber != 0) coreNumber = 0;
   for (unsigned int i = 0; i < amountOfCore; i++)
     multiCore[i] = 0;
 }
@@ -340,16 +342,10 @@ std::cout<<"addTransaction"<<_name<<std::endl;
     //    std::cout << "CPU:addt: to be started" << std::endl;
     //std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
-    ////test///
-   // unsigned int iCoreNumber=getCoreNumber();
-    static unsigned int time=0;
-    // std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
-//    multiCore[coreNumber]=_endSchedule;
-  //  std::cout<<"cycle time is "<<_cycleTime<<std::endl;
-    if (time < amountOfCore -1){
+    if (timeCnt < amountOfCore -1){
 //	  _endSchedule=0;
         // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
-        if ((_nextTransaction != NULL  && _lastTransaction != NULL && !(_lastTransaction->getCommand()->getActiveDelay()) && _lastTransaction->getCommand()->isDelayTransaction())) {
+        if ((_nextTransaction != NULL  && _lastTransaction != NULL && (_lastTransaction->getEndTime() == _nextTransaction->getStartTime()))) {
             if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
                 _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
                 multiCore[_lastTransaction->getTransactCoreNumber()] = _endSchedule;
@@ -366,7 +362,7 @@ std::cout<<"addTransaction"<<_name<<std::endl;
 	 
     } else {
         // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
-        if ((_nextTransaction != NULL  && _lastTransaction != NULL && !(_lastTransaction->getCommand()->getActiveDelay()) && _lastTransaction->getCommand()->isDelayTransaction())) {
+        if ((_nextTransaction != NULL  && _lastTransaction != NULL && (_lastTransaction->getEndTime() == _nextTransaction->getStartTime()))) {
             if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
                 _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
                 multiCore[_lastTransaction->getTransactCoreNumber()] = _endSchedule;
@@ -381,7 +377,8 @@ std::cout<<"addTransaction"<<_name<<std::endl;
 
         _endSchedule = getMinEndSchedule();
     }
-    time++;
+    std::cout << "MULTICORE: assign transaction " << _nextTransaction->toShortString() << " to core " << _nextTransaction->getTransactCoreNumber() << std::endl;
+    timeCnt++;
     if(!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))
       _simulatedTime=max(_simulatedTime,_nextTransaction->getEndTime());
     _overallTransNo++; //NEW!!!!!!!!

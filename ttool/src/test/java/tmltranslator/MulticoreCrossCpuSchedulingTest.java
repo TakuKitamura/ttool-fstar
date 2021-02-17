@@ -27,14 +27,23 @@ import static org.junit.Assert.assertTrue;
 
 public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_CPU_CROSS = {"crossCpuScheduling"};
+    final String [] MODELS_CPU_CROSS = {"testMultiCore"};
     private String SIM_DIR;
-    final int [] NB_OF_CS_STATES = {29};
-    final int [] NB_OF_CS_TRANSTIONS = {28};
-    final int [] MIN_CS_CYCLES = {42};
-    final int [] MAX_CS_CYCLES = {42};
+    final int [] NB_OF_CS_STATES = {9};
+    final int [] NB_OF_CS_TRANSTIONS = {8};
+    final int [] MIN_CS_CYCLES = {65};
+    final int [] MAX_CS_CYCLES = {65};
+    static final String EXPECTED =
+            "MULTICORE: assign transaction Application__C1: Execi 15 t:0 l:15 (vl:15) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 10 t:15 l:10 (vl:10) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Execi 16 t:15 l:16 (vl:16) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:31 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
+            "MULTICORE: assign transaction Application__C3: Execi 40 t:25 l:40 (vl:40) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:32 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 15 t:33 l:15 (vl:15) params: to core 0";
     static String CPP_DIR = "../../../../simulators/c++2/";
     static String mappingName = "Architecture";
+    private String actualResult = "";
     private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
@@ -156,14 +165,16 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
 
                 params[0] = "./" + SIM_DIR + "run.x";
                 params[1] = "-cmd";
-                params[2] = "1 6 10; 1 7 100 100 " + graphPath;
+                params[2] = "1 0; 1 7 100 100 " + graphPath;
                 proc = Runtime.getRuntime().exec(params);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
                 monitorError(proc);
 
                 while ((str = proc_in.readLine()) != null) {
-                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    if (str.contains("MULTICORE: assign transaction")) {
+                        actualResult += str;
+                    }
                     System.out.println("executing: " + str);
                 }
             } catch (Exception e) {
@@ -197,6 +208,9 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
             int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
             System.out.println("executing: maxvalue of " + s + " " + maxValue);
             assertTrue(MAX_CS_CYCLES[i] == maxValue);
+
+            // compare which transaction belong to which core
+            assertTrue(EXPECTED.equals(actualResult));
         }
     }
 }
