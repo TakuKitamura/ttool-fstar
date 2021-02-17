@@ -77,6 +77,7 @@ public class AvatarDependencyGraph  {
         }
         // Connect everything ie writers to all potential readers
         // For each writing state, we draw a transition to all possible corresponding readers
+        // Double direction if synchronous
         for(AUTState state: states) {
             if (state.referenceObject instanceof AvatarActionOnSignal) {
                 AvatarActionOnSignal aaos = (AvatarActionOnSignal) state.referenceObject;
@@ -91,9 +92,14 @@ public class AvatarDependencyGraph  {
                                 AvatarActionOnSignal aaosD = (AvatarActionOnSignal) stateDestination.referenceObject;
                                 if (aaosD.getSignal() == correspondingSig) {
                                     // Found relation
-                                    TraceManager.addDev("Found relation!");
+                                    //TraceManager.addDev("Found relation!");
                                     AUTTransition tr = new AUTTransition(state.id, "", stateDestination.id);
                                     transitions.add(tr);
+                                    AvatarRelation ar = _avspec.getAvatarRelationWithSignal(correspondingSig);
+                                    if (!(ar.isAsynchronous())) {
+                                        tr = new AUTTransition(stateDestination.id, "", state.id);
+                                        transitions.add(tr);
+                                    }
                                 }
                             }
                         }

@@ -99,8 +99,8 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
             "edge {text-color: black; shape: cubic-curve; text-size:10;}    " +
             "edge.defaultedge {text-size:10; text-color:black;}  " +
             "edge.external {text-color:blue; text-size:14;}    " +
-            "node.deadlock {fill-color: red; text-color: white; size: 20px, 20px; text-size:16;}    " +
-            "node.init { fill-color: green; text-color: black; size: 20px, 20px; text-size:16;}";
+            "node.deadlock {fill-color: orange; text-color: red; size: 20px, 20px; text-size:15;}    " +
+            "node.init { fill-color: green; text-color: black; size: 20px, 20px; text-size:15;}";
 
     protected static String STYLE_SHEET2 = "graph {  canvas-color: white; fill-mode: gradient-vertical; fill-color: white, #004; padding: 20px;  } " +
             "node { shape: circle; size-mode: dyn-size; size: 10px; fill-mode: gradient-radial; fill-color: #FFFC, #FFF0; stroke-mode: none; " +
@@ -111,22 +111,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
             "edge.external { shape: L-square-line; size: 3px; fill-color: #AAA3; fill-mode: plain; arrow-shape: circle; } " +
             "sprite { shape: circle; fill-mode: gradient-radial; fill-color: #FFF8, #FFF0; }";
 
-    /*public static String STYLE_SHEET =
-            "node {" +
-                    "       fill-color: #B1CAF1; text-color: black; size: 11px, 11px;" +
-                    "} " +
-                    "edge.default edge {" + "text-color: blue;" + " shape: cubic-curve; }" +
-                    "edge.external {" +
-                    //"       arrow-shape: circle" +
-                    "       text-style: bold;" +
-                    "} " +
-                    "node.deadlock {" +
-                    "       fill-color: red; text-color: white; size: 15px, 15px;" +
 
-                    "} " +
-                    "node.init {" +
-                    "       fill-color: green; text-color: black; size: 15px, 15px;" +
-                    "} ";*/
 
     public AUTGraphDisplay(AUTGraph _graph, boolean _exitOnClose) {
         graph = _graph;
