@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 public class InputInstanceTest {
 
-    private static String[] LIBS = {"/opt/z3/bin/libz3.dylib:/opt/z3/bin/libz3java.dylib",
+    private static String[] LIBS = {"/opt/z3/bin/libz3.so:/opt/z3/bin/libz3java.so",
             "/Users/ludovicapvrille/Library/Java/Extensions/libz3.dylib:/Users/ludovicapvrille/Library/Java/Extensions/libz3java.dylib"};
 
 
