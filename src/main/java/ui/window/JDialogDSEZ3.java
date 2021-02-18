@@ -332,7 +332,8 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
 
 
         outputText.append("Loading Z3 libs\n");
-        String error = ConfigurationTTool.loadZ3Libs();
+        String error = null;
+        error = ConfigurationTTool.loadZ3Libs();
 
         if (error != null) {
             outputText.append(error);

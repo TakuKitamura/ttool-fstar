@@ -1707,15 +1707,18 @@ public class ConfigurationTTool {
         }
 
         try {
-
+            TraceManager.addDev("Z3. CONFIG TTOOL. Loading Z3 libs");
 
             String [] libs = ConfigurationTTool.Z3LIBS.split(":");
             boolean setLibPath = false;
+
+
 
             for (int i=0; i<libs.length; i++) {
                 // get the path and set it as a property of java lib path
 
                 String tmp = libs[i].trim();
+                TraceManager.addDev("Z3. Working with lib:" + tmp);
                 if (tmp.length() > 0) {
                     if (setLibPath == false) {
                         File f = new File(tmp);
@@ -1723,21 +1726,22 @@ public class ConfigurationTTool {
                         //TraceManager.addDev("Old library path: " + System.getProperty("java.library.path"));
                         //TraceManager.addDev("Setting java library path to " + dir);
                         //System.setProperty("java.library.path", ".:" + dir);
-                        addToJavaLibraryPath(new File(dir));
-                        //TraceManager.addDev("New library path: " + System.getProperty("java.library.path"));
+                        //addToJavaLibraryPath(new File(dir));
+                        TraceManager.addDev("Z3. New library path: " + System.getProperty("java.library.path"));
                         setLibPath = true;
                     }
-                    TraceManager.addDev("Loading Z3 lib: " + tmp);
+                    TraceManager.addDev("Z3. Loading Z3 lib: " + tmp);
                     System.load(tmp);
-                    TraceManager.addDev("Loaded Z3 lib: " + tmp);
+                    TraceManager.addDev("Z3. Loaded Z3 lib: " + tmp);
                 }
-
             }
 
         } catch (UnsatisfiedLinkError e) {
-            return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
+            return ("Z3. UnsatisfiedLinkError/ Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be loaded. " + e.getMessage() + "\n");
         } catch (IllegalArgumentException iae) {
-            return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be used\n");
+            return ("Z3. IllegalArgumentException/ Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be used\n");
+        } catch (SecurityException se ) {
+            return ("Z3. SecurityException/ Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be used:" + se.getMessage());
         }
 
         return null;
@@ -1748,6 +1752,7 @@ public class ConfigurationTTool {
  * @param dir The new directory
  */
 public static void addToJavaLibraryPath(File dir) {
+    TraceManager.addDev("Adding to lib path: " + dir.getAbsolutePath());
 	final String LIBRARY_PATH = "java.library.path";
 	if (!dir.isDirectory()) {
 		throw new IllegalArgumentException(dir + " is not a directory.");

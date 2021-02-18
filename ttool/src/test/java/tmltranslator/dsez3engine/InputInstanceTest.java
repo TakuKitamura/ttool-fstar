@@ -8,6 +8,7 @@ package tmltranslator.dsez3engine;
 
 import com.microsoft.z3.Log;
 import common.ConfigurationTTool;
+import myutil.TraceManager;
 import org.junit.Before;
 import org.junit.Test;
 import tmltranslator.*;
@@ -21,19 +22,48 @@ import static org.junit.Assert.assertTrue;
 
 public class InputInstanceTest {
 
+    private static String[] LIBS = {"/opt/z3/bin/libz3.dylib:/opt/z3/bin/libz3java.dylib",
+            "/Users/ludovicapvrille/Library/Java/Extensions/libz3.dylib:/Users/ludovicapvrille/Library/Java/Extensions/libz3java.dylib"};
+
+
     private TMLArchitecture tmla;
     private TMLModeling<TGComponent> tmlm;
     private InputInstance inputInstance;
     private OptimizationModel optimizationModel;
+    private boolean libraryLoaded = false;
 
     @Before
     public void setUpTest() {
+
+        // Test Z3 lib load
+        if (!libraryLoaded) {
+            libraryLoaded = loadZ3Libs();
+        }
 
         tmla = setUpTMLArchitecture();
         tmlm = setUpTMLModeling();
 
         inputInstance = new InputInstance(tmla, tmlm);
         optimizationModel = new OptimizationModel(inputInstance);
+    }
+
+    private boolean loadZ3Libs() {
+        TraceManager.devPolicy = TraceManager.TO_CONSOLE;
+        TraceManager.addDev("Z3. Test add dev");
+        System.out.println("Z3. Loading external and necessary libraries");
+
+        for (String s : LIBS) {
+            System.out.println("Z3. Trying to load lib: " + s);
+            ConfigurationTTool.Z3LIBS = s;
+            String error = ConfigurationTTool.loadZ3Libs();
+            if (error == null) {
+                System.out.println("Z3. load OK");
+                return true;
+            }
+            System.out.println("Z3. load KO:" + error);
+        }
+
+        return false;
     }
 
     private TMLModeling<TGComponent> setUpTMLModeling() {
@@ -209,12 +239,11 @@ public class InputInstanceTest {
 
     @Test
     public void findOptimizedMapping() {
-
-        String error = ConfigurationTTool.loadZ3Libs();
-        if (error != null) {
-            // we cannot run the test since Z3 is not installed
+        if (!libraryLoaded) {
             return;
         }
+
+        System.out.println("Z3. Finding optimal mapping");
         OptimizationResult result = optimizationModel.findOptimizedMapping();
 
         Log.close();
@@ -250,15 +279,12 @@ public class InputInstanceTest {
 
     @Test
     public void findFeasibleMapping() {
-        String error = ConfigurationTTool.loadZ3Libs();
-        if (error != null) {
-            // we cannot run the test since Z3 is not installed
+        if (!libraryLoaded) {
             return;
         }
         OptimizationResult result = optimizationModel.findFeasibleMapping();
 
         Log.close();
-
 
     }
 
@@ -306,6 +332,7 @@ public class InputInstanceTest {
 
     // @Test
     public void getBufferOut() {
+
         List<TMLTask> tempTasks = new ArrayList<>();
         for (int i = 0; i < inputInstance.getModeling().getTasks().size(); i++) {
             tempTasks.add(inputInstance.getModeling().getTasks().get(i));
@@ -322,6 +349,7 @@ public class InputInstanceTest {
     @Test
     public void getLocalMemoryOfHwExecutionNode() {
 
+
         HwNode output1 = inputInstance.getArchitecture().getHwMemoryByName("mainMem");
         HwNode output2 = inputInstance.getArchitecture().getHwMemoryByName("dspMem");
 
@@ -333,6 +361,8 @@ public class InputInstanceTest {
 
     @Test
     public void getWCET() {
+
+
         //a temporary list of the tasks
         List<TMLTask> tempTasks = new ArrayList<>();
         for (int i = 0; i < inputInstance.getModeling().getTasks().size(); i++) {
