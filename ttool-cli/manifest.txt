@@ -16,7 +16,7 @@ Class-Path: ./opencloud.jar
  ./batik-svggen.jar
  ./batik-dom.jar
  ./batik-awt-util.jar
- xml-apis.jar
+ ./xml-apis.jar
  ./batik-awt-util.jar
  ./batik-dom.jar
  ./batik-svggen.jar
