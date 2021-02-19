@@ -1,6 +1,8 @@
 PREFIX			= [$(COLOR)TTOOL$(RESET)]            
 
-MANIFEST		= $(TTOOL_DIR)/META-INF/MANIFEST.MF
+#MANIFEST		= $(TTOOL_DIR)/META-INF/MANIFEST.MF
+MANIFEST               = $(TTOOL_DIR)/ttool.txt  
+
 
 DEPEND			= $(patsubst %,$(TTOOL_BUILD)/%,$(shell cat $(MANIFEST) | grep Class-Path | cut -d: -f2))
 

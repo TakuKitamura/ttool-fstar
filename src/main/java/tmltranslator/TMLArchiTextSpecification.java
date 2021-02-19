@@ -635,7 +635,7 @@ public class TMLArchiTextSpecification {
                         for (int i=3; i<_split.length; i++) {
                             tmpOp += _split[i] + " ";
                         }
-                        //TraceManager.addDev("Setting op in " + cpu.getName() + " to " + tmpOp);
+                        TraceManager.addDev("Setting op in " + cpu.getName() + " to " + tmpOp);
                         cpu.setOperation(tmpOp.trim());
                     }
                 }
@@ -693,7 +693,6 @@ public class TMLArchiTextSpecification {
                         for (int i=3; i<_split.length; i++) {
                             tmpOp += _split[i] + " ";
                         }
-
                         fpga.setOperation(tmpOp.trim());
 
                     }

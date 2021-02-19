@@ -167,7 +167,7 @@ public class TToolCLI implements InterpreterOutputInterface {
                 File f = new File(getInputFile(args));
                 if (!myutil.FileUtils.checkFileForOpen(f)) {
                     cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
-                    cli.exit(-1);
+                    cli.exit(1);
                 }
                 script = myutil.FileUtils.loadFileData(f);
             }

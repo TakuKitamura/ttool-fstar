@@ -159,7 +159,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
         }
         scanner.close();
         printInterface.print("All done. See you soon.");
-        printInterface.exit(1);
+        printInterface.exit(0);
 
     }
 
