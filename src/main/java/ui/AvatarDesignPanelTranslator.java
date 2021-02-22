@@ -1598,7 +1598,8 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-    private void translateAvatarSMDSendSignal(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDSendSignal asmdss) throws CheckingError {
+    private void translateAvatarSMDSendSignal(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDSendSignal asmdss)
+            throws CheckingError {
         AvatarStateMachine asm = _ab.getStateMachine();
         avatartranslator.AvatarSignal atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
 
@@ -2447,14 +2448,18 @@ public class AvatarDesignPanelTranslator {
                 if (tgc instanceof AvatarSMDReceiveSignal)
                     this.translateAvatarSMDReceiveSignal(asmdp, _as, _ab, (AvatarSMDReceiveSignal) tgc);
                     // Send signals
+
                 else if (tgc instanceof AvatarSMDSendSignal)
                     this.translateAvatarSMDSendSignal(asmdp, _as, _ab, (AvatarSMDSendSignal) tgc);
+
                     // Library Function Call
                 else if (tgc instanceof AvatarSMDLibraryFunctionCall)
                     this.translateAvatarSMDLibraryFunctionCall(asmdp, _as, _ab, (AvatarSMDLibraryFunctionCall) tgc);
+
                     // State
                 else if (tgc instanceof AvatarSMDState)
                     this.translateAvatarSMDState(asmdp, _as, _ab, (AvatarSMDState) tgc);
+
                     // Choice
                 else if (tgc instanceof AvatarSMDChoice) {
                     AvatarState astate = new AvatarState("choice__" + choiceID, tgc);
@@ -2463,6 +2468,7 @@ public class AvatarDesignPanelTranslator {
                     listE.addCor(astate, tgc);
                     tgc.setAVATARID(astate.getID());
                 }
+
                 // Random
                 else if (tgc instanceof AvatarSMDRandom)
                     this.translateAvatarSMDRandom(asmdp, _as, _ab, (AvatarSMDRandom) tgc);
