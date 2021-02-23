@@ -96,10 +96,10 @@ public class FormatManager {
                     //
                     s1 = s.substring(0, s.indexOf(" states,"));
                     //
-                    nbState = new Integer(s1).intValue();
+                    nbState = Integer.parseInt(s1);
                     s2 = s.substring(s.indexOf("states,") + 8, index - 1);
                     //
-                    nbTransition = new Integer(s2).intValue();
+                    nbTransition = Integer.parseInt(s2);
                 }
             }
         } catch (Exception e) {
@@ -152,11 +152,11 @@ public class FormatManager {
                     s1 = s.substring(s.indexOf(',') + 1, s.length());
                     s1 = s1.substring(0, s1.indexOf(','));
                     s1 = Conversion.removeFirstSpaces(s1);
-                    nbTransition = new Integer(s1).intValue();
+                    nbTransition = Integer.parseInt(s1);
                     s2 = s.substring(s.indexOf(",") + 1, s.indexOf(')'));
                     s2 = s2.substring(s2.indexOf(",") + 1, s2.length());
                     s2 = Conversion.removeFirstSpaces(s2);
-                    nbState = new Integer(s2).intValue();
+                    nbState = Integer.parseInt(s2);
                     break;
                 }
             }

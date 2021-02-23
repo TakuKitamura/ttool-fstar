@@ -236,7 +236,7 @@ public class FaultTreePanelTranslator {
                             listE.addCor(andnode, comp);
                             at1.addDestinationNode(andnode);
                             at2.setOriginNode(andnode);
-                            andnode.addInputFault(at1, new Integer("0"));
+                            andnode.addInputFault(at1, Integer.parseInt("0"));
                             andnode.setResultingFault(at2);
 
 
@@ -249,7 +249,7 @@ public class FaultTreePanelTranslator {
                             if (val.length() == 0) {
                                 val = "0";
                             }
-                            node1.addInputFault(at1, new Integer(val));
+                            node1.addInputFault(at1, Integer.parseInt(val));
 
                             // Node -> Fault
                         } else if ((tgc1 instanceof FTDConstraint) && (tgc2 instanceof FTDFault)) {
@@ -293,7 +293,7 @@ public class FaultTreePanelTranslator {
                             if (val.length() == 0) {
                                 val = "0";
                             }
-                            node2.addInputFault(att, new Integer(val));
+                            node2.addInputFault(att, Integer.parseInt(val));
                         }
 
                     } catch (Exception e) {

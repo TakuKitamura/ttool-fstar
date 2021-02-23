@@ -279,7 +279,7 @@ public class BoolExpressionEvaluator {
                 IntBoolRes targetF = this.father;
 
                 boolean go = true;
-                while (go == true) {
+                while (go) {
                     //TraceManager.addDev("in loop targetF=" + targetF);
                     if (targetF == null) {
                         go = false;
@@ -390,10 +390,10 @@ public class BoolExpressionEvaluator {
 
         public Object getObjectValue() {
             if (res == INT_TERM) {
-                return new Integer(i);
+                return i;
             }
             if (res == BOOL_TERM) {
-                return new Boolean(b);
+                return b;
             }
             return null;
 
@@ -414,9 +414,9 @@ public class BoolExpressionEvaluator {
         private Boolean makeUnaryOp(int op, int elt1) {
             if (op == NOT_TOKEN) {
                 if (elt1 == 0) {
-                    return new Boolean(true);
+                    return true;
                 } else
-                    return new Boolean(false);
+                    return false;
             }
             return null;
         }
@@ -424,19 +424,19 @@ public class BoolExpressionEvaluator {
 
         private Boolean makeBinaryOp(int op, int elt1, int elt2) {
             if (op == EQUAL_TOKEN) {
-                return new Boolean(elt1 == elt2);
+                return elt1 == elt2;
             }
 
             if (op == NOT_EQUAL_TOKEN) {
-                return new Boolean(elt1 != elt2);
+                return elt1 != elt2;
             }
 
             if (op == OR_TOKEN) {
-                return new Boolean((elt1 != 0) || (elt2 != 0));
+                return (elt1 != 0) || (elt2 != 0);
             }
 
             if (op == AND_TOKEN) {
-                return new Boolean((elt1 != 0) && (elt2 != 0));
+                return (elt1 != 0) && (elt2 != 0);
             }
 
 
@@ -445,20 +445,20 @@ public class BoolExpressionEvaluator {
 
         private Integer makeIntegerOp(int op, int elt1, int elt2) {
             if (op == PLUS_TOKEN) {
-                return new Integer(elt1 + elt2);
+                return elt1 + elt2;
             }
 
             if (op == MINUS_TOKEN) {
-                return new Integer(elt1 - elt2);
+                return elt1 - elt2;
             }
 
             if (op == MULT_TOKEN) {
-                return new Integer(elt1 * elt2);
+                return elt1 * elt2;
             }
 
             if (op == DIV_TOKEN) {
                 //TraceManager.addDev("Div token .. elt1 = " + elt1 + " elt2 = " + elt2 + " res=" +  new Integer(elt1 / elt2).intValue());
-                return new Integer(elt1 / elt2);
+                return elt1 / elt2;
             }
 
             return null;
@@ -467,19 +467,19 @@ public class BoolExpressionEvaluator {
         private Boolean makeIntegerToBooleanOp(int op, int elt1, int elt2) {
 
             if (op == LT_TOKEN) {
-                return new Boolean(elt1 < elt2);
+                return elt1 < elt2;
             }
 
             if (op == GT_TOKEN) {
-                return new Boolean(elt1 > elt2);
+                return elt1 > elt2;
             }
 
             if (op == LTEQ_TOKEN) {
-                return new Boolean(elt1 <= elt2);
+                return elt1 <= elt2;
             }
 
             if (op == GTEQ_TOKEN) {
-                return new Boolean(elt1 >= elt2);
+                return elt1 >= elt2;
             }
 
             return null;

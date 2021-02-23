@@ -80,17 +80,17 @@ import java.util.HashMap;
  */
 public class JFrameDataElementStatistics extends JFrame implements ActionListener, GenericTree {
     protected JButton buttonClose, buttonCloseAllTabs;
-    protected JCheckBox checkHistogram, checkPieChart, checkTimeValueChart, checkTimeValueBlockChart,
+    private JCheckBox checkHistogram, checkPieChart, checkTimeValueChart, checkTimeValueBlockChart,
     checkValueEvolution;
     protected JScrollPane jsp;
     protected JTabbedPane mainPane;
-    protected TGHelpButton helpButton;
+    private TGHelpButton helpButton;
 
     protected Thread t;
     protected int threadMode = 0;
     protected boolean go;
-    ArrayList<DataElement> elements;
-    private String title;
+    private final ArrayList<DataElement> elements;
+    private final String title;
 
     protected MainGUI mgui;
 
@@ -292,7 +292,7 @@ public class JFrameDataElementStatistics extends JFrame implements ActionListene
         for (int i = 0; i < de.data.length; i++) {
             if (map.containsKey(de.data[i])) {
                 Integer myInt = map.get(de.data[i]);
-                map.put(de.data[i], new Integer(myInt.intValue() + 1));
+                map.put(de.data[i], myInt + 1);
             } else {
                 map.put(de.data[i], 1);
             }

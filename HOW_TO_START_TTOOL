@@ -9,7 +9,7 @@ $ javac --version
 # Then, you can compile TTool
 $ make all&&make install
 
-#To avoid running all the tests and compiling only TTool, ytou may try:
+#To avoid running all the tests and compiling only TTool, you may try:
 $ make ttoolnotests&&make install
 
 #To start TTool, this is recommended to use your own version of ttool.exe and config.xml

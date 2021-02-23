@@ -266,19 +266,19 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
                                 if ( (ast.executedElement == asme) || (ast.executedElement.getNext(0) == asme) ){
                                     Integer occ = map.get(ast.initialClockValue);
                                     if (occ == null) {
-                                        occ = new Integer(1);
+                                        occ = 1;
                                     } else {
-                                        occ = new Integer(occ.intValue() + 1);
+                                        occ = occ + 1;
                                     }
-                                    map.put(new Long(ast.initialClockValue), occ);
+                                    map.put(ast.initialClockValue, occ);
                                     //TraceManager.addDev("Putting in table " + ast.initialClockValue + " " + occ.intValue());
                                     occ = mapOne.get(ast.initialClockValue);
                                     if (occ == null) {
-                                        occ = new Integer(1);
+                                        occ = 1;
                                     } else {
-                                        occ = new Integer(occ.intValue() + 1);
+                                        occ = occ + 1;
                                     }
-                                    mapOne.put(new Long(ast.initialClockValue), occ);
+                                    mapOne.put(ast.initialClockValue, occ);
 
                                 }
                             }
@@ -371,7 +371,7 @@ public class AvatarSimulationStatisticsPanel extends JPanel implements ActionLis
         int nbOfSimulations;
 
         try {
-            nbOfSimulations = new Integer(nbOfSimulationsText.getText()).intValue();
+            nbOfSimulations = Integer.parseInt(nbOfSimulationsText.getText());
         } catch (Exception e) {
             return;
         }

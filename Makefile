@@ -71,7 +71,7 @@ Please report bugs or suggestions of improvements to:
 endef
 export HELP_message
 
-.PHONY: ttool clean launcher graphminimize graphshow ttool-cli tiftranslator tmltranslator rundse remotesimulator webcrawler documentation help ultraclean publish_jar preinstall test git
+.PHONY: ttool clean launcher graphminimize graphshow ttool-cli tiftranslator rundse remotesimulator webcrawler documentation help ultraclean publish_jar preinstall test git
 
 help:
 	@echo "$$HELP_message"
@@ -132,10 +132,10 @@ export TTOOL_HELP_DIR	= $(TTOOL_PATH)/src/main/resources/help
 MD_FILES=$(wildcard src/main/resources/help/*.md)	
 MD2HTML=$(MD_FILES:.md=.html)
 
-all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+all: ttool launcher ttool-cli graphminimize graphshow tiftranslator rundse remotesimulator webcrawler install
 
 allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
-allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator rundse remotesimulator webcrawler install
 
 ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 ttoolnotest: ttool install
@@ -549,7 +549,6 @@ clean:
 	@$(MAKE) -C $(GRAPHMINIMIZE_DIR) -e clean
 	@$(MAKE) -C $(GRAPHSHOW_DIR) -e clean
 	@$(MAKE) -C $(TIFTRANSLATOR_DIR) -e clean
-	@$(MAKE) -C $(TMLTRANSLATOR_DIR) -e clean
 	@$(MAKE) -C $(RUNDSE_DIR) -e clean
 	@$(MAKE) -C $(REMOTESIMULATOR_DIR) -e clean
 	@$(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e clean

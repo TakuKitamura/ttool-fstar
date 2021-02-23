@@ -61,8 +61,7 @@ public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
     private static final String PATH_TO_SOURCE_MODEL = "/ui/diagram2tml/input/CloneCompositeComponentTest.xml";
     private static String EXPECTED_FILE_MODEL;
 
-    private TMLMapping tmlMapping_clone;
-    private TMLMapping tmlMapping_exp;
+    private final TMLMapping tmlMapping_exp;
     private TDiagramPanel architecture_clone;
     private TGComponent CPU_Cl;
     private TGComponent DMA_Cl;
@@ -220,7 +219,7 @@ public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
     public void testTMLMapping() {
         cloneHwNodesOfTestingModel();
         mainGUI.checkModelingSyntax(true);
-        tmlMapping_clone = mainGUI.gtm.getTMLMapping();
+        TMLMapping tmlMapping_clone = mainGUI.gtm.getTMLMapping();
         assertTrue(tmlMapping_clone.equalSpec(tmlMapping_exp));
     }
 

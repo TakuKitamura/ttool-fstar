@@ -198,7 +198,7 @@ public class AttackTreePanelTranslator {
                     String eq = cons.getEquation();
                     int time;
                     try {
-                        time = Integer.decode(eq).intValue();
+                        time = Integer.decode(eq);
                         BeforeNode befnode = new BeforeNode("BEFORE__" + nodeID, cons, time);
                         at.addNode(befnode);
                         listE.addCor(befnode, comp);
@@ -214,7 +214,7 @@ public class AttackTreePanelTranslator {
                     String eq = cons.getEquation();
                     int time;
                     try {
-                        time = Integer.decode(eq).intValue();
+                        time = Integer.decode(eq);
                         AfterNode aftnode = new AfterNode("AFTER__" + nodeID, cons, time);
                         at.addNode(aftnode);
                         listE.addCor(aftnode, comp);
@@ -257,7 +257,7 @@ public class AttackTreePanelTranslator {
                             listE.addCor(andnode, comp);
                             at1.addDestinationNode(andnode);
                             at2.setOriginNode(andnode);
-                            andnode.addInputAttack(at1, new Integer("0"));
+                            andnode.addInputAttack(at1, Integer.parseInt("0"));
                             andnode.setResultingAttack(at2);
 
 
@@ -270,7 +270,7 @@ public class AttackTreePanelTranslator {
                             if (val.length() == 0) {
                                 val = "0";
                             }
-                            node1.addInputAttack(at1, new Integer(val));
+                            node1.addInputAttack(at1, Integer.parseInt(val));
 
                             // Node -> attack
                         } else if ((tgc1 instanceof ATDConstraint) && (tgc2 instanceof ATDAttack)) {
@@ -314,7 +314,7 @@ public class AttackTreePanelTranslator {
                             if (val.length() == 0) {
                                 val = "0";
                             }
-                            node2.addInputAttack(att, new Integer(val));
+                            node2.addInputAttack(att, Integer.parseInt(val));
                         }
 
                     } catch (Exception e) {

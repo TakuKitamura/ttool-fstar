@@ -61,16 +61,15 @@ public class LargeHTMLEditorKit extends HTMLEditorKit {
         @Override
         protected void layout(int width, int height) {
             if (width<Integer.MAX_VALUE) {
-                super.layout(new Double(width / getZoomFactor()).intValue(),
-                        new Double(height *
-                                getZoomFactor()).intValue());
+                super.layout((int)(width / getZoomFactor()),
+                        (int)(height * getZoomFactor()));
             }
         }
 
         public double getZoomFactor() {
             Double scale = (Double) getDocument().getProperty("ZOOM_FACTOR");
             if (scale != null) {
-                return scale.doubleValue();
+                return scale;
             }
 
             return 1;

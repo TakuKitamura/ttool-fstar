@@ -301,11 +301,11 @@ public class DSESimulationResult {
                     if (elt.getTagName().compareTo(SIMULATION_DURATION) == 0) {
                         simdur = elt.getTextContent();
                         //
-                        simulationDurations.add(new Long(simdur));
+                        simulationDurations.add(Long.parseLong(simdur));
                     }
                     if (elt.getTagName().compareTo("EndTime") == 0) {
                         String end = elt.getTextContent();
-                        cycleDurations.add(new Long(end));
+                        cycleDurations.add(Long.parseLong(end));
                     }
 
                     if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
@@ -386,9 +386,9 @@ public class DSESimulationResult {
                             if (util != null) {
                                 BusResult busr = new BusResult();
                                 try {
-                                    busr.id = Integer.decode(id).intValue();
+                                    busr.id = Integer.decode(id);
                                     busr.name = name;
-                                    busr.utilization = Double.valueOf(util).doubleValue();
+                                    busr.utilization = Double.valueOf(util);
                                     AddingBusResult(busr);
                                 } catch (Exception e) {
                                 }
@@ -425,9 +425,9 @@ public class DSESimulationResult {
                             if (extime != null) {
                                 TaskResult tr = new TaskResult();
                                 try {
-                                    tr.id = Integer.decode(id).intValue();
+                                    tr.id = Integer.decode(id);
                                     tr.name = name;
-                                    tr.nbOfExecutedCycles = Long.decode(extime).longValue();
+                                    tr.nbOfExecutedCycles = Long.decode(extime);
                                     tr.state = state;
                                     AddingTaskResult(tr);
                                 } catch (Exception e) {
@@ -482,17 +482,17 @@ public class DSESimulationResult {
         // Durations
         for (Long l : simulationDurations) {
             if (sdwr == null) {
-                sdwr = new SimulationDurationWholeResult(l.longValue());
+                sdwr = new SimulationDurationWholeResult(l);
             } else {
-                sdwr.updateResults(l.longValue());
+                sdwr.updateResults(l);
             }
         }
 
         for (Long l : cycleDurations) {
             if (cdwr == null) {
-                cdwr = new SimulationDurationWholeResult(l.longValue());
+                cdwr = new SimulationDurationWholeResult(l);
             } else {
-                cdwr.updateResults(l.longValue());
+                cdwr.updateResults(l);
             }
         }
         // CPUs

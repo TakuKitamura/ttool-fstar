@@ -328,7 +328,7 @@ public class TranslatedRouter<E> {
                             listOfOutChannels);
 
                 }
-                dispatchIns.put(new Integer(portNb), inDispatch);
+                dispatchIns.put(portNb, inDispatch);
                 allTasks.add(inDispatch);
             }
         }
@@ -365,7 +365,7 @@ public class TranslatedRouter<E> {
                         if (playingTheRoleOfPrevious[dom] != null) {
                             TMLEvent evt = routeEvtVCs[portNb][vcNb][dom];
                             listOfOutVCEvents.add(evt);
-                            listOfIndexes.add(new Integer(dom));
+                            listOfIndexes.add(dom);
                             evt.setOriginTask(taskINForVC);
                         }
                     }
@@ -453,7 +453,7 @@ public class TranslatedRouter<E> {
 
                 outDispatch.generate(inPacketEvents, inFeedbackEvents, outSelectEvents, outPktEvent, outPkt);
 
-                dispatchOuts.put(new Integer(portNb), outDispatch);
+                dispatchOuts.put(portNb, outDispatch);
 
             } else {
                 // We need to use a fake out
