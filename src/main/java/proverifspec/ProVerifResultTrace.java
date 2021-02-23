@@ -539,20 +539,20 @@ public class ProVerifResultTrace {
                             if (this.attackerNamesMap.get(k) == 0)
                             {
                                 this.attackerNamesMap.remove(k);
-                                this.attackerNamesMap.put(k, new Integer("1"));
+                                this.attackerNamesMap.put(k, 1);
                                 n = 2;
                                 break;
                             }
                             else
                             {
-                                int nn = this.attackerNamesMap.get(k).intValue();
+                                int nn = this.attackerNamesMap.get(k);
                                 if (nn >= n)
                                     n = nn+1;
                             }
                         }
                     }
 
-                    this.attackerNamesMap.put(attrName, new Integer(n));
+                    this.attackerNamesMap.put(attrName, n);
                         
                     this.trace.add(new NewStep(attrName2));
                 }

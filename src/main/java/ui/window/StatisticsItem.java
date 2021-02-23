@@ -53,13 +53,13 @@ import java.util.Vector;
  */
 public class StatisticsItem implements Comparable<StatisticsItem> {
     private String name;
-    private Integer occurence;
+    private Integer occurrence;
     private Vector<Point> originDestination;
     
     public StatisticsItem(String _name) {
         name = _name;
         originDestination = new Vector<>();
-        occurence = new Integer(0);
+        occurrence = 0;
     }
     
     //observers
@@ -67,8 +67,8 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
         return name;
     }
     
-    public Integer getOccurence() {
-        return occurence;
+    public Integer getOccurrence() {
+        return occurrence;
     }
     
  
@@ -94,7 +94,7 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
     
     // modifiers
     public void increaseOccurence() {
-        occurence = new Integer(occurence.intValue() + 1);
+        occurrence = occurrence + 1;
     }
     
     public void addOriginDestination(int origin, int destination) {

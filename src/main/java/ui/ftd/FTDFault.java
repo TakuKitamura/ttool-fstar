@@ -318,7 +318,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         }
 
         if (dialog.getProbability() != null) {
-            probability = new Double(dialog.getProbability()).doubleValue();
+            probability = Double.parseDouble(dialog.getProbability());
         }
 
         isRootFault = dialog.isRootFault();
@@ -398,7 +398,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
                             }
                             if (sproba != null) {
                                 try {
-                                    probability = new Double(sproba).doubleValue();
+                                    probability = Double.parseDouble(sproba);
                                 } catch (Exception e) {
                                     probability = DEFAULT_PROBABILITY;
                                     sproba = null;

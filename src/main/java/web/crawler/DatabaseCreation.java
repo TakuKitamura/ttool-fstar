@@ -224,7 +224,7 @@ public class DatabaseCreation {
         String password = "1234";
 
         try {
-            Class.forName(driver).newInstance();
+            Class.forName(driver).getDeclaredConstructor().newInstance();
 
             NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
             server.start(null);

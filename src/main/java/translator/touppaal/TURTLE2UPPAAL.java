@@ -1290,14 +1290,14 @@ public class TURTLE2UPPAAL {
 					index = paras.indexOf(adp);
 					loc = addLocation(template);
 					tr = addTransition(template, previous, loc);
-					sync = "exitpar__" + parasint.get(index).intValue();
+					sync = "exitpar__" + parasint.get(index);
 					setSynchronization(tr, sync + "!");
-					parasint.set(index, new Integer(parasint.get(index).intValue() + 1));
+					parasint.set(index, parasint.get(index) + 1);
 					return;
 				} else {
 					// I am the first one
 					paras.add(adp);
-					parasint.add(new Integer(idPar));
+					parasint.add(idPar);
 					loc1 = previous;
 					for(i=1; i<nb; i++) {
 						loc = addLocation(template);

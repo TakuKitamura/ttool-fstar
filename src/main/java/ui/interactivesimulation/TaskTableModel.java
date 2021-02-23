@@ -155,29 +155,29 @@ public class TaskTableModel extends AbstractTableModel {
 	
 	private String getTaskCycles(int row) {
 		int ID = tmlm.getTasks().get(row).getID();
-		String s = getCycles(valueTable.get(new Integer(ID)));
+		String s = getCycles(valueTable.get(ID));
 		
 		if ((s != null) && (s.length() > 0)) {
 			return s;
 		}
 		
 	
-		valueTable.put(new Integer(ID), "-");
-		rowTable.put(new Integer(ID), row);
+		valueTable.put(ID, "-");
+		rowTable.put(ID, row);
 		return "-";
 	}
 	
 	public String getTaskStatus(int row) {
 		int ID = tmlm.getTasks().get(row).getID();
-		String s = getState(valueTable.get(new Integer(ID)));
+		String s = getState(valueTable.get(ID));
 		
 		if ((s != null) && (s.length() > 0)) {
 			return s;
 		}
 		
 	
-		valueTable.put(new Integer(ID), "-");
-		rowTable.put(new Integer(ID), row);
+		valueTable.put(ID, "-");
+		rowTable.put(ID, row);
 		return "-";
 	}
 	
@@ -192,6 +192,6 @@ public class TaskTableModel extends AbstractTableModel {
 		for(int i=0; i<nbOfRows; i++) {
 			getTaskStatus(i);
 		}
-		return;
+
 	}
 }

@@ -327,7 +327,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
                                 s = elt.getAttribute("functionId");
                                 if (s != null) {
                                     try {
-                                        functionId = new Integer(s).intValue();
+                                        functionId = Integer.parseInt(s);
                                     } catch (Exception e){
                                         functionId = AvatarRandom.RANDOM_UNIFORM_LAW;
                                     }

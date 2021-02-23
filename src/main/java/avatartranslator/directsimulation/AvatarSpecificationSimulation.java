@@ -1721,8 +1721,8 @@ public class AvatarSpecificationSimulation {
 
 
 
-        toBeFilled.add(new Double(oldValue));
-        toBeFilled.add(new Double(0));
+        toBeFilled.add((double)oldValue);
+        toBeFilled.add(0.0);
 
         for(AvatarSimulationTransaction ast: allTransactions) {
             if (ast.block == ab) {
@@ -1739,9 +1739,8 @@ public class AvatarSpecificationSimulation {
                 if (newValue != oldValue) {
                     oldValue = newValue;
                     //TraceManager.addDev("Block " + ab.getName() + " / " + aa.getName() + ". Adding value " + newValue + " at time " +
-                     //       ast.clockValueWhenFinished);
-                    toBeFilled.add(new Double(newValue));
-                    toBeFilled.add(new Double(ast.clockValueWhenFinished));
+                    toBeFilled.add((double)newValue);
+                    toBeFilled.add((double)ast.clockValueWhenFinished);
                 }
             }
         }
@@ -1790,8 +1789,8 @@ public class AvatarSpecificationSimulation {
             }
         }
 
-        toBeFilled.add(new Double(oldValue));
-        toBeFilled.add(new Double(oldTime));
+        toBeFilled.add((double)oldValue);
+        toBeFilled.add((double)oldTime);
     }
 
 

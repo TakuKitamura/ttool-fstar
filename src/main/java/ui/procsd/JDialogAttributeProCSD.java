@@ -292,12 +292,12 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
     }
     
     public void addType(String s) {
-        initValues.add(new Boolean(true));
+        initValues.add(true);
         typeBox.addItem(s);
     }
     
     public void addType(String s, boolean b) {
-        initValues.add(new Boolean(b));
+        initValues.add(b);
         typeBox.addItem(s);
     }
    

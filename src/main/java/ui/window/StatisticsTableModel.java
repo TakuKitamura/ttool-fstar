@@ -106,7 +106,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 		if (column == 0) {
 			return si.getName();
 		} else if (column == 1) {
-			return si.getOccurence();
+			return si.getOccurrence();
 		} else {
 			return si.getOriginDestination();
 		}

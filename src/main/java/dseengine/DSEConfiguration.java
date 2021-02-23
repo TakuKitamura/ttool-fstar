@@ -497,8 +497,7 @@ public class DSEConfiguration implements Runnable  {
         for(int i=0; i<taps.length; i++) {
             if (taps[i].toLowerCase().compareTo(tapName.toLowerCase()) ==0) {
                 try {
-                    int intval = new Integer(valueOfTap).intValue();
-                    tapValues[i] = intval;
+                    tapValues[i] = Integer.parseInt(valueOfTap);;
                     return 0;
                 } catch (Exception e) {
                     return -1;

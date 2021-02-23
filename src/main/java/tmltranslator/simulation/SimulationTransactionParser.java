@@ -72,7 +72,7 @@ public class SimulationTransactionParser extends DefaultHandler {
             st.nodeType = attributes.getValue("deviceid");
 
             try {
-                st.uniqueID = new Integer(attributes.getValue("uniqueid"));
+                st.uniqueID = Long.parseLong(attributes.getValue("uniqueid"));
             } catch (Exception e) {
 
             }

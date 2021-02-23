@@ -110,15 +110,15 @@ public class BusTableModel extends AbstractTableModel {
     // Assumes tmlm != null
     private String getBusStatus(int row) {
         int ID = bus.get(row).getID();
-        String s = valueTable.get(new Integer(ID));
+        String s = valueTable.get(ID);
 
         if (s != null) {
             return s;
         }
 
 
-        valueTable.put(new Integer(ID), "-");
-        rowTable.put(new Integer(ID), row);
+        valueTable.put(ID, "-");
+        rowTable.put(ID, row);
         return "-";
 
     }
@@ -143,7 +143,6 @@ public class BusTableModel extends AbstractTableModel {
         for(int i=0; i<nbOfRows; i++) {
             getBusStatus(i);
         }
-        return;
     }
 
 }

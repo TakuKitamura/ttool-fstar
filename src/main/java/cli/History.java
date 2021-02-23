@@ -91,8 +91,7 @@ public class History extends Command  {
         }
 
         try {
-            Integer indexInfo = new Integer(command);
-            return interpreter.executeFormerCommand(indexInfo);
+            return interpreter.executeFormerCommand(Integer.parseInt(command));
         } catch (Exception e) {
             return "Invalid argument. Must provide an int";
         }

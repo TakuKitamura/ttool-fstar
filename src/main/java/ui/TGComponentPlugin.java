@@ -156,6 +156,7 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
 
     }
 
+    @SuppressWarnings("unchecked")
     private void createInstance() {
         try {
             if (componentPlugin == null) {
@@ -167,7 +168,7 @@ public class TGComponentPlugin extends TGComponent implements ComponentPluginInt
                 //classRef = componentPlugin.getClass(className);
                 //TraceManager.addDev("[create instance] classRef:" + classRef);
                 classRef = componentPlugin.getClassGraphicalComponent();
-                instance = componentPlugin.getClassGraphicalComponent().newInstance();
+                instance = componentPlugin.getClassGraphicalComponent().getDeclaredConstructor().newInstance();
                 if (width == 0) {
                     width = Plugin.executeIntMethod(instance, "getWidth");
                 }

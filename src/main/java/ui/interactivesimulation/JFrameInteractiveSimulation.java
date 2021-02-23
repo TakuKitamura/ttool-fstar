@@ -2306,7 +2306,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             st.nodeType = elt.getAttribute("deviceid");
 
                             try {
-                                st.uniqueID = new Integer(elt.getAttribute("uniqueid"));
+                                st.uniqueID = Integer.parseInt(elt.getAttribute("uniqueid"));
                             } catch (Exception e) {
 
                             }
@@ -3174,7 +3174,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         Integer nc = getInteger(nextCommand);
 
         if (_state == null) {
-            _state = tasktm.getState(valueTable.get(new Integer(id)));
+            _state = tasktm.getState(valueTable.get(id));
         }
 
         //TraceManager.addDev("state:" + _state);
@@ -3693,7 +3693,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     public Double getDouble(String s) {
         try {
-            return new Double(s);
+            return Double.parseDouble(s);
         } catch (Exception e) {
             return null;
         }

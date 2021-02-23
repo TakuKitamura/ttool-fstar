@@ -115,9 +115,9 @@ public class CPUTableModel extends AbstractTableModel {
 		}
 		
 	
-		valueTable.put(new Integer(ID), "-");
+		valueTable.put(ID, "-");
 		//
-		rowTable.put(new Integer(ID), new Integer(row));
+		rowTable.put(ID, row);
 		return "-";
 		
 	}
@@ -142,7 +142,7 @@ public class CPUTableModel extends AbstractTableModel {
 		for(int i=0; i<nbOfRows; i++) {
 			getCPUStatus(i);
 		}
-		return;
+
 	}
 
 }

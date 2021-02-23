@@ -109,9 +109,9 @@ public class AvatarSimulationTransaction {
 
         Integer val = hashOfAllElements.get(_asme);
         if (val == null) {
-            hashOfAllElements.put(_asme, new Integer(1));
+            hashOfAllElements.put(_asme, 1);
         } else {
-            hashOfAllElements.put(_asme, new Integer(1 + val.intValue()));
+            hashOfAllElements.put(_asme, 1 + val);
         }
 
     }
@@ -126,7 +126,7 @@ public class AvatarSimulationTransaction {
             return;
         }
 
-        hashOfAllElements.put(_asme, new Integer(val.intValue() - 1));
+        hashOfAllElements.put(_asme, val - 1);
 
 
     }

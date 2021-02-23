@@ -65,7 +65,6 @@ public class AvatarSyntaxChecker  {
     }
 
 
-
     public static ArrayList<AvatarError> checkSyntax(AvatarSpecification avspec) {
         ArrayList<AvatarError> errors = new ArrayList<>();
 
@@ -261,7 +260,7 @@ public class AvatarSyntaxChecker  {
         double prob = 0.5;
 
         try {
-            prob = new Double(tmp).doubleValue();
+            prob = Double.parseDouble(tmp);
         } catch (Exception e) {
             return -1;
         }

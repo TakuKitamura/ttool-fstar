@@ -198,15 +198,15 @@ public class TaskVariableTableModel extends AbstractTableModel {
 
     private String getVariableValue(int row) {
         int ID = getVariableID(row);
-        String s = valueTable.get(new Integer(ID));
+        String s = valueTable.get(ID);
         if (s != null) {
             return s.toString();
         }
 
         // Must set the ID;
         String val = getVariableInitialValue(row);
-        valueTable.put(new Integer(ID), val);
-        rowTable.put(new Integer(ID), row);
+        valueTable.put(ID, val);
+        rowTable.put(ID, row);
         return val;
 
     }
@@ -227,6 +227,6 @@ public class TaskVariableTableModel extends AbstractTableModel {
         for(int i=0; i<nbOfRows; i++) {
             getVariableValue(i);
         }
-        return;
+
     }
 }

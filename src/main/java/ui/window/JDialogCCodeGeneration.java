@@ -561,7 +561,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
                         if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
                             FileUtils.saveFile(code1.getText() + "/info.xml", XML);
                         }
-                        Object instance = foundPlugin.getClassDiplodocusCodeGenerator().newInstance();
+                        @SuppressWarnings("unchecked")
+                        Object instance = foundPlugin.getClassDiplodocusCodeGenerator().getDeclaredConstructor().newInstance();
                         if (instance == null) {
                             jta.append("Invalid plugin: could not create an instance\n");
                         } else {

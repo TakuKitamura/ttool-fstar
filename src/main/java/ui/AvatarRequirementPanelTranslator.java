@@ -345,9 +345,9 @@ public class AvatarRequirementPanelTranslator {
 						if ((element1 != null) && (element2 != null)) {
 							element2.addInPropertyComponent(element1);
 							if (apdpco.isNegated()) {
-								element2.addInNegatedProperty(new Boolean(true));
+								element2.addInNegatedProperty(true);
 							} else {
-								element2.addInNegatedProperty(new Boolean(false));
+								element2.addInNegatedProperty(false);
 							}
 						}
 					}
