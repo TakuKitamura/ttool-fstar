@@ -69,7 +69,7 @@ public class GraphLatencyAnalysisTest extends AbstractUITest {
     public void parseFile() {
         assertNotNull(latencyDetailedAnalysis);
         int graphsize = dgt.getGraphsize();
-        assertTrue(graphsize == 40);
+        assertTrue(graphsize >= 40);
         checkedDropDown = latencyDetailedAnalysis.getCheckedT();
         assertTrue(checkedDropDown.size() == 3);
         transFile1 = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + SIMULATIONTRACE_PATH));
