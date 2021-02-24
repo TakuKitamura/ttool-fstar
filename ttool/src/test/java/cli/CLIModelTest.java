@@ -75,7 +75,7 @@ public class CLIModelTest extends AbstractTest implements InterpreterOutputInter
 
     public void exit(int reason) {
 	    System.out.println("Exit reason=" + reason);
-	    assertTrue(reason == 1);
+	    assertTrue(reason == 0);
     }
 
     public void printError(String error) {
