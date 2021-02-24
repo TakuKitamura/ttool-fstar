@@ -54,6 +54,7 @@ public class GraphLatencyAnalysisTaintingTest extends AbstractUITest {
         latencyDetailedAnalysis = LatencyDetailedAnalysisMain.getLatencyDetailedAnalysis();
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
+            latencyDetailedAnalysis.getTc().run();
             try {
                 latencyDetailedAnalysis.getT().join();
             } catch (InterruptedException e) {
