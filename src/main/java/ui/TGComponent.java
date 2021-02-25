@@ -105,7 +105,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     private boolean loaded = true;
 
-    // Attributes
+
     protected int x, y; // absolute cd
     protected int width, height;
     protected int minDesiredWidth = 0;

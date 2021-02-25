@@ -650,6 +650,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int ACT_TOGGLE_DIPLO_ID = 264;
     public static final int ACT_TOGGLE_AVATAR_ID = 334;
+    public static final int ACT_TOGGLE_AVATAR_ACTIONS = 533;
     public static final int ACT_TOGGLE_TEPE_ID = 336;
 
     public static final int ACT_TOGGLE_INTERNAL_COMMENT = 227;
@@ -685,11 +686,11 @@ public class TGUIAction extends AbstractAction {
     //@author Huy TRUONG.
     public static final int ACT_EXTERNAL_SEARCH = 414;
     public static final int ACT_INTERNAL_SEARCH = 415;
-    //--
 
     public static final int MOVE_ENABLED = 463;
-    public static final int FIRST_DIAGRAM = 464;   
-    public static final int NB_ACTION = 533;
+    public static final int FIRST_DIAGRAM = 464;
+
+    public static final int NB_ACTION = 534;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -848,6 +849,9 @@ public class TGUIAction extends AbstractAction {
 
         actions[ACT_TOGGLE_DIPLO_ID] = new TAction("toggle-tml-id", "Show / hide DIPLODOCUS IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide DIPLODOCUS IDs", "Show / hide DIPLODOCUS IDs", '0');
         actions[ACT_TOGGLE_AVATAR_ID] = new TAction("toggle-avatar-id", "Show / hide AVATAR IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide AVATAR IDs", "Show / hide AVATAR IDs", '0');
+        actions[ACT_TOGGLE_AVATAR_ACTIONS] = new TAction("toggle-avatar-actions", "Show / hide AVATAR Actions (Always on -> OFF -> mouse over)", IconManager.imgic138,
+                IconManager.imgic138,
+                              "Show / hide AVATAR Actions (Always on -> OFF -> mouse over)", "Show / hide AVATAR Actions (Always on -> OFF -> mouse over)", '0');
         actions[ACT_TOGGLE_TEPE_ID] = new TAction("toggle-tepe-id", "Show / hide TEPE IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide TEPE IDs", "Show / hide TEPE IDs", '0');
 
         actions[ACT_TOGGLE_INTERNAL_COMMENT] = new TAction("toggle-internal-comment-command", "Show / hide (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide internal comments (OFF -> partial -> Full)", "Show / hide internal comments (OFF -> partial -> Full)", '0');

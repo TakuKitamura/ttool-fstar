@@ -297,6 +297,8 @@ public class ActionPerformer {
             mgui.toggleTEPEIDs();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].getActionCommand())) {
             mgui.toggleAVATARIDs();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ACTIONS].getActionCommand())) {
+            mgui.toggleAVATARActions();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_GATES].getActionCommand())) {
             mgui.toggleGates();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_SYNCHRO].getActionCommand())) {

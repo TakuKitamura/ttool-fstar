@@ -87,7 +87,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
     private boolean isOut;
 
     //store selected components
-    private java.util.List<String> selectedMultiComponents=new ArrayList<String>();
+    private final java.util.List<String> selectedMultiComponents = new ArrayList<String>();
 
     // Constructor
     public TDiagramMouseManager(TDiagramPanel _tdp) {

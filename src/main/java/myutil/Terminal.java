@@ -76,7 +76,7 @@ public class Terminal {
         buffer = new Vector<>();
         cpt = 0;
         os = System.getProperty("os.name").toLowerCase();
-        System.out.println("Detected OS:" + os);
+        System.out.println("Detected OS: " + os);
         os = os.split(" ")[0];
         bufferPointer = 0;
     }
@@ -120,14 +120,14 @@ public class Terminal {
                         sequence = null;
                     } else {
                         sequence[seqNb] = x;
-                        seqNb ++;
+                        seqNb++;
                     }
                 }
 
-               if (sequence != null) {
-                   //TraceManager.addDev("Sequence=" + sequence + "length=" + sequence.length());
-                   //printSequence(sequence);
-               }
+                if (sequence != null) {
+                    //TraceManager.addDev("Sequence=" + sequence + "length=" + sequence.length());
+                    //printSequence(sequence);
+                }
 
 
                 if ((sequence != null) && (seqNb == 2)) {
@@ -188,7 +188,6 @@ public class Terminal {
                         //TraceManager.addDev("DEL");
                     }
                 }
-
 
 
                 if ((sequence != null) && (seqNb == 3)) {
@@ -307,7 +306,7 @@ public class Terminal {
                 } else {
                     currentBuf = currentBuf.substring(0, cursorPosition - 1) + currentBuf.substring(cursorPosition, currentBuf.length());
                     backwardCode();
-                    cursorPosition --;
+                    cursorPosition--;
                     myPrint(currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
                     int sep = currentBuf.length() + 1 - cursorPosition;
                     for (int i = 0; i < sep; i++) {

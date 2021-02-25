@@ -190,6 +190,11 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     @Override
     public void internalDrawing(Graphics g) {
+
+        if (TDiagramPanel.AVATAR_ID_ACTIONS == TDiagramPanel.OFF) {
+            return;
+        }
+
         if (!tdp.isScaled()) {
             mygraphics = g;
         }
@@ -227,8 +232,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             }
             
         	g.setColor( guard.isEnabled() ? ColorManager.AVATAR_GUARD : ColorManager.DISABLED );
-            g.drawString( formattedExpr, x, y + step) ;
-
+            drawString(g, formattedExpr, x, y + step);
         	step += inc;
         }
 
@@ -257,7 +261,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             }
 
             g.setColor( afterDelay.isEnabled() ? ColorManager.AVATAR_TIME : ColorManager.DISABLED );
-            g.drawString( formattedExpr, x, y + step );
+            drawString(g, formattedExpr, x, y + step);
             
             step += inc;
 //            }
@@ -295,7 +299,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             }
 
             g.setColor( computeDelay.isEnabled() ? ColorManager.AVATAR_TIME : ColorManager.DISABLED );
-           	g.drawString( formattedExpr, x, y + step );
+            drawString(g, formattedExpr, x, y + step);
             
         	step += inc;
         }
@@ -317,7 +321,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             }
             
         	g.setColor( probability.isEnabled() ? ColorManager.AVATAR_GUARD : ColorManager.DISABLED );
-            g.drawString( formattedExpr, x, y + step) ;
+            drawString(g, formattedExpr, x, y + step);
 
         	step += inc;
 //            s = "weight=" + probability;
@@ -351,7 +355,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 	            }
                 
 	        	g.setColor( action.isEnabled() ? ColorManager.AVATAR_ACTION : ColorManager.DISABLED );
-	        	g.drawString( formattedExpr, x, y + step );
+                drawString(g, formattedExpr, x, y + step);
 
 	            step += inc;
             }
@@ -426,6 +430,14 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             }
 
             //  g.drawRoundRect(x - 1, y - h + 2, width + 2, height + 2, 5, 5);
+        }
+    }
+
+    private void drawString(Graphics g, String str, int x, int y) {
+        if ( (TDiagramPanel.AVATAR_ID_ACTIONS == TDiagramPanel.FULL) ||
+                ( (TDiagramPanel.AVATAR_ID_ACTIONS == TDiagramPanel.PARTIAL)  && (state > TGState.NORMAL) )
+        ) {
+            g.drawString(str, x, y);
         }
     }
 

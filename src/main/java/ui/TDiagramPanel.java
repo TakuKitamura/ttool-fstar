@@ -228,9 +228,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected boolean channelsVisible = true, eventsVisible = true, requestsVisible = true;
     protected int attributesOn = 0;
 
-    public final int OFF = 0;
-    public final int PARTIAL = 1;
-    public final int FULL = 2;
+    public final static int OFF = 0;
+    public final static int PARTIAL = 1;
+    public final static int FULL = 2;
 
     int adjustMode = 0;
 
@@ -244,6 +244,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // AVATAR ID -> for simulation purpose
     public static boolean AVATAR_ID_ON;
+    public static int AVATAR_ID_ACTIONS = FULL;
     public static boolean AVATAR_ANIMATE_ON;
 
 

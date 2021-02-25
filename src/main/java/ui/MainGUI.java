@@ -8851,9 +8851,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+    public void setAVATARActions(int val) {
+        TDiagramPanel.AVATAR_ID_ACTIONS = val;
+        TDiagramPanel tdp = getCurrentTDiagramPanel();
+        if (tdp != null) {
+            tdp.repaint();
+        }
+    }
+
     public void toggleAVATARIDs() {
         setAVATARIDs(!TDiagramPanel.AVATAR_ID_ON);
         TraceManager.addDev("AVATAR id: " + TDiagramPanel.AVATAR_ID_ON);
+    }
+
+    public void toggleAVATARActions() {
+        setAVATARActions((TDiagramPanel.AVATAR_ID_ACTIONS + 1)%3);
+        TraceManager.addDev("AVATAR actions: " + TDiagramPanel.AVATAR_ID_ACTIONS);
     }
 
     // For simulation purpose

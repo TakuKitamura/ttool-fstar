@@ -60,6 +60,7 @@ public class TGState {
 	public static final int POINTED = 5;
     public static final int RESIZE_INDICATIONS = 6;
     public static final int RESIZING = 7;
+
      
 }
 
