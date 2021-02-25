@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -21,10 +22,16 @@ import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
 public class NestedStructurePLANTest extends AbstractUITest {
+
+    private static final int[] EXIST_EDGE = {66, 65,
+    66,63,
+    64, 63};
+
     private static final String mapping_Diag_Name = "Architecture";
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
     private static final String SIMULATIONTRACE_PATH_FILE = INPUT_PATH + "/loopseqTrace.xml";
     private static final String MODEL_PATH = INPUT_PATH + "/loopseqgraph.xml";
+
     private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
     private static DependencyGraphTranslator dgt;
@@ -72,11 +79,21 @@ public class NestedStructurePLANTest extends AbstractUITest {
         int graphsize = dgt.getGraphsize();
         System.out.println("Graphsize=" + graphsize);
         assertTrue(graphsize >= 57);
+
         // test sequence to all its nexts
-        assertTrue(dgt.edgeExists(66, 65));
+
+        for(int i=0; i<EXIST_EDGE.length-1; i = i + 2) {
+            assertTrue(dgt.edgeExists(EXIST_EDGE[i], EXIST_EDGE[i+1]));
+        }
+
+        /*assertTrue(dgt.edgeExists(66, 65));
         assertTrue(dgt.edgeExists(66, 63));
         // test sequence branch to another
-        assertTrue(dgt.edgeExists(64, 63));
+        assertTrue(dgt.edgeExists(64, 63));*/
+
+
+
+
         assertTrue(dgt.edgeExists(63, 62));
         // test ordered sequence
         assertTrue(dgt.edgeExists(62, 61));
