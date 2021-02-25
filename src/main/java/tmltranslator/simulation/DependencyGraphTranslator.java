@@ -207,8 +207,8 @@ public class DependencyGraphTranslator extends SwingWorker {
     private static final String WAIT_REQ_LABEL = "Wait reqChannel_";
     private static final String GET_REQ_ARG_LABEL = "getReqArg";
     private static final String WAIT_ST = "Wait: ";
-    private static final String WAIT_EVENT = "Wait event: ";
-    private static final String SEND_EVENT = "Send event: ";
+    private static final String WAIT_EVENT = "Waitevent:";
+    private static final String SEND_EVENT = "Sendevent:";
     private static final String STOP_AFTER_INFINITE_LOOP = "Stop after infinite loop";
     private static final String START_OF_FORK = "startOfFork";
     private static final String START_OF_JOIN = "startOfJoin";
@@ -2723,10 +2723,8 @@ public class DependencyGraphTranslator extends SwingWorker {
                                                 dependencyGraphRelations.getRunnableTimePerDevice().put(dName, timeValuesList);
                                             }
                                         }
-
                                     } else if (pathToDestination != null && pathToDestination.getLength() > 0) {
                                         mandatoryOptional.add(st);
-
                                         ArrayList<Integer> timeValues = new ArrayList<Integer>();
                                         timeValues.add(0, Integer.valueOf(st.runnableTime));
                                         timeValues.add(1, startTime);
@@ -2780,7 +2778,6 @@ public class DependencyGraphTranslator extends SwingWorker {
                     dataBydelayedTasks.put(i, delayDueTosimTraces);
                     timeDelayedPerRow.put(i, dependencyGraphRelations.getRunnableTimePerDevice());
                     mandatoryOptionalSimT.put(i, mandatoryOptional);
-
                     // dataByTask[i][5] = list.getModel();
                     // dataByTask[i][6] = totalTime;
                 }
@@ -4184,18 +4181,26 @@ public class DependencyGraphTranslator extends SwingWorker {
     }
 
     // import graph in .graphml format
-    public void importGraph(String filename) throws ExportException, IOException, ImportException {
+    public Graph<Vertex, DefaultEdge> importGraph(String filename) throws IOException {
         FileReader ps = new FileReader(filename + ".graphml");
+        Graph<Vertex, DefaultEdge> importedG = new DefaultDirectedGraph<>(DefaultEdge.class);
+        GraphMLImporter<Vertex, DefaultEdge> importer;
         // gmlExporter.exportGraph(g, PS);
         // FileWriter PS2 = new FileWriter(filename + "test.graphml");
-        VertexProvider<String> vertexProvider = (id, attributes) -> {
-            String cv = new String(id);
-            return cv;
+        VertexProvider<Vertex> vertexProvider = (id, attributes) -> {
+            Vertex v = new Vertex(id, 0);
+            return v;
         };
-        EdgeProvider<String, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
-        GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<String, DefaultEdge>(vertexProvider, edgeProvider);
-        Graph<String, DefaultEdge> importedGraph = null;
-        importer.importGraph(importedGraph, ps);
+        EdgeProvider<Vertex, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
+        importer = new GraphMLImporter<Vertex, DefaultEdge>(vertexProvider, edgeProvider);
+        try {
+
+            importer.importGraph(importedG, ps);
+        } catch (ImportException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return importedG;
     }
 
     public HashMap<String, String> getNameIDTaskList() {
@@ -4388,5 +4393,32 @@ public class DependencyGraphTranslator extends SwingWorker {
 
     public DependencyGraphRelations getDependencyGraphRelations() {
         return dependencyGraphRelations;
+    }
+
+    public boolean compareWithImported(String filename) {
+        try {
+            Graph<Vertex, DefaultEdge> importedGraph = importGraph(filename);
+            for (Vertex vg : g.vertexSet()) {
+                if (!importedGraph.vertexSet().contains(vg)) {
+                    return false;
+                }
+            }
+            for (DefaultEdge vg : g.edgeSet()) {
+                if (!importedGraph.edgeSet().toString().contains(vg.toString())) {
+                    return false;
+                }
+            }
+            if (g.vertexSet().size() != importedGraph.vertexSet().size()) {
+                return false;
+            }
+            if (g.edgeSet().size() != importedGraph.edgeSet().size()) {
+                return false;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return true;
+
     }
 }

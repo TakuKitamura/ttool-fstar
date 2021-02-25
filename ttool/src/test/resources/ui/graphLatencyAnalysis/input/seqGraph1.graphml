@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<key id="vertex_label_key" for="node" attr.name="VertexLabel" attr.type="string"/>
+<key id="edge_label_key" for="edge" attr.name="EdgeLabel" attr.type="string"/>
+<graph edgedefault="directed">
+<node id="Bus0">
+<data key="vertex_label_key">Bus0</data>
+</node>
+<node id="Memory0">
+<data key="vertex_label_key">Memory0</data>
+</node>
+<node id="f__dataC__13">
+<data key="vertex_label_key">f__dataC__13</data>
+</node>
+<node id="f__data__16">
+<data key="vertex_label_key">f__data__16</data>
+</node>
+<node id="CPU_R">
+<data key="vertex_label_key">CPU_R</data>
+</node>
+<node id="f__rez">
+<data key="vertex_label_key">f__rez</data>
+</node>
+<node id="f__rez__start__39">
+<data key="vertex_label_key">f__rez__start__39</data>
+</node>
+<node id="f__rez__infiniteloop__54">
+<data key="vertex_label_key">f__rez__infiniteloop__54</data>
+</node>
+<node id="f__rez__rseq__44">
+<data key="vertex_label_key">f__rez__rseq__44</data>
+</node>
+<node id="f__rez__readchannel__53">
+<data key="vertex_label_key">f__rez__readchannel__53</data>
+</node>
+<node id="f__rez__stopstate__52">
+<data key="vertex_label_key">f__rez__stopstate__52</data>
+</node>
+<node id="f__rez__execc__51">
+<data key="vertex_label_key">f__rez__execc__51</data>
+</node>
+<node id="f__rez__stopstate__50">
+<data key="vertex_label_key">f__rez__stopstate__50</data>
+</node>
+<node id="f__rez__loop__49">
+<data key="vertex_label_key">f__rez__loop__49</data>
+</node>
+<node id="f__rez__execi__46">
+<data key="vertex_label_key">f__rez__execi__46</data>
+</node>
+<node id="f__rez__seq__43">
+<data key="vertex_label_key">f__rez__seq__43</data>
+</node>
+<node id="f__rez__d-delay__47">
+<data key="vertex_label_key">f__rez__d-delay__47</data>
+</node>
+<node id="f__rez__stopstate__48">
+<data key="vertex_label_key">f__rez__stopstate__48</data>
+</node>
+<node id="f__rez__execi__42">
+<data key="vertex_label_key">f__rez__execi__42</data>
+</node>
+<node id="f__rez__stopstate__45">
+<data key="vertex_label_key">f__rez__stopstate__45</data>
+</node>
+<node id="f__rez__execc__41">
+<data key="vertex_label_key">f__rez__execc__41</data>
+</node>
+<node id="f__rez__stopstate__40">
+<data key="vertex_label_key">f__rez__stopstate__40</data>
+</node>
+<node id="f__app">
+<data key="vertex_label_key">f__app</data>
+</node>
+<node id="f__app__start__20">
+<data key="vertex_label_key">f__app__start__20</data>
+</node>
+<node id="f__app__Waitevent:f__sendData__f__sendData__38">
+<data key="vertex_label_key">f__app__Waitevent:f__sendData__f__sendData__38</data>
+</node>
+<node id="f__app__readchannel__37">
+<data key="vertex_label_key">f__app__readchannel__37</data>
+</node>
+<node id="f__app__seq__26">
+<data key="vertex_label_key">f__app__seq__26</data>
+</node>
+<node id="f__app__execi__25">
+<data key="vertex_label_key">f__app__execi__25</data>
+</node>
+<node id="f__app__stopstate__24">
+<data key="vertex_label_key">f__app__stopstate__24</data>
+</node>
+<node id="f__app__execi__21">
+<data key="vertex_label_key">f__app__execi__21</data>
+</node>
+<node id="f__app__loop__0__36">
+<data key="vertex_label_key">f__app__loop__0__36</data>
+</node>
+<node id="f__app__execi__23">
+<data key="vertex_label_key">f__app__execi__23</data>
+</node>
+<node id="f__app__stopstate__22">
+<data key="vertex_label_key">f__app__stopstate__22</data>
+</node>
+<node id="f__app__action__33">
+<data key="vertex_label_key">f__app__action__33</data>
+</node>
+<node id="f__app__choice__34">
+<data key="vertex_label_key">f__app__choice__34</data>
+</node>
+<node id="f__app__writechannel__28">
+<data key="vertex_label_key">f__app__writechannel__28</data>
+</node>
+<node id="f__app__stopstate__27">
+<data key="vertex_label_key">f__app__stopstate__27</data>
+</node>
+<node id="f__app__execi__32">
+<data key="vertex_label_key">f__app__execi__32</data>
+</node>
+<node id="f__app__stopstate__30">
+<data key="vertex_label_key">f__app__stopstate__30</data>
+</node>
+<node id="f__app__execi__31">
+<data key="vertex_label_key">f__app__execi__31</data>
+</node>
+<node id="f__app__stopstate__29">
+<data key="vertex_label_key">f__app__stopstate__29</data>
+</node>
+<node id="CPU_S">
+<data key="vertex_label_key">CPU_S</data>
+</node>
+<node id="f__send">
+<data key="vertex_label_key">f__send</data>
+</node>
+<node id="f__send__start__56">
+<data key="vertex_label_key">f__send__start__56</data>
+</node>
+<node id="f__send__seq__66">
+<data key="vertex_label_key">f__send__seq__66</data>
+</node>
+<node id="f__send__d-delay__65">
+<data key="vertex_label_key">f__send__d-delay__65</data>
+</node>
+<node id="f__send__stopstate__64">
+<data key="vertex_label_key">f__send__stopstate__64</data>
+</node>
+<node id="f__send__execi__63">
+<data key="vertex_label_key">f__send__execi__63</data>
+</node>
+<node id="f__send__seq__62">
+<data key="vertex_label_key">f__send__seq__62</data>
+</node>
+<node id="f__send__rseq__61">
+<data key="vertex_label_key">f__send__rseq__61</data>
+</node>
+<node id="f__send__execc__60">
+<data key="vertex_label_key">f__send__execc__60</data>
+</node>
+<node id="f__send__stopstate__59">
+<data key="vertex_label_key">f__send__stopstate__59</data>
+</node>
+<node id="f__send__execi__58">
+<data key="vertex_label_key">f__send__execi__58</data>
+</node>
+<node id="f__send__stopstate__57">
+<data key="vertex_label_key">f__send__stopstate__57</data>
+</node>
+<node id="f__send__Sendevent:f__sendData__f__sendData__67">
+<data key="vertex_label_key">f__send__Sendevent:f__sendData__f__sendData__67</data>
+</node>
+<node id="f__send__writechannel__69">
+<data key="vertex_label_key">f__send__writechannel__69</data>
+</node>
+<node id="f__send__stopstate__68">
+<data key="vertex_label_key">f__send__stopstate__68</data>
+</node>
+<edge id="Bus0f__dataC__13" source="Bus0" target="f__dataC__13">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="Bus0f__data__16" source="Bus0" target="f__data__16">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="CPU_Rf__rez" source="CPU_R" target="f__rez">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rezf__rez__start__39" source="f__rez" target="f__rez__start__39">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__start__39f__rez__infiniteloop__54" source="f__rez__start__39" target="f__rez__infiniteloop__54">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__infiniteloop__54f__rez__rseq__44" source="f__rez__infiniteloop__54" target="f__rez__rseq__44">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__rseq__44f__rez__readchannel__53" source="f__rez__rseq__44" target="f__rez__readchannel__53">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__readchannel__53f__rez__stopstate__52" source="f__rez__readchannel__53" target="f__rez__stopstate__52">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__rseq__44f__rez__execc__51" source="f__rez__rseq__44" target="f__rez__execc__51">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__execc__51f__rez__stopstate__50" source="f__rez__execc__51" target="f__rez__stopstate__50">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__rseq__44f__rez__loop__49" source="f__rez__rseq__44" target="f__rez__loop__49">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__loop__49f__rez__execi__46" source="f__rez__loop__49" target="f__rez__execi__46">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__execi__46f__rez__seq__43" source="f__rez__execi__46" target="f__rez__seq__43">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__loop__49f__rez__d-delay__47" source="f__rez__loop__49" target="f__rez__d-delay__47">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__d-delay__47f__rez__stopstate__48" source="f__rez__d-delay__47" target="f__rez__stopstate__48">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__seq__43f__rez__execi__42" source="f__rez__seq__43" target="f__rez__execi__42">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__execi__42f__rez__stopstate__45" source="f__rez__execi__42" target="f__rez__stopstate__45">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__seq__43f__rez__execc__41" source="f__rez__seq__43" target="f__rez__execc__41">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__execc__41f__rez__stopstate__40" source="f__rez__execc__41" target="f__rez__stopstate__40">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="CPU_Rf__app" source="CPU_R" target="f__app">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__appf__app__start__20" source="f__app" target="f__app__start__20">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__start__20f__app__Waitevent:f__sendData__f__sendData__38" source="f__app__start__20" target="f__app__Waitevent:f__sendData__f__sendData__38">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__Waitevent:f__sendData__f__sendData__38f__app__readchannel__37" source="f__app__Waitevent:f__sendData__f__sendData__38" target="f__app__readchannel__37">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__readchannel__37f__app__seq__26" source="f__app__readchannel__37" target="f__app__seq__26">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__seq__26f__app__execi__25" source="f__app__seq__26" target="f__app__execi__25">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__execi__25f__app__stopstate__24" source="f__app__execi__25" target="f__app__stopstate__24">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__seq__26f__app__execi__21" source="f__app__seq__26" target="f__app__execi__21">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__execi__21f__app__loop__0__36" source="f__app__execi__21" target="f__app__loop__0__36">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__seq__26f__app__execi__23" source="f__app__seq__26" target="f__app__execi__23">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__execi__23f__app__stopstate__22" source="f__app__execi__23" target="f__app__stopstate__22">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__loop__0__36f__app__action__33" source="f__app__loop__0__36" target="f__app__action__33">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__action__33f__app__choice__34" source="f__app__action__33" target="f__app__choice__34">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__loop__0__36f__app__writechannel__28" source="f__app__loop__0__36" target="f__app__writechannel__28">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__writechannel__28f__app__stopstate__27" source="f__app__writechannel__28" target="f__app__stopstate__27">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__choice__34f__app__execi__32" source="f__app__choice__34" target="f__app__execi__32">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__execi__32f__app__stopstate__30" source="f__app__execi__32" target="f__app__stopstate__30">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__choice__34f__app__execi__31" source="f__app__choice__34" target="f__app__execi__31">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__execi__31f__app__stopstate__29" source="f__app__execi__31" target="f__app__stopstate__29">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="CPU_Sf__send" source="CPU_S" target="f__send">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__sendf__send__start__56" source="f__send" target="f__send__start__56">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__start__56f__send__seq__66" source="f__send__start__56" target="f__send__seq__66">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__seq__66f__send__d-delay__65" source="f__send__seq__66" target="f__send__d-delay__65">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__d-delay__65f__send__stopstate__64" source="f__send__d-delay__65" target="f__send__stopstate__64">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__seq__66f__send__execi__63" source="f__send__seq__66" target="f__send__execi__63">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__execi__63f__send__seq__62" source="f__send__execi__63" target="f__send__seq__62">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__seq__62f__send__rseq__61" source="f__send__seq__62" target="f__send__rseq__61">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__seq__62f__send__execc__60" source="f__send__seq__62" target="f__send__execc__60">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__execc__60f__send__stopstate__59" source="f__send__execc__60" target="f__send__stopstate__59">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__rseq__61f__send__execi__58" source="f__send__rseq__61" target="f__send__execi__58">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__execi__58f__send__stopstate__57" source="f__send__execi__58" target="f__send__stopstate__57">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__rseq__61f__send__Sendevent:f__sendData__f__sendData__67" source="f__send__rseq__61" target="f__send__Sendevent:f__sendData__f__sendData__67">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__Sendevent:f__sendData__f__sendData__67f__send__writechannel__69" source="f__send__Sendevent:f__sendData__f__sendData__67" target="f__send__writechannel__69">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__writechannel__69f__send__stopstate__68" source="f__send__writechannel__69" target="f__send__stopstate__68">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="CPU_RBus0" source="CPU_R" target="Bus0">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="Bus0CPU_R" source="Bus0" target="CPU_R">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="CPU_SBus0" source="CPU_S" target="Bus0">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="Bus0CPU_S" source="Bus0" target="CPU_S">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="Memory0Bus0" source="Memory0" target="Bus0">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="Bus0Memory0" source="Bus0" target="Memory0">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__40f__rez__loop__49" source="f__rez__stopstate__40" target="f__rez__loop__49">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__52f__rez__infiniteloop__54" source="f__rez__stopstate__52" target="f__rez__infiniteloop__54">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__50f__rez__infiniteloop__54" source="f__rez__stopstate__50" target="f__rez__infiniteloop__54">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__stopstate__30f__app__loop__0__36" source="f__app__stopstate__30" target="f__app__loop__0__36">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__48f__rez__infiniteloop__54" source="f__rez__stopstate__48" target="f__rez__infiniteloop__54">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__stopstate__29f__app__loop__0__36" source="f__app__stopstate__29" target="f__app__loop__0__36">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__Sendevent:f__sendData__f__sendData__67f__app__Waitevent:f__sendData__f__sendData__38" source="f__send__Sendevent:f__sendData__f__sendData__67" target="f__app__Waitevent:f__sendData__f__sendData__38">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__dataC__13f__rez__readchannel__53" source="f__dataC__13" target="f__rez__readchannel__53">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__data__16f__app__readchannel__37" source="f__data__16" target="f__app__readchannel__37">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__writechannel__69f__data__16" source="f__send__writechannel__69" target="f__data__16">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__writechannel__28f__dataC__13" source="f__app__writechannel__28" target="f__dataC__13">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__stopstate__24f__app__execi__21" source="f__app__stopstate__24" target="f__app__execi__21">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__45f__rez__execc__41" source="f__rez__stopstate__45" target="f__rez__execc__41">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__stopstate__64f__send__execi__63" source="f__send__stopstate__64" target="f__send__execi__63">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__stopstate__57f__send__execc__60" source="f__send__stopstate__57" target="f__send__execc__60">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__stopstate__68f__send__execc__60" source="f__send__stopstate__68" target="f__send__execc__60">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__app__stopstate__27f__app__execi__23" source="f__app__stopstate__27" target="f__app__execi__23">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__52f__rez__loop__49" source="f__rez__stopstate__52" target="f__rez__loop__49">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__52f__rez__execc__51" source="f__rez__stopstate__52" target="f__rez__execc__51">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__50f__rez__loop__49" source="f__rez__stopstate__50" target="f__rez__loop__49">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__50f__rez__readchannel__53" source="f__rez__stopstate__50" target="f__rez__readchannel__53">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__48f__rez__readchannel__53" source="f__rez__stopstate__48" target="f__rez__readchannel__53">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__rez__stopstate__48f__rez__execc__51" source="f__rez__stopstate__48" target="f__rez__execc__51">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__stopstate__57f__send__Sendevent:f__sendData__f__sendData__67" source="f__send__stopstate__57" target="f__send__Sendevent:f__sendData__f__sendData__67">
+<data key="edge_label_key">1.0</data>
+</edge>
+<edge id="f__send__stopstate__68f__send__execi__58" source="f__send__stopstate__68" target="f__send__execi__58">
+<data key="edge_label_key">1.0</data>
+</edge>
+</graph>
+</graphml>
