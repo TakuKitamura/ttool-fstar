@@ -153,6 +153,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private Object[][] dataByTask = null;
     private Object[][] dataByTaskMinMax = null;
     private HashMap<Integer, Vector<SimulationTransaction>> dataByTaskR = new HashMap<Integer, Vector<SimulationTransaction>>();
+    private HashMap<Integer, Vector<SimulationTransaction>> mandatoryOptionalSimT = new HashMap<Integer, Vector<SimulationTransaction>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
     private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRow = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
     private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRowMinMax = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
@@ -168,6 +169,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private ArrayList<String> devicesToBeConsidered = new ArrayList<String>();
     private Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
     private Vector<SimulationTransaction> delayDueTosimTraces = new Vector<SimulationTransaction>();
+    private Vector<SimulationTransaction> mandatoryOptional = new Vector<SimulationTransaction>();
     private HashMap<String, ArrayList<SimulationTransaction>> relatedsimTraceswithTaint = new HashMap<String, ArrayList<SimulationTransaction>>();
     private int nbOfNodes = 0;
     private List<String> usedLabels = new ArrayList<String>();
@@ -2063,6 +2065,7 @@ public class DependencyGraphTranslator extends SwingWorker {
             dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
             dataByTask = null;
             relatedsimTraces = new Vector<SimulationTransaction>();
+            mandatoryOptional = new Vector<SimulationTransaction>();
             delayDueTosimTraces = new Vector<SimulationTransaction>();
             dependencyGraphRelations.setRunnableTimePerDevice(new HashMap<String, ArrayList<ArrayList<Integer>>>());
             if (path2 != null && path2.getLength() > 0) {
@@ -2072,7 +2075,7 @@ public class DependencyGraphTranslator extends SwingWorker {
                     GraphPath<Vertex, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, v1, getvertex(ChannelName));
                     GraphPath<Vertex, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, getvertex(ChannelName),
                             getvertex(task22));
-                    if (pathTochannel != null && pathTochannel.getLength() > 0 && pathFromChannel != null && pathFromChannel.getLength() > 0) {
+                    if (pathFromChannel != null && pathFromChannel.getLength() > 0) {
                         devicesToBeConsidered.addAll(busChList);
                     }
                 }
@@ -2720,6 +2723,25 @@ public class DependencyGraphTranslator extends SwingWorker {
                                                 dependencyGraphRelations.getRunnableTimePerDevice().put(dName, timeValuesList);
                                             }
                                         }
+
+                                    } else if (pathToDestination != null && pathToDestination.getLength() > 0) {
+                                        mandatoryOptional.add(st);
+
+                                        ArrayList<Integer> timeValues = new ArrayList<Integer>();
+                                        timeValues.add(0, Integer.valueOf(st.runnableTime));
+                                        timeValues.add(1, startTime);
+                                        String dName = st.deviceName + "_" + st.coreNumber;
+                                        if (!(st.runnableTime).equals(st.startTime)) {
+                                            if (dependencyGraphRelations.getRunnableTimePerDevice().containsKey(dName)) {
+                                                if (!dependencyGraphRelations.getRunnableTimePerDevice().get(dName).contains(timeValues)) {
+                                                    dependencyGraphRelations.getRunnableTimePerDevice().get(dName).add(timeValues);
+                                                }
+                                            } else {
+                                                ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
+                                                timeValuesList.add(timeValues);
+                                                dependencyGraphRelations.getRunnableTimePerDevice().put(dName, timeValuesList);
+                                            }
+                                        }
                                     } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
                                             || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                             || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
@@ -2757,6 +2779,8 @@ public class DependencyGraphTranslator extends SwingWorker {
                     dataByTaskR.put(i, relatedsimTraces);
                     dataBydelayedTasks.put(i, delayDueTosimTraces);
                     timeDelayedPerRow.put(i, dependencyGraphRelations.getRunnableTimePerDevice());
+                    mandatoryOptionalSimT.put(i, mandatoryOptional);
+
                     // dataByTask[i][5] = list.getModel();
                     // dataByTask[i][6] = totalTime;
                 }
@@ -3713,6 +3737,20 @@ public class DependencyGraphTranslator extends SwingWorker {
         return dataByTaskRowDetails;
     }
 
+    public String[][] getMandatoryOptionalByRow(int row) {
+        String[][] dataByTaskRowDetails = new String[mandatoryOptionalSimT.get(row).size()][5];
+        int i = 0;
+        for (SimulationTransaction st : mandatoryOptionalSimT.get(row)) {
+            dataByTaskRowDetails[i][0] = st.command;
+            dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
+            dataByTaskRowDetails[i][3] = st.startTime;
+            dataByTaskRowDetails[i][4] = st.endTime;
+            i++;
+        }
+        return dataByTaskRowDetails;
+    }
+
     // fill the detailed latency table once a row is selected
     public Object[][] getTaskByRowDetailsMinMaxTaint(int row) {
         String task12 = (String) dataByTaskMinMax[row][0];
@@ -3773,6 +3811,10 @@ public class DependencyGraphTranslator extends SwingWorker {
     // fill the detailed latency table once a row is selected
     public List<SimulationTransaction> getRowDetailsTaks(int row) {
         return dataByTaskR.get(row);
+    }
+
+    public List<SimulationTransaction> getMandatoryOptionalSimTTaks(int row) {
+        return mandatoryOptionalSimT.get(row);
     }
 
     public Vector<SimulationTransaction> getMinMaxTasksByRowTainted(int row) {
