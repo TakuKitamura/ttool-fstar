@@ -17,14 +17,16 @@ class TableRenderer extends DefaultTableCellRenderer {
     private List<String> onPathBehaviors = new Vector<String>();
     private List<String> offPathBehaviors = new Vector<String>();
     private List<String> offPathBehaviorCausingDelay = new Vector<String>();
+    private List<String> mandatoryOptionalByRow = new Vector<String>();
 
-    public TableRenderer(List<String> onPathBehavior, List<String> offPathBehaviorCausingDelay, List<String> offPathBehavior) {
+    public TableRenderer(List<String> onPathBehavior, List<String> offPathBehaviorCausingDelay, List<String> offPathBehavior,List<String> mandatoryOptionalByRow) {
         this.onPathBehaviors = new Vector<String>();
         this.offPathBehaviorCausingDelay = new Vector<String>();
         this.offPathBehaviors = new Vector<String>();
         this.onPathBehaviors = onPathBehavior;
         this.offPathBehaviorCausingDelay = offPathBehaviorCausingDelay;
         this.offPathBehaviors = offPathBehavior;
+        this.mandatoryOptionalByRow=mandatoryOptionalByRow;
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -43,6 +45,10 @@ class TableRenderer extends DefaultTableCellRenderer {
                 randomColour = Color.red;
             } else if (offPathBehaviors.contains(value.toString() + table.getColumnName(column))) {
                 randomColour = Color.orange;
+                // randomColour = Color.red;
+            }
+            else if (mandatoryOptionalByRow.contains(value.toString() + table.getColumnName(column))) {
+                randomColour = Color.LIGHT_GRAY;
                 // randomColour = Color.red;
             }
         } else {
