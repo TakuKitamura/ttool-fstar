@@ -33,7 +33,7 @@ public class HTMLParseTest extends AbstractUITest {
     final String [] MODELS_PARSE_HTML = {"parseFPGA_HTML", "parseCPU1_HTML","parseCPU2_HTML"};
     final String [] PARSE_FPGA = {"<- idle 471 ->","", "", "", ""};
     final String [] PARSE_SINGLE_CORE = {"<- idle 366 ->", "<- idle 401 ->", "<- idle 401 ->", "<- idle 401 ->", "<- idle 401 ->"};
-    final String [] PARSE_MULTI_CORE = { "", "", "", "<- idle 778 ->", "<- idle 807 ->"};
+    final String [] PARSE_MULTI_CORE = { "", "", "", "", "<- idle 377 ->"};
     final static String EXPECTED_FILE_GET_ALL_TRANS = getBaseResourcesDir() + "tmltranslator/expected/expected_get_all_transactions.txt";
     private String SIM_DIR;
 

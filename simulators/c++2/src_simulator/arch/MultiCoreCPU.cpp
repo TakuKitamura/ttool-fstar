@@ -45,7 +45,7 @@
 #include <Bus.h>
 #include <Slave.h>
 #include <TMLChannel.h>
-//#include <TransactionListener.h>
+#include <RRPrioScheduler.h>
 
 
 MultiCoreCPU::MultiCoreCPU(ID iID, 
@@ -61,7 +61,7 @@ MultiCoreCPU::MultiCoreCPU(ID iID,
 			   unsigned int iCyclesBeforeIdle, 
 			   unsigned int ibyteDataSize,
 			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), 
-							coreNumber(0), timeCnt(0)
+							coreNumber(0)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                  , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
                                                                                                                                                                                                                                                                  , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
@@ -92,7 +92,6 @@ MultiCoreCPU::~MultiCoreCPU(){
 
 ///test///
 void MultiCoreCPU::initCore(){
-  if (timeCnt > 0) timeCnt = 0;
   if (coreNumber != 0) coreNumber = 0;
   for (unsigned int i = 0; i < amountOfCore; i++)
     multiCore[i] = 0;
@@ -178,6 +177,12 @@ std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nex
 #endif
   //round to full cycles!!!
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
+  //in case wait event has runable time bigger than send event
+  TMLChannel* aTempChannel = _nextTransaction->getCommand()->getChannel(0);
+  if (aTempChannel != 0 && !channelEndTime.empty()) {
+//     TMLTime _tempStartTime = channelEndTime[aTempChannel->getID()];
+     aStartTime = max(aStartTime, channelEndTime[aTempChannel->getID()]);
+  }
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
   //std::cout << _name << "CPU: set starttime in CPU=" << aStartTime << "\n";
@@ -341,44 +346,28 @@ std::cout<<"addTransaction"<<_name<<std::endl;
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
     //    std::cout << "CPU:addt: to be started" << std::endl;
     //std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
-    _endSchedule=_nextTransaction->getEndTime();
-    if (timeCnt < amountOfCore -1){
-//	  _endSchedule=0;
-        // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
-        if ((_nextTransaction != NULL  && _lastTransaction != NULL && (_lastTransaction->getEndTime() == _nextTransaction->getStartTime()))) {
-            if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
-                _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
-                multiCore[_lastTransaction->getTransactCoreNumber()] = _endSchedule;
-            } else {
-                _nextTransaction->setTransactCoreNumber(coreNumber);
-                multiCore[coreNumber] = _endSchedule;
-            }
-        } else if (_nextTransaction != NULL) {
-            _nextTransaction->setTransactCoreNumber(coreNumber);
-            multiCore[coreNumber] = _endSchedule;
-        }
 
-        ++coreNumber;
-	 
-    } else {
-        // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
-        if ((_nextTransaction != NULL  && _lastTransaction != NULL && (_lastTransaction->getEndTime() == _nextTransaction->getStartTime()))) {
-            if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
-                _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
-                multiCore[_lastTransaction->getTransactCoreNumber()] = _endSchedule;
-            } else {
-                _nextTransaction->setTransactCoreNumber(coreNumber);
-                multiCore[coreNumber] = _endSchedule;
-            }
-        } else if (_nextTransaction != NULL) {
-            _nextTransaction->setTransactCoreNumber(coreNumber);
-            multiCore[coreNumber] = _endSchedule;
-        }
 
-        _endSchedule = getMinEndSchedule();
+    TMLTime _tempEndSchedule = _nextTransaction->getEndTime();
+    // check if lasttrans = idle Delay and current trans has the same task=> not change core, after that update the multicore mapping
+    if ((_nextTransaction != NULL  && _lastTransaction != NULL && (_lastTransaction->getEndTime() <= _nextTransaction->getStartTime()))) {
+        if (_nextTransaction->getCommand()->getTask() == _lastTransaction->getCommand()->getTask()) {
+            _nextTransaction->setTransactCoreNumber(_lastTransaction->getTransactCoreNumber());
+            if (multiCore[_lastTransaction->getTransactCoreNumber()] < _tempEndSchedule)
+                multiCore[_lastTransaction->getTransactCoreNumber()] = _tempEndSchedule;
+        } else {
+            _nextTransaction->setTransactCoreNumber(coreNumber);
+            if (multiCore[coreNumber] < _tempEndSchedule)
+                multiCore[coreNumber] = _tempEndSchedule;
+        }
+    } else if (_nextTransaction != NULL) {
+        _nextTransaction->setTransactCoreNumber(coreNumber);
+        if (multiCore[coreNumber] < _tempEndSchedule)
+            multiCore[coreNumber] = _tempEndSchedule;
     }
+    _endSchedule = getMinEndSchedule();
+    //for testing
     std::cout << "MULTICORE: assign transaction " << _nextTransaction->toShortString() << " to core " << _nextTransaction->getTransactCoreNumber() << std::endl;
-    timeCnt++;
     if(!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))
       _simulatedTime=max(_simulatedTime,_nextTransaction->getEndTime());
     _overallTransNo++; //NEW!!!!!!!!
@@ -394,6 +383,35 @@ std::cout<<"addTransaction"<<_name<<std::endl;
 #ifdef LISTENERS_ENABLED
     NOTIFY_TRANS_EXECUTED(_nextTransaction);
 #endif
+
+    if (_nextTransaction->getCommand()->getTask()->getState() == 3 && dynamic_cast<RRPrioScheduler*>(_scheduler) != 0) {
+        Priority highestPrio = 100;
+        for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
+            if ((*j) != NULL && (*j)->getState() != 3 && (*j)->getPriority() <= highestPrio) {
+                highestPrio = (*j)->getPriority();
+            }
+        }
+
+        Priority currentPrio = _nextTransaction->getCommand()->getTask()->getPriority();
+
+        if ( maxEndTimeWithPrio.find(currentPrio) == maxEndTimeWithPrio.end() ) {
+            maxEndTimeWithPrio[currentPrio] = _nextTransaction->getEndTime();
+        } else if (maxEndTimeWithPrio[currentPrio] < _nextTransaction->getEndTime()) {
+            maxEndTimeWithPrio[currentPrio] = _nextTransaction->getEndTime();
+        }
+
+
+        if (currentPrio < highestPrio) {
+            _endSchedule = max(_nextTransaction->getEndTime(),maxEndTimeWithPrio[currentPrio]);
+        }
+    }
+
+    TMLChannel* aTempChannel=_nextTransaction->getCommand()->getChannel(0);
+
+    if (aTempChannel != 0) {
+        channelEndTime[aTempChannel->getID()] = _nextTransaction->getEndTime();
+    }
+
     _nextTransaction=0;
     //std::cout << "this is not the reason\n";
     return true;
@@ -774,6 +792,10 @@ void MultiCoreCPU::reset(){
   _masterNextTransaction=0;
   if (!multiCore.empty())
     multiCore.clear();
+  if (!channelEndTime.empty())
+    channelEndTime.clear();
+  if (!maxEndTimeWithPrio.empty())
+    maxEndTimeWithPrio.clear();
   initCore();
   _busyCycles=0;
 }

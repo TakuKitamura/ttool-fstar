@@ -86,23 +86,14 @@ TMLTime RRPrioScheduler::schedule(TMLTime iEndSchedule){
 			
 			//if ((*i)->getPriority()<aHighestPrioPast){
 				
-			if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
-				aRunnableTime=aTempTrans->getRunnableTime();	
-				if (aRunnableTime<=iEndSchedule){
-					//Past
-					if ((*i)->getPriority()<aHighestPrioPast || ((*i)->getPriority()==aHighestPrioPast && aRunnableTime<aLowestRunnableTimePast)){
-						aHighestPrioPast=(*i)->getPriority();
-						aLowestRunnableTimePast=aRunnableTime;
-						aSourcePast=*i;
-					}
-				}else{
-					//Future
-					if(aRunnableTime<aLowestRunnableTimeFuture){
-						aLowestRunnableTimeFuture=aRunnableTime;
-						aSourceFuture=*i;
-					}
-					
-				}
+			if (aTempTrans != 0 && aTempTrans->getVirtualLength() != 0) {
+				aRunnableTime = aTempTrans->getRunnableTime();
+                //get tranasaction with highest priority and shortest runable time
+                if ((*i)->getPriority() < aHighestPrioPast || ((*i)->getPriority() == aHighestPrioPast && aRunnableTime < aLowestRunnableTimePast)) {
+                    aHighestPrioPast = (*i)->getPriority();
+                    aLowestRunnableTimePast = aRunnableTime;
+                    aSourcePast = *i;
+                }
 			}
 		}
 	}
