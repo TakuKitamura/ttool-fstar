@@ -151,6 +151,8 @@ protected:
 	//first parameter is the core number
 	///second parameter is the end schedule in the core
 	std::map <unsigned int, unsigned int> multiCore;
+	std::map <ID, TMLTime> channelEndTime; // make sure sent event always be executed earlier than wait event
+	std::map <Priority, TMLTime> maxEndTimeWithPrio; // save the max end time for each priority
 	///initialization of all cores
 	void initCore();
 	///get the avaliable core

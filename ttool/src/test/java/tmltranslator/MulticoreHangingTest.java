@@ -29,8 +29,8 @@ public class MulticoreHangingTest extends AbstractUITest {
     private String SIM_DIR;
     final int [] NB_OF_MH_STATES = {22};
     final int [] NB_OF_MH_TRANSTIONS = {21};
-    final int [] MIN_MH_CYCLES = {118};
-    final int [] MAX_MH_CYCLES = {118};
+    final int [] MIN_MH_CYCLES = {120};
+    final int [] MAX_MH_CYCLES = {120};
     static String CPP_DIR = "../../../../simulators/c++2/";
     static String mappingName = "ArchitectureSimple";
     private TMLArchiDiagramPanel currTdp;

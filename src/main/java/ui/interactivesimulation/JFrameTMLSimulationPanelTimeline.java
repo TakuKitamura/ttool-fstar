@@ -100,8 +100,8 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     //TraceManager.addDev("Invalid default transaction");
                     zoomIndex = "100%";
                 }
-                sdpanel.getDocument().putProperty("ZOOM_FACTOR", new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
-                TraceManager.addDev("Scale: " + new Double(Double.valueOf(zoomIndex.replace("%",""))/100));
+                sdpanel.getDocument().putProperty("ZOOM_FACTOR", Double.parseDouble(zoomIndex.replace("%",""))/100);
+                TraceManager.addDev("Scale: " + Double.parseDouble(zoomIndex.replace("%",""))/100);
                 if (filePath.length() < 10000) {
                     sdpanel.setText(filePath);
                     sdpanel.setCaretPosition(0);
@@ -204,6 +204,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
             @Override
             public String getToolTipText(MouseEvent evt) {
                 toolTipText = null;
+                // viewToModel will be Deprecated. replaced by viewToModel2D(JTextComponent, Point2D, Position.Bias[]) in java 9
                 int pos = viewToModel(evt.getPoint());
                 if (pos >= 0) {
                     HTMLDocument hdoc = (HTMLDocument) sdpanel.getDocument();
@@ -230,6 +231,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     if (Y_AXIS_START != 0) {
                         int drawPoint = 0;
                         try {
+                            // modelToView will be Deprecated. replaced by  modelToView2D(JTextComponent, int, Position.Bias) in java 9
                             drawPoint = modelToView(Y_AXIS_START).y;
                         } catch (BadLocationException e) {
                             drawPoint = 130;
@@ -239,10 +241,12 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                         g2.drawLine(X, 130, X, 130 + sdpanel.getHeight());
                     }
 
+                    // viewToModel will be Deprecated. replaced by viewToModel2D(JTextComponent, Point2D, Position.Bias[]) in java 9
                     int pos = viewToModel(new Point(X,Y));
                     if (pos >= 0) {
 
                         try {
+                            // modelToView will be Deprecated. replaced by  modelToView2D(JTextComponent, int, Position.Bias) in java 9
                             if (timeMarkedPosition.keySet().contains(pos) && Math.abs(modelToView(pos).x - X) < 3) {
                                 g2.drawString("Time: " + timeMarkedPosition.get(pos), X, Y);
                                 g2.dispose();
@@ -258,6 +262,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                                 }
 
                                 if (timeMarkedPosition.keySet().contains(postStart) && timeMarkedPosition.keySet().contains(postEnd) && timeMarkedPosition.get(postStart) < timeMarkedPosition.get(postEnd)) {
+                                    // modelToView will be Deprecated. replaced by  modelToView2D(JTextComponent, int, Position.Bias) in java 9
                                     int value = timeMarkedPosition.get(postStart) + (int)(((float)(timeMarkedPosition.get(postEnd) - timeMarkedPosition.get(postStart))/(modelToView(postEnd).x - modelToView(postStart).x)) * (X - modelToView(postStart).x));
                                     g2.drawString("Time: " + value, X, Y);
                                     g2.dispose();
