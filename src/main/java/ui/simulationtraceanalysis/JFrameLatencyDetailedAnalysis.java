@@ -511,7 +511,6 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     protected void generateDirectedGraph(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels) {
         try {
             dgraph = new DependencyGraphTranslator(tmap);
-            tc.setDgraph(dgraph);
             pbar.setMaximum(dgraph.getNodeNbProgressBar());
             pbar.setMinimum(0);
             dgraph.addPropertyChangeListener(new PropertyChangeListener() {

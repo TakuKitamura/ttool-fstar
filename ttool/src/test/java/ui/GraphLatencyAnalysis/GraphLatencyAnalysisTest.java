@@ -1,4 +1,4 @@
-package ui.graphlatencyanalysis;
+package ui.GraphLatencyAnalysis;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -24,15 +24,15 @@ public class GraphLatencyAnalysisTest extends AbstractUITest {
     private static final String SIMULATIONTRACE_PATH = INPUT_PATH + "/graphTestSimulationTrace.xml";
     private static final String modelPath = INPUT_PATH + "/GraphTestModel.xml";
     private static final String mappingDiagName = "Architecture2";
+    private Vector<SimulationTransaction> transFile1;
+    // private Vector<String> dropDown;
+    private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
     private static final int OPERATOR1_ID = 44;
     private static final int OPERATOR2_ID = 26;
-
-    private Vector<SimulationTransaction> transFile1;
-    private HashMap<String, Integer> checkedDropDown = new HashMap<String, Integer>();
-    private String task1;
-    private String task2;
-    private DependencyGraphTranslator dgt;
-    private Object[][] allLatencies, minMaxArray, taskHWByRowDetails, detailedLatency;
+    private static String task1;
+    private static String task2;
+    private static DependencyGraphTranslator dgt;
+    private static Object[][] allLatencies, minMaxArray, taskHWByRowDetails, detailedLatency;
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
     private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
 
@@ -47,7 +47,7 @@ public class GraphLatencyAnalysisTest extends AbstractUITest {
             System.out.println("Non NULL Panel");
         }
         mainGUI.checkModelingSyntax(panel, true);
-        SimulationTrace file2 = new SimulationTrace("", 6, SIMULATIONTRACE_PATH);
+        SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, SIMULATIONTRACE_PATH);
         LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(3, mainGUI, file2, false, false, 3);
         LatencyDetailedAnalysisMain.getTc().setMainGUI(mainGUI);
         LatencyDetailedAnalysisMain.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
