@@ -560,7 +560,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setAutoCreateRowSorter(true);
-        TableRenderer tr = new TableRenderer(onPathBehavior, offPathBehaviorCausingDelay, offPathBehavior,offPathBehavior);
+        TableRenderer tr = new TableRenderer(onPathBehavior, offPathBehaviorCausingDelay, offPathBehavior);
         int ncols = table.getColumnCount();
         table.getModel().addTableModelListener(this);
         TableColumnModel tcm = table.getColumnModel();
