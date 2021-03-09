@@ -153,6 +153,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private Object[][] dataByTask = null;
     private Object[][] dataByTaskMinMax = null;
     private HashMap<Integer, Vector<SimulationTransaction>> dataByTaskR = new HashMap<Integer, Vector<SimulationTransaction>>();
+    private HashMap<Integer, Vector<SimulationTransaction>> mandatoryOptionalSimT = new HashMap<Integer, Vector<SimulationTransaction>>();
     private HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
     private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRow = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
     private HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>> timeDelayedPerRowMinMax = new HashMap<Integer, HashMap<String, ArrayList<ArrayList<Integer>>>>();
@@ -168,6 +169,7 @@ public class DependencyGraphTranslator extends SwingWorker {
     private ArrayList<String> devicesToBeConsidered = new ArrayList<String>();
     private Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
     private Vector<SimulationTransaction> delayDueTosimTraces = new Vector<SimulationTransaction>();
+    private Vector<SimulationTransaction> mandatoryOptional = new Vector<SimulationTransaction>();
     private HashMap<String, ArrayList<SimulationTransaction>> relatedsimTraceswithTaint = new HashMap<String, ArrayList<SimulationTransaction>>();
     private int nbOfNodes = 0;
     private List<String> usedLabels = new ArrayList<String>();
@@ -205,8 +207,8 @@ public class DependencyGraphTranslator extends SwingWorker {
     private static final String WAIT_REQ_LABEL = "Wait reqChannel_";
     private static final String GET_REQ_ARG_LABEL = "getReqArg";
     private static final String WAIT_ST = "Wait: ";
-    private static final String WAIT_EVENT = "Wait event: ";
-    private static final String SEND_EVENT = "Send event: ";
+    private static final String WAIT_EVENT = "Waitevent:";
+    private static final String SEND_EVENT = "Sendevent:";
     private static final String STOP_AFTER_INFINITE_LOOP = "Stop after infinite loop";
     private static final String START_OF_FORK = "startOfFork";
     private static final String START_OF_JOIN = "startOfJoin";
@@ -2063,6 +2065,7 @@ public class DependencyGraphTranslator extends SwingWorker {
             dataBydelayedTasks = new HashMap<Integer, List<SimulationTransaction>>();
             dataByTask = null;
             relatedsimTraces = new Vector<SimulationTransaction>();
+            mandatoryOptional = new Vector<SimulationTransaction>();
             delayDueTosimTraces = new Vector<SimulationTransaction>();
             dependencyGraphRelations.setRunnableTimePerDevice(new HashMap<String, ArrayList<ArrayList<Integer>>>());
             if (path2 != null && path2.getLength() > 0) {
@@ -2072,7 +2075,7 @@ public class DependencyGraphTranslator extends SwingWorker {
                     GraphPath<Vertex, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, v1, getvertex(ChannelName));
                     GraphPath<Vertex, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, getvertex(ChannelName),
                             getvertex(task22));
-                    if (pathTochannel != null && pathTochannel.getLength() > 0 && pathFromChannel != null && pathFromChannel.getLength() > 0) {
+                    if (pathFromChannel != null && pathFromChannel.getLength() > 0) {
                         devicesToBeConsidered.addAll(busChList);
                     }
                 }
@@ -2720,6 +2723,23 @@ public class DependencyGraphTranslator extends SwingWorker {
                                                 dependencyGraphRelations.getRunnableTimePerDevice().put(dName, timeValuesList);
                                             }
                                         }
+                                    } else if (pathToDestination != null && pathToDestination.getLength() > 0) {
+                                        mandatoryOptional.add(st);
+                                        ArrayList<Integer> timeValues = new ArrayList<Integer>();
+                                        timeValues.add(0, Integer.valueOf(st.runnableTime));
+                                        timeValues.add(1, startTime);
+                                        String dName = st.deviceName + "_" + st.coreNumber;
+                                        if (!(st.runnableTime).equals(st.startTime)) {
+                                            if (dependencyGraphRelations.getRunnableTimePerDevice().containsKey(dName)) {
+                                                if (!dependencyGraphRelations.getRunnableTimePerDevice().get(dName).contains(timeValues)) {
+                                                    dependencyGraphRelations.getRunnableTimePerDevice().get(dName).add(timeValues);
+                                                }
+                                            } else {
+                                                ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
+                                                timeValuesList.add(timeValues);
+                                                dependencyGraphRelations.getRunnableTimePerDevice().put(dName, timeValuesList);
+                                            }
+                                        }
                                     } else if (((st.deviceName.equals(task2DeviceName) && task2CoreNbr.equals(st.coreNumber))
                                             || (st.deviceName.equals(task1DeviceName) && task1CoreNbr.equals(st.coreNumber))
                                             || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
@@ -2757,6 +2777,7 @@ public class DependencyGraphTranslator extends SwingWorker {
                     dataByTaskR.put(i, relatedsimTraces);
                     dataBydelayedTasks.put(i, delayDueTosimTraces);
                     timeDelayedPerRow.put(i, dependencyGraphRelations.getRunnableTimePerDevice());
+                    mandatoryOptionalSimT.put(i, mandatoryOptional);
                     // dataByTask[i][5] = list.getModel();
                     // dataByTask[i][6] = totalTime;
                 }
@@ -3713,6 +3734,20 @@ public class DependencyGraphTranslator extends SwingWorker {
         return dataByTaskRowDetails;
     }
 
+    public String[][] getMandatoryOptionalByRow(int row) {
+        String[][] dataByTaskRowDetails = new String[mandatoryOptionalSimT.get(row).size()][5];
+        int i = 0;
+        for (SimulationTransaction st : mandatoryOptionalSimT.get(row)) {
+            dataByTaskRowDetails[i][0] = st.command;
+            dataByTaskRowDetails[i][1] = nameIDTaskList.get(st.id);
+            dataByTaskRowDetails[i][2] = st.deviceName + "_" + st.coreNumber;
+            dataByTaskRowDetails[i][3] = st.startTime;
+            dataByTaskRowDetails[i][4] = st.endTime;
+            i++;
+        }
+        return dataByTaskRowDetails;
+    }
+
     // fill the detailed latency table once a row is selected
     public Object[][] getTaskByRowDetailsMinMaxTaint(int row) {
         String task12 = (String) dataByTaskMinMax[row][0];
@@ -3773,6 +3808,10 @@ public class DependencyGraphTranslator extends SwingWorker {
     // fill the detailed latency table once a row is selected
     public List<SimulationTransaction> getRowDetailsTaks(int row) {
         return dataByTaskR.get(row);
+    }
+
+    public List<SimulationTransaction> getMandatoryOptionalSimTTaks(int row) {
+        return mandatoryOptionalSimT.get(row);
     }
 
     public Vector<SimulationTransaction> getMinMaxTasksByRowTainted(int row) {
@@ -4142,18 +4181,26 @@ public class DependencyGraphTranslator extends SwingWorker {
     }
 
     // import graph in .graphml format
-    public void importGraph(String filename) throws ExportException, IOException, ImportException {
+    public Graph<Vertex, DefaultEdge> importGraph(String filename) throws IOException {
         FileReader ps = new FileReader(filename + ".graphml");
+        Graph<Vertex, DefaultEdge> importedG = new DefaultDirectedGraph<>(DefaultEdge.class);
+        GraphMLImporter<Vertex, DefaultEdge> importer;
         // gmlExporter.exportGraph(g, PS);
         // FileWriter PS2 = new FileWriter(filename + "test.graphml");
-        VertexProvider<String> vertexProvider = (id, attributes) -> {
-            String cv = new String(id);
-            return cv;
+        VertexProvider<Vertex> vertexProvider = (id, attributes) -> {
+            Vertex v = new Vertex(id, 0);
+            return v;
         };
-        EdgeProvider<String, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
-        GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<String, DefaultEdge>(vertexProvider, edgeProvider);
-        Graph<String, DefaultEdge> importedGraph = null;
-        importer.importGraph(importedGraph, ps);
+        EdgeProvider<Vertex, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
+        importer = new GraphMLImporter<Vertex, DefaultEdge>(vertexProvider, edgeProvider);
+        try {
+
+            importer.importGraph(importedG, ps);
+        } catch (ImportException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return importedG;
     }
 
     public HashMap<String, String> getNameIDTaskList() {
@@ -4346,5 +4393,32 @@ public class DependencyGraphTranslator extends SwingWorker {
 
     public DependencyGraphRelations getDependencyGraphRelations() {
         return dependencyGraphRelations;
+    }
+
+    public boolean compareWithImported(String filename) {
+        try {
+            Graph<Vertex, DefaultEdge> importedGraph = importGraph(filename);
+            for (Vertex vg : g.vertexSet()) {
+                if (!importedGraph.vertexSet().contains(vg)) {
+                    return false;
+                }
+            }
+            for (DefaultEdge vg : g.edgeSet()) {
+                if (!importedGraph.edgeSet().toString().contains(vg.toString())) {
+                    return false;
+                }
+            }
+            if (g.vertexSet().size() != importedGraph.vertexSet().size()) {
+                return false;
+            }
+            if (g.edgeSet().size() != importedGraph.edgeSet().size()) {
+                return false;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return true;
+
     }
 }
