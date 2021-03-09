@@ -47,7 +47,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
         SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test(timeout = 600000)
+    @Test(timeout = 300000)
     public void testCPUShowTraceOnDoubleClick() throws Exception {
         for (int i = 0; i < MODELS_CPU_SHOWTRACE.length; i++) {
             String s = MODELS_CPU_SHOWTRACE[i];
@@ -155,7 +155,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                 jfis.sendTestCmd("run-x-transactions 10"); // run 10 transactions
                 Thread.sleep(50);
                 jfis.sendTestCmd("lt 1000"); // update transaction list
-                Thread.sleep(2000);
+                Thread.sleep(50);
                 for (TGComponent tg : currTdp.getComponentList()) {
                     System.out.println("tgc = " + tg.getName());
                     // get the transaction list of each CPUs on the panel, if the trans size > 0 then there will be a trace shown on double click
@@ -163,14 +163,15 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                         int _ID = tg.getDIPLOID();
                         TraceManager.addDev("Component ID = " + _ID);
                         List<SimulationTransaction> ts = mainGUI.getTransactions(_ID);
-                        Thread.sleep(1000);
-                        if (ts != null) {
-                            TraceManager.addDev("Trans size = " + ts.size());
-                            assertTrue(ts.size() > 0);
-                        } else {
-                            TraceManager.addDev("Transaction size is null with device ID = " + _ID);
-                            assert false;
+                        // mainGUI.getTransactions(_ID) is synchronized function, so we need to wait until data is filled.
+                        //the test will fail after 5 minutes if ts is still null.
+                        while (ts == null) {
+                            TraceManager.addDev("Waiting for data");
+                            ts = mainGUI.getTransactions(_ID);
+                            Thread.sleep(100);
                         }
+                        TraceManager.addDev("Device " + _ID + " has trans size = " + ts.size() + " First trans is " + ts.get(0).command);
+                        assertTrue(ts.size() > 0);
                     }
                 }
                 jfis.killSimulator();
