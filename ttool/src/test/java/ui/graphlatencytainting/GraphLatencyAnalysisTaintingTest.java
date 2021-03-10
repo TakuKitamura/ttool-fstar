@@ -1,4 +1,4 @@
-package ui.GraphLatencyTainting;
+package ui.graphlatencytainting;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
