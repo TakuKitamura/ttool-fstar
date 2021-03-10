@@ -56,7 +56,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
 import tmltranslator.simulation.DependencyGraphTranslator;
 import tmltranslator.simulation.PlanArrays;
 
@@ -229,7 +228,8 @@ public class JFrameLatencyDetailedPopup extends JFrame implements TableModelList
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setAutoCreateRowSorter(true);
-        TableRenderer tr = new TableRenderer(arrays.getOnPathBehavior(), arrays.getOffPathBehaviorCausingDelay(), arrays.getOffPathBehavior());
+        TableRenderer tr = new TableRenderer(arrays.getOnPathBehavior(), arrays.getOffPathBehaviorCausingDelay(), arrays.getOffPathBehavior(),
+                arrays.getMandatoryOptional());
         int ncols = table.getColumnCount();
         table.getModel().addTableModelListener(this);
         TableColumnModel tcm = table.getColumnModel();
