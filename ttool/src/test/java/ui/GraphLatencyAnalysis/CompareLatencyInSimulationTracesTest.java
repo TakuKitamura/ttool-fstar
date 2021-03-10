@@ -1,4 +1,4 @@
-package ui.graphlatencyanalysis;
+package ui.GraphLatencyAnalysis;
 
 import static org.junit.Assert.assertTrue;
 
@@ -27,19 +27,18 @@ import ui.simulationtraceanalysis.LatencyDetailedAnalysisMain;
 
 public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
     private static final String INPUT_PATH = "/ui/graphLatencyAnalysis/input";
-    private static final String SIMULATIONTRACEPATHFILE1 = INPUT_PATH + "/graphTestSimulationTrace.xml";
-    private static final String SIMULATIONTRACEPATHFILE2 = INPUT_PATH + "/testFunc.xml";
-    private static final String MODELPATH = INPUT_PATH + "/GraphTestModel.xml";
-    private static final String MAPPINGDIAGNAME = "Architecture2";
-    private static final int OPERATOR1ID = 44;
-    private static final int OPERATOR2ID = 26;
-    private static final int OPERATOR3ID = 40;
-    private static final int OPERATOR4ID = 28;
-    
+    private static final String simulationTracePathFile1 = INPUT_PATH + "/graphTestSimulationTrace.xml";
+    private static final String simulationTracePathFile2 = INPUT_PATH + "/testFunc.xml";
+    private static final String modelPath = INPUT_PATH + "/GraphTestModel.xml";
+    private static final String mappingDiagName = "Architecture2";
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
     private Vector<String> checkedTransactionsFile2 = new Vector<String>();
+    private static final int operator1ID = 44;
+    private static final int operator2ID = 26;
+    private static final int operator3ID = 40;
+    private static final int operator4ID = 28;
     private DependencyGraphTranslator dgraph1, dgraph2;
-    private String task1, task2, task3, task4;
+    private static String task1, task2, task3, task4;
     private JFrameCompareLatencyDetail cld;
     private LatencyDetailedAnalysisMain LatencyDetailedAnalysisMain;
     private JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis;
@@ -50,7 +49,7 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
     private HashMap<String, Integer> checkedT1 = new HashMap<String, Integer>();
     private HashMap<String, Integer> checkedT2 = new HashMap<String, Integer>();
     // protected MainGUI mainGUI1 = null;
-    private Object[][] dataDetailedByTask, dataDetailedByTask2, dataHWDelayByTask, dataHWDelayByTask2;
+    private static Object[][] dataDetailedByTask, dataDetailedByTask2, dataHWDelayByTask, dataHWDelayByTask2;
 
     public CompareLatencyInSimulationTracesTest() {
         super();
@@ -59,9 +58,9 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
     @Before
     public void GraphLatencyAnalysis()
             throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, InterruptedException {
-        mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + MODELPATH));
-        final TMLArchiPanel panel = findArchiPanel(MAPPINGDIAGNAME);
-        simT1 = new SimulationTrace("", 6, (getBaseResourcesDir() + SIMULATIONTRACEPATHFILE1));
+        mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
+        final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
+        simT1 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile1));
         LatencyDetailedAnalysisMain = new LatencyDetailedAnalysisMain(3, mainGUI, simT1, false, false, 3);
         LatencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
         try {
@@ -76,6 +75,7 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
                 cld.setVisible(false);
             }
         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         LatencyDetailedAnalysisMain.getTc().getT().join();
@@ -85,7 +85,7 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
             checkedT1 = LatencyDetailedAnalysisMain.getCheckedT1();
             cld.setDgraph(null);
             LatencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
-            simT2 = new SimulationTrace("", 6, (getBaseResourcesDir() + SIMULATIONTRACEPATHFILE2));
+            simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
             try {
                 LatencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT2, false, true, 1);
             } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
@@ -110,18 +110,18 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
         for (Entry<String, Integer> cT : checkedT1.entrySet()) {
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == OPERATOR1ID) {
+            if (id == operator1ID) {
                 task1 = taskName;
-            } else if (id == OPERATOR2ID) {
+            } else if (id == operator2ID) {
                 task2 = taskName;
             }
         }
         for (Entry<String, Integer> cT : checkedT2.entrySet()) {
             int id = cT.getValue();
             String taskName = cT.getKey();
-            if (id == OPERATOR3ID) {
+            if (id == operator3ID) {
                 task3 = taskName;
-            } else if (id == OPERATOR4ID) {
+            } else if (id == operator4ID) {
                 task4 = taskName;
             }
         }
