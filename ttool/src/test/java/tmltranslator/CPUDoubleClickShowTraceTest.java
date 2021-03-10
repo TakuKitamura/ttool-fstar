@@ -155,7 +155,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                 jfis.sendTestCmd("run-x-transactions 10"); // run 10 transactions
                 Thread.sleep(50);
                 jfis.sendTestCmd("lt 1000"); // update transaction list
-                Thread.sleep(50);
+                Thread.sleep(1000);
                 for (TGComponent tg : currTdp.getComponentList()) {
                     System.out.println("tgc = " + tg.getName());
                     // get the transaction list of each CPUs on the panel, if the trans size > 0 then there will be a trace shown on double click
@@ -165,13 +165,15 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                         List<SimulationTransaction> ts = mainGUI.getTransactions(_ID);
                         // mainGUI.getTransactions(_ID) is synchronized function, so we need to wait until data is filled.
                         //the test will fail after 5 minutes if ts is still null.
-                        while (ts == null) {
-                            TraceManager.addDev("Waiting for data");
+                        int maxNumberOfLoop = 0;
+                        while (maxNumberOfLoop < 15 && ts == null) {
+//                            TraceManager.addDev("Waiting for data " + maxNumberOfLoop);
                             ts = mainGUI.getTransactions(_ID);
-                            Thread.sleep(100);
+                            maxNumberOfLoop ++;
+                            Thread.sleep(2000);
                         }
-                        TraceManager.addDev("Device " + _ID + " has trans size = " + ts.size() + " First trans is " + ts.get(0).command);
-                        assertTrue(ts.size() > 0);
+                        if (ts != null) TraceManager.addDev("Device " + _ID + " has trans size = " + ts.size());
+                        assertTrue(ts != null && ts.size() > 0);
                     }
                 }
                 jfis.killSimulator();
