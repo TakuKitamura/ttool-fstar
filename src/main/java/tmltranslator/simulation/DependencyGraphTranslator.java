@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -4182,7 +4183,7 @@ public class DependencyGraphTranslator extends SwingWorker {
 
     // import graph in .graphml format
     public Graph<Vertex, DefaultEdge> importGraph(String filename) throws IOException {
-        FileReader ps = new FileReader(filename + ".graphml");
+        InputStream inputStream = getClass().getResourceAsStream(filename + ".graphml");        
         Graph<Vertex, DefaultEdge> importedG = new DefaultDirectedGraph<>(DefaultEdge.class);
         GraphMLImporter<Vertex, DefaultEdge> importer;
         // gmlExporter.exportGraph(g, PS);
@@ -4194,7 +4195,7 @@ public class DependencyGraphTranslator extends SwingWorker {
         EdgeProvider<Vertex, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
         importer = new GraphMLImporter<Vertex, DefaultEdge>(vertexProvider, edgeProvider);
         try {
-            importer.importGraph(importedG, ps);
+            importer.importGraph(importedG, inputStream);
         } catch (ImportException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
