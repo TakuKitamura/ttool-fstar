@@ -61,7 +61,7 @@ public class NestedStructurePLANTest extends AbstractUITest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            dgt = new DependencyGraphTranslator(mainGUI.gtm.getTMLMapping());
+            dgt = latencyDetailedAnalysis.getDgraph();
         }
     }
 
