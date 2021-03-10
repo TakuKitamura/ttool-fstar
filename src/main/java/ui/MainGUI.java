@@ -8861,12 +8861,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void toggleAVATARIDs() {
         setAVATARIDs(!TDiagramPanel.AVATAR_ID_ON);
-        TraceManager.addDev("AVATAR id: " + TDiagramPanel.AVATAR_ID_ON);
+        //TraceManager.addDev("AVATAR id: " + TDiagramPanel.AVATAR_ID_ON);
     }
 
     public void toggleAVATARActions() {
         setAVATARActions((TDiagramPanel.AVATAR_ID_ACTIONS + 1)%3);
-        TraceManager.addDev("AVATAR actions: " + TDiagramPanel.AVATAR_ID_ACTIONS);
+        //TraceManager.addDev("AVATAR actions: " + TDiagramPanel.AVATAR_ID_ACTIONS);
     }
 
     // For simulation purpose

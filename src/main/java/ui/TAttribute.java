@@ -184,10 +184,11 @@ public class TAttribute {
     }
 
     public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeywords, boolean checkJavaKeyword) {
-        return isAValidId(id, checkKeyword, checkUPPAALKeywords, checkJavaKeyword, false);
+        return isAValidId(id, checkKeyword, checkUPPAALKeywords, checkJavaKeyword, false, true);
     }
 
-    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeyword, boolean checkJavaKeyword, boolean checkTMLKeyword) {
+    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeyword, boolean checkJavaKeyword, boolean checkTMLKeyword
+            , boolean checkDoubleUnderscore) {
         // test whether _id is a word
 
         if ((id == null) || (id.length() < 1)) {
@@ -195,7 +196,7 @@ public class TAttribute {
         }
 
         String lowerid = id.toLowerCase();
-        boolean b1, b2, b3, b4, b5, b6, b7;
+        boolean b1, b2, b3, b4, b5, b6, b7, b8;
         b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
         b2 = id.matches("\\w*");
         if (checkKeyword) {
@@ -223,7 +224,14 @@ public class TAttribute {
             b6 = true;
         }
 
-        return (b1 && b2 && b3 && b4 && b5 && b6 && b7);
+        // Check if double __
+        if (checkDoubleUnderscore) {
+            b8 = !id.contains("__");
+        } else {
+            b8 = true;
+        }
+
+        return (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8);
     }
 
     //checking port name
@@ -234,12 +242,12 @@ public class TAttribute {
         if (id.contains(",")) {
             String [] splitName = id.split("\\s*,\\s*");
             for (int i = 0; i < splitName.length; i ++) {
-                if(!isAValidId(splitName[i],checkKeyword,checkUPPAALKeyword, checkJavaKeyword,checkTMLKeyword)) {
+                if(!isAValidId(splitName[i], checkKeyword, checkUPPAALKeyword, checkJavaKeyword, checkTMLKeyword, true)) {
                     return false;
                 }
             }
         }else {
-            return isAValidId(id,checkKeyword,checkUPPAALKeyword, checkJavaKeyword,checkTMLKeyword);
+            return isAValidId(id, checkKeyword, checkUPPAALKeyword, checkJavaKeyword, checkTMLKeyword, true);
         }
         return  true;
     }
@@ -260,7 +268,7 @@ public class TAttribute {
             case GATE:
             case OUTGATE:
             case INGATE:
-                return ((value == null) || (value.equals("")));
+            case TIMER:
             case OTHER:
                 return ((value == null) || (value.equals("")));
             case QUEUE_NAT:
@@ -271,7 +279,7 @@ public class TAttribute {
                 }
 
                 try {
-                    val = Integer.decode(value).intValue();
+                    val = Integer.parseInt(value);
                 } catch (Exception e) {
                     return false;
                 }
@@ -279,8 +287,6 @@ public class TAttribute {
             case INTEGER:
                 //return value.matches("-?\\d+");
                 return value.matches("\\d+");
-            case TIMER:
-                return ((value == null) || (value.equals("")));
             default:
                 return false;
         }
