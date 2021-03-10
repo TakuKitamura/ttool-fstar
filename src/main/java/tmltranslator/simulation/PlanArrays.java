@@ -10,6 +10,7 @@ public class PlanArrays {
     private List<String> onPathBehavior = new ArrayList<String>();
     private List<String> offPathBehavior = new ArrayList<String>();
     private List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
+    private List<String> mandatoryOptional = new ArrayList<String>();
     private static final String ZERO = "0";
     private static final String DEVICE_NAME = "Device Name";
     private String[] columnNames;
@@ -22,6 +23,23 @@ public class PlanArrays {
         Vector<String> deviceNames1 = new Vector<String>();
         if (firstTable) {
             for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
+                if (st.coreNumber == null) {
+                    st.coreNumber = ZERO;
+                }
+                tmpEnd = Integer.parseInt(st.endTime);
+                if (tmpEnd > maxTime) {
+                    maxTime = tmpEnd;
+                }
+                tmpStart = Integer.parseInt(st.startTime);
+                if (tmpStart < minTime) {
+                    minTime = tmpStart;
+                }
+                String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+                if (!deviceNames1.contains(deviceNameandcore)) {
+                    deviceNames1.add(deviceNameandcore);
+                }
+            }
+            for (SimulationTransaction st : dgraph.getMandatoryOptionalSimTTaks(row)) {
                 if (st.coreNumber == null) {
                     st.coreNumber = ZERO;
                 }
@@ -81,6 +99,26 @@ public class PlanArrays {
                             if (!dgraph.getOnPath().contains(st)) {
                                 dgraph.getOnPath().add(st);
                             }
+                        }
+                    }
+                }
+            }
+            for (SimulationTransaction st : dgraph.getMandatoryOptionalSimTTaks(row)) {
+                if (st.coreNumber == null) {
+                    st.coreNumber = ZERO;
+                }
+                for (String dName : deviceNames1) {
+                    String deviceNameandcore = st.deviceName + "_" + st.coreNumber;
+                    if (deviceNameandcore.equals(dName)) {
+                        length = Integer.parseInt(st.length);
+                        for (int i = 0; i < length; i++) {
+                            int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
+                            dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
+                            ;
+                            mandatoryOptional.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                            // if (!dgraph.getOnPath().contains(st)) {
+                            // dgraph.getOnPath().add(st);
+                            // }
                         }
                     }
                 }
@@ -308,4 +346,9 @@ public class PlanArrays {
     public String[] getColumnNames() {
         return columnNames;
     }
+
+    public List<String> getMandatoryOptional() {
+        return mandatoryOptional;
+    }
+
 }
