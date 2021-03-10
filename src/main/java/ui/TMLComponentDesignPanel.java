@@ -101,11 +101,18 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         TMLActivityDiagramPanel tmladp;
         for (int i = 1; i < panels.size(); i++) {
             tmladp = (TMLActivityDiagramPanel) (panels.elementAt(i));
-            //TraceManager.addDev("Testing " + tmladp.getName() + " with " + _name);
+            TraceManager.addDev("Testing " + tmladp.getName() + " with " + _name);
             if (tmladp.getName().compareTo(_name) == 0 ) {
                 //TraceManager.addDev("Ok found");
                 return tmladp;
             }
+
+            // Testing also with "__"
+            if (_name.endsWith("__" + tmladp.getName())) {
+                //TraceManager.addDev("Ok found");
+                return tmladp;
+            }
+
         }
         return null;
     }

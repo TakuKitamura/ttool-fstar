@@ -1659,15 +1659,19 @@ public class GTURTLEModeling {
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String
             overhead, String decComp) {
-        return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false, new HashMap<String, java.util.List<String>>());
+        return autoSecure(gui, name, tmap, newarch, encComp, overhead, decComp, true, false, false,
+                new HashMap<String, java.util.List<String>>());
     }
 
 
-    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth, Map<String, List<String>> selectedCpuTasks) {
+    public TMLMapping<TGComponent> autoSecure(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp,
+                                              String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth,
+                                              Map<String, List<String>> selectedCpuTasks) {
 
 
         //move to another thread
-        SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth, autoStrongAuth, selectedCpuTasks);
+        SecurityGeneration secgen = new SecurityGeneration(gui, name, map, newarch, encComp, overhead, decComp, autoConf, autoWeakAuth,
+                autoStrongAuth, selectedCpuTasks);
         tmap = null;
         tmap = secgen.startThread();
         GTMLModeling gtm = new GTMLModeling(newarch, true);

@@ -84,18 +84,19 @@ public class SecurityGeneration implements Runnable {
 	public SecurityGeneration(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth,	Map<String, List<String>> selectedCPUTasks){
 
 		this.gui = gui;
-		this.name=name;
-		this.map=map;
-		this.newMap=map;
-		this.newarch=newarch;
+		this.name = name;
+		this.map = map;
+		this.newMap = map;
+		this.newarch = newarch;
 		this.encComp = encComp;
 		this.overhead = overhead;
 		this.decComp = decComp;
-		this.autoConf=autoConf;
+		this.autoConf = autoConf;
 		this.autoWeakAuth = autoWeakAuth;
 		this.autoStrongAuth = autoStrongAuth;
 		this.selectedCPUTasks = selectedCPUTasks;
 	}
+
 	public void proverifAnalysis(TMLMapping<TGComponent> map, List<String> nonAuthChans, List<String> nonConfChans) {
 		if (map == null) {
 			TraceManager.addDev("No mapping");
@@ -129,34 +130,36 @@ public class SecurityGeneration implements Runnable {
 			ProVerifOutputAnalyzer pvoa = avatar2proverif.getOutputAnalyzer();
 			pvoa.analyzeOutput(data, true);
 
-			if (pvoa.getResults().size() ==0){
-				TraceManager.addDev("ERROR: No security results");
+			if (pvoa.getResults().size() == 0){
+				TraceManager.addDev("SECGEN ERROR: No security results");
 			}
 
 
 			Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
 
 			for (AvatarPragmaSecret pragma : confResults.keySet()) {
-				//    	System.out.println("Pragma " + pragma);
+				TraceManager.addDev(	"SECGEN: Pragma " + pragma);
 				if (confResults.get(pragma).isProved() && !confResults.get(pragma).isSatisfied()) {
 					nonConfChans.add(pragma.getArg().getBlock().getName() + "__" + pragma.getArg().getName());
-					TraceManager.addDev(pragma.getArg().getBlock().getName() + "." + pragma.getArg().getName() + " is not secret");
+					TraceManager.addDev("SECGEN:" + pragma.getArg().getBlock().getName() + "." + pragma.getArg().getName() + " is not secret");
 
 					TMLChannel chan = map.getTMLModeling().getChannelByShortName(pragma.getArg().getName().replaceAll("_chData", ""));
 
-					if (chan==null){
+					if (chan == null){
 						chan = map.getTMLModeling().getChannelByOriginPortName(pragma.getArg().getName().replaceAll("_chData", ""));
 					}
 
-					if (chan==null){
+					if (chan == null) {
+						TraceManager.addDev(	"SECGEN: NULL Channel");
 						continue;
 					}
 
-					if (chan.isBasicChannel()){
+					if (chan.isBasicChannel()) {
+						TraceManager.addDev(	"SECGEN: Channel added to nonConfCh");
 						nonConfChans.add(chan.getOriginTask().getName() + "__" + pragma.getArg().getName());
-					}
-					else {
-						for (TMLTask originTask: chan.getOriginTasks()){
+
+					} else {
+						for (TMLTask originTask: chan.getOriginTasks()) {
 							nonConfChans.add(originTask.getName() + "__" + pragma.getArg().getName());
 						}
 					}
@@ -177,7 +180,7 @@ public class SecurityGeneration implements Runnable {
 			//   TraceManager.addDev("all results displayed");
 
 		} catch (Exception e) {
-			System.out.println("EXCEPTION " + e);
+			System.out.println("SECGEN EXCEPTION " + e);
 
 		}
 	}
@@ -189,8 +192,8 @@ public class SecurityGeneration implements Runnable {
 			t.join();
 		}
 		catch (Exception e){
-			TraceManager.addDev("Error in Security Generation Thread");
-			System.out.println("Error in Security Generation Thread");
+			TraceManager.addDev("SECGEN. Error in Security Generation Thread");
+			System.out.println("SECGEN. Error in Security Generation Thread");
 		}
 		return map;
 	}
@@ -342,12 +345,11 @@ public class SecurityGeneration implements Runnable {
 
 		//With the proverif results, check which channels need to be secured
 		for (TMLTask task : map.getTMLModeling().getTasks()) {
-			//System.out.println("Task " + task.getName());
 			//Check if all channel operators are secured
 			TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName()); //FIXME getActivityDiagramName( task ) )
-			if (tad==null){
+			if (tad == null) {
+				TraceManager.addDev("SECGEN. Null tad for " + task.getName());
 				continue;
-
 			}
 
 			for (TMLChannel chan: tmlmodel.getChannels(task)){ 	
@@ -355,26 +357,30 @@ public class SecurityGeneration implements Runnable {
 				List<String> portNames = new ArrayList<String>();
 				boolean nonConf = false;
 				boolean nonAuth = false;
-				if (chan.isBasicChannel()){
 
+				if (chan.isBasicChannel()){
 					portNames.add(chan.getOriginPort().getName());
 					portNames.add(chan.getDestinationPort().getName());
-					if (nonConfChans.contains(chan.getOriginTask().getName().split("__")[1] + "__" + chan.getOriginPort().getName() + "_chData")){
-						nonConf=true;
+					if (nonConfChans.contains(chan.getOriginTask().getName().split("__")[1] + "__" + chan.getOriginPort().getName() + "_chData")) {
+						nonConf = true;
+						TraceManager.addDev("SECGEN. non conf basic ch = true");
 					}
+
 					if (nonAuthChans.contains(chan.getDestinationTask().getName().split("__")[1] + "__" + title + "__" + chan.getDestinationPort().getName())){
-						nonAuth=true;
+						nonAuth = true;
 					}
+
 					//When port names are different
 					if (nonAuthChans.contains(chan.getDestinationTask().getName().split("__")[1] + "__" + chan.getName())){
-						nonAuth=true;
+						nonAuth = true;
 					}
 				}
 				else {
 					for (TMLPort port: chan.getOriginPorts()){
 						for (TMLTask origTask: chan.getOriginTasks()){
 							if (nonConfChans.contains(origTask.getName().split("__")[1] + "__" + port.getName() + "_chData")){
-								nonConf=true;
+								nonConf = true;
+								TraceManager.addDev("SECGEN. non conf port ch = true");
 							}
 						}
 						portNames.add(port.getName());
@@ -384,7 +390,7 @@ public class SecurityGeneration implements Runnable {
 					for (TMLTask destTask: chan.getDestinationTasks()){
 						for (TMLPort port: chan.getDestinationPorts()){
 							if (nonAuthChans.contains(destTask.getName().split("__")[1] + "__" + title + "__" + port.getName())){
-								nonAuth=true;
+								nonAuth = true;
 							}
 							if (!portNames.contains(port.getName())){
 								portNames.add(port.getName());
@@ -392,7 +398,7 @@ public class SecurityGeneration implements Runnable {
 						}
 						//System.out.println(destTask.getName().split("__")[1] + "__" + chan.getName());
 						if  (nonAuthChans.contains(destTask.getName().split("__")[1] + "__" + chan.getName())){
-							nonAuth=true;
+							nonAuth = true;
 						}
 
 					}
