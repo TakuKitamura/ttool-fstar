@@ -4183,7 +4183,7 @@ public class DependencyGraphTranslator extends SwingWorker {
 
     // import graph in .graphml format
     public Graph<Vertex, DefaultEdge> importGraph(String filename) throws IOException {
-        InputStream inputStream = getClass().getResourceAsStream(filename + ".graphml");        
+        InputStream inputStream = getClass().getResourceAsStream(filename + ".graphml");
         Graph<Vertex, DefaultEdge> importedG = new DefaultDirectedGraph<>(DefaultEdge.class);
         GraphMLImporter<Vertex, DefaultEdge> importer;
         // gmlExporter.exportGraph(g, PS);
@@ -4415,7 +4415,6 @@ public class DependencyGraphTranslator extends SwingWorker {
                 return false;
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return true;
