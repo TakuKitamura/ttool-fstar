@@ -6,7 +6,6 @@ import java.util.Vector;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.xml.sax.SAXException;
-
 import tmltranslator.TMLMapping;
 import tmltranslator.simulation.DependencyGraphTranslator;
 import tmltranslator.simulation.SimulationTransaction;
@@ -25,7 +24,7 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
     private List<TMLComponentDesignPanel> cpanels;
     private DependencyGraphTranslator dgraph, dgraph1, dgraph2;
     private int row, row1, row2, row3, row4, selectedIndex;
-    private Object[][] dataDetailedByTask, dataDetailedByTask2;
+    private Object[][] dataDetailedByTask, dataDetailedByTask2, dataMandatoryOptional;
     private LatencyDetailedAnalysisMain main;
     private MainGUI mainGUI;
     private SimulationTrace selectedST;
@@ -45,6 +44,7 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
             jFrameLDA.generateDirectedGraph(tmap, cpanels);
         } else if (algorithmId == 2) {
             dataDetailedByTask = dgraph.getTaskByRowDetails(row);
+            dataMandatoryOptional = dgraph.getMandatoryOptionalByRow(row);
         } else if (algorithmId == 3) {
             dataDetailedByTask = dgraph.getTaskByRowDetailsMinMaxTaint(row);
         } else if (algorithmId == 4) {
@@ -220,6 +220,10 @@ public class LatencyAnalysisParallelAlgorithms implements Runnable {
 
     public void setDgraph1(DependencyGraphTranslator dgraph1) {
         this.dgraph1 = dgraph1;
+    }
+
+    public Object[][] getDataMandatoryOptional() {
+        return dataMandatoryOptional;
     }
 
     public void latencyDetailedAnalysis(JFrameCompareLatencyDetail jFrameCompareLatencyDetail, String task12, String task22, String task32,
