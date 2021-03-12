@@ -35,7 +35,6 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
     private static final int OPERATOR2ID = 26;
     private static final int OPERATOR3ID = 40;
     private static final int OPERATOR4ID = 28;
-    
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
     private Vector<String> checkedTransactionsFile2 = new Vector<String>();
     private DependencyGraphTranslator dgraph1, dgraph2;
@@ -51,6 +50,7 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
     private HashMap<String, Integer> checkedT2 = new HashMap<String, Integer>();
     // protected MainGUI mainGUI1 = null;
     private Object[][] dataDetailedByTask, dataDetailedByTask2, dataHWDelayByTask, dataHWDelayByTask2;
+    private Object[][] tableData2MinMax, tableData1MinMax, tableData2, tableData = null;
 
     public CompareLatencyInSimulationTracesTest() {
         super();
@@ -78,9 +78,9 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
-        LatencyDetailedAnalysisMain.getTc().getT().join();
-        if (cld.getDgraph().getGraphsize() > 0) {
-            dgraph1 = cld.getDgraph();
+        dgraph1 = new DependencyGraphTranslator(LatencyDetailedAnalysisMain.getMap1());
+        dgraph1.DrawDirectedGraph();
+        if (dgraph1.getGraphsize() > 0) {
             checkedTransactionsFile1 = LatencyDetailedAnalysisMain.getCheckedTransactionsFile();
             checkedT1 = LatencyDetailedAnalysisMain.getCheckedT1();
             cld.setDgraph(null);
@@ -89,13 +89,14 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
             try {
                 LatencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT2, false, true, 1);
             } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             dgraph2 = new DependencyGraphTranslator(LatencyDetailedAnalysisMain.getMap1());
             dgraph2.DrawDirectedGraph();
             checkedTransactionsFile2 = LatencyDetailedAnalysisMain.getCheckedTransactionsFile();
             checkedT2 = LatencyDetailedAnalysisMain.getCheckedT2();
+        } else {
+            System.out.println("Graph size is zero");
         }
     }
 
@@ -130,12 +131,14 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
         transFile1 = cld.parseFile(file1);
         transFile2 = cld.parseFile(file2);
         cld.setDgraph2(dgraph2);
-        cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, false, false, false);
-        cld.setVisible(false);
-        assertTrue(cld.getTableData().length > 0);
-        assertTrue(cld.getTableData2().length > 0);
-        assertTrue(cld.getTableData1MinMax().length > 0);
-        assertTrue(cld.getTableData2MinMax().length > 0);
+        tableData = dgraph1.latencyDetailedAnalysis(task1, task2, transFile1, false, false);
+        tableData1MinMax = dgraph1.latencyMinMaxAnalysis(task1, task2, transFile1);
+        assertTrue(tableData.length > 0);
+        assertTrue(tableData1MinMax.length > 0);
+        tableData2 = dgraph2.latencyDetailedAnalysis(task3, task4, transFile2, false, false);
+        tableData2MinMax = dgraph2.latencyMinMaxAnalysis(task3, task4, transFile2);
+        assertTrue(tableData2.length > 0);
+        assertTrue(tableData2MinMax.length > 0);
         // test row 1 table 1 and row 1 table 2
         row = 1;
         row2 = 1;
