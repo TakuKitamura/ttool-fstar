@@ -78,12 +78,9 @@ public class CompareLatencyInSimulationTracesTest extends AbstractUITest {
         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
-
         dgraph1 = new DependencyGraphTranslator(LatencyDetailedAnalysisMain.getMap1());
         dgraph1.DrawDirectedGraph();
-
         if (dgraph1.getGraphsize() > 0) {
-            dgraph1 = cld.getDgraph();
             checkedTransactionsFile1 = LatencyDetailedAnalysisMain.getCheckedTransactionsFile();
             checkedT1 = LatencyDetailedAnalysisMain.getCheckedT1();
             cld.setDgraph(null);
