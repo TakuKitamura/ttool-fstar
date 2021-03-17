@@ -485,7 +485,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         }
     }
 
-    public boolean editOnDoubleClick(JFrame frame) {
+    public boolean editOndoubleClick(JFrame frame) {
     	if (this instanceof SysCAMSPortTDF) {
     		JDialogSysCAMSPortTDF jtdf = new JDialogSysCAMSPortTDF((SysCAMSPortTDF) this);
     		jtdf.setVisible(true);
@@ -546,6 +546,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	sb.append("\" time=\"" + ((SysCAMSPortTDF) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortTDF) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortTDF) this).getDelay());
+		sb.append("\" arity=\"" + ((SysCAMSPortTDF) this).getArity());
         	sb.append("\" type=\"" + encode(((SysCAMSPortTDF) this).getTDFType()));
         }
         if (this instanceof SysCAMSPortDE) {
@@ -579,7 +580,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
             Element elt;
             
             double period;
-            int rate, delay, nbits;
+            int rate, delay, arity, nbits;
             String type, time, sensitiveMethod; 
             Boolean sensitive, posFirst;
 
@@ -601,11 +602,13 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 									time = elt.getAttribute("time");
 									rate = Integer.decode(elt.getAttribute("rate")).intValue();
 									delay = Integer.decode(elt.getAttribute("delay")).intValue();
+									arity = Integer.decode(elt.getAttribute("arity")).intValue();
 									type = elt.getAttribute("type");
 									((SysCAMSPortTDF) this).setPeriod(period);
 									((SysCAMSPortTDF) this).setTime(time);
 									((SysCAMSPortTDF) this).setRate(rate);
 									((SysCAMSPortTDF) this).setDelay(delay);
+									((SysCAMSPortTDF) this).setArity(arity);
 									((SysCAMSPortTDF) this).setTDFType(type);
 								} else if (this instanceof SysCAMSPortDE) {
 									type = elt.getAttribute("type");
@@ -621,6 +624,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 									time = elt.getAttribute("time");
 									rate = Integer.decode(elt.getAttribute("rate")).intValue();
 									delay = Integer.decode(elt.getAttribute("delay")).intValue();
+									//arity = Integer.decode(elt.getAttribute("arity")).intValue();
 									type = elt.getAttribute("type");
 									nbits = Integer.decode(elt.getAttribute("nbits")).intValue();
 									((SysCAMSPortConverter) this).setPeriod(period);
@@ -628,6 +632,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 									((SysCAMSPortConverter) this).setRate(rate);
 									((SysCAMSPortConverter) this).setNbits(nbits);
 									((SysCAMSPortConverter)this).setDelay(delay);
+									//((SysCAMSPortConverter)this).setArity(arity);
 									((SysCAMSPortConverter)this).setConvType(type);
                                 }
                             }

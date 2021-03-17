@@ -56,6 +56,7 @@ public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
 	private String time;
 	private int rate;
 	private int delay;
+        private int arity;
 	private String TDFType;
 	
 	public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -101,6 +102,15 @@ public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
 	public void setDelay(int delay) {
 		this.delay = delay;
 	}
+
+    	public int getArity() {
+		return arity;
+	}
+
+	public void setArity(int arity) {
+		this.arity = arity;
+	}
+
 
 	public void drawParticularity(Graphics g) {
 	}

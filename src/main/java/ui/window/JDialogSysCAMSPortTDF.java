@@ -62,6 +62,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 	private JComboBox<String> periodComboBoxString;
 	private JTextField rateTextField;
 	private JTextField delayTextField;
+	private JTextField arityTextField;
 	private ArrayList<String> listArrayTypeString;
 	private JComboBox<String> typeComboBoxString;
 	private String listOriginString[];
@@ -208,8 +209,29 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 		gridBag.setConstraints(delayTextField, constraints);
 		boxPanel.add(delayTextField); 
 
-		JLabel typeLabel = new JLabel("Type : ");
+		JLabel arityLabel = new JLabel("Arity : ");
 		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0,
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(arityLabel, constraints);
+		boxPanel.add(arityLabel);
+
+		if (port.getArity() == -1) { 
+			arityTextField = new JTextField(10);
+		} else {
+			arityTextField = new JTextField("" + port.getArity(), 10);
+		}
+		constraints = new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(arityTextField, constraints);
+		boxPanel.add(arityTextField); 
+
+
+		JLabel typeLabel = new JLabel("Type : ");
+		constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
@@ -248,7 +270,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 			}
 		}
 		typeComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 4, 2, 1, 1.0, 1.0,
+		constraints = new GridBagConstraints(1, 5, 2, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
@@ -256,7 +278,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
-		constraints = new GridBagConstraints(0, 5, 1, 1, 1.0, 1.0,
+		constraints = new GridBagConstraints(0, 6, 1, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
@@ -274,7 +296,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 		}
 		originComboBoxString.setActionCommand("origin");
 		originComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 5, 2, 1, 1.0, 1.0,
+		constraints = new GridBagConstraints(1, 6, 2, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
@@ -361,6 +383,25 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 			} else {
 				port.setDelay(-1);
 			}
+
+			if (!(arityTextField.getText().isEmpty())) {
+				Boolean arityValueInteger = false;
+				try {
+					Integer.parseInt(arityTextField.getText());
+				} catch (NumberFormatException e1) {
+					JDialog msg = new JDialog(this);
+					msg.setLocationRelativeTo(null);
+					JOptionPane.showMessageDialog(msg, "arity is not a Integer", "Warning !",
+							JOptionPane.WARNING_MESSAGE);
+					arityValueInteger = true;
+				}
+				if (arityValueInteger == false) {
+					port.setArity(Integer.parseInt(arityTextField.getText()));
+				}
+			} else {
+				port.setArity(-1);
+			}
+
 			port.setTDFType((String) typeComboBoxString.getSelectedItem());
 			port.setTime((String) periodComboBoxString.getSelectedItem());
 
