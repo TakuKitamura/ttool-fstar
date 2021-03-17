@@ -128,31 +128,40 @@ public class PrimitiveCode {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
 					if (i == tdf.getListStruct().getSize()-1 && i != 0) {
-					    //	corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					    
 					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} else {
 					    //corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
 					}
 				}
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;//correction DG
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR2;
 			}
 
 			if (!tdfports.isEmpty()) {
 				for (SysCAMSTPortTDF t : tdfports) {
+				     if(t.getArity()>1){
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in <" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in <" + t.getTDFType() + "> " + t.getName() + "["+t.getArity()+"];" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out <" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out <" + t.getTDFType() + "> " + t.getName() + "["+t.getArity()+"];" + CR;
 					}
+				} else{
+					 
+					 if (t.getOrigin() == 0) {
+					     corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in < " + t.getTDFType() + " > " + t.getName() + ";" + CR;
+					 } else if (t.getOrigin() == 1) {
+					     corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out < " + t.getTDFType() + " > " + t.getName() + ";" + CR;
+					 }
+					 
+				     }
 				}
 			}
-			//	System.out.println("@@@@@ Conv ports empty?");
+			
 			if (!convports.isEmpty()) {
-			    // System.out.println("@@@@@ Conv ports non empty");
+			   
 				for (SysCAMSTPortConverter conv : convports) {
-
-				    //   if(conv.getConvType() !="sc_uint") {
+				    
 				    if(conv.getNbits()==0){
 				if (conv.getOrigin() == 0) {
 					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"> " + conv.getName() + ";" + CR;
@@ -184,8 +193,10 @@ public class PrimitiveCode {
 			}
 
 			if (!tdfports.isEmpty() || !convports.isEmpty() || !tdf.getListStruct().isEmpty()) {
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t: ";
-				if (!tdfports.isEmpty()) {
+			    	// DG 11.7.2020 clashes with array port declaration, not really necessary, temporarily commented out
+			    //corpsPrimitiveTDF = corpsPrimitiveTDF + "\t: ";
+			
+				/*	if (!tdfports.isEmpty()) {
 					for (int i = 0; i < tdfports.size(); i++) {
 						if (tdfports.size() >= 1) {
 							if (cpt == 0) {
@@ -199,7 +210,7 @@ public class PrimitiveCode {
 							cpt++;
 						}
 					}
-				}
+					}*/
 				if (!convports.isEmpty()) {
 					for (int i = 0; i < convports.size(); i++) {
 						if (convports.size() >= 1) {
@@ -243,18 +254,80 @@ public class PrimitiveCode {
 			}	
 			if (cpt2 > 0) {
 				for (SysCAMSTPortTDF t : tdfports) {
-					if (t.getPeriod() != -1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+				    if((t.getArity()>1)&&((t.getPeriod() != -1)||
+							  (t.getRate() != -1)||(t.getDelay() != -1))){
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "for (int i=0;i<"+t.getArity()+";i++){"+ CR;
+					// }
+				    
+				    if((t.getArity()>1)&&(t.getPeriod() != -1)) {
+																		
+					//	if (t.getPeriod() != -1) {
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+						//	corpsPrimitiveTDF = corpsPrimitiveTDF + "\t"		"}"	+ CR;
+						//}
+			       					    
+				    }
+				    if ((t.getArity()>1)&&(t.getRate() != -1)) {
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_rate(" + t.getRate() + ");" + CR;
+						//	corpsPrimitiveTDF = corpsPrimitiveTDF + "\t"		"}"	+ CR;	
+				    }
+				    if ((t.getArity()>1)&&(t.getDelay() != -1)) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_delay(" + t.getDelay() + ");" + CR;
+					
+					    //    corpsPrimitiveTDF = corpsPrimitiveTDF + 		"}"	+ CR;
+				    }
+				    if((t.getArity()>1)&&(t.getPeriod() != -1)||(t.getRate() != -1)||(t.getDelay() != -1)){				    
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + 		"}"	+ CR;
+}
+				    }		
+				else{
+				    if (t.getPeriod() != -1) {
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
 					} 
-					if (t.getRate() != -1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
-					} 
-					if (t.getDelay() != -1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
-					} 
+				    if (t.getRate() != -1) {
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_rate(" + t.getRate() + ");" + CR;
+				    } 
+				    if (t.getDelay() != -1) {
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
+				    }
+					
+				}
 				}
 			} else {
 				for (SysCAMSTPortTDF t : tdfports) {
+				    if (cpt2 == 0) { // DG 11.7.2020
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR;
+					}
+				    if(t.getArity()>1){
+					corpsPrimitiveTDF = corpsPrimitiveTDF + "\tfor (int i=0;i<"+t.getArity()+";i++){"+ CR;									
+					if (t.getPeriod() != -1) {
+					    //	if (cpt2 == 0) {
+					    //	corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							cpt2++;
+							//	} else {
+							//	corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
+							//}
+					} 
+					if (t.getRate() != -1) {
+						if (cpt2 == 0) {
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + "[i].set_rate(" + t.getRate() + ");" + CR;
+							cpt2++;
+						} else {
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_rate(" + t.getRate() + ");" + CR;
+						}
+					} 
+					if (t.getDelay() != -1) {
+						if (cpt2 == 0) {
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + "[i].set_delay(" + t.getDelay() + ");" + CR;
+							cpt2++;
+						} else {
+							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + "[i].set_delay(" + t.getDelay() + ");" + CR;
+						}
+					}
+				    	corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t}"+CR;   
+				    }else{
+		
 					if (t.getPeriod() != -1) {
 						if (cpt2 == 0) {
 							corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + t.getName() + ".set_timestep(" + t.getPeriod() + ", sc_core::SC_" + t.getTime().toUpperCase() + ");" + CR;
@@ -278,9 +351,11 @@ public class PrimitiveCode {
 						} else {
 							corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t" + t.getName() + ".set_delay(" + t.getDelay() + ");" + CR;
 						}
-					} 
+					}
+					
+				    }
 				}
-			}
+			}	    
 			if (cpt2 > 0) {
 				for (SysCAMSTPortConverter t : convports) {
 					if (t.getPeriod() != -1) {
@@ -408,9 +483,7 @@ public class PrimitiveCode {
 			if ((!de.getTypeTemplate().equals("")) && (!de.getNameTemplate().equals("")))  {
 				corpsPrimitiveDE = corpsPrimitiveDE + "template<" + de.getTypeTemplate() + " " + de.getNameTemplate() + ">" + CR;
 			}
-			//corpsPrimitive = "SCA_TDF_MODULE(" + de.getName() + ") {" + CR2;
-			//DG 19.09. corrected sca->sc
-			//	corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sca_core::sca_module {" + CR2 + "public:" + CR;
+		
 	corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sc_core::sc_module {" + CR2 + "public:" + CR;
 			if (!de.getListTypedef().isEmpty()) {
 				for (int i = 0; i < de.getListTypedef().getSize(); i++) {
@@ -462,25 +535,22 @@ public class PrimitiveCode {
 					if ((i > 0) && (i < de.getListStruct().getSize()-1)) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					//	if (i == de.getListStruct().getSize()-1 && i != 0) {
-					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;//DG
-					//	} else {
-					//	corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
-						//	}
+				
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;
+				
 				}
-					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;//correction DG
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
-			//DG 17.10.
+		
 			if(de.getClockName()!=""){
 			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
-			//System.out.println("@@@@@@@@@ " + de.getClockName());
+		
 			}
-			//DG modified, was sca:core
-			//System.out.println("@@@@@@@@@DE ports empty?");
+			
 			if (!deports.isEmpty()) {
-			    //System.out.println("@@@@@@@@@DE ports non empty");
+			    
 				for (SysCAMSTPortDE t : deports) {
 
 
@@ -488,11 +558,10 @@ public class PrimitiveCode {
 				    {	if (t.getOrigin() == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + ">"  + t.getName() + ";" + CR;
 					 
-						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+							
 					} else if (t.getOrigin() == 1) {
-					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "> "+ t.getName() + ";" + CR;
-		 
-					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
+					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "> "+ t.getName() + ";" + CR;		 
+					    				
 					}
 				}
 				   else {
@@ -500,11 +569,11 @@ public class PrimitiveCode {
 if (t.getOrigin() == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
 					 
-						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+							
 					} else if (t.getOrigin() == 1) {
 					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
 		 
-					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
+					  				
 					}
 
 				       

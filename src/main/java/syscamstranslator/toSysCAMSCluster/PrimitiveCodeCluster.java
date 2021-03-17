@@ -136,12 +136,23 @@ public class PrimitiveCodeCluster {
 			}
 
 			if (!tdfports.isEmpty()) {
+			 
 				for (SysCAMSTPortTDF t : tdfports) {
+				    if(t.getArity()>1){
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in< " + t.getTDFType() + " > " + t.getName() + "["+t.getArity()+"];" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out< " + t.getTDFType() + " > " + t.getName() + "["+t.getArity()+"];" + CR;
 					}
+				}			    
+				    else{
+			
+					if (t.getOrigin() == 0) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
+					} else if (t.getOrigin() == 1) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
+					}
+				    }			   
 				}
 			}
 			/*	if (!convports.isEmpty()) {

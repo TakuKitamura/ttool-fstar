@@ -122,6 +122,26 @@ public class ClusterCode {
                 || (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockGPIO2VCI() != null)) ) {
                     if ((connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortTDF) 
                             || (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortTDF)) {
+			int arity=1;
+			//Have to make sure that port is TDF
+			if(connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF){		       SysCAMSTPortTDF pt=(SysCAMSTPortTDF)connectors.get(i).get_p1().getComponent();
+			    arity=pt.getArity();
+			}
+			if(arity>1){
+
+			    if (connectors.get(i).getName().equals("")) {
+				corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
+                                    + "sig_" + nb_con + "["+arity+"];" + CR;
+				names.add("sig_" + nb_con);
+                        } else {
+                            corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
+                                    + connectors.get(i).getName() + "["+arity+"];" + CR;
+                            names.add(connectors.get(i).getName());
+                        }
+			    
+			}
+			
+			else{
                         if (connectors.get(i).getName().equals("")) {
                             corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
                                     + "sig_" + nb_con + ";" + CR;
@@ -131,6 +151,7 @@ public class ClusterCode {
                                     + connectors.get(i).getName() + ";" + CR;
                             names.add(connectors.get(i).getName());
                         }
+			}
                     } else if ((connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE)) {
                         if (connectors.get(i).getName().equals("")) {
                             corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + "> " 
