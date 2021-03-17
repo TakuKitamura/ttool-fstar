@@ -276,7 +276,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         if (dialog.getCommunicationName().length() != 0) {
             tmp = dialog.getCommunicationName();
 
-            if (!TAttribute.isAValidId(tmp, false, false, false)) {
+            if (!TAttribute.isAValidId(tmp, false, false, false, false,
+                    false)) {
                 error = true;
             } else {
                 portName = tmp;

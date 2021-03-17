@@ -820,10 +820,15 @@ public class AvatarSpecification extends AvatarElement {
     public AvatarDependencyGraph makeDependencyGraph() {
         AvatarDependencyGraph adg = new AvatarDependencyGraph();
         adg.buildGraph(this);
-
-
-
         return adg;
+    }
+
+    // TO BE COMPLETED
+    AvatarSpecification reduceFromDependencyGraph(AvatarDependencyGraph _adg) {
+        AvatarSpecification avspec = advancedClone();
+
+        return avspec;
+
     }
 
 

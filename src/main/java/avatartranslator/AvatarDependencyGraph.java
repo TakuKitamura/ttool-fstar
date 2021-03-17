@@ -50,14 +50,25 @@ import java.util.HashMap;
 public class AvatarDependencyGraph  {
     private AUTGraph graph;
     private HashMap<AvatarElement, AUTState> toStates;
+    private HashMap<AUTState, AvatarElement> fromStates;
     private int id = 0;
 
     public AvatarDependencyGraph() {
         toStates = new HashMap<>();
+        fromStates = new HashMap<>();
     }
 
     public AUTGraph getGraph() {
         return graph;
+    }
+
+    public void setGraph(AUTGraph _g) {
+        graph = _g;
+    }
+
+    public void setRefs(HashMap<AvatarElement, AUTState> _toStates, HashMap<AUTState, AvatarElement> _fromStates) {
+       toStates = _toStates;
+       fromStates = _fromStates;
     }
 
     public void buildGraph(AvatarSpecification _avspec) {
@@ -126,6 +137,7 @@ public class AvatarDependencyGraph  {
         state.referenceObject = _elt;
         state.info = _elt.toStringExtendedID();
         toStates.put(_elt, state);
+        fromStates.put(state, _elt);
         id ++;
 
         if (_previousE != null) {
@@ -154,6 +166,30 @@ public class AvatarDependencyGraph  {
         return state;
     }
 
-    
+    @SuppressWarnings("unchecked")
+    public AvatarDependencyGraph clone() {
+        AvatarDependencyGraph adg = new AvatarDependencyGraph();
+        AUTGraph g = graph.cloneMe();
+        adg.setGraph(g);
+
+        HashMap<AvatarElement, AUTState> newToStates = new HashMap<>();
+        HashMap<AUTState, AvatarElement> newFromStates = new HashMap<>();
+
+        adg.setRefs(newToStates, newFromStates);
+
+        // Filling states references
+        for(AvatarElement ae: toStates.keySet()) {
+            AUTState st = toStates.get(ae);
+
+            // We must find the corresponding state in the new graph
+            AUTState newState = g.getState(st.id);
+            newToStates.put(ae, newState);
+            newFromStates.put(newState, ae);
+        }
+
+        return adg;
+    }
+
+
 
 }

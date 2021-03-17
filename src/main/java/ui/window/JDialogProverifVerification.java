@@ -323,12 +323,12 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
         //genJava.addActionListener(this);
 
-		secGroup=new ButtonGroup(); 
-        autoSec= new JRadioButton("Add security");
+		secGroup =new ButtonGroup();
+        autoSec = new JRadioButton("Add security");
 		jp02.add(autoSec, c01);
 		autoSec.addActionListener(this);
 		secGroup.add(autoSec);
-        autoConf= new JCheckBox("Add security (Confidentiality)");
+        autoConf = new JCheckBox("Add security (Confidentiality)");
         jp02.add(autoConf, c01);
         autoConf.setEnabled(false);
         autoConf.addActionListener(this);
