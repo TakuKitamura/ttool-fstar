@@ -485,7 +485,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         }
     }
 
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOnDoubleClick(JFrame frame) {
     	if (this instanceof SysCAMSPortTDF) {
     		JDialogSysCAMSPortTDF jtdf = new JDialogSysCAMSPortTDF((SysCAMSPortTDF) this);
     		jtdf.setVisible(true);
