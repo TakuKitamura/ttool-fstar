@@ -1143,6 +1143,10 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	    return hashOK;
     }
 
+    public int getBusyMode() {
+	    return busyMode;
+    }
+
     public void startSimulation() {
         mode = STARTING;
         setComponents();
