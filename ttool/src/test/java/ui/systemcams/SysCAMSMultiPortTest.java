@@ -27,7 +27,7 @@ public class SysCAMSMultiPortTest extends AbstractUITest{
         RESOURCES_DIR = getBaseResourcesDir() + "/ui/tmlcompd/input/TestPortName.xml";
     }
 
-    public AttachPortTest() {
+    public SysCAMSMultiPortTest() {
         super();
         mainGUI.openProjectFromFile(new File(RESOURCES_DIR));
     }
