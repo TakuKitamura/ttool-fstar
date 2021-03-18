@@ -384,27 +384,27 @@ std::cout<<"addTransaction"<<_name<<std::endl;
     NOTIFY_TRANS_EXECUTED(_nextTransaction);
 #endif
 
-    if (_nextTransaction->getCommand()->getTask()->getState() == 3 && dynamic_cast<RRPrioScheduler*>(_scheduler) != 0) {
-        Priority highestPrio = 100;
-        for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-            if ((*j) != NULL && (*j)->getState() != 3 && (*j)->getPriority() <= highestPrio) {
-                highestPrio = (*j)->getPriority();
-            }
-        }
-
-        Priority currentPrio = _nextTransaction->getCommand()->getTask()->getPriority();
-
-        if ( maxEndTimeWithPrio.find(currentPrio) == maxEndTimeWithPrio.end() ) {
-            maxEndTimeWithPrio[currentPrio] = _nextTransaction->getEndTime();
-        } else if (maxEndTimeWithPrio[currentPrio] < _nextTransaction->getEndTime()) {
-            maxEndTimeWithPrio[currentPrio] = _nextTransaction->getEndTime();
-        }
-
-
-        if (currentPrio < highestPrio) {
-            _endSchedule = max(_nextTransaction->getEndTime(),maxEndTimeWithPrio[currentPrio]);
-        }
-    }
+//    if (_nextTransaction->getCommand()->getTask()->getState() == 3 && dynamic_cast<RRPrioScheduler*>(_scheduler) != 0) {
+//        Priority highestPrio = 100;
+//        for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
+//            if ((*j) != NULL && (*j)->getState() != 3 && (*j)->getPriority() <= highestPrio) {
+//                highestPrio = (*j)->getPriority();
+//            }
+//        }
+//
+//        Priority currentPrio = _nextTransaction->getCommand()->getTask()->getPriority();
+//
+//        if ( maxEndTimeWithPrio.find(currentPrio) == maxEndTimeWithPrio.end() ) {
+//            maxEndTimeWithPrio[currentPrio] = _nextTransaction->getEndTime();
+//        } else if (maxEndTimeWithPrio[currentPrio] < _nextTransaction->getEndTime()) {
+//            maxEndTimeWithPrio[currentPrio] = _nextTransaction->getEndTime();
+//        }
+//
+//
+//        if (currentPrio < highestPrio) {
+//            _endSchedule = max(_nextTransaction->getEndTime(),maxEndTimeWithPrio[currentPrio]);
+//        }
+//    }
 
     TMLChannel* aTempChannel=_nextTransaction->getCommand()->getChannel(0);
 

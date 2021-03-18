@@ -151,7 +151,20 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
 
             if (jfis != null) {
                 jfis.startSimulation();
+                Thread.sleep(1000);
+                jfis.sendTestCmd("time");
                 Thread.sleep(50);
+                jfis.sendTestCmd("get-hashcode");
+                Thread.sleep(500);
+                boolean hashOK = jfis.getHash();
+
+                TraceManager.addDev("HashCode  = " + hashOK + " and Busy mode = " + ((jfis.getBusyMode() == 1) ? "READY" : "BUSY"));
+                if (!hashOK || jfis.getBusyMode() != 1) {
+                    TraceManager.addDev("Server is in use, please restart server and re-run the test");
+                    jfis.killSimulator();
+                    jfis.close();
+                    return;
+                }
                 jfis.sendTestCmd("run-x-transactions 10"); // run 10 transactions
                 Thread.sleep(50);
                 jfis.sendTestCmd("lt 1000"); // update transaction list
