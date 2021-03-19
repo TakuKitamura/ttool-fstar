@@ -27,23 +27,32 @@ import static org.junit.Assert.assertTrue;
 
 public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_CPU_CROSS = {"testMultiCore"};
+    final String [] MODELS_CPU_CROSS = {"testMultiCoreRRPB", "testMultiCoreRR"};
     private String SIM_DIR;
-    final int [] NB_OF_CS_STATES = {9};
-    final int [] NB_OF_CS_TRANSTIONS = {8};
-    final int [] MIN_CS_CYCLES = {88};
-    final int [] MAX_CS_CYCLES = {88};
-    static final String EXPECTED =
+    final int [] NB_OF_CS_STATES = {9, 9};
+    final int [] NB_OF_CS_TRANSTIONS = {8, 8};
+    final int [] MIN_CS_CYCLES = {57, 58};
+    final int [] MAX_CS_CYCLES = {57, 58};
+    static final String [] EXPECTED = {
             "MULTICORE: assign transaction Application__C1: Execi 15 t:0 l:15 (vl:15) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__S: Execi 16 t:15 l:16 (vl:16) params: to core 1\n" +
-            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:31 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Execi 16 t:0 l:16 (vl:16) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:16 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
             "MULTICORE: assign transaction Application__C0: Execi 10 t:15 l:10 (vl:10) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:32 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
-            "MULTICORE: assign transaction Application__C0: Execi 15 t:33 l:15 (vl:15) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__C3: Execi 40 t:48 l:40 (vl:40) params: to core 1\n";
+            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:25 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 15 t:26 l:15 (vl:15) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__C3: Execi 40 t:17 l:40 (vl:40) params: to core 1\n",
+
+            "MULTICORE: assign transaction Application__C3: Execi 40 t:0 l:40 (vl:40) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 10 t:0 l:10 (vl:10) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__C1: Execi 15 t:10 l:15 (vl:15) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Execi 16 t:25 l:16 (vl:16) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:41 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
+            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:42 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 15 t:43 l:15 (vl:15) params: to core 0\n"
+    };
     static String CPP_DIR = "../../../../simulators/c++2/";
     static String mappingName = "Architecture";
-    private String actualResult = "";
+    private String actualResult;
     private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
@@ -63,6 +72,7 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
     @Test(timeout = 600000)
     public void testMulticoreNotHangingWhenSaveTrace() throws Exception {
         for (int i = 0; i < MODELS_CPU_CROSS.length; i++) {
+            actualResult = "";
             String s = MODELS_CPU_CROSS[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
@@ -210,8 +220,8 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
             assertTrue(MAX_CS_CYCLES[i] == maxValue);
 
             // compare which transaction belong to which core
-            System.out.println(actualResult);
-            assertTrue(EXPECTED.equals(actualResult));
+            System.out.println("Scheduling on " + s + "\n" + actualResult);
+            assertTrue(EXPECTED[i].equals(actualResult));
         }
     }
 }
