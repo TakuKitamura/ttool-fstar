@@ -823,11 +823,32 @@ public class AvatarSpecification extends AvatarElement {
         return adg;
     }
 
-    // TO BE COMPLETED
-    AvatarSpecification reduceFromDependencyGraph(AvatarDependencyGraph _adg) {
-        AvatarSpecification avspec = advancedClone();
 
-        return avspec;
+    public AvatarSpecification simplifyFromDependencies(ArrayList<AvatarElement> eltsOfInterest) {
+        AvatarSpecification clonedSpec = advancedClone();
+        AvatarDependencyGraph adg = clonedSpec.makeDependencyGraph();
+        AvatarDependencyGraph reducedGraph = adg.reduceGraphBefore(eltsOfInterest);
+        clonedSpec.reduceFromDependencyGraph(reducedGraph);
+        return clonedSpec;
+
+    }
+
+
+
+
+
+    // TO BE COMPLETED
+    // We assume the graph has been reduced already to what is necessary:
+    // We now need to reduce the avatarspec accordingly
+    public void reduceFromDependencyGraph(AvatarDependencyGraph _adg) {
+
+        // We have to update the state machines according to the graph
+
+
+        // then we can remove useless variables and signals
+
+
+
 
     }
 
