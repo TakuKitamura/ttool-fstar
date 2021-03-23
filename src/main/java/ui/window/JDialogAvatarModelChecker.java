@@ -1204,7 +1204,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         hasDependencyGraph.add(_tgc);
         if (generateDependencyGraphEltSelected) {
             TraceManager.addDev("Generating dependency graph for component:" + _tgc.toString());
-            AvatarDependencyGraph adg = spec.makeDependencyGraph();
+            AvatarSpecification specNew = spec.advancedClone();
+            AvatarDependencyGraph adg = specNew.makeDependencyGraph();
+
             ArrayList<AvatarElement> elts = new ArrayList<>();
             elts.add((AvatarElement)_o);
             AvatarDependencyGraph clonedG = adg.reduceGraphBefore(elts);
@@ -1213,6 +1215,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             rg.nbOfStates = rg.graph.getNbOfStates();
             rg.nbOfTransitions = rg.graph.getNbOfTransitions();
             mgui.addRG(rg);
+
+            // Computing reduced specification
+            specNew.reduceFromDependencyGraph(clonedG);
+            mgui.drawAvatarSpecification(specNew);
+
         }
     }
     

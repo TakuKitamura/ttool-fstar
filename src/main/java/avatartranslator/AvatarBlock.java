@@ -124,6 +124,8 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         signals.add(_signal);
     }
 
+    public void clearAttributes() {attributes.clear();}
+
     public AvatarSignal addSignalIfApplicable(String name, int type, Object refObject) {
         AvatarSignal sig = getSignalByName(name);
         if (sig != null) {

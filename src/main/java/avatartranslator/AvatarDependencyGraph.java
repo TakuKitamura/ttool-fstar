@@ -46,6 +46,7 @@ import myutil.TraceManager;
 import ui.TGComponent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -71,6 +72,20 @@ public class AvatarDependencyGraph  {
     public void setRefs(HashMap<AvatarElement, AUTState> _toStates, HashMap<AUTState, AvatarElement> _fromStates) {
        toStates = _toStates;
        fromStates = _fromStates;
+    }
+
+    public AUTState getStateFor(AvatarElement _ae) {
+        return toStates.get(_ae);
+    }
+
+    public AUTState getStateFromReferenceObject(Object _referenceObject) {
+        for(AvatarElement elt: toStates.keySet()) {
+            if (elt.referenceObject == _referenceObject) {
+                TraceManager.addDev("Found equivalence between " + elt.referenceObject + " and " + _referenceObject);
+                return getStateFor(elt);
+            }
+        }
+        return null;
     }
 
     public void buildGraph(AvatarSpecification _avspec) {
@@ -219,7 +234,7 @@ public class AvatarDependencyGraph  {
 
         // We take each elt one after the other and we complete the after or before states
         for(AvatarElement ae: eltsOfInterest) {
-            //TraceManager.addDev("Condering elt:" + ae.getName());
+            //TraceManager.addDev("Considering elt:" + ae.getName());
             Object ref = ae.getReferenceObject();
             if (ref != null) {
                 // Finding the state referencing o
@@ -263,14 +278,34 @@ public class AvatarDependencyGraph  {
         //TraceManager.addDev("Size of remove: " + toRemoveStates.size());
 
         result.graph.removeStates(toRemoveStates);
+        result.removeReferencesOf(toRemoveStates);
 
         /*TraceManager.addDev("Size of graph after remove: s" + result.graph.getNbOfStates() + " t" + result.graph.getNbOfTransitions());
         TraceManager.addDev("New graph:\n" +result.graph.toStringAll() + "\n");*/
 
 
+        // We have to update state references
+
 
         return result;
 
+    }
+
+    public void removeReferencesOf(Collection<AUTState> _c) {
+        for(AUTState st: _c) {
+            fromStates.remove(st);
+        }
+
+        ArrayList<AvatarElement> toBeRemoved = new ArrayList<>();
+        for(AvatarElement ae: toStates.keySet()) {
+            if (_c.contains(toStates.get(ae))) {
+                toBeRemoved.add(ae);
+            }
+        }
+
+        for(AvatarElement ae: toBeRemoved) {
+            toStates.remove(ae);
+        }
     }
 
 

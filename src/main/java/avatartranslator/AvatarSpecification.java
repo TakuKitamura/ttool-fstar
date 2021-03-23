@@ -38,6 +38,7 @@
 
 package avatartranslator;
 
+import graph.AUTState;
 import myutil.Conversion;
 import myutil.TraceManager;
 
@@ -830,7 +831,6 @@ public class AvatarSpecification extends AvatarElement {
         AvatarDependencyGraph reducedGraph = adg.reduceGraphBefore(eltsOfInterest);
         clonedSpec.reduceFromDependencyGraph(reducedGraph);
         return clonedSpec;
-
     }
 
 
@@ -843,10 +843,55 @@ public class AvatarSpecification extends AvatarElement {
     public void reduceFromDependencyGraph(AvatarDependencyGraph _adg) {
 
         // We have to update the state machines according to the graph
+        for(AvatarBlock block: blocks) {
+            TraceManager.addDev("Handling block " + block.getName());
+            AvatarStateMachine asm = block.getStateMachine();
+            // We first check if the start is still in the graph
+            // If not, the state machine is empty: we just create a stop, and that's it
+            AvatarStartState ass = asm.getStartState();
+            if (_adg.getStateFor(ass) == null) {
+                TraceManager.addDev("No start state in " + block.getName());
+                asm.makeBasicSM(block);
+                block.clearAttributes();
+            } else {
+
+                // Otherwise we keep the start and consider all other elements
+                // We remove all elements with no correspondence in the graph
+                // Then, we redo a valid ASM i.e. all elements with no nexts (apart from states)
+                // are given a stop state after
+
+                TraceManager.addDev("Reducing state machine of " + block.getName());
+
+                ArrayList<AvatarElement> toRemove = new ArrayList<>();
+                for(AvatarStateMachineElement asme: asm.getListOfElements()) {
+
+                    if (_adg.getStateFor(asme) == null) {
+                        toRemove.add(asme);
+                    }
+
+                }
+                TraceManager.addDev("To remove size: " + toRemove.size() + " size of ASM: " + asm.getListOfElements().size());
+                asm.getListOfElements().removeAll(toRemove);
+                TraceManager.addDev("Removed. New size of ASM: " + asm.getListOfElements().size());
+                asm.makeCorrect(block);
+            }
+        }
 
 
-        // then we can remove useless variables and signals
+        // Then we can remove useless variables and signals and blocks
 
+
+        // Remove all blocks with no ASM and no signals
+        ArrayList<AvatarBlock> toBeRemoved = new ArrayList<>();
+        for(AvatarBlock block: blocks) {
+            if (block.getStateMachine().isBasicStateMachine()) {
+                if (block.getSignals().size() == 0) {
+                    toBeRemoved.add(block);
+                }
+            }
+        }
+
+        blocks.removeAll(toBeRemoved);
 
 
 

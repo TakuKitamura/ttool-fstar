@@ -89,6 +89,122 @@ public class AvatarStateMachine extends AvatarElement {
         return cpt;
     }
 
+    public void makeBasicSM(AvatarStateMachineOwner owner) {
+        elements.clear();
+
+        if (startState == null) {
+            startState = new AvatarStartState("StartState", null);
+        } else {
+            startState.removeAllNexts();
+        }
+        addElement(startState);
+
+        AvatarTransition at = new AvatarTransition(owner, "Transition", startState.getReferenceObject());
+        AvatarStopState stopS = new AvatarStopState("StopState", startState.getReferenceObject());
+        addElement(at);
+        addElement(stopS);
+        startState.addNext(at);
+        at.addNext(stopS);
+
+    }
+
+    public boolean isBasicStateMachine() {
+        if (startState == null) {
+            return true;
+        }
+
+        if (elements.size() > 3) {
+            return false;
+        }
+
+        boolean hasStartState = false, hasStopState = false, hasBasicTransition = false;
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarStartState) {
+                hasStartState = true;
+            }
+            if (asme instanceof AvatarStartState) {
+                hasStopState = true;
+            }
+            if (asme instanceof AvatarTransition) {
+                AvatarTransition at = (AvatarTransition) asme;
+                if (at.isEmpty()) {
+                    hasBasicTransition = true;
+                }
+            }
+        }
+
+        return hasStartState && hasStopState && hasBasicTransition;
+
+    }
+
+    /**
+     * Make sure that there is a start state, a stop state and that all
+     * elements apart from regular states are followed by a stop or a next
+     */
+    public void makeCorrect(AvatarStateMachineOwner owner) {
+        if (startState == null) {
+            makeBasicSM(owner);
+            return;
+        }
+
+        // Remove nexts when not in the list of elements
+        for(AvatarStateMachineElement asme: getListOfElements()) {
+            ArrayList<AvatarStateMachineElement> removedNext = new ArrayList<>();
+            for(AvatarStateMachineElement nextElt: asme.getNexts()) {
+                if (!(getListOfElements().contains(nextElt))) {
+                    removedNext.add(nextElt);
+                }
+            }
+            asme.getNexts().removeAll(removedNext);
+        }
+
+        // We check that all elements are reachable from start.
+        HashSet<AvatarStateMachineElement> reachable = new HashSet<>();
+        ArrayList<AvatarStateMachineElement> pending = new ArrayList<>();
+
+        pending.add(startState);
+
+
+        while(pending.size() > 0) {
+            AvatarStateMachineElement current = pending.get(0);
+            reachable.add(current);
+            pending.remove(0);
+            if (current.getNexts().size() == 0) {
+                if (!((current instanceof AvatarStopState) || (current instanceof AvatarState))) {
+                    // We need to add a next
+                    if (current instanceof AvatarTransition) {
+                        AvatarStopState stopS = new AvatarStopState("StopState", current.getReferenceObject());
+                        addElement(stopS);
+                        current.addNext(stopS);
+                    } else {
+                        AvatarTransition at = new AvatarTransition(owner, "Transition", current.getReferenceObject());
+                        AvatarStopState stopS = new AvatarStopState("StopState", current.getReferenceObject());
+                        addElement(at);
+                        addElement(stopS);
+                        current.addNext(at);
+                        at.addNext(stopS);
+                    }
+                }
+            }
+
+            for(AvatarStateMachineElement nextElt: current.getNexts()) {
+                if (!(reachable.contains(nextElt))) {
+                    pending.add(nextElt);
+                }
+            }
+        }
+
+        // We remove all elements that are not reachable
+        ArrayList<AvatarElement> toRemove = new ArrayList<>();
+        for(AvatarStateMachineElement asme: getListOfElements()) {
+           if (!(reachable.contains(asme))) {
+               toRemove.add(asme);
+           }
+        }
+        elements.removeAll(toRemove);
+
+    }
+
     public void addElement(AvatarStateMachineElement _element) {
         if (_element != null) {
             elements.add(_element);
