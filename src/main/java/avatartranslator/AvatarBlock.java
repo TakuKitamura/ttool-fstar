@@ -837,6 +837,34 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     }
 
 
+
+    public void removeUselessAttributes() {
+        AvatarTransition at;
+        List<AvatarAttribute> toBeRemoved = new LinkedList<AvatarAttribute>();
+
+
+        for(AvatarAttribute aa: attributes) {
+            if (aa.isTimer()) {
+                if (!(asm.isTimerUsed(aa))) {
+                    toBeRemoved.add(aa);
+                }
+
+
+                // Regular attribute. We have to search where it is used
+            } else {
+                if (!asm.isRegularAttributeUsed(aa)) {
+                    toBeRemoved.add(aa);
+                }
+            }
+        }
+
+        for(AvatarAttribute aa: toBeRemoved) {
+            attributes.remove(aa);
+        }
+
+    }
+
+
     @Override
     public AvatarBlock advancedClone(AvatarSpecification avspec) {
         AvatarBlock av = new AvatarBlock(this.getName(), this.getAvatarSpecification(), this.getReferenceObject());

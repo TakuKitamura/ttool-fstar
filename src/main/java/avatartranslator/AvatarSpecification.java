@@ -834,6 +834,80 @@ public class AvatarSpecification extends AvatarElement {
     }
 
 
+    public boolean isSignalUsed(AvatarSignal _sig) {
+        for(AvatarBlock block: blocks) {
+            if (block.getStateMachine().isSignalUsed(_sig)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public void removeUselessSignalAssociations() {
+        ArrayList<AvatarRelation> mightBeRemoved = new ArrayList<>();
+        ArrayList<AvatarSignal> toBeRemoved1 = new ArrayList<>();
+        ArrayList<AvatarSignal> toBeRemoved2 = new ArrayList<>();
+
+        for(AvatarRelation rel: relations) {
+            // For each signal association, we look for whether it is used or not
+            for(int i=0; i<rel.getSignals1().size(); i++) {
+                AvatarSignal sig1 = rel.getSignal1(i);
+                if (!isSignalUsed(sig1)) {
+                    AvatarSignal sig2 = rel.getSignal2(i);
+                    if (!isSignalUsed(sig2)) {
+                        // We can remove the signals. We remove its declaration in blocks and we remove the signals from the relation
+                        toBeRemoved1.add(sig1);
+                        toBeRemoved2.add(sig2);
+                        mightBeRemoved.add(rel);
+                    }
+                }
+            }
+        }
+
+        // Removing useless signals from blocks
+        for(AvatarBlock block: blocks) {
+            block.getSignals().removeAll(toBeRemoved1);
+            block.getSignals().removeAll(toBeRemoved2);
+        }
+
+        // Removing signals from relations, and removing relations if applicable
+        for(int cpt=0; cpt<mightBeRemoved.size(); cpt++) {
+            AvatarRelation rel = mightBeRemoved.get(cpt);
+            rel.removeAssociation(toBeRemoved1.get(cpt), toBeRemoved2.get(cpt));
+            if (rel.getSignals1().size() == 0) {
+                relations.remove(rel);
+            }
+        }
+
+    }
+
+    public void removeEmptyBlocks() {
+        // Remove all blocks with no ASM and no signals
+        ArrayList<AvatarBlock> toBeRemoved = new ArrayList<>();
+        for(AvatarBlock block: blocks) {
+            if (block.getStateMachine().isBasicStateMachine()) {
+                if (block.getSignals().size() == 0) {
+                    toBeRemoved.add(block);
+                }
+            }
+        }
+
+        blocks.removeAll(toBeRemoved);
+    }
+
+    /**
+     * Removes attributes that are not used
+     */
+    public void removeUselessAttributes() {
+        ArrayList<AvatarBlock> toBeRemoved = new ArrayList<>();
+        for(AvatarBlock block: blocks) {
+            block.removeUselessAttributes();
+        }
+    }
+
+
 
 
 
@@ -878,21 +952,15 @@ public class AvatarSpecification extends AvatarElement {
         }
 
 
-        // Then we can remove useless variables and signals and blocks
+        // Then we can remove useless attributes i.e attributes that are not used
 
 
-        // Remove all blocks with no ASM and no signals
-        ArrayList<AvatarBlock> toBeRemoved = new ArrayList<>();
-        for(AvatarBlock block: blocks) {
-            if (block.getStateMachine().isBasicStateMachine()) {
-                if (block.getSignals().size() == 0) {
-                    toBeRemoved.add(block);
-                }
-            }
-        }
 
-        blocks.removeAll(toBeRemoved);
+        removeUselessSignalAssociations();
 
+        removeUselessAttributes();
+
+        removeEmptyBlocks();
 
 
     }

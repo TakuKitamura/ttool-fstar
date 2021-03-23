@@ -274,6 +274,106 @@ public class AvatarStateMachine extends AvatarElement {
         return null;
     }
 
+    public boolean isSignalUsed(AvatarSignal _sig) {
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarActionOnSignal) {
+                AvatarActionOnSignal aaos = (AvatarActionOnSignal) asme;
+                if (aaos.getSignal() == _sig) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isTimerUsed(AvatarAttribute _timer) {
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarTimerOperator) {
+                AvatarTimerOperator ato = (AvatarTimerOperator) asme;
+                if (ato.getTimer() == _timer) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Analyze the usage of a regular attribute (int, bool)
+     * @param _aa
+     * @return
+     */
+    public boolean isRegularAttributeUsed(AvatarAttribute _aa) {
+        boolean ret;
+
+        AvatarExpressionSolver.emptyAttributesMap();
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarTransition) {
+                // Must check the guard, the delays and all the actions
+                AvatarTransition at = (AvatarTransition)asme;
+
+                if (at.isGuarded()) {
+                    ret = isInExpression(at.getGuard().toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+                if (at.hasDelay()) {
+                    ret = isInExpression(at.getMinDelay().toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                    ret = isInExpression(at.getMaxDelay().toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+                for(AvatarAction act: at.getActions()) {
+                    ret = isInExpression(act.toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+            } else if (asme instanceof  AvatarActionOnSignal) {
+                for(String s: ((AvatarActionOnSignal)asme).getValues()) {
+                    ret = isInExpression(s, _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+            } else if (asme instanceof AvatarRandom) {
+                AvatarRandom ar = (AvatarRandom)asme;
+                String s = ar.getVariable();
+                ret = isInExpression(s, _aa);
+                if (ret) {
+                    return true;
+                }
+                s = ar.getMinValue();
+                ret = isInExpression(s, _aa);
+                if (ret) {
+                    return true;
+                }
+                s = ar.getMaxValue();
+                ret = isInExpression(s, _aa);
+                if (ret) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isInExpression(String expr, AvatarAttribute _aa) {
+        return AvatarExpressionSolver.indexOfVariable(expr, _aa.getName()) > -1;
+    }
+
     private int getSimplifiedElementsAux( Map<AvatarStateMachineElement, Integer> simplifiedElements, Set<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {
         if (visited.contains(root)) {
             Integer name = simplifiedElements.get(root);
