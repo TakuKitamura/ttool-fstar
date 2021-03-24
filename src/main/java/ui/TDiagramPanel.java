@@ -135,7 +135,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu componentMenu;
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
-    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide, search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
+    protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment,
+            removeInternalComment, attach, detach, hide, unhide, search, enableDisable, setAsCryptoBlock, setAsRegularBlock,
+            setMainColor;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem gotoReference;
     protected JMenuItem showProVerifTrace;
@@ -1496,6 +1498,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(bringFront);
         componentMenu.add(bringBack);
         componentMenu.add(enableDisable);
+        componentMenu.add(setMainColor);
         componentMenu.add(makeSquare);
         componentMenu.addSeparator();
         componentMenu.add(attach);
@@ -1579,6 +1582,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         bringBack = new JMenuItem("Send to back");
         bringBack.addActionListener(menuAL);
+
+        setMainColor = new JMenuItem("Set main color");
+        setMainColor.addActionListener(menuAL);
 
         makeSquare = new JMenuItem("Make Square");
         makeSquare.addActionListener(menuAL);
@@ -1787,6 +1793,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if (e.getSource() == bringBack) {
             bringToBack(componentPopup);
+            mgui.changeMade(this, MOVE_COMPONENT);
+            repaint();
+            return;
+        }
+
+        if (e.getSource() == setMainColor) {
+            setMainColor(componentPopup);
             mgui.changeMade(this, MOVE_COMPONENT);
             repaint();
             return;
@@ -2101,6 +2114,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             clone.setEnabled(false);
         }
 
+
+        setMainColor.setEnabled(componentPointed instanceof ColorCustomizable);
+
+
         // Issue #69
         enableDisable.setEnabled( componentPointed.canBeDisabled() );
 //        if (componentPointed instanceof CanBeDisabled) {
@@ -2354,6 +2371,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 componentList.add(0, tgc);
             }
         }
+    }
+
+    public void setMainColor(TGComponent tgc) {
+        // setting main color
+        Color newColor = JColorChooser.showDialog
+                (null, "Main color", tgc.getCurrentColor());
+        tgc.setCurrentColor(newColor);
     }
 
     private void removeAllSelectedComponents() {

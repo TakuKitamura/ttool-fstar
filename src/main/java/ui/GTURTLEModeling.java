@@ -7660,6 +7660,7 @@ public class GTURTLEModeling {
             int myX = -1, myY = -1, myWidth = -1, myHeight = -1;
             int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
             int myMinX = -1, myMaxX = -1, myMinY = -1, myMaxY = -1;
+            int color = -1;
             String myName = null, myValue = null;
             String customData = null;
             Vector<Point> tgcpList = new Vector<Point>();
@@ -7718,14 +7719,14 @@ public class GTURTLEModeling {
                     } else if (elt.getTagName().equals("enabled")) {
                         enable = elt.getAttribute("value").equals("true");
                     } else if (elt.getTagName().equals("TGConnectingPoint")) {
-                        x = Integer.decode(elt.getAttribute("num")).intValue();
-                        y = Integer.decode(elt.getAttribute("id")).intValue() + decId;
+                        x = Integer.decode(elt.getAttribute("num"));
+                        y = Integer.decode(elt.getAttribute("id")) + decId;
                         tgcpList.add(new Point(x, y));
                     } else if (elt.getTagName().equals("father")) {
-                        fatherId = Integer.decode(elt.getAttribute("id")).intValue();
-                        fatherNum = Integer.decode(elt.getAttribute("num")).intValue();
+                        fatherId = Integer.decode(elt.getAttribute("id"));
+                        fatherNum = Integer.decode(elt.getAttribute("num"));
                     } else if (elt.getTagName().equals("reference")) {
-                        referenceId = Integer.decode(elt.getAttribute("id")).intValue();
+                        referenceId = Integer.decode(elt.getAttribute("id"));
                     } else if (elt.getTagName().equals("prejavacode")) {
                         pre += elt.getAttribute("value") + "\n";
                     } else if (elt.getTagName().equals("postjavacode")) {
@@ -7742,6 +7743,8 @@ public class GTURTLEModeling {
                         masterMutex = true;
                     } else if (elt.getTagName().equals("breakpoint")) {
                         breakpoint = true;
+                    } else if (elt.getTagName().equals("color")) {
+                        color = Integer.decode(elt.getAttribute("value"));
                     }
                 }
             }
@@ -7815,6 +7818,10 @@ public class GTURTLEModeling {
 
             if (customData != null) {
                 tgc.setCustomData(customData);
+            }
+
+            if (color != -1) {
+                tgc.setCurrentColor(color);
             }
 
 

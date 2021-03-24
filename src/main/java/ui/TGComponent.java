@@ -214,6 +214,10 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     protected boolean breakpoint;
 
+    // Colors
+    protected Color currentMainColor;
+
+
     // Zoom
     // Issue #31: Moved to scalable component
     //double dx = 0, dy = 0, dwidth, dheight, dMaxWidth, dMaxHeight, dMinWidth, dMinHeight;
@@ -3206,6 +3210,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         sb.append(translateMasterMutex());
         sb.append(translateBreakpoint());
         sb.append(translateExtraParam());
+        sb.append(translateColor());
 
         if (b) {
             sb.append(XML_TAIL);
@@ -3355,6 +3360,18 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return new String(sb);
     }
 
+    protected String translateColor() {
+        if (currentMainColor == null) {
+            return "";
+        }
+
+        if (!(this instanceof ColorCustomizable)) {
+            return "";
+        }
+
+        return "<color value=\"" + currentMainColor.getRGB() + "\" />\n";
+    }
+
     protected String translateExtraParam() {
         return "";
     }
@@ -3421,6 +3438,25 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             return s1;
         }
         return s1 + ": " + s2;
+    }
+
+    public Color getCurrentColor() {
+        if (currentMainColor != null) {
+            return currentMainColor;
+        }
+        if (this instanceof ColorCustomizable) {
+            return ((ColorCustomizable)(this)).getMainColor();
+        }
+
+        return null;
+    }
+
+    public void setCurrentColor(int _rgb) {
+        currentMainColor = new Color(_rgb);
+    }
+
+    public void setCurrentColor(Color _c) {
+        currentMainColor = _c;
     }
 
 
