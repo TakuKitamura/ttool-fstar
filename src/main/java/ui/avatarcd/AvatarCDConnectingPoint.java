@@ -76,7 +76,7 @@ public class AvatarCDConnectingPoint extends TGConnectingPointWidthHeight {
     }
 
     public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
-        if (outPoint != null) {
+        if ((outPoint != null) && (type == TGComponentManager.CONNECTOR_SPECIA_CD)) {
             if ((outPoint.getFather() instanceof AvatarCDActorBox) || (outPoint.getFather() instanceof AvatarCDActorStickman)) {
                 if (!((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman))) {
                     return false;
