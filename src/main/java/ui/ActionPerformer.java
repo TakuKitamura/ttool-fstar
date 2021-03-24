@@ -499,6 +499,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ACD_COMPOSITION_CONNECTOR);
         } else if (command.equals(mgui.actions[TGUIAction.ACD_AGGREGATION_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ACD_AGGREGATION_CONNECTOR);
+        } else if (command.equals(mgui.actions[TGUIAction.ACD_SPECIA_CONNECTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_SPECIA_CD);
 
             // AVATAR AD
         } else if (command.equals(mgui.actions[TGUIAction.AAD_EDIT].getActionCommand())) {

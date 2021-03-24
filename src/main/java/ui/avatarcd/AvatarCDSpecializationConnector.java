@@ -36,60 +36,50 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarcd;
 
-import ui.CDElement;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.TGConnectingPointWidthHeight;
-import ui.ucd.UCDUseCase;
+import myutil.GraphicLib;
+import ui.*;
+import ui.util.IconManager;
+
+import java.awt.*;
+import java.util.Vector;
 
 /**
- * Class AvatarCDConnectingPoint
- * Definition of connecting points on which attribute connectors can be connected
- * Creation: 31/08/2011
- * @version 1.0 31/08/2011
+ * Class AvatarCDSpecializationConnector
+ * Connector to be used in use case diagram. Connects two actors or two uc
+ * Creation: 24/03/2021
+ * @version 1.0 24/03/2021
  * @author Ludovic APVRILLE
  */
-public class AvatarCDConnectingPoint extends TGConnectingPointWidthHeight {
+public  class AvatarCDSpecializationConnector extends TGConnector {
     
-    public AvatarCDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
+    public AvatarCDSpecializationConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        
+         myImageIcon = IconManager.imgic610;
+    }
+
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+        //g.drawLine(x1, y1, x2, y2);
+        GraphicLib.arrowWithLine(g, 1, 0, 0, x1, y1, x2, y2, false);
     }
     
     @Override
-    public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.ACD_COMPOSITION_CONNECTOR) {
-            return true;
-        }
-
-        if (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR) {
-            return true;
-        }
-
-        if (type == TGComponentManager.CONNECTOR_SPECIA_CD) {
-            return true;
-        }
-
-        return type == TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
-
+    public int getType() {
+        return TGComponentManager.CONNECTOR_SPECIA_CD;
     }
+    
 
-    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
-        if (outPoint != null) {
-            if ((outPoint.getFather() instanceof AvatarCDActorBox) || (outPoint.getFather() instanceof AvatarCDActorStickman)) {
-                if (!((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman))) {
-                    return false;
-                }
-            }
-
-            if ((outPoint.getFather() instanceof AvatarCDBlock)) {
-                if (!((getFather() instanceof AvatarCDBlock))) {
-                    return false;
-                }
-            }
-        }
-
-        return isCompatibleWith(type);
-    }
 }
+
+
+
+
+
+
+
