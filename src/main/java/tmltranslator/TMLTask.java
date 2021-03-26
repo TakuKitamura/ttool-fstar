@@ -403,6 +403,10 @@ public class TMLTask extends TMLElement {
     }
 
     public void addSendAndReceiveEventAfterWriteIn(TMLChannel chan, TMLEvent evt1, TMLEvent evt2, String action1, String action2) {
+        TMLAttribute tmla = new TMLAttribute(action1, new TMLType(TMLType.NATURAL));
+        addAttributeIfApplicable(tmla);
+        tmla = new TMLAttribute(action2, new TMLType(TMLType.NATURAL));
+        addAttributeIfApplicable(tmla);
         activity.addSendAndReceiveEventAfterWriteIn(chan, evt1, evt2, action1, action2);
     }
 
