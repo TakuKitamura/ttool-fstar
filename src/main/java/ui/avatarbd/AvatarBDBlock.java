@@ -68,7 +68,8 @@ import java.util.List;
  * @author Ludovic APVRILLE
  * @version 1.1 06/04/2010
  */
-public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner, WithAttributes {
+public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree,
+        AvatarBDStateMachineOwner, WithAttributes {
 
     private static String GLOBAL_CODE_INFO = "(block code)";
 
@@ -1760,4 +1761,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
         return attr;
     }
+
+    // Color management
+    public Color getMainColor() {
+        return ColorManager.AVATAR_BLOCK;
+    }
+
 }
