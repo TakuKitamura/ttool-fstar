@@ -521,6 +521,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jpadvancedQ.add(cqb, cadvancedQ);
                 customChecks.add(cqb);
             }
+
             JScrollPane jsp = new JScrollPane(jpadvancedQ, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             jsp.setPreferredSize(new Dimension(500, 120));
             cadvanced.gridheight = 10;
@@ -927,9 +928,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             if (safetySelected) {
                 //res = amc.setSafetyAnalysis();
                 res = 0;
+
                 for(JCheckBox cc: customChecks) {
                     if (cc.isSelected()) {
-                        if (amc.addSafety(cc.getText())) {
+                        if (amc.addSafety(cc.getText(), spec.getSafetyPragmasRefs().get(cc.getText()))) {
                             res++;
                         }
                     }
@@ -1250,6 +1252,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
     
     protected void handleSafety(ArrayList<SafetyProperty> safeties) {
+
+        TraceManager.addDev("Handling safety");
+
         int status;
         
         if (safeties == null) {
@@ -1264,7 +1269,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             } else {
                 status = AvatarBDSafetyPragma.PROVED_ERROR;
             }
-            verifMap.put(sp.getRawProperty(), status);
+            //TraceManager.addDev("Putting in map: " + sp.getRefProperty() + " with status: " + status);
+            verifMap.put(sp.getRefProperty(), status);
         }
         mgui.modelBacktracingUPPAAL(verifMap);
     }

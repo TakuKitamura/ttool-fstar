@@ -235,7 +235,7 @@ public class AvatarDesignPanelTranslator {
                     // Remove data types from pragma
                     String prag = removeDataTypesFromPragma(s, _blocks);
                     if (checkSafetyPragma(prag, _blocks, _as, tgc)) {
-                        _as.addSafetyPragma(prag);
+                        _as.addSafetyPragma(prag, s);
                     } else {
                         tgsp.syntaxErrors.add(prag);
                     }
@@ -429,16 +429,24 @@ public class AvatarDesignPanelTranslator {
 
         // Make all possible String DataType.elt
         //TraceManager.addDev("removeDataTypesFromPragma in " + _pragma);
-        Set<String> dataType = new HashSet<>();
-        for(AvatarBDBlock b: _blocks) {
+        Vector<String> dataType;
+
+        if (_blocks.size() < 1) {
+            return _pragma;
+        }
+
+        TDiagramPanel tdp = _blocks.get(0).getTDiagramPanel();
+        dataType = tdp.getAllDataTypes();
+
+        /*for(AvatarBDBlock b: _blocks) {
             for (TAttribute a : b.getAttributeList()) {
-                //TraceManager.addDev("Analyzing attribute  " + a.getId() + " / type" + a.getType() + " in block " + b.getBlockName());
-                if (a.getTypeOther() != null) {
-                    //TraceManager.addDev("Adding type " + a.getType());
+                TraceManager.addDev("Analyzing attribute  " + a.getId() + " / type" + a.getType() + " in block " + b.getBlockName());
+                if (a.isAvatarDefault()) {
+                    TraceManager.addDev("Adding type " + a.getType());
                     dataType.add(a.getTypeOther());
                 }
             }
-        }
+        }*/
 
         if (dataType.size() == 0) {
             //TraceManager.addDev("No Datatype");

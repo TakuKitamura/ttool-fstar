@@ -38,8 +38,6 @@
 
 package avatartranslator;
 
-import graph.AUTState;
-import myutil.Conversion;
 import myutil.TraceManager;
 
 import java.util.*;
@@ -58,22 +56,23 @@ public class AvatarSpecification extends AvatarElement {
 
     public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     public List<String> checkedIDs;
-    private List<AvatarBlock> blocks;
-    private List<AvatarRelation> relations;
-    private List<AvatarInterfaceRelation> irelations;
-    private List<AvatarAMSInterface> interfaces;
+    private final List<AvatarBlock> blocks;
+    private final List<AvatarRelation> relations;
+    private  List<AvatarInterfaceRelation> irelations;
+    private final List<AvatarAMSInterface> interfaces;
     /**
      * The list of all library functions that can be called.
      */
-    private List<AvatarLibraryFunction> libraryFunctions;
+    private final List<AvatarLibraryFunction> libraryFunctions;
 
     //private AvatarBroadcast broadcast;
     private String applicationCode;
-    private List<AvatarPragma> pragmas;
-    private List<String> safety_pragmas;
-    private List<AvatarPragmaLatency> latency_pragmas;
-    private List<AvatarConstant> constants;
-    private boolean robustnessMade = false;
+    private final List<AvatarPragma> pragmas;
+    private final List<String> safetyPragmas;
+    private final HashMap<String, String> safetyPragmasRefs;
+    private final List<AvatarPragmaLatency> latencyPragmas;
+    private final List<AvatarConstant> constants;
+    private final boolean robustnessMade = false;
 
     private Object informationSource; // element from which the spec has been built
 
@@ -85,8 +84,9 @@ public class AvatarSpecification extends AvatarElement {
         relations = new LinkedList<>();
         pragmas = new LinkedList<>();
         constants = new LinkedList<>();
-        safety_pragmas = new LinkedList<>();
-        latency_pragmas = new LinkedList<>();
+        safetyPragmas = new LinkedList<>();
+        safetyPragmasRefs = new HashMap<>();
+        latencyPragmas = new LinkedList<>();
         this.constants.add(AvatarConstant.FALSE);
         this.constants.add(AvatarConstant.TRUE);
         checkedIDs = new ArrayList<>();
@@ -153,15 +153,19 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public List<String> getSafetyPragmas() {
-        return safety_pragmas;
+        return safetyPragmas;
     }
 
     public List<AvatarPragmaLatency> getLatencyPragmas() {
-        return latency_pragmas;
+        return latencyPragmas;
     }
 
     public List<AvatarConstant> getAvatarConstants() {
         return constants;
+    }
+
+    public HashMap<String, String> getSafetyPragmasRefs() {
+        return safetyPragmasRefs;
     }
 
     public int getNbOfASMGraphicalElements() {
@@ -244,12 +248,13 @@ public class AvatarSpecification extends AvatarElement {
         pragmas.add(_pragma);
     }
 
-    public void addSafetyPragma(String _pragma) {
-        safety_pragmas.add(_pragma);
+    public void addSafetyPragma(String _pragma, String _refPragmas) {
+        safetyPragmas.add(_pragma);
+        safetyPragmasRefs.put(_pragma, _refPragmas);
     }
 
     public void addLatencyPragma(AvatarPragmaLatency _pragma) {
-        latency_pragmas.add(_pragma);
+        latencyPragmas.add(_pragma);
     }
 
     public void addConstant(AvatarConstant _constant) {
@@ -786,11 +791,11 @@ public class AvatarSpecification extends AvatarElement {
 		    spec.addPragma(nP);
 		    }*/
 
-        for (String safetyPragma : safety_pragmas) {
-            spec.addSafetyPragma(safetyPragma);
+        for (String safetyPragma : safetyPragmas) {
+            spec.addSafetyPragma(safetyPragma, safetyPragmasRefs.get(safetyPragma));
         }
 
-        for (AvatarPragmaLatency latencyPragma : latency_pragmas) {
+        for (AvatarPragmaLatency latencyPragma : latencyPragmas) {
             spec.addLatencyPragma(latencyPragma);
         }
 

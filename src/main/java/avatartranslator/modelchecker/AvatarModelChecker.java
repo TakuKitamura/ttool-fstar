@@ -342,8 +342,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (safeties == null) {
             safeties = new ArrayList<SafetyProperty>();
         }
-        for (String property : spec.getSafetyPragmas()) {
-            SafetyProperty sp = new SafetyProperty(property);
+        HashMap<String, String> mapOfSafetyProperties = spec.getSafetyPragmasRefs();
+        for (String property : mapOfSafetyProperties.keySet()) {
+            SafetyProperty sp = new SafetyProperty(property, mapOfSafetyProperties.get(property));
             safeties.add(sp);
         }
         studySafety = safeties.size() > 0;
@@ -351,11 +352,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
 
-    public boolean addSafety(String pragma) {
+    public boolean addSafety(String pragma, String _refPragma) {
         if (safeties == null) {
             safeties = new ArrayList<SafetyProperty>();
         }
-        SafetyProperty sp = new SafetyProperty(pragma);
+        SafetyProperty sp = new SafetyProperty(pragma, _refPragma);
         safeties.add(sp);
         studySafety = true;
         return true;
@@ -372,7 +373,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 sp.linkSolverStates();
                 if (sp.hasError()) {
                     iter.remove();
-                    TraceManager.addDev("Pragma " + sp.getRawProperty() + " cannot be parsed");
+                    TraceManager.addDev("Pragma " + sp.getRefProperty() + " cannot be parsed");
                 }
             }
             studySafety = safeties.size() > 0;

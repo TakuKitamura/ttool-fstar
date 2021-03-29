@@ -981,7 +981,7 @@ public class Action extends Command {
                             String[] queries = query.toString().split("\\s*,\\s*");
                             for (String q : queries) {
                                 if (q != "") {
-                                    if (amc.addSafety(q) == false) {
+                                    if (amc.addSafety(q, q) == false) {
                                         System.out.println("Query " + q + " is badly written");
                                         return Interpreter.BAD;
                                     }
