@@ -195,6 +195,7 @@ public class AvatarDesignPanelTranslator {
 
         while (iterator.hasNext()) {
             tgc = iterator.next();
+
             if (tgc instanceof AvatarBDPragma) {
                 ErrorAccumulator errorAcc = new ErrorAccumulator(tgc, adp.getAvatarBDPanel());
                 tgcn = (AvatarBDPragma) tgc;
@@ -225,19 +226,22 @@ public class AvatarDesignPanelTranslator {
                     }
                 }
             }
+
             if (tgc instanceof AvatarBDSafetyPragma) {
                 tgsp = (AvatarBDSafetyPragma) tgc;
                 values = tgsp.getValues();
                 tgsp.syntaxErrors.clear();
                 for (String s : values) {
-                    if (checkSafetyPragma(s, _blocks, _as, tgc)) {
-                        _as.addSafetyPragma(s);
+                    // Remove data types from pragma
+                    String prag = removeDataTypesFromPragma(s, _blocks);
+                    if (checkSafetyPragma(prag, _blocks, _as, tgc)) {
+                        _as.addSafetyPragma(prag);
                     } else {
-                        tgsp.syntaxErrors.add(s);
-
+                        tgsp.syntaxErrors.add(prag);
                     }
                 }
             }
+
             if (tgc instanceof AvatarBDPerformancePragma) {
                 tgpp = (AvatarBDPerformancePragma) tgc;
                 values = tgpp.getValues();
@@ -418,6 +422,61 @@ public class AvatarDesignPanelTranslator {
 
 
     }
+
+    private String removeDataTypesFromPragma(String _pragma,  List<AvatarBDBlock> _blocks) {
+        // For each data type, and each attribute, check if it is present. IF yes
+        // replace it with its value. If no value, the default initial value
+
+        // Make all possible String DataType.elt
+        //TraceManager.addDev("removeDataTypesFromPragma in " + _pragma);
+        Set<String> dataType = new HashSet<>();
+        for(AvatarBDBlock b: _blocks) {
+            for (TAttribute a : b.getAttributeList()) {
+                //TraceManager.addDev("Analyzing attribute  " + a.getId() + " / type" + a.getType() + " in block " + b.getBlockName());
+                if (a.getTypeOther() != null) {
+                    //TraceManager.addDev("Adding type " + a.getType());
+                    dataType.add(a.getTypeOther());
+                }
+            }
+        }
+
+        if (dataType.size() == 0) {
+            //TraceManager.addDev("No Datatype");
+            return _pragma;
+        }
+
+        // At least one DataType
+
+        for(String dt: dataType) {
+            List<TAttribute> attr = adp.getAvatarBDPanel().getAttributesOfDataType(dt);
+            if (attr != null) {
+                //TraceManager.addDev("Found " + attr.size() + " attributes in " + dt);
+                for (TAttribute t : attr) {
+                    _pragma = removeDataTypesAttrFromPragma(_pragma, dt, t);
+                }
+            }
+        }
+
+        return _pragma;
+    }
+
+    private String removeDataTypesAttrFromPragma(String _pragma,  String _dataType, TAttribute _t) {
+        String init = _t.getInitialValue();
+       if (init == null) {
+           return _pragma;
+       }
+
+       String loc = _dataType + "." +  _t.getId();
+
+       // Replace in pragmas loc by its value init
+        // We must be sure to correctly identify loc
+        _pragma = AvatarExpressionSolver.replaceVariable(_pragma, loc, init);
+
+        //TraceManager.addDev("PRAGMA: new pragma=" + _pragma);
+
+        return _pragma;
+    }
+
 
     private boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc) {
         //Todo: check types
