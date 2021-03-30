@@ -154,10 +154,13 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected int status = -1;
     private boolean expectedResult;
 
+    private  AvatarSpecification aspec;
+
     /*
      * Creates new form
      */
-    public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {
+    public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec,
+                                   String _host, TURTLEPanel _tp) {
         super(f, title, true);
 
         mgui = _mgui;
@@ -168,7 +171,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         spec = _spec;
         host = _host;
         tp = _tp;
-        AvatarSpecification aspec = mgui.gtm.getAvatarSpecification();
+        aspec = mgui.gtm.getAvatarSpecification();
         if (aspec != null) {
             customQueries = aspec.getSafetyPragmas();
         }
@@ -800,8 +803,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             if (custom.isSelected() && (mode != NOT_STARTED)) {
                 jta.append("\n\n--------------------------------------------\n");
 
-                jta.append("Studying custom CTL formulae\n");
-                for (JCheckBox j : customChecks) {
+                jta.append("Studying selected safety pragmas\n");
+                for(int i=0; i< customChecks.size(); i++) {
+                    JCheckBox j = customChecks.get(i);
                     if (j.isSelected()) {
                         jta.append(j.getText() + "\n");
                         String translation = checkExpectedResult(j.getText()); 
@@ -809,7 +813,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                         jta.append(translation);
                         status = -1;
                         workQuery(translation, fn, trace_id, rshc);
-                        verifMap.put(j.getText(), status);
+                        verifMap.put(aspec.getSafetyPragmasRefs().get(j.getText()), status);
                         trace_id++;
                     }
                 }
