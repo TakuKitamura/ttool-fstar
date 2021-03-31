@@ -724,6 +724,7 @@ public class BoolExpressionEvaluator {
         tmp = Conversion.replaceAllString(tmp, "!=", "$").trim();
         tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
         tmp = Conversion.replaceAllString(tmp, "<=", ";").trim();
+
         if (tmp.indexOf("=") > -1) {
             TraceManager.addDev("Not a bool");
             errorMessage = "Not a boolean expression because it contains \"=\" operators";

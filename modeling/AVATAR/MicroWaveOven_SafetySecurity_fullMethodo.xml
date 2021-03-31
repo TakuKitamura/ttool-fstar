@@ -79,19 +79,19 @@
 </COMPONENT>
 <SUBCOMPONENT type="5607" id="20" >
 <father id="27" num="0" />
-<cdparam x="355" y="352" />
-<sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="355" maxX="355" minY="355" maxY="355" />
-<infoparam name="value " value="Analysis_UseCase" />
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5607" id="21" >
-<father id="27" num="1" />
 <cdparam x="355" y="367" />
 <sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="355" maxX="355" minY="370" maxY="370" />
 <infoparam name="value " value="Attack Trees" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5607" id="21" >
+<father id="27" num="1" />
+<cdparam x="355" y="352" />
+<sizeparam width="10" height="10" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="355" maxX="355" minY="355" maxY="355" />
+<infoparam name="value " value="Analysis_UseCase" />
 </SUBCOMPONENT>
 
 <COMPONENT type="5602" id="35" >
@@ -1305,7 +1305,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="1" id="697" />
 <TGConnectingPoint num="2" id="698" />
 <P1  x="746" y="209" id="833" />
-<P2  x="864" y="242" id="1116" />
+<P2  x="864" y="242" id="1191" />
 <Point x="832" y="209" />
 <Point x="832" y="241" />
 <AutomaticDrawing  data="true" />
@@ -1333,7 +1333,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="702" />
 <TGConnectingPoint num="1" id="703" />
 <TGConnectingPoint num="2" id="704" />
-<P1  x="836" y="301" id="1141" />
+<P1  x="836" y="301" id="1166" />
 <P2  x="746" y="229" id="835" />
 <Point x="802" y="301" />
 <Point x="802" y="229" />
@@ -1363,7 +1363,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="1" id="710" />
 <TGConnectingPoint num="2" id="711" />
 <TGConnectingPoint num="3" id="712" />
-<P1  x="550" y="549" id="892" />
+<P1  x="550" y="549" id="992" />
 <P2  x="652" y="239" id="836" />
 <Point x="609" y="549" />
 <Point x="609" y="283" />
@@ -1408,7 +1408,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="2" />
 <TGConnectingPoint num="0" id="716" />
-<P1  x="379" y="342" id="1367" />
+<P1  x="379" y="342" id="1317" />
 <P2  x="652" y="344" id="801" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1419,7 +1419,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="719" />
 <TGConnectingPoint num="1" id="720" />
 <P1  x="492" y="225" id="787" />
-<P2  x="287" y="189" id="1317" />
+<P2  x="287" y="189" id="1367" />
 <Point x="492" y="189" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="718" >
@@ -1436,7 +1436,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="1" />
 <TGConnectingPoint num="0" id="722" />
-<P1  x="295" y="245" id="1392" />
+<P1  x="295" y="245" id="1292" />
 <P2  x="430" y="245" id="788" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1445,7 +1445,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="2" />
 <TGConnectingPoint num="0" id="724" />
-<P1  x="483" y="474" id="865" />
+<P1  x="483" y="474" id="1015" />
 <P2  x="492" y="265" id="790" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1456,7 +1456,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="728" />
 <TGConnectingPoint num="1" id="729" />
 <TGConnectingPoint num="2" id="730" />
-<P1  x="287" y="145" id="1299" />
+<P1  x="287" y="145" id="1399" />
 <P2  x="621" y="209" id="832" />
 <Point x="505" y="145" />
 <Point x="505" y="209" />
@@ -1484,7 +1484,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="732" />
 <P1  x="569" y="124" id="819" />
-<P2  x="287" y="125" id="1297" />
+<P2  x="287" y="125" id="1397" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="133" id="735" >
@@ -1492,7 +1492,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="2" />
 <TGConnectingPoint num="0" id="734" />
-<P1  x="784" y="123" id="1066" />
+<P1  x="784" y="123" id="1241" />
 <P2  x="694" y="124" id="820" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1503,7 +1503,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="738" />
 <TGConnectingPoint num="1" id="739" />
 <TGConnectingPoint num="2" id="740" />
-<P1  x="834" y="183" id="1091" />
+<P1  x="834" y="183" id="1216" />
 <P2  x="694" y="144" id="822" />
 <Point x="753" y="183" />
 <Point x="753" y="144" />
@@ -1569,8 +1569,8 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="751" />
 <TGConnectingPoint num="1" id="752" />
-<P1  x="515" y="703" id="967" />
-<P2  x="906" y="500" id="1218" />
+<P1  x="515" y="703" id="917" />
+<P2  x="906" y="500" id="1093" />
 <Point x="906" y="703" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="750" >
@@ -1589,7 +1589,7 @@ A sensor attached to the door enables detection of
 <TGConnectingPoint num="0" id="755" />
 <TGConnectingPoint num="1" id="756" />
 <P1  x="1253" y="400" id="839" />
-<P2  x="1139" y="368" id="1167" />
+<P2  x="1139" y="368" id="1142" />
 <Point x="1253" y="367" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="754" >
@@ -1606,7 +1606,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="758" />
-<P1  x="1056" y="420" id="1192" />
+<P1  x="1056" y="420" id="1117" />
 <P2  x="1191" y="420" id="840" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1616,7 +1616,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="761" />
 <TGConnectingPoint num="1" id="762" />
-<P1  x="1140" y="480" id="1242" />
+<P1  x="1140" y="480" id="1067" />
 <P2  x="1253" y="440" id="842" />
 <Point x="1253" y="480" />
 <AutomaticDrawing  data="true" />
@@ -1634,7 +1634,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="764" />
-<P1  x="511" y="803" id="1015" />
+<P1  x="511" y="803" id="865" />
 <P2  x="427" y="787" id="863" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1643,7 +1643,7 @@ A sensor attached to the door enables detection of
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="766" />
-<P1  x="346" y="807" id="990" />
+<P1  x="346" y="807" id="890" />
 <P2  x="365" y="787" id="862" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1653,7 +1653,7 @@ A sensor attached to the door enables detection of
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="768" />
 <P1  x="396" y="747" id="852" />
-<P2  x="404" y="723" id="968" />
+<P2  x="404" y="723" id="918" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="301" id="786" >
@@ -1859,12 +1859,12 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="889" >
 <father id="1064" num="0" />
-<cdparam x="406" y="474" />
-<sizeparam width="155" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="461" y="803" />
+<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="173" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="CorruptOrFakeMessage" />
+<cdrectangleparam minX="0" maxX="228" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="BusProbing" />
 <TGConnectingPoint num="0" id="865" />
 <TGConnectingPoint num="1" id="866" />
 <TGConnectingPoint num="2" id="867" />
@@ -1889,18 +1889,19 @@ or by a maintenance station
 <TGConnectingPoint num="21" id="886" />
 <TGConnectingPoint num="22" id="887" />
 <TGConnectingPoint num="23" id="888" />
+<accessibility />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="914" >
 <father id="1064" num="1" />
-<cdparam x="260" y="529" />
-<sizeparam width="290" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="256" y="807" />
+<sizeparam width="181" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="38" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="AttackerInjectWrongFirmwareOnTheDomainBus" />
+<cdrectangleparam minX="0" maxX="147" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="HijackingTheRemoteSession" />
 <TGConnectingPoint num="0" id="890" />
 <TGConnectingPoint num="1" id="891" />
 <TGConnectingPoint num="2" id="892" />
@@ -1926,17 +1927,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="912" />
 <TGConnectingPoint num="23" id="913" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="939" >
 <father id="1064" num="2" />
-<cdparam x="313" y="637" />
-<sizeparam width="151" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="293" y="683" />
+<sizeparam width="222" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="177" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="ManInTheMiddleAttack" />
+<cdrectangleparam minX="0" maxX="106" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="RemoteControlProtocolVulnerability" />
 <TGConnectingPoint num="0" id="915" />
 <TGConnectingPoint num="1" id="916" />
 <TGConnectingPoint num="2" id="917" />
@@ -1961,8 +1962,9 @@ or by a maintenance station
 <TGConnectingPoint num="21" id="936" />
 <TGConnectingPoint num="22" id="937" />
 <TGConnectingPoint num="23" id="938" />
+<accessibility />
 <extraparam>
-<info description="" root="false" />
+<info description="Exploit vulnerability or implementation error" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="964" >
@@ -1998,17 +2000,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="962" />
 <TGConnectingPoint num="23" id="963" />
 <extraparam>
-<info description="HU-CCU" root="false" />
+<info description="HU-CCU" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="989" >
 <father id="1064" num="4" />
-<cdparam x="293" y="683" />
-<sizeparam width="222" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="313" y="637" />
+<sizeparam width="151" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="106" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="RemoteControlProtocolVulnerability" />
+<cdrectangleparam minX="0" maxX="177" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="ManInTheMiddleAttack" />
 <TGConnectingPoint num="0" id="965" />
 <TGConnectingPoint num="1" id="966" />
 <TGConnectingPoint num="2" id="967" />
@@ -2033,19 +2035,18 @@ or by a maintenance station
 <TGConnectingPoint num="21" id="986" />
 <TGConnectingPoint num="22" id="987" />
 <TGConnectingPoint num="23" id="988" />
-<accessibility />
 <extraparam>
-<info description="Exploit vulnerability or implementation error" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1014" >
 <father id="1064" num="5" />
-<cdparam x="256" y="807" />
-<sizeparam width="181" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="260" y="529" />
+<sizeparam width="290" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="147" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="HijackingTheRemoteSession" />
+<cdrectangleparam minX="0" maxX="38" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="AttackerInjectWrongFirmwareOnTheDomainBus" />
 <TGConnectingPoint num="0" id="990" />
 <TGConnectingPoint num="1" id="991" />
 <TGConnectingPoint num="2" id="992" />
@@ -2071,17 +2072,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1012" />
 <TGConnectingPoint num="23" id="1013" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1039" >
 <father id="1064" num="6" />
-<cdparam x="461" y="803" />
-<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="406" y="474" />
+<sizeparam width="155" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="228" minY="0" maxY="389" />
-<infoparam name="TGComponent" value="BusProbing" />
+<cdrectangleparam minX="0" maxX="173" minY="0" maxY="389" />
+<infoparam name="TGComponent" value="CorruptOrFakeMessage" />
 <TGConnectingPoint num="0" id="1015" />
 <TGConnectingPoint num="1" id="1016" />
 <TGConnectingPoint num="2" id="1017" />
@@ -2106,9 +2107,8 @@ or by a maintenance station
 <TGConnectingPoint num="21" id="1036" />
 <TGConnectingPoint num="22" id="1037" />
 <TGConnectingPoint num="23" id="1038" />
-<accessibility />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2145,12 +2145,12 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="1089" >
 <father id="1289" num="0" />
-<cdparam x="784" y="103" />
-<sizeparam width="376" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="989" y="460" />
+<sizeparam width="151" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="0" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="InfectedControllerSendsTooManyMessagesToWirelessInterface" />
+<cdrectangleparam minX="0" maxX="225" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="InjectBogusKeysInOven" />
 <TGConnectingPoint num="0" id="1065" />
 <TGConnectingPoint num="1" id="1066" />
 <TGConnectingPoint num="2" id="1067" />
@@ -2176,17 +2176,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1087" />
 <TGConnectingPoint num="23" id="1088" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1114" >
 <father id="1289" num="1" />
-<cdparam x="834" y="163" />
-<sizeparam width="269" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="830" y="460" />
+<sizeparam width="153" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="107" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="ExploitVulnerabilitesOrImplementationError" />
+<cdrectangleparam minX="0" maxX="223" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="FlashYourOwnFirmware" />
 <TGConnectingPoint num="0" id="1090" />
 <TGConnectingPoint num="1" id="1091" />
 <TGConnectingPoint num="2" id="1092" />
@@ -2212,17 +2212,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1112" />
 <TGConnectingPoint num="23" id="1113" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1139" >
 <father id="1289" num="2" />
-<cdparam x="864" y="222" />
-<sizeparam width="155" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="836" y="400" />
+<sizeparam width="220" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="221" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="AbortFlashingOperation" />
+<cdrectangleparam minX="0" maxX="156" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="FaultyORNoFirmwareAuthentication" />
 <TGConnectingPoint num="0" id="1115" />
 <TGConnectingPoint num="1" id="1116" />
 <TGConnectingPoint num="2" id="1117" />
@@ -2248,17 +2248,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1137" />
 <TGConnectingPoint num="23" id="1138" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1164" >
 <father id="1289" num="3" />
-<cdparam x="836" y="281" />
-<sizeparam width="251" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="784" y="348" />
+<sizeparam width="355" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="125" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="InfectedWirelessInterfaceNotResponding" />
+<cdrectangleparam minX="0" maxX="21" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="MaintenanceInstalledModifiedFirmwareToWirelessInterface" />
 <TGConnectingPoint num="0" id="1140" />
 <TGConnectingPoint num="1" id="1141" />
 <TGConnectingPoint num="2" id="1142" />
@@ -2284,17 +2284,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1162" />
 <TGConnectingPoint num="23" id="1163" />
 <extraparam>
-<info description="Denial of service" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1189" >
 <father id="1289" num="4" />
-<cdparam x="784" y="348" />
-<sizeparam width="355" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="836" y="281" />
+<sizeparam width="251" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="21" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="MaintenanceInstalledModifiedFirmwareToWirelessInterface" />
+<cdrectangleparam minX="0" maxX="125" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="InfectedWirelessInterfaceNotResponding" />
 <TGConnectingPoint num="0" id="1165" />
 <TGConnectingPoint num="1" id="1166" />
 <TGConnectingPoint num="2" id="1167" />
@@ -2320,17 +2320,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1187" />
 <TGConnectingPoint num="23" id="1188" />
 <extraparam>
-<info description="" root="false" />
+<info description="Denial of service" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1214" >
 <father id="1289" num="5" />
-<cdparam x="836" y="400" />
-<sizeparam width="220" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="864" y="222" />
+<sizeparam width="155" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="156" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="FaultyORNoFirmwareAuthentication" />
+<cdrectangleparam minX="0" maxX="221" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="AbortFlashingOperation" />
 <TGConnectingPoint num="0" id="1190" />
 <TGConnectingPoint num="1" id="1191" />
 <TGConnectingPoint num="2" id="1192" />
@@ -2356,17 +2356,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1212" />
 <TGConnectingPoint num="23" id="1213" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1239" >
 <father id="1289" num="6" />
-<cdparam x="830" y="460" />
-<sizeparam width="153" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="834" y="163" />
+<sizeparam width="269" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="223" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="FlashYourOwnFirmware" />
+<cdrectangleparam minX="0" maxX="107" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="ExploitVulnerabilitesOrImplementationError" />
 <TGConnectingPoint num="0" id="1215" />
 <TGConnectingPoint num="1" id="1216" />
 <TGConnectingPoint num="2" id="1217" />
@@ -2392,17 +2392,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1237" />
 <TGConnectingPoint num="23" id="1238" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1264" >
 <father id="1289" num="7" />
-<cdparam x="989" y="460" />
-<sizeparam width="151" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="784" y="103" />
+<sizeparam width="376" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="225" minY="0" maxY="425" />
-<infoparam name="TGComponent" value="InjectBogusKeysInOven" />
+<cdrectangleparam minX="0" maxX="0" minY="0" maxY="425" />
+<infoparam name="TGComponent" value="InfectedControllerSendsTooManyMessagesToWirelessInterface" />
 <TGConnectingPoint num="0" id="1240" />
 <TGConnectingPoint num="1" id="1241" />
 <TGConnectingPoint num="2" id="1242" />
@@ -2428,7 +2428,7 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1262" />
 <TGConnectingPoint num="23" id="1263" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2465,12 +2465,12 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="1401" id="1314" >
 <father id="1439" num="0" />
-<cdparam x="88" y="115" />
-<sizeparam width="199" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="99" y="225" />
+<sizeparam width="196" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="155" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="OvenTakesTooLongToRespond" />
+<cdrectangleparam minX="0" maxX="158" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="ExploitVulnerabilitiesInFlashing" />
 <TGConnectingPoint num="0" id="1290" />
 <TGConnectingPoint num="1" id="1291" />
 <TGConnectingPoint num="2" id="1292" />
@@ -2496,17 +2496,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1312" />
 <TGConnectingPoint num="23" id="1313" />
 <extraparam>
-<info description="Denial of Service Attack" root="false" />
+<info description="blah blah blah" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1339" >
 <father id="1439" num="1" />
-<cdparam x="90" y="169" />
-<sizeparam width="197" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="51" y="322" />
+<sizeparam width="328" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="157" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="GainAccessToWirelessInterface" />
+<cdrectangleparam minX="0" maxX="26" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="InfectedWirelessInterfaceShuttingDownCommunication" />
 <TGConnectingPoint num="0" id="1315" />
 <TGConnectingPoint num="1" id="1316" />
 <TGConnectingPoint num="2" id="1317" />
@@ -2532,7 +2532,7 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1337" />
 <TGConnectingPoint num="23" id="1338" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1364" >
@@ -2568,17 +2568,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1362" />
 <TGConnectingPoint num="23" id="1363" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1389" >
 <father id="1439" num="3" />
-<cdparam x="51" y="322" />
-<sizeparam width="328" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="90" y="169" />
+<sizeparam width="197" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="26" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="InfectedWirelessInterfaceShuttingDownCommunication" />
+<cdrectangleparam minX="0" maxX="157" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="GainAccessToWirelessInterface" />
 <TGConnectingPoint num="0" id="1365" />
 <TGConnectingPoint num="1" id="1366" />
 <TGConnectingPoint num="2" id="1367" />
@@ -2604,17 +2604,17 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1387" />
 <TGConnectingPoint num="23" id="1388" />
 <extraparam>
-<info description="" root="false" />
+<info description="" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1401" id="1414" >
 <father id="1439" num="4" />
-<cdparam x="99" y="225" />
-<sizeparam width="196" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="88" y="115" />
+<sizeparam width="199" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
-<cdrectangleparam minX="0" maxX="158" minY="0" maxY="273" />
-<infoparam name="TGComponent" value="ExploitVulnerabilitiesInFlashing" />
+<cdrectangleparam minX="0" maxX="155" minY="0" maxY="273" />
+<infoparam name="TGComponent" value="OvenTakesTooLongToRespond" />
 <TGConnectingPoint num="0" id="1390" />
 <TGConnectingPoint num="1" id="1391" />
 <TGConnectingPoint num="2" id="1392" />
@@ -2640,7 +2640,7 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1412" />
 <TGConnectingPoint num="23" id="1413" />
 <extraparam>
-<info description="blah blah blah" root="false" />
+<info description="Denial of Service Attack" root="false" cost="0" experience="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2668,7 +2668,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1442" />
-<P1  x="120" y="239" id="1489" />
+<P1  x="120" y="239" id="1476" />
 <P2  x="191" y="187" id="1458" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2677,7 +2677,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1444" />
-<P1  x="118" y="191" id="1476" />
+<P1  x="118" y="191" id="1489" />
 <P2  x="191" y="167" id="1456" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2767,11 +2767,11 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="1486" >
 <father id="1524" num="0" />
-<cdparam x="18" y="171" />
+<cdparam x="20" y="219" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="open" />
+<infoparam name="TGComponent" value="closed" />
 <TGConnectingPoint num="0" id="1474" />
 <TGConnectingPoint num="1" id="1475" />
 <TGConnectingPoint num="2" id="1476" />
@@ -2787,11 +2787,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="1499" >
 <father id="1524" num="1" />
-<cdparam x="20" y="219" />
+<cdparam x="18" y="171" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="closed" />
+<infoparam name="TGComponent" value="open" />
 <TGConnectingPoint num="0" id="1487" />
 <TGConnectingPoint num="1" id="1488" />
 <TGConnectingPoint num="2" id="1489" />
@@ -2876,7 +2876,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1565" />
-<P1  x="141" y="80" id="1621" />
+<P1  x="141" y="80" id="1608" />
 <P2  x="179" y="60" id="1578" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2885,7 +2885,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1567" />
-<P1  x="141" y="146" id="1603" />
+<P1  x="141" y="146" id="1616" />
 <P2  x="175" y="146" id="1590" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2987,13 +2987,13 @@ or by a maintenance station
 <TGConnectingPoint num="22" id="1649" />
 <TGConnectingPoint num="23" id="1650" />
 </COMPONENT>
-<SUBCOMPONENT type="5304" id="1613" >
+<SUBCOMPONENT type="5303" id="1613" >
 <father id="1651" num="0" />
-<cdparam x="41" y="126" />
-<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="41" y="68" />
+<sizeparam width="100" height="50" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="14" minY="0" maxY="126" />
-<infoparam name="TGComponent" value="ringBell" />
+<cdrectangleparam minX="0" maxX="14" minY="0" maxY="116" />
+<infoparam name="TGComponent" value="remainingTime" />
 <TGConnectingPoint num="0" id="1601" />
 <TGConnectingPoint num="1" id="1602" />
 <TGConnectingPoint num="2" id="1603" />
@@ -3006,14 +3006,17 @@ or by a maintenance station
 <TGConnectingPoint num="9" id="1610" />
 <TGConnectingPoint num="10" id="1611" />
 <TGConnectingPoint num="11" id="1612" />
+<extraparam>
+<Toggle value="" />
+</extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5303" id="1626" >
+<SUBCOMPONENT type="5304" id="1626" >
 <father id="1651" num="1" />
-<cdparam x="41" y="68" />
-<sizeparam width="100" height="50" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="41" y="126" />
+<sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="14" minY="0" maxY="116" />
-<infoparam name="TGComponent" value="remainingTime" />
+<cdrectangleparam minX="0" maxX="14" minY="0" maxY="126" />
+<infoparam name="TGComponent" value="ringBell" />
 <TGConnectingPoint num="0" id="1614" />
 <TGConnectingPoint num="1" id="1615" />
 <TGConnectingPoint num="2" id="1616" />
@@ -3026,9 +3029,6 @@ or by a maintenance station
 <TGConnectingPoint num="9" id="1623" />
 <TGConnectingPoint num="10" id="1624" />
 <TGConnectingPoint num="11" id="1625" />
-<extraparam>
-<Toggle value="" />
-</extraparam>
 </SUBCOMPONENT>
 
 
@@ -3058,7 +3058,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1656" />
-<P1  x="119" y="400" id="1818" />
+<P1  x="119" y="400" id="1831" />
 <P2  x="175" y="370" id="1749" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -3067,7 +3067,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1658" />
-<P1  x="121" y="353" id="1831" />
+<P1  x="121" y="353" id="1818" />
 <P2  x="175" y="350" id="1747" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -3076,7 +3076,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1660" />
-<P1  x="120" y="248" id="1780" />
+<P1  x="120" y="248" id="1767" />
 <P2  x="189" y="226" id="1726" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -3085,7 +3085,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to TGComponent" value="" />
 <TGConnectingPoint num="0" id="1662" />
-<P1  x="122" y="198" id="1767" />
+<P1  x="122" y="198" id="1780" />
 <P2  x="189" y="216" id="1725" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -3289,11 +3289,11 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="1777" >
 <father id="1815" num="0" />
-<cdparam x="22" y="178" />
+<cdparam x="20" y="228" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="open" />
+<infoparam name="TGComponent" value="closed" />
 <TGConnectingPoint num="0" id="1765" />
 <TGConnectingPoint num="1" id="1766" />
 <TGConnectingPoint num="2" id="1767" />
@@ -3309,11 +3309,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="1790" >
 <father id="1815" num="1" />
-<cdparam x="20" y="228" />
+<cdparam x="22" y="178" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="101" />
-<infoparam name="TGComponent" value="closed" />
+<infoparam name="TGComponent" value="open" />
 <TGConnectingPoint num="0" id="1778" />
 <TGConnectingPoint num="1" id="1779" />
 <TGConnectingPoint num="2" id="1780" />
@@ -3361,11 +3361,11 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="5304" id="1828" >
 <father id="1866" num="0" />
-<cdparam x="19" y="380" />
+<cdparam x="21" y="333" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="99" />
-<infoparam name="TGComponent" value="stopCooking" />
+<infoparam name="TGComponent" value="startCooking" />
 <TGConnectingPoint num="0" id="1816" />
 <TGConnectingPoint num="1" id="1817" />
 <TGConnectingPoint num="2" id="1818" />
@@ -3381,11 +3381,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5304" id="1841" >
 <father id="1866" num="1" />
-<cdparam x="21" y="333" />
+<cdparam x="19" y="380" />
 <sizeparam width="100" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="24" minY="0" maxY="99" />
-<infoparam name="TGComponent" value="startCooking" />
+<infoparam name="TGComponent" value="stopCooking" />
 <TGConnectingPoint num="0" id="1829" />
 <TGConnectingPoint num="1" id="1830" />
 <TGConnectingPoint num="2" id="1831" />
@@ -5022,11 +5022,11 @@ or by a maintenance station
 </COMPONENT>
 <SUBCOMPONENT type="609" id="2751" >
 <father id="2788" num="0" />
-<cdparam x="618" y="235" />
-<sizeparam width="97" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="618" y="299" />
+<sizeparam width="32" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="5" maxX="5" minY="10" maxY="255" />
-<infoparam name="action state" value="magnetronIsOn" />
+<infoparam name="action state" value="end" />
 <TGConnectingPoint num="0" id="2743" />
 <TGConnectingPoint num="1" id="2744" />
 <TGConnectingPoint num="2" id="2745" />
@@ -5038,11 +5038,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="609" id="2760" >
 <father id="2788" num="1" />
-<cdparam x="618" y="299" />
-<sizeparam width="32" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="618" y="235" />
+<sizeparam width="97" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="5" maxX="5" minY="10" maxY="255" />
-<infoparam name="action state" value="end" />
+<infoparam name="action state" value="magnetronIsOn" />
 <TGConnectingPoint num="0" id="2752" />
 <TGConnectingPoint num="1" id="2753" />
 <TGConnectingPoint num="2" id="2754" />
@@ -5309,7 +5309,7 @@ or by a maintenance station
 <oso value="out obs_open()" />
 <oso value="out obs_closed()" />
 <oso value="out obs_magnetronStart()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2892" >
@@ -5317,13 +5317,13 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2891" />
-<P1  x="409" y="491" id="2960" />
-<P2  x="112" y="492" id="3110" />
+<P1  x="409" y="491" id="3110" />
+<P2  x="112" y="492" id="3135" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in remoteStart(int value)" />
 <oso value="out remoteStart(int value)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2898" >
@@ -5341,7 +5341,7 @@ or by a maintenance station
 <extraparam>
 <iso value="in wirelessChannelRead(Message msg)" />
 <osd value="out wirelessChannelWrite(Message msg)" />
-<FIFOType asynchronous="false" size="5" blocking="false" private="false" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="5" blocking="false" private="false" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR><SUBCOMPONENT type="-1" id="2893" >
 <father id="2898" num="0" />
@@ -5366,12 +5366,12 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2899" />
 <P1  x="415" y="748" id="3037" />
-<P2  x="311" y="746" id="3079" />
+<P2  x="311" y="746" id="2979" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
 <oso value="out ringBell()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2902" >
@@ -5379,7 +5379,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2901" />
-<P1  x="789" y="761" id="2987" />
+<P1  x="789" y="761" id="3087" />
 <P2  x="740" y="748" id="3038" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -5387,7 +5387,7 @@ or by a maintenance station
 <isd value="in closed()" />
 <oso value="out open()" />
 <oso value="out closed()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2904" >
@@ -5396,14 +5396,14 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2903" />
 <P1  x="740" y="625" id="3027" />
-<P2  x="775" y="532" id="3003" />
+<P2  x="775" y="532" id="3053" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
 <isd value="in stopM()" />
 <oso value="out startMagnetron()" />
 <oso value="out stopMagnetron()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2906" >
@@ -5411,7 +5411,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="2905" />
-<P1  x="377" y="593" id="3054" />
+<P1  x="377" y="593" id="3004" />
 <P2  x="415" y="707" id="3028" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -5421,7 +5421,7 @@ or by a maintenance station
 <osd value="out stopCooking()" />
 <isd value="in start(int duration)" />
 <oso value="out startButton(int duration)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="2931" >
@@ -5538,50 +5538,13 @@ or by a maintenance station
 <Signal value="out wirelessChannelWrite(Message msg)" attached="true" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="5000" id="3124" >
-<father id="3174" num="0" />
-<cdparam x="112" y="390" />
-<sizeparam width="918" height="409" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="46" minY="0" maxY="217" />
-<infoparam name="Block0" value="MicroWaveOven" />
-<TGConnectingPoint num="0" id="3100" />
-<TGConnectingPoint num="1" id="3101" />
-<TGConnectingPoint num="2" id="3102" />
-<TGConnectingPoint num="3" id="3103" />
-<TGConnectingPoint num="4" id="3104" />
-<TGConnectingPoint num="5" id="3105" />
-<TGConnectingPoint num="6" id="3106" />
-<TGConnectingPoint num="7" id="3107" />
-<TGConnectingPoint num="8" id="3108" />
-<TGConnectingPoint num="9" id="3109" />
-<TGConnectingPoint num="10" id="3110" />
-<TGConnectingPoint num="11" id="3111" />
-<TGConnectingPoint num="12" id="3112" />
-<TGConnectingPoint num="13" id="3113" />
-<TGConnectingPoint num="14" id="3114" />
-<TGConnectingPoint num="15" id="3115" />
-<TGConnectingPoint num="16" id="3116" />
-<TGConnectingPoint num="17" id="3117" />
-<TGConnectingPoint num="18" id="3118" />
-<TGConnectingPoint num="19" id="3119" />
-<TGConnectingPoint num="20" id="3120" />
-<TGConnectingPoint num="21" id="3121" />
-<TGConnectingPoint num="22" id="3122" />
-<TGConnectingPoint num="23" id="3123" />
-<extraparam>
-<blockType data="block" color="-4072719" />
-<CryptoBlock value="false" />
-<Signal value="in remoteStart(int value)" attached="true" />
-</extraparam>
-</SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2974" >
-<father id="3124" num="0" />
-<cdparam x="409" y="454" />
-<sizeparam width="329" height="151" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="3174" num="0" />
+<cdparam x="429" y="226" />
+<sizeparam width="410" height="143" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="589" minY="0" maxY="258" />
-<infoparam name="Block0" value="WirelessInterface" />
+<cdrectangleparam minX="0" maxX="554" minY="0" maxY="483" />
+<infoparam name="Block0" value="RemoteControl" />
 <TGConnectingPoint num="0" id="2950" />
 <TGConnectingPoint num="1" id="2951" />
 <TGConnectingPoint num="2" id="2952" />
@@ -5609,10 +5572,10 @@ or by a maintenance station
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
+<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
-<Attribute access="0" id="msg3" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg" value="" type="5" typeOther="Message" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -5635,16 +5598,54 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<Signal value="out remoteStart(int value)" attached="true" />
+<globalCode value="" />
+<globalCode value="/* This is my global code !!!! */" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="3149" >
+<father id="3174" num="1" />
+<cdparam x="112" y="390" />
+<sizeparam width="918" height="409" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="46" minY="0" maxY="217" />
+<infoparam name="Block0" value="MicroWaveOven" />
+<TGConnectingPoint num="0" id="3125" />
+<TGConnectingPoint num="1" id="3126" />
+<TGConnectingPoint num="2" id="3127" />
+<TGConnectingPoint num="3" id="3128" />
+<TGConnectingPoint num="4" id="3129" />
+<TGConnectingPoint num="5" id="3130" />
+<TGConnectingPoint num="6" id="3131" />
+<TGConnectingPoint num="7" id="3132" />
+<TGConnectingPoint num="8" id="3133" />
+<TGConnectingPoint num="9" id="3134" />
+<TGConnectingPoint num="10" id="3135" />
+<TGConnectingPoint num="11" id="3136" />
+<TGConnectingPoint num="12" id="3137" />
+<TGConnectingPoint num="13" id="3138" />
+<TGConnectingPoint num="14" id="3139" />
+<TGConnectingPoint num="15" id="3140" />
+<TGConnectingPoint num="16" id="3141" />
+<TGConnectingPoint num="17" id="3142" />
+<TGConnectingPoint num="18" id="3143" />
+<TGConnectingPoint num="19" id="3144" />
+<TGConnectingPoint num="20" id="3145" />
+<TGConnectingPoint num="21" id="3146" />
+<TGConnectingPoint num="22" id="3147" />
+<TGConnectingPoint num="23" id="3148" />
+<extraparam>
+<blockType data="block" color="-4072719" />
+<CryptoBlock value="false" />
+<Signal value="in remoteStart(int value)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2999" >
-<father id="3124" num="1" />
-<cdparam x="789" y="668" />
-<sizeparam width="212" height="125" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="3149" num="0" />
+<cdparam x="135" y="701" />
+<sizeparam width="176" height="90" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="706" minY="0" maxY="284" />
-<infoparam name="Block0" value="Door" />
+<cdrectangleparam minX="0" maxX="742" minY="0" maxY="319" />
+<infoparam name="Block0" value="Bell" />
 <TGConnectingPoint num="0" id="2975" />
 <TGConnectingPoint num="1" id="2976" />
 <TGConnectingPoint num="2" id="2977" />
@@ -5672,32 +5673,24 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$openM()" />
-<Method value="$closeM()" />
-<Signal value="out closed()" attached="true" />
-<Signal value="out open()" attached="true" />
-<globalCode value="" />
+<Method value="$runBell()" />
+<Signal value="in ring()" attached="true" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* openD = &quot;Open Door&quot;;" />
-<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
+<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Door__openM() {" />
-<globalCode value="  sendDatagram(openD, 10);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Door__closeM() {" />
-<globalCode value="   sendDatagram(closeD, 10);" />
+<globalCode value="void _userImplemented_Bell__runBell() {" />
+<globalCode value="  sendDatagram(dring, 18);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="3024" >
-<father id="3124" num="2" />
-<cdparam x="775" y="454" />
-<sizeparam width="250" height="157" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="3149" num="1" />
+<cdparam x="126" y="514" />
+<sizeparam width="251" height="159" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
-<infoparam name="Block0" value="Magnetron" />
+<cdrectangleparam minX="0" maxX="667" minY="0" maxY="250" />
+<infoparam name="Block0" value="ControlPanel" />
 <TGConnectingPoint num="0" id="3000" />
 <TGConnectingPoint num="1" id="3001" />
 <TGConnectingPoint num="2" id="3002" />
@@ -5725,25 +5718,14 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Method value="$ON()" />
-<Method value="$OFF()" />
-<Signal value="in startM()" attached="true" />
-<Signal value="in stopM()" attached="true" />
-<globalCode value="extern void sendDatagram(char *data, int size);" />
-<globalCode value="" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__ON() {" />
-<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__OFF() {" />
-<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
-<globalCode value="}" />
+<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="3049" >
-<father id="3124" num="3" />
+<father id="3149" num="2" />
 <cdparam x="415" y="625" />
 <sizeparam width="325" height="164" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -5822,12 +5804,12 @@ or by a maintenance station
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="3074" >
-<father id="3124" num="4" />
-<cdparam x="126" y="514" />
-<sizeparam width="251" height="159" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="3149" num="3" />
+<cdparam x="775" y="454" />
+<sizeparam width="250" height="157" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="667" minY="0" maxY="250" />
-<infoparam name="Block0" value="ControlPanel" />
+<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
+<infoparam name="Block0" value="Magnetron" />
 <TGConnectingPoint num="0" id="3050" />
 <TGConnectingPoint num="1" id="3051" />
 <TGConnectingPoint num="2" id="3052" />
@@ -5855,19 +5837,30 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
-<Signal value="in LEDOn()" attached="false" />
-<Signal value="in LEDoff()" attached="false" />
-<Signal value="out startButton(int duration)" attached="true" />
+<Attribute access="0" id="power" value="0" type="8" typeOther="" />
+<Method value="$ON()" />
+<Method value="$OFF()" />
+<Signal value="in startM()" attached="true" />
+<Signal value="in stopM()" attached="true" />
+<globalCode value="extern void sendDatagram(char *data, int size);" />
+<globalCode value="" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__ON() {" />
+<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__OFF() {" />
+<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
+<globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="3099" >
-<father id="3124" num="5" />
-<cdparam x="135" y="701" />
-<sizeparam width="176" height="90" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<father id="3149" num="4" />
+<cdparam x="789" y="668" />
+<sizeparam width="212" height="125" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="742" minY="0" maxY="319" />
-<infoparam name="Block0" value="Bell" />
+<cdrectangleparam minX="0" maxX="706" minY="0" maxY="284" />
+<infoparam name="Block0" value="Door" />
 <TGConnectingPoint num="0" id="3075" />
 <TGConnectingPoint num="1" id="3076" />
 <TGConnectingPoint num="2" id="3077" />
@@ -5895,55 +5888,63 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$runBell()" />
-<Signal value="in ring()" attached="true" />
+<Method value="$openM()" />
+<Method value="$closeM()" />
+<Signal value="out closed()" attached="true" />
+<Signal value="out open()" attached="true" />
+<globalCode value="" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
+<globalCode value="const char* openD = &quot;Open Door&quot;;" />
+<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Bell__runBell() {" />
-<globalCode value="  sendDatagram(dring, 18);" />
+<globalCode value="void _userImplemented_Door__openM() {" />
+<globalCode value="  sendDatagram(openD, 10);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Door__closeM() {" />
+<globalCode value="   sendDatagram(closeD, 10);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5000" id="3149" >
-<father id="3174" num="1" />
-<cdparam x="429" y="226" />
-<sizeparam width="410" height="143" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="3124" >
+<father id="3149" num="5" />
+<cdparam x="409" y="454" />
+<sizeparam width="329" height="151" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="554" minY="0" maxY="483" />
-<infoparam name="Block0" value="RemoteControl" />
-<TGConnectingPoint num="0" id="3125" />
-<TGConnectingPoint num="1" id="3126" />
-<TGConnectingPoint num="2" id="3127" />
-<TGConnectingPoint num="3" id="3128" />
-<TGConnectingPoint num="4" id="3129" />
-<TGConnectingPoint num="5" id="3130" />
-<TGConnectingPoint num="6" id="3131" />
-<TGConnectingPoint num="7" id="3132" />
-<TGConnectingPoint num="8" id="3133" />
-<TGConnectingPoint num="9" id="3134" />
-<TGConnectingPoint num="10" id="3135" />
-<TGConnectingPoint num="11" id="3136" />
-<TGConnectingPoint num="12" id="3137" />
-<TGConnectingPoint num="13" id="3138" />
-<TGConnectingPoint num="14" id="3139" />
-<TGConnectingPoint num="15" id="3140" />
-<TGConnectingPoint num="16" id="3141" />
-<TGConnectingPoint num="17" id="3142" />
-<TGConnectingPoint num="18" id="3143" />
-<TGConnectingPoint num="19" id="3144" />
-<TGConnectingPoint num="20" id="3145" />
-<TGConnectingPoint num="21" id="3146" />
-<TGConnectingPoint num="22" id="3147" />
-<TGConnectingPoint num="23" id="3148" />
+<cdrectangleparam minX="0" maxX="589" minY="0" maxY="258" />
+<infoparam name="Block0" value="WirelessInterface" />
+<TGConnectingPoint num="0" id="3100" />
+<TGConnectingPoint num="1" id="3101" />
+<TGConnectingPoint num="2" id="3102" />
+<TGConnectingPoint num="3" id="3103" />
+<TGConnectingPoint num="4" id="3104" />
+<TGConnectingPoint num="5" id="3105" />
+<TGConnectingPoint num="6" id="3106" />
+<TGConnectingPoint num="7" id="3107" />
+<TGConnectingPoint num="8" id="3108" />
+<TGConnectingPoint num="9" id="3109" />
+<TGConnectingPoint num="10" id="3110" />
+<TGConnectingPoint num="11" id="3111" />
+<TGConnectingPoint num="12" id="3112" />
+<TGConnectingPoint num="13" id="3113" />
+<TGConnectingPoint num="14" id="3114" />
+<TGConnectingPoint num="15" id="3115" />
+<TGConnectingPoint num="16" id="3116" />
+<TGConnectingPoint num="17" id="3117" />
+<TGConnectingPoint num="18" id="3118" />
+<TGConnectingPoint num="19" id="3119" />
+<TGConnectingPoint num="20" id="3120" />
+<TGConnectingPoint num="21" id="3121" />
+<TGConnectingPoint num="22" id="3122" />
+<TGConnectingPoint num="23" id="3123" />
 <extraparam>
 <blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
-<Attribute access="0" id="duration" value="12" type="8" typeOther="" />
-<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="PSK" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="msg" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="selectedDuration" value="" type="8" typeOther="" />
+<Attribute access="0" id="msg3" value="" type="5" typeOther="Message" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -5966,14 +5967,13 @@ or by a maintenance station
 <Method value="Key getpk(Message cert)" />
 <Method value="Key DH(Key pubK, Key privK)" />
 <Method value="Message hash(Message msg)" />
-<globalCode value="" />
-<globalCode value="/* This is my global code !!!! */" />
+<Signal value="out remoteStart(int value)" attached="true" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="302" id="3191" >
 <cdparam x="116" y="23" />
-<sizeparam width="668" height="97" minWidth="76" minHeight="7" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="616" height="78" minWidth="76" minHeight="7" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="9" maxX="898" minY="9" maxY="898" />
 <infoparam name="Proverif Pragma" value="#InitialSystemKnowledge RemoteControl.PSK WirelessInterface.PSK
@@ -6033,6 +6033,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6063,6 +6066,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6123,6 +6129,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6153,6 +6162,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6223,6 +6235,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6253,6 +6268,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6283,6 +6301,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6313,6 +6334,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6343,6 +6367,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6713,6 +6740,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6745,8 +6775,8 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="516" y="132" id="3548" />
-<P2  x="661" y="85" id="3650" />
+<P1  x="516" y="146" id="3548" />
+<P2  x="661" y="88" id="3650" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
 <CONNECTOR type="5102" id="3552" >
@@ -6773,6 +6803,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6805,6 +6838,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6835,6 +6871,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6865,6 +6904,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6956,7 +6998,7 @@ or by a maintenance station
 
 <COMPONENT type="301" id="3663" >
 <cdparam x="661" y="78" />
-<sizeparam width="251" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="251" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="Encrypting data with the pre shared key
@@ -7130,6 +7172,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7160,6 +7205,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7190,6 +7238,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7408,6 +7459,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7469,6 +7523,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7499,6 +7556,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7529,6 +7589,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7789,6 +7852,9 @@ or by a maintenance station
 <guard value="[  ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7829,6 +7895,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7859,6 +7928,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8004,6 +8076,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8034,6 +8109,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8064,6 +8142,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8094,6 +8175,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8124,6 +8208,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8154,6 +8241,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8184,6 +8274,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8214,6 +8307,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8244,6 +8340,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8274,6 +8373,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8304,6 +8406,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8334,6 +8439,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8364,6 +8472,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8394,6 +8505,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8454,6 +8568,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8484,6 +8601,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8514,6 +8634,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8574,6 +8697,9 @@ or by a maintenance station
 <guard value="[ remainingTime&gt;0 ]" enabled="true"/>
 <afterMin value="1" enabled="true"/>
 <afterMax value="1" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8606,6 +8732,9 @@ or by a maintenance station
 <guard value="[remainingTime &gt; 0 ]" enabled="true"/>
 <afterMin value="1" enabled="true"/>
 <afterMax value="1" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8638,6 +8767,9 @@ or by a maintenance station
 <guard value="[ remainingTime==0 ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8668,6 +8800,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8740,6 +8875,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="5" enabled="true"/>
 <afterMax value="9" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8770,6 +8908,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8800,6 +8941,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8830,6 +8974,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8860,6 +9007,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8890,6 +9040,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9789,6 +9942,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9820,6 +9976,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9850,6 +10009,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9881,6 +10043,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9911,6 +10076,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10160,6 +10328,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10191,6 +10362,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="2" enabled="true"/>
 <afterMax value="3" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10251,6 +10425,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10282,6 +10459,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="2" enabled="true"/>
 <afterMax value="3" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10312,6 +10492,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10563,6 +10746,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10593,6 +10779,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10623,6 +10812,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10655,6 +10847,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10685,6 +10880,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11036,7 +11234,7 @@ or by a maintenance station
 <oso value="out obs_open()" />
 <oso value="out obs_closed()" />
 <oso value="out obs_magnetronStart()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="5699" >
@@ -11045,12 +11243,12 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5698" />
 <P1  x="352" y="599" id="5793" />
-<P2  x="253" y="598" id="5835" />
+<P2  x="253" y="598" id="5735" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in ring()" />
 <oso value="out ringBell()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="5701" >
@@ -11058,7 +11256,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5700" />
-<P1  x="726" y="614" id="5743" />
+<P1  x="726" y="614" id="5843" />
 <P2  x="680" y="599" id="5794" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -11068,7 +11266,7 @@ or by a maintenance station
 <isd value="in closed()" />
 <oso value="out open()" />
 <oso value="out closed()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="5703" >
@@ -11077,14 +11275,14 @@ or by a maintenance station
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5702" />
 <P1  x="680" y="474" id="5783" />
-<P2  x="711" y="385" id="5759" />
+<P2  x="711" y="385" id="5809" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in startM()" />
 <isd value="in stopM()" />
 <oso value="out startMagnetron()" />
 <oso value="out stopMagnetron()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="5705" >
@@ -11092,7 +11290,7 @@ or by a maintenance station
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <TGConnectingPoint num="0" id="5704" />
-<P1  x="319" y="444" id="5810" />
+<P1  x="319" y="444" id="5760" />
 <P2  x="352" y="557" id="5784" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -11102,7 +11300,7 @@ or by a maintenance station
 <osd value="out stopCooking()" />
 <isd value="in start(int duration)" />
 <oso value="out startButton(int duration)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
+<FIFOType asynchronous="false" synchronousCH="true" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="5730" >
@@ -11218,11 +11416,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5755" >
 <father id="5880" num="0" />
-<cdparam x="726" y="520" />
-<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="72" y="551" />
+<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
-<infoparam name="Block0" value="Door" />
+<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
+<infoparam name="Block0" value="Bell" />
 <TGConnectingPoint num="0" id="5731" />
 <TGConnectingPoint num="1" id="5732" />
 <TGConnectingPoint num="2" id="5733" />
@@ -11250,33 +11448,24 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$openM()" />
-<Method value="$closeM()" />
-<Signal value="out closed()" attached="true" />
-<Signal value="out open()" attached="true" />
-<Signal value="in unlockDoor()" attached="true" />
-<globalCode value="" />
+<Method value="$runBell()" />
+<Signal value="in ring()" attached="true" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* openD = &quot;Open Door&quot;;" />
-<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
+<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Door__openM() {" />
-<globalCode value="  sendDatagram(openD, 10);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Door__closeM() {" />
-<globalCode value="   sendDatagram(closeD, 10);" />
+<globalCode value="void _userImplemented_Bell__runBell() {" />
+<globalCode value="  sendDatagram(dring, 18);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5780" >
 <father id="5880" num="1" />
-<cdparam x="711" y="305" />
-<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="63" y="363" />
+<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
-<infoparam name="Block0" value="Magnetron" />
+<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
+<infoparam name="Block0" value="ControlPanel" />
 <TGConnectingPoint num="0" id="5756" />
 <TGConnectingPoint num="1" id="5757" />
 <TGConnectingPoint num="2" id="5758" />
@@ -11304,20 +11493,24 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="power" value="0" type="8" typeOther="" />
-<Method value="$ON()" />
-<Method value="$OFF()" />
-<Signal value="in startM()" attached="true" />
-<Signal value="in stopM()" attached="true" />
-<globalCode value="extern void sendDatagram(char *data, int size);" />
+<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
+<Method value="$start()" />
+<Signal value="in LEDOn()" attached="false" />
+<Signal value="in LEDoff()" attached="false" />
+<Signal value="out startButton(int duration)" attached="true" />
+<globalCode value="extern int start;" />
+<globalCode value="extern pthread_mutex_t startMutex ;" />
+<globalCode value="extern pthread_cond_t  noStart;" />
 <globalCode value="" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__ON() {" />
-<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
-<globalCode value="}" />
-<globalCode value="" />
-<globalCode value="void _userImplemented_Magnetron__OFF() {" />
-<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
+<globalCode value="void _userImplemented_ControlPanel__start() {" />
+<globalCode value="  pthread_mutex_lock(&amp;startMutex);" />
+<globalCode value="  printf(&quot;Waiting for next start&quot;);" />
+<globalCode value="  while(start &lt; 1) {" />
+<globalCode value="    pthread_cond_wait(&amp;noStart, &amp;startMutex);" />
+<globalCode value="  }" />
+<globalCode value="  start = 0;" />
+<globalCode value="  pthread_mutex_unlock(&amp;startMutex);" />
+<globalCode value="  printf(&quot;****** MW can start cooking\n&quot;);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
@@ -11403,11 +11596,11 @@ or by a maintenance station
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5830" >
 <father id="5880" num="3" />
-<cdparam x="63" y="363" />
-<sizeparam width="256" height="162" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="711" y="305" />
+<sizeparam width="253" height="160" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="665" minY="0" maxY="250" />
-<infoparam name="Block0" value="ControlPanel" />
+<cdrectangleparam minX="0" maxX="668" minY="0" maxY="252" />
+<infoparam name="Block0" value="Magnetron" />
 <TGConnectingPoint num="0" id="5806" />
 <TGConnectingPoint num="1" id="5807" />
 <TGConnectingPoint num="2" id="5808" />
@@ -11435,34 +11628,30 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="9" type="8" typeOther="" />
-<Method value="$start()" />
-<Signal value="in LEDOn()" attached="false" />
-<Signal value="in LEDoff()" attached="false" />
-<Signal value="out startButton(int duration)" attached="true" />
-<globalCode value="extern int start;" />
-<globalCode value="extern pthread_mutex_t startMutex ;" />
-<globalCode value="extern pthread_cond_t  noStart;" />
+<Attribute access="0" id="power" value="0" type="8" typeOther="" />
+<Method value="$ON()" />
+<Method value="$OFF()" />
+<Signal value="in startM()" attached="true" />
+<Signal value="in stopM()" attached="true" />
+<globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_ControlPanel__start() {" />
-<globalCode value="  pthread_mutex_lock(&amp;startMutex);" />
-<globalCode value="  printf(&quot;Waiting for next start&quot;);" />
-<globalCode value="  while(start &lt; 1) {" />
-<globalCode value="    pthread_cond_wait(&amp;noStart, &amp;startMutex);" />
-<globalCode value="  }" />
-<globalCode value="  start = 0;" />
-<globalCode value="  pthread_mutex_unlock(&amp;startMutex);" />
-<globalCode value="  printf(&quot;****** MW can start cooking\n&quot;);" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__ON() {" />
+<globalCode value="  sendDatagram(&quot;Magnetron_ON&quot;, 13);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Magnetron__OFF() {" />
+<globalCode value="   sendDatagram(&quot;Magnetron_OFF&quot;, 14);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="5855" >
 <father id="5880" num="4" />
-<cdparam x="72" y="551" />
-<sizeparam width="181" height="95" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="726" y="520" />
+<sizeparam width="215" height="126" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="740" minY="0" maxY="317" />
-<infoparam name="Block0" value="Bell" />
+<cdrectangleparam minX="0" maxX="706" minY="0" maxY="286" />
+<infoparam name="Block0" value="Door" />
 <TGConnectingPoint num="0" id="5831" />
 <TGConnectingPoint num="1" id="5832" />
 <TGConnectingPoint num="2" id="5833" />
@@ -11490,14 +11679,23 @@ or by a maintenance station
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Method value="$runBell()" />
-<Signal value="in ring()" attached="true" />
+<Method value="$openM()" />
+<Method value="$closeM()" />
+<Signal value="out closed()" attached="true" />
+<Signal value="out open()" attached="true" />
+<Signal value="in unlockDoor()" attached="true" />
+<globalCode value="" />
 <globalCode value="extern void sendDatagram(char *data, int size);" />
 <globalCode value="" />
-<globalCode value="const char* dring = &quot;Dring dring dring&quot;;" />
+<globalCode value="const char* openD = &quot;Open Door&quot;;" />
+<globalCode value="const char* closeD = &quot;Close Door&quot;;" />
 <globalCode value="" />
-<globalCode value="void _userImplemented_Bell__runBell() {" />
-<globalCode value="  sendDatagram(dring, 18);" />
+<globalCode value="void _userImplemented_Door__openM() {" />
+<globalCode value="  sendDatagram(openD, 10);" />
+<globalCode value="}" />
+<globalCode value="" />
+<globalCode value="void _userImplemented_Door__closeM() {" />
+<globalCode value="   sendDatagram(closeD, 10);" />
 <globalCode value="}" />
 </extraparam>
 </SUBCOMPONENT>
@@ -11530,6 +11728,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11560,6 +11761,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11620,6 +11824,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11650,6 +11857,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11720,6 +11930,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11750,6 +11963,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11780,6 +11996,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11810,6 +12029,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11840,6 +12062,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12209,6 +12434,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12261,6 +12489,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12387,6 +12618,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12448,6 +12682,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12478,6 +12715,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12508,6 +12748,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12768,6 +13011,9 @@ or by a maintenance station
 <guard value="[  ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12808,6 +13054,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12839,6 +13088,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12984,6 +13236,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13014,6 +13269,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13044,6 +13302,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13074,6 +13335,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13104,6 +13368,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13134,6 +13401,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13164,6 +13434,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13194,6 +13467,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13224,6 +13500,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13254,6 +13533,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13284,6 +13566,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13314,6 +13599,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13344,6 +13632,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13404,6 +13695,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13434,6 +13728,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13464,6 +13761,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13524,6 +13824,9 @@ or by a maintenance station
 <guard value="[ remainingTime&gt;0 ]" enabled="true"/>
 <afterMin value="1" enabled="true"/>
 <afterMax value="1" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13556,6 +13859,9 @@ or by a maintenance station
 <guard value="[remainingTime &gt; 0 ]" enabled="true"/>
 <afterMin value="1" enabled="true"/>
 <afterMax value="1" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13588,6 +13894,9 @@ or by a maintenance station
 <guard value="[ remainingTime==0 ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13618,6 +13927,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13690,6 +14002,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="5" enabled="true"/>
 <afterMax value="9" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13720,6 +14035,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13750,6 +14068,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13780,6 +14101,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13810,6 +14134,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13840,6 +14167,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14738,6 +15068,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14769,6 +15102,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14799,6 +15135,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14830,6 +15169,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14860,6 +15202,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15109,6 +15454,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="2" enabled="true"/>
 <afterMax value="3" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15169,6 +15517,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15200,6 +15551,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15231,6 +15585,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="2" enabled="true"/>
 <afterMax value="3" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15261,6 +15618,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15291,6 +15651,9 @@ or by a maintenance station
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
