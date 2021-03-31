@@ -486,7 +486,7 @@ public class AvatarDesignPanelTranslator {
     }
 
 
-    private boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc) {
+    public boolean checkSafetyPragma(String _pragma, List<AvatarBDBlock> _blocks, AvatarSpecification as, TGComponent tgc) {
         //Todo: check types
         //Todo: handle complex types
         _pragma = _pragma.trim();

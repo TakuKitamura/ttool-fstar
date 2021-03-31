@@ -123,6 +123,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     private int invokedLater = 0;
 
     private int totalNbOfElements = -1;
+    private HashSet<TGComponent> mettableElements;
 
     // Edition of variable value
     protected JMenuItem edit;
@@ -1432,6 +1433,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         if (coverage != null) {
             coverage.setText("0 %");
         }
+
     }
 
     public void updateMetElements() {
@@ -1440,9 +1442,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         Object o;
 
 
-        if ((totalNbOfElements == -1) && (ass != null)) {
+        if ( ((mettableElements == null) || (totalNbOfElements == -1)) && (ass != null) ) {
             totalNbOfElements = 0;
-            Vector<Object> mettableElements = new Vector<Object>();
+            mettableElements = new HashSet<>();
             for (AvatarSimulationBlock asb : ass.getSimulationBlocks()) {
                 AvatarBlock ab = asb.getBlock();
                 if (ab != null) {
@@ -1455,9 +1457,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
                                 // Verifier que obj est une element de machine à états
                                 if (obj.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
-                                    if (!(mettableElements.contains(obj))) {
-                                        mettableElements.add(obj);
-                                    }
+                                    mettableElements.add((TGComponent)obj);
                                 }
 
                             }
@@ -1478,22 +1478,24 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         }
 
         int total = 0;
+        HashSet<Object> metTmp = new HashSet<>();
         if (hashOfAllElements.hashCode() != nbOfAllExecutedElements) {
-            Object objs[] = hashOfAllElements.keySet().toArray();
+            Object objs [] = hashOfAllElements.keySet().toArray();
             //int total = 0;
             //int totalMet = 0;
             //TraceManager.addDev("Parsing array of elements: " + objs.length);
-            for (int i = 0; i < objs.length; i++) {
+            for (int i = 0; i<objs.length; i++) {
                 o = objs[i];
                 //TraceManager.addDev("objs: " + o);
-                Object oo = ((AvatarStateMachineElement) o).getReferenceObject();
-                if (oo != null) {
+                Object oo = ((AvatarElement) o).getReferenceObject();
+                if ( (oo != null) && (mettableElements.contains(oo) && (!metTmp.contains(oo))) ) {
+                    metTmp.add(oo);
                     tgc = (TGComponent) oo;
                     /*if (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0) {
                       total ++;
                       }*/
                     //TraceManager.addDev("TGComponent: " + tgc);
-                    int met = hashOfAllElements.get(o).intValue();
+                    int met = hashOfAllElements.get(o);
                     if ((met > 0) && (tgc.getClass().getPackage().getName().compareTo("ui.avatarsmd") == 0)) {
                         total++;
                     }
@@ -1507,9 +1509,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
             }
             nbOfAllExecutedElements = hashOfAllElements.hashCode();
+
             if ((totalNbOfElements != -1)) {
                 //TraceManager.addDev("totalMet=" + hashOfAllElements.size() + " total=" + totalNbOfElements);
-                double cov = (total * 1000.0) / totalNbOfElements;
+                double cov = (total * 1000.0) / mettableElements.size();
                 cov = Math.floor(cov);
                 coverageVal = cov / 10;
                 if (coverage != null) {

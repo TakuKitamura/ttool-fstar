@@ -142,7 +142,26 @@ public class AvatarSafetyTests {
 		assertNull(pragma);
 		pragma = adpt.checkPerformancePragma("Latency(b<s),1", blocks, as, null);
 		assertNull(pragma);
+
+
+
 	}
+
+	@Test
+	public void testSafetyPragma() {
+    	// Bad format
+		assertFalse(adpt.checkSafetyPragma("A<> B.key1.key2 > 1", blocks, as, null));
+		assertFalse(adpt.checkSafetyPragma("TF A<> B.key1 > 1", blocks, as, null));
+
+		// Correct format
+		assertTrue(adpt.checkSafetyPragma("A<> B.key1 > 1", blocks, as, null));
+		assertTrue(adpt.checkSafetyPragma("T A<> B.key1 > 1", blocks, as, null));
+		assertTrue(adpt.checkSafetyPragma("F A<> B.key1 > 1", blocks, as, null));
+		assertTrue(adpt.checkSafetyPragma("t A<> B.key1 > 1", blocks, as, null));
+		assertTrue(adpt.checkSafetyPragma("f A<> B.key1 > 1", blocks, as, null));
+	}
+
+
 
 	@Test
 	public void testFormLessThanPragma(){
