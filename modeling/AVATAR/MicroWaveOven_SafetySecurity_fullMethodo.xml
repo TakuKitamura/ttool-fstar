@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="6" LAST_SELECTED_SUB_TAB="0">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="6" LAST_SELECTED_SUB_TAB="7">
 
 <Modeling type="Avatar Methodology" nameTab="Methodology" >
 <AvatarMethodologyDiagramPanel name="AVATAR_Methodology" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
@@ -6775,8 +6775,8 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="516" y="146" id="3548" />
-<P2  x="661" y="88" id="3650" />
+<P1  x="516" y="132" id="3548" />
+<P2  x="661" y="85" id="3650" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
 <CONNECTOR type="5102" id="3552" >
@@ -6998,7 +6998,7 @@ or by a maintenance station
 
 <COMPONENT type="301" id="3663" >
 <cdparam x="661" y="78" />
-<sizeparam width="251" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="251" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="Encrypting data with the pre shared key

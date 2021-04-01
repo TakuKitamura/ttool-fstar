@@ -40,6 +40,7 @@
 
 package ui;
 
+import avatartranslator.ElementWithUUID;
 import myutil.Conversion;
 import myutil.GenericTree;
 import myutil.GraphicLib;
@@ -66,11 +67,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class TGComponent
@@ -81,10 +78,11 @@ import java.util.Vector;
  * @version 1.0 21/12/2003
  */
 
-public abstract class TGComponent  extends AbstractCDElement implements /*CDElement,*/ GenericTree {
+public abstract class TGComponent  extends AbstractCDElement implements /*CDElement,*/ GenericTree, ElementWithUUID {
 
     protected final static String XML_HEAD = "<COMPONENT type=\"";
     protected final static String XML_ID = "\" id=\"";
+    protected final static String XML_UUID = "\" uid=\"";
     protected final static String XML_TAIL = "</COMPONENT>\n";
 
     protected final static String XML_SUB_HEAD = "<SUBCOMPONENT type=\"";
@@ -178,6 +176,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     protected String value; //applies if editable
     protected String name = "TGComponent";
 
+    private UUID uniqueID;
+
+
     protected boolean repaint;
 
     protected int state;
@@ -240,8 +241,14 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         canBeCloned = true;
 
         id = ID;
+
         ID++;
+        makeUUID();
         //TraceManager.addDev("creation Id:" + id);
+    }
+
+    public void makeUUID() {
+        uniqueID = java.util.UUID.randomUUID();
     }
 
     // abstract operations
@@ -2583,6 +2590,17 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return id;
     }
 
+    public UUID getUUID() {
+        if (uniqueID == null) {
+            makeUUID();
+        }
+        return uniqueID;
+    }
+
+    public void forceUUID(UUID newUUID) {
+        uniqueID = newUUID;
+    }
+
     public int getMaxId() {
         int ret = id;
         int i;
@@ -3182,6 +3200,10 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         sb.append(getType());
         sb.append(XML_ID);
         sb.append(getId());
+        if (getUUID() != null) {
+            sb.append(XML_UUID);
+            sb.append(getUUID().toString());
+        }
         sb.append("\" >\n");
         if (!b) {
             sb.append(translateFatherInformation());

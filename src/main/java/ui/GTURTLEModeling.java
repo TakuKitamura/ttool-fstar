@@ -7654,8 +7654,17 @@ public class GTURTLEModeling {
             elt1 = elt;
             //TraceManager.addDev("elt=" + elt);
 
-            int myType = Integer.decode(elt.getAttribute("type")).intValue();
-            int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
+            int myType = Integer.decode(elt.getAttribute("type"));
+            int myId = Integer.decode(elt.getAttribute("id")) + decId;
+
+            UUID uid = null;
+            String tmpUid = elt.getAttribute("uid");
+            //TraceManager.addDev("COMP UID=>" + tmpUid + "<");
+            if ((tmpUid != null) && (tmpUid.length() > 0) && (tmpUid.compareTo("null") != 0)) {
+                //TraceManager.addDev("In IF");
+                uid = UUID.fromString(tmpUid);
+            }
+            //TraceManager.addDev("uid created");
 
             int myX = -1, myY = -1, myWidth = -1, myHeight = -1;
             int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
@@ -7907,6 +7916,12 @@ public class GTURTLEModeling {
             }
 
             tgc.forceId(myId);
+            if (uid != null) {
+                tgc.forceUUID(uid);
+            } else {
+                tgc.makeUUID();
+            }
+            tgc.forceUUID(uid);
             tgc.setLoaded(true);
             tgc.setInternalLoaded(false);
             tgc.setMinSize(myMinWidth, myMinHeight);
@@ -8191,8 +8206,15 @@ public class GTURTLEModeling {
             elt = (Element) n;
             elt1 = elt;
 
-            int myType = Integer.decode(elt.getAttribute("type")).intValue();
-            int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
+            int myType = Integer.decode(elt.getAttribute("type"));
+            int myId = Integer.decode(elt.getAttribute("id")) + decId;
+
+            UUID uid = null;
+            String tmpUid = elt.getAttribute("uid");
+            //TraceManager.addDev("UID=>" + tmpUid + "<");
+            if ((tmpUid != null) && (tmpUid.length() > 0) && (tmpUid.compareTo("null") != 0)) {
+                uid = UUID.fromString(tmpUid);
+            }
 
             int myX = -1, myY = -1, myWidth = -1, myHeight = -1;
             int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
@@ -8281,11 +8303,19 @@ public class GTURTLEModeling {
             if (myName != null) {
                 tgco.setName(myName);
             }
+
             if ((myValue != null) && (!myValue.equals(null))) {
                 tgco.setValueWithChange(myValue);
             }
 
             tgco.forceId(myId);
+
+            if (uid != null) {
+                tgco.forceUUID(uid);
+            } else {
+                tgco.makeUUID();
+            }
+
             tgco.setLoaded(true);
             tgco.setInternalLoaded(false);
             tgco.setMinSize(myMinWidth, myMinHeight);
