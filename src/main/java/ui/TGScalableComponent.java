@@ -56,7 +56,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     /**
      * Verifies that the text is readable if its not it shall not be drawn
      * fontsize 8 is the limit that is set to be "readable". It can be changed
-     * @param iconSize
+     * @param g
      * @return
      */
     protected boolean isTextReadable(Graphics g)

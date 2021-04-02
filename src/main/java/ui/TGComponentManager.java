@@ -124,6 +124,7 @@ public class TGComponentManager {
     public static final int CONNECTOR_ACTOR_UCD = 110;
     public static final int CONNECTOR_INCLUDE_UCD = 111;
     public static final int CONNECTOR_SPECIA_UCD = 112;
+    public static final int CONNECTOR_SPECIA_CD = 138;
     public static final int CONNECTOR_EXTEND_UCD = 113;
     public static final int CONNECTOR_NODE_DD = 114;
 
@@ -2051,6 +2052,8 @@ public class TGComponentManager {
             return CONNECTOR_EXTEND_UCD;
         } else if (tgc instanceof TGConnectorSpecialization) {
             return CONNECTOR_SPECIA_UCD;
+        } else if (tgc instanceof TGConnectorSpecialization) {
+            return CONNECTOR_SPECIA_CD;
         } else if (tgc instanceof TGConnectorLinkNode) {
             return CONNECTOR_NODE_DD;
         } else if (tgc instanceof TDDNode) {
@@ -2546,6 +2549,9 @@ public class TGComponentManager {
                 break;
             case CONNECTOR_SPECIA_UCD:
                 tgc = new TGConnectorSpecialization(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_SPECIA_CD:
+                tgc = new AvatarCDSpecializationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
             case CONNECTOR_NODE_DD:
                 tgc = new TGConnectorLinkNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

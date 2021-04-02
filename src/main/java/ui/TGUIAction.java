@@ -523,6 +523,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACD_ACTOR_STICKMAN = 347;
     public static final int ACD_ACTOR_BOX = 348;
     public static final int ACD_ASSOCIATION_CONNECTOR = 349;
+    public static final int ACD_SPECIA_CONNECTOR = 534;
 
     // AVATAR Activity Diagrams
     public static final int AAD_EDIT = 350;
@@ -690,7 +691,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
 
-    public static final int NB_ACTION = 534;
+    public static final int NB_ACTION = 535;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1421,6 +1422,9 @@ public class TGUIAction extends AbstractAction {
         actions[ACD_ASSOCIATION_CONNECTOR] = new TAction("acd-association-connector", "Add an association", IconManager.imgic5044, IconManager.imgic5044, "Association", "Add an association between blocks to the currently opened AVATAR Context Diagram", 0);
         actions[ACD_ACTOR_STICKMAN] = new TAction("acd-add-actor", "Add an actor (stickman format)", IconManager.imgic600, IconManager.imgic600, "Actor", "Add a stickman actor to the currently opened AVATAR Context diagram", 0);
         actions[ACD_ACTOR_BOX] = new TAction("acd-add-actor-box", "Add an actor (box format)", IconManager.imgic614, IconManager.imgic614, "Actor (box format)", "Add a box actor  to the currently opened AVATAR Context diagram", 0);
+        actions[ACD_SPECIA_CONNECTOR] = new TAction("add-connector-specia-cd", "Specialization", IconManager.imgic610, IconManager.imgic610,
+                "specialization", "Add a specialization relationship to the currently opened context diagram", 0);
+
 
         // AVATAR Activity Diagrams
         actions[AAD_EDIT] = new TAction("edit-aad-diagram", "Edit AVATAR Activity Diagrams", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Activity Diagram", "Make it possible to edit the currently opened AVATAR Activity Diagram", 0);
@@ -1436,7 +1440,7 @@ public class TGUIAction extends AbstractAction {
         actions[AAD_SEND_SIGNAL_ACTION] = new TAction("add-add-send-signal-action", "Send signal", IconManager.imgic5050, IconManager.imgic5050, "Send signal", "Add a send signal operator to the currently opened avatar activity diagram", 0);
         actions[AAD_ACCEPT_EVENT_ACTION] = new TAction("add-add-accept-event-action", "Accept event", IconManager.imgic5056, IconManager.imgic5056, "Accept event", "Add an accept event operator to the currently opened avatar activity diagram", 0);
 
- actions[AAD_SEND_AMS_ACTION] = new TAction("add-add-send-ams-action", "Send AMS signal", IconManager.imgic5050, IconManager.imgic5050, "Send AMS signal", "Add a send AMS signal operator to the currently opened avatar activity diagram", 0);
+        actions[AAD_SEND_AMS_ACTION] = new TAction("add-add-send-ams-action", "Send AMS signal", IconManager.imgic5050, IconManager.imgic5050, "Send AMS signal", "Add a send AMS signal operator to the currently opened avatar activity diagram", 0);
         actions[AAD_ACCEPT_AMS_ACTION] = new TAction("add-add-accept-ams-action", "Accept AMS signal", IconManager.imgic5056, IconManager.imgic5056, "Accept AMS", "Add an accept AMS operator to the currently opened avatar activity diagram", 0);
 	
         actions[AAD_PARTITION] = new TAction("add-add-partition", "Partition", IconManager.imgic5052, IconManager.imgic5052, "Partition", "Add a partition to the currently opened avatar activity diagram", 0);

@@ -39,6 +39,7 @@
 package avatartranslator.modelchecker;
 
 import avatartranslator.*;
+import myutil.TraceManager;
 
 
 /**
@@ -51,6 +52,7 @@ import avatartranslator.*;
 public class SafetyProperty  {
 
     private String rawProperty;
+    private String refProperty;
     private int errorOnProperty;
     private AvatarExpressionSolver safetySolver;
     private AvatarExpressionSolver safetySolverLead;
@@ -79,8 +81,19 @@ public class SafetyProperty  {
     public boolean result;
     public boolean expectedResult;
     
+    public SafetyProperty(String property, String _refProperty) {
+        TraceManager.addDev("Adding safety pragma with prop=" + property + " ref=" + _refProperty);
+        rawProperty = property;
+        refProperty = _refProperty;
+        expectedResult = true;
+        phase = SpecificationPropertyPhase.NOTCOMPUTED;
+        /* to manually analyze after the AvatarSpecification is ready
+           for model-checking in order to build correct expression solvers */
+    }
+
     public SafetyProperty(String property) {
         rawProperty = property;
+        refProperty = property;
         expectedResult = true;
         phase = SpecificationPropertyPhase.NOTCOMPUTED;
         /* to manually analyze after the AvatarSpecification is ready
@@ -187,6 +200,10 @@ public class SafetyProperty  {
     
     public String getRawProperty() {
         return rawProperty;
+    }
+
+    public String getRefProperty() {
+        return refProperty;
     }
     
     

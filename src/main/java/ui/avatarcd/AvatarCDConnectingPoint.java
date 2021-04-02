@@ -40,7 +40,9 @@ package ui.avatarcd;
 
 import ui.CDElement;
 import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
+import ui.ucd.UCDUseCase;
 
 /**
  * Class AvatarCDConnectingPoint
@@ -60,9 +62,44 @@ public class AvatarCDConnectingPoint extends TGConnectingPointWidthHeight {
         if (type == TGComponentManager.ACD_COMPOSITION_CONNECTOR) {
             return true;
         }
+
         if (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR) {
             return true;
         }
+
+        if (type == TGComponentManager.CONNECTOR_SPECIA_CD) {
+            return true;
+        }
+
         return type == TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
+
+    }
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+
+
+
+        if ((outPoint != null) && (type == TGComponentManager.CONNECTOR_SPECIA_CD)) {
+            if ((outPoint.getFather() instanceof AvatarCDActorBox) || (outPoint.getFather() instanceof AvatarCDActorStickman)) {
+                if (!((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman))) {
+                    return false;
+                }
+            }
+
+            if ((outPoint.getFather() instanceof AvatarCDBlock)) {
+                if (!((getFather() instanceof AvatarCDBlock))) {
+                    return false;
+                }
+            }
+        }
+
+         if ((outPoint != null) &&
+                 ((type == TGComponentManager.ACD_COMPOSITION_CONNECTOR) || (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR))) {
+             if ((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman)) {
+                 return false;
+             }
+        }
+
+        return isCompatibleWith(type);
     }
 }

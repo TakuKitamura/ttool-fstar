@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -43,13 +43,12 @@ import myutil.Conversion;
 import myutil.DijkstraState;
 import myutil.GraphAlgorithms;
 import myutil.TraceManager;
+import rationals.*;
+import rationals.transformations.Reducer;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.*;
-
-import rationals.*;
-import rationals.transformations.*;
 
 /**
  * Class AUTGraph
@@ -85,6 +84,104 @@ public class AUTGraph implements myutil.Graph {
         transitions = _tr;
         nbState = states.size();
         statesComputed = true;
+    }
+
+    public static String[] decodeLine(String s) {
+        int index1, index2;
+        String s1, s2, s3;
+
+        index1 = s.indexOf("(");
+        index2 = s.indexOf(",");
+        s1 = s.substring(index1 + 1, index2);
+        s = s.substring(index2 + 1, s.length());
+        s = Conversion.removeFirstSpaces(s);
+
+        // for of the action
+        // , action,
+        // "i(action<1,2,4>)",
+        // "action<1,2,4>",
+
+        // guillemets ?
+        index1 = s.indexOf("\"");
+        if (index1 > -1) {
+            //TraceManager.addDev("Guillemets on " + s);
+            s2 = s.substring(index1 + 1, s.length());
+            s2 = s2.substring(0, s2.indexOf("\""));
+            //TraceManager.addDev("Guillemets on " + s2);
+            /*index2 = s2.indexOf("(");
+              if (index2 > -1) {
+              s2 = s2.substring(index2+1, s2.indexOf(")"));
+              }*/
+            //TraceManager.addDev("Guillemets on " + s2);
+
+        } else {
+            //TraceManager.addDev("No Guillemets on " + s);
+            index1 = s.indexOf(",");
+            if ((index2 = s.indexOf("(")) >= 0) {
+                s2 = s.substring(index2 + 1, index1 - 2);
+            } else {
+                if ((index2 = s.indexOf("\"t\"")) >= 0) {
+                    s2 = "t";
+                } else {
+                    s2 = s.substring(0, index1);
+                }
+            }
+        }
+
+        s = s.substring(s.indexOf(s2) + s2.length(), s.length());
+        //TraceManager.addDev("s=" + s);
+        index1 = s.indexOf(",");
+        //index2 = s.indexOf(")");
+        //s2 = s.substring(0, index1-1);
+        s3 = s.substring(index1 + 1, s.length() - 1);
+        s3 = Conversion.removeFirstSpaces(s3);
+        //TraceManager.addDev("s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+
+        String[] array = new String[3];
+        array[0] = s1;
+        array[1] = s2;
+        array[2] = s3;
+        return array;
+    }
+
+    public static String removeSameSignal(String input) {
+        int indexE = input.indexOf("!");
+        int indexQ = input.indexOf("?");
+        int indexP = input.indexOf("(");
+
+        if ((indexE == -1) || (indexQ == -1) || (indexP == -1)) {
+            return input;
+        }
+
+        if (indexQ < indexE) {
+            return input;
+        }
+
+        if (indexP < indexQ) {
+            return input;
+        }
+
+        String tmpE = input.substring(indexE + 1, indexQ - 1);
+        String tmpQ = input.substring(indexQ + 1, indexP);
+
+        TraceManager.addDev("tmpE=" + tmpE + " tmpQ=" + tmpQ);
+
+        if (tmpE.compareTo(tmpQ) != 0) {
+            return input;
+        }
+
+
+        return "!" + input.substring(indexQ, input.length());
+    }
+
+    public static String removeOTime(String input) {
+        if (input.endsWith("[0...0]")) {
+            return input.substring(0, input.length() - 7);
+        } else {
+            return input;
+        }
+
+
     }
 
     public void stopBuildGraph() {
@@ -170,64 +267,6 @@ public class AUTGraph implements myutil.Graph {
         }
     }
 
-    public static String[] decodeLine(String s) {
-        int index1, index2;
-        String s1, s2, s3;
-
-        index1 = s.indexOf("(");
-        index2 = s.indexOf(",");
-        s1 = s.substring(index1 + 1, index2);
-        s = s.substring(index2 + 1, s.length());
-        s = Conversion.removeFirstSpaces(s);
-
-        // for of the action
-        // , action,
-        // "i(action<1,2,4>)",
-        // "action<1,2,4>",
-
-        // guillemets ?
-        index1 = s.indexOf("\"");
-        if (index1 > -1) {
-            //TraceManager.addDev("Guillemets on " + s);
-            s2 = s.substring(index1 + 1, s.length());
-            s2 = s2.substring(0, s2.indexOf("\""));
-            //TraceManager.addDev("Guillemets on " + s2);
-            /*index2 = s2.indexOf("(");
-              if (index2 > -1) {
-              s2 = s2.substring(index2+1, s2.indexOf(")"));
-              }*/
-            //TraceManager.addDev("Guillemets on " + s2);
-
-        } else {
-            //TraceManager.addDev("No Guillemets on " + s);
-            index1 = s.indexOf(",");
-            if ((index2 = s.indexOf("(")) >= 0) {
-                s2 = s.substring(index2 + 1, index1 - 2);
-            } else {
-                if ((index2 = s.indexOf("\"t\"")) >= 0) {
-                    s2 = "t";
-                } else {
-                    s2 = s.substring(0, index1);
-                }
-            }
-        }
-
-        s = s.substring(s.indexOf(s2) + s2.length(), s.length());
-        //TraceManager.addDev("s=" + s);
-        index1 = s.indexOf(",");
-        //index2 = s.indexOf(")");
-        //s2 = s.substring(0, index1-1);
-        s3 = s.substring(index1 + 1, s.length() - 1);
-        s3 = Conversion.removeFirstSpaces(s3);
-        //TraceManager.addDev("s1=" + s1 + " s2=" + s2 + " s3=" + s3);
-
-        String[] array = new String[3];
-        array[0] = s1;
-        array[1] = s2;
-        array[2] = s3;
-        return array;
-    }
-
     public int getNbOfStates() {
         return nbState;
     }
@@ -249,6 +288,12 @@ public class AUTGraph implements myutil.Graph {
         return states;
     }
 
+    public void setStates(ArrayList<AUTState> _states) {
+        states = _states;
+        nbState = states.size();
+        statesComputed = true;
+    }
+
     public ArrayList<AUTTransition> getTransitions() {
         return transitions;
     }
@@ -261,7 +306,6 @@ public class AUTGraph implements myutil.Graph {
     public void addState(AUTState _st) {
         states.add(_st);
     }
-
 
     public int getNbPotentialDeadlocks() {
         int nb = 0;
@@ -286,6 +330,9 @@ public class AUTGraph implements myutil.Graph {
         }
         return "";
     }
+
+    /* State numbers are return under the form of int */
+    /* Should be rewritten: not of high performance at all */
 
     public boolean hasEntryTransition(int state) {
         if (hasEntryTransition == null) {
@@ -316,8 +363,7 @@ public class AUTGraph implements myutil.Graph {
 
     }
 
-    /* State numbers are return under the form of int */
-    /* Should be rewritten: not of high performance at all */
+    // For Graph interface
 
     public int[] getVectorPotentialDeadlocks() {
         int nbPotentialDeadlock = getNbPotentialDeadlocks();
@@ -341,7 +387,6 @@ public class AUTGraph implements myutil.Graph {
         return GraphAlgorithms.ShortestPathFrom(this, fromState)[targetState].path;
     }
 
-
     public boolean hasTransitionWithAction(String action) {
 
         for (AUTTransition aut1 : transitions) {
@@ -351,8 +396,6 @@ public class AUTGraph implements myutil.Graph {
         }
         return false;
     }
-
-    // For Graph interface
 
     public int getWeightOfTransition(int originState, int destinationState) {
         if (statesComputed) {
@@ -375,7 +418,6 @@ public class AUTGraph implements myutil.Graph {
         }
         return graph.toString();
     }
-
 
     public String toFullString() {
         StringBuffer graph = new StringBuffer("Transitions:");
@@ -416,12 +458,6 @@ public class AUTGraph implements myutil.Graph {
         return statesComputed;
     }
 
-    public void setStates(ArrayList<AUTState> _states) {
-        states = _states;
-        nbState = states.size();
-        statesComputed = true;
-    }
-
     public HashSet<String> getAllActions() {
         HashSet<String> hs = new HashSet<String>();
         for (AUTTransition tr : transitions) {
@@ -429,7 +465,6 @@ public class AUTGraph implements myutil.Graph {
         }
         return hs;
     }
-
 
     public void reinitMet() {
         for (AUTState state : states) {
@@ -475,23 +510,34 @@ public class AUTGraph implements myutil.Graph {
         display.display();
     }
 
-
     public AUTGraph cloneMe() {
-        AUTGraph newGraph = new AUTGraph();
-        newGraph.setNbOfStates(getNbOfStates());
+        ArrayList<AUTState> statesN = new ArrayList<>();
+        ArrayList<AUTTransition> trN = new ArrayList<>();
+
+        //newGraph.computeStates();
+        for (AUTState st : getStates()) {
+            AUTState newSt = st.clone();
+            statesN.add(newSt);
+        }
+
         for (AUTTransition tr : transitions) {
             AUTTransition newTr = new AUTTransition(tr.origin, tr.transition, tr.destination);
-            newGraph.addTransition(newTr);
+            trN.add(newTr);
+            // Update receiving and destination states
+            AUTState s = statesN.get(tr.origin);
+            s.addOutTransition(newTr);
+            s = statesN.get(tr.destination);
+            s.addInTransition(newTr);
         }
-        newGraph.computeStates();
-        return newGraph;
-    }
 
+
+        return  new AUTGraph(statesN, trN);
+    }
 
     public String getCompoundString(AUTTransition t, HashSet<AUTTransition> set) {
         String ret = "";
         int cpt = 0;
-        for(AUTTransition tr: transitions) {
+        for (AUTTransition tr : transitions) {
             if ((tr.origin == t.origin) && (tr.destination == t.destination)) {
                 set.add(tr);
                 if (cpt > 0) {
@@ -503,46 +549,6 @@ public class AUTGraph implements myutil.Graph {
             }
         }
         return ret;
-    }
-
-    public static String removeSameSignal(String input) {
-        int indexE = input.indexOf("!");
-        int indexQ = input.indexOf("?");
-        int indexP = input.indexOf("(");
-
-        if ((indexE == -1) || (indexQ == -1) || (indexP == -1) ) {
-            return input;
-        }
-
-        if (indexQ < indexE) {
-            return input;
-        }
-
-        if (indexP < indexQ) {
-            return input;
-        }
-
-        String tmpE = input.substring(indexE+1, indexQ-1);
-        String tmpQ = input.substring(indexQ+1, indexP);
-
-        TraceManager.addDev("tmpE=" + tmpE + " tmpQ=" + tmpQ);
-
-        if (tmpE.compareTo(tmpQ) != 0) {
-            return input;
-        }
-
-
-        return "!" + input.substring(indexQ, input.length());
-    }
-
-    public  static String removeOTime(String input) {
-        if (input.endsWith("[0...0]")) {
-            return input.substring(0, input.length()-7);
-        } else {
-            return input;
-        }
-
-
     }
 
     public String[] getInternalActions() {
@@ -598,12 +604,62 @@ public class AUTGraph implements myutil.Graph {
         }
 
 
-
         //minimizeTau(tauOnly);
         //return this;
 
         return reduceGraph();
     }
+
+
+    public boolean canGoFromTo(int from, int to) {
+        //TraceManager.addDev("Can go from " + from + " to " + to);
+
+        if (from == to) {
+            return true;
+        }
+
+        HashSet<AUTState> alreadyAnalyzed = new HashSet<>();
+        AUTState s = states.get(from);
+
+        // We assume pending states are not the "to" state
+        ArrayList<AUTState> pending = new ArrayList<>();
+        pending.add(s);
+
+        while(pending.size() > 0) {
+            /*String str = "Pending ";
+            for(AUTState sp : pending) {
+                str += sp.id + " ";
+            }
+            TraceManager.addDev(str + "\n");*/
+            AUTState currentS = pending.get(0);
+            pending.remove(0);
+            if (!alreadyAnalyzed.contains(currentS)) {
+                alreadyAnalyzed.add(currentS);
+
+                // We consider all outgoing transitions
+                //TraceManager.addDev("Nb of outgoing transitions:" + currentS.outTransitions.size() + ":" + currentS.outTransitions);
+                for (AUTTransition tr : currentS.outTransitions) {
+                    if (tr.destination == to) {
+                        return true;
+                    } else {
+                        pending.add(states.get(tr.destination));
+                    }
+                }
+            }
+        }
+
+        //TraceManager.addDev("False ...");
+        return false;
+    }
+
+
+    public boolean hasPathFromTo(int idInit, int idEnd) {
+        DijkstraState[] dss;
+        dss = GraphAlgorithms.ShortestPathFrom(this, idInit);
+        int size = dss[idEnd].path.length;
+        return size > 0;
+    }
+
 
     public void minimizeTau(boolean tauOnly) {
         boolean modif = true;
@@ -654,7 +710,7 @@ public class AUTGraph implements myutil.Graph {
                         for (AUTTransition trM : st1.outTransitions) {
                             st.outTransitions.add(trM);
                             trM.origin = st.id;
-                           // TraceManager.addDev("New out transitions " + trM);
+                            // TraceManager.addDev("New out transitions " + trM);
                         }
                         st1.outTransitions.clear();
                         break;
@@ -801,7 +857,7 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
-    private void removeStates(ArrayList<AUTState> toRemoveStates) {
+    public void removeStates(ArrayList<AUTState> toRemoveStates) {
 
         if (toRemoveStates.size() > 0) {
             hasExitTransition = null;
@@ -814,12 +870,18 @@ public class AUTGraph implements myutil.Graph {
         for (AUTState str : toRemoveStates) {
             // We need to remove all transitions of the removed state
             //TraceManager.addDev("Removing transitions of state:" + str.id + "\n" + toFullString());
+
+            //TraceManager.addDev("Transition size before:" + transitions.size());
+
+
             for (AUTTransition trin : str.inTransitions) {
                 transitions.remove(trin);
             }
             for (AUTTransition trout : str.outTransitions) {
                 transitions.remove(trout);
             }
+
+            //TraceManager.addDev("Transition size after:" + transitions.size());
 
             for (AUTState state : states) {
                 state.removeAllTransitionsWithId(str.id);
@@ -839,8 +901,9 @@ public class AUTGraph implements myutil.Graph {
 
                 AUTState moved = states.get(nbState - 1);
                 //TraceManager.addDev("Moving state " + moved.id +  " to index " + str.id);
+                states.remove(moved);
                 states.set(str.id, moved);
-                states.remove(nbState - 1);
+                states.remove(str);
                 nbState--;
                 //TraceManager.addDev("nbState=" + nbState + " states size = " + states.size());
                 /*AUTTransition tt = findTransitionWithId(nbState);
@@ -849,6 +912,10 @@ public class AUTGraph implements myutil.Graph {
                   }*/
                 //TraceManager.addDev("Update id\n" + toAUTStringFormat());
                 moved.updateID(str.id);
+
+
+
+
                 /*tt = findTransitionWithId(nbState);
                   if (tt != null) {
                   TraceManager.addDev("2) Transition with id not normal" + tt);
@@ -1046,14 +1113,14 @@ public class AUTGraph implements myutil.Graph {
 
         long startTime = System.nanoTime();
 
-                AUTState[] statesToConsider = new AUTState[1];
+        AUTState[] statesToConsider = new AUTState[1];
         LinkedList<AUTState> nextStatesToConsider = new LinkedList<AUTState>();
         statesToConsider[0] = states.get(0);
         states.get(0).met = true;
 
-        for(int cpt=0; cpt<statesToConsider.length; cpt++){
+        for (int cpt = 0; cpt < statesToConsider.length; cpt++) {
             nextStatesToConsider.clear();
-            for (AUTState st: statesToConsider) {
+            for (AUTState st : statesToConsider) {
                 //st.met = true;
                 //cpt++;
                 for (AUTTransition tr : st.outTransitions) {
@@ -1087,8 +1154,8 @@ public class AUTGraph implements myutil.Graph {
         long endTime = System.nanoTime();
 
 
-        TraceManager.addDev("First part: " + (time1-startTime)/1000000000 +
-                "  Second part: " + (endTime - time1)/1000000000);
+        TraceManager.addDev("First part: " + (time1 - startTime) / 1000000000 +
+                "  Second part: " + (endTime - time1) / 1000000000);
 
 
         //statesComputed = false;
@@ -1118,11 +1185,11 @@ public class AUTGraph implements myutil.Graph {
         Set<Transition<String>> trs = (Set<Transition<String>>) a.delta();
         //Set<?> trs = a.delta();
         @SuppressWarnings("unchecked")
-        Set<State> sts = (Set<State>)(a.states());
+        Set<State> sts = (Set<State>) (a.states());
 
         Map<State, Integer> mapOfStates = new HashMap<>();
         int cpt = 1;
-        for(State st: sts) {
+        for (State st : sts) {
             if (st.isInitial()) {
 
                 //@SuppressWarnings("unchecked")
@@ -1131,13 +1198,13 @@ public class AUTGraph implements myutil.Graph {
 
                 //@SuppressWarnings("unchecked")
                 mapOfStates.put(st, new Integer(cpt));
-                cpt ++;
+                cpt++;
             }
         }
 
         graph.setNbOfStates(mapOfStates.size());
 
-        for(Transition<String> tr: trs) {
+        for (Transition<String> tr : trs) {
             State s1 = tr.start();
             State s2 = tr.end();
             String label = tr.label();
@@ -1161,12 +1228,12 @@ public class AUTGraph implements myutil.Graph {
         computeStates();
 
         boolean initial = true;
-        for(AUTState s: states) {
+        for (AUTState s : states) {
             State as = a.addState(initial, s.isTerminationState());
             s.referenceObject = as;
             initial = false;
         }
-        for(AUTTransition t: transitions) {
+        for (AUTTransition t : transitions) {
             try {
                 String label = t.transition;
                 if (t.isTau) {
@@ -1175,7 +1242,8 @@ public class AUTGraph implements myutil.Graph {
                 a.addTransition(new Transition<String>((State) (states.get(t.origin).referenceObject), label, (State) (states.get(t
                         .destination)
                         .referenceObject)));
-            } catch (NoSuchStateException nsse) { }
+            } catch (NoSuchStateException nsse) {
+            }
         }
 
         return a;
@@ -1226,8 +1294,8 @@ public class AUTGraph implements myutil.Graph {
         Collections.sort(sortedAlphabet);
 
         TraceManager.addDev("Alphabet size:" + sortedAlphabet.size());
-        for (int i=0; i<alphabet.size(); i++) {
-            TraceManager.addDev("Letter #" + i +  ": " + sortedAlphabet.get(i).toString());
+        for (int i = 0; i < alphabet.size(); i++) {
+            TraceManager.addDev("Letter #" + i + ": " + sortedAlphabet.get(i).toString());
         }
 
 
@@ -1358,7 +1426,7 @@ public class AUTGraph implements myutil.Graph {
                     bii = currentP.blocks.get(1);
                 }
 
-                TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
+                TraceManager.addDev("B= " + b + " bi=" + bi + " bii=" + bii);
 
                 for (AUTElement elt : sortedAlphabet) {
                     //TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
@@ -1640,10 +1708,10 @@ public class AUTGraph implements myutil.Graph {
     public int getMinValue(String nameOfTransition) {
         int minValue = Integer.MAX_VALUE;
         //System.out.println("executing. min value");
-        for (AUTTransition tr: transitions) {
+        for (AUTTransition tr : transitions) {
             //System.out.println("executing. Dealing with " + tr.transition);
             if (tr.transition.length() > 3) {
-                String trans = tr.transition.substring(2, tr.transition.length()-1);
+                String trans = tr.transition.substring(2, tr.transition.length() - 1);
                 //System.out.println("executing. trans " + trans);
                 int index = trans.indexOf("<");
                 if (index > 0) {
@@ -1671,10 +1739,10 @@ public class AUTGraph implements myutil.Graph {
     public int getMaxValue(String nameOfTransition) {
         int maxValue = -1;
         //System.out.println("executing. min value");
-        for (AUTTransition tr: transitions) {
+        for (AUTTransition tr : transitions) {
             //System.out.println("executing. Dealing with " + tr.transition);
             if (tr.transition.length() > 3) {
-                String trans = tr.transition.substring(2, tr.transition.length()-1);
+                String trans = tr.transition.substring(2, tr.transition.length() - 1);
                 //System.out.println("executing. trans " + trans);
                 int index = trans.indexOf("<");
                 if (index > 0) {
@@ -1697,6 +1765,28 @@ public class AUTGraph implements myutil.Graph {
             }
         }
         return maxValue;
+    }
+
+    public String toStringStates() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("nb of states: " + nbState + "\n");
+        for(AUTState s: states) {
+            sb.append(s.toString());
+        }
+        return sb.toString();
+    }
+
+    public String toStringAll() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("nb of states: " + nbState + "\n");
+        for(AUTState s: states) {
+            sb.append(s.toString());
+        }
+        for(AUTTransition t: transitions) {
+            sb.append(t.toString() + "\n");
+        }
+
+        return sb.toString();
     }
 
 

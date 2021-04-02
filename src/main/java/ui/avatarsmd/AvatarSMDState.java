@@ -64,7 +64,8 @@ import java.util.Vector;
    * @version 1.1 13/04/2010
    * @author Ludovic APVRILLE
  */
-public class AvatarSMDState extends TGCScalableWithInternalComponent implements AllowedBreakpoint, CheckableAccessibility, CheckableLatency, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
+public class AvatarSMDState extends TGCScalableWithInternalComponent implements AllowedBreakpoint, CheckableAccessibility, CheckableLatency,
+        CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes, ColorCustomizable {
     //private static String GLOBAL_CODE_INFO = "(global code)";
     private static String ENTRY_CODE_INFO = "(entry code)";
 
@@ -202,7 +203,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
     	Color c = g.getColor();
         // Issue #69
      	if (isEnabled()) {
-             Color avat = ColorManager.AVATAR_STATE;
+             Color avat = getCurrentColor();
      		 g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
      	}
      	else {
@@ -983,4 +984,12 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			state.acceptBackward( visitor );
 		}
 	}
+
+	// Color management
+    public Color getMainColor() {
+        return ColorManager.AVATAR_STATE;
+    }
+
+
+
 }

@@ -216,6 +216,11 @@ public class AvatarRelation extends AvatarElement {
         return block2;
     }
 
+    public void removeAssociation(AvatarSignal sig1, AvatarSignal sig2) {
+        signals1.remove(sig1);
+        signals2.remove(sig2);
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         for(int i=0; i<signals1.size(); i++) {

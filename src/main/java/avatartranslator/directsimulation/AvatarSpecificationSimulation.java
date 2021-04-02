@@ -46,6 +46,7 @@ import myutil.TraceManager;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.UUID;
 import java.util.Vector;
 
 
@@ -1636,11 +1637,18 @@ public class AvatarSpecificationSimulation {
     public String toCSV() {
         StringBuffer sb = new StringBuffer();
 
-        sb.append("ID, block, element ID, linked transaction ID, initial clock value, final clock value, duration, attributes, actions\n");
+        sb.append("ID, block, elementID, element UUID, linked transaction ID, initial clock value, final clock value, duration, attributes, " +
+                "actions\n");
         for(AvatarSimulationTransaction ast: allTransactions) {
             append(sb, ast.id);
             append(sb, ast.block);
             append(sb, ast.executedElement);
+            UUID uuid = ast.executedElement.getUUID();
+            if (uuid == null) {
+                append(sb, "-");
+            } else {
+                append(sb, uuid.toString());
+            }
             append(sb, ast.linkedTransaction);
             append(sb, ast.initialClockValue);
             append(sb, ast.clockValueWhenFinished);

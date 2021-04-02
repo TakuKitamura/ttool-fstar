@@ -40,6 +40,7 @@ package avatartranslator;
 
 import myutil.TraceManager;
 
+import java.util.UUID;
 import java.util.Vector;
 
 /**
@@ -115,6 +116,15 @@ public class AvatarElement {
 
     public int getID(){
         return myID;
+    }
+
+    public UUID getUUID() {
+        if (referenceObject != null) {
+            if (referenceObject instanceof ElementWithUUID) {
+                return ((ElementWithUUID)referenceObject).getUUID();
+            }
+        }
+        return null;
     }
 
     public static void resetID() {

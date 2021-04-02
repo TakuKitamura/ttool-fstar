@@ -155,6 +155,12 @@ public class AvatarExpressionTest {
         AvatarExpressionSolver e13 = new AvatarExpressionSolver("!(not(true))");
         assertTrue(e13.buildExpression());
 
+        AvatarExpressionSolver e13bis = new AvatarExpressionSolver("!(not(TRUE))");
+        assertFalse(e13bis.buildExpression());
+
+        AvatarExpressionSolver e13Ter = new AvatarExpressionSolver("!(not(FALSE))");
+        assertFalse(e13Ter.buildExpression());
+
         AvatarExpressionSolver e14 = new AvatarExpressionSolver("3+2");
         assertTrue(e14.buildExpression());
         assertTrue(e14.getReturnType() == AvatarExpressionSolver.IMMEDIATE_INT);

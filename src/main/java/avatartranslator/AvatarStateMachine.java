@@ -89,6 +89,122 @@ public class AvatarStateMachine extends AvatarElement {
         return cpt;
     }
 
+    public void makeBasicSM(AvatarStateMachineOwner owner) {
+        elements.clear();
+
+        if (startState == null) {
+            startState = new AvatarStartState("StartState", null);
+        } else {
+            startState.removeAllNexts();
+        }
+        addElement(startState);
+
+        AvatarTransition at = new AvatarTransition(owner, "Transition", startState.getReferenceObject());
+        AvatarStopState stopS = new AvatarStopState("StopState", startState.getReferenceObject());
+        addElement(at);
+        addElement(stopS);
+        startState.addNext(at);
+        at.addNext(stopS);
+
+    }
+
+    public boolean isBasicStateMachine() {
+        if (startState == null) {
+            return true;
+        }
+
+        if (elements.size() > 3) {
+            return false;
+        }
+
+        boolean hasStartState = false, hasStopState = false, hasBasicTransition = false;
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarStartState) {
+                hasStartState = true;
+            }
+            if (asme instanceof AvatarStartState) {
+                hasStopState = true;
+            }
+            if (asme instanceof AvatarTransition) {
+                AvatarTransition at = (AvatarTransition) asme;
+                if (at.isEmpty()) {
+                    hasBasicTransition = true;
+                }
+            }
+        }
+
+        return hasStartState && hasStopState && hasBasicTransition;
+
+    }
+
+    /**
+     * Make sure that there is a start state, a stop state and that all
+     * elements apart from regular states are followed by a stop or a next
+     */
+    public void makeCorrect(AvatarStateMachineOwner owner) {
+        if (startState == null) {
+            makeBasicSM(owner);
+            return;
+        }
+
+        // Remove nexts when not in the list of elements
+        for(AvatarStateMachineElement asme: getListOfElements()) {
+            ArrayList<AvatarStateMachineElement> removedNext = new ArrayList<>();
+            for(AvatarStateMachineElement nextElt: asme.getNexts()) {
+                if (!(getListOfElements().contains(nextElt))) {
+                    removedNext.add(nextElt);
+                }
+            }
+            asme.getNexts().removeAll(removedNext);
+        }
+
+        // We check that all elements are reachable from start.
+        HashSet<AvatarStateMachineElement> reachable = new HashSet<>();
+        ArrayList<AvatarStateMachineElement> pending = new ArrayList<>();
+
+        pending.add(startState);
+
+
+        while(pending.size() > 0) {
+            AvatarStateMachineElement current = pending.get(0);
+            reachable.add(current);
+            pending.remove(0);
+            if (current.getNexts().size() == 0) {
+                if (!((current instanceof AvatarStopState) || (current instanceof AvatarState))) {
+                    // We need to add a next
+                    if (current instanceof AvatarTransition) {
+                        AvatarStopState stopS = new AvatarStopState("StopState", current.getReferenceObject());
+                        addElement(stopS);
+                        current.addNext(stopS);
+                    } else {
+                        AvatarTransition at = new AvatarTransition(owner, "Transition", current.getReferenceObject());
+                        AvatarStopState stopS = new AvatarStopState("StopState", current.getReferenceObject());
+                        addElement(at);
+                        addElement(stopS);
+                        current.addNext(at);
+                        at.addNext(stopS);
+                    }
+                }
+            }
+
+            for(AvatarStateMachineElement nextElt: current.getNexts()) {
+                if (!(reachable.contains(nextElt))) {
+                    pending.add(nextElt);
+                }
+            }
+        }
+
+        // We remove all elements that are not reachable
+        ArrayList<AvatarElement> toRemove = new ArrayList<>();
+        for(AvatarStateMachineElement asme: getListOfElements()) {
+           if (!(reachable.contains(asme))) {
+               toRemove.add(asme);
+           }
+        }
+        elements.removeAll(toRemove);
+
+    }
+
     public void addElement(AvatarStateMachineElement _element) {
         if (_element != null) {
             elements.add(_element);
@@ -156,6 +272,106 @@ public class AvatarStateMachine extends AvatarElement {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    public boolean isSignalUsed(AvatarSignal _sig) {
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarActionOnSignal) {
+                AvatarActionOnSignal aaos = (AvatarActionOnSignal) asme;
+                if (aaos.getSignal() == _sig) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isTimerUsed(AvatarAttribute _timer) {
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarTimerOperator) {
+                AvatarTimerOperator ato = (AvatarTimerOperator) asme;
+                if (ato.getTimer() == _timer) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Analyze the usage of a regular attribute (int, bool)
+     * @param _aa
+     * @return
+     */
+    public boolean isRegularAttributeUsed(AvatarAttribute _aa) {
+        boolean ret;
+
+        AvatarExpressionSolver.emptyAttributesMap();
+        for(AvatarStateMachineElement asme: elements) {
+            if (asme instanceof AvatarTransition) {
+                // Must check the guard, the delays and all the actions
+                AvatarTransition at = (AvatarTransition)asme;
+
+                if (at.isGuarded()) {
+                    ret = isInExpression(at.getGuard().toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+                if (at.hasDelay()) {
+                    ret = isInExpression(at.getMinDelay().toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                    ret = isInExpression(at.getMaxDelay().toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+                for(AvatarAction act: at.getActions()) {
+                    ret = isInExpression(act.toString(), _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+            } else if (asme instanceof  AvatarActionOnSignal) {
+                for(String s: ((AvatarActionOnSignal)asme).getValues()) {
+                    ret = isInExpression(s, _aa);
+                    if (ret) {
+                        return true;
+                    }
+                }
+
+            } else if (asme instanceof AvatarRandom) {
+                AvatarRandom ar = (AvatarRandom)asme;
+                String s = ar.getVariable();
+                ret = isInExpression(s, _aa);
+                if (ret) {
+                    return true;
+                }
+                s = ar.getMinValue();
+                ret = isInExpression(s, _aa);
+                if (ret) {
+                    return true;
+                }
+                s = ar.getMaxValue();
+                ret = isInExpression(s, _aa);
+                if (ret) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isInExpression(String expr, AvatarAttribute _aa) {
+        return AvatarExpressionSolver.indexOfVariable(expr, _aa.getName()) > -1;
     }
 
     private int getSimplifiedElementsAux( Map<AvatarStateMachineElement, Integer> simplifiedElements, Set<AvatarStateMachineElement> visited, AvatarStateMachineElement root, int counter) {

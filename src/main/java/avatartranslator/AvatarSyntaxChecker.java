@@ -42,7 +42,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import avatartranslator.modelchecker.SpecificationBlock;
 import compiler.tmlparser.ParseException;
 import compiler.tmlparser.SimpleNode;
 import compiler.tmlparser.TMLExprParser;
@@ -51,6 +50,7 @@ import myutil.BoolExpressionEvaluator;
 import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
+
 
 
 /**
@@ -316,6 +316,12 @@ public class AvatarSyntaxChecker  {
             return -1;
         } else {
             //TraceManager.addDev("IsValidBoolExpr: YES (" + act + ")");
+        }
+
+        // Testing with parsing AvatarExpressionSolver
+        AvatarExpressionSolver aee = new AvatarExpressionSolver(_expr);
+        if ( !(aee.buildExpression())) {
+            return -1;
         }
 
         return 0;

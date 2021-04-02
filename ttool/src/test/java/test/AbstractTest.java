@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import myutil.Conversion;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -112,4 +113,13 @@ public abstract class AbstractTest {
         th.printStackTrace();
         fail( th.getLocalizedMessage() );
     }
+
+    protected String reworkStringForComparison(String input) {
+		String ret = Conversion.replaceAllString(input, "\n", "");
+		ret = Conversion.replaceAllString(ret, "\t", "");
+		ret = Conversion.replaceAllString(ret, " ", "");
+		return ret;
+
+
+	}
 }

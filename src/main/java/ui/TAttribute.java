@@ -159,6 +159,13 @@ public class TAttribute {
                 (otherType != OTHER || this.typeOther.equals(ta.getTypeOther()));
     }
 
+    public boolean isAvatarDefault() {
+        return (getType() == TAttribute.INTEGER) ||
+                (getType() == TAttribute.NATURAL) ||
+                (getType() == TAttribute.BOOLEAN) ||
+                (getType() == TAttribute.TIMER);
+    }
+
     public void setAccess(int _access) {
         access = _access;
     }

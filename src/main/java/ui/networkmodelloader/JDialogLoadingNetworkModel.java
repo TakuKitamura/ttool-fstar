@@ -271,7 +271,8 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                 NetworkModel nm = null;
                 while ((inputLine = in.readLine()) != null) {
                     if (inputLine.startsWith("#FILE")) {
-                        nm = new NetworkModel(inputLine.substring(5, inputLine.length()).trim());
+                        //TraceManager.addDev("Loading network model: " + inputLine.substring(5).trim());
+                        nm = new NetworkModel(inputLine.substring(5).trim());
                         listOfModels.add(nm);
                     }
 

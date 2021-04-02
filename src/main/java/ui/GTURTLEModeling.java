@@ -7654,12 +7654,22 @@ public class GTURTLEModeling {
             elt1 = elt;
             //TraceManager.addDev("elt=" + elt);
 
-            int myType = Integer.decode(elt.getAttribute("type")).intValue();
-            int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
+            int myType = Integer.decode(elt.getAttribute("type"));
+            int myId = Integer.decode(elt.getAttribute("id")) + decId;
+
+            UUID uid = null;
+            String tmpUid = elt.getAttribute("uid");
+            //TraceManager.addDev("COMP UID=>" + tmpUid + "<");
+            if ((tmpUid != null) && (tmpUid.length() > 0) && (tmpUid.compareTo("null") != 0)) {
+                //TraceManager.addDev("In IF");
+                uid = UUID.fromString(tmpUid);
+            }
+            //TraceManager.addDev("uid created");
 
             int myX = -1, myY = -1, myWidth = -1, myHeight = -1;
             int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
             int myMinX = -1, myMaxX = -1, myMinY = -1, myMaxY = -1;
+            int color = -1;
             String myName = null, myValue = null;
             String customData = null;
             Vector<Point> tgcpList = new Vector<Point>();
@@ -7718,14 +7728,14 @@ public class GTURTLEModeling {
                     } else if (elt.getTagName().equals("enabled")) {
                         enable = elt.getAttribute("value").equals("true");
                     } else if (elt.getTagName().equals("TGConnectingPoint")) {
-                        x = Integer.decode(elt.getAttribute("num")).intValue();
-                        y = Integer.decode(elt.getAttribute("id")).intValue() + decId;
+                        x = Integer.decode(elt.getAttribute("num"));
+                        y = Integer.decode(elt.getAttribute("id")) + decId;
                         tgcpList.add(new Point(x, y));
                     } else if (elt.getTagName().equals("father")) {
-                        fatherId = Integer.decode(elt.getAttribute("id")).intValue();
-                        fatherNum = Integer.decode(elt.getAttribute("num")).intValue();
+                        fatherId = Integer.decode(elt.getAttribute("id"));
+                        fatherNum = Integer.decode(elt.getAttribute("num"));
                     } else if (elt.getTagName().equals("reference")) {
-                        referenceId = Integer.decode(elt.getAttribute("id")).intValue();
+                        referenceId = Integer.decode(elt.getAttribute("id"));
                     } else if (elt.getTagName().equals("prejavacode")) {
                         pre += elt.getAttribute("value") + "\n";
                     } else if (elt.getTagName().equals("postjavacode")) {
@@ -7742,6 +7752,8 @@ public class GTURTLEModeling {
                         masterMutex = true;
                     } else if (elt.getTagName().equals("breakpoint")) {
                         breakpoint = true;
+                    } else if (elt.getTagName().equals("color")) {
+                        color = Integer.decode(elt.getAttribute("value"));
                     }
                 }
             }
@@ -7815,6 +7827,10 @@ public class GTURTLEModeling {
 
             if (customData != null) {
                 tgc.setCustomData(customData);
+            }
+
+            if (color != -1) {
+                tgc.setCurrentColor(color);
             }
 
 
@@ -7900,6 +7916,12 @@ public class GTURTLEModeling {
             }
 
             tgc.forceId(myId);
+            if (uid != null) {
+                tgc.forceUUID(uid);
+            } else {
+                tgc.makeUUID();
+            }
+            tgc.forceUUID(uid);
             tgc.setLoaded(true);
             tgc.setInternalLoaded(false);
             tgc.setMinSize(myMinWidth, myMinHeight);
@@ -8184,8 +8206,15 @@ public class GTURTLEModeling {
             elt = (Element) n;
             elt1 = elt;
 
-            int myType = Integer.decode(elt.getAttribute("type")).intValue();
-            int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
+            int myType = Integer.decode(elt.getAttribute("type"));
+            int myId = Integer.decode(elt.getAttribute("id")) + decId;
+
+            UUID uid = null;
+            String tmpUid = elt.getAttribute("uid");
+            //TraceManager.addDev("UID=>" + tmpUid + "<");
+            if ((tmpUid != null) && (tmpUid.length() > 0) && (tmpUid.compareTo("null") != 0)) {
+                uid = UUID.fromString(tmpUid);
+            }
 
             int myX = -1, myY = -1, myWidth = -1, myHeight = -1;
             int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
@@ -8274,11 +8303,19 @@ public class GTURTLEModeling {
             if (myName != null) {
                 tgco.setName(myName);
             }
+
             if ((myValue != null) && (!myValue.equals(null))) {
                 tgco.setValueWithChange(myValue);
             }
 
             tgco.forceId(myId);
+
+            if (uid != null) {
+                tgco.forceUUID(uid);
+            } else {
+                tgco.makeUUID();
+            }
+
             tgco.setLoaded(true);
             tgco.setInternalLoaded(false);
             tgco.setMinSize(myMinWidth, myMinHeight);

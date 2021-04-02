@@ -1,4 +1,3 @@
-
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
@@ -37,82 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.syscams;
+package avatartranslator;
 
-import java.awt.Graphics;
 
-import ui.TDiagramPanel;
-import ui.TGComponent;
+import java.util.UUID;
 
 /**
- * Class SysCAMSPortTDF Primitive port. To be used in SystemC-AMS diagrams
- * Creation: 14/05/2018
- * 
- * @version 1.0 14/05/2018
- * @author Irina Kit Yan LEE
+   * Class ElementWithUUID
+   * Creation: 01/04/2021
+   * @version 1.0 01/04/2021
+   * @author Ludovic Apvrille
  */
-
-public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
-    private double period;
-    private String time;
-    private int rate;
-    private int delay;
-    private int arity;
-    private String TDFType;
-
-    public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-            TDiagramPanel _tdp) {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getTDFType() {
-        return TDFType;
-    }
-
-    public void setTDFType(String tDFType) {
-        TDFType = tDFType;
-    }
-
-    public double getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(double period) {
-        this.period = period;
-    }
-
-    public int getRate() {
-        return rate;
-    }
-
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
-
-    public int getDelay() {
-        return delay;
-    }
-
-    public void setDelay(int delay) {
-        this.delay = delay;
-    }
-
-    public int getArity() {
-        return arity;
-    }
-
-    public void setArity(int arity) {
-        this.arity = arity;
-    }
-
-    public void drawParticularity(Graphics g) {
-    }
+public interface ElementWithUUID {
+    public UUID getUUID();
 }

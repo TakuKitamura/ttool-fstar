@@ -38,7 +38,6 @@
 
 package avatartranslator;
 
-import myutil.Conversion;
 import myutil.TraceManager;
 
 import java.util.*;
@@ -57,22 +56,23 @@ public class AvatarSpecification extends AvatarElement {
 
     public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     public List<String> checkedIDs;
-    private List<AvatarBlock> blocks;
-    private List<AvatarRelation> relations;
-    private List<AvatarInterfaceRelation> irelations;
-    private List<AvatarAMSInterface> interfaces;
+    private final List<AvatarBlock> blocks;
+    private final List<AvatarRelation> relations;
+    private  List<AvatarInterfaceRelation> irelations;
+    private final List<AvatarAMSInterface> interfaces;
     /**
      * The list of all library functions that can be called.
      */
-    private List<AvatarLibraryFunction> libraryFunctions;
+    private final List<AvatarLibraryFunction> libraryFunctions;
 
     //private AvatarBroadcast broadcast;
     private String applicationCode;
-    private List<AvatarPragma> pragmas;
-    private List<String> safety_pragmas;
-    private List<AvatarPragmaLatency> latency_pragmas;
-    private List<AvatarConstant> constants;
-    private boolean robustnessMade = false;
+    private final List<AvatarPragma> pragmas;
+    private final List<String> safetyPragmas;
+    private final HashMap<String, String> safetyPragmasRefs;
+    private final List<AvatarPragmaLatency> latencyPragmas;
+    private final List<AvatarConstant> constants;
+    private final boolean robustnessMade = false;
 
     private Object informationSource; // element from which the spec has been built
 
@@ -84,8 +84,9 @@ public class AvatarSpecification extends AvatarElement {
         relations = new LinkedList<>();
         pragmas = new LinkedList<>();
         constants = new LinkedList<>();
-        safety_pragmas = new LinkedList<>();
-        latency_pragmas = new LinkedList<>();
+        safetyPragmas = new LinkedList<>();
+        safetyPragmasRefs = new HashMap<>();
+        latencyPragmas = new LinkedList<>();
         this.constants.add(AvatarConstant.FALSE);
         this.constants.add(AvatarConstant.TRUE);
         checkedIDs = new ArrayList<>();
@@ -152,15 +153,19 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public List<String> getSafetyPragmas() {
-        return safety_pragmas;
+        return safetyPragmas;
     }
 
     public List<AvatarPragmaLatency> getLatencyPragmas() {
-        return latency_pragmas;
+        return latencyPragmas;
     }
 
     public List<AvatarConstant> getAvatarConstants() {
         return constants;
+    }
+
+    public HashMap<String, String> getSafetyPragmasRefs() {
+        return safetyPragmasRefs;
     }
 
     public int getNbOfASMGraphicalElements() {
@@ -243,12 +248,13 @@ public class AvatarSpecification extends AvatarElement {
         pragmas.add(_pragma);
     }
 
-    public void addSafetyPragma(String _pragma) {
-        safety_pragmas.add(_pragma);
+    public void addSafetyPragma(String _pragma, String _refPragmas) {
+        safetyPragmas.add(_pragma);
+        safetyPragmasRefs.put(_pragma, _refPragmas);
     }
 
     public void addLatencyPragma(AvatarPragmaLatency _pragma) {
-        latency_pragmas.add(_pragma);
+        latencyPragmas.add(_pragma);
     }
 
     public void addConstant(AvatarConstant _constant) {
@@ -785,11 +791,11 @@ public class AvatarSpecification extends AvatarElement {
 		    spec.addPragma(nP);
 		    }*/
 
-        for (String safetyPragma : safety_pragmas) {
-            spec.addSafetyPragma(safetyPragma);
+        for (String safetyPragma : safetyPragmas) {
+            spec.addSafetyPragma(safetyPragma, safetyPragmasRefs.get(safetyPragma));
         }
 
-        for (AvatarPragmaLatency latencyPragma : latency_pragmas) {
+        for (AvatarPragmaLatency latencyPragma : latencyPragmas) {
             spec.addLatencyPragma(latencyPragma);
         }
 
@@ -823,11 +829,144 @@ public class AvatarSpecification extends AvatarElement {
         return adg;
     }
 
-    // TO BE COMPLETED
-    AvatarSpecification reduceFromDependencyGraph(AvatarDependencyGraph _adg) {
-        AvatarSpecification avspec = advancedClone();
 
-        return avspec;
+    public AvatarSpecification simplifyFromDependencies(ArrayList<AvatarElement> eltsOfInterest) {
+        AvatarSpecification clonedSpec = advancedClone();
+        AvatarDependencyGraph adg = clonedSpec.makeDependencyGraph();
+        AvatarDependencyGraph reducedGraph = adg.reduceGraphBefore(eltsOfInterest);
+        clonedSpec.reduceFromDependencyGraph(reducedGraph);
+        return clonedSpec;
+    }
+
+
+    public boolean isSignalUsed(AvatarSignal _sig) {
+        for(AvatarBlock block: blocks) {
+            if (block.getStateMachine().isSignalUsed(_sig)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public void removeUselessSignalAssociations() {
+        ArrayList<AvatarRelation> mightBeRemoved = new ArrayList<>();
+        ArrayList<AvatarSignal> toBeRemoved1 = new ArrayList<>();
+        ArrayList<AvatarSignal> toBeRemoved2 = new ArrayList<>();
+
+        for(AvatarRelation rel: relations) {
+            // For each signal association, we look for whether it is used or not
+            for(int i=0; i<rel.getSignals1().size(); i++) {
+                AvatarSignal sig1 = rel.getSignal1(i);
+                if (!isSignalUsed(sig1)) {
+                    AvatarSignal sig2 = rel.getSignal2(i);
+                    if (!isSignalUsed(sig2)) {
+                        // We can remove the signals. We remove its declaration in blocks and we remove the signals from the relation
+                        toBeRemoved1.add(sig1);
+                        toBeRemoved2.add(sig2);
+                        mightBeRemoved.add(rel);
+                    }
+                }
+            }
+        }
+
+        // Removing useless signals from blocks
+        for(AvatarBlock block: blocks) {
+            block.getSignals().removeAll(toBeRemoved1);
+            block.getSignals().removeAll(toBeRemoved2);
+        }
+
+        // Removing signals from relations, and removing relations if applicable
+        for(int cpt=0; cpt<mightBeRemoved.size(); cpt++) {
+            AvatarRelation rel = mightBeRemoved.get(cpt);
+            rel.removeAssociation(toBeRemoved1.get(cpt), toBeRemoved2.get(cpt));
+            if (rel.getSignals1().size() == 0) {
+                relations.remove(rel);
+            }
+        }
+
+    }
+
+    public void removeEmptyBlocks() {
+        // Remove all blocks with no ASM and no signals
+        ArrayList<AvatarBlock> toBeRemoved = new ArrayList<>();
+        for(AvatarBlock block: blocks) {
+            if (block.getStateMachine().isBasicStateMachine()) {
+                if (block.getSignals().size() == 0) {
+                    toBeRemoved.add(block);
+                }
+            }
+        }
+
+        blocks.removeAll(toBeRemoved);
+    }
+
+    /**
+     * Removes attributes that are not used
+     */
+    public void removeUselessAttributes() {
+        ArrayList<AvatarBlock> toBeRemoved = new ArrayList<>();
+        for(AvatarBlock block: blocks) {
+            block.removeUselessAttributes();
+        }
+    }
+
+
+
+
+
+    // TO BE COMPLETED
+    // We assume the graph has been reduced already to what is necessary:
+    // We now need to reduce the avatarspec accordingly
+    public void reduceFromDependencyGraph(AvatarDependencyGraph _adg) {
+
+        // We have to update the state machines according to the graph
+        for(AvatarBlock block: blocks) {
+            TraceManager.addDev("Handling block " + block.getName());
+            AvatarStateMachine asm = block.getStateMachine();
+            // We first check if the start is still in the graph
+            // If not, the state machine is empty: we just create a stop, and that's it
+            AvatarStartState ass = asm.getStartState();
+            if (_adg.getStateFor(ass) == null) {
+                TraceManager.addDev("No start state in " + block.getName());
+                asm.makeBasicSM(block);
+                block.clearAttributes();
+            } else {
+
+                // Otherwise we keep the start and consider all other elements
+                // We remove all elements with no correspondence in the graph
+                // Then, we redo a valid ASM i.e. all elements with no nexts (apart from states)
+                // are given a stop state after
+
+                TraceManager.addDev("Reducing state machine of " + block.getName());
+
+                ArrayList<AvatarElement> toRemove = new ArrayList<>();
+                for(AvatarStateMachineElement asme: asm.getListOfElements()) {
+
+                    if (_adg.getStateFor(asme) == null) {
+                        toRemove.add(asme);
+                    }
+
+                }
+                TraceManager.addDev("To remove size: " + toRemove.size() + " size of ASM: " + asm.getListOfElements().size());
+                asm.getListOfElements().removeAll(toRemove);
+                TraceManager.addDev("Removed. New size of ASM: " + asm.getListOfElements().size());
+                asm.makeCorrect(block);
+            }
+        }
+
+
+        // Then we can remove useless attributes i.e attributes that are not used
+
+
+
+        removeUselessSignalAssociations();
+
+        removeUselessAttributes();
+
+        removeEmptyBlocks();
+
 
     }
 

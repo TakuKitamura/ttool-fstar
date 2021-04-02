@@ -43,9 +43,12 @@ import graph.AUTGraph;
 import graph.AUTState;
 import graph.AUTTransition;
 import myutil.TraceManager;
+import ui.TGComponent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class AvatarDependencyGraph  {
     private AUTGraph graph;
@@ -69,6 +72,20 @@ public class AvatarDependencyGraph  {
     public void setRefs(HashMap<AvatarElement, AUTState> _toStates, HashMap<AUTState, AvatarElement> _fromStates) {
        toStates = _toStates;
        fromStates = _fromStates;
+    }
+
+    public AUTState getStateFor(AvatarElement _ae) {
+        return toStates.get(_ae);
+    }
+
+    public AUTState getStateFromReferenceObject(Object _referenceObject) {
+        for(AvatarElement elt: toStates.keySet()) {
+            if (elt.referenceObject == _referenceObject) {
+                TraceManager.addDev("Found equivalence between " + elt.referenceObject + " and " + _referenceObject);
+                return getStateFor(elt);
+            }
+        }
+        return null;
     }
 
     public void buildGraph(AvatarSpecification _avspec) {
@@ -96,7 +113,7 @@ public class AvatarDependencyGraph  {
                 if (signal.isOut()) {
                     // Write operation
                     AvatarSignal correspondingSig = _avspec.getCorrespondingSignal(signal);
-                    TraceManager.addDev("Corresponding signal=" + correspondingSig);
+                    //TraceManager.addDev("Corresponding signal=" + correspondingSig);
                     if (correspondingSig != null) {
                         for(AUTState stateDestination: states) {
                             if (stateDestination.referenceObject instanceof AvatarActionOnSignal) {
@@ -106,10 +123,14 @@ public class AvatarDependencyGraph  {
                                     //TraceManager.addDev("Found relation!");
                                     AUTTransition tr = new AUTTransition(state.id, "", stateDestination.id);
                                     transitions.add(tr);
+                                    state.addOutTransition(tr);
+                                    stateDestination.addInTransition(tr);
                                     AvatarRelation ar = _avspec.getAvatarRelationWithSignal(correspondingSig);
                                     if (!(ar.isAsynchronous())) {
                                         tr = new AUTTransition(stateDestination.id, "", state.id);
                                         transitions.add(tr);
+                                        stateDestination.addOutTransition(tr);
+                                        state.addInTransition(tr);
                                     }
                                 }
                             }
@@ -188,6 +209,103 @@ public class AvatarDependencyGraph  {
         }
 
         return adg;
+    }
+
+    public AvatarDependencyGraph reduceGraphBefore(ArrayList<AvatarElement> eltsOfInterest) {
+        AvatarDependencyGraph result = clone();
+
+        /*TraceManager.addDev("Size of original graph: s" + graph.getNbOfStates() + " t" + graph.getNbOfTransitions());
+        TraceManager.addDev("Size of graph after clone: s" + result.graph.getNbOfStates() + " t" + result.graph.getNbOfTransitions());
+
+        TraceManager.addDev("old graph:\n" + graph.toStringAll() + "\n");
+
+        TraceManager.addDev("Cloned graph:\n" + result.graph.toStringAll() + "\n");*/
+
+        /*TraceManager.addDev("Size of original graph toStates:" + toStates.size());
+        TraceManager.addDev("Size of original graph fromStates:" + fromStates.size());
+        TraceManager.addDev("Size of cloned graph toStates:" + result.toStates.size());
+        TraceManager.addDev("Size of cloned graph fromStates:" + result.fromStates.size());*/
+
+        // For each state, we figure out whether if it is linked to go to the elt states
+        // or if they are after the elts.
+
+        HashSet<AUTState> beforeStates = new HashSet<>();
+
+
+        // We take each elt one after the other and we complete the after or before states
+        for(AvatarElement ae: eltsOfInterest) {
+            //TraceManager.addDev("Considering elt:" + ae.getName());
+            Object ref = ae.getReferenceObject();
+            if (ref != null) {
+                // Finding the state referencing o
+                AUTState stateOfInterest = null;
+                for(AUTState s: graph.getStates()) {
+                    AvatarElement elt = fromStates.get(s);
+                    if (elt.getReferenceObject() == ref) {
+                        stateOfInterest = s;
+                        break;
+                    }
+                }
+
+                if (stateOfInterest != null) {
+                    //TraceManager.addDev("Has a state of interest: " + stateOfInterest.id);
+                    for (AUTState state : graph.getStates()) {
+                        if (state == stateOfInterest) {
+                            beforeStates.add(result.graph.getState(state.id));
+                        } else {
+                            /*if (graph.hasPathFromTo(state.id, stateOfInterest.id)) {
+                                beforeStates.add(result.graph.getState(state.id));
+                            }*/
+                            if (graph.canGoFromTo(state.id, stateOfInterest.id)) {
+                                beforeStates.add(result.graph.getState(state.id));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //TraceManager.addDev("Size of before: " + beforeStates.size());
+
+        // We now have to figure out which states have to be removed
+        ArrayList<AUTState> toRemoveStates = new ArrayList<>();
+        for(AUTState st: result.graph.getStates()) {
+            if (!beforeStates.contains(st)) {
+                toRemoveStates.add(st);
+            }
+        }
+
+        //TraceManager.addDev("Size of remove: " + toRemoveStates.size());
+
+        result.graph.removeStates(toRemoveStates);
+        result.removeReferencesOf(toRemoveStates);
+
+        /*TraceManager.addDev("Size of graph after remove: s" + result.graph.getNbOfStates() + " t" + result.graph.getNbOfTransitions());
+        TraceManager.addDev("New graph:\n" +result.graph.toStringAll() + "\n");*/
+
+
+        // We have to update state references
+
+
+        return result;
+
+    }
+
+    public void removeReferencesOf(Collection<AUTState> _c) {
+        for(AUTState st: _c) {
+            fromStates.remove(st);
+        }
+
+        ArrayList<AvatarElement> toBeRemoved = new ArrayList<>();
+        for(AvatarElement ae: toStates.keySet()) {
+            if (_c.contains(toStates.get(ae))) {
+                toBeRemoved.add(ae);
+            }
+        }
+
+        for(AvatarElement ae: toBeRemoved) {
+            toStates.remove(ae);
+        }
     }
 
 

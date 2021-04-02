@@ -40,6 +40,7 @@
 package ui.window;
 
 import avatartranslator.AvatarDependencyGraph;
+import avatartranslator.AvatarElement;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
@@ -64,13 +65,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -108,6 +104,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean ignoreInternalStatesSelected = true;
     protected static boolean generateDesignSelected = false;
     protected static boolean generateDependencyGraphSelected = false;
+    protected static boolean generateDependencyGraphEltSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
     protected static boolean safetySelected = false;
@@ -184,7 +181,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
-            ignoreConcurrenceBetweenInternalActions, generateDesign, generateDependencyGraph;
+            ignoreConcurrenceBetweenInternalActions, generateDesign, generateDependencyGraph, generateDependencyGraphElt;
     protected JButton graphDirButton, graphPathDotButton;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
@@ -201,6 +198,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     private java.util.Timer timer;
     //protected boolean startProcess = false;
     protected Map<String, Integer> verifMap;
+
+    private HashSet<TGComponent> hasDependencyGraph;
+
 
     /*
      * Creates new form
@@ -232,6 +232,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         pack();
         
         verifMap = new HashMap<String, Integer>();
+
+        hasDependencyGraph = new HashSet<>();
 
 	/*if ((mgui != null) && (spec != null)) {
         mgui.drawAvatarSpecification(spec);
@@ -294,6 +296,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             generateDependencyGraph = new JCheckBox("[For testing purpose only] Generate dependency graph", generateDependencyGraphSelected);
             generateDependencyGraph.addActionListener(this);
             jp01.add(generateDependencyGraph, c01);
+        }
+
+        if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
+            generateDependencyGraphElt = new JCheckBox("[For testing purpose only] Generate dependency graph for Reachability / liveness",
+                    generateDependencyGraphEltSelected);
+            generateDependencyGraphElt.addActionListener(this);
+            jp01.add(generateDependencyGraphElt, c01);
         }
 
         c01.gridwidth = 1;
@@ -512,6 +521,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jpadvancedQ.add(cqb, cadvancedQ);
                 customChecks.add(cqb);
             }
+
             JScrollPane jsp = new JScrollPane(jpadvancedQ, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             jsp.setPreferredSize(new Dimension(500, 120));
             cadvanced.gridheight = 10;
@@ -918,9 +928,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             if (safetySelected) {
                 //res = amc.setSafetyAnalysis();
                 res = 0;
+
                 for(JCheckBox cc: customChecks) {
                     if (cc.isSelected()) {
-                        if (amc.addSafety(cc.getText())) {
+                        if (amc.addSafety(cc.getText(), spec.getSafetyPragmasRefs().get(cc.getText()))) {
                             res++;
                         }
                     }
@@ -1167,6 +1178,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
                 TGComponent tgc = (TGComponent) (o);
+
+                handleDependencyGraph(_o, tgc);
+
                 //TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
                 switch (_res) {
                     case NOTCOMPUTED:
@@ -1184,12 +1198,41 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
         }
     }
+
+    protected void handleDependencyGraph(Object _o, TGComponent _tgc) {
+        if (hasDependencyGraph.contains(_tgc)) {
+            return;
+        }
+        hasDependencyGraph.add(_tgc);
+        if (generateDependencyGraphEltSelected) {
+            TraceManager.addDev("Generating dependency graph for component:" + _tgc.toString());
+            AvatarSpecification specNew = spec.advancedClone();
+            AvatarDependencyGraph adg = specNew.makeDependencyGraph();
+
+            ArrayList<AvatarElement> elts = new ArrayList<>();
+            elts.add((AvatarElement)_o);
+            AvatarDependencyGraph clonedG = adg.reduceGraphBefore(elts);
+            RG rg = new RG("Dependency Graph of " + _tgc.toString() + "/" + _tgc.getAVATARID() + ".");
+            rg.graph = clonedG.getGraph();
+            rg.nbOfStates = rg.graph.getNbOfStates();
+            rg.nbOfTransitions = rg.graph.getNbOfTransitions();
+            mgui.addRG(rg);
+
+            // Computing reduced specification
+            specNew.reduceFromDependencyGraph(clonedG);
+            mgui.drawAvatarSpecification(specNew);
+
+        }
+    }
     
     protected void handleLiveness(Object _o, SpecificationPropertyPhase _res) {
         if (_o instanceof AvatarStateMachineElement) {
             Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
                 TGComponent tgc = (TGComponent) (o);
+
+                handleDependencyGraph(_o, tgc);
+
                 //TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
                 switch (_res) {
                     case NOTCOMPUTED:
@@ -1209,6 +1252,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     }
     
     protected void handleSafety(ArrayList<SafetyProperty> safeties) {
+
+        TraceManager.addDev("Handling safety");
+
         int status;
         
         if (safeties == null) {
@@ -1223,7 +1269,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             } else {
                 status = AvatarBDSafetyPragma.PROVED_ERROR;
             }
-            verifMap.put(sp.getRawProperty(), status);
+            //TraceManager.addDev("Putting in map: " + sp.getRefProperty() + " with status: " + status);
+            verifMap.put(sp.getRefProperty(), status);
         }
         mgui.modelBacktracingUPPAAL(verifMap);
     }
@@ -1246,6 +1293,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         if (generateDependencyGraph != null) {
             generateDependencyGraphSelected = generateDependencyGraph.isSelected();
+        }
+        if (generateDependencyGraph != null) {
+            generateDependencyGraphEltSelected = generateDependencyGraphElt.isSelected();
         }
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();

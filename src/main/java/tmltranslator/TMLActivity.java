@@ -526,7 +526,7 @@ public class TMLActivity extends TMLElement {
         TMLWriteChannel twc;
         int cpt = 0;
 
-        Vector<TMLActivityElementEvent> newElements = new Vector<TMLActivityElementEvent>();
+        Collection<TMLActivityElement> newElements = new Vector<>();
 
         for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
@@ -534,6 +534,8 @@ public class TMLActivity extends TMLElement {
                 twc = (TMLWriteChannel) ae;
                 for (int j = 0; j < twc.getNbOfChannels(); j++) {
                     if (twc.getChannel(j) == chan) {
+                        TMLActionState action = new TMLActionState("Action", ae.getReferenceObject());
+                        action.setAction(action1 + "= " + twc.getNbOfSamples());
                         TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
                         send.setEvent(evt1);
                         TMLWaitEvent receive = new TMLWaitEvent("RecvEvt" + cpt, ae.getReferenceObject());
@@ -544,21 +546,21 @@ public class TMLActivity extends TMLElement {
                             receive.addNext(o);
                         }
 
+                        action.addNext(send);
                         send.addNext(receive);
+                        newElements.add(action);
                         newElements.add(send);
                         newElements.add(receive);
                         send.addParam(action1);
                         receive.addParam(action2);
                         ae.clearNexts();
-                        ae.addNext(send);
+                        ae.addNext(action);
                     }
                 }
             }
         }
 
-        for (TMLActivityElementEvent s : newElements) {
-            elements.add(s);
-        }
+        elements.addAll(newElements);
     }
 
     public void removeEmptyInfiniteLoop() {
