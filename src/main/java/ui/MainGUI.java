@@ -40,6 +40,7 @@
 package ui;
 
 import attacktrees.AttackTree;
+import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -4322,6 +4323,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return this.getAllSignals(tp, name);
     }
 
+
     public List<AvatarSignal> getAllSignals(TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;
@@ -4334,6 +4336,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         return adp.getAllSignals(name);
     }
+
+
 
     public List<AvatarBDLibraryFunction> getAllLibraryFunctions() {
         TURTLEPanel tp = getCurrentTURTLEPanel();

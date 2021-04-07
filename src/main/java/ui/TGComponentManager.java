@@ -1,27 +1,27 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
- * 
+ *
  * ludovic.apvrille AT telecom-paristech.fr
  * andrea.enrici AT telecom-paristech.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -32,7 +32,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -58,8 +58,14 @@ import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
 import ui.eln.*;
 import ui.eln.sca_eln.*;
-import ui.eln.sca_eln_sca_de.*;
-import ui.eln.sca_eln_sca_tdf.*;
+import ui.eln.sca_eln_sca_de.ELNComponentCurrentSinkDE;
+import ui.eln.sca_eln_sca_de.ELNComponentCurrentSourceDE;
+import ui.eln.sca_eln_sca_de.ELNComponentVoltageSinkDE;
+import ui.eln.sca_eln_sca_de.ELNComponentVoltageSourceDE;
+import ui.eln.sca_eln_sca_tdf.ELNComponentCurrentSinkTDF;
+import ui.eln.sca_eln_sca_tdf.ELNComponentCurrentSourceTDF;
+import ui.eln.sca_eln_sca_tdf.ELNComponentVoltageSinkTDF;
+import ui.eln.sca_eln_sca_tdf.ELNComponentVoltageSourceTDF;
 import ui.ftd.*;
 import ui.iod.*;
 import ui.ncdd.*;
@@ -333,7 +339,7 @@ public class TGComponentManager {
     public static final int TMLCP_STOP_STATE = 1507;
 
     // Issue #69
-   // public static final int TMLCP_JUNCTION = 1508;
+    // public static final int TMLCP_JUNCTION = 1508;
     public static final int TMLCP_FOR_LOOP = 1510;
 
     public static final int TMLSD_STORAGE_INSTANCE = 1520;
@@ -381,7 +387,7 @@ public class TGComponentManager {
     public static final int ELN_DE_CURRENT_SOURCE = 1634;
     public static final int ELN_DE_VOLTAGE_SINK = 1635;
     public static final int ELN_DE_VOLTAGE_SOURCE = 1636;
-    
+
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
     public static final int PROSMD_STOP_STATE = 2001;
@@ -440,11 +446,11 @@ public class TGComponentManager {
     public static final int AVATARSMD_CONNECTOR = 5102;
     public static final int AVATARSMD_SEND_SIGNAL = 5103;
     public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
+    public static final int AVATARSMD_QUERY_RECEIVE_SIGNAL = 5105;
     public static final int AVATARSMD_SEND_AMS_SIGNAL = 5113;
     public static final int AVATARSMD_RECEIVE_AMS_SIGNAL = 5114;
-    // Issue #69
-    //public static final int AVATARSMD_PARALLEL = 5105;
-    
+
+
     public static final int AVATARSMD_STATE = 5106;
     public static final int AVATARSMD_CHOICE = 5107;
     public static final int AVATARSMD_RANDOM = 5108;
@@ -530,7 +536,7 @@ public class TGComponentManager {
     public static final int AAD_STOP_FLOW = 5508;
     public static final int AAD_SEND_SIGNAL_ACTION = 5509;
     public static final int AAD_ACCEPT_EVENT_ACTION = 5510;
-     public static final int AAD_SEND_AMS_ACTION = 5512;
+    public static final int AAD_SEND_AMS_ACTION = 5512;
     public static final int AAD_ACCEPT_AMS_ACTION = 5513;
     public static final int AAD_PARTITION = 5511;
 
@@ -613,16 +619,19 @@ public class TGComponentManager {
             case AVATARSMD_SEND_SIGNAL:
                 tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-	    case AVATARSMD_SEND_AMS_SIGNAL:
+            case AVATARSMD_SEND_AMS_SIGNAL:
                 tgc = new AvatarSMDSendAMSSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;	
+                break;
             case AVATARSMD_LIBRARY_FUNCTION_CALL:
                 tgc = new AvatarSMDLibraryFunctionCall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case AVATARSMD_RECEIVE_SIGNAL:
                 tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-		case AVATARSMD_RECEIVE_AMS_SIGNAL:
+            case AVATARSMD_QUERY_RECEIVE_SIGNAL:
+                tgc = new AvatarSMDQueryReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARSMD_RECEIVE_AMS_SIGNAL:
                 tgc = new AvatarSMDReceiveAMSSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 //              case AVATARSMD_PARALLEL: Issue #69
@@ -744,13 +753,13 @@ public class TGComponentManager {
             case AAD_ACCEPT_EVENT_ACTION:
                 tgc = new AvatarADAcceptEventAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-	    case AAD_SEND_AMS_ACTION:
+            case AAD_SEND_AMS_ACTION:
                 tgc = new AvatarADSendAMSAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case AAD_ACCEPT_AMS_ACTION:
                 tgc = new AvatarADAcceptAMSAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-		
+
             case AAD_PARTITION:
                 tgc = new AvatarADPartition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1162,7 +1171,7 @@ public class TGComponentManager {
             case TMLAD_READ_CHANNEL:
                 tgc = new TMLADReadChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-	    case TMLAD_WRITE_CAMS:
+            case TMLAD_WRITE_CAMS:
                 tgc = new TMLADWriteCAMS(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLAD_READ_CAMS:
@@ -1303,7 +1312,7 @@ public class TGComponentManager {
             case TMLARCHI_HWANODE:
                 tgc = new TMLArchiHWANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-	case TMLARCHI_CAMSNODE:
+            case TMLARCHI_CAMSNODE:
                 tgc = new TMLArchiCAMSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLARCHI_MEMORYNODE:
@@ -1331,108 +1340,108 @@ public class TGComponentManager {
             case CAMS_BLOCK_TDF:
                 tgc = new SysCAMSBlockTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-	case CAMS_BLOCK_DE:
-	    //  System.out.println("@@@@@@@@@@block reconnu@@@@@@@@@@@@@@@@");
-            	tgc = new SysCAMSBlockDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+            case CAMS_BLOCK_DE:
+                //  System.out.println("@@@@@@@@@@block reconnu@@@@@@@@@@@@@@@@");
+                tgc = new SysCAMSBlockDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case CAMS_PORT_TDF:
-            	tgc = new SysCAMSPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+                tgc = new SysCAMSPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case CAMS_PORT_DE:
-            	tgc = new SysCAMSPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+                tgc = new SysCAMSPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case CAMS_PORT_CONVERTER:
-            	tgc = new SysCAMSPortConverter(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+                tgc = new SysCAMSPortConverter(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case CAMS_CLUSTER:
-            	tgc = new SysCAMSCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+                tgc = new SysCAMSCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case CAMS_BLOCK_GPIO2VCI:
-            	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-	case CAMS_CLOCK:
-	    //System.out.println("@@@@@@@@@@Clock reconnu  2 @@@@@@@@@@@@@@@@");
-            	tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+                tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case CAMS_CLOCK:
+                //System.out.println("@@@@@@@@@@Clock reconnu  2 @@@@@@@@@@@@@@@@");
+                tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             // ELN
             case ELN_RESISTOR:
-            	tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
+                tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case ELN_CAPACITOR:
-            	tgc = new ELNComponentCapacitor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
+                tgc = new ELNComponentCapacitor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case ELN_INDUCTOR:
-            	tgc = new ELNComponentInductor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
+                tgc = new ELNComponentInductor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE:
-            	tgc = new ELNComponentVoltageControlledVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
+                tgc = new ELNComponentVoltageControlledVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE:
-            	tgc = new ELNComponentVoltageControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
-            case ELN_IDEAL_TRANSFORMER: 
-            	tgc = new ELNComponentIdealTransformer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
+                tgc = new ELNComponentVoltageControlledCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_IDEAL_TRANSFORMER:
+                tgc = new ELNComponentIdealTransformer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case ELN_TRANSMISSION_LINE:
-            	tgc = new ELNComponentTransmissionLine(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
+                tgc = new ELNComponentTransmissionLine(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case ELN_INDEPENDENT_VOLTAGE_SOURCE:
-            	tgc = new ELNComponentIndependentVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
-            case ELN_INDEPENDENT_CURRENT_SOURCE: 
-            	tgc = new ELNComponentIndependentCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;	
-            case ELN_NODE_REF: 
-            	tgc = new ELNNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_TDF_VOLTAGE_SINK: 
-            	tgc = new ELNComponentVoltageSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_TDF_CURRENT_SINK: 
-            	tgc = new ELNComponentCurrentSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_MODULE: 
-            	tgc = new ELNModule(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_MODULE_TERMINAL: 
-            	tgc = new ELNModuleTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_TDF_VOLTAGE_SOURCE: 
-            	tgc = new ELNComponentVoltageSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_TDF_CURRENT_SOURCE: 
-            	tgc = new ELNComponentCurrentSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_CLUSTER: 
-            	tgc = new ELNCluster(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_MODULE_PORT_DE: 
-            	tgc = new ELNModulePortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_MODULE_PORT_TDF: 
-            	tgc = new ELNModulePortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_CLUSTER_TERMINAL: 
-            	tgc = new ELNClusterTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_CLUSTER_PORT_DE: 
-            	tgc = new ELNClusterPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_CLUSTER_PORT_TDF: 
-            	tgc = new ELNClusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_DE_CURRENT_SINK: 
-            	tgc = new ELNComponentCurrentSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_DE_CURRENT_SOURCE: 
-            	tgc = new ELNComponentCurrentSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_DE_VOLTAGE_SINK: 
-            	tgc = new ELNComponentVoltageSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-            case ELN_DE_VOLTAGE_SOURCE: 
-            	tgc = new ELNComponentVoltageSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
+                tgc = new ELNComponentIndependentVoltageSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_INDEPENDENT_CURRENT_SOURCE:
+                tgc = new ELNComponentIndependentCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_NODE_REF:
+                tgc = new ELNNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_TDF_VOLTAGE_SINK:
+                tgc = new ELNComponentVoltageSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_TDF_CURRENT_SINK:
+                tgc = new ELNComponentCurrentSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_MODULE:
+                tgc = new ELNModule(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_MODULE_TERMINAL:
+                tgc = new ELNModuleTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_TDF_VOLTAGE_SOURCE:
+                tgc = new ELNComponentVoltageSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_TDF_CURRENT_SOURCE:
+                tgc = new ELNComponentCurrentSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_CLUSTER:
+                tgc = new ELNCluster(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_MODULE_PORT_DE:
+                tgc = new ELNModulePortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_MODULE_PORT_TDF:
+                tgc = new ELNModulePortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_CLUSTER_TERMINAL:
+                tgc = new ELNClusterTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_CLUSTER_PORT_DE:
+                tgc = new ELNClusterPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_CLUSTER_PORT_TDF:
+                tgc = new ELNClusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_DE_CURRENT_SINK:
+                tgc = new ELNComponentCurrentSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_DE_CURRENT_SOURCE:
+                tgc = new ELNComponentCurrentSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_DE_VOLTAGE_SINK:
+                tgc = new ELNComponentVoltageSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ELN_DE_VOLTAGE_SOURCE:
+                tgc = new ELNComponentVoltageSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1610,6 +1619,8 @@ public class TGComponentManager {
             return AVATARSMD_SEND_SIGNAL;
         } else if (tgc instanceof AvatarSMDReceiveSignal) {
             return AVATARSMD_RECEIVE_SIGNAL;
+        } else if (tgc instanceof AvatarSMDQueryReceiveSignal) {
+            return AVATARSMD_QUERY_RECEIVE_SIGNAL;
         } else if (tgc instanceof AvatarSMDLibraryFunctionCall) {
             return AVATARSMD_LIBRARY_FUNCTION_CALL;
 //        } else if (tgc instanceof AvatarSMDParallel) { // Issue #69
@@ -1815,10 +1826,10 @@ public class TGComponentManager {
             return AAD_SEND_SIGNAL_ACTION;
         } else if (tgc instanceof AvatarADAcceptEventAction) {
             return AAD_ACCEPT_EVENT_ACTION;
-	} else if (tgc instanceof AvatarADSendAMSAction) {
+        } else if (tgc instanceof AvatarADSendAMSAction) {
             return AAD_SEND_AMS_ACTION;
         } else if (tgc instanceof AvatarADAcceptAMSAction) {
-            return AAD_ACCEPT_AMS_ACTION;  
+            return AAD_ACCEPT_AMS_ACTION;
         } else if (tgc instanceof AvatarADPartition) {
             return AAD_PARTITION;
         } else if (tgc instanceof AvatarADAssociationConnector) {
@@ -1828,80 +1839,80 @@ public class TGComponentManager {
         } else if (tgc instanceof SysCAMSPortConnector) {
             return CAMS_CONNECTOR;
         } else if (tgc instanceof SysCAMSBlockTDF) {
-        	return CAMS_BLOCK_TDF;
+            return CAMS_BLOCK_TDF;
         } else if (tgc instanceof SysCAMSBlockDE) {
-	    //System.out.println("@@@@@@@@@@Block DE reconnu@@@@@@@@@@@@@@@@");
-        	return CAMS_BLOCK_DE;
+            //System.out.println("@@@@@@@@@@Block DE reconnu@@@@@@@@@@@@@@@@");
+            return CAMS_BLOCK_DE;
         } else if (tgc instanceof SysCAMSPortTDF) {
-        	return CAMS_PORT_TDF;
+            return CAMS_PORT_TDF;
         } else if (tgc instanceof SysCAMSPortDE) {
-        	return CAMS_PORT_DE;
+            return CAMS_PORT_DE;
         } else if (tgc instanceof SysCAMSPortConverter) {
-        	return CAMS_PORT_CONVERTER;
+            return CAMS_PORT_CONVERTER;
         } else if (tgc instanceof SysCAMSCompositeComponent) {
-        	return CAMS_CLUSTER;
+            return CAMS_CLUSTER;
         } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
-        	return CAMS_BLOCK_GPIO2VCI;
-	} else if (tgc instanceof SysCAMSClock) {
-	    //System.out.println("@@@@@@@@@@Clock reconnu  1 @@@@@@@@@@@@@@@@");
-        	return CAMS_CLOCK;
-        	// ELN
+            return CAMS_BLOCK_GPIO2VCI;
+        } else if (tgc instanceof SysCAMSClock) {
+            //System.out.println("@@@@@@@@@@Clock reconnu  1 @@@@@@@@@@@@@@@@");
+            return CAMS_CLOCK;
+            // ELN
         } else if (tgc instanceof ELNConnector) {
-        	return ELN_CONNECTOR;	
+            return ELN_CONNECTOR;
         } else if (tgc instanceof ELNComponentResistor) {
-        	return ELN_RESISTOR;
+            return ELN_RESISTOR;
         } else if (tgc instanceof ELNComponentCapacitor) {
-        	return ELN_CAPACITOR;
+            return ELN_CAPACITOR;
         } else if (tgc instanceof ELNComponentInductor) {
-        	return ELN_INDUCTOR;
+            return ELN_INDUCTOR;
         } else if (tgc instanceof ELNComponentInductor) {
-        	return ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE;
+            return ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentInductor) {
-        	return ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE;
+            return ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE;
         } else if (tgc instanceof ELNComponentIdealTransformer) {
-        	return ELN_IDEAL_TRANSFORMER;
+            return ELN_IDEAL_TRANSFORMER;
         } else if (tgc instanceof ELNComponentTransmissionLine) {
-        	return ELN_TRANSMISSION_LINE;
+            return ELN_TRANSMISSION_LINE;
         } else if (tgc instanceof ELNComponentIndependentVoltageSource) {
-        	return ELN_INDEPENDENT_VOLTAGE_SOURCE;
+            return ELN_INDEPENDENT_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentIndependentCurrentSource) {
-        	return ELN_INDEPENDENT_CURRENT_SOURCE;
+            return ELN_INDEPENDENT_CURRENT_SOURCE;
         } else if (tgc instanceof ELNNodeRef) {
-        	return ELN_NODE_REF;
+            return ELN_NODE_REF;
         } else if (tgc instanceof ELNComponentVoltageSinkTDF) {
-        	return ELN_TDF_VOLTAGE_SINK;
+            return ELN_TDF_VOLTAGE_SINK;
         } else if (tgc instanceof ELNComponentCurrentSinkTDF) {
-        	return ELN_TDF_CURRENT_SINK;
+            return ELN_TDF_CURRENT_SINK;
         } else if (tgc instanceof ELNModule) {
-        	return ELN_MODULE;
+            return ELN_MODULE;
         } else if (tgc instanceof ELNModuleTerminal) {
-        	return ELN_MODULE_TERMINAL;
+            return ELN_MODULE_TERMINAL;
         } else if (tgc instanceof ELNComponentVoltageSourceTDF) {
-        	return ELN_TDF_VOLTAGE_SOURCE;
+            return ELN_TDF_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentCurrentSourceTDF) {
-        	return ELN_TDF_CURRENT_SOURCE;
+            return ELN_TDF_CURRENT_SOURCE;
         } else if (tgc instanceof ELNCluster) {
-        	return ELN_CLUSTER;
+            return ELN_CLUSTER;
         } else if (tgc instanceof ELNModulePortDE) {
-        	return ELN_MODULE_PORT_DE;
+            return ELN_MODULE_PORT_DE;
         } else if (tgc instanceof ELNModulePortTDF) {
-        	return ELN_MODULE_PORT_TDF;
+            return ELN_MODULE_PORT_TDF;
         } else if (tgc instanceof ELNClusterTerminal) {
-        	return ELN_CLUSTER_TERMINAL;
+            return ELN_CLUSTER_TERMINAL;
         } else if (tgc instanceof ELNClusterPortDE) {
-        	return ELN_CLUSTER_PORT_DE;
+            return ELN_CLUSTER_PORT_DE;
         } else if (tgc instanceof ELNClusterPortTDF) {
-        	return ELN_CLUSTER_PORT_TDF;
+            return ELN_CLUSTER_PORT_TDF;
         } else if (tgc instanceof ELNComponentCurrentSinkDE) {
-        	return ELN_DE_CURRENT_SINK;
+            return ELN_DE_CURRENT_SINK;
         } else if (tgc instanceof ELNComponentCurrentSourceDE) {
-        	return ELN_DE_CURRENT_SOURCE;
+            return ELN_DE_CURRENT_SOURCE;
         } else if (tgc instanceof ELNComponentVoltageSinkDE) {
-        	return ELN_DE_VOLTAGE_SINK;
+            return ELN_DE_VOLTAGE_SINK;
         } else if (tgc instanceof ELNComponentVoltageSourceDE) {
-        	return ELN_DE_VOLTAGE_SOURCE;
-        	
-        	// Others
+            return ELN_DE_VOLTAGE_SOURCE;
+
+            // Others
         } else if (tgc instanceof TADDeterministicDelay) {
             return TAD_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADParallel) {
@@ -2141,11 +2152,11 @@ public class TGComponentManager {
             return TMLAD_WRITE_CHANNEL;
         } else if (tgc instanceof TMLADReadChannel) {
             return TMLAD_READ_CHANNEL;
-	}    else if (tgc instanceof TMLADWriteCAMS) {
+        } else if (tgc instanceof TMLADWriteCAMS) {
             return TMLAD_WRITE_CAMS;
         } else if (tgc instanceof TMLADReadCAMS) {
             return TMLAD_READ_CAMS;
-        
+
         } else if (tgc instanceof TMLADSendRequest) {
             return TMLAD_SEND_REQUEST;
         } else if (tgc instanceof TMLADSendEvent) {
@@ -2245,7 +2256,7 @@ public class TGComponentManager {
             return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
-	} else if (tgc instanceof TMLArchiCAMSNode) {
+        } else if (tgc instanceof TMLArchiCAMSNode) {
             return TMLARCHI_CAMSNODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
@@ -2612,11 +2623,11 @@ public class TGComponentManager {
                 tgc = new TMLCPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
             case CAMS_CONNECTOR:
-            	tgc = new SysCAMSPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            	break;
+                tgc = new SysCAMSPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
             case ELN_CONNECTOR:
-            	tgc = new ELNConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-            	break;
+                tgc = new ELNConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
             case CONNECTOR_NODE_TMLARCHI:
                 tgc = new TMLArchiConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;

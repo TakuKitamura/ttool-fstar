@@ -269,6 +269,7 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_loss, main, _referenceRelation);
         }
 
+        /// If maxSize has been reached
         // If it is blocking, then, the new message is written but not added
         if (!(_ar.isBlocking())) {
             AvatarActionOnSignal aaos_write_bucket = new AvatarActionOnSignal("writebucket__", write, _referenceRelation);

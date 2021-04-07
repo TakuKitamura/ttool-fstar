@@ -81,7 +81,7 @@ public class AvatarADToolBar extends TToolBar {
         mgui.actions[TGUIAction.AAD_STOP_FLOW].setEnabled(b);
         mgui.actions[TGUIAction.AAD_SEND_SIGNAL_ACTION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ACCEPT_EVENT_ACTION].setEnabled(b);
-	mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION].setEnabled(b);
+	    mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ACCEPT_AMS_ACTION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_PARTITION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ASSOCIATION_CONNECTOR].setEnabled(b);
@@ -134,15 +134,15 @@ public class AvatarADToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.AAD_ACCEPT_EVENT_ACTION]);
         button.addMouseListener(mgui.mouseHandler);
 	
-	this.addSeparator();
+	    /*this.addSeparator();
 
-	 button = this.add(mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION]);
+	    button = this.add(mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION]);
         button.addMouseListener(mgui.mouseHandler);
 
         button = this.add(mgui.actions[TGUIAction.AAD_ACCEPT_AMS_ACTION]);
-        button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);*/
 	
-	this.addSeparator();
+	    this.addSeparator();
 	
         button = this.add(mgui.actions[TGUIAction.AAD_ACTION]);
         button.addMouseListener(mgui.mouseHandler);

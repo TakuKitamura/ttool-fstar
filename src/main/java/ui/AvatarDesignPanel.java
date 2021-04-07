@@ -233,6 +233,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         return abdp.getAllSignalsOfBlock(_name);
     }
 
+
     public List<String> getAllTimers(String _name) {
         return abdp.getAllTimersOfBlock(_name);
     }
