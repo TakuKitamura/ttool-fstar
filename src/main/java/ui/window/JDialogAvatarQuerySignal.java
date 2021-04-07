@@ -129,6 +129,7 @@ public class JDialogAvatarQuerySignal extends JDialogBase implements ActionListe
         for (TAttribute aa: attributes)
             if (aa.getType() == TAttribute.INTEGER){
                 showAttributes.add(aa.getId());
+                TraceManager.addDev("Adding id=" + aa.getId());
                 realAttributes.add(aa);
             }
     }
@@ -211,7 +212,7 @@ public class JDialogAvatarQuerySignal extends JDialogBase implements ActionListe
     public void selectSignal() {
         int indexS = listSignals.getSelectedIndex();
         int indexA = listAttributes.getSelectedIndex();
-        resultingValue.setText(realAttributes.get(indexA) + "=?" + realSignals.get(indexS).getUseDescription());
+        resultingValue.setText(showAttributes.get(indexA) + "=?" + realSignals.get(indexS).getUseDescription());
     }
 
     public void closeDialog() {
