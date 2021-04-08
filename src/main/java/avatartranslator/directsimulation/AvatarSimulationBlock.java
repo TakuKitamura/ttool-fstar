@@ -59,6 +59,7 @@ public class AvatarSimulationBlock {
     public final static int COMPLETED = 2;
 
     private AvatarBlock block;
+    private AvatarSpecificationSimulation sim;
     private AvatarSimulationTransaction lastTransaction;
     private Vector<AvatarSimulationTransaction> transactions;
     private boolean completed;
@@ -68,8 +69,9 @@ public class AvatarSimulationBlock {
 
     //private int elapsedTime;
 
-    public AvatarSimulationBlock(AvatarBlock _block) {
+    public AvatarSimulationBlock(AvatarBlock _block, AvatarSpecificationSimulation _sim) {
         block = _block;
+        sim = _sim;
         transactions = new Vector<AvatarSimulationTransaction>();
         completed = false;
         //elapsedTime = 0;
@@ -140,7 +142,8 @@ public class AvatarSimulationBlock {
         return transactions;
     }
 
-    public Vector<AvatarSimulationPendingTransaction> getPendingTransactions(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow, long _bunchid) {
+    public Vector<AvatarSimulationPendingTransaction> getPendingTransactions(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue,
+                                                                             int _maxTransationsInARow, long _bunchid) {
         Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 
         if (completed) {
@@ -289,6 +292,8 @@ public class AvatarSimulationBlock {
 
 
     public void executeElement(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt, long _bunchid) {
+        //TraceManager.addDev("Execute Element");
+
         // Stop state
         if (_elt instanceof AvatarStopState) {
             makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
@@ -301,6 +306,10 @@ public class AvatarSimulationBlock {
         } else if (_elt instanceof AvatarRandom) {
             makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 
+            // Query
+        } else if (_elt instanceof AvatarQueryOnSignal) {
+            makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
+
             // Transition
         } else if (_elt instanceof AvatarTransition) {
             makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
@@ -311,7 +320,11 @@ public class AvatarSimulationBlock {
         }
     }
 
-    public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt, long _bunchid) {
+    public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue,
+                                        AvatarSimulationPendingTransaction _aspt, long _bunchid) {
+
+        //TraceManager.addDev("Make executed transaction");
+
         AvatarTransition at;
         String action;
         int i;
@@ -423,6 +436,28 @@ public class AvatarSimulationBlock {
                     ast.actions = new Vector<String>();
                     ast.actions.add(random.getVariable() + " = " + valMin);
                 }
+            }
+
+            if (_elt instanceof AvatarQueryOnSignal) {
+                TraceManager.addDev("Query on signal");
+                AvatarQueryOnSignal aqos = (AvatarQueryOnSignal) (_elt);
+                index = block.getIndexOfAvatarAttributeWithName(aqos.getAttribute().getName());
+                if (index > -1) {
+                    int valFIFO = 0;
+
+                    AvatarSpecification spec = block.getAvatarSpecification();
+                    AvatarRelation ar = spec.getAvatarRelationWithSignal(aqos.getSignal());
+                    if (ar != null) {
+                        valFIFO = sim.getNbOfAsynchronousMessages(ar);
+
+                        attributeValues.remove(index);
+                        attributeValues.add(index, "" + valFIFO);
+
+                        ast.actions = new Vector<String>();
+                        ast.actions.add(aqos.getAttribute().getName() + " = " + valFIFO);
+                    }
+                }
+
             }
 
             // Action on signal?

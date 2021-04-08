@@ -353,10 +353,17 @@ public class AvatarSMDQueryReceiveSignal extends AvatarSMDBasicCanBeDisabledComp
 		if (index == -1) {
 			return "";
 		}
-		return value.substring(index+1).trim();
+
+		int indexLast = value.indexOf('(');
+
+		if (indexLast == -1) {
+			indexLast = value.length();
+		}
+
+		return value.substring(index+1, indexLast).trim();
     }
 
-	public String getVariableName() {
+	public String getAttributeName() {
 		if (value == null) {
 			return null;
 		}

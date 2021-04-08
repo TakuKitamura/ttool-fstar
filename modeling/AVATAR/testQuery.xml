@@ -8,7 +8,7 @@
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="" />
+<Validated value="Reader;RandomGenerator;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >
@@ -20,6 +20,8 @@
 <P2  x="892" y="311" id="6" />
 <AutomaticDrawing  data="true" />
 <extraparam>
+<isd value="in read()" />
+<oso value="out write()" />
 <FIFOType asynchronous="true" synchronousCH="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
@@ -58,7 +60,7 @@
 <CryptoBlock value="false" />
 <Attribute access="0" id="cpt" value="3" type="8" typeOther="" />
 <Attribute access="0" id="x" value="" type="8" typeOther="" />
-<Signal value="in read()" attached="false" />
+<Signal value="in read()" attached="true" />
 </extraparam>
 </COMPONENT>
 
@@ -96,7 +98,7 @@
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Attribute access="0" id="ite" value="3" type="8" typeOther="" />
-<Signal value="out write()" attached="false" />
+<Signal value="out write()" attached="true" />
 </extraparam>
 </COMPONENT>
 

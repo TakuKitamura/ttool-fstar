@@ -201,7 +201,7 @@ public class AvatarSpecificationSimulation {
         blocks = new Vector<AvatarSimulationBlock>();
         for (AvatarBlock block : avspec.getListOfBlocks()) {
             if (block.hasARealBehaviour()) {
-                AvatarSimulationBlock asb = new AvatarSimulationBlock(block);
+                AvatarSimulationBlock asb = new AvatarSimulationBlock(block, this);
                 blocks.add(asb);
                 if (tmpblocks != null) {
                     asb.selected = tmpblocks.get(cpt).selected;

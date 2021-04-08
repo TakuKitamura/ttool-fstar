@@ -2111,6 +2111,67 @@ public class AvatarDesignPanelTranslator {
         return stateElement;
     }
 
+    private void translateAvatarSMDQueryReceiveSignal(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab,
+                                                      AvatarSMDQueryReceiveSignal asmdquery) throws CheckingError {
+        AvatarStateMachine asm = _ab.getStateMachine();
+
+        avatartranslator.AvatarSignal atas = _ab.getAvatarSignalWithName(asmdquery.getSignalName());
+        avatartranslator.AvatarAttribute ataa = _ab.getAvatarAttributeWithName(asmdquery.getAttributeName());
+
+        if (atas == null)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdquery.getSignalName());
+
+        if (ataa == null)
+            throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown attribute: " + asmdquery.getAttributeName());
+
+        // Get relation of that signal
+        if (_ab instanceof AvatarBlock) {
+            // Note that for library functions, signals are just placeholders so they don't need to be connected to anything
+            AvatarRelation ar = _as.getAvatarRelationWithSignal(atas);
+            if (ar == null) {
+                if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+                    //TraceManager.addDev("Receive/ Setting as attached " + atas);
+                    ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = false;
+                }
+                throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdquery.getValue() +
+                        " is not connected to a channel");
+            }
+
+            // Check that the relation is asynchronous
+            if (!(ar.isAsynchronous())) {
+                throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdquery.getValue() +
+                        " is not connected to an asynchronous channel");
+            }
+
+
+            if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+                //TraceManager.addDev("Receive/ Setting as attached " + atas);
+                ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = true;
+            }
+        }
+        if (atas.getReferenceObject() instanceof ui.AvatarSignal) {
+            ((ui.AvatarSignal) atas.getReferenceObject()).attachedToARelation = true;
+        }
+
+
+
+        final AvatarStateMachineElement element;
+        final String name = "query-signal";
+
+        if (asmdquery.isEnabled()) {
+            element = new AvatarQueryOnSignal(name, atas, ataa, asmdquery);
+
+            final AvatarQueryOnSignal aqos = (AvatarQueryOnSignal) element;
+
+        } else {
+            element = new AvatarDummyState(name, asmdquery);
+        }
+
+        asm.addElement(element);
+        listE.addCor(element, asmdquery);
+        asmdquery.setAVATARID(element.getID());
+    }
+
     private void translateAvatarSMDRandom(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDRandom asmdrand) throws CheckingError {
         AvatarStateMachine asm = _ab.getStateMachine();
 
@@ -2518,6 +2579,9 @@ public class AvatarDesignPanelTranslator {
 
                 else if (tgc instanceof AvatarSMDSendSignal)
                     this.translateAvatarSMDSendSignal(asmdp, _as, _ab, (AvatarSMDSendSignal) tgc);
+
+                else if (tgc instanceof AvatarSMDQueryReceiveSignal)
+                    this.translateAvatarSMDQueryReceiveSignal(asmdp, _as, _ab, (AvatarSMDQueryReceiveSignal) tgc);
 
                     // Library Function Call
                 else if (tgc instanceof AvatarSMDLibraryFunctionCall)
