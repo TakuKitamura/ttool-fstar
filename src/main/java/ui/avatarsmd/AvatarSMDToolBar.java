@@ -68,6 +68,7 @@ public class AvatarSMDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_QUERY_RECEIVE_SIGNAL].setEnabled(b);
 
         if (mgui.isExperimentalOn()) {
             mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].setEnabled(b);
@@ -151,11 +152,7 @@ public class AvatarSMDToolBar extends TToolBar {
 		
 		button = this.add(mgui.actions[TGUIAction.ASMD_RANDOM]);
         button.addMouseListener(mgui.mouseHandler);
-		
-		/*this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ASMD_PARALLEL]);
-        button.addMouseListener(mgui.mouseHandler);*/
+
 		
 		this.addSeparator();
         
@@ -163,6 +160,9 @@ public class AvatarSMDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        button = this.add(mgui.actions[TGUIAction.ASMD_QUERY_RECEIVE_SIGNAL]);
         button.addMouseListener(mgui.mouseHandler);
 
 		this.addSeparator();

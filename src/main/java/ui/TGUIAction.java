@@ -435,10 +435,10 @@ public class TGUIAction extends AbstractAction {
     public static final int ASMD_STOP = 294;
     public static final int ASMD_SEND_SIGNAL = 296;
     public static final int ASMD_RECEIVE_SIGNAL = 297;
+    public static final int ASMD_QUERY_RECEIVE_SIGNAL = 535;
     public static final int ASMD_SEND_AMSSIGNAL = 525;
     public static final int ASMD_RECEIVE_AMSSIGNAL = 526;
     public static final int ASMD_LIBRARY_FUNCTION_CALL = 432;
-    //public static final int ASMD_PARALLEL = 298; Issue #69
     public static final int ASMD_STATE = 299;
     public static final int ASMD_GPIO = 298;
     public static final int ASMD_CHOICE = 325;
@@ -536,8 +536,8 @@ public class TGUIAction extends AbstractAction {
     public static final int AAD_ACTIVITY = 357;
     public static final int AAD_ACTION = 358;
     public static final int AAD_STOP_FLOW = 359;
-    public static final int AAD_ACCEPT_AMS_ACTION = 360;
-    public static final int AAD_SEND_AMS_ACTION = 361;
+    public static final int AAD_ACCEPT_AMS_ACTION = 536;
+    public static final int AAD_SEND_AMS_ACTION = 537;
     public static final int AAD_ACCEPT_EVENT_ACTION = 360;
     public static final int AAD_SEND_SIGNAL_ACTION = 361;
     public static final int AAD_PARTITION = 362;
@@ -691,7 +691,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
 
-    public static final int NB_ACTION = 535;
+    public static final int NB_ACTION = 538;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1353,6 +1353,10 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_SEND_SIGNAL] = new TAction("add-asmd-sendsignal", "Send signal", IconManager.imgic2014, IconManager.imgic2014, "Send signal", "Add a send signal operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2016, IconManager.imgic2016,
                 "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_QUERY_RECEIVE_SIGNAL] = new TAction("add-asmd-query-receivesignal", "Query nb of available signals",
+                IconManager.imgic2016,
+                IconManager.imgic2016,
+                "Nb of available signals", "Add a query receive signal operator to the currently opened AVATAR state machine diagram", 0);
 
         actions[ASMD_SEND_AMSSIGNAL] = new TAction("add-ams-sendsignal", "Send AMS signal", IconManager.imgic2015, IconManager.imgic2015, "Send AMS signal",
                 "Add an AMS send signal operator to the currently opened AVATAR state machine diagram", 0);

@@ -1,9 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="1" LAST_SELECTED_SUB_TAB="4">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="Avatar Requirement" nameTab="AVATAR Requirements" >
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1900" minY="10" maxY="1400" zoom="1.0" >
+<COMPONENT type="5200" id="2404" uid="21634324-f1ec-471d-b025-373bb090c963" >
+<cdparam x="693" y="512" />
+<sizeparam width="200" height="120" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
+<infoparam name="Requirement" value="Requirement_0" />
+<TGConnectingPoint num="0" id="2405" />
+<TGConnectingPoint num="1" id="2406" />
+<TGConnectingPoint num="2" id="2407" />
+<TGConnectingPoint num="3" id="2408" />
+<TGConnectingPoint num="4" id="2409" />
+<TGConnectingPoint num="5" id="2410" />
+<TGConnectingPoint num="6" id="2411" />
+<TGConnectingPoint num="7" id="2412" />
+<TGConnectingPoint num="8" id="2413" />
+<TGConnectingPoint num="9" id="2414" />
+<TGConnectingPoint num="10" id="2415" />
+<TGConnectingPoint num="11" id="2416" />
+<TGConnectingPoint num="12" id="2417" />
+<TGConnectingPoint num="13" id="2418" />
+<TGConnectingPoint num="14" id="2419" />
+<TGConnectingPoint num="15" id="2420" />
+<TGConnectingPoint num="16" id="2421" />
+<TGConnectingPoint num="17" id="2422" />
+<TGConnectingPoint num="18" id="2423" />
+<TGConnectingPoint num="19" id="2424" />
+<TGConnectingPoint num="20" id="2425" />
+<TGConnectingPoint num="21" id="2426" />
+<TGConnectingPoint num="22" id="2427" />
+<TGConnectingPoint num="23" id="2428" />
+<TGConnectingPoint num="24" id="2429" />
+<TGConnectingPoint num="25" id="2430" />
+<TGConnectingPoint num="26" id="2431" />
+<TGConnectingPoint num="27" id="2432" />
+<TGConnectingPoint num="28" id="2433" />
+<TGConnectingPoint num="29" id="2434" />
+<TGConnectingPoint num="30" id="2435" />
+<TGConnectingPoint num="31" id="2436" />
+<TGConnectingPoint num="32" id="2437" />
+<TGConnectingPoint num="33" id="2438" />
+<TGConnectingPoint num="34" id="2439" />
+<TGConnectingPoint num="35" id="2440" />
+<TGConnectingPoint num="36" id="2441" />
+<TGConnectingPoint num="37" id="2442" />
+<TGConnectingPoint num="38" id="2443" />
+<TGConnectingPoint num="39" id="2444" />
+<TGConnectingPoint num="40" id="2445" />
+<TGConnectingPoint num="41" id="2446" />
+<TGConnectingPoint num="42" id="2447" />
+<extraparam>
+<textline data="" />
+<kind data="" />
+<criticality data="" />
+<reqType data="Requirement" color="-1773070" />
+<id data="0" />
+<satisfied data="false" />
+<verified data="false" />
+<attackTreeNode data="" />
+<violatedAction data="" />
+<referenceElements data="" />
+</extraparam>
+</COMPONENT>
+
 <COMPONENT type="5207" id="16" uid="34f78e28-10b6-4963-9df8-aa79601cc946" >
 <cdparam x="727" y="252" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="107" minDesiredHeight="0" />
@@ -376,7 +439,7 @@
 
 <COMPONENT type="5200" id="300" uid="3f856106-1533-4f29-bb50-d5da20b70742" >
 <cdparam x="192" y="15" />
-<sizeparam width="304" height="110" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="51" minDesiredHeight="0" />
+<sizeparam width="307" height="120" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="51" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="req0" />
@@ -512,7 +575,7 @@
 <infoparam name="connector" value="&lt;&lt;composition&gt;&gt;" />
 <TGConnectingPoint num="0" id="345" />
 <P1  x="660" y="70" id="34" />
-<P2  x="496" y="70" id="261" />
+<P2  x="499" y="75" id="261" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5208" id="348" >
@@ -565,7 +628,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Requirement to Requirement" value="&lt;&lt;composition&gt;&gt;" />
 <TGConnectingPoint num="0" id="357" />
-<P1  x="192" y="97" id="259" />
+<P1  x="192" y="105" id="259" />
 <P2  x="122" y="182" id="129" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -593,7 +656,7 @@
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
 <TGConnectingPoint num="0" id="363" />
 <P1  x="632" y="166" id="242" />
-<P2  x="496" y="97" id="274" />
+<P2  x="499" y="105" id="274" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -1279,7 +1342,7 @@
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="Wallet;CoffeeMachine;TeaButton;CoffeeButton;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="695" >
