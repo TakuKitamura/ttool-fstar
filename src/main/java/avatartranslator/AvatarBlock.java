@@ -71,6 +71,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         this.avspec = _avspec;
 
         attributes = new LinkedList<AvatarAttribute>();
+        constants = new LinkedList<AvatarAttribute>();
         methods = new LinkedList<AvatarMethod>();
         signals = new LinkedList<AvatarSignal>();
         asm = new AvatarStateMachine(this, "statemachineofblock__" + _name, _referenceObject);
@@ -140,6 +141,10 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 
     public List<AvatarAttribute> getAttributes() {
         return attributes;
+    }
+
+    public List<AvatarAttribute> getConstants() {
+        return constants;
     }
 
     public List<AvatarMethod> getMethods() {
@@ -797,8 +802,12 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
                     toKeep = true;
                 }
                 for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+
                     if (elt instanceof AvatarTransition) {
                         at = (AvatarTransition) elt;
+
+
+
                         for (AvatarAction aa : at.getActions()) {
                             if (aa instanceof AvatarActionAssignment) {
                                if (((AvatarActionAssignment) aa).leftHand.getName().compareTo(attr.name) == 0) {
@@ -822,6 +831,9 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
                             toKeep = true;
                         }
                     }
+
+
+
                     if (toKeep) {
                         break;
                     }
@@ -861,6 +873,33 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         for(AvatarAttribute aa: toBeRemoved) {
             attributes.remove(aa);
         }
+
+    }
+
+    // Returns the number of replaced queries
+    public int  replaceQueriesWithReadSignal(AvatarSignal _origin, AvatarSignal _newSignal) {
+        List<AvatarQueryOnSignal> elts = new LinkedList<>();
+        AvatarQueryOnSignal aqos;
+
+        // Getting all related ops
+        for(AvatarStateMachineElement elt: asm.getListOfElements()) {
+            if (elt instanceof AvatarQueryOnSignal) {
+                aqos = (AvatarQueryOnSignal) elt;
+                if (aqos.getSignal() == _origin) {
+                    elts.add(aqos);
+                }
+            }
+        }
+
+        // Replacing ops
+        for(AvatarQueryOnSignal q: elts) {
+            AvatarActionOnSignal aaosQuery = new AvatarActionOnSignal("query", _newSignal, q.getReferenceObject());
+            aaosQuery.addValue(q.getAttribute().getName());
+            asm.replace(q, aaosQuery);
+        }
+
+        return elts.size();
+
 
     }
 

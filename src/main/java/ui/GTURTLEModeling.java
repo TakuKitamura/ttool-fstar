@@ -9018,6 +9018,17 @@ public class GTURTLEModeling {
             SMDMap.put(asme, smdr);
             locMap.put(asme, smdr);
         }
+
+        if (asme instanceof AvatarQueryOnSignal) {
+            AvatarSMDQueryReceiveSignal smdqrs = new AvatarSMDQueryReceiveSignal(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null,
+                    smp);
+            smdqrs.setNames(((AvatarQueryOnSignal) asme).getAttribute().getName(), ((AvatarQueryOnSignal) asme).getSignal().getName());
+            smp.addComponent(smdqrs, x, y, false, true);
+            tgcomp = smdqrs;
+            SMDMap.put(asme, smdqrs);
+            locMap.put(asme, smdqrs);
+        }
+
         if (asme instanceof AvatarActionOnSignal) {
             avatartranslator.AvatarSignal sig = ((AvatarActionOnSignal) asme).getSignal();
             if (sig.isIn()) {
@@ -9176,6 +9187,8 @@ public class GTURTLEModeling {
                 typeIds[i] = attr.getName();
                 i++;
             }
+
+
             //TraceManager.addDev("Adding signal " + sig + " with name=" + name);
             bl.addSignal(new ui.AvatarSignal(sig.getInOut(), name, types, typeIds));
         }
@@ -9200,6 +9213,26 @@ public class GTURTLEModeling {
                 bl.addCryptoElements();
             }
         }
+
+        for (AvatarAttribute attr : ab.getConstants()) {
+            int type = 5;
+            if (attr.getType() == AvatarType.BOOLEAN) {
+                type = 4;
+            }
+            if (attr.getType() == AvatarType.INTEGER) {
+                type = 0;
+            }
+            if (attr.hasInitialValue()) {
+                bl.addAttribute(new TAttribute(0, attr.getName(), attr.getInitialValue(), type));
+            } else {
+                bl.addAttribute(new TAttribute(0, attr.getName(), attr.getType().getDefaultInitialValue(), type));
+            }
+            if (attr.getName().contains("key_") || attr.getName().contains("privKey_")) {
+                hasCrypto = true;
+                bl.addCryptoElements();
+            }
+        }
+
         for (avatartranslator.AvatarMethod method : ab.getMethods()) {
             bl.addMethodIfApplicable(method.toString().replaceAll(" = 0", ""));
         }
@@ -9700,6 +9733,7 @@ public class GTURTLEModeling {
         AvatarStartState start = asm.getStartState();
 
         addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
+
         //Add transitions
         for (AvatarTransition t : tranSourceMap.keySet()) {
             if (tranSourceMap.get(t) == null || tranDestMap.get(t) == null || locMap.get(tranDestMap.get(t)) == null) {

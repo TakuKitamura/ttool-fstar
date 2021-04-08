@@ -378,6 +378,13 @@ public class AvatarSMDQueryReceiveSignal extends AvatarSMDBasicCanBeDisabledComp
 		}
 		return value.substring(0, index).trim();
 	}
+
+
+
+	public void setNames(String _attributeName, String _sigName) {
+    	value = _attributeName + " =? " + _sigName;
+	}
+
 	
 
 

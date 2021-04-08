@@ -982,6 +982,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             
             TraceManager.addDev("Model checking done");
 
+            if (generateDesignSelected) {
+                TraceManager.addDev("Drawing modified avatar spec");
+                if ((mgui != null) && (spec != null)) {
+                    mgui.drawAvatarSpecification(amc.getReworkedAvatarSpecification());
+                }
+            }
+
 
 
             //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");

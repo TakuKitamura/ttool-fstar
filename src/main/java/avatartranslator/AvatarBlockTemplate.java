@@ -149,13 +149,16 @@ public class AvatarBlockTemplate {
     public static AvatarBlock getFifoBlock(String _name, AvatarSpecification _avspec, AvatarRelation _ar, Object _referenceRelation,
                                            AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfFifo, int FIFO_ID) {
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _referenceRelation);
+        ab.setName(_name);
 
         // Create the read and write signals
         AvatarSignal write = new AvatarSignal("write", AvatarSignal.IN, _referenceRelation);
         AvatarSignal read = new AvatarSignal("read", AvatarSignal.OUT, _referenceRelation);
+        AvatarSignal queryS = new AvatarSignal("query", AvatarSignal.OUT, _referenceRelation);
 
         ab.addSignal(write); // corresponds to sig1
         ab.addSignal(read);  // corresponds to sig2
+        ab.addSignal(queryS);
 
 
         // Creating the attributes of the signals
@@ -166,6 +169,11 @@ public class AvatarBlockTemplate {
         for (AvatarAttribute aa : _sig2.getListOfAttributes()) {
             read.addParameter(aa.advancedClone(null));
         }
+
+        AvatarAttribute queryA = new  AvatarAttribute("queryA", AvatarType.INTEGER, ab, _referenceRelation);
+        ab.addAttribute(queryA);
+        queryS.addParameter(queryA.advancedClone(null));
+
 
 
         // Creating the attributes to support the FIFO
@@ -303,6 +311,12 @@ public class AvatarBlockTemplate {
             at.addAction("size = size - 1");
         }
 
+        // Query
+        AvatarActionOnSignal aaosQuery = new AvatarActionOnSignal("query", queryS, _referenceRelation);
+        asm.addElement(aaosQuery);
+        aaosQuery.addValue("size");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaosQuery, _referenceRelation);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosQuery, main, _referenceRelation);
 
         // Block is finished!
 
