@@ -172,6 +172,8 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   //std::cout << "starttime=" <<  _nextTransaction->getStartTime() << "\n";
   if ((_nextTransaction->getStartTime()-_endSchedule) >=_timeBeforeIdle){
     _nextTransaction->setIdlePenalty(_changeIdleModeTime);
+  } else {
+    _nextTransaction->setIdlePenalty(0);
   }
 #endif
 }

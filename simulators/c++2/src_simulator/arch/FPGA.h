@@ -199,6 +199,7 @@ protected:
 	unsigned int _reconfigNumber;
 	unsigned int maxScale;
 	TMLTime _maxEndTime;
+	TransactionList _transactListReconfig; // contains the first trans of each tasks when fpga scheduling is enable
 	unsigned int nextCellClassIndex;
  	std::map<TMLTask*, std::string> taskCellClasses;	
 	///State variable for the VCD output
