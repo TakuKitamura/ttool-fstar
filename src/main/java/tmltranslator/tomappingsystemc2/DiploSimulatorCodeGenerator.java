@@ -360,7 +360,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 declaration += "FPGA* " + hwFpgaInstName + " = new FPGA(" + hwFpgaNode.getID() + ", \"" + namesGen.hwFpgaName(hwFpgaNode) + "\", "
                         + schedulerInstName + ", ";
 
-                declaration += hwFpgaNode.reconfigurationTime + ", " + hwFpgaNode.goIdleTime + ", " + hwFpgaNode.maxConsecutiveIdleCycles + ", "
+                declaration += hwFpgaNode.reconfigurationTime + ", " + hwFpgaNode.clockRatio + ", " + hwFpgaNode.goIdleTime + ", " + hwFpgaNode.maxConsecutiveIdleCycles + ", "
                         + hwFpgaNode.execiTime + ", " + hwFpgaNode.execcTime + ")" + SCCR;
 
                 // DB: Issue #21 TODO: Should there be a scheduler?? Given the for loop, cores
