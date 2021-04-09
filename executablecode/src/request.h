@@ -18,6 +18,7 @@ struct request;
 #define IMMEDIATE 10
 #define SEND_BROADCAST_REQUEST 12
 #define RECEIVE_BROADCAST_REQUEST 14
+#define QUERY_FIFO_SIZE 16
 
 typedef struct timespec timespec;
 
@@ -48,8 +49,8 @@ struct request {
   int ID;
   int hasDelay;;
   timespec delay;
-  int nbOfParams; // synchronous com.
-  int **params;  // synchronous com.
+  int nbOfParams; // synchronous com. and query
+  int **params;  // synchronous com. and query
   message *msg; // Asynchronous comm.
 
 

@@ -8,7 +8,7 @@
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="Reader;RandomGenerator;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="2" >

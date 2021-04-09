@@ -211,6 +211,13 @@ void executeSendBroadcastTransaction(request *req) {
   debugInt("NUMBER of broadcast Requests", cpt);
 }
 
+void executeQueryFIFOSize(request *req) {
+  debugMsg("Execute FIFO size query");
+  int nb = req->asyncChannel->currentNbOfMessages;
+  req->params[0] = 0;
+  debugInt("NUMBER of elements in FIFO", nb);
+}
+
 
 int executable(setOfRequests *list, int nb) {
   int cpt = 0;
@@ -413,6 +420,10 @@ void private__makeRequest(request *req) {
 
   if (req->type == SEND_BROADCAST_REQUEST) {
     executeSendBroadcastTransaction(req);
+  }
+
+   if (req->type == QUERY_FIFO_SIZE) {
+    executeQueryFIFOSize(req);
   }
 
   // IMMEDIATE: Nothing to do

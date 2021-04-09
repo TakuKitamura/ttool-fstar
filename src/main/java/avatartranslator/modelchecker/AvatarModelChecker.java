@@ -920,6 +920,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.removeElseGuards();
         spec.removeTimers();
         spec.removeRandoms();
+        spec.removeLibraryFunctionCalls();
         spec.removeFIFOs(4);
         spec.makeFullStates();
 
