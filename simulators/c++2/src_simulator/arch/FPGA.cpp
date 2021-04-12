@@ -695,9 +695,9 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
             changeCssClass = true;
         }
         if (reconfigCheck) {
-            tempReconfigIdle << "dynamic reconfiguraiton";
+            tempReconfigIdle << "dynamic reconfiguration";
         } else {
-            tempReconfigIdle << "normal";
+            tempReconfigIdle << " ";
         }
         if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
             listScale.push_back(aBlanks+1);
