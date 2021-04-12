@@ -55,7 +55,8 @@ public class AvatarError {
                     "Signals are connected but there have non compatible parameters",
                     "Missing block1 declaration in relation",
                     "Missing block2 declaration in relation", //5
-                    "No signal of that name in block"
+                    "No signal of that name in block",
+                    "State machine must terminate with a stop state"
             };
 
 

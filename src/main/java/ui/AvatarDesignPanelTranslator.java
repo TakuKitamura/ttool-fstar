@@ -1531,8 +1531,21 @@ public class AvatarDesignPanelTranslator {
             this.makeStateMachine(_as, block);
 
         // Make state machine of library functions
-        for (AvatarLibraryFunction libraryFunction : _as.getListOfLibraryFunctions())
+        for (AvatarLibraryFunction libraryFunction : _as.getListOfLibraryFunctions()) {
             this.makeStateMachine(_as, libraryFunction);
+            // Check state machine of function
+            List<AvatarError> errorsLF = AvatarSyntaxChecker.checkASMLibraryFunction(_as, libraryFunction);
+            for(AvatarError ae: errorsLF) {
+                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
+                        "Badly formed state machine for Library Function " + libraryFunction.getName() +
+                                ": behaviour must terminate with stop states");
+                if (ae.secondAvatarElement.getReferenceObject() instanceof TGComponent)
+                    ce.setTGComponent((TGComponent)(ae.secondAvatarElement.getReferenceObject()));
+                ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                addCheckingError(ce);
+            }
+
+        }
     }
 
     private void makeReturnParameters(AvatarStateMachineOwner _ab, AvatarBDStateMachineOwner _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {

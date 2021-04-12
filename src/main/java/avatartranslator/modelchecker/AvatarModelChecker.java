@@ -920,7 +920,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.removeElseGuards();
         spec.removeTimers();
         spec.removeRandoms();
-        spec.removeLibraryFunctionCalls();
         spec.removeFIFOs(4);
         spec.makeFullStates();
 
@@ -1077,7 +1076,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
             }
         } catch (Exception e) {
-            TraceManager.addDev("Error in Thread: " + e.getMessage());
+            TraceManager.addDev("Error in Thread: " + e.getMessage() );
+            e.printStackTrace(System.out);
         }
     }
 
@@ -2128,7 +2128,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     private AvatarStateElement getStateWithNonEmptyUniqueTransitionArray(AvatarStateElement _ase, AvatarBlock _block, SpecificationBlock _sb, SpecificationState _ss, ArrayList<AvatarStateElement> listOfStates) {
 
-        //      TraceManager.addDev("Handling Empty transition of previous=" + _ase.getName());
+        TraceManager.addDev("Handling Empty transition of previous=" + _ase.getName() + " in block " + _block.getName());
         
         if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
             boolean result = safety.getSolverResult(_ss, _ase);
@@ -2147,7 +2147,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        //TraceManager.addDev("Handling Empty transition of previous= 1 " + _ase.getName());
+        TraceManager.addDev("Handling Empty transition of previous= 1 " + _ase.getName());
 
         AvatarTransition at = (AvatarTransition) (_ase.getNext(0));
 

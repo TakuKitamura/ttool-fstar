@@ -68,7 +68,7 @@ TMLCommand* TMLDelayCommand::prepareNextTransaction(){
 	}
 
 	if (_progress==0){
-	(_task->*_actionFunc)();
+	  (_task->*_actionFunc)();
 //    _execTimes++;  this will recognize delay transaction one more time so remove it
     		if (_length==0){
     			//std::cout << "ExeciCommand len==0 " << std::endl;

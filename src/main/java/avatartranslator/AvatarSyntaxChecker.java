@@ -69,9 +69,41 @@ public class AvatarSyntaxChecker  {
         ArrayList<AvatarError> errors = new ArrayList<>();
 
         errors.addAll(checkSignalRelations(avspec));
+        errors.addAll(checkASMLibraryFunctions(avspec));
 
         return errors;
     }
+
+
+
+    public static ArrayList<AvatarError> checkASMLibraryFunctions(AvatarSpecification avspec) {
+        ArrayList<AvatarError> errors = new ArrayList<>();
+
+        for(AvatarLibraryFunction alf: avspec.getListOfLibraryFunctions()) {
+            errors.addAll(checkASMLibraryFunction(avspec, alf));
+        }
+
+        return errors;
+    }
+
+    public static ArrayList<AvatarError> checkASMLibraryFunction(AvatarSpecification avspec, AvatarLibraryFunction alf) {
+        ArrayList<AvatarError> errors = new ArrayList<>();
+
+        AvatarStateMachine asm = alf.getStateMachine();
+        for(AvatarStateMachineElement elt: asm.getListOfElements()) {
+            if ( ! (elt instanceof AvatarStopState) ) {
+                if (elt.getNexts().size() == 0) {
+                    AvatarError error = new AvatarError(avspec);
+                    error.firstAvatarElement = alf;
+                    error.secondAvatarElement = elt;
+                    error.error = 7;
+                    errors.add(error);
+                }
+            }
+        }
+        return errors;
+    }
+
 
     public static ArrayList<AvatarError> checkSignalRelations(AvatarSpecification avspec) {
         ArrayList<AvatarError> errors = new ArrayList<>();
