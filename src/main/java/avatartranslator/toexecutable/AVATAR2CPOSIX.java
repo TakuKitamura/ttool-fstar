@@ -675,6 +675,9 @@ public class AVATAR2CPOSIX {
                             ", QUERY_FIFO_SIZE, " + 0 + ", 0, 0, " + "1"
                             + ", __params0__" + _block.getName() + ");" + CR;
             ret += "__req0" + "__" + _block.getName() + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+            ret += "addRequestToList(&__list__" + _block.getName() + ", &__req0__" + _block.getName() +");" + CR;
+            ret += executeOneRequest(_block, "__req0__" + _block.getName());
+            ret += traceRequest(_block);
 
 
             //ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() + ", SEND_SYNC_REQUEST, " +

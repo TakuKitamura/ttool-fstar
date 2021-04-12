@@ -214,8 +214,8 @@ void executeSendBroadcastTransaction(request *req) {
 void executeQueryFIFOSize(request *req) {
   debugMsg("Execute FIFO size query");
   int nb = req->asyncChannel->currentNbOfMessages;
-  req->params[0] = 0;
   debugInt("NUMBER of elements in FIFO", nb);
+  *(req->params[0]) = req->asyncChannel->currentNbOfMessages;
 }
 
 
@@ -346,6 +346,14 @@ int executable(setOfRequests *list, int nb) {
 	req->executable = 1;
 	cpt ++;
       }
+
+      if (req->type == QUERY_FIFO_SIZE) {
+	debugMsg("query fifo");
+	req->executable = 1;
+	cpt ++;
+      }
+
+      
     }
 
     req = req->nextRequestInList;
@@ -402,6 +410,8 @@ void private__makeRequestPending(setOfRequests *list) {
 }
 
 void private__makeRequest(request *req) {
+
+  
   if (req->type == SEND_SYNC_REQUEST) {
     executeSendSyncTransaction(req);
   }
