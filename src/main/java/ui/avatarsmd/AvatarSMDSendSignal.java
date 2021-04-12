@@ -385,7 +385,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /*
 
     // Return null in case of error
     public String getValue(int _index) {
-    	TraceManager.addDev("Getting value " + _index + "");
+    	//TraceManager.addDev("Getting value " + _index + "");
         return AvatarSignal.getValue(value, _index);
     }
 

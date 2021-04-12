@@ -43,30 +43,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
-import avatartranslator.AvatarAction;
-import avatartranslator.AvatarActionAssignment;
-import avatartranslator.AvatarActionOnSignal;
-import avatartranslator.AvatarArithmeticOp;
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarBlock;
-import avatartranslator.AvatarConstant;
-import avatartranslator.AvatarLeftHand;
-import avatartranslator.AvatarMethod;
-import avatartranslator.AvatarRandom;
-import avatartranslator.AvatarRelation;
-import avatartranslator.AvatarSignal;
-import avatartranslator.AvatarSpecification;
-import avatartranslator.AvatarStartState;
-import avatartranslator.AvatarState;
-import avatartranslator.AvatarStateMachine;
-import avatartranslator.AvatarStateMachineElement;
-import avatartranslator.AvatarStopState;
-import avatartranslator.AvatarTerm;
-import avatartranslator.AvatarTermFunction;
-import avatartranslator.AvatarTermRaw;
-import avatartranslator.AvatarTransition;
-import avatartranslator.AvatarTuple;
-import avatartranslator.AvatarType;
+import avatartranslator.*;
 import common.SpecConfigTTool;
 import myutil.Conversion;
 import myutil.FileException;
@@ -683,6 +660,27 @@ public class AVATAR2CPOSIX {
         if (_asme instanceof AvatarRandom) {
             AvatarRandom ar = (AvatarRandom) _asme;
             ret += ar.getVariable() + " = computeRandom(" + ar.getMinValue() + ", " + ar.getMaxValue() + ");" + CR;
+            return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
+        }
+
+        if (_asme instanceof AvatarQueryOnSignal) {
+            AvatarQueryOnSignal aqos = (AvatarQueryOnSignal) _asme;
+            AvatarSignal as = aqos.getSignal();
+            AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+            ret += "__params0" +   "__" +  _block.getName() + "[0] = &" + aqos.getAttribute().getName() + ";" + CR;
+
+
+
+            ret += "makeNewRequest(&__req0" + "__" + _block.getName() + ", " + aqos.getID() +
+                            ", QUERY_FIFO_SIZE, " + 0 + ", 0, 0, " + "1"
+                            + ", __params0__" + _block.getName() + ");" + CR;
+            ret += "__req0" + "__" + _block.getName() + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+
+
+            //ret += "makeNewRequest(&__req" + _index + "__" + _block.getName() + ", " + _aaos.getID() + ", SEND_SYNC_REQUEST, " +
+             ///       delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + "__" + _block.getName() + ");" + CR;
+
+
             return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
         }
 

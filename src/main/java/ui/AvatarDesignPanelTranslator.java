@@ -1625,7 +1625,7 @@ public class AvatarDesignPanelTranslator {
 
     private void manageAttribute(String _name, AvatarStateMachineOwner _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc,
                                  String _idOperator) {
-        TraceManager.addDev("Searching for attribute:" + _name);
+        //TraceManager.addDev("Searching for attribute:" + _name);
         TAttribute ta = adp.getAvatarBDPanel().getAttribute(_name, _ab.getName());
         if (ta == null) {
             // Must search among attributes of the created block
