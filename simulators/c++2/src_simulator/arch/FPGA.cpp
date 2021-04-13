@@ -50,18 +50,20 @@
 FPGA::FPGA(    ID iID, 
 	       std::string iName,  
 	       WorkloadSource* iScheduler,
-	       TMLTime iReconfigTime, 
+	       TMLTime iReconfigTime,
+	       TMLTime iTimePerCycle,
 	       unsigned int iChangeIdleModeCycles, 
 	       unsigned int iCyclesBeforeIdle,
 	       unsigned int iCyclesPerExeci, 
 	       unsigned int iCyclesPerExecc ) : SchedulableDevice(iID, iName, iScheduler)
 					      ,_reconfigTime(iReconfigTime)
+					      ,_timePerCycle(iTimePerCycle)
 					      ,_masterNextTransaction(0)
 					      ,_lastTransaction(0)
-					      ,_changeIdleModeCycles(iChangeIdleModeCycles)
-					      ,_cyclesBeforeIdle(iCyclesBeforeIdle)
-					      ,_cyclesPerExeci(iCyclesPerExeci)
-					      ,_cyclesPerExecc(iCyclesPerExecc)
+					      ,_changeIdleModeCycles(iChangeIdleModeCycles * _timePerCycle)
+					      ,_cyclesBeforeIdle(iCyclesBeforeIdle * _timePerCycle)
+					      ,_cyclesPerExeci(iCyclesPerExeci * _timePerCycle)
+					      ,_cyclesPerExecc(iCyclesPerExecc * _timePerCycle)
 					      ,_reconfigNumber(0)
 					      ,_maxEndTime(0)
 					     
@@ -152,8 +154,10 @@ void FPGA::calcStartTimeLength(){
 #ifdef BUS_ENABLED
   if (_masterNextTransaction==0){
 #endif  
-    _nextTransaction->setLength(max(_nextTransaction->getVirtualLength(),(TMLTime)1));
+    _nextTransaction->setLength(max(_nextTransaction->getVirtualLength() * _cyclesPerExeci,(TMLTime)1));
+#ifdef BUS_ENABLED
   }
+#endif
 }
 
 
@@ -187,7 +191,7 @@ std::cout<<"fpga truncateNextTransAt"<<std::endl;
     if (iTime <= _nextTransaction->getStartTime()) return 0;  //before: <=
     TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
     _nextTransaction->setVirtualLength(max((TMLTime)(aNewDuration), (TMLTime)1));
-    _nextTransaction->setLength(_nextTransaction->getVirtualLength());
+    _nextTransaction->setLength(_nextTransaction->getVirtualLength() * _cyclesPerExeci);
   }
   return _nextTransaction->getOverallLength();
 }
@@ -257,14 +261,16 @@ std::cout<<"fpga addTransaction"<<std::endl;
         if(!_nextTransaction->getCommand()->getTask()->getIsFirstTranExecuted() && (_tempTranName.find("Read") == std::string::npos
         && _tempTranName.find("Wait") == std::string::npos && _tempTranName.find("Notified") == std::string::npos)) {
             unsigned int _tempStartTime = _nextTransaction->getStartTime();
-            _nextTransaction->setStartTime(_tempStartTime + _reconfigNumber * _reconfigTime);
+            _nextTransaction->setStartTime(_tempStartTime + _reconfigNumber * _reconfigTime * _cyclesPerExeci);
             _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+            _transactListReconfig.push_back(_nextTransaction);
         }
         _nextTransaction->getCommand()->getTask()->setIsFirstTranExecuted(true);
     } else if(_tempReconfigNumber>0) {
         if(!_nextTransaction->getCommand()->getTask()->getIsFirstTranExecuted()) {
-            _nextTransaction->setStartTime(_maxEndTime + _tempReconfigNumber * _reconfigTime);
+            _nextTransaction->setStartTime(_maxEndTime + _tempReconfigNumber * _reconfigTime * _cyclesPerExeci);
             _nextTransaction->getCommand()->getTask()->setIsFirstTranExecuted(true);
+            _transactListReconfig.push_back(_nextTransaction);
         }
     }
     else{
@@ -395,6 +401,7 @@ void FPGA::reset(){
   SchedulableDevice::reset();
   _scheduler->reset();
   _transactList.clear();
+  if (!_transactListReconfig.empty()) _transactListReconfig.clear();
   _nextTransaction=0;
   _lastTransaction=0;
   _masterNextTransaction=0;
@@ -660,9 +667,17 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
         std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
         #endif
         TMLTransaction* aCurrTrans = *i;
+        bool reconfigCheck = false;
+        if (!_transactListReconfig.empty()) {
+            std::vector<TMLTransaction*>::iterator it = std::find (_transactListReconfig.begin(), _transactListReconfig.end(), aCurrTrans);
+                if (it != _transactListReconfig.end()) {
+                    reconfigCheck = true;
+                }
+        }
+
         unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
         bool isBlankTooBig = false;
-        std::ostringstream tempString;
+        std::ostringstream tempString, tempReconfigIdle;
         int tempBlanks;
         if(_htmlCurrTask->getEndLastTransaction() >= MIN_RESIZE_THRESHOLD && aBlanks > MIN_RESIZE_TRANS) {
             int newBlanks = 0;
@@ -679,6 +694,11 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
             isBlankTooBig = true;
             changeCssClass = true;
         }
+        if (reconfigCheck) {
+            tempReconfigIdle << "dynamic reconfiguration";
+        } else {
+            tempReconfigIdle << " ";
+        }
         if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
             listScale.push_back(aBlanks+1);
             tempString << tempBlanks+1;
@@ -686,21 +706,20 @@ std::map<TMLTask*, std::string> FPGA::HWTIMELINE2HTML(std::ostringstream& myfile
                 listScaleTime.push_back(aCurrTrans->getStartTime()+1);
             }
             if (isBlankTooBig){
-                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time " + tempReconfigIdle.str() + "\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
             } else {
-                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>";
+                myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time " + tempReconfigIdle.str() + "\" class=\"not\"></td>";
             }
-        }
-        else if ( aBlanks > 0 ){
+        } else if ( aBlanks > 0 ){
             listScale.push_back(aBlanks);
             tempString << tempBlanks;
             if(aCurrTrans->getStartTime() > listScaleTime.back()){
                 listScaleTime.push_back(aCurrTrans->getStartTime());
             }
             if (isBlankTooBig){
-                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time " + tempReconfigIdle.str() + "\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>";
             } else {
-                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>";
+                myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time " + tempReconfigIdle.str() + "\" class=\"not\"></td>";
             }
         }
 

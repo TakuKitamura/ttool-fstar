@@ -117,7 +117,7 @@ void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
   TMLTime tmp2  = static_cast<TMLTime>(_nextTransaction->getPenalties());
   TMLTime tmp3 = static_cast<TMLTime>(_nextTransaction->getStartTime());
   //std::cout << "BUS   ------------- tmp1:" << tmp1 << " tmp2:" << tmp2 << " tmp3:" << tmp3 << "\n";
-  if (tmp1 < tmp2) { tmp1 = tmp2;}
+//  if (tmp1 < tmp2) { tmp1 = tmp2;}
   
   
   //_nextTransaction->setStartTime(max(tmp1+tmp2, tmp3));

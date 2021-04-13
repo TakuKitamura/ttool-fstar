@@ -78,7 +78,7 @@ public:
 	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
 	*/
 	
-        FPGA(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iReconfigTime, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle,unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc);
+        FPGA(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iReconfigTime, TMLTime iTimePerCycle, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle,unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc);
 	///Destructor
 	virtual ~FPGA();
 	///Determines the next FPGA transaction to be executed
@@ -164,6 +164,7 @@ protected:
 	void calcStartTimeLength();
 
 	TMLTime _reconfigTime;
+	TMLTime _timePerCycle;
 
 
 	///Determines the correct bus master of this CPU connected to the same bus as bus master iDummy
@@ -199,6 +200,7 @@ protected:
 	unsigned int _reconfigNumber;
 	unsigned int maxScale;
 	TMLTime _maxEndTime;
+	TransactionList _transactListReconfig; // contains the first trans of each tasks when fpga scheduling is enable
 	unsigned int nextCellClassIndex;
  	std::map<TMLTask*, std::string> taskCellClasses;	
 	///State variable for the VCD output
