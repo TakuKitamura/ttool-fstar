@@ -290,8 +290,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     }
     
     //FIXME: need to make this function easier
-    private void internalDrawingAux(Graphics g, int size)
-    {
+    private void internalDrawingAux(Graphics g, int size)  {
         String texti = "Text";
         String s;
         int i;
@@ -524,7 +523,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Requirement ID", REQ_TYPE_STR.toArray(new String[0]), getValue
                     (), reqType,  REQ_TYPE_COLOR.toArray(new Color[0]),ColorManager.AVATAR_REQUIREMENT_TOP);
             //dialog.setSize(400, 300);
-            GraphicLib.centerOnParent(dialog, 400, 300);
+            GraphicLib.centerOnParent(dialog, 600, 450);
             // dialog.show(); // blocked until dialog has been closed
             dialog.setVisible(true);
 

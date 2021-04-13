@@ -39,6 +39,7 @@
 
 package ui.avatarcd;
 
+import myutil.Conversion;
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,6 +48,7 @@ import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogAttribute;
 import ui.window.JDialogGeneralAttribute;
+import ui.window.JDialogTitleAndNote;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +66,7 @@ import java.util.Map;
  * @author Ludovic APVRILLE
  * @version 1.2 03/07/2019
  */
-public class AvatarCDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+public class AvatarCDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, ColorCustomizable {
 //    private int textY1 = 3;
 //    private int textX = 7;
     private String stereotype = "block";
@@ -79,9 +81,11 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 //    private int limitAttr = -1;
 //    private int limitMethod = -1;
 
-    protected List<GeneralAttribute> myAttributes;
 
-    protected Map<GeneralAttribute, Integer> attrLocMap = new HashMap<GeneralAttribute, Integer>();
+
+
+    protected String text;
+    protected String[] texts = {""};
 
     // Icon
     //private int iconSize = 15;
@@ -141,9 +145,15 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
         myImageIcon = IconManager.imgic700;
 
-        this.myAttributes = new LinkedList<GeneralAttribute>();
+        text = "Block description:\nDouble-click to edit";
+
 
         actionOnAdd();
+    }
+
+
+    public void makeValue() {
+        texts = Conversion.wrapText(text);
     }
     
     /**
@@ -154,10 +164,11 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     public void internalDrawing(Graphics g)
     {
     	//Rectangle
+
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
-        Color avat = ColorManager.AVATAR_BLOCK;
+        Color avat = getCurrentColor();
         Font f = g.getFont();
         int currentHeight = f.getSize() * 2;
         g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
@@ -183,119 +194,37 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             g.fill3DRect(x + 1, y + currentHeight+1, width - 1, height - 1 - currentHeight, true);
             g.setColor(c);
         }
+
+        if (!isTextReadable(g))
+            return;
+        int size = f.getSize();
+        internalDrawingAux(g, size, currentHeight);
     }
-    
-////    @Override
-//    public void internalDrawin(Graphics g) {
-//        String ster = "<<" + stereotype + ">>";
-//        Font f = g.getFont();
-//        Font fold = f;
-//
-//        //
-//
-//        if ((rescaled) && (!tdp.isScaled())) {
-//
-//            if (currentFontSize == -1) {
-//                currentFontSize = f.getSize();
-//            }
-//            rescaled = false;
-//            // Must set the font size ..
-//            // Find the biggest font not greater than max_font size
-//            // By Increment of 1
-//            // Or decrement of 1
-//            // If font is less than 4, no text is displayed
-//
-//            int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-//            int w0, w1, w2;
-//            f = f.deriveFont((float) maxCurrentFontSize);
-//            g.setFont(f);
-//            //
-//            while (maxCurrentFontSize > (minFontSize - 1)) {
-//                w0 = g.getFontMetrics().stringWidth(value);
-//                w1 = g.getFontMetrics().stringWidth(ster);
-//                w2 = Math.min(w0, w1);
-//                if (w2 < (width - (2 * textX))) {
-//                    break;
-//                }
-//                maxCurrentFontSize--;
-//                f = f.deriveFont((float) maxCurrentFontSize);
-//                g.setFont(f);
-//            }
-//            currentFontSize = maxCurrentFontSize;
-//
-//            if (currentFontSize < minFontSize) {
-//                displayText = false;
-//            } else {
-//                displayText = true;
-//                f = f.deriveFont((float) currentFontSize);
-//                g.setFont(f);
-//            }
-//
-//        }
-//
-//        //
-//
-//        Color c = g.getColor();
-//
-//        g.draw3DRect(x, y, width, height, true);
-//
-//        //g.setColor(ColorManager.AVATAR_BLOCK);
-//        Color avat = ColorManager.AVATAR_BLOCK;
-//        int h;
-//        h = 2 * (currentFontSize + (int) (textY * tdp.getZoom())) + 2;
-//        g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
-//        g.fill3DRect(x + 1, y + 1, width - 1, Math.min(h, height) - 1, true);
-//        g.setColor(c);
-//
-//        // Strings
-//        int w;
-//        h = 0;
-//        if (displayText) {
-//            f = f.deriveFont((float) currentFontSize);
-//            Font f0 = g.getFont();
-//            g.setFont(f.deriveFont(Font.BOLD));
-//
-//            w = g.getFontMetrics().stringWidth(ster);
-//            h = currentFontSize + (int) (textY * tdp.getZoom());
-//            if ((w < (2 * textX + width)) && (h < height)) {
-//                drawSingleString(g, ster, x + (width - w) / 2, y + h);
-//            }
-//            g.setFont(f0);
-//            w = g.getFontMetrics().stringWidth(value);
-//            h = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
-//            if ((w < (2 * textX + width)) && (h < height)) {
-//                drawSingleString(g, value, x + (width - w) / 2, y + h);
-//            }
-////            limitName = y + h;
-//        } else {
-////            limitName = -1;
-//        }
-//
-//        g.setFont(fold);
-//
-//        h = h + 2;
-//        if (h < height) {
-//            //g.drawLine(x, y+h, x+width, y+h);
-//            g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
-//            g.fill3DRect(x + 1, y + h, width - 1, height - 1 - h, true);
-//            g.setColor(c);
-//        }
-//
-//        // Icon
-//        /*if ((width>30) && (height > (iconSize + 2*textX))) {
-//			iconIsDrawn = true;
-//			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
-//		} else {
-//			iconIsDrawn = false;
-//		}*/
-//
-//        g.setFont(fold);
-//
-//
-//        // Icon
-//        //g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-//        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-//    }
+
+    private void internalDrawingAux(Graphics g, int size, int currentHeight)  {
+        String texti = "Text";
+        String s;
+        int i;
+        int currentFontSize = g.getFont().getSize();
+        size = currentHeight + currentFontSize + 2;
+
+        //text
+        for (i = 0; i < texts.length; i++) {
+            if (size < (height - 2)) {
+                s = texts[i];
+                if (i == 0) {
+                    s = texti + "=\"" + s;
+                }
+                if (i == (texts.length - 1)) {
+                    s = s + "\"";
+                }
+                drawLimitedString(g, s, x + textX, y + size, width, 0);
+            }
+            size += currentFontSize;
+
+        }
+
+    }
 
     
     @Override
@@ -315,37 +244,21 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     public String getNodeName() {
         return name;
     }
-    /*
-     *     public boolean editOndoubleClick(JFrame frame) {
 
-        JDialogGeneralAttribute jda = new JDialogGeneralAttribute(myAttributes, null, frame,
-                "Setting attributes of " + value, "Attribute", stereotype + "/" + value);
-        //setJDialogOptions(jda);
-        // jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda, 750, 375);
-        jda.setVisible(true); // blocked until dialog has been closed
-
-        rescaled = true;
-
-        String oldValue = getStereotype() + "/" + getValue();
-
-        //String text = getName() + ": ";
-        String s = jda.getValue();
-		
-        if (s == null) {
-            return false;
-        }
-     * */
     @Override
     public boolean editOnDoubleClick(JFrame frame) {
 
         oldValue = getStereotype() + "/" + getValue();
 
-        //String text = getName() + ": ";
-        String s = (String) JOptionPane.showInputDialog(frame, "Stereotype / identifier",
-                "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                null,
-                getStereotype() + "/" + getValue());
+        JDialogTitleAndNote jdtan = new JDialogTitleAndNote(frame, "Setting block attributes", oldValue, text);
+        GraphicLib.centerOnParent(jdtan, 600, 450);
+        // dialog.show(); // blocked until dialog has been closed
+        jdtan.setVisible(true);
+
+        String s = jdtan.getId();
+        text = jdtan.getText();
+        makeValue();
+
 
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //boolean b;
@@ -402,6 +315,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             stereotype = ster;
             setValue(blo);
 
+
+
             recalculateSize();
 
             if (tdp.actionOnDoubleClick(this)) {
@@ -414,7 +329,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
                 setValue(oldValue);
             }
         }
-        return false;
+        return true;
 
     }
     
@@ -589,16 +504,13 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<stereotype value=\"" + GTURTLEModeling.transformString(getStereotype()));
-        sb.append("\" />\n");
-        for (GeneralAttribute a : this.myAttributes) {
-            sb.append("<Attribute id=\"");
-            sb.append(a.getId());
-            sb.append("\" value=\"");
-            sb.append(a.getInitialValue());
-            sb.append("\" type=\"");
-            sb.append(a.getType());
-            sb.append("\" />\n");
+        if (texts != null) {
+            for (int i = 0; i < texts.length; i++) {
+                //value = value + texts[i] + "\n";
+                sb.append("<textline data=\"");
+                sb.append(GTURTLEModeling.transformString(texts[i]));
+                sb.append("\" />\n");
+            }
         }
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -606,17 +518,14 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //
         try {
 
             NodeList nli;
             Node n1, n2;
             Element elt;
-//            int t1id;
-//            String sdescription = null;
-//            String prio;
-//            String isRoot = null;
-            String type, id, valueAtt;
+
+            String s;
+            boolean textLoaded = false;
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -631,21 +540,19 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
                             if (elt.getTagName().equals("stereotype")) {
                                 stereotype = elt.getAttribute("value");
                             }
-							//stay or no ?? FIXME
-                            if (elt.getTagName().equals("Attribute")) {
+                            if (elt.getTagName().equals("textline")) {
                                 //
-                                type = elt.getAttribute("type");
-                                id = elt.getAttribute("id");
-                                valueAtt = elt.getAttribute("value");
-
-                                if (valueAtt.equals("null")) {
-                                    valueAtt = "";
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    s = "";
                                 }
-
-                                GeneralAttribute ga = new GeneralAttribute(id, valueAtt, type);
-                                this.myAttributes.add(ga);
-
-                            }//FIXME end 
+                                if (textLoaded == false) {
+                                    text = "";
+                                    textLoaded = true;
+                                }
+                                text += GTURTLEModeling.decodeString(s) + "\n";
+                                makeValue();
+                            }
                         }
                     }
                 }
@@ -660,7 +567,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     // Main Tree
     public int getChildCount() {
         //TraceManager.addDev("Counting childs!");
-        return this.myAttributes.size()  + nbInternalTGComponent;
+        return nbInternalTGComponent;
     }
 
     public Object getChild(int index) {
@@ -671,9 +578,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             return tgcomponent[index];
         }
 
-        index = index - nbInternalTGComponent;
-
-        return this.myAttributes.get(index);
+        return null;
     }
 
     public int getIndexOfChild(Object child) {
@@ -685,12 +590,12 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             }
         }
 
-        if (child instanceof TAttribute) {
-            return this.myAttributes.indexOf(child) + nbInternalTGComponent;
-        }
-
 
         return -1;
+    }
+
+    public Color getMainColor() {
+        return ColorManager.AVATAR_BLOCK;
     }
 
 }

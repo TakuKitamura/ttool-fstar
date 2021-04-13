@@ -8435,13 +8435,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             // name already in use?
             if (s.compareTo(oldName) != 0) {
                 if (isAValidTabName(s) && (!isTabNameUsed(s))) {
-                    renameInMethodo(mainTabbedPane.getTitleAt(index), s);
-                    mainTabbedPane.setTitleAt(index, s);
-                    changeMade(getCurrentTDiagramPanel(), /* ((TURTLEPanel)(tabs.elementAt(index))).tdp */TDiagramPanel.MOVE_COMPONENT);
+                    renameInMethodo(oldName, s);
+                    if (index < mainTabbedPane.getTabCount()) {
+                        mainTabbedPane.setTitleAt(index, s);
+                        changeMade(getCurrentTDiagramPanel(), /* ((TURTLEPanel)(tabs.elementAt(index))).tdp */TDiagramPanel.MOVE_COMPONENT);
 
-                    TURTLEPanel tp = tabs.elementAt(index);
-                    if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
-                        renameMapping(oldName, s);
+                        if (index < tabs.size() ) {
+                            TURTLEPanel tp = tabs.elementAt(index);
+                            if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+                                renameMapping(oldName, s);
+                            }
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Invalid name", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -8475,14 +8479,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
      * @author Fabien Tessier
      */
     public void renameInMethodo(String oldname, String newname) {
-        for (TURTLEPanel tp : tabs) {
-            if (tp instanceof DiplodocusMethodologyPanel) {
-                DiplodocusMethodologyDiagramPanel dmdp = (DiplodocusMethodologyDiagramPanel) tp.tdp;
-                for (TGComponent tgc : dmdp.componentList)
-                    for (TGComponent tgc2 : tgc.tgcomponent) {
-                        if (tgc2.getValue().equals(oldname))
-                            tgc2.setValue(newname);
+        if (tabs != null) {
+            for (TURTLEPanel tp : tabs) {
+                if (tp instanceof DiplodocusMethodologyPanel) {
+                    DiplodocusMethodologyDiagramPanel dmdp = (DiplodocusMethodologyDiagramPanel) tp.tdp;
+                    if (dmdp != null) {
+                        for (TGComponent tgc : dmdp.componentList)
+                            for (TGComponent tgc2 : tgc.tgcomponent) {
+                                if (tgc2.getValue().equals(oldname))
+                                    tgc2.setValue(newname);
+                            }
                     }
+                }
             }
         }
     }
