@@ -710,17 +710,20 @@ public class FullTML2Avatar {
 
             AvatarRelation ar = new AvatarRelation(event.getName(), taskBlockMap.get(event.getOriginTask()), taskBlockMap.get(event.getDestinationTask()),
                     event.getReferenceObject());
+            ar.setAsynchronous(true);
+
 
             AvatarSignal sigOut = signalOutMap.get(event.getName());
             AvatarSignal sigIn = signalInMap.get(event.getName());
+            ar.addSignals(sigOut, sigIn);
 
             TraceManager.addDev("Relation for event " + event.getName() + " sigout:" + sigOut.getSignalName() + " sigin:" + sigIn.getSignalName());
 
-            AvatarSignal sigNotified = signalInMap.get(event.getName() + NOTIFIED);
-            ar.addSignals(sigOut, sigIn);
+            //AvatarSignal sigNotified = signalInMap.get(event.getName() + NOTIFIED);
+            //ar.addSignals(sigOut, sigIn);
 
-            AvatarBlock ab0 = taskBlockMap.get(event.getOriginTask());
-            AvatarBlock ab1 = taskBlockMap.get(event.getDestinationTask());
+            //AvatarBlock ab0 = taskBlockMap.get(event.getOriginTask());
+            //AvatarBlock ab1 = taskBlockMap.get(event.getDestinationTask());
             //ab0.addSignal(new AvatarSignal(event.getName(), AvatarSignal.OUT, null));
             //ab1.addSignal(new AvatarSignal(event.getName(), AvatarSignal.IN, null));
 
@@ -734,9 +737,11 @@ public class FullTML2Avatar {
                 ar.setSizeOfFIFO(event.getMaxSize());
 
             }
-            //avspec.addRelation(ar);
+            avspec.addRelation(ar);
 
-            AvatarBlock FifoEvt = AvatarBlockTemplate.getFifoBlockWithNotified("Block" + event.getName(),
+
+            // Old way to do: using extra blocks. We simply use an asynchronous channel
+            /*AvatarBlock FifoEvt = AvatarBlockTemplate.getFifoBlockWithNotified("Block" + event.getName(),
                     avspec, ar, event.getReferenceObject(), sigOut, sigIn, sigNotified, event.getMaxSize(), event.getID());
             avspec.addBlock(FifoEvt);
 
@@ -749,7 +754,7 @@ public class FullTML2Avatar {
                     event.getReferenceObject());
             ar.addSignals(FifoEvt.getAvatarSignalWithName("read"), sigIn);
             ar.addSignals(FifoEvt.getAvatarSignalWithName("notified"), sigNotified);
-            avspec.addRelation(ar);
+            avspec.addRelation(ar);*/
 
 
         }
@@ -1140,17 +1145,22 @@ public class FullTML2Avatar {
                 elementList.add(tran);
 
             } else {
-                //Notify Event, I don't know how to translate this
-                AvatarSignal sig = signalInMap.get(evt.getName() + NOTIFIED);
-                TraceManager.addDev("sig=" + sig);
-                AvatarActionOnSignal aaos = new AvatarActionOnSignal(ae.getName(), sig, ae.getReferenceObject());
+                TraceManager.addDev("Class: " + ae.getClass() +  " ae=" + ae.toString());
+                //Notify Event: we use a query signal
+                AvatarSignal sig = signalInMap.get(evt.getName());
 
+                String param = ((TMLActivityElementEvent)ae).getVariable();
+                AvatarAttribute at = block.getAvatarAttributeWithName(param);
+                if (at == null) {
+                    at = new AvatarAttribute(param, AvatarType.INTEGER, block, ae.getReferenceObject());
+                }
+                TraceManager.addDev("sig=" + sig);
+                AvatarQueryOnSignal aqos = new AvatarQueryOnSignal(ae.getName(), sig, at, ae.getReferenceObject());
 
                 tran = new AvatarTransition(block, "__after_" + ae.getName(), ae.getReferenceObject());
-                aaos.addValue(aee.getVariable());
 
-                aaos.addNext(tran);
-                elementList.add(aaos);
+                aqos.addNext(tran);
+                elementList.add(aqos);
                 elementList.add(tran);
             }
 

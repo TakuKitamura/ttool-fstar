@@ -341,6 +341,9 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
      * @return The attribute if found, or null otherwise
      */
     public AvatarAttribute getAvatarAttributeWithName(String _name) {
+        if ((attributes == null) || (_name == null)) {
+            return null;
+        }
         for (AvatarAttribute attribute : attributes) {
             if (attribute.getName().compareTo(_name) == 0) {
                 return attribute;
