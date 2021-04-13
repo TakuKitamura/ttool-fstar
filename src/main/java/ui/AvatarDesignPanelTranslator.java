@@ -1738,15 +1738,18 @@ public class AvatarDesignPanelTranslator {
             for (int i = 0; i < aaos.getNbOfValues(); i++) {
                 String theVal = aaos.getValue(i);
                 if (atas.getListOfAttributes().get(i).isInt()) {
-                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, modifyString(theVal)) < 0)
-                        //TraceManager.addDev("theVal=" + modifyString(theVal));
+                    if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, modifyString(theVal)) < 0) {
+                        TraceManager.addDev("Error 1. TheVal=" + modifyString(theVal));
                         throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue()
                                 + " -> value at index #" + i + " does not match definition");
+                    }
                 } else {
                     // We assume it is a bool attribute
-                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, modifyString(theVal)) < 0)
+                    if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, modifyString(theVal)) < 0) {
+                        TraceManager.addDev("Error 2. TheVal=" + modifyString(theVal));
                         throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue()
                                 + " -> value at index #" + i + " does not match definition");
+                    }
                 }
             }
 

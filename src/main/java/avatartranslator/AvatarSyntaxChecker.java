@@ -334,14 +334,19 @@ public class AvatarSyntaxChecker  {
         String tmp = _expr.replaceAll(" ", "").trim();
         String act = tmp;
 
+
+        //TraceManager.addDev("1. IsValidBoolExpr Evaluating bool:" + act);
+
         for(AvatarAttribute aa: _ab.getAttributes()) {
-            act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValueTF());
+            act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
         }
+
+        //TraceManager.addDev("2. IsValidBoolExpr Evaluating bool:" + act);
 
 
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
-        //TraceManager.addDev("IsValidBoolExpr Evaluating bool:" + act);
+
         boolean result = bee.getResultOfWithIntExpr(act);
         if (bee.getError() != null) {
             TraceManager.addDev("Error in bool expr: " + bee.getError());
@@ -351,10 +356,16 @@ public class AvatarSyntaxChecker  {
         }
 
         // Testing with parsing AvatarExpressionSolver
-        AvatarExpressionSolver aee = new AvatarExpressionSolver(_expr);
+
+        //TraceManager.addDev("3. Now with avatar expression solver:" + _expr);
+
+        AvatarExpressionSolver aee = new AvatarExpressionSolver(act);
         if ( !(aee.buildExpression())) {
+            TraceManager.addDev("4. Error with avatar expression solver:" + act);
             return -1;
         }
+
+        //TraceManager.addDev("4. Ok with avatar expression solver:" + act);
 
         return 0;
         // OLD return parse(_as, _ab, "actionbool", _expr);
