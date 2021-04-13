@@ -53,7 +53,8 @@ import java.awt.geom.Line2D;
    * @version 1.0 02/09/2011
    * @author Ludovic APVRILLE
  */
-public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment,
+        BasicErrorHighlight, ColorCustomizable {
     protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
@@ -80,7 +81,7 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         removable = true;
 
         name = "Send signal";
-        value = "signal";
+        value = "event";
 
         myImageIcon = IconManager.imgic904;
     }
@@ -94,33 +95,11 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
             width = w1;            //updateConnectingPoints();
         }
 
-
-        if (stateOfError > 0)  {
-            Color c = g.getColor();
-            switch(stateOfError) {
-            case ErrorHighlight.OK:
-                g.setColor(ColorManager.TML_PORT_EVENT);
-                break;
-            default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-            }
-            // Making the polygon
-            int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
-            int [] py1 = {y, y, y+(height/2), y+height, y+height};
-            g.fillPolygon(px1, py1, 5);
-            g.setColor(c);
-        }
-
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        Color c = g.getColor();
-        //
+        Color c = getCurrentColor();
 
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
-        /*if (g.getColor().equals(ColorManager.NORMAL_0)) {
-          g.setColor(ColorManager.TML_PORT_EVENT);
-          }*/
 
         int x1 = x + 1;
         int y1 = y + 1;
@@ -189,5 +168,10 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
     @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
+    }
+
+    // Color management
+    public Color getMainColor() {
+        return Color.BLACK;
     }
 }

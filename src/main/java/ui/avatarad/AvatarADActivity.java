@@ -44,8 +44,7 @@ import ui.util.IconManager;
 
 import javax.swing.*;
 
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ import java.util.List;
    * @version 1.2 08/03/2017
    * @author Ludovic APVRILLE
  */
-public class AvatarADActivity extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+public class AvatarADActivity extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, ColorCustomizable {
 //    private int textY1 = 3;
 
     //private int maxFontSize = 12;
@@ -197,6 +196,11 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         //g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
         //g.fillRoundRect(x, y, width, height, 5, 5);
         //g.setColor(c);
+
+        Color c = g.getColor();
+        g.setColor(getCurrentColor());
+        g.fillRect(x, y, width, height);
+        g.setColor(c);
         g.drawRect(x, y, width, height);
         int decY = (int)(15 * tdp.getZoom());
         int decX = (int)(20 * tdp.getZoom());
@@ -484,4 +488,9 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
     public boolean canBeDisabled() {
     	return true;
     }
+
+    public Color getMainColor() {
+        return Color.WHITE;
+    }
+
 }

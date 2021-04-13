@@ -53,7 +53,8 @@ import java.awt.geom.Line2D;
    * @version 1.0 02/09/2011
    * @author Ludovic APVRILLE
  */
-public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment,
+        BasicErrorHighlight, ColorCustomizable {
     protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
@@ -98,20 +99,15 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
             //updateConnectingPoints();
         }
 
-        if (stateOfError > 0)  {
-            Color c = g.getColor();
-            switch(stateOfError) {
-            case ErrorHighlight.OK:
-                g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
-                break;
-            default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-            }
-            g.fillRoundRect(x, y, width, height, arc, arc);
-            g.setColor(c);
-        }
 
+
+
+        Color c = g.getColor();
+        g.setColor(getCurrentColor());
+        g.fillRoundRect(x, y, width, height, arc, arc);
+        g.setColor(c);
         g.drawRoundRect(x, y, width, height, arc, arc);
+
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
@@ -189,4 +185,9 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
+
+    public Color getMainColor() {
+        return Color.WHITE;
+    }
+
 }

@@ -53,7 +53,8 @@ import java.awt.geom.Line2D;
    * @version 1.0 02/09/2011
    * @author Ludovic APVRILLE
  */
-public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment,
+        BasicErrorHighlight, ColorCustomizable {
     protected int lineLength = 5;
 //    protected int textX =  6;
 //    protected int textY =  15;
@@ -99,27 +100,13 @@ public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledCompon
             //updateConnectingPoints();
         }
 
-        if (stateOfError > 0)  {
-            Color c = g.getColor();
-            switch(stateOfError) {
-            case ErrorHighlight.OK:
-                g.setColor(ColorManager.TML_PORT_EVENT);
-                break;
-            default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-            }
-            // Making the polygon
-            int [] px1 = {x, x+width, x+width, x, x+linebreak};
-            int [] py1 = {y, y, y+height, y+height, y+(height/2)};
-            g.fillPolygon(px1, py1, 5);
-            g.setColor(c);
-        }
 
-        //g.drawRoundRect(x, y, width, height, arc, arc);
+
+
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
-        Color c = g.getColor();
+        Color c = getCurrentColor();
         int x1 = x + 1;
         int y1 = y + 1;
         int height1 = height;
@@ -188,5 +175,10 @@ public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledCompon
     @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
+    }
+
+    // Color management
+    public Color getMainColor() {
+        return Color.BLACK;
     }
 }
