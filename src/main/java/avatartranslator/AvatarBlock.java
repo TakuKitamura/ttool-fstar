@@ -793,10 +793,12 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     
     public void removeConstantAttributes() {
         AvatarTransition at;
-        
-        if (constants == null) {
-            List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
-            constants = new LinkedList<AvatarAttribute>();
+
+
+
+        if ((constants == null) || (constants.size() == 0)) {
+            List<AvatarAttribute> newAttributes = new LinkedList<>();
+            constants = new LinkedList<>();
     
             for (AvatarAttribute attr : attributes) {
                 boolean toKeep = false;
@@ -804,12 +806,11 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
                 if (attr.isTimer()) {
                     toKeep = true;
                 }
+
                 for (AvatarStateMachineElement elt : asm.getListOfElements()) {
 
                     if (elt instanceof AvatarTransition) {
                         at = (AvatarTransition) elt;
-
-
 
                         for (AvatarAction aa : at.getActions()) {
                             if (aa instanceof AvatarActionAssignment) {
@@ -831,6 +832,10 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
                         }
                     } else if (elt instanceof AvatarRandom) {
                         if (((AvatarRandom) elt).getVariable().compareTo(attr.name) == 0) {
+                            toKeep = true;
+                        }
+                    } else if (elt instanceof AvatarQueryOnSignal) {
+                        if (((AvatarQueryOnSignal) elt).getAttribute().getName().compareTo(attr.name) == 0) {
                             toKeep = true;
                         }
                     }
