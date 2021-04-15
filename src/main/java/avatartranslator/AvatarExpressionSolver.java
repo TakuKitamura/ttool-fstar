@@ -102,11 +102,12 @@ public class AvatarExpressionSolver {
         if (attributesMap == null) {
             attributesMap = new HashMap<AvatarElement, AvatarExpressionAttribute>();
         }
-        returnVal = buildExpressionRec(spec); 
-        if (returnVal == false) {
+        returnVal = buildExpressionRec(spec);
+
+        if (!returnVal) {
             return false;
         }
-        
+
         return checkIntegrity();
     }
     
@@ -117,7 +118,7 @@ public class AvatarExpressionSolver {
             attributesMap = new HashMap<AvatarElement, AvatarExpressionAttribute>();
         }
         returnVal = buildExpressionRec(block); 
-        if (returnVal == false) {
+        if (!returnVal) {
             return false;
         }
         
@@ -128,14 +129,14 @@ public class AvatarExpressionSolver {
         boolean returnVal;
         
         returnVal = buildExpressionRec(); 
-        if (returnVal == false) {
+        if (!returnVal) {
             return false;
         }
         
         return checkIntegrity();
     }
     
-    public boolean builExpression(AvatarExpressionAttribute attribute) {
+    public boolean buildExpression(AvatarExpressionAttribute attribute) {
         this.expression = attribute.toString();
         isLeaf = true;
         isImmediateValue = IMMEDIATE_NO;

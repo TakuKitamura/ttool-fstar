@@ -104,7 +104,7 @@ public class SafetyProperty  {
         //create liveness safety
         AvatarExpressionAttribute attribute = new AvatarExpressionAttribute(block, state);
         safetySolver = new AvatarExpressionSolver();
-        safetySolver.builExpression(attribute);
+        safetySolver.buildExpression(attribute);
         propertyType = BLOCK_STATE;
         safetyType = _safetyType;
         result = true;
