@@ -137,7 +137,7 @@ public class IconManager {
     public static ImageIcon imgic1300, imgic1302, imgic1304, imgic1306, imgic1308;
     public static ImageIcon imgic1310, imgic1312, imgic1314, imgic1316, imgic1318;
     public static ImageIcon imgic1320, imgic1322, imgic1324, imgic1326, imgic1328;
-    public static ImageIcon imgic1330, imgic1332, imgic1334;
+    public static ImageIcon imgic1330, imgic1332, imgic1334, imgic1336;
 
 
     // SMD diagram
@@ -579,6 +579,7 @@ public class IconManager {
     private static String icon1330 = "stepforwardx24.gif";
     private static String icon1332 = "savexml24.gif";
     private static String icon1334 = "savecsv24.gif";
+    private static String icon1336 = "steptrace24.gif";
 
     // SMD diagrams
     private static String icon2000 = "prosmdsendmsg.gif";
@@ -1121,6 +1122,7 @@ public class IconManager {
         imgic1330 = getIcon(icon1330);
         imgic1332 = getIcon(icon1332);
         imgic1334 = getIcon(icon1334);
+        imgic1336 = getIcon(icon1336);
 
         imgic2000 = getIcon(icon2000);
         imgic2002 = getIcon(icon2002);

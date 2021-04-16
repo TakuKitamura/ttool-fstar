@@ -269,7 +269,19 @@ public class AvatarSyntaxChecker  {
             act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
         }
 
-        IntExpressionEvaluator iee = new IntExpressionEvaluator();
+        AvatarExpressionSolver e1 = new AvatarExpressionSolver(act);
+        boolean ret = e1.buildExpression();
+        if (!ret) {
+            return -1;
+        }
+
+        if (e1.getReturnType() == AvatarExpressionSolver.IMMEDIATE_INT) {
+            return 0;
+        }
+
+        return -1;
+
+        /*IntExpressionEvaluator iee = new IntExpressionEvaluator();
 
         //TraceManager.addDev("Evaluating int:" + act);
         double result = iee.getResultOf(act);
@@ -278,7 +290,7 @@ public class AvatarSyntaxChecker  {
             return -1;
         }
 
-        return 0;
+        return 0;*/
         // OLD return parse(_as, _ab, "actionnat", _expr);
 
     }

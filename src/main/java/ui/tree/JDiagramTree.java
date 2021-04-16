@@ -49,6 +49,8 @@ import tmltranslator.TMLCheckingError;
 import ui.*;
 import graph.RG;
 import myutil.*;
+import ui.avatarinteractivesimulation.JFrameAvatarInteractiveSimulation;
+import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.window.JFrameHelp;
 
 import javax.swing.*;
@@ -99,6 +101,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JMenuItem jmiRefusalGraph;
     protected JMenuItem jmiRemove;
     protected JMenuItem jmiShowInFinder;
+    protected JMenuItem jmiSelectInSimulator;
     protected JMenuItem jmiShowST;
     protected JMenuItem jmiShowInFinderST;
     protected JMenuItem jmiCompareST;
@@ -111,8 +114,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
     protected JPopupMenu popupGraphTree;
     protected JPopupMenu popupSimulationTraceTree;
+    protected JMenuItem jmiAddSimTraceFromFile;
     protected JMenuItem jmiAddFromFile;
     protected GraphTree selectedGT;
+    protected SimulationTraceTree selectedSTT;
 
 
     /*
@@ -205,6 +210,17 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         //TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
 
+        if (obj instanceof SimulationTraceTree) {
+            selectedSTT = (SimulationTraceTree) obj;
+            if (popupSimulationTraceTree == null) {
+                popupSimulationTraceTree = new JPopupMenu();
+                jmiAddSimTraceFromFile = new JMenuItem("Add simulation trace from file (.csv)");
+                jmiAddSimTraceFromFile.addActionListener(this);
+                popupSimulationTraceTree.add(jmiAddSimTraceFromFile);
+            }
+            popupSimulationTraceTree.show(tree, x, y);
+        }
+
         if (obj instanceof GraphTree) {
             selectedGT = (GraphTree) obj;
             if (popupGraphTree == null) {
@@ -259,12 +275,19 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 }
                 jmiShowST.addActionListener(this);
                 popupTreeST.add(jmiShowST);
-                if(selectedST.hasFile()) {
+                if (selectedST.hasFile()) {
                     jmiShowInFinderST = new JMenuItem("Show in File Explorer");
                     jmiShowInFinderST.addActionListener(this);
                 }
+                if (selectedST.hasContent() && selectedST.getType() == SimulationTrace.CSV_AVATAR) {
+                    jmiSelectInSimulator = new JMenuItem("Select in simulator");
+                    jmiSelectInSimulator.addActionListener(this);
+                }
 
                 popupTreeST.add(jmiShowInFinderST);
+                if (jmiSelectInSimulator != null) {
+                    popupTreeST.add(jmiSelectInSimulator);
+                }
                 
                 if (selectedST.getType() == SimulationTrace.XML_DIPLO) {
                     
@@ -527,38 +550,42 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         if (selectedST != null) {
            if (ae.getSource() == jmiShowST) {
                showSimulationTrace();
+
             } else if (ae.getSource() == jmiShowInFinderST) {
                mgui.showInFinder(selectedST, true);
-            }
-            else if (ae.getSource() == jmiCompareST) {
+
+            } else if (ae.getSource() == jmiSelectInSimulator) {
+               mgui.setSimulationTraceSelected(selectedST);
+
+           } else if (ae.getSource() == jmiCompareST) {
                 mgui.compareSimulationTraces(selectedST, true);
                
-             }
-            else if (ae.getSource() == jmiLatencyAnalysisST) {
+           } else if (ae.getSource() == jmiLatencyAnalysisST) {
                 try {
                     mgui.latencyDetailedAnalysisForXML(selectedST, true , false,1);
-                } catch (XPathExpressionException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (SAXException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    TraceManager.addDev("Error in latency analysis: " + e.getMessage());
                 }
                
-             } else if (ae.getSource() == jmiCompareLatencyAnalysisST) {
-                
+           } else if (ae.getSource() == jmiCompareLatencyAnalysisST) {
                      mgui.compareLatencyForXML(selectedST, false);
-                 
-                
               }
          }
 
+
+        if (selectedSTT != null) {
+            if (ae.getSource() == jmiAddSimTraceFromFile) {
+
+                //TraceManager.addDev("Adding simulation trace from file");
+                String[] st = mgui.loadSimulationTraceCSV();
+                if (st != null) {
+                    SimulationTrace sim = new SimulationTrace(st[0], SimulationTrace.CSV_AVATAR, st[1]);
+                    sim.setContent(st[2]);
+                    mgui.addSimulationTrace(sim);
+                }
+
+            }
+        }
 
         if (selectedGT != null) {
             if (ae.getSource() == jmiAddFromFile) {

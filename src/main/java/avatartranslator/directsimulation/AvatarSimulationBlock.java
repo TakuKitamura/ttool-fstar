@@ -744,7 +744,7 @@ public class AvatarSimulationBlock {
 
     }
 
-    public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {
+    /*public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {
         String act = _expr;
         int cpt = 0;
         for (String attrValue : _attributeValues) {
@@ -758,7 +758,7 @@ public class AvatarSimulationBlock {
         //TraceManager.addDev("Evaluating expression: " + act);
 
         return (int) (new IntExpressionEvaluator().getResultOf(act));
-    }
+    }*/
 
     public boolean evaluateBoolExpression(String _expr, Vector<String> _attributeValues) {
         String act = _expr;
@@ -778,7 +778,7 @@ public class AvatarSimulationBlock {
         }
 
         int[] attributes = AvatarSimulationTransaction.getAttributeValues(_attributeValues);
-        
+
         return aee.getResult(attributes) != 0;
 
         /*BoolExpressionEvaluator bee = new BoolExpressionEvaluator();

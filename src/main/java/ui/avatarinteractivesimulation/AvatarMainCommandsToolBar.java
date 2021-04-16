@@ -41,6 +41,8 @@
 
 package ui.avatarinteractivesimulation;
 
+import ui.MainGUI;
+
 import javax.swing.*;
 
 //import java.awt.*;
@@ -76,6 +78,8 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
         jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
         jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
         jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].
+                setEnabled(b&&JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE != null);
         jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
 
 
@@ -113,6 +117,13 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
 
         button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
         button.addMouseListener(jfais.mouseHandler);
+
+        if (MainGUI.experimentalOn) {
+            this.addSeparator();
+
+            button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE]);
+            button.addMouseListener(jfais.mouseHandler);
+        }
 
         this.addSeparator();
         this.addSeparator();

@@ -73,6 +73,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     private static int TRACED_TRANSACTIONS = 1000;
     private static int LAST_TRANSACTIONS = 0;
 
+    public static SimulationTrace SELECTED_SIMULATION_TRACE;
+
 
     //    private static String buttonStartS = "Start simulator";
     //    private static String buttonStopAndCloseS = "Stop simulator and close";
@@ -105,6 +107,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     // Commands
     JPanel main, mainTop, commands, save, state, infos;
     //outputs, cpuPanel; // from MGUI
+    JLabel nameOfTrace;
     JCheckBox latex, debug, animate, diploids, hidden, update, openDiagram, animateWithInfo, executeEmptyTransition, executeStateEntering, traceInSD;
     JTabbedPane commandTab, infoTab;
     protected JTextField displayedTransactionsText, lastTransactionsText;
@@ -238,6 +241,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     private Map<String, SimulationLatency> nameLatencyMap = new HashMap<String, SimulationLatency>();
     private Map<String, List<String>> transTimes = new HashMap<String, List<String>>(); //Map of each checked element: all transaction times
     private JScrollPane jspLatency;
+
+    // Trace playing
+    private SimulationTrace selectedTrace;
 
 
     public JFrameAvatarInteractiveSimulation(/*Frame _f,*/ MainGUI _mgui, String _title, AvatarSpecification _avspec) {
@@ -501,6 +507,13 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         paramMainCommand = new JTextField("1", 30);
         jp02.add(paramMainCommand, c01);
+
+        c01.gridwidth = 1;
+        jp02.add(new JLabel("Selected trace: "), c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nameOfTrace = new JLabel();
+        jp02.add(nameOfTrace, c01);
+
         // list of pending transactions
         JPanel panellpt = new JPanel();
         panellpt.setLayout(new BorderLayout());
@@ -513,6 +526,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         JScrollPane scrollPane1 = new JScrollPane(listPendingTransactions);
         scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         panellpt.add(scrollPane1);
+        c01.gridheight = 10;
         jp02.add(panellpt, c01);
         jp01.add(jp02, BorderLayout.CENTER);
 
@@ -1147,6 +1161,27 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         }
     }
 
+
+    public void runTrace() {
+        if (SELECTED_SIMULATION_TRACE == null) {
+            return;
+        }
+
+        if (!SELECTED_SIMULATION_TRACE.hasContent()) {
+            return;
+        }
+
+        selectedTrace = SELECTED_SIMULATION_TRACE;
+
+        // Transform String into a CSV object
+
+
+
+
+
+        // Implement CSV object running;
+    }
+
     public void stopSimulation() {
         //previousTime = System.currentTimeMillis();
         if (ass != null) {
@@ -1243,7 +1278,21 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         }
     }
 
+    private void setTraceName() {
+        if (SELECTED_SIMULATION_TRACE.hasContent()) {
+            nameOfTrace.setText(SELECTED_SIMULATION_TRACE.getName());
+        } else {
+            nameOfTrace.setText("No selected trace");
+        }
+    }
+
+    public void updateSimulationTrace() {
+        setTraceName();
+        setAll();
+    }
+
     public void setAll() {
+
         boolean b = true;
 
         switch (busyMode) {
@@ -1252,6 +1301,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].setEnabled(
+                        JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE != null);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
@@ -1264,6 +1315,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);
@@ -1274,6 +1326,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].setEnabled(
+                        JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE != null);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
@@ -1286,6 +1340,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].setEnabled(
+                        JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE != null);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
@@ -1801,8 +1857,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             fileName += "simulationtrace_fromttool.txt";
         }
 
-        if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
-            fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+        if (ConfigurationTTool.isConfigured(ConfigurationTTool.TGraphPath)) {
+            fileName = ConfigurationTTool.TGraphPath + System.getProperty("file.separator") + fileName;
         } else {
             // Using model directory
             String path = mgui.getModelFileFullPath();
@@ -1862,8 +1918,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             fileName += "simulationtrace_fromttool.csv";
         }
 
-        if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
-            fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+        if (ConfigurationTTool.isConfigured(ConfigurationTTool.TGraphPath)) {
+            fileName = ConfigurationTTool.TGraphPath + System.getProperty("file.separator") + fileName;
         } else {
             // Using model directory
             String path = mgui.getModelFileFullPath();
@@ -1901,15 +1957,12 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             return;
         }
 
-        /*JOptionPane.showMessageDialog(this,
-                "Simulation trace was saved in " + fileName,
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE);*/
+
 
         String shortFileName;
         File f = new File(fileName);
         shortFileName = f.getName();
-        SimulationTrace st = new SimulationTrace(shortFileName, SimulationTrace.TXT_AVATAR, fileName);
+        SimulationTrace st = new SimulationTrace(shortFileName, SimulationTrace.CSV_AVATAR, fileName);
         mgui.addSimulationTrace(st);
 
         //ass.printExecutedTransactions();
@@ -2173,6 +2226,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand())) {
             runXCommands();
+
+        } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].getActionCommand())) {
+            runTrace();
 
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             stopSimulation();

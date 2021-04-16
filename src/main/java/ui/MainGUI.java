@@ -2591,6 +2591,34 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return ret;
     }
 
+    public String[] loadSimulationTraceCSV() {
+        File file;
+
+        /* textual form */
+        CSVFileFilter filter = new CSVFileFilter();
+        jfctgraph.setFileFilter(filter);
+        jfctgraph.setCurrentDirectory(new File(SpecConfigTTool.TGraphPath));
+
+        int returnVal = jfctgraph.showDialog(frame, "Load simulation trace (CSV format)");
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return null;
+        }
+
+        file = jfctgraph.getSelectedFile();
+        file = FileUtils.addFileExtensionIfMissing(file, CSVFileFilter.getExtension());
+
+        String spec = loadFile(file);
+        if (spec == null) {
+            return null;
+        }
+
+        String[] ret = new String[3];
+        ret[0] = file.getName();
+        ret[1] = file.getAbsolutePath();
+        ret[2] = spec;
+        return ret;
+    }
+
     public void loadAUTGraphsDir() {
         File dir = new File(SpecConfigTTool.TGraphPath);
         if (!dir.exists()) {
@@ -4892,6 +4920,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // jfais.setSize(900, 600);
         GraphicLib.centerOnParent(jfais, 900, 600);
         jfais.setVisible(true);
+    }
+
+    public void setSimulationTraceSelected(SimulationTrace _st) {
+        JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE = _st;
+        if (jfais != null) {
+            jfais.updateSimulationTrace();
+        }
     }
 
     public void avatarUPPAALVerification() {
