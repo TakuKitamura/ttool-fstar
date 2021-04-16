@@ -760,7 +760,7 @@ public class TML2UPPAAL {
     }
 
     public void makeLoss(String name) {
-        TraceManager.addDev("Makking loss");
+        TraceManager.addDev("Making loss");
         if (lossTemplate == null) {
             lossTemplate = new UPPAALTemplate();
             lossTemplate.setName("LossManager__");

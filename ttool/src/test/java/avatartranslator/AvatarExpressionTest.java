@@ -235,6 +235,8 @@ public class AvatarExpressionTest {
         assertTrue(e12.buildExpression(block1));
         AvatarExpressionSolver e13 = new AvatarExpressionSolver("(key1==false) and (key2==true)");
         assertTrue(e13.buildExpression(block1));
+        AvatarExpressionSolver e14 = new AvatarExpressionSolver("x-40<3");
+        assertTrue(e14.buildExpression(block1));
         assertTrue(e1.getResult(specBlock) == 15);
         assertTrue(e2.getResult(specBlock) == 1);
         assertTrue(e3.getResult(specBlock) == 0);
@@ -248,6 +250,8 @@ public class AvatarExpressionTest {
         assertTrue(e11.getResult(attributes) == 5);
         assertTrue(e12.getResult(attributes) == 36);
         assertTrue(e13.getResult(attributes) == 1);
+        assertTrue(e14.getResult(attributes) == 1);
+
     }
     
     @Test
