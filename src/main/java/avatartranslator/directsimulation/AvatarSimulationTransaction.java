@@ -96,6 +96,46 @@ public class AvatarSimulationTransaction {
         duration = 0;
     }
 
+    public int[] getAttributeValues() {
+        if (attributeValues == null) {
+            return new int[0];
+        }
+
+        int[] vals = new int[attributeValues.size()];
+        for(int i=0; i<vals.length; i++) {
+            String v = attributeValues.get(i);
+            if (v.equals("true")) {
+                vals[i] = 1;
+            } else if (v.equals("false")) {
+                vals[i] = 0;
+            } else {
+                vals[i] = Integer.decode(v);
+            }
+        }
+
+        return vals;
+    }
+
+    public static int[] getAttributeValues(Vector<String> attributeValues) {
+        if (attributeValues == null) {
+            return new int[0];
+        }
+
+        int[] vals = new int[attributeValues.size()];
+        for(int i=0; i<vals.length; i++) {
+            String v = attributeValues.get(i);
+            if (v.equals("true")) {
+                vals[i] = 1;
+            } else if (v.equals("false")) {
+                vals[i] = 0;
+            } else {
+                vals[i] = Integer.decode(v);
+            }
+        }
+
+        return vals;
+    }
+
     public static void reinit() {
         ID = 0;
         allExecutedElements = new LinkedList<AvatarStateMachineElement>();

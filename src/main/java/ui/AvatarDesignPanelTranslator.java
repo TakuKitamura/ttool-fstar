@@ -1732,7 +1732,8 @@ public class AvatarDesignPanelTranslator {
 
             if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
                 TraceManager.addDev("nb of values: " + aaos.getNbOfValues() + " size of list: " + atas.getListOfAttributes().size());
-                throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+                throw new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() +
+                        " -> nb of parameters does not match definition");
             }
             // Checking expressions passed as parameter
             for (int i = 0; i < aaos.getNbOfValues(); i++) {
@@ -1766,7 +1767,8 @@ public class AvatarDesignPanelTranslator {
         asm.addElement(element);
     }
 
-    private void translateAvatarSMDLibraryFunctionCall(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab, AvatarSMDLibraryFunctionCall asmdlfc) throws CheckingError {
+    private void translateAvatarSMDLibraryFunctionCall(TDiagramPanel tdp, AvatarSpecification _as, AvatarStateMachineOwner _ab,
+                                                       AvatarSMDLibraryFunctionCall asmdlfc) throws CheckingError {
         AvatarStateMachine asm = _ab.getStateMachine();
 
         /* Get Function corresponding to this call */
@@ -2722,99 +2724,6 @@ public class AvatarDesignPanelTranslator {
                                     //TraceManager.addDev("-- Empty transition");
                                     final AvatarTransition at = new AvatarTransition(_ab, "avatar transition", connector);
                                     createTransitionInfo(at, avatarSmdConnector);
-                                    //                        AvatarTransition at = new AvatarTransition (_ab, "avatar transition", tgc);
-                                    //
-                                    //                        // Guard
-                                    //                        String tmp = modifyString (asmdco.getGuard());
-                                    //                        AvatarGuard guard = AvatarGuard.createFromString (_ab, tmp);
-                                    //                        if (guard.isElseGuard())
-                                    //                            at.setGuard(guard);
-                                    //                        else {
-                                    //                            int error = AvatarSyntaxChecker.isAValidGuard (_as, _ab, tmp);
-                                    //                            if (error < 0)
-                                    //                                this.makeError (error, tdp, _ab, tgc, "transition guard", tmp);
-                                    //                            else
-                                    //                                at.setGuard (guard);
-                                    //                        }
-                                    //
-                                    //                        // Delays
-                                    //                        String tmp1 = modifyString (asmdco.getAfterMinDelay ());
-                                    //                        int error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp1);
-                                    //                        if (error < 0) {
-                                    //                            this.makeError (error, tdp, _ab, tgc, "after min delay", tmp1);
-                                    //                            tmp1 = null;
-                                    //                        }
-                                    //                        String tmp2 = modifyString (asmdco.getAfterMaxDelay ());
-                                    //                        error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp2);
-                                    //                        if (error < 0) {
-                                    //                            this.makeError(error, tdp, _ab, tgc, "after max delay", tmp2);
-                                    //                            tmp2 = null;
-                                    //                        }
-                                    //
-                                    //                        if (tmp1 != null && tmp2 != null)
-                                    //                            at.setDelays(tmp1, tmp2);
-
-                                    // Compute min and max
-                                    //                        tmp1 = modifyString (asmdco.getComputeMinDelay ());
-                                    //                        error = AvatarSyntaxChecker.isAValidIntExpr (_as, _ab, tmp1);
-                                    //                        if (error < 0) {
-                                    //                            this.makeError (error, tdp, _ab, tgc, "compute min ", tmp1);
-                                    //                            tmp1 = null;
-                                    //                        }
-                                    //                        tmp2 = modifyString(asmdco.getComputeMaxDelay());
-                                    //                        error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
-                                    //                        if (error < 0) {
-                                    //                            this.makeError (error, tdp, _ab, tgc, "compute max ", tmp2);
-                                    //                            tmp2 = null;
-                                    //                        }
-                                    //
-                                    //                        if (tmp1 != null && tmp2 != null)
-                                    //                            at.setComputes(tmp1, tmp2);
-
-                                    // Probability
-                                    //                        tmp1 = asmdco.getProbability ();
-                                    //                        if ((tmp1 != null) && (tmp1.length()>0)) {
-                                    //                            error = AvatarSyntaxChecker.isAValidProbabilityExpr(_as, _ab, tmp1);
-                                    //                            if (error < 0) {
-                                    //                                this.makeError(error, tdp, _ab, tgc, "probability ", tmp1);
-                                    //                                tmp1 = null;
-                                    //                            }
-                                    //                            if (tmp1 != null) {
-                                    //                                at.setProbability(new Double(tmp1).doubleValue());
-                                    //                            }
-                                    //                        }
-                                    //
-                                    //                        // Actions
-                                    //                        for(String s: asmdco.getActions())
-                                    //                            if (s.trim().length() > 0) {
-                                    //                                s = modifyString(s.trim());
-                                    //
-                                    //                                // Variable assignation or method call?
-                                    //                                if (!isAVariableAssignation(s)) {
-                                    //                                    // Method call
-                                    //                                    int index2 = s.indexOf(";");
-                                    //                                    if (index2 != -1)
-                                    //                                        this.makeError(error, tdp, _ab, tgc, "transition action", s);
-                                    //
-                                    //                                    s = modifyStringMethodCall(s, _ab.getName());
-                                    //                                    if (!AvatarBlock.isAValidMethodCall (_ab, s)) {
-                                    //                                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed transition method call: " + s);
-                                    //                                        // TODO: adapt
-                                    //                                        // ce.setAvatarBlock(_ab);
-                                    //                                        ce.setTDiagramPanel(tdp);
-                                    //                                        ce.setTGComponent(tgc);
-                                    //                                        addCheckingError(ce);
-                                    //                                    } else
-                                    //                                        at.addAction(s);
-                                    //                                } else {
-                                    //                                    // Variable assignation
-                                    //                                    error = AvatarSyntaxChecker.isAValidVariableExpr (_as, _ab, s);
-                                    //                                    if (error < 0)
-                                    //                                        this.makeError (error, tdp, _ab, tgc, "transition action", s);
-                                    //                                    else
-                                    //                                        at.addAction (s);
-                                    //                                }
-                                    //                            }
 
                                     element1.addNext(at);
                                     at.addNext(element2);

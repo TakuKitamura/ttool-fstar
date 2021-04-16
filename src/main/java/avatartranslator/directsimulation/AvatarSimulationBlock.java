@@ -771,7 +771,17 @@ public class AvatarSimulationBlock {
             cpt++;
         }
 
-        BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+        AvatarExpressionSolver aee = new AvatarExpressionSolver(act);
+        if ( !(aee.buildExpression())) {
+            TraceManager.addDev("4. Error with avatar expression solver:" + act);
+            return false;
+        }
+
+        int[] attributes = AvatarSimulationTransaction.getAttributeValues(_attributeValues);
+        
+        return aee.getResult(attributes) != 0;
+
+        /*BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
         if (act.trim().startsWith("100")) {
             TraceManager.addDev("Current block " + this.getBlock().getName() + " lastTransaction=" + lastTransaction);
@@ -784,7 +794,7 @@ public class AvatarSimulationBlock {
         }
 
         //TraceManager.addDev("Result of " + _expr + " = " + result);
-        return result;
+        return result;*/
     }
 
     public int makeRandom(int minV, int maxV, int functionID, double extra1, double extra2) {
