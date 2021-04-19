@@ -244,6 +244,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
     // Trace playing
     private SimulationTrace selectedTrace;
+    private CSVObject traceObject;
 
 
     public JFrameAvatarInteractiveSimulation(/*Frame _f,*/ MainGUI _mgui, String _title, AvatarSpecification _avspec) {
@@ -1167,13 +1168,14 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             return;
         }
 
-        if (!SELECTED_SIMULATION_TRACE.hasContent()) {
+        selectedTrace = SELECTED_SIMULATION_TRACE;
+
+        if (selectedTrace.hasContent()) {
             return;
         }
 
-        selectedTrace = SELECTED_SIMULATION_TRACE;
-
         // Transform String into a CSV object
+        traceObject = new CSVObject(selectedTrace.getContent());
 
 
 

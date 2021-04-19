@@ -43,6 +43,7 @@ package myutil;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.UUID;
 
 /**
  * Class CSVObject
@@ -145,6 +146,20 @@ public class CSVObject  {
        }
 
        return selectedLine[col];
+   }
+
+   public int getInt(int line, int col) throws NumberFormatException {
+        String val = get(line, col);
+        return Integer.decode(val);
+   }
+
+   public UUID getUUID(int line, int col) throws IllegalArgumentException {
+       String val = get(line, col);
+       if (val == null) {
+           return null;
+       }
+       UUID uuid = UUID.fromString(val);
+       return uuid;
    }
    
   
