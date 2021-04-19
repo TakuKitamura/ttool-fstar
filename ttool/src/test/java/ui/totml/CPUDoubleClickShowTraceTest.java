@@ -1,50 +1,46 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import myutil.FileUtils;
 import myutil.TraceManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import remotesimulation.RemoteConnection;
-import remotesimulation.RemoteConnectionException;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
+import tmltranslator.simulation.SimulationTransaction;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
-import ui.AbstractUITest;
-import ui.TDiagramPanel;
-import ui.TMLArchiPanel;
-import ui.TURTLEPanel;
+import ui.*;
+import ui.interactivesimulation.JFrameInteractiveSimulation;
+import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiDiagramPanel;
 
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class TimelineDiagramTest extends AbstractUITest {
+public class CPUDoubleClickShowTraceTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_TIMELINE = {"timelineDiagram"};
+    final String [] MODELS_CPU_SHOWTRACE = {"SmartCardProtocol"};
     private String SIM_DIR;
-    private RemoteConnection rc;
-    private boolean isReady = false;
-    private boolean running = true;
-    private String ssxml;
-    final static String EXPECTED_FILE_GENERATED_TIMELINE = getBaseResourcesDir() + "tmltranslator/expected/expected_get_generated_timeline.txt";
     static String CPP_DIR = "../../../../simulators/c++2/";
+    static String mappingName = "Mapping2";
+    private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public TimelineDiagramTest() {
+    public CPUDoubleClickShowTraceTest() {
         super();
     }
 
@@ -53,22 +49,19 @@ public class TimelineDiagramTest extends AbstractUITest {
         SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test(timeout = 600000) // 10 minutes
-    public void testCompareTimelineGeneratedContent() throws Exception {
-        for (int i = 0; i < MODELS_TIMELINE.length; i++) {
-            String s = MODELS_TIMELINE[i];
-            SIM_DIR = DIR_GEN + s + "/";
+    @Test(timeout = 300000)
+    public void testCPUShowTraceOnDoubleClick() throws Exception {
+        for (int i = 0; i < MODELS_CPU_SHOWTRACE.length; i++) {
+            String s = MODELS_CPU_SHOWTRACE[i];
+            SIM_DIR = DIR_GEN + s + "_showTrace/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
-            for (TURTLEPanel _tab : mainGUI.getTabs()) {
-                if (_tab instanceof TMLArchiPanel) {
-                    for (TDiagramPanel tdp : _tab.getPanels()) {
-                        if (tdp instanceof TMLArchiDiagramPanel) {
-                            mainGUI.selectTab(tdp);
-                            break;
-                        }
-                    }
+            TMLArchiPanel _tab = findArchiPanel(mappingName);
+            for (TDiagramPanel tdp : _tab.getPanels()) {
+                if (tdp instanceof TMLArchiDiagramPanel) {
+                    mainGUI.selectTab(tdp);
+                    currTdp = (TMLArchiDiagramPanel) tdp;
                     break;
                 }
             }
@@ -134,9 +127,8 @@ public class TimelineDiagramTest extends AbstractUITest {
                     return;
                 }
             }
-
+            // TTool/ttool/build/test_diplo_simulator/SmartCardProtocol_showTrace/
             System.out.println("executing: " + "make -C " + SIM_DIR);
-
             try {
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -154,85 +146,56 @@ public class TimelineDiagramTest extends AbstractUITest {
             }
 
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
-            // Starts simulation
-            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
-            Thread.sleep(1000);
-            // Connects to the simulator, incase of using terminal: "./run.x -server" to start server and "nc localhost 3490" to connect to server
-            rc = new RemoteConnection("localhost");
-            try {
-                rc.connect();
-                isReady = true;
-            } catch (RemoteConnectionException rce) {
-                System.out.println("Could not connect to server.");
-            }
 
-            try {
-                toServer(" 1 6 100", rc);
-                Thread.sleep(5);
-                toServer("7 4 ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2", rc);
-                Thread.sleep(5);
-                while (running) {
-                    String line = null;
-                    try {
-                        line = rc.readOneLine();
-                    } catch (RemoteConnectionException e) {
-                        e.printStackTrace();
-                    }
-                    running = analyzeServerAnswer(line);
+            // Starts simulation and connect to the server
+            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -server");
+            JFrameInteractiveSimulation jfis = mainGUI.getJfis();
+
+            if (jfis != null) {
+                jfis.startSimulation();
+                Thread.sleep(1000);
+                jfis.sendTestCmd("time");
+                Thread.sleep(50);
+                jfis.sendTestCmd("get-hashcode");
+                Thread.sleep(500);
+                boolean hashOK = jfis.getHash();
+
+                TraceManager.addDev("HashCode  = " + hashOK + " and Busy mode = " + ((jfis.getBusyMode() == 1) ? "READY" : "BUSY"));
+                if (!hashOK || jfis.getBusyMode() != 1) {
+                    TraceManager.addDev("Server is in use, please restart server and re-run the test");
+                    jfis.killSimulator();
+                    jfis.close();
+                    return;
                 }
-                System.out.println(ssxml);
-                File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
-                String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-                assertTrue(content.equals(ssxml));
-                System.out.println("Test done");
-                if (rc != null) {
-                    try {
-                        rc.send("0");
-                        rc.disconnect();
-                    } catch (RemoteConnectionException rce) {
-                        rce.printStackTrace();
+                jfis.sendTestCmd("run-x-transactions 10"); // run 10 transactions
+                Thread.sleep(50);
+                jfis.sendTestCmd("lt 1000"); // update transaction list
+                Thread.sleep(1000);
+                for (TGComponent tg : currTdp.getComponentList()) {
+                    System.out.println("tgc = " + tg.getName());
+                    // get the transaction list of each CPUs on the panel, if the trans size > 0 then there will be a trace shown on double click
+                    if (tg instanceof TMLArchiCPUNode) {
+                        int _ID = tg.getDIPLOID();
+                        TraceManager.addDev("Component ID = " + _ID);
+                        List<SimulationTransaction> ts = mainGUI.getTransactions(_ID);
+                        // mainGUI.getTransactions(_ID) is synchronized function, so we need to wait until data is filled.
+                        //the test will fail after 5 minutes if ts is still null.
+                        int maxNumberOfLoop = 0;
+                        while (maxNumberOfLoop < 15 && ts == null) {
+//                            TraceManager.addDev("Waiting for data " + maxNumberOfLoop);
+                            ts = mainGUI.getTransactions(_ID);
+                            maxNumberOfLoop ++;
+                            Thread.sleep(2000);
+                        }
+                        if (ts != null) TraceManager.addDev("Device " + _ID + " has trans size = " + ts.size());
+                        assertTrue(ts != null && ts.size() > 0);
                     }
-                    rc = null;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+                jfis.killSimulator();
+                jfis.close();
             }
+
+            System.out.println("Test done");
         }
     }
-
-    private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
-        while (!isReady) {
-            TraceManager.addDev("Server not ready");
-            try {
-                rc.send("13");
-                wait(250);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-        }
-        rc.send(s);
-        System.out.println("send " + s);
-    }
-
-    private boolean analyzeServerAnswer(String s) {
-        boolean isRunning = true;
-        int index0 = s.indexOf("<?xml");
-
-        if (index0 != -1) {
-            //
-            ssxml = s.substring(index0, s.length()) + "\n";
-        } else {
-            //
-            ssxml = ssxml + s + "\n";
-        }
-        index0 = ssxml.indexOf("<![CDATA[");
-        int index1 = ssxml.indexOf("]]>");
-        if ((index0 > -1) && (index1 > -1)) {
-            ssxml = ssxml.substring(index0 + 9, index1).trim();
-            isRunning = false;
-        }
-        return isRunning;
-    }
-
 }
-

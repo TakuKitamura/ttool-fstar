@@ -1,4 +1,4 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -9,6 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLMappingTextSpecification;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.compareTMLTest.CompareTML;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;

@@ -1,13 +1,16 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import myutil.TraceManager;
+import graph.AUTGraph;
+import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
@@ -24,13 +27,34 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class DMASendAndReceiveSignalTest extends AbstractUITest {
+public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_CPU_SHOWTRACE = {"ZigBeeTutorial"};
+    final String [] MODELS_CPU_CROSS = {"testMultiCoreRRPB", "testMultiCoreRR"};
     private String SIM_DIR;
-    final String [] SIM_TIME_TRANS = {"Simulated time: 130 time units."};
+    final int [] NB_OF_CS_STATES = {9, 9};
+    final int [] NB_OF_CS_TRANSTIONS = {8, 8};
+    final int [] MIN_CS_CYCLES = {57, 58};
+    final int [] MAX_CS_CYCLES = {57, 58};
+    static final String [] EXPECTED = {
+            "MULTICORE: assign transaction Application__C1: Execi 15 t:0 l:15 (vl:15) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__S: Execi 16 t:0 l:16 (vl:16) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:16 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 10 t:15 l:10 (vl:10) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:25 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 15 t:26 l:15 (vl:15) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__C3: Execi 40 t:17 l:40 (vl:40) params: to core 1\n",
+
+            "MULTICORE: assign transaction Application__C3: Execi 40 t:0 l:40 (vl:40) params: to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 10 t:0 l:10 (vl:10) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__C1: Execi 15 t:10 l:15 (vl:15) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Execi 16 t:25 l:16 (vl:16) params: to core 1\n" +
+            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:41 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
+            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:42 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
+            "MULTICORE: assign transaction Application__C0: Execi 15 t:43 l:15 (vl:15) params: to core 0\n"
+    };
     static String CPP_DIR = "../../../../simulators/c++2/";
-    static String mappingName = "Mapping_2";
+    static String mappingName = "Architecture";
+    private String actualResult;
     private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
@@ -38,7 +62,7 @@ public class DMASendAndReceiveSignalTest extends AbstractUITest {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public DMASendAndReceiveSignalTest() {
+    public MulticoreCrossCpuSchedulingTest() {
         super();
     }
 
@@ -48,10 +72,11 @@ public class DMASendAndReceiveSignalTest extends AbstractUITest {
     }
 
     @Test(timeout = 600000)
-    public void testZigbeeModelGeneratedCCode() throws Exception {
-        for (int i = 0; i < MODELS_CPU_SHOWTRACE.length; i++) {
-            String s = MODELS_CPU_SHOWTRACE[i];
-            SIM_DIR = DIR_GEN + s + "_dmaGeneratedCCode/";
+    public void testMulticoreNotHangingWhenSaveTrace() throws Exception {
+        for (int i = 0; i < MODELS_CPU_CROSS.length; i++) {
+            actualResult = "";
+            String s = MODELS_CPU_CROSS[i];
+            SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
@@ -145,22 +170,22 @@ public class DMASendAndReceiveSignalTest extends AbstractUITest {
 
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
 
-            ArrayList<String> arr = new ArrayList<>();
+            String graphPath = SIM_DIR + "testgraph_" + s;
             try {
 
                 String[] params = new String[3];
 
                 params[0] = "./" + SIM_DIR + "run.x";
                 params[1] = "-cmd";
-                params[2] = "1 6 50";
+                params[2] = "1 0; 1 7 100 100 " + graphPath;
                 proc = Runtime.getRuntime().exec(params);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
                 monitorError(proc);
 
                 while ((str = proc_in.readLine()) != null) {
-                    if (str.contains("Simulated time")) {
-                        arr.add(str);
+                    if (str.contains("MULTICORE: assign transaction")) {
+                        actualResult += str + "\n";
                     }
                     System.out.println("executing: " + str);
                 }
@@ -170,12 +195,35 @@ public class DMASendAndReceiveSignalTest extends AbstractUITest {
                 return;
             }
 
-            for (int j = 0; j < arr.size(); j++) {
-                assertTrue(arr.get(j).equals(SIM_TIME_TRANS[j]));
-                TraceManager.addDev("check string at " + j + " :pass, content = " + arr.get(j));
+            File graphFile = new File(graphPath + ".aut");
+            String graphData = "";
+            try {
+                graphData = FileUtils.loadFileData(graphFile);
+            } catch (Exception e) {
+                assertTrue(false);
             }
 
-            TraceManager.addDev("Test Done!");
+            AUTGraph graph = new AUTGraph();
+            graph.buildGraph(graphData);
+
+            // States and transitions
+            System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
+            assertTrue(NB_OF_CS_STATES[i] == graph.getNbOfStates());
+            System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
+            assertTrue(NB_OF_CS_TRANSTIONS[i] == graph.getNbOfTransitions());
+
+            // Min and max cycles
+            int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: minvalue of " + s + " " + minValue);
+            assertTrue(MIN_CS_CYCLES[i] == minValue);
+
+            int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: maxvalue of " + s + " " + maxValue);
+            assertTrue(MAX_CS_CYCLES[i] == maxValue);
+
+            // compare which transaction belong to which core
+            System.out.println("Scheduling on " + s + "\n" + actualResult);
+            assertTrue(EXPECTED[i].equals(actualResult));
         }
     }
 }

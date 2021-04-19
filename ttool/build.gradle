@@ -75,3 +75,4 @@ mainClassName = 'Main'
 test {
   testLogging.showStandardStreams = false
 }
+

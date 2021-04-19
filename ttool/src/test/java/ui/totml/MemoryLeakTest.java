@@ -1,15 +1,16 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import myutil.TraceManager;
+import graph.AUTGraph;
+import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import remotesimulation.RemoteConnection;
-import remotesimulation.RemoteConnectionException;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
@@ -21,28 +22,32 @@ import ui.tmldd.TMLArchiDiagramPanel;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
+public class MemoryLeakTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_TERMINATE = {"terminatedTest"};
+    final String [] MODELS_MEMORY_LEAK = {"fpga_reconfig5", "fpga_reconfig6"};
     private String SIM_DIR;
-    private RemoteConnection rc;
-    private boolean isReady = false;
-    private boolean running = true;
-    private String ssxml;
+    final int [] NB_OF_ML_STATES = {20, 20};
+    final int [] NB_OF_ML_TRANSTIONS = {19, 19};
+    final int [] MIN_ML_CYCLES = {75, 76};
+    final int [] MAX_ML_CYCLES = {75, 76};
     static String CPP_DIR = "../../../../simulators/c++2/";
+    static String valgrindVersionCmd = "valgrind --version";
+    static String valgrindExecCmd = "valgrind --leak-check=full --log-file=";
+    static String EXPECTED_OUTPUT = "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)"; // different valgrind version can lead to different output but the ERROR SUMMARY should be the same
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public DiplodocusSimulatorTerminationTest() {
+    public MemoryLeakTest() {
         super();
     }
 
@@ -51,11 +56,11 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
         SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test(timeout = 600000) // 10 minutes
-    public void testIsSimulationTerminated() throws Exception {
-        for (int i = 0; i < MODELS_TERMINATE.length; i++) {
-            String s = MODELS_TERMINATE[i];
-            SIM_DIR = DIR_GEN + s + "/";
+    @Test
+    public void testMemoryLeak() throws Exception {
+        for (int i = 0; i < MODELS_MEMORY_LEAK.length; i++) {
+            String s = MODELS_MEMORY_LEAK[i];
+            SIM_DIR = DIR_GEN + s + "_memoryLeak/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
@@ -135,7 +140,6 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
 
             System.out.println("executing: " + "make -C " + SIM_DIR);
             try {
-
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
@@ -152,83 +156,99 @@ public class DiplodocusSimulatorTerminationTest extends AbstractUITest {
             }
 
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
-            // Starts simulation
-            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
-            Thread.sleep(1000);
-            // Connects to the simulator, incase of using terminal: "./run.x -server" to start server and "nc localhost 3490" to connect to server
-            rc = new RemoteConnection("localhost");
+            // check if valgrind installed or not
+            boolean isValgrindInstalled = false;
             try {
-                rc.connect();
-                isReady = true;
-            } catch (RemoteConnectionException rce) {
-                System.out.println("Could not connect to server.");
-            }
+                proc = Runtime.getRuntime().exec(valgrindVersionCmd);
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
-            try {
-                toServer(" 1 6 500", rc);
-                Thread.sleep(5);
-                while (running) {
-                    String line = null;
-                    try {
-                        line = rc.readOneLine();
-                    } catch (RemoteConnectionException e) {
-                        e.printStackTrace();
-                    }
-                    running = analyzeServerAnswer(line);
-                }
-                System.out.println(ssxml);
-                String content = "Simulation completed";
-                assertTrue(content.equals(ssxml));
-                System.out.println("Test done");
-                if (rc != null) {
-                    try {
-                        rc.send("0");
-                        rc.disconnect();
-                    } catch (RemoteConnectionException rce) {
-                        rce.printStackTrace();
-                    }
-                    rc = null;
-                }
+                monitorError(proc);
 
+                while ((str = proc_in.readLine()) != null) {
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    System.out.println("executing: " + str);
+                }
+                isValgrindInstalled = true;
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("FAILED: valgrind is not installed");
+            }
+
+            //run test with valgrind
+            if(isValgrindInstalled) {
+                String logPath = SIM_DIR + "valgrind.log";
+                proc = Runtime.getRuntime().exec(valgrindExecCmd + logPath + " ./" + SIM_DIR + "run.x" + " -cmd 1 0");
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                monitorError(proc);
+
+                while ((str = proc_in.readLine()) != null) {
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    System.out.println("executing valgrind: " + str);
+                }
+
+                boolean errorFound = true;
+                String sCurrentLine = "";
+                BufferedReader br = new BufferedReader(new FileReader(logPath));
+                while ((sCurrentLine = br.readLine()) != null) {
+                    if(sCurrentLine.contains(EXPECTED_OUTPUT)) {
+                        errorFound = false;
+                        System.out.println(sCurrentLine);
+                    }
+                }
+
+                assertTrue(!errorFound);// no error and memory leak
+
+            } else {
+                //valgrind is not installed, so run test without it
+                String graphPath = SIM_DIR + "testgraph_" + s;
+                try {
+
+                    String[] params = new String[3];
+
+                    params[0] = "./" + SIM_DIR + "run.x";
+                    params[1] = "-cmd";
+                    params[2] = "1 0; 1 7 100 100 " + graphPath;
+                    proc = Runtime.getRuntime().exec(params);
+                    proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                    monitorError(proc);
+
+                    while ((str = proc_in.readLine()) != null) {
+                        // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                        System.out.println("executing: " + str);
+                    }
+                } catch (Exception e) {
+                    // Probably make is not installed
+                    System.out.println("FAILED: executing simulation " + e.getCause());
+                    return;
+                }
+
+                File graphFile = new File(graphPath + ".aut");
+                String graphData = "";
+                try {
+                    graphData = FileUtils.loadFileData(graphFile);
+                } catch (Exception e) {
+                    assertTrue(false);
+                }
+
+                AUTGraph graph = new AUTGraph();
+                graph.buildGraph(graphData);
+
+                // States and transitions
+                System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
+                assertTrue(NB_OF_ML_STATES[i] == graph.getNbOfStates());
+                System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
+                assertTrue(NB_OF_ML_TRANSTIONS[i] == graph.getNbOfTransitions());
+
+                // Min and max cycles
+                int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
+                System.out.println("executing: minvalue of " + s + " " + minValue);
+                assertTrue(MIN_ML_CYCLES[i] == minValue);
+
+                int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
+                System.out.println("executing: maxvalue of " + s + " " + maxValue);
+                assertTrue(MAX_ML_CYCLES[i] == maxValue);
             }
         }
     }
-
-    private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
-        while (!isReady) {
-            TraceManager.addDev("Server not ready");
-            try {
-                rc.send("13");
-                wait(250);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-        }
-        rc.send(s);
-        System.out.println("send " + s);
-    }
-
-    private boolean analyzeServerAnswer(String s) {
-        boolean isRunning = true;
-        int index0 = s.indexOf("<?xml");
-
-        if (index0 != -1) {
-            //
-            ssxml = s.substring(index0, s.length()) + "\n";
-        } else {
-            //
-            ssxml = ssxml + s + "\n";
-        }
-        index0 = ssxml.indexOf("<brkreason>");
-        int index1 = ssxml.indexOf("</brkreason>");
-        if ((index0 > -1) && (index1 > -1)) {
-            ssxml = ssxml.substring(index0 + 11, index1).trim();
-            isRunning = false;
-        }
-        return isRunning;
-    }
-
 }
-

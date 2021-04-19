@@ -1,4 +1,4 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -9,12 +9,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
-import ui.AbstractUITest;
-import ui.TDiagramPanel;
-import ui.TMLArchiPanel;
+import ui.*;
 import ui.tmldd.TMLArchiDiagramPanel;
 
 import java.io.BufferedReader;
@@ -25,34 +25,16 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
+public class MulticoreHangingTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_CPU_CROSS = {"testMultiCoreRRPB", "testMultiCoreRR"};
+    final String [] MODELS_CPU_SHOWTRACE = {"multicore_trace"};
     private String SIM_DIR;
-    final int [] NB_OF_CS_STATES = {9, 9};
-    final int [] NB_OF_CS_TRANSTIONS = {8, 8};
-    final int [] MIN_CS_CYCLES = {57, 58};
-    final int [] MAX_CS_CYCLES = {57, 58};
-    static final String [] EXPECTED = {
-            "MULTICORE: assign transaction Application__C1: Execi 15 t:0 l:15 (vl:15) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__S: Execi 16 t:0 l:16 (vl:16) params: to core 1\n" +
-            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:16 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
-            "MULTICORE: assign transaction Application__C0: Execi 10 t:15 l:10 (vl:10) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:25 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
-            "MULTICORE: assign transaction Application__C0: Execi 15 t:26 l:15 (vl:15) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__C3: Execi 40 t:17 l:40 (vl:40) params: to core 1\n",
-
-            "MULTICORE: assign transaction Application__C3: Execi 40 t:0 l:40 (vl:40) params: to core 0\n" +
-            "MULTICORE: assign transaction Application__C0: Execi 10 t:0 l:10 (vl:10) params: to core 1\n" +
-            "MULTICORE: assign transaction Application__C1: Execi 15 t:10 l:15 (vl:15) params: to core 1\n" +
-            "MULTICORE: assign transaction Application__S: Execi 16 t:25 l:16 (vl:16) params: to core 1\n" +
-            "MULTICORE: assign transaction Application__S: Send Application__evt__Application__evt(evtFB) len:8 content:0 params: t:41 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 1\n" +
-            "MULTICORE: assign transaction Application__C0: Wait Application__evt__Application__evt params: t:42 l:1 (vl:1) params: Ch: Application__evt__Application__evt to core 0\n" +
-            "MULTICORE: assign transaction Application__C0: Execi 15 t:43 l:15 (vl:15) params: to core 0\n"
-    };
+    final int [] NB_OF_MH_STATES = {22};
+    final int [] NB_OF_MH_TRANSTIONS = {21};
+    final int [] MIN_MH_CYCLES = {120};
+    final int [] MAX_MH_CYCLES = {120};
     static String CPP_DIR = "../../../../simulators/c++2/";
-    static String mappingName = "Architecture";
-    private String actualResult;
+    static String mappingName = "ArchitectureSimple";
     private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
@@ -60,7 +42,7 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public MulticoreCrossCpuSchedulingTest() {
+    public MulticoreHangingTest() {
         super();
     }
 
@@ -71,9 +53,8 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
 
     @Test(timeout = 600000)
     public void testMulticoreNotHangingWhenSaveTrace() throws Exception {
-        for (int i = 0; i < MODELS_CPU_CROSS.length; i++) {
-            actualResult = "";
-            String s = MODELS_CPU_CROSS[i];
+        for (int i = 0; i < MODELS_CPU_SHOWTRACE.length; i++) {
+            String s = MODELS_CPU_SHOWTRACE[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
@@ -175,16 +156,14 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
 
                 params[0] = "./" + SIM_DIR + "run.x";
                 params[1] = "-cmd";
-                params[2] = "1 0; 1 7 100 100 " + graphPath;
+                params[2] = "1 0; 7 1 " + SIM_DIR + "test; 2; 1 0; 7 1 " + SIM_DIR + "test ;1 7 100 100 " + graphPath;
                 proc = Runtime.getRuntime().exec(params);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
                 monitorError(proc);
 
                 while ((str = proc_in.readLine()) != null) {
-                    if (str.contains("MULTICORE: assign transaction")) {
-                        actualResult += str + "\n";
-                    }
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
                     System.out.println("executing: " + str);
                 }
             } catch (Exception e) {
@@ -206,22 +185,18 @@ public class MulticoreCrossCpuSchedulingTest extends AbstractUITest {
 
             // States and transitions
             System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
-            assertTrue(NB_OF_CS_STATES[i] == graph.getNbOfStates());
+            assertTrue(NB_OF_MH_STATES[i] == graph.getNbOfStates());
             System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
-            assertTrue(NB_OF_CS_TRANSTIONS[i] == graph.getNbOfTransitions());
+            assertTrue(NB_OF_MH_TRANSTIONS[i] == graph.getNbOfTransitions());
 
             // Min and max cycles
             int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
             System.out.println("executing: minvalue of " + s + " " + minValue);
-            assertTrue(MIN_CS_CYCLES[i] == minValue);
+            assertTrue(MIN_MH_CYCLES[i] == minValue);
 
             int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
             System.out.println("executing: maxvalue of " + s + " " + maxValue);
-            assertTrue(MAX_CS_CYCLES[i] == maxValue);
-
-            // compare which transaction belong to which core
-            System.out.println("Scheduling on " + s + "\n" + actualResult);
-            assertTrue(EXPECTED[i].equals(actualResult));
+            assertTrue(MAX_MH_CYCLES[i] == maxValue);
         }
     }
 }

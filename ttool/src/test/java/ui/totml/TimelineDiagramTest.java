@@ -1,44 +1,52 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import myutil.FileUtils;
 import myutil.TraceManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import remotesimulation.RemoteConnection;
+import remotesimulation.RemoteConnectionException;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
 import ui.AbstractUITest;
 import ui.TDiagramPanel;
 import ui.TMLArchiPanel;
+import ui.TURTLEPanel;
 import ui.tmldd.TMLArchiDiagramPanel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class RunToNextBreakpointMaxTransTest extends AbstractUITest {
+public class TimelineDiagramTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_RTNBP_MAX_TRANS = {"rtnbmt"};
+    final String [] MODELS_TIMELINE = {"timelineDiagram"};
     private String SIM_DIR;
-    final String [] SIM_TIME_TRANS = {"Simulated time: 1 time units.", "Simulated time: 2 time units.", "Simulated time: 2002 time units."};
+    private RemoteConnection rc;
+    private boolean isReady = false;
+    private boolean running = true;
+    private String ssxml;
+    final static String EXPECTED_FILE_GENERATED_TIMELINE = getBaseResourcesDir() + "tmltranslator/expected/expected_get_generated_timeline.txt";
     static String CPP_DIR = "../../../../simulators/c++2/";
-    static String mappingName = "ArchitectureSimple";
-    private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public RunToNextBreakpointMaxTransTest() {
+    public TimelineDiagramTest() {
         super();
     }
 
@@ -47,19 +55,22 @@ public class RunToNextBreakpointMaxTransTest extends AbstractUITest {
         SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test(timeout = 600000)
-    public void testRunToNextBreakPointFunction() throws Exception {
-        for (int i = 0; i < MODELS_RTNBP_MAX_TRANS.length; i++) {
-            String s = MODELS_RTNBP_MAX_TRANS[i];
+    @Test(timeout = 600000) // 10 minutes
+    public void testCompareTimelineGeneratedContent() throws Exception {
+        for (int i = 0; i < MODELS_TIMELINE.length; i++) {
+            String s = MODELS_TIMELINE[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
-            TMLArchiPanel _tab = findArchiPanel(mappingName);
-            for (TDiagramPanel tdp : _tab.getPanels()) {
-                if (tdp instanceof TMLArchiDiagramPanel) {
-                    mainGUI.selectTab(tdp);
-                    currTdp = (TMLArchiDiagramPanel) tdp;
+            for (TURTLEPanel _tab : mainGUI.getTabs()) {
+                if (_tab instanceof TMLArchiPanel) {
+                    for (TDiagramPanel tdp : _tab.getPanels()) {
+                        if (tdp instanceof TMLArchiDiagramPanel) {
+                            mainGUI.selectTab(tdp);
+                            break;
+                        }
+                    }
                     break;
                 }
             }
@@ -127,6 +138,7 @@ public class RunToNextBreakpointMaxTransTest extends AbstractUITest {
             }
 
             System.out.println("executing: " + "make -C " + SIM_DIR);
+
             try {
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -144,38 +156,85 @@ public class RunToNextBreakpointMaxTransTest extends AbstractUITest {
             }
 
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
-
-            ArrayList<String> arr = new ArrayList<>();
+            // Starts simulation
+            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x" + " -server");
+            Thread.sleep(1000);
+            // Connects to the simulator, incase of using terminal: "./run.x -server" to start server and "nc localhost 3490" to connect to server
+            rc = new RemoteConnection("localhost");
             try {
+                rc.connect();
+                isReady = true;
+            } catch (RemoteConnectionException rce) {
+                System.out.println("Could not connect to server.");
+            }
 
-                String[] params = new String[3];
-
-                params[0] = "./" + SIM_DIR + "run.x";
-                params[1] = "-cmd";
-                params[2] = "1 19 1; 1 19 1; 1 19 0";
-                proc = Runtime.getRuntime().exec(params);
-                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-                monitorError(proc);
-
-                while ((str = proc_in.readLine()) != null) {
-                    if (str.contains("Simulated time")) {
-                        arr.add(str);
+            try {
+                toServer(" 1 6 100", rc);
+                Thread.sleep(5);
+                toServer("7 4 ApplicationSimple__Src,ApplicationSimple__T1,ApplicationSimple__T2", rc);
+                Thread.sleep(5);
+                while (running) {
+                    String line = null;
+                    try {
+                        line = rc.readOneLine();
+                    } catch (RemoteConnectionException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println("executing: " + str);
+                    running = analyzeServerAnswer(line);
+                }
+                System.out.println(ssxml);
+                File file = new File(EXPECTED_FILE_GENERATED_TIMELINE);
+                String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                assertTrue(content.equals(ssxml));
+                System.out.println("Test done");
+                if (rc != null) {
+                    try {
+                        rc.send("0");
+                        rc.disconnect();
+                    } catch (RemoteConnectionException rce) {
+                        rce.printStackTrace();
+                    }
+                    rc = null;
                 }
             } catch (Exception e) {
-                // Probably make is not installed
-                System.out.println("FAILED: executing simulation " + e.getCause());
-                return;
+                e.printStackTrace();
             }
-
-            for (int j = 0; j < arr.size(); j++) {
-                assertTrue(arr.get(j).equals(SIM_TIME_TRANS[j]));
-                TraceManager.addDev("check string at " + j + " :pass, content = " + arr.get(j));
-            }
-
-            TraceManager.addDev("Test Done!");
         }
     }
+
+    private synchronized void toServer (String s, RemoteConnection rc) throws RemoteConnectionException {
+        while (!isReady) {
+            TraceManager.addDev("Server not ready");
+            try {
+                rc.send("13");
+                wait(250);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+        rc.send(s);
+        System.out.println("send " + s);
+    }
+
+    private boolean analyzeServerAnswer(String s) {
+        boolean isRunning = true;
+        int index0 = s.indexOf("<?xml");
+
+        if (index0 != -1) {
+            //
+            ssxml = s.substring(index0, s.length()) + "\n";
+        } else {
+            //
+            ssxml = ssxml + s + "\n";
+        }
+        index0 = ssxml.indexOf("<![CDATA[");
+        int index1 = ssxml.indexOf("]]>");
+        if ((index0 > -1) && (index1 > -1)) {
+            ssxml = ssxml.substring(index0 + 9, index1).trim();
+            isRunning = false;
+        }
+        return isRunning;
+    }
+
 }
+

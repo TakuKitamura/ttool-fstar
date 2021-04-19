@@ -1,4 +1,4 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -8,13 +8,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
-import tmltranslator.simulation.SimulationTransaction;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
-import ui.*;
-import ui.interactivesimulation.JFrameInteractiveSimulation;
-import ui.tmldd.TMLArchiCPUNode;
+import ui.AbstractUITest;
+import ui.TDiagramPanel;
+import ui.TMLArchiPanel;
 import ui.tmldd.TMLArchiDiagramPanel;
 
 import java.io.BufferedReader;
@@ -25,12 +26,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class CPUDoubleClickShowTraceTest extends AbstractUITest {
+public class DMASendAndReceiveSignalTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_CPU_SHOWTRACE = {"SmartCardProtocol"};
+    final String [] MODELS_CPU_SHOWTRACE = {"ZigBeeTutorial"};
     private String SIM_DIR;
+    final String [] SIM_TIME_TRANS = {"Simulated time: 130 time units."};
     static String CPP_DIR = "../../../../simulators/c++2/";
-    static String mappingName = "Mapping2";
+    static String mappingName = "Mapping_2";
     private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
@@ -38,7 +40,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public CPUDoubleClickShowTraceTest() {
+    public DMASendAndReceiveSignalTest() {
         super();
     }
 
@@ -47,11 +49,11 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
         SIM_DIR = getBaseResourcesDir() + CPP_DIR;
     }
 
-    @Test(timeout = 300000)
-    public void testCPUShowTraceOnDoubleClick() throws Exception {
+    @Test(timeout = 600000)
+    public void testZigbeeModelGeneratedCCode() throws Exception {
         for (int i = 0; i < MODELS_CPU_SHOWTRACE.length; i++) {
             String s = MODELS_CPU_SHOWTRACE[i];
-            SIM_DIR = DIR_GEN + s + "_showTrace/";
+            SIM_DIR = DIR_GEN + s + "_dmaGeneratedCCode/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
             mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
@@ -125,7 +127,7 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
                     return;
                 }
             }
-            // TTool/ttool/build/test_diplo_simulator/SmartCardProtocol_showTrace/
+
             System.out.println("executing: " + "make -C " + SIM_DIR);
             try {
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
@@ -145,55 +147,37 @@ public class CPUDoubleClickShowTraceTest extends AbstractUITest {
 
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
 
-            // Starts simulation and connect to the server
-            Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -server");
-            JFrameInteractiveSimulation jfis = mainGUI.getJfis();
+            ArrayList<String> arr = new ArrayList<>();
+            try {
 
-            if (jfis != null) {
-                jfis.startSimulation();
-                Thread.sleep(1000);
-                jfis.sendTestCmd("time");
-                Thread.sleep(50);
-                jfis.sendTestCmd("get-hashcode");
-                Thread.sleep(500);
-                boolean hashOK = jfis.getHash();
+                String[] params = new String[3];
 
-                TraceManager.addDev("HashCode  = " + hashOK + " and Busy mode = " + ((jfis.getBusyMode() == 1) ? "READY" : "BUSY"));
-                if (!hashOK || jfis.getBusyMode() != 1) {
-                    TraceManager.addDev("Server is in use, please restart server and re-run the test");
-                    jfis.killSimulator();
-                    jfis.close();
-                    return;
-                }
-                jfis.sendTestCmd("run-x-transactions 10"); // run 10 transactions
-                Thread.sleep(50);
-                jfis.sendTestCmd("lt 1000"); // update transaction list
-                Thread.sleep(1000);
-                for (TGComponent tg : currTdp.getComponentList()) {
-                    System.out.println("tgc = " + tg.getName());
-                    // get the transaction list of each CPUs on the panel, if the trans size > 0 then there will be a trace shown on double click
-                    if (tg instanceof TMLArchiCPUNode) {
-                        int _ID = tg.getDIPLOID();
-                        TraceManager.addDev("Component ID = " + _ID);
-                        List<SimulationTransaction> ts = mainGUI.getTransactions(_ID);
-                        // mainGUI.getTransactions(_ID) is synchronized function, so we need to wait until data is filled.
-                        //the test will fail after 5 minutes if ts is still null.
-                        int maxNumberOfLoop = 0;
-                        while (maxNumberOfLoop < 15 && ts == null) {
-//                            TraceManager.addDev("Waiting for data " + maxNumberOfLoop);
-                            ts = mainGUI.getTransactions(_ID);
-                            maxNumberOfLoop ++;
-                            Thread.sleep(2000);
-                        }
-                        if (ts != null) TraceManager.addDev("Device " + _ID + " has trans size = " + ts.size());
-                        assertTrue(ts != null && ts.size() > 0);
+                params[0] = "./" + SIM_DIR + "run.x";
+                params[1] = "-cmd";
+                params[2] = "1 6 50";
+                proc = Runtime.getRuntime().exec(params);
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                monitorError(proc);
+
+                while ((str = proc_in.readLine()) != null) {
+                    if (str.contains("Simulated time")) {
+                        arr.add(str);
                     }
+                    System.out.println("executing: " + str);
                 }
-                jfis.killSimulator();
-                jfis.close();
+            } catch (Exception e) {
+                // Probably make is not installed
+                System.out.println("FAILED: executing simulation " + e.getCause());
+                return;
             }
 
-            System.out.println("Test done");
+            for (int j = 0; j < arr.size(); j++) {
+                assertTrue(arr.get(j).equals(SIM_TIME_TRANS[j]));
+                TraceManager.addDev("check string at " + j + " :pass, content = " + arr.get(j));
+            }
+
+            TraceManager.addDev("Test Done!");
         }
     }
 }

@@ -1,14 +1,15 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import graph.AUTGraph;
-import myutil.FileUtils;
+import myutil.TraceManager;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
@@ -25,24 +26,21 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class FpgaClockDividerTest extends AbstractUITest {
-
-    private final String DIR_GEN = "test_diplo_simulator/";
-    private final String [] MODELS_FPGA_CLOCK_DIVIDER = {"fpga_clock_divider"};
+public class RunToNextBreakpointMaxTransTest extends AbstractUITest {
+    final String DIR_GEN = "test_diplo_simulator/";
+    final String [] MODELS_RTNBP_MAX_TRANS = {"rtnbmt"};
     private String SIM_DIR;
-    private final int [] NB_OF_FCD_STATES = {32};
-    private final int [] NB_OF_FCD_TRANSTIONS = {31};
-    private final int [] MIN_FCD_CYCLES = {220};
-    private final int [] MAX_FCD_CYCLES = {220};
-    private static String CPP_DIR = "../../../../simulators/c++2/";
-    private static String mappingName = "ArchitectureSimple";
+    final String [] SIM_TIME_TRANS = {"Simulated time: 1 time units.", "Simulated time: 2 time units.", "Simulated time: 2002 time units."};
+    static String CPP_DIR = "../../../../simulators/c++2/";
+    static String mappingName = "ArchitectureSimple";
+    private TMLArchiDiagramPanel currTdp;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public FpgaClockDividerTest() {
+    public RunToNextBreakpointMaxTransTest() {
         super();
     }
 
@@ -52,9 +50,9 @@ public class FpgaClockDividerTest extends AbstractUITest {
     }
 
     @Test(timeout = 600000)
-    public void testMulticoreNotHangingWhenSaveTrace() throws Exception {
-        for (int i = 0; i < MODELS_FPGA_CLOCK_DIVIDER.length; i++) {
-            String s = MODELS_FPGA_CLOCK_DIVIDER[i];
+    public void testRunToNextBreakPointFunction() throws Exception {
+        for (int i = 0; i < MODELS_RTNBP_MAX_TRANS.length; i++) {
+            String s = MODELS_RTNBP_MAX_TRANS[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
@@ -63,6 +61,7 @@ public class FpgaClockDividerTest extends AbstractUITest {
             for (TDiagramPanel tdp : _tab.getPanels()) {
                 if (tdp instanceof TMLArchiDiagramPanel) {
                     mainGUI.selectTab(tdp);
+                    currTdp = (TMLArchiDiagramPanel) tdp;
                     break;
                 }
             }
@@ -148,21 +147,23 @@ public class FpgaClockDividerTest extends AbstractUITest {
 
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
 
-            String graphPath = SIM_DIR + "testgraph_" + s;
+            ArrayList<String> arr = new ArrayList<>();
             try {
 
                 String[] params = new String[3];
 
                 params[0] = "./" + SIM_DIR + "run.x";
                 params[1] = "-cmd";
-                params[2] = "1 0; 1 7 100 100 " + graphPath;
+                params[2] = "1 19 1; 1 19 1; 1 19 0";
                 proc = Runtime.getRuntime().exec(params);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
                 monitorError(proc);
 
                 while ((str = proc_in.readLine()) != null) {
-                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    if (str.contains("Simulated time")) {
+                        arr.add(str);
+                    }
                     System.out.println("executing: " + str);
                 }
             } catch (Exception e) {
@@ -171,31 +172,12 @@ public class FpgaClockDividerTest extends AbstractUITest {
                 return;
             }
 
-            File graphFile = new File(graphPath + ".aut");
-            String graphData = "";
-            try {
-                graphData = FileUtils.loadFileData(graphFile);
-            } catch (Exception e) {
-                assertTrue(false);
+            for (int j = 0; j < arr.size(); j++) {
+                assertTrue(arr.get(j).equals(SIM_TIME_TRANS[j]));
+                TraceManager.addDev("check string at " + j + " :pass, content = " + arr.get(j));
             }
 
-            AUTGraph graph = new AUTGraph();
-            graph.buildGraph(graphData);
-
-            // States and transitions
-            System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
-            assertTrue(NB_OF_FCD_STATES[i] == graph.getNbOfStates());
-            System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
-            assertTrue(NB_OF_FCD_TRANSTIONS[i] == graph.getNbOfTransitions());
-
-            // Min and max cycles
-            int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
-            System.out.println("executing: minvalue of " + s + " " + minValue);
-            assertTrue(MIN_FCD_CYCLES[i] == minValue);
-
-            int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
-            System.out.println("executing: maxvalue of " + s + " " + maxValue);
-            assertTrue(MAX_FCD_CYCLES[i] == maxValue);
+            TraceManager.addDev("Test Done!");
         }
     }
 }

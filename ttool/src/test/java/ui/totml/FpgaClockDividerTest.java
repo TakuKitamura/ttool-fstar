@@ -1,4 +1,4 @@
-package tmltranslator;
+package ui.totml;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -9,10 +9,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLSyntaxChecking;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
-import ui.*;
+import ui.AbstractUITest;
+import ui.TDiagramPanel;
+import ui.TMLArchiPanel;
 import ui.tmldd.TMLArchiDiagramPanel;
 
 import java.io.BufferedReader;
@@ -23,24 +27,24 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class MulticoreHangingTest extends AbstractUITest {
-    final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_CPU_SHOWTRACE = {"multicore_trace"};
+public class FpgaClockDividerTest extends AbstractUITest {
+
+    private final String DIR_GEN = "test_diplo_simulator/";
+    private final String [] MODELS_FPGA_CLOCK_DIVIDER = {"fpga_clock_divider"};
     private String SIM_DIR;
-    final int [] NB_OF_MH_STATES = {22};
-    final int [] NB_OF_MH_TRANSTIONS = {21};
-    final int [] MIN_MH_CYCLES = {120};
-    final int [] MAX_MH_CYCLES = {120};
-    static String CPP_DIR = "../../../../simulators/c++2/";
-    static String mappingName = "ArchitectureSimple";
-    private TMLArchiDiagramPanel currTdp;
+    private final int [] NB_OF_FCD_STATES = {32};
+    private final int [] NB_OF_FCD_TRANSTIONS = {31};
+    private final int [] MIN_FCD_CYCLES = {220};
+    private final int [] MAX_FCD_CYCLES = {220};
+    private static String CPP_DIR = "../../../../simulators/c++2/";
+    private static String mappingName = "ArchitectureSimple";
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
         RESOURCES_DIR = getBaseResourcesDir() + "/tmltranslator/simulator/";
     }
 
-    public MulticoreHangingTest() {
+    public FpgaClockDividerTest() {
         super();
     }
 
@@ -51,8 +55,8 @@ public class MulticoreHangingTest extends AbstractUITest {
 
     @Test(timeout = 600000)
     public void testMulticoreNotHangingWhenSaveTrace() throws Exception {
-        for (int i = 0; i < MODELS_CPU_SHOWTRACE.length; i++) {
-            String s = MODELS_CPU_SHOWTRACE[i];
+        for (int i = 0; i < MODELS_FPGA_CLOCK_DIVIDER.length; i++) {
+            String s = MODELS_FPGA_CLOCK_DIVIDER[i];
             SIM_DIR = DIR_GEN + s + "/";
             System.out.println("executing: checking syntax " + s);
             // select architecture tab
@@ -61,7 +65,6 @@ public class MulticoreHangingTest extends AbstractUITest {
             for (TDiagramPanel tdp : _tab.getPanels()) {
                 if (tdp instanceof TMLArchiDiagramPanel) {
                     mainGUI.selectTab(tdp);
-                    currTdp = (TMLArchiDiagramPanel) tdp;
                     break;
                 }
             }
@@ -154,7 +157,7 @@ public class MulticoreHangingTest extends AbstractUITest {
 
                 params[0] = "./" + SIM_DIR + "run.x";
                 params[1] = "-cmd";
-                params[2] = "1 0; 7 1 " + SIM_DIR + "test; 2; 1 0; 7 1 " + SIM_DIR + "test ;1 7 100 100 " + graphPath;
+                params[2] = "1 0; 1 7 100 100 " + graphPath;
                 proc = Runtime.getRuntime().exec(params);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
@@ -183,18 +186,18 @@ public class MulticoreHangingTest extends AbstractUITest {
 
             // States and transitions
             System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
-            assertTrue(NB_OF_MH_STATES[i] == graph.getNbOfStates());
+            assertTrue(NB_OF_FCD_STATES[i] == graph.getNbOfStates());
             System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
-            assertTrue(NB_OF_MH_TRANSTIONS[i] == graph.getNbOfTransitions());
+            assertTrue(NB_OF_FCD_TRANSTIONS[i] == graph.getNbOfTransitions());
 
             // Min and max cycles
             int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
             System.out.println("executing: minvalue of " + s + " " + minValue);
-            assertTrue(MIN_MH_CYCLES[i] == minValue);
+            assertTrue(MIN_FCD_CYCLES[i] == minValue);
 
             int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
             System.out.println("executing: maxvalue of " + s + " " + maxValue);
-            assertTrue(MAX_MH_CYCLES[i] == maxValue);
+            assertTrue(MAX_FCD_CYCLES[i] == maxValue);
         }
     }
 }

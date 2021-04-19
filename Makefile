@@ -12,6 +12,8 @@ GRADLE			= $(shell which gradle)
 GRADLE_VERSION_NEEDED	= 3.3
 ERROR_MSG		= printf "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"
 
+NO_GUI_TESTS		= avatartranslator.* graph.* help.* launcher.* myutil.* tmltranslator.*
+
 ifeq "$(GRADLE)" ""
     ERROR_MSG	= echo "Gradle was not found. Falling back to regular javac command...\n"
     GRADLE 	= false && echo >/dev/null
@@ -44,6 +46,7 @@ make documentation      Generate the documentation of java classes using javadoc
 make release            Prepare a new release for the website.
 			It produces the release.tgz and releaseWithSrc.tgz files.
 make test               Run tests on TTool.
+make noguitest               Run non graphical tests on TTool.
 make publish_jar        Build TTool and upload the resulting archive.
 			!!! Must have the right ssh key installed for this !!!
 make install		Install TTool, the jar of companion software and the runtime
@@ -538,6 +541,12 @@ install:
 # ======================================== 
 test:
 	@$(GRADLE) test
+
+noguitest:
+	@@for p in $(NO_GUI_TESTS); do \
+		echo "\n-----> TESTS FOR:" $$p ;\
+		$(GRADLE) test --tests $$p ;\
+	done
 
 # ======================================== 
 # ==========       CLEAN        ========== 
