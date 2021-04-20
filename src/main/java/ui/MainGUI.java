@@ -827,6 +827,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return gtm.getSimulationTraces();
     }
 
+    // Getting the avatar simulation window
+    public JFrameAvatarInteractiveSimulation getJFrameAvatarInteractiveSimulation() {
+        return jfais;
+    }
+
     public void addSimulationTrace(SimulationTrace _newSimulationTrace) {
         gtm.addSimulationTrace(_newSimulationTrace);
         expandToSimulationTraces();
@@ -2605,6 +2610,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         file = jfctgraph.getSelectedFile();
+        return loadSimulationTraceCSVFile(file);
+    }
+
+    public String[] loadSimulationTraceCSVFile(File file) {
         file = FileUtils.addFileExtensionIfMissing(file, CSVFileFilter.getExtension());
 
         String spec = loadFile(file);
@@ -4920,6 +4929,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // jfais.setSize(900, 600);
         GraphicLib.centerOnParent(jfais, 900, 600);
         jfais.setVisible(true);
+        //jfais.repaint();
+    }
+
+    public void openCloseAvatarSimulationWindow() {
+        if (jfais == null) {
+            avatarSimulation();
+        } else {
+            jfais.setVisible(false);
+            jfais = null;
+        }
     }
 
     public void setSimulationTraceSelected(SimulationTrace _st) {

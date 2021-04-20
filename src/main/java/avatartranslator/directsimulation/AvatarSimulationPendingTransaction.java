@@ -46,6 +46,7 @@ import myutil.MyMath;
 import myutil.TraceManager;
 
 import java.awt.*;
+import java.util.UUID;
 import java.util.Vector;
 
 
@@ -184,7 +185,7 @@ public class AvatarSimulationPendingTransaction {
                 TraceManager.addDev("Null element to execute");
             }
 
-            res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
+            res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID() + "/UUID=" + elementToExecute.getUUID();
             if (hasClock) {
                 if (myMinDuration == maxDuration) {
                     res += " [Delay: " + myMinDuration + "]";
@@ -194,7 +195,7 @@ public class AvatarSimulationPendingTransaction {
             }
 
         } else {
-            res += "[SYNCHRO]" + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
+            res += "[SYNCHRO]" + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID() + "/UUID=" + elementToExecute.getUUID();
             res += " | " + linkedTransaction.toString();
         }
 
@@ -207,7 +208,7 @@ public class AvatarSimulationPendingTransaction {
                 } else {
                     res += " ";
                 }
-                res += aspt.elementToExecute.getID();
+                res += aspt.elementToExecute.getID() + "/" + aspt.elementToExecute.getUUID();
             }
             res += "]";
         }
@@ -303,6 +304,15 @@ public class AvatarSimulationPendingTransaction {
                 return;
 
         }
+    }
+
+    public UUID getUUID() {
+        if (elementToExecute == null) {
+            return null;
+        }
+
+        return elementToExecute.getUUID();
+
     }
 
 

@@ -292,6 +292,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         }
         makeComponents();
         setComponents();
+        TraceManager.addDev("Components done");
+
     }
 
     private void initSimulation() {
@@ -513,6 +515,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         jp02.add(new JLabel("Selected trace: "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         nameOfTrace = new JLabel();
+        setTraceName();
         jp02.add(nameOfTrace, c01);
 
         // list of pending transactions
@@ -1139,6 +1142,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     }
 
     public void runSimulation() {
+        ass.resetTrace();
         previousTime = System.currentTimeMillis();
         if (ass != null) {
             ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTION_IN_A_ROW);
@@ -1148,6 +1152,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     }
 
     public void runXCommands() {
+        ass.resetTrace();
         String txt = paramMainCommand.getText();
         int nb;
         try {
@@ -1164,24 +1169,37 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
 
     public void runTrace() {
+        TraceManager.addDev("Running trace");
+
         if (SELECTED_SIMULATION_TRACE == null) {
             return;
         }
 
         selectedTrace = SELECTED_SIMULATION_TRACE;
 
-        if (selectedTrace.hasContent()) {
+        TraceManager.addDev("Testing content");
+
+        if (!selectedTrace.hasContent()) {
             return;
         }
+
+        TraceManager.addDev("Content ok");
 
         // Transform String into a CSV object
         traceObject = new CSVObject(selectedTrace.getContent());
 
-
-
-
-
-        // Implement CSV object running;
+        // Start the trace execution
+        TraceManager.addDev("Reset simulation");
+        resetSimulation();
+        ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTION_IN_A_ROW);
+        ass.setTraceToPlay(traceObject);
+        TraceManager.addDev("Going to play the trace");
+        previousTime = System.currentTimeMillis();
+        if (ass != null) {
+            ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTION_IN_A_ROW);
+            ass.goSimulation();
+            //ass.backOneTransactionBunch();
+        }
     }
 
     public void stopSimulation() {
@@ -1197,6 +1215,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         if (ass != null) {
             resetMetElements();
             ass.resetSimulation();
+            ass.resetTrace();
             //ass.backOneTransactionBunch();
         }
         //      latencies.clear();
@@ -1281,10 +1300,12 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     }
 
     private void setTraceName() {
-        if (SELECTED_SIMULATION_TRACE.hasContent()) {
-            nameOfTrace.setText(SELECTED_SIMULATION_TRACE.getName());
-        } else {
-            nameOfTrace.setText("No selected trace");
+        if (SELECTED_SIMULATION_TRACE != null) {
+            if (SELECTED_SIMULATION_TRACE.hasContent()) {
+                nameOfTrace.setText(SELECTED_SIMULATION_TRACE.getName());
+            } else {
+                nameOfTrace.setText("No selected trace");
+            }
         }
     }
 
@@ -1948,8 +1969,9 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         }
 
 
+        String data = ass.toCSV();
         try {
-            FileUtils.saveFile(fileName, ass.toCSV());
+            FileUtils.saveFile(fileName, data);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
@@ -1965,6 +1987,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         File f = new File(fileName);
         shortFileName = f.getName();
         SimulationTrace st = new SimulationTrace(shortFileName, SimulationTrace.CSV_AVATAR, fileName);
+        st.setContent(data);
         mgui.addSimulationTrace(st);
 
         //ass.printExecutedTransactions();
@@ -2218,6 +2241,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
+        actionPerformed(command, evt);
+    }
+
+    public void actionPerformed(String command, ActionEvent evt) {
         //TraceManager.addDev("Command:" + command);
 
         if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand())) {
@@ -2275,7 +2302,13 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ADD_LATENCY].getActionCommand())) {
             addLatency();
             return;
-        } else if (evt.getSource() == displayedTransactionsText) {
+        }
+
+        if (evt == null) {
+            return;
+        }
+
+        if (evt.getSource() == displayedTransactionsText) {
             TraceManager.addDev("Entered text:" + displayedTransactionsText.getText());
 
         } else if ((evt.getSource() == imposeRandom) || (evt.getSource() == updateRandom)) {

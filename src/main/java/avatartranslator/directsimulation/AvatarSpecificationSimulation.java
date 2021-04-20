@@ -40,12 +40,11 @@
 package avatartranslator.directsimulation;
 
 import avatartranslator.*;
-import myutil.IntExpressionEvaluator;
+import myutil.CSVObject;
 import myutil.TraceManager;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -61,6 +60,8 @@ import java.util.Vector;
 public class AvatarSpecificationSimulation {
 
     public final static String COMMA = ", ";
+    public final static int INDEX_UUID = 3;
+
 
     public static int MAX_TRANSACTION_IN_A_ROW = 1000;
 
@@ -97,6 +98,8 @@ public class AvatarSpecificationSimulation {
     private long bunchid;
 
     private boolean nbOfCommandsActivated = false;
+    private CSVObject traceToPlay = null;
+    private int idInTrace = 1;
     private int nbOfCommands = -1; // means: until it blocks
     private int indexSelectedTransaction = -1;
 
@@ -180,7 +183,14 @@ public class AvatarSpecificationSimulation {
         //TraceManager.addDev("-------Spec:" + avspec.toString() + "--------");
     }
 
+    public void resetTrace() {
+        TraceManager.addDev("resetTrace()");
+        traceToPlay = null;
+        idInTrace = 1;
+    }
+    
     public void reset() {
+        TraceManager.addDev("Reset simulation");
 
         // Reinit clock
         clockValue = 0;
@@ -190,6 +200,7 @@ public class AvatarSpecificationSimulation {
 
         // Stop the first transaction
         unsetNbOfCommands();
+
         stopped = true;
 
         // Reinit simulation
@@ -342,7 +353,18 @@ public class AvatarSpecificationSimulation {
                 case EXECUTE:
                     //TraceManager.addDev("-> -> EXECUTE");
                     silentTransactionExecuted = false;
-                    selectedTransactions = selectTransactions(pendingTransactions);
+
+                    if (traceToPlay == null) {
+                        TraceManager.addDev("Null trace");
+                    }
+
+                    if ((traceToPlay != null) && (idInTrace > 0)){
+                        TraceManager.addDev("Selecting transaction from trace");
+                        selectedTransactions = selectTransactionsFromTrace(pendingTransactions);
+                    } else {
+                        TraceManager.addDev("Selecting transaction randomly");
+                        selectedTransactions = selectTransactions(pendingTransactions);
+                    }
 
                     if (selectedTransactions.size() == 0) {
                         setState(TERMINATED);
@@ -504,6 +526,11 @@ public class AvatarSpecificationSimulation {
     public void unsetNbOfCommands() {
         nbOfCommands = -1;
         nbOfCommandsActivated = false;
+    }
+
+    public void setTraceToPlay(CSVObject _traceToPlay) {
+        traceToPlay = _traceToPlay;
+        idInTrace = 1;
     }
 
     // External control functions
@@ -952,6 +979,47 @@ public class AvatarSpecificationSimulation {
         return cpt;
     }
 
+    public Vector<AvatarSimulationPendingTransaction> selectTransactionsFromTrace(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+        Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
+
+        TraceManager.addDev("Selecting transaction from trace");
+
+        // Silent transition ?
+        AvatarSimulationPendingTransaction tr = getRandomSilentTransactionToExecute(_pendingTransactions);
+        if (tr != null) {
+            ll.add(tr);
+            indexSelectedTransaction = -1;
+            silentTransactionExecuted = true;
+            return ll;
+        }
+        
+        // Find the corresponding elements of the trace. If cannot be found, then stop with the trace
+        for (AvatarSimulationPendingTransaction pt: _pendingTransactions) {
+            // check the current UUID and the one of the pendingTransaction
+            UUID currentUUID = traceToPlay.getUUID(idInTrace, INDEX_UUID);
+            if (currentUUID != null) {
+                UUID toExecuteUUID = pt.getUUID();
+                if (toExecuteUUID == currentUUID) {
+                    // Select this one
+                    ll.add(pt);
+                    indexSelectedTransaction = -1;
+                    TraceManager.addDev("Trace execution ok at ID = " + idInTrace);
+                    idInTrace ++;
+                    if (idInTrace >= traceToPlay.getNbOfLines()) {
+                        resetTrace();
+                        TraceManager.addDev("Stopping simulation");
+                        stopSimulation();
+                    }
+                    return ll;
+                }
+            }
+
+        }
+
+       // None were found!
+        TraceManager.addDev("Trace execution failed at ID = " + idInTrace);
+        return ll;
+    }
 
     public Vector<AvatarSimulationPendingTransaction> selectTransactions(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
         Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
@@ -966,7 +1034,7 @@ public class AvatarSpecificationSimulation {
         }
 
         // Put in ll the first possible logical transaction which is met
-        // Random select the first index if none has been selected
+        // Randomly select the first index if none has been selected
         if (indexSelectedTransaction == -1) {
             //TraceManager.addDev("No transition selected");
             // Consider probabilities

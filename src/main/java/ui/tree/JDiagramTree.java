@@ -580,6 +580,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 String[] st = mgui.loadSimulationTraceCSV();
                 if (st != null) {
                     SimulationTrace sim = new SimulationTrace(st[0], SimulationTrace.CSV_AVATAR, st[1]);
+                    //TraceManager.addDev("Content=" + st[2]);
                     sim.setContent(st[2]);
                     mgui.addSimulationTrace(sim);
                 }

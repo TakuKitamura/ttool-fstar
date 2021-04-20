@@ -1,0 +1,13 @@
+# Playing simulation trace
+set model ./../modeling/AVATAR/CoffeeMachine_avatar.xml
+#print The model to be opened is: $model
+action start
+wait 2
+action open $model
+wait 4
+action check-syntax
+wait 2
+action avatar-simulation-open-window
+wait 2
+action asst ./../graphs/tracecmpartial.csv
+wait 2

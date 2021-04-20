@@ -75,6 +75,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
     public final static String BAD_FILE_NAME = "Unvalid file identifier";
     public final static String BAD_FILE = "Badly formatted file";
     public final static String AVATAR_NO_SPEC = "No Avatar specification";
+    public final static String NO_WINDOW = "The targeted window does not exist";
 
 
     private String script;

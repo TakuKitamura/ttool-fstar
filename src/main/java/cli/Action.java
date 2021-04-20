@@ -56,9 +56,13 @@ import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 import tmltranslator.TMLModeling;
 import ui.MainGUI;
+import ui.avatarinteractivesimulation.AvatarInteractiveSimulationActions;
+import ui.avatarinteractivesimulation.JFrameAvatarInteractiveSimulation;
 import ui.util.IconManager;
 import ui.window.JDialogSystemCGeneration;
 import ui.*;
+
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.text.DateFormat;
@@ -104,11 +108,14 @@ public class Action extends Command {
 
     private final static String SELECT_PANEL = "select-panel";
 
-    private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
+
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
     private final static String AVATAR_UPPAAL_VALIDATE = "avatar-rg-validate";
     private final static String AVATAR_SIMULATION_TO_BRK = "avatar-simulation-to-brk";
+    private final static String AVATAR_SIMULATION_SELECT_TRACE = "avatar-simulation-select-trace";
+    private final static String AVATAR_SIMULATION_OPEN_WINDOW = "avatar-simulation-open-window";
+    private final static String AVATAR_SIMULATION_GENERIC = "avatar-simulation-generic";
 
 
 
@@ -1311,24 +1318,139 @@ public class Action extends Command {
                 ass = new AvatarSpecificationSimulation(as, null);
                 ass.runSimulationToCompletion();
 
-                /*Thread t = new Thread() {
-                    public void run() {
-                        ass.runSimulation();
-                    }
-                };
-
-                t.start();
-                ass.goSimulation();
-                try {
-                    while(ass.getState() != ass.TERMINATED) {
-                        Thread.currentThread().sleep(25);
-                        //TraceManager.addDev("Waiting for termination");
-                    };
-                    ass.killSimulation();
-                    t.join();
-                } catch (InterruptedException ie) {}*/
 
                 TraceManager.addUser("Simulation terminated. End time=" + ass.getClockValue());
+
+
+                return null;
+            }
+        };
+
+        // AVATAR
+        Command avatarSimulationSelectTrace = new Command() {
+            public String getCommand() {
+                return AVATAR_SIMULATION_SELECT_TRACE;
+            }
+
+            public String getShortCommand() {
+                return "asst";
+            }
+
+            public String getDescription() {
+                return "Simulate a trace to be simulated";
+            }
+
+            public String getUsage() {
+                return "avatar-simulation-select-trace [PATH_TO_TRACE]";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String [] st = interpreter.mgui.loadSimulationTraceCSVFile(new File(commands[0]));
+                if (st == null) {
+                    return Interpreter.BAD_FILE_NAME;
+                }
+
+                SimulationTrace sim = new SimulationTrace(st[0], SimulationTrace.CSV_AVATAR, st[1]);
+                sim.setContent(st[2]);
+                interpreter.mgui.addSimulationTrace(sim);
+                interpreter.mgui.setSimulationTraceSelected(sim);
+
+
+                return null;
+            }
+        };
+
+        // AVATAR
+        Command avatarSimulationOpenWindow = new Command() {
+            public String getCommand() {
+                return AVATAR_SIMULATION_OPEN_WINDOW;
+            }
+
+            public String getShortCommand() {
+                return "asow";
+            }
+
+            public String getDescription() {
+                return "Show / hide Avatar simulation window";
+            }
+
+            public String getUsage() {
+                return "avatar-simulation-open-window";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                SwingUtilities.invokeLater(()->{
+                    interpreter.mgui.openCloseAvatarSimulationWindow();
+                });
+
+
+                return null;
+            }
+        };
+
+        // AVATAR
+        Command avatarSimulationGeneric = new Command() {
+            public String getCommand() {
+                return AVATAR_SIMULATION_GENERIC;
+            }
+
+            public String getShortCommand() {
+                return "asg";
+            }
+
+            public String getDescription() {
+                return "Execute a generic action in the Avatar simulation";
+            }
+
+            public String getUsage() {
+                String usage =  "avatar-simulation-generic <generic-command>\n" +
+                        "<generic command> are :";
+                if (AvatarInteractiveSimulationActions.actions != null) {
+                    for (TAction action : AvatarInteractiveSimulationActions.actions) {
+                        if (action != null) {
+                            usage += "\n\t" + action.ACTION_COMMAND_KEY;
+                        } else {
+                            usage += "Actions can be listed only once the simulation window has been started";
+                            break;
+                        }
+                    }
+                } else {
+                    usage += "Actions can be listed only once the simulation window has been started";
+                }
+                return usage;
+
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                JFrameAvatarInteractiveSimulation jfais = interpreter.mgui.getJFrameAvatarInteractiveSimulation();
+
+                if (jfais == null) {
+                    return interpreter.NO_WINDOW;
+                }
+
+                jfais.actionPerformed(commands[0], null);
 
 
                 return null;
@@ -1368,6 +1490,10 @@ public class Action extends Command {
         addAndSortSubcommand(selectPanel);
         addAndSortSubcommand(compareUppaal);
         addAndSortSubcommand(avatarSimulationToBrk);
+        addAndSortSubcommand(avatarSimulationSelectTrace);
+        addAndSortSubcommand(avatarSimulationOpenWindow);
+        addAndSortSubcommand(avatarSimulationGeneric);
+
         addAndSortSubcommand(generic);
 
     }

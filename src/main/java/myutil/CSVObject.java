@@ -110,6 +110,7 @@ public class CSVObject  {
         }
    }
 
+
    public int getNbOfLines() {
         if (lines == null) {
             return -1;
