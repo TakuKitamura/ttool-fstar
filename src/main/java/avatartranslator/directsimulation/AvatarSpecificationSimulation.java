@@ -1722,7 +1722,7 @@ public class AvatarSpecificationSimulation {
             append(sb, ast.clockValueWhenFinished);
             append(sb, ast.duration);
             append(sb, ast.getAttributesString());
-            sb.append(ast.getActionsString());
+            append(sb, ast.getActionsString());
             sb.append("\n");
         }
 

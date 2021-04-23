@@ -3457,9 +3457,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         String s1 = getName();
         String s2 = getValue();
         if ((s2 == null) || (s2.equals("null"))) {
-            return s1;
+            return s1 + " / " + id;
         }
-        return s1 + ": " + s2;
+        return s1 + ": " + s2 + " / " + id;
     }
 
     public Color getCurrentColor() {
