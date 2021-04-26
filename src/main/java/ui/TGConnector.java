@@ -77,11 +77,14 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     // WARNING: point of connectors must be put first in the list of internal components ...
 
-    public TGConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    public TGConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp,
+                       TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        p1 = _p1;
-        p2 = _p2;
+        setP1(_p1);
+        setP2(_p2);
+
+
 	
         //initScaling(0, 0);
         initPoints( _listPoint );
@@ -249,10 +252,12 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     public void setP1(TGConnectingPoint p) {
         p1 = p;
+        p1.setReferenceToConnector(this);
     }
 
     public void setP2(TGConnectingPoint p) {
         p2 = p;
+        p2.setReferenceToConnector(this);
     }
 
     public boolean isP1(CDElement cd) {

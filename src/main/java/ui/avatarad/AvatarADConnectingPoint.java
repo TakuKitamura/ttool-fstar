@@ -40,6 +40,7 @@ package ui.avatarad;
 
 import ui.CDElement;
 import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
@@ -54,9 +55,21 @@ public class AvatarADConnectingPoint extends TGConnectingPointWidthHeight {
     public AvatarADConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
+
     
     @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+    }
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+        if (getFather() instanceof AvatarADActivity) {
+            AvatarADActivity act = (AvatarADActivity)getFather();
+            int nb = act.getNbOfOccupiedPoints(outPoint == null);
+            if (nb > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

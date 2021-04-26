@@ -279,7 +279,6 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
     public void setFree(boolean b) {
         /*TraceManager.addDev("Setting connecting point as free=" + b + " point=" + this);
 
-
           for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
           TraceManager.addDev(ste.toString());
           }*/
@@ -288,6 +287,11 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
         if (cpg != null) {
             cpg.setFree(b);
         }
+
+        if (free) {
+            referenceToConnector = null;
+        }
+
     }
     
     @Override

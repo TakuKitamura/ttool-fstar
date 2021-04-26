@@ -3437,6 +3437,25 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return sb;
     }
 
+    public int getNbOfOccupiedPoints(boolean out) {
+        int cpt = 0;
+        for(TGConnectingPoint pt: connectingPoint) {
+            TGConnector connector = pt.getReferenceToConnector();
+            TGConnectingPoint cp;
+            if (connector != null) {
+                if (out) {
+                    cp = connector.getTGConnectingPointP1();
+                } else {
+                    cp = connector.getTGConnectingPointP2();
+                }
+                if (cp == pt) {
+                    cpt++;
+                }
+            }
+        }
+        return cpt;
+    }
+
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         return;
     }
