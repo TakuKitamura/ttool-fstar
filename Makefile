@@ -143,7 +143,7 @@ allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator rundse
 ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 ttoolnotest: ttool install
 
-ttool: $(TTOOL_BINARY)
+ttool: $(TTOOL_BINARY) install
 ttoolnotest: 
 
 $(TTOOL_BINARY): FORCE
