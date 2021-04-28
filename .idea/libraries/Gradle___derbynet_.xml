@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: :derbynet:">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/derbynet.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

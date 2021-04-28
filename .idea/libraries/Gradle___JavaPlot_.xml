@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: :JavaPlot:">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/JavaPlot.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

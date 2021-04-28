@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: :batik-awt-util:">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/batik-awt-util.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
