@@ -534,6 +534,8 @@ DESTDIR ?= $(TTOOL_PATH)
 install:
 #ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 	mkdir -p $(DESTDIR)/bin
+	mkdir -p $(TTOOL_BUILD)/output
+	@cp -r executablecode $(TTOOL_BUILD)/output/
 	@cp $(TTOOL_BUILD)/*.jar $(TTOOL_BUILD)/*.xml $(TTOOL_BUILD)/*.h $(TTOOL_BUILD)/*.f  $(TTOOL_BUILD)/*.t $(TTOOL_BUILD)/*.exe  $(DESTDIR)/bin
 
 run:
