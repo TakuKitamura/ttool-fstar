@@ -1,4 +1,0 @@
-
-#include "elfpp_symbol.hh"
-#include "elfpp_symbol.hxx"
-

@@ -1,2 +1,0 @@
-Main-Class: GraphShow
-Class-Path: ./gs-core-2.0.jar ./gs-ui-swing-2.0.jar ./commons-math3-3.6.1.jar ./jfreechart-1.6.0.jar

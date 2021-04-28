@@ -1,1 +1,0 @@
-objs = main.o test.o test2.o

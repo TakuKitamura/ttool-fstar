@@ -1,6 +1,0 @@
-
-# -*- python -*-
-
-Module('common:papr_slot',
-	header_files = ["../include/papr_slot.h",],
-)

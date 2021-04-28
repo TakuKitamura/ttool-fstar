@@ -1,9 +1,0 @@
-The files can be compiled by using the generated Makefile
-in standalone mode, without SoCLib cross-compilation, if no GPIO2VCI
-component or code running on the SoCLib digital platform is required
-
-A SystemC-AMS proof-of-concept(2.1) is provided in
-https://www.coseda-tech.com/systemc-ams-proof-of-concept
-
-In the Virtual Machine, the authors kindly accepted that we
-provide the PoC 
