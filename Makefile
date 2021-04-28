@@ -556,16 +556,6 @@ noguitest:
 # ======================================== 
 clean:
 	@$(MAKE) -C $(TTOOL_DIR) -e clean
-	@$(MAKE) -C $(LAUNCHER_DIR) -e clean
-	@$(MAKE) -C $(TTOOLCLI_DIR) -e clean
-	@$(MAKE) -C $(GRAPHMINIMIZE_DIR) -e clean
-	@$(MAKE) -C $(GRAPHSHOW_DIR) -e clean
-	@$(MAKE) -C $(TIFTRANSLATOR_DIR) -e clean
-	@$(MAKE) -C $(RUNDSE_DIR) -e clean
-	@$(MAKE) -C $(REMOTESIMULATOR_DIR) -e clean
-	@$(MAKE) -C $(WEBCRAWLER_CLIENT_DIR) -e clean
-	@$(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e clean
-	@$(MAKE) -C $(JTTOOL_DIR) -e clean
 	@$(MAKE) -C $(TTOOL_DOC_SYSMLSEC_DIR) clean	
 	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) clean
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) clean
