@@ -143,7 +143,7 @@ allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator rundse
 ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 ttoolnotest: ttool install
 
-ttool: $(TTOOL_BINARY) install
+ttool: $(TTOOL_BINARY) install run
 ttoolnotest: 
 
 $(TTOOL_BINARY): FORCE
@@ -535,6 +535,9 @@ install:
 #ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 	mkdir -p $(DESTDIR)/bin
 	@cp $(TTOOL_BUILD)/*.jar $(TTOOL_BUILD)/*.xml $(TTOOL_BUILD)/*.h $(TTOOL_BUILD)/*.f  $(TTOOL_BUILD)/*.t $(TTOOL_BUILD)/*.exe  $(DESTDIR)/bin
+
+run:
+	./ttool.exe
 
 # ======================================== 
 # ==========       TESTS        ========== 
