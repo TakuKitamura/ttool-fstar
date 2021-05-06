@@ -2,6 +2,6 @@
 java -version
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd ${DIR}/bin;
-java -cp . -Xmx4096m -jar ttool.jar -config config_mac.xml -experimental -debug -avatar -uppaal -launcher -interact -openlast
-
+# java -cp . -Xmx4096m -jar ttool.jar -config config_mac.xml -experimental -debug -avatar -uppaal -launcher -interact -openlast
+java -cp . -jar ttool.jar -config config_mac.xml -debug
  
