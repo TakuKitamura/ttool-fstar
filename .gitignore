@@ -1,6 +1,9 @@
 # Vim
 *.swp
 
+# Meta
+.DS_Store
+
 # Emacs
 .#*
 
