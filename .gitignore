@@ -4,6 +4,9 @@
 # Meta
 .DS_Store
 
+# VSCode
+.vscode
+
 # Emacs
 .#*
 
