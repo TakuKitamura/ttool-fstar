@@ -39,17 +39,6 @@
 
 package ui.window;
 
-import myutil.Conversion;
-import myutil.GraphicLib;
-import myutil.TraceManager;
-import ui.AvatarMethod;
-import ui.AvatarSignal;
-import ui.TAttribute;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -62,6 +51,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import myutil.Conversion;
+import myutil.GraphicLib;
+import myutil.TraceManager;
+import ui.AvatarMethod;
+import ui.AvatarSignal;
+import ui.TAttribute;
 
 
 /**
@@ -98,6 +110,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     // Panel1
     private JComboBox<String> accessBox, typeBox;
     private JTextField identifierText;
+    private JTextField typeRestrictionText;
     private JTextField initialValue;
     private JButton addButton;
 
@@ -270,6 +283,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel1.add(new JLabel(" "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         panel1.add(new JLabel("type"), c1);
+        panel1.add(new JLabel("typeRestriction"), c1);
 
         // second line panel1
         c1.gridwidth = 1;
@@ -296,6 +310,11 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         typeBox = new JComboBox<String>();
         typeBox.addActionListener(this);
         panel1.add(typeBox, c1);
+        
+        typeRestrictionText  = new JTextField();
+        typeRestrictionText.setColumns(15);
+        typeRestrictionText.setEditable(true);
+        panel1.add(typeRestrictionText, c1);
 
         // third line panel1
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
