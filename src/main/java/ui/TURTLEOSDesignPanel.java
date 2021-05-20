@@ -59,105 +59,106 @@ import java.awt.*;
  * @see MainGUI
  */
 public class TURTLEOSDesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
-  // public Vector validated, ignored;
-  public TURTLEOSClassDiagramPanel toscdp;
+    // public Vector validated, ignored;
+    public TURTLEOSClassDiagramPanel toscdp;
 
-  public TURTLEOSDesignPanel(MainGUI _mgui) {
-    super(_mgui);
+    public TURTLEOSDesignPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    cl = new ChangeListener() {
+        cl = new ChangeListener() {
 
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDesignAction(e);
-      }
-    };
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-  }
-
-  public ActivityDiagramPanelInterface getBehaviourPanel(String name) {
-    return getTURTLEOSActivityDiagramPanel(name);
-  }
-
-  public ClassDiagramPanelInterface getStructurePanel() {
-    return toscdp;
-  }
-
-  public TURTLEOSActivityDiagramPanel getTURTLEOSActivityDiagramPanel(String name) {
-    TURTLEOSActivityDiagramPanel tosadp;
-    for (int i = 1; i < panels.size(); i++) {
-      tosadp = (TURTLEOSActivityDiagramPanel) (panels.elementAt(i));
-      if (tosadp.getName().compareTo(name) == 0) {
-        return tosadp;
-      }
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
-    return null;
-  }
 
-  public void addTURTLEOSActivityDiagram(String s) {
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    TURTLEOSActivityDiagramToolBar toolBarActivity = new TURTLEOSActivityDiagramToolBar(mgui);
-    toolbars.add(toolBarActivity);
-
-    TURTLEOSActivityDiagramPanel tosadp = new TURTLEOSActivityDiagramPanel(mgui, toolBarActivity);
-    tosadp.tp = this;
-    tosadp.setName(s);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tosadp);
-    tosadp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    panels.add(tosadp);
-    tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the TURTLE-OS activity diagram of " + s);
-
-    return;
-  }
-
-  public void init() {
-    // Class Diagram toolbar
-    TURTLEOSClassDiagramToolBar toolBarTOS = new TURTLEOSClassDiagramToolBar(mgui);
-    toolbars.add(toolBarTOS);
-
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    // Class diagram
-    toscdp = new TURTLEOSClassDiagramPanel(mgui, toolBarTOS);
-    toscdp.setName("TURTLE-OS Class Diagram");
-    toscdp.tp = this;
-    tdp = toscdp;
-    panels.add(toscdp); // Always first in list
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(toscdp);
-    toscdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarTOS, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab("TURTLE-OS Class diagram", IconManager.imgic62, toolBarPanel, "Opens TURTLE-OS class diagram");
-    tabbedPane.setSelectedIndex(0);
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    public ActivityDiagramPanelInterface getBehaviourPanel(String name) {
+        return getTURTLEOSActivityDiagramPanel(name);
     }
-    return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+    public ClassDiagramPanelInterface getStructurePanel() {
+        return toscdp;
+    }
 
-  public String toString() {
-    return "TURTLE-OS: " + mgui.getTitleAt(this);
-  }
+    public TURTLEOSActivityDiagramPanel getTURTLEOSActivityDiagramPanel(String name) {
+        TURTLEOSActivityDiagramPanel tosadp;
+        for (int i = 1; i < panels.size(); i++) {
+            tosadp = (TURTLEOSActivityDiagramPanel) (panels.elementAt(i));
+            if (tosadp.getName().compareTo(name) == 0) {
+                return tosadp;
+            }
+        }
+        return null;
+    }
+
+    public void addTURTLEOSActivityDiagram(String s) {
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        TURTLEOSActivityDiagramToolBar toolBarActivity = new TURTLEOSActivityDiagramToolBar(mgui);
+        toolbars.add(toolBarActivity);
+
+        TURTLEOSActivityDiagramPanel tosadp = new TURTLEOSActivityDiagramPanel(mgui, toolBarActivity);
+        tosadp.tp = this;
+        tosadp.setName(s);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(tosadp);
+        tosadp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        panels.add(tosadp);
+        tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the TURTLE-OS activity diagram of " + s);
+
+        return;
+    }
+
+    public void init() {
+        // Class Diagram toolbar
+        TURTLEOSClassDiagramToolBar toolBarTOS = new TURTLEOSClassDiagramToolBar(mgui);
+        toolbars.add(toolBarTOS);
+
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        // Class diagram
+        toscdp = new TURTLEOSClassDiagramPanel(mgui, toolBarTOS);
+        toscdp.setName("TURTLE-OS Class Diagram");
+        toscdp.tp = this;
+        tdp = toscdp;
+        panels.add(toscdp); // Always first in list
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(toscdp);
+        toscdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarTOS, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab("TURTLE-OS Class diagram", IconManager.imgic62, toolBarPanel,
+                "Opens TURTLE-OS class diagram");
+        tabbedPane.setSelectedIndex(0);
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"TURTLE-OS Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+    }
+
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return "TURTLE-OS: " + mgui.getTitleAt(this);
+    }
 
 }

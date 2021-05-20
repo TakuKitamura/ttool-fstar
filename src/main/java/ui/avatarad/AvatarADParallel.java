@@ -55,98 +55,98 @@ import ui.util.IconManager;
  * @author Ludovic APVRILLE
  */
 public class AvatarADParallel extends AvatarADBasicCanBeDisabledComponent /* Issue #69 AvatarADBasicComponent */ {
-  private int lineLength = 0;
-  // private int textX, textY;
+    private int lineLength = 0;
+    // private int textX, textY;
 
-  public AvatarADParallel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public AvatarADParallel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(150, 5);
-    oldScaleFactor = tdp.getZoom();
+        initScaling(150, 5);
+        oldScaleFactor = tdp.getZoom();
 
-    // textX = width - 10;
-    // textY = height - 8;
+        // textX = width - 10;
+        // textY = height - 8;
 
-    nbConnectingPoint = 10;
-    connectingPoint = new TGConnectingPoint[10];
-    connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.167, 0.0);
-    connectingPoint[1] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.333, 0.0);
-    connectingPoint[2] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[3] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.667, 0.0);
-    connectingPoint[4] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.833, 0.0);
-    connectingPoint[5] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.167, 1.0);
-    connectingPoint[6] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.333, 1.0);
-    connectingPoint[7] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
-    connectingPoint[8] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.667, 1.0);
-    connectingPoint[9] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.833, 1.0);
-    addTGConnectingPointsCommentCorner();
+        nbConnectingPoint = 10;
+        connectingPoint = new TGConnectingPoint[10];
+        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.167, 0.0);
+        connectingPoint[1] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.333, 0.0);
+        connectingPoint[2] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[3] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.667, 0.0);
+        connectingPoint[4] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.833, 0.0);
+        connectingPoint[5] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.167, 1.0);
+        connectingPoint[6] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.333, 1.0);
+        connectingPoint[7] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+        connectingPoint[8] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.667, 1.0);
+        connectingPoint[9] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.833, 1.0);
+        addTGConnectingPointsCommentCorner();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "parallel";
+        name = "parallel";
 
-    myImageIcon = IconManager.imgic206;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.fillRect(x, y, width, height);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic206;
     }
-    return null;
-  }
 
-  public String getValueGate() {
-    return tgcomponent[0].getValue();
-  }
-
-  public void setValueGate(String val) {
-    tgcomponent[0].setValue(val);
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.AAD_PARALLEL;
-  }
-  //
-  // public int getDefaultConnector() {
-  // return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-  // }
-
-  public List<TGConnectingPoint> getEnterConnectingPoints() {
-    return Arrays.asList(Arrays.copyOfRange(connectingPoint, 0, 5));
-  }
-
-  public List<TGConnectingPoint> getExitConnectingPoints() {
-    return Arrays.asList(Arrays.copyOfRange(connectingPoint, 5, connectingPoint.length));
-  }
-
-  /**
-   * Issue #69
-   * 
-   * @param _enabled : true for enabling the Parallel Operator
-   */
-  @Override
-  public void setEnabled(final boolean _enabled) {
-    super.setEnabled(_enabled);
-
-    final List<TGConnectingPoint> enterConPoints = getEnterConnectingPoints();
-
-    for (final TGConnectingPoint point : connectingPoint) {
-      if (!enterConPoints.contains(point)) {
-        point.acceptForward(new EnablingADConnectorVisitor(_enabled));
-      }
+    @Override
+    public void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.fillRect(x, y, width, height);
     }
-  }
+
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public String getValueGate() {
+        return tgcomponent[0].getValue();
+    }
+
+    public void setValueGate(String val) {
+        tgcomponent[0].setValue(val);
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.AAD_PARALLEL;
+    }
+    //
+    // public int getDefaultConnector() {
+    // return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+    // }
+
+    public List<TGConnectingPoint> getEnterConnectingPoints() {
+        return Arrays.asList(Arrays.copyOfRange(connectingPoint, 0, 5));
+    }
+
+    public List<TGConnectingPoint> getExitConnectingPoints() {
+        return Arrays.asList(Arrays.copyOfRange(connectingPoint, 5, connectingPoint.length));
+    }
+
+    /**
+     * Issue #69
+     * 
+     * @param _enabled : true for enabling the Parallel Operator
+     */
+    @Override
+    public void setEnabled(final boolean _enabled) {
+        super.setEnabled(_enabled);
+
+        final List<TGConnectingPoint> enterConPoints = getEnterConnectingPoints();
+
+        for (final TGConnectingPoint point : connectingPoint) {
+            if (!enterConPoints.contains(point)) {
+                point.acceptForward(new EnablingADConnectorVisitor(_enabled));
+            }
+        }
+    }
 }

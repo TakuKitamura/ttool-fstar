@@ -49,36 +49,36 @@ import java.util.LinkedList;
  */
 
 public class ELNTComponentCurrentSourceTDF extends ELNTComponent implements ELNTPrimitiveComponent {
-  private String name;
-  private double scale;
-  private LinkedList<ELNTConnectingPoint> cp;
+    private String name;
+    private double scale;
+    private LinkedList<ELNTConnectingPoint> cp;
 
-  private ELNTModule module;
+    private ELNTModule module;
 
-  public ELNTComponentCurrentSourceTDF(String _name, double _scale, ELNTModule _module) {
-    name = _name;
-    scale = _scale;
-    cp = new LinkedList<ELNTConnectingPoint>();
-    module = _module;
-  }
+    public ELNTComponentCurrentSourceTDF(String _name, double _scale, ELNTModule _module) {
+        name = _name;
+        scale = _scale;
+        cp = new LinkedList<ELNTConnectingPoint>();
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public double getScale() {
-    return scale;
-  }
+    public double getScale() {
+        return scale;
+    }
 
-  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-    return cp;
-  }
+    public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+        return cp;
+    }
 
-  public void addConnectingPoint(ELNTConnectingPoint _cp) {
-    cp.add(_cp);
-  }
+    public void addConnectingPoint(ELNTConnectingPoint _cp) {
+        cp.add(_cp);
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

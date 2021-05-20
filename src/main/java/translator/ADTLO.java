@@ -45,66 +45,66 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADTLO extends ADComponent {
-  protected String action;
-  protected String latency;
-  protected String delay;
-  protected Gate g;
+    protected String action;
+    protected String latency;
+    protected String delay;
+    protected Gate g;
 
-  public ADTLO(Gate _g) {
-    g = _g;
-    nbNext = 2;
-    minNbNext = 2;
-    setAction("");
-  }
+    public ADTLO(Gate _g) {
+        g = _g;
+        nbNext = 2;
+        minNbNext = 2;
+        setAction("");
+    }
 
-  public ADTLO() {
-    nbNext = 2;
-    minNbNext = 2;
-    setAction("");
-  }
+    public ADTLO() {
+        nbNext = 2;
+        minNbNext = 2;
+        setAction("");
+    }
 
-  public void setGate(Gate _g) {
-    g = _g;
-  }
+    public void setGate(Gate _g) {
+        g = _g;
+    }
 
-  public void setLatency(String s) {
-    latency = s;
-  }
+    public void setLatency(String s) {
+        latency = s;
+    }
 
-  public void setAction(String s) {
-    action = s;
-  }
+    public void setAction(String s) {
+        action = s;
+    }
 
-  public void setDelay(String s) {
-    delay = s;
-  }
+    public void setDelay(String s) {
+        delay = s;
+    }
 
-  public String getLatency() {
-    return latency;
-  }
+    public String getLatency() {
+        return latency;
+    }
 
-  public String getAction() {
-    return action;
-  }
+    public String getAction() {
+        return action;
+    }
 
-  public String getDelay() {
-    return delay;
-  }
+    public String getDelay() {
+        return delay;
+    }
 
-  public Gate getGate() {
-    return g;
-  }
+    public Gate getGate() {
+        return g;
+    }
 
-  public String toString() {
-    return "Time-limited offer (" + g.getName() + ", " + delay + ", " + latency + ")";
-  }
+    public String toString() {
+        return "Time-limited offer (" + g.getName() + ", " + delay + ", " + latency + ")";
+    }
 
-  public ADComponent makeSame() {
-    ADTLO adtlo = new ADTLO(g);
-    adtlo.setLatency(getLatency());
-    adtlo.setAction(getAction());
-    adtlo.setDelay(getDelay());
-    return adtlo;
-  }
+    public ADComponent makeSame() {
+        ADTLO adtlo = new ADTLO(g);
+        adtlo.setLatency(getLatency());
+        adtlo.setAction(getAction());
+        adtlo.setDelay(getDelay());
+        return adtlo;
+    }
 
 }

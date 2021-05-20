@@ -45,28 +45,28 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADLatency extends ADComponent {
-  protected String value;
+    protected String value;
 
-  public ADLatency() {
-    nbNext = 1;
-  }
+    public ADLatency() {
+        nbNext = 1;
+    }
 
-  public void setValue(String s) {
-    value = s;
-  }
+    public void setValue(String s) {
+        value = s;
+    }
 
-  public String getValue() {
-    return value;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public ADComponent makeSame() {
-    ADLatency adl = new ADLatency();
-    adl.setValue(getValue());
-    return adl;
-  }
+    public ADComponent makeSame() {
+        ADLatency adl = new ADLatency();
+        adl.setValue(getValue());
+        return adl;
+    }
 
-  public String toString() {
-    return "Latency (" + value + ")";
-  }
+    public String toString() {
+        return "Latency (" + value + ")";
+    }
 
 }

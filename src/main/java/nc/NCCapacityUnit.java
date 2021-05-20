@@ -46,27 +46,27 @@ package nc;
  */
 public class NCCapacityUnit {
 
-  public static final String MBS = "Mbs";
-  public static final String KBS = "Kbs";
+    public static final String MBS = "Mbs";
+    public static final String KBS = "Kbs";
 
-  private String unit;
+    private String unit;
 
-  public NCCapacityUnit() {
-    unit = MBS;
-  }
-
-  public void setUnit(String s) {
-    if (s.equals(MBS)) {
-      unit = MBS;
+    public NCCapacityUnit() {
+        unit = MBS;
     }
 
-    if (s.equals(KBS)) {
-      unit = KBS;
-    }
-  }
+    public void setUnit(String s) {
+        if (s.equals(MBS)) {
+            unit = MBS;
+        }
 
-  public String getStringUnit() {
-    return unit;
-  }
+        if (s.equals(KBS)) {
+            unit = KBS;
+        }
+    }
+
+    public String getStringUnit() {
+        return unit;
+    }
 
 }

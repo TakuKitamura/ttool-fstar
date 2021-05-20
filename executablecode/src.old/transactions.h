@@ -24,16 +24,16 @@
 
 struct synccell
 {
-  struct synccell *next;
-  int ID;
-  int taskID;
-  int type; /* RECEIVING, SENDING, TIMER */
-  char transactionDone;
-  long long timerValue; // in nanoseconds
-  hrtime_t completionTime;
-  timer_t timer;
-  int nParams;
-  int *params[];
+    struct synccell *next;
+    int ID;
+    int taskID;
+    int type; /* RECEIVING, SENDING, TIMER */
+    char transactionDone;
+    long long timerValue; // in nanoseconds
+    hrtime_t completionTime;
+    timer_t timer;
+    int nParams;
+    int *params[];
 };
 
 typedef struct synccell synccell;

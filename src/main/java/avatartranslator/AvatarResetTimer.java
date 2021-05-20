@@ -46,18 +46,18 @@ package avatartranslator;
  */
 public class AvatarResetTimer extends AvatarTimerOperator {
 
-  public AvatarResetTimer(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarResetTimer(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-    AvatarResetTimer art = new AvatarResetTimer(getName(), getReferenceObject());
-    art.setTimer(getTimer());
-    return art;
-  }
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+        AvatarResetTimer art = new AvatarResetTimer(getName(), getReferenceObject());
+        art.setTimer(getTimer());
+        return art;
+    }
 
-  public String getNiceName() {
-    return "Reseting of timer " + getName();
-  }
+    public String getNiceName() {
+        return "Reseting of timer " + getName();
+    }
 
 }

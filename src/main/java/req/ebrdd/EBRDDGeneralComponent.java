@@ -47,20 +47,20 @@ import tmltranslator.DIPLOElement;
  * @author Ludovic APVRILLE
  */
 public abstract class EBRDDGeneralComponent extends DIPLOElement {
-  protected Object referenceObject;
-  protected String name;
+    protected Object referenceObject;
+    protected String name;
 
-  public EBRDDGeneralComponent(String _name, Object _referenceObject) {
-    name = _name;
-    referenceObject = _referenceObject;
-  }
+    public EBRDDGeneralComponent(String _name, Object _referenceObject) {
+        name = _name;
+        referenceObject = _referenceObject;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Object getReferenceObject() {
-    return referenceObject;
-  }
+    public Object getReferenceObject() {
+        return referenceObject;
+    }
 
 }

@@ -48,45 +48,45 @@ import java.util.List;
  */
 public class AvatarPragmaAuthenticity extends AvatarPragma {
 
-  private AvatarAttributeState attrA;
-  private AvatarAttributeState attrB;
+    private AvatarAttributeState attrA;
+    private AvatarAttributeState attrB;
 
-  public AvatarPragmaAuthenticity(String _name, Object _referenceObject, List<AvatarAttributeState> args) {
-    super(_name, _referenceObject);
+    public AvatarPragmaAuthenticity(String _name, Object _referenceObject, List<AvatarAttributeState> args) {
+        super(_name, _referenceObject);
 
-    attrA = args.get(0);
-    attrB = args.get(1);
-  }
+        attrA = args.get(0);
+        attrB = args.get(1);
+    }
 
-  public AvatarPragmaAuthenticity(String _name, Object _referenceObject, AvatarAttributeState a,
-      AvatarAttributeState b) {
-    super(_name, _referenceObject);
+    public AvatarPragmaAuthenticity(String _name, Object _referenceObject, AvatarAttributeState a,
+            AvatarAttributeState b) {
+        super(_name, _referenceObject);
 
-    attrA = a;
-    attrB = b;
-  }
+        attrA = a;
+        attrB = b;
+    }
 
-  public AvatarAttributeState getAttrA() {
-    return attrA;
-  }
+    public AvatarAttributeState getAttrA() {
+        return attrA;
+    }
 
-  public AvatarAttributeState getAttrB() {
-    return attrB;
-  }
+    public AvatarAttributeState getAttrB() {
+        return attrB;
+    }
 
-  @Override
-  public String toString() {
-    if (this.attrA == null || this.attrB == null)
-      return "<undefined>";
+    @Override
+    public String toString() {
+        if (this.attrA == null || this.attrB == null)
+            return "<undefined>";
 
-    return this.attrA.toString() + " ==> " + this.attrB.toString();
-  }
+        return this.attrA.toString() + " ==> " + this.attrB.toString();
+    }
 
-  @Override
-  public AvatarPragmaAuthenticity advancedClone(AvatarSpecification avspec) {
-    AvatarPragmaAuthenticity result = new AvatarPragmaAuthenticity(this.name, this.referenceObject,
-        this.attrA.advancedClone(avspec), this.attrB.advancedClone(avspec));
-    this.cloneLinkToReferenceObjects(result);
-    return result;
-  }
+    @Override
+    public AvatarPragmaAuthenticity advancedClone(AvatarSpecification avspec) {
+        AvatarPragmaAuthenticity result = new AvatarPragmaAuthenticity(this.name, this.referenceObject,
+                this.attrA.advancedClone(avspec), this.attrB.advancedClone(avspec));
+        this.cloneLinkToReferenceObjects(result);
+        return result;
+    }
 }

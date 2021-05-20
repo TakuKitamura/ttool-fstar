@@ -46,5 +46,5 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface SpecificActionAfterMove {
-  void specificActionAfterMove();
+    void specificActionAfterMove();
 }

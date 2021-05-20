@@ -7,22 +7,22 @@
 
 syncchannel *getNewSyncchannel(char *outname, char *inname)
 {
-  syncchannel *syncch = (syncchannel *)(malloc(sizeof(struct syncchannel)));
-  if (syncch == NULL)
-  {
-    criticalError("Allocation of request failed");
-  }
-  syncch->inname = inname;
-  syncch->outname = outname;
-  syncch->inWaitQueue = NULL;
-  syncch->outWaitQueue = NULL;
-  syncch->isBroadcast = false;
-  return syncch;
+    syncchannel *syncch = (syncchannel *)(malloc(sizeof(struct syncchannel)));
+    if (syncch == NULL)
+    {
+        criticalError("Allocation of request failed");
+    }
+    syncch->inname = inname;
+    syncch->outname = outname;
+    syncch->inWaitQueue = NULL;
+    syncch->outWaitQueue = NULL;
+    syncch->isBroadcast = false;
+    return syncch;
 }
 
 void setBroadcast(syncchannel *syncch, bool b)
 {
-  syncch->isBroadcast = b;
+    syncch->isBroadcast = b;
 }
 
 /*request *makeNewSendSync(int hasDelay, long delay, int nbOfParams, int *params[]) {
@@ -37,5 +37,5 @@ request *makeNewReceiveSync(int hasDelay, long delay, int nbOfParams, int *param
 
 void destroySyncchannel(syncchannel *syncch)
 {
-  free(syncch);
+    free(syncch);
 }

@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class TTIFFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.tif);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.tif);
+    public String getDescription() {
+        return "TIF Image";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "TIF Image";
-  }
-
-  public static String getExtension() {
-    return FileUtils.tif;
-  }
+    public static String getExtension() {
+        return FileUtils.tif;
+    }
 
 }

@@ -46,10 +46,10 @@ package myutil;
  */
 public interface CallbackLoaderInterface {
 
-  void loadDone();
+    void loadDone();
 
-  void loadFailed();
+    void loadFailed();
 
-  void loadFailed(Exception e);
+    void loadFailed(Exception e);
 
 }

@@ -58,16 +58,16 @@ import ui.TGConnectingPoint;
  */
 public class TCDOperationBoxNoConnection extends TCDOperationBox {
 
-  public TCDOperationBoxNoConnection(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDOperationBoxNoConnection(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    nbConnectingPoint = 0;
-    connectingPoint = new TGConnectingPoint[0];
-    addTGConnectingPointsCommentDown();
-  }
+        nbConnectingPoint = 0;
+        connectingPoint = new TGConnectingPoint[0];
+        addTGConnectingPointsCommentDown();
+    }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_ASSOCIATION;
-  }
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_ASSOCIATION;
+    }
 }

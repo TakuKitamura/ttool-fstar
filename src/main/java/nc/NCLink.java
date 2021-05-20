@@ -45,75 +45,75 @@ package nc;
  * @author Ludovic APVRILLE
  */
 public class NCLink extends NCElement {
-  protected int capacity;
-  protected NCCapacityUnit capacityUnit = new NCCapacityUnit(); // Default value: Mbs
-  protected NCLinkedElement le1, le2;
+    protected int capacity;
+    protected NCCapacityUnit capacityUnit = new NCCapacityUnit(); // Default value: Mbs
+    protected NCLinkedElement le1, le2;
 
-  public NCLink() {
-  }
-
-  public void setCapacity(int _capacity) {
-    capacity = _capacity;
-  }
-
-  public int getCapacity() {
-    return capacity;
-  }
-
-  public int getCapacityInMbs() {
-    if (capacityUnit.getStringUnit().equals(NCCapacityUnit.KBS)) {
-      return capacity * 1000;
+    public NCLink() {
     }
-    return capacity;
-  }
 
-  public NCLinkedElement getLinkedElement1() {
-    return le1;
-  }
+    public void setCapacity(int _capacity) {
+        capacity = _capacity;
+    }
 
-  public NCLinkedElement getLinkedElement2() {
-    return le2;
-  }
+    public int getCapacity() {
+        return capacity;
+    }
 
-  public void setLinkedElement1(NCLinkedElement ncle) {
-    le1 = ncle;
-  }
+    public int getCapacityInMbs() {
+        if (capacityUnit.getStringUnit().equals(NCCapacityUnit.KBS)) {
+            return capacity * 1000;
+        }
+        return capacity;
+    }
 
-  public void setLinkedElement2(NCLinkedElement ncle) {
-    le2 = ncle;
-  }
+    public NCLinkedElement getLinkedElement1() {
+        return le1;
+    }
 
-  public void setCapacityUnit(NCCapacityUnit _unit) {
-    capacityUnit = _unit;
-  }
+    public NCLinkedElement getLinkedElement2() {
+        return le2;
+    }
 
-  public NCCapacityUnit getCapacityUnit() {
-    return capacityUnit;
-  }
+    public void setLinkedElement1(NCLinkedElement ncle) {
+        le1 = ncle;
+    }
 
-  public Object clone() {
-    NCLink link = new NCLink();
-    link.setName(getName());
-    NCCapacityUnit unit = new NCCapacityUnit();
-    unit.setUnit(getCapacityUnit().getStringUnit());
-    link.setCapacity(capacity);
-    link.setCapacityUnit(unit);
-    link.setLinkedElement1(le1);
-    link.setLinkedElement2(le2);
-    return link;
-  }
+    public void setLinkedElement2(NCLinkedElement ncle) {
+        le2 = ncle;
+    }
 
-  public NCLink cloneReversed() {
-    NCLink link = new NCLink();
-    link.setName(getName() + "_r");
-    NCCapacityUnit unit = new NCCapacityUnit();
-    unit.setUnit(getCapacityUnit().getStringUnit());
-    link.setCapacity(capacity);
-    //
-    link.setCapacityUnit(unit);
-    link.setLinkedElement2(le1);
-    link.setLinkedElement1(le2);
-    return link;
-  }
+    public void setCapacityUnit(NCCapacityUnit _unit) {
+        capacityUnit = _unit;
+    }
+
+    public NCCapacityUnit getCapacityUnit() {
+        return capacityUnit;
+    }
+
+    public Object clone() {
+        NCLink link = new NCLink();
+        link.setName(getName());
+        NCCapacityUnit unit = new NCCapacityUnit();
+        unit.setUnit(getCapacityUnit().getStringUnit());
+        link.setCapacity(capacity);
+        link.setCapacityUnit(unit);
+        link.setLinkedElement1(le1);
+        link.setLinkedElement2(le2);
+        return link;
+    }
+
+    public NCLink cloneReversed() {
+        NCLink link = new NCLink();
+        link.setName(getName() + "_r");
+        NCCapacityUnit unit = new NCCapacityUnit();
+        unit.setUnit(getCapacityUnit().getStringUnit());
+        link.setCapacity(capacity);
+        //
+        link.setCapacityUnit(unit);
+        link.setLinkedElement2(le1);
+        link.setLinkedElement1(le2);
+        return link;
+    }
 
 }

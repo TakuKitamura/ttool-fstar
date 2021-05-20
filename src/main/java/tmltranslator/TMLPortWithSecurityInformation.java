@@ -54,30 +54,30 @@ import java.util.Objects;
 
 public interface TMLPortWithSecurityInformation {
 
-  public int getConfStatus();
+    public int getConfStatus();
 
-  public boolean getCheckConf();
+    public boolean getCheckConf();
 
-  public boolean getCheckAuth();
+    public boolean getCheckAuth();
 
-  public int getCheckStrongAuthStatus();
+    public int getCheckStrongAuthStatus();
 
-  public int getCheckWeakAuthStatus();
+    public int getCheckWeakAuthStatus();
 
-  public boolean isOrigin();
+    public boolean isOrigin();
 
-  public void setConfStatus(int _status);
+    public void setConfStatus(int _status);
 
-  public void setMappingName(String _mappingName);
+    public void setMappingName(String _mappingName);
 
-  public void setSecName(String _secName);
+    public void setSecName(String _secName);
 
-  public void setResultTrace(ProVerifResultTrace _trace);
+    public void setResultTrace(ProVerifResultTrace _trace);
 
-  public void setPragmaString(String _info);
+    public void setPragmaString(String _info);
 
-  public void setStrongAuthStatus(int _status);
+    public void setStrongAuthStatus(int _status);
 
-  public void setWeakAuthStatus(int _status);
+    public void setWeakAuthStatus(int _status);
 
 }

@@ -48,33 +48,33 @@ import java.util.Objects;
  */
 public class HwMemory extends HwCommunicationNode {
 
-  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-  public static final int DEFAULT_MEMORY_SIZE = 1024;
-  public static final int DEFAULT_BUFFER_TYPE = 0;
+    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+    public static final int DEFAULT_MEMORY_SIZE = 1024;
+    public static final int DEFAULT_BUFFER_TYPE = 0;
 
-  public int bufferType = DEFAULT_BUFFER_TYPE;
-  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
-  public int memorySize = DEFAULT_MEMORY_SIZE; // In bytes. Should more than 0
+    public int bufferType = DEFAULT_BUFFER_TYPE;
+    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public int memorySize = DEFAULT_MEMORY_SIZE; // In bytes. Should more than 0
 
-  public HwMemory(String _name) {
-    super(_name);
-  }
+    public HwMemory(String _name) {
+        super(_name);
+    }
 
-  @Override
-  public String toXML() {
-    String s = "<MEMORY name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
-        + "\" memorySize=\"" + memorySize + "\"  bufferType=\"" + bufferType + "\" />\n";
-    return s;
-  }
+    @Override
+    public String toXML() {
+        String s = "<MEMORY name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+                + "\" memorySize=\"" + memorySize + "\"  bufferType=\"" + bufferType + "\" />\n";
+        return s;
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof HwMemory))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    HwMemory hwMemory = (HwMemory) o;
-    return bufferType == hwMemory.bufferType && byteDataSize == hwMemory.byteDataSize
-        && memorySize == hwMemory.memorySize;
-  }
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwMemory))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        HwMemory hwMemory = (HwMemory) o;
+        return bufferType == hwMemory.bufferType && byteDataSize == hwMemory.byteDataSize
+                && memorySize == hwMemory.memorySize;
+    }
 
 }

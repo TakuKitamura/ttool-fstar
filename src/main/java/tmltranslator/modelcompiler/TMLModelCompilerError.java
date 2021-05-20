@@ -51,41 +51,41 @@ import tmltranslator.TMLTask;
  */
 public class TMLModelCompilerError {
 
-  // type
-  public final static int ERROR_STRUCTURE = 0;
-  public final static int WARNING_STRUCTURE = 1;
-  public final static int ERROR_BEHAVIOR = 2;
-  public final static int WARNING_BEHAVIOR = 3;
+    // type
+    public final static int ERROR_STRUCTURE = 0;
+    public final static int WARNING_STRUCTURE = 1;
+    public final static int ERROR_BEHAVIOR = 2;
+    public final static int WARNING_BEHAVIOR = 3;
 
-  public int type; // ERROR, WARNING
-  public String message;
-  public TMLTask task;
-  public TMLActivityElement element;
+    public int type; // ERROR, WARNING
+    public String message;
+    public TMLTask task;
+    public TMLActivityElement element;
 
-  public TMLModelCompilerError(int _type) {
-    type = _type;
-  }
-
-  @Override
-  public String toString() {
-    String error_type = "";
-    switch (type) {
-      case 0:
-        error_type = "ERROR_STRUCTURE";
-        break;
-      case 1:
-        error_type = "WARNING_STRUCTURE";
-        break;
-      case 2:
-        error_type = "ERROR_BEHAVIOR";
-        break;
-      case 3:
-        error_type = "WARNING_BEHAVIOR";
-        break;
-      default:
-        error_type = "NO RECOGNIZED ERROR TYPE";
-        break;
+    public TMLModelCompilerError(int _type) {
+        type = _type;
     }
-    return "TMLModelCompilerError of type: " + error_type;
-  }
+
+    @Override
+    public String toString() {
+        String error_type = "";
+        switch (type) {
+            case 0:
+                error_type = "ERROR_STRUCTURE";
+                break;
+            case 1:
+                error_type = "WARNING_STRUCTURE";
+                break;
+            case 2:
+                error_type = "ERROR_BEHAVIOR";
+                break;
+            case 3:
+                error_type = "WARNING_BEHAVIOR";
+                break;
+            default:
+                error_type = "NO RECOGNIZED ERROR TYPE";
+                break;
+        }
+        return "TMLModelCompilerError of type: " + error_type;
+    }
 }

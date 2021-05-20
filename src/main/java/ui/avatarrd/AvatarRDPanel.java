@@ -53,558 +53,558 @@ import java.util.*;
  * @version 1.0 20/04/2010
  */
 public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
-  public Vector validated, ignored;
+    public Vector validated, ignored;
 
-  public AvatarRDPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
+    public AvatarRDPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
+    }
+
+    @Override
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return true;
+    }
+
+    @Override
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.addTClass(tgcc.getClassName()); return true; }
+         */
+        return false;
+    }
+
+    @Override
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
+
+    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
+
+    @Override
+    public String getXMLHead() {
+        return "<AvatarRDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+    }
+
+    @Override
+    public String getXMLTail() {
+        return "</AvatarRDPanel>";
+    }
+
+    @Override
+    public String getXMLSelectedHead() {
+        return "<AvatarRDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+                + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    @Override
+    public String getXMLSelectedTail() {
+        return "</AvatarRDPanelCopy>";
+    }
+
+    @Override
+    public String getXMLCloneHead() {
+        return "<AvatarRDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+                + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    @Override
+    public String getXMLCloneTail() {
+        return "</AvatarRDPanelCopy>";
+    }
+
+    public void makePostLoadingProcessing() throws MalformedModelingException {
+
+    }
+
     /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     * public int nbOfVerifyStartingAt(TGComponent tgc) { ListIterator iterator =
+     * getComponentList().listIterator(); TGComponent tgc1, tgc2; TGConnectingPoint
+     * p;
+     * 
+     * int cpt = 0;
+     * 
+     * while(iterator.hasNext()) { tgc1 = (TGComponent)(iterator.next()); if (tgc1
+     * instanceof TGConnectorVerify) { p =
+     * ((TGConnectorVerify)(tgc1)).getTGConnectingPointP1(); if
+     * (tgc.belongsToMeOrSon(p) != null) { cpt ++; } } }
+     * 
+     * return cpt; }
      */
-  }
 
-  @Override
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return true;
-  }
+    public LinkedList<TGComponent> getAllRequirements() {
+        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+        TGComponent tgc;
 
-  @Override
-  public boolean actionOnAdd(TGComponent tgc) {
+        ListIterator iterator = getComponentList().listIterator();
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof AvatarRDRequirement) {
+                list.add(tgc);
+            }
+        }
+
+        return list;
+
+    }
+
     /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.addTClass(tgcc.getClassName()); return true; }
+     * public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
+     * ListIterator iterator = getComponentList().listIterator(); TGComponent tgc;
+     * TGConnectingPoint p1, p2;
+     * 
+     * while(iterator.hasNext()) { tgc = (TGComponent)(iterator.next()); if (tgc
+     * instanceof TGConnectorVerify) { p1 =
+     * ((TGConnectorVerify)(tgc)).getTGConnectingPointP1(); p2 =
+     * ((TGConnectorVerify)(tgc)).getTGConnectingPointP2(); if
+     * ((tgc1.belongsToMeOrSon(p1) != null) && (tgc2.belongsToMeOrSon(p2)!=null)) {
+     * return true; } } }
+     * 
+     * return false; }
      */
-    return false;
-  }
 
-  @Override
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
-
-  @Override
-  public String getXMLHead() {
-    return "<AvatarRDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-  }
-
-  @Override
-  public String getXMLTail() {
-    return "</AvatarRDPanel>";
-  }
-
-  @Override
-  public String getXMLSelectedHead() {
-    return "<AvatarRDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel
-        + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  @Override
-  public String getXMLSelectedTail() {
-    return "</AvatarRDPanelCopy>";
-  }
-
-  @Override
-  public String getXMLCloneHead() {
-    return "<AvatarRDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  @Override
-  public String getXMLCloneTail() {
-    return "</AvatarRDPanelCopy>";
-  }
-
-  public void makePostLoadingProcessing() throws MalformedModelingException {
-
-  }
-
-  /*
-   * public int nbOfVerifyStartingAt(TGComponent tgc) { ListIterator iterator =
-   * getComponentList().listIterator(); TGComponent tgc1, tgc2; TGConnectingPoint
-   * p;
-   * 
-   * int cpt = 0;
-   * 
-   * while(iterator.hasNext()) { tgc1 = (TGComponent)(iterator.next()); if (tgc1
-   * instanceof TGConnectorVerify) { p =
-   * ((TGConnectorVerify)(tgc1)).getTGConnectingPointP1(); if
-   * (tgc.belongsToMeOrSon(p) != null) { cpt ++; } } }
-   * 
-   * return cpt; }
-   */
-
-  public LinkedList<TGComponent> getAllRequirements() {
-    LinkedList<TGComponent> list = new LinkedList<TGComponent>();
-    TGComponent tgc;
-
-    ListIterator iterator = getComponentList().listIterator();
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if (tgc instanceof AvatarRDRequirement) {
-        list.add(tgc);
-      }
+    @Override
+    public void enhance() {
+        autoAdjust();
     }
 
-    return list;
+    //
+    // For requirement table defined in RequirementsTableModel
+    //
 
-  }
+    public ArrayList<AvatarRDProperty> getAllPropertiesVerify(TGComponent req) {
+        ArrayList<AvatarRDProperty> listOfProps = new ArrayList<>();
 
-  /*
-   * public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
-   * ListIterator iterator = getComponentList().listIterator(); TGComponent tgc;
-   * TGConnectingPoint p1, p2;
-   * 
-   * while(iterator.hasNext()) { tgc = (TGComponent)(iterator.next()); if (tgc
-   * instanceof TGConnectorVerify) { p1 =
-   * ((TGConnectorVerify)(tgc)).getTGConnectingPointP1(); p2 =
-   * ((TGConnectorVerify)(tgc)).getTGConnectingPointP2(); if
-   * ((tgc1.belongsToMeOrSon(p1) != null) && (tgc2.belongsToMeOrSon(p2)!=null)) {
-   * return true; } } }
-   * 
-   * return false; }
-   */
+        // We parse all AvatarRDVerifyConnector
+        ListIterator iterator = getComponentList().listIterator();
+        TGComponent tgc;
+        TGConnectingPoint p1, p2, pother;
 
-  @Override
-  public void enhance() {
-    autoAdjust();
-  }
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            // TraceManager.addDev("Considering component=" + tgc);
+            if (tgc instanceof AvatarRDVerifyConnector) {
+                // TraceManager.addDev("Connector verify");
+                p1 = ((AvatarRDVerifyConnector) (tgc)).getTGConnectingPointP1();
+                p2 = ((AvatarRDVerifyConnector) (tgc)).getTGConnectingPointP2();
+                pother = null;
+                if (req.belongsToMe(p1)) {
+                    pother = p2;
+                    // TraceManager.addDev("pother = p2");
+                }
+                if (req.belongsToMe(p2)) {
+                    pother = p1;
+                    // TraceManager.addDev("pother = p1");
+                }
+                // TraceManager.addDev("pother computed");
 
-  //
-  // For requirement table defined in RequirementsTableModel
-  //
+                // TraceManager.addDev("pother=" + pother);
 
-  public ArrayList<AvatarRDProperty> getAllPropertiesVerify(TGComponent req) {
-    ArrayList<AvatarRDProperty> listOfProps = new ArrayList<>();
-
-    // We parse all AvatarRDVerifyConnector
-    ListIterator iterator = getComponentList().listIterator();
-    TGComponent tgc;
-    TGConnectingPoint p1, p2, pother;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      // TraceManager.addDev("Considering component=" + tgc);
-      if (tgc instanceof AvatarRDVerifyConnector) {
-        // TraceManager.addDev("Connector verify");
-        p1 = ((AvatarRDVerifyConnector) (tgc)).getTGConnectingPointP1();
-        p2 = ((AvatarRDVerifyConnector) (tgc)).getTGConnectingPointP2();
-        pother = null;
-        if (req.belongsToMe(p1)) {
-          pother = p2;
-          // TraceManager.addDev("pother = p2");
-        }
-        if (req.belongsToMe(p2)) {
-          pother = p1;
-          // TraceManager.addDev("pother = p1");
-        }
-        // TraceManager.addDev("pother computed");
-
-        // TraceManager.addDev("pother=" + pother);
-
-        if (pother != null) {
-          TGComponent foundC = getComponentToWhichBelongs(pother);
-          // TraceManager.addDev("FoundC=" + foundC);
-          if (foundC instanceof AvatarRDProperty) {
-            // TraceManager.addDev("Adding foundC");
-            listOfProps.add((AvatarRDProperty) foundC);
-          }
-        }
-      }
-    }
-
-    return listOfProps;
-
-  }
-
-  public ArrayList<AvatarRDElementReference> getAllElementsSatified(TGComponent req) {
-    ArrayList<AvatarRDElementReference> listOfProps = new ArrayList<>();
-
-    // We parse all AvatarRDVerifyConnector
-    ListIterator iterator = getComponentList().listIterator();
-    TGComponent tgc;
-    TGConnectingPoint p1, p2, pother;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      // TraceManager.addDev("Considering component=" + tgc);
-      if (tgc instanceof AvatarRDSatisfyConnector) {
-        // TraceManager.addDev("Connector verify");
-        p1 = ((AvatarRDSatisfyConnector) (tgc)).getTGConnectingPointP1();
-        p2 = ((AvatarRDSatisfyConnector) (tgc)).getTGConnectingPointP2();
-        pother = null;
-        if (req.belongsToMe(p1)) {
-          pother = p2;
-          // TraceManager.addDev("pother = p2");
-        }
-        if (req.belongsToMe(p2)) {
-          pother = p1;
-          // TraceManager.addDev("pother = p1");
-        }
-        // TraceManager.addDev("pother computed");
-
-        // TraceManager.addDev("pother=" + pother);
-
-        if (pother != null) {
-          TGComponent foundC = getComponentToWhichBelongs(pother);
-          // TraceManager.addDev("FoundC=" + foundC);
-          if (foundC instanceof AvatarRDElementReference) {
-            // TraceManager.addDev("Adding foundC");
-            listOfProps.add((AvatarRDElementReference) foundC);
-          }
-        }
-      }
-    }
-
-    return listOfProps;
-
-  }
-
-  public ArrayList<AvatarRDRequirement> getAllImmediateSons(TGComponent req) {
-    HashSet<TGComponent> met = new HashSet<>();
-    return getAllImmediateSons(req, met);
-  }
-
-  public ArrayList<AvatarRDRequirement> getAllImmediateSons(TGComponent req, HashSet<TGComponent> met) {
-    ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
-
-    if (met.contains(req)) {
-      return listOfProps;
-    }
-
-    met.add(req);
-
-    // We parse all AvatarRDVerifyConnector
-    ListIterator iterator = getComponentList().listIterator();
-    TGComponent tgc;
-    TGConnectingPoint p1, p2, pother;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      // TraceManager.addDev("Considering component=" + tgc);
-      if (tgc instanceof AvatarRDCompositionConnector) {
-        // TraceManager.addDev("Connector verify");
-        p1 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP1();
-        p2 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP2();
-        pother = null;
-
-        if (req.belongsToMe(p2)) {
-          pother = p1;
-          // TraceManager.addDev("pother = p1");
-        }
-        // TraceManager.addDev("pother computed");
-
-        // TraceManager.addDev("pother=" + pother);
-
-        if (pother != null) {
-          TGComponent foundC = getComponentToWhichBelongs(pother);
-          // TraceManager.addDev("FoundC=" + foundC);
-          if (foundC instanceof AvatarRDRequirement) {
-            // TraceManager.addDev("Adding foundC");
-            listOfProps.add((AvatarRDRequirement) foundC);
-          }
-          if (foundC instanceof AvatarRDRequirementReference) {
-            AvatarRDRequirement refReq = ((AvatarRDRequirementReference) foundC).getReference();
-            if (refReq != null) {
-              listOfProps.add(refReq);
+                if (pother != null) {
+                    TGComponent foundC = getComponentToWhichBelongs(pother);
+                    // TraceManager.addDev("FoundC=" + foundC);
+                    if (foundC instanceof AvatarRDProperty) {
+                        // TraceManager.addDev("Adding foundC");
+                        listOfProps.add((AvatarRDProperty) foundC);
+                    }
+                }
             }
-            listOfProps.addAll(getAllImmediateSons(foundC, met));
-          }
         }
-      }
+
+        return listOfProps;
+
     }
 
-    if (req instanceof AvatarRDRequirement) {
-      AvatarRDRequirement myReq = (AvatarRDRequirement) req;
-      for (AvatarRDRequirementReference ref : myReq.getAllReferences()) {
-        AvatarRDPanel myPanel = (AvatarRDPanel) (ref.getTDiagramPanel());
-        listOfProps.addAll(myPanel.getAllImmediateSons(ref));
-      }
-    }
+    public ArrayList<AvatarRDElementReference> getAllElementsSatified(TGComponent req) {
+        ArrayList<AvatarRDElementReference> listOfProps = new ArrayList<>();
 
-    return listOfProps;
+        // We parse all AvatarRDVerifyConnector
+        ListIterator iterator = getComponentList().listIterator();
+        TGComponent tgc;
+        TGConnectingPoint p1, p2, pother;
 
-  }
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            // TraceManager.addDev("Considering component=" + tgc);
+            if (tgc instanceof AvatarRDSatisfyConnector) {
+                // TraceManager.addDev("Connector verify");
+                p1 = ((AvatarRDSatisfyConnector) (tgc)).getTGConnectingPointP1();
+                p2 = ((AvatarRDSatisfyConnector) (tgc)).getTGConnectingPointP2();
+                pother = null;
+                if (req.belongsToMe(p1)) {
+                    pother = p2;
+                    // TraceManager.addDev("pother = p2");
+                }
+                if (req.belongsToMe(p2)) {
+                    pother = p1;
+                    // TraceManager.addDev("pother = p1");
+                }
+                // TraceManager.addDev("pother computed");
 
-  public ArrayList<AvatarRDRequirement> getAllSons(AvatarRDRequirement req) {
-    // TraceManager.addDev("\nGet all sons of: " + req);
-    HashSet<AvatarRDRequirement> met = new HashSet<>();
-    met.add(req);
+                // TraceManager.addDev("pother=" + pother);
 
-    ArrayList<AvatarRDRequirement> listOfSons = new ArrayList<>();
-    ArrayList<AvatarRDRequirement> tmpList = new ArrayList<>();
-    ArrayList<AvatarRDRequirement> tmpNew = new ArrayList<>();
-    tmpList.add(req);
-
-    for (;;) {
-      tmpNew.clear();
-      for (AvatarRDRequirement rq : tmpList) {
-        tmpNew.addAll(rq.getAllImmediateSons());
-      }
-      tmpList.clear();
-      for (AvatarRDRequirement rq : tmpNew) {
-        if (!(met.contains(rq))) {
-          // TraceManager.addDev("Adding req:" + rq);
-          met.add(rq);
-          listOfSons.add(rq);
-          tmpList.add(rq);
-          if (rq.getAllReferences().size() > 0) {
-            // TraceManager.addDev("Adding references of " + rq);
-          }
-          for (AvatarRDRequirementReference ref : rq.getAllReferences()) {
-            AvatarRDRequirement newReq = ref.getReference();
-            // TraceManager.addDev("Adding son of references = " + newReq);
-            if (newReq != null) {
-              if (!(met.contains(newReq))) {
-                listOfSons.add(newReq);
-                tmpList.add(newReq);
-              }
+                if (pother != null) {
+                    TGComponent foundC = getComponentToWhichBelongs(pother);
+                    // TraceManager.addDev("FoundC=" + foundC);
+                    if (foundC instanceof AvatarRDElementReference) {
+                        // TraceManager.addDev("Adding foundC");
+                        listOfProps.add((AvatarRDElementReference) foundC);
+                    }
+                }
             }
-          }
-
         }
-      }
-      if (tmpList.size() == 0) {
-        break;
-      }
+
+        return listOfProps;
+
     }
 
-    return listOfSons;
-  }
-
-  public ArrayList<AvatarRDRequirement> getAllImmediateFathers(TGComponent req) {
-    HashSet<TGComponent> met = new HashSet<>();
-    return getAllImmediateFathers(req, met);
-  }
-
-  public ArrayList<AvatarRDRequirement> getAllImmediateFathers(TGComponent req, HashSet<TGComponent> met) {
-
-    ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
-
-    if (met.contains(req)) {
-      return listOfProps;
+    public ArrayList<AvatarRDRequirement> getAllImmediateSons(TGComponent req) {
+        HashSet<TGComponent> met = new HashSet<>();
+        return getAllImmediateSons(req, met);
     }
 
-    met.add(req);
+    public ArrayList<AvatarRDRequirement> getAllImmediateSons(TGComponent req, HashSet<TGComponent> met) {
+        ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
 
-    // We parse all AvatarRDVerifyConnector
-    ListIterator iterator = getComponentList().listIterator();
-    TGComponent tgc;
-    TGConnectingPoint p1, p2, pother;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      // TraceManager.addDev("Considering component=" + tgc);
-      if (tgc instanceof AvatarRDCompositionConnector) {
-        // TraceManager.addDev("Connector verify");
-        p1 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP1();
-        p2 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP2();
-        pother = null;
-
-        if (req.belongsToMe(p1)) {
-          pother = p2;
-          // TraceManager.addDev("pother = p1");
+        if (met.contains(req)) {
+            return listOfProps;
         }
-        // TraceManager.addDev("pother computed");
 
-        // TraceManager.addDev("pother=" + pother);
+        met.add(req);
 
-        if (pother != null) {
-          TGComponent foundC = getComponentToWhichBelongs(pother);
-          // TraceManager.addDev("FoundC=" + foundC);
-          if (foundC instanceof AvatarRDRequirement) {
-            // TraceManager.addDev("Adding foundC");
-            listOfProps.add((AvatarRDRequirement) foundC);
-          }
-          if (foundC instanceof AvatarRDRequirementReference) {
-            AvatarRDRequirement refReq = ((AvatarRDRequirementReference) foundC).getReference();
-            if (refReq != null) {
-              listOfProps.add(refReq);
+        // We parse all AvatarRDVerifyConnector
+        ListIterator iterator = getComponentList().listIterator();
+        TGComponent tgc;
+        TGConnectingPoint p1, p2, pother;
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            // TraceManager.addDev("Considering component=" + tgc);
+            if (tgc instanceof AvatarRDCompositionConnector) {
+                // TraceManager.addDev("Connector verify");
+                p1 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP1();
+                p2 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP2();
+                pother = null;
+
+                if (req.belongsToMe(p2)) {
+                    pother = p1;
+                    // TraceManager.addDev("pother = p1");
+                }
+                // TraceManager.addDev("pother computed");
+
+                // TraceManager.addDev("pother=" + pother);
+
+                if (pother != null) {
+                    TGComponent foundC = getComponentToWhichBelongs(pother);
+                    // TraceManager.addDev("FoundC=" + foundC);
+                    if (foundC instanceof AvatarRDRequirement) {
+                        // TraceManager.addDev("Adding foundC");
+                        listOfProps.add((AvatarRDRequirement) foundC);
+                    }
+                    if (foundC instanceof AvatarRDRequirementReference) {
+                        AvatarRDRequirement refReq = ((AvatarRDRequirementReference) foundC).getReference();
+                        if (refReq != null) {
+                            listOfProps.add(refReq);
+                        }
+                        listOfProps.addAll(getAllImmediateSons(foundC, met));
+                    }
+                }
             }
-            listOfProps.addAll(getAllImmediateFathers(foundC, met));
-          }
         }
-      }
-    }
 
-    if (req instanceof AvatarRDRequirement) {
-      AvatarRDRequirement myReq = (AvatarRDRequirement) req;
-      for (AvatarRDRequirementReference ref : myReq.getAllReferences()) {
-        AvatarRDPanel myPanel = (AvatarRDPanel) (ref.getTDiagramPanel());
-        listOfProps.addAll(myPanel.getAllImmediateFathers(ref));
-      }
-    }
-
-    return listOfProps;
-
-  }
-
-  public ArrayList<AvatarRDRequirement> getAllFathers(AvatarRDRequirement req) {
-    HashSet<AvatarRDRequirement> met = new HashSet<>();
-    met.add(req);
-
-    ArrayList<AvatarRDRequirement> listOfSons = new ArrayList<>();
-    ArrayList<AvatarRDRequirement> tmpList = new ArrayList<>();
-    ArrayList<AvatarRDRequirement> tmpNew = new ArrayList<>();
-    tmpList.add(req);
-
-    for (;;) {
-      tmpNew.clear();
-      for (AvatarRDRequirement rq : tmpList) {
-        tmpNew.addAll(getAllImmediateFathers(rq));
-      }
-      tmpList.clear();
-
-      for (AvatarRDRequirement rq : tmpNew) {
-        if (!(met.contains(rq))) {
-          // TraceManager.addDev("Adding req:" + rq);
-          met.add(rq);
-          listOfSons.add(rq);
-          tmpList.add(rq);
-          if (rq.getAllReferences().size() > 0) {
-            // TraceManager.addDev("Adding references of " + rq);
-          }
-          for (AvatarRDRequirementReference ref : rq.getAllReferences()) {
-            AvatarRDRequirement newReq = ref.getReference();
-            // TraceManager.addDev("Adding son of references = " + newReq);
-            if (newReq != null) {
-              if (!(met.contains(newReq))) {
-                listOfSons.add(newReq);
-                tmpList.add(newReq);
-              }
+        if (req instanceof AvatarRDRequirement) {
+            AvatarRDRequirement myReq = (AvatarRDRequirement) req;
+            for (AvatarRDRequirementReference ref : myReq.getAllReferences()) {
+                AvatarRDPanel myPanel = (AvatarRDPanel) (ref.getTDiagramPanel());
+                listOfProps.addAll(myPanel.getAllImmediateSons(ref));
             }
-          }
-
         }
-      }
 
-      /*
-       * for (AvatarRDRequirement rq : tmpNew) { if (!(met.contains(rq))) {
-       * met.add(rq); listOfSons.add(rq); tmpList.add(rq); } }
-       */
+        return listOfProps;
 
-      if (tmpList.size() == 0) {
-        break;
-      }
     }
 
-    return listOfSons;
-  }
+    public ArrayList<AvatarRDRequirement> getAllSons(AvatarRDRequirement req) {
+        // TraceManager.addDev("\nGet all sons of: " + req);
+        HashSet<AvatarRDRequirement> met = new HashSet<>();
+        met.add(req);
 
-  public ArrayList<AvatarRDRequirement> getAllMeRefine(AvatarRDRequirement req, int origin) {
-    ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
+        ArrayList<AvatarRDRequirement> listOfSons = new ArrayList<>();
+        ArrayList<AvatarRDRequirement> tmpList = new ArrayList<>();
+        ArrayList<AvatarRDRequirement> tmpNew = new ArrayList<>();
+        tmpList.add(req);
 
-    // We parse all AvatarRDVerifyConnector
-    ListIterator iterator = getComponentList().listIterator();
-    TGComponent tgc;
-    TGConnectingPoint p1, p2, pother;
+        for (;;) {
+            tmpNew.clear();
+            for (AvatarRDRequirement rq : tmpList) {
+                tmpNew.addAll(rq.getAllImmediateSons());
+            }
+            tmpList.clear();
+            for (AvatarRDRequirement rq : tmpNew) {
+                if (!(met.contains(rq))) {
+                    // TraceManager.addDev("Adding req:" + rq);
+                    met.add(rq);
+                    listOfSons.add(rq);
+                    tmpList.add(rq);
+                    if (rq.getAllReferences().size() > 0) {
+                        // TraceManager.addDev("Adding references of " + rq);
+                    }
+                    for (AvatarRDRequirementReference ref : rq.getAllReferences()) {
+                        AvatarRDRequirement newReq = ref.getReference();
+                        // TraceManager.addDev("Adding son of references = " + newReq);
+                        if (newReq != null) {
+                            if (!(met.contains(newReq))) {
+                                listOfSons.add(newReq);
+                                tmpList.add(newReq);
+                            }
+                        }
+                    }
 
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      // TraceManager.addDev("Considering component=" + tgc);
-      if (tgc instanceof AvatarRDRefineConnector) {
-        // TraceManager.addDev("Connector verify");
-        p1 = ((AvatarRDRefineConnector) (tgc)).getTGConnectingPointP1();
-        p2 = ((AvatarRDRefineConnector) (tgc)).getTGConnectingPointP2();
-        pother = null;
-
-        if (origin == 0) {
-          if (req.belongsToMe(p1)) {
-            pother = p2;
-            // TraceManager.addDev("pother = p1");
-          }
-        } else {
-          if (req.belongsToMe(p2)) {
-            pother = p1;
-            // TraceManager.addDev("pother = p1");
-          }
+                }
+            }
+            if (tmpList.size() == 0) {
+                break;
+            }
         }
-        // TraceManager.addDev("pother computed");
 
-        // TraceManager.addDev("pother=" + pother);
-
-        if (pother != null) {
-          TGComponent foundC = getComponentToWhichBelongs(pother);
-          // TraceManager.addDev("FoundC=" + foundC);
-          if (foundC instanceof AvatarRDRequirement) {
-            // TraceManager.addDev("Adding foundC");
-            listOfProps.add((AvatarRDRequirement) foundC);
-          }
-        }
-      }
+        return listOfSons;
     }
 
-    return listOfProps;
-
-  }
-
-  public ArrayList<AvatarRDRequirement> getAllMeDerive(AvatarRDRequirement req, int origin) {
-    ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
-
-    // We parse all AvatarRDVerifyConnector
-    ListIterator iterator = getComponentList().listIterator();
-    TGComponent tgc;
-    TGConnectingPoint p1, p2, pother;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      // TraceManager.addDev("Considering component=" + tgc);
-      if (tgc instanceof AvatarRDDeriveConnector) {
-        // TraceManager.addDev("Connector verify");
-        p1 = ((AvatarRDDeriveConnector) (tgc)).getTGConnectingPointP1();
-        p2 = ((AvatarRDDeriveConnector) (tgc)).getTGConnectingPointP2();
-        pother = null;
-
-        if (origin == 0) {
-          if (req.belongsToMe(p1)) {
-            pother = p2;
-            // TraceManager.addDev("pother = p1");
-          }
-        } else {
-          if (req.belongsToMe(p2)) {
-            pother = p1;
-            // TraceManager.addDev("pother = p1");
-          }
-        }
-        // TraceManager.addDev("pother computed");
-
-        // TraceManager.addDev("pother=" + pother);
-
-        if (pother != null) {
-          TGComponent foundC = getComponentToWhichBelongs(pother);
-          // TraceManager.addDev("FoundC=" + foundC);
-          if (foundC instanceof AvatarRDRequirement) {
-            // TraceManager.addDev("Adding foundC");
-            listOfProps.add((AvatarRDRequirement) foundC);
-          }
-        }
-      }
+    public ArrayList<AvatarRDRequirement> getAllImmediateFathers(TGComponent req) {
+        HashSet<TGComponent> met = new HashSet<>();
+        return getAllImmediateFathers(req, met);
     }
 
-    return listOfProps;
+    public ArrayList<AvatarRDRequirement> getAllImmediateFathers(TGComponent req, HashSet<TGComponent> met) {
 
-  }
+        ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
 
-  public void updateReferences() {
-    ListIterator iterator = getComponentList().listIterator();
-    while (iterator.hasNext()) {
-      TGComponent tgc = (TGComponent) (iterator.next());
-      if (tgc instanceof AvatarRDRequirementReference) {
-        ((AvatarRDRequirementReference) tgc).updateReference();
-      }
+        if (met.contains(req)) {
+            return listOfProps;
+        }
+
+        met.add(req);
+
+        // We parse all AvatarRDVerifyConnector
+        ListIterator iterator = getComponentList().listIterator();
+        TGComponent tgc;
+        TGConnectingPoint p1, p2, pother;
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            // TraceManager.addDev("Considering component=" + tgc);
+            if (tgc instanceof AvatarRDCompositionConnector) {
+                // TraceManager.addDev("Connector verify");
+                p1 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP1();
+                p2 = ((AvatarRDCompositionConnector) (tgc)).getTGConnectingPointP2();
+                pother = null;
+
+                if (req.belongsToMe(p1)) {
+                    pother = p2;
+                    // TraceManager.addDev("pother = p1");
+                }
+                // TraceManager.addDev("pother computed");
+
+                // TraceManager.addDev("pother=" + pother);
+
+                if (pother != null) {
+                    TGComponent foundC = getComponentToWhichBelongs(pother);
+                    // TraceManager.addDev("FoundC=" + foundC);
+                    if (foundC instanceof AvatarRDRequirement) {
+                        // TraceManager.addDev("Adding foundC");
+                        listOfProps.add((AvatarRDRequirement) foundC);
+                    }
+                    if (foundC instanceof AvatarRDRequirementReference) {
+                        AvatarRDRequirement refReq = ((AvatarRDRequirementReference) foundC).getReference();
+                        if (refReq != null) {
+                            listOfProps.add(refReq);
+                        }
+                        listOfProps.addAll(getAllImmediateFathers(foundC, met));
+                    }
+                }
+            }
+        }
+
+        if (req instanceof AvatarRDRequirement) {
+            AvatarRDRequirement myReq = (AvatarRDRequirement) req;
+            for (AvatarRDRequirementReference ref : myReq.getAllReferences()) {
+                AvatarRDPanel myPanel = (AvatarRDPanel) (ref.getTDiagramPanel());
+                listOfProps.addAll(myPanel.getAllImmediateFathers(ref));
+            }
+        }
+
+        return listOfProps;
+
     }
-  }
+
+    public ArrayList<AvatarRDRequirement> getAllFathers(AvatarRDRequirement req) {
+        HashSet<AvatarRDRequirement> met = new HashSet<>();
+        met.add(req);
+
+        ArrayList<AvatarRDRequirement> listOfSons = new ArrayList<>();
+        ArrayList<AvatarRDRequirement> tmpList = new ArrayList<>();
+        ArrayList<AvatarRDRequirement> tmpNew = new ArrayList<>();
+        tmpList.add(req);
+
+        for (;;) {
+            tmpNew.clear();
+            for (AvatarRDRequirement rq : tmpList) {
+                tmpNew.addAll(getAllImmediateFathers(rq));
+            }
+            tmpList.clear();
+
+            for (AvatarRDRequirement rq : tmpNew) {
+                if (!(met.contains(rq))) {
+                    // TraceManager.addDev("Adding req:" + rq);
+                    met.add(rq);
+                    listOfSons.add(rq);
+                    tmpList.add(rq);
+                    if (rq.getAllReferences().size() > 0) {
+                        // TraceManager.addDev("Adding references of " + rq);
+                    }
+                    for (AvatarRDRequirementReference ref : rq.getAllReferences()) {
+                        AvatarRDRequirement newReq = ref.getReference();
+                        // TraceManager.addDev("Adding son of references = " + newReq);
+                        if (newReq != null) {
+                            if (!(met.contains(newReq))) {
+                                listOfSons.add(newReq);
+                                tmpList.add(newReq);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            /*
+             * for (AvatarRDRequirement rq : tmpNew) { if (!(met.contains(rq))) {
+             * met.add(rq); listOfSons.add(rq); tmpList.add(rq); } }
+             */
+
+            if (tmpList.size() == 0) {
+                break;
+            }
+        }
+
+        return listOfSons;
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeRefine(AvatarRDRequirement req, int origin) {
+        ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
+
+        // We parse all AvatarRDVerifyConnector
+        ListIterator iterator = getComponentList().listIterator();
+        TGComponent tgc;
+        TGConnectingPoint p1, p2, pother;
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            // TraceManager.addDev("Considering component=" + tgc);
+            if (tgc instanceof AvatarRDRefineConnector) {
+                // TraceManager.addDev("Connector verify");
+                p1 = ((AvatarRDRefineConnector) (tgc)).getTGConnectingPointP1();
+                p2 = ((AvatarRDRefineConnector) (tgc)).getTGConnectingPointP2();
+                pother = null;
+
+                if (origin == 0) {
+                    if (req.belongsToMe(p1)) {
+                        pother = p2;
+                        // TraceManager.addDev("pother = p1");
+                    }
+                } else {
+                    if (req.belongsToMe(p2)) {
+                        pother = p1;
+                        // TraceManager.addDev("pother = p1");
+                    }
+                }
+                // TraceManager.addDev("pother computed");
+
+                // TraceManager.addDev("pother=" + pother);
+
+                if (pother != null) {
+                    TGComponent foundC = getComponentToWhichBelongs(pother);
+                    // TraceManager.addDev("FoundC=" + foundC);
+                    if (foundC instanceof AvatarRDRequirement) {
+                        // TraceManager.addDev("Adding foundC");
+                        listOfProps.add((AvatarRDRequirement) foundC);
+                    }
+                }
+            }
+        }
+
+        return listOfProps;
+
+    }
+
+    public ArrayList<AvatarRDRequirement> getAllMeDerive(AvatarRDRequirement req, int origin) {
+        ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
+
+        // We parse all AvatarRDVerifyConnector
+        ListIterator iterator = getComponentList().listIterator();
+        TGComponent tgc;
+        TGConnectingPoint p1, p2, pother;
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            // TraceManager.addDev("Considering component=" + tgc);
+            if (tgc instanceof AvatarRDDeriveConnector) {
+                // TraceManager.addDev("Connector verify");
+                p1 = ((AvatarRDDeriveConnector) (tgc)).getTGConnectingPointP1();
+                p2 = ((AvatarRDDeriveConnector) (tgc)).getTGConnectingPointP2();
+                pother = null;
+
+                if (origin == 0) {
+                    if (req.belongsToMe(p1)) {
+                        pother = p2;
+                        // TraceManager.addDev("pother = p1");
+                    }
+                } else {
+                    if (req.belongsToMe(p2)) {
+                        pother = p1;
+                        // TraceManager.addDev("pother = p1");
+                    }
+                }
+                // TraceManager.addDev("pother computed");
+
+                // TraceManager.addDev("pother=" + pother);
+
+                if (pother != null) {
+                    TGComponent foundC = getComponentToWhichBelongs(pother);
+                    // TraceManager.addDev("FoundC=" + foundC);
+                    if (foundC instanceof AvatarRDRequirement) {
+                        // TraceManager.addDev("Adding foundC");
+                        listOfProps.add((AvatarRDRequirement) foundC);
+                    }
+                }
+            }
+        }
+
+        return listOfProps;
+
+    }
+
+    public void updateReferences() {
+        ListIterator iterator = getComponentList().listIterator();
+        while (iterator.hasNext()) {
+            TGComponent tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof AvatarRDRequirementReference) {
+                ((AvatarRDRequirementReference) tgc).updateReference();
+            }
+        }
+    }
 }

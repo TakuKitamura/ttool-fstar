@@ -53,27 +53,27 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public abstract class ADDNode extends TGCWithInternalComponent {
-  protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+    protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
 
-  public ADDNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-  }
-
-  public ArrayList<ADDArtifact> getAllADDArtifacts() {
-    ArrayList<ADDArtifact> artifacts = new ArrayList<ADDArtifact>();
-
-    for (int i = 0; i < nbInternalTGComponent; i++) {
-      if (tgcomponent[i] instanceof ADDArtifact) {
-        artifacts.add((ADDArtifact) (tgcomponent[i]));
-      }
+    public ADDNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
-    return artifacts;
-  }
+    public ArrayList<ADDArtifact> getAllADDArtifacts() {
+        ArrayList<ADDArtifact> artifacts = new ArrayList<ADDArtifact>();
 
-  public int getClockRatio() {
-    return clockRatio;
-  }
+        for (int i = 0; i < nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof ADDArtifact) {
+                artifacts.add((ADDArtifact) (tgcomponent[i]));
+            }
+        }
+
+        return artifacts;
+    }
+
+    public int getClockRatio() {
+        return clockRatio;
+    }
 
 }

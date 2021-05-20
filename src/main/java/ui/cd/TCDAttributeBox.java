@@ -56,49 +56,49 @@ import java.util.List;
  */
 public class TCDAttributeBox extends TGCAttributeBox {
 
-  public TCDAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "Tclass attributes";
-    value = "";
+        name = "Tclass attributes";
+        value = "";
 
-    attributeText = "Attribute";
+        attributeText = "Attribute";
 
-    attributes = true; // It contains attributes
+        attributes = true; // It contains attributes
 
-    addTGConnectingPointsCommentCorner();
+        addTGConnectingPointsCommentCorner();
 
-    myColor = ColorManager.ATTRIBUTE_BOX;
+        myColor = ColorManager.ATTRIBUTE_BOX;
 
-    myImageIcon = IconManager.imgic118;
-  }
-
-  protected void setJDialogOptions(JDialogAttribute jda) {
-    jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
-    jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-    jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
-    jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
-    jda.addType(TAttribute.getStringType(TAttribute.QUEUE_NAT), true);
-    jda.addType(TAttribute.getStringType(TAttribute.ARRAY_NAT), true);
-
-    // jda.enableInitialValue(true);
-    jda.enableRTLOTOSKeyword(false);
-    jda.enableJavaKeyword(false);
-    // jda.enableOtherTypes(true);
-
-    List<TGComponent> ll = tdp.getComponentList();
-    Iterator<TGComponent> iterator = ll.listIterator();
-    TGComponent tgc;
-    while (iterator.hasNext()) {
-      tgc = iterator.next();
-      if (tgc instanceof TCDTData) {
-        jda.addType(tgc.getValue(), false);
-      }
+        myImageIcon = IconManager.imgic118;
     }
-  }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_ASSOCIATION;
-  }
+    protected void setJDialogOptions(JDialogAttribute jda) {
+        jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+        jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+        jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
+        jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
+        jda.addType(TAttribute.getStringType(TAttribute.QUEUE_NAT), true);
+        jda.addType(TAttribute.getStringType(TAttribute.ARRAY_NAT), true);
+
+        // jda.enableInitialValue(true);
+        jda.enableRTLOTOSKeyword(false);
+        jda.enableJavaKeyword(false);
+        // jda.enableOtherTypes(true);
+
+        List<TGComponent> ll = tdp.getComponentList();
+        Iterator<TGComponent> iterator = ll.listIterator();
+        TGComponent tgc;
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+            if (tgc instanceof TCDTData) {
+                jda.addType(tgc.getValue(), false);
+            }
+        }
+    }
+
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_ASSOCIATION;
+    }
 }

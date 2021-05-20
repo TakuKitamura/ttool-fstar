@@ -53,95 +53,95 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TADTimeCapture extends TADOneLineText/* Issue #69 TGCOneLineText */ implements ActionStateErrorHighlight {
-  protected int lineLength = 5;
-  protected int textX = 5;
-  protected int textY = 15;
-  protected int arc = 5;
+    protected int lineLength = 5;
+    protected int textX = 5;
+    protected int textY = 15;
+    protected int arc = 5;
 
-  protected int stateAction = 0; // 0: unchecked 1: attribute; 3:unknown
+    protected int stateAction = 0; // 0: unchecked 1: attribute; 3:unknown
 
-  public TADTimeCapture(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TADTimeCapture(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 30;
-    height = 20;
-    minWidth = 30;
+        width = 30;
+        height = 20;
+        minWidth = 30;
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+        addTGConnectingPointsComment();
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    value = "x";
-    name = "Capture time in variable:";
+        value = "x";
+        name = "Capture time in variable:";
 
-    myImageIcon = IconManager.imgic204;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    String myVal = "time -> " + value;
-    int w = g.getFontMetrics().stringWidth(myVal);
-    int w1 = Math.max(minWidth, w + 2 * textX);
-    if ((w1 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w1 / 2, y);
-      width = w1;
-      // updateConnectingPoints();
+        myImageIcon = IconManager.imgic204;
     }
 
-    if (stateAction > 0) {
-      Color c = g.getColor();
-      switch (stateAction) {
-        case ErrorHighlight.ATTRIBUTE:
-          g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
-          break;
-        default:
-          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-      }
-      g.fillRoundRect(x, y, width, height, arc, arc);
-      g.setColor(c);
+    @Override
+    public void internalDrawing(Graphics g) {
+        String myVal = "time -> " + value;
+        int w = g.getFontMetrics().stringWidth(myVal);
+        int w1 = Math.max(minWidth, w + 2 * textX);
+        if ((w1 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w1 / 2, y);
+            width = w1;
+            // updateConnectingPoints();
+        }
+
+        if (stateAction > 0) {
+            Color c = g.getColor();
+            switch (stateAction) {
+                case ErrorHighlight.ATTRIBUTE:
+                    g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            g.fillRoundRect(x, y, width, height, arc, arc);
+            g.setColor(c);
+        }
+
+        g.drawRoundRect(x, y, width, height, arc, arc);
+
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        g.drawString(myVal, x + (width - w) / 2, y + textY);
     }
 
-    g.drawRoundRect(x, y, width, height, arc, arc);
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
 
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
 
-    g.drawString(myVal, x + (width - w) / 2, y + textY);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        return null;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    @Override
+    public int getType() {
+        return TGComponentManager.TAD_TIME_CAPTURE;
     }
 
-    return null;
-  }
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TAD_TIME_CAPTURE;
-  }
-
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-  }
-
-  @Override
-  public void setStateAction(int _stateAction) {
-    stateAction = _stateAction;
-  }
+    @Override
+    public void setStateAction(int _stateAction) {
+        stateAction = _stateAction;
+    }
 }

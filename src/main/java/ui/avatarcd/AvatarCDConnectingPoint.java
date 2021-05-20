@@ -53,53 +53,53 @@ import ui.ucd.UCDUseCase;
  */
 public class AvatarCDConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public AvatarCDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    if (type == TGComponentManager.ACD_COMPOSITION_CONNECTOR) {
-      return true;
+    public AvatarCDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
 
-    if (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR) {
-      return true;
-    }
-
-    if (type == TGComponentManager.CONNECTOR_SPECIA_CD) {
-      return true;
-    }
-
-    return type == TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
-
-  }
-
-  public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
-
-    if ((outPoint != null) && (type == TGComponentManager.CONNECTOR_SPECIA_CD)) {
-      if ((outPoint.getFather() instanceof AvatarCDActorBox)
-          || (outPoint.getFather() instanceof AvatarCDActorStickman)) {
-        if (!((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman))) {
-          return false;
+    @Override
+    public boolean isCompatibleWith(int type) {
+        if (type == TGComponentManager.ACD_COMPOSITION_CONNECTOR) {
+            return true;
         }
-      }
 
-      if ((outPoint.getFather() instanceof AvatarCDBlock)) {
-        if (!((getFather() instanceof AvatarCDBlock))) {
-          return false;
+        if (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR) {
+            return true;
         }
-      }
+
+        if (type == TGComponentManager.CONNECTOR_SPECIA_CD) {
+            return true;
+        }
+
+        return type == TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
+
     }
 
-    if ((outPoint != null) && ((type == TGComponentManager.ACD_COMPOSITION_CONNECTOR)
-        || (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR))) {
-      if ((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman)) {
-        return false;
-      }
-    }
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
 
-    return isCompatibleWith(type);
-  }
+        if ((outPoint != null) && (type == TGComponentManager.CONNECTOR_SPECIA_CD)) {
+            if ((outPoint.getFather() instanceof AvatarCDActorBox)
+                    || (outPoint.getFather() instanceof AvatarCDActorStickman)) {
+                if (!((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman))) {
+                    return false;
+                }
+            }
+
+            if ((outPoint.getFather() instanceof AvatarCDBlock)) {
+                if (!((getFather() instanceof AvatarCDBlock))) {
+                    return false;
+                }
+            }
+        }
+
+        if ((outPoint != null) && ((type == TGComponentManager.ACD_COMPOSITION_CONNECTOR)
+                || (type == TGComponentManager.ACD_AGGREGATION_CONNECTOR))) {
+            if ((getFather() instanceof AvatarCDActorBox) || (getFather() instanceof AvatarCDActorStickman)) {
+                return false;
+            }
+        }
+
+        return isCompatibleWith(type);
+    }
 }

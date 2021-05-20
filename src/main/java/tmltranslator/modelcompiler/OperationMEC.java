@@ -52,54 +52,54 @@ import java.util.List;
  */
 public abstract class OperationMEC implements CCodeGenConstants {
 
-  public static final int MAPP_OPERATION_MEC = 0;
-  public static final int INTL_OPERATION_MEC = 1;
-  public static final int ADAIF_OPERATION_MEC = 2;
-  public static final int CPU_OPERATION_MEC = 3;
-  public static final int FEP_OPERATION_MEC = 4;
-  public static final int CWM_MEC = FEP_OPERATION_MEC + 1;
-  public static final int CWA_MEC = FEP_OPERATION_MEC + 2;
-  public static final int CWL_MEC = FEP_OPERATION_MEC + 3;
-  public static final int CWP_MEC = FEP_OPERATION_MEC + 4;
-  public static final int SUM_MEC = FEP_OPERATION_MEC + 5;
-  public static final int FFT_MEC = FEP_OPERATION_MEC + 6;
+    public static final int MAPP_OPERATION_MEC = 0;
+    public static final int INTL_OPERATION_MEC = 1;
+    public static final int ADAIF_OPERATION_MEC = 2;
+    public static final int CPU_OPERATION_MEC = 3;
+    public static final int FEP_OPERATION_MEC = 4;
+    public static final int CWM_MEC = FEP_OPERATION_MEC + 1;
+    public static final int CWA_MEC = FEP_OPERATION_MEC + 2;
+    public static final int CWL_MEC = FEP_OPERATION_MEC + 3;
+    public static final int CWP_MEC = FEP_OPERATION_MEC + 4;
+    public static final int SUM_MEC = FEP_OPERATION_MEC + 5;
+    public static final int FFT_MEC = FEP_OPERATION_MEC + 6;
 
-  private static final String[] CONTEXTS = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT",
-      "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT" };
-  public static final List<String> CONTEXTS_LIST = new ArrayList<String>(Arrays.asList(CONTEXTS));
+    private static final String[] CONTEXTS = { "MAPPER_CONTEXT", "INTL_CONTEXT", "ADAIF_CONTEXT", "EMBB_CONTEXT",
+            "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT", "FEP_CONTEXT" };
+    public static final List<String> CONTEXTS_LIST = new ArrayList<String>(Arrays.asList(CONTEXTS));
 
-  // protected String CR = "\n";
-  // protected String TAB = "\t";
-  protected String name = new String();
-  protected String init_code = new String();
-  protected String exec_code = new String();
-  protected String cleanup_code = new String();
-  protected String context = new String();
+    // protected String CR = "\n";
+    // protected String TAB = "\t";
+    protected String name = new String();
+    protected String init_code = new String();
+    protected String exec_code = new String();
+    protected String cleanup_code = new String();
+    protected String context = new String();
 
-  protected String ID0 = new String();
-  protected String OD0 = new String();
-  protected String XOP = new String();
+    protected String ID0 = new String();
+    protected String OD0 = new String();
+    protected String XOP = new String();
 
-  public ArchUnitMEC archUnitMEC;
+    public ArchUnitMEC archUnitMEC;
 
-  public OperationMEC() {
-    name = "OperationMEC";
-  }
+    public OperationMEC() {
+        name = "OperationMEC";
+    }
 
-  public String getExecCode() {
-    return exec_code;
-  }
+    public String getExecCode() {
+        return exec_code;
+    }
 
-  public String getInitCode() {
-    return init_code;
-  }
-  //
-  // public String getContext() {
-  // return context;
-  // }
+    public String getInitCode() {
+        return init_code;
+    }
+    //
+    // public String getContext() {
+    // return context;
+    // }
 
-  @Override
-  public String toString() {
-    return name;
-  }
+    @Override
+    public String toString() {
+        return name;
+    }
 } // End of class

@@ -53,113 +53,113 @@ import java.io.StringReader;
  */
 public class FormatManager {
 
-  // Simulation (RTL)
-  public static int nbActionSimulation(String data) {
-    int nbAction = 0;
-    int index;
+    // Simulation (RTL)
+    public static int nbActionSimulation(String data) {
+        int nbAction = 0;
+        int index;
 
-    StringReader sr = new StringReader(data);
-    BufferedReader br = new BufferedReader(sr);
-    String s;
+        StringReader sr = new StringReader(data);
+        BufferedReader br = new BufferedReader(sr);
+        String s;
 
-    try {
-      while ((s = br.readLine()) != null) {
-        index = s.indexOf('(');
-        if (index != -1) {
-          nbAction++;
+        try {
+            while ((s = br.readLine()) != null) {
+                index = s.indexOf('(');
+                if (index != -1) {
+                    nbAction++;
+                }
+            }
+        } catch (Exception e) {
+
         }
-      }
-    } catch (Exception e) {
-
+        return nbAction;
     }
-    return nbAction;
-  }
 
-  // DTA (RTL)
-  public static Point nbStateTransitionDTA(String data) {
-    int nbState = 0;
-    int nbTransition = 0;
-    int index;
-    String s1, s2;
+    // DTA (RTL)
+    public static Point nbStateTransitionDTA(String data) {
+        int nbState = 0;
+        int nbTransition = 0;
+        int index;
+        String s1, s2;
 
-    StringReader sr = new StringReader(data);
-    BufferedReader br = new BufferedReader(sr);
-    String s;
+        StringReader sr = new StringReader(data);
+        BufferedReader br = new BufferedReader(sr);
+        String s;
 
-    try {
-      while ((s = br.readLine()) != null) {
-        index = s.indexOf("arcs");
-        if (index != -1) {
-          //
-          s1 = s.substring(0, s.indexOf(" states,"));
-          //
-          nbState = Integer.parseInt(s1);
-          s2 = s.substring(s.indexOf("states,") + 8, index - 1);
-          //
-          nbTransition = Integer.parseInt(s2);
+        try {
+            while ((s = br.readLine()) != null) {
+                index = s.indexOf("arcs");
+                if (index != -1) {
+                    //
+                    s1 = s.substring(0, s.indexOf(" states,"));
+                    //
+                    nbState = Integer.parseInt(s1);
+                    s2 = s.substring(s.indexOf("states,") + 8, index - 1);
+                    //
+                    nbTransition = Integer.parseInt(s2);
+                }
+            }
+        } catch (Exception e) {
+
         }
-      }
-    } catch (Exception e) {
-
+        return new Point(nbState, nbTransition);
     }
-    return new Point(nbState, nbTransition);
-  }
 
-  // RG (RTL) -> default format
-  public static Point nbStateTransitionRGDefault(String data) {
-    int nbState = 0;
-    int nbTransition = 0;
-    int index;
+    // RG (RTL) -> default format
+    public static Point nbStateTransitionRGDefault(String data) {
+        int nbState = 0;
+        int nbTransition = 0;
+        int index;
 
-    StringReader sr = new StringReader(data);
-    BufferedReader br = new BufferedReader(sr);
-    String s;
+        StringReader sr = new StringReader(data);
+        BufferedReader br = new BufferedReader(sr);
+        String s;
 
-    try {
-      while ((s = br.readLine()) != null) {
-        index = s.indexOf("(");
-        if (index == 0)
-          nbTransition++;
-        else
-          nbState++;
-      }
-    } catch (Exception e) {
+        try {
+            while ((s = br.readLine()) != null) {
+                index = s.indexOf("(");
+                if (index == 0)
+                    nbTransition++;
+                else
+                    nbState++;
+            }
+        } catch (Exception e) {
 
-    }
-    return new Point(nbState, nbTransition);
-  }
-
-  // RG (RTL) -> default format
-  public static Point nbStateTransitionRGAldebaran(String data) {
-    int nbState = 0;
-    int nbTransition = 0;
-    int index;
-    String s1, s2;
-
-    StringReader sr = new StringReader(data);
-    BufferedReader br = new BufferedReader(sr);
-    String s;
-
-    try {
-      while ((s = br.readLine()) != null) {
-        index = s.indexOf("des");
-        //
-        if (index == 0) {
-          //
-          s1 = s.substring(s.indexOf(',') + 1, s.length());
-          s1 = s1.substring(0, s1.indexOf(','));
-          s1 = Conversion.removeFirstSpaces(s1);
-          nbTransition = Integer.parseInt(s1);
-          s2 = s.substring(s.indexOf(",") + 1, s.indexOf(')'));
-          s2 = s2.substring(s2.indexOf(",") + 1, s2.length());
-          s2 = Conversion.removeFirstSpaces(s2);
-          nbState = Integer.parseInt(s2);
-          break;
         }
-      }
-    } catch (Exception e) {
-
+        return new Point(nbState, nbTransition);
     }
-    return new Point(nbState, nbTransition);
-  }
+
+    // RG (RTL) -> default format
+    public static Point nbStateTransitionRGAldebaran(String data) {
+        int nbState = 0;
+        int nbTransition = 0;
+        int index;
+        String s1, s2;
+
+        StringReader sr = new StringReader(data);
+        BufferedReader br = new BufferedReader(sr);
+        String s;
+
+        try {
+            while ((s = br.readLine()) != null) {
+                index = s.indexOf("des");
+                //
+                if (index == 0) {
+                    //
+                    s1 = s.substring(s.indexOf(',') + 1, s.length());
+                    s1 = s1.substring(0, s1.indexOf(','));
+                    s1 = Conversion.removeFirstSpaces(s1);
+                    nbTransition = Integer.parseInt(s1);
+                    s2 = s.substring(s.indexOf(",") + 1, s.indexOf(')'));
+                    s2 = s2.substring(s2.indexOf(",") + 1, s2.length());
+                    s2 = Conversion.removeFirstSpaces(s2);
+                    nbState = Integer.parseInt(s2);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return new Point(nbState, nbTransition);
+    }
 }

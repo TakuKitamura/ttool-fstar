@@ -45,111 +45,111 @@ package sddescription;
  * @author Ludovic APVRILLE
  */
 public class Evt {
-  public final static int SYNC = 0;
-  public final static int SEND_SYNC = 1;
-  public final static int RECV_SYNC = 2;
-  public final static int RET_SYNC = 3;
-  public final static int WAIT_RET_SYNC = 4;
-  public final static int TIMER_SET = 5;
-  public final static int TIMER_RESET = 6;
-  public final static int TIMER_EXP = 7;
-  public final static int INTERNAL_ACTION = 8;
-  public final static int SEND_MSG = 9;
-  public final static int RECV_MSG = 10;
-  public final static int VARIABLE_SET = 11;
-  public final static int TIME_INTERVAL = 12;
-  public final static int GUARD = 13;
-  public final static int ELSE_GUARD = 14;
-  public final static int END_GUARD = 15;
+    public final static int SYNC = 0;
+    public final static int SEND_SYNC = 1;
+    public final static int RECV_SYNC = 2;
+    public final static int RET_SYNC = 3;
+    public final static int WAIT_RET_SYNC = 4;
+    public final static int TIMER_SET = 5;
+    public final static int TIMER_RESET = 6;
+    public final static int TIMER_EXP = 7;
+    public final static int INTERNAL_ACTION = 8;
+    public final static int SEND_MSG = 9;
+    public final static int RECV_MSG = 10;
+    public final static int VARIABLE_SET = 11;
+    public final static int TIME_INTERVAL = 12;
+    public final static int GUARD = 13;
+    public final static int ELSE_GUARD = 14;
+    public final static int END_GUARD = 15;
 
-  /* actionId */
+    /* actionId */
 
-  /* Timers */
-  /* set: actionId = "timer;duration" */
-  /* reset: actionId = "timer" */
-  /* exp: actionId = "timer" */
+    /* Timers */
+    /* set: actionId = "timer;duration" */
+    /* reset: actionId = "timer" */
+    /* exp: actionId = "timer" */
 
-  private int type;
-  private String actionId;
-  private Instance instance;
-  public int y; /* used for graphical evts */
-  private int id; /* used for loading MSCs only */
-  private Evt relatedEvt;
+    private int type;
+    private String actionId;
+    private Instance instance;
+    public int y; /* used for graphical evts */
+    private int id; /* used for loading MSCs only */
+    private Evt relatedEvt;
 
-  public Evt(int _type, String _actionId, Instance _instance) {
-    type = _type;
-    actionId = _actionId;
-    instance = _instance;
-  }
-
-  public void setID(int _id) {
-    id = _id;
-  }
-
-  public int getID() {
-    return id;
-  }
-
-  public void setRelatedEvt(Evt _relatedEvt) {
-    relatedEvt = _relatedEvt;
-  }
-
-  public Evt getRelatedEvt() {
-    return relatedEvt;
-  }
-
-  public int getType() {
-    return type;
-  }
-
-  public boolean isAGuardEvt() {
-    return ((type == GUARD) || (type == ELSE_GUARD) || (type == END_GUARD));
-  }
-
-  public String getActionId() {
-    return actionId;
-  }
-
-  public Instance getInstance() {
-    return instance;
-  }
-
-  public String getTimerName() {
-    if (actionId == null) {
-      return "";
+    public Evt(int _type, String _actionId, Instance _instance) {
+        type = _type;
+        actionId = _actionId;
+        instance = _instance;
     }
 
-    int index = actionId.indexOf(';');
-    if (index == -1) {
-      return actionId;
+    public void setID(int _id) {
+        id = _id;
     }
 
-    return actionId.substring(0, index);
-
-  }
-
-  public String getTimerValue() {
-    if (actionId == null) {
-      return "";
+    public int getID() {
+        return id;
     }
 
-    int index = actionId.indexOf(';');
-    if (index == -1) {
-      return "";
+    public void setRelatedEvt(Evt _relatedEvt) {
+        relatedEvt = _relatedEvt;
     }
 
-    return actionId.substring(index + 1, actionId.length());
-  }
+    public Evt getRelatedEvt() {
+        return relatedEvt;
+    }
 
-  public boolean isSendingEvt() {
-    return (type == SEND_SYNC) || (type == SEND_MSG);
-  }
+    public int getType() {
+        return type;
+    }
 
-  public boolean isReceivingEvt() {
-    return (type == RECV_SYNC) || (type == RECV_MSG);
-  }
+    public boolean isAGuardEvt() {
+        return ((type == GUARD) || (type == ELSE_GUARD) || (type == END_GUARD));
+    }
 
-  public String toString() {
-    return "evt of type " + type + ", action=" + actionId + " of instance " + instance;
-  }
+    public String getActionId() {
+        return actionId;
+    }
+
+    public Instance getInstance() {
+        return instance;
+    }
+
+    public String getTimerName() {
+        if (actionId == null) {
+            return "";
+        }
+
+        int index = actionId.indexOf(';');
+        if (index == -1) {
+            return actionId;
+        }
+
+        return actionId.substring(0, index);
+
+    }
+
+    public String getTimerValue() {
+        if (actionId == null) {
+            return "";
+        }
+
+        int index = actionId.indexOf(';');
+        if (index == -1) {
+            return "";
+        }
+
+        return actionId.substring(index + 1, actionId.length());
+    }
+
+    public boolean isSendingEvt() {
+        return (type == SEND_SYNC) || (type == SEND_MSG);
+    }
+
+    public boolean isReceivingEvt() {
+        return (type == RECV_SYNC) || (type == RECV_MSG);
+    }
+
+    public String toString() {
+        return "evt of type " + type + ", action=" + actionId + " of instance " + instance;
+    }
 }

@@ -51,424 +51,429 @@ import java.util.HashMap;
  * @author Ludovic APVRILLE
  */
 public class Plugin {
-  private String path;
-  private String name;
-  private String packageName;
-  private File file;
-  private HashMap<String, Class> listOfClasses;
-  private Class classAvatarCodeGenerator;
-  private Class classDiplodocusCodeGenerator;
-  private Class classFPGAScheduling;
-  private Class classGraphicalComponent;
-  private Class classCommandLineInterface;
+    private String path;
+    private String name;
+    private String packageName;
+    private File file;
+    private HashMap<String, Class> listOfClasses;
+    private Class classAvatarCodeGenerator;
+    private Class classDiplodocusCodeGenerator;
+    private Class classFPGAScheduling;
+    private Class classGraphicalComponent;
+    private Class classCommandLineInterface;
 
-  public Plugin(String _path, String _name, String _packageName) {
-    path = _path;
-    name = _name;
-    packageName = _packageName.trim();
-    listOfClasses = new HashMap<String, Class>();
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getPackageName() {
-    return packageName;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  public boolean hasAvatarCodeGenerator() {
-    String ret = null;
-    try {
-      ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
-      if (ret != null) {
-        classAvatarCodeGenerator = getClass(ret);
-        return true;
-      }
-    } catch (Exception e) {
-      return false;
+    public Plugin(String _path, String _name, String _packageName) {
+        path = _path;
+        name = _name;
+        packageName = _packageName.trim();
+        listOfClasses = new HashMap<String, Class>();
     }
 
-    return false;
-  }
-
-  public boolean hasDiplodocusCodeGenerator() {
-    String ret = executeRetStringMethod(removeJar(name), "hasDiplodocusCodeGenerator");
-    if (ret != null) {
-      classDiplodocusCodeGenerator = getClass(ret);
-      return true;
+    public String getName() {
+        return name;
     }
 
-    return false;
-  }
-
-  public boolean hasFPGAScheduling() {
-    String ret = executeRetStringMethod(removeJar(name), "hasFPGAScheduling");
-    if (ret != null) {
-      TraceManager.addDev("classFPGAScheduling=" + getClass(ret));
-      classFPGAScheduling = getClass(ret);
-      return true;
+    public String getPackageName() {
+        return packageName;
     }
 
-    return false;
-  }
-
-  public String getDiplodocusCodeGeneratorIdentifier() {
-    String desc = executeRetStringMethod(classDiplodocusCodeGenerator, "getIdentifier");
-    return desc;
-  }
-
-  public String getFPGASchedulingIdentifier() {
-    TraceManager.addDev(
-        "Calling method getFPGASchedulingIdentifier in class " + classFPGAScheduling + " of plugin " + getName());
-    String desc = executeRetStringMethod(classFPGAScheduling, "getFPGASchedulingIdentifier");
-    return desc;
-  }
-
-  public boolean hasCommandLineInterface() {
-    String ret = executeRetStringMethod(removeJar(name), "hasCommandLineInterface");
-    if (ret != null) {
-      classCommandLineInterface = getClass(ret);
-      return true;
+    public String getPath() {
+        return path;
     }
 
-    return false;
-  }
-
-  public String getCommandLineInterfaceFunctions() {
-    String ret = executeRetStringMethod(removeJar(name), "getCommandsOfCommandLineInterface");
-    if (ret != null) {
-      return ret;
-    }
-
-    return "";
-  }
-
-  public String getHelpOnCommandLineInterfaceFunction(String command) {
-    if (classCommandLineInterface == null) {
-      hasCommandLineInterface();
-    }
-    if (classCommandLineInterface == null) {
-      return "";
-    }
-
-    String ret = executeStaticRetStringOneStringMethod(classCommandLineInterface,
-        "getHelpOnCommandLineInterfaceFunction", command);
-    if (ret != null) {
-      return ret;
-    }
-
-    return "";
-  }
-
-  public ImageIcon getDiplodocusCodeGeneratorLogo() {
-    String mName = "getLogoImage";
-    // TraceManager.addDev("Getting image with method=" + mName);
-    ImageIcon img = executeRetImageIconMethod(classDiplodocusCodeGenerator, mName);
-    return img;
-  }
-
-  public boolean hasGraphicalComponent() {
-    String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
-    if (ret != null) {
-      classGraphicalComponent = getClass(ret);
-      String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
-      if (diagOk != null) {
-        return true;
-      }
-    }
-    classGraphicalComponent = null;
-    return false;
-  }
-
-  public boolean hasGraphicalComponent(String _diagID) {
-    // TraceManager.addDev("Test GC with diag=" + _diagID);
-    // TraceManager.addDev("Executing hasGraphicalComponent in plugin " +
-    // getName());
-    String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
-    // TraceManager.addDev("Executed hasGraphicalComponent in plugin " + getName() +
-    // " ret=" +ret);
-
-    if (ret != null) {
-      classGraphicalComponent = getClass(ret);
-      // TraceManager.addDev("Executing getPanelClassName in plugin " + getName());
-      String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
-      // TraceManager.addDev("Executed getPanelClassName in plugin " + getName());
-      if (diagOk != null) {
-        if (diagOk.compareTo(_diagID) == 0) {
-          // TraceManager.addDev("Found graphical component in plugin:" + name);
-          return true;
-        }
-      }
-    }
-    classGraphicalComponent = null;
-
-    return false;
-  }
-
-  public Class getClassAvatarCodeGenerator() {
-    return classAvatarCodeGenerator;
-  }
-
-  public Class getClassGraphicalComponent() {
-    return classGraphicalComponent;
-  }
-
-  public Class getClassDiplodocusCodeGenerator() {
-    return classDiplodocusCodeGenerator;
-  }
-
-  public Class getClassFPGAScheduling() {
-    return classFPGAScheduling;
-  }
-
-  public Class getClass(String _className) {
-    Class<?> c = listOfClasses.get(_className);
-    if (c != null) {
-      return c;
-    }
-
-    try {
-      if (c == null) {
-        file = new File(path + java.io.File.separator + name);
-        TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
-        URL[] urls = new URL[] { file.toURI().toURL() };
-        ClassLoader loader = new URLClassLoader(urls);
-        // TraceManager.addDev("getClass() Loader created");
-        if ((packageName == null) || (packageName.length() == 0)) {
-          c = loader.loadClass(_className);
-        } else {
-          c = loader.loadClass(packageName + "." + _className);
-        }
-        // TraceManager.addDev("getClass() class loaded");
-        if (c == null) {
-          return null;
-        }
-        listOfClasses.put(_className, c);
-        return c;
-      }
-
-    } catch (Exception e) {
-      // TraceManager.addDev("getClass()\n");
-      // e.printStackTrace(System.out);
-      TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
-      return null;
-    }
-
-    return null;
-  }
-
-  public Method getMethod(String _className, String _methodName) {
-    Class<?> c = listOfClasses.get(_className);
-
-    try {
-      if (c == null) {
-        file = new File(path + java.io.File.separator + name);
-        // TraceManager.addDev("Loading plugin=" + path + java.io.File.separator +
-        // name);
-        URL[] urls = new URL[] { file.toURI().toURL() };
-        ClassLoader loader = new URLClassLoader(urls);
-        // TraceManager.addDev("Loader created");
-        if ((packageName == null) || (packageName.length() == 0)) {
-          c = loader.loadClass(_className);
-        } else {
-          c = loader.loadClass(packageName + "." + _className);
+    public boolean hasAvatarCodeGenerator() {
+        String ret = null;
+        try {
+            ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
+            if (ret != null) {
+                classAvatarCodeGenerator = getClass(ret);
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
         }
 
-        // TraceManager.addDev( "Class loaded" );
-        if (c == null) {
-          return null;
+        return false;
+    }
+
+    public boolean hasDiplodocusCodeGenerator() {
+        String ret = executeRetStringMethod(removeJar(name), "hasDiplodocusCodeGenerator");
+        if (ret != null) {
+            classDiplodocusCodeGenerator = getClass(ret);
+            return true;
         }
-        listOfClasses.put(_className, c);
-      }
 
-      return c.getMethod(_methodName);
-    } catch (Exception e) {
-      // e.printStackTrace( System.out );
-      TraceManager.addDev(
-          "Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
-      return null;
+        return false;
     }
 
-  }
+    public boolean hasFPGAScheduling() {
+        String ret = executeRetStringMethod(removeJar(name), "hasFPGAScheduling");
+        if (ret != null) {
+            TraceManager.addDev("classFPGAScheduling=" + getClass(ret));
+            classFPGAScheduling = getClass(ret);
+            return true;
+        }
 
-  public String executeRetStringMethod(String _className, String _methodName) {
-    // We have a valid plugin. We now need to get the Method
-    TraceManager.addDev("-------- Getting " + _methodName + " of class " + _className);
-    Method m = getMethod(_className, _methodName);
-    TraceManager.addDev("-------- Got " + _methodName + " of class " + _className);
-    if (m == null) {
-      TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
-      return null;
+        return false;
     }
 
-    try {
-      return (String) (m.invoke(null));
-    } catch (Exception e) {
-      TraceManager.addDev("Exception occurred when executing method " + _methodName + " in class=" + _className);
-      return null;
+    public String getDiplodocusCodeGeneratorIdentifier() {
+        String desc = executeRetStringMethod(classDiplodocusCodeGenerator, "getIdentifier");
+        return desc;
     }
-  }
 
-  public String executeRetStringMethod(Class<?> c, String _methodName) {
-    // We have a valid plugin. We now need to get the Method
+    public String getFPGASchedulingIdentifier() {
+        TraceManager.addDev("Calling method getFPGASchedulingIdentifier in class " + classFPGAScheduling + " of plugin "
+                + getName());
+        String desc = executeRetStringMethod(classFPGAScheduling, "getFPGASchedulingIdentifier");
+        return desc;
+    }
 
-    try {
-      // TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
-      Method m = c.getMethod(_methodName);
+    public boolean hasCommandLineInterface() {
+        String ret = executeRetStringMethod(removeJar(name), "hasCommandLineInterface");
+        if (ret != null) {
+            classCommandLineInterface = getClass(ret);
+            return true;
+        }
 
-      if (m == null) {
-        // TraceManager.addDev("Null method in executeRetStringMethod with Class
-        // parameter");
+        return false;
+    }
+
+    public String getCommandLineInterfaceFunctions() {
+        String ret = executeRetStringMethod(removeJar(name), "getCommandsOfCommandLineInterface");
+        if (ret != null) {
+            return ret;
+        }
+
+        return "";
+    }
+
+    public String getHelpOnCommandLineInterfaceFunction(String command) {
+        if (classCommandLineInterface == null) {
+            hasCommandLineInterface();
+        }
+        if (classCommandLineInterface == null) {
+            return "";
+        }
+
+        String ret = executeStaticRetStringOneStringMethod(classCommandLineInterface,
+                "getHelpOnCommandLineInterfaceFunction", command);
+        if (ret != null) {
+            return ret;
+        }
+
+        return "";
+    }
+
+    public ImageIcon getDiplodocusCodeGeneratorLogo() {
+        String mName = "getLogoImage";
+        // TraceManager.addDev("Getting image with method=" + mName);
+        ImageIcon img = executeRetImageIconMethod(classDiplodocusCodeGenerator, mName);
+        return img;
+    }
+
+    public boolean hasGraphicalComponent() {
+        String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
+        if (ret != null) {
+            classGraphicalComponent = getClass(ret);
+            String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
+            if (diagOk != null) {
+                return true;
+            }
+        }
+        classGraphicalComponent = null;
+        return false;
+    }
+
+    public boolean hasGraphicalComponent(String _diagID) {
+        // TraceManager.addDev("Test GC with diag=" + _diagID);
+        // TraceManager.addDev("Executing hasGraphicalComponent in plugin " +
+        // getName());
+        String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
+        // TraceManager.addDev("Executed hasGraphicalComponent in plugin " + getName() +
+        // " ret=" +ret);
+
+        if (ret != null) {
+            classGraphicalComponent = getClass(ret);
+            // TraceManager.addDev("Executing getPanelClassName in plugin " + getName());
+            String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
+            // TraceManager.addDev("Executed getPanelClassName in plugin " + getName());
+            if (diagOk != null) {
+                if (diagOk.compareTo(_diagID) == 0) {
+                    // TraceManager.addDev("Found graphical component in plugin:" + name);
+                    return true;
+                }
+            }
+        }
+        classGraphicalComponent = null;
+
+        return false;
+    }
+
+    public Class getClassAvatarCodeGenerator() {
+        return classAvatarCodeGenerator;
+    }
+
+    public Class getClassGraphicalComponent() {
+        return classGraphicalComponent;
+    }
+
+    public Class getClassDiplodocusCodeGenerator() {
+        return classDiplodocusCodeGenerator;
+    }
+
+    public Class getClassFPGAScheduling() {
+        return classFPGAScheduling;
+    }
+
+    public Class getClass(String _className) {
+        Class<?> c = listOfClasses.get(_className);
+        if (c != null) {
+            return c;
+        }
+
+        try {
+            if (c == null) {
+                file = new File(path + java.io.File.separator + name);
+                TraceManager.addDev("Loading plugin=" + path + java.io.File.separator + name);
+                URL[] urls = new URL[] { file.toURI().toURL() };
+                ClassLoader loader = new URLClassLoader(urls);
+                // TraceManager.addDev("getClass() Loader created");
+                if ((packageName == null) || (packageName.length() == 0)) {
+                    c = loader.loadClass(_className);
+                } else {
+                    c = loader.loadClass(packageName + "." + _className);
+                }
+                // TraceManager.addDev("getClass() class loaded");
+                if (c == null) {
+                    return null;
+                }
+                listOfClasses.put(_className, c);
+                return c;
+            }
+
+        } catch (Exception e) {
+            // TraceManager.addDev("getClass()\n");
+            // e.printStackTrace(System.out);
+            TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+            return null;
+        }
+
         return null;
-      }
-      return (String) (m.invoke(null));
-    } catch (Exception e) {
-      TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
-      return null;
     }
-  }
 
-  public static int executeIntMethod(Object instance, String _methodName) throws Exception {
-    Class[] cArg = new Class[0];
-    Method method = instance.getClass().getMethod(_methodName, cArg);
-    return (int) (method.invoke(instance));
-  }
+    public Method getMethod(String _className, String _methodName) {
+        Class<?> c = listOfClasses.get(_className);
 
-  public static boolean executeBoolMethod(Object instance, String _methodName) throws Exception {
-    Class[] cArg = new Class[0];
-    Method method = instance.getClass().getMethod(_methodName, cArg);
-    return (boolean) (method.invoke(instance));
-  }
+        try {
+            if (c == null) {
+                file = new File(path + java.io.File.separator + name);
+                // TraceManager.addDev("Loading plugin=" + path + java.io.File.separator +
+                // name);
+                URL[] urls = new URL[] { file.toURI().toURL() };
+                ClassLoader loader = new URLClassLoader(urls);
+                // TraceManager.addDev("Loader created");
+                if ((packageName == null) || (packageName.length() == 0)) {
+                    c = loader.loadClass(_className);
+                } else {
+                    c = loader.loadClass(packageName + "." + _className);
+                }
 
-  public static boolean executeBoolStringMethod(Object instance, String value, String _methodName, String options)
-      throws Exception {
-    Class[] cArg = new Class[2];
-    cArg[0] = String.class;
-    cArg[1] = String.class;
-    // TraceManager.addDev("Looking for method=" + _methodName + " in instance " +
-    // instance);
-    Method method = instance.getClass().getMethod(_methodName, cArg);
-    return (boolean) (method.invoke(instance, value, options));
-  }
+                // TraceManager.addDev( "Class loaded" );
+                if (c == null) {
+                    return null;
+                }
+                listOfClasses.put(_className, c);
+            }
 
-  public static void executeOneStringMethod(Object instance, String value, String _methodName) throws Exception {
-    Class[] cArg = new Class[1];
-    cArg[0] = String.class;
+            return c.getMethod(_methodName);
+        } catch (Exception e) {
+            // e.printStackTrace( System.out );
+            TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method "
+                    + _methodName);
+            return null;
+        }
 
-    // TraceManager.addDev("Looking for method=" + _methodName + " in instance " +
-    // instance);
-    Method method = instance.getClass().getMethod(_methodName, cArg);
-    method.invoke(instance, value);
-  }
+    }
 
-  public static String executeStaticRetStringOneStringMethod(Class<?> c, String _methodName, String value) {
-    try {
-      Class[] cArg = new Class[1];
-      cArg[0] = String.class;
-      // TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName()
-      // + ">");
-      Method m = c.getMethod(_methodName, cArg);
+    public String executeRetStringMethod(String _className, String _methodName) {
+        // We have a valid plugin. We now need to get the Method
+        TraceManager.addDev("-------- Getting " + _methodName + " of class " + _className);
+        Method m = getMethod(_className, _methodName);
+        TraceManager.addDev("-------- Got " + _methodName + " of class " + _className);
+        if (m == null) {
+            TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
+            return null;
+        }
 
-      if (m == null) {
-        TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+        try {
+            return (String) (m.invoke(null));
+        } catch (Exception e) {
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " in class=" + _className);
+            return null;
+        }
+    }
+
+    public String executeRetStringMethod(Class<?> c, String _methodName) {
+        // We have a valid plugin. We now need to get the Method
+
+        try {
+            // TraceManager.addDev("Getting " + _methodName + " in class " + c.getName());
+            Method m = c.getMethod(_methodName);
+
+            if (m == null) {
+                // TraceManager.addDev("Null method in executeRetStringMethod with Class
+                // parameter");
+                return null;
+            }
+            return (String) (m.invoke(null));
+        } catch (Exception e) {
+            TraceManager.addDev(
+                    "Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static int executeIntMethod(Object instance, String _methodName) throws Exception {
+        Class[] cArg = new Class[0];
+        Method method = instance.getClass().getMethod(_methodName, cArg);
+        return (int) (method.invoke(instance));
+    }
+
+    public static boolean executeBoolMethod(Object instance, String _methodName) throws Exception {
+        Class[] cArg = new Class[0];
+        Method method = instance.getClass().getMethod(_methodName, cArg);
+        return (boolean) (method.invoke(instance));
+    }
+
+    public static boolean executeBoolStringMethod(Object instance, String value, String _methodName, String options)
+            throws Exception {
+        Class[] cArg = new Class[2];
+        cArg[0] = String.class;
+        cArg[1] = String.class;
+        // TraceManager.addDev("Looking for method=" + _methodName + " in instance " +
+        // instance);
+        Method method = instance.getClass().getMethod(_methodName, cArg);
+        return (boolean) (method.invoke(instance, value, options));
+    }
+
+    public static void executeOneStringMethod(Object instance, String value, String _methodName) throws Exception {
+        Class[] cArg = new Class[1];
+        cArg[0] = String.class;
+
+        // TraceManager.addDev("Looking for method=" + _methodName + " in instance " +
+        // instance);
+        Method method = instance.getClass().getMethod(_methodName, cArg);
+        method.invoke(instance, value);
+    }
+
+    public static String executeStaticRetStringOneStringMethod(Class<?> c, String _methodName, String value) {
+        try {
+            Class[] cArg = new Class[1];
+            cArg[0] = String.class;
+            // TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName()
+            // + ">");
+            Method m = c.getMethod(_methodName, cArg);
+
+            if (m == null) {
+                TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+                return null;
+            }
+            return (String) (m.invoke(null, value));
+        } catch (Exception e) {
+            TraceManager.addDev(
+                    "Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
+            e.printStackTrace(System.out);
+            return null;
+        }
+    }
+
+    public static void executeStaticRetVoidOneStringMethod(Class<?> c, String _methodName, String value) {
+        try {
+            Class[] cArg = new Class[1];
+            cArg[0] = String.class;
+            // TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName()
+            // + ">");
+            Method m = c.getMethod(_methodName, cArg);
+
+            if (m == null) {
+                TraceManager.addDev("Null method in executeRetVoidMethod with Class parameter");
+                return;
+            }
+            m.invoke(null, value);
+        } catch (Exception e) {
+            TraceManager.addDev(
+                    "Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
+            e.printStackTrace(System.out);
+            return;
+        }
+    }
+
+    public String callCommandLineCommand(String _methodName, String[] args) {
+        if (classCommandLineInterface == null) {
+            hasCommandLineInterface();
+            if (classCommandLineInterface == null) {
+                TraceManager.addDev("No class for command line");
+                return null;
+            }
+        }
+
+        return callCommandLineCommand(classCommandLineInterface, _methodName, args);
+    }
+
+    public String callCommandLineCommand(Class<?> c, String _methodName, String[] args) {
+        Class[] cArg = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            cArg[i] = String.class;
+        }
+
+        try {
+            Method m = c.getMethod(_methodName, cArg);
+            switch (args.length) {
+                case 0:
+                    return (String) (m.invoke(null));
+                case 1:
+                    return (String) (m.invoke(null, args[0]));
+                case 2:
+                    return (String) (m.invoke(null, args[0], args[1]));
+                case 3:
+                    return (String) (m.invoke(null, args[0], args[1], args[2]));
+                case 4:
+                    return (String) (m.invoke(null, args[0], args[1], args[2], args[3]));
+
+            }
+
+        } catch (Exception e) {
+            TraceManager
+                    .addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
+            return null;
+        }
         return null;
-      }
-      return (String) (m.invoke(null, value));
-    } catch (Exception e) {
-      TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
-      e.printStackTrace(System.out);
-      return null;
-    }
-  }
-
-  public static void executeStaticRetVoidOneStringMethod(Class<?> c, String _methodName, String value) {
-    try {
-      Class[] cArg = new Class[1];
-      cArg[0] = String.class;
-      // TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName()
-      // + ">");
-      Method m = c.getMethod(_methodName, cArg);
-
-      if (m == null) {
-        TraceManager.addDev("Null method in executeRetVoidMethod with Class parameter");
-        return;
-      }
-      m.invoke(null, value);
-    } catch (Exception e) {
-      TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
-      e.printStackTrace(System.out);
-      return;
-    }
-  }
-
-  public String callCommandLineCommand(String _methodName, String[] args) {
-    if (classCommandLineInterface == null) {
-      hasCommandLineInterface();
-      if (classCommandLineInterface == null) {
-        TraceManager.addDev("No class for command line");
-        return null;
-      }
     }
 
-    return callCommandLineCommand(classCommandLineInterface, _methodName, args);
-  }
+    public ImageIcon executeRetImageIconMethod(Class<?> c, String _methodName) {
+        // We have a valid plugin. We now need to get the Method
+        try {
+            Method m = c.getMethod(_methodName);
+            if (m == null) {
+                return null;
+            }
 
-  public String callCommandLineCommand(Class<?> c, String _methodName, String[] args) {
-    Class[] cArg = new Class[args.length];
-    for (int i = 0; i < args.length; i++) {
-      cArg[i] = String.class;
+            return (ImageIcon) (m.invoke(null));
+        } catch (Exception e) {
+            TraceManager
+                    .addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
+            return null;
+        }
     }
 
-    try {
-      Method m = c.getMethod(_methodName, cArg);
-      switch (args.length) {
-        case 0:
-          return (String) (m.invoke(null));
-        case 1:
-          return (String) (m.invoke(null, args[0]));
-        case 2:
-          return (String) (m.invoke(null, args[0], args[1]));
-        case 3:
-          return (String) (m.invoke(null, args[0], args[1], args[2]));
-        case 4:
-          return (String) (m.invoke(null, args[0], args[1], args[2], args[3]));
+    public String removeJar(String withjar) {
+        int index = withjar.indexOf(".jar");
+        if (index == -1) {
+            return withjar;
+        }
+        return withjar.substring(0, index);
 
-      }
-
-    } catch (Exception e) {
-      TraceManager.addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
-      return null;
     }
-    return null;
-  }
-
-  public ImageIcon executeRetImageIconMethod(Class<?> c, String _methodName) {
-    // We have a valid plugin. We now need to get the Method
-    try {
-      Method m = c.getMethod(_methodName);
-      if (m == null) {
-        return null;
-      }
-
-      return (ImageIcon) (m.invoke(null));
-    } catch (Exception e) {
-      TraceManager.addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
-      return null;
-    }
-  }
-
-  public String removeJar(String withjar) {
-    int index = withjar.indexOf(".jar");
-    if (index == -1) {
-      return withjar;
-    }
-    return withjar.substring(0, index);
-
-  }
 
 }

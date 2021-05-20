@@ -53,116 +53,116 @@ import java.util.Vector;
 
 public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {
 
-  protected int monitored = 0;
-  protected int index = 0;
-  // protected int cluster_index = 0;
+    protected int monitored = 0;
+    protected int index = 0;
+    // protected int cluster_index = 0;
 
-  public ADDRAMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ADDRAMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 200;
-    height = 200;
-    minWidth = 100;
-    minHeight = 35;
+        width = 200;
+        height = 200;
+        minWidth = 100;
+        minHeight = 35;
 
-    nbConnectingPoint = 16;
-    connectingPoint = new TGConnectingPoint[16];
+        nbConnectingPoint = 16;
+        connectingPoint = new TGConnectingPoint[16];
 
-    connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
-    connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
-    connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
-    connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
-    connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-    connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
-    connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
-    connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
+        connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
+        connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+        connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
+        connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+        connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+        connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
+        connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+        connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
 
-    connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
-    connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
-    connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
-    connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
-    connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
-    connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
-    connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
-    connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
+        connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+        connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+        connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+        connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+        connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+        connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 
-    addTGConnectingPointsComment();
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = true;
-    removable = true;
-    userResizable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
+        userResizable = true;
 
-    stereotype = "RAM";
+        stereotype = "RAM";
 
-    name = tdp.findNodeName("Memory");
-    value = "name";
+        name = tdp.findNodeName("Memory");
+        value = "name";
 
-    myImageIcon = IconManager.imgic700;
-  }
-
-  public int getType() {
-    return TGComponentManager.ADD_RAMNODE;
-  }
-
-  public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-    // TraceManager.addDev("Accept swallowed?");
-    return tgc instanceof ADDBlockArtifact;
-  }
-
-  public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-    // TraceManager.addDev("Add swallowed?");
-    // Set its coordinates
-    if (tgc instanceof ADDChannelArtifact) {
-      tgc.setFather(this);
-      tgc.setDrawingZone(true);
-      tgc.resizeWithFather();
-      // TraceManager.addDev("Add swallowed!!!");
-      addInternalComponent(tgc, 0);
-      return true;
+        myImageIcon = IconManager.imgic700;
     }
-    return false;
-  }
 
-  public void removeSwallowedTGComponent(TGComponent tgc) {
-    removeInternalComponent(tgc);
-  }
-
-  public Vector<ADDChannelArtifact> getArtifactList() {
-    Vector<ADDChannelArtifact> v = new Vector<ADDChannelArtifact>();
-
-    for (int i = 0; i < nbInternalTGComponent; i++) {
-      if (tgcomponent[i] instanceof ADDChannelArtifact) {
-        v.add((ADDChannelArtifact) tgcomponent[i]);
-      }
+    public int getType() {
+        return TGComponentManager.ADD_RAMNODE;
     }
-    return v;
-  }
 
-  public void hasBeenResized() {
-    for (int i = 0; i < nbInternalTGComponent; i++) {
-      if (tgcomponent[i] instanceof ADDChannelArtifact) {
-        tgcomponent[i].resizeWithFather();
-      }
+    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+        // TraceManager.addDev("Accept swallowed?");
+        return tgc instanceof ADDBlockArtifact;
     }
-  }
 
-  public int getIndex() {
-    return index;
-  }
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+        // TraceManager.addDev("Add swallowed?");
+        // Set its coordinates
+        if (tgc instanceof ADDChannelArtifact) {
+            tgc.setFather(this);
+            tgc.setDrawingZone(true);
+            tgc.resizeWithFather();
+            // TraceManager.addDev("Add swallowed!!!");
+            addInternalComponent(tgc, 0);
+            return true;
+        }
+        return false;
+    }
 
-  /*
-   * public int getClusterIndex() { return cluster_index; }
-   */
+    public void removeSwallowedTGComponent(TGComponent tgc) {
+        removeInternalComponent(tgc);
+    }
 
-  public int getMonitored() {
-    return monitored;
-  }
+    public Vector<ADDChannelArtifact> getArtifactList() {
+        Vector<ADDChannelArtifact> v = new Vector<ADDChannelArtifact>();
 
-  public void setMonitored(int _monitored) {
-    monitored = _monitored;
-  }
+        for (int i = 0; i < nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof ADDChannelArtifact) {
+                v.add((ADDChannelArtifact) tgcomponent[i]);
+            }
+        }
+        return v;
+    }
+
+    public void hasBeenResized() {
+        for (int i = 0; i < nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof ADDChannelArtifact) {
+                tgcomponent[i].resizeWithFather();
+            }
+        }
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    /*
+     * public int getClusterIndex() { return cluster_index; }
+     */
+
+    public int getMonitored() {
+        return monitored;
+    }
+
+    public void setMonitored(int _monitored) {
+        monitored = _monitored;
+    }
 }

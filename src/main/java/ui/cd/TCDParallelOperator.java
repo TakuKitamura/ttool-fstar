@@ -55,24 +55,24 @@ import ui.TGComponentManager;
  */
 public class TCDParallelOperator extends TCDCompositionOperator {
 
-  public TCDParallelOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDParallelOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "Parallel composition operator";
-    value = "Parallel";
+        name = "Parallel composition operator";
+        value = "Parallel";
 
-    myImageIcon = IconManager.imgic112;
-  }
+        myImageIcon = IconManager.imgic112;
+    }
 
-  /*
-   * public void internalDrawing(Graphics g) { g.drawRect(x, y, width, height);
-   * g.setColor(ColorManager.COMPOSITION_OPERATOR); g.fillRect(x+1, y+1, width-1,
-   * height-1); ColorManager.setColor(g, getState(), 0); g.drawString(value, x +
-   * textX, y + textY); }
-   */
+    /*
+     * public void internalDrawing(Graphics g) { g.drawRect(x, y, width, height);
+     * g.setColor(ColorManager.COMPOSITION_OPERATOR); g.fillRect(x+1, y+1, width-1,
+     * height-1); ColorManager.setColor(g, getState(), 0); g.drawString(value, x +
+     * textX, y + textY); }
+     */
 
-  public int getType() {
-    return TGComponentManager.TCD_PARALLEL_OPERATOR;
-  }
+    public int getType() {
+        return TGComponentManager.TCD_PARALLEL_OPERATOR;
+    }
 }

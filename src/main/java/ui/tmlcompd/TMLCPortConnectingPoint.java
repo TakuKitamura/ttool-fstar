@@ -51,17 +51,17 @@ import ui.TGConnectingPointWidthHeight;
  * @author Ludovic APVRILLE
  */
 public class TMLCPortConnectingPoint extends TGConnectingPointWidthHeight {
-  public TMLCPrimitivePort port;
-  public boolean positionned;
+    public TMLCPrimitivePort port;
+    public boolean positionned;
 
-  public TMLCPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
+    public TMLCPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.CONNECTOR_PORT_TMLC;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.CONNECTOR_PORT_TMLC;
+    }
 
 }

@@ -57,342 +57,344 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class ADDVgmnNode extends ADDCommunicationNode implements WithAttributes {
-  private int textY1 = 15;
-  private int textY2 = 30;
-  private int derivationx = 2;
-  private int derivationy = 3;
-  private String stereotype = "VGMN";
+    private int textY1 = 15;
+    private int textY2 = 30;
+    private int derivationx = 2;
+    private int derivationy = 3;
+    private String stereotype = "VGMN";
 
-  private int index = 0;
-  private int nbOfAttachedInitiators = 0;
-  private int nbOfAttachedTargets = 0;
-  private int fifoDepth = 0;
-  private int minLatency = 0;
+    private int index = 0;
+    private int nbOfAttachedInitiators = 0;
+    private int nbOfAttachedTargets = 0;
+    private int fifoDepth = 0;
+    private int minLatency = 0;
 
-  public ADDVgmnNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ADDVgmnNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 250;
-    height = 50;
-    minWidth = 100;
-    minHeight = 50;
+        width = 250;
+        height = 50;
+        minWidth = 100;
+        minHeight = 50;
 
-    nbConnectingPoint = 16;
-    connectingPoint = new TGConnectingPoint[16];
+        nbConnectingPoint = 16;
+        connectingPoint = new TGConnectingPoint[16];
 
-    connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
-    connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-    connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
-    connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-    connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-    connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
-    connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-    connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
+        connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
+        connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
+        connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
+        connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
 
-    connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-    connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-    connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-    connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-    connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-    connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-    connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-    connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
 
-    addTGConnectingPointsComment();
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = true;
-    removable = true;
-    userResizable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
+        userResizable = true;
 
-    name = tdp.findNodeName("Vgmn");
-    value = "name";
+        name = tdp.findNodeName("Vgmn");
+        value = "name";
 
-    myImageIcon = IconManager.imgic700;
-  }
-
-  public void internalDrawing(Graphics g) {
-    Color c = g.getColor();
-    g.draw3DRect(x, y, width, height, true);
-
-    // Top lines
-    g.drawLine(x, y, x + derivationx, y - derivationy);
-    g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-    g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
-
-    // Right lines
-    g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-    g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
-
-    // Filling color
-    g.setColor(ColorManager.BUS_BOX);
-    g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
-    g.setColor(c);
-
-    // Strings
-    String ster = "<<" + stereotype + ">>";
-    int w = g.getFontMetrics().stringWidth(ster);
-    Font f = g.getFont();
-    g.setFont(f.deriveFont(Font.BOLD));
-    drawSingleString(g, ster, x + (width - w) / 2, y + textY1);
-    g.setFont(f);
-    w = g.getFontMetrics().stringWidth(name);
-    drawSingleString(g, name, x + (width - w) / 2, y + textY2);
-
-    // Icon
-    // g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
-    g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-    // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-  }
-
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-
-    Polygon pol = new Polygon();
-    pol.addPoint(x, y);
-    pol.addPoint(x + derivationx, y - derivationy);
-    pol.addPoint(x + derivationx + width, y - derivationy);
-    pol.addPoint(x + derivationx + width, y + height - derivationy);
-    pol.addPoint(x + width, y + height);
-    pol.addPoint(x, y + height);
-    if (pol.contains(x1, y1)) {
-      return this;
+        myImageIcon = IconManager.imgic700;
     }
 
-    return null;
-  }
+    public void internalDrawing(Graphics g) {
+        Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
 
-  public String getStereotype() {
-    return stereotype;
+        // Top lines
+        g.drawLine(x, y, x + derivationx, y - derivationy);
+        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
+        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
 
-  }
+        // Right lines
+        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
 
-  public String getNodeName() {
-    return name;
-  }
+        // Filling color
+        g.setColor(ColorManager.BUS_BOX);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+        g.setColor(c);
 
-  public boolean editOnDoubleClick(JFrame frame) {
-    boolean error = false;
-    String errors = "";
-    int tmp;
-    String tmpName;
+        // Strings
+        String ster = "<<" + stereotype + ">>";
+        int w = g.getFontMetrics().stringWidth(ster);
+        Font f = g.getFont();
+        g.setFont(f.deriveFont(Font.BOLD));
+        drawSingleString(g, ster, x + (width - w) / 2, y + textY1);
+        g.setFont(f);
+        w = g.getFontMetrics().stringWidth(name);
+        drawSingleString(g, name, x + (width - w) / 2, y + textY2);
 
-    JDialogADDVgmnNode dialog = new JDialogADDVgmnNode(frame, "Setting vgmn attributes", this);
-    // dialog.setSize(500, 450);
-    GraphicLib.centerOnParent(dialog, 500, 450);
-    dialog.setVisible(true); // blocked until dialog has been closed
-
-    if (!dialog.isRegularClose()) {
-      return false;
+        // Icon
+        // g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
+        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
+        // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
-    if (dialog.getNodeName().length() != 0) {
-      tmpName = dialog.getNodeName();
-      tmpName = tmpName.trim();
-      if (!TAttribute.isAValidId(tmpName, false, false, false)) {
-        error = true;
-        errors += "Name of the node  ";
-      } else {
-        name = tmpName;
-      }
-    }
+    public TGComponent isOnOnlyMe(int x1, int y1) {
 
-    if (dialog.getIndex().length() != 0) {
-      try {
-        tmp = index;
-        index = Integer.decode(dialog.getIndex()).intValue();
-        if (index < 0) {
-          index = tmp;
-          error = true;
-          errors += "index ";
+        Polygon pol = new Polygon();
+        pol.addPoint(x, y);
+        pol.addPoint(x + derivationx, y - derivationy);
+        pol.addPoint(x + derivationx + width, y - derivationy);
+        pol.addPoint(x + derivationx + width, y + height - derivationy);
+        pol.addPoint(x + width, y + height);
+        pol.addPoint(x, y + height);
+        if (pol.contains(x1, y1)) {
+            return this;
         }
-      } catch (Exception e) {
-        error = true;
-        errors += "index  ";
-      }
+
+        return null;
     }
 
-    if (dialog.getNbOfAttachedInitiators().length() != 0) {
-      try {
-        tmp = nbOfAttachedInitiators;
-        nbOfAttachedInitiators = Integer.decode(dialog.getNbOfAttachedInitiators()).intValue();
-        if (nbOfAttachedInitiators < 0) {
-          nbOfAttachedInitiators = tmp;
-          error = true;
-          errors += "nbOfAttachedInitiators  ";
+    public String getStereotype() {
+        return stereotype;
+
+    }
+
+    public String getNodeName() {
+        return name;
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        boolean error = false;
+        String errors = "";
+        int tmp;
+        String tmpName;
+
+        JDialogADDVgmnNode dialog = new JDialogADDVgmnNode(frame, "Setting vgmn attributes", this);
+        // dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible(true); // blocked until dialog has been closed
+
+        if (!dialog.isRegularClose()) {
+            return false;
         }
-      } catch (Exception e) {
-        error = true;
-        errors += "nbOfAttachedInitiators  ";
-      }
-    }
 
-    if (dialog.getNbOfAttachedTargets().length() != 0) {
-      try {
-        tmp = nbOfAttachedTargets;
-        nbOfAttachedTargets = Integer.decode(dialog.getNbOfAttachedTargets()).intValue();
-        if (nbOfAttachedTargets < 0) {
-          nbOfAttachedTargets = tmp;
-          error = true;
-          errors += "nbOfAttachedTargets  ";
-        }
-      } catch (Exception e) {
-        error = true;
-        errors += "nbOfAttachedTargets  ";
-      }
-    }
-
-    if (dialog.getFifoDepth().length() != 0) {
-      try {
-        tmp = fifoDepth;
-        fifoDepth = Integer.decode(dialog.getFifoDepth()).intValue();
-        if (fifoDepth < 0) {
-          fifoDepth = tmp;
-          error = true;
-          errors += "fifoDepth  ";
-        }
-      } catch (Exception e) {
-        error = true;
-        errors += "fifoDepth  ";
-      }
-    }
-
-    if (dialog.getMinLatency().length() != 0) {
-      try {
-        tmp = minLatency;
-        minLatency = Integer.decode(dialog.getMinLatency()).intValue();
-        if (minLatency < 0) {
-          minLatency = tmp;
-          error = true;
-          errors += "minLatency  ";
-        }
-      } catch (Exception e) {
-        error = true;
-        errors += "minLatency  ";
-      }
-    }
-
-    if (error) {
-      JOptionPane.showMessageDialog(frame, "Invalid value for the following attributes: " + errors, "Error",
-          JOptionPane.INFORMATION_MESSAGE);
-      return false;
-    }
-
-    return true;
-  }
-
-  public int getType() {
-    return TGComponentManager.ADD_VGMNNODE;
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
-    sb.append("\" />\n");
-    sb.append("<attributes index=\"" + index + "\" ");
-    sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
-    sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
-    sb.append(" minLatency=\"" + minLatency + "\" ");
-    sb.append(" fifoDepth=\"" + fifoDepth + "\" ");
-    sb.append("/>\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int t1id;
-      String sstereotype = null, snodeName = null;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                sstereotype = elt.getAttribute("stereotype");
-                snodeName = elt.getAttribute("nodeName");
-              }
-              if (sstereotype != null) {
-                stereotype = sstereotype;
-              }
-              if (snodeName != null) {
-                name = snodeName;
-              }
-
-              if (elt.getTagName().equals("attributes")) {
-                index = Integer.decode(elt.getAttribute("index")).intValue();
-                nbOfAttachedInitiators = Integer.decode(elt.getAttribute("nbOfAttachedInitiators")).intValue();
-                nbOfAttachedTargets = Integer.decode(elt.getAttribute("nbOfAttachedTargets")).intValue();
-                minLatency = Integer.decode(elt.getAttribute("minLatency")).intValue();
-                fifoDepth = Integer.decode(elt.getAttribute("fifoDepth")).intValue();
-
-              }
+        if (dialog.getNodeName().length() != 0) {
+            tmpName = dialog.getNodeName();
+            tmpName = tmpName.trim();
+            if (!TAttribute.isAValidId(tmpName, false, false, false)) {
+                error = true;
+                errors += "Name of the node  ";
+            } else {
+                name = tmpName;
             }
-          }
         }
-      }
 
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+        if (dialog.getIndex().length() != 0) {
+            try {
+                tmp = index;
+                index = Integer.decode(dialog.getIndex()).intValue();
+                if (index < 0) {
+                    index = tmp;
+                    error = true;
+                    errors += "index ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "index  ";
+            }
+        }
+
+        if (dialog.getNbOfAttachedInitiators().length() != 0) {
+            try {
+                tmp = nbOfAttachedInitiators;
+                nbOfAttachedInitiators = Integer.decode(dialog.getNbOfAttachedInitiators()).intValue();
+                if (nbOfAttachedInitiators < 0) {
+                    nbOfAttachedInitiators = tmp;
+                    error = true;
+                    errors += "nbOfAttachedInitiators  ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "nbOfAttachedInitiators  ";
+            }
+        }
+
+        if (dialog.getNbOfAttachedTargets().length() != 0) {
+            try {
+                tmp = nbOfAttachedTargets;
+                nbOfAttachedTargets = Integer.decode(dialog.getNbOfAttachedTargets()).intValue();
+                if (nbOfAttachedTargets < 0) {
+                    nbOfAttachedTargets = tmp;
+                    error = true;
+                    errors += "nbOfAttachedTargets  ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "nbOfAttachedTargets  ";
+            }
+        }
+
+        if (dialog.getFifoDepth().length() != 0) {
+            try {
+                tmp = fifoDepth;
+                fifoDepth = Integer.decode(dialog.getFifoDepth()).intValue();
+                if (fifoDepth < 0) {
+                    fifoDepth = tmp;
+                    error = true;
+                    errors += "fifoDepth  ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "fifoDepth  ";
+            }
+        }
+
+        if (dialog.getMinLatency().length() != 0) {
+            try {
+                tmp = minLatency;
+                minLatency = Integer.decode(dialog.getMinLatency()).intValue();
+                if (minLatency < 0) {
+                    minLatency = tmp;
+                    error = true;
+                    errors += "minLatency  ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "minLatency  ";
+            }
+        }
+
+        if (error) {
+            JOptionPane.showMessageDialog(frame, "Invalid value for the following attributes: " + errors, "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
-  }
 
-  public String getAttributes() {
-    String attr = "";
-    attr += "index = " + index + "\n";
-    attr += "nbOfAttachedInitiators = " + nbOfAttachedInitiators + "\n";
-    attr += "nbOfAttachedTargets = " + nbOfAttachedTargets + "\n";
-    attr += "minLatency = " + minLatency + "\n";
-    attr += "fifoDepth = " + fifoDepth + "\n";
-    return attr;
-  }
+    public int getType() {
+        return TGComponentManager.ADD_VGMNNODE;
+    }
 
-  public String getAttributesToFile() {
-    String attr = "";
-    attr += index + "\n";
-    attr += nbOfAttachedInitiators + "\n";
-    attr += nbOfAttachedTargets + "\n";
-    attr += minLatency + "\n";
-    attr += fifoDepth + "\n";
-    return attr;
-  }
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
+        sb.append("\" />\n");
+        sb.append("<attributes index=\"" + index + "\" ");
+        sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
+        sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
+        sb.append(" minLatency=\"" + minLatency + "\" ");
+        sb.append(" fifoDepth=\"" + fifoDepth + "\" ");
+        sb.append("/>\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
 
-  public int getIndex() {
-    return index;
-  }
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
 
-  public int getNbOfAttachedInitiators() {
-    return nbOfAttachedInitiators;
-  }
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int t1id;
+            String sstereotype = null, snodeName = null;
 
-  public int getNbOfAttachedTargets() {
-    return nbOfAttachedTargets;
-  }
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                sstereotype = elt.getAttribute("stereotype");
+                                snodeName = elt.getAttribute("nodeName");
+                            }
+                            if (sstereotype != null) {
+                                stereotype = sstereotype;
+                            }
+                            if (snodeName != null) {
+                                name = snodeName;
+                            }
 
-  public int getFifoDepth() {
-    return fifoDepth;
-  }
+                            if (elt.getTagName().equals("attributes")) {
+                                index = Integer.decode(elt.getAttribute("index")).intValue();
+                                nbOfAttachedInitiators = Integer.decode(elt.getAttribute("nbOfAttachedInitiators"))
+                                        .intValue();
+                                nbOfAttachedTargets = Integer.decode(elt.getAttribute("nbOfAttachedTargets"))
+                                        .intValue();
+                                minLatency = Integer.decode(elt.getAttribute("minLatency")).intValue();
+                                fifoDepth = Integer.decode(elt.getAttribute("fifoDepth")).intValue();
 
-  public int getMinLatency() {
-    return minLatency;
-  }
+                            }
+                        }
+                    }
+                }
+            }
 
-  public String toString() {
-    return "Vgmn";
-  }
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
+
+    public String getAttributes() {
+        String attr = "";
+        attr += "index = " + index + "\n";
+        attr += "nbOfAttachedInitiators = " + nbOfAttachedInitiators + "\n";
+        attr += "nbOfAttachedTargets = " + nbOfAttachedTargets + "\n";
+        attr += "minLatency = " + minLatency + "\n";
+        attr += "fifoDepth = " + fifoDepth + "\n";
+        return attr;
+    }
+
+    public String getAttributesToFile() {
+        String attr = "";
+        attr += index + "\n";
+        attr += nbOfAttachedInitiators + "\n";
+        attr += nbOfAttachedTargets + "\n";
+        attr += minLatency + "\n";
+        attr += fifoDepth + "\n";
+        return attr;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public int getNbOfAttachedInitiators() {
+        return nbOfAttachedInitiators;
+    }
+
+    public int getNbOfAttachedTargets() {
+        return nbOfAttachedTargets;
+    }
+
+    public int getFifoDepth() {
+        return fifoDepth;
+    }
+
+    public int getMinLatency() {
+        return minLatency;
+    }
+
+    public String toString() {
+        return "Vgmn";
+    }
 
 }

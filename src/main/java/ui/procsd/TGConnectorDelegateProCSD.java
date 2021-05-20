@@ -55,62 +55,63 @@ import java.util.Vector;
  * @author Emil Salageanu, Ludovic APVRILLE
  */
 public class TGConnectorDelegateProCSD extends TGConnectorProCSD {
-  protected int arrowLength = 10;
+    protected int arrowLength = 10;
 
-  public TGConnectorDelegateProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, new Vector<Point>(0));
-    //
-    //
-    myImageIcon = IconManager.imgic202;
-    automaticDrawing = false;
+    public TGConnectorDelegateProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, new Vector<Point>(0));
+        //
+        //
+        myImageIcon = IconManager.imgic202;
+        automaticDrawing = false;
 
-    if ((p1.getFather() instanceof ProCSDOutPort) || (p2.getFather() instanceof ProCSDInPort)) {
-      TGConnectingPoint tmp = p1;
-      p1 = p2;
-      p2 = tmp;
+        if ((p1.getFather() instanceof ProCSDOutPort) || (p2.getFather() instanceof ProCSDInPort)) {
+            TGConnectingPoint tmp = p1;
+            p1 = p2;
+            p2 = tmp;
 
+        }
+        // _tdp.finishAddingConnector(_p1);
     }
-    // _tdp.finishAddingConnector(_p1);
-  }
 
-  public void internalDrawing(Graphics g) {
+    public void internalDrawing(Graphics g) {
 
-    TGComponent p3, p4;
+        TGComponent p3, p4;
 
-    if (nbInternalTGComponent > 0) {
-      p3 = tgcomponent[0];
-      p4 = tgcomponent[0];
-      //
-      drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
+        if (nbInternalTGComponent > 0) {
+            p3 = tgcomponent[0];
+            p4 = tgcomponent[0];
+            //
+            drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
 
-      for (int i = 0; i < nbInternalTGComponent - 1; i++) {
-        p3 = tgcomponent[i];
-        p4 = tgcomponent[i + 1];
-        drawMiddleSegment(g, p3.getX(), p3.getY(), p4.getX(), p4.getY());
-      }
-      drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
-    } else {
-      drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
+            for (int i = 0; i < nbInternalTGComponent - 1; i++) {
+                p3 = tgcomponent[i];
+                p4 = tgcomponent[i + 1];
+                drawMiddleSegment(g, p3.getX(), p3.getY(), p4.getX(), p4.getY());
+            }
+            drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
+        } else {
+            drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        }
     }
-  }
 
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
 
-    g.setColor(Color.BLUE);
-    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-      // GraphicLib.dashedLine(g,x1, y1, x2, y2);
-      g.drawLine(x1, y1, x2, y2);
-    } else {
-      // Changed because the arrow was to the other side, by Solange
-      // GraphicLib.dashedArrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-      // GraphicLib.dashedArrowWithLine(g, 1, 0, 10, x2, y2, x1, y1, true);
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x2, y2, x1, y1, true);
+        g.setColor(Color.BLUE);
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            // GraphicLib.dashedLine(g,x1, y1, x2, y2);
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            // Changed because the arrow was to the other side, by Solange
+            // GraphicLib.dashedArrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+            // GraphicLib.dashedArrowWithLine(g, 1, 0, 10, x2, y2, x1, y1, true);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x2, y2, x1, y1, true);
+        }
+        g.setColor(Color.BLACK);
     }
-    g.setColor(Color.BLACK);
-  }
 
-  public int getType() {
-    return TGComponentManager.CONNECTOR_DELEGATE_PROCSD;
-  }
+    public int getType() {
+        return TGComponentManager.CONNECTOR_DELEGATE_PROCSD;
+    }
 }

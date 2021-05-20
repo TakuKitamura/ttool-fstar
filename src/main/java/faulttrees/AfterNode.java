@@ -46,9 +46,9 @@ package faulttrees;
  */
 public class AfterNode extends TimeNode {
 
-  public AfterNode(String _name, Object _referenceObject, int _time) {
-    super(_name, _referenceObject, _time);
-    type = "AFTER";
-  }
+    public AfterNode(String _name, Object _referenceObject, int _time) {
+        super(_name, _referenceObject, _time);
+        type = "AFTER";
+    }
 
 }

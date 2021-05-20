@@ -48,21 +48,21 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public interface TClassInterface {
-  String getClassName();
+    String getClassName();
 
-  String getValue();
+    String getValue();
 
-  int getId();
+    int getId();
 
-  boolean isStart();
+    boolean isStart();
 
-  List<TAttribute> getAttributes();
+    List<TAttribute> getAttributes();
 
-  List<TAttribute> getGates();
+    List<TAttribute> getGates();
 
-  // public TActivityDiagramPanel getActivityDiagramPanel();
-  ActivityDiagramPanelInterface getBehaviourDiagramPanel();
+    // public TActivityDiagramPanel getActivityDiagramPanel();
+    ActivityDiagramPanelInterface getBehaviourDiagramPanel();
 
-  TAttribute getGateById(String name);
+    TAttribute getGateById(String name);
 
 }

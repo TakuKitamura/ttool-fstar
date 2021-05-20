@@ -57,279 +57,279 @@ import java.awt.event.ActionListener;
 
 public class JDialogADDMemoryNode extends JDialogBase implements ActionListener {
 
-  // private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI
-  // stats"};
-  private static String[] tracemodeTab = { "VCI logger", "VCI stats" };
-  private boolean regularClose;
+    // private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI
+    // stats"};
+    private static String[] tracemodeTab = { "VCI logger", "VCI stats" };
+    private boolean regularClose;
 
-  private JPanel panel2, panel3;
-  private JTabbedPane tabbedPane;
-  private JTextArea processCodeTextArea;
-  private String finalString;
-  private Frame frame;
-  private ADDMemoryNode node;
+    private JPanel panel2, panel3;
+    private JTabbedPane tabbedPane;
+    private JTextArea processCodeTextArea;
+    private String finalString;
+    private Frame frame;
+    private ADDMemoryNode node;
 
-  protected JComboBox<String> tracemode;
-  private static int selectedTracemode = 0;
+    protected JComboBox<String> tracemode;
+    private static int selectedTracemode = 0;
 
-  // Panel1
-  protected JTextField nodeName;
+    // Panel1
+    protected JTextField nodeName;
 
-  // Panel2
-  protected JTextField index;
-  protected JTextField dataSize;
-  protected JTextField monitored;
+    // Panel2
+    protected JTextField index;
+    protected JTextField dataSize;
+    protected JTextField monitored;
 
-  private String memoryName;
+    private String memoryName;
 
-  /* Creates new form */
-  public JDialogADDMemoryNode(Frame _frame, String _title, ADDMemoryNode _node) {
-    super(_frame, _title, true);
-    frame = _frame;
-    node = _node;
-    memoryName = _title.split(" ")[1];
+    /* Creates new form */
+    public JDialogADDMemoryNode(Frame _frame, String _title, ADDMemoryNode _node) {
+        super(_frame, _title, true);
+        frame = _frame;
+        node = _node;
+        memoryName = _title.split(" ")[1];
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
+        initComponents();
+        myInitComponents();
+        pack();
+    }
 
-  private void myInitComponents() {
-  }
+    private void myInitComponents() {
+    }
 
-  public StringBuffer encode(String data) {
-    StringBuffer databuf = new StringBuffer(data);
-    StringBuffer buffer = new StringBuffer("");
-    int endline = 0;
-    int nb_arobase = 0;
-    int condition = 0;
+    public StringBuffer encode(String data) {
+        StringBuffer databuf = new StringBuffer(data);
+        StringBuffer buffer = new StringBuffer("");
+        int endline = 0;
+        int nb_arobase = 0;
+        int condition = 0;
 
-    for (int pos = 0; pos != data.length(); pos++) {
-      char c = databuf.charAt(pos);
-      switch (c) {
-        case '\n':
-          break;
-        case '\t':
-          break;
-        case '{':
-          buffer.append("{\n");
-          endline = 1;
-          nb_arobase++;
-          break;
-        case '}':
-          if (nb_arobase == 1) {
-            buffer.append("}\n");
-            endline = 0;
-          } else {
-            int i = nb_arobase;
-            while (i >= 1) {
-              buffer.append("\t");
-              i--;
+        for (int pos = 0; pos != data.length(); pos++) {
+            char c = databuf.charAt(pos);
+            switch (c) {
+                case '\n':
+                    break;
+                case '\t':
+                    break;
+                case '{':
+                    buffer.append("{\n");
+                    endline = 1;
+                    nb_arobase++;
+                    break;
+                case '}':
+                    if (nb_arobase == 1) {
+                        buffer.append("}\n");
+                        endline = 0;
+                    } else {
+                        int i = nb_arobase;
+                        while (i >= 1) {
+                            buffer.append("\t");
+                            i--;
+                        }
+                        buffer.append("}\n");
+                        endline = 1;
+                    }
+                    nb_arobase--;
+                    break;
+                case ';':
+                    if (condition == 1) {
+                        buffer.append(";");
+                    } else {
+                        buffer.append(";\n");
+                        endline = 1;
+                    }
+                    break;
+                case ' ':
+                    if (endline == 0) {
+                        buffer.append(databuf.charAt(pos));
+                    }
+                    break;
+                case '(':
+                    buffer.append("(");
+                    condition = 1;
+                    break;
+                case ')':
+                    buffer.append(")");
+                    condition = 0;
+                    break;
+                default:
+                    if (endline == 1) {
+                        endline = 0;
+                        int i = nb_arobase;
+                        while (i >= 1) {
+                            buffer.append("\t");
+                            i--;
+                        }
+                    }
+                    buffer.append(databuf.charAt(pos));
+                    break;
             }
-            buffer.append("}\n");
-            endline = 1;
-          }
-          nb_arobase--;
-          break;
-        case ';':
-          if (condition == 1) {
-            buffer.append(";");
-          } else {
-            buffer.append(";\n");
-            endline = 1;
-          }
-          break;
-        case ' ':
-          if (endline == 0) {
-            buffer.append(databuf.charAt(pos));
-          }
-          break;
-        case '(':
-          buffer.append("(");
-          condition = 1;
-          break;
-        case ')':
-          buffer.append(")");
-          condition = 0;
-          break;
-        default:
-          if (endline == 1) {
-            endline = 0;
-            int i = nb_arobase;
-            while (i >= 1) {
-              buffer.append("\t");
-              i--;
-            }
-          }
-          buffer.append(databuf.charAt(pos));
-          break;
-      }
-    }
-    return buffer;
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    if (memoryName.equals("RAM")) {
-      panel3 = new JPanel();
-      panel3.setLayout(new BorderLayout());
-      panel3.setBorder(new javax.swing.border.TitledBorder("C Code"));
-      panel3.setPreferredSize(new Dimension(400, 200));
+        }
+        return buffer;
     }
 
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Memory attributes"));
-    panel2.setPreferredSize(new Dimension(400, 200));
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-    if (memoryName.equals("RAM")) {
-      tabbedPane = new JTabbedPane();
-      tabbedPane.add("Attributes", panel2);
-      tabbedPane.add("C Code", panel3);
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        if (memoryName.equals("RAM")) {
+            panel3 = new JPanel();
+            panel3.setLayout(new BorderLayout());
+            panel3.setBorder(new javax.swing.border.TitledBorder("C Code"));
+            panel3.setPreferredSize(new Dimension(400, 200));
+        }
+
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Memory attributes"));
+        panel2.setPreferredSize(new Dimension(400, 200));
+
+        if (memoryName.equals("RAM")) {
+            tabbedPane = new JTabbedPane();
+            tabbedPane.add("Attributes", panel2);
+            tabbedPane.add("C Code", panel3);
+        }
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Memory name:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName.setEditable(true);
+        nodeName.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(nodeName, c1);
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Index:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        index = new JTextField("" + node.getIndex(), 15);
+        panel2.add(index, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Data size (in byte):"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        dataSize = new JTextField("" + node.getDataSize(), 15);
+        panel2.add(dataSize, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Monitored:"), c2);
+        tracemode = new JComboBox<>(tracemodeTab);
+        tracemode.setSelectedIndex(selectedTracemode);
+        tracemode.addActionListener(this);
+        panel2.add(tracemode, c2);
+
+        if (memoryName.equals("RAM")) {
+            panel3.add(new JLabel("Behavior function of RAM : "), BorderLayout.NORTH);
+            StringBuffer stringbuf = encode(node.getProcessCode());
+            String beginString = stringbuf.toString();
+            finalString = beginString.replaceAll("\t}", "}");
+
+            processCodeTextArea = new JTextArea(finalString);
+            processCodeTextArea.setSize(100, 100);
+            processCodeTextArea.setTabSize(2);
+
+            processCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+            processCodeTextArea.setLineWrap(true);
+            processCodeTextArea.setWrapStyleWord(true);
+
+            JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
+            processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            processScrollPane.setPreferredSize(new Dimension(200, 150));
+
+            panel3.add(processScrollPane, BorderLayout.SOUTH);
+        }
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        if (memoryName.equals("RAM")) {
+            c.add(tabbedPane, c0);
+        } else {
+            c.add(panel2, c0);
+        }
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
     }
 
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Memory name:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    nodeName = new JTextField(node.getNodeName(), 30);
-    nodeName.setEditable(true);
-    nodeName.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(nodeName, c1);
+    public void actionPerformed(ActionEvent evt) {
+        /*
+         * if (evt.getSource() == typeBox) { boolean b =
+         * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+         * initialValue.setEnabled(b); return; }
+         */
+        if (evt.getSource() == tracemode) {
+            selectedTracemode = tracemode.getSelectedIndex();
+        }
 
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
+        String command = evt.getActionCommand();
 
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Index:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    index = new JTextField("" + node.getIndex(), 15);
-    panel2.add(index, c2);
+        if (memoryName.equals("RAM")) {
+            node.setProcessCode(processCodeTextArea.getText());
+        }
 
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Data size (in byte):"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    dataSize = new JTextField("" + node.getDataSize(), 15);
-    panel2.add(dataSize, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Monitored:"), c2);
-    tracemode = new JComboBox<>(tracemodeTab);
-    tracemode.setSelectedIndex(selectedTracemode);
-    tracemode.addActionListener(this);
-    panel2.add(tracemode, c2);
-
-    if (memoryName.equals("RAM")) {
-      panel3.add(new JLabel("Behavior function of RAM : "), BorderLayout.NORTH);
-      StringBuffer stringbuf = encode(node.getProcessCode());
-      String beginString = stringbuf.toString();
-      finalString = beginString.replaceAll("\t}", "}");
-
-      processCodeTextArea = new JTextArea(finalString);
-      processCodeTextArea.setSize(100, 100);
-      processCodeTextArea.setTabSize(2);
-
-      processCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
-      processCodeTextArea.setLineWrap(true);
-      processCodeTextArea.setWrapStyleWord(true);
-
-      JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
-      processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-      processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-      processScrollPane.setPreferredSize(new Dimension(200, 150));
-
-      panel3.add(processScrollPane, BorderLayout.SOUTH);
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
     }
 
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-
-    if (memoryName.equals("RAM")) {
-      c.add(tabbedPane, c0);
-    } else {
-      c.add(panel2, c0);
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
     }
 
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    /*
-     * if (evt.getSource() == typeBox) { boolean b =
-     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-     * initialValue.setEnabled(b); return; }
-     */
-    if (evt.getSource() == tracemode) {
-      selectedTracemode = tracemode.getSelectedIndex();
+    public void cancelDialog() {
+        dispose();
     }
 
-    String command = evt.getActionCommand();
-
-    if (memoryName.equals("RAM")) {
-      node.setProcessCode(processCodeTextArea.getText());
+    public boolean isRegularClose() {
+        return regularClose;
     }
 
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    public String getNodeName() {
+        return nodeName.getText();
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    public String getIndex() {
+        return index.getText();
+    }
 
-  public void cancelDialog() {
-    dispose();
-  }
+    public String getDataSize() {
+        return dataSize.getText();
+    }
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
-
-  public String getNodeName() {
-    return nodeName.getText();
-  }
-
-  public String getIndex() {
-    return index.getText();
-  }
-
-  public String getDataSize() {
-    return dataSize.getText();
-  }
-
-  public int getMonitored() {
-    // return tracemodeTab[tracemode.getSelectedIndex()];
-    return tracemode.getSelectedIndex();
-    // return monitored.getText();
-  }
+    public int getMonitored() {
+        // return tracemodeTab[tracemode.getSelectedIndex()];
+        return tracemode.getSelectedIndex();
+        // return monitored.getText();
+    }
 }

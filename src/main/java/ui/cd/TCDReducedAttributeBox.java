@@ -59,34 +59,34 @@ import java.util.List;
  */
 public class TCDReducedAttributeBox extends TGCReducedAttributeBox {
 
-  public TCDReducedAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDReducedAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "TObject attribute setting";
-    value = "";
+        name = "TObject attribute setting";
+        value = "";
 
-    attributeText = "Attribute";
+        attributeText = "Attribute";
 
-    attributes = true; // It contains attributes
+        attributes = true; // It contains attributes
 
-    addTGConnectingPointsCommentCorner();
+        addTGConnectingPointsCommentCorner();
 
-    myColor = ColorManager.ATTRIBUTE_BOX;
+        myColor = ColorManager.ATTRIBUTE_BOX;
 
-    myImageIcon = IconManager.imgic118;
-  }
+        myImageIcon = IconManager.imgic118;
+    }
 
-  protected void setJDialogOptions(JDialogReducedAttribute jda) {
-  }
+    protected void setJDialogOptions(JDialogReducedAttribute jda) {
+    }
 
-  protected List<TAttribute> getCustomAttributes() {
-    TCDTObject to = (TCDTObject) (getFather());
-    TCDTClass tc = to.getMasterTClass();
-    return tc.getAttributes();
-  }
+    protected List<TAttribute> getCustomAttributes() {
+        TCDTObject to = (TCDTObject) (getFather());
+        TCDTClass tc = to.getMasterTClass();
+        return tc.getAttributes();
+    }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_ASSOCIATION;
-  }
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_ASSOCIATION;
+    }
 }

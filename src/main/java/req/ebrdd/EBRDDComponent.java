@@ -47,44 +47,44 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public abstract class EBRDDComponent extends EBRDDGeneralComponent implements Cloneable {
-  protected int nbNext = 1; // -1 means more than 1
-  protected ArrayList<EBRDDComponent> nexts;
+    protected int nbNext = 1; // -1 means more than 1
+    protected ArrayList<EBRDDComponent> nexts;
 
-  public EBRDDComponent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    nexts = new ArrayList<EBRDDComponent>();
-  }
-
-  public EBRDDComponent getNextElement(int index) {
-    if (index < nexts.size()) {
-      return nexts.get(index);
-    } else {
-      return null;
+    public EBRDDComponent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        nexts = new ArrayList<EBRDDComponent>();
     }
-  }
 
-  public int getNbNext() {
-    return nexts.size();
-  }
+    public EBRDDComponent getNextElement(int index) {
+        if (index < nexts.size()) {
+            return nexts.get(index);
+        } else {
+            return null;
+        }
+    }
 
-  public int getNormalizedNbNext() {
-    return nbNext;
-  }
+    public int getNbNext() {
+        return nexts.size();
+    }
 
-  public ArrayList<EBRDDComponent> getNexts() {
-    return nexts;
-  }
+    public int getNormalizedNbNext() {
+        return nbNext;
+    }
 
-  public void addNext(EBRDDComponent _comp) {
-    nexts.add(_comp);
-  }
+    public ArrayList<EBRDDComponent> getNexts() {
+        return nexts;
+    }
 
-  public void addNext(int _index, EBRDDComponent _comp) {
-    nexts.add(_index, _comp);
-  }
+    public void addNext(EBRDDComponent _comp) {
+        nexts.add(_comp);
+    }
 
-  public void removeNext(int index) {
-    nexts.remove(index);
-  }
+    public void addNext(int _index, EBRDDComponent _comp) {
+        nexts.add(_index, _comp);
+    }
+
+    public void removeNext(int index) {
+        nexts.remove(index);
+    }
 
 }

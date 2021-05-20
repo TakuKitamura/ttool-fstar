@@ -59,103 +59,103 @@ import test.AbstractTest;
 
 public class CLIModelTest extends AbstractTest implements InterpreterOutputInterface {
 
-  final static String PATH_TO_TEST_FILE = "cli/input/";
-  final static String PATH_TO_OUTPUT_FILE = "cli/output/";
-  final static String NEW_MODEL_FILE = PATH_TO_OUTPUT_FILE + "mynewmodel.xml";
-  final static String EMPTY_MODEL_FILE = PATH_TO_OUTPUT_FILE + "myemptymodel.xml";
-  private StringBuilder outputResult;
+    final static String PATH_TO_TEST_FILE = "cli/input/";
+    final static String PATH_TO_OUTPUT_FILE = "cli/output/";
+    final static String NEW_MODEL_FILE = PATH_TO_OUTPUT_FILE + "mynewmodel.xml";
+    final static String EMPTY_MODEL_FILE = PATH_TO_OUTPUT_FILE + "myemptymodel.xml";
+    private StringBuilder outputResult;
 
-  public CLIModelTest() {
-    //
-  }
-
-  public void exit(int reason) {
-    System.out.println("Exit reason=" + reason);
-    assertTrue(reason == 0);
-  }
-
-  public void printError(String error) {
-    System.out.println("Error=" + error);
-  }
-
-  public void print(String s) {
-    System.out.println("info from interpreter:" + s);
-    outputResult.append(s);
-  }
-
-  @Test
-  public void testNewModel() {
-    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodel";
-    String script;
-
-    outputResult = new StringBuilder();
-
-    File f = new File(filePath);
-    assertTrue(myutil.FileUtils.checkFileForOpen(f));
-
-    script = myutil.FileUtils.loadFileData(f);
-
-    assertTrue(script.length() > 0);
-
-    // Create directory
-    File removeIfExists = new File(getBaseResourcesDir() + NEW_MODEL_FILE);
-    if (removeIfExists.exists()) {
-      removeIfExists.delete();
+    public CLIModelTest() {
+        //
     }
-    File makeDir = new File(getBaseResourcesDir() + PATH_TO_OUTPUT_FILE);
-    makeDir.mkdir();
-    System.out.println("Created: " + makeDir.getAbsolutePath());
 
-    boolean show = false;
-    Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface) this, show);
-    interpret.interpret();
-
-    // Must check if the model has really been saved
-    f = new File(getBaseResourcesDir() + NEW_MODEL_FILE);
-    assertTrue(myutil.FileUtils.checkFileForOpen(f));
-    String data = myutil.FileUtils.loadFileData(f);
-
-    assertTrue(data.length() > 0);
-    assertTrue(f.length() > 100);
-    assertTrue(f.length() < 500);
-
-  }
-
-  @Test
-  public void testRemoveTabEmptyModel() {
-    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptemptymodel";
-    String script;
-
-    outputResult = new StringBuilder();
-
-    File f = new File(filePath);
-    assertTrue(myutil.FileUtils.checkFileForOpen(f));
-
-    script = myutil.FileUtils.loadFileData(f);
-    assertTrue(script.length() > 0);
-
-    // Create directory
-    File removeIfExists = new File(getBaseResourcesDir() + EMPTY_MODEL_FILE);
-    if (removeIfExists.exists()) {
-      removeIfExists.delete();
+    public void exit(int reason) {
+        System.out.println("Exit reason=" + reason);
+        assertTrue(reason == 0);
     }
-    File makeDir = new File(getBaseResourcesDir() + PATH_TO_OUTPUT_FILE);
-    makeDir.mkdir();
-    System.out.println("Created: " + makeDir.getAbsolutePath());
 
-    boolean show = false;
-    Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface) this, show);
-    interpret.interpret();
+    public void printError(String error) {
+        System.out.println("Error=" + error);
+    }
 
-    // Must check if the model has really been saved
-    f = new File(getBaseResourcesDir() + EMPTY_MODEL_FILE);
-    assertTrue(myutil.FileUtils.checkFileForOpen(f));
-    String data = myutil.FileUtils.loadFileData(f);
+    public void print(String s) {
+        System.out.println("info from interpreter:" + s);
+        outputResult.append(s);
+    }
 
-    assertTrue(data.length() > 0);
-    assertTrue(f.length() > 100);
-    assertTrue(f.length() < 500);
+    @Test
+    public void testNewModel() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodel";
+        String script;
 
-  }
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        // Create directory
+        File removeIfExists = new File(getBaseResourcesDir() + NEW_MODEL_FILE);
+        if (removeIfExists.exists()) {
+            removeIfExists.delete();
+        }
+        File makeDir = new File(getBaseResourcesDir() + PATH_TO_OUTPUT_FILE);
+        makeDir.mkdir();
+        System.out.println("Created: " + makeDir.getAbsolutePath());
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface) this, show);
+        interpret.interpret();
+
+        // Must check if the model has really been saved
+        f = new File(getBaseResourcesDir() + NEW_MODEL_FILE);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(data.length() > 0);
+        assertTrue(f.length() > 100);
+        assertTrue(f.length() < 500);
+
+    }
+
+    @Test
+    public void testRemoveTabEmptyModel() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptemptymodel";
+        String script;
+
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+        assertTrue(script.length() > 0);
+
+        // Create directory
+        File removeIfExists = new File(getBaseResourcesDir() + EMPTY_MODEL_FILE);
+        if (removeIfExists.exists()) {
+            removeIfExists.delete();
+        }
+        File makeDir = new File(getBaseResourcesDir() + PATH_TO_OUTPUT_FILE);
+        makeDir.mkdir();
+        System.out.println("Created: " + makeDir.getAbsolutePath());
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface) this, show);
+        interpret.interpret();
+
+        // Must check if the model has really been saved
+        f = new File(getBaseResourcesDir() + EMPTY_MODEL_FILE);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(data.length() > 0);
+        assertTrue(f.length() > 100);
+        assertTrue(f.length() < 500);
+
+    }
 
 }

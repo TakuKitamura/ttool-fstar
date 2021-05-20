@@ -50,27 +50,27 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class CPUWithTasks {
-  public int id0;
-  private Vector<TMLTask> tasks;
+    public int id0;
+    private Vector<TMLTask> tasks;
 
-  public CPUWithTasks() {
-    tasks = new Vector<TMLTask>();
-  }
+    public CPUWithTasks() {
+        tasks = new Vector<TMLTask>();
+    }
 
-  public void addTask(TMLTask task) {
-    tasks.add(task);
-  }
+    public void addTask(TMLTask task) {
+        tasks.add(task);
+    }
 
-  public void removeTask(TMLTask task) {
-    tasks.remove(task);
-  }
+    public void removeTask(TMLTask task) {
+        tasks.remove(task);
+    }
 
-  public Vector<TMLTask> getTasks() {
-    return tasks;
-  }
+    public Vector<TMLTask> getTasks() {
+        return tasks;
+    }
 
-  public int getNbOfTasks() {
-    return tasks.size();
-  }
+    public int getNbOfTasks() {
+        return tasks.size();
+    }
 
 } // Class BusResult

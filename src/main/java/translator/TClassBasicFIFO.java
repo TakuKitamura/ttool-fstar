@@ -46,70 +46,70 @@ package translator;
  */
 public class TClassBasicFIFO extends TClassBuffer {
 
-  public TClassBasicFIFO(String name) {
-    super(name, true);
-  }
-
-  public void makeTClass() {
-    //
-    if ((paramInForExchange.size() == 0) && (paramOutForExchange.size() == 0)) {
-      return;
+    public TClassBasicFIFO(String name) {
+        super(name, true);
     }
 
-    //
-    Param cpt = new Param("cpt", Param.NAT, "0");
-    addParameter(cpt);
+    public void makeTClass() {
+        //
+        if ((paramInForExchange.size() == 0) && (paramOutForExchange.size() == 0)) {
+            return;
+        }
 
-    ActivityDiagram ad = new ActivityDiagram();
+        //
+        Param cpt = new Param("cpt", Param.NAT, "0");
+        addParameter(cpt);
 
-    ADJunction adj = new ADJunction();
-    ad.getStartState().addNext(adj);
-    ad.add(adj);
+        ActivityDiagram ad = new ActivityDiagram();
 
-    ADChoice adc = new ADChoice();
-    ad.add(adc);
-    adj.addNext(adc);
+        ADJunction adj = new ADJunction();
+        ad.getStartState().addNext(adj);
+        ad.add(adj);
 
-    Gate g1, g2;
-    ADActionStateWithGate adag1, adag2;
-    ADActionStateWithParam adap1, adap2;
+        ADChoice adc = new ADChoice();
+        ad.add(adc);
+        adj.addNext(adc);
 
-    for (String m1 : paramInForExchange) {
-      g1 = addNewGateIfApplicable(m1);
-      adag1 = new ADActionStateWithGate(g1);
-      adag1.setActionValue("");
+        Gate g1, g2;
+        ADActionStateWithGate adag1, adag2;
+        ADActionStateWithParam adap1, adap2;
 
-      adap1 = new ADActionStateWithParam(cpt);
-      adap1.setActionValue("cpt+1");
+        for (String m1 : paramInForExchange) {
+            g1 = addNewGateIfApplicable(m1);
+            adag1 = new ADActionStateWithGate(g1);
+            adag1.setActionValue("");
 
-      adc.addNext(adag1);
-      adc.addGuard("[]");
-      adag1.addNext(adap1);
-      adap1.addNext(adj);
+            adap1 = new ADActionStateWithParam(cpt);
+            adap1.setActionValue("cpt+1");
 
-      ad.add(adag1);
-      ad.add(adap1);
+            adc.addNext(adag1);
+            adc.addGuard("[]");
+            adag1.addNext(adap1);
+            adap1.addNext(adj);
+
+            ad.add(adag1);
+            ad.add(adap1);
+        }
+
+        for (String m2 : paramOutForExchange) {
+            g2 = addNewGateIfApplicable(m2);
+
+            adag2 = new ADActionStateWithGate(g2);
+            adag2.setActionValue("");
+
+            adap2 = new ADActionStateWithParam(cpt);
+            adap2.setActionValue("cpt-1");
+
+            adc.addNext(adag2);
+            adc.addGuard("[cpt>0]");
+            adag2.addNext(adap2);
+            adap2.addNext(adj);
+
+            // adding components to AD
+
+            ad.add(adag2);
+            ad.add(adap2);
+        }
+        setActivityDiagram(ad);
     }
-
-    for (String m2 : paramOutForExchange) {
-      g2 = addNewGateIfApplicable(m2);
-
-      adag2 = new ADActionStateWithGate(g2);
-      adag2.setActionValue("");
-
-      adap2 = new ADActionStateWithParam(cpt);
-      adap2.setActionValue("cpt-1");
-
-      adc.addNext(adag2);
-      adc.addGuard("[cpt>0]");
-      adag2.addNext(adap2);
-      adap2.addNext(adj);
-
-      // adding components to AD
-
-      ad.add(adag2);
-      ad.add(adap2);
-    }
-    setActivityDiagram(ad);
-  }
 }

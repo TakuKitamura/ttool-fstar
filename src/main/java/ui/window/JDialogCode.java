@@ -53,108 +53,108 @@ import java.awt.event.ActionListener;
  */
 public class JDialogCode extends JDialogBase implements ActionListener {
 
-  protected String pretext, posttext;
+    protected String pretext, posttext;
 
-  // components
-  protected JTextArea jta1, jta2;
-  protected JButton close;
-  protected JButton cancel;
+    // components
+    protected JTextArea jta1, jta2;
+    protected JButton close;
+    protected JButton cancel;
 
-  /* Creates new form */
-  public JDialogCode(Frame f, String title, String _pretext, boolean pretextEnabled, String _posttext,
-      boolean posttextEnabled) {
-    super(f, title, true);
+    /* Creates new form */
+    public JDialogCode(Frame f, String title, String _pretext, boolean pretextEnabled, String _posttext,
+            boolean posttextEnabled) {
+        super(f, title, true);
 
-    if (_pretext == null) {
-      _pretext = "";
+        if (_pretext == null) {
+            _pretext = "";
+        }
+
+        if (_posttext == null) {
+            _posttext = "";
+        }
+
+        pretext = _pretext;
+        posttext = _posttext;
+
+        initComponents(pretextEnabled, posttextEnabled);
+        pack();
     }
 
-    if (_posttext == null) {
-      _posttext = "";
+    protected void initComponents(boolean pre, boolean post) {
+
+        Container c = getContentPane();
+        Font f = new Font("Helvetica", Font.PLAIN, 14);
+        setFont(f);
+        c.setLayout(new BorderLayout());
+        // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        jta1 = new JTextArea();
+        jta1.setEditable(pre);
+        jta1.setMargin(new Insets(10, 10, 10, 10));
+        jta1.setTabSize(3);
+        jta1.append(pretext);
+        jta1.setFont(new Font("times", Font.PLAIN, 12));
+        jta1.setPreferredSize(new Dimension(300, 300));
+        JScrollPane jsp1 = new JScrollPane(jta1, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        c.add(jsp1, BorderLayout.NORTH);
+
+        jta2 = new JTextArea();
+        jta2.setEditable(post);
+        jta2.setMargin(new Insets(10, 10, 10, 10));
+        jta2.setTabSize(3);
+        jta2.append(posttext);
+        jta2.setFont(new Font("times", Font.PLAIN, 12));
+        jta2.setPreferredSize(new Dimension(300, 300));
+        JScrollPane jsp2 = new JScrollPane(jta2, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        c.add(jsp2, BorderLayout.CENTER);
+
+        close = new JButton("Ok", IconManager.imgic25);
+        cancel = new JButton("Cancel", IconManager.imgic27);
+
+        close.setPreferredSize(new Dimension(150, 30));
+        cancel.setPreferredSize(new Dimension(150, 30));
+
+        close.addActionListener(this);
+        cancel.addActionListener(this);
+
+        JPanel jp = new JPanel();
+        jp.add(close);
+        jp.add(cancel);
+
+        c.add(jp, BorderLayout.SOUTH);
     }
 
-    pretext = _pretext;
-    posttext = _posttext;
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
 
-    initComponents(pretextEnabled, posttextEnabled);
-    pack();
-  }
-
-  protected void initComponents(boolean pre, boolean post) {
-
-    Container c = getContentPane();
-    Font f = new Font("Helvetica", Font.PLAIN, 14);
-    setFont(f);
-    c.setLayout(new BorderLayout());
-    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    jta1 = new JTextArea();
-    jta1.setEditable(pre);
-    jta1.setMargin(new Insets(10, 10, 10, 10));
-    jta1.setTabSize(3);
-    jta1.append(pretext);
-    jta1.setFont(new Font("times", Font.PLAIN, 12));
-    jta1.setPreferredSize(new Dimension(300, 300));
-    JScrollPane jsp1 = new JScrollPane(jta1, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    c.add(jsp1, BorderLayout.NORTH);
-
-    jta2 = new JTextArea();
-    jta2.setEditable(post);
-    jta2.setMargin(new Insets(10, 10, 10, 10));
-    jta2.setTabSize(3);
-    jta2.append(posttext);
-    jta2.setFont(new Font("times", Font.PLAIN, 12));
-    jta2.setPreferredSize(new Dimension(300, 300));
-    JScrollPane jsp2 = new JScrollPane(jta2, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    c.add(jsp2, BorderLayout.CENTER);
-
-    close = new JButton("Ok", IconManager.imgic25);
-    cancel = new JButton("Cancel", IconManager.imgic27);
-
-    close.setPreferredSize(new Dimension(150, 30));
-    cancel.setPreferredSize(new Dimension(150, 30));
-
-    close.addActionListener(this);
-    cancel.addActionListener(this);
-
-    JPanel jp = new JPanel();
-    jp.add(close);
-    jp.add(cancel);
-
-    c.add(jp, BorderLayout.SOUTH);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Cancel")) {
-      cancel();
-    } else if (command.equals("Ok")) {
-      close();
+        // Compare the action command to the known actions.
+        if (command.equals("Cancel")) {
+            cancel();
+        } else if (command.equals("Ok")) {
+            close();
+        }
     }
-  }
 
-  public void cancel() {
-    dispose();
-  }
+    public void cancel() {
+        dispose();
+    }
 
-  public void close() {
-    pretext = jta1.getText();
-    posttext = jta2.getText();
-    dispose();
-  }
+    public void close() {
+        pretext = jta1.getText();
+        posttext = jta2.getText();
+        dispose();
+    }
 
-  public String getPreCode() {
-    return pretext;
-  }
+    public String getPreCode() {
+        return pretext;
+    }
 
-  public String getPostCode() {
-    return posttext;
-  }
+    public String getPostCode() {
+        return posttext;
+    }
 
 }

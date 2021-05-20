@@ -46,47 +46,47 @@ package compiler.tmlgrammar;
 
 public interface Node {
 
-  /**
-   * This method is called after the node has been made the current node. It
-   * indicates that child nodes can now be added to it.
-   */
-  void jjtOpen();
+    /**
+     * This method is called after the node has been made the current node. It
+     * indicates that child nodes can now be added to it.
+     */
+    void jjtOpen();
 
-  /**
-   * This method is called after all the child nodes have been added.
-   */
-  void jjtClose();
+    /**
+     * This method is called after all the child nodes have been added.
+     */
+    void jjtClose();
 
-  /**
-   * This pair of methods are used to inform the node of its parent
-   * 
-   * @param n : node
-   */
-  void jjtSetParent(Node n);
+    /**
+     * This pair of methods are used to inform the node of its parent
+     * 
+     * @param n : node
+     */
+    void jjtSetParent(Node n);
 
-  Node jjtGetParent();
+    Node jjtGetParent();
 
-  /**
-   * This method tells the node to add its argument to the node's list of children
-   * 
-   * @param n : added node
-   * @param i : index of the added node in the node's list of children
-   */
-  void jjtAddChild(Node n, int i);
+    /**
+     * This method tells the node to add its argument to the node's list of children
+     * 
+     * @param n : added node
+     * @param i : index of the added node in the node's list of children
+     */
+    void jjtAddChild(Node n, int i);
 
-  /**
-   * This method returns a child node. The children are numbered from zero, left
-   * to right
-   * 
-   * @param i : index of the child node
-   * @return : child node
-   */
-  Node jjtGetChild(int i);
+    /**
+     * This method returns a child node. The children are numbered from zero, left
+     * to right
+     * 
+     * @param i : index of the child node
+     * @return : child node
+     */
+    Node jjtGetChild(int i);
 
-  /**
-   * @return : the number of children the node has
-   */
-  int jjtGetNumChildren();
+    /**
+     * @return : the number of children the node has
+     */
+    int jjtGetNumChildren();
 }
 /*
  * JavaCC - OriginalChecksum=4ad84079284f044103e44453dfa3546c (do not edit this

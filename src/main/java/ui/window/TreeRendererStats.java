@@ -53,22 +53,22 @@ import java.awt.*;
  */
 public class TreeRendererStats extends DefaultTreeCellRenderer {
 
-  public TreeRendererStats() {
+    public TreeRendererStats() {
 
-  }
-
-  public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
-      int row, boolean hasFocus) {
-
-    super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-    if (value instanceof DataElement) {
-      // setIcon(IconManager.imgic80);
-      setToolTipText(value.toString());
-    } else {
-      setToolTipText(null);
     }
 
-    return this;
-  }
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+            int row, boolean hasFocus) {
+
+        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+        if (value instanceof DataElement) {
+            // setIcon(IconManager.imgic80);
+            setToolTipText(value.toString());
+        } else {
+            setToolTipText(null);
+        }
+
+        return this;
+    }
 }

@@ -49,62 +49,62 @@ import java.util.Objects;
  * @author Ludovic APVRILLE
  */
 public class TMLForLoop extends TMLActivityElement {
-  // next #0 -> inside the loop
-  // next #1 -> after the loop
+    // next #0 -> inside the loop
+    // next #1 -> after the loop
 
-  private String init = "", condition = "", increment = "";
+    private String init = "", condition = "", increment = "";
 
-  private boolean isInfinite;
+    private boolean isInfinite;
 
-  public TMLForLoop(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLForLoop(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void setInit(String _init) {
-    init = _init;
-  }
+    public void setInit(String _init) {
+        init = _init;
+    }
 
-  public void setCondition(String _condition) {
-    condition = _condition;
-  }
+    public void setCondition(String _condition) {
+        condition = _condition;
+    }
 
-  public void setIncrement(String _increment) {
-    increment = _increment;
-  }
+    public void setIncrement(String _increment) {
+        increment = _increment;
+    }
 
-  public String getInit() {
-    return init;
-  }
+    public String getInit() {
+        return init;
+    }
 
-  public String getCondition() {
-    return condition;
-  }
+    public String getCondition() {
+        return condition;
+    }
 
-  public String getIncrement() {
-    return increment;
-  }
+    public String getIncrement() {
+        return increment;
+    }
 
-  public void setInfinite(boolean b) {
-    isInfinite = b;
-  }
+    public void setInfinite(boolean b) {
+        isInfinite = b;
+    }
 
-  public boolean isInfinite() {
-    return isInfinite;
-  }
+    public boolean isInfinite() {
+        return isInfinite;
+    }
 
-  public String customExtraToXML() {
-    return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\""
-        + Conversion.transformToXMLString(condition) + "\" increment=\"" + Conversion.transformToXMLString(increment)
-        + "\" isInfinite=\"" + isInfinite + "\" ";
-  }
+    public String customExtraToXML() {
+        return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\""
+                + Conversion.transformToXMLString(condition) + "\" increment=\""
+                + Conversion.transformToXMLString(increment) + "\" isInfinite=\"" + isInfinite + "\" ";
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLForLoop))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    TMLForLoop tmlForLoop = (TMLForLoop) o;
-    return Objects.equals(init, tmlForLoop.getInit()) && Objects.equals(condition, tmlForLoop.getCondition())
-        && Objects.equals(increment, tmlForLoop.getIncrement()) && isInfinite == tmlForLoop.isInfinite();
-  }
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLForLoop))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        TMLForLoop tmlForLoop = (TMLForLoop) o;
+        return Objects.equals(init, tmlForLoop.getInit()) && Objects.equals(condition, tmlForLoop.getCondition())
+                && Objects.equals(increment, tmlForLoop.getIncrement()) && isInfinite == tmlForLoop.isInfinite();
+    }
 }

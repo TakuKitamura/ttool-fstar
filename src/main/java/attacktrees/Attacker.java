@@ -48,52 +48,52 @@ import ui.TAttribute;
  * @version 1.0 03/02/2021
  */
 public class Attacker extends AttackElement {
-  public int expertise;
-  public int money;
+    public int expertise;
+    public int money;
 
-  public Attacker(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
-
-  public String toString() {
-    String ret = name + " Money: " + money;
-    if ((expertise > 0) && (expertise < Attack.EXPERIENCES.length)) {
-      ret += " Expertise: " + Attack.EXPERIENCES[expertise];
-    } else {
-      ret += "Expertise: " + expertise;
-    }
-    return ret;
-  }
-
-  public static boolean isValidMoney(String _money) {
-    if ((_money == null) || (_money.length() == 0)) {
-      return false;
+    public Attacker(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
     }
 
-    if (!Conversion.isInteger(_money)) {
-      return false;
+    public String toString() {
+        String ret = name + " Money: " + money;
+        if ((expertise > 0) && (expertise < Attack.EXPERIENCES.length)) {
+            ret += " Expertise: " + Attack.EXPERIENCES[expertise];
+        } else {
+            ret += "Expertise: " + expertise;
+        }
+        return ret;
     }
 
-    int myMoney = Integer.decode(_money);
-    return myMoney >= 0;
-  }
+    public static boolean isValidMoney(String _money) {
+        if ((_money == null) || (_money.length() == 0)) {
+            return false;
+        }
 
-  public static boolean isValidID(String _id) {
-    return TAttribute.isAValidId(_id, false, false, false);
-  }
+        if (!Conversion.isInteger(_money)) {
+            return false;
+        }
 
-  public static boolean isValidExpertise(String _expertise) {
-    if ((_expertise == null) || (_expertise.length() == 0)) {
-      return false;
+        int myMoney = Integer.decode(_money);
+        return myMoney >= 0;
     }
 
-    if (!Conversion.isInteger(_expertise)) {
-      return false;
+    public static boolean isValidID(String _id) {
+        return TAttribute.isAValidId(_id, false, false, false);
     }
 
-    int myExpertise = Integer.decode(_expertise);
+    public static boolean isValidExpertise(String _expertise) {
+        if ((_expertise == null) || (_expertise.length() == 0)) {
+            return false;
+        }
 
-    return (myExpertise >= 0) && (myExpertise < Attack.EXPERIENCES.length);
-  }
+        if (!Conversion.isInteger(_expertise)) {
+            return false;
+        }
+
+        int myExpertise = Integer.decode(_expertise);
+
+        return (myExpertise >= 0) && (myExpertise < Attack.EXPERIENCES.length);
+    }
 
 }

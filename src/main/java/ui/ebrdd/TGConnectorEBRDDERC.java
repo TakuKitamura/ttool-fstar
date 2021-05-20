@@ -57,86 +57,87 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TGConnectorEBRDDERC extends TGConnector {
-  protected int arrowLength = 10;
-  protected boolean negation = false;
-  protected static int negateSize = 10;
+    protected int arrowLength = 10;
+    protected boolean negation = false;
+    protected static int negateSize = 10;
 
-  public TGConnectorEBRDDERC(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    myImageIcon = IconManager.imgic1052;
-  }
-
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-      g.drawLine(x1, y1, x2, y2);
-    } else {
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+    public TGConnectorEBRDDERC(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic1052;
     }
-    if (negation) {
-      g.drawOval((x1 + x2 - negateSize) / 2, (y1 + y2 - negateSize) / 2, negateSize, negateSize);
-    }
-  }
 
-  public int getType() {
-    return TGComponentManager.CONNECTOR_EBRDD_ERC;
-  }
-
-  public void reverseNegation() {
-    negation = !negation;
-  }
-
-  public boolean canBeNegated() {
-    return true;
-  }
-
-  public boolean getNegation() {
-    return negation;
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<negation value=\"" + negation);
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-
-      String val = null;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-
-          // Issue #17 copy-paste error on j index
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("negation")) {
-                val = elt.getAttribute("value").trim();
-                //
-                negation = !val.equals("false");
-              }
-            }
-          }
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         }
-      }
-
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+        if (negation) {
+            g.drawOval((x1 + x2 - negateSize) / 2, (y1 + y2 - negateSize) / 2, negateSize, negateSize);
+        }
     }
-  }
+
+    public int getType() {
+        return TGComponentManager.CONNECTOR_EBRDD_ERC;
+    }
+
+    public void reverseNegation() {
+        negation = !negation;
+    }
+
+    public boolean canBeNegated() {
+        return true;
+    }
+
+    public boolean getNegation() {
+        return negation;
+    }
+
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<negation value=\"" + negation);
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+
+            String val = null;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("negation")) {
+                                val = elt.getAttribute("value").trim();
+                                //
+                                negation = !val.equals("false");
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
 }

@@ -47,42 +47,42 @@ package tmltranslator;
  */
 public class TMLParserSaveElt {
 
-  // type
-  public final static int FOR = 0;
-  public final static int SELECTEVT = 1;
-  public final static int IF = 2;
-  public final static int CASE = 3;
-  public final static int RAND = 4;
-  public final static int CASERAND = 5;
-  public final static int RANDOMSEQ = 6;
-  public final static int SEQ = 7;
-  public final static String[] instructions = { "FOR", "SELECTEVT", "IF", "CASE", "RAND", "CASERAND", "RANDOMSEQ",
-      "SEQ" };
+    // type
+    public final static int FOR = 0;
+    public final static int SELECTEVT = 1;
+    public final static int IF = 2;
+    public final static int CASE = 3;
+    public final static int RAND = 4;
+    public final static int CASERAND = 5;
+    public final static int RANDOMSEQ = 6;
+    public final static int SEQ = 7;
+    public final static String[] instructions = { "FOR", "SELECTEVT", "IF", "CASE", "RAND", "CASERAND", "RANDOMSEQ",
+            "SEQ" };
 
-  public int type; // FOR, etc.
-  public TMLActivityElement tmlae; //
-  public TMLActivityElement top;
+    public int type; // FOR, etc.
+    public TMLActivityElement tmlae; //
+    public TMLActivityElement top;
 
-  public int nbElse = 0;
+    public int nbElse = 0;
 
-  public TMLParserSaveElt() {
-  }
-
-  public void setType(String _inst) {
-    _inst = _inst.toUpperCase();
-    for (int i = 0; i < instructions.length; i++) {
-      if (instructions[i].equals(_inst)) {
-        type = i;
-      }
+    public TMLParserSaveElt() {
     }
-    type = 0;
-  }
 
-  public String getExpectedInstruction() {
-    return "END" + instructions[type];
-  }
+    public void setType(String _inst) {
+        _inst = _inst.toUpperCase();
+        for (int i = 0; i < instructions.length; i++) {
+            if (instructions[i].equals(_inst)) {
+                type = i;
+            }
+        }
+        type = 0;
+    }
 
-  public String getInstruction() {
-    return instructions[type];
-  }
+    public String getExpectedInstruction() {
+        return "END" + instructions[type];
+    }
+
+    public String getInstruction() {
+        return instructions[type];
+    }
 }

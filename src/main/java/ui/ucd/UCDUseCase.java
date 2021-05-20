@@ -56,184 +56,185 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class UCDUseCase extends TGCScalableWithoutInternalComponent {
-  protected int lineLength = 5;
-  // protected int textX = 5;
-  // protected int textY = 15;
-  protected int arc = 5;
-  protected int w, h, w1, w2; // w1;
+    protected int lineLength = 5;
+    // protected int textX = 5;
+    // protected int textY = 15;
+    protected int arc = 5;
+    protected int w, h, w1, w2; // w1;
 
-  protected String extension = "";
+    protected String extension = "";
 
-  public UCDUseCase(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public UCDUseCase(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = (int) (50 * tdp.getZoom());
-    height = (int) (40 * tdp.getZoom());
-    // minWidth = 30;
-    textY = 15;
-    textX = 5;
+        width = (int) (50 * tdp.getZoom());
+        height = (int) (40 * tdp.getZoom());
+        // minWidth = 30;
+        textY = 15;
+        textX = 5;
 
-    nbConnectingPoint = 16;
-    int index = 0;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    while (index < 16) {
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.5, 0.0);
-      index++;
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.0, 0.5);
-      index++;
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 1.0, 0.5);
-      index++;
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.5, 1.0);
-      index++;
+        nbConnectingPoint = 16;
+        int index = 0;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        while (index < 16) {
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.5, 0.0);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.0, 0.5);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 1.0, 0.5);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.5, 1.0);
+            index++;
 
-      // while(index < 16) {
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.25, 0.06);
-      index++;
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.25, 0.94);
-      index++;
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.75, 0.06);
-      index++;
-      connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.75, 0.94);
-      index++;
-    }
-    // }
-    addTGConnectingPointsComment();
-
-    moveable = true;
-    editable = true;
-    removable = true;
-
-    super.oldScaleFactor = tdp.getZoom();
-    // currentFontSize = (int) (maxFontSize*oldScaleFactor);
-
-    value = "My use case";
-    name = "Use case";
-
-    myImageIcon = IconManager.imgic602;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    if (extension.length() > 0) {
-      w1 = g.getFontMetrics().stringWidth(value);
-      w2 = g.getFontMetrics().stringWidth(extension);
-      w = Math.max(w1, w2);
-    } else {
-      w = g.getFontMetrics().stringWidth(value);
-    }
-    h = g.getFontMetrics().getHeight();
-
-    // Size has changed?
-    int w3 = Math.max(minWidth, w + 2 * textX);
-    if ((w3 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w3 / 2, y);
-      width = w3;
-      // updateConnectingPoints();
-    }
-
-    g.drawOval(x, y, width, height);
-    // name of use case
-
-    if (extension.length() > 0) {
-      drawSingleString(g, value, x + width / 2 - w1 / 2, y + height / 2 + h / 2 - 8);
-      g.drawLine(x + width / 2 - w / 2, y + height / 2 + h / 2 - 6, x + width / 2 + w / 2, y + height / 2 + h / 2 - 6);
-      drawSingleString(g, extension, x + width / 2 - w2 / 2, y + height / 2 + h / 2 + 5);
-    } else {
-      drawSingleString(g, value, x + width / 2 - w / 2, y + height / 2 + h / 2 - 3);
-    }
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
-    return null;
-  }
-
-  public String getUCDName() {
-    return value;
-  }
-
-  public String getUCDExtension() {
-    return extension;
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.UCD_USECASE;
-  }
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    // boolean error = false;
-    // String errors = "";
-    // int tmp;
-    String tmpName;
-
-    JDialogUseCase dialog = new JDialogUseCase(frame, "Setting Use Case attributes", value, extension);
-    // dialog.setSize(500, 450);
-    GraphicLib.centerOnParent(dialog, 500, 450);
-    dialog.setVisible(true); // blocked until dialog has been closed
-
-    if (!dialog.isRegularClose()) {
-      return false;
-    }
-
-    if (dialog.getName().length() != 0) {
-      tmpName = dialog.getName();
-      value = tmpName.trim();
-    }
-
-    tmpName = dialog.getExtension();
-    extension = tmpName.trim();
-
-    return true;
-  }
-
-  @Override
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info extension=\"" + GTURTLEModeling.transformString(extension) + "\" ");
-    sb.append("/>\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int t1id;
-      String sextension = null;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                sextension = elt.getAttribute("extension");
-              }
-              if (sextension != null) {
-                extension = sextension;
-              }
-            }
-          }
+            // while(index < 16) {
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.25, 0.06);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.25, 0.94);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.75, 0.06);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.75, 0.94);
+            index++;
         }
-      }
+        // }
+        addTGConnectingPointsComment();
 
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+        moveable = true;
+        editable = true;
+        removable = true;
+
+        super.oldScaleFactor = tdp.getZoom();
+        // currentFontSize = (int) (maxFontSize*oldScaleFactor);
+
+        value = "My use case";
+        name = "Use case";
+
+        myImageIcon = IconManager.imgic602;
     }
-  }
+
+    @Override
+    public void internalDrawing(Graphics g) {
+        if (extension.length() > 0) {
+            w1 = g.getFontMetrics().stringWidth(value);
+            w2 = g.getFontMetrics().stringWidth(extension);
+            w = Math.max(w1, w2);
+        } else {
+            w = g.getFontMetrics().stringWidth(value);
+        }
+        h = g.getFontMetrics().getHeight();
+
+        // Size has changed?
+        int w3 = Math.max(minWidth, w + 2 * textX);
+        if ((w3 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w3 / 2, y);
+            width = w3;
+            // updateConnectingPoints();
+        }
+
+        g.drawOval(x, y, width, height);
+        // name of use case
+
+        if (extension.length() > 0) {
+            drawSingleString(g, value, x + width / 2 - w1 / 2, y + height / 2 + h / 2 - 8);
+            g.drawLine(x + width / 2 - w / 2, y + height / 2 + h / 2 - 6, x + width / 2 + w / 2,
+                    y + height / 2 + h / 2 - 6);
+            drawSingleString(g, extension, x + width / 2 - w2 / 2, y + height / 2 + h / 2 + 5);
+        } else {
+            drawSingleString(g, value, x + width / 2 - w / 2, y + height / 2 + h / 2 - 3);
+        }
+    }
+
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public String getUCDName() {
+        return value;
+    }
+
+    public String getUCDExtension() {
+        return extension;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.UCD_USECASE;
+    }
+
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        // boolean error = false;
+        // String errors = "";
+        // int tmp;
+        String tmpName;
+
+        JDialogUseCase dialog = new JDialogUseCase(frame, "Setting Use Case attributes", value, extension);
+        // dialog.setSize(500, 450);
+        GraphicLib.centerOnParent(dialog, 500, 450);
+        dialog.setVisible(true); // blocked until dialog has been closed
+
+        if (!dialog.isRegularClose()) {
+            return false;
+        }
+
+        if (dialog.getName().length() != 0) {
+            tmpName = dialog.getName();
+            value = tmpName.trim();
+        }
+
+        tmpName = dialog.getExtension();
+        extension = tmpName.trim();
+
+        return true;
+    }
+
+    @Override
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info extension=\"" + GTURTLEModeling.transformString(extension) + "\" ");
+        sb.append("/>\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int t1id;
+            String sextension = null;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                sextension = elt.getAttribute("extension");
+                            }
+                            if (sextension != null) {
+                                extension = sextension;
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
 }

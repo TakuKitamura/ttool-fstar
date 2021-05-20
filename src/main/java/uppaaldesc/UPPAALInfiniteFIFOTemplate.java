@@ -48,44 +48,44 @@ import java.awt.*;
  */
 public class UPPAALInfiniteFIFOTemplate extends UPPAALTemplate {
 
-  public UPPAALInfiniteFIFOTemplate(String name, String chname) {
-    super();
-    setName(name);
-    declaration = "int buffer = 0;";
+    public UPPAALInfiniteFIFOTemplate(String name, String chname) {
+        super();
+        setName(name);
+        declaration = "int buffer = 0;";
 
-    // Main state
-    initLocation = new UPPAALLocation();
-    initLocation.idPoint = new Point(-64, -80);
-    initLocation.namePoint = new Point(-80, -56);
-    initLocation.name = "main_state";
-    locations.add(initLocation);
+        // Main state
+        initLocation = new UPPAALLocation();
+        initLocation.idPoint = new Point(-64, -80);
+        initLocation.namePoint = new Point(-80, -56);
+        initLocation.name = "main_state";
+        locations.add(initLocation);
 
-    // Transition for writting
-    UPPAALTransition tr = new UPPAALTransition();
-    tr.sourceLoc = initLocation;
-    tr.destinationLoc = initLocation;
-    // tr.guard = "buffer<maxBuffer";
-    // tr.guardPoint = new Point(-336, -112);
-    tr.synchronization = "wr__" + chname + "?";
-    tr.synchronizationPoint = new Point(-280, -88);
-    tr.assignment = "buffer = buffer + 1";
-    tr.assignmentPoint = new Point(-304, -64);
-    tr.points.add(new Point(-208, -232));
-    tr.points.add(new Point(-208, 104));
-    transitions.add(tr);
+        // Transition for writting
+        UPPAALTransition tr = new UPPAALTransition();
+        tr.sourceLoc = initLocation;
+        tr.destinationLoc = initLocation;
+        // tr.guard = "buffer<maxBuffer";
+        // tr.guardPoint = new Point(-336, -112);
+        tr.synchronization = "wr__" + chname + "?";
+        tr.synchronizationPoint = new Point(-280, -88);
+        tr.assignment = "buffer = buffer + 1";
+        tr.assignmentPoint = new Point(-304, -64);
+        tr.points.add(new Point(-208, -232));
+        tr.points.add(new Point(-208, 104));
+        transitions.add(tr);
 
-    tr = new UPPAALTransition();
-    tr.sourceLoc = initLocation;
-    tr.destinationLoc = initLocation;
-    tr.guard = "buffer>0";
-    tr.guardPoint = new Point(16, -112);
-    tr.synchronization = "rd__" + chname + "?";
-    tr.synchronizationPoint = new Point(40, -88);
-    tr.assignment = "buffer = buffer - 1";
-    tr.assignmentPoint = new Point(24, -72);
-    tr.points.add(new Point(64, 80));
-    tr.points.add(new Point(64, -232));
-    transitions.add(tr);
-  }
+        tr = new UPPAALTransition();
+        tr.sourceLoc = initLocation;
+        tr.destinationLoc = initLocation;
+        tr.guard = "buffer>0";
+        tr.guardPoint = new Point(16, -112);
+        tr.synchronization = "rd__" + chname + "?";
+        tr.synchronizationPoint = new Point(40, -88);
+        tr.assignment = "buffer = buffer - 1";
+        tr.assignmentPoint = new Point(24, -72);
+        tr.points.add(new Point(64, 80));
+        tr.points.add(new Point(64, -232));
+        transitions.add(tr);
+    }
 
 }

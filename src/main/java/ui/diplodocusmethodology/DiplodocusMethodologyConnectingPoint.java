@@ -51,14 +51,14 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class DiplodocusMethodologyConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public DiplodocusMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
-      double _w, double _h, int _orientation) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-    orientation = _orientation;
-  }
+    public DiplodocusMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+            double _w, double _h, int _orientation) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+        orientation = _orientation;
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
+    }
 }

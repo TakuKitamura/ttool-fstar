@@ -66,724 +66,725 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class JDialogCPUNode extends JDialogBase implements ActionListener {
-  // private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI
-  // stats"};
-  // private static String[] tracemodeTab = {"VCI logger"};
+    // private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI
+    // stats"};
+    // private static String[] tracemodeTab = {"VCI logger"};
 
-  public static final String[] helpStrings = { "cpuname.html", "schedulingpolicy.html", "slicetime.html",
-      "numbercores.html", "datasize.html", "pipelinesize.html", "taskswitchingtime.html", "misbranchingprediction.html",
-      "cachemiss.html", "goidletime.html", "maxconsecutivecycles.html", "execi.html", "execc.html", "clockdivider.html",
-      "encryption.html", "cpuextension.html", "operation.html" };
+    public static final String[] helpStrings = { "cpuname.html", "schedulingpolicy.html", "slicetime.html",
+            "numbercores.html", "datasize.html", "pipelinesize.html", "taskswitchingtime.html",
+            "misbranchingprediction.html", "cachemiss.html", "goidletime.html", "maxconsecutivecycles.html",
+            "execi.html", "execc.html", "clockdivider.html", "encryption.html", "cpuextension.html", "operation.html" };
 
-  protected MainGUI mgui;
+    protected MainGUI mgui;
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2, panel4, panel5, panel6;
-  // private Frame frame;
-  private TMLArchiCPUNode node;
+    private JPanel panel2, panel4, panel5, panel6;
+    // private Frame frame;
+    private TMLArchiCPUNode node;
 
-  private ArchUnitMEC MECType;
+    private ArchUnitMEC MECType;
 
-  protected JComboBox<String> tracemode;
-  // private static int selectedTracemode = 0;
-  // Panel1
-  protected TGTextFieldWithHelp nodeName;
+    protected JComboBox<String> tracemode;
+    // private static int selectedTracemode = 0;
+    // Panel1
+    protected TGTextFieldWithHelp nodeName;
 
-  // Panel2
-  protected TGTextFieldWithHelp sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
-      taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored, operation;
+    // Panel2
+    protected TGTextFieldWithHelp sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime,
+            maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime,
+            execcTime, monitored, operation;
 
-  protected TGComboBoxWithHelp<String> schedulingPolicy, MECTypeCB, encryption;
+    protected TGComboBoxWithHelp<String> schedulingPolicy, MECTypeCB, encryption;
 
-  // Tabbed pane for panel1 and panel2
-  private JTabbedPane tabbedPane;
+    // Tabbed pane for panel1 and panel2
+    private JTabbedPane tabbedPane;
 
-  //
-  private java.util.List<SimulationTransaction> transactions;
+    //
+    private java.util.List<SimulationTransaction> transactions;
 
-  // issue 183
-  private List<JButton> buttons;
-  private List<HelpEntry> helpEntries;
-  private JDialogTGComponentHelp cpuHelp;
-
-  /* Creates new form */
-  public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
-      java.util.List<SimulationTransaction> _transactions) {
-    super(_frame, _title, true);
-
-    mgui = _mgui;
-    node = _node;
-    MECType = _MECType;
-    transactions = _transactions;
-
-    initComponents();
-    pack();
-  }
-
-  private void initComponents() {
-
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagLayout gridbag4 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    // GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-    GridBagConstraints c4 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
-    panel2.setPreferredSize(new Dimension(500, 300));
-
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
-
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-
-    panel2.add(new JLabel("CPU name:"), c2);
-    // -------
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
-    nodeName.setEditable(true);
-    nodeName.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(nodeName, c2);
-    nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Scheduling policy:"), c2);
-
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    schedulingPolicy = new TGComboBoxWithHelp<String>();
-    schedulingPolicy.addItem("Round Robin");
-    schedulingPolicy.addItem("Round Robin - Priority Based");
-    schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
-    panel2.add(schedulingPolicy, c2);
-    schedulingPolicy.makeEndHelpButton(helpStrings[1], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
     // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Slice time (in microseconds):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    sliceTime = new TGTextFieldWithHelp("" + node.getSliceTime(), 15);
-    panel2.add(sliceTime, c2);
-    sliceTime.makeEndHelpButton(helpStrings[2], mgui, mgui.getHelpManager(), panel2, c2);
+    private List<JButton> buttons;
+    private List<HelpEntry> helpEntries;
+    private JDialogTGComponentHelp cpuHelp;
 
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Nb of cores:"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    nbOfCores = new TGTextFieldWithHelp("" + node.getNbOfCores(), 15);
-    panel2.add(nbOfCores, c2);
-    nbOfCores.makeEndHelpButton(helpStrings[3], mgui, mgui.getHelpManager(), panel2, c2);
+    /* Creates new form */
+    public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
+            java.util.List<SimulationTransaction> _transactions) {
+        super(_frame, _title, true);
 
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Data size (in byte):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    byteDataSize = new TGTextFieldWithHelp("" + node.getByteDataSize(), 15);
-    panel2.add(byteDataSize, c2);
-    byteDataSize.makeEndHelpButton(helpStrings[4], mgui, mgui.getHelpManager(), panel2, c2);
+        mgui = _mgui;
+        node = _node;
+        MECType = _MECType;
+        transactions = _transactions;
 
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    pipelineSize = new TGTextFieldWithHelp("" + node.getPipelineSize(), 15);
-    panel2.add(pipelineSize, c2);
-    pipelineSize.makeEndHelpButton(helpStrings[5], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Task switching time (in cycle):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    taskSwitchingTime = new TGTextFieldWithHelp("" + node.getTaskSwitchingTime(), 15);
-    panel2.add(taskSwitchingTime, c2);
-    pipelineSize.makeEndHelpButton(helpStrings[6], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Mis-Branching prediction (in %):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    branchingPredictionPenalty = new TGTextFieldWithHelp("" + node.getBranchingPredictionPenalty(), 15);
-    panel2.add(branchingPredictionPenalty, c2);
-    branchingPredictionPenalty.makeEndHelpButton(helpStrings[7], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Cache-miss (in %):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    cacheMiss = new TGTextFieldWithHelp("" + node.getCacheMiss(), 15);
-    panel2.add(cacheMiss, c2);
-    cacheMiss.makeEndHelpButton(helpStrings[8], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Go idle time (in cycle):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    goIdleTime = new TGTextFieldWithHelp("" + node.getGoIdleTime(), 15);
-    panel2.add(goIdleTime, c2);
-    goIdleTime.makeEndHelpButton(helpStrings[9], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Max consecutive cycles before idle (in cycle):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    maxConsecutiveIdleCycles = new TGTextFieldWithHelp("" + node.getMaxConsecutiveIdleCycles(), 15);
-    panel2.add(maxConsecutiveIdleCycles, c2);
-    maxConsecutiveIdleCycles.makeEndHelpButton(helpStrings[10], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("EXECI execution time (in cycle):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    execiTime = new TGTextFieldWithHelp("" + node.getExeciTime(), 15);
-    panel2.add(execiTime, c2);
-    execiTime.makeEndHelpButton(helpStrings[11], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("EXECC execution time (in cycle):"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    execcTime = new TGTextFieldWithHelp("" + node.getExeccTime(), 15);
-    panel2.add(execcTime, c2);
-    execcTime.makeEndHelpButton(helpStrings[12], mgui, mgui.getHelpManager(), panel2, c2);
-
-    c2.gridwidth = 1;
-    // issue 183
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    panel2.add(new JLabel("Clock divider:"), c2);
-    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-    clockRatio = new TGTextFieldWithHelp("" + node.getClockRatio(), 15);
-    panel2.add(clockRatio, c2);
-    execcTime.makeEndHelpButton(helpStrings[13], mgui, mgui.getHelpManager(), panel2, c2);
-
-    // Code generation
-    panel4 = new JPanel();
-    panel4.setLayout(gridbag4);
-    panel4.setBorder(new javax.swing.border.TitledBorder("Attributes"));
-    panel4.setPreferredSize(new Dimension(500, 300));
-    c4.gridwidth = 1;
-    c4.gridheight = 1;
-    c4.weighty = 1.0;
-    c4.weightx = 1.0;
-    c4.fill = GridBagConstraints.HORIZONTAL;
-    panel4.add(new JLabel("Encryption:"), c4);
-    // c4.gridwidth = GridBagConstraints.REMAINDER;
-    encryption = new TGComboBoxWithHelp<String>();
-    encryption.addItem("None");
-    encryption.addItem("Software Encryption");
-    encryption.addItem("Hardware Security Module");
-    encryption.setSelectedIndex(node.getEncryption());
-    panel4.add(encryption, c4);
-    encryption.makeEndHelpButton(helpStrings[14], mgui, mgui.getHelpManager(), panel4, c4);
-
-    c4.weighty = 1.0;
-    c4.weightx = 1.0;
-
-    // operation
-    c4.gridwidth = 1;
-    panel4.add(new JLabel("Operation:"), c4);
-    // c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-    operation = new TGTextFieldWithHelp("" + node.getOperation(), 15);
-    panel4.add(operation, c4);
-    operation.makeEndHelpButton(helpStrings[16], mgui, mgui.getHelpManager(), panel4, c4);
-
-    c4.weighty = 1.0;
-    c4.weightx = 1.0;
-    // extension constructs
-    c4.gridwidth = 1;
-    panel4.add(new JLabel("CPU Extension Construct:"), c4);
-    // c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-    MECTypeCB = new TGComboBoxWithHelp<String>(ArchUnitMEC.stringTypes);
-    if (MECType == null) {
-      MECTypeCB.setSelectedIndex(0);
-    } else {
-      MECTypeCB.setSelectedIndex(MECType.getIndex());
-    }
-    MECTypeCB.addActionListener(this);
-    panel4.add(MECTypeCB, c4);
-    MECTypeCB.makeEndHelpButton(helpStrings[15], mgui, mgui.getHelpManager(), panel4, c4);
-
-    if (transactions != null && transactions.size() != 0) {
-      TraceManager.addDev("Transactions size=" + transactions.size());
-      TraceManager.addDev("On going simulation");
-
-      panel5 = new JPanel();
-      panel5.setPreferredSize(new Dimension(400, 300));
-      MyFrame simulationFrame = new MyFrame(getNodeName(), 1);
-      TraceManager.addDev("Adding simulation frame");
-      simulationFrame.setPreferredSize(new Dimension(400, 300));
-      panel5.add(simulationFrame, c4);
-      tabbedPane.addTab("Simulation Trans: Task View", panel5);
-      // Draw from transactions
-      // for view per core
-      panel6 = new JPanel();
-      panel6.setPreferredSize(new Dimension(400, 300));
-      MyFrame simulationFramePerCore = new MyFrame(getNodeName(), 2);
-      TraceManager.addDev("Adding view per core frame");
-      simulationFramePerCore.setPreferredSize(new Dimension(400, 300));
-      panel6.add(simulationFramePerCore, c4);
-      tabbedPane.addTab("Simulation Trans: Core View", panel6);
-
-    } else {
-      tabbedPane.addTab("Main attributes", panel2);
-      tabbedPane.addTab("Security & operation type", panel4);
-      tabbedPane.setSelectedIndex(0);
-    }
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c0.fill = GridBagConstraints.BOTH;
-    /*
-     * c.add(panel2, c0); c.add(panel4, c0);
-     */
-    c.add(tabbedPane, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
-    }
-  }
-
-  public void closeDialog() {
-    // TraceManager.addDev("Save and close");
-    regularClose = true;
-    MECType = ArchUnitMEC.Types.get(MECTypeCB.getSelectedIndex());
-    dispose();
-    if ((cpuHelp != null) && cpuHelp.isVisible()) {
-      cpuHelp.setVisible(false);
-    }
-  }
-
-  public void cancelDialog() {
-
-    // TraceManager.addDev("Cancel dialog");
-    dispose();
-    if ((cpuHelp != null) && cpuHelp.isVisible()) {
-      cpuHelp.setVisible(false);
-    }
-  }
-
-  public boolean isRegularClose() {
-    // TraceManager.addDev("regularclose=" + regularClose);
-    return regularClose;
-  }
-
-  public String getNodeName() {
-    return nodeName.getText();
-  }
-
-  public String getSliceTime() {
-    return sliceTime.getText();
-  }
-
-  public String getNbOfCores() {
-    return nbOfCores.getText();
-  }
-
-  public String getByteDataSize() {
-    return byteDataSize.getText();
-  }
-
-  public String getPipelineSize() {
-    return pipelineSize.getText();
-  }
-
-  public String getGoIdleTime() {
-    return goIdleTime.getText();
-  }
-
-  public String getMaxConsecutiveIdleCycles() {
-    return maxConsecutiveIdleCycles.getText();
-  }
-
-  public String getExeciTime() {
-    return execiTime.getText();
-  }
-
-  public String getExeccTime() {
-    return execcTime.getText();
-  }
-
-  public String getTaskSwitchingTime() {
-    return taskSwitchingTime.getText();
-  }
-
-  public String getBranchingPredictionPenalty() {
-    return branchingPredictionPenalty.getText();
-  }
-
-  public String getCacheMiss() {
-    return cacheMiss.getText();
-  }
-
-  public int getMonitored() {
-    return tracemode.getSelectedIndex();
-    // return monitored.getText();
-  }
-
-  public String getOperation() {
-    return operation.getText();
-  }
-
-  public String getClockRatio() {
-    return clockRatio.getText();
-  }
-
-  public int getSchedulingPolicy() {
-    return schedulingPolicy.getSelectedIndex();
-  }
-
-  public int getEncryption() {
-    return encryption.getSelectedIndex();
-  }
-
-  public ArchUnitMEC getMECType() {
-    return MECType;
-  }
-
-  class Range {
-    int xi, yi, xf, yf;
-
-    public Range(int xa, int ya, int xb, int yb) {
-      xi = xa;
-      yi = ya;
-      xf = xb;
-      yf = yb;
+        initComponents();
+        pack();
     }
 
-    public boolean inRange(int x, int y) {
-      if (y > yi && y < yf) {
-        if (x > xi && x < xf) {
-          return true;
+    private void initComponents() {
+
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagLayout gridbag4 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        // GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
+        GridBagConstraints c4 = new GridBagConstraints();
+
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
+        panel2.setPreferredSize(new Dimension(500, 300));
+
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+
+        panel2.add(new JLabel("CPU name:"), c2);
+        // -------
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
+        nodeName.setEditable(true);
+        nodeName.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(nodeName, c2);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Scheduling policy:"), c2);
+
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        schedulingPolicy = new TGComboBoxWithHelp<String>();
+        schedulingPolicy.addItem("Round Robin");
+        schedulingPolicy.addItem("Round Robin - Priority Based");
+        schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
+        panel2.add(schedulingPolicy, c2);
+        schedulingPolicy.makeEndHelpButton(helpStrings[1], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Slice time (in microseconds):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        sliceTime = new TGTextFieldWithHelp("" + node.getSliceTime(), 15);
+        panel2.add(sliceTime, c2);
+        sliceTime.makeEndHelpButton(helpStrings[2], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Nb of cores:"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfCores = new TGTextFieldWithHelp("" + node.getNbOfCores(), 15);
+        panel2.add(nbOfCores, c2);
+        nbOfCores.makeEndHelpButton(helpStrings[3], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Data size (in byte):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        byteDataSize = new TGTextFieldWithHelp("" + node.getByteDataSize(), 15);
+        panel2.add(byteDataSize, c2);
+        byteDataSize.makeEndHelpButton(helpStrings[4], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        pipelineSize = new TGTextFieldWithHelp("" + node.getPipelineSize(), 15);
+        panel2.add(pipelineSize, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[5], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Task switching time (in cycle):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        taskSwitchingTime = new TGTextFieldWithHelp("" + node.getTaskSwitchingTime(), 15);
+        panel2.add(taskSwitchingTime, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[6], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Mis-Branching prediction (in %):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        branchingPredictionPenalty = new TGTextFieldWithHelp("" + node.getBranchingPredictionPenalty(), 15);
+        panel2.add(branchingPredictionPenalty, c2);
+        branchingPredictionPenalty.makeEndHelpButton(helpStrings[7], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Cache-miss (in %):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cacheMiss = new TGTextFieldWithHelp("" + node.getCacheMiss(), 15);
+        panel2.add(cacheMiss, c2);
+        cacheMiss.makeEndHelpButton(helpStrings[8], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Go idle time (in cycle):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        goIdleTime = new TGTextFieldWithHelp("" + node.getGoIdleTime(), 15);
+        panel2.add(goIdleTime, c2);
+        goIdleTime.makeEndHelpButton(helpStrings[9], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Max consecutive cycles before idle (in cycle):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        maxConsecutiveIdleCycles = new TGTextFieldWithHelp("" + node.getMaxConsecutiveIdleCycles(), 15);
+        panel2.add(maxConsecutiveIdleCycles, c2);
+        maxConsecutiveIdleCycles.makeEndHelpButton(helpStrings[10], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("EXECI execution time (in cycle):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        execiTime = new TGTextFieldWithHelp("" + node.getExeciTime(), 15);
+        panel2.add(execiTime, c2);
+        execiTime.makeEndHelpButton(helpStrings[11], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("EXECC execution time (in cycle):"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        execcTime = new TGTextFieldWithHelp("" + node.getExeccTime(), 15);
+        panel2.add(execcTime, c2);
+        execcTime.makeEndHelpButton(helpStrings[12], mgui, mgui.getHelpManager(), panel2, c2);
+
+        c2.gridwidth = 1;
+        // issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        panel2.add(new JLabel("Clock divider:"), c2);
+        // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        clockRatio = new TGTextFieldWithHelp("" + node.getClockRatio(), 15);
+        panel2.add(clockRatio, c2);
+        execcTime.makeEndHelpButton(helpStrings[13], mgui, mgui.getHelpManager(), panel2, c2);
+
+        // Code generation
+        panel4 = new JPanel();
+        panel4.setLayout(gridbag4);
+        panel4.setBorder(new javax.swing.border.TitledBorder("Attributes"));
+        panel4.setPreferredSize(new Dimension(500, 300));
+        c4.gridwidth = 1;
+        c4.gridheight = 1;
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
+        c4.fill = GridBagConstraints.HORIZONTAL;
+        panel4.add(new JLabel("Encryption:"), c4);
+        // c4.gridwidth = GridBagConstraints.REMAINDER;
+        encryption = new TGComboBoxWithHelp<String>();
+        encryption.addItem("None");
+        encryption.addItem("Software Encryption");
+        encryption.addItem("Hardware Security Module");
+        encryption.setSelectedIndex(node.getEncryption());
+        panel4.add(encryption, c4);
+        encryption.makeEndHelpButton(helpStrings[14], mgui, mgui.getHelpManager(), panel4, c4);
+
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
+
+        // operation
+        c4.gridwidth = 1;
+        panel4.add(new JLabel("Operation:"), c4);
+        // c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        operation = new TGTextFieldWithHelp("" + node.getOperation(), 15);
+        panel4.add(operation, c4);
+        operation.makeEndHelpButton(helpStrings[16], mgui, mgui.getHelpManager(), panel4, c4);
+
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
+        // extension constructs
+        c4.gridwidth = 1;
+        panel4.add(new JLabel("CPU Extension Construct:"), c4);
+        // c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        MECTypeCB = new TGComboBoxWithHelp<String>(ArchUnitMEC.stringTypes);
+        if (MECType == null) {
+            MECTypeCB.setSelectedIndex(0);
+        } else {
+            MECTypeCB.setSelectedIndex(MECType.getIndex());
         }
-      }
-      return false;
-    }
-  }
+        MECTypeCB.addActionListener(this);
+        panel4.add(MECTypeCB, c4);
+        MECTypeCB.makeEndHelpButton(helpStrings[15], mgui, mgui.getHelpManager(), panel4, c4);
 
-  class MyFrame extends JPanel implements MouseMotionListener, MouseListener {
-    Map<Range, String> toolMap = new HashMap<Range, String>();
-    private int type;
-    private String nodeName;
+        if (transactions != null && transactions.size() != 0) {
+            TraceManager.addDev("Transactions size=" + transactions.size());
+            TraceManager.addDev("On going simulation");
 
-    public MyFrame(String _nodeName, int _type) {
-      this.type = _type;
-      this.nodeName = _nodeName;
-      ToolTipManager.sharedInstance().setInitialDelay(0);
+            panel5 = new JPanel();
+            panel5.setPreferredSize(new Dimension(400, 300));
+            MyFrame simulationFrame = new MyFrame(getNodeName(), 1);
+            TraceManager.addDev("Adding simulation frame");
+            simulationFrame.setPreferredSize(new Dimension(400, 300));
+            panel5.add(simulationFrame, c4);
+            tabbedPane.addTab("Simulation Trans: Task View", panel5);
+            // Draw from transactions
+            // for view per core
+            panel6 = new JPanel();
+            panel6.setPreferredSize(new Dimension(400, 300));
+            MyFrame simulationFramePerCore = new MyFrame(getNodeName(), 2);
+            TraceManager.addDev("Adding view per core frame");
+            simulationFramePerCore.setPreferredSize(new Dimension(400, 300));
+            panel6.add(simulationFramePerCore, c4);
+            tabbedPane.addTab("Simulation Trans: Core View", panel6);
 
-      addMouseMotionListener(this);
-      addMouseListener(this);
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-      // do something
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-      drawToolTip(e);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-      drawToolTip(e);
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-      drawToolTip(e);
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-      ///
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-      ///
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void drawToolTip(MouseEvent e) {
-
-      setToolTipText(null);
-      for (Range r : toolMap.keySet()) {
-
-        int x = e.getX();
-        int y = e.getY();
-        if (r.inRange(x, y)) {
-          setToolTipText(toolMap.get(r));
-          break;
+        } else {
+            tabbedPane.addTab("Main attributes", panel2);
+            tabbedPane.addTab("Security & operation type", panel4);
+            tabbedPane.setSelectedIndex(0);
         }
-      }
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c0.fill = GridBagConstraints.BOTH;
+        /*
+         * c.add(panel2, c0); c.add(panel4, c0);
+         */
+        c.add(tabbedPane, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
     }
 
-    // If simulation is ongoing
-    public void paint(Graphics g) {
-      if (type == 1) { // task view
-        // Draw Axis
-        g.drawLine(70, 0, 70, 300);
-        int i = 0;
-        java.util.List<String> tasks = new ArrayList<String>();
-        Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
-        // double incr=0.0;
-        BigDecimal maxtime = new BigDecimal("0");
-        BigDecimal mintime = new BigDecimal("9999999999999999999999999999");
-        // Colors
-        // Exec- ColorManager.EXEC
-        // Channel - TML_PORT_CHANNEL
-        Collections.sort(transactions, new Comparator<SimulationTransaction>() {
-          public int compare(SimulationTransaction o1, SimulationTransaction o2) {
-            BigDecimal t1 = new BigDecimal(o1.startTime);
-            BigDecimal t2 = new BigDecimal(o2.startTime);
-            return t1.compareTo(t2);
-          }
-        });
-        ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
-        for (SimulationTransaction st : transactions) {
-          if (!tasks.contains(st.taskName)) {
-            tasks.add(st.taskName);
-            java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
-            tasktrans.put(st.taskName, tmp);
-          }
+    public void actionPerformed(ActionEvent evt) {
 
-          if (tasktrans.get(st.taskName).size() == 0
-              || !(tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size() - 1).command
-                  + tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size() - 1).startTime)
-                      .equals(st.command + st.startTime)) {
-            tasktrans.get(st.taskName).add(st);
-          } else {
-            tranList.remove(st);
-          }
+        String command = evt.getActionCommand();
 
-          BigDecimal start = new BigDecimal(st.startTime);
-          BigDecimal end = new BigDecimal(st.endTime);
-
-          if (start.compareTo(mintime) == -1) {
-            mintime = start;
-          }
-
-          if (end.compareTo(maxtime) == 1) {
-            maxtime = end;
-          }
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
         }
-        String commandName = "";
-        TreeSet<Integer> tree = new TreeSet<>();
-        for (int j = 0; j < tranList.size(); j++) {
-          tree.add(Integer.valueOf(tranList.get(j).startTime));
+    }
+
+    public void closeDialog() {
+        // TraceManager.addDev("Save and close");
+        regularClose = true;
+        MECType = ArchUnitMEC.Types.get(MECTypeCB.getSelectedIndex());
+        dispose();
+        if ((cpuHelp != null) && cpuHelp.isVisible()) {
+            cpuHelp.setVisible(false);
         }
-        Integer[] arr = new Integer[tree.size()];
-        tree.toArray(arr);
-        for (int t = 0; t < tranList.size(); t++) {
-          for (int k = 0; k < arr.length; k++) {
-            if (tranList.get(t).startTime.equals(String.valueOf(arr[k]))) {
-              tranList.get(t).index = k;
-              break;
+    }
+
+    public void cancelDialog() {
+
+        // TraceManager.addDev("Cancel dialog");
+        dispose();
+        if ((cpuHelp != null) && cpuHelp.isVisible()) {
+            cpuHelp.setVisible(false);
+        }
+    }
+
+    public boolean isRegularClose() {
+        // TraceManager.addDev("regularclose=" + regularClose);
+        return regularClose;
+    }
+
+    public String getNodeName() {
+        return nodeName.getText();
+    }
+
+    public String getSliceTime() {
+        return sliceTime.getText();
+    }
+
+    public String getNbOfCores() {
+        return nbOfCores.getText();
+    }
+
+    public String getByteDataSize() {
+        return byteDataSize.getText();
+    }
+
+    public String getPipelineSize() {
+        return pipelineSize.getText();
+    }
+
+    public String getGoIdleTime() {
+        return goIdleTime.getText();
+    }
+
+    public String getMaxConsecutiveIdleCycles() {
+        return maxConsecutiveIdleCycles.getText();
+    }
+
+    public String getExeciTime() {
+        return execiTime.getText();
+    }
+
+    public String getExeccTime() {
+        return execcTime.getText();
+    }
+
+    public String getTaskSwitchingTime() {
+        return taskSwitchingTime.getText();
+    }
+
+    public String getBranchingPredictionPenalty() {
+        return branchingPredictionPenalty.getText();
+    }
+
+    public String getCacheMiss() {
+        return cacheMiss.getText();
+    }
+
+    public int getMonitored() {
+        return tracemode.getSelectedIndex();
+        // return monitored.getText();
+    }
+
+    public String getOperation() {
+        return operation.getText();
+    }
+
+    public String getClockRatio() {
+        return clockRatio.getText();
+    }
+
+    public int getSchedulingPolicy() {
+        return schedulingPolicy.getSelectedIndex();
+    }
+
+    public int getEncryption() {
+        return encryption.getSelectedIndex();
+    }
+
+    public ArchUnitMEC getMECType() {
+        return MECType;
+    }
+
+    class Range {
+        int xi, yi, xf, yf;
+
+        public Range(int xa, int ya, int xb, int yb) {
+            xi = xa;
+            yi = ya;
+            xf = xb;
+            yf = yb;
+        }
+
+        public boolean inRange(int x, int y) {
+            if (y > yi && y < yf) {
+                if (x > xi && x < xf) {
+                    return true;
+                }
             }
-          }
+            return false;
         }
-
-        for (String s : tasks) {
-          i++;
-          g.drawString(s.split("__")[1], 0, i * 50 + 50);
-          for (SimulationTransaction tran : tasktrans.get(s)) {
-            // Fill rectangle with color
-            if (tran.command.contains("Read")) {
-              commandName = "RD";
-              g.setColor(ColorManager.TML_PORT_CHANNEL);
-            } else if (tran.command.contains("Write")) {
-              g.setColor(ColorManager.TML_PORT_CHANNEL);
-              commandName = "WR";
-            } else if (tran.command.contains("Send")) {
-              g.setColor(ColorManager.TML_PORT_EVENT);
-              commandName = "SND";
-            } else if (tran.command.contains("Wait")) {
-              g.setColor(ColorManager.TML_PORT_EVENT);
-              commandName = "WT";
-            } else if (tran.command.contains("Request")) {
-              g.setColor(ColorManager.TML_PORT_REQUEST);
-              commandName = "REQ";
-            } else if (tran.command.contains("Delay")) {
-              g.setColor(ColorManager.TML_PORT_CHANNEL);
-              commandName = "DL";
-            } else if (tran.command.contains("Execi")) {
-              commandName = "EX";
-              g.setColor(ColorManager.EXEC);
-            } else {
-              continue;
-            }
-            int start = 30 * tran.index + 70;
-            g.fillRect(start, i * 50 + 40, 30, 20);
-            g.setColor(Color.black);
-            g.drawRect(start, i * 50 + 40, 30, 20);
-            g.drawString(commandName, start + 2, i * 50 + 55);
-            toolMap.put(new Range(start, i * 50 + 40, start + 30, i * 50 + 40 + 20),
-                "Task: " + tran.taskName + ", " + tran.command + " Time " + tran.startTime + "-" + tran.endTime);
-          }
-        }
-      } else if (type == 2) { // view per core
-        // Draw Axis
-        g.drawLine(70, 0, 70, 300);
-        int i = 0;
-        java.util.List<String> cores = new ArrayList<String>();
-        Map<String, java.util.List<SimulationTransaction>> coreTrans = new HashMap<String, java.util.List<SimulationTransaction>>();
-        // double incr=0.0;
-        BigDecimal maxtime = new BigDecimal("0");
-        BigDecimal mintime = new BigDecimal("9999999999999999999999999999");
-
-        Collections.sort(transactions, new Comparator<SimulationTransaction>() {
-          public int compare(SimulationTransaction o1, SimulationTransaction o2) {
-            BigDecimal t1 = new BigDecimal(o1.startTime);
-            BigDecimal t2 = new BigDecimal(o2.startTime);
-            return t1.compareTo(t2);
-          }
-        });
-
-        ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
-        for (SimulationTransaction st : transactions) {
-          if (!cores.contains(st.coreNumber)) {
-            cores.add(st.coreNumber);
-            java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
-            coreTrans.put(st.coreNumber, tmp);
-          }
-
-          if (coreTrans.get(st.coreNumber).size() == 0
-              || !(coreTrans.get(st.coreNumber).get(coreTrans.get(st.coreNumber).size() - 1).command
-                  + coreTrans.get(st.coreNumber).get(coreTrans.get(st.coreNumber).size() - 1).startTime)
-                      .equals(st.command + st.startTime)) {
-            coreTrans.get(st.coreNumber).add(st);
-          } else {
-            tranList.remove(st);
-          }
-
-          BigDecimal start = new BigDecimal(st.startTime);
-          BigDecimal end = new BigDecimal(st.endTime);
-
-          if (start.compareTo(mintime) == -1) {
-            mintime = start;
-          }
-
-          if (end.compareTo(maxtime) == 1) {
-            maxtime = end;
-          }
-        }
-        String commandName = "";
-        TreeSet<Integer> tree = new TreeSet<>();
-        for (int j = 0; j < tranList.size(); j++) {
-          tree.add(Integer.valueOf(tranList.get(j).startTime));
-        }
-
-        Integer[] arr = new Integer[tree.size()];
-        tree.toArray(arr);
-        for (int t = 0; t < tranList.size(); t++) {
-          for (int k = 0; k < arr.length; k++) {
-            if (tranList.get(t).startTime.equals(String.valueOf(arr[k]))) {
-              tranList.get(t).index = k;
-              break;
-            }
-          }
-        }
-
-        g.drawString("Device: " + nodeName, 170, 25);
-        for (String s : cores) {
-          i++;
-          g.drawString("Core " + s, 0, i * 50 + 50);
-          for (SimulationTransaction tran : coreTrans.get(s)) {
-            // Fill rectangle with color
-            if (tran.command.contains("Read")) {
-              commandName = "RD";
-              g.setColor(ColorManager.TML_PORT_CHANNEL);
-            } else if (tran.command.contains("Write")) {
-              g.setColor(ColorManager.TML_PORT_CHANNEL);
-              commandName = "WR";
-            } else if (tran.command.contains("Send")) {
-              g.setColor(ColorManager.TML_PORT_EVENT);
-              commandName = "SND";
-            } else if (tran.command.contains("Wait")) {
-              g.setColor(ColorManager.TML_PORT_EVENT);
-              commandName = "WT";
-            } else if (tran.command.contains("Request")) {
-              g.setColor(ColorManager.TML_PORT_REQUEST);
-              commandName = "REQ";
-            } else if (tran.command.contains("Delay")) {
-              g.setColor(ColorManager.TML_PORT_CHANNEL);
-              commandName = "DL";
-            } else if (tran.command.contains("Execi")) {
-              commandName = "EX";
-              g.setColor(ColorManager.EXEC);
-            } else {
-              continue;
-            }
-            int start = 30 * tran.index + 70;
-            g.fillRect(start, i * 50 + 40, 30, 20);
-            g.setColor(Color.black);
-            g.drawRect(start, i * 50 + 40, 30, 20);
-            g.drawString(commandName, start + 2, i * 50 + 55);
-            toolMap.put(new Range(start, i * 50 + 40, start + 30, i * 50 + 40 + 20),
-                "Task: " + tran.taskName + ", " + tran.command + " Time " + tran.startTime + "-" + tran.endTime);
-          }
-        }
-      }
     }
-  }
+
+    class MyFrame extends JPanel implements MouseMotionListener, MouseListener {
+        Map<Range, String> toolMap = new HashMap<Range, String>();
+        private int type;
+        private String nodeName;
+
+        public MyFrame(String _nodeName, int _type) {
+            this.type = _type;
+            this.nodeName = _nodeName;
+            ToolTipManager.sharedInstance().setInitialDelay(0);
+
+            addMouseMotionListener(this);
+            addMouseListener(this);
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            // do something
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            drawToolTip(e);
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            drawToolTip(e);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            drawToolTip(e);
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            ///
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            ///
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        public void drawToolTip(MouseEvent e) {
+
+            setToolTipText(null);
+            for (Range r : toolMap.keySet()) {
+
+                int x = e.getX();
+                int y = e.getY();
+                if (r.inRange(x, y)) {
+                    setToolTipText(toolMap.get(r));
+                    break;
+                }
+            }
+        }
+
+        // If simulation is ongoing
+        public void paint(Graphics g) {
+            if (type == 1) { // task view
+                // Draw Axis
+                g.drawLine(70, 0, 70, 300);
+                int i = 0;
+                java.util.List<String> tasks = new ArrayList<String>();
+                Map<String, java.util.List<SimulationTransaction>> tasktrans = new HashMap<String, java.util.List<SimulationTransaction>>();
+                // double incr=0.0;
+                BigDecimal maxtime = new BigDecimal("0");
+                BigDecimal mintime = new BigDecimal("9999999999999999999999999999");
+                // Colors
+                // Exec- ColorManager.EXEC
+                // Channel - TML_PORT_CHANNEL
+                Collections.sort(transactions, new Comparator<SimulationTransaction>() {
+                    public int compare(SimulationTransaction o1, SimulationTransaction o2) {
+                        BigDecimal t1 = new BigDecimal(o1.startTime);
+                        BigDecimal t2 = new BigDecimal(o2.startTime);
+                        return t1.compareTo(t2);
+                    }
+                });
+                ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
+                for (SimulationTransaction st : transactions) {
+                    if (!tasks.contains(st.taskName)) {
+                        tasks.add(st.taskName);
+                        java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
+                        tasktrans.put(st.taskName, tmp);
+                    }
+
+                    if (tasktrans.get(st.taskName).size() == 0
+                            || !(tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size() - 1).command
+                                    + tasktrans.get(st.taskName).get(tasktrans.get(st.taskName).size() - 1).startTime)
+                                            .equals(st.command + st.startTime)) {
+                        tasktrans.get(st.taskName).add(st);
+                    } else {
+                        tranList.remove(st);
+                    }
+
+                    BigDecimal start = new BigDecimal(st.startTime);
+                    BigDecimal end = new BigDecimal(st.endTime);
+
+                    if (start.compareTo(mintime) == -1) {
+                        mintime = start;
+                    }
+
+                    if (end.compareTo(maxtime) == 1) {
+                        maxtime = end;
+                    }
+                }
+                String commandName = "";
+                TreeSet<Integer> tree = new TreeSet<>();
+                for (int j = 0; j < tranList.size(); j++) {
+                    tree.add(Integer.valueOf(tranList.get(j).startTime));
+                }
+                Integer[] arr = new Integer[tree.size()];
+                tree.toArray(arr);
+                for (int t = 0; t < tranList.size(); t++) {
+                    for (int k = 0; k < arr.length; k++) {
+                        if (tranList.get(t).startTime.equals(String.valueOf(arr[k]))) {
+                            tranList.get(t).index = k;
+                            break;
+                        }
+                    }
+                }
+
+                for (String s : tasks) {
+                    i++;
+                    g.drawString(s.split("__")[1], 0, i * 50 + 50);
+                    for (SimulationTransaction tran : tasktrans.get(s)) {
+                        // Fill rectangle with color
+                        if (tran.command.contains("Read")) {
+                            commandName = "RD";
+                            g.setColor(ColorManager.TML_PORT_CHANNEL);
+                        } else if (tran.command.contains("Write")) {
+                            g.setColor(ColorManager.TML_PORT_CHANNEL);
+                            commandName = "WR";
+                        } else if (tran.command.contains("Send")) {
+                            g.setColor(ColorManager.TML_PORT_EVENT);
+                            commandName = "SND";
+                        } else if (tran.command.contains("Wait")) {
+                            g.setColor(ColorManager.TML_PORT_EVENT);
+                            commandName = "WT";
+                        } else if (tran.command.contains("Request")) {
+                            g.setColor(ColorManager.TML_PORT_REQUEST);
+                            commandName = "REQ";
+                        } else if (tran.command.contains("Delay")) {
+                            g.setColor(ColorManager.TML_PORT_CHANNEL);
+                            commandName = "DL";
+                        } else if (tran.command.contains("Execi")) {
+                            commandName = "EX";
+                            g.setColor(ColorManager.EXEC);
+                        } else {
+                            continue;
+                        }
+                        int start = 30 * tran.index + 70;
+                        g.fillRect(start, i * 50 + 40, 30, 20);
+                        g.setColor(Color.black);
+                        g.drawRect(start, i * 50 + 40, 30, 20);
+                        g.drawString(commandName, start + 2, i * 50 + 55);
+                        toolMap.put(new Range(start, i * 50 + 40, start + 30, i * 50 + 40 + 20), "Task: "
+                                + tran.taskName + ", " + tran.command + " Time " + tran.startTime + "-" + tran.endTime);
+                    }
+                }
+            } else if (type == 2) { // view per core
+                // Draw Axis
+                g.drawLine(70, 0, 70, 300);
+                int i = 0;
+                java.util.List<String> cores = new ArrayList<String>();
+                Map<String, java.util.List<SimulationTransaction>> coreTrans = new HashMap<String, java.util.List<SimulationTransaction>>();
+                // double incr=0.0;
+                BigDecimal maxtime = new BigDecimal("0");
+                BigDecimal mintime = new BigDecimal("9999999999999999999999999999");
+
+                Collections.sort(transactions, new Comparator<SimulationTransaction>() {
+                    public int compare(SimulationTransaction o1, SimulationTransaction o2) {
+                        BigDecimal t1 = new BigDecimal(o1.startTime);
+                        BigDecimal t2 = new BigDecimal(o2.startTime);
+                        return t1.compareTo(t2);
+                    }
+                });
+
+                ArrayList<SimulationTransaction> tranList = new ArrayList<SimulationTransaction>(transactions);
+                for (SimulationTransaction st : transactions) {
+                    if (!cores.contains(st.coreNumber)) {
+                        cores.add(st.coreNumber);
+                        java.util.List<SimulationTransaction> tmp = new ArrayList<SimulationTransaction>();
+                        coreTrans.put(st.coreNumber, tmp);
+                    }
+
+                    if (coreTrans.get(st.coreNumber).size() == 0 || !(coreTrans.get(st.coreNumber)
+                            .get(coreTrans.get(st.coreNumber).size() - 1).command
+                            + coreTrans.get(st.coreNumber).get(coreTrans.get(st.coreNumber).size() - 1).startTime)
+                                    .equals(st.command + st.startTime)) {
+                        coreTrans.get(st.coreNumber).add(st);
+                    } else {
+                        tranList.remove(st);
+                    }
+
+                    BigDecimal start = new BigDecimal(st.startTime);
+                    BigDecimal end = new BigDecimal(st.endTime);
+
+                    if (start.compareTo(mintime) == -1) {
+                        mintime = start;
+                    }
+
+                    if (end.compareTo(maxtime) == 1) {
+                        maxtime = end;
+                    }
+                }
+                String commandName = "";
+                TreeSet<Integer> tree = new TreeSet<>();
+                for (int j = 0; j < tranList.size(); j++) {
+                    tree.add(Integer.valueOf(tranList.get(j).startTime));
+                }
+
+                Integer[] arr = new Integer[tree.size()];
+                tree.toArray(arr);
+                for (int t = 0; t < tranList.size(); t++) {
+                    for (int k = 0; k < arr.length; k++) {
+                        if (tranList.get(t).startTime.equals(String.valueOf(arr[k]))) {
+                            tranList.get(t).index = k;
+                            break;
+                        }
+                    }
+                }
+
+                g.drawString("Device: " + nodeName, 170, 25);
+                for (String s : cores) {
+                    i++;
+                    g.drawString("Core " + s, 0, i * 50 + 50);
+                    for (SimulationTransaction tran : coreTrans.get(s)) {
+                        // Fill rectangle with color
+                        if (tran.command.contains("Read")) {
+                            commandName = "RD";
+                            g.setColor(ColorManager.TML_PORT_CHANNEL);
+                        } else if (tran.command.contains("Write")) {
+                            g.setColor(ColorManager.TML_PORT_CHANNEL);
+                            commandName = "WR";
+                        } else if (tran.command.contains("Send")) {
+                            g.setColor(ColorManager.TML_PORT_EVENT);
+                            commandName = "SND";
+                        } else if (tran.command.contains("Wait")) {
+                            g.setColor(ColorManager.TML_PORT_EVENT);
+                            commandName = "WT";
+                        } else if (tran.command.contains("Request")) {
+                            g.setColor(ColorManager.TML_PORT_REQUEST);
+                            commandName = "REQ";
+                        } else if (tran.command.contains("Delay")) {
+                            g.setColor(ColorManager.TML_PORT_CHANNEL);
+                            commandName = "DL";
+                        } else if (tran.command.contains("Execi")) {
+                            commandName = "EX";
+                            g.setColor(ColorManager.EXEC);
+                        } else {
+                            continue;
+                        }
+                        int start = 30 * tran.index + 70;
+                        g.fillRect(start, i * 50 + 40, 30, 20);
+                        g.setColor(Color.black);
+                        g.drawRect(start, i * 50 + 40, 30, 20);
+                        g.drawString(commandName, start + 2, i * 50 + 55);
+                        toolMap.put(new Range(start, i * 50 + 40, start + 30, i * 50 + 40 + 20), "Task: "
+                                + tran.taskName + ", " + tran.command + " Time " + tran.startTime + "-" + tran.endTime);
+                    }
+                }
+            }
+        }
+    }
 }

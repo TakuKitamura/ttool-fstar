@@ -51,62 +51,62 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class UCDBorder extends TGCScalableWithoutInternalComponentOneLineText {
-  /*
-   * protected int lineLength = 5; protected int textX = 5; protected int textY =
-   * 15; protected int arc = 5;
-   */
-  protected int w, h; // w1;
-  protected int textSpace = 5;
+    /*
+     * protected int lineLength = 5; protected int textX = 5; protected int textY =
+     * 15; protected int arc = 5;
+     */
+    protected int w, h; // w1;
+    protected int textSpace = 5;
 
-  public UCDBorder(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public UCDBorder(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = (int) (250 * tdp.getZoom());
-    height = (int) (250 * tdp.getZoom());
-    minWidth = (int) (100 * tdp.getZoom());
-    minHeight = (int) (100 * tdp.getZoom());
+        width = (int) (250 * tdp.getZoom());
+        height = (int) (250 * tdp.getZoom());
+        minWidth = (int) (100 * tdp.getZoom());
+        minHeight = (int) (100 * tdp.getZoom());
 
-    nbConnectingPoint = 0;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 0;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        addTGConnectingPointsComment();
 
-    super.oldScaleFactor = tdp.getZoom();
+        super.oldScaleFactor = tdp.getZoom();
 
-    moveable = true;
-    editable = true;
-    removable = true;
-    userResizable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
+        userResizable = true;
 
-    value = "My system";
-    name = "border";
+        value = "My system";
+        name = "border";
 
-    myImageIcon = IconManager.imgic612;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    w = g.getFontMetrics().stringWidth(value);
-    h = g.getFontMetrics().getHeight();
-
-    g.drawRect(x, y, width, height);
-    drawSingleString(g, value, x + width - w - textSpace, y + h);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic612;
     }
-    return null;
-  }
 
-  public String getSystemName() {
-    return value;
-  }
+    @Override
+    public void internalDrawing(Graphics g) {
+        w = g.getFontMetrics().stringWidth(value);
+        h = g.getFontMetrics().getHeight();
 
-  @Override
-  public int getType() {
-    return TGComponentManager.UCD_BORDER;
-  }
+        g.drawRect(x, y, width, height);
+        drawSingleString(g, value, x + width - w - textSpace, y + h);
+    }
+
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public String getSystemName() {
+        return value;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.UCD_BORDER;
+    }
 }

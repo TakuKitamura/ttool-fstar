@@ -58,88 +58,88 @@ import javax.swing.*;
  */
 public class RequirementDiagramToolBar extends TToolBar {
 
-  public RequirementDiagramToolBar(MainGUI _mgui) {
-    super(_mgui);
+    public RequirementDiagramToolBar(MainGUI _mgui) {
+        super(_mgui);
 
-  }
+    }
 
-  protected void setActive(boolean b) {
-    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    protected void setActive(boolean b) {
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-    mgui.updateZoomInfo();
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        mgui.updateZoomInfo();
 
-    mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
-    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_REQUIREMENT].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_OBSERVER].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_EBRDD].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_VERIFY].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_DERIVE].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_COPY].setEnabled(b);
-    mgui.actions[TGUIAction.TREQ_COMPOSITION].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_REQUIREMENT].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_OBSERVER].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_EBRDD].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_VERIFY].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_DERIVE].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_COPY].setEnabled(b);
+        mgui.actions[TGUIAction.TREQ_COMPOSITION].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
 
-  }
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_REQUIREMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_REQUIREMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_OBSERVER]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_OBSERVER]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_EBRDD]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_EBRDD]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_COMPOSITION]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_COMPOSITION]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_DERIVE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_DERIVE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_COPY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_COPY]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.TREQ_VERIFY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TREQ_VERIFY]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-  }
+    }
 
 } // Class

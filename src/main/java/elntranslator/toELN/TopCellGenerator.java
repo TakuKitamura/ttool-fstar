@@ -60,78 +60,82 @@ import elntranslator.*;
  */
 
 public class TopCellGenerator {
-  public static ELNSpecification eln;
+    public static ELNSpecification eln;
 
-  private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
-  private final static String GENERATED_PATH2 = "generated_H" + File.separator;
+    private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
+    private final static String GENERATED_PATH2 = "generated_H" + File.separator;
 
-  public TopCellGenerator(ELNSpecification _eln) {
-    eln = _eln;
-  }
-
-  public String generateTopCell(ELNTCluster cluster, LinkedList<ELNTConnector> connectors) {
-    if (TopCellGenerator.eln.getCluster() == null) {
-      System.out.println("***Warning: require at least one cluster***");
+    public TopCellGenerator(ELNSpecification _eln) {
+        eln = _eln;
     }
-    if (TopCellGenerator.eln.getNbModule() == 0) {
-      System.out.println("***Warning: require at least one module***");
+
+    public String generateTopCell(ELNTCluster cluster, LinkedList<ELNTConnector> connectors) {
+        if (TopCellGenerator.eln.getCluster() == null) {
+            System.out.println("***Warning: require at least one cluster***");
+        }
+        if (TopCellGenerator.eln.getNbModule() == 0) {
+            System.out.println("***Warning: require at least one module***");
+        }
+        if (TopCellGenerator.eln.getNbComponentCapacitor() + TopCellGenerator.eln.getNbComponentCurrentSinkTDF()
+                + TopCellGenerator.eln.getNbComponentCurrentSourceTDF()
+                + TopCellGenerator.eln.getNbComponentIdealTransformer()
+                + TopCellGenerator.eln.getNbComponentIndependentCurrentSource()
+                + TopCellGenerator.eln.getNbComponentIndependentVoltageSource()
+                + TopCellGenerator.eln.getNbComponentInductor() + TopCellGenerator.eln.getNbComponentResistor()
+                + TopCellGenerator.eln.getNbComponentTransmissionLine()
+                + TopCellGenerator.eln.getNbComponentVoltageControlledCurrentSource()
+                + TopCellGenerator.eln.getNbComponentVoltageControlledVoltageSource()
+                + TopCellGenerator.eln.getNbComponentVoltageSinkTDF()
+                + TopCellGenerator.eln.getNbComponentVoltageSourceTDF()
+                + TopCellGenerator.eln.getNbComponentVoltageSinkDE()
+                + TopCellGenerator.eln.getNbComponentVoltageSourceDE()
+                + TopCellGenerator.eln.getNbComponentCurrentSinkDE()
+                + TopCellGenerator.eln.getNbComponentCurrentSourceDE() == 0) {
+            System.out.println("***Warning: require at least one primitive component***");
+        }
+        if (TopCellGenerator.eln.getNbComponentNodeRef() == 0) {
+            System.out.println("***Warning: require at least one node ref***");
+        }
+        String top = ClusterCode.getClusterCode(cluster, connectors);
+        return (top);
     }
-    if (TopCellGenerator.eln.getNbComponentCapacitor() + TopCellGenerator.eln.getNbComponentCurrentSinkTDF()
-        + TopCellGenerator.eln.getNbComponentCurrentSourceTDF() + TopCellGenerator.eln.getNbComponentIdealTransformer()
-        + TopCellGenerator.eln.getNbComponentIndependentCurrentSource()
-        + TopCellGenerator.eln.getNbComponentIndependentVoltageSource() + TopCellGenerator.eln.getNbComponentInductor()
-        + TopCellGenerator.eln.getNbComponentResistor() + TopCellGenerator.eln.getNbComponentTransmissionLine()
-        + TopCellGenerator.eln.getNbComponentVoltageControlledCurrentSource()
-        + TopCellGenerator.eln.getNbComponentVoltageControlledVoltageSource()
-        + TopCellGenerator.eln.getNbComponentVoltageSinkTDF() + TopCellGenerator.eln.getNbComponentVoltageSourceTDF()
-        + TopCellGenerator.eln.getNbComponentVoltageSinkDE() + TopCellGenerator.eln.getNbComponentVoltageSourceDE()
-        + TopCellGenerator.eln.getNbComponentCurrentSinkDE()
-        + TopCellGenerator.eln.getNbComponentCurrentSourceDE() == 0) {
-      System.out.println("***Warning: require at least one primitive component***");
+
+    public void saveFile(String path) {
+        ELNTCluster cluster = TopCellGenerator.eln.getCluster();
+        LinkedList<ELNTConnector> connectorsModule = TopCellGenerator.eln.getAllConnectorsInModule();
+        LinkedList<ELNTConnector> connectorsCluster = TopCellGenerator.eln.getAllConnectorsInCluster();
+
+        String top;
+
+        try {
+            // Save file .cpp
+            System.err.println(path + GENERATED_PATH1 + cluster.getName() + ".cpp");
+            FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getName() + "_tb.cpp");
+            top = generateTopCell(cluster, connectorsCluster);
+            fw.write(top);
+            fw.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        // Save files .h
+        saveFileModule(path, cluster, connectorsModule);
     }
-    if (TopCellGenerator.eln.getNbComponentNodeRef() == 0) {
-      System.out.println("***Warning: require at least one node ref***");
+
+    public void saveFileModule(String path, ELNTCluster cluster, List<ELNTConnector> connectors) {
+        LinkedList<ELNTModule> modules = cluster.getModule();
+
+        String code;
+
+        for (ELNTModule module : modules) {
+            try {
+                System.err.println(path + GENERATED_PATH2 + module.getName() + ".h");
+                FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + module.getName() + ".h");
+                code = ModuleCode.getModuleCode(module, connectors);
+                fw.write(code);
+                fw.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
-    String top = ClusterCode.getClusterCode(cluster, connectors);
-    return (top);
-  }
-
-  public void saveFile(String path) {
-    ELNTCluster cluster = TopCellGenerator.eln.getCluster();
-    LinkedList<ELNTConnector> connectorsModule = TopCellGenerator.eln.getAllConnectorsInModule();
-    LinkedList<ELNTConnector> connectorsCluster = TopCellGenerator.eln.getAllConnectorsInCluster();
-
-    String top;
-
-    try {
-      // Save file .cpp
-      System.err.println(path + GENERATED_PATH1 + cluster.getName() + ".cpp");
-      FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getName() + "_tb.cpp");
-      top = generateTopCell(cluster, connectorsCluster);
-      fw.write(top);
-      fw.close();
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-    // Save files .h
-    saveFileModule(path, cluster, connectorsModule);
-  }
-
-  public void saveFileModule(String path, ELNTCluster cluster, List<ELNTConnector> connectors) {
-    LinkedList<ELNTModule> modules = cluster.getModule();
-
-    String code;
-
-    for (ELNTModule module : modules) {
-      try {
-        System.err.println(path + GENERATED_PATH2 + module.getName() + ".h");
-        FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + module.getName() + ".h");
-        code = ModuleCode.getModuleCode(module, connectors);
-        fw.write(code);
-        fw.close();
-      } catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    }
-  }
 }

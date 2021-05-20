@@ -48,10 +48,10 @@ package tmltranslator.modelcompiler;
  */
 public class CpuMEC extends ArchUnitMEC {
 
-  // protected String addr = "";
+    // protected String addr = "";
 
-  public CpuMEC() {
-    index = 0;
-  }
+    public CpuMEC() {
+        index = 0;
+    }
 
 } // End of class

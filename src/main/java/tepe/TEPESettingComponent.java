@@ -48,11 +48,11 @@ import java.util.Vector;
  */
 public class TEPESettingComponent extends TEPEComponent {
 
-  public TEPESettingComponent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    inAttributeComponents = new Vector<TEPEComponent>();
-    outAttributeComponents = new Vector<TEPEComponent>();
-    outSignalComponents = new Vector<TEPEComponent>();
-  }
+    public TEPESettingComponent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        inAttributeComponents = new Vector<TEPEComponent>();
+        outAttributeComponents = new Vector<TEPEComponent>();
+        outSignalComponents = new Vector<TEPEComponent>();
+    }
 
 }

@@ -46,15 +46,15 @@ package sddescription;
  */
 public class HMSCElement {
 
-  protected String name;
+    protected String name;
 
-  public HMSCElement(String _name) {
-    name = _name;
+    public HMSCElement(String _name) {
+        name = _name;
 
-  }
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
 }

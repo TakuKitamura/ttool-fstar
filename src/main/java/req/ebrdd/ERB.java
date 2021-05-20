@@ -46,42 +46,42 @@ package req.ebrdd;
  */
 public class ERB extends ERCElement {
 
-  protected String evt, condition, action;
+    protected String evt, condition, action;
 
-  public ERB(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public ERB(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void setEvent(String _evt) {
-    evt = _evt;
-  }
+    public void setEvent(String _evt) {
+        evt = _evt;
+    }
 
-  public void setCondition(String _condition) {
-    condition = _condition;
-  }
+    public void setCondition(String _condition) {
+        condition = _condition;
+    }
 
-  public void setAction(String _action) {
-    action = _action;
-  }
+    public void setAction(String _action) {
+        action = _action;
+    }
 
-  public String getEvent() {
-    return evt;
-  }
+    public String getEvent() {
+        return evt;
+    }
 
-  public String getCondition() {
-    return condition;
-  }
+    public String getCondition() {
+        return condition;
+    }
 
-  public String getAction() {
-    return action;
-  }
+    public String getAction() {
+        return action;
+    }
 
-  public String toString() {
-    String s = "ERB(" + evt + ", " + condition + ", " + action + ")";
-    /*
-     * if (isNegated()) { s += " [negated]"; }
-     */
-    return s;
-  }
+    public String toString() {
+        String s = "ERB(" + evt + ", " + condition + ", " + action + ")";
+        /*
+         * if (isNegated()) { s += " [negated]"; }
+         */
+        return s;
+    }
 
 }

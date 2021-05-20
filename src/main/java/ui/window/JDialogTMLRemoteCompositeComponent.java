@@ -57,149 +57,149 @@ import java.util.Vector;
  */
 public class JDialogTMLRemoteCompositeComponent extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
-  private boolean emptyList = false;
+    private boolean regularClose;
+    private boolean emptyList = false;
 
-  private TMLCRemoteCompositeComponent artifact;
+    private TMLCRemoteCompositeComponent artifact;
 
-  private JComboBox<String> referenceComponentName;
+    private JComboBox<String> referenceComponentName;
 
-  /* Creates new form */
-  public JDialogTMLRemoteCompositeComponent(Frame _frame, String _title, TMLCRemoteCompositeComponent _artifact) {
-    super(_frame, _title, true);
-    artifact = _artifact;
+    /* Creates new form */
+    public JDialogTMLRemoteCompositeComponent(Frame _frame, String _title, TMLCRemoteCompositeComponent _artifact) {
+        super(_frame, _title, true);
+        artifact = _artifact;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    JPanel panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-    panel2.setPreferredSize(new Dimension(350, 250));
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Component:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    Vector<String> list = artifact.getTDiagramPanel().getMGUI()
-        .getAllCompositeComponent((TMLComponentTaskDiagramPanel) (artifact.getTDiagramPanel()));
-    int index = 0;
-    if (list.size() == 0) {
-      list.add("No component to reference");
-      emptyList = true;
-    } else {
-      index = indexOf(list, artifact.getValue());
-    }
-    referenceComponentName = new JComboBox<>(list);
-    referenceComponentName.setSelectedIndex(index);
-    // referenceTaskName.setEditable(true);
-    // referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(referenceComponentName, c1);
-
-    list = new Vector<>();
-    for (int i = 0; i < 11; i++) {
-      list.add("" + i);
+        initComponents();
+        myInitComponents();
+        pack();
     }
 
-    /*
-     * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
-     * c1.fill = GridBagConstraints.HORIZONTAL; panel2.add(new JLabel("Name:"), c2);
-     * c1.gridwidth = GridBagConstraints.REMAINDER; //end row taskName = new
-     * JTextField(artifact.getTaskName(), 30); taskName.setEditable(true);
-     * taskName.setFont(new Font("times", Font.PLAIN, 12)); panel2.add(taskName,
-     * c1);
-     */
-
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c.add(panel2, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    /*
-     * if (evt.getSource() == typeBox) { boolean b =
-     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-     * initialValue.setEnabled(b); return; }
-     */
-
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    private void myInitComponents() {
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-  public void cancelDialog() {
-    dispose();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public String getReferenceComponentName() {
-    if (emptyList) {
-      return null;
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+        panel2.setPreferredSize(new Dimension(350, 250));
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Component:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        Vector<String> list = artifact.getTDiagramPanel().getMGUI()
+                .getAllCompositeComponent((TMLComponentTaskDiagramPanel) (artifact.getTDiagramPanel()));
+        int index = 0;
+        if (list.size() == 0) {
+            list.add("No component to reference");
+            emptyList = true;
+        } else {
+            index = indexOf(list, artifact.getValue());
+        }
+        referenceComponentName = new JComboBox<>(list);
+        referenceComponentName.setSelectedIndex(index);
+        // referenceTaskName.setEditable(true);
+        // referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(referenceComponentName, c1);
+
+        list = new Vector<>();
+        for (int i = 0; i < 11; i++) {
+            list.add("" + i);
+        }
+
+        /*
+         * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
+         * c1.fill = GridBagConstraints.HORIZONTAL; panel2.add(new JLabel("Name:"), c2);
+         * c1.gridwidth = GridBagConstraints.REMAINDER; //end row taskName = new
+         * JTextField(artifact.getTaskName(), 30); taskName.setEditable(true);
+         * taskName.setFont(new Font("times", Font.PLAIN, 12)); panel2.add(taskName,
+         * c1);
+         */
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
     }
-    return (String) (referenceComponentName.getSelectedItem());
-  }
 
-  public String getComponentName() {
-    String tmp = (String) (referenceComponentName.getSelectedItem());
-    int index = tmp.indexOf("::");
-    if (index == -1) {
-      return tmp;
-    }
-    return tmp.substring(index + 2, tmp.length());
-  }
+    public void actionPerformed(ActionEvent evt) {
+        /*
+         * if (evt.getSource() == typeBox) { boolean b =
+         * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+         * initialValue.setEnabled(b); return; }
+         */
 
-  public int indexOf(Vector<String> _list, String name) {
-    int i = 0;
-    for (String s : _list) {
-      if (s.equals(name)) {
-        return i;
-      }
-      i++;
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
     }
-    return 0;
-  }
+
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public String getReferenceComponentName() {
+        if (emptyList) {
+            return null;
+        }
+        return (String) (referenceComponentName.getSelectedItem());
+    }
+
+    public String getComponentName() {
+        String tmp = (String) (referenceComponentName.getSelectedItem());
+        int index = tmp.indexOf("::");
+        if (index == -1) {
+            return tmp;
+        }
+        return tmp.substring(index + 2, tmp.length());
+    }
+
+    public int indexOf(Vector<String> _list, String name) {
+        int i = 0;
+        for (String s : _list) {
+            if (s.equals(name)) {
+                return i;
+            }
+            i++;
+        }
+        return 0;
+    }
 
 }

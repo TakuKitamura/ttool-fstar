@@ -47,38 +47,38 @@ package myutil;
  */
 public class BrowserControl {
 
-  private static final String WINDOWS = "Windows";
-  private static final String WIN_PATH = "rundll32";
-  private static final String WIN_FLAG = "url.dll,FileProtocolHandler";
-  private static final String UNIX_PATH = "netscape";
-  private static final String UNIX2_PATH = "netscape";
-  private static final String UNIX_FLAG = "-remote openURL";
+    private static final String WINDOWS = "Windows";
+    private static final String WIN_PATH = "rundll32";
+    private static final String WIN_FLAG = "url.dll,FileProtocolHandler";
+    private static final String UNIX_PATH = "netscape";
+    private static final String UNIX2_PATH = "netscape";
+    private static final String UNIX_FLAG = "-remote openURL";
 
-  public static boolean underWindows() {
-    String currentOS = System.getProperty("os.name");
-    return (currentOS != null) && currentOS.startsWith(WINDOWS);
-  }
-
-  public static void startBrowerToURL(String url) {
-    try {
-      java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
-    } catch (Exception e) {
-      TraceManager.addError("Error: couldn't start browser because: " + e.getMessage());
+    public static boolean underWindows() {
+        String currentOS = System.getProperty("os.name");
+        return (currentOS != null) && currentOS.startsWith(WINDOWS);
     }
 
-    /*
-     * Process p; boolean underWindows = underWindows();
-     * 
-     * String cmd = null; try { if (underWindows) { cmd = WIN_PATH + " " + WIN_FLAG
-     * + " " + url; p = Runtime.getRuntime().exec(cmd); } else { cmd = UNIX_PATH +
-     * " " + UNIX_FLAG + "(" + url + ")"; p = Runtime.getRuntime().exec(cmd);
-     * 
-     * int exitCode = p.waitFor(); if (exitCode != 0) { cmd = UNIX_PATH + " " + url;
-     * p = Runtime.getRuntime().exec(cmd); exitCode = p.waitFor(); if (exitCode !=
-     * 0) { cmd = UNIX2_PATH + " " + url; p = Runtime.getRuntime().exec(cmd); } } }
-     * } catch(Exception e) {
-     * TraceManager.addError("Error: couldn't start browser because: " +
-     * e.getMessage()); }
-     */
-  }
+    public static void startBrowerToURL(String url) {
+        try {
+            java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+        } catch (Exception e) {
+            TraceManager.addError("Error: couldn't start browser because: " + e.getMessage());
+        }
+
+        /*
+         * Process p; boolean underWindows = underWindows();
+         * 
+         * String cmd = null; try { if (underWindows) { cmd = WIN_PATH + " " + WIN_FLAG
+         * + " " + url; p = Runtime.getRuntime().exec(cmd); } else { cmd = UNIX_PATH +
+         * " " + UNIX_FLAG + "(" + url + ")"; p = Runtime.getRuntime().exec(cmd);
+         * 
+         * int exitCode = p.waitFor(); if (exitCode != 0) { cmd = UNIX_PATH + " " + url;
+         * p = Runtime.getRuntime().exec(cmd); exitCode = p.waitFor(); if (exitCode !=
+         * 0) { cmd = UNIX2_PATH + " " + url; p = Runtime.getRuntime().exec(cmd); } } }
+         * } catch(Exception e) {
+         * TraceManager.addError("Error: couldn't start browser because: " +
+         * e.getMessage()); }
+         */
+    }
 }

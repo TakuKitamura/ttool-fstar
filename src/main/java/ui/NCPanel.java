@@ -56,73 +56,74 @@ import java.awt.*;
  * @see MainGUI
  */
 public class NCPanel extends TURTLEPanel {
-  public NCDiagramPanel ncdp;
-  // public Vector validated, ignored;
+    public NCDiagramPanel ncdp;
+    // public Vector validated, ignored;
 
-  public NCPanel(MainGUI _mgui) {
-    super(_mgui);
+    public NCPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    cl = new ChangeListener() {
+        cl = new ChangeListener() {
 
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDesignAction(e);
-      }
-    };
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-  }
-
-  public void init() {
-
-    // Class Diagram toolbar
-    NCDiagramToolBar toolBarNC = new NCDiagramToolBar(mgui);
-    toolbars.add(toolBarNC);
-
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    // Class diagram
-    ncdp = new NCDiagramPanel(mgui, toolBarNC);
-    ncdp.setName("Network Calculus Diagram");
-    // tmlap.tp = this;
-    tdp = ncdp;
-    panels.add(ncdp); // Always first in list
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(ncdp);
-    ncdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarNC, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab("Network Calculus Diagram", IconManager.imgic60, toolBarPanel, "Opens network calculus diagram");
-    tabbedPane.setSelectedIndex(0);
-
-    // jsp.setVisible(true);
-
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"NC diagram\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
-    return "<Modeling type=\"NC diagram\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+    public void init() {
 
-  public String toString() {
-    return "NC diagram: " + mgui.getTitleAt(this);
-  }
+        // Class Diagram toolbar
+        NCDiagramToolBar toolBarNC = new NCDiagramToolBar(mgui);
+        toolbars.add(toolBarNC);
 
-  /*
-   * public void renameMapping(String oldName, String newName) { if (tmlap !=
-   * null) { tmlap.renameMapping(oldName, newName); } }
-   */
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        // Class diagram
+        ncdp = new NCDiagramPanel(mgui, toolBarNC);
+        ncdp.setName("Network Calculus Diagram");
+        // tmlap.tp = this;
+        tdp = ncdp;
+        panels.add(ncdp); // Always first in list
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(ncdp);
+        ncdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarNC, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab("Network Calculus Diagram", IconManager.imgic60, toolBarPanel,
+                "Opens network calculus diagram");
+        tabbedPane.setSelectedIndex(0);
+
+        // jsp.setVisible(true);
+
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"NC diagram\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"NC diagram\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+    }
+
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return "NC diagram: " + mgui.getTitleAt(this);
+    }
+
+    /*
+     * public void renameMapping(String oldName, String newName) { if (tmlap !=
+     * null) { tmlap.renameMapping(oldName, newName); } }
+     */
 
 }

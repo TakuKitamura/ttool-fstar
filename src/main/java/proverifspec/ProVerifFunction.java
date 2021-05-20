@@ -45,13 +45,13 @@ package proverifspec;
  * @author Ludovic APVRILLE
  */
 public class ProVerifFunction {
-  public String functionName;
-  public int functionArity;
-  public String functionDefiniton;
-  public boolean isRedunc;
+    public String functionName;
+    public int functionArity;
+    public String functionDefiniton;
+    public boolean isRedunc;
 
-  public ProVerifFunction() {
-    functionArity = 1;
-  }
+    public ProVerifFunction() {
+        functionArity = 1;
+    }
 
 }

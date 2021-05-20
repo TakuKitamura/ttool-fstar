@@ -47,9 +47,9 @@ package tmltranslator.tmlcp;
  */
 public class TMLSDReceiveMessage extends TMLSDMessageManipulation {
 
-  public TMLSDReceiveMessage(TMLSDMessage _msg, String _name, Object _referenceObject) {
-    super(_msg, _name, _referenceObject);
+    public TMLSDReceiveMessage(TMLSDMessage _msg, String _name, Object _referenceObject) {
+        super(_msg, _name, _referenceObject);
 
-  }
+    }
 
 }

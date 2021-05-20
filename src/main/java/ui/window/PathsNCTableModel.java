@@ -52,61 +52,61 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class PathsNCTableModel extends AbstractTableModel {
-  private NCStructure ncs;
-  private String[] paths;
+    private NCStructure ncs;
+    private String[] paths;
 
-  // private String [] names;
-  public PathsNCTableModel(NCStructure _ncs) {
-    ncs = _ncs;
-    computeData();
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return ncs.paths.size();
-  }
-
-  public int getColumnCount() {
-    return 3;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (column == 0) {
-      return ncs.paths.get(row).getName();
-    } else if (column == 1) {
-      return ncs.paths.get(row).traffic.getName();
+    // private String [] names;
+    public PathsNCTableModel(NCStructure _ncs) {
+        ncs = _ncs;
+        computeData();
     }
 
-    return paths[row];
-
-  }
-
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Path";
-      case 1:
-        return "Traffic";
-      case 2:
-        return "Eq -> ... -> Eq ";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return ncs.paths.size();
     }
-    return "none";
-  }
 
-  private void computeData() {
-    paths = new String[ncs.paths.size()];
-    String tmp;
-    int cpt = 0;
-
-    for (NCPath path : ncs.paths) {
-      tmp = path.origin.getName() + " -> ";
-      for (NCSwitch sw : path.switches) {
-        tmp += sw.getName() + " -> ";
-      }
-      tmp += path.destination.getName();
-      paths[cpt] = tmp;
-      cpt++;
+    public int getColumnCount() {
+        return 3;
     }
-  }
+
+    public Object getValueAt(int row, int column) {
+        if (column == 0) {
+            return ncs.paths.get(row).getName();
+        } else if (column == 1) {
+            return ncs.paths.get(row).traffic.getName();
+        }
+
+        return paths[row];
+
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Path";
+            case 1:
+                return "Traffic";
+            case 2:
+                return "Eq -> ... -> Eq ";
+        }
+        return "none";
+    }
+
+    private void computeData() {
+        paths = new String[ncs.paths.size()];
+        String tmp;
+        int cpt = 0;
+
+        for (NCPath path : ncs.paths) {
+            tmp = path.origin.getName() + " -> ";
+            for (NCSwitch sw : path.switches) {
+                tmp += sw.getName() + " -> ";
+            }
+            tmp += path.destination.getName();
+            paths[cpt] = tmp;
+            cpt++;
+        }
+    }
 
 }

@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class TLSAFileFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.dta);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.dta);
+    public String getDescription() {
+        return "TLSA";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "TLSA";
-  }
-
-  public static String getExtension() {
-    return FileUtils.tlsa;
-  }
+    public static String getExtension() {
+        return FileUtils.tlsa;
+    }
 
 }

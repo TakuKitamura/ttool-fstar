@@ -46,9 +46,9 @@ package attacktrees;
  */
 public class SequenceNode extends AttackNode {
 
-  public SequenceNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "SEQUENCE";
-  }
+    public SequenceNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "SEQUENCE";
+    }
 
 }

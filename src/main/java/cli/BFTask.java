@@ -61,82 +61,82 @@ import java.util.*;
  */
 public class BFTask {
 
-  public String name;
-  public int type; // 0: HW 1:SW
-  public int clb, dsp, mem; // Used only for HW tasks
-  public int timing; // i.e. max duration
-  private Vector<BFTask> next;
-  private Vector<BFTask> previous;
+    public String name;
+    public int type; // 0: HW 1:SW
+    public int clb, dsp, mem; // Used only for HW tasks
+    public int timing; // i.e. max duration
+    private Vector<BFTask> next;
+    private Vector<BFTask> previous;
 
-  // Translation to AVATAR
-  public AvatarBlock block;
+    // Translation to AVATAR
+    public AvatarBlock block;
 
-  public BFTask(String name) {
-    this.name = name;
-    next = new Vector<>();
-    previous = new Vector<>();
-  }
-
-  public boolean isHW() {
-    return type == 0;
-  }
-
-  public boolean isSW() {
-    return type == 1;
-  }
-
-  public void addNext(BFTask t) {
-    next.add(t);
-  }
-
-  public void addPrevious(BFTask t) {
-    previous.add(t);
-  }
-
-  public Vector<BFTask> getNext() {
-    return next;
-  }
-
-  public String toString() {
-    StringBuffer sb = new StringBuffer(name + ": ");
-    if (isHW()) {
-      sb.append("hw " + clb + " " + dsp + " " + mem + " " + timing);
-    } else {
-      sb.append("sw " + timing);
+    public BFTask(String name) {
+        this.name = name;
+        next = new Vector<>();
+        previous = new Vector<>();
     }
 
-    sb.append(" previous:");
-    for (BFTask t : previous) {
-      sb.append(t.name + " ");
+    public boolean isHW() {
+        return type == 0;
     }
 
-    sb.append(" next:");
-    for (BFTask t : next) {
-      sb.append(t.name + " ");
+    public boolean isSW() {
+        return type == 1;
     }
 
-    return sb.toString();
-  }
-
-  public void makeBlock(AvatarSpecification avspec) {
-
-    TraceManager.addDev("Making block of " + name);
-
-    Vector<String> unblockedBy = new Vector<>();
-    for (BFTask t : previous) {
-      String s = "unblockFrom" + t.name;
-      unblockedBy.add(s);
+    public void addNext(BFTask t) {
+        next.add(t);
     }
-    Vector<String> unblock = new Vector<>();
-    for (BFTask t : next) {
-      String s = "unblock" + t.name;
-      unblock.add(s);
+
+    public void addPrevious(BFTask t) {
+        previous.add(t);
     }
-    if (isHW()) {
-      block = AvatarBlockTemplate.getHWGraphBlock(name, avspec, this, timing, unblockedBy, unblock);
-    } else {
-      block = AvatarBlockTemplate.getSWGraphBlock(name, avspec, this, timing, unblockedBy, unblock);
+
+    public Vector<BFTask> getNext() {
+        return next;
     }
-  }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer(name + ": ");
+        if (isHW()) {
+            sb.append("hw " + clb + " " + dsp + " " + mem + " " + timing);
+        } else {
+            sb.append("sw " + timing);
+        }
+
+        sb.append(" previous:");
+        for (BFTask t : previous) {
+            sb.append(t.name + " ");
+        }
+
+        sb.append(" next:");
+        for (BFTask t : next) {
+            sb.append(t.name + " ");
+        }
+
+        return sb.toString();
+    }
+
+    public void makeBlock(AvatarSpecification avspec) {
+
+        TraceManager.addDev("Making block of " + name);
+
+        Vector<String> unblockedBy = new Vector<>();
+        for (BFTask t : previous) {
+            String s = "unblockFrom" + t.name;
+            unblockedBy.add(s);
+        }
+        Vector<String> unblock = new Vector<>();
+        for (BFTask t : next) {
+            String s = "unblock" + t.name;
+            unblock.add(s);
+        }
+        if (isHW()) {
+            block = AvatarBlockTemplate.getHWGraphBlock(name, avspec, this, timing, unblockedBy, unblock);
+        } else {
+            block = AvatarBlockTemplate.getSWGraphBlock(name, avspec, this, timing, unblockedBy, unblock);
+        }
+    }
 
 }

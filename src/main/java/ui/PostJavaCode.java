@@ -46,5 +46,5 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface PostJavaCode {
-  void setPostJavaCode(String code);
+    void setPostJavaCode(String code);
 }

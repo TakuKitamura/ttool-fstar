@@ -45,13 +45,13 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifProperty implements ProVerifDeclaration {
-  protected String prop;
+    protected String prop;
 
-  public ProVerifProperty(String _prop) {
-    this.prop = _prop;
-  }
+    public ProVerifProperty(String _prop) {
+        this.prop = _prop;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateProperty(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateProperty(this, _alinea);
+    }
 }

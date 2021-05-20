@@ -49,19 +49,19 @@ import javax.swing.*;
  * @see ui.TGComponent
  */
 public abstract class InteractiveSimulationBar extends JToolBar {
-  protected JFrameInteractiveSimulation jfis;
+    protected JFrameInteractiveSimulation jfis;
 
-  public InteractiveSimulationBar(JFrameInteractiveSimulation _jfis) {
-    super();
-    jfis = _jfis;
-    setOrientation(SwingConstants.HORIZONTAL);
-    setFloatable(true);
-    setButtons();
-  }
+    public InteractiveSimulationBar(JFrameInteractiveSimulation _jfis) {
+        super();
+        jfis = _jfis;
+        setOrientation(SwingConstants.HORIZONTAL);
+        setFloatable(true);
+        setButtons();
+    }
 
-  // asbtract operations
-  protected abstract void setButtons();
+    // asbtract operations
+    protected abstract void setButtons();
 
-  protected abstract void setActive(boolean b);
+    protected abstract void setActive(boolean b);
 
 } // Class

@@ -52,12 +52,12 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public enum PropertyType {
-  SAFETY(1), SECURITY(2), PERFORMANCE(3);
+    SAFETY(1), SECURITY(2), PERFORMANCE(3);
 
-  private final int type;
+    private final int type;
 
-  PropertyType(int type) {
-    this.type = type;
-  }
+    PropertyType(int type) {
+        this.type = type;
+    }
 
 }

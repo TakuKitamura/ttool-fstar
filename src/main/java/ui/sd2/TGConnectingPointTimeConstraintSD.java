@@ -53,18 +53,18 @@ import ui.TGConnectingPoint;
  */
 public class TGConnectingPointTimeConstraintSD extends TGConnectingPoint {
 
-  public TGConnectingPointTimeConstraintSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
-    super(_container, _x, _y, _in, _out);
-  }
-
-  public boolean isCompatibleWith(int type) {
-    //
-    if (type == TGComponentManager.CONNECTOR_RELATIVE_TIME_SDZV) {
-      //
-      return true;
+    public TGConnectingPointTimeConstraintSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
+        super(_container, _x, _y, _in, _out);
     }
-    //
-    return false;
-  }
+
+    public boolean isCompatibleWith(int type) {
+        //
+        if (type == TGComponentManager.CONNECTOR_RELATIVE_TIME_SDZV) {
+            //
+            return true;
+        }
+        //
+        return false;
+    }
 
 }

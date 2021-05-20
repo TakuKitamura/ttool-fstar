@@ -48,9 +48,9 @@ import java.util.*;
  */
 public interface InterpreterOutputInterface {
 
-  public void print(String s);
+    public void print(String s);
 
-  public void printError(String s);
+    public void printError(String s);
 
-  public void exit(int status);
+    public void exit(int status);
 }

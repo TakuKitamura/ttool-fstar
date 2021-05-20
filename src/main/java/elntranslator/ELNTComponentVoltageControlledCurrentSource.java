@@ -49,42 +49,42 @@ import java.util.LinkedList;
  */
 
 public class ELNTComponentVoltageControlledCurrentSource extends ELNTComponent implements ELNTPrimitiveComponent {
-  private String name;
-  private double val;
-  private String unit;
-  private LinkedList<ELNTConnectingPoint> cp;
+    private String name;
+    private double val;
+    private String unit;
+    private LinkedList<ELNTConnectingPoint> cp;
 
-  private ELNTModule module;
+    private ELNTModule module;
 
-  public ELNTComponentVoltageControlledCurrentSource(String _name, double _val, String _unit, ELNTModule _module) {
-    name = _name;
-    val = _val;
-    unit = _unit;
-    cp = new LinkedList<ELNTConnectingPoint>();
-    module = _module;
-  }
+    public ELNTComponentVoltageControlledCurrentSource(String _name, double _val, String _unit, ELNTModule _module) {
+        name = _name;
+        val = _val;
+        unit = _unit;
+        cp = new LinkedList<ELNTConnectingPoint>();
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public double getVal() {
-    return val;
-  }
+    public double getVal() {
+        return val;
+    }
 
-  public String getUnit() {
-    return unit;
-  }
+    public String getUnit() {
+        return unit;
+    }
 
-  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-    return cp;
-  }
+    public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+        return cp;
+    }
 
-  public void addConnectingPoint(ELNTConnectingPoint _cp) {
-    cp.add(_cp);
-  }
+    public void addConnectingPoint(ELNTConnectingPoint _cp) {
+        cp.add(_cp);
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

@@ -47,7 +47,7 @@ package ui.window;
  */
 public interface JSimulationPanelInterface {
 
-  void zoomIn();
+    void zoomIn();
 
-  void zoomOut();
+    void zoomOut();
 }

@@ -52,132 +52,133 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class AvatarCDCompositionConnector
-    extends TGConnectorWithMultiplicity /* Issue #31 implements ScalableTGComponent */ {
-  protected int d = 20;
-  protected int D = 26;
-  // protected int widthValue, heightValue, maxWidthValue, h;
-  protected Polygon p;
-  protected int xp1, xp2, yp1, yp2;
-  // protected double oldScaleFactor;
-  // protected boolean rescaled;
+        extends TGConnectorWithMultiplicity /* Issue #31 implements ScalableTGComponent */ {
+    protected int d = 20;
+    protected int D = 26;
+    // protected int widthValue, heightValue, maxWidthValue, h;
+    protected Polygon p;
+    protected int xp1, xp2, yp1, yp2;
+    // protected double oldScaleFactor;
+    // protected boolean rescaled;
 
-  public AvatarCDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public AvatarCDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    myImageIcon = IconManager.imgic202;
+        myImageIcon = IconManager.imgic202;
 
-    value = "{info}";
-    editable = true;
-    // oldScaleFactor = tdp.getZoom();
+        value = "{info}";
+        editable = true;
+        // oldScaleFactor = tdp.getZoom();
+        // rescaled = true;
+    }
+
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if ((p == null) || (rescaled) || (xp1 != x1) || (xp2 != x2) || (yp1 != y1) || (yp2 != y2)) {
+            p = new Polygon();
+            xp1 = x1;
+            xp2 = x2;
+            yp1 = y1;
+            yp2 = y2;
+            // Double alpha;
+
+            int dd = (int) (d * tdp.getZoom());
+            int DD = (int) (D * tdp.getZoom());
+
+            if (x1 == x2) {
+                if (y1 > y2) {
+                    p.addPoint(x2, y2 + DD);
+                    p.addPoint(x2 + (dd / 2), y2 + (DD / 2));
+                    p.addPoint(x2, y2);
+                    p.addPoint(x2 - (dd / 2), y2 + (DD / 2));
+                } else {
+                    p.addPoint(x2, y2 - DD);
+                    p.addPoint(x2 + (dd / 2), y2 - (DD / 2));
+                    p.addPoint(x2, y2);
+                    p.addPoint(x2 - (dd / 2), y2 - (DD / 2));
+                }
+            } else {
+                double xd[] = new double[4];
+                double yd[] = new double[4];
+
+                // P
+                xd[0] = x2;
+                yd[0] = y2;
+
+                int x0 = x1 - x2;
+                int y0 = y1 - y2;
+                double k = 1 / (Math.sqrt((x0 * x0) + (y0 * y0)));
+                double u = x0 * k;
+                double v = y0 * k;
+
+                double Ex = DD * u;
+                double Ey = DD * v;
+                double Fx = dd * v;
+                double Fy = -dd * u;
+
+                // Q
+                xd[1] = x2 + ((Ex + Fx) / 2);
+                yd[1] = y2 + ((Ey + Fy) / 2);
+
+                // R
+                xd[2] = x2 + Ex;
+                yd[2] = y2 + Ey;
+
+                // S
+                xd[3] = xd[1] - Fx;
+                yd[3] = yd[1] - Fy;
+
+                for (int i = 0; i < 4; i++) {
+                    p.addPoint((int) xd[i], (int) yd[i]);
+                }
+            }
+
+        }
+        g.fillPolygon(p);
+        g.drawLine(x1, y1, x2, y2);
+        rescaled = false;
+    }
+
+    @Override
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (p != null) {
+            if (p.contains(x1, y1)) {
+                return this;
+            }
+        }
+
+        return null;
+    }
+
+    // Issue #31 Now managed in upper class
+    // public void rescale(double scaleFactor){
+    // //
+    // int xx, yy;
+    //
+    // for(int i=0; i<nbInternalTGComponent; i++) {
+    // xx = tgcomponent[i].getX();
+    // yy = tgcomponent[i].getY();
+    // //
+    // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+    // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+    // xx = (int)(tgcomponent[i].dx);
+    // tgcomponent[i].dx = tgcomponent[i].dx - xx;
+    // yy = (int)(tgcomponent[i].dy);
+    // tgcomponent[i].dy = tgcomponent[i].dy - yy;
+    //
+    // tgcomponent[i].setCd(xx, yy);
+    //
+    // //
+    // }
+    //
+    // oldScaleFactor = scaleFactor;
     // rescaled = true;
-  }
+    // }
 
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if ((p == null) || (rescaled) || (xp1 != x1) || (xp2 != x2) || (yp1 != y1) || (yp2 != y2)) {
-      p = new Polygon();
-      xp1 = x1;
-      xp2 = x2;
-      yp1 = y1;
-      yp2 = y2;
-      // Double alpha;
-
-      int dd = (int) (d * tdp.getZoom());
-      int DD = (int) (D * tdp.getZoom());
-
-      if (x1 == x2) {
-        if (y1 > y2) {
-          p.addPoint(x2, y2 + DD);
-          p.addPoint(x2 + (dd / 2), y2 + (DD / 2));
-          p.addPoint(x2, y2);
-          p.addPoint(x2 - (dd / 2), y2 + (DD / 2));
-        } else {
-          p.addPoint(x2, y2 - DD);
-          p.addPoint(x2 + (dd / 2), y2 - (DD / 2));
-          p.addPoint(x2, y2);
-          p.addPoint(x2 - (dd / 2), y2 - (DD / 2));
-        }
-      } else {
-        double xd[] = new double[4];
-        double yd[] = new double[4];
-
-        // P
-        xd[0] = x2;
-        yd[0] = y2;
-
-        int x0 = x1 - x2;
-        int y0 = y1 - y2;
-        double k = 1 / (Math.sqrt((x0 * x0) + (y0 * y0)));
-        double u = x0 * k;
-        double v = y0 * k;
-
-        double Ex = DD * u;
-        double Ey = DD * v;
-        double Fx = dd * v;
-        double Fy = -dd * u;
-
-        // Q
-        xd[1] = x2 + ((Ex + Fx) / 2);
-        yd[1] = y2 + ((Ey + Fy) / 2);
-
-        // R
-        xd[2] = x2 + Ex;
-        yd[2] = y2 + Ey;
-
-        // S
-        xd[3] = xd[1] - Fx;
-        yd[3] = yd[1] - Fy;
-
-        for (int i = 0; i < 4; i++) {
-          p.addPoint((int) xd[i], (int) yd[i]);
-        }
-      }
-
+    @Override
+    public int getType() {
+        return TGComponentManager.ACD_COMPOSITION_CONNECTOR;
     }
-    g.fillPolygon(p);
-    g.drawLine(x1, y1, x2, y2);
-    rescaled = false;
-  }
-
-  @Override
-  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-    if (p != null) {
-      if (p.contains(x1, y1)) {
-        return this;
-      }
-    }
-
-    return null;
-  }
-
-  // Issue #31 Now managed in upper class
-  // public void rescale(double scaleFactor){
-  // //
-  // int xx, yy;
-  //
-  // for(int i=0; i<nbInternalTGComponent; i++) {
-  // xx = tgcomponent[i].getX();
-  // yy = tgcomponent[i].getY();
-  // //
-  // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-  // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-  // xx = (int)(tgcomponent[i].dx);
-  // tgcomponent[i].dx = tgcomponent[i].dx - xx;
-  // yy = (int)(tgcomponent[i].dy);
-  // tgcomponent[i].dy = tgcomponent[i].dy - yy;
-  //
-  // tgcomponent[i].setCd(xx, yy);
-  //
-  // //
-  // }
-  //
-  // oldScaleFactor = scaleFactor;
-  // rescaled = true;
-  // }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.ACD_COMPOSITION_CONNECTOR;
-  }
 }

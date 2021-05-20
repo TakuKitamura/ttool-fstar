@@ -83,134 +83,134 @@ import ui.util.IconManager;
  */
 public class JDialogToChosePanel extends JDialogBase implements ActionListener, ListSelectionListener {
 
-  private JPanel panel1, panel2, panel3, panel6;
-  private JList<String> listIgnored;
-  private JList<String> listSelected;
-  private JButton allSelected;
-  private JButton addOneSelected;
-  private JButton addOneIgnored;
-  private JButton allIgnored;
+    private JPanel panel1, panel2, panel3, panel6;
+    private JList<String> listIgnored;
+    private JList<String> listSelected;
+    private JButton allSelected;
+    private JButton addOneSelected;
+    private JButton addOneIgnored;
+    private JButton allIgnored;
 
-  private JComboBox<String> tasksDropDownCombo1 = new JComboBox<String>();
+    private JComboBox<String> tasksDropDownCombo1 = new JComboBox<String>();
 
-  private Vector<TURTLEPanel> tabs;
-  private TURTLEPanel selectedTab;
+    private Vector<TURTLEPanel> tabs;
+    private TURTLEPanel selectedTab;
 
-  private Container c;
+    private Container c;
 
-  public JDialogToChosePanel(JFrame frame, Vector<TURTLEPanel> allTabs, String title) {
+    public JDialogToChosePanel(JFrame frame, Vector<TURTLEPanel> allTabs, String title) {
 
-    super(frame, title, true);
-    tabs = allTabs;
-    c = getContentPane();
-    initComponents();
-    pack();
+        super(frame, title, true);
+        tabs = allTabs;
+        c = getContentPane();
+        initComponents();
+        pack();
 
-    // TODO Auto-generated constructor stub
-  }
+        // TODO Auto-generated constructor stub
+    }
 
-  @SuppressWarnings("unchecked")
-  private void initComponents() {
+    @SuppressWarnings("unchecked")
+    private void initComponents() {
 
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c1 = new GridBagConstraints();
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(new BorderLayout());
-    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c1 = new GridBagConstraints();
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(new BorderLayout());
+        // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    GridBagConstraints c01 = new GridBagConstraints();
+        GridBagConstraints c01 = new GridBagConstraints();
 
-    panel1 = new JPanel();
-    panel1.setLayout(new FlowLayout());
+        panel1 = new JPanel();
+        panel1.setLayout(new FlowLayout());
 
-    c01.gridheight = 1;
-    c01.weighty = 1.0;
-    c01.weightx = 1.0;
-    c01.gridwidth = 1;
-    c01.gridx = 0;
-    c01.gridy = 0;
-    // c01.fill = GridBagConstraints.BOTH;
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 0;
+        c01.gridy = 0;
+        // c01.fill = GridBagConstraints.BOTH;
 
-    JLabel xmlLabel = new JLabel("Simulation trace as XML File ", JLabel.LEFT);
+        JLabel xmlLabel = new JLabel("Simulation trace as XML File ", JLabel.LEFT);
 
-    panel1.add(xmlLabel, c01);
+        panel1.add(xmlLabel, c01);
 
-    c01.gridheight = 1;
-    c01.weighty = 1.0;
-    c01.weightx = 1.0;
-    c01.gridwidth = 1;
-    c01.gridx = 1;
-    c01.gridy = 0;
-    tasksDropDownCombo1.addActionListener(this);
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 1;
+        c01.gridy = 0;
+        tasksDropDownCombo1.addActionListener(this);
 
-    ComboBoxModel[] models = new ComboBoxModel[1];
+        ComboBoxModel[] models = new ComboBoxModel[1];
 
-    models[0] = new DefaultComboBoxModel(loadDropDowns());
+        models[0] = new DefaultComboBoxModel(loadDropDowns());
 
-    tasksDropDownCombo1.setModel(models[0]);
-    panel1.add(tasksDropDownCombo1, c01);
-    c.add(panel1, BorderLayout.NORTH);
+        tasksDropDownCombo1.setModel(models[0]);
+        panel1.add(tasksDropDownCombo1, c01);
+        c.add(panel1, BorderLayout.NORTH);
 
-    // main panel;
-    panel6 = new JPanel();
-    panel6.setLayout(new FlowLayout());
-    closeButton = new JButton("OK", IconManager.imgic37);
-    // closeButton.setPreferredSize(new Dimension(600, 50));
-    closeButton.addActionListener(this);
-    closeButton.setPreferredSize(new Dimension(200, 30));
+        // main panel;
+        panel6 = new JPanel();
+        panel6.setLayout(new FlowLayout());
+        closeButton = new JButton("OK", IconManager.imgic37);
+        // closeButton.setPreferredSize(new Dimension(600, 50));
+        closeButton.addActionListener(this);
+        closeButton.setPreferredSize(new Dimension(200, 30));
 
-    cancelButton = new JButton("Cancel", IconManager.imgic27);
-    cancelButton.addActionListener(this);
-    cancelButton.setPreferredSize(new Dimension(200, 30));
-    panel6.add(cancelButton);
-    panel6.add(closeButton);
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(new Dimension(200, 30));
+        panel6.add(cancelButton);
+        panel6.add(closeButton);
 
-    c.add(panel6, BorderLayout.SOUTH);
-
-  }
-
-  public Vector<String> loadDropDowns() {
-
-    Vector<String> allLatencyTasks = new Vector<String>();
-
-    for (int i = 0; i < tabs.size(); i++) {
-      allLatencyTasks.add(tabs.get(i).getNameOfTab());
+        c.add(panel6, BorderLayout.SOUTH);
 
     }
 
-    return allLatencyTasks;
+    public Vector<String> loadDropDowns() {
 
-  }
+        Vector<String> allLatencyTasks = new Vector<String>();
 
-  @Override
-  public void valueChanged(ListSelectionEvent e) {
-    // TODO Auto-generated method stub
+        for (int i = 0; i < tabs.size(); i++) {
+            allLatencyTasks.add(tabs.get(i).getNameOfTab());
 
-  }
+        }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    // Compare the action command to the known actions.
-    if (e.getSource() == cancelButton) {
-
-      closeDialog();
-    } else if (e.getSource() == closeButton) {
-
-      selectedTab = tabs.get(tasksDropDownCombo1.getSelectedIndex());
-
-      dispose();
+        return allLatencyTasks;
 
     }
 
-  }
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        // TODO Auto-generated method stub
 
-  public TURTLEPanel getSelectedTab() {
-    return selectedTab;
-  }
+    }
 
-  public void closeDialog() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Compare the action command to the known actions.
+        if (e.getSource() == cancelButton) {
 
-    dispose();
-  }
+            closeDialog();
+        } else if (e.getSource() == closeButton) {
+
+            selectedTab = tabs.get(tasksDropDownCombo1.getSelectedIndex());
+
+            dispose();
+
+        }
+
+    }
+
+    public TURTLEPanel getSelectedTab() {
+        return selectedTab;
+    }
+
+    public void closeDialog() {
+
+        dispose();
+    }
 
 }

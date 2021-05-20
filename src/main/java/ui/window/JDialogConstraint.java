@@ -57,105 +57,105 @@ import java.awt.event.ActionListener;
  */
 public class JDialogConstraint extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2;
-  private Frame frame;
+    private JPanel panel2;
+    private Frame frame;
 
-  // protected JTextField taskName;
-  protected JComboBox<String> stereotype;
+    // protected JTextField taskName;
+    protected JComboBox<String> stereotype;
 
-  private ConstraintListInterface constraint;
+    private ConstraintListInterface constraint;
 
-  /* Creates new form */
-  public JDialogConstraint(Frame _frame, String _title, ConstraintListInterface _constraint) {
-    super(_frame, _title, true);
-    frame = _frame;
-    constraint = _constraint;
+    /* Creates new form */
+    public JDialogConstraint(Frame _frame, String _title, ConstraintListInterface _constraint) {
+        super(_frame, _title, true);
+        frame = _frame;
+        constraint = _constraint;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Constraint attributes"));
-    panel2.setPreferredSize(new Dimension(350, 250));
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    stereotype = new JComboBox<>(constraint.getConstraintList());
-    for (int i = 0; i < constraint.getConstraintList().length; i++) {
-      if (constraint.getCurrentConstraint().compareTo(constraint.getConstraintList()[i]) == 0) {
-        stereotype.setSelectedIndex(i);
-        break;
-      }
+        initComponents();
+        myInitComponents();
+        pack();
     }
-    panel2.add(stereotype, c1);
 
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c0.fill = GridBagConstraints.BOTH;
-    c.add(panel2, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    private void myInitComponents() {
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-  public void cancelDialog() {
-    dispose();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public String getStereotype() {
-    return (String) (stereotype.getSelectedItem());
-  }
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Constraint attributes"));
+        panel2.setPreferredSize(new Dimension(350, 250));
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        stereotype = new JComboBox<>(constraint.getConstraintList());
+        for (int i = 0; i < constraint.getConstraintList().length; i++) {
+            if (constraint.getCurrentConstraint().compareTo(constraint.getConstraintList()[i]) == 0) {
+                stereotype.setSelectedIndex(i);
+                break;
+            }
+        }
+        panel2.add(stereotype, c1);
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c0.fill = GridBagConstraints.BOTH;
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public String getStereotype() {
+        return (String) (stereotype.getSelectedItem());
+    }
 
 }

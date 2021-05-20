@@ -57,118 +57,118 @@ import java.awt.event.ActionListener;
  */
 public class JDialogUseCase extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2;
-  private Frame frame;
-  private String name, extension;
+    private JPanel panel2;
+    private Frame frame;
+    private String name, extension;
 
-  // Panel1
-  protected JTextField jname, jextension;
+    // Panel1
+    protected JTextField jname, jextension;
 
-  /* Creates new form */
-  public JDialogUseCase(Frame _frame, String _title, String _name, String _extension) {
-    super(_frame, _title, true);
-    frame = _frame;
-    name = _name;
-    extension = _extension;
+    /* Creates new form */
+    public JDialogUseCase(Frame _frame, String _title, String _name, String _extension) {
+        super(_frame, _title, true);
+        frame = _frame;
+        name = _name;
+        extension = _extension;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
-    panel2.setPreferredSize(new Dimension(350, 250));
-
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("use case name:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    jname = new JTextField(name, 30);
-    jname.setEditable(true);
-    jname.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(jname, c2);
-
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Extension point:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    jextension = new JTextField(extension, 30);
-    jextension.setEditable(true);
-    jextension.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(jextension, c2);
-
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c.add(panel2, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+        initComponents();
+        myInitComponents();
+        pack();
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    private void myInitComponents() {
+    }
 
-  public void cancelDialog() {
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public String getName() {
-    return jname.getText();
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public String getExtension() {
-    return jextension.getText();
-  }
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
+        panel2.setPreferredSize(new Dimension(350, 250));
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("use case name:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        jname = new JTextField(name, 30);
+        jname.setEditable(true);
+        jname.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(jname, c2);
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Extension point:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        jextension = new JTextField(extension, 30);
+        jextension.setEditable(true);
+        jextension.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(jextension, c2);
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public String getName() {
+        return jname.getText();
+    }
+
+    public String getExtension() {
+        return jextension.getText();
+    }
 
 }

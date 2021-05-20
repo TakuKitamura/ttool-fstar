@@ -46,7 +46,7 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface AllowedBreakpoint {
-  void setBreakpoint(boolean b);
+    void setBreakpoint(boolean b);
 
-  boolean getBreakpoint();
+    boolean getBreakpoint();
 }

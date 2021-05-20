@@ -48,105 +48,105 @@ import java.util.Collections;
  * @version 1.0 24/01/2018
  */
 public abstract class FaultNode extends FaultElement {
-  private Fault resultingFault; // If no resulting attack -> error!
-  private ArrayList<Fault> inputFaults;
-  private ArrayList<Integer> inputValues;
-  protected String type = "";
+    private Fault resultingFault; // If no resulting attack -> error!
+    private ArrayList<Fault> inputFaults;
+    private ArrayList<Integer> inputValues;
+    protected String type = "";
 
-  public FaultNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    inputFaults = new ArrayList<Fault>();
-    inputValues = new ArrayList<Integer>();
-  }
-
-  // At least one input and one output
-  public boolean isWellFormed() {
-    if (resultingFault == null) {
-      return false;
+    public FaultNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        inputFaults = new ArrayList<Fault>();
+        inputValues = new ArrayList<Integer>();
     }
 
-    return inputFaults.size() >= 1;
-
-  }
-
-  public void setResultingFault(Fault _fault) {
-    resultingFault = _fault;
-  }
-
-  public Fault getResultingFault() {
-    return resultingFault;
-  }
-
-  public ArrayList<Fault> getInputFaults() {
-    return inputFaults;
-  }
-
-  public void addInputFault(Fault _fault, Integer _val) {
-    inputFaults.add(_fault);
-    inputValues.add(_val);
-  }
-
-  public int hasNegativeAttackNumber() {
-    for (int i = 0; i < inputValues.size(); i++) {
-      int atti = inputValues.get(i).intValue();
-      if (atti < 0) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  public int hasUniqueAttackNumber() {
-    for (int i = 0; i < inputValues.size() - 1; i++) {
-      int atti = inputValues.get(i).intValue();
-      for (int j = i + 1; j < inputValues.size(); j++) {
-        // myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
-        int attj = inputValues.get(j).intValue();
-        // myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + "
-        // size=" + attacks.size());
-        if (atti == attj) {
-          return i;
+    // At least one input and one output
+    public boolean isWellFormed() {
+        if (resultingFault == null) {
+            return false;
         }
-      }
-    }
-    return -1;
-  }
 
-  @Override
-  public String toString() {
-    String ret = name + "/" + type + " Incoming faults: ";
-    for (Fault att : inputFaults) {
-      ret += att.getName() + " ";
+        return inputFaults.size() >= 1;
+
     }
 
-    if (resultingFault == null) {
-      ret += " No resulting attack";
-    } else {
-      ret += " Resulting attack:" + resultingFault.getName();
+    public void setResultingFault(Fault _fault) {
+        resultingFault = _fault;
     }
 
-    return ret;
-  }
-
-  // Order attacks according to the Integer value
-  public void orderFaults() {
-    ArrayList<Fault> newFaults = new ArrayList<Fault>();
-    ArrayList<Integer> newInputValues = new ArrayList<Integer>();
-
-    for (Integer i : inputValues) {
-      newInputValues.add(i);
+    public Fault getResultingFault() {
+        return resultingFault;
     }
 
-    // sort newInputValues
-    Collections.sort(newInputValues);
-
-    for (Integer i : newInputValues) {
-      int index = inputValues.indexOf(i);
-      newFaults.add(inputFaults.get(index));
+    public ArrayList<Fault> getInputFaults() {
+        return inputFaults;
     }
 
-    inputFaults = newFaults;
-    inputValues = newInputValues;
-  }
+    public void addInputFault(Fault _fault, Integer _val) {
+        inputFaults.add(_fault);
+        inputValues.add(_val);
+    }
+
+    public int hasNegativeAttackNumber() {
+        for (int i = 0; i < inputValues.size(); i++) {
+            int atti = inputValues.get(i).intValue();
+            if (atti < 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int hasUniqueAttackNumber() {
+        for (int i = 0; i < inputValues.size() - 1; i++) {
+            int atti = inputValues.get(i).intValue();
+            for (int j = i + 1; j < inputValues.size(); j++) {
+                // myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                int attj = inputValues.get(j).intValue();
+                // myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + "
+                // size=" + attacks.size());
+                if (atti == attj) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public String toString() {
+        String ret = name + "/" + type + " Incoming faults: ";
+        for (Fault att : inputFaults) {
+            ret += att.getName() + " ";
+        }
+
+        if (resultingFault == null) {
+            ret += " No resulting attack";
+        } else {
+            ret += " Resulting attack:" + resultingFault.getName();
+        }
+
+        return ret;
+    }
+
+    // Order attacks according to the Integer value
+    public void orderFaults() {
+        ArrayList<Fault> newFaults = new ArrayList<Fault>();
+        ArrayList<Integer> newInputValues = new ArrayList<Integer>();
+
+        for (Integer i : inputValues) {
+            newInputValues.add(i);
+        }
+
+        // sort newInputValues
+        Collections.sort(newInputValues);
+
+        for (Integer i : newInputValues) {
+            int index = inputValues.indexOf(i);
+            newFaults.add(inputFaults.get(index));
+        }
+
+        inputFaults = newFaults;
+        inputValues = newInputValues;
+    }
 
 }

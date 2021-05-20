@@ -58,59 +58,60 @@ import ui.util.IconManager;
  * @author Ludovic APVRILLE
  */
 public class ATDCountermeasureConnector
-    extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
-  // protected int arrowLength = 10;
-  // protected int widthValue, heightValue, maxWidthValue, h;
-  protected int c = 5; // square length
-  // protected double oldScaleFactor;
-  protected int fontSize = 12;
+        extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
+    // protected int arrowLength = 10;
+    // protected int widthValue, heightValue, maxWidthValue, h;
+    protected int c = 5; // square length
+    // protected double oldScaleFactor;
+    protected int fontSize = 12;
 
-  public ATDCountermeasureConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    myImageIcon = IconManager.imgic202;
-    value = "";
-    // editable = true;
-    // oldScaleFactor = tdp.getZoom();
-  }
+    public ATDCountermeasureConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic202;
+        value = "";
+        // editable = true;
+        // oldScaleFactor = tdp.getZoom();
+    }
 
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        GraphicLib.dashedLine(g, x1, y1, x2, y2);
 
-  }
+    }
 
-  @Override
-  protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    GraphicLib.dashedLine(g, x1, y1, x2, y2);
-  }
+    @Override
+    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        GraphicLib.dashedLine(g, x1, y1, x2, y2);
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR;
+    }
 
-  // @Override Issue #31 Managed in upper class
-  // public void rescale(double scaleFactor){
-  // //
-  // int xx, yy;
-  //
-  // for(int i=0; i<nbInternalTGComponent; i++) {
-  // xx = tgcomponent[i].getX();
-  // yy = tgcomponent[i].getY();
-  // //
-  // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-  // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-  // xx = (int)(tgcomponent[i].dx);
-  // tgcomponent[i].dx = tgcomponent[i].dx - xx;
-  // yy = (int)(tgcomponent[i].dy);
-  // tgcomponent[i].dy = tgcomponent[i].dy - yy;
-  //
-  // tgcomponent[i].setCd(xx, yy);
-  //
-  // //
-  // }
-  //
-  // oldScaleFactor = scaleFactor;
-  // }
+    // @Override Issue #31 Managed in upper class
+    // public void rescale(double scaleFactor){
+    // //
+    // int xx, yy;
+    //
+    // for(int i=0; i<nbInternalTGComponent; i++) {
+    // xx = tgcomponent[i].getX();
+    // yy = tgcomponent[i].getY();
+    // //
+    // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+    // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+    // xx = (int)(tgcomponent[i].dx);
+    // tgcomponent[i].dx = tgcomponent[i].dx - xx;
+    // yy = (int)(tgcomponent[i].dy);
+    // tgcomponent[i].dy = tgcomponent[i].dy - yy;
+    //
+    // tgcomponent[i].setCd(xx, yy);
+    //
+    // //
+    // }
+    //
+    // oldScaleFactor = scaleFactor;
+    // }
 }

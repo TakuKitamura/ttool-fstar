@@ -47,34 +47,34 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public interface AvatarAction {
-  boolean isAMethodCall();
+    boolean isAMethodCall();
 
-  boolean isAVariableSetting();
+    boolean isAVariableSetting();
 
-  boolean isABasicVariableSetting();
+    boolean isABasicVariableSetting();
 
-  String getName();
+    String getName();
 
-  /**
-   * Returns True if the whole action contains a method call.
-   *
-   * @return True if the whole action contains a method call. False otherwise.
-   */
-  boolean containsAMethodCall();
+    /**
+     * Returns True if the whole action contains a method call.
+     *
+     * @return True if the whole action contains a method call. False otherwise.
+     */
+    boolean containsAMethodCall();
 
-  /**
-   * Returns a full clone of the action.
-   *
-   * @return A clone of the action.
-   */
-  AvatarAction clone();
+    /**
+     * Returns a full clone of the action.
+     *
+     * @return A clone of the action.
+     */
+    AvatarAction clone();
 
-  /**
-   * Replaces attributes in this action according to the provided mapping.
-   *
-   * @param attributesMapping The mapping used to replace the attributes of the
-   *                          action. All the attributes of the block should be
-   *                          present as keys.
-   */
-  void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
+    /**
+     * Replaces attributes in this action according to the provided mapping.
+     *
+     * @param attributesMapping The mapping used to replace the attributes of the
+     *                          action. All the attributes of the block should be
+     *                          present as keys.
+     */
+    void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

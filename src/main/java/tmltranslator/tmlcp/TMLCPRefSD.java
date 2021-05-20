@@ -47,23 +47,23 @@ package tmltranslator.tmlcp;
  */
 public class TMLCPRefSD extends TMLCPElement {
 
-  private TMLCPSequenceDiagram reference;
+    private TMLCPSequenceDiagram reference;
 
-  public TMLCPRefSD(TMLCPSequenceDiagram _ref, String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    reference = _ref;
-  }
+    public TMLCPRefSD(TMLCPSequenceDiagram _ref, String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        reference = _ref;
+    }
 
-  public TMLCPRefSD(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    reference = null;
-  }
+    public TMLCPRefSD(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        reference = null;
+    }
 
-  public TMLCPSequenceDiagram getReference() {
-    return this.reference;
-  }
+    public TMLCPSequenceDiagram getReference() {
+        return this.reference;
+    }
 
-  public void setReference(TMLCPSequenceDiagram _ref) {
-    this.reference = _ref;
-  }
+    public void setReference(TMLCPSequenceDiagram _ref) {
+        this.reference = _ref;
+    }
 }

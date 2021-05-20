@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class UninitializedVariableException extends Exception {
 
-  public UninitializedVariableException() {
-    super("TMLCP COMPILER ERROR: uninitialized variable");
-  }
+    public UninitializedVariableException() {
+        super("TMLCP COMPILER ERROR: uninitialized variable");
+    }
 
-  public UninitializedVariableException(String message) {
-    super(message);
-  }
+    public UninitializedVariableException(String message) {
+        super(message);
+    }
 }

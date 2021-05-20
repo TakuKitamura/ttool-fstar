@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class UndeclaredDiagramException extends Exception {
 
-  public UndeclaredDiagramException() {
-    super("TMLCP COMPILER ERROR: undeclared diagram");
-  }
+    public UndeclaredDiagramException() {
+        super("TMLCP COMPILER ERROR: undeclared diagram");
+    }
 
-  public UndeclaredDiagramException(String message) {
-    super(message);
-  }
+    public UndeclaredDiagramException(String message) {
+        super(message);
+    }
 }

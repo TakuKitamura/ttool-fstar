@@ -48,59 +48,59 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class DeadlockItem implements Comparable<DeadlockItem> {
-  private String name;
-  private Vector<String> origin;
-  private Vector<String> action;
-  private String path;
+    private String name;
+    private Vector<String> origin;
+    private Vector<String> action;
+    private String path;
 
-  public DeadlockItem(String _name) {
-    name = _name;
-    origin = new Vector<>();
-    action = new Vector<>();
-  }
-
-  // observers
-  public String getName() {
-    return name;
-  }
-
-  public String getOriginAction() {
-    String s1, s2;
-    StringBuffer ret = new StringBuffer();
-
-    for (int i = 0; i < origin.size(); i++) {
-      s1 = origin.elementAt(i);
-      s2 = action.elementAt(i);
-      if (i != 0) {
-        ret.append(", ");
-      }
-      ret.append("(");
-      ret.append(s1);
-      ret.append(", ");
-      ret.append(s2);
-      ret.append(")");
+    public DeadlockItem(String _name) {
+        name = _name;
+        origin = new Vector<>();
+        action = new Vector<>();
     }
 
-    return new String(ret);
-  }
+    // observers
+    public String getName() {
+        return name;
+    }
 
-  public String getPath() {
-    return path;
-  }
+    public String getOriginAction() {
+        String s1, s2;
+        StringBuffer ret = new StringBuffer();
 
-  // modifiers
+        for (int i = 0; i < origin.size(); i++) {
+            s1 = origin.elementAt(i);
+            s2 = action.elementAt(i);
+            if (i != 0) {
+                ret.append(", ");
+            }
+            ret.append("(");
+            ret.append(s1);
+            ret.append(", ");
+            ret.append(s2);
+            ret.append(")");
+        }
 
-  public void addOriginAction(String _origin, String _action) {
-    origin.add(_origin);
-    action.add(_action);
-  }
+        return new String(ret);
+    }
 
-  public void setPath(String _path) {
-    path = _path;
-  }
+    public String getPath() {
+        return path;
+    }
 
-  // comparable interface
-  public int compareTo(DeadlockItem o) {
-    return getName().compareTo(o.getName());
-  }
+    // modifiers
+
+    public void addOriginAction(String _origin, String _action) {
+        origin.add(_origin);
+        action.add(_action);
+    }
+
+    public void setPath(String _path) {
+        path = _path;
+    }
+
+    // comparable interface
+    public int compareTo(DeadlockItem o) {
+        return getName().compareTo(o.getName());
+    }
 }

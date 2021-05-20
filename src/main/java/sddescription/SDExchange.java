@@ -60,329 +60,330 @@ import java.util.ListIterator;
  * @version 1.0 17/07/2009
  */
 public class SDExchange {
-  private MSC msc;
-  private HMSC hmsc;
+    private MSC msc;
+    private HMSC hmsc;
 
-  private String XML_SD_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
-  private String XML_SD_TOP = "MSC";
-  private String XML_SD_INSTANCE = "INSTANCE";
-  private String XML_SD_EVENT = "EVENT";
-  private String XML_SD_EVENT_LINKS = "EVT_LINKS";
-  private String XML_SD_EVENT_LINK = "LINK";
-  private String XML_SD_NL = "\n";
+    private String XML_SD_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
+    private String XML_SD_TOP = "MSC";
+    private String XML_SD_INSTANCE = "INSTANCE";
+    private String XML_SD_EVENT = "EVENT";
+    private String XML_SD_EVENT_LINKS = "EVT_LINKS";
+    private String XML_SD_EVENT_LINK = "LINK";
+    private String XML_SD_NL = "\n";
 
-  public void SDExchange() {
-  }
-
-  public MSC getMSC() {
-    return msc;
-  }
-
-  public HMSC getHMSC() {
-    return hmsc;
-  }
-
-  public void createHMSC(MSC _msc) {
-    HMSCNode startNode = new HMSCNode("start", HMSCNode.START);
-    hmsc = new HMSC("GeneratedHMSC", startNode);
-    startNode.addNextMSC(_msc);
-    HMSCNode stopNode = new HMSCNode("stop", HMSCNode.STOP);
-    _msc.setNextNode(stopNode);
-
-  }
-
-  public boolean loadFromXMLSD(String xml) throws MalformedSDException {
-    DocumentBuilderFactory dbf;
-    DocumentBuilder db;
-    Element elt;
-
-    try {
-      dbf = DocumentBuilderFactory.newInstance();
-      db = dbf.newDocumentBuilder();
-    } catch (ParserConfigurationException e) {
-      dbf = null;
-      db = null;
+    public void SDExchange() {
     }
 
-    if ((dbf == null) || (db == null)) {
-      throw new MalformedSDException();
+    public MSC getMSC() {
+        return msc;
     }
 
-    ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xml).getBytes());
-    int i;
-    String tmp;
-    msc = null;
+    public HMSC getHMSC() {
+        return hmsc;
+    }
 
-    try {
-      // building nodes from xml String
-      Document doc = db.parse(bais);
-      NodeList nl;
-      Node node;
+    public void createHMSC(MSC _msc) {
+        HMSCNode startNode = new HMSCNode("start", HMSCNode.START);
+        hmsc = new HMSC("GeneratedHMSC", startNode);
+        startNode.addNextMSC(_msc);
+        HMSCNode stopNode = new HMSCNode("stop", HMSCNode.STOP);
+        _msc.setNextNode(stopNode);
 
-      nl = doc.getElementsByTagName(XML_SD_TOP);
+    }
 
-      if (nl == null) {
-        return false;
-      }
+    public boolean loadFromXMLSD(String xml) throws MalformedSDException {
+        DocumentBuilderFactory dbf;
+        DocumentBuilder db;
+        Element elt;
 
-      elt = (Element) (nl.item(0));
-      tmp = elt.getAttribute("name");
-      if (tmp == null) {
-        msc = new MSC("msc");
-      } else {
-        TraceManager.addDev("Name of SD = " + tmp);
-        msc = new MSC(tmp);
-      }
-
-      createHMSC(msc);
-
-      for (i = 0; i < nl.getLength(); i++) {
-        node = nl.item(i);
-        // TraceManager.addDev("Node = " + dnd);
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-          loadMSCNode(node, hmsc, msc);
+        try {
+            dbf = DocumentBuilderFactory.newInstance();
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            dbf = null;
+            db = null;
         }
-      }
 
-      orderEvents(hmsc, msc);
-      linkEvents(hmsc, msc);
+        if ((dbf == null) || (db == null)) {
+            throw new MalformedSDException();
+        }
 
-    } catch (IOException e) {
-      TraceManager.addDev("500 ");
-      throw new MalformedSDException();
-    } catch (SAXException saxe) {
-      TraceManager.addDev("501 " + saxe.getMessage());
-      throw new MalformedSDException();
-    }
-    return true;
-  }
+        ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xml).getBytes());
+        int i;
+        String tmp;
+        msc = null;
 
-  private boolean loadMSCNode(Node node1, HMSC _hmsc, MSC _msc) {
-    NodeList diagramNl = node1.getChildNodes();
-    Element elt;
-    Node node;
-    NodeList listData = null;
+        try {
+            // building nodes from xml String
+            Document doc = db.parse(bais);
+            NodeList nl;
+            Node node;
 
-    String tmp;
-    int val;
-    int j;
-    int nbOfFaces = 1; // default value;
+            nl = doc.getElementsByTagName(XML_SD_TOP);
 
-    int[] colors;
+            if (nl == null) {
+                return false;
+            }
 
-    Instance instance;
-
-    try {
-      // Searching for instances
-      for (j = 0; j < diagramNl.getLength(); j++) {
-        node = diagramNl.item(j);
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-          elt = (Element) node;
-
-          // Data
-          if (elt.getTagName().compareTo(XML_SD_INSTANCE) == 0) {
+            elt = (Element) (nl.item(0));
             tmp = elt.getAttribute("name");
-            if (tmp != null) {
-              instance = _hmsc.getInstance(tmp);
-              if (instance != null) {
-                TraceManager.addDev("Duplicate name for instance " + tmp + ": ignoring second instance");
-              } else {
-                instance = _hmsc.getCreateInstanceIfNecessary(tmp);
-              }
-              loadInstance(elt.getChildNodes(), _hmsc, _msc, instance);
+            if (tmp == null) {
+                msc = new MSC("msc");
             } else {
-              TraceManager.addDev("Instance without a name: skipping");
+                TraceManager.addDev("Name of SD = " + tmp);
+                msc = new MSC(tmp);
             }
-            // listData = elt.getElementsByTagName("WidgetData");
-          }
 
-          if (elt.getTagName().compareTo(XML_SD_EVENT_LINKS) == 0) {
-            loadLinks(elt.getChildNodes(), _hmsc, _msc);
-          }
-        }
-      }
-    } catch (Exception e) {
-      System.err.println("Exception in SD " + e.getMessage());
-      return false;
-    }
+            createHMSC(msc);
 
-    return true;
-
-  }
-
-  private boolean loadInstance(NodeList nl, HMSC _hmsc, MSC _msc, Instance _instance) {
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      String type, value, id;
-      Evt evt1;
-      boolean validType;
-      int stype = 0;
-      int sid;
-
-      TraceManager.addDev("Loading instance " + _instance.getName());
-      // TraceManager.addDev(nl.toString());
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          elt = (Element) n1;
-          if (elt.getTagName().equals(XML_SD_EVENT)) {
-            TraceManager.addDev("Found one event in instance " + _instance.getName());
-            type = elt.getAttribute("type");
-            value = elt.getAttribute("value");
-            id = elt.getAttribute("id");
-            TraceManager.addDev("Evt type=" + type + " value=" + value + " id=" + id);
-            if ((type != null) && (value != null)) {
-              type = type.toUpperCase();
-              validType = false;
-              if (type.equals("SEND_SYNC")) {
-                validType = true;
-                stype = Evt.SEND_SYNC;
-              } else if (type.equals("RECV_SYNC")) {
-                validType = true;
-                stype = Evt.RECV_SYNC;
-              } else if (type.equals("VARIABLE_SET")) {
-                validType = true;
-                stype = Evt.VARIABLE_SET;
-              }
-              if (validType) {
-                evt1 = new Evt(stype, value, _instance);
-                if (id != null) {
-                  try {
-                    sid = Integer.parseInt(id);
-                    evt1.setID(sid);
-                  } catch (NumberFormatException nfe) {
-                  }
+            for (i = 0; i < nl.getLength(); i++) {
+                node = nl.item(i);
+                // TraceManager.addDev("Node = " + dnd);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    loadMSCNode(node, hmsc, msc);
                 }
-                TraceManager.addDev("Adding evt type=" + type + " value=" + value + " id=" + id);
-                _msc.addEvt(evt1);
-              }
             }
-          }
+
+            orderEvents(hmsc, msc);
+            linkEvents(hmsc, msc);
+
+        } catch (IOException e) {
+            TraceManager.addDev("500 ");
+            throw new MalformedSDException();
+        } catch (SAXException saxe) {
+            TraceManager.addDev("501 " + saxe.getMessage());
+            throw new MalformedSDException();
         }
-      }
-
-    } catch (Exception e) {
-      return false;
+        return true;
     }
-    return true;
-  }
 
-  private boolean loadLinks(NodeList nl, HMSC _hmsc, MSC _msc) {
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      String id1, id2;
-      Evt evt1;
-      Evt evt2;
-      int sid1, sid2;
-      LinkEvts le;
+    private boolean loadMSCNode(Node node1, HMSC _hmsc, MSC _msc) {
+        NodeList diagramNl = node1.getChildNodes();
+        Element elt;
+        Node node;
+        NodeList listData = null;
 
-      TraceManager.addDev("Loading links ");
-      TraceManager.addDev(nl.toString());
+        String tmp;
+        int val;
+        int j;
+        int nbOfFaces = 1; // default value;
 
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          elt = (Element) n1;
-          if (elt.getTagName().equals(XML_SD_EVENT_LINK)) {
-            id1 = elt.getAttribute("id1");
-            id2 = elt.getAttribute("id2");
-            TraceManager.addDev("Evt link id1=" + id1 + " id2=" + id2);
-            if ((id1 != null) && (id2 != null)) {
-              try {
-                sid1 = Integer.parseInt(id1);
-                sid2 = Integer.parseInt(id2);
-                evt1 = _msc.getEvtByID(sid1);
-                evt2 = _msc.getEvtByID(sid2);
-                if ((evt1 != null) && (evt2 != null)) {
-                  le = new LinkEvts(evt1, evt2);
-                  if (!le.areCompatible(evt1, evt2)) {
-                    TraceManager.addDev("The two events are not compatible. Skipping");
-                  } else {
-                    _msc.addLinkEvts(le);
-                    TraceManager.addDev("Adding linkEvts");
-                  }
-                } else {
-                  TraceManager.addDev("Error in xml specification: evts not found. Skipping");
+        int[] colors;
+
+        Instance instance;
+
+        try {
+            // Searching for instances
+            for (j = 0; j < diagramNl.getLength(); j++) {
+                node = diagramNl.item(j);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    elt = (Element) node;
+
+                    // Data
+                    if (elt.getTagName().compareTo(XML_SD_INSTANCE) == 0) {
+                        tmp = elt.getAttribute("name");
+                        if (tmp != null) {
+                            instance = _hmsc.getInstance(tmp);
+                            if (instance != null) {
+                                TraceManager
+                                        .addDev("Duplicate name for instance " + tmp + ": ignoring second instance");
+                            } else {
+                                instance = _hmsc.getCreateInstanceIfNecessary(tmp);
+                            }
+                            loadInstance(elt.getChildNodes(), _hmsc, _msc, instance);
+                        } else {
+                            TraceManager.addDev("Instance without a name: skipping");
+                        }
+                        // listData = elt.getElementsByTagName("WidgetData");
+                    }
+
+                    if (elt.getTagName().compareTo(XML_SD_EVENT_LINKS) == 0) {
+                        loadLinks(elt.getChildNodes(), _hmsc, _msc);
+                    }
                 }
-              } catch (Exception e) {
-                TraceManager.addDev("Exception in loadlinks: parsing ints");
-              }
+            }
+        } catch (Exception e) {
+            System.err.println("Exception in SD " + e.getMessage());
+            return false;
+        }
 
+        return true;
+
+    }
+
+    private boolean loadInstance(NodeList nl, HMSC _hmsc, MSC _msc, Instance _instance) {
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            String type, value, id;
+            Evt evt1;
+            boolean validType;
+            int stype = 0;
+            int sid;
+
+            TraceManager.addDev("Loading instance " + _instance.getName());
+            // TraceManager.addDev(nl.toString());
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    elt = (Element) n1;
+                    if (elt.getTagName().equals(XML_SD_EVENT)) {
+                        TraceManager.addDev("Found one event in instance " + _instance.getName());
+                        type = elt.getAttribute("type");
+                        value = elt.getAttribute("value");
+                        id = elt.getAttribute("id");
+                        TraceManager.addDev("Evt type=" + type + " value=" + value + " id=" + id);
+                        if ((type != null) && (value != null)) {
+                            type = type.toUpperCase();
+                            validType = false;
+                            if (type.equals("SEND_SYNC")) {
+                                validType = true;
+                                stype = Evt.SEND_SYNC;
+                            } else if (type.equals("RECV_SYNC")) {
+                                validType = true;
+                                stype = Evt.RECV_SYNC;
+                            } else if (type.equals("VARIABLE_SET")) {
+                                validType = true;
+                                stype = Evt.VARIABLE_SET;
+                            }
+                            if (validType) {
+                                evt1 = new Evt(stype, value, _instance);
+                                if (id != null) {
+                                    try {
+                                        sid = Integer.parseInt(id);
+                                        evt1.setID(sid);
+                                    } catch (NumberFormatException nfe) {
+                                    }
+                                }
+                                TraceManager.addDev("Adding evt type=" + type + " value=" + value + " id=" + id);
+                                _msc.addEvt(evt1);
+                            }
+                        }
+                    }
+                }
             }
 
-          }
+        } catch (Exception e) {
+            return false;
         }
-      }
-
-    } catch (Exception e) {
-      TraceManager.addDev("Exception in loadlinks");
-      return false;
+        return true;
     }
-    return true;
-  }
 
-  public boolean orderEvents(HMSC _hmsc, MSC _msc) {
-    Evt previousEvt = null;
-    Evt evt;
-    Instance instance;
-    // For each instance, look for event sof that instance, and order them
-    ListIterator li2;
-    ListIterator li1 = _hmsc.getInstances().listIterator();
-    Order order;
+    private boolean loadLinks(NodeList nl, HMSC _hmsc, MSC _msc) {
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            String id1, id2;
+            Evt evt1;
+            Evt evt2;
+            int sid1, sid2;
+            LinkEvts le;
 
-    TraceManager.addDev("Ordering events");
-    while (li1.hasNext()) {
-      instance = (Instance) (li1.next());
-      if (instance != null) {
-        TraceManager.addDev("Ordering events of instance " + instance.getName());
-        previousEvt = null;
-        li2 = _msc.getEvts().listIterator();
-        while (li2.hasNext()) {
-          evt = (Evt) (li2.next());
-          if (evt.getInstance() == instance) {
-            if (previousEvt != null) {
-              order = new Order(previousEvt, evt);
-              _msc.addOrder(order);
-              TraceManager.addDev("New order between " + previousEvt.getID() + " and " + evt.getID());
+            TraceManager.addDev("Loading links ");
+            TraceManager.addDev(nl.toString());
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    elt = (Element) n1;
+                    if (elt.getTagName().equals(XML_SD_EVENT_LINK)) {
+                        id1 = elt.getAttribute("id1");
+                        id2 = elt.getAttribute("id2");
+                        TraceManager.addDev("Evt link id1=" + id1 + " id2=" + id2);
+                        if ((id1 != null) && (id2 != null)) {
+                            try {
+                                sid1 = Integer.parseInt(id1);
+                                sid2 = Integer.parseInt(id2);
+                                evt1 = _msc.getEvtByID(sid1);
+                                evt2 = _msc.getEvtByID(sid2);
+                                if ((evt1 != null) && (evt2 != null)) {
+                                    le = new LinkEvts(evt1, evt2);
+                                    if (!le.areCompatible(evt1, evt2)) {
+                                        TraceManager.addDev("The two events are not compatible. Skipping");
+                                    } else {
+                                        _msc.addLinkEvts(le);
+                                        TraceManager.addDev("Adding linkEvts");
+                                    }
+                                } else {
+                                    TraceManager.addDev("Error in xml specification: evts not found. Skipping");
+                                }
+                            } catch (Exception e) {
+                                TraceManager.addDev("Exception in loadlinks: parsing ints");
+                            }
+
+                        }
+
+                    }
+                }
             }
-            previousEvt = evt;
-          }
+
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in loadlinks");
+            return false;
         }
-      }
+        return true;
     }
-    return true;
-  }
 
-  public boolean linkEvents(HMSC _hmsc, MSC _msc) {
-    return true;
-  }
+    public boolean orderEvents(HMSC _hmsc, MSC _msc) {
+        Evt previousEvt = null;
+        Evt evt;
+        Instance instance;
+        // For each instance, look for event sof that instance, and order them
+        ListIterator li2;
+        ListIterator li1 = _hmsc.getInstances().listIterator();
+        Order order;
 
-  public static String transformString(String s) {
-    if (s != null) {
-      s = Conversion.replaceAllChar(s, '&', "&amp;");
-      s = Conversion.replaceAllChar(s, '<', "&lt;");
-      s = Conversion.replaceAllChar(s, '>', "&gt;");
-      s = Conversion.replaceAllChar(s, '"', "&quot;");
-      s = Conversion.replaceAllChar(s, '\'', "&apos;");
+        TraceManager.addDev("Ordering events");
+        while (li1.hasNext()) {
+            instance = (Instance) (li1.next());
+            if (instance != null) {
+                TraceManager.addDev("Ordering events of instance " + instance.getName());
+                previousEvt = null;
+                li2 = _msc.getEvts().listIterator();
+                while (li2.hasNext()) {
+                    evt = (Evt) (li2.next());
+                    if (evt.getInstance() == instance) {
+                        if (previousEvt != null) {
+                            order = new Order(previousEvt, evt);
+                            _msc.addOrder(order);
+                            TraceManager.addDev("New order between " + previousEvt.getID() + " and " + evt.getID());
+                        }
+                        previousEvt = evt;
+                    }
+                }
+            }
+        }
+        return true;
     }
-    return s;
-  }
 
-  public static String decodeString(String s) throws MalformedSDException {
-    if (s == null)
-      return s;
-    byte b[] = null;
-    try {
-      b = s.getBytes("ISO-8859-1");
-      return new String(b);
-    } catch (Exception e) {
-      throw new MalformedSDException();
+    public boolean linkEvents(HMSC _hmsc, MSC _msc) {
+        return true;
     }
-  }
+
+    public static String transformString(String s) {
+        if (s != null) {
+            s = Conversion.replaceAllChar(s, '&', "&amp;");
+            s = Conversion.replaceAllChar(s, '<', "&lt;");
+            s = Conversion.replaceAllChar(s, '>', "&gt;");
+            s = Conversion.replaceAllChar(s, '"', "&quot;");
+            s = Conversion.replaceAllChar(s, '\'', "&apos;");
+        }
+        return s;
+    }
+
+    public static String decodeString(String s) throws MalformedSDException {
+        if (s == null)
+            return s;
+        byte b[] = null;
+        try {
+            b = s.getBytes("ISO-8859-1");
+            return new String(b);
+        } catch (Exception e) {
+            throw new MalformedSDException();
+        }
+    }
 
 }

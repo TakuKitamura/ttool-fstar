@@ -53,79 +53,79 @@ import java.awt.event.ActionListener;
  */
 public class JDialogNote extends JDialogBase implements ActionListener {
 
-  protected String text;
+    protected String text;
 
-  // components
-  protected JTextArea jta;
-  protected JButton close;
-  protected JButton cancel;
+    // components
+    protected JTextArea jta;
+    protected JButton close;
+    protected JButton cancel;
 
-  /* Creates new form */
-  public JDialogNote(Frame f, String title, String _text) {
-    super(f, title, true);
-    text = _text;
+    /* Creates new form */
+    public JDialogNote(Frame f, String title, String _text) {
+        super(f, title, true);
+        text = _text;
 
-    initComponents();
-    pack();
-  }
-
-  protected void initComponents() {
-
-    Container c = getContentPane();
-    Font f = new Font("Helvetica", Font.PLAIN, 14);
-    setFont(f);
-    c.setLayout(new BorderLayout());
-    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    jta = new JTextArea();
-    jta.setEditable(true);
-    jta.setMargin(new Insets(10, 10, 10, 10));
-    jta.setTabSize(3);
-    jta.append(text);
-    jta.setFont(new Font("times", Font.PLAIN, 12));
-    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    jsp.setPreferredSize(new Dimension(300, 300));
-    c.add(jsp, BorderLayout.CENTER);
-
-    close = new JButton("Ok", IconManager.imgic25);
-    cancel = new JButton("Cancel", IconManager.imgic27);
-
-    close.setPreferredSize(new Dimension(150, 30));
-    cancel.setPreferredSize(new Dimension(150, 30));
-
-    close.addActionListener(this);
-    cancel.addActionListener(this);
-
-    JPanel jp = new JPanel();
-    jp.add(cancel);
-    jp.add(close);
-
-    c.add(jp, BorderLayout.SOUTH);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Cancel")) {
-      cancel();
-    } else if (command.equals("Ok")) {
-      close();
+        initComponents();
+        pack();
     }
-  }
 
-  public void cancel() {
-    dispose();
-  }
+    protected void initComponents() {
 
-  public void close() {
-    text = jta.getText();
-    dispose();
-  }
+        Container c = getContentPane();
+        Font f = new Font("Helvetica", Font.PLAIN, 14);
+        setFont(f);
+        c.setLayout(new BorderLayout());
+        // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public String getText() {
-    return text;
-  }
+        jta = new JTextArea();
+        jta.setEditable(true);
+        jta.setMargin(new Insets(10, 10, 10, 10));
+        jta.setTabSize(3);
+        jta.append(text);
+        jta.setFont(new Font("times", Font.PLAIN, 12));
+        JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 300));
+        c.add(jsp, BorderLayout.CENTER);
+
+        close = new JButton("Ok", IconManager.imgic25);
+        cancel = new JButton("Cancel", IconManager.imgic27);
+
+        close.setPreferredSize(new Dimension(150, 30));
+        cancel.setPreferredSize(new Dimension(150, 30));
+
+        close.addActionListener(this);
+        cancel.addActionListener(this);
+
+        JPanel jp = new JPanel();
+        jp.add(cancel);
+        jp.add(close);
+
+        c.add(jp, BorderLayout.SOUTH);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Cancel")) {
+            cancel();
+        } else if (command.equals("Ok")) {
+            close();
+        }
+    }
+
+    public void cancel() {
+        dispose();
+    }
+
+    public void close() {
+        text = jta.getText();
+        dispose();
+    }
+
+    public String getText() {
+        return text;
+    }
 
 }

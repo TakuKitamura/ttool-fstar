@@ -58,248 +58,248 @@ import java.awt.event.ActionListener;
  */
 public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2;
-  private Frame frame;
-  private ADDCoproMWMRNode node;
+    private JPanel panel2;
+    private Frame frame;
+    private ADDCoproMWMRNode node;
 
-  // Panel1
-  protected JTextField nodeName;
+    // Panel1
+    protected JTextField nodeName;
 
-  // Panel2
-  private JTextField srcid; // initiator id
-  private JTextField tgtid; // target id
-  private JTextField plaps; // configuration of integrated timer
-  private JTextField fifoToCoprocDepth;
-  private JTextField fifoFromCoprocDepth;
-  private JTextField nToCopro; // Nb of channels going to copro
-  private JTextField nFromCopro; // Nb of channels coming from copro
-  private JTextField nConfig; // Nb of configuration registers
-  private JTextField nStatus; // nb of status registers
+    // Panel2
+    private JTextField srcid; // initiator id
+    private JTextField tgtid; // target id
+    private JTextField plaps; // configuration of integrated timer
+    private JTextField fifoToCoprocDepth;
+    private JTextField fifoFromCoprocDepth;
+    private JTextField nToCopro; // Nb of channels going to copro
+    private JTextField nFromCopro; // Nb of channels coming from copro
+    private JTextField nConfig; // Nb of configuration registers
+    private JTextField nStatus; // nb of status registers
 
-  private String[] choices = { "false", "true" };
-  private JComboBox<String> useLLSC;
-  private JComboBox<String> coproc;
-  private static int selectedCoproc = 0;
+    private String[] choices = { "false", "true" };
+    private JComboBox<String> useLLSC;
+    private JComboBox<String> coproc;
+    private static int selectedCoproc = 0;
 
-  private static String[] coprocTab = { "Input Engine", "Output Engine", "Virtual Coprocessor" };
+    private static String[] coprocTab = { "Input Engine", "Output Engine", "Virtual Coprocessor" };
 
-  /* Creates new form */
-  public JDialogADDCoproMWMRNode(Frame _frame, String _title, ADDCoproMWMRNode _node) {
-    super(_frame, _title, true);
-    frame = _frame;
-    node = _node;
+    /* Creates new form */
+    public JDialogADDCoproMWMRNode(Frame _frame, String _title, ADDCoproMWMRNode _node) {
+        super(_frame, _title, true);
+        frame = _frame;
+        node = _node;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Copro attributes"));
-    // panel2.setPreferredSize(new Dimension(400, 200));
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Timer node name:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    nodeName = new JTextField(node.getNodeName(), 30);
-    nodeName.setEditable(true);
-    nodeName.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(nodeName, c1);
-
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("srcid:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    srcid = new JTextField("" + node.getSrcid(), 15);
-    panel2.add(srcid, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("tgtid:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    tgtid = new JTextField("" + node.getTgtid(), 15);
-    panel2.add(tgtid, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("plaps:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    plaps = new JTextField("" + node.getPlaps(), 15);
-    panel2.add(plaps, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("fifoToCoprocDepth:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    fifoToCoprocDepth = new JTextField("" + node.getFifoToCoprocDepth(), 15);
-    panel2.add(fifoToCoprocDepth, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("fifoFromCoprocDepth:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    fifoFromCoprocDepth = new JTextField("" + node.getFifoFromCoprocDepth(), 15);
-    panel2.add(fifoFromCoprocDepth, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("nToCopro:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    nToCopro = new JTextField("" + node.getNToCopro(), 15);
-    panel2.add(nToCopro, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("nFromCopro:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    nFromCopro = new JTextField("" + node.getNFromCopro(), 15);
-    panel2.add(nFromCopro, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("nConfig:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    nConfig = new JTextField("" + node.getNConfig(), 15);
-    panel2.add(nConfig, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("nStatus:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    nStatus = new JTextField("" + node.getNStatus(), 15);
-    panel2.add(nStatus, c2);
-
-    // Create the combo box, select item at index 4.
-    // Indices start at 0, so 4 specifies the pig.
-
-    useLLSC = new JComboBox<>(choices);
-    useLLSC.setSelectedIndex((node.getUseLLSC()) ? 1 : 0);
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("use LLSC:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER;
-    panel2.add(useLLSC, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Coprocessor Type:"), c2);
-    coproc = new JComboBox<String>(coprocTab);
-    coproc.setSelectedIndex(selectedCoproc);
-    coproc.addActionListener(this);
-    panel2.add(coproc, c2);
-
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c.add(panel2, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    /*
-     * if (evt.getSource() == typeBox) { boolean b =
-     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-     * initialValue.setEnabled(b); return; }
-     */
-
-    if (evt.getSource() == coproc) {
-      selectedCoproc = coproc.getSelectedIndex();
+        initComponents();
+        myInitComponents();
+        pack();
     }
 
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    private void myInitComponents() {
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-  public void cancelDialog() {
-    dispose();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public String getNodeName() {
-    return nodeName.getText();
-  }
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Copro attributes"));
+        // panel2.setPreferredSize(new Dimension(400, 200));
 
-  public String getSrcid() {
-    return srcid.getText();
-  }
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Timer node name:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName.setEditable(true);
+        nodeName.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(nodeName, c1);
 
-  public String getTgtid() {
-    return tgtid.getText();
-  }
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
 
-  public String getPlaps() {
-    return plaps.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("srcid:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        srcid = new JTextField("" + node.getSrcid(), 15);
+        panel2.add(srcid, c2);
 
-  public String getFifoToCoprocDepth() {
-    return fifoToCoprocDepth.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("tgtid:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        tgtid = new JTextField("" + node.getTgtid(), 15);
+        panel2.add(tgtid, c2);
 
-  public String getFifoFromCoprocDepth() {
-    return fifoFromCoprocDepth.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("plaps:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        plaps = new JTextField("" + node.getPlaps(), 15);
+        panel2.add(plaps, c2);
 
-  public String getNToCopro() {
-    return nToCopro.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("fifoToCoprocDepth:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        fifoToCoprocDepth = new JTextField("" + node.getFifoToCoprocDepth(), 15);
+        panel2.add(fifoToCoprocDepth, c2);
 
-  public String getNFromCopro() {
-    return nFromCopro.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("fifoFromCoprocDepth:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        fifoFromCoprocDepth = new JTextField("" + node.getFifoFromCoprocDepth(), 15);
+        panel2.add(fifoFromCoprocDepth, c2);
 
-  public String getNConfig() {
-    return nConfig.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("nToCopro:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        nToCopro = new JTextField("" + node.getNToCopro(), 15);
+        panel2.add(nToCopro, c2);
 
-  public String getNStatus() {
-    return nStatus.getText();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("nFromCopro:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        nFromCopro = new JTextField("" + node.getNFromCopro(), 15);
+        panel2.add(nFromCopro, c2);
 
-  public boolean getUseLLSC() {
-    return (useLLSC.getSelectedIndex() == 1);
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("nConfig:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        nConfig = new JTextField("" + node.getNConfig(), 15);
+        panel2.add(nConfig, c2);
 
-  public int getCoprocType() {
-    return coproc.getSelectedIndex();
-  }
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("nStatus:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        nStatus = new JTextField("" + node.getNStatus(), 15);
+        panel2.add(nStatus, c2);
+
+        // Create the combo box, select item at index 4.
+        // Indices start at 0, so 4 specifies the pig.
+
+        useLLSC = new JComboBox<>(choices);
+        useLLSC.setSelectedIndex((node.getUseLLSC()) ? 1 : 0);
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("use LLSC:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(useLLSC, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Coprocessor Type:"), c2);
+        coproc = new JComboBox<String>(coprocTab);
+        coproc.setSelectedIndex(selectedCoproc);
+        coproc.addActionListener(this);
+        panel2.add(coproc, c2);
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        /*
+         * if (evt.getSource() == typeBox) { boolean b =
+         * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+         * initialValue.setEnabled(b); return; }
+         */
+
+        if (evt.getSource() == coproc) {
+            selectedCoproc = coproc.getSelectedIndex();
+        }
+
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public String getNodeName() {
+        return nodeName.getText();
+    }
+
+    public String getSrcid() {
+        return srcid.getText();
+    }
+
+    public String getTgtid() {
+        return tgtid.getText();
+    }
+
+    public String getPlaps() {
+        return plaps.getText();
+    }
+
+    public String getFifoToCoprocDepth() {
+        return fifoToCoprocDepth.getText();
+    }
+
+    public String getFifoFromCoprocDepth() {
+        return fifoFromCoprocDepth.getText();
+    }
+
+    public String getNToCopro() {
+        return nToCopro.getText();
+    }
+
+    public String getNFromCopro() {
+        return nFromCopro.getText();
+    }
+
+    public String getNConfig() {
+        return nConfig.getText();
+    }
+
+    public String getNStatus() {
+        return nStatus.getText();
+    }
+
+    public boolean getUseLLSC() {
+        return (useLLSC.getSelectedIndex() == 1);
+    }
+
+    public int getCoprocType() {
+        return coproc.getSelectedIndex();
+    }
 }

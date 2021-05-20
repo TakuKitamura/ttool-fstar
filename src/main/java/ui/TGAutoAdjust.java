@@ -46,6 +46,6 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface TGAutoAdjust {
-  // Auto adjust mode: 2 modes: 0: regular, 1: small
-  void autoAdjust(int mode);
+    // Auto adjust mode: 2 modes: 0: regular, 1: small
+    void autoAdjust(int mode);
 }

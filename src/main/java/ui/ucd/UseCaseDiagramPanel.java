@@ -50,101 +50,101 @@ import java.util.ListIterator;
  */
 public class UseCaseDiagramPanel extends TDiagramPanel {
 
-  public UseCaseDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
-
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    //
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
-     * mgui.newTClassName(t.oldValue, t.getValue()); } else if (tgc instanceof
-     * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
-     * mgui.selectTab(tgc.getFather().getValue()); } else if (tgc.getFather()
-     * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
-     * TCDTClass t = to.getMasterTClass(); if (t != null) {
-     * mgui.selectTab(t.getValue()); } } return false; // because no change made on
-     * any diagram }
-     */
-    return false;
-  }
-
-  public boolean actionOnAdd(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.addTClass(tgcc.getClassName()); return true; }
-     */
-    return false;
-  }
-
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
-
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
-
-  public String getXMLHead() {
-    return "<UseCaseDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-  }
-
-  public String getXMLTail() {
-    return "</UseCaseDiagramPanel>";
-  }
-
-  public String getXMLSelectedHead() {
-    return "<UseCaseDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
-        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  public String getXMLSelectedTail() {
-    return "</UseCaseDiagramPanelCopy>";
-  }
-
-  public String getXMLCloneHead() {
-    return "<UseCaseDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  public String getXMLCloneTail() {
-    return "</UseCaseDiagramPanelCopy>";
-  }
-
-  public void makePostLoadingProcessing() throws MalformedModelingException {
-    TGComponent tgc;
-
-    /*
-     * for(int i=0; i<componentList.size(); i++) { tgc =
-     * (TGComponent)(componentList.elementAt(i)); if (tgc instanceof TCDTObject) {
-     * ((TCDTObject)tgc).postLoadingProcessing(); } }
-     */
-  }
-
-  public UCDBorder getFirstUCDBorder() {
-    TGComponent tgc;
-
-    ListIterator iterator = getComponentList().listIterator();
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if (tgc instanceof UCDBorder) {
-        return (UCDBorder) tgc;
-      }
+    public UseCaseDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
     }
 
-    return null;
-  }
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        //
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
+         * mgui.newTClassName(t.oldValue, t.getValue()); } else if (tgc instanceof
+         * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
+         * mgui.selectTab(tgc.getFather().getValue()); } else if (tgc.getFather()
+         * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
+         * TCDTClass t = to.getMasterTClass(); if (t != null) {
+         * mgui.selectTab(t.getValue()); } } return false; // because no change made on
+         * any diagram }
+         */
+        return false;
+    }
+
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.addTClass(tgcc.getClassName()); return true; }
+         */
+        return false;
+    }
+
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
+
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
+
+    public String getXMLHead() {
+        return "<UseCaseDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+    }
+
+    public String getXMLTail() {
+        return "</UseCaseDiagramPanel>";
+    }
+
+    public String getXMLSelectedHead() {
+        return "<UseCaseDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+                + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    public String getXMLSelectedTail() {
+        return "</UseCaseDiagramPanelCopy>";
+    }
+
+    public String getXMLCloneHead() {
+        return "<UseCaseDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+                + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    public String getXMLCloneTail() {
+        return "</UseCaseDiagramPanelCopy>";
+    }
+
+    public void makePostLoadingProcessing() throws MalformedModelingException {
+        TGComponent tgc;
+
+        /*
+         * for(int i=0; i<componentList.size(); i++) { tgc =
+         * (TGComponent)(componentList.elementAt(i)); if (tgc instanceof TCDTObject) {
+         * ((TCDTObject)tgc).postLoadingProcessing(); } }
+         */
+    }
+
+    public UCDBorder getFirstUCDBorder() {
+        TGComponent tgc;
+
+        ListIterator iterator = getComponentList().listIterator();
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof UCDBorder) {
+                return (UCDBorder) tgc;
+            }
+        }
+
+        return null;
+    }
 
 }

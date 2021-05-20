@@ -51,74 +51,74 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
-  // private int width = 8;
-  // private int height = 8;
+    // private int width = 8;
+    // private int height = 8;
 
-  public TGCPointOfConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TGCPointOfConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    nbConnectingPoint = 0;
+        nbConnectingPoint = 0;
 
-    initScaling(8, 8);
+        initScaling(8, 8);
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
-    canBeCloned = false;
+        moveable = true;
+        editable = false;
+        removable = true;
+        canBeCloned = false;
 
-    name = "point ";
+        name = "point ";
 
-    myImageIcon = IconManager.imgic304;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    if ((state != TGState.NORMAL) && (tdp.isSelectedTemp())) {
-      g.fillRect(x - width / 2, y - height / 2, width, height);
-      GraphicLib.doubleColorRect(g, x - width / 2, y - height / 2, width, height, Color.lightGray, Color.black);
+        myImageIcon = IconManager.imgic304;
     }
-  }
 
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y - height / 2, width, height)) {
-      return this;
+    @Override
+    public void internalDrawing(Graphics g) {
+        if ((state != TGState.NORMAL) && (tdp.isSelectedTemp())) {
+            g.fillRect(x - width / 2, y - height / 2, width, height);
+            GraphicLib.doubleColorRect(g, x - width / 2, y - height / 2, width, height, Color.lightGray, Color.black);
+        }
     }
-    return null;
-  }
 
-  @Override
-  public void myActionWhenRemoved() {
-    if (father != null) {
-      if (father instanceof TGConnector) {
-        TGConnector tg = (TGConnector) father;
-        tg.pointHasBeenRemoved(this);
-      }
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y - height / 2, width, height)) {
+            return this;
+        }
+        return null;
     }
-  }
 
-  // Issue #14 The max x of a connector should not use the x and width values but
-  // be computed from the points
-  @Override
-  public int getCurrentMaxX() {
-    return getX() + getWidth();
-  }
+    @Override
+    public void myActionWhenRemoved() {
+        if (father != null) {
+            if (father instanceof TGConnector) {
+                TGConnector tg = (TGConnector) father;
+                tg.pointHasBeenRemoved(this);
+            }
+        }
+    }
 
-  @Override
-  public int getCurrentMaxY() {
-    return getY() + getHeight();
-  }
+    // Issue #14 The max x of a connector should not use the x and width values but
+    // be computed from the points
+    @Override
+    public int getCurrentMaxX() {
+        return getX() + getWidth();
+    }
 
-  /*
-   * Issue #69 (non-Javadoc)
-   * 
-   * @see ui.CDElement#canBeDisabled()
-   */
-  @Override
-  public boolean canBeDisabled() {
-    return false;
-  }
+    @Override
+    public int getCurrentMaxY() {
+        return getY() + getHeight();
+    }
+
+    /*
+     * Issue #69 (non-Javadoc)
+     * 
+     * @see ui.CDElement#canBeDisabled()
+     */
+    @Override
+    public boolean canBeDisabled() {
+        return false;
+    }
 }

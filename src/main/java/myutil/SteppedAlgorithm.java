@@ -46,6 +46,6 @@ package myutil;
  * @author Ludovic APVRILLE
  */
 public interface SteppedAlgorithm {
-  int getPercentage();
+    int getPercentage();
 
 }

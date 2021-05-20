@@ -48,221 +48,221 @@ import java.util.List;
 import ui.tmldd.TMLArchiHWANode;
 
 public class AvatarddSpecification {
-  private List<AvatarComponent> components;
-  private List<AvatarConnector> connectors;
-  private List<AvatarMappedObject> mappedObjects;
+    private List<AvatarComponent> components;
+    private List<AvatarConnector> connectors;
+    private List<AvatarMappedObject> mappedObjects;
 
-  // private int nb_init;
+    // private int nb_init;
 
-  /*
-   * there are 11 targets which are fixed but invisible to the user of the TTool
-   * deployment diagram) :
-   * 
-   * Targets on RAM0 : the text segment (target 0) the reset segment (target 1)
-   * the data segment (target 2)
-   * 
-   * Other targets : the simhelper segment (target 3) the timer segment (target 4)
-   * the icu segment (target 5) the dma segment (target 6) the fdt (flattened
-   * device tree) segment (target 7) the fd segment (target 8) the ethernet
-   * segment (target 9) the block device segment (target 10)
-   * 
-   * There always is at least one RAM0, TTY and interconnect (Bus or VGMN or
-   * crossbar)
-   */
+    /*
+     * there are 11 targets which are fixed but invisible to the user of the TTool
+     * deployment diagram) :
+     * 
+     * Targets on RAM0 : the text segment (target 0) the reset segment (target 1)
+     * the data segment (target 2)
+     * 
+     * Other targets : the simhelper segment (target 3) the timer segment (target 4)
+     * the icu segment (target 5) the dma segment (target 6) the fdt (flattened
+     * device tree) segment (target 7) the fd segment (target 8) the ethernet
+     * segment (target 9) the block device segment (target 10)
+     * 
+     * There always is at least one RAM0, TTY and interconnect (Bus or VGMN or
+     * crossbar)
+     */
 
-  /* initialization of counters */
-  int nb_init;
-  int nb_target;
-  int nb_mwmr_segments = 0;
+    /* initialization of counters */
+    int nb_init;
+    int nb_target;
+    int nb_mwmr_segments = 0;
 
-  public AvatarddSpecification(List<AvatarComponent> _components, List<AvatarConnector> _connectors,
-      List<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init) {
-    components = _components;
-    connectors = _connectors;
-    mappedObjects = _mappedObjects;
-    nb_target = _nb_target;
-    nb_init = _nb_init;
-  }
-
-  public List<AvatarComponent> getComponents() {
-    return components;
-  }
-
-  public List<AvatarConnector> getConnectors() {
-    return connectors;
-  }
-
-  public List<AvatarMappedObject> getMappedObjects() {
-    return mappedObjects;
-  }
-
-  public List<AvatarTask> getAllMappedTask() {
-    List<AvatarTask> tasks = new LinkedList<AvatarTask>();
-
-    for (AvatarMappedObject task : mappedObjects) {
-      if (task instanceof AvatarTask) {
-        tasks.add((AvatarTask) task);
-      }
-    }
-    return tasks;
-  }
-
-  public LinkedList<AvatarChannel> getAllMappedChannels() {
-    LinkedList<AvatarChannel> channels = new LinkedList<AvatarChannel>();
-    for (AvatarMappedObject channel : mappedObjects) {
-      if (channel instanceof AvatarChannel)
-        channels.add((AvatarChannel) channel);
-    }
-    return channels;
-  }
-
-  public LinkedList<AvatarTTY> getAllTTY() {
-
-    LinkedList<AvatarTTY> ttys = new LinkedList<AvatarTTY>();
-    for (AvatarComponent tty : components) {
-      if (tty instanceof AvatarTTY) {
-        ttys.add((AvatarTTY) tty);
-        nb_target++;
-      }
-    }
-    return ttys;
-  }
-
-  public LinkedList<AvatarCPU> getAllCPU() {
-    LinkedList<AvatarCPU> cpus = new LinkedList<AvatarCPU>();
-    for (AvatarComponent cpu : components) {
-      if (cpu instanceof AvatarCPU) {
-        cpus.add((AvatarCPU) cpu);
-        nb_init++;
-      }
-    }
-    return cpus;
-  }
-
-  public List<AvatarRAM> getAllRAM() {
-
-    List<AvatarRAM> rams = new LinkedList<AvatarRAM>();
-
-    for (AvatarComponent ram : components) {
-      if (ram instanceof AvatarRAM) {
-        rams.add((AvatarRAM) ram);
-        nb_target++;
-      }
+    public AvatarddSpecification(List<AvatarComponent> _components, List<AvatarConnector> _connectors,
+            List<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init) {
+        components = _components;
+        connectors = _connectors;
+        mappedObjects = _mappedObjects;
+        nb_target = _nb_target;
+        nb_init = _nb_init;
     }
 
-    return rams;
-  }
-
-  public List<AvatarBus> getAllBus() {
-    LinkedList<AvatarBus> buss = new LinkedList<AvatarBus>();
-    for (AvatarComponent bus : components) {
-      if (bus instanceof AvatarBus)
-        buss.add((AvatarBus) bus);
+    public List<AvatarComponent> getComponents() {
+        return components;
     }
-    return buss;
-  }
 
-  public LinkedList<AvatarVgmn> getAllVgmn() {
-    LinkedList<AvatarVgmn> vgmns = new LinkedList<AvatarVgmn>();
-    for (AvatarComponent vgmn : components) {
-      if (vgmn instanceof AvatarVgmn) {
-        vgmns.add((AvatarVgmn) vgmn);
-      }
+    public List<AvatarConnector> getConnectors() {
+        return connectors;
     }
-    return vgmns;
-  }
 
-  public LinkedList<AvatarCrossbar> getAllCrossbar() {
-    LinkedList<AvatarCrossbar> crossbars = new LinkedList<AvatarCrossbar>();
-
-    for (AvatarComponent crossbar : components) {
-
-      if (crossbar instanceof AvatarCrossbar) {
-
-        crossbars.add((AvatarCrossbar) crossbar);
-        nb_target++;
-        nb_init++;
-      }
-
+    public List<AvatarMappedObject> getMappedObjects() {
+        return mappedObjects;
     }
-    return crossbars;
-  }
 
-  /*
-   * public LinkedList<AvatarBridge> getAllBridge(){ LinkedList<AvatarBridge>
-   * bridges = new LinkedList<AvatarBridge>(); for (AvatarComponent bridge :
-   * components ) { if (bridges instanceof AvatarBridge){
-   * bridges.add((AvatarBridge)bridge); } } return bridges; }
-   */
+    public List<AvatarTask> getAllMappedTask() {
+        List<AvatarTask> tasks = new LinkedList<AvatarTask>();
 
-  public int getNbClusters() {
-    return getAllCrossbar().size();
-  }
-
-  public List<AvatarCoproMWMR> getAllCoproMWMR() {
-    List<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
-    for (AvatarComponent copro : components) {
-      if (copro instanceof AvatarCoproMWMR) {
-
-        copros.add((AvatarCoproMWMR) copro);
-        nb_init++;
-        nb_target++;
-      }
+        for (AvatarMappedObject task : mappedObjects) {
+            if (task instanceof AvatarTask) {
+                tasks.add((AvatarTask) task);
+            }
+        }
+        return tasks;
     }
-    return copros;
-  }
 
-  public LinkedList<AvatarAmsCluster> getAllAmsCluster() {
-    LinkedList<AvatarAmsCluster> amsClusters = new LinkedList<AvatarAmsCluster>();
-    for (AvatarComponent amsCluster : components) {
-      if (amsCluster instanceof AvatarAmsCluster) {
-        amsClusters.add((AvatarAmsCluster) amsCluster);
-        nb_target++;
-      }
+    public LinkedList<AvatarChannel> getAllMappedChannels() {
+        LinkedList<AvatarChannel> channels = new LinkedList<AvatarChannel>();
+        for (AvatarMappedObject channel : mappedObjects) {
+            if (channel instanceof AvatarChannel)
+                channels.add((AvatarChannel) channel);
+        }
+        return channels;
     }
-    return amsClusters;
-  }
 
-  public int getNbCPU() {
-    return (getAllCPU()).size();
-  }
+    public LinkedList<AvatarTTY> getAllTTY() {
 
-  public int getNbTTY() {
-    return (getAllTTY()).size();
-  }
+        LinkedList<AvatarTTY> ttys = new LinkedList<AvatarTTY>();
+        for (AvatarComponent tty : components) {
+            if (tty instanceof AvatarTTY) {
+                ttys.add((AvatarTTY) tty);
+                nb_target++;
+            }
+        }
+        return ttys;
+    }
 
-  public int getNbRAM() {
-    return (getAllRAM()).size();
-  }
+    public LinkedList<AvatarCPU> getAllCPU() {
+        LinkedList<AvatarCPU> cpus = new LinkedList<AvatarCPU>();
+        for (AvatarComponent cpu : components) {
+            if (cpu instanceof AvatarCPU) {
+                cpus.add((AvatarCPU) cpu);
+                nb_init++;
+            }
+        }
+        return cpus;
+    }
 
-  public int getNbBus() {
-    return (getAllBus()).size();
-  }
+    public List<AvatarRAM> getAllRAM() {
 
-  public int getNbVgmn() {
-    return (getAllVgmn()).size();
-  }
+        List<AvatarRAM> rams = new LinkedList<AvatarRAM>();
 
-  public int getNbCrossbar() {
-    return (getAllCrossbar()).size();
-  }
+        for (AvatarComponent ram : components) {
+            if (ram instanceof AvatarRAM) {
+                rams.add((AvatarRAM) ram);
+                nb_target++;
+            }
+        }
 
-  public int getNbCoproMWMR() {
-    return (getAllCoproMWMR()).size();
-  }
+        return rams;
+    }
 
-  public int getNbAmsCluster() {
-    return (getAllAmsCluster()).size();
-  }
+    public List<AvatarBus> getAllBus() {
+        LinkedList<AvatarBus> buss = new LinkedList<AvatarBus>();
+        for (AvatarComponent bus : components) {
+            if (bus instanceof AvatarBus)
+                buss.add((AvatarBus) bus);
+        }
+        return buss;
+    }
 
-  // for construction of the central interconnect
+    public LinkedList<AvatarVgmn> getAllVgmn() {
+        LinkedList<AvatarVgmn> vgmns = new LinkedList<AvatarVgmn>();
+        for (AvatarComponent vgmn : components) {
+            if (vgmn instanceof AvatarVgmn) {
+                vgmns.add((AvatarVgmn) vgmn);
+            }
+        }
+        return vgmns;
+    }
 
-  public int getNb_init() {
-    return nb_init;
-  }
+    public LinkedList<AvatarCrossbar> getAllCrossbar() {
+        LinkedList<AvatarCrossbar> crossbars = new LinkedList<AvatarCrossbar>();
 
-  public int getNb_target() {
-    return nb_target;
-  }
+        for (AvatarComponent crossbar : components) {
+
+            if (crossbar instanceof AvatarCrossbar) {
+
+                crossbars.add((AvatarCrossbar) crossbar);
+                nb_target++;
+                nb_init++;
+            }
+
+        }
+        return crossbars;
+    }
+
+    /*
+     * public LinkedList<AvatarBridge> getAllBridge(){ LinkedList<AvatarBridge>
+     * bridges = new LinkedList<AvatarBridge>(); for (AvatarComponent bridge :
+     * components ) { if (bridges instanceof AvatarBridge){
+     * bridges.add((AvatarBridge)bridge); } } return bridges; }
+     */
+
+    public int getNbClusters() {
+        return getAllCrossbar().size();
+    }
+
+    public List<AvatarCoproMWMR> getAllCoproMWMR() {
+        List<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
+        for (AvatarComponent copro : components) {
+            if (copro instanceof AvatarCoproMWMR) {
+
+                copros.add((AvatarCoproMWMR) copro);
+                nb_init++;
+                nb_target++;
+            }
+        }
+        return copros;
+    }
+
+    public LinkedList<AvatarAmsCluster> getAllAmsCluster() {
+        LinkedList<AvatarAmsCluster> amsClusters = new LinkedList<AvatarAmsCluster>();
+        for (AvatarComponent amsCluster : components) {
+            if (amsCluster instanceof AvatarAmsCluster) {
+                amsClusters.add((AvatarAmsCluster) amsCluster);
+                nb_target++;
+            }
+        }
+        return amsClusters;
+    }
+
+    public int getNbCPU() {
+        return (getAllCPU()).size();
+    }
+
+    public int getNbTTY() {
+        return (getAllTTY()).size();
+    }
+
+    public int getNbRAM() {
+        return (getAllRAM()).size();
+    }
+
+    public int getNbBus() {
+        return (getAllBus()).size();
+    }
+
+    public int getNbVgmn() {
+        return (getAllVgmn()).size();
+    }
+
+    public int getNbCrossbar() {
+        return (getAllCrossbar()).size();
+    }
+
+    public int getNbCoproMWMR() {
+        return (getAllCoproMWMR()).size();
+    }
+
+    public int getNbAmsCluster() {
+        return (getAllAmsCluster()).size();
+    }
+
+    // for construction of the central interconnect
+
+    public int getNb_init() {
+        return nb_init;
+    }
+
+    public int getNb_target() {
+        return nb_target;
+    }
 
 }

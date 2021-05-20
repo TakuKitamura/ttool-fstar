@@ -45,8 +45,8 @@ package ui;
  */
 public class NoComponentException extends Exception {
 
-  public NoComponentException() {
-    super("Component could not be found");
-  }
+    public NoComponentException() {
+        super("Component could not be found");
+    }
 
 } // Class

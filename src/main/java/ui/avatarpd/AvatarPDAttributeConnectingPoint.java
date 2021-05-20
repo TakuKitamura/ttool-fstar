@@ -51,13 +51,13 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class AvatarPDAttributeConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public AvatarPDAttributeConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
+    public AvatarPDAttributeConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.APD_ATTRIBUTE_CONNECTOR;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.APD_ATTRIBUTE_CONNECTOR;
+    }
 }

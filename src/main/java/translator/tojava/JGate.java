@@ -45,86 +45,86 @@ package translator.tojava;
  * @author Ludovic APVRILLE
  */
 public class JGate implements Comparable {
-  private String name;
-  private String jName;
-  private String access;
-  private int protocol;
-  private int localPort;
-  private int destPort;
-  private String destHost;
-  private String localHost;
+    private String name;
+    private String jName;
+    private String access;
+    private int protocol;
+    private int localPort;
+    private int destPort;
+    private String destHost;
+    private String localHost;
 
-  public JGate(String _name, boolean _internal, int _protocol, int _localPort, int _destPort, String _destHost,
-      String _localHost) {
-    name = _name;
-    jName = name;
-    if (_internal == true) {
-      access = translator.JKeyword.PRIVATE;
-    } else {
-      access = translator.JKeyword.PUBLIC;
-    }
-    protocol = _protocol;
-    localPort = _localPort;
-    destPort = _destPort;
-    destHost = _destHost;
-    localHost = _localHost;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setJName(String _name) {
-    jName = _name;
-  }
-
-  public String getJName() {
-    return jName;
-  }
-
-  public String getAccess() {
-    return access;
-  }
-
-  public String getJavaDeclaration() {
-    return access + " " + TURTLE2Java.JGATE + " " + jName + translator.JKeyword.END_OP;
-  }
-
-  public String getJavaCreation() {
-    return TURTLE2Java.JGATE + " " + jName + " = new " + TURTLE2Java.JGATE + "(" + jName + ")"
-        + translator.JKeyword.END_OP;
-  }
-
-  public boolean hasAProtocol() {
-    return (protocol != TURTLE2Java.NO_PROTOCOL);
-  }
-
-  public int getProtocol() {
-    return protocol;
-  }
-
-  public int getLocalPort() {
-    return localPort;
-  }
-
-  public int getDestPort() {
-    return destPort;
-  }
-
-  public String getDestHost() {
-    return destHost;
-  }
-
-  public String getLocalHost() {
-    return localHost;
-  }
-
-  public int compareTo(Object o) {
-    if (!(o instanceof JGate)) {
-      return 0;
-    } else {
-      return toString().compareTo(o.toString());
+    public JGate(String _name, boolean _internal, int _protocol, int _localPort, int _destPort, String _destHost,
+            String _localHost) {
+        name = _name;
+        jName = name;
+        if (_internal == true) {
+            access = translator.JKeyword.PRIVATE;
+        } else {
+            access = translator.JKeyword.PUBLIC;
+        }
+        protocol = _protocol;
+        localPort = _localPort;
+        destPort = _destPort;
+        destHost = _destHost;
+        localHost = _localHost;
     }
 
-  }
+    public String getName() {
+        return name;
+    }
+
+    public void setJName(String _name) {
+        jName = _name;
+    }
+
+    public String getJName() {
+        return jName;
+    }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public String getJavaDeclaration() {
+        return access + " " + TURTLE2Java.JGATE + " " + jName + translator.JKeyword.END_OP;
+    }
+
+    public String getJavaCreation() {
+        return TURTLE2Java.JGATE + " " + jName + " = new " + TURTLE2Java.JGATE + "(" + jName + ")"
+                + translator.JKeyword.END_OP;
+    }
+
+    public boolean hasAProtocol() {
+        return (protocol != TURTLE2Java.NO_PROTOCOL);
+    }
+
+    public int getProtocol() {
+        return protocol;
+    }
+
+    public int getLocalPort() {
+        return localPort;
+    }
+
+    public int getDestPort() {
+        return destPort;
+    }
+
+    public String getDestHost() {
+        return destHost;
+    }
+
+    public String getLocalHost() {
+        return localHost;
+    }
+
+    public int compareTo(Object o) {
+        if (!(o instanceof JGate)) {
+            return 0;
+        } else {
+            return toString().compareTo(o.toString());
+        }
+
+    }
 }

@@ -51,54 +51,54 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class TMatrixTableModel extends AbstractTableModel {
-  RequirementModeling rm;
+    RequirementModeling rm;
 
-  public TMatrixTableModel(RequirementModeling _rm) {
-    rm = _rm;
-  }
+    public TMatrixTableModel(RequirementModeling _rm) {
+        rm = _rm;
+    }
 
-  // From AbstractTableModel
-  public int getRowCount() {
-    return rm.nbOfElements();
-  }
+    // From AbstractTableModel
+    public int getRowCount() {
+        return rm.nbOfElements();
+    }
 
-  public int getColumnCount() {
-    return 4;
-  }
+    public int getColumnCount() {
+        return 4;
+    }
 
-  public Object getValueAt(int row, int column) {
-    Requirements reqs;
-    reqs = rm.getRequirements(row);
-    if (column == 0) {
-      return reqs.req.getValue();
-    } else if (column == 1) {
-      return reqs.ro.getValue();
-    } else if (column == 2) {
-      return reqs.diagramName;
-    } else {
-      if (reqs.satisfiedStudied == false) {
-        return "-";
-      } else {
-        if (reqs.satisfied) {
-          return "OK";
+    public Object getValueAt(int row, int column) {
+        Requirements reqs;
+        reqs = rm.getRequirements(row);
+        if (column == 0) {
+            return reqs.req.getValue();
+        } else if (column == 1) {
+            return reqs.ro.getValue();
+        } else if (column == 2) {
+            return reqs.diagramName;
         } else {
-          return "KO";
+            if (reqs.satisfiedStudied == false) {
+                return "-";
+            } else {
+                if (reqs.satisfied) {
+                    return "OK";
+                } else {
+                    return "KO";
+                }
+            }
         }
-      }
     }
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Requirement";
-      case 1:
-        return "observer";
-      case 2:
-        return "Diagram";
-      default:
-        return "Satisfiability";
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Requirement";
+            case 1:
+                return "observer";
+            case 2:
+                return "Diagram";
+            default:
+                return "Satisfiability";
+        }
     }
-  }
 
 }

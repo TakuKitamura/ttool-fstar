@@ -46,13 +46,13 @@ package proverifspec;
  */
 public abstract class ProVerifProcInstr implements ProVerifDeclaration {
 
-  protected ProVerifProcInstr next;
+    protected ProVerifProcInstr next;
 
-  public ProVerifProcInstr setNextInstr(ProVerifProcInstr _next) {
-    if (_next == null)
-      return this;
+    public ProVerifProcInstr setNextInstr(ProVerifProcInstr _next) {
+        if (_next == null)
+            return this;
 
-    this.next = _next;
-    return _next;
-  }
+        this.next = _next;
+        return _next;
+    }
 }

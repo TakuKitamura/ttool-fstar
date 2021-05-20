@@ -46,8 +46,8 @@ package tmltranslator.tmlcp;
  */
 public class TMLCPFork extends TMLCPElement {
 
-  public TMLCPFork(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLCPFork(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

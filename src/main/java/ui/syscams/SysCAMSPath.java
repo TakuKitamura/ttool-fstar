@@ -51,117 +51,117 @@ import java.util.ArrayList;
 
 public class SysCAMSPath {
 
-  public ArrayList<SysCAMSPrimitivePort> producerPorts;
-  public ArrayList<SysCAMSPrimitivePort> consumerPorts;
+    public ArrayList<SysCAMSPrimitivePort> producerPorts;
+    public ArrayList<SysCAMSPrimitivePort> consumerPorts;
 
-  private boolean errorOfConnection = false;
+    private boolean errorOfConnection = false;
 
-  private int errorNumber;
-  private TGComponent faultyComponent;
+    private int errorNumber;
+    private TGComponent faultyComponent;
 
-  private String[] errors = { "Fork and Join operators in the same path", "Must have at least one sender",
-      "Must have at least one receiver", "More than one sender in a path with a fork",
-      "Senders and receivers are not of the same kind", "One of more element of the path is badly connected",
-      "Events are not compatible with fork/join", "Requests are not compatible with fork/join",
-      "Events/requests must all have the same parameters",
-      "Channels and events can have only one input and one output" };
+    private String[] errors = { "Fork and Join operators in the same path", "Must have at least one sender",
+            "Must have at least one receiver", "More than one sender in a path with a fork",
+            "Senders and receivers are not of the same kind", "One of more element of the path is badly connected",
+            "Events are not compatible with fork/join", "Requests are not compatible with fork/join",
+            "Events/requests must all have the same parameters",
+            "Channels and events can have only one input and one output" };
 
-  public SysCAMSPath() {
-    producerPorts = new ArrayList<SysCAMSPrimitivePort>();
-    consumerPorts = new ArrayList<SysCAMSPrimitivePort>();
-  }
-
-  public void addComponent(TGComponent _tgc) {
-    if (_tgc instanceof SysCAMSPrimitivePort) {
-      SysCAMSPrimitivePort p = (SysCAMSPrimitivePort) _tgc;
-      if (p.getOrigin() == 1) {
-        producerPorts.add(p);
-      } else {
-        consumerPorts.add(p);
-      }
-    }
-  }
-
-  public void setErrorOfConnection(boolean _err) {
-    errorOfConnection = _err;
-  }
-
-  public boolean getErrorOfConnection() {
-    return errorOfConnection;
-  }
-
-  public boolean contains(TGComponent tgc) {
-    if (producerPorts.contains(tgc)) {
-      return true;
-    }
-    if (consumerPorts.contains(tgc)) {
-      return true;
-    }
-    return false;
-  }
-
-  public void mergeWith(SysCAMSPath _path) {
-    producerPorts.addAll(_path.producerPorts);
-    consumerPorts.addAll(_path.consumerPorts);
-    setErrorOfConnection(getErrorOfConnection() || _path.getErrorOfConnection());
-  }
-
-  public boolean hasError() {
-    return (errorNumber != -1);
-  }
-
-  public String getErrorMessage() {
-    if (hasError()) {
-      return errors[errorNumber];
-    }
-    return "";
-  }
-
-  public TGComponent getFaultyComponent() {
-    return faultyComponent;
-  }
-
-  public void checkRules() {
-    errorNumber = -1;
-
-    // rule1: Must have at least one producer
-    if (producerPorts.size() == 0) {
-      errorNumber = 1;
-      if ((consumerPorts != null) && (consumerPorts.size() > 0)) {
-        faultyComponent = consumerPorts.get(0);
-      }
+    public SysCAMSPath() {
+        producerPorts = new ArrayList<SysCAMSPrimitivePort>();
+        consumerPorts = new ArrayList<SysCAMSPrimitivePort>();
     }
 
-    // rule2: Must have at least one receiver
-    if (consumerPorts.size() == 0) {
-      errorNumber = 2;
-      if ((producerPorts != null) && (producerPorts.size() > 0)) {
-        faultyComponent = producerPorts.get(0);
-      }
-    }
-
-    // rule4: producers and consumers must be of the same type
-    if ((consumerPorts.size() > 0) && (producerPorts.size() > 0)) {
-      int type = consumerPorts.get(0).getPortType();
-      for (SysCAMSPrimitivePort porto : producerPorts) {
-        if (porto.getPortType() != type) {
-          errorNumber = 4;
-          faultyComponent = porto;
-          break;
+    public void addComponent(TGComponent _tgc) {
+        if (_tgc instanceof SysCAMSPrimitivePort) {
+            SysCAMSPrimitivePort p = (SysCAMSPrimitivePort) _tgc;
+            if (p.getOrigin() == 1) {
+                producerPorts.add(p);
+            } else {
+                consumerPorts.add(p);
+            }
         }
-      }
-      for (SysCAMSPrimitivePort porti : consumerPorts) {
-        if (porti.getPortType() != type) {
-          errorNumber = 4;
-          faultyComponent = porti;
-          break;
-        }
-      }
     }
 
-    // rule5: Error of connection
-    if (errorOfConnection) {
-      errorNumber = 5;
+    public void setErrorOfConnection(boolean _err) {
+        errorOfConnection = _err;
     }
-  }
+
+    public boolean getErrorOfConnection() {
+        return errorOfConnection;
+    }
+
+    public boolean contains(TGComponent tgc) {
+        if (producerPorts.contains(tgc)) {
+            return true;
+        }
+        if (consumerPorts.contains(tgc)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void mergeWith(SysCAMSPath _path) {
+        producerPorts.addAll(_path.producerPorts);
+        consumerPorts.addAll(_path.consumerPorts);
+        setErrorOfConnection(getErrorOfConnection() || _path.getErrorOfConnection());
+    }
+
+    public boolean hasError() {
+        return (errorNumber != -1);
+    }
+
+    public String getErrorMessage() {
+        if (hasError()) {
+            return errors[errorNumber];
+        }
+        return "";
+    }
+
+    public TGComponent getFaultyComponent() {
+        return faultyComponent;
+    }
+
+    public void checkRules() {
+        errorNumber = -1;
+
+        // rule1: Must have at least one producer
+        if (producerPorts.size() == 0) {
+            errorNumber = 1;
+            if ((consumerPorts != null) && (consumerPorts.size() > 0)) {
+                faultyComponent = consumerPorts.get(0);
+            }
+        }
+
+        // rule2: Must have at least one receiver
+        if (consumerPorts.size() == 0) {
+            errorNumber = 2;
+            if ((producerPorts != null) && (producerPorts.size() > 0)) {
+                faultyComponent = producerPorts.get(0);
+            }
+        }
+
+        // rule4: producers and consumers must be of the same type
+        if ((consumerPorts.size() > 0) && (producerPorts.size() > 0)) {
+            int type = consumerPorts.get(0).getPortType();
+            for (SysCAMSPrimitivePort porto : producerPorts) {
+                if (porto.getPortType() != type) {
+                    errorNumber = 4;
+                    faultyComponent = porto;
+                    break;
+                }
+            }
+            for (SysCAMSPrimitivePort porti : consumerPorts) {
+                if (porti.getPortType() != type) {
+                    errorNumber = 4;
+                    faultyComponent = porti;
+                    break;
+                }
+            }
+        }
+
+        // rule5: Error of connection
+        if (errorOfConnection) {
+            errorNumber = 5;
+        }
+    }
 }

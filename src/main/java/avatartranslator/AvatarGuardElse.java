@@ -48,54 +48,54 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarGuardElse extends AvatarGuard {
-  public AvatarGuardElse() {
-  }
-
-  public AvatarGuard getRealGuard(AvatarStateMachineElement precedent) {
-    AvatarGuard result = null;
-
-    for (AvatarStateMachineElement asme : precedent.getNexts()) {
-      if (!(asme instanceof AvatarTransition))
-        continue;
-
-      AvatarGuard guard = ((AvatarTransition) asme).getGuard();
-      if (guard == this)
-        continue;
-
-      if (guard == null || !guard.isGuarded())
-        // another guard is empty: else will never trigger
-        // FIXME: add warning
-        return new AvatarConstantGuard(AvatarConstant.FALSE);
-
-      if (guard.isElseGuard())
-        // there were two else guards... Shouldn't happen
-        // FIXME: add warning
-        continue;
-
-      if (result == null)
-        result = ((AvatarComposedGuard) guard).getOpposite();
-      else
-        result = AvatarGuard.addGuard(result, ((AvatarComposedGuard) guard).getOpposite(), "and");
+    public AvatarGuardElse() {
     }
 
-    return result;
-  }
+    public AvatarGuard getRealGuard(AvatarStateMachineElement precedent) {
+        AvatarGuard result = null;
 
-  public String getAsString(AvatarSyntaxTranslator translator) {
-    return "else";
-  }
+        for (AvatarStateMachineElement asme : precedent.getNexts()) {
+            if (!(asme instanceof AvatarTransition))
+                continue;
 
-  @Override
-  public boolean isElseGuard() {
-    return true;
-  }
+            AvatarGuard guard = ((AvatarTransition) asme).getGuard();
+            if (guard == this)
+                continue;
 
-  @Override
-  public AvatarGuardElse clone() {
-    return new AvatarGuardElse();
-  }
+            if (guard == null || !guard.isGuarded())
+                // another guard is empty: else will never trigger
+                // FIXME: add warning
+                return new AvatarConstantGuard(AvatarConstant.FALSE);
 
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-  }
+            if (guard.isElseGuard())
+                // there were two else guards... Shouldn't happen
+                // FIXME: add warning
+                continue;
+
+            if (result == null)
+                result = ((AvatarComposedGuard) guard).getOpposite();
+            else
+                result = AvatarGuard.addGuard(result, ((AvatarComposedGuard) guard).getOpposite(), "and");
+        }
+
+        return result;
+    }
+
+    public String getAsString(AvatarSyntaxTranslator translator) {
+        return "else";
+    }
+
+    @Override
+    public boolean isElseGuard() {
+        return true;
+    }
+
+    @Override
+    public AvatarGuardElse clone() {
+        return new AvatarGuardElse();
+    }
+
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    }
 }

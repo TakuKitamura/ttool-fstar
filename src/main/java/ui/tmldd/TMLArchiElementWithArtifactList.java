@@ -48,5 +48,5 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public interface TMLArchiElementWithArtifactList {
-  Vector<TMLArchiArtifact> getArtifactList();
+    Vector<TMLArchiArtifact> getArtifactList();
 }

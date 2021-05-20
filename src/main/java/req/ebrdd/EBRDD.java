@@ -47,145 +47,145 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public class EBRDD extends ArrayList<EBRDDComponent> {
-  private String name;
-  protected EBRDDStart ads;
-  protected ArrayList<EBRDDAttribute> variables;
+    private String name;
+    protected EBRDDStart ads;
+    protected ArrayList<EBRDDAttribute> variables;
 
-  public EBRDD(EBRDDStart _ads, String _name) {
-    name = _name;
-    ads = _ads;
-    variables = new ArrayList<EBRDDAttribute>();
-    add(ads);
-  }
-
-  public EBRDD(String _name) {
-    name = _name;
-    ads = new EBRDDStart("Start", null);
-    variables = new ArrayList<EBRDDAttribute>();
-    add(ads);
-  }
-
-  // Returns false if another attribute with the same name has already been
-  // defined
-  // Returns true otherwise.
-  public boolean addAttribute(EBRDDAttribute _attr) {
-    for (EBRDDAttribute attr : variables) {
-      if (attr.getName().equals(_attr.getName())) {
-        return false;
-      }
-    }
-    variables.add(_attr);
-    return true;
-  }
-
-  public int getNbOfAttributes() {
-    return variables.size();
-  }
-
-  public EBRDDAttribute getAttributeByIndex(int _index) {
-    if ((_index < variables.size()) && (_index > -1)) {
-      return variables.get(_index);
+    public EBRDD(EBRDDStart _ads, String _name) {
+        name = _name;
+        ads = _ads;
+        variables = new ArrayList<EBRDDAttribute>();
+        add(ads);
     }
 
-    return null;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public EBRDDStart getStartState() {
-    return ads;
-  }
-
-  public void setStartState(EBRDDStart _ads) {
-    remove(ads);
-    ads = _ads;
-  }
-
-  public EBRDDComponent getEBRDDComponent(int index) {
-    return get(index);
-  }
-
-  public void removeAllNonReferencedElts() {
-    EBRDDComponent adc;
-    while ((adc = hasNonReferencedElts()) != null) {
-      remove(adc);
+    public EBRDD(String _name) {
+        name = _name;
+        ads = new EBRDDStart("Start", null);
+        variables = new ArrayList<EBRDDAttribute>();
+        add(ads);
     }
-  }
 
-  public EBRDDComponent hasNonReferencedElts() {
-    EBRDDComponent adc;
-    EBRDDComponent adc1;
-    for (int i = 0; i < size(); i++) {
-      adc = get(i);
-      if (adc != ads) {
-        adc1 = getFirstComponentLeadingTo(adc);
-        if (adc1 == null) {
-          // no component!
-          return adc;
+    // Returns false if another attribute with the same name has already been
+    // defined
+    // Returns true otherwise.
+    public boolean addAttribute(EBRDDAttribute _attr) {
+        for (EBRDDAttribute attr : variables) {
+            if (attr.getName().equals(_attr.getName())) {
+                return false;
+            }
         }
-      }
+        variables.add(_attr);
+        return true;
     }
-    return null;
-  }
 
-  public EBRDDComponent getFirstComponentLeadingTo(EBRDDComponent ad) {
-    EBRDDComponent ad1;
-    int i, j;
+    public int getNbOfAttributes() {
+        return variables.size();
+    }
 
-    for (i = 0; i < size(); i++) {
-      ad1 = get(i);
-      for (j = 0; j < ad1.getNbNext(); j++) {
-        if (ad1.getNextElement(j) == ad) {
-          return ad1;
+    public EBRDDAttribute getAttributeByIndex(int _index) {
+        if ((_index < variables.size()) && (_index > -1)) {
+            return variables.get(_index);
         }
-      }
-    }
-    return null;
-  }
 
-  public String toString() {
-    StringBuffer sb = new StringBuffer("EBRDD=\nvariables:\n");
-    for (EBRDDAttribute attr : variables) {
-      sb.append(attr.toString() + "\n");
-    }
-    sb.append("Activity diagram:\n");
-
-    if (ads != null) {
-      exploreString(ads, sb, 0);
+        return null;
     }
 
-    return sb.toString();
-  }
-
-  public void exploreString(EBRDDComponent elt, StringBuffer sb, int tabLevel) {
-    int j;
-    for (j = 0; j < tabLevel; j++) {
-      sb.append("\t");
-    }
-    sb.append(elt.toString() + "\n");
-
-    if (elt instanceof EBRDDERC) {
-      ((EBRDDERC) elt).exploreString(((EBRDDERC) elt).getRoot(), sb, tabLevel + 1);
+    public String getName() {
+        return name;
     }
 
-    if (elt.getNbNext() == 0) {
-      return;
-    }
-    if (elt.getNbNext() == 1) {
-      exploreString(elt.getNextElement(0), sb, tabLevel);
-      return;
+    public EBRDDStart getStartState() {
+        return ads;
     }
 
-    tabLevel++;
-    for (int i = 0; i < elt.getNbNext(); i++) {
-      for (j = 0; j < tabLevel; j++) {
-        sb.append("\t");
-      }
-      sb.append("#" + i + ":\n");
-      exploreString(elt.getNextElement(i), sb, tabLevel + 1);
+    public void setStartState(EBRDDStart _ads) {
+        remove(ads);
+        ads = _ads;
     }
-  }
+
+    public EBRDDComponent getEBRDDComponent(int index) {
+        return get(index);
+    }
+
+    public void removeAllNonReferencedElts() {
+        EBRDDComponent adc;
+        while ((adc = hasNonReferencedElts()) != null) {
+            remove(adc);
+        }
+    }
+
+    public EBRDDComponent hasNonReferencedElts() {
+        EBRDDComponent adc;
+        EBRDDComponent adc1;
+        for (int i = 0; i < size(); i++) {
+            adc = get(i);
+            if (adc != ads) {
+                adc1 = getFirstComponentLeadingTo(adc);
+                if (adc1 == null) {
+                    // no component!
+                    return adc;
+                }
+            }
+        }
+        return null;
+    }
+
+    public EBRDDComponent getFirstComponentLeadingTo(EBRDDComponent ad) {
+        EBRDDComponent ad1;
+        int i, j;
+
+        for (i = 0; i < size(); i++) {
+            ad1 = get(i);
+            for (j = 0; j < ad1.getNbNext(); j++) {
+                if (ad1.getNextElement(j) == ad) {
+                    return ad1;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("EBRDD=\nvariables:\n");
+        for (EBRDDAttribute attr : variables) {
+            sb.append(attr.toString() + "\n");
+        }
+        sb.append("Activity diagram:\n");
+
+        if (ads != null) {
+            exploreString(ads, sb, 0);
+        }
+
+        return sb.toString();
+    }
+
+    public void exploreString(EBRDDComponent elt, StringBuffer sb, int tabLevel) {
+        int j;
+        for (j = 0; j < tabLevel; j++) {
+            sb.append("\t");
+        }
+        sb.append(elt.toString() + "\n");
+
+        if (elt instanceof EBRDDERC) {
+            ((EBRDDERC) elt).exploreString(((EBRDDERC) elt).getRoot(), sb, tabLevel + 1);
+        }
+
+        if (elt.getNbNext() == 0) {
+            return;
+        }
+        if (elt.getNbNext() == 1) {
+            exploreString(elt.getNextElement(0), sb, tabLevel);
+            return;
+        }
+
+        tabLevel++;
+        for (int i = 0; i < elt.getNbNext(); i++) {
+            for (j = 0; j < tabLevel; j++) {
+                sb.append("\t");
+            }
+            sb.append("#" + i + ":\n");
+            exploreString(elt.getNextElement(i), sb, tabLevel + 1);
+        }
+    }
 
 }

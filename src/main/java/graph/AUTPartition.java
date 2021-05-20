@@ -49,66 +49,66 @@ import java.util.LinkedList;
  */
 public class AUTPartition {
 
-  public ArrayList<AUTBlock> blocks;
-  // Blocks are expected to be mutually exclusive
-  // in terms of states they contain.
+    public ArrayList<AUTBlock> blocks;
+    // Blocks are expected to be mutually exclusive
+    // in terms of states they contain.
 
-  public AUTPartition() {
-    blocks = new ArrayList<AUTBlock>();
-  }
-
-  public void addBlock(AUTBlock _bl) {
-    blocks.add(_bl);
-  }
-
-  public void addIfNonEmpty(AUTBlock _b) {
-    if (_b.size() > 0) {
-      addBlock(_b);
+    public AUTPartition() {
+        blocks = new ArrayList<AUTBlock>();
     }
-  }
 
-  public String toString() {
-    StringBuffer sb = new StringBuffer("");
-    for (AUTBlock block : blocks) {
-      sb.append("(" + block.toString() + ")");
+    public void addBlock(AUTBlock _bl) {
+        blocks.add(_bl);
     }
-    return sb.toString();
-  }
 
-  // List of blocks that has a state that has an
-  // output "elt" transition
-  public LinkedList<AUTBlock> getI(AUTElement _elt, AUTBlock _b) {
-    LinkedList<AUTBlock> listI = new LinkedList<AUTBlock>();
-    for (AUTBlock b : blocks) {
-      if (b.hasStateOf(_b)) {
-        listI.add(b);
-      }
+    public void addIfNonEmpty(AUTBlock _b) {
+        if (_b.size() > 0) {
+            addBlock(_b);
+        }
     }
-    return listI;
-  }
 
-  public boolean removeBlock(AUTBlock _b) {
-    return blocks.remove(_b);
-  }
-
-  public AUTBlock getBlockWithState(int id) {
-    for (AUTBlock b : blocks) {
-      if (b.hasState(id)) {
-        return b;
-      }
+    public String toString() {
+        StringBuffer sb = new StringBuffer("");
+        for (AUTBlock block : blocks) {
+            sb.append("(" + block.toString() + ")");
+        }
+        return sb.toString();
     }
-    return null;
-  }
 
-  public int getHashCode() {
-    int[] values = new int[blocks.size()];
-    int cpt = 0;
-    for (AUTBlock b : blocks) {
-      values[cpt] = b.getHashValue();
-      cpt++;
+    // List of blocks that has a state that has an
+    // output "elt" transition
+    public LinkedList<AUTBlock> getI(AUTElement _elt, AUTBlock _b) {
+        LinkedList<AUTBlock> listI = new LinkedList<AUTBlock>();
+        for (AUTBlock b : blocks) {
+            if (b.hasStateOf(_b)) {
+                listI.add(b);
+            }
+        }
+        return listI;
     }
-    return Arrays.hashCode(values);
 
-  }
+    public boolean removeBlock(AUTBlock _b) {
+        return blocks.remove(_b);
+    }
+
+    public AUTBlock getBlockWithState(int id) {
+        for (AUTBlock b : blocks) {
+            if (b.hasState(id)) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    public int getHashCode() {
+        int[] values = new int[blocks.size()];
+        int cpt = 0;
+        for (AUTBlock b : blocks) {
+            values[cpt] = b.getHashValue();
+            cpt++;
+        }
+        return Arrays.hashCode(values);
+
+    }
 
 }

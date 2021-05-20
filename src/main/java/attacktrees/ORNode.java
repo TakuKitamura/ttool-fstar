@@ -50,35 +50,35 @@ import java.awt.*;
  */
 public class ORNode extends BooleanNode {
 
-  public ORNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "OR";
-  }
-
-  public int getLowestCost(int _expertise) {
-
-    // TraceManager.addDev("In node: " + this.getClass());
-
-    if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-      return -1;
+    public ORNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "OR";
     }
 
-    // Built from the lower attacks. Assume all attacks are necessary
+    public int getLowestCost(int _expertise) {
 
-    // We task the lowest cost;
-    int cost = Integer.MAX_VALUE;
-    for (Attack attack : inputAttacks) {
-      int ret = attack.getLowestCost(_expertise);
-      if (ret != -1) {
-        cost = Math.min(cost, ret);
-      }
+        // TraceManager.addDev("In node: " + this.getClass());
+
+        if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
+            return -1;
+        }
+
+        // Built from the lower attacks. Assume all attacks are necessary
+
+        // We task the lowest cost;
+        int cost = Integer.MAX_VALUE;
+        for (Attack attack : inputAttacks) {
+            int ret = attack.getLowestCost(_expertise);
+            if (ret != -1) {
+                cost = Math.min(cost, ret);
+            }
+        }
+
+        if (cost == Integer.MAX_VALUE) {
+            return -1; // no solution found
+        }
+
+        return cost;
     }
-
-    if (cost == Integer.MAX_VALUE) {
-      return -1; // no solution found
-    }
-
-    return cost;
-  }
 
 }

@@ -45,12 +45,12 @@ package sdtranslator;
  */
 public class SDTranslationException extends Exception {
 
-  public SDTranslationException() {
-    super("SD does not follows the restricted format");
-  }
+    public SDTranslationException() {
+        super("SD does not follows the restricted format");
+    }
 
-  public SDTranslationException(String msg) {
-    super("SD does not follows the restricted format: " + msg);
-  }
+    public SDTranslationException(String msg) {
+        super("SD does not follows the restricted format: " + msg);
+    }
 
 } // Class

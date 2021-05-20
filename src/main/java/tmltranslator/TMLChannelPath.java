@@ -51,15 +51,15 @@ package tmltranslator;
 import java.util.ArrayList;
 
 public class TMLChannelPath {
-  private TMLChannel ch;
+    private TMLChannel ch;
 
-  ArrayList<ArrayList<HwNode>> srcs; // Path from src CPUs to mem
-  ArrayList<ArrayList<HwNode>> dests; // Path from dests CPUs to mem
+    ArrayList<ArrayList<HwNode>> srcs; // Path from src CPUs to mem
+    ArrayList<ArrayList<HwNode>> dests; // Path from dests CPUs to mem
 
-  public TMLChannelPath(TMLChannel _ch) {
-    ch = _ch;
-    srcs = new ArrayList<ArrayList<HwNode>>();
-    dests = new ArrayList<ArrayList<HwNode>>();
-  }
+    public TMLChannelPath(TMLChannel _ch) {
+        ch = _ch;
+        srcs = new ArrayList<ArrayList<HwNode>>();
+        dests = new ArrayList<ArrayList<HwNode>>();
+    }
 
 }

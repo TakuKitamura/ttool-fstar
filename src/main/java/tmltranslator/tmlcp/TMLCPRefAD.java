@@ -47,23 +47,23 @@ package tmltranslator.tmlcp;
  */
 public class TMLCPRefAD extends TMLCPElement {
 
-  private TMLCPActivityDiagram reference;
+    private TMLCPActivityDiagram reference;
 
-  public TMLCPRefAD(TMLCPActivityDiagram _ref, String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    reference = _ref;
-  }
+    public TMLCPRefAD(TMLCPActivityDiagram _ref, String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        reference = _ref;
+    }
 
-  public TMLCPRefAD(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    reference = null;
-  }
+    public TMLCPRefAD(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        reference = null;
+    }
 
-  public TMLCPActivityDiagram getReference() {
-    return this.reference;
-  }
+    public TMLCPActivityDiagram getReference() {
+        return this.reference;
+    }
 
-  public void setReference(TMLCPActivityDiagram _ref) {
-    this.reference = _ref;
-  }
+    public void setReference(TMLCPActivityDiagram _ref) {
+        this.reference = _ref;
+    }
 }

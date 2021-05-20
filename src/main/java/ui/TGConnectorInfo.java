@@ -47,10 +47,10 @@ package ui;
  */
 public class TGConnectorInfo {
 
-  public TGConnector connector;
+    public TGConnector connector;
 
-  public TGConnectorInfo() {
+    public TGConnectorInfo() {
 
-  }
+    }
 
 }

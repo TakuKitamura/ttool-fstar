@@ -46,26 +46,26 @@ package avatartranslator;
  */
 public class AvatarPragmaSecret extends AvatarPragma {
 
-  private AvatarAttribute argument;
+    private AvatarAttribute argument;
 
-  public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
-    super(_name, _referenceObject);
-    this.argument = arg;
-  }
+    public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
+        super(_name, _referenceObject);
+        this.argument = arg;
+    }
 
-  public AvatarAttribute getArg() {
-    return this.argument;
-  }
+    public AvatarAttribute getArg() {
+        return this.argument;
+    }
 
-  public String toString() {
-    return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
-  }
+    public String toString() {
+        return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
+    }
 
-  @Override
-  public AvatarPragmaSecret advancedClone(AvatarSpecification avspec) {
-    AvatarPragmaSecret result = new AvatarPragmaSecret(this.name, this.referenceObject,
-        avspec.getMatchingAttribute(this.argument));
-    this.cloneLinkToReferenceObjects(result);
-    return result;
-  }
+    @Override
+    public AvatarPragmaSecret advancedClone(AvatarSpecification avspec) {
+        AvatarPragmaSecret result = new AvatarPragmaSecret(this.name, this.referenceObject,
+                avspec.getMatchingAttribute(this.argument));
+        this.cloneLinkToReferenceObjects(result);
+        return result;
+    }
 }

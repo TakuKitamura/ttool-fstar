@@ -56,59 +56,59 @@ import java.util.*;
  */
 public class Help extends Command {
 
-  public Help() {
+    public Help() {
 
-  }
-
-  public List<Command> getListOfSubCommands() {
-    return subcommands;
-  }
-
-  public String getCommand() {
-    return "help";
-  }
-
-  public String getShortCommand() {
-    return "h";
-  }
-
-  public String getUsage() {
-    return "help or help <command>";
-  }
-
-  public String getDescription() {
-    return "Displays the general help of the help of a given command";
-  }
-
-  public String getExample() {
-    return "help action";
-  }
-
-  public String executeCommand(String command, Interpreter interpreter) {
-    if (command.trim().length() == 0) {
-      String s = "";
-      for (Command c : Interpreter.commands) {
-        s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
-      }
-      interpreter.print(s);
-      TraceManager.addDev("Info on command");
-      return null;
     }
 
-    Command c = interpreter.getSubCommandByName(command);
-
-    if (c == null) {
-      return Interpreter.BAD_COMMAND_NAME;
+    public List<Command> getListOfSubCommands() {
+        return subcommands;
     }
 
-    interpreter.print(c.getHelp(1));
+    public String getCommand() {
+        return "help";
+    }
 
-    return null;
+    public String getShortCommand() {
+        return "h";
+    }
 
-  }
+    public String getUsage() {
+        return "help or help <command>";
+    }
 
-  public void fillSubCommands() {
+    public String getDescription() {
+        return "Displays the general help of the help of a given command";
+    }
 
-  }
+    public String getExample() {
+        return "help action";
+    }
+
+    public String executeCommand(String command, Interpreter interpreter) {
+        if (command.trim().length() == 0) {
+            String s = "";
+            for (Command c : Interpreter.commands) {
+                s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
+            }
+            interpreter.print(s);
+            TraceManager.addDev("Info on command");
+            return null;
+        }
+
+        Command c = interpreter.getSubCommandByName(command);
+
+        if (c == null) {
+            return Interpreter.BAD_COMMAND_NAME;
+        }
+
+        interpreter.print(c.getHelp(1));
+
+        return null;
+
+    }
+
+    public void fillSubCommands() {
+
+    }
 
 }

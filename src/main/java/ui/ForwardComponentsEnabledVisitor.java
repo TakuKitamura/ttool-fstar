@@ -2,30 +2,30 @@ package ui;
 
 public class ForwardComponentsEnabledVisitor extends TrackingCDElementVisitor {
 
-  private boolean enabled;
+    private boolean enabled;
 
-  public ForwardComponentsEnabledVisitor() {
-    super();
+    public ForwardComponentsEnabledVisitor() {
+        super();
 
-    enabled = true;
-  }
-
-  @Override
-  public boolean visit(CDElement element) {
-    if (!super.visit(element)) {
-      return false;
+        enabled = true;
     }
 
-    if (element.canBeDisabled() && !(element instanceof TGConnector)) {
-      enabled = element.isEnabled();
+    @Override
+    public boolean visit(CDElement element) {
+        if (!super.visit(element)) {
+            return false;
+        }
 
-      return false;
+        if (element.canBeDisabled() && !(element instanceof TGConnector)) {
+            enabled = element.isEnabled();
+
+            return false;
+        }
+
+        return true;
     }
 
-    return true;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
-  }
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

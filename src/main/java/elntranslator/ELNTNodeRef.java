@@ -47,20 +47,20 @@ package elntranslator;
  */
 
 public class ELNTNodeRef extends ELNTComponent {
-  private String name;
+    private String name;
 
-  private ELNTModule module;
+    private ELNTModule module;
 
-  public ELNTNodeRef(String _name, ELNTModule _module) {
-    name = _name;
-    module = _module;
-  }
+    public ELNTNodeRef(String _name, ELNTModule _module) {
+        name = _name;
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

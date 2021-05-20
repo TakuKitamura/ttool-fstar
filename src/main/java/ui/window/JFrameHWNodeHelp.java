@@ -18,57 +18,57 @@ import java.awt.event.ActionListener;
  */
 
 public class JFrameHWNodeHelp extends JFrame implements ActionListener {
-  private HelpEntry he;
-  private JButton helpBut;
-  private JEditorPane pane;
+    private HelpEntry he;
+    private JButton helpBut;
+    private JEditorPane pane;
 
-  private MainGUI mgui;
+    private MainGUI mgui;
 
-  public JFrameHWNodeHelp(MainGUI _mgui, String title, HelpEntry _he) {
-    super(title);
-    mgui = _mgui;
-    he = _he;
+    public JFrameHWNodeHelp(MainGUI _mgui, String title, HelpEntry _he) {
+        super(title);
+        mgui = _mgui;
+        he = _he;
 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
-    Font f = new Font("Courrier", Font.BOLD, 12);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
+        Font f = new Font("Courrier", Font.BOLD, 12);
 
-    JPanel helpPanel = new JPanel();
-    helpPanel.setLayout(new BorderLayout());
-    helpPanel.setBorder(new javax.swing.border.TitledBorder("Help of " + he.getMasterKeyword()));
-    pane = new JEditorPane("text/html;charset=UTF-8", "");
-    pane.setEditable(false);
-    pane.setText(he.getHTMLContent());
+        JPanel helpPanel = new JPanel();
+        helpPanel.setLayout(new BorderLayout());
+        helpPanel.setBorder(new javax.swing.border.TitledBorder("Help of " + he.getMasterKeyword()));
+        pane = new JEditorPane("text/html;charset=UTF-8", "");
+        pane.setEditable(false);
+        pane.setText(he.getHTMLContent());
 
-    JScrollPane jsp = new JScrollPane(pane);
-    jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    helpPanel.add(jsp, BorderLayout.CENTER);
+        JScrollPane jsp = new JScrollPane(pane);
+        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        helpPanel.add(jsp, BorderLayout.CENTER);
 
-    framePanel.add(helpPanel, BorderLayout.CENTER);
+        framePanel.add(helpPanel, BorderLayout.CENTER);
 
-    helpBut = new JButton("Help", IconManager.imgic32);
+        helpBut = new JButton("Help", IconManager.imgic32);
 
-    HelpManager hm = new HelpManager();
-    if (hm.loadEntries()) {
-      // mgui.setHelpManager(hm);
+        HelpManager hm = new HelpManager();
+        if (hm.loadEntries()) {
+            // mgui.setHelpManager(hm);
+        }
+
+        helpBut.addActionListener(this);
+
+        JPanel jp = new JPanel();
+        jp.add(helpBut);
+        framePanel.add(jp, BorderLayout.SOUTH);
+
+        setSize(400, 400);
+        setVisible(true);
+        pack();
     }
 
-    helpBut.addActionListener(this);
-
-    JPanel jp = new JPanel();
-    jp.add(helpBut);
-    framePanel.add(jp, BorderLayout.SOUTH);
-
-    setSize(400, 400);
-    setVisible(true);
-    pack();
-  }
-
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == helpBut) {
-      mgui.openHelpFrame(he);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == helpBut) {
+            mgui.openHelpFrame(he);
+        }
     }
-  }
 }

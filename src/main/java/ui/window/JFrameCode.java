@@ -51,73 +51,73 @@ import java.awt.event.ActionListener;
  * @author Ludovic APVRILLE
  */
 public class JFrameCode extends JFrame implements ActionListener {
-  private String textPre;
-  private String textPost;
-  private JTextArea jtaPre, jtaPost;
+    private String textPre;
+    private String textPost;
+    private JTextArea jtaPre, jtaPost;
 
-  public JFrameCode(String title, String _textPre, String _textPost) {
-    super(title);
-    textPre = _textPre;
-    textPost = _textPost;
+    public JFrameCode(String title, String _textPre, String _textPost) {
+        super(title);
+        textPre = _textPre;
+        textPost = _textPost;
 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
-    Font f = new Font("Courrier", Font.BOLD, 12);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
+        Font f = new Font("Courrier", Font.BOLD, 12);
 
-    JPanel jp1 = new JPanel();
-    jp1.setLayout(new BorderLayout());
-    JPanel jp01 = new JPanel();
-    jp01.setLayout(new BorderLayout());
-    jp01.setBorder(new javax.swing.border.TitledBorder("Pre Code"));
-    jtaPre = new JTextArea(textPre);
-    jtaPre.setEditable(false);
-    jtaPre.setMargin(new Insets(10, 10, 10, 10));
-    jtaPre.setTabSize(3);
-    jtaPre.setFont(f);
-    jtaPre.setPreferredSize(new Dimension(250, 100));
-    JScrollPane jsp1 = new JScrollPane(jtaPre);
-    jp01.add(jsp1, BorderLayout.CENTER);
+        JPanel jp1 = new JPanel();
+        jp1.setLayout(new BorderLayout());
+        JPanel jp01 = new JPanel();
+        jp01.setLayout(new BorderLayout());
+        jp01.setBorder(new javax.swing.border.TitledBorder("Pre Code"));
+        jtaPre = new JTextArea(textPre);
+        jtaPre.setEditable(false);
+        jtaPre.setMargin(new Insets(10, 10, 10, 10));
+        jtaPre.setTabSize(3);
+        jtaPre.setFont(f);
+        jtaPre.setPreferredSize(new Dimension(250, 100));
+        JScrollPane jsp1 = new JScrollPane(jtaPre);
+        jp01.add(jsp1, BorderLayout.CENTER);
 
-    JPanel jp02 = new JPanel();
-    jp02.setLayout(new BorderLayout());
-    jp02.setBorder(new javax.swing.border.TitledBorder("Post Code"));
-    jtaPost = new JTextArea(textPost);
-    jtaPost.setEditable(false);
-    jtaPost.setMargin(new Insets(10, 10, 10, 10));
-    jtaPost.setTabSize(3);
-    jtaPost.setFont(f);
-    jtaPost.setPreferredSize(new Dimension(250, 100));
-    JScrollPane jsp2 = new JScrollPane(jtaPost);
-    jp02.add(jsp2, BorderLayout.CENTER);
+        JPanel jp02 = new JPanel();
+        jp02.setLayout(new BorderLayout());
+        jp02.setBorder(new javax.swing.border.TitledBorder("Post Code"));
+        jtaPost = new JTextArea(textPost);
+        jtaPost.setEditable(false);
+        jtaPost.setMargin(new Insets(10, 10, 10, 10));
+        jtaPost.setTabSize(3);
+        jtaPost.setFont(f);
+        jtaPost.setPreferredSize(new Dimension(250, 100));
+        JScrollPane jsp2 = new JScrollPane(jtaPost);
+        jp02.add(jsp2, BorderLayout.CENTER);
 
-    jp1.add(jp01, BorderLayout.NORTH);
-    jp1.add(jp02, BorderLayout.SOUTH);
-    framePanel.add(jp1, BorderLayout.CENTER);
+        jp1.add(jp01, BorderLayout.NORTH);
+        jp1.add(jp02, BorderLayout.SOUTH);
+        framePanel.add(jp1, BorderLayout.CENTER);
 
-    JButton button1 = new JButton("Close", IconManager.imgic27);
-    button1.addActionListener(this);
-    JPanel jp = new JPanel();
-    jp.add(button1);
-    framePanel.add(jp, BorderLayout.SOUTH);
+        JButton button1 = new JButton("Close", IconManager.imgic27);
+        button1.addActionListener(this);
+        JPanel jp = new JPanel();
+        jp.add(button1);
+        framePanel.add(jp, BorderLayout.SOUTH);
 
-    pack();
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-    if (command.equals("Close")) {
-      dispose();
-      return;
+        pack();
     }
-  }
 
-  public void setPreCode(String code) {
-    jtaPre.setText(code);
-  }
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+        if (command.equals("Close")) {
+            dispose();
+            return;
+        }
+    }
 
-  public void setPostCode(String code) {
-    jtaPost.setText(code);
-  }
+    public void setPreCode(String code) {
+        jtaPre.setText(code);
+    }
+
+    public void setPostCode(String code) {
+        jtaPost.setText(code);
+    }
 
 } // Class

@@ -48,9 +48,9 @@ package myutil;
  */
 public interface Graph {
 
-  int getNbOfStates();
+    int getNbOfStates();
 
-  // Returns 0 is no transition, 1 otherwise
-  int getWeightOfTransition(int originState, int destinationState);
+    // Returns 0 is no transition, 1 otherwise
+    int getWeightOfTransition(int originState, int destinationState);
 
 }

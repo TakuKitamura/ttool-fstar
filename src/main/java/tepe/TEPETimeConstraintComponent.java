@@ -48,36 +48,36 @@ import java.util.Vector;
  */
 public class TEPETimeConstraintComponent extends TEPEComponent {
 
-  protected int type, minTime, maxTime;
+    protected int type, minTime, maxTime;
 
-  public TEPETimeConstraintComponent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    inSignalComponents = new Vector<TEPEComponent>();
-    inNegatedSignalComponents = new Vector<TEPEComponent>();
-    outSignalComponents = new Vector<TEPEComponent>();
-    inPropertyComponents = new Vector<TEPEComponent>();
-    inNegatedProperty = new Vector<Boolean>();
-    outPropertyComponents = new Vector<TEPEComponent>();
-  }
+    public TEPETimeConstraintComponent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        inSignalComponents = new Vector<TEPEComponent>();
+        inNegatedSignalComponents = new Vector<TEPEComponent>();
+        outSignalComponents = new Vector<TEPEComponent>();
+        inPropertyComponents = new Vector<TEPEComponent>();
+        inNegatedProperty = new Vector<Boolean>();
+        outPropertyComponents = new Vector<TEPEComponent>();
+    }
 
-  public int getType() {
-    return type;
-  }
+    public int getType() {
+        return type;
+    }
 
-  public void setMinTime(int _minTime) {
-    minTime = _minTime;
-  }
+    public void setMinTime(int _minTime) {
+        minTime = _minTime;
+    }
 
-  public void setMaxTime(int _maxTime) {
-    maxTime = _maxTime;
-  }
+    public void setMaxTime(int _maxTime) {
+        maxTime = _maxTime;
+    }
 
-  public int getMinTime() {
-    return minTime;
-  }
+    public int getMinTime() {
+        return minTime;
+    }
 
-  public int getMaxTime() {
-    return maxTime;
-  }
+    public int getMaxTime() {
+        return maxTime;
+    }
 
 }

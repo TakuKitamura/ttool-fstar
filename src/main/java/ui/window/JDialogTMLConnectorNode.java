@@ -58,119 +58,119 @@ import java.util.Vector;
  */
 public class JDialogTMLConnectorNode extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2;
-  private Frame frame;
-  private TMLArchiConnectorNode connector;
+    private JPanel panel2;
+    private Frame frame;
+    private TMLArchiConnectorNode connector;
 
-  // protected JTextField taskName;
-  protected JComboBox<String> priority;
+    // protected JTextField taskName;
+    protected JComboBox<String> priority;
 
-  /* Creates new form */
-  public JDialogTMLConnectorNode(Frame _frame, String _title, TMLArchiConnectorNode _connector) {
-    super(_frame, _title, true);
-    frame = _frame;
-    connector = _connector;
+    /* Creates new form */
+    public JDialogTMLConnectorNode(Frame _frame, String _title, TMLArchiConnectorNode _connector) {
+        super(_frame, _title, true);
+        frame = _frame;
+        connector = _connector;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Priority"));
-    panel2.setPreferredSize(new Dimension(350, 250));
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-
-    Vector<String> list = new Vector<String>();
-    for (int i = 0; i < 11; i++) {
-      list.add("" + i);
+        initComponents();
+        myInitComponents();
+        pack();
     }
-    priority = new JComboBox<>(list);
-    priority.setSelectedIndex(connector.getPriority());
-    panel2.add(priority, c1);
 
-    /*
-     * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
-     * c1.fill = GridBagConstraints.HORIZONTAL; panel2.add(new JLabel("Name:"), c2);
-     * c1.gridwidth = GridBagConstraints.REMAINDER; //end row taskName = new
-     * JTextField(artifact.getTaskName(), 30); taskName.setEditable(true);
-     * taskName.setFont(new Font("times", Font.PLAIN, 12)); panel2.add(taskName,
-     * c1);
-     */
-
-    // main panel;
-    c0.fill = GridBagConstraints.BOTH;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c.add(panel2, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-
-    initButtons(c0, c, this);
-
-    pack();
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    /*
-     * if (evt.getSource() == typeBox) { boolean b =
-     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-     * initialValue.setEnabled(b); return; }
-     */
-
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    private void myInitComponents() {
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-  public void cancelDialog() {
-    dispose();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public int getPriority() {
-    return priority.getSelectedIndex();
-  }
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Priority"));
+        panel2.setPreferredSize(new Dimension(350, 250));
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+
+        Vector<String> list = new Vector<String>();
+        for (int i = 0; i < 11; i++) {
+            list.add("" + i);
+        }
+        priority = new JComboBox<>(list);
+        priority.setSelectedIndex(connector.getPriority());
+        panel2.add(priority, c1);
+
+        /*
+         * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
+         * c1.fill = GridBagConstraints.HORIZONTAL; panel2.add(new JLabel("Name:"), c2);
+         * c1.gridwidth = GridBagConstraints.REMAINDER; //end row taskName = new
+         * JTextField(artifact.getTaskName(), 30); taskName.setEditable(true);
+         * taskName.setFont(new Font("times", Font.PLAIN, 12)); panel2.add(taskName,
+         * c1);
+         */
+
+        // main panel;
+        c0.fill = GridBagConstraints.BOTH;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+
+        initButtons(c0, c, this);
+
+        pack();
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        /*
+         * if (evt.getSource() == typeBox) { boolean b =
+         * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+         * initialValue.setEnabled(b); return; }
+         */
+
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public int getPriority() {
+        return priority.getSelectedIndex();
+    }
 
 }

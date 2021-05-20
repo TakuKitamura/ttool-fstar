@@ -45,14 +45,14 @@ package ui;
  */
 public class ErrorGUI {
 
-  public static String GUI = "GUI error";
-  public static String ERROR_TAB = "GUI Error (tab)";
-  public static String ERROR_CHARSET = "Platform does not support required charsets";
-  public static String ERROR_UNIT = "GUI Error (unit calculation)";
+    public static String GUI = "GUI error";
+    public static String ERROR_TAB = "GUI Error (tab)";
+    public static String ERROR_CHARSET = "Platform does not support required charsets";
+    public static String ERROR_UNIT = "GUI Error (unit calculation)";
 
-  public static void exit(String s) {
-    System.err.println("Fatal Error:" + s);
-    System.exit(-1);
-  }
+    public static void exit(String s) {
+        System.err.println("Fatal Error:" + s);
+        System.exit(-1);
+    }
 
 } // Class Error

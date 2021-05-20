@@ -45,5 +45,5 @@ package avatartranslator.modelchecker;
  * @author Ludovic APVRILLE
  */
 public enum SpecificationPropertyPhase {
-  NOTCOMPUTED, SATISFIED, NONSATISFIED
+    NOTCOMPUTED, SATISFIED, NONSATISFIED
 }

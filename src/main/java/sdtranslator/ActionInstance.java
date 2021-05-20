@@ -51,14 +51,14 @@ import translator.TClass;
  */
 public class ActionInstance {
 
-  public ADComponent first;
-  public ADComponent last;
-  public Instance ins;
-  public TClass t;
-  public int nbAction;
-  public MSC msc;
+    public ADComponent first;
+    public ADComponent last;
+    public Instance ins;
+    public TClass t;
+    public int nbAction;
+    public MSC msc;
 
-  public ActionInstance() {
-  }
+    public ActionInstance() {
+    }
 
 }

@@ -47,14 +47,14 @@ package remotesimulation;
  */
 public class SimulationCommandSaveState extends SimulationCommand {
 
-  public SimulationCommandSaveState(String _userCommand, String _alias, String _simulatorCommand, int _params[],
-      String _paramNames[], String _help) {
-    super(_userCommand, _alias, _simulatorCommand, _params, _paramNames, _help);
-  }
+    public SimulationCommandSaveState(String _userCommand, String _alias, String _simulatorCommand, int _params[],
+            String _paramNames[], String _help) {
+        super(_userCommand, _alias, _simulatorCommand, _params, _paramNames, _help);
+    }
 
-  public String translateCommand(String cmds[]) {
-    String ret = super.translateCommand(cmds);
-    return ret + " 0";
-  }
+    public String translateCommand(String cmds[]) {
+        String ret = super.translateCommand(cmds);
+        return ret + " 0";
+    }
 
 }

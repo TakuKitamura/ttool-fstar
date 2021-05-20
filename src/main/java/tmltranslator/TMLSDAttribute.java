@@ -48,81 +48,81 @@ package tmltranslator;
  */
 public class TMLSDAttribute extends DIPLOElement {
 
-  public TMLSDType type;
-  public String name;
-  public String initialValue;
+    public TMLSDType type;
+    public String name;
+    public String initialValue;
 
-  public TMLSDAttribute(String _name) {
-    this.name = _name;
-    type = new TMLSDType("unknown");
-    initialValue = "unknown";
-  }
-
-  public TMLSDAttribute(String _name, TMLSDType _type) {
-    name = _name;
-    type = _type;
-  }
-
-  public TMLSDAttribute(String _name, TMLSDType _type, String _initialValue) {
-    name = _name;
-    type = _type;
-    initialValue = _initialValue;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public TMLSDType getType() {
-    return type;
-  }
-
-  public boolean isNat() {
-    return (TMLSDType.getType("NATURAL") == TMLSDType.NATURAL);
-  }
-
-  public boolean isArch() {
-    return (TMLSDType.getType("ARCHITECTURE") == TMLSDType.ARCHITECTURE);
-  }
-
-  public String getInitialValue() {
-    return initialValue;
-  }
-
-  public String toString() {
-    return name + ":" + type.toString();
-  }
-
-  public boolean hasInitialValue() {
-    return ((initialValue != null) && (initialValue.length() > 0));
-  }
-
-  public String getDefaultInitialValue() {
-    if (isNat()) {
-      return "0";
-    } else {
-      if (isArch()) {
-        return "false";
-      }
+    public TMLSDAttribute(String _name) {
+        this.name = _name;
+        type = new TMLSDType("unknown");
+        initialValue = "unknown";
     }
-    return "unknown";
-  }
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == null) {
-      return false;
+    public TMLSDAttribute(String _name, TMLSDType _type) {
+        name = _name;
+        type = _type;
     }
-    if (!(o instanceof TMLSDAttribute)) {
-      return false;
+
+    public TMLSDAttribute(String _name, TMLSDType _type, String _initialValue) {
+        name = _name;
+        type = _type;
+        initialValue = _initialValue;
     }
-    TMLSDAttribute mt = (TMLSDAttribute) o;
-    if (!this.initialValue.equals(mt.initialValue)) {
-      return false;
+
+    public String getName() {
+        return name;
     }
-    if (!this.name.equals(mt.name)) {
-      return false;
+
+    public TMLSDType getType() {
+        return type;
     }
-    return this.type.equals(mt.type);
-  }
+
+    public boolean isNat() {
+        return (TMLSDType.getType("NATURAL") == TMLSDType.NATURAL);
+    }
+
+    public boolean isArch() {
+        return (TMLSDType.getType("ARCHITECTURE") == TMLSDType.ARCHITECTURE);
+    }
+
+    public String getInitialValue() {
+        return initialValue;
+    }
+
+    public String toString() {
+        return name + ":" + type.toString();
+    }
+
+    public boolean hasInitialValue() {
+        return ((initialValue != null) && (initialValue.length() > 0));
+    }
+
+    public String getDefaultInitialValue() {
+        if (isNat()) {
+            return "0";
+        } else {
+            if (isArch()) {
+                return "false";
+            }
+        }
+        return "unknown";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof TMLSDAttribute)) {
+            return false;
+        }
+        TMLSDAttribute mt = (TMLSDAttribute) o;
+        if (!this.initialValue.equals(mt.initialValue)) {
+            return false;
+        }
+        if (!this.name.equals(mt.name)) {
+            return false;
+        }
+        return this.type.equals(mt.type);
+    }
 } // End of class

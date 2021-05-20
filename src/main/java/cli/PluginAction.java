@@ -65,358 +65,358 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class PluginAction extends Command {
-  // Action commands
-  private final static String LIST_PLUGIN = "list";
-  private final static String INFO_PLUGIN = "info";
-  private final static String INFO_COMMAND_PLUGIN = "info-command";
-  private final static String LOAD_PLUGIN = "load";
-  private final static String EXECUTE_COMMAND_IN_PLUGIN = "exec";
-  private final static String EXECUTE_RAW_COMMAND_IN_PLUGIN = "exec-raw";
-
-  public PluginAction() {
-
-  }
-
-  public List<Command> getListOfSubCommands() {
-    return subcommands;
-  }
-
-  public String getCommand() {
-    return "plugin";
-  }
-
-  public String getShortCommand() {
-    return "pl";
-  }
-
-  public String getUsage() {
-    return "action <subcommand> <options>";
-  }
-
-  public String getDescription() {
-    return "Can be used to performe actions with pluginsT";
-  }
-
-  public void fillSubCommands() {
-    // List
-    Command list = new Command() {
-      public String getCommand() {
-        return LIST_PLUGIN;
-      }
-
-      public String getShortCommand() {
-        return "li";
-      }
-
-      public String getDescription() {
-        return "List loaded plugins";
-      }
-
-      public String executeCommand(String command, Interpreter interpreter) {
-        if (PluginManager.pluginManager == null) {
-          System.out.println("No plugins");
-          return null;
-        }
-
-        StringBuffer sb = new StringBuffer("");
-        for (Plugin p : PluginManager.pluginManager.plugins) {
-          sb.append(p.getName() + "\n");
-        }
-        System.out.println(sb.toString());
-
-        return null;
-      }
-    };
-
-    // info
-    Command info = new Command() {
-      public String getCommand() {
-        return INFO_PLUGIN;
-      }
-
-      public String getShortCommand() {
-        return "i";
-      }
-
-      public String getDescription() {
-        return "Get information on a given plugin";
-      }
-
-      public String executeCommand(String command, Interpreter interpreter) {
-        if (PluginManager.pluginManager == null) {
-          return "No plugins";
-        }
-
-        String[] commands = command.split(" ");
-        if (commands.length < 1) {
-          return Interpreter.BAD;
-        }
-
-        System.out.println("Info on plugin:" + commands[0]);
-        Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
-        if (p == null) {
-          return "Unknown plugin " + commands[0];
-        }
-        StringBuffer sb = new StringBuffer("");
-        sb.append("Package:\t" + p.getPackageName() + "\n");
-        sb.append("Path:\t" + p.getPath() + "\n");
-        sb.append("Has graphical component?\t");
-        if (p.hasGraphicalComponent()) {
-          sb.append("true\n");
-        } else {
-          sb.append("false\n");
-        }
-        sb.append("Has Avatar code generator?\t");
-        if (p.hasAvatarCodeGenerator()) {
-          sb.append("true\n");
-        } else {
-          sb.append("false\n");
-        }
-        sb.append("Has Diplodocus code generator?\t");
-        if (p.hasDiplodocusCodeGenerator()) {
-          sb.append("true\n");
-        } else {
-          sb.append("false\n");
-        }
-        sb.append("Has Command line interface?\t");
-        if (p.hasCommandLineInterface()) {
-          sb.append("true\n");
-          sb.append("Custom commands: " + p.getCommandLineInterfaceFunctions());
-        } else {
-          sb.append("false\n");
-        }
-
-        System.out.println(sb.toString());
-
-        return null;
-      }
-    };
-
-    // info on command
-    Command infoCommand = new Command() {
-      public String getCommand() {
-        return INFO_COMMAND_PLUGIN;
-      }
-
-      public String getShortCommand() {
-        return "ic";
-      }
-
-      public String getDescription() {
-        return "Get information on a given command of a plugin";
-      }
-
-      public String executeCommand(String command, Interpreter interpreter) {
-        if (PluginManager.pluginManager == null) {
-          return "No plugins";
-        }
-
-        String[] commands = command.split(" ");
-        if (commands.length < 2) {
-          return Interpreter.BAD;
-        }
-
-        Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
-        if (p == null) {
-          return "No such plugin";
-        }
-
-        String s = p.getHelpOnCommandLineInterfaceFunction(commands[1]);
-
-        if ((s == null) || (s.length() == 0)) {
-          return "No such function";
-        }
-
-        System.out.println(s);
-
-        return null;
-      }
-    };
-
-    // execute command
-    Command executeCommand = new Command() {
-      public String getCommand() {
-        return EXECUTE_COMMAND_IN_PLUGIN;
-      }
-
-      public String getShortCommand() {
-        return "e";
-      }
-
-      public String getDescription() {
-        return "Execute a command. exec <pluginname> <command> [-ret variable for return value (if applicable)] "
-            + "[arg1]  [arg2] ...";
-      }
-
-      public String executeCommand(String command, Interpreter interpreter) {
-        if (PluginManager.pluginManager == null) {
-          return "No plugins";
-        }
-
-        String[] commands = command.split(" ");
-        if (commands.length < 2) {
-          return Interpreter.BAD;
-        }
-
-        Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
-        if (p == null) {
-          return "No such plugin";
-        }
-
-        String methodName = commands[1];
-        if ((methodName == null) || (methodName.length() == 0)) {
-          return "No such command";
-        }
-
-        // Look for a return variable
-        String retVar = null;
-        int indexArg = 2;
-        if (commands.length > 3) {
-          if (commands[2].compareTo("-ret") == 0) {
-            retVar = commands[3];
-            indexArg = 4;
-            TraceManager.addDev("Using variable for return:" + retVar);
-          }
-        }
-
-        String[] tab = new String[commands.length - indexArg];
-        for (int i = 0; i < tab.length; i++) {
-          tab[i] = commands[i + indexArg];
-        }
-
-        TraceManager.addDev("Using " + tab.length + " arguments");
-
-        // Start the command
-        String ret = p.callCommandLineCommand(methodName, tab);
-
-        TraceManager.addDev("Ret= " + ret);
-
-        // Store new variable
-        if ((ret != null) && (retVar != null)) {
-          interpreter.addVariable(retVar, ret);
-        }
-
-        return null;
-      }
-    };
-
-    // execute raw command
-    Command executeRawCommand = new Command() {
-      public String getCommand() {
-        return EXECUTE_RAW_COMMAND_IN_PLUGIN;
-      }
-
-      public String getShortCommand() {
-        return "er";
-      }
-
-      public String getDescription() {
-        return "Execute a command. execraw <pluginname> <command>  [-ret variable for return value (if applicable)]\n\t <all arguments in "
-            + "one" + " " + "string> ";
-
-      }
-
-      public String executeCommand(String command, Interpreter interpreter) {
-        if (PluginManager.pluginManager == null) {
-          return "No plugins";
-        }
-
-        String[] commands = command.split(" ");
-        if (commands.length < 2) {
-          return Interpreter.BAD;
-        }
-
-        Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
-        if (p == null) {
-          return "No such plugin";
-        }
-        commands[0] = "";
-
-        String methodName = commands[1];
-        if ((methodName == null) || (methodName.length() == 0)) {
-          return "No such command";
-        }
-        commands[1] = "";
-
-        // Look for a return variable
-        String retVar = null;
-        int indexArg = 2;
-        if (commands.length > 3) {
-          if (commands[2].compareTo("-ret") == 0) {
-            retVar = commands[3];
-            TraceManager.addDev("Using variable for return:" + retVar);
-            commands[2] = "";
-            commands[3] = "";
-          }
-        }
-
-        StringBuilder builder = new StringBuilder();
-        for (String s : commands) {
-          builder.append(s);
-        }
-        String str = builder.toString().trim();
-        String[] sA = new String[1];
-
-        // Start the command
-        String ret = p.callCommandLineCommand(methodName, sA);
-
-        TraceManager.addDev("Ret= " + ret);
-
-        // Store new variable
-        if ((ret != null) && (retVar != null)) {
-          interpreter.addVariable(retVar, ret);
-        }
-
-        return null;
-      }
-    };
-
-    // load
-    Command load = new Command() {
-      public String getCommand() {
-        return LOAD_PLUGIN;
-      }
-
-      public String getShortCommand() {
-        return "lo";
-      }
-
-      public String getDescription() {
-        return "Load a new plugin. pl l <plugin path> <plugin name> <plugin package>";
-      }
-
-      public String executeCommand(String command, Interpreter interpreter) {
-        if (PluginManager.pluginManager == null) {
-          PluginManager.pluginManager = new PluginManager();
-        }
-
-        String[] commands = command.split(" ");
-        if (commands.length < 2) {
-          return Interpreter.BAD;
-        }
-
-        String[] names = new String[1];
-        names[0] = commands[1];
-        String[] packages = new String[1];
-        if (commands.length == 3) {
-          packages[0] = commands[2];
-        } else {
-          packages[0] = "";
-        }
-
-        PluginManager.pluginManager.preparePlugins(commands[0], names, packages);
-
-        return null;
-      }
-    };
-
-    addAndSortSubcommand(list);
-    addAndSortSubcommand(info);
-    addAndSortSubcommand(executeCommand);
-    addAndSortSubcommand(executeRawCommand);
-    addAndSortSubcommand(infoCommand);
-    addAndSortSubcommand(load);
-
-  }
+    // Action commands
+    private final static String LIST_PLUGIN = "list";
+    private final static String INFO_PLUGIN = "info";
+    private final static String INFO_COMMAND_PLUGIN = "info-command";
+    private final static String LOAD_PLUGIN = "load";
+    private final static String EXECUTE_COMMAND_IN_PLUGIN = "exec";
+    private final static String EXECUTE_RAW_COMMAND_IN_PLUGIN = "exec-raw";
+
+    public PluginAction() {
+
+    }
+
+    public List<Command> getListOfSubCommands() {
+        return subcommands;
+    }
+
+    public String getCommand() {
+        return "plugin";
+    }
+
+    public String getShortCommand() {
+        return "pl";
+    }
+
+    public String getUsage() {
+        return "action <subcommand> <options>";
+    }
+
+    public String getDescription() {
+        return "Can be used to performe actions with pluginsT";
+    }
+
+    public void fillSubCommands() {
+        // List
+        Command list = new Command() {
+            public String getCommand() {
+                return LIST_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "li";
+            }
+
+            public String getDescription() {
+                return "List loaded plugins";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    System.out.println("No plugins");
+                    return null;
+                }
+
+                StringBuffer sb = new StringBuffer("");
+                for (Plugin p : PluginManager.pluginManager.plugins) {
+                    sb.append(p.getName() + "\n");
+                }
+                System.out.println(sb.toString());
+
+                return null;
+            }
+        };
+
+        // info
+        Command info = new Command() {
+            public String getCommand() {
+                return INFO_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "i";
+            }
+
+            public String getDescription() {
+                return "Get information on a given plugin";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    return "No plugins";
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                System.out.println("Info on plugin:" + commands[0]);
+                Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
+                if (p == null) {
+                    return "Unknown plugin " + commands[0];
+                }
+                StringBuffer sb = new StringBuffer("");
+                sb.append("Package:\t" + p.getPackageName() + "\n");
+                sb.append("Path:\t" + p.getPath() + "\n");
+                sb.append("Has graphical component?\t");
+                if (p.hasGraphicalComponent()) {
+                    sb.append("true\n");
+                } else {
+                    sb.append("false\n");
+                }
+                sb.append("Has Avatar code generator?\t");
+                if (p.hasAvatarCodeGenerator()) {
+                    sb.append("true\n");
+                } else {
+                    sb.append("false\n");
+                }
+                sb.append("Has Diplodocus code generator?\t");
+                if (p.hasDiplodocusCodeGenerator()) {
+                    sb.append("true\n");
+                } else {
+                    sb.append("false\n");
+                }
+                sb.append("Has Command line interface?\t");
+                if (p.hasCommandLineInterface()) {
+                    sb.append("true\n");
+                    sb.append("Custom commands: " + p.getCommandLineInterfaceFunctions());
+                } else {
+                    sb.append("false\n");
+                }
+
+                System.out.println(sb.toString());
+
+                return null;
+            }
+        };
+
+        // info on command
+        Command infoCommand = new Command() {
+            public String getCommand() {
+                return INFO_COMMAND_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "ic";
+            }
+
+            public String getDescription() {
+                return "Get information on a given command of a plugin";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    return "No plugins";
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
+                if (p == null) {
+                    return "No such plugin";
+                }
+
+                String s = p.getHelpOnCommandLineInterfaceFunction(commands[1]);
+
+                if ((s == null) || (s.length() == 0)) {
+                    return "No such function";
+                }
+
+                System.out.println(s);
+
+                return null;
+            }
+        };
+
+        // execute command
+        Command executeCommand = new Command() {
+            public String getCommand() {
+                return EXECUTE_COMMAND_IN_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "e";
+            }
+
+            public String getDescription() {
+                return "Execute a command. exec <pluginname> <command> [-ret variable for return value (if applicable)] "
+                        + "[arg1]  [arg2] ...";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    return "No plugins";
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
+                if (p == null) {
+                    return "No such plugin";
+                }
+
+                String methodName = commands[1];
+                if ((methodName == null) || (methodName.length() == 0)) {
+                    return "No such command";
+                }
+
+                // Look for a return variable
+                String retVar = null;
+                int indexArg = 2;
+                if (commands.length > 3) {
+                    if (commands[2].compareTo("-ret") == 0) {
+                        retVar = commands[3];
+                        indexArg = 4;
+                        TraceManager.addDev("Using variable for return:" + retVar);
+                    }
+                }
+
+                String[] tab = new String[commands.length - indexArg];
+                for (int i = 0; i < tab.length; i++) {
+                    tab[i] = commands[i + indexArg];
+                }
+
+                TraceManager.addDev("Using " + tab.length + " arguments");
+
+                // Start the command
+                String ret = p.callCommandLineCommand(methodName, tab);
+
+                TraceManager.addDev("Ret= " + ret);
+
+                // Store new variable
+                if ((ret != null) && (retVar != null)) {
+                    interpreter.addVariable(retVar, ret);
+                }
+
+                return null;
+            }
+        };
+
+        // execute raw command
+        Command executeRawCommand = new Command() {
+            public String getCommand() {
+                return EXECUTE_RAW_COMMAND_IN_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "er";
+            }
+
+            public String getDescription() {
+                return "Execute a command. execraw <pluginname> <command>  [-ret variable for return value (if applicable)]\n\t <all arguments in "
+                        + "one" + " " + "string> ";
+
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    return "No plugins";
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
+                if (p == null) {
+                    return "No such plugin";
+                }
+                commands[0] = "";
+
+                String methodName = commands[1];
+                if ((methodName == null) || (methodName.length() == 0)) {
+                    return "No such command";
+                }
+                commands[1] = "";
+
+                // Look for a return variable
+                String retVar = null;
+                int indexArg = 2;
+                if (commands.length > 3) {
+                    if (commands[2].compareTo("-ret") == 0) {
+                        retVar = commands[3];
+                        TraceManager.addDev("Using variable for return:" + retVar);
+                        commands[2] = "";
+                        commands[3] = "";
+                    }
+                }
+
+                StringBuilder builder = new StringBuilder();
+                for (String s : commands) {
+                    builder.append(s);
+                }
+                String str = builder.toString().trim();
+                String[] sA = new String[1];
+
+                // Start the command
+                String ret = p.callCommandLineCommand(methodName, sA);
+
+                TraceManager.addDev("Ret= " + ret);
+
+                // Store new variable
+                if ((ret != null) && (retVar != null)) {
+                    interpreter.addVariable(retVar, ret);
+                }
+
+                return null;
+            }
+        };
+
+        // load
+        Command load = new Command() {
+            public String getCommand() {
+                return LOAD_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "lo";
+            }
+
+            public String getDescription() {
+                return "Load a new plugin. pl l <plugin path> <plugin name> <plugin package>";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    PluginManager.pluginManager = new PluginManager();
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                String[] names = new String[1];
+                names[0] = commands[1];
+                String[] packages = new String[1];
+                if (commands.length == 3) {
+                    packages[0] = commands[2];
+                } else {
+                    packages[0] = "";
+                }
+
+                PluginManager.pluginManager.preparePlugins(commands[0], names, packages);
+
+                return null;
+            }
+        };
+
+        addAndSortSubcommand(list);
+        addAndSortSubcommand(info);
+        addAndSortSubcommand(executeCommand);
+        addAndSortSubcommand(executeRawCommand);
+        addAndSortSubcommand(infoCommand);
+        addAndSortSubcommand(load);
+
+    }
 
 }

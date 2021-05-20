@@ -1,82 +1,89 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <meta name="generator" content="pandoc" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=yes"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>TTool help</title>
     <style>
-      code {
-        white-space: pre-wrap;
-      }
-      span.smallcaps {
-        font-variant: small-caps;
-      }
-      span.underline {
-        text-decoration: underline;
-      }
-      div.column {
-        display: inline-block;
-        vertical-align: top;
-        width: 50%;
-      }
+        code {
+            white-space: pre-wrap;
+        }
+
+        span.smallcaps {
+            font-variant: small-caps;
+        }
+
+        span.underline {
+            text-decoration: underline;
+        }
+
+        div.column {
+            display: inline-block;
+            vertical-align: top;
+            width: 50%;
+        }
     </style>
     <!--[if lt IE 9]>
       <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
+</head>
+
+<body>
     <h1 id="avatar-block-diagram">AVATAR block diagram</h1>
     <p>
-      An AVATAR block diagram can be sued to describe the dtructure of a
-      software in an abstract way.
+        An AVATAR block diagram can be sued to describe the dtructure of a
+        software in an abstract way.
     </p>
     <p>The following modeling elements can be used for this purpose:</p>
     <ul>
-      <li>
-        <p>
-          <strong>Blocks</strong>. A block corresponds to a software component.
-          A block defines its own private attributes, methods and signals.
-        </p>
-      </li>
-      <li>
-        <p>
-          <strong>Crypto blocks</strong>. Crypto blocks are blocks containing
-          cryptographic methods
-        </p>
-      </li>
-      <li>
-        <p>
-          <strong>Data type blocks</strong>. They can be used to define custom
-          data types built upon baisc data types (integers, booleans).
-        </p>
-      </li>
-      <li>
-        <p>
-          <strong>Library functions</strong> are meant to factorize the bahavior
-          of blocks
-        </p>
-      </li>
-      <li>
-        <p>
-          <strong>Crypto Library functions</strong> are library functions
-          containing a set of cryptographic methods.
-        </p>
-      </li>
+        <li>
+            <p>
+                <strong>Blocks</strong>. A block corresponds to a software component.
+                A block defines its own private attributes, methods and signals.
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Crypto blocks</strong>. Crypto blocks are blocks containing
+                cryptographic methods
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Data type blocks</strong>. They can be used to define custom
+                data types built upon baisc data types (integers, booleans).
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Library functions</strong> are meant to factorize the bahavior
+                of blocks
+            </p>
+        </li>
+        <li>
+            <p>
+                <strong>Crypto Library functions</strong> are library functions
+                containing a set of cryptographic methods.
+            </p>
+        </li>
     </ul>
     <p>
-      Additionally, properties to be verified by this design are captured using
-      pragmas:
+        Additionally, properties to be verified by this design are captured using
+        pragmas:
     </p>
     <ul>
-      <li>
-        <p><a href="file://avatarsafetypragmas.html">Safety pragmas</a></p>
-      </li>
-      <li><p>Security pragmas</p></li>
-      <li><p>Performance pragmas</p></li>
+        <li>
+            <p><a href="file://avatarsafetypragmas.html">Safety pragmas</a></p>
+        </li>
+        <li>
+            <p>Security pragmas</p>
+        </li>
+        <li>
+            <p>Performance pragmas</p>
+        </li>
     </ul>
-  </body>
+</body>
+
 </html>

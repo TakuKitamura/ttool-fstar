@@ -45,9 +45,9 @@ package proverifspec;
  * @author Ludovic APVRILLE
  */
 public class ProVerifQuery {
-  public String query;
+    public String query;
 
-  public ProVerifQuery() {
-  }
+    public ProVerifQuery() {
+    }
 
 }

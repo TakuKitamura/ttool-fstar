@@ -45,28 +45,28 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class TClassGate implements Comparable<TClassGate> {
-  private TClass t;
-  private Gate g;
+    private TClass t;
+    private Gate g;
 
-  public TClassGate(TClass _t, Gate _g) {
-    t = _t;
-    g = _g;
-  }
+    public TClassGate(TClass _t, Gate _g) {
+        t = _t;
+        g = _g;
+    }
 
-  public TClass getTClass() {
-    return t;
-  }
+    public TClass getTClass() {
+        return t;
+    }
 
-  public Gate getGate() {
-    return g;
-  }
+    public Gate getGate() {
+        return g;
+    }
 
-  public String toString() {
-    return t.getName() + "." + g.getName();
-  }
+    public String toString() {
+        return t.getName() + "." + g.getName();
+    }
 
-  public int compareTo(TClassGate o) {
-    return toString().compareTo(o.toString());
-  }
+    public int compareTo(TClassGate o) {
+        return toString().compareTo(o.toString());
+    }
 
 }

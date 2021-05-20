@@ -51,145 +51,145 @@ import java.util.*;
  */
 public class TMLRequest extends TMLCommunicationElement {
 
-  protected Vector<TMLType> params; // List of various types of parameters
-  private List<TMLTask> originTasks; // list of tasks from which request starts
-  protected TMLTask destinationTask;
+    protected Vector<TMLType> params; // List of various types of parameters
+    private List<TMLTask> originTasks; // list of tasks from which request starts
+    protected TMLTask destinationTask;
 
-  protected List<String> paramNames;
+    protected List<String> paramNames;
 
-  // For security verification
-  public int confStatus;
-  public boolean checkConf;
-  public boolean checkAuth;
+    // For security verification
+    public int confStatus;
+    public boolean checkConf;
+    public boolean checkAuth;
 
-  public List<TMLCPrimitivePort> ports;
+    public List<TMLCPrimitivePort> ports;
 
-  public TMLRequest(final String name, final Object reference) {
-    super(name, reference);
+    public TMLRequest(final String name, final Object reference) {
+        super(name, reference);
 
-    params = new Vector<TMLType>();
-    originTasks = new ArrayList<TMLTask>();
-    paramNames = new ArrayList<String>();
-    ports = new ArrayList<TMLCPrimitivePort>();
-    checkConf = false;
-  }
-
-  public int getNbOfParams() {
-    return params.size();
-  }
-
-  public void addParam(TMLType _type) {
-    params.add(_type);
-  }
-
-  public void addParamName(String name) {
-    paramNames.add(name);
-  }
-
-  public TMLType getType(int i) {
-    if (i < getNbOfParams()) {
-      return params.elementAt(i);
+        params = new Vector<TMLType>();
+        originTasks = new ArrayList<TMLTask>();
+        paramNames = new ArrayList<String>();
+        ports = new ArrayList<TMLCPrimitivePort>();
+        checkConf = false;
     }
 
-    return null;
-  }
-
-  public Vector<TMLType> getParams() {
-    return params;
-  }
-
-  public String getParam(int i) {
-    if (i < paramNames.size()) {
-      return paramNames.get(i);
+    public int getNbOfParams() {
+        return params.size();
     }
 
-    return "";
-  }
-
-  public void setDestinationTask(TMLTask _task) {
-    destinationTask = _task;
-  }
-
-  public TMLTask getDestinationTask() {
-    return destinationTask;
-  }
-
-  public void addOriginTask(TMLTask _task) {
-    originTasks.add(_task);
-  }
-
-  public boolean isAnOriginTask(TMLTask _task) {
-    return (originTasks.contains(_task));
-  }
-
-  public List<TMLTask> getOriginTasks() {
-    return originTasks;
-  }
-
-  public String getNameExtension() {
-    return "request__";
-  }
-
-  public void addParam(String _list) {
-    String[] split = _list.split(",");
-    TMLType type;
-
-    for (int i = 0; i < split.length; i++) {
-      if (TMLType.isAValidType(split[i])) {
-        type = new TMLType(TMLType.getType(split[i]));
-        addParam(type);
-      }
-    }
-  }
-
-  public boolean isBlockingAtOrigin() {
-    return false;
-  }
-
-  public boolean isBlockingAtDestination() {
-    return true;
-  }
-
-  public String toXML() {
-    String s = "<TMLREQUEST ";
-    s += "name=\"" + name + "\" ";
-    s += "destinationtask=\"" + destinationTask.getName() + "\" ";
-    s += "isLossy=\"" + isLossy + "\" ";
-    s += "lossPercentage=\"" + lossPercentage + "\" ";
-    s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
-    s += " >\n";
-
-    for (TMLTask ta : originTasks) {
-      s += "<ORIGINTASK name=\"" + ta.getName() + "\" /> ";
+    public void addParam(TMLType _type) {
+        params.add(_type);
     }
 
-    for (TMLType t : params) {
-      s += "<PARAM type=\"" + t.toString() + "\" />";
+    public void addParamName(String name) {
+        paramNames.add(name);
     }
-    s += "</TMLREQUEST>\n";
-    return s;
-  }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLRequest))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    TMLRequest request = (TMLRequest) o;
-    TMLComparingMethod comp = new TMLComparingMethod();
+    public TMLType getType(int i) {
+        if (i < getNbOfParams()) {
+            return params.elementAt(i);
+        }
 
-    if (destinationTask != null) {
-      if (!destinationTask.equalSpec(request.getDestinationTask()))
+        return null;
+    }
+
+    public Vector<TMLType> getParams() {
+        return params;
+    }
+
+    public String getParam(int i) {
+        if (i < paramNames.size()) {
+            return paramNames.get(i);
+        }
+
+        return "";
+    }
+
+    public void setDestinationTask(TMLTask _task) {
+        destinationTask = _task;
+    }
+
+    public TMLTask getDestinationTask() {
+        return destinationTask;
+    }
+
+    public void addOriginTask(TMLTask _task) {
+        originTasks.add(_task);
+    }
+
+    public boolean isAnOriginTask(TMLTask _task) {
+        return (originTasks.contains(_task));
+    }
+
+    public List<TMLTask> getOriginTasks() {
+        return originTasks;
+    }
+
+    public String getNameExtension() {
+        return "request__";
+    }
+
+    public void addParam(String _list) {
+        String[] split = _list.split(",");
+        TMLType type;
+
+        for (int i = 0; i < split.length; i++) {
+            if (TMLType.isAValidType(split[i])) {
+                type = new TMLType(TMLType.getType(split[i]));
+                addParam(type);
+            }
+        }
+    }
+
+    public boolean isBlockingAtOrigin() {
         return false;
     }
 
-    if (!(new HashSet<>(params).equals(new HashSet<>(request.params))))
-      return false;
+    public boolean isBlockingAtDestination() {
+        return true;
+    }
 
-    if (!(new HashSet<>(paramNames).equals(new HashSet<>(request.paramNames))))
-      return false;
+    public String toXML() {
+        String s = "<TMLREQUEST ";
+        s += "name=\"" + name + "\" ";
+        s += "destinationtask=\"" + destinationTask.getName() + "\" ";
+        s += "isLossy=\"" + isLossy + "\" ";
+        s += "lossPercentage=\"" + lossPercentage + "\" ";
+        s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
+        s += " >\n";
 
-    return confStatus == request.confStatus && checkConf == request.checkConf && checkAuth == request.checkAuth
-        && comp.isTasksListEquals(originTasks, request.getOriginTasks());
-  }
+        for (TMLTask ta : originTasks) {
+            s += "<ORIGINTASK name=\"" + ta.getName() + "\" /> ";
+        }
+
+        for (TMLType t : params) {
+            s += "<PARAM type=\"" + t.toString() + "\" />";
+        }
+        s += "</TMLREQUEST>\n";
+        return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLRequest))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        TMLRequest request = (TMLRequest) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (destinationTask != null) {
+            if (!destinationTask.equalSpec(request.getDestinationTask()))
+                return false;
+        }
+
+        if (!(new HashSet<>(params).equals(new HashSet<>(request.params))))
+            return false;
+
+        if (!(new HashSet<>(paramNames).equals(new HashSet<>(request.paramNames))))
+            return false;
+
+        return confStatus == request.confStatus && checkConf == request.checkConf && checkAuth == request.checkAuth
+                && comp.isTasksListEquals(originTasks, request.getOriginTasks());
+    }
 }

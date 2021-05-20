@@ -47,56 +47,56 @@ import java.util.ArrayList;
  * @version 1.0 24/01/2018
  */
 public class Fault extends FaultElement {
-  private FaultNode originNode; // If no origin node -> leaf attack
-  private ArrayList<FaultNode> destinationNodes;
-  private boolean isRoot;
-  private boolean isEnabled = true;
-  private double probability;
+    private FaultNode originNode; // If no origin node -> leaf attack
+    private ArrayList<FaultNode> destinationNodes;
+    private boolean isRoot;
+    private boolean isEnabled = true;
+    private double probability;
 
-  public Fault(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    destinationNodes = new ArrayList<FaultNode>();
-  }
+    public Fault(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        destinationNodes = new ArrayList<FaultNode>();
+    }
 
-  public boolean isRoot() {
-    return isRoot;
-  }
+    public boolean isRoot() {
+        return isRoot;
+    }
 
-  public void setRoot(boolean _root) {
-    isRoot = _root;
-  }
+    public void setRoot(boolean _root) {
+        isRoot = _root;
+    }
 
-  public boolean isEnabled() {
-    return isEnabled;
-  }
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 
-  public void setEnabled(boolean _enabled) {
-    isEnabled = _enabled;
-  }
+    public void setEnabled(boolean _enabled) {
+        isEnabled = _enabled;
+    }
 
-  public void setOriginNode(FaultNode _node) {
-    originNode = _node;
-  }
+    public void setOriginNode(FaultNode _node) {
+        originNode = _node;
+    }
 
-  public void setProbability(double probability) {
-    this.probability = probability;
-  }
+    public void setProbability(double probability) {
+        this.probability = probability;
+    }
 
-  public double getProbability() {
-    return probability;
-  }
+    public double getProbability() {
+        return probability;
+    }
 
-  public void addDestinationNode(FaultNode _node) {
-    destinationNodes.add(_node);
-  }
+    public void addDestinationNode(FaultNode _node) {
+        destinationNodes.add(_node);
+    }
 
-  public boolean isLeaf() {
-    return (originNode == null);
-  }
+    public boolean isLeaf() {
+        return (originNode == null);
+    }
 
-  public boolean isFinal() {
-    return destinationNodes.size() == 0;
+    public boolean isFinal() {
+        return destinationNodes.size() == 0;
 
-  }
+    }
 
 }

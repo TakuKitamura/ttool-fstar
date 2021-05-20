@@ -52,14 +52,14 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class SysmlsecMethodologyConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public SysmlsecMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h, int _orientation) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-    orientation = _orientation;
-  }
+    public SysmlsecMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+            double _w, double _h, int _orientation) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+        orientation = _orientation;
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR;
+    }
 }

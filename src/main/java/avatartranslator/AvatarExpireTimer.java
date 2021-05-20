@@ -46,18 +46,18 @@ package avatartranslator;
  */
 public class AvatarExpireTimer extends AvatarTimerOperator {
 
-  public AvatarExpireTimer(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarExpireTimer(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-    AvatarExpireTimer aet = new AvatarExpireTimer(getName(), getReferenceObject());
-    aet.setTimer(getTimer());
-    return aet;
-  }
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+        AvatarExpireTimer aet = new AvatarExpireTimer(getName(), getReferenceObject());
+        aet.setTimer(getTimer());
+        return aet;
+    }
 
-  public String getNiceName() {
-    return "Expiration of timer " + getName();
-  }
+    public String getNiceName() {
+        return "Expiration of timer " + getName();
+    }
 
 }

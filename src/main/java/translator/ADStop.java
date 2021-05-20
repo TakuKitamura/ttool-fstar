@@ -46,16 +46,16 @@ package translator;
  */
 public class ADStop extends ADComponent {
 
-  public ADStop() {
-    nbNext = 0;
-    minNbNext = 0;
-  }
+    public ADStop() {
+        nbNext = 0;
+        minNbNext = 0;
+    }
 
-  public ADComponent makeSame() {
-    return new ADStop();
-  }
+    public ADComponent makeSame() {
+        return new ADStop();
+    }
 
-  public String toString() {
-    return "Stop state";
-  }
+    public String toString() {
+        return "Stop state";
+    }
 }

@@ -49,19 +49,19 @@ import javax.swing.*;
  * @see ui.TGComponent
  */
 public abstract class AvatarInteractiveSimulationBar extends JToolBar {
-  protected JFrameAvatarInteractiveSimulation jfais;
+    protected JFrameAvatarInteractiveSimulation jfais;
 
-  public AvatarInteractiveSimulationBar(JFrameAvatarInteractiveSimulation _jfais) {
-    super();
-    jfais = _jfais;
-    setOrientation(SwingConstants.HORIZONTAL);
-    setFloatable(true);
-    setButtons();
-  }
+    public AvatarInteractiveSimulationBar(JFrameAvatarInteractiveSimulation _jfais) {
+        super();
+        jfais = _jfais;
+        setOrientation(SwingConstants.HORIZONTAL);
+        setFloatable(true);
+        setButtons();
+    }
 
-  // asbtract operations
-  protected abstract void setButtons();
+    // asbtract operations
+    protected abstract void setButtons();
 
-  protected abstract void setActive(boolean b);
+    protected abstract void setActive(boolean b);
 
 } // Class

@@ -47,35 +47,35 @@ package ui;
  */
 public class LRArtifactTClassGate implements Comparable {
 
-  public ArtifactTClassGate left;
-  public ArtifactTClassGate right;
+    public ArtifactTClassGate left;
+    public ArtifactTClassGate right;
 
-  public LRArtifactTClassGate(ArtifactTClassGate _left, ArtifactTClassGate _right) {
-    left = _left;
-    right = _right;
-  }
-
-  public int compareTo(Object o) {
-    if (!(o instanceof LRArtifactTClassGate)) {
-      return -1;
+    public LRArtifactTClassGate(ArtifactTClassGate _left, ArtifactTClassGate _right) {
+        left = _left;
+        right = _right;
     }
 
-    LRArtifactTClassGate lratg = (LRArtifactTClassGate) o;
-    if ((lratg.left.compareTo(left) == 0) && (lratg.right.compareTo(right) == 0)) {
-      return 0;
+    public int compareTo(Object o) {
+        if (!(o instanceof LRArtifactTClassGate)) {
+            return -1;
+        }
+
+        LRArtifactTClassGate lratg = (LRArtifactTClassGate) o;
+        if ((lratg.left.compareTo(left) == 0) && (lratg.right.compareTo(right) == 0)) {
+            return 0;
+        }
+        if ((lratg.left.compareTo(right) == 0) && (lratg.right.compareTo(left) == 0)) {
+            return 0;
+        }
+
+        return -1;
     }
-    if ((lratg.left.compareTo(right) == 0) && (lratg.right.compareTo(left) == 0)) {
-      return 0;
+
+    public boolean hasEquivalent(ArtifactTClassGate atg) {
+        return ((atg.compareTo(left) == 0) || (atg.compareTo(right) == 0));
     }
 
-    return -1;
-  }
-
-  public boolean hasEquivalent(ArtifactTClassGate atg) {
-    return ((atg.compareTo(left) == 0) || (atg.compareTo(right) == 0));
-  }
-
-  public String toString() {
-    return left.toString() + " = " + right.toString();
-  }
+    public String toString() {
+        return left.toString() + " = " + right.toString();
+    }
 }

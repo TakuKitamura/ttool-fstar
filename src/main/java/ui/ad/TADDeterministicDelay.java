@@ -54,78 +54,79 @@ import java.awt.geom.Line2D;
  */
 public class TADDeterministicDelay extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent */ {
 
-  private int lineLength = 5;
+    private int lineLength = 5;
 
-  private int textX, textY;
+    private int textX, textY;
 
-  public TADDeterministicDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TADDeterministicDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 10;
-    height = 30;
-    textX = width + 5;
-    textY = height / 2 + 5;
+        width = 10;
+        height = 30;
+        textX = width + 5;
+        textY = height / 2 + 5;
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointAD(this, 0, +lineLength, false, true, 0.5, 1.0);
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, 0, +lineLength, false, true, 0.5, 1.0);
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 1;
-    tgcomponent = new TGComponent[nbInternalTGComponent];
+        nbInternalTGComponent = 1;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
 
-    TGCOneLineText tgc = new TGCOneLineText(x + textX, y + textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
-    tgc.setValue("delay value");
-    tgc.setName("value of the delay");
-    tgcomponent[0] = tgc;
+        TGCOneLineText tgc = new TGCOneLineText(x + textX, y + textY, -75, 30, textY - 10, textY + 10, true, this,
+                _tdp);
+        tgc.setValue("delay value");
+        tgc.setName("value of the delay");
+        tgcomponent[0] = tgc;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "deterministic delay";
+        name = "deterministic delay";
 
-    myImageIcon = IconManager.imgic214;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-  }
-
-  @Override
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic214;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
-        y1)) < distanceSelected) {
-      return this;
+    @Override
+    public void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
     }
 
-    return null;
-  }
+    @Override
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+            return this;
+        }
 
-  public String getDelayValue() {
-    return tgcomponent[0].getValue();
-  }
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
+                y1)) < distanceSelected) {
+            return this;
+        }
 
-  public void setDelayValue(String value) {
-    tgcomponent[0].setValue(value);
-  }
+        return null;
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TAD_DETERMINISTIC_DELAY;
-  }
+    public String getDelayValue() {
+        return tgcomponent[0].getValue();
+    }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-  }
+    public void setDelayValue(String value) {
+        tgcomponent[0].setValue(value);
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.TAD_DETERMINISTIC_DELAY;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
 }

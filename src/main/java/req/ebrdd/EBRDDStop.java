@@ -46,12 +46,12 @@ package req.ebrdd;
  */
 public class EBRDDStop extends EBRDDComponent {
 
-  public EBRDDStop(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    nbNext = 0;
-  }
+    public EBRDDStop(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        nbNext = 0;
+    }
 
-  public String toString() {
-    return "Stop state";
-  }
+    public String toString() {
+        return "Stop state";
+    }
 }

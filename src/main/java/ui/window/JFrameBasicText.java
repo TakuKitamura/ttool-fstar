@@ -51,88 +51,88 @@ import java.awt.event.ActionListener;
  * @author Ludovic APVRILLE
  */
 public class JFrameBasicText extends JFrame implements ActionListener {
-  private String theText;
+    private String theText;
 
-  public JFrameBasicText(String title, String _theText) {
-    this(title, _theText, null);
-    // super(title);
-    // theText = _theText;
-    //
-    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    // Container framePanel = getContentPane();
-    // framePanel.setLayout(new BorderLayout());
-    //
-    // JTextArea jta = new JTextArea(theText);
-    // jta.setEditable(true);
-    // jta.setMargin(new Insets(10, 10, 10, 10));
-    // jta.setTabSize(3);
-    // Font f = new Font("Courrier", Font.BOLD, 12);
-    // jta.setFont(f);
-    // JScrollPane jsp = new JScrollPane(jta);
-    //
-    // framePanel.add(jsp, BorderLayout.CENTER);
-    //
-    // JButton button1 = new JButton("Close", IconManager.imgic27);
-    //
-    // button1.addActionListener(this);
-    //
-    // JPanel jp = new JPanel();
-    // jp.add(button1);
-    //
-    // framePanel.add(jp, BorderLayout.SOUTH);
-    //
-    // pack();
-  }
-
-  public JFrameBasicText(String title, String _theText, ImageIcon imgic) {
-    super(title);
-    theText = _theText;
-
-    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
-
-    JTextArea jta = new JTextArea(theText);
-    // Issue #35: This should not be editable because changes will not be
-    // taken into account
-    jta.setEditable(false);
-    // jta.setEditable(true);
-    jta.setMargin(new Insets(10, 10, 10, 10));
-    jta.setTabSize(3);
-    Font f = new Font("Courrier", Font.BOLD, 12);
-    jta.setFont(f);
-    JScrollPane jsp = new JScrollPane(jta);
-
-    framePanel.add(jsp, BorderLayout.CENTER);
-
-    JButton button1 = new JButton("Close", IconManager.imgic27);
-
-    button1.addActionListener(this);
-
-    JPanel jp = new JPanel();
-    jp.add(button1);
-
-    framePanel.add(jp, BorderLayout.SOUTH);
-
-    if (imgic != null) {
-      JButton button2 = new JButton(imgic);
-      jp = new JPanel();
-      jp.add(button2);
-      framePanel.add(jp, BorderLayout.NORTH);
+    public JFrameBasicText(String title, String _theText) {
+        this(title, _theText, null);
+        // super(title);
+        // theText = _theText;
+        //
+        // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // Container framePanel = getContentPane();
+        // framePanel.setLayout(new BorderLayout());
+        //
+        // JTextArea jta = new JTextArea(theText);
+        // jta.setEditable(true);
+        // jta.setMargin(new Insets(10, 10, 10, 10));
+        // jta.setTabSize(3);
+        // Font f = new Font("Courrier", Font.BOLD, 12);
+        // jta.setFont(f);
+        // JScrollPane jsp = new JScrollPane(jta);
+        //
+        // framePanel.add(jsp, BorderLayout.CENTER);
+        //
+        // JButton button1 = new JButton("Close", IconManager.imgic27);
+        //
+        // button1.addActionListener(this);
+        //
+        // JPanel jp = new JPanel();
+        // jp.add(button1);
+        //
+        // framePanel.add(jp, BorderLayout.SOUTH);
+        //
+        // pack();
     }
 
-    pack();
-    button1.setName("Close Configuration");
-    jsp.setName("Jsp Configuration");
-  }
+    public JFrameBasicText(String title, String _theText, ImageIcon imgic) {
+        super(title);
+        theText = _theText;
 
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
 
-    if (command.equals("Close")) {
-      dispose();
-      return;
+        JTextArea jta = new JTextArea(theText);
+        // Issue #35: This should not be editable because changes will not be
+        // taken into account
+        jta.setEditable(false);
+        // jta.setEditable(true);
+        jta.setMargin(new Insets(10, 10, 10, 10));
+        jta.setTabSize(3);
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        jta.setFont(f);
+        JScrollPane jsp = new JScrollPane(jta);
+
+        framePanel.add(jsp, BorderLayout.CENTER);
+
+        JButton button1 = new JButton("Close", IconManager.imgic27);
+
+        button1.addActionListener(this);
+
+        JPanel jp = new JPanel();
+        jp.add(button1);
+
+        framePanel.add(jp, BorderLayout.SOUTH);
+
+        if (imgic != null) {
+            JButton button2 = new JButton(imgic);
+            jp = new JPanel();
+            jp.add(button2);
+            framePanel.add(jp, BorderLayout.NORTH);
+        }
+
+        pack();
+        button1.setName("Close Configuration");
+        jsp.setName("Jsp Configuration");
     }
-  }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        if (command.equals("Close")) {
+            dispose();
+            return;
+        }
+    }
 
 } // Class

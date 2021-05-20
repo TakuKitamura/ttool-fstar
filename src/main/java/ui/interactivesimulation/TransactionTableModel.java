@@ -51,87 +51,87 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TransactionTableModel extends AbstractTableModel {
-  private JFrameInteractiveSimulation jfis;
-  private int nbOfRows;
-  private SimulationTransaction data[];
+    private JFrameInteractiveSimulation jfis;
+    private int nbOfRows;
+    private SimulationTransaction data[];
 
-  // private String [] names;
-  public TransactionTableModel(JFrameInteractiveSimulation _jfis) {
-    jfis = jfis;
-    data = null;
-  }
-
-  // From AbstractTableModel
-  public synchronized int getRowCount() {
-    // Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
-    if (data == null) {
-      return 0;
-    }
-    return data.length;
-  }
-
-  public int getColumnCount() {
-    return 7;
-  }
-
-  public synchronized Object getValueAt(int row, int column) {
-    if (data == null) {
-      return "";
+    // private String [] names;
+    public TransactionTableModel(JFrameInteractiveSimulation _jfis) {
+        jfis = jfis;
+        data = null;
     }
 
-    if (row >= data.length) {
-      return "";
+    // From AbstractTableModel
+    public synchronized int getRowCount() {
+        // Vector<SimulationTransaction> tr = jfis.getListOfRecentTransactions();
+        if (data == null) {
+            return 0;
+        }
+        return data.length;
     }
 
-    SimulationTransaction st = data[row];
-
-    switch (column) {
-      case 0:
-        return st.deviceName;
-      case 1:
-        return st.taskName;
-      case 2:
-        return st.command;
-      case 3:
-        return st.startTime;
-      case 4:
-        return st.endTime;
-      case 5:
-        return st.length;
-      case 6:
-        return st.channelName;
+    public int getColumnCount() {
+        return 7;
     }
-    return "unknown";
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Node";
-      case 1:
-        return "Task";
-      case 2:
-        return "Command";
-      case 3:
-        return "Start";
-      case 4:
-        return "End";
-      case 5:
-        return "Length";
-      case 6:
-        return "Channel";
-    }
-    return "unknown";
-  }
+    public synchronized Object getValueAt(int row, int column) {
+        if (data == null) {
+            return "";
+        }
 
-  public synchronized void setData(Vector<SimulationTransaction> _trans) {
-    if (_trans != null) {
-      data = new SimulationTransaction[_trans.size()];
-      for (int i = 0; i < _trans.size(); i++) {
-        data[i] = _trans.get(i);
-      }
-      fireTableStructureChanged();
+        if (row >= data.length) {
+            return "";
+        }
+
+        SimulationTransaction st = data[row];
+
+        switch (column) {
+            case 0:
+                return st.deviceName;
+            case 1:
+                return st.taskName;
+            case 2:
+                return st.command;
+            case 3:
+                return st.startTime;
+            case 4:
+                return st.endTime;
+            case 5:
+                return st.length;
+            case 6:
+                return st.channelName;
+        }
+        return "unknown";
     }
-  }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Node";
+            case 1:
+                return "Task";
+            case 2:
+                return "Command";
+            case 3:
+                return "Start";
+            case 4:
+                return "End";
+            case 5:
+                return "Length";
+            case 6:
+                return "Channel";
+        }
+        return "unknown";
+    }
+
+    public synchronized void setData(Vector<SimulationTransaction> _trans) {
+        if (_trans != null) {
+            data = new SimulationTransaction[_trans.size()];
+            for (int i = 0; i < _trans.size(); i++) {
+                data[i] = _trans.get(i);
+            }
+            fireTableStructureChanged();
+        }
+    }
 
 }

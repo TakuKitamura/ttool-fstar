@@ -45,24 +45,24 @@ package ddtranslatorSoclib;
 
 public class AvatarBridge extends AvatarComponent {
 
-  private String bridgeName;
-  private int nbConnectingPoint = 16;
+    private String bridgeName;
+    private int nbConnectingPoint = 16;
 
-  AvatarConnectingPoint[] connectingPoints = new AvatarConnectingPoint[16];
+    AvatarConnectingPoint[] connectingPoints = new AvatarConnectingPoint[16];
 
-  public AvatarBridge(String _bridgeName) {
-    bridgeName = _bridgeName;
-  }
+    public AvatarBridge(String _bridgeName) {
+        bridgeName = _bridgeName;
+    }
 
-  AvatarConnectingPoint[] getAvatarConnectingPoints() {
-    return connectingPoints;
-  }
+    AvatarConnectingPoint[] getAvatarConnectingPoints() {
+        return connectingPoints;
+    }
 
-  int getnbConnectingPoint() {
-    return nbConnectingPoint;
-  }
+    int getnbConnectingPoint() {
+        return nbConnectingPoint;
+    }
 
-  void setConnectingPoint(int indexConnectingPoint, AvatarConnector connector) {
-    return;
-  }
+    void setConnectingPoint(int indexConnectingPoint, AvatarConnector connector) {
+        return;
+    }
 }

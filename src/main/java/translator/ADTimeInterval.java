@@ -45,38 +45,38 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADTimeInterval extends ADComponent {
-  protected String minValue;
-  protected String maxValue;
+    protected String minValue;
+    protected String maxValue;
 
-  public ADTimeInterval() {
-    nbNext = 1;
-  }
+    public ADTimeInterval() {
+        nbNext = 1;
+    }
 
-  public void setValue(String s1, String s2) {
-    minValue = s1;
-    maxValue = s2;
-  }
+    public void setValue(String s1, String s2) {
+        minValue = s1;
+        maxValue = s2;
+    }
 
-  public String getValue() {
-    return "[" + minValue + ", " + maxValue + "]";
-  }
+    public String getValue() {
+        return "[" + minValue + ", " + maxValue + "]";
+    }
 
-  public String getMinValue() {
-    return minValue;
-  }
+    public String getMinValue() {
+        return minValue;
+    }
 
-  public String getMaxValue() {
-    return maxValue;
-  }
+    public String getMaxValue() {
+        return maxValue;
+    }
 
-  public String toString() {
-    return "Delay (" + minValue + ", " + maxValue + ")";
-  }
+    public String toString() {
+        return "Delay (" + minValue + ", " + maxValue + ")";
+    }
 
-  public ADComponent makeSame() {
-    ADTimeInterval adc = new ADTimeInterval();
-    adc.setValue(getMinValue(), getMaxValue());
-    return adc;
-  }
+    public ADComponent makeSame() {
+        ADTimeInterval adc = new ADTimeInterval();
+        adc.setValue(getMinValue(), getMaxValue());
+        return adc;
+    }
 
 }

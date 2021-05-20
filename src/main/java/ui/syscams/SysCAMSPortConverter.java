@@ -52,66 +52,66 @@ import ui.TGComponent;
  */
 
 public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
-  private double period;
-  private String time;
-  private int rate;
-  private int nbits;
-  private int delay;
-  private String convType;
+    private double period;
+    private String time;
+    private int rate;
+    private int nbits;
+    private int delay;
+    private String convType;
 
-  public SysCAMSPortConverter(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-  }
+    public SysCAMSPortConverter(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    }
 
-  public String getTime() {
-    return time;
-  }
+    public String getTime() {
+        return time;
+    }
 
-  public void setTime(String time) {
-    this.time = time;
-  }
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-  public double getPeriod() {
-    return period;
-  }
+    public double getPeriod() {
+        return period;
+    }
 
-  public void setPeriod(double period) {
-    this.period = period;
-  }
+    public void setPeriod(double period) {
+        this.period = period;
+    }
 
-  public int getRate() {
-    return rate;
-  }
+    public int getRate() {
+        return rate;
+    }
 
-  public int getNbits() {
-    return nbits;
-  }
+    public int getNbits() {
+        return nbits;
+    }
 
-  public void setNbits(int nbits) {
-    this.nbits = nbits;
-  }
+    public void setNbits(int nbits) {
+        this.nbits = nbits;
+    }
 
-  public void setRate(int rate) {
-    this.rate = rate;
-  }
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
 
-  public int getDelay() {
-    return delay;
-  }
+    public int getDelay() {
+        return delay;
+    }
 
-  public void setDelay(int delay) {
-    this.delay = delay;
-  }
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
 
-  public String getConvType() {
-    return convType;
-  }
+    public String getConvType() {
+        return convType;
+    }
 
-  public void setConvType(String convType) {
-    this.convType = convType;
-  }
+    public void setConvType(String convType) {
+        this.convType = convType;
+    }
 
-  public void drawParticularity(Graphics g) {
-  }
+    public void drawParticularity(Graphics g) {
+    }
 }

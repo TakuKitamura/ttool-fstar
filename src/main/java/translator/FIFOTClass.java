@@ -47,24 +47,24 @@ import java.util.LinkedList;
  * @author Ludovic APVRILLE
  */
 public interface FIFOTClass {
-  int getNbPara();
+    int getNbPara();
 
-  /**
-   * Returns the first write gate
-   * 
-   * @return the first write gate
-   */
-  Gate getGateWrite();
+    /**
+     * Returns the first write gate
+     * 
+     * @return the first write gate
+     */
+    Gate getGateWrite();
 
-  /**
-   * Returns the first read gate
-   * 
-   * @return the first read gate
-   */
-  Gate getGateRead();
+    /**
+     * Returns the first read gate
+     * 
+     * @return the first read gate
+     */
+    Gate getGateRead();
 
-  LinkedList<Gate> getGatesWrite();
+    LinkedList<Gate> getGatesWrite();
 
-  LinkedList<Gate> getGatesRead();
+    LinkedList<Gate> getGatesRead();
 
 }

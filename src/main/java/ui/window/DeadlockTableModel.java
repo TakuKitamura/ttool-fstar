@@ -55,99 +55,100 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class DeadlockTableModel extends AbstractTableModel {
-  private Vector<DeadlockItem> deadlockData;
-  private int maxTransitions;
+    private Vector<DeadlockItem> deadlockData;
+    private int maxTransitions;
 
-  public DeadlockTableModel(AUTGraph _graph, int _maxTransitions) {
-    deadlockData = new Vector<>();
-    maxTransitions = _maxTransitions;
-    makeDeadlockData(_graph);
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return deadlockData.size();
-  }
-
-  public int getColumnCount() {
-    return 3;
-  }
-
-  public Object getValueAt(int row, int column) {
-    DeadlockItem di;
-    di = deadlockData.elementAt(Math.min(row, deadlockData.size()));
-    if (column == 0) {
-      return di.getName();
-    } else if (column == 1) {
-      return di.getOriginAction();
-    } else {
-      return di.getPath();
+    public DeadlockTableModel(AUTGraph _graph, int _maxTransitions) {
+        deadlockData = new Vector<>();
+        maxTransitions = _maxTransitions;
+        makeDeadlockData(_graph);
     }
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "States";
-      case 1:
-        return "(origin, action)";
-      case 2:
-      default:
-        return "Shortest path to state";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return deadlockData.size();
     }
-  }
 
-  // to build internal data structure -> graph in AUT format
-  private void makeDeadlockData(AUTGraph graph) {
-    DeadlockItem di;
-    AUTTransition aut1;
-    DijkstraState[] dss = null;
-    if (graph.getNbOfTransitions() < maxTransitions) {
-      dss = GraphAlgorithms.ShortestPathFrom(graph, 0);
+    public int getColumnCount() {
+        return 3;
     }
-    //
 
-    /*
-     * for(int k=0; k<dss.length; k++) {
-     * 
-     * }
-     */
-
-    //
-    int[] states = graph.getVectorPotentialDeadlocks();
-    //
-    int i, j, size, state;
-    String path;
-
-    for (i = 0; i < states.length; i++) {
-      state = states[i];
-      di = new DeadlockItem("" + state);
-      deadlockData.add(di);
-      if (dss != null) {
-        for (j = 0; j < graph.getNbOfTransitions(); j++) {
-          aut1 = graph.getAUTTransition(j);
-          if (aut1.destination == state) {
-            di.addOriginAction("" + aut1.origin, aut1.transition);
-          }
+    public Object getValueAt(int row, int column) {
+        DeadlockItem di;
+        di = deadlockData.elementAt(Math.min(row, deadlockData.size()));
+        if (column == 0) {
+            return di.getName();
+        } else if (column == 1) {
+            return di.getOriginAction();
+        } else {
+            return di.getPath();
         }
-      } else {
-        di.addOriginAction("", "");
-      }
-      // path = "0 --" + graph.getActionTransition(0, dss[state].path[0]) + "--> ";;
-      if (dss != null) {
-        size = dss[state].path.length;
-        path = "";
-        for (j = 0; j < dss[state].path.length; j++) {
-          path = path + "[" + dss[state].path[j] + "]";
-          if (j < size - 1) {
-            path = path + " -- " + graph.getActionTransition(dss[state].path[j], dss[state].path[j + 1]) + " --> ";
-          }
-        }
-        di.setPath(path);
-      } else {
-        di.setPath("not calculated");
-      }
     }
-    Collections.sort(deadlockData);
-  }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "States";
+            case 1:
+                return "(origin, action)";
+            case 2:
+            default:
+                return "Shortest path to state";
+        }
+    }
+
+    // to build internal data structure -> graph in AUT format
+    private void makeDeadlockData(AUTGraph graph) {
+        DeadlockItem di;
+        AUTTransition aut1;
+        DijkstraState[] dss = null;
+        if (graph.getNbOfTransitions() < maxTransitions) {
+            dss = GraphAlgorithms.ShortestPathFrom(graph, 0);
+        }
+        //
+
+        /*
+         * for(int k=0; k<dss.length; k++) {
+         * 
+         * }
+         */
+
+        //
+        int[] states = graph.getVectorPotentialDeadlocks();
+        //
+        int i, j, size, state;
+        String path;
+
+        for (i = 0; i < states.length; i++) {
+            state = states[i];
+            di = new DeadlockItem("" + state);
+            deadlockData.add(di);
+            if (dss != null) {
+                for (j = 0; j < graph.getNbOfTransitions(); j++) {
+                    aut1 = graph.getAUTTransition(j);
+                    if (aut1.destination == state) {
+                        di.addOriginAction("" + aut1.origin, aut1.transition);
+                    }
+                }
+            } else {
+                di.addOriginAction("", "");
+            }
+            // path = "0 --" + graph.getActionTransition(0, dss[state].path[0]) + "--> ";;
+            if (dss != null) {
+                size = dss[state].path.length;
+                path = "";
+                for (j = 0; j < dss[state].path.length; j++) {
+                    path = path + "[" + dss[state].path[j] + "]";
+                    if (j < size - 1) {
+                        path = path + " -- " + graph.getActionTransition(dss[state].path[j], dss[state].path[j + 1])
+                                + " --> ";
+                    }
+                }
+                di.setPath(path);
+            } else {
+                di.setPath("not calculated");
+            }
+        }
+        Collections.sort(deadlockData);
+    }
 }

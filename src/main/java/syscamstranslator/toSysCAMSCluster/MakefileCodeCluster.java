@@ -57,57 +57,57 @@ import syscamstranslator.*;
  */
 
 public class MakefileCodeCluster {
-  static private String corpsMakefile;
-  private final static String CR = "\n";
-  private final static String CR2 = "\n\n";
+    static private String corpsMakefile;
+    private final static String CR = "\n";
+    private final static String CR2 = "\n\n";
 
-  MakefileCodeCluster() {
-  }
-
-  public static String getMakefileCode(LinkedList<SysCAMSTCluster> clusters) {
-    if (clusters != null) {
-      corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR
-          + "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
-          + "EXECUTABLES = ";
-
-      for (int i = 0; i < clusters.size(); i++) {
-        if (i == 0) {
-          corpsMakefile = corpsMakefile + clusters.get(i).getClusterName() + "_tb";
-        }
-        if (i > 0) {
-          corpsMakefile = corpsMakefile + " " + clusters.get(i).getClusterName() + "_tb";
-        }
-        if (i == clusters.size() - 1) {
-          corpsMakefile = corpsMakefile + CR2;
-        }
-      }
-
-      corpsMakefile = corpsMakefile + "# .PHONY targets don't generate files" + CR + ".PHONY:	all clean" + CR2
-          + "# Default targets" + CR + "all:	$(EXECUTABLES)" + CR2;
-
-      for (int i = 0; i < clusters.size(); i++) {
-        LinkedList<SysCAMSTBlockTDF> tdf = clusters.get(i).getBlockTDF();
-        LinkedList<SysCAMSTBlockDE> de = clusters.get(i).getBlockDE();
-
-        corpsMakefile = corpsMakefile + clusters.get(i).getClusterName() + "_tb: " + clusters.get(i).getClusterName()
-            + "_tb.cpp";
-
-        for (SysCAMSTBlockTDF t : tdf) {
-          corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
-        }
-
-        for (SysCAMSTBlockDE t : de) {
-          corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
-        }
-        corpsMakefile = corpsMakefile + CR
-            + "\t$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< -lsystemc-ams -lsystemc | c++filt" + CR2;
-      }
-
-      corpsMakefile = corpsMakefile + "# Clean rule to delete temporary and generated files" + CR + "clean:" + CR
-          + "\trm -rf *~ *.o *.dat *.vcd *.dSYM $(EXECUTABLES)" + CR;
-    } else {
-      corpsMakefile = "";
+    MakefileCodeCluster() {
     }
-    return corpsMakefile;
-  }
+
+    public static String getMakefileCode(LinkedList<SysCAMSTCluster> clusters) {
+        if (clusters != null) {
+            corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR
+                    + "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
+                    + "EXECUTABLES = ";
+
+            for (int i = 0; i < clusters.size(); i++) {
+                if (i == 0) {
+                    corpsMakefile = corpsMakefile + clusters.get(i).getClusterName() + "_tb";
+                }
+                if (i > 0) {
+                    corpsMakefile = corpsMakefile + " " + clusters.get(i).getClusterName() + "_tb";
+                }
+                if (i == clusters.size() - 1) {
+                    corpsMakefile = corpsMakefile + CR2;
+                }
+            }
+
+            corpsMakefile = corpsMakefile + "# .PHONY targets don't generate files" + CR + ".PHONY:	all clean" + CR2
+                    + "# Default targets" + CR + "all:	$(EXECUTABLES)" + CR2;
+
+            for (int i = 0; i < clusters.size(); i++) {
+                LinkedList<SysCAMSTBlockTDF> tdf = clusters.get(i).getBlockTDF();
+                LinkedList<SysCAMSTBlockDE> de = clusters.get(i).getBlockDE();
+
+                corpsMakefile = corpsMakefile + clusters.get(i).getClusterName() + "_tb: "
+                        + clusters.get(i).getClusterName() + "_tb.cpp";
+
+                for (SysCAMSTBlockTDF t : tdf) {
+                    corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+                }
+
+                for (SysCAMSTBlockDE t : de) {
+                    corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+                }
+                corpsMakefile = corpsMakefile + CR
+                        + "\t$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< -lsystemc-ams -lsystemc | c++filt" + CR2;
+            }
+
+            corpsMakefile = corpsMakefile + "# Clean rule to delete temporary and generated files" + CR + "clean:" + CR
+                    + "\trm -rf *~ *.o *.dat *.vcd *.dSYM $(EXECUTABLES)" + CR;
+        } else {
+            corpsMakefile = "";
+        }
+        return corpsMakefile;
+    }
 }

@@ -5,20 +5,20 @@
 
 void criticalErrorInt(char *msg, int value)
 {
-  if (msg != NULL)
-  {
-    printf("\nCritical error: %s, %d\n", msg, value);
-  }
+    if (msg != NULL)
+    {
+        printf("\nCritical error: %s, %d\n", msg, value);
+    }
 
-  exit(-1);
+    exit(-1);
 }
 
 void criticalError(char *msg)
 {
-  if (msg != NULL)
-  {
-    printf("\nCritical error: %s\n", msg);
-  }
+    if (msg != NULL)
+    {
+        printf("\nCritical error: %s\n", msg);
+    }
 
-  exit(-1);
+    exit(-1);
 }

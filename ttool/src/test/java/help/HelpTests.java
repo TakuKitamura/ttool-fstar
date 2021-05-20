@@ -61,19 +61,19 @@ import avatartranslator.*;
 
 public class HelpTests {
 
-  AvatarGuard res;
-  AvatarBlock A, B;
+    AvatarGuard res;
+    AvatarBlock A, B;
 
-  public HelpTests() {
-    // super ("AvatarGuards", false);
-  }
+    public HelpTests() {
+        // super ("AvatarGuards", false);
+    }
 
-  @Test
-  public void testLoadHelp() {
-    HelpManager helpManager;
-    helpManager = new HelpManager();
-    boolean ok = helpManager.loadEntries();
-    assertTrue(ok);
-  }
+    @Test
+    public void testLoadHelp() {
+        HelpManager helpManager;
+        helpManager = new HelpManager();
+        boolean ok = helpManager.loadEntries();
+        assertTrue(ok);
+    }
 
 }

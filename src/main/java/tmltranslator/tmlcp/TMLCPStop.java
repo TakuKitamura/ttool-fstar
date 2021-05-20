@@ -46,8 +46,8 @@ package tmltranslator.tmlcp;
  */
 public class TMLCPStop extends TMLCPElement {
 
-  public TMLCPStop(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLCPStop(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

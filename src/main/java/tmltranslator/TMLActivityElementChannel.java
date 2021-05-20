@@ -48,86 +48,86 @@ import java.util.Objects;
  * @version 1.1 18/02/2015
  */
 public class TMLActivityElementChannel extends TMLActivityElement {
-  protected ArrayList<TMLChannel> channels;
-  protected String nbOfSamples;
-  private boolean isAttacker;
-  protected boolean isEncForm; // If the Cryptographic
+    protected ArrayList<TMLChannel> channels;
+    protected String nbOfSamples;
+    private boolean isAttacker;
+    protected boolean isEncForm; // If the Cryptographic
 
-  public TMLActivityElementChannel(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    channels = new ArrayList<TMLChannel>();
-    isAttacker = false;
-  }
-
-  public void addChannel(TMLChannel _channel) {
-    channels.add(_channel);
-  }
-
-  public int getNbOfChannels() {
-    return channels.size();
-  }
-
-  public boolean hasChannel(TMLChannel ch) {
-    return channels.contains(ch);
-  }
-
-  public TMLChannel getChannel(int _index) {
-    return channels.get(_index);
-  }
-
-  public boolean isAttacker() {
-    return isAttacker;
-  }
-
-  public void setAttacker(boolean attacker) {
-    isAttacker = attacker;
-  }
-
-  public void setNbOfSamples(String _nbOfSamples) {
-    nbOfSamples = _nbOfSamples;
-  }
-
-  public String getNbOfSamples() {
-    return nbOfSamples;
-  }
-
-  public boolean getEncForm() {
-    return isEncForm;
-  }
-
-  public void setEncForm(boolean form) {
-    isEncForm = form;
-  }
-
-  public void replaceChannelWith(TMLChannel oldChan, TMLChannel newChan) {
-    if (channels.contains(oldChan)) {
-      channels.remove(oldChan);
-      channels.add(newChan);
+    public TMLActivityElementChannel(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        channels = new ArrayList<TMLChannel>();
+        isAttacker = false;
     }
-  }
 
-  @Override
-  public String customExtraToXML() {
-    String s = " nbOfSamples=\"" + nbOfSamples + "\" ";
-    String chan = "";
-    String chanType = "0";
-    for (TMLChannel ch : channels) {
-      chan += ch.getName() + " ";
-      chanType = "" + ch.getType();
+    public void addChannel(TMLChannel _channel) {
+        channels.add(_channel);
     }
-    s += " channels=\"" + chan + "\" ";
-    s += " type=\"" + chanType + "\" ";
-    return s;
-  }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLActivityElementChannel))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    TMLActivityElementChannel tmlActEltChannel = (TMLActivityElementChannel) o;
-    return Objects.equals(nbOfSamples, ((TMLActivityElementChannel) o).getNbOfSamples())
-        && isAttacker == tmlActEltChannel.isAttacker() && isEncForm == tmlActEltChannel.getEncForm();
+    public int getNbOfChannels() {
+        return channels.size();
+    }
 
-  }
+    public boolean hasChannel(TMLChannel ch) {
+        return channels.contains(ch);
+    }
+
+    public TMLChannel getChannel(int _index) {
+        return channels.get(_index);
+    }
+
+    public boolean isAttacker() {
+        return isAttacker;
+    }
+
+    public void setAttacker(boolean attacker) {
+        isAttacker = attacker;
+    }
+
+    public void setNbOfSamples(String _nbOfSamples) {
+        nbOfSamples = _nbOfSamples;
+    }
+
+    public String getNbOfSamples() {
+        return nbOfSamples;
+    }
+
+    public boolean getEncForm() {
+        return isEncForm;
+    }
+
+    public void setEncForm(boolean form) {
+        isEncForm = form;
+    }
+
+    public void replaceChannelWith(TMLChannel oldChan, TMLChannel newChan) {
+        if (channels.contains(oldChan)) {
+            channels.remove(oldChan);
+            channels.add(newChan);
+        }
+    }
+
+    @Override
+    public String customExtraToXML() {
+        String s = " nbOfSamples=\"" + nbOfSamples + "\" ";
+        String chan = "";
+        String chanType = "0";
+        for (TMLChannel ch : channels) {
+            chan += ch.getName() + " ";
+            chanType = "" + ch.getType();
+        }
+        s += " channels=\"" + chan + "\" ";
+        s += " type=\"" + chanType + "\" ";
+        return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElementChannel))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        TMLActivityElementChannel tmlActEltChannel = (TMLActivityElementChannel) o;
+        return Objects.equals(nbOfSamples, ((TMLActivityElementChannel) o).getNbOfSamples())
+                && isAttacker == tmlActEltChannel.isAttacker() && isEncForm == tmlActEltChannel.getEncForm();
+
+    }
 }

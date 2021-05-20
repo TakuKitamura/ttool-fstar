@@ -59,91 +59,91 @@ import java.util.List;
  */
 public class TML2AUTviaLOTOS {
 
-  // private static int gateId;
+    // private static int gateId;
 
-  private TMLModeling<?> tmlmodeling;
-  private TURTLEModeling tm;
-  private List<Automata> automatas;
-  private List<String> specs; /* name, then spec, then name, then spec. All specs are in LOTOS ! */
+    private TMLModeling<?> tmlmodeling;
+    private TURTLEModeling tm;
+    private List<Automata> automatas;
+    private List<String> specs; /* name, then spec, then name, then spec. All specs are in LOTOS ! */
 
-  // private boolean debug;
+    // private boolean debug;
 
-  public static String FC2_EXTENSION = "fc2";
-  public static String AUT_EXTENSION = "aut";
-  public static String IMM = "imm__";
+    public static String FC2_EXTENSION = "fc2";
+    public static String AUT_EXTENSION = "aut";
+    public static String IMM = "imm__";
 
-  public TML2AUTviaLOTOS(TMLModeling<?> _tmlmodeling, TURTLEModeling _tm) {
-    tmlmodeling = _tmlmodeling;
-    tm = _tm;
-    if (_tm == null) {
-      TraceManager.addDev("tm = null!");
-    }
-  }
-
-  // Returns a list of all file names ..
-  public List<String> saveInFiles(String path) throws FileException {
-    // print();
-
-    Iterator<Automata> iterator = automatas.listIterator();
-    Automata aut;
-    String name;
-    List<String> ll = new LinkedList<String>();
-
-    while (iterator.hasNext()) {
-      aut = iterator.next();
-      name = aut.getName() + "." + AUT_EXTENSION;
-      ll.add(name);
-      TraceManager.addDev("File: " + path + aut.getName() + "." + AUT_EXTENSION);
-      FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
+    public TML2AUTviaLOTOS(TMLModeling<?> _tmlmodeling, TURTLEModeling _tm) {
+        tmlmodeling = _tmlmodeling;
+        tm = _tm;
+        if (_tm == null) {
+            TraceManager.addDev("tm = null!");
+        }
     }
 
-    return ll;
+    // Returns a list of all file names ..
+    public List<String> saveInFiles(String path) throws FileException {
+        // print();
 
-  }
+        Iterator<Automata> iterator = automatas.listIterator();
+        Automata aut;
+        String name;
+        List<String> ll = new LinkedList<String>();
 
-  public void print() {
-    // Print each automatas
-    Iterator<Automata> iterator = automatas.listIterator();
-    Automata aut;
+        while (iterator.hasNext()) {
+            aut = iterator.next();
+            name = aut.getName() + "." + AUT_EXTENSION;
+            ll.add(name);
+            TraceManager.addDev("File: " + path + aut.getName() + "." + AUT_EXTENSION);
+            FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
+        }
 
-    while (iterator.hasNext()) {
-      aut = iterator.next();
-      TraceManager.addDev("Automata: " + aut.getName());
-      TraceManager.addDev(aut.toAUT());
+        return ll;
+
     }
-  }
 
-  public void generateLOTOS(boolean _debug) {
-    // debug = _debug;
-    specs = new LinkedList<String>();
+    public void print() {
+        // Print each automatas
+        Iterator<Automata> iterator = automatas.listIterator();
+        Automata aut;
 
-    // Generate one LOTOS spec per TMLTask
-    generateLOTOSTMLTasks();
-
-  }
-
-  public void generateLOTOSTMLTasks() {
-    TMLTask task;
-    Iterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
-
-    while (iterator.hasNext()) {
-      task = iterator.next();
-      specs.add(task.getName());
-      specs.add(generateLOTOS(task));
+        while (iterator.hasNext()) {
+            aut = iterator.next();
+            TraceManager.addDev("Automata: " + aut.getName());
+            TraceManager.addDev(aut.toAUT());
+        }
     }
-  }
 
-  public List<String> getSpecs() {
-    return specs;
-  }
+    public void generateLOTOS(boolean _debug) {
+        // debug = _debug;
+        specs = new LinkedList<String>();
 
-  public String generateLOTOS(TMLTask task) {
-    TURTLEModeling tmex = new TURTLEModeling();
-    tmex.addTClass(tm.getTClassWithName(task.getName()));
+        // Generate one LOTOS spec per TMLTask
+        generateLOTOSTMLTasks();
 
-    // Generate LOTOS
-    TURTLETranslator translator = new TURTLETranslator(tmex);
-    return translator.generateLOTOS(true);
-  }
+    }
+
+    public void generateLOTOSTMLTasks() {
+        TMLTask task;
+        Iterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
+
+        while (iterator.hasNext()) {
+            task = iterator.next();
+            specs.add(task.getName());
+            specs.add(generateLOTOS(task));
+        }
+    }
+
+    public List<String> getSpecs() {
+        return specs;
+    }
+
+    public String generateLOTOS(TMLTask task) {
+        TURTLEModeling tmex = new TURTLEModeling();
+        tmex.addTClass(tm.getTClassWithName(task.getName()));
+
+        // Generate LOTOS
+        TURTLETranslator translator = new TURTLETranslator(tmex);
+        return translator.generateLOTOS(true);
+    }
 
 }

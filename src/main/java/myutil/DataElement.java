@@ -48,102 +48,102 @@ import java.util.ArrayList;
  */
 
 public class DataElement implements GenericTree {
-  public ArrayList<DataElement> childs;
+    public ArrayList<DataElement> childs;
 
-  public String title;
-  public double data[];
-  public long times[];
+    public String title;
+    public double data[];
+    public long times[];
 
-  public ArrayList<DataElement> setOfValues;
+    public ArrayList<DataElement> setOfValues;
 
-  public DataElement(String _title) {
-    title = _title;
-    childs = new ArrayList<>();
-  }
-
-  public void addSetOfValue(DataElement de) {
-    if (setOfValues == null) {
-      setOfValues = new ArrayList<>();
-    }
-    setOfValues.add(de);
-  }
-
-  public void addChild(DataElement de) {
-    childs.add(de);
-  }
-
-  public int getChildCount() {
-    return childs.size();
-  }
-
-  public Object getChild(int index) {
-    if (index < getChildCount()) {
-      return childs.get(index);
-    }
-    return null;
-  }
-
-  public int getIndexOfChild(Object child) {
-    if (child == null) {
-      return -1;
-    }
-    return childs.indexOf(child);
-  }
-
-  public boolean isLeaf() {
-    return (getChildCount() == 0);
-  }
-
-  public String toString() {
-    return title;
-  }
-
-  public boolean hasCSVData() {
-    return (data != null);
-  }
-
-  public String getCSVData() {
-
-    if (data == null) {
-      return "";
+    public DataElement(String _title) {
+        title = _title;
+        childs = new ArrayList<>();
     }
 
-    String ret = "";
-    int i;
-
-    if ((times == null) || (times.length == 0)) {
-      for (i = 0; i < data.length; i++) {
-        if (i > 0) {
-          ret += ",";
+    public void addSetOfValue(DataElement de) {
+        if (setOfValues == null) {
+            setOfValues = new ArrayList<>();
         }
-        ret += data[i];
-      }
-    } else {
-      for (i = 0; i < data.length; i++) {
-        ret += times[i] + "," + data[i] + "\n";
-      }
+        setOfValues.add(de);
     }
 
-    return ret;
-  }
-
-  public boolean hasCSVSonData() {
-    return (childs != null);
-  }
-
-  public String getCSVDataSons() {
-    if (childs == null) {
-      return "";
+    public void addChild(DataElement de) {
+        childs.add(de);
     }
 
-    StringBuffer sb = new StringBuffer("");
-
-    for (DataElement de : childs) {
-      sb.append(de.getCSVData() + "\n");
-      sb.append(de.getCSVDataSons());
+    public int getChildCount() {
+        return childs.size();
     }
 
-    return sb.toString();
-  }
+    public Object getChild(int index) {
+        if (index < getChildCount()) {
+            return childs.get(index);
+        }
+        return null;
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child == null) {
+            return -1;
+        }
+        return childs.indexOf(child);
+    }
+
+    public boolean isLeaf() {
+        return (getChildCount() == 0);
+    }
+
+    public String toString() {
+        return title;
+    }
+
+    public boolean hasCSVData() {
+        return (data != null);
+    }
+
+    public String getCSVData() {
+
+        if (data == null) {
+            return "";
+        }
+
+        String ret = "";
+        int i;
+
+        if ((times == null) || (times.length == 0)) {
+            for (i = 0; i < data.length; i++) {
+                if (i > 0) {
+                    ret += ",";
+                }
+                ret += data[i];
+            }
+        } else {
+            for (i = 0; i < data.length; i++) {
+                ret += times[i] + "," + data[i] + "\n";
+            }
+        }
+
+        return ret;
+    }
+
+    public boolean hasCSVSonData() {
+        return (childs != null);
+    }
+
+    public String getCSVDataSons() {
+        if (childs == null) {
+            return "";
+        }
+
+        StringBuffer sb = new StringBuffer("");
+
+        for (DataElement de : childs) {
+            sb.append(de.getCSVData() + "\n");
+            sb.append(de.getCSVDataSons());
+        }
+
+        return sb.toString();
+    }
 
 } // Class

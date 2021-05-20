@@ -51,71 +51,71 @@ import java.util.ArrayList;
  */
 public class SimulationLatency {
 
-  private String trans1;
-  private String trans2;
-  private String minTime = "N/A";
-  private String maxTime = "N/A";
-  private String avTime = "N/A";
-  private String stDev = "N/A";
-  private List<AvatarPragmaLatency> pragmas = new ArrayList<AvatarPragmaLatency>();
+    private String trans1;
+    private String trans2;
+    private String minTime = "N/A";
+    private String maxTime = "N/A";
+    private String avTime = "N/A";
+    private String stDev = "N/A";
+    private List<AvatarPragmaLatency> pragmas = new ArrayList<AvatarPragmaLatency>();
 
-  public SimulationLatency() {
-  }
+    public SimulationLatency() {
+    }
 
-  public void setTransaction1(String t) {
-    trans1 = t;
-  }
+    public void setTransaction1(String t) {
+        trans1 = t;
+    }
 
-  public void setTransaction2(String t) {
-    trans2 = t;
-  }
+    public void setTransaction2(String t) {
+        trans2 = t;
+    }
 
-  public void setMinTime(String time) {
-    minTime = time;
-  }
+    public void setMinTime(String time) {
+        minTime = time;
+    }
 
-  public void setMaxTime(String time) {
-    maxTime = time;
-  }
+    public void setMaxTime(String time) {
+        maxTime = time;
+    }
 
-  public void setAverageTime(String time) {
-    avTime = time;
-  }
+    public void setAverageTime(String time) {
+        avTime = time;
+    }
 
-  public void setStDev(String dev) {
-    stDev = dev;
-  }
+    public void setStDev(String dev) {
+        stDev = dev;
+    }
 
-  public String getTransaction1() {
-    return trans1;
-  }
+    public String getTransaction1() {
+        return trans1;
+    }
 
-  public String getTransaction2() {
-    return trans2;
-  }
+    public String getTransaction2() {
+        return trans2;
+    }
 
-  public String getMinTime() {
-    return minTime;
-  }
+    public String getMinTime() {
+        return minTime;
+    }
 
-  public String getMaxTime() {
-    return maxTime;
-  }
+    public String getMaxTime() {
+        return maxTime;
+    }
 
-  public String getAverageTime() {
-    return avTime;
-  }
+    public String getAverageTime() {
+        return avTime;
+    }
 
-  public String getStDev() {
-    return stDev;
-  }
+    public String getStDev() {
+        return stDev;
+    }
 
-  public List<AvatarPragmaLatency> getPragmas() {
-    return pragmas;
-  }
+    public List<AvatarPragmaLatency> getPragmas() {
+        return pragmas;
+    }
 
-  public void addPragma(AvatarPragmaLatency ap) {
-    pragmas.add(ap);
-  }
+    public void addPragma(AvatarPragmaLatency ap) {
+        pragmas.add(ap);
+    }
 
 }

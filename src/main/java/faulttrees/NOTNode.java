@@ -46,9 +46,9 @@ package faulttrees;
  */
 public class NOTNode extends BooleanNode {
 
-  public NOTNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "NOT";
-  }
+    public NOTNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "NOT";
+    }
 
 }

@@ -51,158 +51,158 @@ import java.util.HashMap;
  * @version 1.0 10/04/2015
  */
 public class AttackTree extends AttackElement {
-  private ArrayList<AttackNode> nodes;
-  private ArrayList<Attack> attacks;
+    private ArrayList<AttackNode> nodes;
+    private ArrayList<Attack> attacks;
 
-  public AttackElement faultyElement;
-  public String errorOfFaultyElement;
+    public AttackElement faultyElement;
+    public String errorOfFaultyElement;
 
-  private ArrayList<AttackerPopulation> populations;
+    private ArrayList<AttackerPopulation> populations;
 
-  public AttackTree(String _name, Object _reference) {
-    super(_name, _reference);
-    nodes = new ArrayList<>();
-    attacks = new ArrayList<>();
-    populations = new ArrayList<>();
-  }
-
-  public void addNode(AttackNode _node) {
-    nodes.add(_node);
-  }
-
-  public void addAttack(Attack _attack) {
-    attacks.add(_attack);
-  }
-
-  public void addPopulation(AttackerPopulation _ap) {
-    populations.add(_ap);
-  }
-
-  public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("List of nodes:");
-    for (AttackNode an : nodes) {
-      sb.append("  " + an.toString() + "\n");
-    }
-    return sb.toString();
-  }
-
-  public ArrayList<Attack> getAttacks() {
-    return attacks;
-  }
-
-  public ArrayList<AttackNode> getAttackNodes() {
-    return nodes;
-  }
-
-  public ArrayList<AttackerPopulation> getAttackerPopulation() {
-    return populations;
-  }
-
-  // Checks:
-  // Sequence/after/before nodes have attacks which are ordered (i.e. unique
-  // positive number)
-  // Time value is positive in before and after
-  // Attack name is unique
-  // Node name is unique -> by construction, no need to check this
-  public boolean checkSyntax() {
-    // Negative order for attacks
-    for (AttackNode an : nodes) {
-      int faulty = an.hasNegativeAttackNumber();
-      if (faulty >= 0) {
-        faultyElement = an;
-        errorOfFaultyElement = "Negative sequence number for node: " + an.getName() + " and attack: "
-            + an.getInputAttacks().get(faulty).getName();
-        return false;
-      }
+    public AttackTree(String _name, Object _reference) {
+        super(_name, _reference);
+        nodes = new ArrayList<>();
+        attacks = new ArrayList<>();
+        populations = new ArrayList<>();
     }
 
-    // Order of input attacks : in sequence / after / before
-    for (AttackNode an : nodes) {
+    public void addNode(AttackNode _node) {
+        nodes.add(_node);
+    }
 
-      if ((an instanceof SequenceNode) || (an instanceof TimeNode)) {
-        int faulty = an.hasUniqueAttackNumber();
-        if (faulty >= 0) {
-          faultyElement = an;
-          errorOfFaultyElement = "Identical sequence number for node: " + an.getName() + " and attack: "
-              + an.getInputAttacks().get(faulty).getName();
-          return false;
+    public void addAttack(Attack _attack) {
+        attacks.add(_attack);
+    }
+
+    public void addPopulation(AttackerPopulation _ap) {
+        populations.add(_ap);
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("List of nodes:");
+        for (AttackNode an : nodes) {
+            sb.append("  " + an.toString() + "\n");
         }
-      }
-
+        return sb.toString();
     }
 
-    // Time value is positive
-    for (AttackNode an : nodes) {
-      if (an instanceof TimeNode) {
-        int t = ((TimeNode) an).getTime();
-        if (t < 0) {
-          faultyElement = an;
-          errorOfFaultyElement = "Time value must be positive in: " + an.getName();
-          return false;
-        }
-      }
+    public ArrayList<Attack> getAttacks() {
+        return attacks;
     }
 
+    public ArrayList<AttackNode> getAttackNodes() {
+        return nodes;
+    }
+
+    public ArrayList<AttackerPopulation> getAttackerPopulation() {
+        return populations;
+    }
+
+    // Checks:
+    // Sequence/after/before nodes have attacks which are ordered (i.e. unique
+    // positive number)
+    // Time value is positive in before and after
     // Attack name is unique
-    for (int i = 0; i < attacks.size() - 1; i++) {
-      Attack atti = attacks.get(i);
-      for (int j = i + 1; j < attacks.size(); j++) {
-        // myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
-        Attack attj = attacks.get(j);
-        // myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + "
-        // size=" + attacks.size());
-        if (atti.getName().compareTo(attj.getName()) == 0) {
-          faultyElement = atti;
-          errorOfFaultyElement = "Duplicate name for attack: " + atti.getName();
-          return false;
+    // Node name is unique -> by construction, no need to check this
+    public boolean checkSyntax() {
+        // Negative order for attacks
+        for (AttackNode an : nodes) {
+            int faulty = an.hasNegativeAttackNumber();
+            if (faulty >= 0) {
+                faultyElement = an;
+                errorOfFaultyElement = "Negative sequence number for node: " + an.getName() + " and attack: "
+                        + an.getInputAttacks().get(faulty).getName();
+                return false;
+            }
         }
-      }
+
+        // Order of input attacks : in sequence / after / before
+        for (AttackNode an : nodes) {
+
+            if ((an instanceof SequenceNode) || (an instanceof TimeNode)) {
+                int faulty = an.hasUniqueAttackNumber();
+                if (faulty >= 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Identical sequence number for node: " + an.getName() + " and attack: "
+                            + an.getInputAttacks().get(faulty).getName();
+                    return false;
+                }
+            }
+
+        }
+
+        // Time value is positive
+        for (AttackNode an : nodes) {
+            if (an instanceof TimeNode) {
+                int t = ((TimeNode) an).getTime();
+                if (t < 0) {
+                    faultyElement = an;
+                    errorOfFaultyElement = "Time value must be positive in: " + an.getName();
+                    return false;
+                }
+            }
+        }
+
+        // Attack name is unique
+        for (int i = 0; i < attacks.size() - 1; i++) {
+            Attack atti = attacks.get(i);
+            for (int j = i + 1; j < attacks.size(); j++) {
+                // myutil.TraceManager.addDev("i=" + i + " j=" + j + " size=" + attacks.size());
+                Attack attj = attacks.get(j);
+                // myutil.TraceManager.addDev("i=" + atti.getName() + " j=" + attj.getName() + "
+                // size=" + attacks.size());
+                if (atti.getName().compareTo(attj.getName()) == 0) {
+                    faultyElement = atti;
+                    errorOfFaultyElement = "Duplicate name for attack: " + atti.getName();
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
-    return true;
-  }
+    public boolean canPerformRootAttack(int _resource, int _experience) {
 
-  public boolean canPerformRootAttack(int _resource, int _experience) {
+        // Must find the root attack
+        Attack rootAttack = null;
+        for (Attack attack : attacks) {
+            if (attack.isRoot()) {
+                rootAttack = attack;
+                break;
+            }
+        }
 
-    // Must find the root attack
-    Attack rootAttack = null;
-    for (Attack attack : attacks) {
-      if (attack.isRoot()) {
-        rootAttack = attack;
-        break;
-      }
+        if (rootAttack == null) {
+            TraceManager.addDev("No root attack");
+            return false;
+        }
+
+        // TraceManager.addDev("Considering root attack:" + rootAttack.getName());
+
+        return rootAttack.canPerformAttack(_resource, _experience);
     }
 
-    if (rootAttack == null) {
-      TraceManager.addDev("No root attack");
-      return false;
+    public ArrayList<Double> analyse() {
+        ArrayList<Double> ret = new ArrayList<>(populations.size());
+
+        for (AttackerPopulation ap : populations) {
+            double d = ap.getTotalAttackers(this);
+            ret.add(new Double(d / ap.getTotalPopulation()));
+        }
+
+        return ret;
     }
 
-    // TraceManager.addDev("Considering root attack:" + rootAttack.getName());
+    public double analyse(String _populationName) {
+        for (AttackerPopulation ap : populations) {
+            if (ap.getName().compareTo(_populationName) == 0) {
+                return ap.getTotalAttackers(this) / ap.getTotalPopulation();
+            }
+        }
+        return -1;
 
-    return rootAttack.canPerformAttack(_resource, _experience);
-  }
-
-  public ArrayList<Double> analyse() {
-    ArrayList<Double> ret = new ArrayList<>(populations.size());
-
-    for (AttackerPopulation ap : populations) {
-      double d = ap.getTotalAttackers(this);
-      ret.add(new Double(d / ap.getTotalPopulation()));
     }
-
-    return ret;
-  }
-
-  public double analyse(String _populationName) {
-    for (AttackerPopulation ap : populations) {
-      if (ap.getName().compareTo(_populationName) == 0) {
-        return ap.getTotalAttackers(this) / ap.getTotalPopulation();
-      }
-    }
-    return -1;
-
-  }
 
 }

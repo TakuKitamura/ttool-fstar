@@ -49,35 +49,35 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarTermRaw extends AvatarTerm {
-  String raw;
+    String raw;
 
-  public AvatarTermRaw(String raw, Object _referenceObject) {
-    super(raw, _referenceObject);
-    this.raw = raw;
-  }
+    public AvatarTermRaw(String raw, Object _referenceObject) {
+        super(raw, _referenceObject);
+        this.raw = raw;
+    }
 
-  public boolean isLeftHand() {
-    return false;
-  }
+    public boolean isLeftHand() {
+        return false;
+    }
 
-  @Override
-  public String toString() {
-    return this.raw;
-  }
+    @Override
+    public String toString() {
+        return this.raw;
+    }
 
-  @Override
-  public boolean containsAMethodCall() {
-    return false;
-  }
+    @Override
+    public boolean containsAMethodCall() {
+        return false;
+    }
 
-  @Override
-  public AvatarTermRaw clone() {
-    return new AvatarTermRaw(this.raw, this.referenceObject);
-  }
+    @Override
+    public AvatarTermRaw clone() {
+        return new AvatarTermRaw(this.raw, this.referenceObject);
+    }
 
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-    // TraceManager.addDev("Replace attributes in AvatarTermRaw");
-  }
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        // TraceManager.addDev("Replace attributes in AvatarTermRaw");
+    }
 
 }

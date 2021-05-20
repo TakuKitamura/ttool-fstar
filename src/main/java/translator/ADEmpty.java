@@ -45,17 +45,17 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADEmpty extends ADComponent {
-  public String id;
+    public String id;
 
-  public ADEmpty() {
-    nbNext = 1;
-  }
+    public ADEmpty() {
+        nbNext = 1;
+    }
 
-  public ADComponent makeSame() {
-    return new ADEmpty();
-  }
+    public ADComponent makeSame() {
+        return new ADEmpty();
+    }
 
-  public String toString() {
-    return "Empty component";
-  }
+    public String toString() {
+        return "Empty component";
+    }
 }

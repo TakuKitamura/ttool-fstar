@@ -52,130 +52,130 @@ import java.awt.event.ActionListener;
  */
 public class JDialogMultiStringCP extends JDialogBase implements ActionListener {
 
-  private String[] labels;
-  private String[] values;
+    private String[] labels;
+    private String[] values;
 
-  private int nbString;
+    private int nbString;
 
-  private boolean set = false;
+    private boolean set = false;
 
-  private JPanel panel1;
+    private JPanel panel1;
 
-  // Panel1
-  private JTextField[] texts;
+    // Panel1
+    private JTextField[] texts;
 
-  /*
-   * Creates new form
-   */
-  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-  public JDialogMultiStringCP(Frame f, String title, int _nbString, String[] _labels, String[] _values) {
+    /*
+     * Creates new form
+     */
+    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+    public JDialogMultiStringCP(Frame f, String title, int _nbString, String[] _labels, String[] _values) {
 
-    super(f, title, true);
+        super(f, title, true);
 
-    nbString = _nbString;
-    labels = _labels;
-    values = _values;
+        nbString = _nbString;
+        labels = _labels;
+        values = _values;
 
-    texts = new JTextField[nbString];
+        texts = new JTextField[nbString];
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-
-    panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
-
-    panel1.setPreferredSize(new Dimension(300, 200));
-
-    // first line panel1
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 1;
-    panel1.add(new JLabel(" "), c1);
-
-    // second line panel1
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-
-    // String1
-    for (int i = 0; i < nbString; i++) {
-      panel1.add(new JLabel(labels[i] + " = "), c1);
-      c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-      texts[i] = new JTextField(values[i], 15);
-      panel1.add(texts[i], c1);
+        initComponents();
+        myInitComponents();
+        pack();
     }
 
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c0.fill = GridBagConstraints.BOTH;
-
-    c.add(panel1, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    private void myInitComponents() {
     }
-  }
 
-  public void closeDialog() {
-    set = true;
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-  public String getString(int i) {
-    return texts[i].getText();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean hasValidString(int i) {
-    return texts[i].getText().length() > 0;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public boolean hasBeenSet() {
-    return set;
-  }
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
 
-  public void cancelDialog() {
-    dispose();
-  }
+        panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
+
+        panel1.setPreferredSize(new Dimension(300, 200));
+
+        // first line panel1
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        panel1.add(new JLabel(" "), c1);
+
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+
+        // String1
+        for (int i = 0; i < nbString; i++) {
+            panel1.add(new JLabel(labels[i] + " = "), c1);
+            c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+            texts[i] = new JTextField(values[i], 15);
+            panel1.add(texts[i], c1);
+        }
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c0.fill = GridBagConstraints.BOTH;
+
+        c.add(panel1, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        set = true;
+        dispose();
+    }
+
+    public String getString(int i) {
+        return texts[i].getText();
+    }
+
+    public boolean hasValidString(int i) {
+        return texts[i].getText().length() > 0;
+    }
+
+    public boolean hasBeenSet() {
+        return set;
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
 }

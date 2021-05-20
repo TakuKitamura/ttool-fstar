@@ -54,133 +54,133 @@ import java.awt.event.ActionListener;
  */
 public class JDialogTimeInterval extends JDialogBase implements ActionListener {
 
-  private String[] arrayDelay;
+    private String[] arrayDelay;
 
-  private JPanel panel1;
+    private JPanel panel1;
 
-  // Panel1
-  private JTextField text1, text2;
+    // Panel1
+    private JTextField text1, text2;
 
-  private String id1, id2;
+    private String id1, id2;
 
-  /* Creates new form */
-  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-  public JDialogTimeInterval(Frame f, String[] _arrayDelay, String title) {
+    /* Creates new form */
+    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+    public JDialogTimeInterval(Frame f, String[] _arrayDelay, String title) {
 
-    super(f, title, true);
-    arrayDelay = _arrayDelay;
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  public JDialogTimeInterval(Frame f, String[] _arrayDelay, String title, String _id1, String _id2) {
-
-    super(f, title, true);
-    arrayDelay = _arrayDelay;
-    id1 = _id1;
-    id2 = _id2;
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-    if ((id1 != null) && (id2 != null)) {
-      panel1.setBorder(new javax.swing.border.TitledBorder("setting " + id1 + " and " + id2));
-    } else {
-      panel1.setBorder(new javax.swing.border.TitledBorder("setting min and max delays"));
+        super(f, title, true);
+        arrayDelay = _arrayDelay;
+        initComponents();
+        myInitComponents();
+        pack();
     }
-    panel1.setPreferredSize(new Dimension(300, 150));
 
-    // first line panel1
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 1;
-    panel1.add(new JLabel(" "), c1);
+    public JDialogTimeInterval(Frame f, String[] _arrayDelay, String title, String _id1, String _id2) {
 
-    // second line panel1
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-
-    // min
-    if ((id1 != null) && (id2 != null)) {
-      panel1.add(new JLabel(id1 + " = "), c1);
-    } else {
-      panel1.add(new JLabel(" min = "), c1);
+        super(f, title, true);
+        arrayDelay = _arrayDelay;
+        id1 = _id1;
+        id2 = _id2;
+        initComponents();
+        myInitComponents();
+        pack();
     }
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    text1 = new JTextField(arrayDelay[0], 15);
-    panel1.add(text1, c1);
 
-    // max
-    c1.gridwidth = 1;
-    if ((id1 != null) && (id2 != null)) {
-      panel1.add(new JLabel(id2 + " = "), c1);
-    } else {
-      panel1.add(new JLabel(" max = "), c1);
+    private void myInitComponents() {
     }
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    text2 = new JTextField(arrayDelay[1], 15);
-    panel1.add(text2, c1);
 
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-    c.add(panel1, c0);
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    initButtons(c0, c, this);
-  }
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+        if ((id1 != null) && (id2 != null)) {
+            panel1.setBorder(new javax.swing.border.TitledBorder("setting " + id1 + " and " + id2));
+        } else {
+            panel1.setBorder(new javax.swing.border.TitledBorder("setting min and max delays"));
+        }
+        panel1.setPreferredSize(new Dimension(300, 150));
 
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
+        // first line panel1
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        panel1.add(new JLabel(" "), c1);
 
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+
+        // min
+        if ((id1 != null) && (id2 != null)) {
+            panel1.add(new JLabel(id1 + " = "), c1);
+        } else {
+            panel1.add(new JLabel(" min = "), c1);
+        }
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        text1 = new JTextField(arrayDelay[0], 15);
+        panel1.add(text1, c1);
+
+        // max
+        c1.gridwidth = 1;
+        if ((id1 != null) && (id2 != null)) {
+            panel1.add(new JLabel(id2 + " = "), c1);
+        } else {
+            panel1.add(new JLabel(" max = "), c1);
+        }
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        text2 = new JTextField(arrayDelay[1], 15);
+        panel1.add(text2, c1);
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        c.add(panel1, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
     }
-  }
 
-  public void closeDialog() {
-    arrayDelay[0] = text1.getText();
-    arrayDelay[1] = text2.getText();
-    dispose();
-  }
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
 
-  public void cancelDialog() {
-    dispose();
-  }
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        arrayDelay[0] = text1.getText();
+        arrayDelay[1] = text2.getText();
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
 }

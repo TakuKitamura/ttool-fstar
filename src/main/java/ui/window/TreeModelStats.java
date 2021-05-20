@@ -52,86 +52,86 @@ import java.util.Vector;
  * @version 1.0 14/12/2003
  */
 public class TreeModelStats implements TreeModel {
-  private JFrameDataElementStatistics jFStats;
-  private Vector<TreeModelListener> treeModelListeners = new Vector<>();
+    private JFrameDataElementStatistics jFStats;
+    private Vector<TreeModelListener> treeModelListeners = new Vector<>();
 
-  public TreeModelStats(JFrameDataElementStatistics _jFStats) {
-    // super(_mgui.gtm);
-    jFStats = _jFStats;
-  }
-
-  /**
-   * Adds a listener for the TreeModelEvent posted after the tree changes.
-   */
-  public void addTreeModelListener(TreeModelListener l) {
-    treeModelListeners.addElement(l);
-  }
-
-  /**
-   * Returns the child of parent at index index in the parent's child array.
-   */
-  public Object getChild(Object parent, int index) {
-    //
-    if (parent instanceof GenericTree) {
-      return ((GenericTree) parent).getChild(index);
-    }
-    return null;
-  }
-
-  /**
-   * Returns the number of children of parent.
-   */
-  public int getChildCount(Object parent) {
-    //
-    if (parent instanceof GenericTree) {
-      return ((GenericTree) parent).getChildCount();
+    public TreeModelStats(JFrameDataElementStatistics _jFStats) {
+        // super(_mgui.gtm);
+        jFStats = _jFStats;
     }
 
-    return 0;
-  }
-
-  /**
-   * Returns the index of child in parent.
-   */
-  public int getIndexOfChild(Object parent, Object child) {
-    if (parent instanceof GenericTree) {
-      return ((GenericTree) parent).getIndexOfChild(child);
+    /**
+     * Adds a listener for the TreeModelEvent posted after the tree changes.
+     */
+    public void addTreeModelListener(TreeModelListener l) {
+        treeModelListeners.addElement(l);
     }
 
-    return -1;
-  }
-
-  /**
-   * Returns the root of the tree.
-   */
-  public Object getRoot() {
-    return jFStats;
-  }
-
-  /**
-   * Returns true if node is a leaf.
-   */
-  public boolean isLeaf(Object node) {
-    if (node instanceof GenericTree) {
-      return (((GenericTree) node).getChildCount() == 0);
+    /**
+     * Returns the child of parent at index index in the parent's child array.
+     */
+    public Object getChild(Object parent, int index) {
+        //
+        if (parent instanceof GenericTree) {
+            return ((GenericTree) parent).getChild(index);
+        }
+        return null;
     }
 
-    return true;
+    /**
+     * Returns the number of children of parent.
+     */
+    public int getChildCount(Object parent) {
+        //
+        if (parent instanceof GenericTree) {
+            return ((GenericTree) parent).getChildCount();
+        }
 
-  }
+        return 0;
+    }
 
-  /**
-   * Removes a listener previously added with addTreeModelListener().
-   */
-  public void removeTreeModelListener(TreeModelListener l) {
-    treeModelListeners.removeElement(l);
-  }
+    /**
+     * Returns the index of child in parent.
+     */
+    public int getIndexOfChild(Object parent, Object child) {
+        if (parent instanceof GenericTree) {
+            return ((GenericTree) parent).getIndexOfChild(child);
+        }
 
-  /**
-   * Messaged when the user has altered the value for the item identified by path
-   * to newValue. Not used by this model.
-   */
-  public void valueForPathChanged(TreePath path, Object newValue) {
-    //
-  }
+        return -1;
+    }
+
+    /**
+     * Returns the root of the tree.
+     */
+    public Object getRoot() {
+        return jFStats;
+    }
+
+    /**
+     * Returns true if node is a leaf.
+     */
+    public boolean isLeaf(Object node) {
+        if (node instanceof GenericTree) {
+            return (((GenericTree) node).getChildCount() == 0);
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Removes a listener previously added with addTreeModelListener().
+     */
+    public void removeTreeModelListener(TreeModelListener l) {
+        treeModelListeners.removeElement(l);
+    }
+
+    /**
+     * Messaged when the user has altered the value for the item identified by path
+     * to newValue. Not used by this model.
+     */
+    public void valueForPathChanged(TreePath path, Object newValue) {
+        //
+    }
 }

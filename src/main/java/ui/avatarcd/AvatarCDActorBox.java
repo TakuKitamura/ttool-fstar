@@ -52,91 +52,91 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarCDActorBox extends TGCScalableOneLineText {
-  /*
-   * protected int lineLength = 5; protected int textX = 5; protected int textY =
-   * 15; protected int arc = 5;
-   */
-  protected int w, h; // w1;
-  protected final static String STEREOTYPE = "<<Actor>>";
-  protected int space = 4;
-
-  public AvatarCDActorBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    // issue #31
-    width = 40;
-    height = 50;
-    minWidth = 40; // (int)(40 * tdp.getZoom());
-    oldScaleFactor = tdp.getZoom();
-    initScaling(40, 50);
-
-    nbConnectingPoint = 24;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    int i;
-    for (int j = 0; j < 24; j = j + 12) {
-      for (i = 0; i < 5; i++) {
-        connectingPoint[i + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.0, ((double) (i)) / 4);
-      }
-      connectingPoint[5 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-      connectingPoint[6 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-      for (i = 0; i < 5; i++) {
-        connectingPoint[i + 7 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 1.0, ((double) i) / 4);
-      }
-    }
-    addTGConnectingPointsComment();
-
-    moveable = true;
-    editable = true;
-    removable = true;
-
-    value = "Actor";
-    name = "actor";
-
-    myImageIcon = IconManager.imgic600;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    w = g.getFontMetrics().stringWidth(value);
-    int w1 = g.getFontMetrics().stringWidth(STEREOTYPE);
-    if (!tdp.isScaled()) {
-      width = Math.max(Math.max(w, w1) + space, minWidth);
-    }
-    h = g.getFontMetrics().getHeight();
-    drawSingleString(g, STEREOTYPE, x + ((width - w1) / 2), y + h + space / 2);
-    drawSingleString(g, value, x + ((width - w) / 2), y + height - h);
-    g.drawRect(x, y, width, height);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
     /*
-     * if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - w / 2, y +height - h, w,
-     * h)) { return this; }
+     * protected int lineLength = 5; protected int textX = 5; protected int textY =
+     * 15; protected int arc = 5;
      */
-    return null;
-  }
+    protected int w, h; // w1;
+    protected final static String STEREOTYPE = "<<Actor>>";
+    protected int space = 4;
 
-  @Override
-  public int getMyCurrentMinX() {
-    return Math.min(x + width / 2 - w / 2, x);
+    public AvatarCDActorBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        // issue #31
+        width = 40;
+        height = 50;
+        minWidth = 40; // (int)(40 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
+        initScaling(40, 50);
 
-  }
+        nbConnectingPoint = 24;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        int i;
+        for (int j = 0; j < 24; j = j + 12) {
+            for (i = 0; i < 5; i++) {
+                connectingPoint[i + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.0, ((double) (i)) / 4);
+            }
+            connectingPoint[5 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+            connectingPoint[6 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+            for (i = 0; i < 5; i++) {
+                connectingPoint[i + 7 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 1.0, ((double) i) / 4);
+            }
+        }
+        addTGConnectingPointsComment();
 
-  @Override
-  public int getMyCurrentMaxX() {
-    return Math.max(x + width / 2 + w / 2, x + width);
-  }
+        moveable = true;
+        editable = true;
+        removable = true;
 
-  public String getActorName() {
-    return value;
-  }
+        value = "Actor";
+        name = "actor";
 
-  @Override
-  public int getType() {
-    return TGComponentManager.ACD_ACTOR_BOX;
-  }
+        myImageIcon = IconManager.imgic600;
+    }
+
+    @Override
+    public void internalDrawing(Graphics g) {
+        w = g.getFontMetrics().stringWidth(value);
+        int w1 = g.getFontMetrics().stringWidth(STEREOTYPE);
+        if (!tdp.isScaled()) {
+            width = Math.max(Math.max(w, w1) + space, minWidth);
+        }
+        h = g.getFontMetrics().getHeight();
+        drawSingleString(g, STEREOTYPE, x + ((width - w1) / 2), y + h + space / 2);
+        drawSingleString(g, value, x + ((width - w) / 2), y + height - h);
+        g.drawRect(x, y, width, height);
+    }
+
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        /*
+         * if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - w / 2, y +height - h, w,
+         * h)) { return this; }
+         */
+        return null;
+    }
+
+    @Override
+    public int getMyCurrentMinX() {
+        return Math.min(x + width / 2 - w / 2, x);
+
+    }
+
+    @Override
+    public int getMyCurrentMaxX() {
+        return Math.max(x + width / 2 + w / 2, x + width);
+    }
+
+    public String getActorName() {
+        return value;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.ACD_ACTOR_BOX;
+    }
 }

@@ -57,78 +57,79 @@ import java.net.URLConnection;
  */
 public class TToolUpdater extends Thread {
 
-  private Frame f;
+    private Frame f;
 
-  public TToolUpdater(Frame _f) {
-    f = _f;
-  }
-
-  public void run() {
-    if (ConfigurationTTool.TToolUpdateURL.length() < 1) {
-      return;
+    public TToolUpdater(Frame _f) {
+        f = _f;
     }
 
-    // Proxy configuration
-    if (ConfigurationTTool.TToolUpdateProxy.compareTo("true") == 0) {
-      System.getProperties().put("proxySet", "true");
-      System.getProperties().put("proxyPort", ConfigurationTTool.TToolUpdateProxyPort);
-      System.getProperties().put("proxyHost", ConfigurationTTool.TToolUpdateProxyHost);
+    public void run() {
+        if (ConfigurationTTool.TToolUpdateURL.length() < 1) {
+            return;
+        }
+
+        // Proxy configuration
+        if (ConfigurationTTool.TToolUpdateProxy.compareTo("true") == 0) {
+            System.getProperties().put("proxySet", "true");
+            System.getProperties().put("proxyPort", ConfigurationTTool.TToolUpdateProxyPort);
+            System.getProperties().put("proxyHost", ConfigurationTTool.TToolUpdateProxyHost);
+        }
+
+        try {
+            // Getting document
+            URL ttoolurl = new URL(ConfigurationTTool.TToolUpdateURL);
+            URLConnection tc = ttoolurl.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(tc.getInputStream()));
+            String inputLine;
+            StringBuffer doc = new StringBuffer("");
+
+            // Reading document
+            while ((inputLine = in.readLine()) != null) {
+                //
+                doc.append(inputLine);
+            }
+            in.close();
+
+            // Extracting version number
+            String s = doc.toString();
+            int index1 = s.indexOf("*Version");
+            if (index1 < 0) {
+                return;
+            }
+
+            s = s.substring(index1 + 8, s.length());
+            int index2 = s.indexOf("*");
+            if (index2 < 0) {
+                return;
+            }
+
+            s = s.substring(0, index2);
+            s = s.trim();
+            //
+
+            int compare = s.compareTo(DefaultText.getVersion());
+            if (compare == 0) {
+
+            } else if (compare > 0) {
+
+                JOptionPane.showMessageDialog(f,
+                        "A new version of TTool has been released. Please, update as soon as possible", "New version!",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+
+            }
+
+            // Dealing with counter / statistics
+            URL staturl = new URL("http://m1.nedstatbasic.net/n?id=ADQQ3gWbvyUrshjP9W3M7+vaqNIw");
+            tc = staturl.openConnection();
+            in = new BufferedReader(new InputStreamReader(tc.getInputStream()));
+            while ((inputLine = in.readLine()) != null) {
+            }
+            in.close();
+
+        } catch (Exception e) {
+
+        }
+
     }
-
-    try {
-      // Getting document
-      URL ttoolurl = new URL(ConfigurationTTool.TToolUpdateURL);
-      URLConnection tc = ttoolurl.openConnection();
-      BufferedReader in = new BufferedReader(new InputStreamReader(tc.getInputStream()));
-      String inputLine;
-      StringBuffer doc = new StringBuffer("");
-
-      // Reading document
-      while ((inputLine = in.readLine()) != null) {
-        //
-        doc.append(inputLine);
-      }
-      in.close();
-
-      // Extracting version number
-      String s = doc.toString();
-      int index1 = s.indexOf("*Version");
-      if (index1 < 0) {
-        return;
-      }
-
-      s = s.substring(index1 + 8, s.length());
-      int index2 = s.indexOf("*");
-      if (index2 < 0) {
-        return;
-      }
-
-      s = s.substring(0, index2);
-      s = s.trim();
-      //
-
-      int compare = s.compareTo(DefaultText.getVersion());
-      if (compare == 0) {
-
-      } else if (compare > 0) {
-
-        JOptionPane.showMessageDialog(f, "A new version of TTool has been released. Please, update as soon as possible",
-            "New version!", JOptionPane.INFORMATION_MESSAGE);
-      } else {
-
-      }
-
-      // Dealing with counter / statistics
-      URL staturl = new URL("http://m1.nedstatbasic.net/n?id=ADQQ3gWbvyUrshjP9W3M7+vaqNIw");
-      tc = staturl.openConnection();
-      in = new BufferedReader(new InputStreamReader(tc.getInputStream()));
-      while ((inputLine = in.readLine()) != null) {
-      }
-      in.close();
-
-    } catch (Exception e) {
-
-    }
-
-  }
 }

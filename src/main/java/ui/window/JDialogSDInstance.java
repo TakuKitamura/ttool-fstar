@@ -55,121 +55,121 @@ import java.awt.event.ActionListener;
  */
 public class JDialogSDInstance extends JDialogBase implements ActionListener {
 
-  private JPanel panel1;
-  private Frame frame;
+    private JPanel panel1;
+    private Frame frame;
 
-  private String name;
-  private boolean isActor;
+    private String name;
+    private boolean isActor;
 
-  private boolean data;
+    private boolean data;
 
-  // Panel1
-  private JTextField instanceName;
-  private JCheckBox actor;
+    // Panel1
+    private JTextField instanceName;
+    private JCheckBox actor;
 
-  /* Creates new form */
-  public JDialogSDInstance(Frame f, String _name, boolean _isActor, String _title) {
-    super(f, _title, true);
-    frame = f;
+    /* Creates new form */
+    public JDialogSDInstance(Frame f, String _name, boolean _isActor, String _title) {
+        super(f, _title, true);
+        frame = f;
 
-    name = _name;
-    isActor = _isActor;
+        name = _name;
+        isActor = _isActor;
 
-    data = false;
+        data = false;
 
-    myInitComponents();
-    initComponents();
-    // setComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-    panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters"));
-    panel1.setPreferredSize(new Dimension(250, 100));
-
-    // first line panel1
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel("Name:"), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    instanceName = new JTextField(name);
-    panel1.add(instanceName, c1);
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    actor = new JCheckBox("actor?");
-    panel1.add(actor, c1);
-    actor.setSelected(isActor);
-
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-
-    c.add(panel1, c0);
-
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+        myInitComponents();
+        initComponents();
+        // setComponents();
+        pack();
     }
-  }
 
-  public void closeDialog() {
-    data = true;
-    dispose();
-  }
+    private void myInitComponents() {
+    }
 
-  public void cancelDialog() {
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-  public String getInstanceName() {
-    return instanceName.getText();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean isAnActor() {
-    return actor.isSelected();
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public boolean hasBeenUpdated() {
-    return data;
-  }
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+        panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters"));
+        panel1.setPreferredSize(new Dimension(250, 100));
+
+        // first line panel1
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Name:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        instanceName = new JTextField(name);
+        panel1.add(instanceName, c1);
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        actor = new JCheckBox("actor?");
+        panel1.add(actor, c1);
+        actor.setSelected(isActor);
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        c.add(panel1, c0);
+
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        data = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public String getInstanceName() {
+        return instanceName.getText();
+    }
+
+    public boolean isAnActor() {
+        return actor.isSelected();
+    }
+
+    public boolean hasBeenUpdated() {
+        return data;
+    }
 
 }

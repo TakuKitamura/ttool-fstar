@@ -52,69 +52,70 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class AvatarMADCompositionConnector extends TGConnectorWithCommentConnectionPoints {
-  // int w, h;
-  private int radius = 5;
+    // int w, h;
+    private int radius = 5;
 
-  public AvatarMADCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    value = "<<composition>>";
+    public AvatarMADCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        value = "<<composition>>";
 
-    myImageIcon = IconManager.imgic1012;
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-
-    // g.drawLine(x1, y1, x2, y2);
-    // GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-    g.drawLine(x1, y1, x2, y2);
-
-    int orientation = p2.getOrientation();
-
-    switch (orientation) {
-      case TGConnectingPoint.NORTH:
-        y2 = y2 - radius;
-        break;
-      case TGConnectingPoint.EAST:
-        x2 = x2 + radius;
-        break;
-      case TGConnectingPoint.SOUTH:
-        y2 = y2 + radius;
-        break;
-      case TGConnectingPoint.WEST:
-        x2 = x2 - radius;
-        break;
+        myImageIcon = IconManager.imgic1012;
     }
-    // g.drawLine(x1, y1, x2, y2 + radius);
-    Color c = g.getColor();
-    g.setColor(Color.WHITE);
-    g.fillOval(x2 - radius + 1, y2 - radius + 1, (2 * radius), (2 * radius));
-    g.setColor(c);
-    g.drawOval(x2 - radius, y2 - radius, 2 * radius, 2 * radius);
-    g.drawLine(x2, y2 - radius, x2, y2 + radius);
-    g.drawLine(x2 - radius, y2, x2 + radius, y2);
 
-    // Indicate semantics
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+
+        // g.drawLine(x1, y1, x2, y2);
+        // GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+        g.drawLine(x1, y1, x2, y2);
+
+        int orientation = p2.getOrientation();
+
+        switch (orientation) {
+            case TGConnectingPoint.NORTH:
+                y2 = y2 - radius;
+                break;
+            case TGConnectingPoint.EAST:
+                x2 = x2 + radius;
+                break;
+            case TGConnectingPoint.SOUTH:
+                y2 = y2 + radius;
+                break;
+            case TGConnectingPoint.WEST:
+                x2 = x2 - radius;
+                break;
+        }
+        // g.drawLine(x1, y1, x2, y2 + radius);
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.fillOval(x2 - radius + 1, y2 - radius + 1, (2 * radius), (2 * radius));
+        g.setColor(c);
+        g.drawOval(x2 - radius, y2 - radius, 2 * radius, 2 * radius);
+        g.drawLine(x2, y2 - radius, x2, y2 + radius);
+        g.drawLine(x2 - radius, y2, x2 + radius, y2);
+
+        // Indicate semantics
+        /*
+         * Font f = g.getFont(); Font old = f; if (f.getSize() != tdp.getFontSize()) { f
+         * = f.deriveFont((float)tdp.getFontSize()); g.setFont(f); }
+         * 
+         * w = g.getFontMetrics().stringWidth(value); h =
+         * g.getFontMetrics().getHeight(); g.drawString(value, (p1.getX() + p2.getX() -
+         * w) / 2, (p1.getY() + p2.getY())/2); g.setFont(old);
+         */
+    }
+
     /*
-     * Font f = g.getFont(); Font old = f; if (f.getSize() != tdp.getFontSize()) { f
-     * = f.deriveFont((float)tdp.getFontSize()); g.setFont(f); }
-     * 
-     * w = g.getFontMetrics().stringWidth(value); h =
-     * g.getFontMetrics().getHeight(); g.drawString(value, (p1.getX() + p2.getX() -
-     * w) / 2, (p1.getY() + p2.getY())/2); g.setFont(old);
+     * public TGComponent extraIsOnOnlyMe(int x1, int y1) { if
+     * (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY()
+     * + p2.getY())/2 - h, w, h)) { return this; } return null; }
      */
-  }
 
-  /*
-   * public TGComponent extraIsOnOnlyMe(int x1, int y1) { if
-   * (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY()
-   * + p2.getY())/2 - h, w, h)) { return this; } return null; }
-   */
-
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR;
+    }
 
 }

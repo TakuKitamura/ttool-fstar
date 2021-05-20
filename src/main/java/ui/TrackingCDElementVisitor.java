@@ -5,14 +5,14 @@ import java.util.Set;
 
 public abstract class TrackingCDElementVisitor implements ICDElementVisitor {
 
-  private final Set<CDElement> visitedElements;
+    private final Set<CDElement> visitedElements;
 
-  protected TrackingCDElementVisitor() {
-    visitedElements = new HashSet<CDElement>();
-  }
+    protected TrackingCDElementVisitor() {
+        visitedElements = new HashSet<CDElement>();
+    }
 
-  @Override
-  public boolean visit(CDElement element) {
-    return visitedElements.add(element);
-  }
+    @Override
+    public boolean visit(CDElement element) {
+        return visitedElements.add(element);
+    }
 }

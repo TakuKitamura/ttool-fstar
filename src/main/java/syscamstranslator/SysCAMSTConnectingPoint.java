@@ -48,22 +48,22 @@ package syscamstranslator;
 
 public class SysCAMSTConnectingPoint {
 
-  private SysCAMSTConnector ownerConnector;
-  private SysCAMSTComponent ownerComponent;
+    private SysCAMSTConnector ownerConnector;
+    private SysCAMSTComponent ownerComponent;
 
-  public SysCAMSTConnectingPoint(SysCAMSTComponent _ownerComponent) {
-    ownerComponent = _ownerComponent;
-  }
+    public SysCAMSTConnectingPoint(SysCAMSTComponent _ownerComponent) {
+        ownerComponent = _ownerComponent;
+    }
 
-  public SysCAMSTConnector getConnector() {
-    return ownerConnector;
-  }
+    public SysCAMSTConnector getConnector() {
+        return ownerConnector;
+    }
 
-  public SysCAMSTComponent getComponent() {
-    return ownerComponent;
-  }
+    public SysCAMSTComponent getComponent() {
+        return ownerComponent;
+    }
 
-  boolean ConnectingPointIsFree() {
-    return ownerConnector == null;
-  }
+    boolean ConnectingPointIsFree() {
+        return ownerConnector == null;
+    }
 }

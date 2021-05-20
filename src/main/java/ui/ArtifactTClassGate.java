@@ -47,28 +47,28 @@ package ui;
  */
 public class ArtifactTClassGate implements Comparable {
 
-  public String art, tcl, gat;
+    public String art, tcl, gat;
 
-  public ArtifactTClassGate(String _art, String _tcl, String _gat) {
-    art = _art;
-    tcl = _tcl;
-    gat = _gat;
-  }
-
-  public int compareTo(Object o) {
-    if (!(o instanceof ArtifactTClassGate)) {
-      return -1;
+    public ArtifactTClassGate(String _art, String _tcl, String _gat) {
+        art = _art;
+        tcl = _tcl;
+        gat = _gat;
     }
 
-    ArtifactTClassGate atg = (ArtifactTClassGate) o;
-    if ((atg.art.compareTo(art) == 0) && (atg.tcl.compareTo(tcl) == 0) && (atg.gat.compareTo(gat) == 0)) {
-      return 0;
+    public int compareTo(Object o) {
+        if (!(o instanceof ArtifactTClassGate)) {
+            return -1;
+        }
+
+        ArtifactTClassGate atg = (ArtifactTClassGate) o;
+        if ((atg.art.compareTo(art) == 0) && (atg.tcl.compareTo(tcl) == 0) && (atg.gat.compareTo(gat) == 0)) {
+            return 0;
+        }
+
+        return -1;
     }
 
-    return -1;
-  }
-
-  public String toString() {
-    return art + "." + tcl + "." + gat;
-  }
+    public String toString() {
+        return art + "." + tcl + "." + gat;
+    }
 }

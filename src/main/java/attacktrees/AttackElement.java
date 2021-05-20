@@ -47,24 +47,24 @@ import java.util.ArrayList;
  * @version 1.0 31/01/2018
  */
 public abstract class AttackElement {
-  protected String name;
-  protected Object referenceObject;
+    protected String name;
+    protected Object referenceObject;
 
-  public AttackElement(String _name, Object _referenceObject) {
-    name = _name;
-    referenceObject = _referenceObject;
-  }
+    public AttackElement(String _name, Object _referenceObject) {
+        name = _name;
+        referenceObject = _referenceObject;
+    }
 
-  public void setName(String _name) {
-    name = _name;
-  }
+    public void setName(String _name) {
+        name = _name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public Object getReferenceObject() {
-    return referenceObject;
-  }
+    public Object getReferenceObject() {
+        return referenceObject;
+    }
 
 }

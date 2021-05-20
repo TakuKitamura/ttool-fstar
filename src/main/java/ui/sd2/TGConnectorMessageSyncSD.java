@@ -56,43 +56,44 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TGConnectorMessageSyncSD extends TGConnectorMessageSD {
-  protected int arrowLength = 10;
+    protected int arrowLength = 10;
 
-  public TGConnectorMessageSyncSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    myImageIcon = IconManager.imgic502;
-  }
-
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-      g.drawLine(x1, y1, x2, y2);
-    } else {
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+    public TGConnectorMessageSyncSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic502;
     }
 
-    if (!tdp.isScaled()) {
-      widthValue = g.getFontMetrics().stringWidth(value);
-      heightValue = g.getFontMetrics().getHeight();
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+        }
+
+        if (!tdp.isScaled()) {
+            widthValue = g.getFontMetrics().stringWidth(value);
+            heightValue = g.getFontMetrics().getHeight();
+        }
+
+        // g.drawString(value, (p1.getX() + p2.getX()) / 2, ((p1.getY() + p2.getY()) /
+        // 2) - 5);
+        g.drawString(value, ((p1.getX() + p2.getX()) / 2) - widthValue / 2, ((p1.getY() + p2.getY()) / 2) - 5);
     }
 
-    // g.drawString(value, (p1.getX() + p2.getX()) / 2, ((p1.getY() + p2.getY()) /
-    // 2) - 5);
-    g.drawString(value, ((p1.getX() + p2.getX()) / 2) - widthValue / 2, ((p1.getY() + p2.getY()) / 2) - 5);
-  }
+    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+        componentMenu.addSeparator();
+        JMenuItem generate = null;
+        // Should verify first whether it is connected to a formal requirement with a
+        // verify relation, or not
+        generate = new JMenuItem(TO_ASYNC);
 
-  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-    componentMenu.addSeparator();
-    JMenuItem generate = null;
-    // Should verify first whether it is connected to a formal requirement with a
-    // verify relation, or not
-    generate = new JMenuItem(TO_ASYNC);
+        generate.addActionListener(menuAL);
+        componentMenu.add(generate);
+    }
 
-    generate.addActionListener(menuAL);
-    componentMenu.add(generate);
-  }
-
-  public int getType() {
-    return TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD;
-  }
+    public int getType() {
+        return TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD;
+    }
 }

@@ -56,75 +56,75 @@ import java.awt.*;
  * @see MainGUI
  */
 public class ADDPanel extends TURTLEPanel {
-  public ADDDiagramPanel tmladd;
-  // public Vector validated, ignored;
+    public ADDDiagramPanel tmladd;
+    // public Vector validated, ignored;
 
-  public ADDPanel(MainGUI _mgui) {
-    super(_mgui);
+    public ADDPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    cl = new ChangeListener() {
+        cl = new ChangeListener() {
 
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDesignAction(e);
-      }
-    };
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-  }
-
-  public void init() {
-    addDeploymentPanelDiagram("Deployment Diagram");
-  }
-
-  public boolean addDeploymentPanelDiagram(String s) {
-    ADDDiagramToolBar toolBar = new ADDDiagramToolBar(mgui);
-    toolbars.add(toolBar);
-
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    // Class diagram
-    tmladd = new ADDDiagramPanel(mgui, toolBar);
-    tmladd.setName(s);
-    tmladd.tp = this;
-    tdp = tmladd;
-    panels.add(tmladd); // Always first in list
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmladd);
-    tmladd.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBar, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(s, IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
-    tabbedPane.setSelectedIndex(0);
-
-    return true;
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"ADD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
-    return "<Modeling type=\"ADD\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+    public void init() {
+        addDeploymentPanelDiagram("Deployment Diagram");
+    }
 
-  public String toString() {
-    return mgui.getTitleAt(this) + " (deployment diagram)";
-  }
+    public boolean addDeploymentPanelDiagram(String s) {
+        ADDDiagramToolBar toolBar = new ADDDiagramToolBar(mgui);
+        toolbars.add(toolBar);
 
-  public void renameDeployment(String oldName, String newName) {
-    /*
-     * if (tmladd != null) { tmladd.renameDeployment(oldName, newName); }
-     */
-  }
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        // Class diagram
+        tmladd = new ADDDiagramPanel(mgui, toolBar);
+        tmladd.setName(s);
+        tmladd.tp = this;
+        tdp = tmladd;
+        panels.add(tmladd); // Always first in list
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmladd);
+        tmladd.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBar, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
+        tabbedPane.setSelectedIndex(0);
+
+        return true;
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"ADD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"ADD\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+    }
+
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return mgui.getTitleAt(this) + " (deployment diagram)";
+    }
+
+    public void renameDeployment(String oldName, String newName) {
+        /*
+         * if (tmladd != null) { tmladd.renameDeployment(oldName, newName); }
+         */
+    }
 
 }

@@ -46,12 +46,12 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface CheckableAccessibility {
-  // public static final int UNKNOWN;
-  // public static final int NON_REACHABLE;
+    // public static final int UNKNOWN;
+    // public static final int NON_REACHABLE;
 
-  void setCheckableAccessibility(boolean b);
+    void setCheckableAccessibility(boolean b);
 
-  boolean getCheckableAccessibility();
+    boolean getCheckableAccessibility();
 
-  // public void setReachability();
+    // public void setReachability();
 }

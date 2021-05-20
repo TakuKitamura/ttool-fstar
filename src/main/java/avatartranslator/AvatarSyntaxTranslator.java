@@ -45,11 +45,11 @@ package avatartranslator;
  * @author Florian LUGOU
  */
 public class AvatarSyntaxTranslator {
-  String translateUnaryOp(String op) {
-    return op;
-  }
+    String translateUnaryOp(String op) {
+        return op;
+    }
 
-  String translateBinaryOp(String op) {
-    return op;
-  }
+    String translateBinaryOp(String op) {
+        return op;
+    }
 }

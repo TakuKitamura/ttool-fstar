@@ -49,21 +49,21 @@ import myutil.TraceManager;
  */
 public class RTLLauncher implements Runnable {
 
-  protected String sk;
+    protected String sk;
 
-  public String getKey() {
-    sk = "";
-    for (int i = 0; i < 16; i++) {
-      int cpt = (int) (Math.random() * 60) + 50;
-      sk += (char) cpt;
+    public String getKey() {
+        sk = "";
+        for (int i = 0; i < 16; i++) {
+            int cpt = (int) (Math.random() * 60) + 50;
+            sk += (char) cpt;
+        }
+        TraceManager.addDev("Key=" + sk);
+        return sk;
     }
-    TraceManager.addDev("Key=" + sk);
-    return sk;
-  }
 
-  public void run() {
-    TraceManager.addDev("Server side of the launcher\nVersion: " + RshServer.VERSION);
-    (new RshServer(sk)).startServer();
-  }
+    public void run() {
+        TraceManager.addDev("Server side of the launcher\nVersion: " + RshServer.VERSION);
+        (new RshServer(sk)).startServer();
+    }
 
 }

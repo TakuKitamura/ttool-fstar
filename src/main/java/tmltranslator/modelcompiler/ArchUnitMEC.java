@@ -52,60 +52,60 @@ import java.util.Vector;
  */
 public abstract class ArchUnitMEC {
 
-  // Static
-  private static ArchUnitMEC[] typesArr = { new CpuMEC(), new FepMEC(), new InterleaverMEC(), new MapperMEC(),
-      new AdaifMEC() };
-  public static final Vector<ArchUnitMEC> Types = new Vector<ArchUnitMEC>(Arrays.asList(typesArr));
-  private static String[] stringTypesArr = { "CPU", "FEP", "INTL", "MAPP", "ADAIF" };
-  public static final Vector<String> stringTypes = new Vector<String>(Arrays.asList(stringTypesArr));
-  public static final int CpuMECIndex = 0;
-  public static final int FepMECIndex = 1;
-  public static final int InterleaverMECIndex = 2;
-  public static final int MapperMECIndex = 3;
-  public static final int AdaifMECIndex = 4;
+    // Static
+    private static ArchUnitMEC[] typesArr = { new CpuMEC(), new FepMEC(), new InterleaverMEC(), new MapperMEC(),
+            new AdaifMEC() };
+    public static final Vector<ArchUnitMEC> Types = new Vector<ArchUnitMEC>(Arrays.asList(typesArr));
+    private static String[] stringTypesArr = { "CPU", "FEP", "INTL", "MAPP", "ADAIF" };
+    public static final Vector<String> stringTypes = new Vector<String>(Arrays.asList(stringTypesArr));
+    public static final int CpuMECIndex = 0;
+    public static final int FepMECIndex = 1;
+    public static final int InterleaverMECIndex = 2;
+    public static final int MapperMECIndex = 3;
+    public static final int AdaifMECIndex = 4;
 
-  // public static final String CR = "\n";
-  // public static final String TAB = "\t";
+    // public static final String CR = "\n";
+    // public static final String TAB = "\t";
 
-  protected int index;
-  protected String initCtxRoutine;
-  protected String ctxCleanupRoutine;
-  protected String localMemoryPointer;
+    protected int index;
+    protected String initCtxRoutine;
+    protected String ctxCleanupRoutine;
+    protected String localMemoryPointer;
 
-  // Issue #98
-  public final static String CONTEXT = "EMBB_CONTEXT";
+    // Issue #98
+    public final static String CONTEXT = "EMBB_CONTEXT";
 
-  public int getIndex() {
-    return index;
-  }
-  //
-  // public static String getContext() {
-  // return "EMBB_CONTEXT";
-  // }
+    public int getIndex() {
+        return index;
+    }
+    //
+    // public static String getContext() {
+    // return "EMBB_CONTEXT";
+    // }
 
-  public String getCtxInitCode() {
-    return initCtxRoutine;
-  }
+    public String getCtxInitCode() {
+        return initCtxRoutine;
+    }
 
-  public String getCtxCleanupCode() {
-    return ctxCleanupRoutine;
-  }
+    public String getCtxCleanupCode() {
+        return ctxCleanupRoutine;
+    }
 
-  public String getLocalMemoryPointer() {
-    return localMemoryPointer;
-  }
+    public String getLocalMemoryPointer() {
+        return localMemoryPointer;
+    }
 
-  public String typeToString() {
-    return stringTypesArr[index];
-  }
+    public String typeToString() {
+        return stringTypesArr[index];
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof ArchUnitMEC))
-      return false;
-    ArchUnitMEC that = (ArchUnitMEC) o;
-    return index == that.getIndex() && Objects.equals(initCtxRoutine, that.getCtxInitCode())
-        && Objects.equals(ctxCleanupRoutine, that.getCtxCleanupCode())
-        && Objects.equals(localMemoryPointer, getLocalMemoryPointer());
-  }
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof ArchUnitMEC))
+            return false;
+        ArchUnitMEC that = (ArchUnitMEC) o;
+        return index == that.getIndex() && Objects.equals(initCtxRoutine, that.getCtxInitCode())
+                && Objects.equals(ctxCleanupRoutine, that.getCtxCleanupCode())
+                && Objects.equals(localMemoryPointer, getLocalMemoryPointer());
+    }
 
 } // End of class

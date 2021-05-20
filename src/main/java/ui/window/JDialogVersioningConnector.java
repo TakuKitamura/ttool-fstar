@@ -54,141 +54,141 @@ import java.awt.event.ActionListener;
  */
 public class JDialogVersioningConnector extends JDialogBase implements ActionListener {
 
-  private JPanel panel1;// , panel2, panel3, panel4, panel5;
+    private JPanel panel1;// , panel2, panel3, panel4, panel5;
 
-  // Panel1
-  int oldVersion, newVersion;
-  private JTextField version1, version2;
+    // Panel1
+    int oldVersion, newVersion;
+    private JTextField version1, version2;
 
-  boolean cancel = false;
+    boolean cancel = false;
 
-  // private String id1, id2;
+    // private String id1, id2;
 
-  /* Creates new form */
-  public JDialogVersioningConnector(Frame f, int _oldVersion, int _newVersion) {
+    /* Creates new form */
+    public JDialogVersioningConnector(Frame f, int _oldVersion, int _newVersion) {
 
-    super(f, "Setting versions", true);
+        super(f, "Setting versions", true);
 
-    oldVersion = _oldVersion;
-    newVersion = _newVersion;
+        oldVersion = _oldVersion;
+        newVersion = _newVersion;
 
-    initComponents();
-    // myInitComponents();
-    pack();
-  }
-  //
-  //
-  // private void myInitComponents() {
-  // }
-
-  private void initComponents() {
-    // JTabbedPane tabbedPane = new JTabbedPane();
-    // tabbedPane.setPreferredSize(new Dimension(550, 400));
-
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-
-    panel1.setBorder(new javax.swing.border.TitledBorder("Value of versions"));
-
-    // panel1.setPreferredSize(new Dimension(600, 350));
-
-    // first line panel1
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 1;
-    panel1.add(new JLabel(" "), c1);
-
-    // second line panel1
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-
-    // name
-    panel1.add(new JLabel("origin version = "), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    version1 = new JTextField("" + oldVersion, 15);
-    panel1.add(version1, c1);
-
-    // loss rate
-    c1.gridwidth = 1;
-    panel1.add(new JLabel("Destination version = "), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    version2 = new JTextField("" + newVersion, 15);
-    panel1.add(version2, c1);
-
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-
-    c.add(panel1, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+        initComponents();
+        // myInitComponents();
+        pack();
     }
-  }
+    //
+    //
+    // private void myInitComponents() {
+    // }
 
-  public void closeDialog() {
-    /*
-     * delay = jdelay.getText(); lossRate = jlossRate.getText(); implementation =
-     * jimp.getSelectedIndex(); try { oport =
-     * Integer.decode(joport.getText()).intValue(); } catch (Exception e) { oport =
-     * -1; }
-     * 
-     * try { dport = Integer.decode(jdport.getText()).intValue(); } catch (Exception
-     * e) { dport = -1; }
-     */
+    private void initComponents() {
+        // JTabbedPane tabbedPane = new JTabbedPane();
+        // tabbedPane.setPreferredSize(new Dimension(550, 400));
 
-    dispose();
-  }
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-  public String getOldVersion() {
-    return version1.getText();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public String getNewVersion() {
-    return version2.getText();
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public void cancelDialog() {
-    cancel = true;
-    dispose();
-  }
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
 
-  public boolean hasBeenCancelled() {
-    return cancel;
-  }
+        panel1.setBorder(new javax.swing.border.TitledBorder("Value of versions"));
+
+        // panel1.setPreferredSize(new Dimension(600, 350));
+
+        // first line panel1
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        panel1.add(new JLabel(" "), c1);
+
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+
+        // name
+        panel1.add(new JLabel("origin version = "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        version1 = new JTextField("" + oldVersion, 15);
+        panel1.add(version1, c1);
+
+        // loss rate
+        c1.gridwidth = 1;
+        panel1.add(new JLabel("Destination version = "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        version2 = new JTextField("" + newVersion, 15);
+        panel1.add(version2, c1);
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        c.add(panel1, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        /*
+         * delay = jdelay.getText(); lossRate = jlossRate.getText(); implementation =
+         * jimp.getSelectedIndex(); try { oport =
+         * Integer.decode(joport.getText()).intValue(); } catch (Exception e) { oport =
+         * -1; }
+         * 
+         * try { dport = Integer.decode(jdport.getText()).intValue(); } catch (Exception
+         * e) { dport = -1; }
+         */
+
+        dispose();
+    }
+
+    public String getOldVersion() {
+        return version1.getText();
+    }
+
+    public String getNewVersion() {
+        return version2.getText();
+    }
+
+    public void cancelDialog() {
+        cancel = true;
+        dispose();
+    }
+
+    public boolean hasBeenCancelled() {
+        return cancel;
+    }
 
 }

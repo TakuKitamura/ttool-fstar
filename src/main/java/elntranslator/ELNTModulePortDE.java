@@ -47,32 +47,32 @@ package elntranslator;
  */
 
 public class ELNTModulePortDE extends ELNTComponent {
-  private String name;
-  private String type;
-  private String origin;
+    private String name;
+    private String type;
+    private String origin;
 
-  private ELNTModule module;
+    private ELNTModule module;
 
-  public ELNTModulePortDE(String _name, String _type, String _origin, ELNTModule _module) {
-    name = _name;
-    type = _type;
-    origin = _origin;
-    module = _module;
-  }
+    public ELNTModulePortDE(String _name, String _type, String _origin, ELNTModule _module) {
+        name = _name;
+        type = _type;
+        origin = _origin;
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getType() {
-    return type;
-  }
+    public String getType() {
+        return type;
+    }
 
-  public String getOrigin() {
-    return origin;
-  }
+    public String getOrigin() {
+        return origin;
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

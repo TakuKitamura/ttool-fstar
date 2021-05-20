@@ -51,58 +51,58 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class TrafficsNCTableModel extends AbstractTableModel {
-  private NCStructure ncs;
+    private NCStructure ncs;
 
-  // private String [] names;
-  public TrafficsNCTableModel(NCStructure _ncs) {
-    ncs = _ncs;
-    // computeData(_ncs);
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return ncs.traffics.size();
-  }
-
-  public int getColumnCount() {
-    return 7;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (column == 0) {
-      return ncs.traffics.get(row).getName();
-    } else if (column == 1) {
-      return NCTraffic.getStringPeriodicType(ncs.traffics.get(row).getPeriodicType());
-    } else if (column == 2) {
-      return ncs.traffics.get(row).getPeriod() + " " + ncs.traffics.get(row).getPeriodUnit().getStringUnit();
-    } else if (column == 3) {
-      return ncs.traffics.get(row).getDeadline() + " " + ncs.traffics.get(row).getDeadlineUnit().getStringUnit();
-    } else if (column == 4) {
-      return ncs.traffics.get(row).getMinPacketSize();
-    } else if (column == 5) {
-      return ncs.traffics.get(row).getMaxPacketSize();
+    // private String [] names;
+    public TrafficsNCTableModel(NCStructure _ncs) {
+        ncs = _ncs;
+        // computeData(_ncs);
     }
-    return ncs.traffics.get(row).getPriority();
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Traffic";
-      case 1:
-        return "Type";
-      case 2:
-        return "Period";
-      case 3:
-        return "Deadline";
-      case 4:
-        return "Min packet size";
-      case 5:
-        return "Max packet size";
-      case 6:
-        return "Priority";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return ncs.traffics.size();
     }
-    return "none";
-  }
+
+    public int getColumnCount() {
+        return 7;
+    }
+
+    public Object getValueAt(int row, int column) {
+        if (column == 0) {
+            return ncs.traffics.get(row).getName();
+        } else if (column == 1) {
+            return NCTraffic.getStringPeriodicType(ncs.traffics.get(row).getPeriodicType());
+        } else if (column == 2) {
+            return ncs.traffics.get(row).getPeriod() + " " + ncs.traffics.get(row).getPeriodUnit().getStringUnit();
+        } else if (column == 3) {
+            return ncs.traffics.get(row).getDeadline() + " " + ncs.traffics.get(row).getDeadlineUnit().getStringUnit();
+        } else if (column == 4) {
+            return ncs.traffics.get(row).getMinPacketSize();
+        } else if (column == 5) {
+            return ncs.traffics.get(row).getMaxPacketSize();
+        }
+        return ncs.traffics.get(row).getPriority();
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Traffic";
+            case 1:
+                return "Type";
+            case 2:
+                return "Period";
+            case 3:
+                return "Deadline";
+            case 4:
+                return "Min packet size";
+            case 5:
+                return "Max packet size";
+            case 6:
+                return "Priority";
+        }
+        return "none";
+    }
 
 }

@@ -45,7 +45,7 @@ package ui.util;
  * @author Florian LUGOU
  */
 public interface CorrespondanceElement<E> {
-  void addCor(Object o, E tgc);
+    void addCor(Object o, E tgc);
 
-  void useDIPLOIDs();
+    void useDIPLOIDs();
 }

@@ -53,73 +53,73 @@ import java.awt.*;
  * @author Emil Salageanu, Ludovic APVRILLE
  */
 public class ProSMDAction extends TGCOneLineText {
-  protected int lineLength = 5;
-  protected int textX = 5;
-  protected int textY = 15;
-  /* protected int arc = 5; */
-  protected int linebreak = 10;
+    protected int lineLength = 5;
+    protected int textX = 5;
+    protected int textY = 15;
+    /* protected int arc = 5; */
+    protected int linebreak = 10;
 
-  public ProSMDAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ProSMDAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 30;
-    height = 20;
-    minWidth = 30;
+        width = 30;
+        height = 20;
+        minWidth = 30;
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointProSMD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointProSMD(this, 0, lineLength, false, true, 0.5, 1.0);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointProSMD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointProSMD(this, 0, lineLength, false, true, 0.5, 1.0);
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    name = "action state";
-    value = "...";
+        name = "action state";
+        value = "...";
 
-    myImageIcon = IconManager.imgic2010;
-  }
-
-  public void internalDrawing(Graphics g) {
-
-    if (this.x <= 0)
-      this.x = 1;
-    if (this.y <= 0)
-      this.y = 1;
-
-    int w = g.getFontMetrics().stringWidth(value);
-    int w1 = Math.max(minWidth, w + 2 * textX + linebreak);
-    if ((w1 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w1 / 2, y);
-      width = w1;
-      // updateConnectingPoints();
+        myImageIcon = IconManager.imgic2010;
     }
 
-    // Lines to connecting points
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+    public void internalDrawing(Graphics g) {
 
-    // Drawing in clockwise fashion
+        if (this.x <= 0)
+            this.x = 1;
+        if (this.y <= 0)
+            this.y = 1;
 
-    g.drawRect(x, y, width, height);
-    // g.drawString("chl", x+(width-w) / 2, y);
-    g.drawString(value, x + textX, y + textY);
-  }
+        int w = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, w + 2 * textX + linebreak);
+        if ((w1 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w1 / 2, y);
+            width = w1;
+            // updateConnectingPoints();
+        }
 
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        // Lines to connecting points
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        // Drawing in clockwise fashion
+
+        g.drawRect(x, y, width, height);
+        // g.drawString("chl", x+(width-w) / 2, y);
+        g.drawString(value, x + textX, y + textY);
     }
-    return null;
-  }
 
-  public String getAction() {
-    return value;
-  }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
 
-  public int getType() {
-    return TGComponentManager.PROSMD_ACTION;
-  }
+    public String getAction() {
+        return value;
+    }
+
+    public int getType() {
+        return TGComponentManager.PROSMD_ACTION;
+    }
 }

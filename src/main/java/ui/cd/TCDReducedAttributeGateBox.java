@@ -53,62 +53,62 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TCDReducedAttributeGateBox extends TGCReducedAttributeBox {
-  protected Color myColor;
+    protected Color myColor;
 
-  public TCDReducedAttributeGateBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDReducedAttributeGateBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 150;
-    height = 30;
-    minWidth = 150;
-    minHeight = 30;
-    minDesiredWidth = 150;
-    minDesiredHeight = 30;
+        width = 150;
+        height = 30;
+        minWidth = 150;
+        minHeight = 30;
+        minDesiredWidth = 150;
+        minDesiredHeight = 30;
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, 0.5);
-    connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
 
-    moveable = false;
-    editable = true;
-    removable = false;
+        moveable = false;
+        editable = true;
+        removable = false;
 
-    name = "Tobject gates";
-    value = "";
+        name = "Tobject gates";
+        value = "";
 
-    myColor = ColorManager.GATE_BOX;
+        myColor = ColorManager.GATE_BOX;
 
-    myImageIcon = IconManager.imgic120;
+        myImageIcon = IconManager.imgic120;
 
-    attributeText = "Gate";
-    editable = true;
-    attributes = false; // It contains gates
-  }
+        attributeText = "Gate";
+        editable = true;
+        attributes = false; // It contains gates
+    }
 
-  protected void setJDialogOptions(JDialogReducedAttribute jda) {
-    jda.setEditable(false);
-  }
+    protected void setJDialogOptions(JDialogReducedAttribute jda) {
+        jda.setEditable(false);
+    }
 
-  public void checkMySize() {
-  }
+    public void checkMySize() {
+    }
 
-  public void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.setColor(myColor);
-    g.fillRect(x + 1, y + 1, width - 1, height - 1);
-    ColorManager.setColor(g, getState(), 0);
-  }
+    public void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.setColor(myColor);
+        g.fillRect(x + 1, y + 1, width - 1, height - 1);
+        ColorManager.setColor(g, getState(), 0);
+    }
 
-  protected java.util.List<TAttribute> getCustomAttributes() {
-    TCDTObject to = (TCDTObject) (getFather());
-    TCDTClass tc = to.getMasterTClass();
-    return tc.getGates();
-  }
+    protected java.util.List<TAttribute> getCustomAttributes() {
+        TCDTObject to = (TCDTObject) (getFather());
+        TCDTClass tc = to.getMasterTClass();
+        return tc.getGates();
+    }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_ASSOCIATION;
-  }
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_ASSOCIATION;
+    }
 
 }

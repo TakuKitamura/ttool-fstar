@@ -47,5 +47,5 @@ package ui.networkmodelloader;
  * @author Ludovic APVRILLE
  */
 public enum NetworkModelType {
-  SOFTWARE_DESIGN, PARTITIONING, ATTACK_TREE, SECURITY_PROTOCOL
+    SOFTWARE_DESIGN, PARTITIONING, ATTACK_TREE, SECURITY_PROTOCOL
 }

@@ -45,8 +45,8 @@ package ui;
  */
 public class AnalysisSyntaxException extends Exception {
 
-  public AnalysisSyntaxException(String msg) {
-    super(msg);
-  }
+    public AnalysisSyntaxException(String msg) {
+        super(msg);
+    }
 
 } // Class

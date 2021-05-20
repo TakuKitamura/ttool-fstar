@@ -40,9 +40,9 @@ package fr.inria.oasis.vercors.cttool.model;
 
 public interface Message {
 
-  String getName();
+    String getName();
 
-  void setName(String name);
+    void setName(String name);
 
-  boolean equals(Message m);
+    boolean equals(Message m);
 }

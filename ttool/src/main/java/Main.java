@@ -1,3 +1,4 @@
+
 /**
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * <p>
@@ -68,7 +69,7 @@ import java.util.Locale;
 
 //import java.io.*;
 
-public class Main implements ActionListener, InterpreterOutputInterface{
+public class Main implements ActionListener, InterpreterOutputInterface {
     public boolean finish = false;
     public static Main main = new Main();
     public static boolean systemc = true;
@@ -92,40 +93,35 @@ public class Main implements ActionListener, InterpreterOutputInterface{
 
     public static void main(String[] args) {
 
-
         TraceManager.devPolicy = TraceManager.TO_DEVNULL;
 
         System.out.println("\n*** TTool version: " + DefaultText.getFullVersion() + " ***\n");
 
-
         // Read the image data and display the splash screen
         // -------------------------------------------------
-
 
         new Timer(2500, main).start();
 
         JStartingWindow splashFrame = null;
-        //System.out.println("hello");
+        // System.out.println("hello");
         URL imageURL = Main.class.getResource("ui/util/starting_logo.png");
         Image img;
-        //System.out.println("helli");
+        // System.out.println("helli");
         if (imageURL != null) {
 
             img = (new ImageIcon(imageURL)).getImage();
             splashFrame = JStartingWindow.splash(img, "Loading TTool's elements");
-            //splashFrame.setLicenceMessage("An open-source toolkit from:");
+            // splashFrame.setLicenceMessage("An open-source toolkit from:");
             if (splashFrame != null) {
                 splashFrame.setMiddleMessage("version " + DefaultText.getVersion());
             }
-            //System.out.println("helly");
+            // System.out.println("helly");
         } else {
             System.err.println("Starting image not found");
             System.exit(0);
         }
 
-
-        //new Timer(2500, main).start();
-
+        // new Timer(2500, main).start();
 
         // Starting window
         // setting default language
@@ -137,26 +133,28 @@ public class Main implements ActionListener, InterpreterOutputInterface{
         boolean startLauncher = true;
 
         // Setting certificates
-	/*String trustStore = System.getProperty("javax.net.ssl.trustStore");
-	if (trustStore == null) {
-	    System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
-	    } */
+        /*
+         * String trustStore = System.getProperty("javax.net.ssl.trustStore"); if
+         * (trustStore == null) { System.setProperty("javax.net.ssl.trustStore",
+         * "cacerts.jks"); }
+         */
 
         // Analyzing arguments
         String config = "config.xml";
         startLauncher = true;
         for (int i = 0; i < args.length; i++) {
-            /*if (args[i].compareTo("-systemc") == 0) {
-              systemc = true;
-              System.out.println("SystemC features activated - these are beta features that are meant to be used only for research purpose");
-              }*/
+            /*
+             * if (args[i].compareTo("-systemc") == 0) { systemc = true; System.out.
+             * println("SystemC features activated - these are beta features that are meant to be used only for research purpose"
+             * ); }
+             */
             if (args[i].compareTo("-lotos") == 0) {
                 lotos = true;
-                //System.out.println("LOTOS features activated");
+                // System.out.println("LOTOS features activated");
             }
             if (args[i].compareTo("-nolotos") == 0) {
                 lotos = false;
-                //System.out.println("LOTOS features activated");
+                // System.out.println("LOTOS features activated");
             }
             if (args[i].compareTo("-launcher") == 0) {
                 startLauncher = true;
@@ -167,7 +165,7 @@ public class Main implements ActionListener, InterpreterOutputInterface{
             if (args[i].compareTo("-diplodocus") == 0) {
                 systemc = true;
                 lotos = true;
-                //System.out.println("Diplodocus features activated");
+                // System.out.println("Diplodocus features activated");
             }
             if (args[i].compareTo("-experimental") == 0) {
                 experimental = true;
@@ -175,39 +173,44 @@ public class Main implements ActionListener, InterpreterOutputInterface{
             }
             if (args[i].compareTo("-nodiplodocus") == 0) {
                 systemc = false;
-                //System.out.println("Diplodocus features deactivated");
+                // System.out.println("Diplodocus features deactivated");
             }
             if (args[i].compareTo("-interact") == 0) {
                 interact = true;
-                //System.out.println("Diplodocus features deactivated");
+                // System.out.println("Diplodocus features deactivated");
             }
             if (args[i].compareTo("-nointeract") == 0) {
                 interact = false;
-                //System.out.println("Diplodocus features deactivated");
+                // System.out.println("Diplodocus features deactivated");
             }
             if (args[i].compareTo("-proactive") == 0) {
                 proactive = true;
                 lotos = true;
-                //System.out.println("Proactive features activated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("Proactive features activated - these are beta features
+                // that are meant to be used only for research purpose");
             }
             if (args[i].compareTo("-tpn") == 0) {
                 tpn = true;
-                System.out.println("TPN features activated - these are beta features that are meant to be used only for research purpose");
+                System.out.println(
+                        "TPN features activated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-nonc") == 0) {
                 nc = false;
-                //System.out.println("Network calculus features unactivated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("Network calculus features unactivated - these are beta
+                // features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-avatar") == 0) {
                 avatar = true;
-                //System.out.println("AVATAR activated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("AVATAR activated - these are beta features that are meant
+                // to be used only for research purpose");
             }
 
             if (args[i].compareTo("-noavatar") == 0) {
                 avatar = false;
-                //System.out.println("AVATAR unactivated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("AVATAR unactivated - these are beta features that are
+                // meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-avataronly") == 0) {
@@ -216,26 +219,31 @@ public class Main implements ActionListener, InterpreterOutputInterface{
             }
             if (args[i].compareTo("-proverif") == 0) {
                 proverif = true;
-                //System.out.println("ProVerif activated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("ProVerif activated - these are beta features that are
+                // meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-noproverif") == 0) {
                 proverif = false;
-                //System.out.println("ProVerif unactivated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("ProVerif unactivated - these are beta features that are
+                // meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-os") == 0) {
                 os = true;
-                System.out.println("TURTLE-OS features activated - these are beta features that are meant to be used only for research purpose");
+                System.out.println(
+                        "TURTLE-OS features activated - these are beta features that are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-uppaal") == 0) {
                 uppaal = true;
-                //System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("UPPAAL features activated - these are beta features that
+                // are meant to be used only for research purpose");
             }
             if (args[i].compareTo("-nouppaal") == 0) {
                 uppaal = false;
-                //System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
+                // System.out.println("UPPAAL features activated - these are beta features that
+                // are meant to be used only for research purpose");
             }
 
             if (args[i].compareTo("-config") == 0) {
@@ -271,8 +279,7 @@ public class Main implements ActionListener, InterpreterOutputInterface{
             splashFrame.setMessage("Loading configuration file: " + config);
         }
 
-
-        //ConfigurationTTool.makeDefaultConfiguration();
+        // ConfigurationTTool.makeDefaultConfiguration();
         try {
             ConfigurationTTool.loadConfiguration(config, systemc);
             SpecConfigTTool.setBasicConfigFile(config);
@@ -288,7 +295,8 @@ public class Main implements ActionListener, InterpreterOutputInterface{
             splashFrame.setMessage("Preparing plugins");
         }
         PluginManager.pluginManager = new PluginManager();
-        PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN, ConfigurationTTool.PLUGIN_PKG);
+        PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN,
+                ConfigurationTTool.PLUGIN_PKG);
 
         if (ConfigurationTTool.LauncherPort.length() > 0) {
             try {
@@ -306,13 +314,12 @@ public class Main implements ActionListener, InterpreterOutputInterface{
             t.start();
         }
 
-
-
         // making main window
         if (splashFrame != null) {
             splashFrame.setMessage("Creating main window");
         }
-        MainGUI mainGUI = new MainGUI(openLast, turtle, systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif, avataronly, experimental);
+        MainGUI mainGUI = new MainGUI(openLast, turtle, systemc, lotos, proactive, tpn, os, uppaal, nc, avatar,
+                proverif, avataronly, experimental);
         if (splashFrame != null) {
             splashFrame.setMessage("Building graphical components");
         }
@@ -321,10 +328,10 @@ public class Main implements ActionListener, InterpreterOutputInterface{
         // loading configuration
 
         // starting application
-// DB: Useless
-//        if (mainGUI == null) {
-//            ErrorGUI.exit(ErrorGUI.GUI);
-//        }
+        // DB: Useless
+        // if (mainGUI == null) {
+        // ErrorGUI.exit(ErrorGUI.GUI);
+        // }
 
         if (splashFrame != null) {
             splashFrame.setMessage("Starting TTool ...");
@@ -345,10 +352,9 @@ public class Main implements ActionListener, InterpreterOutputInterface{
         interpret.setMGUI(mainGUI);
         t.start();
 
-
         // Checking for update
-        //TToolUpdater tu = new TToolUpdater(mainGUI.frame);
-        //tu.start();
+        // TToolUpdater tu = new TToolUpdater(mainGUI.frame);
+        // tu.start();
     }
 
     public synchronized void waitFinish() {
@@ -369,74 +375,57 @@ public class Main implements ActionListener, InterpreterOutputInterface{
         main.okFinish();
     }
 
-
     public static void testMatrix() {
 
-        //int[] numbers = {42, 18, 12,-12};
-        //System.out.println("GCD=" + MyMath.gcd(numbers));
+        // int[] numbers = {42, 18, 12,-12};
+        // System.out.println("GCD=" + MyMath.gcd(numbers));
 
-
-        /*String[] names = {"a", "b", "e", "ae4"};
-          int [] line0 ={-1, 1, 0, 0};
-          int [] line1 ={0, 0,-1, 1};
-          int [] line2 ={-4, 4, -1, 1};
-          int [] line3 ={1, -1, 0, 0};
-          int [] line4 ={0, 0, 1, -1};
-          int [] line4_fake ={10, 10, 11, -11};
-
-
-          int [] line0b ={-1, 1, 1, -1};
-          int [] line1b ={1, -1,-1, 1};
-          int [] line2b ={0, 0, 1, 0};
-          int [] line3b ={1, 0, 0, -1};
-          int [] line4b ={-1, 0, 0, 1};
-
-          IntMatrix myMat = new IntMatrix(4, 4);
-          myMat.setNamesOfLine(names);
-
-
-          myMat.setLineValues(0, line0);
-          myMat.setLineValues(1, line1);
-          myMat.setLineValues(2, line2);
-          myMat.setLineValues(3, line3);
-
-          System.out.println("mat=\n" + myMat.toString() + "\n\n");
-
-          myMat.addLine(line4_fake, "duplicate-be");
-          myMat.addLine(line4, "be");
-
-          System.out.println("mat=\n" + myMat.toString() + "\n\n");
-
-          myMat.removeLine(4);
-
-
-          System.out.println("mat=\n" + myMat.toString() + "\n\n");
-          myMat.Farkas();
-          System.out.println("mat=\n" + myMat.toString() + "\n\n");
-
-          myMat = new IntMatrix(5, 4);
-
-
-          myMat.setLineValues(0, line0b);
-          myMat.setLineValues(1, line1b);
-          myMat.setLineValues(2, line2b);
-          myMat.setLineValues(3, line3b);
-          myMat.setLineValues(4, line4b);
-          System.out.println("matb=\n" + myMat.toString() + "\n\n");
-          myMat.Farkas();
-          System.out.println("matb=\n" + myMat.toString() + "\n\n");*/
+        /*
+         * String[] names = {"a", "b", "e", "ae4"}; int [] line0 ={-1, 1, 0, 0}; int []
+         * line1 ={0, 0,-1, 1}; int [] line2 ={-4, 4, -1, 1}; int [] line3 ={1, -1, 0,
+         * 0}; int [] line4 ={0, 0, 1, -1}; int [] line4_fake ={10, 10, 11, -11};
+         * 
+         * 
+         * int [] line0b ={-1, 1, 1, -1}; int [] line1b ={1, -1,-1, 1}; int [] line2b
+         * ={0, 0, 1, 0}; int [] line3b ={1, 0, 0, -1}; int [] line4b ={-1, 0, 0, 1};
+         * 
+         * IntMatrix myMat = new IntMatrix(4, 4); myMat.setNamesOfLine(names);
+         * 
+         * 
+         * myMat.setLineValues(0, line0); myMat.setLineValues(1, line1);
+         * myMat.setLineValues(2, line2); myMat.setLineValues(3, line3);
+         * 
+         * System.out.println("mat=\n" + myMat.toString() + "\n\n");
+         * 
+         * myMat.addLine(line4_fake, "duplicate-be"); myMat.addLine(line4, "be");
+         * 
+         * System.out.println("mat=\n" + myMat.toString() + "\n\n");
+         * 
+         * myMat.removeLine(4);
+         * 
+         * 
+         * System.out.println("mat=\n" + myMat.toString() + "\n\n"); myMat.Farkas();
+         * System.out.println("mat=\n" + myMat.toString() + "\n\n");
+         * 
+         * myMat = new IntMatrix(5, 4);
+         * 
+         * 
+         * myMat.setLineValues(0, line0b); myMat.setLineValues(1, line1b);
+         * myMat.setLineValues(2, line2b); myMat.setLineValues(3, line3b);
+         * myMat.setLineValues(4, line4b); System.out.println("matb=\n" +
+         * myMat.toString() + "\n\n"); myMat.Farkas(); System.out.println("matb=\n" +
+         * myMat.toString() + "\n\n");
+         */
 
     }
 
     public static void testBoolExpr() {
-
 
         evalBool("t or f");
 
         evalBool("(t) or f");
 
         evalBool("(0==0)");
-
 
         System.exit(-1);
     }

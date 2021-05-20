@@ -4,5 +4,5 @@ import java.util.*;
 
 public interface Feeder {
 
-  public void setMessage(String msg);
+    public void setMessage(String msg);
 }

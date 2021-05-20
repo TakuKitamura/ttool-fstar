@@ -50,88 +50,88 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class TransactionTableModel extends AbstractTableModel {
-  private static String ERROR_STRING = "-";
-  private static int MAX_TRANSACTIONS = 1000;
+    private static String ERROR_STRING = "-";
+    private static int MAX_TRANSACTIONS = 1000;
 
-  private AvatarSpecificationSimulation ass;
+    private AvatarSpecificationSimulation ass;
 
-  // private String [] names;
-  public TransactionTableModel(AvatarSpecificationSimulation _ass) {
-    ass = _ass;
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return Math.min(ass.getAllTransactions().size(), MAX_TRANSACTIONS);
-  }
-
-  public int getColumnCount() {
-    return 8;
-  }
-
-  public Object getValueAt(int row, int column) {
-    try {
-      if (ass == null) {
-        return ERROR_STRING;
-      }
-
-      AvatarSimulationTransaction ast;
-      if (ass.getAllTransactions().size() < MAX_TRANSACTIONS) {
-        ast = ass.getAllTransactions().get(row);
-      } else {
-        ast = ass.getAllTransactions().get(ass.getAllTransactions().size() - MAX_TRANSACTIONS + row);
-      }
-
-      if (ast == null) {
-        return ERROR_STRING;
-      }
-
-      if (column == 0) {
-        return "" + ast.id;
-      } else if (column == 1) {
-        return ast.block.getName();
-      } else if (column == 2) {
-        return ast.executedElement.getNiceName() + "/" + ast.executedElement.getID();
-      } else if (column == 3) {
-        if (ast.concernedElement != null) {
-          return ast.concernedElement.getNiceName() + "/" + ast.concernedElement.getID();
-        }
-      } else if (column == 4) {
-        if (ast.linkedTransaction != null) {
-          return "" + ast.linkedTransaction.id;
-        }
-      } else if (column == 5) {
-        return "" + ast.initialClockValue;
-      } else if (column == 6) {
-        return "" + ast.duration;
-      } else if (column == 7) {
-        return "" + ast.clockValueWhenFinished;
-      }
-    } catch (Exception e) {
+    // private String [] names;
+    public TransactionTableModel(AvatarSpecificationSimulation _ass) {
+        ass = _ass;
     }
-    return ERROR_STRING;
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "#";
-      case 1:
-        return "Block";
-      case 2:
-        return "ASM element";
-      case 3:
-        return "Related ASM element";
-      case 4:
-        return "Linked transaction";
-      case 5:
-        return "Initial clock value";
-      case 6:
-        return "Duration";
-      case 7:
-        return "Final clock value";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return Math.min(ass.getAllTransactions().size(), MAX_TRANSACTIONS);
     }
-    return "unknown";
-  }
+
+    public int getColumnCount() {
+        return 8;
+    }
+
+    public Object getValueAt(int row, int column) {
+        try {
+            if (ass == null) {
+                return ERROR_STRING;
+            }
+
+            AvatarSimulationTransaction ast;
+            if (ass.getAllTransactions().size() < MAX_TRANSACTIONS) {
+                ast = ass.getAllTransactions().get(row);
+            } else {
+                ast = ass.getAllTransactions().get(ass.getAllTransactions().size() - MAX_TRANSACTIONS + row);
+            }
+
+            if (ast == null) {
+                return ERROR_STRING;
+            }
+
+            if (column == 0) {
+                return "" + ast.id;
+            } else if (column == 1) {
+                return ast.block.getName();
+            } else if (column == 2) {
+                return ast.executedElement.getNiceName() + "/" + ast.executedElement.getID();
+            } else if (column == 3) {
+                if (ast.concernedElement != null) {
+                    return ast.concernedElement.getNiceName() + "/" + ast.concernedElement.getID();
+                }
+            } else if (column == 4) {
+                if (ast.linkedTransaction != null) {
+                    return "" + ast.linkedTransaction.id;
+                }
+            } else if (column == 5) {
+                return "" + ast.initialClockValue;
+            } else if (column == 6) {
+                return "" + ast.duration;
+            } else if (column == 7) {
+                return "" + ast.clockValueWhenFinished;
+            }
+        } catch (Exception e) {
+        }
+        return ERROR_STRING;
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "#";
+            case 1:
+                return "Block";
+            case 2:
+                return "ASM element";
+            case 3:
+                return "Related ASM element";
+            case 4:
+                return "Linked transaction";
+            case 5:
+                return "Initial clock value";
+            case 6:
+                return "Duration";
+            case 7:
+                return "Final clock value";
+        }
+        return "unknown";
+    }
 
 }

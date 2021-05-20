@@ -57,146 +57,146 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implements SwallowedTGComponent {
-  private String minConstraint = "0";
-  private String maxConstraint = "0";
-  private int widthValue, heightValue;
+    private String minConstraint = "0";
+    private String maxConstraint = "0";
+    private int widthValue, heightValue;
 
-  public SDAbsoluteTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SDAbsoluteTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 40;
-    height = 15;
+        width = 40;
+        height = 15;
 
-    nbConnectingPoint = 0;
-    nbInternalTGComponent = 0;
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 0;
+        nbInternalTGComponent = 0;
+        addTGConnectingPointsComment();
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    name = "absolute time constraint";
-    value = "@ {0..0}";
-    widthValue = 0;
-    heightValue = 0;
+        name = "absolute time constraint";
+        value = "@ {0..0}";
+        widthValue = 0;
+        heightValue = 0;
 
-    myImageIcon = IconManager.imgic506;
-  }
-
-  public void internalDrawing(Graphics g) {
-    if (!tdp.isScaled()) {
-      widthValue = g.getFontMetrics().stringWidth(value);
-      heightValue = g.getFontMetrics().getHeight();
-    }
-    drawSingleString(g, value, x - widthValue - 2, y);
-    g.drawLine(x, y, x + width, y);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y - height / 2, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic506;
     }
 
-    if (GraphicLib.isInRectangle(_x, _y, x - widthValue - 2, y - heightValue, widthValue, heightValue)) {
-      return this;
-    }
-    return null;
-  }
-
-  public int getMyCurrentMinX() {
-    return Math.min(x - widthValue, x);
-
-  }
-
-  public int getMyCurrentMinY() {
-    return y - heightValue;
-  }
-
-  public int getType() {
-    return TGComponentManager.SD_ABSOLUTE_TIME_CONSTRAINT;
-  }
-
-  public String getMinConstraint() {
-    return minConstraint;
-  }
-
-  public String getMaxConstraint() {
-    return maxConstraint;
-  }
-
-  public void makeValue() {
-    value = "@ {" + minConstraint + ".." + maxConstraint + "}";
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    String oldMin = getMinConstraint();
-    String oldMax = getMaxConstraint();
-    String[] array = new String[2];
-    array[0] = getMinConstraint();
-    array[1] = getMaxConstraint();
-
-    JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints");
-    jdti.setSize(350, 250);
-    GraphicLib.centerOnParent(jdti);
-    jdti.setVisible(true); // blocked until dialog has been closed
-
-    minConstraint = array[0];
-    maxConstraint = array[1];
-
-    if ((minConstraint != null) && (maxConstraint != null)
-        && ((!minConstraint.equals(oldMin)) || (!maxConstraint.equals(oldMax)))) {
-      makeValue();
-      return true;
-    }
-    minConstraint = oldMin;
-    maxConstraint = oldMax;
-    return false;
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<Interval minConstraint=\"");
-    sb.append(getMinConstraint());
-    sb.append("\" maxConstraint=\"");
-    sb.append(getMaxConstraint());
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-
-          // Issue #17 copy-paste error on j index
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("Interval")) {
-                minConstraint = elt.getAttribute("minConstraint");
-                maxConstraint = elt.getAttribute("maxConstraint");
-              }
-            }
-          }
+    public void internalDrawing(Graphics g) {
+        if (!tdp.isScaled()) {
+            widthValue = g.getFontMetrics().stringWidth(value);
+            heightValue = g.getFontMetrics().getHeight();
         }
-      }
-
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+        drawSingleString(g, value, x - widthValue - 2, y);
+        g.drawLine(x, y, x + width, y);
     }
-    makeValue();
-  }
+
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y - height / 2, width, height)) {
+            return this;
+        }
+
+        if (GraphicLib.isInRectangle(_x, _y, x - widthValue - 2, y - heightValue, widthValue, heightValue)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getMyCurrentMinX() {
+        return Math.min(x - widthValue, x);
+
+    }
+
+    public int getMyCurrentMinY() {
+        return y - heightValue;
+    }
+
+    public int getType() {
+        return TGComponentManager.SD_ABSOLUTE_TIME_CONSTRAINT;
+    }
+
+    public String getMinConstraint() {
+        return minConstraint;
+    }
+
+    public String getMaxConstraint() {
+        return maxConstraint;
+    }
+
+    public void makeValue() {
+        value = "@ {" + minConstraint + ".." + maxConstraint + "}";
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        String oldMin = getMinConstraint();
+        String oldMax = getMaxConstraint();
+        String[] array = new String[2];
+        array[0] = getMinConstraint();
+        array[1] = getMaxConstraint();
+
+        JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting absolute time constraints");
+        jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti);
+        jdti.setVisible(true); // blocked until dialog has been closed
+
+        minConstraint = array[0];
+        maxConstraint = array[1];
+
+        if ((minConstraint != null) && (maxConstraint != null)
+                && ((!minConstraint.equals(oldMin)) || (!maxConstraint.equals(oldMax)))) {
+            makeValue();
+            return true;
+        }
+        minConstraint = oldMin;
+        maxConstraint = oldMax;
+        return false;
+    }
+
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<Interval minConstraint=\"");
+        sb.append(getMinConstraint());
+        sb.append("\" maxConstraint=\"");
+        sb.append(getMaxConstraint());
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("Interval")) {
+                                minConstraint = elt.getAttribute("minConstraint");
+                                maxConstraint = elt.getAttribute("maxConstraint");
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+        makeValue();
+    }
 }

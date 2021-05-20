@@ -48,13 +48,13 @@ package ui;
  */
 public class TGConnectingPointCommentConnector extends TGConnectingPointTwoFathers {
 
-  public TGConnectingPointCommentConnector(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
-      boolean _out) {
-    super(_container1, _container2, _x, _y, _in, _out);
-  }
+    public TGConnectingPointCommentConnector(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
+            boolean _out) {
+        super(_container1, _container2, _x, _y, _in, _out);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.CONNECTOR_COMMENT;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.CONNECTOR_COMMENT;
+    }
 }

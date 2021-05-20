@@ -45,5 +45,5 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public interface ProVerifOutputListener {
-  void proVerifOutputChanged();
+    void proVerifOutputChanged();
 }

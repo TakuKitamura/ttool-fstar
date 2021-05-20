@@ -50,17 +50,17 @@ import ui.TGConnectingPointTwoFathers;
  */
 public class TGConnectingPointAssociationProCSD extends TGConnectingPointTwoFathers {
 
-  public TGConnectingPointAssociationProCSD(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
-      boolean _out) {
-    super(_container1, _container2, _x, _y, _in, _out);
-  }
+    public TGConnectingPointAssociationProCSD(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
+            boolean _out) {
+        super(_container1, _container2, _x, _y, _in, _out);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    // A link is not compatible with an interface. By Solange
-    // if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
-    // return true;
-    // }
-    return false;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        // A link is not compatible with an interface. By Solange
+        // if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
+        // return true;
+        // }
+        return false;
+    }
 }

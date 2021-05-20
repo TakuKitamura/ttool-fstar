@@ -88,253 +88,253 @@ import java.awt.*;
  */
 public class DiagramTreeRenderer extends DefaultTreeCellRenderer {
 
-  public DiagramTreeRenderer() {
+    public DiagramTreeRenderer() {
 
-  }
-
-  public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
-      int row, boolean hasFocus) {
-
-    super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-    if (value instanceof AvatarDesignPanel) {
-      setIcon(IconManager.imgic80);
-      setToolTipText("Software Design");
-    } else if (value instanceof AvatarAnalysisPanel) {
-      setIcon(IconManager.imgic18);
-      setToolTipText("Software Analysis");
-    } else if (value instanceof DiplodocusMethodologyPanel) {
-      setIcon(IconManager.imgic98);
-      setToolTipText("DIPLODOCUS Methodology");
-    } else if (value instanceof DiplodocusMethodologyDiagramPanel) {
-      setIcon(IconManager.imgic98);
-      setToolTipText("DIPLODOCUS Methodology");
-    } else if (value instanceof AvatarMethodologyPanel) {
-      setIcon(IconManager.imgic99);
-      setToolTipText("Avatar Methodology");
-    } else if (value instanceof AvatarMethodologyDiagramPanel) {
-      setIcon(IconManager.imgic99);
-      setToolTipText("Avatar Methodology");
-    } else if (value instanceof SysmlsecMethodologyPanel) {
-      setIcon(IconManager.imgic99);
-      setToolTipText("SysMLSec Methodology");
-    } else if (value instanceof SysmlsecMethodologyDiagramPanel) {
-      setIcon(IconManager.imgic99);
-      setToolTipText("SysMLSec Methodology");
-    } else if (value instanceof TMLCommunicationPatternPanel) {
-      setIcon(IconManager.imgic18);
-      setToolTipText("Communication Patterns");
-    } else if (value instanceof AvatarCDPanel) {
-      setIcon(IconManager.imgic600);
-      setToolTipText("Use Case Diagram");
-    } else if (value instanceof AvatarADPanel) {
-      setIcon(IconManager.imgic5048);
-      setToolTipText("Activity Diagram");
-    } else if (value instanceof AvatarBDPanel) {
-      setIcon(IconManager.imgic80);
-      setToolTipText("Block Diagram");
-    } else if (value instanceof AvatarSMDPanel) {
-      setIcon(IconManager.imgic63);
-      setToolTipText("State Machine Diagram");
-    } else if (value instanceof AvatarRequirementPanel) {
-      setIcon(IconManager.imgic82);
-      setToolTipText("Requirement Diagram");
-    } else if (value instanceof AvatarPDPanel) {
-      setIcon(IconManager.imgic82);
-      setToolTipText("Property Diagram");
-    } else if (value instanceof AvatarRDPanel) {
-      setIcon(IconManager.imgic84);
-      setToolTipText("Requirement Diagram");
-    } else if (value instanceof ADDDiagramPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("Deployment Diagram");
-    } else if (value instanceof ADDPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("Deployment Diagram");
-    } else if (value instanceof GTURTLEModeling) {
-      setIcon(IconManager.imgic8);
-      setToolTipText("TURTLE modeling");
-    } else if (value instanceof DesignPanel) {
-      setIcon(IconManager.imgic14);
-      setToolTipText("TURTLE Design");
-    } else if (value instanceof TURTLEOSDesignPanel) {
-      setIcon(IconManager.imgic14);
-      setToolTipText("TURTLE-OS Design");
-    } else if (value instanceof AnalysisPanel) {
-      setIcon(IconManager.imgic18);
-      setToolTipText("TURTLE Analysis");
-    } else if (value instanceof DeploymentPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("TURTLE Deployment");
-    } else if (value instanceof NCPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("Network Calculus");
-    } else if (value instanceof RequirementPanel) {
-      setIcon(IconManager.imgic1000);
-      setToolTipText("TURTLE Requirement");
-    } else if (value instanceof AttackTreePanel) {
-      setIcon(IconManager.imgic1074);
-      setToolTipText("Attack tree");
-    } else if (value instanceof FaultTreePanel) {
-      setIcon(IconManager.imgic1074);
-      setToolTipText("Fault tree");
-    } else if (value instanceof TClassDiagramPanel) {
-      setIcon(IconManager.imgic14);
-      setToolTipText("TURTLE Class diagram");
-    } else if (value instanceof TURTLEOSClassDiagramPanel) {
-      setIcon(IconManager.imgic14);
-      setToolTipText("TURTLE-OS Class diagram");
-    } else if (value instanceof InteractionOverviewDiagramPanel) {
-      setIcon(IconManager.imgic17);
-      setToolTipText("TURTLE Interaction Overview Diagram");
-    } else if (value instanceof TMLCPPanel) {
-      setIcon(IconManager.imgic17);
-      setToolTipText("DIPLODOCUS Communication Pattern");
-    } else if (value instanceof SequenceDiagramPanel) {
-      setIcon(IconManager.imgic18);
-      setToolTipText("TURTLE Sequence Diagram");
-    } else if (value instanceof TMLSDPanel) {
-      setIcon(IconManager.imgic18);
-      setToolTipText("DIPLODOCUS Sequence Diagram");
-    } else if (value instanceof UseCaseDiagramPanel) {
-      setIcon(IconManager.imgic19);
-      setToolTipText("TURTLE Use Case Diagram");
-    } else if (value instanceof TDeploymentDiagramPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("TURTLE Deployment Diagram");
-    } else if (value instanceof NCDiagramPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("NC Diagram");
-    } else if (value instanceof RequirementDiagramPanel) {
-      setIcon(IconManager.imgic1000);
-      setToolTipText("TURTLE Requirement Diagram");
-    } else if (value instanceof AttackTreeDiagramPanel) {
-      setIcon(IconManager.imgic1074);
-      setToolTipText("Attack Tree Diagram (SysML Parametric diagram)");
-    } else if (value instanceof FaultTreeDiagramPanel) {
-      setIcon(IconManager.imgic1074);
-      setToolTipText("Fault Tree Diagram (SysML Parametric diagram)");
-    } else if (value instanceof EBRDDPanel) {
-      setIcon(IconManager.imgic1058);
-      setToolTipText("Event-Based Requirement Description Diagram");
-    } else if (value instanceof TActivityDiagramPanel) {
-      setIcon(IconManager.imgic15);
-      setToolTipText("TURTLE Activity Diagram of " + value.toString());
-    } else if (value instanceof TURTLEOSActivityDiagramPanel) {
-      setIcon(IconManager.imgic15);
-      setToolTipText("TURTLE-OS Activity Diagram of " + value.toString());
-    } else if (value instanceof TMLActivityDiagramPanel) {
-      setIcon(IconManager.imgic63);
-      setToolTipText("Activity Diagram of " + value.toString());
-    } else if (value instanceof TMLTaskDiagramPanel) {
-      setIcon(IconManager.imgic62);
-      setToolTipText("Functional view of " + value.toString());
-    } else if (value instanceof TMLDesignPanel) {
-      setIcon(IconManager.imgic62);
-      setToolTipText("Functional view");
-    } else if (value instanceof TMLComponentDesignPanel) {
-      setIcon(IconManager.imgic1208);
-      setToolTipText("Functional view");
-    } else if (value instanceof TMLComponentTaskDiagramPanel) {
-      setIcon(IconManager.imgic1208);
-      setToolTipText("Functional view");
-    } else if (value instanceof TMLArchiPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("Architecture");
-    } else if (value instanceof TMLArchiDiagramPanel) {
-      setIcon(IconManager.imgic60);
-      setToolTipText("Architecture Diagram: " + value.toString());
-    } else if (value instanceof TGComponent) {
-      TGComponent t = (TGComponent) value;
-      setIcon(t.getImageIcon());
-      setToolTipText(t.toString());
-    } else if (value instanceof ValidationDataTree) {
-      setIcon(IconManager.imgic34);
-      setToolTipText("Validation data");
-    } else if (value instanceof TClassesValidationDataTree) {
-      setIcon(IconManager.imgic104);
-      setToolTipText("TClasses taken into account at validation");
-    } else if (value instanceof SyntaxAnalysisTree) {
-      setIcon(IconManager.imgic36);
-      setToolTipText("Results of the syntax analysis or of the formal code generation");
-    } else if (value instanceof SyntaxAnalysisErrorTree) {
-      setIcon(IconManager.imgic36);
-      setToolTipText("Error(s) of the syntax analysis or of the formal code generation");
-    } else if (value instanceof SyntaxAnalysisWarningTree) {
-      setIcon(IconManager.imgic36);
-      setToolTipText("Warning(s) of the syntax analysis or of the formal code generation");
-    } else if (value instanceof CorrespondanceValidationDataTree) {
-      setIcon(null);
-      setToolTipText("Correspondance between actions on simulation traces / DTA / RG, and on TURTLE gates ");
-    } else if (value instanceof GroupOfGates) {
-      setIcon(null);
-      setToolTipText("TURTLE Gates ");
-    } else if (value instanceof CheckingError) {
-      setIcon(IconManager.imgic322);
-      setToolTipText(value.toString());
-    } else if (value instanceof RG) {
-      RG rg = (RG) value;
-      setIcon(IconManager.imgic310);
-      setToolTipText("Graph: " + rg.getToolTip());
-    } else if (value instanceof SimulationTrace) {
-      SimulationTrace st = (SimulationTrace) value;
-      setIcon(IconManager.imgic312);
-      setToolTipText("Simulation trace: " + st.getToolTip());
-    } else if (value instanceof Invariant) {
-      Invariant inv = (Invariant) value;
-      setIcon(IconManager.imgic5110);
-      setToolTipText("value=" + inv.getValue() + " tokenValue=" + inv.getTokenValue());
-    } else if (value instanceof InvariantSynchro) {
-      InvariantSynchro is = (InvariantSynchro) value;
-      setIcon(IconManager.imgic5004);
-      setToolTipText("name=" + is.getName() + " from=" + is.getFrom() + " to=" + is.getTo());
-    } else if (value instanceof InvariantDataTree) {
-      setIcon(IconManager.imgic5112);
-      setToolTipText("List of invariants");
-    } else if (value instanceof GraphTree) {
-      setIcon(IconManager.imgic310);
-      setToolTipText("List of RG");
-    } else if (value instanceof SimulationTraceTree) {
-      setIcon(IconManager.imgic312);
-      setToolTipText("List of Simulation Traces");
-    } else if (value instanceof TAttribute) {
-      setIcon(IconManager.imgic5106);
-      setToolTipText(value.toString());
-    } else if (value instanceof AvatarSignal) {
-      if (((AvatarSignal) value).getInOut() == AvatarSignal.OUT) {
-        setIcon(IconManager.imgic5050);
-        setToolTipText(value.toString());
-      } else {
-        setIcon(IconManager.imgic5056);
-        setToolTipText(value.toString());
-      }
-    } else if (value instanceof AvatarMethod) {
-      setIcon(IconManager.imgic5108);
-      setToolTipText(value.toString());
-
-    } else if (value instanceof SearchTree) {
-      setIcon(IconManager.imgic56);
-      setToolTipText(value.toString());
-
-    } else if (value instanceof AvatarMADsPanel) {
-      setIcon(IconManager.imgic5060);
-      setToolTipText("Panel for Avatar Modeling Assumptions Diagram");
-
-    } else if (value instanceof AvatarMADPanel) {
-      setIcon(IconManager.imgic5060);
-      setToolTipText("Avatar Modeling Assumptions Diagram");
-
-    } else if (value instanceof HelpTree) {
-      setIcon(IconManager.imgic33);
-      setToolTipText("Help on TTool");
-
-    } else if (value instanceof HelpEntry) {
-      setIcon(IconManager.imgic32);
-      setToolTipText(((HelpEntry) value).getToolTip());
-
-    } else {
-      setToolTipText(null);
     }
 
-    return this;
-  }
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+            int row, boolean hasFocus) {
+
+        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+        if (value instanceof AvatarDesignPanel) {
+            setIcon(IconManager.imgic80);
+            setToolTipText("Software Design");
+        } else if (value instanceof AvatarAnalysisPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("Software Analysis");
+        } else if (value instanceof DiplodocusMethodologyPanel) {
+            setIcon(IconManager.imgic98);
+            setToolTipText("DIPLODOCUS Methodology");
+        } else if (value instanceof DiplodocusMethodologyDiagramPanel) {
+            setIcon(IconManager.imgic98);
+            setToolTipText("DIPLODOCUS Methodology");
+        } else if (value instanceof AvatarMethodologyPanel) {
+            setIcon(IconManager.imgic99);
+            setToolTipText("Avatar Methodology");
+        } else if (value instanceof AvatarMethodologyDiagramPanel) {
+            setIcon(IconManager.imgic99);
+            setToolTipText("Avatar Methodology");
+        } else if (value instanceof SysmlsecMethodologyPanel) {
+            setIcon(IconManager.imgic99);
+            setToolTipText("SysMLSec Methodology");
+        } else if (value instanceof SysmlsecMethodologyDiagramPanel) {
+            setIcon(IconManager.imgic99);
+            setToolTipText("SysMLSec Methodology");
+        } else if (value instanceof TMLCommunicationPatternPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("Communication Patterns");
+        } else if (value instanceof AvatarCDPanel) {
+            setIcon(IconManager.imgic600);
+            setToolTipText("Use Case Diagram");
+        } else if (value instanceof AvatarADPanel) {
+            setIcon(IconManager.imgic5048);
+            setToolTipText("Activity Diagram");
+        } else if (value instanceof AvatarBDPanel) {
+            setIcon(IconManager.imgic80);
+            setToolTipText("Block Diagram");
+        } else if (value instanceof AvatarSMDPanel) {
+            setIcon(IconManager.imgic63);
+            setToolTipText("State Machine Diagram");
+        } else if (value instanceof AvatarRequirementPanel) {
+            setIcon(IconManager.imgic82);
+            setToolTipText("Requirement Diagram");
+        } else if (value instanceof AvatarPDPanel) {
+            setIcon(IconManager.imgic82);
+            setToolTipText("Property Diagram");
+        } else if (value instanceof AvatarRDPanel) {
+            setIcon(IconManager.imgic84);
+            setToolTipText("Requirement Diagram");
+        } else if (value instanceof ADDDiagramPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Deployment Diagram");
+        } else if (value instanceof ADDPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Deployment Diagram");
+        } else if (value instanceof GTURTLEModeling) {
+            setIcon(IconManager.imgic8);
+            setToolTipText("TURTLE modeling");
+        } else if (value instanceof DesignPanel) {
+            setIcon(IconManager.imgic14);
+            setToolTipText("TURTLE Design");
+        } else if (value instanceof TURTLEOSDesignPanel) {
+            setIcon(IconManager.imgic14);
+            setToolTipText("TURTLE-OS Design");
+        } else if (value instanceof AnalysisPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("TURTLE Analysis");
+        } else if (value instanceof DeploymentPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("TURTLE Deployment");
+        } else if (value instanceof NCPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Network Calculus");
+        } else if (value instanceof RequirementPanel) {
+            setIcon(IconManager.imgic1000);
+            setToolTipText("TURTLE Requirement");
+        } else if (value instanceof AttackTreePanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Attack tree");
+        } else if (value instanceof FaultTreePanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Fault tree");
+        } else if (value instanceof TClassDiagramPanel) {
+            setIcon(IconManager.imgic14);
+            setToolTipText("TURTLE Class diagram");
+        } else if (value instanceof TURTLEOSClassDiagramPanel) {
+            setIcon(IconManager.imgic14);
+            setToolTipText("TURTLE-OS Class diagram");
+        } else if (value instanceof InteractionOverviewDiagramPanel) {
+            setIcon(IconManager.imgic17);
+            setToolTipText("TURTLE Interaction Overview Diagram");
+        } else if (value instanceof TMLCPPanel) {
+            setIcon(IconManager.imgic17);
+            setToolTipText("DIPLODOCUS Communication Pattern");
+        } else if (value instanceof SequenceDiagramPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("TURTLE Sequence Diagram");
+        } else if (value instanceof TMLSDPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("DIPLODOCUS Sequence Diagram");
+        } else if (value instanceof UseCaseDiagramPanel) {
+            setIcon(IconManager.imgic19);
+            setToolTipText("TURTLE Use Case Diagram");
+        } else if (value instanceof TDeploymentDiagramPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("TURTLE Deployment Diagram");
+        } else if (value instanceof NCDiagramPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("NC Diagram");
+        } else if (value instanceof RequirementDiagramPanel) {
+            setIcon(IconManager.imgic1000);
+            setToolTipText("TURTLE Requirement Diagram");
+        } else if (value instanceof AttackTreeDiagramPanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Attack Tree Diagram (SysML Parametric diagram)");
+        } else if (value instanceof FaultTreeDiagramPanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Fault Tree Diagram (SysML Parametric diagram)");
+        } else if (value instanceof EBRDDPanel) {
+            setIcon(IconManager.imgic1058);
+            setToolTipText("Event-Based Requirement Description Diagram");
+        } else if (value instanceof TActivityDiagramPanel) {
+            setIcon(IconManager.imgic15);
+            setToolTipText("TURTLE Activity Diagram of " + value.toString());
+        } else if (value instanceof TURTLEOSActivityDiagramPanel) {
+            setIcon(IconManager.imgic15);
+            setToolTipText("TURTLE-OS Activity Diagram of " + value.toString());
+        } else if (value instanceof TMLActivityDiagramPanel) {
+            setIcon(IconManager.imgic63);
+            setToolTipText("Activity Diagram of " + value.toString());
+        } else if (value instanceof TMLTaskDiagramPanel) {
+            setIcon(IconManager.imgic62);
+            setToolTipText("Functional view of " + value.toString());
+        } else if (value instanceof TMLDesignPanel) {
+            setIcon(IconManager.imgic62);
+            setToolTipText("Functional view");
+        } else if (value instanceof TMLComponentDesignPanel) {
+            setIcon(IconManager.imgic1208);
+            setToolTipText("Functional view");
+        } else if (value instanceof TMLComponentTaskDiagramPanel) {
+            setIcon(IconManager.imgic1208);
+            setToolTipText("Functional view");
+        } else if (value instanceof TMLArchiPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Architecture");
+        } else if (value instanceof TMLArchiDiagramPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Architecture Diagram: " + value.toString());
+        } else if (value instanceof TGComponent) {
+            TGComponent t = (TGComponent) value;
+            setIcon(t.getImageIcon());
+            setToolTipText(t.toString());
+        } else if (value instanceof ValidationDataTree) {
+            setIcon(IconManager.imgic34);
+            setToolTipText("Validation data");
+        } else if (value instanceof TClassesValidationDataTree) {
+            setIcon(IconManager.imgic104);
+            setToolTipText("TClasses taken into account at validation");
+        } else if (value instanceof SyntaxAnalysisTree) {
+            setIcon(IconManager.imgic36);
+            setToolTipText("Results of the syntax analysis or of the formal code generation");
+        } else if (value instanceof SyntaxAnalysisErrorTree) {
+            setIcon(IconManager.imgic36);
+            setToolTipText("Error(s) of the syntax analysis or of the formal code generation");
+        } else if (value instanceof SyntaxAnalysisWarningTree) {
+            setIcon(IconManager.imgic36);
+            setToolTipText("Warning(s) of the syntax analysis or of the formal code generation");
+        } else if (value instanceof CorrespondanceValidationDataTree) {
+            setIcon(null);
+            setToolTipText("Correspondance between actions on simulation traces / DTA / RG, and on TURTLE gates ");
+        } else if (value instanceof GroupOfGates) {
+            setIcon(null);
+            setToolTipText("TURTLE Gates ");
+        } else if (value instanceof CheckingError) {
+            setIcon(IconManager.imgic322);
+            setToolTipText(value.toString());
+        } else if (value instanceof RG) {
+            RG rg = (RG) value;
+            setIcon(IconManager.imgic310);
+            setToolTipText("Graph: " + rg.getToolTip());
+        } else if (value instanceof SimulationTrace) {
+            SimulationTrace st = (SimulationTrace) value;
+            setIcon(IconManager.imgic312);
+            setToolTipText("Simulation trace: " + st.getToolTip());
+        } else if (value instanceof Invariant) {
+            Invariant inv = (Invariant) value;
+            setIcon(IconManager.imgic5110);
+            setToolTipText("value=" + inv.getValue() + " tokenValue=" + inv.getTokenValue());
+        } else if (value instanceof InvariantSynchro) {
+            InvariantSynchro is = (InvariantSynchro) value;
+            setIcon(IconManager.imgic5004);
+            setToolTipText("name=" + is.getName() + " from=" + is.getFrom() + " to=" + is.getTo());
+        } else if (value instanceof InvariantDataTree) {
+            setIcon(IconManager.imgic5112);
+            setToolTipText("List of invariants");
+        } else if (value instanceof GraphTree) {
+            setIcon(IconManager.imgic310);
+            setToolTipText("List of RG");
+        } else if (value instanceof SimulationTraceTree) {
+            setIcon(IconManager.imgic312);
+            setToolTipText("List of Simulation Traces");
+        } else if (value instanceof TAttribute) {
+            setIcon(IconManager.imgic5106);
+            setToolTipText(value.toString());
+        } else if (value instanceof AvatarSignal) {
+            if (((AvatarSignal) value).getInOut() == AvatarSignal.OUT) {
+                setIcon(IconManager.imgic5050);
+                setToolTipText(value.toString());
+            } else {
+                setIcon(IconManager.imgic5056);
+                setToolTipText(value.toString());
+            }
+        } else if (value instanceof AvatarMethod) {
+            setIcon(IconManager.imgic5108);
+            setToolTipText(value.toString());
+
+        } else if (value instanceof SearchTree) {
+            setIcon(IconManager.imgic56);
+            setToolTipText(value.toString());
+
+        } else if (value instanceof AvatarMADsPanel) {
+            setIcon(IconManager.imgic5060);
+            setToolTipText("Panel for Avatar Modeling Assumptions Diagram");
+
+        } else if (value instanceof AvatarMADPanel) {
+            setIcon(IconManager.imgic5060);
+            setToolTipText("Avatar Modeling Assumptions Diagram");
+
+        } else if (value instanceof HelpTree) {
+            setIcon(IconManager.imgic33);
+            setToolTipText("Help on TTool");
+
+        } else if (value instanceof HelpEntry) {
+            setIcon(IconManager.imgic32);
+            setToolTipText(((HelpEntry) value).getToolTip());
+
+        } else {
+            setToolTipText(null);
+        }
+
+        return this;
+    }
 }

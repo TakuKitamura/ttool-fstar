@@ -47,5 +47,5 @@ import java.util.UUID;
  * @author Ludovic Apvrille
  */
 public interface ElementWithUUID {
-  public UUID getUUID();
+    public UUID getUUID();
 }

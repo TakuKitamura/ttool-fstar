@@ -50,5 +50,5 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public interface TClassSynchroInterface extends TClassInterface {
-  List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);
+    List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);
 }

@@ -46,21 +46,21 @@ import javax.swing.*;
  * @author Ludovic APVRILLE
  */
 public class JTGComponentButton extends JToggleButton {
-  protected int componentType;
-  protected int componentId;
+    protected int componentType;
+    protected int componentId;
 
-  public JTGComponentButton(int _type, int _id, String _text, Icon _icon) {
-    super(_text, _icon);
-    componentType = _type;
-    componentId = _id;
-  }
+    public JTGComponentButton(int _type, int _id, String _text, Icon _icon) {
+        super(_text, _icon);
+        componentType = _type;
+        componentId = _id;
+    }
 
-  public int getType() {
-    return componentType;
-  }
+    public int getType() {
+        return componentType;
+    }
 
-  public int getId() {
-    return componentId;
-  }
+    public int getId() {
+        return componentId;
+    }
 
 } // Class

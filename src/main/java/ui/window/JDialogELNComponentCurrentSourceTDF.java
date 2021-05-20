@@ -75,121 +75,121 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 
 public class JDialogELNComponentCurrentSourceTDF extends JDialog implements ActionListener {
-  private JTextField nameTextField;
-  private JTextField valueTextField;
+    private JTextField nameTextField;
+    private JTextField valueTextField;
 
-  private ELNComponentCurrentSourceTDF isource;
+    private ELNComponentCurrentSourceTDF isource;
 
-  public JDialogELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF _isource) {
-    setTitle("Setting the current driven by a TDF output signal");
-    setLocationRelativeTo(null);
-    setVisible(true);
-    setAlwaysOnTop(true);
-    setResizable(false);
+    public JDialogELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF _isource) {
+        setTitle("Setting the current driven by a TDF output signal");
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setAlwaysOnTop(true);
+        setResizable(false);
 
-    isource = _isource;
+        isource = _isource;
 
-    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-    getRootPane().getActionMap().put("close", new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        dispose();
-      }
-    });
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
 
-    dialog();
-  }
-
-  public void dialog() {
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    this.add(mainPanel);
-
-    JPanel attributesMainPanel = new JPanel(new GridLayout());
-    mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
-
-    Box box = Box.createVerticalBox();
-    box.setBorder(BorderFactory.createTitledBorder("Setting eln_tdf_isource attributes"));
-
-    GridBagLayout gridBag = new GridBagLayout();
-    GridBagConstraints constraints = new GridBagConstraints();
-    JPanel boxPanel = new JPanel();
-    boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-    boxPanel.setLayout(gridBag);
-
-    JLabel labelName = new JLabel("nm : ");
-    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(labelName, constraints);
-    boxPanel.add(labelName);
-
-    nameTextField = new JTextField(isource.getValue().toString(), 10);
-    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(nameTextField, constraints);
-    boxPanel.add(nameTextField);
-
-    JLabel valueLabel = new JLabel("scale : ");
-    constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(valueLabel, constraints);
-    boxPanel.add(valueLabel);
-
-    valueTextField = new JTextField("" + isource.getScale(), 10);
-    constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(valueTextField, constraints);
-    boxPanel.add(valueTextField);
-
-    box.add(boxPanel);
-    attributesMainPanel.add(box);
-
-    JPanel downPanel = new JPanel(new FlowLayout());
-
-    JButton saveCloseButton = new JButton("Save and close");
-    saveCloseButton.setIcon(IconManager.imgic25);
-    saveCloseButton.setActionCommand("Save_Close");
-    saveCloseButton.addActionListener(this);
-    saveCloseButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(saveCloseButton);
-
-    JButton cancelButton = new JButton("Cancel");
-    cancelButton.setIcon(IconManager.imgic27);
-    cancelButton.setActionCommand("Cancel");
-    cancelButton.addActionListener(this);
-    cancelButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(cancelButton);
-
-    mainPanel.add(downPanel, BorderLayout.CENTER);
-    pack();
-    this.getRootPane().setDefaultButton(saveCloseButton);
-  }
-
-  public void actionPerformed(ActionEvent e) {
-    if ("Save_Close".equals(e.getActionCommand())) {
-      isource.setValue(new String(nameTextField.getText()));
-
-      if (!(valueTextField.getText().isEmpty())) {
-        Boolean valValueDouble = false;
-        try {
-          Double.parseDouble(valueTextField.getText());
-        } catch (NumberFormatException e1) {
-          JDialog msg = new JDialog(this);
-          msg.setLocationRelativeTo(null);
-          JOptionPane.showMessageDialog(msg, "The scale coefficient is not a Double", "Warning !",
-              JOptionPane.WARNING_MESSAGE);
-          valValueDouble = true;
-        }
-        if (valValueDouble == false) {
-          isource.setScale(Double.parseDouble(valueTextField.getText()));
-        }
-      } else {
-        isource.setScale(1.0);
-      }
-
-      this.dispose();
+        dialog();
     }
 
-    if ("Cancel".equals(e.getActionCommand())) {
-      this.dispose();
+    public void dialog() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        this.add(mainPanel);
+
+        JPanel attributesMainPanel = new JPanel(new GridLayout());
+        mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
+
+        Box box = Box.createVerticalBox();
+        box.setBorder(BorderFactory.createTitledBorder("Setting eln_tdf_isource attributes"));
+
+        GridBagLayout gridBag = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        JPanel boxPanel = new JPanel();
+        boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+        boxPanel.setLayout(gridBag);
+
+        JLabel labelName = new JLabel("nm : ");
+        constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(labelName, constraints);
+        boxPanel.add(labelName);
+
+        nameTextField = new JTextField(isource.getValue().toString(), 10);
+        constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(nameTextField, constraints);
+        boxPanel.add(nameTextField);
+
+        JLabel valueLabel = new JLabel("scale : ");
+        constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(valueLabel, constraints);
+        boxPanel.add(valueLabel);
+
+        valueTextField = new JTextField("" + isource.getScale(), 10);
+        constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(valueTextField, constraints);
+        boxPanel.add(valueTextField);
+
+        box.add(boxPanel);
+        attributesMainPanel.add(box);
+
+        JPanel downPanel = new JPanel(new FlowLayout());
+
+        JButton saveCloseButton = new JButton("Save and close");
+        saveCloseButton.setIcon(IconManager.imgic25);
+        saveCloseButton.setActionCommand("Save_Close");
+        saveCloseButton.addActionListener(this);
+        saveCloseButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(saveCloseButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setIcon(IconManager.imgic27);
+        cancelButton.setActionCommand("Cancel");
+        cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(cancelButton);
+
+        mainPanel.add(downPanel, BorderLayout.CENTER);
+        pack();
+        this.getRootPane().setDefaultButton(saveCloseButton);
     }
-  }
+
+    public void actionPerformed(ActionEvent e) {
+        if ("Save_Close".equals(e.getActionCommand())) {
+            isource.setValue(new String(nameTextField.getText()));
+
+            if (!(valueTextField.getText().isEmpty())) {
+                Boolean valValueDouble = false;
+                try {
+                    Double.parseDouble(valueTextField.getText());
+                } catch (NumberFormatException e1) {
+                    JDialog msg = new JDialog(this);
+                    msg.setLocationRelativeTo(null);
+                    JOptionPane.showMessageDialog(msg, "The scale coefficient is not a Double", "Warning !",
+                            JOptionPane.WARNING_MESSAGE);
+                    valValueDouble = true;
+                }
+                if (valValueDouble == false) {
+                    isource.setScale(Double.parseDouble(valueTextField.getText()));
+                }
+            } else {
+                isource.setScale(1.0);
+            }
+
+            this.dispose();
+        }
+
+        if ("Cancel".equals(e.getActionCommand())) {
+            this.dispose();
+        }
+    }
 }

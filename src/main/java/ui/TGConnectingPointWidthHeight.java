@@ -47,34 +47,34 @@ package ui;
  */
 public class TGConnectingPointWidthHeight extends TGConnectingPoint {
 
-  protected double w;
+    protected double w;
 
-  protected double h;
+    protected double h;
 
-  public TGConnectingPointWidthHeight(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out);
-    w = _w;
-    h = _h;
-  }
+    public TGConnectingPointWidthHeight(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out);
+        w = _w;
+        h = _h;
+    }
 
-  /* From Interface ui.CDElement */
-  @Override
-  public int getX() {
-    return scaledX() + container.getX() + (int) (container.getWidth() * w);
-  }
+    /* From Interface ui.CDElement */
+    @Override
+    public int getX() {
+        return scaledX() + container.getX() + (int) (container.getWidth() * w);
+    }
 
-  /* From Interface ui.CDElement */
-  @Override
-  public int getY() {
-    return scaledY() + container.getY() + (int) (container.getHeight() * h);
-  }
+    /* From Interface ui.CDElement */
+    @Override
+    public int getY() {
+        return scaledY() + container.getY() + (int) (container.getHeight() * h);
+    }
 
-  public void setW(double _w) {
-    w = _w;
-  }
+    public void setW(double _w) {
+        w = _w;
+    }
 
-  public void setH(double _h) {
-    h = _h;
-  }
+    public void setH(double _h) {
+        h = _h;
+    }
 } // Class

@@ -49,37 +49,37 @@ import ui.*;
  */
 public class SysmlsecMethodologyReferenceToCP extends SysmlsecMethodologyDiagramReference {
 
-  public SysmlsecMethodologyReferenceToCP(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SysmlsecMethodologyReferenceToCP(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(227, 70);
+        initScaling(227, 70);
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = CP_VIEW;
+        typeOfReference = CP_VIEW;
 
-    addTGConnectingPointsCommentTop();
-  }
+        addTGConnectingPointsCommentTop();
+    }
 
-  public int getType() {
-    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_CP_VIEW;
-  }
+    public int getType() {
+        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_CP_VIEW;
+    }
 
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof TMLCommunicationPatternPanel;
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof TMLCommunicationPatternPanel;
 
-  }
+    }
 
-  public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-    dn.setValidationsNumber(0);
-  }
+    public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
+        dn.setValidationsNumber(0);
+    }
 
-  public boolean makeCall(String diagramName, int index) {
-    return true;
-  }
+    public boolean makeCall(String diagramName, int index) {
+        return true;
+    }
 
 }

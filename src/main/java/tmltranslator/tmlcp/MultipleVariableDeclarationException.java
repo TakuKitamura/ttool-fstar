@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class MultipleVariableDeclarationException extends Exception {
 
-  public MultipleVariableDeclarationException() {
-    super("TMLCP COMPILER ERROR: multiple declarations of variables");
-  }
+    public MultipleVariableDeclarationException() {
+        super("TMLCP COMPILER ERROR: multiple declarations of variables");
+    }
 
-  public MultipleVariableDeclarationException(String message) {
-    super(message);
-  }
+    public MultipleVariableDeclarationException(String message) {
+        super(message);
+    }
 }

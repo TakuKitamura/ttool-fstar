@@ -46,9 +46,9 @@ package faulttrees;
  */
 public class VoteNode extends FaultNode {
 
-  public VoteNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "VOTE";
-  }
+    public VoteNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "VOTE";
+    }
 
 }

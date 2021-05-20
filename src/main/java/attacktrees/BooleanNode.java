@@ -46,8 +46,8 @@ package attacktrees;
  */
 public abstract class BooleanNode extends AttackNode {
 
-  public BooleanNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public BooleanNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

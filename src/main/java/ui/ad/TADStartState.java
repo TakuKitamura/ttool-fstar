@@ -54,75 +54,75 @@ import java.awt.geom.Line2D;
  */
 public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent */ {
 
-  // protected int lineLength = 5;
+    // protected int lineLength = 5;
 
-  public TADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    // Issue #3&
-    createConnectingPoints();
-    // width = 15;
-    // height = 15;
-    initScaling(15, 15);
+        // Issue #3&
+        createConnectingPoints();
+        // width = 15;
+        // height = 15;
+        initScaling(15, 15);
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "start state";
+        name = "start state";
 
-    myImageIcon = IconManager.imgic222;
-  }
-
-  protected void createConnectingPoints() {
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[1];
-    connectingPoint[0] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-  }
-
-  @Override
-  protected void internalDrawing(Graphics g) {
-    final int radius = width / 2;
-
-    g.fillOval(x, y, radius * 2, radius * 2);// width, height);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength /** oldScaleFactor */
-        + height);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic222;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[1];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
     }
 
-    return null;
-  }
+    @Override
+    protected void internalDrawing(Graphics g) {
+        final int radius = width / 2;
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TAD_START_STATE;
-  }
+        g.fillOval(x, y, radius * 2, radius * 2);// width, height);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength /** oldScaleFactor */
+                + height);
+    }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-  }
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
 
-  /*
-   * Issue #69 (non-Javadoc)
-   * 
-   * @see ui.AbstractCDElement#canBeDisabled()
-   */
-  @Override
-  public boolean canBeDisabled() {
-    return false;
-  }
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.TAD_START_STATE;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
+
+    /*
+     * Issue #69 (non-Javadoc)
+     * 
+     * @see ui.AbstractCDElement#canBeDisabled()
+     */
+    @Override
+    public boolean canBeDisabled() {
+        return false;
+    }
 }

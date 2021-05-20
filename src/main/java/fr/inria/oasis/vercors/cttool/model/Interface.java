@@ -42,21 +42,21 @@ import java.util.Collection;
 
 public interface Interface {
 
-  Collection<Message> getMessages();
+    Collection<Message> getMessages();
 
-  String getName();
+    String getName();
 
-  void setName(String name);
+    void setName(String name);
 
-  void addMessage(Message m);
+    void addMessage(Message m);
 
-  void removeMessage(Message m);
+    void removeMessage(Message m);
 
-  void removeMessage(String messageName);
+    void removeMessage(String messageName);
 
-  Message getMessageByName(String messageName);
+    Message getMessageByName(String messageName);
 
-  boolean isMandatory();
+    boolean isMandatory();
 
-  void setMandatory(boolean isMandatory);
+    void setMandatory(boolean isMandatory);
 }

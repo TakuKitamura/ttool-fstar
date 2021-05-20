@@ -50,50 +50,50 @@ import translator.TClass;
  */
 public class TClassAndGateDS implements Comparable<TClassAndGateDS> {
 
-  private TClassInterface tc;
-  private TAttribute gate;
+    private TClassInterface tc;
+    private TAttribute gate;
 
-  private TClass t;
-  private Gate g;
+    private TClass t;
+    private Gate g;
 
-  public TClassAndGateDS(TClassInterface _tc, TAttribute _gate) {
-    tc = _tc;
-    gate = _gate;
-  }
-
-  public TClassAndGateDS(TClass _t, Gate _g) {
-    t = _t;
-    g = _g;
-  }
-
-  // public TClassInterface getTClass() { return tc;}
-  // public TAttribute getGate() { return gate;}
-
-  public String getTClassName() {
-    if (t == null) {
-      return tc.getValue();
-    } else {
-      return t.getName();
+    public TClassAndGateDS(TClassInterface _tc, TAttribute _gate) {
+        tc = _tc;
+        gate = _gate;
     }
-  }
 
-  public String getGateName() {
-    if (t == null) {
-      return gate.getId();
-    } else {
-      return g.getName();
+    public TClassAndGateDS(TClass _t, Gate _g) {
+        t = _t;
+        g = _g;
     }
-  }
 
-  public String toString() {
-    if (t == null) {
-      return tc.getValue() + "." + gate.getId();
-    } else {
-      return t.getName() + "." + g.getName();
+    // public TClassInterface getTClass() { return tc;}
+    // public TAttribute getGate() { return gate;}
+
+    public String getTClassName() {
+        if (t == null) {
+            return tc.getValue();
+        } else {
+            return t.getName();
+        }
     }
-  }
 
-  public int compareTo(TClassAndGateDS o) {
-    return toString().compareTo(o.toString());
-  }
+    public String getGateName() {
+        if (t == null) {
+            return gate.getId();
+        } else {
+            return g.getName();
+        }
+    }
+
+    public String toString() {
+        if (t == null) {
+            return tc.getValue() + "." + gate.getId();
+        } else {
+            return t.getName() + "." + g.getName();
+        }
+    }
+
+    public int compareTo(TClassAndGateDS o) {
+        return toString().compareTo(o.toString());
+    }
 }

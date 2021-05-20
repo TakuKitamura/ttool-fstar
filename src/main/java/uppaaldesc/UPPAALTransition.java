@@ -52,83 +52,83 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class UPPAALTransition {
-  public UPPAALLocation destinationLoc, sourceLoc;
+    public UPPAALLocation destinationLoc, sourceLoc;
 
-  public List<Point> points; // nails -> intermediate graphical points on transitions
+    public List<Point> points; // nails -> intermediate graphical points on transitions
 
-  public String guard = "";
-  public Point guardPoint;
-  public String synchronization = "";
-  public Point synchronizationPoint;
-  public String assignment = "";
-  public Point assignmentPoint;
+    public String guard = "";
+    public Point guardPoint;
+    public String synchronization = "";
+    public Point synchronizationPoint;
+    public String assignment = "";
+    public Point assignmentPoint;
 
-  public UPPAALTransition() {
-    points = new LinkedList<Point>();
-    guardPoint = new Point();
-    synchronizationPoint = new Point();
-    assignmentPoint = new Point();
-  }
-
-  public String getXML() {
-    if (guard == null) {
-      guard = "";
+    public UPPAALTransition() {
+        points = new LinkedList<Point>();
+        guardPoint = new Point();
+        synchronizationPoint = new Point();
+        assignmentPoint = new Point();
     }
 
-    String ret = "<transition>\n";
+    public String getXML() {
+        if (guard == null) {
+            guard = "";
+        }
 
-    if (sourceLoc != null) {
-      ret += "<source ref=\"" + sourceLoc.id + "\" />\n";
-    }
-    if (destinationLoc != null) {
-      ret += "<target ref=\"" + destinationLoc.id + "\" />\n";
-    }
+        String ret = "<transition>\n";
 
-    ret += "<label kind=\"guard\" x=\"" + guardPoint.x + "\" y=\"" + guardPoint.y + "\">"
-        + Conversion.transformToXMLString(guard) + "</label>\n";
-    ret += "<label kind=\"synchronisation\" x=\"" + synchronizationPoint.x + "\" y=\"" + synchronizationPoint.y + "\">"
-        + Conversion.transformToXMLString(synchronization) + "</label>\n";
-    ret += "<label kind=\"assignment\" x=\"" + assignmentPoint.x + "\" y=\"" + assignmentPoint.y + "\">"
-        + Conversion.transformToXMLString(assignment) + "</label>\n";
+        if (sourceLoc != null) {
+            ret += "<source ref=\"" + sourceLoc.id + "\" />\n";
+        }
+        if (destinationLoc != null) {
+            ret += "<target ref=\"" + destinationLoc.id + "\" />\n";
+        }
 
-    Iterator<Point> iterator = points.listIterator();
-    Point p;
-    while (iterator.hasNext()) {
-      p = iterator.next();
-      ret += "<nail x=\"" + p.x + "\" y=\"" + p.y + "\" />\n";
-    }
+        ret += "<label kind=\"guard\" x=\"" + guardPoint.x + "\" y=\"" + guardPoint.y + "\">"
+                + Conversion.transformToXMLString(guard) + "</label>\n";
+        ret += "<label kind=\"synchronisation\" x=\"" + synchronizationPoint.x + "\" y=\"" + synchronizationPoint.y
+                + "\">" + Conversion.transformToXMLString(synchronization) + "</label>\n";
+        ret += "<label kind=\"assignment\" x=\"" + assignmentPoint.x + "\" y=\"" + assignmentPoint.y + "\">"
+                + Conversion.transformToXMLString(assignment) + "</label>\n";
 
-    ret += "</transition>\n";
-    return ret;
+        Iterator<Point> iterator = points.listIterator();
+        Point p;
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            ret += "<nail x=\"" + p.x + "\" y=\"" + p.y + "\" />\n";
+        }
 
-  }
+        ret += "</transition>\n";
+        return ret;
 
-  public void enhanceGraphics() {
-    if ((points.size() == 0) && (destinationLoc == sourceLoc)) {
-      points.add(new Point(sourceLoc.idPoint.x - 50, sourceLoc.idPoint.y - 50));
-    }
-
-    if ((points.size() == 1) && (destinationLoc == sourceLoc)) {
-      Point p = points.get(0);
-      points.add(new Point(p.x + 10, p.y + 35));
-    }
-  }
-
-  public boolean isAnEmptyTransition() {
-
-    if (guard == null) {
-      guard = "";
     }
 
-    if (guard.length() > 0) {
-      return false;
+    public void enhanceGraphics() {
+        if ((points.size() == 0) && (destinationLoc == sourceLoc)) {
+            points.add(new Point(sourceLoc.idPoint.x - 50, sourceLoc.idPoint.y - 50));
+        }
+
+        if ((points.size() == 1) && (destinationLoc == sourceLoc)) {
+            Point p = points.get(0);
+            points.add(new Point(p.x + 10, p.y + 35));
+        }
     }
 
-    if (synchronization.length() > 0) {
-      return false;
-    }
+    public boolean isAnEmptyTransition() {
 
-    return assignment.length() <= 0;
-  }
+        if (guard == null) {
+            guard = "";
+        }
+
+        if (guard.length() > 0) {
+            return false;
+        }
+
+        if (synchronization.length() > 0) {
+            return false;
+        }
+
+        return assignment.length() <= 0;
+    }
 
 }

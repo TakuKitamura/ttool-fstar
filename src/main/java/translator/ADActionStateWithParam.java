@@ -45,43 +45,43 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADActionStateWithParam extends ADActionState {
-  protected Param p;
-  Process proc;
+    protected Param p;
+    Process proc;
 
-  public ADActionStateWithParam(Param _p) {
-    p = _p;
-  }
+    public ADActionStateWithParam(Param _p) {
+        p = _p;
+    }
 
-  public ADActionStateWithParam() {
-  }
+    public ADActionStateWithParam() {
+    }
 
-  public void setParam(Param _p) {
-    p = _p;
-  }
+    public void setParam(Param _p) {
+        p = _p;
+    }
 
-  public Param getParam() {
-    return p;
-  }
+    public Param getParam() {
+        return p;
+    }
 
-  public void setProcess(Process _p) {
-    proc = _p;
-  }
+    public void setProcess(Process _p) {
+        proc = _p;
+    }
 
-  public Process getProcess() {
-    return proc;
-  }
+    public Process getProcess() {
+        return proc;
+    }
 
-  public String toString() {
-    return "Action state (" + p.getName() + " = " + actionValue + ")";
-  }
+    public String toString() {
+        return "Action state (" + p.getName() + " = " + actionValue + ")";
+    }
 
-  public String brutToString() {
-    return p.getName() + " = " + actionValue;
-  }
+    public String brutToString() {
+        return p.getName() + " = " + actionValue;
+    }
 
-  public ADComponent makeSame() {
-    ADActionStateWithParam adap = new ADActionStateWithParam(getParam());
-    adap.setActionValue(getActionValue());
-    return adap;
-  }
+    public ADComponent makeSame() {
+        ADActionStateWithParam adap = new ADActionStateWithParam(getParam());
+        adap.setActionValue(getActionValue());
+        return adap;
+    }
 }

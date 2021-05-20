@@ -50,23 +50,23 @@ import java.util.Vector;
  */
 public class EmptyTMLTask extends TMLTask {
 
-  public EmptyTMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
-    super(name, referenceToClass, referenceToActivityDiagram);
-  }
+    public EmptyTMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
+    }
 
-  public void generate() {
+    public void generate() {
 
-    // Attributes
+        // Attributes
 
-    // Events
+        // Events
 
-    // Activity Diagram
-    TMLStartState start = new TMLStartState("mainStart", referenceObject);
-    activity.setFirst(start);
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
 
-    TMLStopState stopMain = new TMLStopState("mainStop", referenceObject);
-    addElement(start, stopMain);
+        TMLStopState stopMain = new TMLStopState("mainStop", referenceObject);
+        addElement(start, stopMain);
 
-  }
+    }
 
 }

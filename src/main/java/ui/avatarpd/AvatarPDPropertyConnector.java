@@ -55,146 +55,148 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDPropertyConnector
-    extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
-  // protected int arrowLength = 10;
-  // protected int widthValue, heightValue, maxWidthValue, h;
-  protected int c = 10; // square length
-  // protected double oldScaleFactor;
-  protected int fontSize = 12;
-  protected int l = 4; // cross length;
+        extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
+    // protected int arrowLength = 10;
+    // protected int widthValue, heightValue, maxWidthValue, h;
+    protected int c = 10; // square length
+    // protected double oldScaleFactor;
+    protected int fontSize = 12;
+    protected int l = 4; // cross length;
 
-  // value is set to "not" when the property is negated.
-  // Otherwise, it is set to "reg"
+    // value is set to "not" when the property is negated.
+    // Otherwise, it is set to "reg"
 
-  public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    myImageIcon = IconManager.imgic202;
-    value = "reg";
-    editable = true;
-    // oldScaleFactor = tdp.getZoom();
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    /*
-     * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-     * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
-     * x1, y1, x2, y2, true); }
-     */
-
-    // g.drawLine(x1, y1, x2, y2);
-    int cz = (int) (tdp.getZoom() * c);
-    // g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
-    // g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
-    Color c = g.getColor();
-    g.setColor(Color.white);
-    g.fillOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
-    g.setColor(c);
-    g.drawOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
-
-    // Point p = p2;//GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2),
-    // cz, cz, x1, y1, x2, y2);
-
-    cz = cz + 1;
-
-    Point p = new Point();
-
-    int x0 = x1 - x2;
-    int y0 = y1 - y2;
-    double k = 1 / (Math.sqrt((x0 * x0) + (y0 * y0)));
-    double u = x0 * k;
-    double v = y0 * k;
-
-    double Ex = cz / 2 * u;
-    double Ey = cz / 2 * v;
-    // double Fx = cz/2*v;
-    // double Fy = -cz/2*u;
-
-    p.x = (int) (x2 + Ex);
-    p.y = (int) (y2 + Ey);
-
-    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-      //
-      if ((x2 != x1) || (y2 != y1)) {
-        g.drawLine(x1, y1, p.x, p.y);
-        //
-      }
-    } else {
-      // g.drawLine(x1, y1, p.x, p.y);
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
+        myImageIcon = IconManager.imgic202;
+        value = "reg";
+        editable = true;
+        // oldScaleFactor = tdp.getZoom();
     }
 
-    c = g.getColor();
-    g.setColor(Color.white);
-    g.fillOval(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
-    g.setColor(c);
-    g.drawOval(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        /*
+         * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+         * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
+         * x1, y1, x2, y2, true); }
+         */
 
-    if (getValue().compareTo("not") == 0) {
-      g.drawLine(x2 - l, y2 - l, x2 + l, y2 + l);
-      g.drawLine(x2 - l, y2 + l, x2 + l, y2 - l);
+        // g.drawLine(x1, y1, x2, y2);
+        int cz = (int) (tdp.getZoom() * c);
+        // g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
+        // g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
+        Color c = g.getColor();
+        g.setColor(Color.white);
+        g.fillOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+        g.setColor(c);
+        g.drawOval(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+
+        // Point p = p2;//GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2),
+        // cz, cz, x1, y1, x2, y2);
+
+        cz = cz + 1;
+
+        Point p = new Point();
+
+        int x0 = x1 - x2;
+        int y0 = y1 - y2;
+        double k = 1 / (Math.sqrt((x0 * x0) + (y0 * y0)));
+        double u = x0 * k;
+        double v = y0 * k;
+
+        double Ex = cz / 2 * u;
+        double Ey = cz / 2 * v;
+        // double Fx = cz/2*v;
+        // double Fy = -cz/2*u;
+
+        p.x = (int) (x2 + Ex);
+        p.y = (int) (y2 + Ey);
+
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            //
+            if ((x2 != x1) || (y2 != y1)) {
+                g.drawLine(x1, y1, p.x, p.y);
+                //
+            }
+        } else {
+            // g.drawLine(x1, y1, p.x, p.y);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
+        }
+
+        c = g.getColor();
+        g.setColor(Color.white);
+        g.fillOval(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
+        g.setColor(c);
+        g.drawOval(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
+
+        if (getValue().compareTo("not") == 0) {
+            g.drawLine(x2 - l, y2 - l, x2 + l, y2 + l);
+            g.drawLine(x2 - l, y2 + l, x2 + l, y2 - l);
+        }
+
+        /*
+         * if (value.length() > 0) { Font f = g.getFont(); if (tdp.getZoom() < 1) { Font
+         * f0 = f.deriveFont((float)(fontSize*tdp.getZoom())); g.setFont(f0); }
+         * g.drawString(value, x2-(cz/2), y2-(cz/2)-1); g.setFont(f); }
+         */
     }
 
-    /*
-     * if (value.length() > 0) { Font f = g.getFont(); if (tdp.getZoom() < 1) { Font
-     * f0 = f.deriveFont((float)(fontSize*tdp.getZoom())); g.setFont(f0); }
-     * g.drawString(value, x2-(cz/2), y2-(cz/2)-1); g.setFont(f); }
-     */
-  }
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        // String oldValue = value;
+        JDialogAvatarPropertyConnector jdapc = new JDialogAvatarPropertyConnector(frame,
+                getValue().compareTo("not") == 0);
+        // jdapc.setSize(300, 200);
+        GraphicLib.centerOnParent(jdapc, 300, 200);
+        jdapc.setVisible(true); // blocked until dialog has been closed
 
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    // String oldValue = value;
-    JDialogAvatarPropertyConnector jdapc = new JDialogAvatarPropertyConnector(frame, getValue().compareTo("not") == 0);
-    // jdapc.setSize(300, 200);
-    GraphicLib.centerOnParent(jdapc, 300, 200);
-    jdapc.setVisible(true); // blocked until dialog has been closed
+        if (jdapc.hasBeenCancelled()) {
+            return false;
+        }
 
-    if (jdapc.hasBeenCancelled()) {
-      return false;
+        if (jdapc.isNegated()) {
+            value = "not";
+        } else {
+            value = "reg";
+        }
+
+        return true;
     }
 
-    if (jdapc.isNegated()) {
-      value = "not";
-    } else {
-      value = "reg";
+    @Override
+    public int getType() {
+        return TGComponentManager.APD_PROPERTY_CONNECTOR;
     }
 
-    return true;
-  }
+    // Issue #31: Now managed in upper class
+    // public void rescale(double scaleFactor){
+    // //
+    // int xx, yy;
+    //
+    // for(int i=0; i<nbInternalTGComponent; i++) {
+    // xx = tgcomponent[i].getX();
+    // yy = tgcomponent[i].getY();
+    // //
+    // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+    // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+    // xx = (int)(tgcomponent[i].dx);
+    // tgcomponent[i].dx = tgcomponent[i].dx - xx;
+    // yy = (int)(tgcomponent[i].dy);
+    // tgcomponent[i].dy = tgcomponent[i].dy - yy;
+    //
+    // tgcomponent[i].setCd(xx, yy);
+    //
+    // //
+    // }
+    //
+    // oldScaleFactor = scaleFactor;
+    // }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.APD_PROPERTY_CONNECTOR;
-  }
-
-  // Issue #31: Now managed in upper class
-  // public void rescale(double scaleFactor){
-  // //
-  // int xx, yy;
-  //
-  // for(int i=0; i<nbInternalTGComponent; i++) {
-  // xx = tgcomponent[i].getX();
-  // yy = tgcomponent[i].getY();
-  // //
-  // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-  // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-  // xx = (int)(tgcomponent[i].dx);
-  // tgcomponent[i].dx = tgcomponent[i].dx - xx;
-  // yy = (int)(tgcomponent[i].dy);
-  // tgcomponent[i].dy = tgcomponent[i].dy - yy;
-  //
-  // tgcomponent[i].setCd(xx, yy);
-  //
-  // //
-  // }
-  //
-  // oldScaleFactor = scaleFactor;
-  // }
-
-  public boolean isNegated() {
-    return value.compareTo("not") == 0;
-  }
+    public boolean isNegated() {
+        return value.compareTo("not") == 0;
+    }
 }

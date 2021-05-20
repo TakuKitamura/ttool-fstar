@@ -53,163 +53,163 @@ import javax.swing.*;
  */
 public class AvatarSMDToolBar extends TToolBar {
 
-  public AvatarSMDToolBar(MainGUI _mgui) {
-    super(_mgui);
-  }
-
-  @Override
-  protected void setActive(boolean b) {
-    mgui.actions[TGUIAction.ASMD_EDIT].setEnabled(b);
-    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-
-    mgui.actions[TGUIAction.ASMD_CONNECTOR].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_START].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_QUERY_RECEIVE_SIGNAL].setEnabled(b);
-
-    if (mgui.isExperimentalOn()) {
-      mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].setEnabled(b);
-      mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL].setEnabled(b);
+    public AvatarSMDToolBar(MainGUI _mgui) {
+        super(_mgui);
     }
 
-    mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].setEnabled(b);
-    // mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_GPIO].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_CHOICE].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_RANDOM].setEnabled(b);
+    @Override
+    protected void setActive(boolean b) {
+        mgui.actions[TGUIAction.ASMD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
-    mgui.actions[TGUIAction.ASMD_SET_TIMER].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_RESET_TIMER].setEnabled(b);
-    mgui.actions[TGUIAction.ASMD_EXPIRE_TIMER].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_START].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_QUERY_RECEIVE_SIGNAL].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+        if (mgui.isExperimentalOn()) {
+            mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].setEnabled(b);
+            mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL].setEnabled(b);
+        }
 
-    // Issue #31
-    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+        mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].setEnabled(b);
+        // mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_GPIO].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_CHOICE].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_RANDOM].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ACTIONS].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_SET_TIMER].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_RESET_TIMER].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_EXPIRE_TIMER].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+        // Issue #31
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 
-    mgui.updateZoomInfo();
-  }
+        mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ACTIONS].setEnabled(b);
 
-  @Override
-  protected void setButtons() {
-    JButton button;
+        mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].setEnabled(b);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_EDIT]);
-    button.addMouseListener(mgui.mouseHandler);
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
-    this.addSeparator();
+        mgui.updateZoomInfo();
+    }
 
-    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-    button.addMouseListener(mgui.mouseHandler);
+    @Override
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_EDIT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_CONNECTOR]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_START]);
-    button.addMouseListener(mgui.mouseHandler);
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_STOP]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_STATE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_START]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    /*
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ASMD_GPIO]);
-     * button.addMouseListener(mgui.mouseHandler);
-     */
+        button = this.add(mgui.actions[TGUIAction.ASMD_STOP]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_CHOICE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_STATE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        /*
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ASMD_GPIO]);
+         * button.addMouseListener(mgui.mouseHandler);
+         */
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_RANDOM]);
-    button.addMouseListener(mgui.mouseHandler);
+        this.addSeparator();
 
-    this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.ASMD_CHOICE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_SEND_SIGNAL]);
-    button.addMouseListener(mgui.mouseHandler);
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_RANDOM]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_QUERY_RECEIVE_SIGNAL]);
-    button.addMouseListener(mgui.mouseHandler);
+        this.addSeparator();
 
-    this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.ASMD_SEND_SIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_QUERY_RECEIVE_SIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_SET_TIMER]);
-    button.addMouseListener(mgui.mouseHandler);
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_RESET_TIMER]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ASMD_EXPIRE_TIMER]);
-    button.addMouseListener(mgui.mouseHandler);
+        this.addSeparator();
 
-    this.addSeparator();
+        button = this.add(mgui.actions[TGUIAction.ASMD_SET_TIMER]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ASMD_RESET_TIMER]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    /*
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT]);
-     * button.addMouseListener(mgui.mouseHandler);
-     */
+        button = this.add(mgui.actions[TGUIAction.ASMD_EXPIRE_TIMER]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ACTIONS]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        /*
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT]);
+         * button.addMouseListener(mgui.mouseHandler);
+         */
 
-    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID]);
-    button.addMouseListener(mgui.mouseHandler);
-  }
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ACTIONS]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID]);
+        button.addMouseListener(mgui.mouseHandler);
+    }
 } // Class

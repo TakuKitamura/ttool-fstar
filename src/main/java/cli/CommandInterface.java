@@ -48,20 +48,20 @@ import java.util.*;
  */
 public interface CommandInterface {
 
-  List<Command> getListOfSubCommands();
+    List<Command> getListOfSubCommands();
 
-  String getCommand();
+    String getCommand();
 
-  String getShortCommand();
+    String getShortCommand();
 
-  String getExample();
+    String getExample();
 
-  // return null in case of success, or a error string in case of failure.
-  String executeCommand(String command, Interpreter interpreter);
+    // return null in case of success, or a error string in case of failure.
+    String executeCommand(String command, Interpreter interpreter);
 
-  void fillSubCommands();
+    void fillSubCommands();
 
-  String getUsage();
+    String getUsage();
 
-  String getDescription();
+    String getDescription();
 }

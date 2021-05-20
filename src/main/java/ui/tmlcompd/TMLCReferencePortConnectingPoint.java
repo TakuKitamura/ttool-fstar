@@ -51,76 +51,76 @@ import ui.TGComponent;
  */
 public class TMLCReferencePortConnectingPoint extends TMLCPortConnectingPoint {
 
-  private TMLCCompositePort port;
+    private TMLCCompositePort port;
 
-  public TMLCReferencePortConnectingPoint(TMLCCompositePort _port, CDElement _container, double _w, double _h) {
-    super(_container, 0, 0, true, true, _w, _h);
-    port = _port;
-  }
-
-  public void setPort(TMLCCompositePort _port) {
-    port = _port;
-  }
-
-  public TMLCCompositePort getPort() {
-    return port;
-  }
-
-  public static double getDecX(TMLCCompositePort _port) {
-    if (_port != null) {
-      TGComponent tgc = _port.getFather();
-      if (tgc != null) {
-        int x1 = _port.getX() + _port.getWidth() / 2;
-        int x2 = tgc.getX();
-        int w1 = tgc.getWidth();
-        return ((double) x1 - x2) / w1;
-      }
-    }
-    return 0;
-  }
-
-  public double getDecX() {
-    if (port != null) {
-      return getDecX(port);
-    }
-    return 0;
-  }
-
-  public static double getDecY(TMLCCompositePort _port) {
-    if (_port != null) {
-      TGComponent tgc = _port.getFather();
-      //
-      if (tgc != null) {
-        int y1 = _port.getY() + _port.getHeight() / 2;
-        int y2 = tgc.getY();
-        int h1 = tgc.getHeight();
-        return ((double) y1 - y2) / h1;
-      }
+    public TMLCReferencePortConnectingPoint(TMLCCompositePort _port, CDElement _container, double _w, double _h) {
+        super(_container, 0, 0, true, true, _w, _h);
+        port = _port;
     }
 
-    return 0;
-  }
-
-  public double getDecY() {
-    if (port != null) {
-      return getDecY(port);
+    public void setPort(TMLCCompositePort _port) {
+        port = _port;
     }
-    return 0;
 
-  }
-
-  public int getX() {
-    if (container != null) {
-      return x + container.getX() + (int) (container.getWidth() * getDecX());
+    public TMLCCompositePort getPort() {
+        return port;
     }
-    return x;
-  }
 
-  public int getY() {
-    if (container != null) {
-      return y + container.getY() + (int) (container.getHeight() * getDecY());
+    public static double getDecX(TMLCCompositePort _port) {
+        if (_port != null) {
+            TGComponent tgc = _port.getFather();
+            if (tgc != null) {
+                int x1 = _port.getX() + _port.getWidth() / 2;
+                int x2 = tgc.getX();
+                int w1 = tgc.getWidth();
+                return ((double) x1 - x2) / w1;
+            }
+        }
+        return 0;
     }
-    return y;
-  }
+
+    public double getDecX() {
+        if (port != null) {
+            return getDecX(port);
+        }
+        return 0;
+    }
+
+    public static double getDecY(TMLCCompositePort _port) {
+        if (_port != null) {
+            TGComponent tgc = _port.getFather();
+            //
+            if (tgc != null) {
+                int y1 = _port.getY() + _port.getHeight() / 2;
+                int y2 = tgc.getY();
+                int h1 = tgc.getHeight();
+                return ((double) y1 - y2) / h1;
+            }
+        }
+
+        return 0;
+    }
+
+    public double getDecY() {
+        if (port != null) {
+            return getDecY(port);
+        }
+        return 0;
+
+    }
+
+    public int getX() {
+        if (container != null) {
+            return x + container.getX() + (int) (container.getWidth() * getDecX());
+        }
+        return x;
+    }
+
+    public int getY() {
+        if (container != null) {
+            return y + container.getY() + (int) (container.getHeight() * getDecY());
+        }
+        return y;
+    }
 
 }

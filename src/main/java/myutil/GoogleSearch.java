@@ -58,234 +58,234 @@ import java.util.ArrayList;
  */
 public class GoogleSearch {
 
-  public static final String charset = "UTF-8";
-  public static final String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0";// "Eurecom";
-  public static final String google = "http://www.google.com/search?hl=en";
-  public static final String googleScholar = "http://scholar.google.com/scholar?ht=en";
+    public static final String charset = "UTF-8";
+    public static final String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0";// "Eurecom";
+    public static final String google = "http://www.google.com/search?hl=en";
+    public static final String googleScholar = "http://scholar.google.com/scholar?ht=en";
 
-  public static final String ENCODING_ERROR = "encodeding_error";
-  public static final String IOEx = "IOExeption";
+    public static final String ENCODING_ERROR = "encodeding_error";
+    public static final String IOEx = "IOExeption";
 
-  public static final ArrayList<GoogleSearch> getGoogleResult(String search, String num) {
-    ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
+    public static final ArrayList<GoogleSearch> getGoogleResult(String search, String num) {
+        ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
 
-    String title = "";
-    String url = "";
-    String desc = "";
-    GoogleSearch gs;
+        String title = "";
+        String url = "";
+        String desc = "";
+        GoogleSearch gs;
 
-    try {
-      String keyword = "&q=" + URLEncoder.encode(search, charset);
-      String number = "&num=" + URLEncoder.encode(num, charset);
-      String googleurl = google + number + keyword;
+        try {
+            String keyword = "&q=" + URLEncoder.encode(search, charset);
+            String number = "&num=" + URLEncoder.encode(num, charset);
+            String googleurl = google + number + keyword;
 
-      Document doc = Jsoup.connect(googleurl).userAgent(userAgent).get();
+            Document doc = Jsoup.connect(googleurl).userAgent(userAgent).get();
 
-      // get list of search result, each result begin with tag <li class="g">
-      Elements articles = doc.select("li.g");
+            // get list of search result, each result begin with tag <li class="g">
+            Elements articles = doc.select("li.g");
 
-      if (articles.size() != 0) {
-        for (Element l : articles) {
-          gs = new GoogleSearch();
+            if (articles.size() != 0) {
+                for (Element l : articles) {
+                    gs = new GoogleSearch();
 
-          // convert an article to a html in order to using parser again.
-          String htmlArticle = l.toString();
-          Document docArticle = Jsoup.parse(htmlArticle, charset);
+                    // convert an article to a html in order to using parser again.
+                    String htmlArticle = l.toString();
+                    Document docArticle = Jsoup.parse(htmlArticle, charset);
 
-          // get first tag <a href=....>
+                    // get first tag <a href=....>
 
-          Elements ahrefElement = docArticle.select("a");
-          if (ahrefElement.size() != 0) {
-            // get value of tag.
-            title = ahrefElement.first().text();
-            // get value of attribute href
-            url = ahrefElement.first().attr("href");
-            // string in href has form "/url?q=http://www.... --> remove prefix.
-            url = URLDecoder.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')), "UTF-8");
-          }
+                    Elements ahrefElement = docArticle.select("a");
+                    if (ahrefElement.size() != 0) {
+                        // get value of tag.
+                        title = ahrefElement.first().text();
+                        // get value of attribute href
+                        url = ahrefElement.first().attr("href");
+                        // string in href has form "/url?q=http://www.... --> remove prefix.
+                        url = URLDecoder.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')), "UTF-8");
+                    }
 
-          // get description begin with tag <span class="st">
-          Elements descelement = docArticle.select("span.st");
-          if (descelement.size() != 0)
-            desc = descelement.first().text();
+                    // get description begin with tag <span class="st">
+                    Elements descelement = docArticle.select("span.st");
+                    if (descelement.size() != 0)
+                        desc = descelement.first().text();
 
-          // TraceManager.addDev("Title: --> "+title);
-          // TraceManager.addDev("url: --> "+url);
-          // TraceManager.addDev("Decription: --> "+desc);
+                    // TraceManager.addDev("Title: --> "+title);
+                    // TraceManager.addDev("url: --> "+url);
+                    // TraceManager.addDev("Decription: --> "+desc);
 
-          gs.setTitle(title);
-          gs.setUrl(url);
-          gs.setDesc(desc);
+                    gs.setTitle(title);
+                    gs.setUrl(url);
+                    gs.setDesc(desc);
 
-          r.add(gs);
-        }
-      }
-      return r;
-    } catch (NullPointerException e) {
-      return null;
-    } catch (UnsupportedEncodingException e) {
-      gs = new GoogleSearch();
-      gs.setTitle(ENCODING_ERROR);
-      r.add(gs);
-      return r;
-    } catch (IOException e) {
-      gs = new GoogleSearch();
-      gs.setTitle(IOEx);
-      r.add(gs);
-      return r;
-    }
-  }
-
-  public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search, String num) {
-    ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
-    String title = "";
-    String url = "";
-    String desc = "";
-    String authors = "";
-    String citedNumber = "";
-    String citedLinks = "";
-    String related = "";
-
-    GoogleSearch gs;
-    try {
-      String keyword = "&q=" + URLEncoder.encode(search, charset);
-      String number = "&num=" + URLEncoder.encode(num, charset);
-      String googleScholarurl = googleScholar + number + keyword;
-      Document doc = Jsoup.connect(googleScholarurl).userAgent(userAgent).get();
-
-      // get list of search result, each result begin with tag <li class="g">
-      Element error = doc.select("span.gs_red").first();
-      if (error != null) {
-        if (error.text().contains("Did you mean:")) {
-          String newrequest = "http://scholar.google.com" + doc.select("a.gs_pda").first().attr("href");
-          doc = Jsoup.connect(newrequest).userAgent(userAgent).get();
-        }
-      }
-
-      Elements articles = doc.select("div.gs_ri");
-
-      if (articles.size() != 0) {
-        for (Element l : articles) {
-          gs = new GoogleSearch();
-          //
-          // convert an article to a html in order to using parser again.
-          String htmlArticle = l.toString();
-
-          Document docArticle = Jsoup.parse(htmlArticle, charset);
-          //
-          // //get first tag <a href=....>
-
-          Elements ahrefElement = docArticle.select("h3.gs_rt > a");
-          if (ahrefElement.size() != 0) {
-            title = ahrefElement.first().text();
-            // get value of attribute href
-            url = ahrefElement.attr("href");
-          }
-
-          Elements descElement = docArticle.select("div.gs_rs");
-          if (descElement.size() != 0) {
-            desc = descElement.first().text();
-          }
-
-          Elements authorElement = docArticle.select("div.gs_a");
-          if (authorElement.size() != 0)
-            authors = authorElement.first().text();
-
-          Elements inforElements = docArticle.select("div.gs_fl > a ");
-          if (inforElements.size() != 0) {
-            for (Element a : inforElements) {
-              String href = a.attr("href");
-              if (href.contains("cites")) {
-                citedNumber = a.text();
-                citedLinks = "http://scholar.google.com" + href;
-              }
-              if (href.contains("related")) {
-                related = "http://scholar.google.com" + href;
-              }
+                    r.add(gs);
+                }
             }
-          }
-          gs.authors = authors;
-          gs.title = title;
-          gs.url = url;
-          gs.desc = desc;
-          gs.citedLinks = citedLinks;
-          gs.citedNumber = citedNumber;
-
-          r.add(gs);
+            return r;
+        } catch (NullPointerException e) {
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            gs = new GoogleSearch();
+            gs.setTitle(ENCODING_ERROR);
+            r.add(gs);
+            return r;
+        } catch (IOException e) {
+            gs = new GoogleSearch();
+            gs.setTitle(IOEx);
+            r.add(gs);
+            return r;
         }
-      }
-      return r;
-    } catch (NullPointerException e) {
-      return null;
-    } catch (UnsupportedEncodingException e) {
-      gs = new GoogleSearch();
-      gs.setTitle(ENCODING_ERROR);
-      r.add(gs);
-      return r;
-    } catch (IOException e) {
-      gs = new GoogleSearch();
-      gs.setTitle(IOEx);
-      r.add(gs);
-      return r;
     }
-  }
 
-  private String title;
-  private String url;
-  private String desc;
-  private String authors;
-  private String citedNumber;
-  private String citedLinks;
-  private String related;
+    public static final ArrayList<GoogleSearch> getGoogleScholarResult(String search, String num) {
+        ArrayList<GoogleSearch> r = new ArrayList<GoogleSearch>();
+        String title = "";
+        String url = "";
+        String desc = "";
+        String authors = "";
+        String citedNumber = "";
+        String citedLinks = "";
+        String related = "";
 
-  public GoogleSearch() {
-  }
+        GoogleSearch gs;
+        try {
+            String keyword = "&q=" + URLEncoder.encode(search, charset);
+            String number = "&num=" + URLEncoder.encode(num, charset);
+            String googleScholarurl = googleScholar + number + keyword;
+            Document doc = Jsoup.connect(googleScholarurl).userAgent(userAgent).get();
 
-  public String getTitle() {
-    return title;
-  }
+            // get list of search result, each result begin with tag <li class="g">
+            Element error = doc.select("span.gs_red").first();
+            if (error != null) {
+                if (error.text().contains("Did you mean:")) {
+                    String newrequest = "http://scholar.google.com" + doc.select("a.gs_pda").first().attr("href");
+                    doc = Jsoup.connect(newrequest).userAgent(userAgent).get();
+                }
+            }
 
-  public String getUrl() {
-    return url;
-  }
+            Elements articles = doc.select("div.gs_ri");
 
-  public String getDesc() {
-    return desc;
-  }
+            if (articles.size() != 0) {
+                for (Element l : articles) {
+                    gs = new GoogleSearch();
+                    //
+                    // convert an article to a html in order to using parser again.
+                    String htmlArticle = l.toString();
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+                    Document docArticle = Jsoup.parse(htmlArticle, charset);
+                    //
+                    // //get first tag <a href=....>
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
+                    Elements ahrefElement = docArticle.select("h3.gs_rt > a");
+                    if (ahrefElement.size() != 0) {
+                        title = ahrefElement.first().text();
+                        // get value of attribute href
+                        url = ahrefElement.attr("href");
+                    }
 
-  public void setDesc(String desc) {
-    this.desc = desc;
-  }
+                    Elements descElement = docArticle.select("div.gs_rs");
+                    if (descElement.size() != 0) {
+                        desc = descElement.first().text();
+                    }
 
-  public String getAuthors() {
-    return authors;
-  }
+                    Elements authorElement = docArticle.select("div.gs_a");
+                    if (authorElement.size() != 0)
+                        authors = authorElement.first().text();
 
-  public void setAuthors(String authors) {
-    this.authors = authors;
-  }
+                    Elements inforElements = docArticle.select("div.gs_fl > a ");
+                    if (inforElements.size() != 0) {
+                        for (Element a : inforElements) {
+                            String href = a.attr("href");
+                            if (href.contains("cites")) {
+                                citedNumber = a.text();
+                                citedLinks = "http://scholar.google.com" + href;
+                            }
+                            if (href.contains("related")) {
+                                related = "http://scholar.google.com" + href;
+                            }
+                        }
+                    }
+                    gs.authors = authors;
+                    gs.title = title;
+                    gs.url = url;
+                    gs.desc = desc;
+                    gs.citedLinks = citedLinks;
+                    gs.citedNumber = citedNumber;
 
-  public String getCitedNumber() {
-    return citedNumber;
-  }
+                    r.add(gs);
+                }
+            }
+            return r;
+        } catch (NullPointerException e) {
+            return null;
+        } catch (UnsupportedEncodingException e) {
+            gs = new GoogleSearch();
+            gs.setTitle(ENCODING_ERROR);
+            r.add(gs);
+            return r;
+        } catch (IOException e) {
+            gs = new GoogleSearch();
+            gs.setTitle(IOEx);
+            r.add(gs);
+            return r;
+        }
+    }
 
-  public void setCitedNumber(String citedNumber) {
-    this.citedNumber = citedNumber;
-  }
+    private String title;
+    private String url;
+    private String desc;
+    private String authors;
+    private String citedNumber;
+    private String citedLinks;
+    private String related;
 
-  public String getCitedLinks() {
-    return citedLinks;
-  }
+    public GoogleSearch() {
+    }
 
-  public void setCitedLinks(String citedLinks) {
-    this.citedLinks = citedLinks;
-  }
+    public String getTitle() {
+        return title;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
+    }
+
+    public String getCitedNumber() {
+        return citedNumber;
+    }
+
+    public void setCitedNumber(String citedNumber) {
+        this.citedNumber = citedNumber;
+    }
+
+    public String getCitedLinks() {
+        return citedLinks;
+    }
+
+    public void setCitedLinks(String citedLinks) {
+        this.citedLinks = citedLinks;
+    }
 }

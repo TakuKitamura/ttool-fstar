@@ -51,29 +51,29 @@ import ui.window.JDialogAttribute;
  */
 public class TCDAttributeBoxNoConnection extends TCDAttributeBox {
 
-  public TCDAttributeBoxNoConnection(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDAttributeBoxNoConnection(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    nbConnectingPoint = 0;
-    connectingPoint = new TGConnectingPoint[0];
-    addTGConnectingPointsCommentCorner();
+        nbConnectingPoint = 0;
+        connectingPoint = new TGConnectingPoint[0];
+        addTGConnectingPointsCommentCorner();
 
-    attributes = true; // It contains attributes
-  }
+        attributes = true; // It contains attributes
+    }
 
-  protected void setJDialogOptions(JDialogAttribute jda) {
-    jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
-    jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-    jda.addType(TAttribute.getStringType(TAttribute.NATURAL));
-    jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN));
-    jda.enableInitialValue(true);
-    jda.enableRTLOTOSKeyword(false);
-    jda.enableJavaKeyword(false);
-    // jda.enableOtherTypes(false);
-  }
+    protected void setJDialogOptions(JDialogAttribute jda) {
+        jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+        jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+        jda.addType(TAttribute.getStringType(TAttribute.NATURAL));
+        jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN));
+        jda.enableInitialValue(true);
+        jda.enableRTLOTOSKeyword(false);
+        jda.enableJavaKeyword(false);
+        // jda.enableOtherTypes(false);
+    }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_ASSOCIATION;
-  }
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_ASSOCIATION;
+    }
 }

@@ -54,406 +54,408 @@ import java.util.Vector;
  */
 public class AvatarMethod {
 
-  public static final String[] cryptoMethods = { "Message aencrypt(Message msg, Key k)",
-      "Message adecrypt(Message msg, Key k)", "Key pk(Key k)", "Message sign(Message msg, Key k)",
-      "bool verifySign(Message msg1, Message sig, Key k)", "Message cert(Key k, Message msg)",
-      "bool verifyCert(Message cert, Key k)", "Key getpk(Message cert)", "Message sencrypt(Message msg, Key k)",
-      "Message sdecrypt(Message msg, Key k)", "Key DH(Key pubK, Key privK)", "Message hash(Message msg)",
-      "Message MAC(Message msg, Key k)", "bool verifyMAC(Message msg, Key k, Message macmsg)",
-      "Message concat2(Message msg1, Message msg2)", "Message concat3(Message msg1, Message msg2, Message msg3)",
-      "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)",
-      "get2(Message msg, Message msg1, Message msg2)", "get3(Message msg, Message msg1, Message msg2, Message msg3)",
-      "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" };
+    public static final String[] cryptoMethods = { "Message aencrypt(Message msg, Key k)",
+            "Message adecrypt(Message msg, Key k)", "Key pk(Key k)", "Message sign(Message msg, Key k)",
+            "bool verifySign(Message msg1, Message sig, Key k)", "Message cert(Key k, Message msg)",
+            "bool verifyCert(Message cert, Key k)", "Key getpk(Message cert)", "Message sencrypt(Message msg, Key k)",
+            "Message sdecrypt(Message msg, Key k)", "Key DH(Key pubK, Key privK)", "Message hash(Message msg)",
+            "Message MAC(Message msg, Key k)", "bool verifyMAC(Message msg, Key k, Message macmsg)",
+            "Message concat2(Message msg1, Message msg2)", "Message concat3(Message msg1, Message msg2, Message msg3)",
+            "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)",
+            "get2(Message msg, Message msg1, Message msg2)",
+            "get3(Message msg, Message msg1, Message msg2, Message msg3)",
+            "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" };
 
-  // Types of parameters
-  public final static int NATURAL = 0;
-  public final static int BOOLEAN = 1;
-  public final static int INTEGER = 2;
-  public final static int OTHER = 3;
+    // Types of parameters
+    public final static int NATURAL = 0;
+    public final static int BOOLEAN = 1;
+    public final static int INTEGER = 2;
+    public final static int OTHER = 3;
 
-  protected String id;
-  protected String typeIds[];
-  protected String types[];
+    protected String id;
+    protected String typeIds[];
+    protected String types[];
 
-  protected String returnType;
+    protected String returnType;
 
-  protected boolean implementationProvided;
+    protected boolean implementationProvided;
 
-  public AvatarMethod(String _id, String _types[], String _typeIds[]) {
-    id = _id;
-    types = _types;
-    typeIds = _typeIds;
-    returnType = "";
-    implementationProvided = false;
-    // TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " +
-    // implementationProvided);
-  }
-
-  public AvatarMethod(String _id, String _types[], String _typeIds[], String _returnType) {
-    id = _id;
-    types = _types;
-    typeIds = _typeIds;
-    returnType = _returnType;
-    implementationProvided = false;
-    // TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " +
-    // implementationProvided);
-  }
-
-  public boolean isImplementationProvided() {
-    return implementationProvided;
-  }
-
-  public void setImplementationProvided(boolean _imp) {
-    // TraceManager.addDev("Implementation of " + this + " is now set to: " + _imp);
-    implementationProvided = _imp;
-  }
-
-  // An operation must be of the form: "id(type id0, type id1, ...)"
-  // Or 'returntype id(type id0, type id1, ...)'
-  // Returns null in case the method is not valid
-  public static AvatarMethod isAValidMethod(String _method) {
-
-    // TraceManager.addDev("Is a valid method? " + _method);
-
-    String method, tmp, id;
-    String rt = "";
-
-    if (_method == null) {
-      return null;
+    public AvatarMethod(String _id, String _types[], String _typeIds[]) {
+        id = _id;
+        types = _types;
+        typeIds = _typeIds;
+        returnType = "";
+        implementationProvided = false;
+        // TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " +
+        // implementationProvided);
     }
 
-    method = _method.trim();
-    // Must replace all "more than one space" by only one space
-    method = Conversion.replaceAllString(method, "\t", " ");
-    method = Conversion.replaceAllString(method, "  ", " ");
-    // TraceManager.addDev("Method=" + method);
-
-    if (method.length() == 0) {
-      return null;
+    public AvatarMethod(String _id, String _types[], String _typeIds[], String _returnType) {
+        id = _id;
+        types = _types;
+        typeIds = _typeIds;
+        returnType = _returnType;
+        implementationProvided = false;
+        // TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " +
+        // implementationProvided);
     }
 
-    // If has opening parenthesis, remove all spaces before
-    int index0 = method.indexOf('(');
-    int index1;
-
-    index0 = method.indexOf('(');
-    if (index0 != -1) {
-      if (index0 == 0) {
-        return null;
-      } else if (method.charAt(index0 - 1) == ' ') {
-        method = method.substring(0, index0 - 1) + method.substring(index0, method.length());
-      }
+    public boolean isImplementationProvided() {
+        return implementationProvided;
     }
 
-    // Check whether there is a return type or not
-    int index2 = method.indexOf(' ');
-    if (index2 != -1) {
-      tmp = method.substring(0, index2);
-      // No parenthesis?
-      if ((tmp.indexOf('(') == -1) && (tmp.indexOf(')') == -1)) {
-        // So, there is a return type!
-        rt = tmp.trim();
-        method = method.substring(index2 + 1, method.length()).trim();
-        if (!isAValidId(rt, false, false, false, false)) {
-          TraceManager.addDev("Unvalid type: " + rt);
-          return null;
+    public void setImplementationProvided(boolean _imp) {
+        // TraceManager.addDev("Implementation of " + this + " is now set to: " + _imp);
+        implementationProvided = _imp;
+    }
+
+    // An operation must be of the form: "id(type id0, type id1, ...)"
+    // Or 'returntype id(type id0, type id1, ...)'
+    // Returns null in case the method is not valid
+    public static AvatarMethod isAValidMethod(String _method) {
+
+        // TraceManager.addDev("Is a valid method? " + _method);
+
+        String method, tmp, id;
+        String rt = "";
+
+        if (_method == null) {
+            return null;
         }
-        // TraceManager.addDev("Found a return type: " + rt);
-        // TraceManager.addDev("Now working with method: " + method);
-      }
-    }
 
-    // TraceManager.addDev("Valid type stage 1");
+        method = _method.trim();
+        // Must replace all "more than one space" by only one space
+        method = Conversion.replaceAllString(method, "\t", " ");
+        method = Conversion.replaceAllString(method, "  ", " ");
+        // TraceManager.addDev("Method=" + method);
 
-    index0 = method.indexOf('(');
-    index1 = method.indexOf(')');
-    // Only one of the two parenthesis
-    if ((index0 == -1) && (index1 > -1)) {
-      return null;
-    }
-
-    if ((index1 == -1) && (index0 > -1)) {
-      return null;
-    }
-
-    // No parenthesis at all
-    if ((index0 == -1) && (index1 == -1)) {
-      if (isAValidId(method, true, true, true, true)) {
-        return new AvatarMethod(method, new String[0], new String[0], rt);
-      } else {
-        return null;
-      }
-    }
-
-    // Check parenthesis order
-    if (index0 > index1) {
-      return null;
-    }
-
-    // Check that only one parenthesis of each type
-    tmp = method.substring(Math.min(index0 + 1, method.length()), method.length());
-    if (tmp.indexOf('(') > -1) {
-      return null;
-    }
-    tmp = method.substring(Math.min(index1 + 1, method.length()), method.length());
-    if (tmp.indexOf(')') > -1) {
-      return null;
-    }
-
-    // And so: parenthesis are in the right order, and are used only one for each
-
-    // TraceManager.addDev("Checking for an id before parenthesis index0=" + index0
-    // + " method=" + method);
-    // Before parenthesis -> id
-    tmp = method.substring(0, index0).trim();
-    // TraceManager.addDev("Checking for an id before parenthesis; tmp=" + tmp);
-    if (!isAValidId(tmp, true, true, true, true)) {
-      return null;
-    }
-    id = tmp;
-
-    // Between parenthesis: parameters of the form: String space String comma
-    // We replace double space by spaces and then spaces by commas
-    tmp = method.substring(index0 + 1, index1).trim();
-
-    // no parameter?
-    if (tmp.length() == 0) {
-      return new AvatarMethod(id, new String[0], new String[0], rt);
-    }
-
-    // Has parameters...
-    tmp = Conversion.replaceAllString(tmp, "  ", " ");
-    tmp = Conversion.replaceAllString(tmp, " ,", ",");
-    tmp = Conversion.replaceAllString(tmp, ", ", ",");
-    tmp = Conversion.replaceAllChar(tmp, ' ', ",");
-
-    // TraceManager.addDev("tmp=" + tmp);
-
-    String splitted[] = tmp.split(",");
-    int size = splitted.length / 2;
-    // TraceManager.addDev("Nb of parameters=" + size);
-    String types[] = new String[size];
-    String typeIds[] = new String[size];
-    boolean b0, b1;
-    int i;
-
-    // TraceManager.addDev("splitted");
-    // for(i=0; i<splitted.length; i++) {
-    // TraceManager.addDev("splitted[" + i + "]: " + splitted[i]);
-    // }
-
-    try {
-      for (i = 0; i < splitted.length; i = i + 2) {
-        if (splitted[i].length() == 0) {
-          return null;
+        if (method.length() == 0) {
+            return null;
         }
-        if (splitted[i + 1].length() == 0) {
-          return null;
+
+        // If has opening parenthesis, remove all spaces before
+        int index0 = method.indexOf('(');
+        int index1;
+
+        index0 = method.indexOf('(');
+        if (index0 != -1) {
+            if (index0 == 0) {
+                return null;
+            } else if (method.charAt(index0 - 1) == ' ') {
+                method = method.substring(0, index0 - 1) + method.substring(index0, method.length());
+            }
         }
-        if (!isAValidId(splitted[i], false, false, false, false)) {
-          TraceManager.addDev("Unvalid type: " + splitted[i]);
-          return null;
+
+        // Check whether there is a return type or not
+        int index2 = method.indexOf(' ');
+        if (index2 != -1) {
+            tmp = method.substring(0, index2);
+            // No parenthesis?
+            if ((tmp.indexOf('(') == -1) && (tmp.indexOf(')') == -1)) {
+                // So, there is a return type!
+                rt = tmp.trim();
+                method = method.substring(index2 + 1, method.length()).trim();
+                if (!isAValidId(rt, false, false, false, false)) {
+                    TraceManager.addDev("Unvalid type: " + rt);
+                    return null;
+                }
+                // TraceManager.addDev("Found a return type: " + rt);
+                // TraceManager.addDev("Now working with method: " + method);
+            }
         }
-        if (!isAValidId(splitted[i + 1], true, true, true, true)) {
-          TraceManager.addDev("Unvalid id of parameter " + splitted[i + 1]);
-          return null;
+
+        // TraceManager.addDev("Valid type stage 1");
+
+        index0 = method.indexOf('(');
+        index1 = method.indexOf(')');
+        // Only one of the two parenthesis
+        if ((index0 == -1) && (index1 > -1)) {
+            return null;
         }
-        // TraceManager.addDev("Adding parameter: " + splitted[i] + " " +
-        // splitted[i+1]);
-        types[i / 2] = splitted[i];
-        typeIds[i / 2] = splitted[i + 1];
-      }
-    } catch (Exception e) {
-      TraceManager.addDev("AvatarMethod Exception:" + e.getMessage());
-      return null;
+
+        if ((index1 == -1) && (index0 > -1)) {
+            return null;
+        }
+
+        // No parenthesis at all
+        if ((index0 == -1) && (index1 == -1)) {
+            if (isAValidId(method, true, true, true, true)) {
+                return new AvatarMethod(method, new String[0], new String[0], rt);
+            } else {
+                return null;
+            }
+        }
+
+        // Check parenthesis order
+        if (index0 > index1) {
+            return null;
+        }
+
+        // Check that only one parenthesis of each type
+        tmp = method.substring(Math.min(index0 + 1, method.length()), method.length());
+        if (tmp.indexOf('(') > -1) {
+            return null;
+        }
+        tmp = method.substring(Math.min(index1 + 1, method.length()), method.length());
+        if (tmp.indexOf(')') > -1) {
+            return null;
+        }
+
+        // And so: parenthesis are in the right order, and are used only one for each
+
+        // TraceManager.addDev("Checking for an id before parenthesis index0=" + index0
+        // + " method=" + method);
+        // Before parenthesis -> id
+        tmp = method.substring(0, index0).trim();
+        // TraceManager.addDev("Checking for an id before parenthesis; tmp=" + tmp);
+        if (!isAValidId(tmp, true, true, true, true)) {
+            return null;
+        }
+        id = tmp;
+
+        // Between parenthesis: parameters of the form: String space String comma
+        // We replace double space by spaces and then spaces by commas
+        tmp = method.substring(index0 + 1, index1).trim();
+
+        // no parameter?
+        if (tmp.length() == 0) {
+            return new AvatarMethod(id, new String[0], new String[0], rt);
+        }
+
+        // Has parameters...
+        tmp = Conversion.replaceAllString(tmp, "  ", " ");
+        tmp = Conversion.replaceAllString(tmp, " ,", ",");
+        tmp = Conversion.replaceAllString(tmp, ", ", ",");
+        tmp = Conversion.replaceAllChar(tmp, ' ', ",");
+
+        // TraceManager.addDev("tmp=" + tmp);
+
+        String splitted[] = tmp.split(",");
+        int size = splitted.length / 2;
+        // TraceManager.addDev("Nb of parameters=" + size);
+        String types[] = new String[size];
+        String typeIds[] = new String[size];
+        boolean b0, b1;
+        int i;
+
+        // TraceManager.addDev("splitted");
+        // for(i=0; i<splitted.length; i++) {
+        // TraceManager.addDev("splitted[" + i + "]: " + splitted[i]);
+        // }
+
+        try {
+            for (i = 0; i < splitted.length; i = i + 2) {
+                if (splitted[i].length() == 0) {
+                    return null;
+                }
+                if (splitted[i + 1].length() == 0) {
+                    return null;
+                }
+                if (!isAValidId(splitted[i], false, false, false, false)) {
+                    TraceManager.addDev("Unvalid type: " + splitted[i]);
+                    return null;
+                }
+                if (!isAValidId(splitted[i + 1], true, true, true, true)) {
+                    TraceManager.addDev("Unvalid id of parameter " + splitted[i + 1]);
+                    return null;
+                }
+                // TraceManager.addDev("Adding parameter: " + splitted[i] + " " +
+                // splitted[i+1]);
+                types[i / 2] = splitted[i];
+                typeIds[i / 2] = splitted[i + 1];
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("AvatarMethod Exception:" + e.getMessage());
+            return null;
+        }
+
+        // TraceManager.addDev("Returning method");
+
+        return new AvatarMethod(id, types, typeIds, rt);
     }
 
-    // TraceManager.addDev("Returning method");
-
-    return new AvatarMethod(id, types, typeIds, rt);
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public String[] getTypes() {
-    return types;
-  }
-
-  public String[] getTypeIds() {
-    return typeIds;
-  }
-
-  public String getReturnType() {
-    return returnType;
-  }
-
-  public String getType(int _index) {
-    if ((_index < 0) || (_index >= types.length)) {
-      return null;
-    }
-    return types[_index];
-  }
-
-  public String getTypeId(int _index) {
-    if ((_index < 0) || (_index >= typeIds.length)) {
-      return null;
-    }
-    return typeIds[_index];
-  }
-
-  public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeyword,
-      boolean checkJavaKeyword, boolean checkTypes) {
-    // test whether _id is a word
-
-    if ((id == null) || (id.length() < 1)) {
-      return false;
+    public String getId() {
+        return id;
     }
 
-    String lowerid = id.toLowerCase();
-    boolean b1, b2, b3, b4, b5, b6;
-    b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
-    b2 = id.matches("\\w*");
-    if (checkKeyword) {
-      b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
-    } else {
-      b3 = true;
+    public String[] getTypes() {
+        return types;
     }
 
-    if (checkKeyword) {
-      b6 = !UPPAALKeyword.isAKeyword(lowerid);
-    } else {
-      b6 = true;
+    public String[] getTypeIds() {
+        return typeIds;
     }
 
-    if (checkJavaKeyword) {
-      b5 = !JKeyword.isAKeyword(lowerid);
-    } else {
-      b5 = true;
+    public String getReturnType() {
+        return returnType;
     }
 
-    if (checkTypes) {
-      b4 = !((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase()))
-          || (lowerid.equals(getStringType(2).toLowerCase())) || (lowerid.equals(getStringType(3).toLowerCase()))
-          || (lowerid.equals(getStringType(4).toLowerCase())));
-    } else {
-      b4 = true;
+    public String getType(int _index) {
+        if ((_index < 0) || (_index >= types.length)) {
+            return null;
+        }
+        return types[_index];
     }
 
-    return (b1 && b2 && b3 && b4 && b5 && b6);
-  }
-
-  public static boolean notIn(String s, Vector forbidden) {
-    if (forbidden == null) {
-      return true;
+    public String getTypeId(int _index) {
+        if ((_index < 0) || (_index >= typeIds.length)) {
+            return null;
+        }
+        return typeIds[_index];
     }
 
-    AvatarMethod am;
+    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeyword,
+            boolean checkJavaKeyword, boolean checkTypes) {
+        // test whether _id is a word
 
-    for (int i = 0; i < forbidden.size(); i++) {
-      am = (AvatarMethod) (forbidden.elementAt(i));
-      if (s.compareTo(am.getId()) == 0) {
-        return false;
-      }
+        if ((id == null) || (id.length() < 1)) {
+            return false;
+        }
+
+        String lowerid = id.toLowerCase();
+        boolean b1, b2, b3, b4, b5, b6;
+        b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
+        b2 = id.matches("\\w*");
+        if (checkKeyword) {
+            b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
+        } else {
+            b3 = true;
+        }
+
+        if (checkKeyword) {
+            b6 = !UPPAALKeyword.isAKeyword(lowerid);
+        } else {
+            b6 = true;
+        }
+
+        if (checkJavaKeyword) {
+            b5 = !JKeyword.isAKeyword(lowerid);
+        } else {
+            b5 = true;
+        }
+
+        if (checkTypes) {
+            b4 = !((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase()))
+                    || (lowerid.equals(getStringType(2).toLowerCase()))
+                    || (lowerid.equals(getStringType(3).toLowerCase()))
+                    || (lowerid.equals(getStringType(4).toLowerCase())));
+        } else {
+            b4 = true;
+        }
+
+        return (b1 && b2 && b3 && b4 && b5 && b6);
     }
 
-    return true;
-  }
+    public static boolean notIn(String s, Vector forbidden) {
+        if (forbidden == null) {
+            return true;
+        }
 
-  public static int getType(String s) {
-    if (s.equals("nat")) {
-      return NATURAL;
-    } else if (s.equals("bool")) {
-      return BOOLEAN;
-    } else if (s.equals("int")) {
-      return INTEGER;
-    } else if (s.equals("Integer")) {
-      return INTEGER;
-    }
-    return OTHER;
-  }
+        AvatarMethod am;
 
-  public static String getStringType(int type) {
-    switch (type) {
-      case NATURAL:
-        return "nat";
-      case BOOLEAN:
-        return "bool";
-      case INTEGER:
-        return "int";
-    }
-    return "";
-  }
+        for (int i = 0; i < forbidden.size(); i++) {
+            am = (AvatarMethod) (forbidden.elementAt(i));
+            if (s.compareTo(am.getId()) == 0) {
+                return false;
+            }
+        }
 
-  public String toString() {
-    int cpt = 0;
-
-    String method = "";
-    if (returnType.length() > 0) {
-      method += returnType + " ";
+        return true;
     }
 
-    method += id + "(";
-    for (int i = 0; i < types.length; i++) {
-      method += types[i] + " " + typeIds[i];
-      if (i < (types.length - 1)) {
-        method += ", ";
-      }
-    }
-    method += ")";
-    return method;
-  }
-
-  public String toSaveString() {
-    String ret = "";
-    if (implementationProvided) {
-      // TraceManager.addDev("Implementation provided for " + toString());
-      ret += "$";
-    }
-    return ret + toString();
-  }
-
-  // Comparison on id only
-  public boolean equals(Object o) {
-    if (!(o instanceof AvatarMethod)) {
-      return false;
+    public static int getType(String s) {
+        if (s.equals("nat")) {
+            return NATURAL;
+        } else if (s.equals("bool")) {
+            return BOOLEAN;
+        } else if (s.equals("int")) {
+            return INTEGER;
+        } else if (s.equals("Integer")) {
+            return INTEGER;
+        }
+        return OTHER;
     }
 
-    AvatarMethod am = (AvatarMethod) o;
-    return getId().equals(am.getId());
-
-  }
-
-  public String getUseDescription() {
-    String s = getId() + "(";
-    for (int i = 0; i < typeIds.length; i++) {
-      s += typeIds[i];
-      if (i < (typeIds.length - 1)) {
-        s += ", ";
-      }
+    public static String getStringType(int type) {
+        switch (type) {
+            case NATURAL:
+                return "nat";
+            case BOOLEAN:
+                return "bool";
+            case INTEGER:
+                return "int";
+        }
+        return "";
     }
-    s += ")";
-    return s;
-  }
 
-  // Comparison on all fields
-  /*
-   * public int compareTo(Object o){ if (!(o instanceof AvatarMethod)) { return 1;
-   * }
-   * 
-   * AvatarMethod am = (AvatarMethod)o; if (!(getId().equals(am.getId()))) {
-   * return 1; }
-   * 
-   * 
-   * return 0;
-   * 
-   * }
-   */
+    public String toString() {
+        int cpt = 0;
 
-  public AvatarMethod makeClone() {
-    AvatarMethod am = isAValidMethod(toString());
-    am.setImplementationProvided(isImplementationProvided());
-    return am;
-  }
+        String method = "";
+        if (returnType.length() > 0) {
+            method += returnType + " ";
+        }
+
+        method += id + "(";
+        for (int i = 0; i < types.length; i++) {
+            method += types[i] + " " + typeIds[i];
+            if (i < (types.length - 1)) {
+                method += ", ";
+            }
+        }
+        method += ")";
+        return method;
+    }
+
+    public String toSaveString() {
+        String ret = "";
+        if (implementationProvided) {
+            // TraceManager.addDev("Implementation provided for " + toString());
+            ret += "$";
+        }
+        return ret + toString();
+    }
+
+    // Comparison on id only
+    public boolean equals(Object o) {
+        if (!(o instanceof AvatarMethod)) {
+            return false;
+        }
+
+        AvatarMethod am = (AvatarMethod) o;
+        return getId().equals(am.getId());
+
+    }
+
+    public String getUseDescription() {
+        String s = getId() + "(";
+        for (int i = 0; i < typeIds.length; i++) {
+            s += typeIds[i];
+            if (i < (typeIds.length - 1)) {
+                s += ", ";
+            }
+        }
+        s += ")";
+        return s;
+    }
+
+    // Comparison on all fields
+    /*
+     * public int compareTo(Object o){ if (!(o instanceof AvatarMethod)) { return 1;
+     * }
+     * 
+     * AvatarMethod am = (AvatarMethod)o; if (!(getId().equals(am.getId()))) {
+     * return 1; }
+     * 
+     * 
+     * return 0;
+     * 
+     * }
+     */
+
+    public AvatarMethod makeClone() {
+        AvatarMethod am = isAValidMethod(toString());
+        am.setImplementationProvided(isImplementationProvided());
+        return am;
+    }
 }

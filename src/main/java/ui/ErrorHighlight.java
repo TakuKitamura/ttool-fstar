@@ -44,13 +44,13 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public class ErrorHighlight extends Exception {
-  // public static final int UNCHECKED = 0;
+    // public static final int UNCHECKED = 0;
 
-  public static final int OK = 1;
-  public static final int UNKNOWN = 2;
+    public static final int OK = 1;
+    public static final int UNKNOWN = 2;
 
-  public static final int ATTRIBUTE = 1;
-  public static final int GATE = 2;
-  public static final int UNKNOWN_AS = 3;
+    public static final int ATTRIBUTE = 1;
+    public static final int GATE = 2;
+    public static final int UNKNOWN_AS = 3;
 
 } // Class

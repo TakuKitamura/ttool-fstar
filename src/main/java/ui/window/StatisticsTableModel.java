@@ -56,157 +56,157 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class StatisticsTableModel extends AbstractTableModel implements SteppedAlgorithm {
-  private Vector<StatisticsItem> statisticData;
-  private int percentage;
-  private boolean go;
+    private Vector<StatisticsItem> statisticData;
+    private int percentage;
+    private boolean go;
 
-  public StatisticsTableModel() {
-    statisticData = new Vector<>();
+    public StatisticsTableModel() {
+        statisticData = new Vector<>();
 
-  }
-
-  public void analyzeData(String data) {
-    makeStatisticData(data);
-  }
-
-  public void analyzeData(AUTGraph graph) {
-    makeStatisticData(graph);
-  }
-
-  public int getPercentage() {
-    return percentage;
-  }
-
-  public void stopBuildElement() {
-    go = false;
-  }
-
-  public void setGo() {
-    go = true;
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return statisticData.size();
-  }
-
-  public int getColumnCount() {
-    return 3;
-  }
-
-  public Object getValueAt(int row, int column) {
-    StatisticsItem si;
-    si = statisticData.elementAt(Math.min(row, statisticData.size()));
-    if (column == 0) {
-      return si.getName();
-    } else if (column == 1) {
-      return si.getOccurrence();
-    } else {
-      return si.getOriginDestination();
     }
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Transition";
-      case 1:
-        return "Nb";
-      case 2:
-      default:
-        return "(origin, destination)";
+    public void analyzeData(String data) {
+        makeStatisticData(data);
     }
-  }
 
-  // to build internal data structure -> graph in AUT format
-  private void makeStatisticData(String data) {
-    StringReader sr = new StringReader(data);
-    BufferedReader br = new BufferedReader(sr);
-    String s;
-    // String s1="", s2="", s3="";
-    // String actionName, actionName1;
-    // int index, index1, index2;
-    StatisticsItem si1;
-    String array[];
+    public void analyzeData(AUTGraph graph) {
+        makeStatisticData(graph);
+    }
 
-    setGo();
+    public int getPercentage() {
+        return percentage;
+    }
 
-    try {
-      while (((s = br.readLine()) != null) && (go)) {
-        if (s.startsWith("(")) {
-          array = AUTGraph.decodeLine(s);
-          si1 = foundStatisticsItem(array[1]);
-          //
-          if (si1 == null) {
-            si1 = new StatisticsItem(array[1]);
-            statisticData.add(si1);
-          }
-          //
-          si1.increaseOccurence();
-          si1.addOriginDestination(Integer.decode(array[0]).intValue(), Integer.decode(array[2]).intValue());
+    public void stopBuildElement() {
+        go = false;
+    }
+
+    public void setGo() {
+        go = true;
+    }
+
+    // From AbstractTableModel
+    public int getRowCount() {
+        return statisticData.size();
+    }
+
+    public int getColumnCount() {
+        return 3;
+    }
+
+    public Object getValueAt(int row, int column) {
+        StatisticsItem si;
+        si = statisticData.elementAt(Math.min(row, statisticData.size()));
+        if (column == 0) {
+            return si.getName();
+        } else if (column == 1) {
+            return si.getOccurrence();
+        } else {
+            return si.getOriginDestination();
+        }
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Transition";
+            case 1:
+                return "Nb";
+            case 2:
+            default:
+                return "(origin, destination)";
+        }
+    }
+
+    // to build internal data structure -> graph in AUT format
+    private void makeStatisticData(String data) {
+        StringReader sr = new StringReader(data);
+        BufferedReader br = new BufferedReader(sr);
+        String s;
+        // String s1="", s2="", s3="";
+        // String actionName, actionName1;
+        // int index, index1, index2;
+        StatisticsItem si1;
+        String array[];
+
+        setGo();
+
+        try {
+            while (((s = br.readLine()) != null) && (go)) {
+                if (s.startsWith("(")) {
+                    array = AUTGraph.decodeLine(s);
+                    si1 = foundStatisticsItem(array[1]);
+                    //
+                    if (si1 == null) {
+                        si1 = new StatisticsItem(array[1]);
+                        statisticData.add(si1);
+                    }
+                    //
+                    si1.increaseOccurence();
+                    si1.addOriginDestination(Integer.decode(array[0]).intValue(), Integer.decode(array[2]).intValue());
+
+                }
+
+            }
+        } catch (Exception e) {
 
         }
-
-      }
-    } catch (Exception e) {
-
+        Collections.sort(statisticData);
     }
-    Collections.sort(statisticData);
-  }
 
-  private void makeStatisticData(AUTGraph graph) {
-    String s;
-    // String s1="", s2="", s3="";
-    // String actionName, actionName1;
-    // int index, index1, index2;
-    StatisticsItem si1 = null;
-    String array[];
-    int i;
-    int nb = graph.getNbOfTransitions();
-    AUTTransition tr;
+    private void makeStatisticData(AUTGraph graph) {
+        String s;
+        // String s1="", s2="", s3="";
+        // String actionName, actionName1;
+        // int index, index1, index2;
+        StatisticsItem si1 = null;
+        String array[];
+        int i;
+        int nb = graph.getNbOfTransitions();
+        AUTTransition tr;
 
-    percentage = 0;
+        percentage = 0;
 
-    setGo();
+        setGo();
 
-    try {
-      for (i = 0; i < graph.getNbOfTransitions(); i++) {
+        try {
+            for (i = 0; i < graph.getNbOfTransitions(); i++) {
 
-        if (!go) {
-          return;
+                if (!go) {
+                    return;
+                }
+
+                percentage = ((i + 1) * 100) / nb;
+                //
+                tr = graph.getAUTTransition(i);
+
+                si1 = foundStatisticsItem(tr.transition);
+                //
+                if (si1 == null) {
+                    si1 = new StatisticsItem(tr.transition);
+                    statisticData.add(si1);
+                }
+                //
+                si1.increaseOccurence();
+                si1.addOriginDestination(tr.origin, tr.destination);
+
+            }
+        } catch (Exception e) {
+
         }
+        Collections.sort(statisticData);
+    }
 
-        percentage = ((i + 1) * 100) / nb;
-        //
-        tr = graph.getAUTTransition(i);
+    private StatisticsItem foundStatisticsItem(String name) {
+        StatisticsItem si;
 
-        si1 = foundStatisticsItem(tr.transition);
-        //
-        if (si1 == null) {
-          si1 = new StatisticsItem(tr.transition);
-          statisticData.add(si1);
+        for (int i = 0; i < statisticData.size(); i++) {
+            //
+            si = statisticData.elementAt(i);
+            if (si.getName().compareTo(name) == 0) {
+                return si;
+            }
         }
-        //
-        si1.increaseOccurence();
-        si1.addOriginDestination(tr.origin, tr.destination);
-
-      }
-    } catch (Exception e) {
-
+        return null;
     }
-    Collections.sort(statisticData);
-  }
-
-  private StatisticsItem foundStatisticsItem(String name) {
-    StatisticsItem si;
-
-    for (int i = 0; i < statisticData.size(); i++) {
-      //
-      si = statisticData.elementAt(i);
-      if (si.getName().compareTo(name) == 0) {
-        return si;
-      }
-    }
-    return null;
-  }
 }

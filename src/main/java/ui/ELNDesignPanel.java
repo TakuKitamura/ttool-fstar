@@ -59,144 +59,144 @@ import java.util.Vector;
 
 public class ELNDesignPanel extends TURTLEPanel {
 
-  public ELNDiagramPanel elndp;
+    public ELNDiagramPanel elndp;
 
-  public Vector<TGComponent> validated, ignored;
+    public Vector<TGComponent> validated, ignored;
 
-  public ELNDesignPanel(MainGUI _mgui) {
-    super(_mgui);
+    public ELNDesignPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    cl = new ChangeListener() {
+        cl = new ChangeListener() {
 
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDesignAction(e);
-      }
-    };
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
-    // Issue #41: Ordering of tabbed panes
-    tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-  }
-
-  public void init() {
-    mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"ELN\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        // Issue #41: Ordering of tabbed panes
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     }
-    return "<Modeling type=\"ELN\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
-
-  public String toString() {
-    return mgui.getTitleAt(this) + "(ELN Application diagram)";
-  }
-
-  public boolean canFirstDiagramBeMoved() {
-    return true;
-  }
-
-  public boolean removeEnabled(int index) {
-    return panels.size() > 1;
-  }
-
-  public boolean renameEnabled(int index) {
-    if (panels.size() == 0) {
-      return false;
+    public void init() {
+        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
     }
-    return (panels.elementAt(index) instanceof ELNDiagramPanel);
-  }
 
-  public boolean isELNEnabled() {
-    return true;
-  }
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"ELN\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"ELN\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+    }
 
-  public boolean addELN(String s) {
-    ELNDiagramToolBar elntb = new ELNDiagramToolBar(mgui);
-    toolbars.add(elntb);
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
 
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
+    public String toString() {
+        return mgui.getTitleAt(this) + "(ELN Application diagram)";
+    }
 
-    elndp = new ELNDiagramPanel(mgui, elntb);
-    elndp.setName(s);
-    elndp.tp = this;
-    tdp = elndp;
-    panels.add(elndp);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(elndp);
-    elndp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(elntb, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(s, IconManager.imgic1208, toolBarPanel, "Opens ELN component diagram");
-    tabbedPane.setSelectedIndex(0);
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
+    public boolean canFirstDiagramBeMoved() {
+        return true;
+    }
 
-    return true;
-  }
+    public boolean removeEnabled(int index) {
+        return panels.size() > 1;
+    }
 
-  // public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {
-  // return elndp.getBlockTDFComponentByName(_name);
-  // }
-  //
-  // public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
-  // return elndp.getBlockDEComponentByName(_name);
-  // }
-  //
-  // public String[] getCompOutChannels(){
-  // return syscamsctdp.getCompOutChannels();
-  // }
-  //
-  // public String[] getCompInChannels(){
-  // return syscamsctdp.getCompInChannels();
-  // }
-  //
-  // public java.util.List<String> getAllSysCAMSCommunicationNames(String _name) {
-  // return syscamsctdp.getAllSysCAMSCommunicationNames(_name);
-  // }
-  //
-  // public java.util.List<String> getAllSysCAMSInputPorts( String _name ) {
-  // return syscamsctdp.getAllSysCAMSInputPorts( _name );
-  // }
+    public boolean renameEnabled(int index) {
+        if (panels.size() == 0) {
+            return false;
+        }
+        return (panels.elementAt(index) instanceof ELNDiagramPanel);
+    }
 
-  // public java.util.List<String> getAllCompositeComponent(String _name) {
-  // return elndp.getAllCompositeComponent(_name);
-  // }
-  //
-  // public Vector<String> getAllSysCAMSTasksAttributes() {
-  // return elndp.getAllSysCAMSTasksAttributes();
-  // }
-  //
-  // public java.util.List<String> getAllSysCAMSTaskNames(String _name) {
-  // return elndp.getAllSysCAMSTaskNames(_name);
-  // }
-  //
-  // public String[] getAllOutTDF(String nameOfComponent) {
-  // return elndp.getAllOutTDF(nameOfComponent);
-  // }
-  //
-  // public String[] getAllInTDF(String nameOfComponent) {
-  // return elndp.getAllInTDF(nameOfComponent);
-  // }
-  //
-  // public String[] getAllOutDE(String nameOfComponent) {
-  // return elndp.getAllOutDE(nameOfComponent);
-  // }
-  //
-  // public String[] getAllInDE(String nameOfComponent) {
-  // return elndp.getAllInDE(nameOfComponent);
-  // }
+    public boolean isELNEnabled() {
+        return true;
+    }
+
+    public boolean addELN(String s) {
+        ELNDiagramToolBar elntb = new ELNDiagramToolBar(mgui);
+        toolbars.add(elntb);
+
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        elndp = new ELNDiagramPanel(mgui, elntb);
+        elndp.setName(s);
+        elndp.tp = this;
+        tdp = elndp;
+        panels.add(elndp);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(elndp);
+        elndp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(elntb, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic1208, toolBarPanel, "Opens ELN component diagram");
+        tabbedPane.setSelectedIndex(0);
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        return true;
+    }
+
+    // public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {
+    // return elndp.getBlockTDFComponentByName(_name);
+    // }
+    //
+    // public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
+    // return elndp.getBlockDEComponentByName(_name);
+    // }
+    //
+    // public String[] getCompOutChannels(){
+    // return syscamsctdp.getCompOutChannels();
+    // }
+    //
+    // public String[] getCompInChannels(){
+    // return syscamsctdp.getCompInChannels();
+    // }
+    //
+    // public java.util.List<String> getAllSysCAMSCommunicationNames(String _name) {
+    // return syscamsctdp.getAllSysCAMSCommunicationNames(_name);
+    // }
+    //
+    // public java.util.List<String> getAllSysCAMSInputPorts( String _name ) {
+    // return syscamsctdp.getAllSysCAMSInputPorts( _name );
+    // }
+
+    // public java.util.List<String> getAllCompositeComponent(String _name) {
+    // return elndp.getAllCompositeComponent(_name);
+    // }
+    //
+    // public Vector<String> getAllSysCAMSTasksAttributes() {
+    // return elndp.getAllSysCAMSTasksAttributes();
+    // }
+    //
+    // public java.util.List<String> getAllSysCAMSTaskNames(String _name) {
+    // return elndp.getAllSysCAMSTaskNames(_name);
+    // }
+    //
+    // public String[] getAllOutTDF(String nameOfComponent) {
+    // return elndp.getAllOutTDF(nameOfComponent);
+    // }
+    //
+    // public String[] getAllInTDF(String nameOfComponent) {
+    // return elndp.getAllInTDF(nameOfComponent);
+    // }
+    //
+    // public String[] getAllOutDE(String nameOfComponent) {
+    // return elndp.getAllOutDE(nameOfComponent);
+    // }
+    //
+    // public String[] getAllInDE(String nameOfComponent) {
+    // return elndp.getAllInDE(nameOfComponent);
+    // }
 }

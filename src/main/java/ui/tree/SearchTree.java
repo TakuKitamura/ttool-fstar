@@ -51,49 +51,49 @@ import java.util.Vector;
  */
 public class SearchTree implements GenericTree {
 
-  private MainGUI mgui;
-  private String name = "Search result";
-  private Vector<Object> elements;
+    private MainGUI mgui;
+    private String name = "Search result";
+    private Vector<Object> elements;
 
-  public SearchTree(MainGUI _mgui) {
-    mgui = _mgui;
-  }
-
-  public void setElements(Vector<Object> _elements) {
-    elements = _elements;
-    TraceManager.addDev("Found in search " + elements.size() + " elements");
-  }
-
-  // TREE MANAGEMENT
-
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    //
-    if (elements == null) {
-      return 0;
-    }
-    return elements.size();
-  }
-
-  public Object getChild(int index) {
-    //
-    if (elements != null) {
-      return elements.get(index);
-    }
-    return null;
-  }
-
-  public int getIndexOfChild(Object child) {
-    //
-    if (elements != null) {
-      return elements.indexOf(child);
+    public SearchTree(MainGUI _mgui) {
+        mgui = _mgui;
     }
 
-    return -1;
+    public void setElements(Vector<Object> _elements) {
+        elements = _elements;
+        TraceManager.addDev("Found in search " + elements.size() + " elements");
+    }
 
-  }
+    // TREE MANAGEMENT
+
+    public String toString() {
+        return name;
+    }
+
+    public int getChildCount() {
+        //
+        if (elements == null) {
+            return 0;
+        }
+        return elements.size();
+    }
+
+    public Object getChild(int index) {
+        //
+        if (elements != null) {
+            return elements.get(index);
+        }
+        return null;
+    }
+
+    public int getIndexOfChild(Object child) {
+        //
+        if (elements != null) {
+            return elements.indexOf(child);
+        }
+
+        return -1;
+
+    }
 
 }

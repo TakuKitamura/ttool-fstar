@@ -46,141 +46,141 @@ package remotesimulation;
  * @author Ludovic APVRILLE
  */
 public class SimulationCommand {
-  public String userCommand;
-  public String alias;
-  public String simulatorCommand;
-  public int[] params;
-  public String[] paramNames;
-  // 0: no parameter;
-  // 1: int
-  // 2: String
-  // 3: optional int
-  // 4: optional String
-  // 5: String to translate to id
-  // 6: int: percentage (between 0 and 100)
-  // WARNING: optional parameters must be put at the end of the list
-  public String help;
+    public String userCommand;
+    public String alias;
+    public String simulatorCommand;
+    public int[] params;
+    public String[] paramNames;
+    // 0: no parameter;
+    // 1: int
+    // 2: String
+    // 3: optional int
+    // 4: optional String
+    // 5: String to translate to id
+    // 6: int: percentage (between 0 and 100)
+    // WARNING: optional parameters must be put at the end of the list
+    public String help;
 
-  public SimulationCommand(String _userCommand, String _alias, String _simulatorCommand, int _params[],
-      String _paramNames[], String _help) {
-    userCommand = _userCommand;
-    alias = _alias;
-    simulatorCommand = _simulatorCommand;
-    params = _params;
-    paramNames = _paramNames;
+    public SimulationCommand(String _userCommand, String _alias, String _simulatorCommand, int _params[],
+            String _paramNames[], String _help) {
+        userCommand = _userCommand;
+        alias = _alias;
+        simulatorCommand = _simulatorCommand;
+        params = _params;
+        paramNames = _paramNames;
 
-    help = _help;
-  }
-
-  public String getSynopsis() {
-    StringBuffer sb = new StringBuffer(userCommand);
-    for (int i = 0; i < params.length; i++) {
-      sb.append(getParamString(i));
-    }
-    return sb.toString();
-  }
-
-  public String getParamString(int i) {
-
-    if (params[i] == 0) {
-      return "";
+        help = _help;
     }
 
-    if (params[i] == 1) {
-      return " <int: " + paramNames[i] + ">";
+    public String getSynopsis() {
+        StringBuffer sb = new StringBuffer(userCommand);
+        for (int i = 0; i < params.length; i++) {
+            sb.append(getParamString(i));
+        }
+        return sb.toString();
     }
 
-    if (params[i] == 2) {
-      return " <string: " + paramNames[i] + ">";
-    }
+    public String getParamString(int i) {
 
-    if (params[i] == 3) {
-      return " [int: " + paramNames[i] + "]";
-    }
+        if (params[i] == 0) {
+            return "";
+        }
 
-    if (params[i] == 4) {
-      return " [string: " + paramNames[i] + "]";
-    }
-
-    if (params[i] == 6) {
-      return " [int between 0 and 100 (percentage): " + paramNames[i] + "]";
-    }
-
-    return " <unknow param>";
-  }
-
-  public int getMaxNumberOfParameters() {
-    return params.length;
-  }
-
-  public int getMinNumberOfParameters() {
-    int min = 0;
-    for (int i = 0; i < params.length; i++) {
-      if ((params[i] > 0) && (params[i] < 3)) {
-        min++;
-      }
-    }
-    return min;
-  }
-
-  private boolean checkForInteger(String s) {
-    try {
-      int i = Integer.decode(s).intValue();
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
-
-  public boolean areParametersCompatible(String[] splitCmd) {
-    try {
-      if ((splitCmd.length - 1) < getMinNumberOfParameters()) {
-        return false;
-      }
-
-      if ((splitCmd.length - 1) > getMaxNumberOfParameters()) {
-        return false;
-      }
-
-      for (int i = 0; i < params.length; i++) {
         if (params[i] == 1) {
-          if (!checkForInteger(splitCmd[i + 1])) {
-            return false;
-          }
+            return " <int: " + paramNames[i] + ">";
+        }
+
+        if (params[i] == 2) {
+            return " <string: " + paramNames[i] + ">";
         }
 
         if (params[i] == 3) {
-          if (!checkForInteger(splitCmd[i + 1])) {
-            return false;
-          }
+            return " [int: " + paramNames[i] + "]";
+        }
+
+        if (params[i] == 4) {
+            return " [string: " + paramNames[i] + "]";
         }
 
         if (params[i] == 6) {
-          if (!checkForInteger(splitCmd[i + 1])) {
-            return false;
-          }
+            return " [int between 0 and 100 (percentage): " + paramNames[i] + "]";
         }
-      }
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
-  }
 
-  public boolean hasAlias() {
-    if ((alias == null) || (alias.length() == 0)) {
-      return false;
+        return " <unknow param>";
     }
 
-    return !alias.equals(userCommand);
-  }
-
-  public String translateCommand(String cmds[]) {
-    String ret = simulatorCommand;
-    for (int i = 1; i < cmds.length; i++) {
-      ret += " " + cmds[i];
+    public int getMaxNumberOfParameters() {
+        return params.length;
     }
-    return ret;
-  }
+
+    public int getMinNumberOfParameters() {
+        int min = 0;
+        for (int i = 0; i < params.length; i++) {
+            if ((params[i] > 0) && (params[i] < 3)) {
+                min++;
+            }
+        }
+        return min;
+    }
+
+    private boolean checkForInteger(String s) {
+        try {
+            int i = Integer.decode(s).intValue();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean areParametersCompatible(String[] splitCmd) {
+        try {
+            if ((splitCmd.length - 1) < getMinNumberOfParameters()) {
+                return false;
+            }
+
+            if ((splitCmd.length - 1) > getMaxNumberOfParameters()) {
+                return false;
+            }
+
+            for (int i = 0; i < params.length; i++) {
+                if (params[i] == 1) {
+                    if (!checkForInteger(splitCmd[i + 1])) {
+                        return false;
+                    }
+                }
+
+                if (params[i] == 3) {
+                    if (!checkForInteger(splitCmd[i + 1])) {
+                        return false;
+                    }
+                }
+
+                if (params[i] == 6) {
+                    if (!checkForInteger(splitCmd[i + 1])) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean hasAlias() {
+        if ((alias == null) || (alias.length() == 0)) {
+            return false;
+        }
+
+        return !alias.equals(userCommand);
+    }
+
+    public String translateCommand(String cmds[]) {
+        String ret = simulatorCommand;
+        for (int i = 1; i < cmds.length; i++) {
+            ret += " " + cmds[i];
+        }
+        return ret;
+    }
 
 }

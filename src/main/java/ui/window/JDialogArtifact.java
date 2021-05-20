@@ -53,150 +53,150 @@ import java.awt.event.ActionListener;
  */
 public class JDialogArtifact extends JDialog implements ActionListener {
 
-  private String name, jarName;
-  private boolean userCode;
+    private String name, jarName;
+    private boolean userCode;
 
-  private JPanel panel1;
+    private JPanel panel1;
 
-  // Panel1
-  private JTextField text1, text2;
-  private JCheckBox user;
+    // Panel1
+    private JTextField text1, text2;
+    private JCheckBox user;
 
-  // Main Panel
-  private JButton closeButton;
-  private JButton cancelButton;
+    // Main Panel
+    private JButton closeButton;
+    private JButton cancelButton;
 
-  // private String id1, id2;
+    // private String id1, id2;
 
-  /* Creates new form */
-  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-  public JDialogArtifact(Frame f, String _name, String _jarName, boolean _userCode) {
+    /* Creates new form */
+    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+    public JDialogArtifact(Frame f, String _name, String _jarName, boolean _userCode) {
 
-    super(f, "Setting artifact's properties", true);
+        super(f, "Setting artifact's properties", true);
 
-    name = _name;
-    jarName = _jarName;
-    userCode = _userCode;
+        name = _name;
+        jarName = _jarName;
+        userCode = _userCode;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-
-    panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
-
-    panel1.setPreferredSize(new Dimension(300, 150));
-
-    // first line panel1
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 1;
-    panel1.add(new JLabel(" "), c1);
-
-    // second line panel1
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-
-    // name
-    panel1.add(new JLabel("Name = "), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    text1 = new JTextField(name, 15);
-    panel1.add(text1, c1);
-
-    // jarName
-    c1.gridwidth = 1;
-    panel1.add(new JLabel("Java package (.jar) = "), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    text2 = new JTextField(jarName, 15);
-    panel1.add(text2, c1);
-
-    // userCode
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    user = new JCheckBox("Take into account user code");
-    user.setSelected(userCode);
-    panel1.add(user, c1);
-
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-
-    c.add(panel1, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    closeButton = new JButton("Save and Close", IconManager.imgic25);
-    // closeButton.setPreferredSize(new Dimension(600, 50));
-    closeButton.addActionListener(this);
-    c.add(closeButton, c0);
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    cancelButton = new JButton("Cancel", IconManager.imgic27);
-    cancelButton.addActionListener(this);
-    c.add(cancelButton, c0);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+        initComponents();
+        myInitComponents();
+        pack();
     }
-  }
 
-  public void closeDialog() {
-    name = text1.getText();
-    jarName = text2.getText();
-    userCode = user.isSelected();
-    dispose();
-  }
+    private void myInitComponents() {
+    }
 
-  public String getName() {
-    return name;
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-  public String getJarName() {
-    return jarName;
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean getUserCode() {
-    return userCode;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public void cancelDialog() {
-    name = null;
-    jarName = null;
-    dispose();
-  }
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+
+        panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
+
+        panel1.setPreferredSize(new Dimension(300, 150));
+
+        // first line panel1
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        panel1.add(new JLabel(" "), c1);
+
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+
+        // name
+        panel1.add(new JLabel("Name = "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        text1 = new JTextField(name, 15);
+        panel1.add(text1, c1);
+
+        // jarName
+        c1.gridwidth = 1;
+        panel1.add(new JLabel("Java package (.jar) = "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        text2 = new JTextField(jarName, 15);
+        panel1.add(text2, c1);
+
+        // userCode
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        user = new JCheckBox("Take into account user code");
+        user.setSelected(userCode);
+        panel1.add(user, c1);
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        c.add(panel1, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        // closeButton.setPreferredSize(new Dimension(600, 50));
+        closeButton.addActionListener(this);
+        c.add(closeButton, c0);
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        cancelButton.addActionListener(this);
+        c.add(cancelButton, c0);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        name = text1.getText();
+        jarName = text2.getText();
+        userCode = user.isSelected();
+        dispose();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getJarName() {
+        return jarName;
+    }
+
+    public boolean getUserCode() {
+        return userCode;
+    }
+
+    public void cancelDialog() {
+        name = null;
+        jarName = null;
+        dispose();
+    }
 }

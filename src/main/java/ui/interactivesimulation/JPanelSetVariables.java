@@ -51,179 +51,179 @@ import java.util.Map;
  */
 public class JPanelSetVariables extends JPanel implements ActionListener {
 
-  private JFrameInteractiveSimulation jfis;
+    private JFrameInteractiveSimulation jfis;
 
-  private JComboBox<String> tasks;
-  private JComboBox<String> variables;
-  private JTextField currentValue, newValue;
-  private JButton setButton;
+    private JComboBox<String> tasks;
+    private JComboBox<String> variables;
+    private JTextField currentValue, newValue;
+    private JButton setButton;
 
-  private String[] taskIDs, variableIDs;
+    private String[] taskIDs, variableIDs;
 
-  private Map<Integer, String> valueTable;
+    private Map<Integer, String> valueTable;
 
-  public JPanelSetVariables(JFrameInteractiveSimulation _jfis, Map<Integer, String> _valueTable) {
-    super();
+    public JPanelSetVariables(JFrameInteractiveSimulation _jfis, Map<Integer, String> _valueTable) {
+        super();
 
-    jfis = _jfis;
+        jfis = _jfis;
 
-    taskIDs = jfis.makeTasksIDs();
-    valueTable = _valueTable;
+        taskIDs = jfis.makeTasksIDs();
+        valueTable = _valueTable;
 
-    makeComponents();
-    setComponents();
-  }
-
-  private void makeComponents() {
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c2 = new GridBagConstraints();
-    setLayout(gridbag2);
-    setBorder(new javax.swing.border.TitledBorder("Variables setting"));
-
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.BOTH;
-    c2.gridheight = 1;
-    add(new JLabel(""), c2);
-
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c2.fill = GridBagConstraints.HORIZONTAL;
-
-    add(new JLabel(" "), c2);
-
-    if (taskIDs == null) {
-      tasks = new JComboBox<>();
-    } else {
-      tasks = new JComboBox<>(taskIDs);
-      tasks.addActionListener(this);
-    }
-    add(tasks, c2);
-
-    if ((taskIDs == null) || (taskIDs.length == 0)) {
-      variables = new JComboBox<>();
-    } else {
-      variableIDs = jfis.makeVariableIDs(0);
-      variables = new JComboBox<>(variableIDs);
-      variables.addActionListener(this);
-    }
-    add(variables, c2);
-
-    c2.gridwidth = 1;
-    add(new JLabel("Current value: "), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    currentValue = new JTextField(getCurrentVariableValue(), 30);
-    currentValue.setEditable(false);
-    add(currentValue, c2);
-
-    add(new JLabel(""), c2);
-
-    c2.gridwidth = 1;
-    add(new JLabel("New value: "), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    newValue = new JTextField("", 30);
-    newValue.setEditable(true);
-    add(newValue, c2);
-
-    setButton = new JButton("Set variable");
-    setButton.addActionListener(this);
-    add(setButton, c2);
-  }
-
-  private void setComponents() {
-    if ((variableIDs != null) && (variableIDs.length > 0)) {
-      setButton.setEnabled(true);
-      newValue.setEditable(true);
-    } else {
-      setButton.setEnabled(false);
-      newValue.setEditable(false);
-    }
-  }
-
-  @Override
-  public void actionPerformed(ActionEvent evt) {
-
-    // Compare the action command to the known actions.
-    if (evt.getSource() == setButton) {
-      setValue();
-    } else if (evt.getSource() == tasks) {
-      variableIDs = jfis.makeVariableIDs(tasks.getSelectedIndex());
-      variables.removeAllItems();
-      for (int i = 0; i < variableIDs.length; i++) {
-        variables.addItem(variableIDs[i]);
-      }
-      setComponents();
-    } else if (evt.getSource() == variables) {
-      currentValue.setText(getCurrentVariableValue());
-    }
-  }
-
-  private void setValue() {
-    int idTask = getID((String) (tasks.getSelectedItem()));
-    int idVariable = getID((String) (variables.getSelectedItem()));
-    String val = newValue.getText().trim();
-
-    if ((idTask == -1) || (idVariable == -1) || (val.length() == 0)) {
-      return;
+        makeComponents();
+        setComponents();
     }
 
-    jfis.setVariables(idTask, idVariable, val);
-  }
+    private void makeComponents() {
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c2 = new GridBagConstraints();
+        setLayout(gridbag2);
+        setBorder(new javax.swing.border.TitledBorder("Variables setting"));
 
-  private int getID(String s) {
-    if (s == null) {
-      return -1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.BOTH;
+        c2.gridheight = 1;
+        add(new JLabel(""), c2);
+
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c2.fill = GridBagConstraints.HORIZONTAL;
+
+        add(new JLabel(" "), c2);
+
+        if (taskIDs == null) {
+            tasks = new JComboBox<>();
+        } else {
+            tasks = new JComboBox<>(taskIDs);
+            tasks.addActionListener(this);
+        }
+        add(tasks, c2);
+
+        if ((taskIDs == null) || (taskIDs.length == 0)) {
+            variables = new JComboBox<>();
+        } else {
+            variableIDs = jfis.makeVariableIDs(0);
+            variables = new JComboBox<>(variableIDs);
+            variables.addActionListener(this);
+        }
+        add(variables, c2);
+
+        c2.gridwidth = 1;
+        add(new JLabel("Current value: "), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        currentValue = new JTextField(getCurrentVariableValue(), 30);
+        currentValue.setEditable(false);
+        add(currentValue, c2);
+
+        add(new JLabel(""), c2);
+
+        c2.gridwidth = 1;
+        add(new JLabel("New value: "), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        newValue = new JTextField("", 30);
+        newValue.setEditable(true);
+        add(newValue, c2);
+
+        setButton = new JButton("Set variable");
+        setButton.addActionListener(this);
+        add(setButton, c2);
     }
-    int index0 = s.indexOf("(");
-    int index1 = s.indexOf(")");
-    if ((index0 < 0) || (index1 < 0) || (index1 < index0)) {
-      return -1;
+
+    private void setComponents() {
+        if ((variableIDs != null) && (variableIDs.length > 0)) {
+            setButton.setEnabled(true);
+            newValue.setEditable(true);
+        } else {
+            setButton.setEnabled(false);
+            newValue.setEditable(false);
+        }
     }
 
-    String in = s.substring(index0 + 1, index1);
+    @Override
+    public void actionPerformed(ActionEvent evt) {
 
-    try {
-      return Integer.decode(in).intValue();
-    } catch (Exception e) {
+        // Compare the action command to the known actions.
+        if (evt.getSource() == setButton) {
+            setValue();
+        } else if (evt.getSource() == tasks) {
+            variableIDs = jfis.makeVariableIDs(tasks.getSelectedIndex());
+            variables.removeAllItems();
+            for (int i = 0; i < variableIDs.length; i++) {
+                variables.addItem(variableIDs[i]);
+            }
+            setComponents();
+        } else if (evt.getSource() == variables) {
+            currentValue.setText(getCurrentVariableValue());
+        }
+    }
+
+    private void setValue() {
+        int idTask = getID((String) (tasks.getSelectedItem()));
+        int idVariable = getID((String) (variables.getSelectedItem()));
+        String val = newValue.getText().trim();
+
+        if ((idTask == -1) || (idVariable == -1) || (val.length() == 0)) {
+            return;
+        }
+
+        jfis.setVariables(idTask, idVariable, val);
+    }
+
+    private int getID(String s) {
+        if (s == null) {
+            return -1;
+        }
+        int index0 = s.indexOf("(");
+        int index1 = s.indexOf(")");
+        if ((index0 < 0) || (index1 < 0) || (index1 < index0)) {
+            return -1;
+        }
+
+        String in = s.substring(index0 + 1, index1);
+
+        try {
+            return Integer.decode(in).intValue();
+        } catch (Exception e) {
+
+        }
+
+        return -1;
+    }
+
+    private String getCurrentVariableValue() {
+        int id = getID((String) (variables.getSelectedItem()));
+        if (id == -1) {
+            return " - ";
+        }
+        String val = valueTable.get(id);
+        if (val == null) {
+            val = " - ";
+        }
+        return val;
 
     }
 
-    return -1;
-  }
-
-  private String getCurrentVariableValue() {
-    int id = getID((String) (variables.getSelectedItem()));
-    if (id == -1) {
-      return " - ";
+    protected void updateOnVariableValue(String _idVar) {
+        int id = getID((String) (variables.getSelectedItem()));
+        if (_idVar.equals("" + id)) {
+            currentValue.setText(getCurrentVariableValue());
+        }
     }
-    String val = valueTable.get(id);
-    if (val == null) {
-      val = " - ";
+
+    protected void unsetElements() {
+        setButton.setEnabled(false);
+        newValue.setEditable(false);
+        variables.setEnabled(false);
+        variables.removeAllItems();
+        variables.removeActionListener(this);
+        tasks.setEnabled(false);
+        tasks.removeActionListener(this);
+        tasks.removeAllItems();
+        currentValue.setText(" ");
+        currentValue.setEnabled(false);
     }
-    return val;
 
-  }
-
-  protected void updateOnVariableValue(String _idVar) {
-    int id = getID((String) (variables.getSelectedItem()));
-    if (_idVar.equals("" + id)) {
-      currentValue.setText(getCurrentVariableValue());
+    protected void setVariableButton(boolean b) {
+        setButton.setEnabled(b);
     }
-  }
-
-  protected void unsetElements() {
-    setButton.setEnabled(false);
-    newValue.setEditable(false);
-    variables.setEnabled(false);
-    variables.removeAllItems();
-    variables.removeActionListener(this);
-    tasks.setEnabled(false);
-    tasks.removeActionListener(this);
-    tasks.removeAllItems();
-    currentValue.setText(" ");
-    currentValue.setEnabled(false);
-  }
-
-  protected void setVariableButton(boolean b) {
-    setButton.setEnabled(b);
-  }
 } // Class

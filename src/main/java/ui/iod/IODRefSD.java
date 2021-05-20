@@ -57,120 +57,120 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class IODRefSD extends TGCOneLineText {
-  protected int lineLength = 5;
-  protected int textX = 5;
-  protected int textY = 15;
-  protected int arc = 5;
+    protected int lineLength = 5;
+    protected int textX = 5;
+    protected int textY = 15;
+    protected int arc = 5;
 
-  public IODRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public IODRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 30;
-    height = 35;
-    minWidth = 70;
+        width = 30;
+        height = 35;
+        minWidth = 70;
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointIOD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.5, 1.0);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointIOD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.5, 1.0);
 
-    addTGConnectingPointsComment();
+        addTGConnectingPointsComment();
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    value = "Scenario";
-    name = "Reference to a SD";
+        value = "Scenario";
+        name = "Reference to a SD";
 
-    myImageIcon = IconManager.imgic400;
-  }
-
-  public void internalDrawing(Graphics g) {
-    // int w2 = g.getFontMetrics().stringWidth("ref");
-    int w = g.getFontMetrics().stringWidth(value) /* + w2 */;
-    int w1 = Math.max(minWidth, w + 2 * textX);
-    if ((w1 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w1 / 2, y);
-      width = w1;
-      // updateConnectingPoints();
+        myImageIcon = IconManager.imgic400;
     }
 
-    Color c = g.getColor();
-    g.setColor(ColorManager.SD_REFERENCE);
-    g.drawRect(x + 1, y + 1, width, height);
-    g.setColor(c);
+    public void internalDrawing(Graphics g) {
+        // int w2 = g.getFontMetrics().stringWidth("ref");
+        int w = g.getFontMetrics().stringWidth(value) /* + w2 */;
+        int w1 = Math.max(minWidth, w + 2 * textX);
+        if ((w1 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w1 / 2, y);
+            width = w1;
+            // updateConnectingPoints();
+        }
 
-    g.drawRect(x, y, width, height);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+        Color c = g.getColor();
+        g.setColor(ColorManager.SD_REFERENCE);
+        g.drawRect(x + 1, y + 1, width, height);
+        g.setColor(c);
 
-    g.drawString(value, x + (width - w) / 2, y + textY + 15);
-    g.drawString("sd", x + 3, y + 12);
-    g.drawLine(x, y + 15, x + 15, y + 15);
-    g.drawLine(x + 25, y, x + 25, y + 8);
-    g.drawLine(x + 15, y + 15, x + 25, y + 8);
-  }
+        g.drawRect(x, y, width, height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
 
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        g.drawString(value, x + (width - w) / 2, y + textY + 15);
+        g.drawString("sd", x + 3, y + 12);
+        g.drawLine(x, y + 15, x + 15, y + 15);
+        g.drawLine(x + 25, y, x + 25, y + 8);
+        g.drawLine(x + 15, y + 15, x + 25, y + 8);
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
     }
 
-    return null;
-  }
-
-  public String getAction() {
-    return value;
-  }
-
-  public int getType() {
-    return TGComponentManager.IOD_REF_SD;
-  }
-
-  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-    componentMenu.addSeparator();
-    boolean b = ((InteractionOverviewDiagramPanel) tdp).isSDCreated(value);
-    JMenuItem isSDCreated;
-
-    if (b) {
-      isSDCreated = new JMenuItem("Open diagram");
-    } else {
-      isSDCreated = new JMenuItem("Create Sequence Diagram");
+    public String getAction() {
+        return value;
     }
 
-    isSDCreated.addActionListener(menuAL);
-    componentMenu.add(isSDCreated);
-  }
-
-  public boolean eventOnPopup(ActionEvent e) {
-    boolean b = ((InteractionOverviewDiagramPanel) tdp).isSDCreated(value);
-    if (b) {
-      ((InteractionOverviewDiagramPanel) tdp).openSequenceDiagram(value);
-    } else {
-      ((InteractionOverviewDiagramPanel) tdp).createSequenceDiagram(value);
+    public int getType() {
+        return TGComponentManager.IOD_REF_SD;
     }
-    tdp.getMouseManager().setSelection(-1, -1);
-    return true;
-  }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_INTERACTION;
-  }
+    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+        componentMenu.addSeparator();
+        boolean b = ((InteractionOverviewDiagramPanel) tdp).isSDCreated(value);
+        JMenuItem isSDCreated;
 
-  /*
-   * public boolean editOndoubleClick(JFrame frame) {
-   * 
-   * // String text = getName() + ": "; if( hasFather() ) { text =
-   * getTopLevelName() + " / " + text; } String s = (String)
-   * JOptionPane.showInputDialog(frame, text, "Setting Name",
-   * JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() ); if( (s !=
-   * null) && (s.length() > 0) ) { setName(s); return true; } return false; }
-   */
+        if (b) {
+            isSDCreated = new JMenuItem("Open diagram");
+        } else {
+            isSDCreated = new JMenuItem("Create Sequence Diagram");
+        }
+
+        isSDCreated.addActionListener(menuAL);
+        componentMenu.add(isSDCreated);
+    }
+
+    public boolean eventOnPopup(ActionEvent e) {
+        boolean b = ((InteractionOverviewDiagramPanel) tdp).isSDCreated(value);
+        if (b) {
+            ((InteractionOverviewDiagramPanel) tdp).openSequenceDiagram(value);
+        } else {
+            ((InteractionOverviewDiagramPanel) tdp).createSequenceDiagram(value);
+        }
+        tdp.getMouseManager().setSelection(-1, -1);
+        return true;
+    }
+
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_INTERACTION;
+    }
+
+    /*
+     * public boolean editOndoubleClick(JFrame frame) {
+     * 
+     * // String text = getName() + ": "; if( hasFather() ) { text =
+     * getTopLevelName() + " / " + text; } String s = (String)
+     * JOptionPane.showInputDialog(frame, text, "Setting Name",
+     * JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() ); if( (s !=
+     * null) && (s.length() > 0) ) { setName(s); return true; } return false; }
+     */
 }

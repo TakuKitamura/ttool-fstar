@@ -47,121 +47,121 @@ import java.util.LinkedList;
 
 public class AvatarCoproMWMR extends AvatarComponent {
 
-  private String coprocName;
-  private int srcid;
-  private int tgtid;
-  private int plaps;
-  private int fifoToCoprocDepth;
-  private int fifoFromCoprocDepth;
-  private int nToCopro;
-  private int nFromCopro;
-  private int nConfig;
-  private int nStatus;
-  private boolean useLLSC;
-  private int coprocType;
-  private int cluster_index;
+    private String coprocName;
+    private int srcid;
+    private int tgtid;
+    private int plaps;
+    private int fifoToCoprocDepth;
+    private int fifoFromCoprocDepth;
+    private int nToCopro;
+    private int nFromCopro;
+    private int nConfig;
+    private int nStatus;
+    private boolean useLLSC;
+    private int coprocType;
+    private int cluster_index;
 
-  private AvatarConnectingPoint[] connectingsPoints;
-  private int nbConnectingPoint = 16;
+    private AvatarConnectingPoint[] connectingsPoints;
+    private int nbConnectingPoint = 16;
 
-  private LinkedList<AvatarTask> tasksMapped;
+    private LinkedList<AvatarTask> tasksMapped;
 
-  public AvatarCoproMWMR(String _coprocName, int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,
-      int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC,
-      int _coprocType, int _cluster_index) {
-    coprocName = _coprocName;
-    srcid = _srcid;
-    tgtid = _tgtid;
-    plaps = _plaps;
-    fifoToCoprocDepth = _fifoToCoprocDepth;
-    fifoFromCoprocDepth = _fifoFromCoprocDepth;
-    nToCopro = _nToCopro;
-    nFromCopro = _nFromCopro;
-    nConfig = _nConfig;
-    nStatus = _nStatus;
-    useLLSC = _useLLSC;
-    coprocType = _coprocType;
-    cluster_index = _cluster_index;
+    public AvatarCoproMWMR(String _coprocName, int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,
+            int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC,
+            int _coprocType, int _cluster_index) {
+        coprocName = _coprocName;
+        srcid = _srcid;
+        tgtid = _tgtid;
+        plaps = _plaps;
+        fifoToCoprocDepth = _fifoToCoprocDepth;
+        fifoFromCoprocDepth = _fifoFromCoprocDepth;
+        nToCopro = _nToCopro;
+        nFromCopro = _nFromCopro;
+        nConfig = _nConfig;
+        nStatus = _nStatus;
+        useLLSC = _useLLSC;
+        coprocType = _coprocType;
+        cluster_index = _cluster_index;
 
-    connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint];
-    tasksMapped = new LinkedList<AvatarTask>(); // DG 21.09.
-  }
+        connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint];
+        tasksMapped = new LinkedList<AvatarTask>(); // DG 21.09.
+    }
 
-  AvatarConnectingPoint[] getAvatarConnectingPoints() {
-    return connectingsPoints;
-  }
+    AvatarConnectingPoint[] getAvatarConnectingPoints() {
+        return connectingsPoints;
+    }
 
-  int getnbConnectingPoint() {
-    return nbConnectingPoint;
-  }
+    int getnbConnectingPoint() {
+        return nbConnectingPoint;
+    }
 
-  void setConnectingPoint(int _indexConnectingPoint, AvatarConnector _connector) {
-    connectingsPoints[_indexConnectingPoint].setConnector(_connector);
-  }
+    void setConnectingPoint(int _indexConnectingPoint, AvatarConnector _connector) {
+        connectingsPoints[_indexConnectingPoint].setConnector(_connector);
+    }
 
-  public String putCoprocName(String coprocName) {
-    String MyCoprocName = coprocName;
-    return MyCoprocName;
-  }
+    public String putCoprocName(String coprocName) {
+        String MyCoprocName = coprocName;
+        return MyCoprocName;
+    }
 
-  public String getCoprocName() {
-    return coprocName;
-  }
+    public String getCoprocName() {
+        return coprocName;
+    }
 
-  public int getSrcid() {
-    return srcid;
-  }
+    public int getSrcid() {
+        return srcid;
+    }
 
-  public int getClusterIndex() {
-    return cluster_index;
-  }
+    public int getClusterIndex() {
+        return cluster_index;
+    }
 
-  public int getTgtid() {
-    return tgtid;
-  }
+    public int getTgtid() {
+        return tgtid;
+    }
 
-  public int getPlaps() {
-    return plaps;
-  }
+    public int getPlaps() {
+        return plaps;
+    }
 
-  public int getFifoToCoprocDepth() {
-    return fifoToCoprocDepth;
-  }
+    public int getFifoToCoprocDepth() {
+        return fifoToCoprocDepth;
+    }
 
-  public int getFifoFromCoprocDepth() {
-    return fifoFromCoprocDepth;
-  }
+    public int getFifoFromCoprocDepth() {
+        return fifoFromCoprocDepth;
+    }
 
-  public int getNToCopro() {
-    return nToCopro;
-  }
+    public int getNToCopro() {
+        return nToCopro;
+    }
 
-  public int getNFromCopro() {
-    return nFromCopro;
-  }
+    public int getNFromCopro() {
+        return nFromCopro;
+    }
 
-  public int getNConfig() {
-    return nConfig;
-  }
+    public int getNConfig() {
+        return nConfig;
+    }
 
-  public int getNStatus() {
-    return nStatus;
-  }
+    public int getNStatus() {
+        return nStatus;
+    }
 
-  public boolean getUseLLSC() {
-    return useLLSC;
-  }
+    public boolean getUseLLSC() {
+        return useLLSC;
+    }
 
-  public int getCoprocType() {
-    return coprocType;
-  }
+    public int getCoprocType() {
+        return coprocType;
+    }
 
-  public LinkedList<AvatarTask> getAllTasks() {
-    return tasksMapped;
-  }
+    public LinkedList<AvatarTask> getAllTasks() {
+        return tasksMapped;
+    }
 
-  public void addTask(AvatarTask task) {
-    tasksMapped.add(task);
-  }
+    public void addTask(AvatarTask task) {
+        tasksMapped.add(task);
+    }
 
 }

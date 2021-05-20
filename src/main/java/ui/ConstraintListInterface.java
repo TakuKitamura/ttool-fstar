@@ -46,7 +46,7 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface ConstraintListInterface {
-  String[] getConstraintList();
+    String[] getConstraintList();
 
-  String getCurrentConstraint();
+    String getCurrentConstraint();
 }

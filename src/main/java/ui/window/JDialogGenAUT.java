@@ -62,267 +62,267 @@ import java.util.List;
  */
 public class JDialogGenAUT extends JDialog implements ActionListener, Runnable {
 
-  private static String path = "";
+    private static String path = "";
 
-  protected MainGUI mgui;
+    protected MainGUI mgui;
 
-  protected String cmdbcgio;
-  protected String host;
-  protected RshClient rshc;
-  protected Thread t;
-  protected int mode;
+    protected String cmdbcgio;
+    protected String host;
+    protected RshClient rshc;
+    protected Thread t;
+    protected int mode;
 
-  protected static boolean dot = false;
+    protected static boolean dot = false;
 
-  protected final static int NOT_STARTED = 1;
-  protected final static int STARTED = 2;
-  protected final static int STOPPED = 3;
+    protected final static int NOT_STARTED = 1;
+    protected final static int STARTED = 2;
+    protected final static int STOPPED = 3;
 
-  // components
-  protected JTextArea jta;
-  protected JTextField jtf;
-  protected JButton start;
-  protected JButton stop;
-  protected JButton close;
+    // components
+    protected JTextArea jta;
+    protected JTextField jtf;
+    protected JButton start;
+    protected JButton stop;
+    protected JButton close;
 
-  protected JCheckBox makeDOT;
+    protected JCheckBox makeDOT;
 
-  protected SortedVector<String> files;
+    protected SortedVector<String> files;
 
-  /* Creates new form */
-  public JDialogGenAUT(Frame f, MainGUI _mgui, String title, String _cmdbcgio, String _host, String _path) {
-    super(f, title, true);
+    /* Creates new form */
+    public JDialogGenAUT(Frame f, MainGUI _mgui, String title, String _cmdbcgio, String _host, String _path) {
+        super(f, title, true);
 
-    mgui = _mgui;
+        mgui = _mgui;
 
-    cmdbcgio = _cmdbcgio;
-    host = _host;
-    path = _path;
+        cmdbcgio = _cmdbcgio;
+        host = _host;
+        path = _path;
 
-    initComponents();
-    myInitComponents();
-    pack();
+        initComponents();
+        myInitComponents();
+        pack();
 
-    // getGlassPane().addMouseListener( new MouseAdapter() {});
-    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-  }
-
-  protected void myInitComponents() {
-    mode = NOT_STARTED;
-    setButtons();
-  }
-
-  protected void initComponents() {
-
-    Container c = getContentPane();
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(new BorderLayout());
-    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    JPanel jp1 = new JPanel();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    jp1.setLayout(gridbag1);
-    jp1.setBorder(new javax.swing.border.TitledBorder("Automata options"));
-    // jp1.setPreferredSize(new Dimension(300, 150));
-
-    // first line panel1
-    // c1.gridwidth = 3;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 1;
-
-    makeDOT = new JCheckBox("Convert automata from AUT to DOT format");
-    makeDOT.setSelected(dot);
-    makeDOT.addActionListener(this);
-
-    jp1.add(makeDOT, c1);
-
-    c1.gridwidth = 1;
-    jp1.add(new JLabel("Path where graphs shall be generated:"), c1);
-
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    jtf = new JTextField(path, 25);
-    jp1.add(jtf, c1);
-
-    c.add(jp1, BorderLayout.NORTH);
-
-    jta = new ScrolledJTextArea();
-    jta.setEditable(false);
-    jta.setMargin(new Insets(10, 10, 10, 10));
-    jta.setTabSize(3);
-    jta.append("Select options and then, click on 'start' to start automata generation\n");
-    Font f = new Font("Courrier", Font.BOLD, 12);
-    jta.setFont(f);
-    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    c.add(jsp, BorderLayout.CENTER);
-
-    start = new JButton("Start", IconManager.imgic53);
-    stop = new JButton("Stop", IconManager.imgic55);
-    close = new JButton("Close", IconManager.imgic27);
-
-    start.setPreferredSize(new Dimension(100, 30));
-    stop.setPreferredSize(new Dimension(100, 30));
-    close.setPreferredSize(new Dimension(100, 30));
-
-    start.addActionListener(this);
-    stop.addActionListener(this);
-    close.addActionListener(this);
-
-    JPanel jp2 = new JPanel();
-    jp2.add(start);
-    jp2.add(stop);
-    jp2.add(close);
-
-    c.add(jp2, BorderLayout.SOUTH);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Start")) {
-      startProcess();
-    } else if (command.equals("Stop")) {
-      stopProcess();
-    } else if (command.equals("Close")) {
-      closeDialog();
+        // getGlassPane().addMouseListener( new MouseAdapter() {});
+        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
-  }
 
-  public void closeDialog() {
-    if (mode == STARTED) {
-      stopProcess();
+    protected void myInitComponents() {
+        mode = NOT_STARTED;
+        setButtons();
     }
-    dispose();
-  }
 
-  public void stopProcess() {
-    try {
-      rshc.stopCommand();
-    } catch (LauncherException le) {
+    protected void initComponents() {
+
+        Container c = getContentPane();
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(new BorderLayout());
+        // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel jp1 = new JPanel();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c1 = new GridBagConstraints();
+
+        jp1.setLayout(gridbag1);
+        jp1.setBorder(new javax.swing.border.TitledBorder("Automata options"));
+        // jp1.setPreferredSize(new Dimension(300, 150));
+
+        // first line panel1
+        // c1.gridwidth = 3;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+
+        makeDOT = new JCheckBox("Convert automata from AUT to DOT format");
+        makeDOT.setSelected(dot);
+        makeDOT.addActionListener(this);
+
+        jp1.add(makeDOT, c1);
+
+        c1.gridwidth = 1;
+        jp1.add(new JLabel("Path where graphs shall be generated:"), c1);
+
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        jtf = new JTextField(path, 25);
+        jp1.add(jtf, c1);
+
+        c.add(jp1, BorderLayout.NORTH);
+
+        jta = new ScrolledJTextArea();
+        jta.setEditable(false);
+        jta.setMargin(new Insets(10, 10, 10, 10));
+        jta.setTabSize(3);
+        jta.append("Select options and then, click on 'start' to start automata generation\n");
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        jta.setFont(f);
+        JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        c.add(jsp, BorderLayout.CENTER);
+
+        start = new JButton("Start", IconManager.imgic53);
+        stop = new JButton("Stop", IconManager.imgic55);
+        close = new JButton("Close", IconManager.imgic27);
+
+        start.setPreferredSize(new Dimension(100, 30));
+        stop.setPreferredSize(new Dimension(100, 30));
+        close.setPreferredSize(new Dimension(100, 30));
+
+        start.addActionListener(this);
+        stop.addActionListener(this);
+        close.addActionListener(this);
+
+        JPanel jp2 = new JPanel();
+        jp2.add(start);
+        jp2.add(stop);
+        jp2.add(close);
+
+        c.add(jp2, BorderLayout.SOUTH);
     }
-    rshc = null;
-    mode = STOPPED;
-    setButtons();
-  }
 
-  public void startProcess() {
-    t = new Thread(this);
-    mode = STARTED;
-    setButtons();
-    t.start();
-  }
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
 
-  public SortedVector<String> getFiles() {
-    return files;
-  }
+        // Compare the action command to the known actions.
+        if (command.equals("Start")) {
+            startProcess();
+        } else if (command.equals("Stop")) {
+            stopProcess();
+        } else if (command.equals("Close")) {
+            closeDialog();
+        }
+    }
 
-  public void run() {
+    public void closeDialog() {
+        if (mode == STARTED) {
+            stopProcess();
+        }
+        dispose();
+    }
 
-    String cmd1 = "";
-    String data;
-    String fileName;
-    List<String> ll;
-    Iterator<String> iterator;
-    path = jtf.getText();
-    files = new SortedVector<String>();
+    public void stopProcess() {
+        try {
+            rshc.stopCommand();
+        } catch (LauncherException le) {
+        }
+        rshc = null;
+        mode = STOPPED;
+        setButtons();
+    }
 
-    rshc = new RshClient(host);
+    public void startProcess() {
+        t = new Thread(this);
+        mode = STARTED;
+        setButtons();
+        t.start();
+    }
 
-    try {
-      jta.append("Generating automata in AUT format\n");
-      ll = mgui.generateAllAUT(path);
+    public SortedVector<String> getFiles() {
+        return files;
+    }
 
-      if (ll == null) {
-        jta.append("Generation failed\n");
-      } else {
-        jta.append("Generation successful of:\n");
-        iterator = ll.listIterator();
-        while (iterator.hasNext()) {
-          fileName = iterator.next();
-          jta.append(fileName + "\n");
+    public void run() {
+
+        String cmd1 = "";
+        String data;
+        String fileName;
+        List<String> ll;
+        Iterator<String> iterator;
+        path = jtf.getText();
+        files = new SortedVector<String>();
+
+        rshc = new RshClient(host);
+
+        try {
+            jta.append("Generating automata in AUT format\n");
+            ll = mgui.generateAllAUT(path);
+
+            if (ll == null) {
+                jta.append("Generation failed\n");
+            } else {
+                jta.append("Generation successful of:\n");
+                iterator = ll.listIterator();
+                while (iterator.hasNext()) {
+                    fileName = iterator.next();
+                    jta.append(fileName + "\n");
+                }
+
+                dot = makeDOT.isSelected();
+
+                if (dot) {
+                    jta.append("\nConverting automata to DOT format\n");
+                    cmd1 = cmdbcgio + " -aldebaran spec.aut" + " -graphviz " + "spec.aut.dot";
+                    data = processCmd(cmd1);
+                    iterator = ll.listIterator();
+                    while (iterator.hasNext()) {
+                        fileName = iterator.next();
+                        jta.append("Converting " + fileName + " to " + fileName + ".dot\n");
+                        data = FileUtils.loadFile(path + fileName);
+                        rshc.sendFileData("spec.aut", data);
+                        data = processCmd(cmd1);
+                        jta.append(data);
+                        data = rshc.getFileData("spec.aut.dot");
+                        jta.append("Saving in " + path + fileName + ".dot\n");
+                        files.add(new String(path + fileName + ".dot"));
+                        FileUtils.saveFile(path + fileName + ".dot", data);
+                    }
+                }
+            }
+            jta.append("\nAll done\n");
+
+        } catch (LauncherException le) {
+            jta.append(le.getMessage() + "\n");
+            mode = STOPPED;
+            setButtons();
+            return;
+        } catch (Exception e) {
+            mode = STOPPED;
+            setButtons();
+            return;
         }
 
-        dot = makeDOT.isSelected();
+        mode = STOPPED;
+        setButtons();
+    }
 
-        if (dot) {
-          jta.append("\nConverting automata to DOT format\n");
-          cmd1 = cmdbcgio + " -aldebaran spec.aut" + " -graphviz " + "spec.aut.dot";
-          data = processCmd(cmd1);
-          iterator = ll.listIterator();
-          while (iterator.hasNext()) {
-            fileName = iterator.next();
-            jta.append("Converting " + fileName + " to " + fileName + ".dot\n");
-            data = FileUtils.loadFile(path + fileName);
-            rshc.sendFileData("spec.aut", data);
-            data = processCmd(cmd1);
-            jta.append(data);
-            data = rshc.getFileData("spec.aut.dot");
-            jta.append("Saving in " + path + fileName + ".dot\n");
-            files.add(new String(path + fileName + ".dot"));
-            FileUtils.saveFile(path + fileName + ".dot", data);
-          }
+    protected String processCmd(String cmd) throws LauncherException {
+        rshc.setCmd(cmd);
+        String s = null;
+        rshc.sendExecuteCommandRequest();
+        s = rshc.getDataFromProcess();
+        return s;
+    }
+
+    protected void setButtons() {
+        switch (mode) {
+            case NOT_STARTED:
+                makeDOT.setEnabled(true);
+                jtf.setEnabled(true);
+                start.setEnabled(true);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
+            case STARTED:
+                makeDOT.setEnabled(false);
+                jtf.setEnabled(false);
+                start.setEnabled(false);
+                stop.setEnabled(true);
+                close.setEnabled(false);
+                getGlassPane().setVisible(true);
+                break;
+            case STOPPED:
+            default:
+                makeDOT.setEnabled(false);
+                jtf.setEnabled(false);
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
         }
-      }
-      jta.append("\nAll done\n");
-
-    } catch (LauncherException le) {
-      jta.append(le.getMessage() + "\n");
-      mode = STOPPED;
-      setButtons();
-      return;
-    } catch (Exception e) {
-      mode = STOPPED;
-      setButtons();
-      return;
     }
-
-    mode = STOPPED;
-    setButtons();
-  }
-
-  protected String processCmd(String cmd) throws LauncherException {
-    rshc.setCmd(cmd);
-    String s = null;
-    rshc.sendExecuteCommandRequest();
-    s = rshc.getDataFromProcess();
-    return s;
-  }
-
-  protected void setButtons() {
-    switch (mode) {
-      case NOT_STARTED:
-        makeDOT.setEnabled(true);
-        jtf.setEnabled(true);
-        start.setEnabled(true);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        getGlassPane().setVisible(false);
-        break;
-      case STARTED:
-        makeDOT.setEnabled(false);
-        jtf.setEnabled(false);
-        start.setEnabled(false);
-        stop.setEnabled(true);
-        close.setEnabled(false);
-        getGlassPane().setVisible(true);
-        break;
-      case STOPPED:
-      default:
-        makeDOT.setEnabled(false);
-        jtf.setEnabled(false);
-        start.setEnabled(false);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        getGlassPane().setVisible(false);
-        break;
-    }
-  }
 }

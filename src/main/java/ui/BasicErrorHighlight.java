@@ -45,6 +45,6 @@ package ui;
  */
 public interface BasicErrorHighlight {
 
-  void setStateAction(int _stateAction);
+    void setStateAction(int _stateAction);
 
 } // Class

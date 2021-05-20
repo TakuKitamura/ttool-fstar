@@ -45,12 +45,12 @@ package syscamstranslator;
  */
 public class SysCAMSValidateException extends Exception {
 
-  public SysCAMSValidateException() {
-    super("SysC-AMS diagram validation exception");
-  }
+    public SysCAMSValidateException() {
+        super("SysC-AMS diagram validation exception");
+    }
 
-  public SysCAMSValidateException(String msg) {
-    super(msg);
-  }
+    public SysCAMSValidateException(String msg) {
+        super(msg);
+    }
 
 } // Class

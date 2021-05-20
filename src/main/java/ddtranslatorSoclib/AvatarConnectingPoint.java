@@ -45,27 +45,27 @@ package ddtranslatorSoclib;
 
 public class AvatarConnectingPoint {
 
-  AvatarConnector ownerConnector;
-  AvatarComponent ownerComponent;
+    AvatarConnector ownerConnector;
+    AvatarComponent ownerComponent;
 
-  public AvatarConnectingPoint(AvatarComponent _ownerComponent) {
-    ownerComponent = _ownerComponent;
-  }
+    public AvatarConnectingPoint(AvatarComponent _ownerComponent) {
+        ownerComponent = _ownerComponent;
+    }
 
-  AvatarConnector getConnector() {
-    return ownerConnector;
-  }
+    AvatarConnector getConnector() {
+        return ownerConnector;
+    }
 
-  public AvatarComponent getComponent() {// DG
-    return ownerComponent;
-  }
+    public AvatarComponent getComponent() {// DG
+        return ownerComponent;
+    }
 
-  void setConnector(AvatarConnector _connector) {
-    ownerConnector = _connector;
-  }
+    void setConnector(AvatarConnector _connector) {
+        ownerConnector = _connector;
+    }
 
-  boolean ConnectingPointIsFree() {
-    return ownerConnector == null;
-  }
+    boolean ConnectingPointIsFree() {
+        return ownerConnector == null;
+    }
 
 }

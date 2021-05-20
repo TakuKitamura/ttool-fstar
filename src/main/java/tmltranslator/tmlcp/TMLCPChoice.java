@@ -49,37 +49,37 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public class TMLCPChoice extends TMLCPElement {
-  private ArrayList<String> guards;
+    private ArrayList<String> guards;
 
-  public TMLCPChoice(String _name, ArrayList<String> _guards, Object _referenceObject) {
-    super(_name, _referenceObject);
-    this.guards = _guards;
-  }
-
-  /*
-   * public void addGuard( String _guard ) { nexts.add( new TMLCPElement( _guard,
-   * null ) ); }
-   */
-
-  public void addGuard(String _guard) {
-    if (guards == null) {
-      guards = new ArrayList<String>();
+    public TMLCPChoice(String _name, ArrayList<String> _guards, Object _referenceObject) {
+        super(_name, _referenceObject);
+        this.guards = _guards;
     }
-    guards.add(_guard);
-  }
 
-  public ArrayList<String> getGuards() {
-    return this.guards;
-  }
+    /*
+     * public void addGuard( String _guard ) { nexts.add( new TMLCPElement( _guard,
+     * null ) ); }
+     */
 
-  public String toString() {
-    String s = "\t+ " + toShortString();
-    int i = 0;
-    for (TMLCPElement elt : nexts) {
-      s += "\t\t->" + guards.get(i) + " " + elt.toShortString();
-      i++;
+    public void addGuard(String _guard) {
+        if (guards == null) {
+            guards = new ArrayList<String>();
+        }
+        guards.add(_guard);
     }
-    return s;
-  }
+
+    public ArrayList<String> getGuards() {
+        return this.guards;
+    }
+
+    public String toString() {
+        String s = "\t+ " + toShortString();
+        int i = 0;
+        for (TMLCPElement elt : nexts) {
+            s += "\t\t->" + guards.get(i) + " " + elt.toShortString();
+            i++;
+        }
+        return s;
+    }
 
 }

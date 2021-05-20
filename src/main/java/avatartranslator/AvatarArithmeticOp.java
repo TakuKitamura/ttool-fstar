@@ -49,135 +49,135 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarArithmeticOp extends AvatarTerm {
-  AvatarTerm term1;
-  AvatarTerm term2;
-  String operator;
+    AvatarTerm term1;
+    AvatarTerm term2;
+    String operator;
 
-  private static final String[] knownOp = { "+", "-", "*" };
+    private static final String[] knownOp = { "+", "-", "*" };
 
-  public AvatarArithmeticOp(AvatarTerm _term1, AvatarTerm _term2, String _operator, Object _referenceObject) {
-    super(_term1.getName() + _operator + _term2.getName(), _referenceObject);
-    this.operator = _operator;
-    this.term1 = _term1;
-    this.term2 = _term2;
-  }
-
-  public static AvatarArithmeticOp createFromString(AvatarStateMachineOwner block, String toParse) {
-    for (String op : AvatarArithmeticOp.knownOp) {
-      int indexOp = toParse.indexOf(op);
-      if (indexOp != -1) {
-        AvatarTerm t1, t2;
-        t1 = AvatarTerm.createFromString(block, toParse.substring(0, indexOp).trim());
-        if (t1 == null)
-          continue;
-
-        t2 = AvatarTerm.createFromString(block, toParse.substring(indexOp + op.length()).trim());
-        if (t2 == null)
-          continue;
-
-        return new AvatarArithmeticOp(t1, t2, op, block);
-      }
+    public AvatarArithmeticOp(AvatarTerm _term1, AvatarTerm _term2, String _operator, Object _referenceObject) {
+        super(_term1.getName() + _operator + _term2.getName(), _referenceObject);
+        this.operator = _operator;
+        this.term1 = _term1;
+        this.term2 = _term2;
     }
 
-    return null;
-  }
+    public static AvatarArithmeticOp createFromString(AvatarStateMachineOwner block, String toParse) {
+        for (String op : AvatarArithmeticOp.knownOp) {
+            int indexOp = toParse.indexOf(op);
+            if (indexOp != -1) {
+                AvatarTerm t1, t2;
+                t1 = AvatarTerm.createFromString(block, toParse.substring(0, indexOp).trim());
+                if (t1 == null)
+                    continue;
 
-  public String getOperator() {
-    return this.operator;
-  }
+                t2 = AvatarTerm.createFromString(block, toParse.substring(indexOp + op.length()).trim());
+                if (t2 == null)
+                    continue;
 
-  public AvatarTerm getTerm1() {
-    return this.term1;
-  }
-
-  public AvatarTerm getTerm2() {
-    return this.term2;
-  }
-
-  public String toString() {
-    return this.term1.getName() + operator + this.term2.getName();
-  }
-
-  public boolean isLeftHand() {
-    return false;
-  }
-
-  @Override
-  public boolean containsAMethodCall() {
-    return this.term1.containsAMethodCall() || this.term2.containsAMethodCall();
-  }
-
-  @Override
-  public AvatarArithmeticOp clone() {
-    return new AvatarArithmeticOp(this.term1.clone(), this.term2.clone(), this.operator, this.referenceObject);
-  }
-
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-
-    // TraceManager.addDev("Replace Attribute term1=" +
-    // term1.getClass().getCanonicalName() + " / " + term1.getName());
-
-    if (this.term1 instanceof AvatarAttribute) {
-      // TraceManager.addDev("Found an attribute: " + this.term1.getName());
-
-      AvatarAttribute at = attributesMapping.get(this.term1);
-      if (at == null) {
-        // Search by name
-        for (AvatarAttribute atbis : attributesMapping.keySet()) {
-          if (atbis.getName().equals(this.term1.getName())) {
-            at = attributesMapping.get(atbis);
-            break;
-          }
+                return new AvatarArithmeticOp(t1, t2, op, block);
+            }
         }
 
-      }
-
-      if (at == null) {
-        // TraceManager.addDev("No correspondance for " + this.term1.getName());
-      } else {
-        // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
-        // " / " + at.getName());
-        this.term1 = at;
-        name = this.toString();
-        // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
-        // this.term1.getName());
-      }
-
-    } else {
-      this.term1.replaceAttributes(attributesMapping);
+        return null;
     }
 
-    // TraceManager.addDev("Replace Attribute term2=" +
-    // term2.getClass().getCanonicalName() + " / " + term2.getName());
+    public String getOperator() {
+        return this.operator;
+    }
 
-    if (this.term2 instanceof AvatarAttribute) {
-      AvatarAttribute at = attributesMapping.get(this.term2);
-      if (at == null) {
-        // Search by name
-        for (AvatarAttribute atbis : attributesMapping.keySet()) {
-          if (atbis.getName().equals(this.term2.getName())) {
-            at = attributesMapping.get(atbis);
-            break;
-          }
+    public AvatarTerm getTerm1() {
+        return this.term1;
+    }
+
+    public AvatarTerm getTerm2() {
+        return this.term2;
+    }
+
+    public String toString() {
+        return this.term1.getName() + operator + this.term2.getName();
+    }
+
+    public boolean isLeftHand() {
+        return false;
+    }
+
+    @Override
+    public boolean containsAMethodCall() {
+        return this.term1.containsAMethodCall() || this.term2.containsAMethodCall();
+    }
+
+    @Override
+    public AvatarArithmeticOp clone() {
+        return new AvatarArithmeticOp(this.term1.clone(), this.term2.clone(), this.operator, this.referenceObject);
+    }
+
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+
+        // TraceManager.addDev("Replace Attribute term1=" +
+        // term1.getClass().getCanonicalName() + " / " + term1.getName());
+
+        if (this.term1 instanceof AvatarAttribute) {
+            // TraceManager.addDev("Found an attribute: " + this.term1.getName());
+
+            AvatarAttribute at = attributesMapping.get(this.term1);
+            if (at == null) {
+                // Search by name
+                for (AvatarAttribute atbis : attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.term1.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+
+            }
+
+            if (at == null) {
+                // TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                // " / " + at.getName());
+                this.term1 = at;
+                name = this.toString();
+                // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
+                // this.term1.getName());
+            }
+
+        } else {
+            this.term1.replaceAttributes(attributesMapping);
         }
-      }
 
-      if (at == null) {
-        // TraceManager.addDev("No correspondance for " + this.term2.getName());
-      } else {
-        // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
-        // " / " + at.getName());
-        this.term2 = at;
-        name = this.toString();
-        // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
-        // this.term2.getName());
-      }
+        // TraceManager.addDev("Replace Attribute term2=" +
+        // term2.getClass().getCanonicalName() + " / " + term2.getName());
 
-    } else {
-      this.term2.replaceAttributes(attributesMapping);
+        if (this.term2 instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.term2);
+            if (at == null) {
+                // Search by name
+                for (AvatarAttribute atbis : attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.term2.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+            }
+
+            if (at == null) {
+                // TraceManager.addDev("No correspondance for " + this.term2.getName());
+            } else {
+                // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                // " / " + at.getName());
+                this.term2 = at;
+                name = this.toString();
+                // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
+                // this.term2.getName());
+            }
+
+        } else {
+            this.term2.replaceAttributes(attributesMapping);
+        }
+
+        // TraceManager.addDev("Expr: " + this.toString());
     }
-
-    // TraceManager.addDev("Expr: " + this.toString());
-  }
 }

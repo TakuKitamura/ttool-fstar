@@ -44,32 +44,32 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface CDElement {
-  int getX();
+    int getX();
 
-  int getY();
+    int getY();
 
-  void setCd(int x, int y);
+    void setCd(int x, int y);
 
-  int getWidth();
+    int getWidth();
 
-  int getHeight();
+    int getHeight();
 
-  String getName();
+    String getName();
 
-  // Issue #69
-  void acceptForward(ICDElementVisitor visitor);
+    // Issue #69
+    void acceptForward(ICDElementVisitor visitor);
 
-  void acceptBackward(ICDElementVisitor visitor);
+    void acceptBackward(ICDElementVisitor visitor);
 
-  boolean canBeDisabled();
+    boolean canBeDisabled();
 
-  void setEnabled(boolean _enabled);
+    void setEnabled(boolean _enabled);
 
-  void doSetEnabled(boolean _enabled);
+    void doSetEnabled(boolean _enabled);
 
-  boolean isEnabled();
+    boolean isEnabled();
 
-  boolean isEnabled(boolean checkBranch);
+    boolean isEnabled(boolean checkBranch);
 
-  boolean canLabelBeDisabled(TGCOneLineText label);
+    boolean canLabelBeDisabled(TGCOneLineText label);
 }

@@ -47,10 +47,10 @@ package ui;
  */
 public class LoadInfo {
 
-  public int id;
-  public double load;
-  public long energy;
+    public int id;
+    public double load;
+    public long energy;
 
-  public LoadInfo() {
-  }
+    public LoadInfo() {
+    }
 }

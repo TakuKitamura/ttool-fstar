@@ -51,139 +51,139 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public abstract class TMLCChannelFacility extends TGCScalableWithInternalComponent {
-  protected Color myColor, portColor;
+    protected Color myColor, portColor;
 
-  protected TMLCPrimitivePort inp, outp;
-  protected int inpIndex, outpIndex;
-  protected boolean conflict = false;
-  protected String conflictMessage;
+    protected TMLCPrimitivePort inp, outp;
+    protected int inpIndex, outpIndex;
+    protected boolean conflict = false;
+    protected String conflictMessage;
 
-  public TMLCChannelFacility(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TMLCChannelFacility(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    minWidth = 10;
-    minHeight = 10;
+        minWidth = 10;
+        minHeight = 10;
 
-    moveable = true;
-    editable = false;
-    removable = true;
-    userResizable = false;
-  }
-
-  @Override
-  public TGComponent isOnOnlyMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        moveable = true;
+        editable = false;
+        removable = true;
+        userResizable = false;
     }
-    return null;
-  }
 
-  public void calculatePortColor() {
-    if (conflict) {
-      myColor = Color.red;
-    } else {
-
-      TMLCPrimitivePort port = inp;
-      if (port == null) {
-        port = outp;
-        //
-      }
-      if (port == null) {
-        portColor = null;
-        if (myColor == null) {
-          myColor = new Color(251, 252, 155 - (getMyDepth() * 10));
+    @Override
+    public TGComponent isOnOnlyMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
         }
-      } else {
-        int typep = port.getPortType();
-        if (typep == 0) {
-          myColor = ColorManager.TML_PORT_CHANNEL;
-        } else if (typep == 1) {
-          myColor = ColorManager.TML_PORT_EVENT;
+        return null;
+    }
+
+    public void calculatePortColor() {
+        if (conflict) {
+            myColor = Color.red;
         } else {
-          myColor = ColorManager.TML_PORT_REQUEST;
+
+            TMLCPrimitivePort port = inp;
+            if (port == null) {
+                port = outp;
+                //
+            }
+            if (port == null) {
+                portColor = null;
+                if (myColor == null) {
+                    myColor = new Color(251, 252, 155 - (getMyDepth() * 10));
+                }
+            } else {
+                int typep = port.getPortType();
+                if (typep == 0) {
+                    myColor = ColorManager.TML_PORT_CHANNEL;
+                } else if (typep == 1) {
+                    myColor = ColorManager.TML_PORT_EVENT;
+                } else {
+                    myColor = ColorManager.TML_PORT_REQUEST;
+                }
+            }
         }
-      }
-    }
-    portColor = myColor;
-  }
-
-  public void setInPort(TMLCPrimitivePort _inp) {
-    inp = _inp;
-    calculatePortColor();
-  }
-
-  public void setOutPort(TMLCPrimitivePort _outp) {
-    outp = _outp;
-    calculatePortColor();
-    //
-  }
-
-  public TMLCPrimitivePort getInPort() {
-    return inp;
-  }
-
-  public TMLCPrimitivePort getOutPort() {
-    return outp;
-  }
-
-  public int getInpIndex() {
-    return inpIndex;
-  }
-
-  public int getOutpIndex() {
-    return outpIndex;
-  }
-
-  public void setInpIndex(int _inpIndex) {
-    inpIndex = _inpIndex;
-  }
-
-  public void setOutpIndex(int _outpIndex) {
-    outpIndex = _outpIndex;
-  }
-
-  public boolean getConflict() {
-    return conflict;
-  }
-
-  public void setConflict(boolean _conflict, String _msg) {
-    conflict = _conflict;
-    myColor = null;
-    conflictMessage = _msg;
-    calculatePortColor();
-  }
-
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_PORT_TMLC;
-  }
-
-  public Color getPortColor() {
-    return portColor;
-  }
-
-  public String getAttributes() {
-    if (conflict) {
-      return conflictMessage;
+        portColor = myColor;
     }
 
-    String s = "";
-    if (inp != null) {
-      s = s + inp.getAttributes();
-      if (outp != null) {
-        s = s + "\n";
-      }
+    public void setInPort(TMLCPrimitivePort _inp) {
+        inp = _inp;
+        calculatePortColor();
     }
 
-    if (outp != null) {
-      s = s + outp.getAttributes();
+    public void setOutPort(TMLCPrimitivePort _outp) {
+        outp = _outp;
+        calculatePortColor();
+        //
     }
 
-    if (conflict) {
-      s += "Error in path=" + conflict;
+    public TMLCPrimitivePort getInPort() {
+        return inp;
     }
 
-    return s;
-  }
+    public TMLCPrimitivePort getOutPort() {
+        return outp;
+    }
+
+    public int getInpIndex() {
+        return inpIndex;
+    }
+
+    public int getOutpIndex() {
+        return outpIndex;
+    }
+
+    public void setInpIndex(int _inpIndex) {
+        inpIndex = _inpIndex;
+    }
+
+    public void setOutpIndex(int _outpIndex) {
+        outpIndex = _outpIndex;
+    }
+
+    public boolean getConflict() {
+        return conflict;
+    }
+
+    public void setConflict(boolean _conflict, String _msg) {
+        conflict = _conflict;
+        myColor = null;
+        conflictMessage = _msg;
+        calculatePortColor();
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_PORT_TMLC;
+    }
+
+    public Color getPortColor() {
+        return portColor;
+    }
+
+    public String getAttributes() {
+        if (conflict) {
+            return conflictMessage;
+        }
+
+        String s = "";
+        if (inp != null) {
+            s = s + inp.getAttributes();
+            if (outp != null) {
+                s = s + "\n";
+            }
+        }
+
+        if (outp != null) {
+            s = s + outp.getAttributes();
+        }
+
+        if (conflict) {
+            s += "Error in path=" + conflict;
+        }
+
+        return s;
+    }
 }

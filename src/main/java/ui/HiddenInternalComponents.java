@@ -46,7 +46,7 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface HiddenInternalComponents {
-  void setInternalsHidden(boolean hide);
+    void setInternalsHidden(boolean hide);
 
-  boolean areInternalsHidden();
+    boolean areInternalsHidden();
 }

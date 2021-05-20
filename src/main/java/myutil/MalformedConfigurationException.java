@@ -46,13 +46,13 @@ package myutil;
  */
 public class MalformedConfigurationException extends Exception {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 3702606106817772428L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3702606106817772428L;
 
-  public MalformedConfigurationException(String s) {
-    super(s);
-  }
+    public MalformedConfigurationException(String s) {
+        super(s);
+    }
 
 } // Class

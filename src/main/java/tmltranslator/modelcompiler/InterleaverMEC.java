@@ -48,16 +48,16 @@ package tmltranslator.modelcompiler;
  */
 public class InterleaverMEC extends ArchUnitMEC {
 
-  public static final String CONTEXT_CLEANUP = "intl_ctx_cleanup";
-  public static final String OPERATION = "Interleaver operation";
-  public static final String CONTEXT = "INTL_CONTEXT";
+    public static final String CONTEXT_CLEANUP = "intl_ctx_cleanup";
+    public static final String OPERATION = "Interleaver operation";
+    public static final String CONTEXT = "INTL_CONTEXT";
 
-  public InterleaverMEC() {
+    public InterleaverMEC() {
 
-    index = 2;
-    initCtxRoutine = "intl_ctx_init";
-    localMemoryPointer = "intl_mss";
-    ctxCleanupRoutine = "intl_ctx_cleanup";
-  }
+        index = 2;
+        initCtxRoutine = "intl_ctx_init";
+        localMemoryPointer = "intl_mss";
+        ctxCleanupRoutine = "intl_ctx_cleanup";
+    }
 
 } // End of class

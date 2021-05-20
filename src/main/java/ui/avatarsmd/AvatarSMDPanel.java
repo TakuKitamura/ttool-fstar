@@ -55,334 +55,336 @@ import myutil.*;
  */
 public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 
-  public AvatarSMDPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    addComponent(400, 50, TGComponentManager.AVATARSMD_START_STATE, false);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
+    public AvatarSMDPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        addComponent(400, 50, TGComponentManager.AVATARSMD_START_STATE, false);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
 
-    attributesOn = NORMAL;
-  }
-
-  @Override
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public boolean actionOnAdd(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public boolean actionOnRemove(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public String getXMLHead() {
-    return "<AVATARStateMachineDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
-  }
-
-  @Override
-  public String getXMLTail() {
-    return "</AVATARStateMachineDiagramPanel>";
-  }
-
-  @Override
-  public String getXMLSelectedHead() {
-    return "<AVATARStateMachineDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
-        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  @Override
-  public String getXMLSelectedTail() {
-    return "</AVATARStateMachineDiagramPanelCopy>";
-  }
-
-  @Override
-  public String getXMLCloneHead() {
-    return "<AVATARStateMachineDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\""
-        + 0 + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  @Override
-  public String getXMLCloneTail() {
-    return "</AVATARStateMachineDiagramPanelCopy>";
-  }
-
-  public void makeGraphicalOptimizations() {
-    // Segments of connector that mask components
-
-    // Components over others
-
-    // Position correctly guards of choice
-  }
-
-  @Override
-  public void enhance() {
-    // TraceManager.addDev("Enhance");
-    Vector<TGComponent> v = new Vector<TGComponent>();
-    TGComponent o;
-    Iterator<TGComponent> iterator = componentList.listIterator();
-
-    while (iterator.hasNext()) {
-      o = iterator.next();
-
-      if (o instanceof AvatarSMDStartState) {
-        enhance(v, (AvatarSMDStartState) o);
-      }
+        attributesOn = NORMAL;
     }
 
-    mgui.changeMade(this, MOVE_CONNECTOR);
-    repaint();
-  }
-
-  public void enhance(Vector<TGComponent> v, TGComponent tgc) {
-    TGComponent tgc1;
-    TGConnector tgcon;
-    int i;
-
-    TraceManager.addDev("Enhancing: " + tgc);
-
-    if (tgc == null) {
-      return;
+    @Override
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return false;
     }
 
-    if (v.contains(tgc)) {
-      return;
+    @Override
+    public boolean actionOnAdd(TGComponent tgc) {
+        return false;
     }
 
-    v.add(tgc);
-
-    //
-    if (!(tgc instanceof AvatarSMDStartState)) {
-      for (i = 0; i < tgc.getNbNext(); i++) {
-        tgc1 = getNextTGComponent(tgc, i);
-        tgcon = getNextTGConnector(tgc, i);
-        if (tgcon.getAutomaticDrawing()) {
-          if ((tgc1 != null) && (tgcon != null)) {
-            tgcon.alignOrMakeSquareTGComponents();
-          }
-        }
-      }
+    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        return false;
     }
 
-    // Explore next elements
-    for (i = 0; i < tgc.getNbNext(); i++) {
-      tgc1 = getNextTGComponent(tgc, i);
-      enhance(v, tgc1);
-    }
-  }
-
-  public void setConnectorsToFront() {
-    TGComponent tgc;
-
-    //
-
-    Iterator<TGComponent> iterator = componentList.listIterator();
-
-    List<TGComponent> list = new ArrayList<TGComponent>();
-
-    while (iterator.hasNext()) {
-      tgc = iterator.next();
-
-      if (!(tgc instanceof TGConnector)) {
-        list.add(tgc);
-      }
+    @Override
+    public boolean actionOnRemove(TGComponent tgc) {
+        return false;
     }
 
-    //
-    for (TGComponent tgc1 : list) {
-      //
-      componentList.remove(tgc1);
-      componentList.add(tgc1);
-    }
-  }
-
-  @Override
-  public boolean hasAutoConnect() {
-    return true;
-  }
-
-  public List<String> getAllStates() {
-    Iterator<TGComponent> iterator = componentList.listIterator();
-
-    List<String> list = new ArrayList<String>();
-
-    while (iterator.hasNext()) {
-      final TGComponent tgc = iterator.next();
-
-      if (tgc instanceof AvatarSMDState) {
-        list.add(tgc.getValue());
-      }
+    @Override
+    public String getXMLHead() {
+        return "<AVATARStateMachineDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
     }
 
-    return list;
-  }
-
-  @Override
-  public void autoConnect(TGComponent added) {
-    boolean cond = hasAutoConnect();
-
-    if (!cond) {
-      return;
+    @Override
+    public String getXMLTail() {
+        return "</AVATARStateMachineDiagramPanel>";
     }
 
-    int i, j;
+    @Override
+    public String getXMLSelectedHead() {
+        return "<AVATARStateMachineDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+                + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
 
-    // TraceManager.addDev("Autoconnect");
+    @Override
+    public String getXMLSelectedTail() {
+        return "</AVATARStateMachineDiagramPanelCopy>";
+    }
 
-    Vector<Point> listPoint = new Vector<>();
+    @Override
+    public String getXMLCloneHead() {
+        return "<AVATARStateMachineDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+                + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+    }
 
-    // Vector v = new Vector();
+    @Override
+    public String getXMLCloneTail() {
+        return "</AVATARStateMachineDiagramPanelCopy>";
+    }
 
-    // int distance = 100;
-    int dist1, dist2;
-    int x1, y1;
-    // TGConnectingPoint found = null;
-    int distanceTmp;
+    public void makeGraphicalOptimizations() {
+        // Segments of connector that mask components
 
-    // boolean cd1, cd2;
+        // Components over others
 
-    TGConnectingPoint tgcp, tgcp1;
+        // Position correctly guards of choice
+    }
 
-    TGConnector tgco;
-
-    TGComponent tgc;
-    // Iterator iterator;
-
-    // boolean inTaken = false;
-    // boolean outTaken = false;
-
-    // Tries to locate the two closer connecting point both in and out
-    // Connection can occur only from top to down
-
-    int foundDistanceIn = 100;
-    int foundDistanceOut = 100;
-    TGConnectingPoint foundIn1 = null, foundIn2 = null;
-    TGConnectingPoint foundOut1 = null, foundOut2 = null;
-
-    for (i = 0; i < added.getNbConnectingPoint(); i++) {
-      tgcp = added.getTGConnectingPointAtIndex(i);
-      // Only two at most : one up, one down!
-      if (tgcp.isFree() && tgcp.isCompatibleWith(added.getDefaultConnector())) {
-
-        // Try to connect that connecting point
-        // found = null;
-        // distance = 100;
-
-        final Iterator<TGComponent> iterator = componentList.listIterator();
+    @Override
+    public void enhance() {
+        // TraceManager.addDev("Enhance");
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        Iterator<TGComponent> iterator = componentList.listIterator();
 
         while (iterator.hasNext()) {
-          tgc = iterator.next();
+            o = iterator.next();
 
-          if (tgc != added) {
-            for (j = 0; j < tgc.getNbConnectingPoint(); j++) {
-              tgcp1 = tgc.getTGConnectingPointAtIndex(j);
-              if ((tgcp1 != null) && tgcp1.isFree()) {
-                if (tgcp1.isCompatibleWith(added.getDefaultConnector())) {
-                  if (tgcp1.getY() > tgcp.getY()) {
-                    // out connector
-                    if (tgcp.isOut() && tgcp1.isIn()) {
-                      distanceTmp = (int) (Math
-                          .sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
-                      if (distanceTmp < foundDistanceOut) {
-                        foundDistanceOut = distanceTmp;
-                        foundOut1 = tgcp;
-                        foundOut2 = tgcp1;
-                      } else if ((distanceTmp == foundDistanceOut) && (foundOut1 != null)) {
-                        // Distance from the center
-                        x1 = added.getX() + added.getWidth() / 2;
-                        y1 = added.getY() + added.getHeight() / 2;
-                        dist1 = (int) (Math
-                            .sqrt(Math.pow(foundOut1.getX() - x1, 2) + Math.pow(foundOut1.getY() - y1, 2)));
-                        dist2 = (int) (Math.sqrt(Math.pow(tgcp.getX() - x1, 2) + Math.pow(tgcp.getY() - y1, 2)));
-                        if (dist2 <= dist1) {
-                          foundOut1 = tgcp;
-                          foundOut2 = tgcp1;
-                        }
-                      }
-                    }
-                  } else {
-                    // In connector
-                    if (tgcp1.isOut() && tgcp.isIn()) {
-                      distanceTmp = (int) (Math
-                          .sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
-                      if (distanceTmp < foundDistanceIn) {
-                        foundDistanceIn = distanceTmp;
-                        foundIn1 = tgcp1;
-                        foundIn2 = tgcp;
-                      } else if ((distanceTmp == foundDistanceIn) && (foundIn2 != null)) {
-                        x1 = added.getX() + added.getWidth() / 2;
-                        y1 = added.getY() + added.getHeight() / 2;
-                        dist1 = (int) (Math
-                            .sqrt(Math.pow(foundIn2.getX() - x1, 2) + Math.pow(foundIn2.getY() - y1, 2)));
-                        dist2 = (int) (Math.sqrt(Math.pow(tgcp.getX() - x1, 2) + Math.pow(tgcp.getY() - y1, 2)));
-                        if (dist2 <= dist1) {
-                          foundIn1 = tgcp1;
-                          foundIn2 = tgcp;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+            if (o instanceof AvatarSMDStartState) {
+                enhance(v, (AvatarSMDStartState) o);
             }
-          }
         }
-        // if (found != null) {
-        // //TraceManager.addDev("Adding connector");
-        // if (found.isIn()) {
-        // tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(),
-        // added.getDefaultConnector(), this, tgcp, found, listPoint);
-        // } else {
-        // tgco = TGComponentManager.addConnector(found.getX(), found.getY(),
-        // added.getDefaultConnector(), this, found, tgcp, listPoint);
-        // }
-        // found.setFree(false);
-        // tgcp.setFree(false);
-        // componentList.add(tgco);
-        // //TraceManager.addDev("Connector added");
-        // }
-      }
+
+        mgui.changeMade(this, MOVE_CONNECTOR);
+        repaint();
     }
 
-    if (foundIn1 != null) {
-      tgco = TGComponentManager.addConnector(foundIn1.getX(), foundIn1.getY(), added.getDefaultConnector(), this,
-          foundIn1, foundIn2, listPoint);
-      foundIn1.setFree(false);
-      foundIn2.setFree(false);
-      componentList.add(tgco);
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
+        TGComponent tgc1;
+        TGConnector tgcon;
+        int i;
+
+        TraceManager.addDev("Enhancing: " + tgc);
+
+        if (tgc == null) {
+            return;
+        }
+
+        if (v.contains(tgc)) {
+            return;
+        }
+
+        v.add(tgc);
+
+        //
+        if (!(tgc instanceof AvatarSMDStartState)) {
+            for (i = 0; i < tgc.getNbNext(); i++) {
+                tgc1 = getNextTGComponent(tgc, i);
+                tgcon = getNextTGConnector(tgc, i);
+                if (tgcon.getAutomaticDrawing()) {
+                    if ((tgc1 != null) && (tgcon != null)) {
+                        tgcon.alignOrMakeSquareTGComponents();
+                    }
+                }
+            }
+        }
+
+        // Explore next elements
+        for (i = 0; i < tgc.getNbNext(); i++) {
+            tgc1 = getNextTGComponent(tgc, i);
+            enhance(v, tgc1);
+        }
     }
 
-    if ((foundOut1 != null) && (foundOut1.isFree()) && (foundOut2.isFree())) {
-      tgco = TGComponentManager.addConnector(foundOut1.getX(), foundOut1.getY(), added.getDefaultConnector(), this,
-          foundOut1, foundOut2, listPoint);
-      foundOut1.setFree(false);
-      foundOut2.setFree(false);
-      componentList.add(tgco);
+    public void setConnectorsToFront() {
+        TGComponent tgc;
+
+        //
+
+        Iterator<TGComponent> iterator = componentList.listIterator();
+
+        List<TGComponent> list = new ArrayList<TGComponent>();
+
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+
+            if (!(tgc instanceof TGConnector)) {
+                list.add(tgc);
+            }
+        }
+
+        //
+        for (TGComponent tgc1 : list) {
+            //
+            componentList.remove(tgc1);
+            componentList.add(tgc1);
+        }
     }
-    // TraceManager.addDev("End Autoconnect");
-  }
 
-  public void resetStateSecurityInfo() {
-    Iterator<TGComponent> iterator = getComponentList().listIterator();
-    // TGComponent tgc;
-
-    while (iterator.hasNext()) {
-      final TGComponent tgc = iterator.next();
-
-      if (tgc instanceof AvatarSMDState) {
-        ((AvatarSMDState) tgc).resetSecurityInfo();
-      }
+    @Override
+    public boolean hasAutoConnect() {
+        return true;
     }
-  }
+
+    public List<String> getAllStates() {
+        Iterator<TGComponent> iterator = componentList.listIterator();
+
+        List<String> list = new ArrayList<String>();
+
+        while (iterator.hasNext()) {
+            final TGComponent tgc = iterator.next();
+
+            if (tgc instanceof AvatarSMDState) {
+                list.add(tgc.getValue());
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public void autoConnect(TGComponent added) {
+        boolean cond = hasAutoConnect();
+
+        if (!cond) {
+            return;
+        }
+
+        int i, j;
+
+        // TraceManager.addDev("Autoconnect");
+
+        Vector<Point> listPoint = new Vector<>();
+
+        // Vector v = new Vector();
+
+        // int distance = 100;
+        int dist1, dist2;
+        int x1, y1;
+        // TGConnectingPoint found = null;
+        int distanceTmp;
+
+        // boolean cd1, cd2;
+
+        TGConnectingPoint tgcp, tgcp1;
+
+        TGConnector tgco;
+
+        TGComponent tgc;
+        // Iterator iterator;
+
+        // boolean inTaken = false;
+        // boolean outTaken = false;
+
+        // Tries to locate the two closer connecting point both in and out
+        // Connection can occur only from top to down
+
+        int foundDistanceIn = 100;
+        int foundDistanceOut = 100;
+        TGConnectingPoint foundIn1 = null, foundIn2 = null;
+        TGConnectingPoint foundOut1 = null, foundOut2 = null;
+
+        for (i = 0; i < added.getNbConnectingPoint(); i++) {
+            tgcp = added.getTGConnectingPointAtIndex(i);
+            // Only two at most : one up, one down!
+            if (tgcp.isFree() && tgcp.isCompatibleWith(added.getDefaultConnector())) {
+
+                // Try to connect that connecting point
+                // found = null;
+                // distance = 100;
+
+                final Iterator<TGComponent> iterator = componentList.listIterator();
+
+                while (iterator.hasNext()) {
+                    tgc = iterator.next();
+
+                    if (tgc != added) {
+                        for (j = 0; j < tgc.getNbConnectingPoint(); j++) {
+                            tgcp1 = tgc.getTGConnectingPointAtIndex(j);
+                            if ((tgcp1 != null) && tgcp1.isFree()) {
+                                if (tgcp1.isCompatibleWith(added.getDefaultConnector())) {
+                                    if (tgcp1.getY() > tgcp.getY()) {
+                                        // out connector
+                                        if (tgcp.isOut() && tgcp1.isIn()) {
+                                            distanceTmp = (int) (Math.sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2)
+                                                    + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
+                                            if (distanceTmp < foundDistanceOut) {
+                                                foundDistanceOut = distanceTmp;
+                                                foundOut1 = tgcp;
+                                                foundOut2 = tgcp1;
+                                            } else if ((distanceTmp == foundDistanceOut) && (foundOut1 != null)) {
+                                                // Distance from the center
+                                                x1 = added.getX() + added.getWidth() / 2;
+                                                y1 = added.getY() + added.getHeight() / 2;
+                                                dist1 = (int) (Math.sqrt(Math.pow(foundOut1.getX() - x1, 2)
+                                                        + Math.pow(foundOut1.getY() - y1, 2)));
+                                                dist2 = (int) (Math.sqrt(
+                                                        Math.pow(tgcp.getX() - x1, 2) + Math.pow(tgcp.getY() - y1, 2)));
+                                                if (dist2 <= dist1) {
+                                                    foundOut1 = tgcp;
+                                                    foundOut2 = tgcp1;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // In connector
+                                        if (tgcp1.isOut() && tgcp.isIn()) {
+                                            distanceTmp = (int) (Math.sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2)
+                                                    + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
+                                            if (distanceTmp < foundDistanceIn) {
+                                                foundDistanceIn = distanceTmp;
+                                                foundIn1 = tgcp1;
+                                                foundIn2 = tgcp;
+                                            } else if ((distanceTmp == foundDistanceIn) && (foundIn2 != null)) {
+                                                x1 = added.getX() + added.getWidth() / 2;
+                                                y1 = added.getY() + added.getHeight() / 2;
+                                                dist1 = (int) (Math.sqrt(Math.pow(foundIn2.getX() - x1, 2)
+                                                        + Math.pow(foundIn2.getY() - y1, 2)));
+                                                dist2 = (int) (Math.sqrt(
+                                                        Math.pow(tgcp.getX() - x1, 2) + Math.pow(tgcp.getY() - y1, 2)));
+                                                if (dist2 <= dist1) {
+                                                    foundIn1 = tgcp1;
+                                                    foundIn2 = tgcp;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                // if (found != null) {
+                // //TraceManager.addDev("Adding connector");
+                // if (found.isIn()) {
+                // tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(),
+                // added.getDefaultConnector(), this, tgcp, found, listPoint);
+                // } else {
+                // tgco = TGComponentManager.addConnector(found.getX(), found.getY(),
+                // added.getDefaultConnector(), this, found, tgcp, listPoint);
+                // }
+                // found.setFree(false);
+                // tgcp.setFree(false);
+                // componentList.add(tgco);
+                // //TraceManager.addDev("Connector added");
+                // }
+            }
+        }
+
+        if (foundIn1 != null) {
+            tgco = TGComponentManager.addConnector(foundIn1.getX(), foundIn1.getY(), added.getDefaultConnector(), this,
+                    foundIn1, foundIn2, listPoint);
+            foundIn1.setFree(false);
+            foundIn2.setFree(false);
+            componentList.add(tgco);
+        }
+
+        if ((foundOut1 != null) && (foundOut1.isFree()) && (foundOut2.isFree())) {
+            tgco = TGComponentManager.addConnector(foundOut1.getX(), foundOut1.getY(), added.getDefaultConnector(),
+                    this, foundOut1, foundOut2, listPoint);
+            foundOut1.setFree(false);
+            foundOut2.setFree(false);
+            componentList.add(tgco);
+        }
+        // TraceManager.addDev("End Autoconnect");
+    }
+
+    public void resetStateSecurityInfo() {
+        Iterator<TGComponent> iterator = getComponentList().listIterator();
+        // TGComponent tgc;
+
+        while (iterator.hasNext()) {
+            final TGComponent tgc = iterator.next();
+
+            if (tgc instanceof AvatarSMDState) {
+                ((AvatarSMDState) tgc).resetSecurityInfo();
+            }
+        }
+    }
 }

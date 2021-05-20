@@ -52,77 +52,77 @@ import java.util.Vector;
  */
 public class AvatarSimulationAsynchronousTransaction {
 
-  private Vector<String> parameters;
-  private AvatarRelation relation;
-  private int index;
-  public AvatarSimulationTransaction firstTransaction;
-  // public AvatarSimulationTransaction receivedTransaction;
+    private Vector<String> parameters;
+    private AvatarRelation relation;
+    private int index;
+    public AvatarSimulationTransaction firstTransaction;
+    // public AvatarSimulationTransaction receivedTransaction;
 
-  public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar, int _index) {
-    relation = _ar;
-    index = _index;
-    parameters = new Vector<String>();
-  }
-
-  public AvatarRelation getRelation() {
-    return relation;
-  }
-
-  public void addParameter(String _s) {
-    parameters.add(_s);
-  }
-
-  public int getNbOfParameters() {
-    return parameters.size();
-  }
-
-  public Vector<String> getParameters() {
-    return parameters;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
-  public String toString() {
-    String blockName;
-    if (firstTransaction != null) {
-      blockName = firstTransaction.block.getName();
-    } else {
-      blockName = relation.block1.getName();
+    public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar, int _index) {
+        relation = _ar;
+        index = _index;
+        parameters = new Vector<String>();
     }
 
-    AvatarSignal sig1 = relation.getSignal1(index);
-    AvatarSignal sig2 = relation.getSignal2(index);
-
-    if ((sig1 == null) || (sig2 == null)) {
-      return "?";
+    public AvatarRelation getRelation() {
+        return relation;
     }
 
-    String ret = blockName + "." + sig1.getName() + "(";
-    for (int i = 0; i < parameters.size(); i++) {
-      if (i != 0) {
-        ret += ",";
-      }
-      ret += parameters.get(i);
+    public void addParameter(String _s) {
+        parameters.add(_s);
     }
-    ret += ") -> ";
 
-    ret += relation.block2.getName() + "." + sig2.getName();
-
-    return ret;
-  }
-
-  public String parametersToString() {
-    String ret = "(";
-    for (int i = 0; i < parameters.size(); i++) {
-      if (i != 0) {
-        ret += ",";
-      }
-      ret += parameters.get(i);
+    public int getNbOfParameters() {
+        return parameters.size();
     }
-    ret += ")";
 
-    return ret;
-  }
+    public Vector<String> getParameters() {
+        return parameters;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public String toString() {
+        String blockName;
+        if (firstTransaction != null) {
+            blockName = firstTransaction.block.getName();
+        } else {
+            blockName = relation.block1.getName();
+        }
+
+        AvatarSignal sig1 = relation.getSignal1(index);
+        AvatarSignal sig2 = relation.getSignal2(index);
+
+        if ((sig1 == null) || (sig2 == null)) {
+            return "?";
+        }
+
+        String ret = blockName + "." + sig1.getName() + "(";
+        for (int i = 0; i < parameters.size(); i++) {
+            if (i != 0) {
+                ret += ",";
+            }
+            ret += parameters.get(i);
+        }
+        ret += ") -> ";
+
+        ret += relation.block2.getName() + "." + sig2.getName();
+
+        return ret;
+    }
+
+    public String parametersToString() {
+        String ret = "(";
+        for (int i = 0; i < parameters.size(); i++) {
+            if (i != 0) {
+                ret += ",";
+            }
+            ret += parameters.get(i);
+        }
+        ret += ")";
+
+        return ret;
+    }
 }

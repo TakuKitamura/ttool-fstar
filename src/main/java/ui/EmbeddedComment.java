@@ -46,5 +46,5 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface EmbeddedComment {
-  void setInternalComment(String comment);
+    void setInternalComment(String comment);
 }

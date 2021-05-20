@@ -48,51 +48,51 @@ import java.util.ListIterator;
  * @author Ludovic APVRILLE
  */
 public class State {
-  private String name;
-  private LinkedList<Transition> transitions;
-  public Object referenceObject;
+    private String name;
+    private LinkedList<Transition> transitions;
+    public Object referenceObject;
 
-  public State(String _name) {
-    transitions = new LinkedList<Transition>();
-    name = _name;
-  }
-
-  public int nbOfTransitions() {
-    return transitions.size();
-  }
-
-  public LinkedList<Transition> getTransitions() {
-    return transitions;
-  }
-
-  public Transition getTransition(int index) {
-    return transitions.get(index);
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String _name) {
-    name = _name;
-  }
-
-  public void addTransition(Transition t) {
-    // System.out.println("Adding transition to state " + getName() + " transition="
-    // + t.getValue() + " to " + t.getNextState().getName());
-    transitions.add(t);
-  }
-
-  public String toAUT() {
-    StringBuffer sb = new StringBuffer("");
-    Transition tr;
-
-    ListIterator<Transition> iterator = transitions.listIterator();
-    while (iterator.hasNext()) {
-      tr = iterator.next();
-      sb.append("(" + name + ", \"" + tr.getValue() + "\", " + tr.getNextState().getName() + ")\n");
+    public State(String _name) {
+        transitions = new LinkedList<Transition>();
+        name = _name;
     }
-    return new String(sb);
-  }
+
+    public int nbOfTransitions() {
+        return transitions.size();
+    }
+
+    public LinkedList<Transition> getTransitions() {
+        return transitions;
+    }
+
+    public Transition getTransition(int index) {
+        return transitions.get(index);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String _name) {
+        name = _name;
+    }
+
+    public void addTransition(Transition t) {
+        // System.out.println("Adding transition to state " + getName() + " transition="
+        // + t.getValue() + " to " + t.getNextState().getName());
+        transitions.add(t);
+    }
+
+    public String toAUT() {
+        StringBuffer sb = new StringBuffer("");
+        Transition tr;
+
+        ListIterator<Transition> iterator = transitions.listIterator();
+        while (iterator.hasNext()) {
+            tr = iterator.next();
+            sb.append("(" + name + ", \"" + tr.getValue() + "\", " + tr.getNextState().getName() + ")\n");
+        }
+        return new String(sb);
+    }
 
 }

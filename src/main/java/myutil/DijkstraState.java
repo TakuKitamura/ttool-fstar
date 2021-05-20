@@ -47,28 +47,28 @@ package myutil;
  * @author Ludovic APVRILLE
  */
 public class DijkstraState {
-  public int state;
-  public boolean used;
-  public int weight;
-  public int previous;
-  public int[] path;
+    public int state;
+    public boolean used;
+    public int weight;
+    public int previous;
+    public int[] path;
 
-  public DijkstraState(int stateNb) {
-    state = stateNb;
-    used = false;
-  }
-
-  public String toString() {
-    String s;
-    if (path != null) {
-      s = "state= " + state + " weight=" + weight + " path= ";
-      for (int i = 0; i < path.length; i++) {
-        s += path[i] + " ";
-      }
-      return s;
-    } else {
-      return ("state= " + state + " no path");
+    public DijkstraState(int stateNb) {
+        state = stateNb;
+        used = false;
     }
-  }
+
+    public String toString() {
+        String s;
+        if (path != null) {
+            s = "state= " + state + " weight=" + weight + " path= ";
+            for (int i = 0; i < path.length; i++) {
+                s += path[i] + " ";
+            }
+            return s;
+        } else {
+            return ("state= " + state + " no path");
+        }
+    }
 
 }

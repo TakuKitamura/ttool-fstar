@@ -57,248 +57,249 @@ import java.util.Map;
  */
 public class AVATAR2TPN {
 
-  // private static int GENERAL_ID = 0;
+    // private static int GENERAL_ID = 0;
 
-  private TPN tpn;
-  private AvatarSpecification avspec;
+    private TPN tpn;
+    private AvatarSpecification avspec;
 
-  private Map<AvatarStateMachineElement, Place> entryPlaces;
-  private Map<AvatarStateMachineElement, Place> exitPlaces;
-  private List<AvatarActionOnSignal> sendActions;
-  private List<AvatarActionOnSignal> receiveActions;
+    private Map<AvatarStateMachineElement, Place> entryPlaces;
+    private Map<AvatarStateMachineElement, Place> exitPlaces;
+    private List<AvatarActionOnSignal> sendActions;
+    private List<AvatarActionOnSignal> receiveActions;
 
-  // private Vector warnings;
+    // private Vector warnings;
 
-  public AVATAR2TPN(AvatarSpecification _avspec) {
-    avspec = _avspec;
-  }
+    public AVATAR2TPN(AvatarSpecification _avspec) {
+        avspec = _avspec;
+    }
 
-  // public Vector getWarnings() {
-  // return warnings;
-  // }
+    // public Vector getWarnings() {
+    // return warnings;
+    // }
 
-  public TPN generateTPN(boolean _debug, boolean _optimize) {
-    // GENERAL_ID = 0;
+    public TPN generateTPN(boolean _debug, boolean _optimize) {
+        // GENERAL_ID = 0;
 
-    entryPlaces = new Hashtable<AvatarStateMachineElement, Place>();
-    exitPlaces = new Hashtable<AvatarStateMachineElement, Place>();
+        entryPlaces = new Hashtable<AvatarStateMachineElement, Place>();
+        exitPlaces = new Hashtable<AvatarStateMachineElement, Place>();
 
-    sendActions = new LinkedList<AvatarActionOnSignal>();
-    receiveActions = new LinkedList<AvatarActionOnSignal>();
+        sendActions = new LinkedList<AvatarActionOnSignal>();
+        receiveActions = new LinkedList<AvatarActionOnSignal>();
 
-    // warnings = new Vector();
-    tpn = new TPN();
+        // warnings = new Vector();
+        tpn = new TPN();
 
-    avspec.removeCompositeStates();
-    avspec.removeLibraryFunctionCalls();
-    avspec.removeTimers();
+        avspec.removeCompositeStates();
+        avspec.removeLibraryFunctionCalls();
+        avspec.removeTimers();
 
-    makeBlocks();
+        makeBlocks();
 
-    // TraceManager.addDev("-> tpn:" + tpn.toString());
+        // TraceManager.addDev("-> tpn:" + tpn.toString());
 
+        /*
+         * if (_optimize) { spec.optimize(); }
+         */
+
+        return tpn;
+    }
+
+    public void makeBlocks() {
+        java.util.List<AvatarBlock> blocks = avspec.getListOfBlocks();
+
+        for (AvatarBlock block : blocks) {
+            makeBlock(block);
+        }
+        interconnectSynchro();
+    }
+
+    public void makeBlock(AvatarBlock ab) {
+        AvatarStateMachine asm = ab.getStateMachine();
+        AvatarStartState ass = asm.getStartState();
+        if (ass != null) {
+            makeBlockTPN(ab, asm, ass, null);
+        }
+
+    }
+
+    public void makeBlockTPN(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme,
+            AvatarStateMachineElement _previous) {
+
+        Place p0, p1, pentry = null, pexit = null;
+        Transition t0;
+        AvatarActionOnSignal aaos;
+
+        p0 = entryPlaces.get(_asme);
+        if (_previous == null) {
+            p1 = null;
+        } else {
+            p1 = exitPlaces.get(_previous);
+        }
+
+        boolean link = false;
+
+        // Element already taken into account?
+        if (p0 != null) {
+            // Link the exit place of the previous element to the one of the current element
+            if (p1 != null) {
+                t0 = new Transition(getTPNName(_block, _previous) + "_to_" + getTPNName(_block, _asme));
+                t0.addDestinationPlace(p0);
+                t0.addOriginPlace(p1);
+                tpn.addTransition(t0);
+            }
+            return;
+        }
+
+        // New element!
+
+        // Start state
+        if ((_asme instanceof AvatarStartState) || (_asme instanceof AvatarStopState)
+                || (_asme instanceof AvatarState)) {
+            pentry = new Place(getTPNName(_block, _asme));
+            if (_asme instanceof AvatarStartState) {
+                pentry.nbOfTokens = 1;
+            }
+            pexit = pentry;
+            entryPlaces.put(_asme, pentry);
+            exitPlaces.put(_asme, pexit);
+            // TraceManager.addDev("Adding place : " + pentry);
+            tpn.addPlace(pentry);
+            link = true;
+
+        } else if ((_asme instanceof AvatarTransition) || (_asme instanceof AvatarRandom)) {
+            if (p1 != null) {
+                entryPlaces.put(_asme, p1);
+                exitPlaces.put(_asme, p1);
+            } else {
+                TraceManager.addDev("Previous element without pexit!!");
+            }
+
+        } else if (_asme instanceof AvatarActionOnSignal) {
+            TraceManager.addDev("??????? Analyzing actions on signals: " + _asme);
+            aaos = (AvatarActionOnSignal) _asme;
+
+            if (aaos.getSignal().isOut()) {
+                sendActions.add(aaos);
+            } else {
+                receiveActions.add(aaos);
+            }
+
+            if (p1 == null) {
+                TraceManager.addDev("********* NULL P1");
+            }
+
+            pentry = p1;
+            pexit = new Place(getTPNName(_block, _asme));
+            entryPlaces.put(_asme, pentry);
+            exitPlaces.put(_asme, pexit);
+
+            tpn.addPlace(pexit);
+            // TraceManager.addDev("Adding place : " + pentry);
+
+        } else {
+            TraceManager.addDev("UNMANAGED ELEMENTS: " + _asme);
+        }
+
+        // Must link the new element to the previous one
+        if ((p1 != null) && (link)) {
+            t0 = new Transition(getTPNName(_block, _previous) + "_to_" + getTPNName(_block, _asme));
+            t0.addDestinationPlace(pentry);
+            t0.addOriginPlace(p1);
+            tpn.addTransition(t0);
+        }
+
+        // Work with next elements
+        for (int i = 0; i < _asme.nbOfNexts(); i++) {
+            makeBlockTPN(_block, _asm, _asme.getNext(i), _asme);
+        }
+
+    }
+
+    public void interconnectSynchro() {
+        int index;
+        AvatarSignal sig;
+        Transition t0, t1;
+        Place pSynchro;
+
+        // TraceManager.addDev("Interconnecting synchro");
+
+        // Interconnect sender and receivers together!
+        for (AvatarActionOnSignal destination : receiveActions) {
+            TraceManager.addDev("Dealing with receive actions : " + destination);
+            // Find the related relation
+            for (AvatarRelation ar : avspec.getRelations()) {
+                if (ar.containsSignal(destination.getSignal()) && !ar.isAsynchronous()) {
+                    index = ar.getIndexOfSignal(destination.getSignal());
+                    sig = ar.getOutSignal(index);
+                    for (AvatarActionOnSignal origin : sendActions) {
+                        if (origin.getSignal() == sig) {
+                            // combination found!
+                            TraceManager.addDev("Combination found for: " + sig);
+                            t0 = new Transition("beginning_Synchro_from_" + getTPNName(ar.getOutBlock(index), origin)
+                                    + "_to_" + getTPNName(ar.getInBlock(index), destination));
+                            pSynchro = new Place("Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_"
+                                    + getTPNName(ar.getInBlock(index), destination));
+                            tpn.addPlace(pSynchro);
+                            t1 = new Transition("end_Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_"
+                                    + getTPNName(ar.getInBlock(index), destination));
+
+                            t0.addOriginPlace(entryPlaces.get(destination));
+                            t0.addOriginPlace(entryPlaces.get(origin));
+                            t0.addDestinationPlace(pSynchro);
+
+                            t1.addOriginPlace(pSynchro);
+                            t1.addDestinationPlace(exitPlaces.get(origin));
+                            t1.addDestinationPlace(exitPlaces.get(destination));
+
+                            tpn.addTransition(t0);
+                            tpn.addTransition(t1);
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
     /*
-     * if (_optimize) { spec.optimize(); }
+     * Old version public void interconnectSynchro() { int index; AvatarSignal sig;
+     * Transition t0;
+     * 
+     * //TraceManager.addDev("Interconnecting synchro");
+     * 
+     * // Interconnect sender and receivers together! for(AvatarActionOnSignal
+     * destination: receiveActions) { // Find the related relation
+     * for(AvatarRelation ar: avspec.getRelations()) { if
+     * (ar.containsSignal(destination.getSignal()) && !ar.isAsynchronous()) { index
+     * = ar.getIndexOfSignal(destination.getSignal()); sig = ar.getOutSignal(index);
+     * for(AvatarActionOnSignal origin:sendActions) { if (origin.getSignal() == sig)
+     * { // combination found! //TraceManager.addDev("Combination found"); t0 = new
+     * Transition("Synchro from " + getShortTPNName(origin) + " to " +
+     * getShortTPNName(destination)); t0.addOriginPlace(entryPlaces.get(origin));
+     * t0.addDestinationPlace(exitPlaces.get(origin));
+     * t0.addOriginPlace(entryPlaces.get(destination));
+     * t0.addDestinationPlace(exitPlaces.get(destination)); tpn.addTransition(t0); }
+     * } } } }
+     * 
+     * }
      */
 
-    return tpn;
-  }
-
-  public void makeBlocks() {
-    java.util.List<AvatarBlock> blocks = avspec.getListOfBlocks();
-
-    for (AvatarBlock block : blocks) {
-      makeBlock(block);
-    }
-    interconnectSynchro();
-  }
-
-  public void makeBlock(AvatarBlock ab) {
-    AvatarStateMachine asm = ab.getStateMachine();
-    AvatarStartState ass = asm.getStartState();
-    if (ass != null) {
-      makeBlockTPN(ab, asm, ass, null);
-    }
-
-  }
-
-  public void makeBlockTPN(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme,
-      AvatarStateMachineElement _previous) {
-
-    Place p0, p1, pentry = null, pexit = null;
-    Transition t0;
-    AvatarActionOnSignal aaos;
-
-    p0 = entryPlaces.get(_asme);
-    if (_previous == null) {
-      p1 = null;
-    } else {
-      p1 = exitPlaces.get(_previous);
-    }
-
-    boolean link = false;
-
-    // Element already taken into account?
-    if (p0 != null) {
-      // Link the exit place of the previous element to the one of the current element
-      if (p1 != null) {
-        t0 = new Transition(getTPNName(_block, _previous) + "_to_" + getTPNName(_block, _asme));
-        t0.addDestinationPlace(p0);
-        t0.addOriginPlace(p1);
-        tpn.addTransition(t0);
-      }
-      return;
-    }
-
-    // New element!
-
-    // Start state
-    if ((_asme instanceof AvatarStartState) || (_asme instanceof AvatarStopState) || (_asme instanceof AvatarState)) {
-      pentry = new Place(getTPNName(_block, _asme));
-      if (_asme instanceof AvatarStartState) {
-        pentry.nbOfTokens = 1;
-      }
-      pexit = pentry;
-      entryPlaces.put(_asme, pentry);
-      exitPlaces.put(_asme, pexit);
-      // TraceManager.addDev("Adding place : " + pentry);
-      tpn.addPlace(pentry);
-      link = true;
-
-    } else if ((_asme instanceof AvatarTransition) || (_asme instanceof AvatarRandom)) {
-      if (p1 != null) {
-        entryPlaces.put(_asme, p1);
-        exitPlaces.put(_asme, p1);
-      } else {
-        TraceManager.addDev("Previous element without pexit!!");
-      }
-
-    } else if (_asme instanceof AvatarActionOnSignal) {
-      TraceManager.addDev("??????? Analyzing actions on signals: " + _asme);
-      aaos = (AvatarActionOnSignal) _asme;
-
-      if (aaos.getSignal().isOut()) {
-        sendActions.add(aaos);
-      } else {
-        receiveActions.add(aaos);
-      }
-
-      if (p1 == null) {
-        TraceManager.addDev("********* NULL P1");
-      }
-
-      pentry = p1;
-      pexit = new Place(getTPNName(_block, _asme));
-      entryPlaces.put(_asme, pentry);
-      exitPlaces.put(_asme, pexit);
-
-      tpn.addPlace(pexit);
-      // TraceManager.addDev("Adding place : " + pentry);
-
-    } else {
-      TraceManager.addDev("UNMANAGED ELEMENTS: " + _asme);
-    }
-
-    // Must link the new element to the previous one
-    if ((p1 != null) && (link)) {
-      t0 = new Transition(getTPNName(_block, _previous) + "_to_" + getTPNName(_block, _asme));
-      t0.addDestinationPlace(pentry);
-      t0.addOriginPlace(p1);
-      tpn.addTransition(t0);
-    }
-
-    // Work with next elements
-    for (int i = 0; i < _asme.nbOfNexts(); i++) {
-      makeBlockTPN(_block, _asm, _asme.getNext(i), _asme);
-    }
-
-  }
-
-  public void interconnectSynchro() {
-    int index;
-    AvatarSignal sig;
-    Transition t0, t1;
-    Place pSynchro;
-
-    // TraceManager.addDev("Interconnecting synchro");
-
-    // Interconnect sender and receivers together!
-    for (AvatarActionOnSignal destination : receiveActions) {
-      TraceManager.addDev("Dealing with receive actions : " + destination);
-      // Find the related relation
-      for (AvatarRelation ar : avspec.getRelations()) {
-        if (ar.containsSignal(destination.getSignal()) && !ar.isAsynchronous()) {
-          index = ar.getIndexOfSignal(destination.getSignal());
-          sig = ar.getOutSignal(index);
-          for (AvatarActionOnSignal origin : sendActions) {
-            if (origin.getSignal() == sig) {
-              // combination found!
-              TraceManager.addDev("Combination found for: " + sig);
-              t0 = new Transition("beginning_Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_"
-                  + getTPNName(ar.getInBlock(index), destination));
-              pSynchro = new Place("Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_"
-                  + getTPNName(ar.getInBlock(index), destination));
-              tpn.addPlace(pSynchro);
-              t1 = new Transition("end_Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_"
-                  + getTPNName(ar.getInBlock(index), destination));
-
-              t0.addOriginPlace(entryPlaces.get(destination));
-              t0.addOriginPlace(entryPlaces.get(origin));
-              t0.addDestinationPlace(pSynchro);
-
-              t1.addOriginPlace(pSynchro);
-              t1.addDestinationPlace(exitPlaces.get(origin));
-              t1.addDestinationPlace(exitPlaces.get(destination));
-
-              tpn.addTransition(t0);
-              tpn.addTransition(t1);
-
+    public String getTPNName(AvatarBlock _block, AvatarStateMachineElement _asme) {
+        if (_asme instanceof AvatarActionOnSignal) {
+            AvatarActionOnSignal aaos = (AvatarActionOnSignal) _asme;
+            if (aaos.isSending()) {
+                return _block.getName() + "__Send__" + aaos.getSignal().getName() + "__" + _asme.getID();
+            } else {
+                return _block.getName() + "__Receive__" + aaos.getSignal().getName() + "__" + _asme.getID();
             }
-          }
+
         }
-      }
+
+        return _block.getName() + "__" + _asme.getName() + "__" + _asme.getID();
     }
 
-  }
-  /*
-   * Old version public void interconnectSynchro() { int index; AvatarSignal sig;
-   * Transition t0;
-   * 
-   * //TraceManager.addDev("Interconnecting synchro");
-   * 
-   * // Interconnect sender and receivers together! for(AvatarActionOnSignal
-   * destination: receiveActions) { // Find the related relation
-   * for(AvatarRelation ar: avspec.getRelations()) { if
-   * (ar.containsSignal(destination.getSignal()) && !ar.isAsynchronous()) { index
-   * = ar.getIndexOfSignal(destination.getSignal()); sig = ar.getOutSignal(index);
-   * for(AvatarActionOnSignal origin:sendActions) { if (origin.getSignal() == sig)
-   * { // combination found! //TraceManager.addDev("Combination found"); t0 = new
-   * Transition("Synchro from " + getShortTPNName(origin) + " to " +
-   * getShortTPNName(destination)); t0.addOriginPlace(entryPlaces.get(origin));
-   * t0.addDestinationPlace(exitPlaces.get(origin));
-   * t0.addOriginPlace(entryPlaces.get(destination));
-   * t0.addDestinationPlace(exitPlaces.get(destination)); tpn.addTransition(t0); }
-   * } } } }
-   * 
-   * }
-   */
-
-  public String getTPNName(AvatarBlock _block, AvatarStateMachineElement _asme) {
-    if (_asme instanceof AvatarActionOnSignal) {
-      AvatarActionOnSignal aaos = (AvatarActionOnSignal) _asme;
-      if (aaos.isSending()) {
-        return _block.getName() + "__Send__" + aaos.getSignal().getName() + "__" + _asme.getID();
-      } else {
-        return _block.getName() + "__Receive__" + aaos.getSignal().getName() + "__" + _asme.getID();
-      }
-
+    public String getShortTPNName(AvatarStateMachineElement _asme) {
+        return _asme.getName() + "__" + _asme.getID();
     }
-
-    return _block.getName() + "__" + _asme.getName() + "__" + _asme.getID();
-  }
-
-  public String getShortTPNName(AvatarStateMachineElement _asme) {
-    return _asme.getName() + "__" + _asme.getID();
-  }
 
 }

@@ -47,37 +47,37 @@ import java.util.LinkedList;
  * @author Ludovic APVRILLE
  */
 public interface FIFOFiniteAndGetSizeTClass {
-  int getNbPara();
+    int getNbPara();
 
-  int getMaxSamples();
+    int getMaxSamples();
 
-  /**
-   * Returns the first write gate
-   * 
-   * @return the first write gate
-   */
-  Gate getGateWrite();
+    /**
+     * Returns the first write gate
+     * 
+     * @return the first write gate
+     */
+    Gate getGateWrite();
 
-  /**
-   * Returns the first read gate
-   * 
-   * @return the first read gate
-   */
-  Gate getGateRead();
+    /**
+     * Returns the first read gate
+     * 
+     * @return the first read gate
+     */
+    Gate getGateRead();
 
-  /**
-   * Returns the first size gate
-   * 
-   * @return the first size gate
-   */
-  Gate getGateSize();
+    /**
+     * Returns the first size gate
+     * 
+     * @return the first size gate
+     */
+    Gate getGateSize();
 
-  LinkedList<Gate> getGatesWrite();
+    LinkedList<Gate> getGatesWrite();
 
-  LinkedList<Gate> getGatesRead();
+    LinkedList<Gate> getGatesRead();
 
-  LinkedList<Gate> getGatesSize();
+    LinkedList<Gate> getGatesSize();
 
-  boolean isBlocking();
+    boolean isBlocking();
 
 }

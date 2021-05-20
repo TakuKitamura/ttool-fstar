@@ -47,57 +47,57 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class TMLElement extends DIPLOElement {
-  protected Object referenceObject;
-  protected String name;
+    protected Object referenceObject;
+    protected String name;
 
-  public TMLElement(String _name, Object _referenceObject) {
-    name = _name;
-    referenceObject = _referenceObject;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getExtendedName() {
-    return getNameExtension() + name;
-  }
-
-  public Object getReferenceObject() {
-    return referenceObject;
-  }
-
-  public String getNameExtension() {
-    return "";
-  }
-
-  public void prefixName(String _prefix) {
-    name = _prefix + name;
-  }
-
-  /*
-   * When a TMLCP object is instantiated the name and reference object might not
-   * be known
-   */
-  public void setName(String _name) {
-    if (_name != "") {
-      this.name = _name;
-    } else {
-      this.name = "NoName";
+    public TMLElement(String _name, Object _referenceObject) {
+        name = _name;
+        referenceObject = _referenceObject;
     }
-  }
 
-  public void setReferenceObject(Object _referenceObject) {
-    this.referenceObject = _referenceObject;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public boolean equalSpec(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    TMLElement that = (TMLElement) o;
-    return Objects.equals(name, that.getName());
-  }
+    public String getExtendedName() {
+        return getNameExtension() + name;
+    }
+
+    public Object getReferenceObject() {
+        return referenceObject;
+    }
+
+    public String getNameExtension() {
+        return "";
+    }
+
+    public void prefixName(String _prefix) {
+        name = _prefix + name;
+    }
+
+    /*
+     * When a TMLCP object is instantiated the name and reference object might not
+     * be known
+     */
+    public void setName(String _name) {
+        if (_name != "") {
+            this.name = _name;
+        } else {
+            this.name = "NoName";
+        }
+    }
+
+    public void setReferenceObject(Object _referenceObject) {
+        this.referenceObject = _referenceObject;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        TMLElement that = (TMLElement) o;
+        return Objects.equals(name, that.getName());
+    }
 
 }

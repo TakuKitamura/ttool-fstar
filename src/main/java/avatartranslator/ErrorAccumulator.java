@@ -44,7 +44,7 @@ package avatartranslator;
  * @author Florian LUGOU
  */
 public abstract class ErrorAccumulator {
-  public abstract void addWarning(String msg);
+    public abstract void addWarning(String msg);
 
-  public abstract void addError(String msg);
+    public abstract void addError(String msg);
 }

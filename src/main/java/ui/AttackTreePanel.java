@@ -58,130 +58,130 @@ import java.util.ArrayList;
  * @see MainGUI
  */
 public class AttackTreePanel extends TURTLEPanel {
-  public AttackTreeDiagramPanel atdp;
+    public AttackTreeDiagramPanel atdp;
 
-  public AttackTreePanel(MainGUI _mgui) {
-    super(_mgui);
+    public AttackTreePanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);// new JTabbedPane();
-    UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
-    UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
-    SwingUtilities.updateComponentTreeUI(tabbedPane);
-    // tabbedPane.setOpaque(true);
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);// new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
+        SwingUtilities.updateComponentTreeUI(tabbedPane);
+        // tabbedPane.setOpaque(true);
 
-    cl = new ChangeListener() {
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneRequirementAction(e);
-      }
-    };
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-  }
-
-  public void init() {
-    mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-    // Requirement Diagram toolbar
-    // addRequirementDiagram("Requirement Diagram");
-
-    // jsp.setVisible(true);
-  }
-
-  public boolean addAttackTreeDiagram(String s) {
-    AttackTreeDiagramToolbar toolBarAt = new AttackTreeDiagramToolbar(mgui);
-    toolbars.add(toolBarAt);
-
-    toolBarPanel = new JPanel();
-    // toolBarPanel.setBackground(Color.red);
-    toolBarPanel.setLayout(new BorderLayout());
-    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
-
-    // The diagram
-    atdp = new AttackTreeDiagramPanel(mgui, toolBarAt);
-    atdp.setName(s);
-    atdp.tp = this;
-    tdp = atdp;
-    panels.add(atdp);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(atdp);
-    atdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Opens Attack Tree Diagram");
-    tabbedPane.setSelectedIndex(0);
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-    tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
-
-    return true;
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"AttackTree\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        cl = new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneRequirementAction(e);
+            }
+        };
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
-    return "<Modeling type=\"AttackTree\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+    public void init() {
+        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
+        // Requirement Diagram toolbar
+        // addRequirementDiagram("Requirement Diagram");
 
-  public String toString() {
-    return mgui.getTitleAt(this) + " (SysML Parametric Diagram)";
-  }
-
-  public boolean canFirstDiagramBeMoved() {
-    return true;
-  }
-
-  public boolean removeEnabled(int index) {
-    return panels.size() > 1;
-  }
-
-  public boolean renameEnabled(int index) {
-    if (panels.size() == 0) {
-      return false;
+        // jsp.setVisible(true);
     }
-    return (panels.elementAt(index) instanceof AttackTreeDiagramPanel);
 
-  }
+    public boolean addAttackTreeDiagram(String s) {
+        AttackTreeDiagramToolbar toolBarAt = new AttackTreeDiagramToolbar(mgui);
+        toolbars.add(toolBarAt);
 
-  public boolean isATDEnabled() {
-    return true;
-  }
+        toolBarPanel = new JPanel();
+        // toolBarPanel.setBackground(Color.red);
+        toolBarPanel.setLayout(new BorderLayout());
+        // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
 
-  public ArrayList<TGComponent> getAllAttacks() {
-    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-    TDiagramPanel tp;
-    for (int i = 0; i < panels.size(); i++) {
-      tp = panels.get(i);
-      if (tp instanceof AttackTreeDiagramPanel) {
-        for (TGComponent s : ((AttackTreeDiagramPanel) tp).getAllAttacks()) {
-          list.add(s);
+        // The diagram
+        atdp = new AttackTreeDiagramPanel(mgui, toolBarAt);
+        atdp.setName(s);
+        atdp.tp = this;
+        tdp = atdp;
+        panels.add(atdp);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(atdp);
+        atdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Opens Attack Tree Diagram");
+        tabbedPane.setSelectedIndex(0);
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+        return true;
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"AttackTree\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
         }
-      }
-    }
-    return list;
-
-  }
-
-  public void resetMetElements() {
-    // TraceManager.addDev("Reset met elements");
-    TGComponent tgc;
-
-    for (int i = 0; i < panels.size(); i++) {
-      Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-
-      while (iterator.hasNext()) {
-        tgc = iterator.next();
-        tgc.setAVATARMet(0);
-        tgc.setInternalAvatarMet(0);
-
-      }
+        return "<Modeling type=\"AttackTree\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
-  }
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return mgui.getTitleAt(this) + " (SysML Parametric Diagram)";
+    }
+
+    public boolean canFirstDiagramBeMoved() {
+        return true;
+    }
+
+    public boolean removeEnabled(int index) {
+        return panels.size() > 1;
+    }
+
+    public boolean renameEnabled(int index) {
+        if (panels.size() == 0) {
+            return false;
+        }
+        return (panels.elementAt(index) instanceof AttackTreeDiagramPanel);
+
+    }
+
+    public boolean isATDEnabled() {
+        return true;
+    }
+
+    public ArrayList<TGComponent> getAllAttacks() {
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+        TDiagramPanel tp;
+        for (int i = 0; i < panels.size(); i++) {
+            tp = panels.get(i);
+            if (tp instanceof AttackTreeDiagramPanel) {
+                for (TGComponent s : ((AttackTreeDiagramPanel) tp).getAllAttacks()) {
+                    list.add(s);
+                }
+            }
+        }
+        return list;
+
+    }
+
+    public void resetMetElements() {
+        // TraceManager.addDev("Reset met elements");
+        TGComponent tgc;
+
+        for (int i = 0; i < panels.size(); i++) {
+            Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+
+            while (iterator.hasNext()) {
+                tgc = iterator.next();
+                tgc.setAVATARMet(0);
+                tgc.setInternalAvatarMet(0);
+
+            }
+        }
+
+    }
 
 }

@@ -49,111 +49,111 @@ import java.util.Vector;
  * @version 1.0 07/01/2019
  */
 public class TaskINForDispatch extends TMLTask {
-  protected int nbOfVCs;
+    protected int nbOfVCs;
 
-  public TaskINForDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
-    super(name, referenceToClass, referenceToActivityDiagram);
-    setDaemon(TMAP2Network.DAEMON);
-  }
-
-  // Output Channels are given in the order of VCs
-  public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel, Vector<TMLEvent> outputEvents,
-      Vector<TMLChannel> outputChannels) {
-
-    this.nbOfVCs = nbOfVCs;
-
-    // inputEvent.setDestinationTask(this);
-    // inputChannel.setDestinationTask(this);
-
-    for (TMLEvent evt : outputEvents) {
-      evt.setOriginTask(this);
-    }
-    for (TMLChannel ch : outputChannels) {
-      ch.setOriginTask(this);
+    public TaskINForDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
-    // Attributes
-    TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(pktlen);
-    TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstX);
-    TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstY);
-    TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(vc);
-    TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(eop);
-    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(chid);
+    // Output Channels are given in the order of VCs
+    public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel, Vector<TMLEvent> outputEvents,
+            Vector<TMLChannel> outputChannels) {
 
-    // Events and channels
-    addTMLEvent(inputEvent);
-    for (TMLEvent evt : outputEvents) {
-      addTMLEvent(evt);
+        this.nbOfVCs = nbOfVCs;
+
+        // inputEvent.setDestinationTask(this);
+        // inputChannel.setDestinationTask(this);
+
+        for (TMLEvent evt : outputEvents) {
+            evt.setOriginTask(this);
+        }
+        for (TMLChannel ch : outputChannels) {
+            ch.setOriginTask(this);
+        }
+
+        // Attributes
+        TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(pktlen);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
+        TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(vc);
+        TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
+
+        // Events and channels
+        addTMLEvent(inputEvent);
+        for (TMLEvent evt : outputEvents) {
+            addTMLEvent(evt);
+        }
+
+        addReadTMLChannel(inputChannel);
+        for (TMLChannel ch : outputChannels) {
+            addWriteTMLChannel(ch);
+        }
+
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
+
+        TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
+        loop.setInfinite(true);
+        activity.addElement(loop);
+        start.addNext(loop);
+
+        TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
+        waitEvt.setEvent(inputEvent);
+        waitEvt.addParam("pktlen");
+        waitEvt.addParam("dstX");
+        waitEvt.addParam("dstY");
+        waitEvt.addParam("vc");
+        waitEvt.addParam("eop");
+        waitEvt.addParam("chid");
+        activity.addLinkElement(loop, waitEvt);
+
+        TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
+        activity.addLinkElement(waitEvt, choice);
+
+        for (int i = 0; i < nbOfVCs; i++) {
+            TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
+            sendEvt.setEvent(outputEvents.get(i));
+            sendEvt.addParam("pktlen");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
+            sendEvt.addParam("vc");
+            sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
+            activity.addElement(sendEvt);
+            choice.addNext(sendEvt);
+            choice.addGuard("vc == " + i);
+
+            TMLReadChannel read = new TMLReadChannel("ReadFlit" + i, referenceObject);
+            read.addChannel(inputChannel);
+            read.setNbOfSamples("1");
+            activity.addElement(read);
+            sendEvt.addNext(read);
+
+            TMLWriteChannel write = new TMLWriteChannel("WriteFlit" + i, referenceObject);
+            write.addChannel(outputChannels.get(i));
+            write.setNbOfSamples("1");
+            activity.addElement(write);
+            read.addNext(write);
+
+            TMLStopState stopL = new TMLStopState("WriteFlit" + i, referenceObject);
+            activity.addElement(stopL);
+            write.addNext(stopL);
+        }
+
+        // Ending loop
+        TMLStopState stop = new TMLStopState("StopState", referenceObject);
+        activity.addElement(stop);
+        loop.addNext(stop);
+
     }
-
-    addReadTMLChannel(inputChannel);
-    for (TMLChannel ch : outputChannels) {
-      addWriteTMLChannel(ch);
-    }
-
-    // Activity Diagram
-    TMLStartState start = new TMLStartState("mainStart", referenceObject);
-    activity.setFirst(start);
-
-    TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
-    loop.setInfinite(true);
-    activity.addElement(loop);
-    start.addNext(loop);
-
-    TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
-    waitEvt.setEvent(inputEvent);
-    waitEvt.addParam("pktlen");
-    waitEvt.addParam("dstX");
-    waitEvt.addParam("dstY");
-    waitEvt.addParam("vc");
-    waitEvt.addParam("eop");
-    waitEvt.addParam("chid");
-    activity.addLinkElement(loop, waitEvt);
-
-    TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
-    activity.addLinkElement(waitEvt, choice);
-
-    for (int i = 0; i < nbOfVCs; i++) {
-      TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
-      sendEvt.setEvent(outputEvents.get(i));
-      sendEvt.addParam("pktlen");
-      sendEvt.addParam("dstX");
-      sendEvt.addParam("dstY");
-      sendEvt.addParam("vc");
-      sendEvt.addParam("eop");
-      sendEvt.addParam("chid");
-      activity.addElement(sendEvt);
-      choice.addNext(sendEvt);
-      choice.addGuard("vc == " + i);
-
-      TMLReadChannel read = new TMLReadChannel("ReadFlit" + i, referenceObject);
-      read.addChannel(inputChannel);
-      read.setNbOfSamples("1");
-      activity.addElement(read);
-      sendEvt.addNext(read);
-
-      TMLWriteChannel write = new TMLWriteChannel("WriteFlit" + i, referenceObject);
-      write.addChannel(outputChannels.get(i));
-      write.setNbOfSamples("1");
-      activity.addElement(write);
-      read.addNext(write);
-
-      TMLStopState stopL = new TMLStopState("WriteFlit" + i, referenceObject);
-      activity.addElement(stopL);
-      write.addNext(stopL);
-    }
-
-    // Ending loop
-    TMLStopState stop = new TMLStopState("StopState", referenceObject);
-    activity.addElement(stop);
-    loop.addNext(stop);
-
-  }
 
 }

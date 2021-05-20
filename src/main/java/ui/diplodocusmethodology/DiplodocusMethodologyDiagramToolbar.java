@@ -56,98 +56,98 @@ import javax.swing.*;
  */
 public class DiplodocusMethodologyDiagramToolbar extends TToolBar {
 
-  public DiplodocusMethodologyDiagramToolbar(MainGUI _mgui) {
-    super(_mgui);
+    public DiplodocusMethodologyDiagramToolbar(MainGUI _mgui) {
+        super(_mgui);
 
-  }
+    }
 
-  @Override
-  protected void setActive(boolean b) {
-    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    @Override
+    protected void setActive(boolean b) {
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-    mgui.updateZoomInfo();
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        mgui.updateZoomInfo();
 
-    // mgui.actions[TGUIAction.ARD_EDIT].setEnabled(b);
-    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-    /*
-     * mgui.actions[TGUIAction.ARD_REQUIREMENT].setEnabled(b);
-     * mgui.actions[TGUIAction.ARD_PROPERTY].setEnabled(b);
-     * mgui.actions[TGUIAction.ARD_VERIFY_CONNECTOR].setEnabled(b);
-     * mgui.actions[TGUIAction.ARD_DERIVE_CONNECTOR].setEnabled(b);
-     * mgui.actions[TGUIAction.ARD_REFINE_CONNECTOR].setEnabled(b);
-     * mgui.actions[TGUIAction.ARD_COPY_CONNECTOR].setEnabled(b);
-     * mgui.actions[TGUIAction.ARD_COMPOSITION_CONNECTOR].setEnabled(b);
-     * 
-     * mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-     * 
-     * mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
-     */
+        // mgui.actions[TGUIAction.ARD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+        /*
+         * mgui.actions[TGUIAction.ARD_REQUIREMENT].setEnabled(b);
+         * mgui.actions[TGUIAction.ARD_PROPERTY].setEnabled(b);
+         * mgui.actions[TGUIAction.ARD_VERIFY_CONNECTOR].setEnabled(b);
+         * mgui.actions[TGUIAction.ARD_DERIVE_CONNECTOR].setEnabled(b);
+         * mgui.actions[TGUIAction.ARD_REFINE_CONNECTOR].setEnabled(b);
+         * mgui.actions[TGUIAction.ARD_COPY_CONNECTOR].setEnabled(b);
+         * mgui.actions[TGUIAction.ARD_COMPOSITION_CONNECTOR].setEnabled(b);
+         * 
+         * mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+         * 
+         * mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+         */
 
-    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
 
-  }
+    }
 
-  @Override
-  protected void setButtons() {
-    JButton button;
+    @Override
+    protected void setButtons() {
+        JButton button;
 
-    /*
-     * button = this.add(mgui.actions[TGUIAction.ARD_EDIT]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * this.addSeparator();
-     */
+        /*
+         * button = this.add(mgui.actions[TGUIAction.ARD_EDIT]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * this.addSeparator();
+         */
 
-    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    /*
-     * button = this.add(mgui.actions[TGUIAction.ARD_REQUIREMENT]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ARD_PROPERTY]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ARD_COMPOSITION_CONNECTOR]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ARD_DERIVE_CONNECTOR]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ARD_COPY_CONNECTOR]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ARD_REFINE_CONNECTOR]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ARD_VERIFY_CONNECTOR]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-     * button.addMouseListener(mgui.mouseHandler);
-     * 
-     * this.addSeparator();
-     * 
-     * button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-     * button.addMouseListener(mgui.mouseHandler);
-     */
+        /*
+         * button = this.add(mgui.actions[TGUIAction.ARD_REQUIREMENT]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ARD_PROPERTY]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ARD_COMPOSITION_CONNECTOR]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ARD_DERIVE_CONNECTOR]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ARD_COPY_CONNECTOR]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ARD_REFINE_CONNECTOR]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ARD_VERIFY_CONNECTOR]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+         * button.addMouseListener(mgui.mouseHandler);
+         * 
+         * this.addSeparator();
+         * 
+         * button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+         * button.addMouseListener(mgui.mouseHandler);
+         */
 
-  }
+    }
 
 } // Class

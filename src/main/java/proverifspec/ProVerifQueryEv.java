@@ -45,15 +45,15 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifQueryEv implements ProVerifDeclaration {
-  protected String name;
-  protected ProVerifVar[] vars;
+    protected String name;
+    protected ProVerifVar[] vars;
 
-  public ProVerifQueryEv(ProVerifVar[] _vars, String _name) {
-    this.vars = _vars;
-    this.name = _name;
-  }
+    public ProVerifQueryEv(ProVerifVar[] _vars, String _name) {
+        this.vars = _vars;
+        this.name = _name;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateQueryEv(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateQueryEv(this, _alinea);
+    }
 }

@@ -49,32 +49,32 @@ package dseengine;
  */
 public class SimulationDurationWholeResult {
 
-  public long minDuration;
-  public long maxDuration;
-  public double averageDuration;
-  public int nbOfResults;
+    public long minDuration;
+    public long maxDuration;
+    public double averageDuration;
+    public int nbOfResults;
 
-  public SimulationDurationWholeResult(long duration) {
+    public SimulationDurationWholeResult(long duration) {
 
-    minDuration = duration;
-    maxDuration = duration;
-    averageDuration = (double) duration;
-    nbOfResults = 1;
+        minDuration = duration;
+        maxDuration = duration;
+        averageDuration = (double) duration;
+        nbOfResults = 1;
 
-  }
+    }
 
-  public void updateResults(long duration) {
-    minDuration = Math.min(minDuration, duration);
-    maxDuration = Math.max(maxDuration, duration);
-    averageDuration = ((averageDuration * nbOfResults) + duration) / (nbOfResults + 1);
-    nbOfResults++;
-  }
+    public void updateResults(long duration) {
+        minDuration = Math.min(minDuration, duration);
+        maxDuration = Math.max(maxDuration, duration);
+        averageDuration = ((averageDuration * nbOfResults) + duration) / (nbOfResults + 1);
+        nbOfResults++;
+    }
 
-  public String toStringResult() {
-    StringBuffer sb = new StringBuffer("");
-    sb.append("DURATION " + nbOfResults + " " + minDuration + " " + averageDuration + " " + maxDuration);
+    public String toStringResult() {
+        StringBuffer sb = new StringBuffer("");
+        sb.append("DURATION " + nbOfResults + " " + minDuration + " " + averageDuration + " " + maxDuration);
 
-    return sb.toString();
-  }
+        return sb.toString();
+    }
 
 } // Class SimulationDurationWholeResult

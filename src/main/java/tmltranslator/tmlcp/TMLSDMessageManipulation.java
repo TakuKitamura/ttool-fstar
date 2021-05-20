@@ -45,15 +45,15 @@ package tmltranslator.tmlcp;
  * @author Ludovic APVRILLE
  */
 public class TMLSDMessageManipulation extends TMLSDElement {
-  private TMLSDMessage msg;
+    private TMLSDMessage msg;
 
-  public TMLSDMessageManipulation(TMLSDMessage _msg, String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    msg = _msg;
-  }
+    public TMLSDMessageManipulation(TMLSDMessage _msg, String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        msg = _msg;
+    }
 
-  public TMLSDMessage getMessage() {
-    return msg;
-  }
+    public TMLSDMessage getMessage() {
+        return msg;
+    }
 
 }

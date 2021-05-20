@@ -58,17 +58,17 @@ import java.util.stream.Collectors;
  */
 public class ScoredHelpEntry implements Comparable<ScoredHelpEntry> {
 
-  public int score;
-  public HelpEntry he;
+    public int score;
+    public HelpEntry he;
 
-  public ScoredHelpEntry(int score, HelpEntry he) {
-    this.score = score;
-    this.he = he;
-  }
+    public ScoredHelpEntry(int score, HelpEntry he) {
+        this.score = score;
+        this.he = he;
+    }
 
-  public int compareTo(ScoredHelpEntry compareEntry) {
-    // descending order
-    return this.score - compareEntry.score;
-  }
+    public int compareTo(ScoredHelpEntry compareEntry) {
+        // descending order
+        return this.score - compareEntry.score;
+    }
 
 }

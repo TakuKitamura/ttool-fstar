@@ -52,12 +52,12 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public enum PropertyResultType {
-  SATISFIED("passed"), NONSATISFIED("failed"), CANNOTBEPROVED("Cannot be proved"), ERROR("error");
+    SATISFIED("passed"), NONSATISFIED("failed"), CANNOTBEPROVED("Cannot be proved"), ERROR("error");
 
-  private final String info;
+    private final String info;
 
-  PropertyResultType(String info) {
-    this.info = info;
-  }
+    PropertyResultType(String info) {
+        this.info = info;
+    }
 
 }

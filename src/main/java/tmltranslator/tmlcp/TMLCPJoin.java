@@ -49,18 +49,18 @@ import java.util.List;
  */
 public class TMLCPJoin extends TMLCPElement {
 
-  // they can be either CPSections (AD) or SDSections (SD)
-  private List<String> listElements = new ArrayList<String>();
+    // they can be either CPSections (AD) or SDSections (SD)
+    private List<String> listElements = new ArrayList<String>();
 
-  public TMLCPJoin(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLCPJoin(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void addElementName(String elementName) {
-    listElements.add(elementName);
-  }
+    public void addElementName(String elementName) {
+        listElements.add(elementName);
+    }
 
-  public List<String> getElementsName() {
-    return listElements;
-  }
+    public List<String> getElementsName() {
+        return listElements;
+    }
 }

@@ -45,29 +45,29 @@ package avatartranslator;
  * @author Ludovic APVRILLE
  */
 public class AvatarSetTimer extends AvatarTimerOperator {
-  protected String setValue;
+    protected String setValue;
 
-  public AvatarSetTimer(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarSetTimer(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void setTimerValue(String _setValue) {
-    setValue = _setValue;
-  }
+    public void setTimerValue(String _setValue) {
+        setValue = _setValue;
+    }
 
-  public String getTimerValue() {
-    return setValue;
-  }
+    public String getTimerValue() {
+        return setValue;
+    }
 
-  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-    AvatarSetTimer ast = new AvatarSetTimer(getName(), getReferenceObject());
-    ast.setTimer(getTimer());
-    ast.setTimerValue(getTimerValue());
-    return ast;
-  }
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+        AvatarSetTimer ast = new AvatarSetTimer(getName(), getReferenceObject());
+        ast.setTimer(getTimer());
+        ast.setTimerValue(getTimerValue());
+        return ast;
+    }
 
-  public String getNiceName() {
-    return "Setting of timer " + getName();
-  }
+    public String getNiceName() {
+        return "Setting of timer " + getName();
+    }
 
 }

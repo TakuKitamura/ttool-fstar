@@ -47,29 +47,29 @@ package launcher;
  */
 public class RemoteExecutionThread extends Thread {
 
-  private String host;
-  private String fileName;
-  private String data;
-  private String cmd;
+    private String host;
+    private String fileName;
+    private String data;
+    private String cmd;
 
-  public RemoteExecutionThread(String _host, String _fileName, String _data, String _cmd) {
-    host = _host;
-    fileName = _fileName;
-    data = _data;
-    cmd = _cmd;
-  }
-
-  public void run() {
-    try {
-      RshClient rshc = new RshClient(host);
-      if ((fileName != null) && (data != null)) {
-        rshc.sendFileData(fileName, data);
-      }
-      rshc.setCmd(cmd);
-      rshc.sendExecuteCommandRequest();
-      rshc.getDataFromProcess();
-    } catch (Exception e) {
+    public RemoteExecutionThread(String _host, String _fileName, String _data, String _cmd) {
+        host = _host;
+        fileName = _fileName;
+        data = _data;
+        cmd = _cmd;
     }
-  }
+
+    public void run() {
+        try {
+            RshClient rshc = new RshClient(host);
+            if ((fileName != null) && (data != null)) {
+                rshc.sendFileData(fileName, data);
+            }
+            rshc.setCmd(cmd);
+            rshc.sendExecuteCommandRequest();
+            rshc.getDataFromProcess();
+        } catch (Exception e) {
+        }
+    }
 
 }

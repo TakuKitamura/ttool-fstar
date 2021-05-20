@@ -56,162 +56,162 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class SDTimerExpiration extends TGCWithoutInternalComponent implements SwallowedTGComponent {
-  private String timer = "myTimer";
-  private int widthValue, heightValue;
-  private int lineWidth = 20;
+    private String timer = "myTimer";
+    private int widthValue, heightValue;
+    private int lineWidth = 20;
 
-  public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 15;
-    height = 25;
+        width = 15;
+        height = 25;
 
-    nbConnectingPoint = 0;
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 0;
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    name = "timer expiration";
-    makeValue();
-    widthValue = 0;
-    heightValue = 0;
+        name = "timer expiration";
+        makeValue();
+        widthValue = 0;
+        heightValue = 0;
 
-    myImageIcon = IconManager.imgic516;
-  }
-
-  public void internalDrawing(Graphics g) {
-    if (!tdp.isScaled()) {
-      widthValue = g.getFontMetrics().stringWidth(value);
-      heightValue = g.getFontMetrics().getHeight();
+        myImageIcon = IconManager.imgic516;
     }
 
-    drawSingleString(g, value, x + width, y + height / 2 + 3);
-
-    g.drawLine(x, y, x + width, y + height);
-    g.drawLine(x, y, x + width, y);
-    g.drawLine(x, y + height, x + width, y + height);
-    g.drawLine(x + width, y, x, y + height);
-
-    GraphicLib.arrowWithLine(g, 2, 0, 10, x + width / 2 - lineWidth, y + height / 2, x + width / 2, y + height / 2,
-        true);
-  }
-
-  public int getLineLength() {
-    return lineWidth;
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
-
-    /* text */
-    if (GraphicLib.isInRectangle(_x, _y, x + width, y + height / 2 - heightValue + 3, widthValue, heightValue)) {
-      return this;
-    }
-
-    /* line */
-    if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - lineWidth, y + height / 2 - 2, lineWidth, 4)) {
-      return this;
-    }
-    return null;
-  }
-
-  public int getMyCurrentMaxX() {
-    return x + width + widthValue;
-  }
-
-  public int getType() {
-    return TGComponentManager.SD_TIMER_EXPIRATION;
-  }
-
-  public String getTimer() {
-    return timer;
-  }
-
-  public int getYOrder() {
-    return y + height / 2;
-  }
-
-  public void makeValue() {
-    value = "{timer=" + timer + "}";
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    String oldValue = timer;
-    String text = getName() + ": ";
-    if (hasFather()) {
-      text = getTopLevelName() + " / " + text;
-    }
-    String s = (String) JOptionPane.showInputDialog(frame, text, "setting timer value", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic101, null, getTimer());
-
-    if (s != null) {
-      s = s.trim();
-    }
-    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-      if (!TAttribute.isAValidId(s, false, false, false)) {
-        JOptionPane.showMessageDialog(frame, "Could not perform any change: the new name is not a valid name", "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-        return false;
-      }
-      timer = s;
-      makeValue();
-      return true;
-    }
-    return false;
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<Interval timer=\"");
-    sb.append(getTimer());
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    boolean timerSet = false;
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-
-          // Issue #17 copy-paste error on j index
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("Interval")) {
-                timer = elt.getAttribute("timer");
-                timerSet = true;
-              }
-            }
-          }
+    public void internalDrawing(Graphics g) {
+        if (!tdp.isScaled()) {
+            widthValue = g.getFontMetrics().stringWidth(value);
+            heightValue = g.getFontMetrics().getHeight();
         }
-      }
 
-    } catch (Exception e) {
-      //
-      if (!timerSet) {
-        throw new MalformedModelingException();
-      }
+        drawSingleString(g, value, x + width, y + height / 2 + 3);
+
+        g.drawLine(x, y, x + width, y + height);
+        g.drawLine(x, y, x + width, y);
+        g.drawLine(x, y + height, x + width, y + height);
+        g.drawLine(x + width, y, x, y + height);
+
+        GraphicLib.arrowWithLine(g, 2, 0, 10, x + width / 2 - lineWidth, y + height / 2, x + width / 2, y + height / 2,
+                true);
     }
-    makeValue();
-  }
+
+    public int getLineLength() {
+        return lineWidth;
+    }
+
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+
+        /* text */
+        if (GraphicLib.isInRectangle(_x, _y, x + width, y + height / 2 - heightValue + 3, widthValue, heightValue)) {
+            return this;
+        }
+
+        /* line */
+        if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - lineWidth, y + height / 2 - 2, lineWidth, 4)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getMyCurrentMaxX() {
+        return x + width + widthValue;
+    }
+
+    public int getType() {
+        return TGComponentManager.SD_TIMER_EXPIRATION;
+    }
+
+    public String getTimer() {
+        return timer;
+    }
+
+    public int getYOrder() {
+        return y + height / 2;
+    }
+
+    public void makeValue() {
+        value = "{timer=" + timer + "}";
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        String oldValue = timer;
+        String text = getName() + ": ";
+        if (hasFather()) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String) JOptionPane.showInputDialog(frame, text, "setting timer value", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic101, null, getTimer());
+
+        if (s != null) {
+            s = s.trim();
+        }
+        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            if (!TAttribute.isAValidId(s, false, false, false)) {
+                JOptionPane.showMessageDialog(frame, "Could not perform any change: the new name is not a valid name",
+                        "Error", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+            timer = s;
+            makeValue();
+            return true;
+        }
+        return false;
+    }
+
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<Interval timer=\"");
+        sb.append(getTimer());
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        boolean timerSet = false;
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("Interval")) {
+                                timer = elt.getAttribute("timer");
+                                timerSet = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            //
+            if (!timerSet) {
+                throw new MalformedModelingException();
+            }
+        }
+        makeValue();
+    }
 }

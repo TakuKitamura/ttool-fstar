@@ -49,12 +49,12 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public interface ClassDiagramPanelInterface {
-  List<TGComponent> getComponentList();
+    List<TGComponent> getComponentList();
 
-  TClassSynchroInterface getTClass1ToWhichIamConnected(CompositionOperatorInterface coi);
+    TClassSynchroInterface getTClass1ToWhichIamConnected(CompositionOperatorInterface coi);
 
-  TClassSynchroInterface getTClass2ToWhichIamConnected(CompositionOperatorInterface coi);
+    TClassSynchroInterface getTClass2ToWhichIamConnected(CompositionOperatorInterface coi);
 
-  TGConnector getTGConnectorAssociationOf(CompositionOperatorInterface coi);
+    TGConnector getTGConnectorAssociationOf(CompositionOperatorInterface coi);
 
 }

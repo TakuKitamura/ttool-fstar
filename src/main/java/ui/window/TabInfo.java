@@ -48,19 +48,19 @@ import java.util.List;
  */
 public class TabInfo {
 
-  public String identifier;
-  public String[] labels;
-  public String[] values;
-  public List<String[]> help;
+    public String identifier;
+    public String[] labels;
+    public String[] values;
+    public List<String[]> help;
 
-  public TabInfo(String _identifier) {
-    identifier = _identifier;
-  }
-
-  public int getSize() {
-    if (labels == null) {
-      return 0;
+    public TabInfo(String _identifier) {
+        identifier = _identifier;
     }
-    return labels.length;
-  }
+
+    public int getSize() {
+        if (labels == null) {
+            return 0;
+        }
+        return labels.length;
+    }
 }

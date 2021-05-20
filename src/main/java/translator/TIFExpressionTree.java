@@ -46,21 +46,21 @@ package translator;
  */
 public class TIFExpressionTree {
 
-  private TIFTreeNode rootNode;
+    private TIFTreeNode rootNode;
 
-  public TIFExpressionTree() {
-  }
+    public TIFExpressionTree() {
+    }
 
-  public boolean buildTree(String action) {
-    action = action.trim();
+    public boolean buildTree(String action) {
+        action = action.trim();
 
-    return true;
-  }
+        return true;
+    }
 
-  public void addPrefixToVariables(String prefix) {
-  }
+    public void addPrefixToVariables(String prefix) {
+    }
 
-  public String getExpression() {
-    return "";
-  }
+    public String getExpression() {
+        return "";
+    }
 }

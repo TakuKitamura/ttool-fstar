@@ -51,31 +51,31 @@ import ui.TGConnectingPointWidthHeight;
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointProCSD extends TGConnectingPointWidthHeight {
-  private TGComponent myOwnerComp;
+    private TGComponent myOwnerComp;
 
-  public TGConnectingPointProCSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h,
-      TGComponent myOwner) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-    myOwnerComp = myOwner;
-  }
-
-  public boolean isCompatibleWith(int type) {
-    if ((type == TGComponentManager.CONNECTOR_PROCSD)) {
-      return true;
-    }
-    if ((type == TGComponentManager.CONNECTOR_DELEGATE_PROCSD)) {
-      return true;
-    }
-    // To link ports to interfaces
-    if ((type == TGComponentManager.CONNECTOR_ATTRIBUTE)) {
-      return true;
+    public TGConnectingPointProCSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h, TGComponent myOwner) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+        myOwnerComp = myOwner;
     }
 
-    return (type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);
+    public boolean isCompatibleWith(int type) {
+        if ((type == TGComponentManager.CONNECTOR_PROCSD)) {
+            return true;
+        }
+        if ((type == TGComponentManager.CONNECTOR_DELEGATE_PROCSD)) {
+            return true;
+        }
+        // To link ports to interfaces
+        if ((type == TGComponentManager.CONNECTOR_ATTRIBUTE)) {
+            return true;
+        }
 
-  }
+        return (type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);
 
-  public TGComponent getMyOwnerComponent() {
-    return myOwnerComp;
-  }
+    }
+
+    public TGComponent getMyOwnerComponent() {
+        return myOwnerComp;
+    }
 }

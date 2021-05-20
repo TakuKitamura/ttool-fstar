@@ -45,21 +45,21 @@ package req.ebrdd;
  * @author Ludovic APVRILLE
  */
 public abstract class ERCElement extends EBRDDGeneralComponent implements Cloneable {
-  protected boolean negated;
+    protected boolean negated;
 
-  public ERCElement(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public ERCElement(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void setNegated(boolean _negated) {
-    negated = _negated;
-  }
+    public void setNegated(boolean _negated) {
+        negated = _negated;
+    }
 
-  public boolean isNegated() {
-    return negated;
-  }
+    public boolean isNegated() {
+        return negated;
+    }
 
-  public String superString() {
-    return super.toString();
-  }
+    public String superString() {
+        return super.toString();
+    }
 }

@@ -45,15 +45,15 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifEquation implements ProVerifDeclaration {
-  protected ProVerifVar[] vars;
-  protected String formula;
+    protected ProVerifVar[] vars;
+    protected String formula;
 
-  public ProVerifEquation(ProVerifVar[] _vars, String _formula) {
-    this.vars = _vars;
-    this.formula = _formula;
-  }
+    public ProVerifEquation(ProVerifVar[] _vars, String _formula) {
+        this.vars = _vars;
+        this.formula = _formula;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateEquation(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateEquation(this, _alinea);
+    }
 }

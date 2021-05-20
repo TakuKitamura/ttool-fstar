@@ -46,28 +46,28 @@ package fr.inria.oasis.vercors.cttool.model;
  */
 public interface Port {
 
-  String getName();
+    String getName();
 
-  void setName(String name);
+    void setName(String name);
 
-  Port getToPort();
+    Port getToPort();
 
-  void setToPort(Port p);
+    void setToPort(Port p);
 
-  Port getLastToPort();
+    Port getLastToPort();
 
-  Port getFromPort();
+    Port getFromPort();
 
-  void setFromPort(Port p);
+    void setFromPort(Port p);
 
-  Port getLastFromPort();
+    Port getLastFromPort();
 
-  Interface getInterface();
+    Interface getInterface();
 
-  void setInterface(Interface i);
+    void setInterface(Interface i);
 
-  Component getFather();
+    Component getFather();
 
-  void setFather(Component c);
+    void setFather(Component c);
 
 }

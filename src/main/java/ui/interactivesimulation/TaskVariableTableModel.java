@@ -53,181 +53,181 @@ import java.util.Map;
  */
 public class TaskVariableTableModel extends AbstractTableModel {
 
-  private TMLModeling<TGComponent> tmlm;
-  private Map<Integer, String> valueTable;
-  private Map<Integer, Integer> rowTable;
+    private TMLModeling<TGComponent> tmlm;
+    private Map<Integer, String> valueTable;
+    private Map<Integer, Integer> rowTable;
 
-  private int nbOfRows;
+    private int nbOfRows;
 
-  // private String [] names;
-  public TaskVariableTableModel(TMLModeling<TGComponent> _tmlm, Map<Integer, String> _valueTable,
-      Map<Integer, Integer> _rowTable) {
-    tmlm = _tmlm;
-    valueTable = _valueTable;
-    rowTable = _rowTable;
-    computeData();
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return nbOfRows;
-  }
-
-  public int getColumnCount() {
-    return 5;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (tmlm == null) {
-      return "-";
+    // private String [] names;
+    public TaskVariableTableModel(TMLModeling<TGComponent> _tmlm, Map<Integer, String> _valueTable,
+            Map<Integer, Integer> _rowTable) {
+        tmlm = _tmlm;
+        valueTable = _valueTable;
+        rowTable = _rowTable;
+        computeData();
     }
 
-    if (column == 0) {
-      return getTaskName(row);
-    } else if (column == 1) {
-      return getTaskID(row);
-    } else if (column == 2) {
-      return getVariableName(row);
-    } else if (column == 3) {
-      return getStringVariableID(row);
-    } else if (column == 4) {
-      return getVariableValue(row);
-    }
-    return "";
-  }
-
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Task Name";
-      case 1:
-        return "Task ID";
-      case 2:
-        return "Variable name";
-      case 3:
-        return "Variable ID";
-      case 4:
-        return "Value";
-    }
-    return "unknown";
-  }
-
-  // Assumes tmlm != null
-  private String getTaskName(int row) {
-    int cpt = 0;
-    for (TMLTask task : tmlm.getTasks()) {
-      cpt += task.getAttributes().size();
-      if (row < cpt) {
-        return task.getName();
-      }
+    // From AbstractTableModel
+    public int getRowCount() {
+        return nbOfRows;
     }
 
-    return "unknown task";
-  }
-
-  // Assumes tmlm != null
-  private String getTaskID(int row) {
-    int cpt = 0;
-    for (TMLTask task : tmlm.getTasks()) {
-      cpt += task.getAttributes().size();
-      if (row < cpt) {
-        return "" + task.getID();
-      }
+    public int getColumnCount() {
+        return 5;
     }
 
-    return "unknown ID";
-  }
-
-  private String getVariableName(int row) {
-    int cpt = 0;
-    int size;
-    for (TMLTask task : tmlm.getTasks()) {
-      size = task.getAttributes().size();
-      cpt += size;
-      if (row < cpt) {
-        return "" + task.getAttributes().get(row + size - cpt).getName();
-      }
-    }
-
-    return "unknown name";
-  }
-
-  private String getStringVariableID(int row) {
-    int id = getVariableID(row);
-    if (id < 0) {
-      return "unknown id";
-    }
-    return "" + id;
-  }
-
-  private int getVariableID(int row) {
-    int cpt = 0;
-    int size;
-    for (TMLTask task : tmlm.getTasks()) {
-      size = task.getAttributes().size();
-      cpt += size;
-      if (row < cpt) {
-        return task.getAttributes().get(row + size - cpt).getID();
-      }
-    }
-
-    return 0;
-  }
-
-  private String getVariableInitialValue(int row) {
-    int cpt = 0;
-    int size;
-    for (TMLTask task : tmlm.getTasks()) {
-      size = task.getAttributes().size();
-      cpt += size;
-      if (row < cpt) {
-        String val = null;
-        try {
-          val = task.getAttributes().get(row + size - cpt).getInitialValue();
-        } catch (Exception e) {
+    public Object getValueAt(int row, int column) {
+        if (tmlm == null) {
+            return "-";
         }
-        if ((val == null) || (val.length() == 0)) {
-          return " - ";
-        } else {
-          return val;
+
+        if (column == 0) {
+            return getTaskName(row);
+        } else if (column == 1) {
+            return getTaskID(row);
+        } else if (column == 2) {
+            return getVariableName(row);
+        } else if (column == 3) {
+            return getStringVariableID(row);
+        } else if (column == 4) {
+            return getVariableValue(row);
         }
-      }
+        return "";
     }
 
-    return "unknown ID";
-  }
-
-  private String getVariableValue(int row) {
-    int ID = getVariableID(row);
-    String s = valueTable.get(ID);
-    if (s != null) {
-      return s.toString();
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Task Name";
+            case 1:
+                return "Task ID";
+            case 2:
+                return "Variable name";
+            case 3:
+                return "Variable ID";
+            case 4:
+                return "Value";
+        }
+        return "unknown";
     }
 
-    // Must set the ID;
-    String val = getVariableInitialValue(row);
-    valueTable.put(ID, val);
-    rowTable.put(ID, row);
-    return val;
+    // Assumes tmlm != null
+    private String getTaskName(int row) {
+        int cpt = 0;
+        for (TMLTask task : tmlm.getTasks()) {
+            cpt += task.getAttributes().size();
+            if (row < cpt) {
+                return task.getName();
+            }
+        }
 
-  }
-
-  private void computeData() {
-    if (tmlm == null) {
-      nbOfRows = 0;
-      return;
+        return "unknown task";
     }
 
-    int cpt = 0;
-    for (TMLTask task : tmlm.getTasks()) {
-      cpt += task.getAttributes().size();
+    // Assumes tmlm != null
+    private String getTaskID(int row) {
+        int cpt = 0;
+        for (TMLTask task : tmlm.getTasks()) {
+            cpt += task.getAttributes().size();
+            if (row < cpt) {
+                return "" + task.getID();
+            }
+        }
+
+        return "unknown ID";
     }
 
-    nbOfRows = cpt;
+    private String getVariableName(int row) {
+        int cpt = 0;
+        int size;
+        for (TMLTask task : tmlm.getTasks()) {
+            size = task.getAttributes().size();
+            cpt += size;
+            if (row < cpt) {
+                return "" + task.getAttributes().get(row + size - cpt).getName();
+            }
+        }
 
-    for (int i = 0; i < nbOfRows; i++) {
-      getVariableValue(i);
+        return "unknown name";
     }
 
-  }
+    private String getStringVariableID(int row) {
+        int id = getVariableID(row);
+        if (id < 0) {
+            return "unknown id";
+        }
+        return "" + id;
+    }
+
+    private int getVariableID(int row) {
+        int cpt = 0;
+        int size;
+        for (TMLTask task : tmlm.getTasks()) {
+            size = task.getAttributes().size();
+            cpt += size;
+            if (row < cpt) {
+                return task.getAttributes().get(row + size - cpt).getID();
+            }
+        }
+
+        return 0;
+    }
+
+    private String getVariableInitialValue(int row) {
+        int cpt = 0;
+        int size;
+        for (TMLTask task : tmlm.getTasks()) {
+            size = task.getAttributes().size();
+            cpt += size;
+            if (row < cpt) {
+                String val = null;
+                try {
+                    val = task.getAttributes().get(row + size - cpt).getInitialValue();
+                } catch (Exception e) {
+                }
+                if ((val == null) || (val.length() == 0)) {
+                    return " - ";
+                } else {
+                    return val;
+                }
+            }
+        }
+
+        return "unknown ID";
+    }
+
+    private String getVariableValue(int row) {
+        int ID = getVariableID(row);
+        String s = valueTable.get(ID);
+        if (s != null) {
+            return s.toString();
+        }
+
+        // Must set the ID;
+        String val = getVariableInitialValue(row);
+        valueTable.put(ID, val);
+        rowTable.put(ID, row);
+        return val;
+
+    }
+
+    private void computeData() {
+        if (tmlm == null) {
+            nbOfRows = 0;
+            return;
+        }
+
+        int cpt = 0;
+        for (TMLTask task : tmlm.getTasks()) {
+            cpt += task.getAttributes().size();
+        }
+
+        nbOfRows = cpt;
+
+        for (int i = 0; i < nbOfRows; i++) {
+            getVariableValue(i);
+        }
+
+    }
 }

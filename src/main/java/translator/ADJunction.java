@@ -45,25 +45,25 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADJunction extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
-  Process p; // for RT-LOTOS code generation
+    Process p; // for RT-LOTOS code generation
 
-  public ADJunction() {
-    nbNext = 1;
-  }
+    public ADJunction() {
+        nbNext = 1;
+    }
 
-  public void setProcess(Process _p) {
-    p = _p;
-  }
+    public void setProcess(Process _p) {
+        p = _p;
+    }
 
-  public Process getProcess() {
-    return p;
-  }
+    public Process getProcess() {
+        return p;
+    }
 
-  public ADComponent makeSame() {
-    return new ADJunction();
-  }
+    public ADComponent makeSame() {
+        return new ADJunction();
+    }
 
-  public String toString() {
-    return "Junction";
-  }
+    public String toString() {
+        return "Junction";
+    }
 }

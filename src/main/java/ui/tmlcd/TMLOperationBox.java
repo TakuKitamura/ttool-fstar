@@ -53,74 +53,74 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TMLOperationBox extends TGCWithoutInternalComponent {
-  public String oldValue;
-  protected int textX = 5;
-  protected int textY = 20;
+    public String oldValue;
+    protected int textX = 5;
+    protected int textY = 20;
 
-  public TMLOperationBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TMLOperationBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 150;
-    height = 30;
-    minWidth = 150;
-    minHeight = 30;
-    minDesiredWidth = 150;
-    minDesiredHeight = 30;
+        width = 150;
+        height = 30;
+        minWidth = 150;
+        minHeight = 30;
+        minDesiredWidth = 150;
+        minDesiredHeight = 30;
 
-    nbConnectingPoint = 4;
-    connectingPoint = new TGConnectingPoint[4];
-    connectingPoint[0] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, 0.5);
-    connectingPoint[1] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
-    connectingPoint[2] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, 0.5);
-    connectingPoint[3] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
+        nbConnectingPoint = 4;
+        connectingPoint = new TGConnectingPoint[4];
+        connectingPoint[0] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[1] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[2] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[3] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
 
-    moveable = false;
-    editable = true;
-    removable = false;
+        moveable = false;
+        editable = true;
+        removable = false;
 
-    name = "TML Task operations";
-    value = "";
+        name = "TML Task operations";
+        value = "";
 
-    myImageIcon = IconManager.imgic122;
-  }
-
-  @Override
-  protected void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.setColor(ColorManager.OPERATION_BOX);
-    g.fillRect(x + 1, y + 1, width - 1, height - 1);
-    ColorManager.setColor(g, getState(), 0);
-    if (value.length() > 0) {
-      drawSingleString(g, value, x + textX, y + textY);
+        myImageIcon = IconManager.imgic122;
     }
-  }
 
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    oldValue = value;
-    String text = getName() + ": ";
-    if (hasFather()) {
-      text = getTopLevelName() + " / " + text;
+    @Override
+    protected void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.setColor(ColorManager.OPERATION_BOX);
+        g.fillRect(x + 1, y + 1, width - 1, height - 1);
+        ColorManager.setColor(g, getState(), 0);
+        if (value.length() > 0) {
+            drawSingleString(g, value, x + textX, y + textY);
+        }
     }
-    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic101, null, getValue());
-    if ((s != null) && (!s.equals(oldValue))) {
-      setValue(s);
-    }
-    return false;
-  }
 
-  @Override
-  public TGComponent isOnMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-      return this;
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        oldValue = value;
+        String text = getName() + ": ";
+        if (hasFather()) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic101, null, getValue());
+        if ((s != null) && (!s.equals(oldValue))) {
+            setValue(s);
+        }
+        return false;
     }
-    return null;
-  }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
-  }
+    @Override
+    public TGComponent isOnMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
+    }
 }

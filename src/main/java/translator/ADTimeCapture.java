@@ -45,42 +45,42 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADTimeCapture extends ADComponent {
-  protected Param p;
-  Process proc;
+    protected Param p;
+    Process proc;
 
-  public ADTimeCapture(Param _p) {
-    p = _p;
-  }
+    public ADTimeCapture(Param _p) {
+        p = _p;
+    }
 
-  public ADTimeCapture() {
-  }
+    public ADTimeCapture() {
+    }
 
-  public void setParam(Param _p) {
-    p = _p;
-  }
+    public void setParam(Param _p) {
+        p = _p;
+    }
 
-  public Param getParam() {
-    return p;
-  }
+    public Param getParam() {
+        return p;
+    }
 
-  public void setProcess(Process _p) {
-    proc = _p;
-  }
+    public void setProcess(Process _p) {
+        proc = _p;
+    }
 
-  public Process getProcess() {
-    return proc;
-  }
+    public Process getProcess() {
+        return proc;
+    }
 
-  public String toString() {
-    return "Time capture (" + p.getName() + ")";
-  }
+    public String toString() {
+        return "Time capture (" + p.getName() + ")";
+    }
 
-  public String brutToString() {
-    return p.getName();
-  }
+    public String brutToString() {
+        return p.getName();
+    }
 
-  public ADComponent makeSame() {
-    ADTimeCapture adtc = new ADTimeCapture(getParam());
-    return adtc;
-  }
+    public ADComponent makeSame() {
+        ADTimeCapture adtc = new ADTimeCapture(getParam());
+        return adtc;
+    }
 }

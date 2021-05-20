@@ -51,12 +51,12 @@ import ui.TGConnectingPoint;
  */
 public class TGConnectingPointCompositionOperator extends TGConnectingPoint {
 
-  public TGConnectingPointCompositionOperator(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
-    super(_container1, _x, _y, _in, _out);
-  }
+    public TGConnectingPointCompositionOperator(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
+        super(_container1, _x, _y, _in, _out);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.CONNECTOR_ATTRIBUTE;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.CONNECTOR_ATTRIBUTE;
+    }
 }

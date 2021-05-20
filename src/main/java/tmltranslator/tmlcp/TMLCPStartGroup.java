@@ -46,8 +46,8 @@ package tmltranslator.tmlcp;
  */
 public class TMLCPStartGroup extends TMLCPElement {
 
-  public TMLCPStartGroup(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLCPStartGroup(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

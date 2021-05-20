@@ -46,8 +46,8 @@ package ui.tmlcd;
  */
 public abstract class TMLDataFlowType {
 
-  public static final String INT_16 = "int16_t";
-  public static final String INT_32 = "int32_t";
-  public static final String INT_64 = "int64_t";
+    public static final String INT_16 = "int16_t";
+    public static final String INT_32 = "int32_t";
+    public static final String INT_64 = "int64_t";
 
 }

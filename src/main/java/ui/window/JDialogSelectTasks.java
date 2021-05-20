@@ -59,347 +59,347 @@ import java.util.Collections;
  * @version 1.0 28/03/2008
  */
 public class JDialogSelectTasks extends JDialogBase implements ActionListener, ListSelectionListener {
-  public static Vector<String> validated, ignored;
+    public static Vector<String> validated, ignored;
 
-  private Vector<String> val;
-  private Vector<String> ign, back;
+    private Vector<String> val;
+    private Vector<String> ign, back;
 
-  // subpanels
-  private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
-  private JList<String> listIgnored;
-  private JList<String> listValidated;
-  private JButton allValidated;
-  private JButton addOneValidated;
-  private JButton addOneIgnored;
-  private JButton allIgnored;
+    // subpanels
+    private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
+    private JList<String> listIgnored;
+    private JList<String> listValidated;
+    private JButton allValidated;
+    private JButton addOneValidated;
+    private JButton addOneIgnored;
+    private JButton allIgnored;
 
-  private JButton shiftUp;
-  private JButton shiftDown;
+    private JButton shiftUp;
+    private JButton shiftDown;
 
-  /*
-   * Creates new form
-   */
-  public JDialogSelectTasks(Frame f, Vector<String> _back, List<String> componentList, String title) {
-    super(f, title, true);
+    /*
+     * Creates new form
+     */
+    public JDialogSelectTasks(Frame f, Vector<String> _back, List<String> componentList, String title) {
+        super(f, title, true);
 
-    back = _back;
+        back = _back;
 
-    if ((validated == null) || (ignored == null)) {
-      val = makeNewVal(componentList);
-      ign = new Vector<String>();
-    } else {
-      val = validated;
-      ign = ignored;
-      checkTask(val, componentList);
-      checkTask(ign, componentList);
-      addNewTask(val, componentList, ign);
+        if ((validated == null) || (ignored == null)) {
+            val = makeNewVal(componentList);
+            ign = new Vector<String>();
+        } else {
+            val = validated;
+            ign = ignored;
+            checkTask(val, componentList);
+            checkTask(ign, componentList);
+            addNewTask(val, componentList, ign);
+        }
+
+        initComponents();
+        myInitComponents();
+        pack();
     }
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
+    private Vector<String> makeNewVal(List<String> list) {
+        Vector<String> v = new Vector<String>();
+        String tgc;
 
-  private Vector<String> makeNewVal(List<String> list) {
-    Vector<String> v = new Vector<String>();
-    String tgc;
+        for (int i = 0; i < list.size(); i++) {
+            tgc = list.get(i);
+            //
 
-    for (int i = 0; i < list.size(); i++) {
-      tgc = list.get(i);
-      //
+            v.addElement(tgc);
 
-      v.addElement(tgc);
-
-    }
-    return v;
-  }
-
-  private void checkTask(Vector<? extends String> tobeChecked, List<String> source) {
-    String t;
-
-    for (int i = 0; i < tobeChecked.size(); i++) {
-      t = tobeChecked.elementAt(i);
-
-      if (!source.contains(t)) {
-        tobeChecked.removeElementAt(i);
-        i--;
-      }
-    }
-  }
-
-  public void addNewTask(Vector<String> added, List<String> source, Vector<String> notSource) {
-    String tgc;
-
-    for (int i = 0; i < source.size(); i++) {
-      tgc = source.get(i);
-
-      if ((!added.contains(tgc)) && (!notSource.contains(tgc))) {
-        added.addElement(tgc);
-        //
-      }
-    }
-  }
-
-  private void myInitComponents() {
-    setButtons();
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c2 = new GridBagConstraints();
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-
-    c.setLayout(gridbag2);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.gridwidth = 1;
-    c2.fill = GridBagConstraints.BOTH;
-    c2.gridheight = 1;
-
-    // ignored list
-    panel1 = new JPanel();
-    panel1.setLayout(new BorderLayout());
-    panel1.setBorder(new javax.swing.border.TitledBorder("Ignored Tasks"));
-    listIgnored = new JList<String>(ign);
-    // listIgnored.setPreferredSize(new Dimension(200, 250));
-    listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    listIgnored.addListSelectionListener(this);
-    JScrollPane scrollPane1 = new JScrollPane(listIgnored);
-    panel1.add(scrollPane1, BorderLayout.CENTER);
-    panel1.setPreferredSize(new Dimension(200, 250));
-    c.add(panel1, c2);
-
-    // central buttons
-    panel3 = new JPanel();
-    panel3.setLayout(gridbag1);
-
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.gridheight = 1;
-
-    allValidated = new JButton(IconManager.imgic50);
-    allValidated.setPreferredSize(new Dimension(50, 25));
-    allValidated.addActionListener(this);
-    allValidated.setActionCommand("allValidated");
-    panel3.add(allValidated, c1);
-
-    addOneValidated = new JButton(IconManager.imgic48);
-    addOneValidated.setPreferredSize(new Dimension(50, 25));
-    addOneValidated.addActionListener(this);
-    addOneValidated.setActionCommand("addOneValidated");
-    panel3.add(addOneValidated, c1);
-
-    panel3.add(new JLabel(" "), c1);
-
-    addOneIgnored = new JButton(IconManager.imgic46);
-    addOneIgnored.addActionListener(this);
-    addOneIgnored.setPreferredSize(new Dimension(50, 25));
-    addOneIgnored.setActionCommand("addOneIgnored");
-    panel3.add(addOneIgnored, c1);
-
-    allIgnored = new JButton(IconManager.imgic44);
-    allIgnored.addActionListener(this);
-    allIgnored.setPreferredSize(new Dimension(50, 25));
-    allIgnored.setActionCommand("allIgnored");
-    panel3.add(allIgnored, c1);
-
-    c.add(panel3, c2);
-
-    shiftUp = new JButton(IconManager.imgic78);
-    shiftUp.addActionListener(this);
-    shiftUp.setPreferredSize(new Dimension(50, 25));
-    shiftUp.setActionCommand("shiftUp");
-    panel3.add(shiftUp, c1);
-
-    c.add(panel3, c2);
-
-    shiftDown = new JButton(IconManager.imgic79);
-    shiftDown.addActionListener(this);
-    shiftDown.setPreferredSize(new Dimension(50, 25));
-    shiftDown.setActionCommand("shiftDown");
-    panel3.add(shiftDown, c1);
-
-    c.add(panel3, c2);
-
-    // validated list
-    panel2 = new JPanel();
-    panel2.setLayout(new BorderLayout());
-    panel2.setBorder(new javax.swing.border.TitledBorder("Displayed Tasks"));
-    listValidated = new JList<String>(val);
-    // listValidated.setPreferredSize(new Dimension(200, 250));
-    listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    listValidated.addListSelectionListener(this);
-    JScrollPane scrollPane2 = new JScrollPane(listValidated);
-    panel2.add(scrollPane2, BorderLayout.CENTER);
-    panel2.setPreferredSize(new Dimension(200, 250));
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c.add(panel2, c2);
-
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    c2.gridwidth = 1; // end row
-    initMainButtons(c2, c, this, false, "Show trace", "Cancel");
-
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    if (evt.getSource() == closeButton) {
-      closeDialog();
-      return;
-    } else if (evt.getSource() == cancelButton) {
-      cancelDialog();
-      return;
+        }
+        return v;
     }
 
-    // Compare the action command to the known actions.
-    if (command.equals("addOneIgnored")) {
-      addOneIgnored();
-    } else if (command.equals("addOneValidated")) {
-      addOneValidated();
-    } else if (command.equals("allValidated")) {
-      allValidated();
-    } else if (command.equals("allIgnored")) {
-      allIgnored();
-    } else if (command.equals("shiftUp")) {
-      shiftUp();
-    } else if (command.equals("shiftDown")) {
-      shiftDown();
-    }
-  }
+    private void checkTask(Vector<? extends String> tobeChecked, List<String> source) {
+        String t;
 
-  private void shiftUp() {
-    int index = listValidated.getSelectedIndices()[0];
+        for (int i = 0; i < tobeChecked.size(); i++) {
+            t = tobeChecked.elementAt(i);
 
-    Collections.swap(val, index, index - 1);
-    listValidated.setListData(val);
-    setButtons();
-  }
-
-  private void shiftDown() {
-    int index = listValidated.getSelectedIndices()[0];
-
-    Collections.swap(val, index, index + 1);
-    listValidated.setListData(val);
-    setButtons();
-  }
-
-  private void addOneIgnored() {
-    int[] list = listValidated.getSelectedIndices();
-    Vector<String> v = new Vector<String>();
-    String o;
-    for (int i = 0; i < list.length; i++) {
-      o = val.elementAt(list[i]);
-      ign.addElement(o);
-      v.addElement(o);
+            if (!source.contains(t)) {
+                tobeChecked.removeElementAt(i);
+                i--;
+            }
+        }
     }
 
-    val.removeAll(v);
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
+    public void addNewTask(Vector<String> added, List<String> source, Vector<String> notSource) {
+        String tgc;
 
-  private void addOneValidated() {
-    int[] list = listIgnored.getSelectedIndices();
-    Vector<String> v = new Vector<String>();
-    String o;
-    for (int i = 0; i < list.length; i++) {
-      o = ign.elementAt(list[i]);
-      val.addElement(o);
-      v.addElement(o);
+        for (int i = 0; i < source.size(); i++) {
+            tgc = source.get(i);
+
+            if ((!added.contains(tgc)) && (!notSource.contains(tgc))) {
+                added.addElement(tgc);
+                //
+            }
+        }
     }
 
-    ign.removeAll(v);
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
-
-  private void allValidated() {
-    val.addAll(ign);
-    ign.removeAllElements();
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
-
-  private void allIgnored() {
-    ign.addAll(val);
-    val.removeAllElements();
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
-
-  public void closeDialog() {
-    back.removeAllElements();
-    for (int i = 0; i < val.size(); i++) {
-      back.addElement(val.elementAt(i));
-    }
-    validated = val;
-    ignored = ign;
-    dispose();
-  }
-
-  public void cancelDialog() {
-    dispose();
-  }
-
-  private void setButtons() {
-    int i1 = listIgnored.getSelectedIndex();
-    int i2 = listValidated.getSelectedIndex();
-
-    if (i1 == -1) {
-      addOneValidated.setEnabled(false);
-    } else {
-      addOneValidated.setEnabled(true);
-      // listValidated.clearSelection();
+    private void myInitComponents() {
+        setButtons();
     }
 
-    if (i2 == -1) {
-      addOneIgnored.setEnabled(false);
-    } else {
-      addOneIgnored.setEnabled(true);
-      // listIgnored.clearSelection();
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c2 = new GridBagConstraints();
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+
+        c.setLayout(gridbag2);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.BOTH;
+        c2.gridheight = 1;
+
+        // ignored list
+        panel1 = new JPanel();
+        panel1.setLayout(new BorderLayout());
+        panel1.setBorder(new javax.swing.border.TitledBorder("Ignored Tasks"));
+        listIgnored = new JList<String>(ign);
+        // listIgnored.setPreferredSize(new Dimension(200, 250));
+        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listIgnored.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+        panel1.add(scrollPane1, BorderLayout.CENTER);
+        panel1.setPreferredSize(new Dimension(200, 250));
+        c.add(panel1, c2);
+
+        // central buttons
+        panel3 = new JPanel();
+        panel3.setLayout(gridbag1);
+
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.gridheight = 1;
+
+        allValidated = new JButton(IconManager.imgic50);
+        allValidated.setPreferredSize(new Dimension(50, 25));
+        allValidated.addActionListener(this);
+        allValidated.setActionCommand("allValidated");
+        panel3.add(allValidated, c1);
+
+        addOneValidated = new JButton(IconManager.imgic48);
+        addOneValidated.setPreferredSize(new Dimension(50, 25));
+        addOneValidated.addActionListener(this);
+        addOneValidated.setActionCommand("addOneValidated");
+        panel3.add(addOneValidated, c1);
+
+        panel3.add(new JLabel(" "), c1);
+
+        addOneIgnored = new JButton(IconManager.imgic46);
+        addOneIgnored.addActionListener(this);
+        addOneIgnored.setPreferredSize(new Dimension(50, 25));
+        addOneIgnored.setActionCommand("addOneIgnored");
+        panel3.add(addOneIgnored, c1);
+
+        allIgnored = new JButton(IconManager.imgic44);
+        allIgnored.addActionListener(this);
+        allIgnored.setPreferredSize(new Dimension(50, 25));
+        allIgnored.setActionCommand("allIgnored");
+        panel3.add(allIgnored, c1);
+
+        c.add(panel3, c2);
+
+        shiftUp = new JButton(IconManager.imgic78);
+        shiftUp.addActionListener(this);
+        shiftUp.setPreferredSize(new Dimension(50, 25));
+        shiftUp.setActionCommand("shiftUp");
+        panel3.add(shiftUp, c1);
+
+        c.add(panel3, c2);
+
+        shiftDown = new JButton(IconManager.imgic79);
+        shiftDown.addActionListener(this);
+        shiftDown.setPreferredSize(new Dimension(50, 25));
+        shiftDown.setActionCommand("shiftDown");
+        panel3.add(shiftDown, c1);
+
+        c.add(panel3, c2);
+
+        // validated list
+        panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        panel2.setBorder(new javax.swing.border.TitledBorder("Displayed Tasks"));
+        listValidated = new JList<String>(val);
+        // listValidated.setPreferredSize(new Dimension(200, 250));
+        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listValidated.addListSelectionListener(this);
+        JScrollPane scrollPane2 = new JScrollPane(listValidated);
+        panel2.add(scrollPane2, BorderLayout.CENTER);
+        panel2.setPreferredSize(new Dimension(200, 250));
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c.add(panel2, c2);
+
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.gridwidth = 1; // end row
+        initMainButtons(c2, c, this, false, "Show trace", "Cancel");
+
     }
 
-    if (ign.size() == 0) {
-      allValidated.setEnabled(false);
-    } else {
-      allValidated.setEnabled(true);
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        if (evt.getSource() == closeButton) {
+            closeDialog();
+            return;
+        } else if (evt.getSource() == cancelButton) {
+            cancelDialog();
+            return;
+        }
+
+        // Compare the action command to the known actions.
+        if (command.equals("addOneIgnored")) {
+            addOneIgnored();
+        } else if (command.equals("addOneValidated")) {
+            addOneValidated();
+        } else if (command.equals("allValidated")) {
+            allValidated();
+        } else if (command.equals("allIgnored")) {
+            allIgnored();
+        } else if (command.equals("shiftUp")) {
+            shiftUp();
+        } else if (command.equals("shiftDown")) {
+            shiftDown();
+        }
     }
 
-    if (val.size() == 0) {
-      allIgnored.setEnabled(false);
-      closeButton.setEnabled(false);
-    } else {
-      allIgnored.setEnabled(true);
-      closeButton.setEnabled(true);
-    }
-    if (i2 < 1) {
-      shiftUp.setEnabled(false);
+    private void shiftUp() {
+        int index = listValidated.getSelectedIndices()[0];
 
-    } else {
-      shiftUp.setEnabled(true);
+        Collections.swap(val, index, index - 1);
+        listValidated.setListData(val);
+        setButtons();
     }
 
-    if (i2 == val.size() - 1 || i2 == -1) {
-      shiftDown.setEnabled(false);
-    } else {
-      shiftDown.setEnabled(true);
-    }
-  }
+    private void shiftDown() {
+        int index = listValidated.getSelectedIndices()[0];
 
-  public void valueChanged(ListSelectionEvent e) {
-    setButtons();
-  }
+        Collections.swap(val, index, index + 1);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void addOneIgnored() {
+        int[] list = listValidated.getSelectedIndices();
+        Vector<String> v = new Vector<String>();
+        String o;
+        for (int i = 0; i < list.length; i++) {
+            o = val.elementAt(list[i]);
+            ign.addElement(o);
+            v.addElement(o);
+        }
+
+        val.removeAll(v);
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void addOneValidated() {
+        int[] list = listIgnored.getSelectedIndices();
+        Vector<String> v = new Vector<String>();
+        String o;
+        for (int i = 0; i < list.length; i++) {
+            o = ign.elementAt(list[i]);
+            val.addElement(o);
+            v.addElement(o);
+        }
+
+        ign.removeAll(v);
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void allValidated() {
+        val.addAll(ign);
+        ign.removeAllElements();
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void allIgnored() {
+        ign.addAll(val);
+        val.removeAllElements();
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    public void closeDialog() {
+        back.removeAllElements();
+        for (int i = 0; i < val.size(); i++) {
+            back.addElement(val.elementAt(i));
+        }
+        validated = val;
+        ignored = ign;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    private void setButtons() {
+        int i1 = listIgnored.getSelectedIndex();
+        int i2 = listValidated.getSelectedIndex();
+
+        if (i1 == -1) {
+            addOneValidated.setEnabled(false);
+        } else {
+            addOneValidated.setEnabled(true);
+            // listValidated.clearSelection();
+        }
+
+        if (i2 == -1) {
+            addOneIgnored.setEnabled(false);
+        } else {
+            addOneIgnored.setEnabled(true);
+            // listIgnored.clearSelection();
+        }
+
+        if (ign.size() == 0) {
+            allValidated.setEnabled(false);
+        } else {
+            allValidated.setEnabled(true);
+        }
+
+        if (val.size() == 0) {
+            allIgnored.setEnabled(false);
+            closeButton.setEnabled(false);
+        } else {
+            allIgnored.setEnabled(true);
+            closeButton.setEnabled(true);
+        }
+        if (i2 < 1) {
+            shiftUp.setEnabled(false);
+
+        } else {
+            shiftUp.setEnabled(true);
+        }
+
+        if (i2 == val.size() - 1 || i2 == -1) {
+            shiftDown.setEnabled(false);
+        } else {
+            shiftDown.setEnabled(true);
+        }
+    }
+
+    public void valueChanged(ListSelectionEvent e) {
+        setButtons();
+    }
 
 }

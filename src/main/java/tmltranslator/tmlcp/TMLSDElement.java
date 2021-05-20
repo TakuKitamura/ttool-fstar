@@ -48,8 +48,8 @@ import tmltranslator.TMLElement;
  */
 public abstract class TMLSDElement extends TMLElement {
 
-  public TMLSDElement(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLSDElement(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

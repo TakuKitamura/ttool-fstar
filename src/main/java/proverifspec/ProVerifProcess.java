@@ -45,28 +45,28 @@ package proverifspec;
  * @author Ludovic APVRILLE
  */
 public class ProVerifProcess extends ProVerifProcInstr {
-  protected String name;
-  protected ProVerifVar[] args;
+    protected String name;
+    protected ProVerifVar[] args;
 
-  public ProVerifProcess(String _name) {
-    this.name = _name;
-  }
+    public ProVerifProcess(String _name) {
+        this.name = _name;
+    }
 
-  public ProVerifProcess(String _name, ProVerifVar[] _args) {
-    this(_name);
-    this.args = _args;
-  }
+    public ProVerifProcess(String _name, ProVerifVar[] _args) {
+        this(_name);
+        this.args = _args;
+    }
 
-  public ProVerifProcess(String _name, ProVerifVar[] _args, ProVerifProcInstr _next) {
-    this(_name, _args);
-    this.next = _next;
-  }
+    public ProVerifProcess(String _name, ProVerifVar[] _args, ProVerifProcInstr _next) {
+        this(_name, _args);
+        this.next = _next;
+    }
 
-  public String getName() {
-    return this.name;
-  }
+    public String getName() {
+        return this.name;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateProcess(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateProcess(this, _alinea);
+    }
 }

@@ -47,10 +47,10 @@ package syscamstranslator;
 
 public class SysCAMSTComponent {
 
-  public String name;
+    public String name;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
 }

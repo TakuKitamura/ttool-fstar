@@ -49,5 +49,5 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public interface ActivityDiagramPanelInterface {
-  List<TGComponent> getComponentList();
+    List<TGComponent> getComponentList();
 }

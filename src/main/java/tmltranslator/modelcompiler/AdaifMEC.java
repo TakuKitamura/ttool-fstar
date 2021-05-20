@@ -48,17 +48,17 @@ package tmltranslator.modelcompiler;
  */
 public class AdaifMEC extends ArchUnitMEC {
 
-  public static final String CTX_CLEANUP = "adaif_ctx_cleanup";
-  public static final String OPERATION = "Adaif operation";
+    public static final String CTX_CLEANUP = "adaif_ctx_cleanup";
+    public static final String OPERATION = "Adaif operation";
 
-  // Issue #98: Compilation problem
-  public static final String CONTEXT = "ADAIF_CONTEXT";
+    // Issue #98: Compilation problem
+    public static final String CONTEXT = "ADAIF_CONTEXT";
 
-  public AdaifMEC() {
-    index = 4;
-    initCtxRoutine = "adaif_ctx_init";
-    localMemoryPointer = "adaif_mss";
-    ctxCleanupRoutine = CTX_CLEANUP;// "adaif_ctx_cleanup";
-  }
+    public AdaifMEC() {
+        index = 4;
+        initCtxRoutine = "adaif_ctx_init";
+        localMemoryPointer = "adaif_mss";
+        ctxCleanupRoutine = CTX_CLEANUP;// "adaif_ctx_cleanup";
+    }
 
 } // End of class

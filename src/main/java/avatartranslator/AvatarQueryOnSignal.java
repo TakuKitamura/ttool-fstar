@@ -51,61 +51,62 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class AvatarQueryOnSignal extends AvatarStateMachineElement {
-  private AvatarSignal signal;
-  private AvatarAttribute attribute;
+    private AvatarSignal signal;
+    private AvatarAttribute attribute;
 
-  public AvatarQueryOnSignal(String _name, AvatarSignal _signal, AvatarAttribute _attribute, Object _referenceObject) {
-    super(_name, _referenceObject);
-    signal = _signal;
-    attribute = _attribute;
+    public AvatarQueryOnSignal(String _name, AvatarSignal _signal, AvatarAttribute _attribute,
+            Object _referenceObject) {
+        super(_name, _referenceObject);
+        signal = _signal;
+        attribute = _attribute;
 
-  }
-
-  public AvatarSignal getSignal() {
-    return signal;
-  }
-
-  public AvatarAttribute getAttribute() {
-    return attribute;
-  }
-
-  public AvatarQueryOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
-    // TraceManager.addDev("I HAVE BEEN CLONED: " + this);
-    AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
-    AvatarAttribute att = _block.getAvatarAttributeWithName(getAttribute().getName());
-    if ((sig != null) && (att != null)) {
-      AvatarQueryOnSignal aqos = new AvatarQueryOnSignal(getName() + "__clone", sig, att, getReferenceObject());
-      return aqos;
-    } else {
-      TraceManager.addDev("Basic clone failed for AvatarQueryOnSignal");
     }
 
-    return null;
-  }
-
-  public String getExtendedName() {
-    if ((getSignal() == null) || (getAttribute() == null)) {
-      String s = getName() + " refobjt=" + referenceObject.toString();
-      TraceManager.addDev("Null signal" + " res=" + s);
-      return s;
+    public AvatarSignal getSignal() {
+        return signal;
     }
 
-    if (getName() == null) {
-      TraceManager.addDev("Null name");
+    public AvatarAttribute getAttribute() {
+        return attribute;
     }
 
-    return getName() + ":" + getSignal().getName() + "/" + attribute.getName();
-  }
+    public AvatarQueryOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
+        // TraceManager.addDev("I HAVE BEEN CLONED: " + this);
+        AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
+        AvatarAttribute att = _block.getAvatarAttributeWithName(getAttribute().getName());
+        if ((sig != null) && (att != null)) {
+            AvatarQueryOnSignal aqos = new AvatarQueryOnSignal(getName() + "__clone", sig, att, getReferenceObject());
+            return aqos;
+        } else {
+            TraceManager.addDev("Basic clone failed for AvatarQueryOnSignal");
+        }
 
-  public String getNiceName() {
-    if ((getSignal() == null) || (getAttribute() == null)) {
-      return getName();
+        return null;
     }
 
-    return "Query " + attribute.getName() + " =? " + signal.getName();
-  }
+    public String getExtendedName() {
+        if ((getSignal() == null) || (getAttribute() == null)) {
+            String s = getName() + " refobjt=" + referenceObject.toString();
+            TraceManager.addDev("Null signal" + " res=" + s);
+            return s;
+        }
 
-  public void translate(AvatarTranslator translator, Object arg) {
-    // translator.translateActionOnSignal (this, arg);
-  }
+        if (getName() == null) {
+            TraceManager.addDev("Null name");
+        }
+
+        return getName() + ":" + getSignal().getName() + "/" + attribute.getName();
+    }
+
+    public String getNiceName() {
+        if ((getSignal() == null) || (getAttribute() == null)) {
+            return getName();
+        }
+
+        return "Query " + attribute.getName() + " =? " + signal.getName();
+    }
+
+    public void translate(AvatarTranslator translator, Object arg) {
+        // translator.translateActionOnSignal (this, arg);
+    }
 }

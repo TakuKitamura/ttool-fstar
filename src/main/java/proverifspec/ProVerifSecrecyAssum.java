@@ -45,13 +45,13 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifSecrecyAssum implements ProVerifDeclaration {
-  protected String name;
+    protected String name;
 
-  public ProVerifSecrecyAssum(String _name) {
-    this.name = _name;
-  }
+    public ProVerifSecrecyAssum(String _name) {
+        this.name = _name;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateSecrecyAssum(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateSecrecyAssum(this, _alinea);
+    }
 }

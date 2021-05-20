@@ -52,63 +52,63 @@ import java.awt.*;
  */
 public class TMLRequestOperator extends TMLCompositionOperator {
 
-  public TMLRequestOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TMLRequestOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    nbInternalTGComponent = 1;
-    tgcomponent = new TGComponent[nbInternalTGComponent];
-    TMLRequestProperties tgc = new TMLRequestProperties(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
-        tdp.getMaxY(), false, this, _tdp);
-    tgc.setName("request properties");
-    tgc.setMoveWithFather(false);
-    tgcomponent[0] = tgc;
+        nbInternalTGComponent = 1;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
+        TMLRequestProperties tgc = new TMLRequestProperties(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
+                tdp.getMaxY(), false, this, _tdp);
+        tgc.setName("request properties");
+        tgc.setMoveWithFather(false);
+        tgcomponent[0] = tgc;
 
-    name = "Request TML composition operator";
-    value = "Request";
+        name = "Request TML composition operator";
+        value = "Request";
 
-    myImageIcon = IconManager.imgic804;
-  }
-
-  public void internalDrawing(Graphics g) {
-    if (((TMLTaskDiagramPanel) (tdp)).areRequestsVisible()) {
-      g.drawRect(x, y, width, height);
-      g.setColor(getMyColor());
-      g.fillRect(x + 1, y + 1, width - 1, height - 1);
-      // g.drawImage(IconManager.img8, x + width - 20, y + 3,
-      // ColorManager.COMPOSITION_OPERATOR, null);
-      ColorManager.setColor(g, getState(), 0);
-      g.setFont((g.getFont()).deriveFont(Font.BOLD));
-      drawSingleString(g, value, x + textX, y + textY);
-      g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+        myImageIcon = IconManager.imgic804;
     }
-  }
 
-  public TMLRequestProperties getTMLRequestProperties() {
-    return (TMLRequestProperties) tgcomponent[0];
-  }
+    public void internalDrawing(Graphics g) {
+        if (((TMLTaskDiagramPanel) (tdp)).areRequestsVisible()) {
+            g.drawRect(x, y, width, height);
+            g.setColor(getMyColor());
+            g.fillRect(x + 1, y + 1, width - 1, height - 1);
+            // g.drawImage(IconManager.img8, x + width - 20, y + 3,
+            // ColorManager.COMPOSITION_OPERATOR, null);
+            ColorManager.setColor(g, getState(), 0);
+            g.setFont((g.getFont()).deriveFont(Font.BOLD));
+            drawSingleString(g, value, x + textX, y + textY);
+            g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+        }
+    }
 
-  public String getRequestName() {
-    return getTMLRequestProperties().getRequestName();
-  }
+    public TMLRequestProperties getTMLRequestProperties() {
+        return (TMLRequestProperties) tgcomponent[0];
+    }
 
-  public int getRequestMaxParam() {
-    return getTMLRequestProperties().getNbMaxParam();
-  }
+    public String getRequestName() {
+        return getTMLRequestProperties().getRequestName();
+    }
 
-  public TType getParamAt(int _index) {
-    return getTMLRequestProperties().getParamAt(_index);
-  }
+    public int getRequestMaxParam() {
+        return getTMLRequestProperties().getNbMaxParam();
+    }
 
-  public boolean isToggledVisible() {
-    return (((TMLTaskDiagramPanel) (tdp)).areRequestsVisible());
-  }
+    public TType getParamAt(int _index) {
+        return getTMLRequestProperties().getParamAt(_index);
+    }
 
-  public Color getMyColor() {
-    return ColorManager.TML_PORT_REQUEST;
-  }
+    public boolean isToggledVisible() {
+        return (((TMLTaskDiagramPanel) (tdp)).areRequestsVisible());
+    }
 
-  public int getType() {
-    return TGComponentManager.TMLTD_REQUEST_OPERATOR;
-  }
+    public Color getMyColor() {
+        return ColorManager.TML_PORT_REQUEST;
+    }
+
+    public int getType() {
+        return TGComponentManager.TMLTD_REQUEST_OPERATOR;
+    }
 }

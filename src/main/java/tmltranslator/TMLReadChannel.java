@@ -46,12 +46,12 @@ package tmltranslator;
  */
 public class TMLReadChannel extends TMLActivityElementChannel {
 
-  public TMLReadChannel(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLReadChannel(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public String toString() {
-    return "Read " + nbOfSamples + " samples in channel: " + getChannel(0).getName();
-  }
+    public String toString() {
+        return "Read " + nbOfSamples + " samples in channel: " + getChannel(0).getName();
+    }
 
 }

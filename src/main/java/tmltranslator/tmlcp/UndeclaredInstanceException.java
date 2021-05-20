@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class UndeclaredInstanceException extends Exception {
 
-  public UndeclaredInstanceException() {
-    super("TMLCP COMPILER ERROR: undeclared instance");
-  }
+    public UndeclaredInstanceException() {
+        super("TMLCP COMPILER ERROR: undeclared instance");
+    }
 
-  public UndeclaredInstanceException(String message) {
-    super(message);
-  }
+    public UndeclaredInstanceException(String message) {
+        super(message);
+    }
 }

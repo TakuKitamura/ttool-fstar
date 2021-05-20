@@ -58,265 +58,265 @@ import java.awt.*;
  */
 public class TMLEventProperties extends TGCWithoutInternalComponent {
 
-  protected int nbMaxAttribute = 3;
-  protected TType list[];
-  protected String eventName;
-  protected int h;
-  protected String valueOCL;
-  protected int maxSamples = 4;
-  protected boolean isFinite = false;
-  protected boolean isBlocking = false;
+    protected int nbMaxAttribute = 3;
+    protected TType list[];
+    protected String eventName;
+    protected int h;
+    protected String valueOCL;
+    protected int maxSamples = 4;
+    protected boolean isFinite = false;
+    protected boolean isBlocking = false;
 
-  public TMLEventProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TMLEventProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    moveable = true;
-    editable = true;
-    removable = false;
+        moveable = true;
+        editable = true;
+        removable = false;
 
-    eventName = "evt";
-    list = new TType[nbMaxAttribute];
-    for (int i = 0; i < nbMaxAttribute; i++) {
-      list[i] = new TType();
-    }
-
-    makeValue();
-
-    myImageIcon = IconManager.imgic302;
-  }
-
-  public void internalDrawing(Graphics g) {
-    if (((TMLTaskDiagramPanel) (tdp)).areEventsVisible()) {
-      ColorManager.setColor(g, getState(), 0);
-      //
-      h = g.getFontMetrics().getHeight();
-      drawSingleString(g, valueOCL, x, y + h);
-
-      if (!tdp.isScaled()) {
-        width = g.getFontMetrics().stringWidth(valueOCL);
-        width = Math.max(minWidth, width);
-        height = h;
-      }
-    }
-
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
-    return null;
-  }
-
-  public int getMycurrentMinY() {
-    return Math.min(y, y - h + 2);
-  }
-
-  public int getMycurrentMaxY() {
-    return Math.min(y, y - h + 2 + height);
-  }
-
-  public void makeValue() {
-    valueOCL = "{" + getEventName() + "(" + getAttributeString() + "); ";
-    if (!isFinite) {
-      valueOCL += "infinite FIFO";
-    } else {
-      valueOCL += "finite FIFO(" + maxSamples + ")";
-      if (isBlocking) {
-        valueOCL += "/blocking";
-      } else {
-        valueOCL += "/non-blocking";
-      }
-    }
-    valueOCL += "}";
-    value = valueOCL;
-    //
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    String oldValue = valueOCL;
-    int oldSample = maxSamples;
-    JDialogParamFIFO jda = new JDialogParamFIFO(eventName, list[0].getType(), list[1].getType(), list[2].getType(),
-        isFinite, isBlocking, "" + maxSamples, frame, "Setting properties");
-    // jda.setSize(350, 350);
-    GraphicLib.centerOnParent(jda, 350, 350);
-    jda.setVisible(true); // blocked until dialog has been closed
-
-    if (jda.hasNewData()) {
-      try {
-        maxSamples = Integer.decode(jda.getMaxSamples()).intValue();
-        if (maxSamples < 1) {
-          maxSamples = oldSample;
-          JOptionPane.showMessageDialog(frame, "Non valid value: " + maxSamples + ": Should be at least 1", "Error",
-              JOptionPane.INFORMATION_MESSAGE);
-          return false;
-        }
-        isFinite = jda.isFinite();
-        isBlocking = jda.isBlocking();
-        eventName = jda.getParamName();
+        eventName = "evt";
+        list = new TType[nbMaxAttribute];
         for (int i = 0; i < nbMaxAttribute; i++) {
-          list[i].setType(jda.getType(i));
+            list[i] = new TType();
         }
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(frame, "Non valid value: " + e.getMessage(), "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-        return false;
-      }
+
+        makeValue();
+
+        myImageIcon = IconManager.imgic302;
     }
 
-    makeValue();
-
-    return !oldValue.equals(valueOCL);
-
-  }
-
-  protected String translateExtraParam() {
-    TType a;
-    // String val = "";
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<Prop name=\"");
-    sb.append(getEventName());
-    sb.append("\" finite=\"");
-    if (isFinite) {
-      sb.append("true");
-    } else {
-      sb.append("false");
-    }
-    sb.append("\" blocking=\"");
-    if (isBlocking) {
-      sb.append("true");
-    } else {
-      sb.append("false");
-    }
-    sb.append("\" maxSamples=\"" + maxSamples);
-    sb.append("\" />\n");
-    for (int i = 0; i < nbMaxAttribute; i++) {
-      //
-      a = list[i];
-      //
-      // val = val + a + "\n";
-      sb.append("<Type");
-      sb.append(" type=\"");
-      sb.append(a.getType());
-      sb.append("\" typeOther=\"");
-      sb.append(a.getTypeOther());
-      sb.append("\" />\n");
-    }
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int access;
-      int type;
-      String typeOther;
-      // String id, valueAtt;
-
-      int nbAttribute = 0;
-
-      //
-      //
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
+    public void internalDrawing(Graphics g) {
+        if (((TMLTaskDiagramPanel) (tdp)).areEventsVisible()) {
+            ColorManager.setColor(g, getState(), 0);
             //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if ((elt.getTagName().equals("Type")) && (nbAttribute < nbMaxAttribute)) {
-                //
-                type = Integer.decode(elt.getAttribute("type")).intValue();
-                try {
-                  typeOther = elt.getAttribute("typeOther");
-                } catch (Exception e) {
-                  typeOther = "";
-                }
+            h = g.getFontMetrics().getHeight();
+            drawSingleString(g, valueOCL, x, y + h);
 
-                TType ta = new TType(type, typeOther);
-                list[nbAttribute] = ta;
-                nbAttribute++;
-
-              }
-
-              if (elt.getTagName().equals("Prop")) {
-                eventName = elt.getAttribute("name");
-                isFinite = (elt.getAttribute("finite").compareTo("true") == 0);
-                try {
-                  maxSamples = Integer.decode(elt.getAttribute("maxSamples")).intValue();
-                } catch (Exception e) {
-                }
-                try {
-                  isBlocking = (elt.getAttribute("blocking").compareTo("true") == 0);
-                } catch (Exception e) {
-                }
-
-              }
+            if (!tdp.isScaled()) {
+                width = g.getFontMetrics().stringWidth(valueOCL);
+                width = Math.max(minWidth, width);
+                height = h;
             }
-          }
         }
-      }
 
-    } catch (Exception e) {
-      throw new MalformedModelingException();
     }
-    makeValue();
-  }
 
-  public String getEventName() {
-    return eventName;
-  }
-
-  public boolean isFinite() {
-    return isFinite;
-  }
-
-  public boolean isBlocking() {
-    return isBlocking;
-  }
-
-  public int getMaxSamples() {
-    return maxSamples;
-  }
-
-  public String getAttributeString() {
-    TType tt;
-    String s = "";
-    int nb = 0;
-    for (int i = 0; i < nbMaxAttribute; i++) {
-      //
-      tt = list[i];
-      if (tt.getType() != TType.NONE) {
-        if (nb != 0) {
-          s += ", ";
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
         }
-        s += tt.toString();
-        nb++;
-      }
+        return null;
     }
-    //
-    return s;
-  }
 
-  public int getNbMaxParam() {
-    return nbMaxAttribute;
-  }
-
-  public TType getParamAt(int _index) {
-    if (_index < nbMaxAttribute) {
-      return list[_index];
-    } else {
-      return null;
+    public int getMycurrentMinY() {
+        return Math.min(y, y - h + 2);
     }
-  }
+
+    public int getMycurrentMaxY() {
+        return Math.min(y, y - h + 2 + height);
+    }
+
+    public void makeValue() {
+        valueOCL = "{" + getEventName() + "(" + getAttributeString() + "); ";
+        if (!isFinite) {
+            valueOCL += "infinite FIFO";
+        } else {
+            valueOCL += "finite FIFO(" + maxSamples + ")";
+            if (isBlocking) {
+                valueOCL += "/blocking";
+            } else {
+                valueOCL += "/non-blocking";
+            }
+        }
+        valueOCL += "}";
+        value = valueOCL;
+        //
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        String oldValue = valueOCL;
+        int oldSample = maxSamples;
+        JDialogParamFIFO jda = new JDialogParamFIFO(eventName, list[0].getType(), list[1].getType(), list[2].getType(),
+                isFinite, isBlocking, "" + maxSamples, frame, "Setting properties");
+        // jda.setSize(350, 350);
+        GraphicLib.centerOnParent(jda, 350, 350);
+        jda.setVisible(true); // blocked until dialog has been closed
+
+        if (jda.hasNewData()) {
+            try {
+                maxSamples = Integer.decode(jda.getMaxSamples()).intValue();
+                if (maxSamples < 1) {
+                    maxSamples = oldSample;
+                    JOptionPane.showMessageDialog(frame, "Non valid value: " + maxSamples + ": Should be at least 1",
+                            "Error", JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+                isFinite = jda.isFinite();
+                isBlocking = jda.isBlocking();
+                eventName = jda.getParamName();
+                for (int i = 0; i < nbMaxAttribute; i++) {
+                    list[i].setType(jda.getType(i));
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(frame, "Non valid value: " + e.getMessage(), "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+
+        makeValue();
+
+        return !oldValue.equals(valueOCL);
+
+    }
+
+    protected String translateExtraParam() {
+        TType a;
+        // String val = "";
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<Prop name=\"");
+        sb.append(getEventName());
+        sb.append("\" finite=\"");
+        if (isFinite) {
+            sb.append("true");
+        } else {
+            sb.append("false");
+        }
+        sb.append("\" blocking=\"");
+        if (isBlocking) {
+            sb.append("true");
+        } else {
+            sb.append("false");
+        }
+        sb.append("\" maxSamples=\"" + maxSamples);
+        sb.append("\" />\n");
+        for (int i = 0; i < nbMaxAttribute; i++) {
+            //
+            a = list[i];
+            //
+            // val = val + a + "\n";
+            sb.append("<Type");
+            sb.append(" type=\"");
+            sb.append(a.getType());
+            sb.append("\" typeOther=\"");
+            sb.append(a.getTypeOther());
+            sb.append("\" />\n");
+        }
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int access;
+            int type;
+            String typeOther;
+            // String id, valueAtt;
+
+            int nbAttribute = 0;
+
+            //
+            //
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if ((elt.getTagName().equals("Type")) && (nbAttribute < nbMaxAttribute)) {
+                                //
+                                type = Integer.decode(elt.getAttribute("type")).intValue();
+                                try {
+                                    typeOther = elt.getAttribute("typeOther");
+                                } catch (Exception e) {
+                                    typeOther = "";
+                                }
+
+                                TType ta = new TType(type, typeOther);
+                                list[nbAttribute] = ta;
+                                nbAttribute++;
+
+                            }
+
+                            if (elt.getTagName().equals("Prop")) {
+                                eventName = elt.getAttribute("name");
+                                isFinite = (elt.getAttribute("finite").compareTo("true") == 0);
+                                try {
+                                    maxSamples = Integer.decode(elt.getAttribute("maxSamples")).intValue();
+                                } catch (Exception e) {
+                                }
+                                try {
+                                    isBlocking = (elt.getAttribute("blocking").compareTo("true") == 0);
+                                } catch (Exception e) {
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+        makeValue();
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public boolean isFinite() {
+        return isFinite;
+    }
+
+    public boolean isBlocking() {
+        return isBlocking;
+    }
+
+    public int getMaxSamples() {
+        return maxSamples;
+    }
+
+    public String getAttributeString() {
+        TType tt;
+        String s = "";
+        int nb = 0;
+        for (int i = 0; i < nbMaxAttribute; i++) {
+            //
+            tt = list[i];
+            if (tt.getType() != TType.NONE) {
+                if (nb != 0) {
+                    s += ", ";
+                }
+                s += tt.toString();
+                nb++;
+            }
+        }
+        //
+        return s;
+    }
+
+    public int getNbMaxParam() {
+        return nbMaxAttribute;
+    }
+
+    public TType getParamAt(int _index) {
+        if (_index < nbMaxAttribute) {
+            return list[_index];
+        } else {
+            return null;
+        }
+    }
 
 }

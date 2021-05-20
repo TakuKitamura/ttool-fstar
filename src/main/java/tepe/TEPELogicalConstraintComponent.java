@@ -48,34 +48,34 @@ import java.util.Vector;
  */
 public class TEPELogicalConstraintComponent extends TEPEComponent {
 
-  public static final int SEQUENCE = 0;
-  public static final int NO_SEQUENCE = 1;
+    public static final int SEQUENCE = 0;
+    public static final int NO_SEQUENCE = 1;
 
-  protected int type;
+    protected int type;
 
-  public TEPELogicalConstraintComponent(String _name, Object _referenceObject, int _type) {
-    super(_name, _referenceObject);
-    type = _type;
-    inSignalComponents = new Vector<TEPEComponent>();
-    inNegatedSignalComponents = new Vector<TEPEComponent>();
-    outSignalComponents = new Vector<TEPEComponent>();
-    inPropertyComponents = new Vector<TEPEComponent>();
-    inNegatedProperty = new Vector<Boolean>();
-    outPropertyComponents = new Vector<TEPEComponent>();
-  }
-
-  public int getType() {
-    return type;
-  }
-
-  public String getExtraString() {
-    if (type == SEQUENCE) {
-      return "\nSequence";
+    public TEPELogicalConstraintComponent(String _name, Object _referenceObject, int _type) {
+        super(_name, _referenceObject);
+        type = _type;
+        inSignalComponents = new Vector<TEPEComponent>();
+        inNegatedSignalComponents = new Vector<TEPEComponent>();
+        outSignalComponents = new Vector<TEPEComponent>();
+        inPropertyComponents = new Vector<TEPEComponent>();
+        inNegatedProperty = new Vector<Boolean>();
+        outPropertyComponents = new Vector<TEPEComponent>();
     }
-    if (type == NO_SEQUENCE) {
-      return "\nSet of signals";
+
+    public int getType() {
+        return type;
     }
-    return "Unknown type";
-  }
+
+    public String getExtraString() {
+        if (type == SEQUENCE) {
+            return "\nSequence";
+        }
+        if (type == NO_SEQUENCE) {
+            return "\nSet of signals";
+        }
+        return "Unknown type";
+    }
 
 }

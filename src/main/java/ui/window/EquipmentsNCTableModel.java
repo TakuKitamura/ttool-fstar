@@ -52,90 +52,90 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class EquipmentsNCTableModel extends AbstractTableModel {
-  private NCStructure ncs;
+    private NCStructure ncs;
 
-  // private String [] names;
-  private String[] outputs;
-  private String[] inputs;
+    // private String [] names;
+    private String[] outputs;
+    private String[] inputs;
 
-  public EquipmentsNCTableModel(NCStructure _ncs) {
-    ncs = _ncs;
-    outputs = new String[ncs.equipments.size()];
-    inputs = new String[ncs.equipments.size()];
-    computeData(_ncs);
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return ncs.equipments.size();
-  }
-
-  public int getColumnCount() {
-    return 5;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (column == 0) {
-      return ncs.equipments.get(row).getName();
-    } else if (column == 1) {
-      return NCEquipment.getStringType(ncs.equipments.get(row).getType());
-    } else if (column == 2) {
-      return NCEquipment.getStringSchedulingPolicy(ncs.equipments.get(row).getSchedulingPolicy());
-    } else if (column == 3) {
-      return outputs[row];
+    public EquipmentsNCTableModel(NCStructure _ncs) {
+        ncs = _ncs;
+        outputs = new String[ncs.equipments.size()];
+        inputs = new String[ncs.equipments.size()];
+        computeData(_ncs);
     }
-    return inputs[row];
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Equipment";
-      case 1:
-        return "Type";
-      case 2:
-        return "Scheduling Policy";
-      case 3:
-        return "Ouput traffic";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return ncs.equipments.size();
     }
-    return "Input traffic";
-  }
 
-  private void computeData(NCStructure _ncs) {
-    String out = "", in = "";
-    String tmpout = "", tmpin = "";
-    int cpt = 0;
-    for (NCEquipment eq : ncs.equipments) {
-      for (NCPath path : ncs.paths) {
+    public int getColumnCount() {
+        return 5;
+    }
 
-        if (path.destination == eq) {
-          if (tmpin.indexOf(path.traffic.getName()) == -1) {
-            tmpin += path.traffic.getName() + " ";
-            if (in.length() > 0) {
-              in += ", " + path.traffic.getName();
-            } else {
-              in = path.traffic.getName();
-            }
-          }
+    public Object getValueAt(int row, int column) {
+        if (column == 0) {
+            return ncs.equipments.get(row).getName();
+        } else if (column == 1) {
+            return NCEquipment.getStringType(ncs.equipments.get(row).getType());
+        } else if (column == 2) {
+            return NCEquipment.getStringSchedulingPolicy(ncs.equipments.get(row).getSchedulingPolicy());
+        } else if (column == 3) {
+            return outputs[row];
         }
-
-        if (path.origin == eq) {
-          if (tmpout.indexOf(path.traffic.getName()) == -1) {
-            tmpout += path.traffic.getName() + " ";
-            if (out.length() > 0) {
-              out += ", " + path.traffic.getName();
-            } else {
-              out = path.traffic.getName();
-            }
-          }
-        }
-      }
-
-      outputs[cpt] = out;
-      inputs[cpt] = in;
-      out = "";
-      in = "";
-      cpt++;
+        return inputs[row];
     }
-  }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Equipment";
+            case 1:
+                return "Type";
+            case 2:
+                return "Scheduling Policy";
+            case 3:
+                return "Ouput traffic";
+        }
+        return "Input traffic";
+    }
+
+    private void computeData(NCStructure _ncs) {
+        String out = "", in = "";
+        String tmpout = "", tmpin = "";
+        int cpt = 0;
+        for (NCEquipment eq : ncs.equipments) {
+            for (NCPath path : ncs.paths) {
+
+                if (path.destination == eq) {
+                    if (tmpin.indexOf(path.traffic.getName()) == -1) {
+                        tmpin += path.traffic.getName() + " ";
+                        if (in.length() > 0) {
+                            in += ", " + path.traffic.getName();
+                        } else {
+                            in = path.traffic.getName();
+                        }
+                    }
+                }
+
+                if (path.origin == eq) {
+                    if (tmpout.indexOf(path.traffic.getName()) == -1) {
+                        tmpout += path.traffic.getName() + " ";
+                        if (out.length() > 0) {
+                            out += ", " + path.traffic.getName();
+                        } else {
+                            out = path.traffic.getName();
+                        }
+                    }
+                }
+            }
+
+            outputs[cpt] = out;
+            inputs[cpt] = in;
+            out = "";
+            in = "";
+            cpt++;
+        }
+    }
 }

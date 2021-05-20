@@ -53,110 +53,110 @@ import ui.window.JDialogSystemCGeneration;
  */
 public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodologyDiagramReference {
 
-  public SysmlsecMethodologyReferenceToApplication(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
-      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SysmlsecMethodologyReferenceToApplication(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+            boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(200, 70);
+        initScaling(200, 70);
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = FUNCTIONAL_VIEW;
+        typeOfReference = FUNCTIONAL_VIEW;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
-
-  public int getType() {
-    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW;
-  }
-
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return (panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel);
-
-  }
-
-  public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-    dn.setValidationsNumber(4);
-    dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM_APP_DIPLO);
-    dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.SIM_TRACE_APP_DIPLO);
-    // dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.LOT_APP_DIPLO);
-    dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP_APP_DIPLO);
-    dn.setValidationsInfo(3, SysmlsecMethodologyDiagramName.TML_APP_DIPLO);
-  }
-
-  public boolean makeCall(String diagramName, int index) {
-    // TraceManager.addDev("Make call to App with index=" + index);
-    String tmp;
-
-    switch (index) {
-      case 0:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ANIMATION);
-          return true;
-        }
-        return false;
-      case 1:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
-          return true;
-        }
-        return false;
-      /*
-       * case 2: if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) { if
-       * (!tdp.getMGUI().generateLOTOS(true)) {
-       * TraceManager.addDev("Generate LOTOS: error");
-       * giveInformation("Error when generating LOTOS file"); return false; }
-       * tdp.getMGUI().formalValidation(true); giveInformation("RG generated"); return
-       * true;
-       * 
-       * } else { giveInformation("Syntax error"); return false; }
-       */
-
-      case 2:
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().generateUPPAAL(false);
-          boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 8,
-              false);
-          if (!result) {
-            giveInformation("UPPAAL Generation failed");
-            return false;
-          }
-          if (tdp.getMGUI().formalValidation(true, diagramName)) {
-            giveInformation("UPPAAL-based verification done");
-            return true;
-          }
-          giveInformation("UPPAAL-based verification failed");
-          return false;
-
-        }
-        break;
-      case 3:
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          TraceManager.addDev("Generate TML");
-          tmp = tdp.getMGUI().generateTMLTxt();
-          if (tmp == null) {
-            giveInformation("TML generation failed");
-            return false;
-          }
-          giveInformation("TML file generated in " + tmp);
-        }
-        break;
-      default:
-        return false;
     }
 
-    return true;
+    public int getType() {
+        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW;
+    }
 
-  }
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return (panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel);
+
+    }
+
+    public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
+        dn.setValidationsNumber(4);
+        dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM_APP_DIPLO);
+        dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.SIM_TRACE_APP_DIPLO);
+        // dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.LOT_APP_DIPLO);
+        dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP_APP_DIPLO);
+        dn.setValidationsInfo(3, SysmlsecMethodologyDiagramName.TML_APP_DIPLO);
+    }
+
+    public boolean makeCall(String diagramName, int index) {
+        // TraceManager.addDev("Make call to App with index=" + index);
+        String tmp;
+
+        switch (index) {
+            case 0:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ANIMATION);
+                    return true;
+                }
+                return false;
+            case 1:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
+                    return true;
+                }
+                return false;
+            /*
+             * case 2: if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) { if
+             * (!tdp.getMGUI().generateLOTOS(true)) {
+             * TraceManager.addDev("Generate LOTOS: error");
+             * giveInformation("Error when generating LOTOS file"); return false; }
+             * tdp.getMGUI().formalValidation(true); giveInformation("RG generated"); return
+             * true;
+             * 
+             * } else { giveInformation("Syntax error"); return false; }
+             */
+
+            case 2:
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().generateUPPAAL(false);
+                    boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false,
+                            8, false);
+                    if (!result) {
+                        giveInformation("UPPAAL Generation failed");
+                        return false;
+                    }
+                    if (tdp.getMGUI().formalValidation(true, diagramName)) {
+                        giveInformation("UPPAAL-based verification done");
+                        return true;
+                    }
+                    giveInformation("UPPAAL-based verification failed");
+                    return false;
+
+                }
+                break;
+            case 3:
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    TraceManager.addDev("Generate TML");
+                    tmp = tdp.getMGUI().generateTMLTxt();
+                    if (tmp == null) {
+                        giveInformation("TML generation failed");
+                        return false;
+                    }
+                    giveInformation("TML file generated in " + tmp);
+                }
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+
+    }
 
 }

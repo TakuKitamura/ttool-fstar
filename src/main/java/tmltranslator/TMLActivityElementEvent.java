@@ -50,97 +50,97 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public abstract class TMLActivityElementEvent extends TMLActivityElement {
-  protected TMLEvent event;
-  protected Vector<String> datas;
-  protected String variable; // Used for notified -> variable in which the result is stored:
-                             // 0: no event
-                             // >0: nb of event in the list
+    protected TMLEvent event;
+    protected Vector<String> datas;
+    protected String variable; // Used for notified -> variable in which the result is stored:
+                               // 0: no event
+                               // >0: nb of event in the list
 
-  protected List<TMLEvent> events;
+    protected List<TMLEvent> events;
 
-  public TMLActivityElementEvent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
+    public TMLActivityElementEvent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
 
-    datas = new Vector<String>();
-  }
-
-  public boolean hasEvents() {
-    return events != null;
-  }
-
-  public List<TMLEvent> getEvents() {
-    return events;
-  }
-
-  public void setEvent(TMLEvent _event) {
-    event = _event;
-  }
-
-  public TMLEvent getEvent() {
-    return event;
-  }
-
-  public void setVariable(String _variable) {
-    variable = _variable;
-  }
-
-  public String getVariable() {
-    return variable;
-  }
-
-  public void addParam(String _param) {
-    datas.add(_param);
-  }
-
-  public int getNbOfParams() {
-    return datas.size();
-  }
-
-  public String getParam(int _index) {
-    if (_index < getNbOfParams()) {
-      return datas.elementAt(_index);
-    } else {
-      return null;
+        datas = new Vector<String>();
     }
-  }
 
-  public void setParam(String _param, int _index) {
-    datas.setElementAt(_param, _index);
-  }
-
-  public String getAllParams() {
-    return getAllParams(",");
-  }
-
-  public String getAllParams(String separator) {
-    String s = "";
-    for (int i = 0; i < getNbOfParams(); i++) {
-      if (i != 0) {
-        s += separator;
-      }
-      s += TMLTextSpecification.modifyString(getParam(i));
+    public boolean hasEvents() {
+        return events != null;
     }
-    return s;
-  }
 
-  public void replaceEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
-    if (event == oldEvt) {
-      event = newEvt;
+    public List<TMLEvent> getEvents() {
+        return events;
     }
-  }
 
-  public Vector<String> getDatas() {
-    return datas;
-  }
+    public void setEvent(TMLEvent _event) {
+        event = _event;
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLActivityElementEvent))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    TMLActivityElementEvent tmlActivityElementEvent = (TMLActivityElementEvent) o;
+    public TMLEvent getEvent() {
+        return event;
+    }
 
-    return (new HashSet<>(datas)).equals(new HashSet<>(tmlActivityElementEvent.getDatas()))
-        && Objects.equals(variable, tmlActivityElementEvent.getVariable());
-  }
+    public void setVariable(String _variable) {
+        variable = _variable;
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public void addParam(String _param) {
+        datas.add(_param);
+    }
+
+    public int getNbOfParams() {
+        return datas.size();
+    }
+
+    public String getParam(int _index) {
+        if (_index < getNbOfParams()) {
+            return datas.elementAt(_index);
+        } else {
+            return null;
+        }
+    }
+
+    public void setParam(String _param, int _index) {
+        datas.setElementAt(_param, _index);
+    }
+
+    public String getAllParams() {
+        return getAllParams(",");
+    }
+
+    public String getAllParams(String separator) {
+        String s = "";
+        for (int i = 0; i < getNbOfParams(); i++) {
+            if (i != 0) {
+                s += separator;
+            }
+            s += TMLTextSpecification.modifyString(getParam(i));
+        }
+        return s;
+    }
+
+    public void replaceEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
+        if (event == oldEvt) {
+            event = newEvt;
+        }
+    }
+
+    public Vector<String> getDatas() {
+        return datas;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElementEvent))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        TMLActivityElementEvent tmlActivityElementEvent = (TMLActivityElementEvent) o;
+
+        return (new HashSet<>(datas)).equals(new HashSet<>(tmlActivityElementEvent.getDatas()))
+                && Objects.equals(variable, tmlActivityElementEvent.getVariable());
+    }
 }

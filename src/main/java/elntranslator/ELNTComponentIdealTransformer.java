@@ -49,36 +49,36 @@ import java.util.LinkedList;
  */
 
 public class ELNTComponentIdealTransformer extends ELNTComponent implements ELNTPrimitiveComponent {
-  private String name;
-  private double ratio;
-  private LinkedList<ELNTConnectingPoint> cp;
+    private String name;
+    private double ratio;
+    private LinkedList<ELNTConnectingPoint> cp;
 
-  private ELNTModule module;
+    private ELNTModule module;
 
-  public ELNTComponentIdealTransformer(String _name, double _ratio, ELNTModule _module) {
-    name = _name;
-    ratio = _ratio;
-    cp = new LinkedList<ELNTConnectingPoint>();
-    module = _module;
-  }
+    public ELNTComponentIdealTransformer(String _name, double _ratio, ELNTModule _module) {
+        name = _name;
+        ratio = _ratio;
+        cp = new LinkedList<ELNTConnectingPoint>();
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public double getRatio() {
-    return ratio;
-  }
+    public double getRatio() {
+        return ratio;
+    }
 
-  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-    return cp;
-  }
+    public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+        return cp;
+    }
 
-  public void addConnectingPoint(ELNTConnectingPoint _cp) {
-    cp.add(_cp);
-  }
+    public void addConnectingPoint(ELNTConnectingPoint _cp) {
+        cp.add(_cp);
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

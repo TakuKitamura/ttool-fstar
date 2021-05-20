@@ -46,8 +46,8 @@ package nc;
  */
 public class NCLinkedElement extends NCElement {
 
-  public NCLinkedElement() {
+    public NCLinkedElement() {
 
-  }
+    }
 
 }

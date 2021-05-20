@@ -56,23 +56,23 @@ import ui.avatarsmd.AvatarSMDPanel;
  */
 public interface AvatarBDStateMachineOwner {
 
-  List<TAttribute> getAttributeList();
+    List<TAttribute> getAttributeList();
 
-  List<String> getAllTimerList();
+    List<String> getAllTimerList();
 
-  TAttribute getAttributeByName(String _name);
+    TAttribute getAttributeByName(String _name);
 
-  List<AvatarSignal> getSignalList();
+    List<AvatarSignal> getSignalList();
 
-  List<AvatarSignal> getAllSignalList();
+    List<AvatarSignal> getAllSignalList();
 
-  AvatarSignal getSignalNameBySignalDef(String _id);
+    AvatarSignal getSignalNameBySignalDef(String _id);
 
-  List<AvatarMethod> getMethodList();
+    List<AvatarMethod> getMethodList();
 
-  List<AvatarMethod> getAllMethodList();
+    List<AvatarMethod> getAllMethodList();
 
-  String getOwnerName();
+    String getOwnerName();
 
-  AvatarSMDPanel getAvatarSMDPanel();
+    AvatarSMDPanel getAvatarSMDPanel();
 }

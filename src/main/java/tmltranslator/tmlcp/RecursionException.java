@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class RecursionException extends Exception {
 
-  public RecursionException() {
-    super("TMLCP COMPILER ERROR: detected recursion of diagram");
-  }
+    public RecursionException() {
+        super("TMLCP COMPILER ERROR: detected recursion of diagram");
+    }
 
-  public RecursionException(String message) {
-    super(message);
-  }
+    public RecursionException(String message) {
+        super(message);
+    }
 }

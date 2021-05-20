@@ -46,9 +46,9 @@ package faulttrees;
  */
 public class XORNode extends BooleanNode {
 
-  public XORNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "XOR";
-  }
+    public XORNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "XOR";
+    }
 
 }

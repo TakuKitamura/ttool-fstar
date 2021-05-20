@@ -61,172 +61,172 @@ import avatartranslator.*;
 
 public class AvatarGuardTests {
 
-  AvatarGuard res;
-  AvatarBlock A, B;
+    AvatarGuard res;
+    AvatarBlock A, B;
 
-  public AvatarGuardTests() {
-    // super ("AvatarGuards", false);
-  }
+    public AvatarGuardTests() {
+        // super ("AvatarGuards", false);
+    }
 
-  @Before
-  public void test() {
-    AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
-    A = new AvatarBlock("A", as, null);
-    AvatarStateMachine Aasm = A.getStateMachine();
-    Aasm.addElement(new AvatarState("a1", null));
-    A.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, A, null));
-    A.addAttribute(new AvatarAttribute("key2", AvatarType.INTEGER, A, null));
-    A.addAttribute(new AvatarAttribute("test", AvatarType.BOOLEAN, A, null));
-    A.addAttribute(new AvatarAttribute("test2", AvatarType.BOOLEAN, A, null));
+    @Before
+    public void test() {
+        AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
+        A = new AvatarBlock("A", as, null);
+        AvatarStateMachine Aasm = A.getStateMachine();
+        Aasm.addElement(new AvatarState("a1", null));
+        A.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, A, null));
+        A.addAttribute(new AvatarAttribute("key2", AvatarType.INTEGER, A, null));
+        A.addAttribute(new AvatarAttribute("test", AvatarType.BOOLEAN, A, null));
+        A.addAttribute(new AvatarAttribute("test2", AvatarType.BOOLEAN, A, null));
 
-    B = new AvatarBlock("B", as, null);
-    AvatarStateMachine Basm = B.getStateMachine();
-    Basm.addElement(new AvatarState("b1", null));
-    B.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, B, null));
-    B.addAttribute(new AvatarAttribute("key2", AvatarType.BOOLEAN, B, null));
-    B.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, B, null));
-    B.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, B, null));
+        B = new AvatarBlock("B", as, null);
+        AvatarStateMachine Basm = B.getStateMachine();
+        Basm.addElement(new AvatarState("b1", null));
+        B.addAttribute(new AvatarAttribute("key1", AvatarType.INTEGER, B, null));
+        B.addAttribute(new AvatarAttribute("key2", AvatarType.BOOLEAN, B, null));
+        B.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, B, null));
+        B.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, B, null));
 
-    AvatarBlock C = new AvatarBlock("C", as, null);
-    AvatarStateMachine Casm = C.getStateMachine();
-    Casm.addElement(new AvatarState("c1", null));
-    C.addAttribute(new AvatarAttribute("attr", AvatarType.INTEGER, C, null));
-    C.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, C, null));
-    C.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, C, null));
-    C.addAttribute(new AvatarAttribute("d__c", AvatarType.UNDEFINED, C, null));
+        AvatarBlock C = new AvatarBlock("C", as, null);
+        AvatarStateMachine Casm = C.getStateMachine();
+        Casm.addElement(new AvatarState("c1", null));
+        C.addAttribute(new AvatarAttribute("attr", AvatarType.INTEGER, C, null));
+        C.addAttribute(new AvatarAttribute("m__a", AvatarType.UNDEFINED, C, null));
+        C.addAttribute(new AvatarAttribute("m__b", AvatarType.UNDEFINED, C, null));
+        C.addAttribute(new AvatarAttribute("d__c", AvatarType.UNDEFINED, C, null));
 
-    LinkedList<AvatarBlock> blocks = new LinkedList<AvatarBlock>();
-    blocks.add(A);
-    blocks.add(B);
-    blocks.add(C);
+        LinkedList<AvatarBlock> blocks = new LinkedList<AvatarBlock>();
+        blocks.add(A);
+        blocks.add(B);
+        blocks.add(C);
 
-    HashMap<String, Vector<TAttribute>> typeAttributesMap = new HashMap<String, Vector<TAttribute>>();
-    HashMap<String, String> nameTypeMap = new HashMap<String, String>();
+        HashMap<String, Vector<TAttribute>> typeAttributesMap = new HashMap<String, Vector<TAttribute>>();
+        HashMap<String, String> nameTypeMap = new HashMap<String, String>();
 
-    // Type T1: a,b
-    // Type T2: c
-    TAttribute attr_a = new TAttribute(2, "a", "0", 2);
-    TAttribute attr_b = new TAttribute(2, "b", "1", 1);
-    TAttribute attr_c = new TAttribute(2, "c", "true", 0);
-    nameTypeMap.put("C.m", "T1");
-    nameTypeMap.put("B.m", "T1");
-    nameTypeMap.put("C.d", "T2");
-    Vector<TAttribute> t1s = new Vector<TAttribute>();
-    Vector<TAttribute> t2s = new Vector<TAttribute>();
-    t1s.add(attr_a);
-    t1s.add(attr_b);
-    t2s.add(attr_c);
-    typeAttributesMap.put("T1", t1s);
-    typeAttributesMap.put("T2", t2s);
+        // Type T1: a,b
+        // Type T2: c
+        TAttribute attr_a = new TAttribute(2, "a", "0", 2);
+        TAttribute attr_b = new TAttribute(2, "b", "1", 1);
+        TAttribute attr_c = new TAttribute(2, "c", "true", 0);
+        nameTypeMap.put("C.m", "T1");
+        nameTypeMap.put("B.m", "T1");
+        nameTypeMap.put("C.d", "T2");
+        Vector<TAttribute> t1s = new Vector<TAttribute>();
+        Vector<TAttribute> t2s = new Vector<TAttribute>();
+        t1s.add(attr_a);
+        t1s.add(attr_b);
+        t2s.add(attr_c);
+        typeAttributesMap.put("T1", t1s);
+        typeAttributesMap.put("T2", t2s);
 
-  }
+    }
 
-  @Test
-  public void testElseGuardCreation() {
-    res = AvatarGuard.createFromString(A, "else");
-    assertTrue(res instanceof AvatarGuardElse);
-  }
+    @Test
+    public void testElseGuardCreation() {
+        res = AvatarGuard.createFromString(A, "else");
+        assertTrue(res instanceof AvatarGuardElse);
+    }
 
-  @Test
-  public void testEmptyGuardCreation() {
-    // Empty Guard
-    res = AvatarGuard.createFromString(A, "");
-    assertTrue(res instanceof AvatarGuardEmpty);
-  }
+    @Test
+    public void testEmptyGuardCreation() {
+        // Empty Guard
+        res = AvatarGuard.createFromString(A, "");
+        assertTrue(res instanceof AvatarGuardEmpty);
+    }
 
-  /*
-   * @Test public void testFailNonValidExpression(){ //Fail if not valid
-   * expression /*res= AvatarGuard.createFromString(A, "arg(key1==key2))");
-   * assertTrue(res instanceof AvatarGuardEmpty); res=
-   * AvatarGuard.createFromString(A, "key1=key2"); assertTrue(res instanceof
-   * AvatarGuardEmpty); res= AvatarGuard.createFromString(A, "key1==)");
-   * assertTrue(res instanceof AvatarGuardEmpty); res=
-   * AvatarGuard.createFromString(A, "(key1==)))"); assertTrue(res instanceof
-   * AvatarGuardEmpty); }
-   */
+    /*
+     * @Test public void testFailNonValidExpression(){ //Fail if not valid
+     * expression /*res= AvatarGuard.createFromString(A, "arg(key1==key2))");
+     * assertTrue(res instanceof AvatarGuardEmpty); res=
+     * AvatarGuard.createFromString(A, "key1=key2"); assertTrue(res instanceof
+     * AvatarGuardEmpty); res= AvatarGuard.createFromString(A, "key1==)");
+     * assertTrue(res instanceof AvatarGuardEmpty); res=
+     * AvatarGuard.createFromString(A, "(key1==)))"); assertTrue(res instanceof
+     * AvatarGuardEmpty); }
+     */
 
-  @Test
-  public void testMonoGuardCreation() {
-    res = AvatarGuard.createFromString(A, "test");
-    assertTrue(res instanceof AvatarSimpleGuardMono);
-  }
+    @Test
+    public void testMonoGuardCreation() {
+        res = AvatarGuard.createFromString(A, "test");
+        assertTrue(res instanceof AvatarSimpleGuardMono);
+    }
 
-  @Test
-  public void testDuoGuardCreation() {
+    @Test
+    public void testDuoGuardCreation() {
 
-    res = AvatarGuard.createFromString(A, "key1==key2+1");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1==key2+1");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    res = AvatarGuard.createFromString(A, "key1==(key2+1)");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1==(key2+1)");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    System.out.println("1+1");
-    res = AvatarGuard.createFromString(A, "key1==(1+1)");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        System.out.println("1+1");
+        res = AvatarGuard.createFromString(A, "key1==(1+1)");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    res = AvatarGuard.createFromString(A, "key11==(key2 / 1)");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key11==(key2 / 1)");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    res = AvatarGuard.createFromString(A, "test==test2");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
-    res = AvatarGuard.createFromString(A, "key1==key2");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "test==test2");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1==key2");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    res = AvatarGuard.createFromString(A, "key1 != key2");
+        res = AvatarGuard.createFromString(A, "key1 != key2");
 
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    res = AvatarGuard.createFromString(A, "key1 != true");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
-    res = AvatarGuard.createFromString(A, "key1 != false");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1 != true");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1 != false");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    res = AvatarGuard.createFromString(A, "key1 != 1");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
-    res = AvatarGuard.createFromString(A, "key1 != a1234");
-    assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1 != 1");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
+        res = AvatarGuard.createFromString(A, "key1 != a1234");
+        assertTrue(res instanceof AvatarSimpleGuardDuo);
 
-    // res= AvatarGuard.createFromString(A, "(a,b)==(c,d)");
-    // assertTrue(res instanceof AvatarSimpleGuardDuo);
-  }
+        // res= AvatarGuard.createFromString(A, "(a,b)==(c,d)");
+        // assertTrue(res instanceof AvatarSimpleGuardDuo);
+    }
 
-  @Test
-  public void testUnaryGuardCreation() {
-    res = AvatarGuard.createFromString(A, "not(test)");
-    assertTrue(res instanceof AvatarUnaryGuard);
-    res = AvatarGuard.createFromString(A, "not(test==test2)");
-    assertTrue(res instanceof AvatarUnaryGuard);
-    res = AvatarGuard.createFromString(A, "not(key1==key2)");
-    assertTrue(res instanceof AvatarUnaryGuard);
-    res = AvatarGuard.createFromString(B, "not(m__a==key2)");
-    assertTrue(res instanceof AvatarUnaryGuard);
-    res = AvatarGuard.createFromString(B, "not(m__a==m__b)");
-    assertTrue(res instanceof AvatarUnaryGuard);
+    @Test
+    public void testUnaryGuardCreation() {
+        res = AvatarGuard.createFromString(A, "not(test)");
+        assertTrue(res instanceof AvatarUnaryGuard);
+        res = AvatarGuard.createFromString(A, "not(test==test2)");
+        assertTrue(res instanceof AvatarUnaryGuard);
+        res = AvatarGuard.createFromString(A, "not(key1==key2)");
+        assertTrue(res instanceof AvatarUnaryGuard);
+        res = AvatarGuard.createFromString(B, "not(m__a==key2)");
+        assertTrue(res instanceof AvatarUnaryGuard);
+        res = AvatarGuard.createFromString(B, "not(m__a==m__b)");
+        assertTrue(res instanceof AvatarUnaryGuard);
 
-  }
+    }
 
-  @Test
-  public void testBinaryGuardCreation() {
-    // Binary Guards
-    res = AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
-    assertTrue(res instanceof AvatarBinaryGuard);
-    res = AvatarGuard.createFromString(A, "(a) and (b)");
-    assertTrue(res instanceof AvatarBinaryGuard);
-    res = AvatarGuard.createFromString(A, "(key1==key1) or (key2==key1)");
-    assertTrue(res instanceof AvatarBinaryGuard);
-    res = AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
-    assertTrue(res instanceof AvatarBinaryGuard);
+    @Test
+    public void testBinaryGuardCreation() {
+        // Binary Guards
+        res = AvatarGuard.createFromString(A, "(key1==true) and (key2==false)");
+        assertTrue(res instanceof AvatarBinaryGuard);
+        res = AvatarGuard.createFromString(A, "(a) and (b)");
+        assertTrue(res instanceof AvatarBinaryGuard);
+        res = AvatarGuard.createFromString(A, "(key1==key1) or (key2==key1)");
+        assertTrue(res instanceof AvatarBinaryGuard);
+        res = AvatarGuard.createFromString(A, "((key1==key1) or (key2==key1)) and (m__a==m__b)");
+        assertTrue(res instanceof AvatarBinaryGuard);
 
-    res = AvatarGuard.createFromString(A, "((key1==key1+1) or (key2==1+2)) and (m__a==m__b)");
-    assertTrue(res instanceof AvatarBinaryGuard);
+        res = AvatarGuard.createFromString(A, "((key1==key1+1) or (key2==1+2)) and (m__a==m__b)");
+        assertTrue(res instanceof AvatarBinaryGuard);
 
-    res = AvatarGuard.createFromString(A, "(key1+1)");
-    assertFalse(res instanceof AvatarBinaryGuard);
-    assertTrue(res instanceof AvatarUnaryGuard);
-  }
+        res = AvatarGuard.createFromString(A, "(key1+1)");
+        assertFalse(res instanceof AvatarBinaryGuard);
+        assertTrue(res instanceof AvatarUnaryGuard);
+    }
 
-  public static void main(String[] args) {
-    AvatarGuardTests apt = new AvatarGuardTests();
-    // apt.runTest ();
-  }
+    public static void main(String[] args) {
+        AvatarGuardTests apt = new AvatarGuardTests();
+        // apt.runTest ();
+    }
 }

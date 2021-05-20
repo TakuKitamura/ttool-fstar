@@ -46,5 +46,5 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface WithAttributes {
-  String getAttributes();
+    String getAttributes();
 }

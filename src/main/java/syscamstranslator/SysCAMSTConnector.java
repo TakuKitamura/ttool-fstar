@@ -47,27 +47,27 @@ package syscamstranslator;
  */
 
 public class SysCAMSTConnector {
-  private SysCAMSTConnectingPoint connectingPoint1;
-  private SysCAMSTConnectingPoint connectingPoint2;
+    private SysCAMSTConnectingPoint connectingPoint1;
+    private SysCAMSTConnectingPoint connectingPoint2;
 
-  private String name;
+    private String name;
 
-  public SysCAMSTConnector(SysCAMSTConnectingPoint _connectingPoint1, SysCAMSTConnectingPoint _connectingPoint2,
-      String _name) {
-    connectingPoint1 = _connectingPoint1;
-    connectingPoint2 = _connectingPoint2;
-    name = _name;
-  }
+    public SysCAMSTConnector(SysCAMSTConnectingPoint _connectingPoint1, SysCAMSTConnectingPoint _connectingPoint2,
+            String _name) {
+        connectingPoint1 = _connectingPoint1;
+        connectingPoint2 = _connectingPoint2;
+        name = _name;
+    }
 
-  public SysCAMSTConnectingPoint get_p1() {
-    return connectingPoint1;
-  }
+    public SysCAMSTConnectingPoint get_p1() {
+        return connectingPoint1;
+    }
 
-  public SysCAMSTConnectingPoint get_p2() {
-    return connectingPoint2;
-  }
+    public SysCAMSTConnectingPoint get_p2() {
+        return connectingPoint2;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

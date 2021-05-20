@@ -15,8 +15,8 @@ extern char mapper_mss[];
 
 struct SIG_TYPE
 {
-  bool f;
-  void *pBuff;
+    bool f;
+    void *pBuff;
 };
 
 typedef struct SIG_TYPE SIG_TYPE;
@@ -25,53 +25,53 @@ extern SIG_TYPE sig[];
 /**** Buffers ****/
 struct FEP_BUFFER_TYPE
 {
-  uint8_t num_samples;
-  uint64_t base_address;
-  uint8_t bank;
-  uint8_t data_type;
+    uint8_t num_samples;
+    uint64_t base_address;
+    uint8_t bank;
+    uint8_t data_type;
 };
 
 typedef FEP_BUFFER_TYPE FEP_BUFFER_TYPE;
 
 struct MAPPER_BUFFER_TYPE
 {
-  uint16_t num_symbols;
-  uint16_t input_base_address;
-  uint16_t num_bits_per_symbol;
-  bool symmetrical_value;
-  uint16_t output_base_address;
-  uint16_t lut_base_address;
+    uint16_t num_symbols;
+    uint16_t input_base_address;
+    uint16_t num_bits_per_symbol;
+    bool symmetrical_value;
+    uint16_t output_base_address;
+    uint16_t lut_base_address;
 };
 
 typedef MAPPER_BUFFER_TYPE MAPPER_BUFFER_TYPE;
 
 struct INTERLEAVER_BUFFER_TYPE
 {
-  bool packed_binary_input_mode;
-  uint8_t samples_width;
-  uint8_t bit_input_offset;
-  uint16_t input_offset;
-  bool packed_binary_output_mode;
-  uint8_t bit_output_offset;
-  uint16_t output_offset;
-  uint16_t permutation_offset;
-  uint16_t permutation_length;
+    bool packed_binary_input_mode;
+    uint8_t samples_width;
+    uint8_t bit_input_offset;
+    uint16_t input_offset;
+    bool packed_binary_output_mode;
+    uint8_t bit_output_offset;
+    uint16_t output_offset;
+    uint16_t permutation_offset;
+    uint16_t permutation_length;
 };
 
 typedef INTERLEAVER_BUFFER_TYPE INTERLEAVER_BUFFER_TYPE;
 
 struct MM_BUFFER_TYPE
 {
-  uint8_t num_samples;
-  uint32_t *base_address;
+    uint8_t num_samples;
+    uint32_t *base_address;
 };
 
 typedef MM_BUFFER_TYPE MM_BUFFER_TYPE;
 
 struct ADAIF_BUFFER_TYPE
 {
-  uint8_t num_samples;
-  uint32_t *base_address;
+    uint8_t num_samples;
+    uint32_t *base_address;
 };
 
 typedef ADAIF_BUFFER_TYPE ADAIF_BUFFER_TYPE;
@@ -121,37 +121,37 @@ extern MAPPER_CONTEXT CP_Source_to_Bits2Symbol_ctx;
 
 enum sigs_enu
 {
-  Source_ch_out,
-  chip2octet_ch_out,
-  cwl_ch_out,
-  JOINPORTORIGIN_S_Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out,
-  symbol2ChipSeq_ch_out,
-  FORKPORTORIGIN_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
-  FORKPORTORIGIN_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
-  cwpQ_ch_out,
-  cwpI_ch_out,
-  symbol2ChipSeq_ch_out_CP,
-  chip2octet_ch_out_CP,
-  JOINPORTORIGIN_S_Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out_CP,
-  Source_ch_out_CP,
-  sink_ch_in,
-  NUM_SIGS
+    Source_ch_out,
+    chip2octet_ch_out,
+    cwl_ch_out,
+    JOINPORTORIGIN_S_Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out,
+    symbol2ChipSeq_ch_out,
+    FORKPORTORIGIN_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
+    FORKPORTORIGIN_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
+    cwpQ_ch_out,
+    cwpI_ch_out,
+    symbol2ChipSeq_ch_out_CP,
+    chip2octet_ch_out_CP,
+    JOINPORTORIGIN_S_Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out_CP,
+    Source_ch_out_CP,
+    sink_ch_in,
+    NUM_SIGS
 };
 
 enum ops_enu
 {
-  F_CWP_I,
-  F_CWP_Q,
-  F_CWL,
-  F_Sink,
-  F_Chip2Octet,
-  F_Symbol2ChipSeq,
-  F_Source,
-  CP_Symbol2ChipSeq_Chips2Octet,
-  CP_Chip2Octet_CWL,
-  CP_sink,
-  CP_Source_to_Bits2Symbol,
-  NUM_OPS
+    F_CWP_I,
+    F_CWP_Q,
+    F_CWL,
+    F_Sink,
+    F_Chip2Octet,
+    F_Symbol2ChipSeq,
+    F_Source,
+    CP_Symbol2ChipSeq_Chips2Octet,
+    CP_Chip2Octet_CWL,
+    CP_sink,
+    CP_Source_to_Bits2Symbol,
+    NUM_OPS
 };
 
 #endif

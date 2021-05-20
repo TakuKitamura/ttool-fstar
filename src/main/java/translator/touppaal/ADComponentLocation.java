@@ -48,31 +48,31 @@ import uppaaldesc.UPPAALLocation;
  * @author Ludovic APVRILLE
  */
 public class ADComponentLocation {
-  public ADComponent adc;
-  public UPPAALLocation beginloc;
-  public UPPAALLocation endloc;
+    public ADComponent adc;
+    public UPPAALLocation beginloc;
+    public UPPAALLocation endloc;
 
-  public ADComponentLocation() {
-  }
+    public ADComponentLocation() {
+    }
 
-  public ADComponentLocation(ADComponent _adc, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
-    adc = _adc;
-    beginloc = _beginloc;
-    endloc = _endloc;
-  }
+    public ADComponentLocation(ADComponent _adc, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
+        adc = _adc;
+        beginloc = _beginloc;
+        endloc = _endloc;
+    }
 
-  public String toString() {
-    String s = "";
-    if (adc != null) {
-      s += "component: " + adc.toString() + " ";
+    public String toString() {
+        String s = "";
+        if (adc != null) {
+            s += "component: " + adc.toString() + " ";
+        }
+        if (beginloc != null) {
+            s += "beginloc=" + beginloc.id + " ";
+        }
+        if (endloc != null) {
+            s += "endloc=" + endloc.id + " ";
+        }
+        return s;
     }
-    if (beginloc != null) {
-      s += "beginloc=" + beginloc.id + " ";
-    }
-    if (endloc != null) {
-      s += "endloc=" + endloc.id + " ";
-    }
-    return s;
-  }
 
 }

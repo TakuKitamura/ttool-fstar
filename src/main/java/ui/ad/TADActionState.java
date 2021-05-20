@@ -52,161 +52,161 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText */ implements PreJavaCode, PostJavaCode,
-    CheckableAccessibility, ActionStateErrorHighlight {
-  // protected int lineLength = 5;
-
-  // Issue #31
-  // protected int textX = 5;
-  // protected int textY = 15;
-  // protected int arc = 5;
-
-  protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
-
-  public TADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        CheckableAccessibility, ActionStateErrorHighlight {
+    // protected int lineLength = 5;
 
     // Issue #31
-    // Must be created before the dimensions are scaled for zoom
-    createConnectingPoints();
-    // width = 30;
-    // height = 20;
+    // protected int textX = 5;
+    // protected int textY = 15;
+    // protected int arc = 5;
 
-    initScaling(30, 20);
+    protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
 
-    minWidth = scale(30);
-    textX = scale(5);
+    public TADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    // nbConnectingPoint = 2;
-    // connectingPoint = new TGConnectingPoint[2];
-    // connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true,
-    // false, 0.5, 0.0);
-    // connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false,
-    // true, 0.5, 1.0);
-    // addTGConnectingPointsComment();
+        // Issue #31
+        // Must be created before the dimensions are scaled for zoom
+        createConnectingPoints();
+        // width = 30;
+        // height = 20;
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        initScaling(30, 20);
 
-    value = "action";
-    name = "action state";
+        minWidth = scale(30);
+        textX = scale(5);
 
-    myImageIcon = IconManager.imgic204;
-  }
+        // nbConnectingPoint = 2;
+        // connectingPoint = new TGConnectingPoint[2];
+        // connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true,
+        // false, 0.5, 0.0);
+        // connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false,
+        // true, 0.5, 1.0);
+        // addTGConnectingPointsComment();
 
-  protected void createConnectingPoints() {
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    addTGConnectingPointsComment();
-  }
+        value = "action";
+        name = "action state";
 
-  @Override
-  protected void internalDrawing(Graphics g) {
-
-    // Issue #31
-    final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value);
-    // int w1 = Math.max(minWidth, w + 2 * textX);
-    // if ((w1 != width) & (!tdp.isScaled())) {
-    // setCd(x + width/2 - w1/2, y);
-    // width = w1;
-    // //updateConnectingPoints();
-    // }
-
-    if (stateAction > 0) {
-      Color c = g.getColor();
-      switch (stateAction) {
-        case ErrorHighlight.ATTRIBUTE:
-          g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
-          break;
-        case ErrorHighlight.GATE:
-          g.setColor(ColorManager.GATE_BOX_ACTION);
-          break;
-        default:
-          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-      }
-      g.fillRoundRect(x, y, width, height, arc, arc);
-      g.setColor(c);
-    }
-    g.drawRoundRect(x, y, width, height, arc, arc);
-
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-
-    g.drawString(value, x + (width - w) / 2, y + textY);
-
-    if (accessibility) {
-      // g.drawString("acc", x + width - 10, y+height-10);
-      g.drawLine(x + width - 2, y + 2, x + width - 6, y + 6);
-      g.drawLine(x + width - 6, y + 2, x + width - 2, y + 6);
-      //
-    }
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic204;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+
+        addTGConnectingPointsComment();
     }
 
-    return null;
-  }
+    @Override
+    protected void internalDrawing(Graphics g) {
 
-  public String getAction() {
-    return value;
-  }
+        // Issue #31
+        final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value);
+        // int w1 = Math.max(minWidth, w + 2 * textX);
+        // if ((w1 != width) & (!tdp.isScaled())) {
+        // setCd(x + width/2 - w1/2, y);
+        // width = w1;
+        // //updateConnectingPoints();
+        // }
 
-  public String getAction(int cpt) {
-    if (cpt < 0) {
-      return value;
+        if (stateAction > 0) {
+            Color c = g.getColor();
+            switch (stateAction) {
+                case ErrorHighlight.ATTRIBUTE:
+                    g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
+                    break;
+                case ErrorHighlight.GATE:
+                    g.setColor(ColorManager.GATE_BOX_ACTION);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            g.fillRoundRect(x, y, width, height, arc, arc);
+            g.setColor(c);
+        }
+        g.drawRoundRect(x, y, width, height, arc, arc);
+
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        g.drawString(value, x + (width - w) / 2, y + textY);
+
+        if (accessibility) {
+            // g.drawString("acc", x + width - 10, y+height-10);
+            g.drawLine(x + width - 2, y + 2, x + width - 6, y + 6);
+            g.drawLine(x + width - 6, y + 2, x + width - 2, y + 6);
+            //
+        }
     }
 
-    String ret;
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
 
-    try {
-      ret = value;
-      while (cpt > 0) {
-        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-        cpt--;
-      }
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
 
-      int index = ret.indexOf(';');
-
-      if (index > 0) {
-        ret = ret.substring(0, index + 1);
-      }
-    } catch (Exception e) {
-      return value;
+        return null;
     }
 
-    int index = ret.indexOf(';');
-    if (index > -1) {
-      ret = ret.substring(0, index);
+    public String getAction() {
+        return value;
     }
 
-    return ret;
-  }
+    public String getAction(int cpt) {
+        if (cpt < 0) {
+            return value;
+        }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TAD_ACTION_STATE;
-  }
+        String ret;
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-  }
+        try {
+            ret = value;
+            while (cpt > 0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt--;
+            }
 
-  @Override
-  public void setStateAction(int _stateAction) {
-    stateAction = _stateAction;
-  }
+            int index = ret.indexOf(';');
+
+            if (index > 0) {
+                ret = ret.substring(0, index + 1);
+            }
+        } catch (Exception e) {
+            return value;
+        }
+
+        int index = ret.indexOf(';');
+        if (index > -1) {
+            ret = ret.substring(0, index);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.TAD_ACTION_STATE;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
+
+    @Override
+    public void setStateAction(int _stateAction) {
+        stateAction = _stateAction;
+    }
 }

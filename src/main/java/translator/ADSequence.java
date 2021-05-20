@@ -47,37 +47,37 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class ADSequence extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
-  private Vector<Integer> sort;
+    private Vector<Integer> sort;
 
-  public ADSequence() {
-    nbNext = 100;
-    minNbNext = 1;
-    sort = new Vector<>();
-  }
-
-  public void addNextAtIndex(ADComponent adc, int index) {
-    //
-    // perform sorting when adding the component
-    if (sort.size() == 0) {
-      next.addElement(adc);
-      sort.addElement(index);
-      return;
+    public ADSequence() {
+        nbNext = 100;
+        minNbNext = 1;
+        sort = new Vector<>();
     }
 
-    int i = 0;
-    while (i < sort.size() && index > sort.elementAt(i)) {
-      i++;
+    public void addNextAtIndex(ADComponent adc, int index) {
+        //
+        // perform sorting when adding the component
+        if (sort.size() == 0) {
+            next.addElement(adc);
+            sort.addElement(index);
+            return;
+        }
+
+        int i = 0;
+        while (i < sort.size() && index > sort.elementAt(i)) {
+            i++;
+        }
+
+        next.insertElementAt(adc, i);
+        sort.insertElementAt(index, i);
     }
 
-    next.insertElementAt(adc, i);
-    sort.insertElementAt(index, i);
-  }
+    public ADComponent makeSame() {
+        return new ADSequence();
+    }
 
-  public ADComponent makeSame() {
-    return new ADSequence();
-  }
-
-  public String toString() {
-    return "Sequence";
-  }
+    public String toString() {
+        return "Sequence";
+    }
 }

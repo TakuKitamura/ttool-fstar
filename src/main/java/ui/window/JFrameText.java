@@ -56,134 +56,134 @@ import java.io.FileOutputStream;
  * @author Ludovic APVRILLE
  */
 public class JFrameText extends JFrame implements ActionListener {
-  private JFileChooser jfc;
-  private String theText;
-  private String theTextWithLineNumber;
+    private JFileChooser jfc;
+    private String theText;
+    private String theTextWithLineNumber;
 
-  public JFrameText(String title, String _theText) {
-    super(title);
-    theText = _theText;
-    makeTextWithLineNumber();
+    public JFrameText(String title, String _theText) {
+        super(title);
+        theText = _theText;
+        makeTextWithLineNumber();
 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
 
-    JTextArea jta = new JTextArea(theTextWithLineNumber);
-    jta.setEditable(true);
-    jta.setMargin(new Insets(10, 10, 10, 10));
-    jta.setTabSize(3);
-    Font f = new Font("Courrier", Font.BOLD, 12);
-    jta.setFont(f);
-    JScrollPane jsp = new JScrollPane(jta);
+        JTextArea jta = new JTextArea(theTextWithLineNumber);
+        jta.setEditable(true);
+        jta.setMargin(new Insets(10, 10, 10, 10));
+        jta.setTabSize(3);
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        jta.setFont(f);
+        JScrollPane jsp = new JScrollPane(jta);
 
-    framePanel.add(jsp, BorderLayout.CENTER);
+        framePanel.add(jsp, BorderLayout.CENTER);
 
-    JButton button1 = new JButton("Close", IconManager.imgic27);
-    JButton button2 = new JButton("Save", IconManager.imgic25);
+        JButton button1 = new JButton("Close", IconManager.imgic27);
+        JButton button2 = new JButton("Save", IconManager.imgic25);
 
-    button1.addActionListener(this);
-    button2.addActionListener(this);
+        button1.addActionListener(this);
+        button2.addActionListener(this);
 
-    JPanel jp = new JPanel();
-    jp.add(button1);
-    jp.add(button2);
+        JPanel jp = new JPanel();
+        jp.add(button1);
+        jp.add(button2);
 
-    framePanel.add(jp, BorderLayout.SOUTH);
+        framePanel.add(jp, BorderLayout.SOUTH);
 
-    if (ConfigurationTTool.LOTOSPath.length() > 0) {
-      jfc = new JFileChooser(ConfigurationTTool.LOTOSPath);
-    } else {
-      jfc = new JFileChooser();
-    }
-    jfc.setApproveButtonText("Save");
-    RTLFileFilter filter = new RTLFileFilter();
-    jfc.setFileFilter(filter);
+        if (ConfigurationTTool.LOTOSPath.length() > 0) {
+            jfc = new JFileChooser(ConfigurationTTool.LOTOSPath);
+        } else {
+            jfc = new JFileChooser();
+        }
+        jfc.setApproveButtonText("Save");
+        RTLFileFilter filter = new RTLFileFilter();
+        jfc.setFileFilter(filter);
 
-    pack();
-    // setBounds(0,0,800, 600);
+        pack();
+        // setBounds(0,0,800, 600);
 
-    // jdk 1.4 or more
-    // setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-  }
-
-  private void makeTextWithLineNumber() {
-    StringBuffer sb = new StringBuffer("1\t" + theText);
-
-    int line = 2;
-    int index = 0;
-
-    while (index < sb.length() - 1) {
-      if (sb.charAt(index) == '\n') {
-        sb.insert(index + 1, "" + line + "\t");
-        line++;
-      }
-      index++;
+        // jdk 1.4 or more
+        // setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
     }
 
-    theTextWithLineNumber = new String(sb);
-  }
+    private void makeTextWithLineNumber() {
+        StringBuffer sb = new StringBuffer("1\t" + theText);
 
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-    //
+        int line = 2;
+        int index = 0;
 
-    if (command.equals("Close")) {
-      dispose();
-      return;
+        while (index < sb.length() - 1) {
+            if (sb.charAt(index) == '\n') {
+                sb.insert(index + 1, "" + line + "\t");
+                line++;
+            }
+            index++;
+        }
+
+        theTextWithLineNumber = new String(sb);
     }
 
-    if (command.equals("Save")) {
-      File file = null;
-      int returnVal = jfc.showSaveDialog(this);
-      if (returnVal == JFileChooser.APPROVE_OPTION) {
-        file = jfc.getSelectedFile();
-        file = FileUtils.addFileExtensionIfMissing(file, RTLFileFilter.getExtension());
-      }
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+        //
 
-      if (checkFileForSave(file)) {
+        if (command.equals("Close")) {
+            dispose();
+            return;
+        }
+
+        if (command.equals("Save")) {
+            File file = null;
+            int returnVal = jfc.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                file = jfc.getSelectedFile();
+                file = FileUtils.addFileExtensionIfMissing(file, RTLFileFilter.getExtension());
+            }
+
+            if (checkFileForSave(file)) {
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(theText.getBytes());
+                    fos.close();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "File could not be saved because " + e.getMessage(),
+                            "File Error", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+    }
+
+    public boolean checkFileForSave(File file) {
+        boolean ok = true;
+        String pb = "";
+
+        if (file == null) {
+            return false;
+        }
+
         try {
-          FileOutputStream fos = new FileOutputStream(file);
-          fos.write(theText.getBytes());
-          fos.close();
+            if (file != null) {
+                if (!file.exists()) {
+                    if (!file.createNewFile()) {
+                        pb = "File could not be created";
+                        ok = false;
+                    }
+                    if (!file.canWrite()) {
+                        pb = "File is write protected";
+                        ok = false;
+                    }
+                }
+            }
         } catch (Exception e) {
-          JOptionPane.showMessageDialog(this, "File could not be saved because " + e.getMessage(), "File Error",
-              JOptionPane.INFORMATION_MESSAGE);
-        }
-      }
-    }
-  }
-
-  public boolean checkFileForSave(File file) {
-    boolean ok = true;
-    String pb = "";
-
-    if (file == null) {
-      return false;
-    }
-
-    try {
-      if (file != null) {
-        if (!file.exists()) {
-          if (!file.createNewFile()) {
-            pb = "File could not be created";
             ok = false;
-          }
-          if (!file.canWrite()) {
-            pb = "File is write protected";
-            ok = false;
-          }
+            pb = e.getMessage();
         }
-      }
-    } catch (Exception e) {
-      ok = false;
-      pb = e.getMessage();
+        if (ok == false) {
+            file = null;
+            JOptionPane.showMessageDialog(this, pb, "File Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        return ok;
     }
-    if (ok == false) {
-      file = null;
-      JOptionPane.showMessageDialog(this, pb, "File Error", JOptionPane.INFORMATION_MESSAGE);
-    }
-    return ok;
-  }
 
 } // Class

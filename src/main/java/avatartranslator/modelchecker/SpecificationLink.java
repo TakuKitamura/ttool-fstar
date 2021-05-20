@@ -46,14 +46,14 @@ package avatartranslator.modelchecker;
  */
 public class SpecificationLink {
 
-  public SpecificationState originState;
-  public SpecificationState destinationState;
-  public String action;
+    public SpecificationState originState;
+    public SpecificationState destinationState;
+    public String action;
 
-  public SpecificationLink() {
-  }
+    public SpecificationLink() {
+    }
 
-  public String toString() {
-    return "" + originState.id + " -- " + action + " --> " + destinationState.id;
-  }
+    public String toString() {
+        return "" + originState.id + " -- " + action + " --> " + destinationState.id;
+    }
 }

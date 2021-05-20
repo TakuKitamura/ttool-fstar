@@ -47,15 +47,15 @@ package ui;
  */
 public class RunningInfo {
 
-  public int id;
-  public int nextCommand;
-  public String progression;
-  public String startTime;
-  public String finishTime;
-  public String transStartTime;
-  public String transFinishTime;
-  public String state;
+    public int id;
+    public int nextCommand;
+    public String progression;
+    public String startTime;
+    public String finishTime;
+    public String transStartTime;
+    public String transFinishTime;
+    public String state;
 
-  public RunningInfo() {
-  }
+    public RunningInfo() {
+    }
 }

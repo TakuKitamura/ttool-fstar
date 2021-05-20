@@ -46,22 +46,22 @@ package proverifspec;
  */
 public class ProVerifProcITE extends ProVerifProcInstr {
 
-  protected String cond;
-  protected ProVerifProcInstr elseInstr;
+    protected String cond;
+    protected ProVerifProcInstr elseInstr;
 
-  public ProVerifProcITE(String _cond) {
-    this.cond = _cond;
-    this.elseInstr = new ProVerifProcInstr() {
-      public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-      }
-    };
-  }
+    public ProVerifProcITE(String _cond) {
+        this.cond = _cond;
+        this.elseInstr = new ProVerifProcInstr() {
+            public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+            }
+        };
+    }
 
-  public ProVerifProcInstr getElse() {
-    return this.elseInstr;
-  }
+    public ProVerifProcInstr getElse() {
+        return this.elseInstr;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateProcITE(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateProcITE(this, _alinea);
+    }
 }

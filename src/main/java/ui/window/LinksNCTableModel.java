@@ -50,44 +50,45 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class LinksNCTableModel extends AbstractTableModel {
-  private NCStructure ncs;
+    private NCStructure ncs;
 
-  // private String [] names;
-  public LinksNCTableModel(NCStructure _ncs) {
-    ncs = _ncs;
-    // computeData(_ncs);
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return ncs.links.size();
-  }
-
-  public int getColumnCount() {
-    return 3;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (column == 0) {
-      return ncs.links.get(row).getName();
-    } else if (column == 1) {
-      return ncs.links.get(row).getCapacity() + " " + ncs.links.get(row).getCapacityUnit().getStringUnit();
+    // private String [] names;
+    public LinksNCTableModel(NCStructure _ncs) {
+        ncs = _ncs;
+        // computeData(_ncs);
     }
 
-    return ncs.links.get(row).getLinkedElement1().getName() + " -> " + ncs.links.get(row).getLinkedElement2().getName();
-
-  }
-
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Link";
-      case 1:
-        return "Capacity";
-      case 2:
-        return "Link from -> to";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return ncs.links.size();
     }
-    return "none";
-  }
+
+    public int getColumnCount() {
+        return 3;
+    }
+
+    public Object getValueAt(int row, int column) {
+        if (column == 0) {
+            return ncs.links.get(row).getName();
+        } else if (column == 1) {
+            return ncs.links.get(row).getCapacity() + " " + ncs.links.get(row).getCapacityUnit().getStringUnit();
+        }
+
+        return ncs.links.get(row).getLinkedElement1().getName() + " -> "
+                + ncs.links.get(row).getLinkedElement2().getName();
+
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Link";
+            case 1:
+                return "Capacity";
+            case 2:
+                return "Link from -> to";
+        }
+        return "none";
+    }
 
 }

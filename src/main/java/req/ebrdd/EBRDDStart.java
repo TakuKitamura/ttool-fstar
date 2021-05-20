@@ -46,12 +46,12 @@ package req.ebrdd;
  */
 public class EBRDDStart extends EBRDDComponent {
 
-  public EBRDDStart(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    nbNext = 1;
-  }
+    public EBRDDStart(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        nbNext = 1;
+    }
 
-  public String toString() {
-    return "Start state";
-  }
+    public String toString() {
+        return "Start state";
+    }
 }

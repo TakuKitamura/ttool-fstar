@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class UndeclaredVariableException extends Exception {
 
-  public UndeclaredVariableException() {
-    super("TMLCP COMPILER ERROR: undeclared variable");
-  }
+    public UndeclaredVariableException() {
+        super("TMLCP COMPILER ERROR: undeclared variable");
+    }
 
-  public UndeclaredVariableException(String message) {
-    super(message);
-  }
+    public UndeclaredVariableException(String message) {
+        super(message);
+    }
 }

@@ -52,42 +52,42 @@ import java.awt.*;
  */
 public class SDCoregion extends TGCScalableOneLineText implements SwallowedTGComponent {
 
-  public SDCoregion(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SDCoregion(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = (int) (20 * tdp.getZoom());
-    height = (int) (100 * tdp.getZoom());
-    minWidth = (int) (20 * tdp.getZoom());
-    oldScaleFactor = tdp.getZoom();
+        width = (int) (20 * tdp.getZoom());
+        height = (int) (100 * tdp.getZoom());
+        minWidth = (int) (20 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
 
-    nbConnectingPoint = 0;
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 0;
+        addTGConnectingPointsComment();
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    value = "action";
-    name = "action state";
+        value = "action";
+        name = "action state";
 
-    myImageIcon = IconManager.imgic520;
+        myImageIcon = IconManager.imgic520;
 
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.drawRect(x - width / 2, y, width, height);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
-      return this;
     }
-    return null;
-  }
 
-  public int getType() {
-    return TGComponentManager.SDZV_COREGION;
-  }
+    public void internalDrawing(Graphics g) {
+        g.drawRect(x - width / 2, y, width, height);
+    }
+
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getType() {
+        return TGComponentManager.SDZV_COREGION;
+    }
 
 }

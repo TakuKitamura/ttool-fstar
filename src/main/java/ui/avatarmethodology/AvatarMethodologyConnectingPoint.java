@@ -52,21 +52,21 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class AvatarMethodologyConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public AvatarMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h, int _orientation) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-    orientation = _orientation;
-  }
+    public AvatarMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h, int _orientation) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+        orientation = _orientation;
+    }
 
-  /**
-   * From ui.TGConnectingPoint.isCompatibleWith isCompatibleWith checks if the
-   * element to be connected are compatible ?
-   * 
-   * @param type
-   * @return boolean indicating if the type is compatible
-   */
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
-  }
+    /**
+     * From ui.TGConnectingPoint.isCompatibleWith isCompatibleWith checks if the
+     * element to be connected are compatible ?
+     * 
+     * @param type
+     * @return boolean indicating if the type is compatible
+     */
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
+    }
 }

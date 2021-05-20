@@ -8,14 +8,14 @@ struct asyncchannel;
 
 struct asyncchannel
 {
-  char *outname;
-  char *inname;
-  int isBlocking;      // In writing. Reading is always blocking
-  int maxNbOfMessages; //
-  struct request *outWaitQueue;
-  struct request *inWaitQueue;
-  message *pendingMessages;
-  int currentNbOfMessages;
+    char *outname;
+    char *inname;
+    int isBlocking;      // In writing. Reading is always blocking
+    int maxNbOfMessages; //
+    struct request *outWaitQueue;
+    struct request *inWaitQueue;
+    message *pendingMessages;
+    int currentNbOfMessages;
 };
 
 typedef struct asyncchannel asyncchannel;

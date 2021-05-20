@@ -51,67 +51,67 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointTwoFathers extends TGConnectingPoint {
-  protected CDElement container2;
+    protected CDElement container2;
 
-  public TGConnectingPointTwoFathers(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
-      boolean _out) {
-    super(_container1, _x, _y, _in, _out);
-    container2 = _container2;
-  }
-
-  @Override
-  public void draw(Graphics g) {
-    int mx = scaledX() + (container.getX() + container2.getX()) / 2;
-    int my = scaledY() + (container.getY() + container2.getY()) / 2;
-    if (state == SELECTED) {
-      mx = mx - width / 2;
-      my = my - height / 2;
-      g.setColor(myColor);
-      g.fillRect(mx, my, width, height);
-      GraphicLib.doubleColorRect(g, mx, my, width, height, Color.lightGray, Color.black);
-    } else {
-      g.setColor(myColor);
-      g.fillRect(mx - width / 4, my - width / 4, width / 2, height / 2);
-      GraphicLib.doubleColorRect(g, mx - width / 4, my - width / 4, width / 2, height / 2, Color.lightGray,
-          Color.black);
+    public TGConnectingPointTwoFathers(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
+            boolean _out) {
+        super(_container1, _x, _y, _in, _out);
+        container2 = _container2;
     }
-  }
 
-  public boolean isIn() {
-    return in;
-  }
+    @Override
+    public void draw(Graphics g) {
+        int mx = scaledX() + (container.getX() + container2.getX()) / 2;
+        int my = scaledY() + (container.getY() + container2.getY()) / 2;
+        if (state == SELECTED) {
+            mx = mx - width / 2;
+            my = my - height / 2;
+            g.setColor(myColor);
+            g.fillRect(mx, my, width, height);
+            GraphicLib.doubleColorRect(g, mx, my, width, height, Color.lightGray, Color.black);
+        } else {
+            g.setColor(myColor);
+            g.fillRect(mx - width / 4, my - width / 4, width / 2, height / 2);
+            GraphicLib.doubleColorRect(g, mx - width / 4, my - width / 4, width / 2, height / 2, Color.lightGray,
+                    Color.black);
+        }
+    }
 
-  public boolean isOut() {
-    return out;
-  }
+    public boolean isIn() {
+        return in;
+    }
 
-  public boolean isCloseTo(int _x, int _y) {
-    int mx = scaledX() + (container.getX() + container2.getX()) / 2;
-    int my = scaledY() + (container.getY() + container2.getY()) / 2;
-    return GraphicLib.isInRectangle(_x, _y, mx - width / 2, my - height / 2, width, height);
-  }
+    public boolean isOut() {
+        return out;
+    }
 
-  public void setCdX(int _x) {
-    x = _x;
-  }
+    public boolean isCloseTo(int _x, int _y) {
+        int mx = scaledX() + (container.getX() + container2.getX()) / 2;
+        int my = scaledY() + (container.getY() + container2.getY()) / 2;
+        return GraphicLib.isInRectangle(_x, _y, mx - width / 2, my - height / 2, width, height);
+    }
 
-  public void setCdY(int _y) {
-    y = _y;
-  }
+    public void setCdX(int _x) {
+        x = _x;
+    }
 
-  public int getX() {
-    return x + (container.getX() + container2.getX()) / 2;
-  }
+    public void setCdY(int _y) {
+        y = _y;
+    }
 
-  public int getY() {
-    return y + (container.getY() + container2.getY()) / 2;
-  }
+    public int getX() {
+        return x + (container.getX() + container2.getX()) / 2;
+    }
 
-  public CDElement getFather2() {
-    return container2;
-  }
+    public int getY() {
+        return y + (container.getY() + container2.getY()) / 2;
+    }
 
-  public void setFather2(CDElement cd) {
-    container2 = cd;
-  }
+    public CDElement getFather2() {
+        return container2;
+    }
+
+    public void setFather2(CDElement cd) {
+        container2 = cd;
+    }
 }

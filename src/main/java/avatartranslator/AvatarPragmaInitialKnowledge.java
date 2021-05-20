@@ -49,36 +49,36 @@ import java.util.List;
  */
 public class AvatarPragmaInitialKnowledge extends AvatarPragma {
 
-  private List<AvatarAttribute> arguments;
-  private boolean isSystem;
+    private List<AvatarAttribute> arguments;
+    private boolean isSystem;
 
-  public AvatarPragmaInitialKnowledge(String _name, Object _referenceObject, List<AvatarAttribute> args,
-      boolean isSystem) {
-    super(_name, _referenceObject);
+    public AvatarPragmaInitialKnowledge(String _name, Object _referenceObject, List<AvatarAttribute> args,
+            boolean isSystem) {
+        super(_name, _referenceObject);
 
-    arguments = args;
-    this.isSystem = isSystem;
-  }
+        arguments = args;
+        this.isSystem = isSystem;
+    }
 
-  public List<AvatarAttribute> getArgs() {
-    return arguments;
-  }
+    public List<AvatarAttribute> getArgs() {
+        return arguments;
+    }
 
-  public boolean isSystem() {
-    return isSystem;
-  }
+    public boolean isSystem() {
+        return isSystem;
+    }
 
-  @Override
-  public AvatarPragmaInitialKnowledge advancedClone(AvatarSpecification avspec) {
-    List<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
+    @Override
+    public AvatarPragmaInitialKnowledge advancedClone(AvatarSpecification avspec) {
+        List<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
 
-    for (AvatarAttribute aa : this.arguments)
-      l.add(avspec.getMatchingAttribute(aa));
+        for (AvatarAttribute aa : this.arguments)
+            l.add(avspec.getMatchingAttribute(aa));
 
-    AvatarPragmaInitialKnowledge result = new AvatarPragmaInitialKnowledge(this.name, this.referenceObject, l,
-        this.isSystem);
-    this.cloneLinkToReferenceObjects(result);
+        AvatarPragmaInitialKnowledge result = new AvatarPragmaInitialKnowledge(this.name, this.referenceObject, l,
+                this.isSystem);
+        this.cloneLinkToReferenceObjects(result);
 
-    return result;
-  }
+        return result;
+    }
 }

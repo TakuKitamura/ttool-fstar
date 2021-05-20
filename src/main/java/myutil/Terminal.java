@@ -46,317 +46,317 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class Terminal {
-  private final static int MAX_BUFFER_SIZE = 5000;
+    private final static int MAX_BUFFER_SIZE = 5000;
 
-  private final static int CR = 10;
+    private final static int CR = 10;
 
-  private final static int BACKSPACE = 8;
-  private final static int DEL = 127;
+    private final static int BACKSPACE = 8;
+    private final static int DEL = 127;
 
-  private final static int ESC = 27;
+    private final static int ESC = 27;
 
-  private final static int TAB = 9;
+    private final static int TAB = 9;
 
-  private Vector<String> buffer;
-  private int bufferPointer;
-  private int cursorPosition;
-  private int promptLength = 0;
-  private int maxbufferSize = MAX_BUFFER_SIZE;
-  private TerminalProviderInterface terminalProvider;
-  private int cpt;
-  private char[] sequence;
-  private String os;
+    private Vector<String> buffer;
+    private int bufferPointer;
+    private int cursorPosition;
+    private int promptLength = 0;
+    private int maxbufferSize = MAX_BUFFER_SIZE;
+    private TerminalProviderInterface terminalProvider;
+    private int cpt;
+    private char[] sequence;
+    private String os;
 
-  public Terminal() {
-    buffer = new Vector<>();
-    cpt = 0;
-    os = System.getProperty("os.name").toLowerCase();
-    System.out.println("Detected OS: " + os);
-    os = os.split(" ")[0];
-    bufferPointer = 0;
-  }
-
-  public void setTerminalProvider(TerminalProviderInterface tp) {
-    terminalProvider = tp;
-  }
-
-  public String getNextCommand() {
-
-    char x;
-    int val = 0;
-    cursorPosition = 0;
-
-    printPrompt(cpt);
-
-    String currentBuf = "";
-    sequence = null;
-    int seqNb = 0;
-    long timeSeq = 0;
-
-    try {
-      while (val != 3) {
-        val = (RawConsoleInput.read(true));
-        x = (char) val;
-
-        // TraceManager.addDev("val=" + val);
-
-        // Special sequence?
-        if (sequence == null) {
-          if (val == ESC) {
-            sequence = new char[256];
-            seqNb = 0;
-            timeSeq = System.currentTimeMillis();
-          }
-        } else {
-          // Time check
-          long now = System.currentTimeMillis();
-          if (now - timeSeq > 10) {
-            sequence = null;
-          } else {
-            sequence[seqNb] = x;
-            seqNb++;
-          }
-        }
-
-        if (sequence != null) {
-          // TraceManager.addDev("Sequence=" + sequence + "length=" + sequence.length());
-          // printSequence(sequence);
-        }
-
-        if ((sequence != null) && (seqNb == 2)) {
-
-          // UP?
-          if ((sequence[0] == 91) && (sequence[1] == 65)) {
-            // TraceManager.addDev("UP");
-            // System.out.println("UP buffersize=" + buffer.size() + " bufferpointer=" +
-            // bufferPointer);
-            if (buffer.size() > 0) {
-              delCurrent(currentBuf);
-              bufferPointer = (bufferPointer > 0) ? bufferPointer - 1 : bufferPointer;
-              currentBuf = buffer.get(bufferPointer);
-              // printPrompt(cpt);
-              myPrint(currentBuf);
-              cursorPosition = currentBuf.length();
-              sequence = null;
-              val = -1;
-            } else {
-              sequence = null;
-              val = -1;
-            }
-
-            // DOWN
-          } else if ((sequence[0] == 91) && (sequence[1] == 66)) {
-            // System.out.println("DOWN buffersize=" + buffer.size());
-            if (buffer.size() > 0) {
-              // System.out.println("DOWN");
-              delCurrent(currentBuf);
-              bufferPointer = (bufferPointer == (buffer.size() - 1)) ? bufferPointer : bufferPointer + 1;
-              currentBuf = buffer.get(bufferPointer);
-              // printPrompt(cpt);
-              myPrint(currentBuf);
-              cursorPosition = currentBuf.length();
-              sequence = null;
-              val = -1;
-            } else {
-              sequence = null;
-              val = -1;
-            }
-
-            // BACKWARD
-          } else if ((sequence[0] == 91) && (sequence[1] == 68)) {
-
-            // System.out.println("BACKWARD");
-            backward();
-            sequence = null;
-            val = -1;
-
-            // FORWARD
-          } else if ((sequence[0] == 91) && (sequence[1] == 67)) {
-
-            forward(currentBuf);
-            sequence = null;
-            val = -1;
-            // DEL
-            // TraceManager.addDev("DEL");
-          }
-        }
-
-        if ((sequence != null) && (seqNb == 3)) {
-
-          // DEL
-          if ((sequence[0] == 91) && (sequence[1] == 51) && (sequence[2] == 126)) {
-            // TraceManager.addDev("DEL");
-            currentBuf = del(currentBuf);
-            // cursorPosition--;
-
-            sequence = null;
-            val = -1;
-            //
-          }
-
-        }
-
-        // Usual CHAR
-        if ((sequence == null) && (val != -1)) {
-
-          // CR
-          if (val == CR) {
-            cursorPosition = 0;
-            if (currentBuf.length() == 0) {
-              myPrint("\n");
-              printPrompt(cpt);
-            } else {
-              cpt++;
-
-              // if (!(os.startsWith("mac"))) {
-              myPrint("\n");
-              // }
-              addToBuffer(currentBuf);
-              return currentBuf;
-            }
-          }
-
-          // BACKSPACE
-          if ((val == BACKSPACE) || (val == DEL)) {
-            // System.out.println("BACKSPACE/DEL");
-            currentBuf = del(currentBuf);
-
-            // TAB
-          } else if (val == TAB) {
-            System.out.println("TAB");
-            if (terminalProvider != null) {
-              boolean b = terminalProvider.tabAction(currentBuf);
-              if (b) {
-                printPrompt(cpt);
-              }
-            }
-
-            // Regular character
-          } else if (val >= 32) {
-            // System.out.print("" + x + "(val=" + val + ");");
-            if (cursorPosition == currentBuf.length()) {
-              myPrint("" + x);
-              currentBuf += x;
-            } else {
-              // System.out.println("Tricky cursor position");
-              int sep = currentBuf.length() - cursorPosition;
-              currentBuf = currentBuf.substring(0, cursorPosition) + x
-                  + currentBuf.substring(cursorPosition, currentBuf.length());
-              // TraceManager.addDev("buffer=" + currentBuf);
-              myPrint(currentBuf.substring(cursorPosition, currentBuf.length()));
-              // Must move cursor to previous psition + 1
-              for (int i = 0; i < sep; i++) {
-                backwardCode();
-              }
-              // TraceManager.addDev("buffer=" + currentBuf);
-            }
-            cursorPosition++;
-
-          }
-        }
-
-      }
-    } catch (Exception e) {
-      TraceManager.addDev("Exception in terminal:" + e.getMessage());
-      return null;
+    public Terminal() {
+        buffer = new Vector<>();
+        cpt = 0;
+        os = System.getProperty("os.name").toLowerCase();
+        System.out.println("Detected OS: " + os);
+        os = os.split(" ")[0];
+        bufferPointer = 0;
     }
 
-    return "";
-  }
-
-  private void addToBuffer(String newBuf) {
-    // Add at bufferPointer
-    // Therefore remove all elements after bufferPointer
-
-    buffer.add(newBuf);
-
-    if (buffer.size() > maxbufferSize) {
-      buffer.removeElementAt(0);
+    public void setTerminalProvider(TerminalProviderInterface tp) {
+        terminalProvider = tp;
     }
 
-    bufferPointer = buffer.size();
-    // System.out.println("new BufferPointer=" + bufferPointer + " size buffer=" +
-    // buffer.size());
+    public String getNextCommand() {
+
+        char x;
+        int val = 0;
+        cursorPosition = 0;
+
+        printPrompt(cpt);
+
+        String currentBuf = "";
+        sequence = null;
+        int seqNb = 0;
+        long timeSeq = 0;
+
+        try {
+            while (val != 3) {
+                val = (RawConsoleInput.read(true));
+                x = (char) val;
+
+                // TraceManager.addDev("val=" + val);
+
+                // Special sequence?
+                if (sequence == null) {
+                    if (val == ESC) {
+                        sequence = new char[256];
+                        seqNb = 0;
+                        timeSeq = System.currentTimeMillis();
+                    }
+                } else {
+                    // Time check
+                    long now = System.currentTimeMillis();
+                    if (now - timeSeq > 10) {
+                        sequence = null;
+                    } else {
+                        sequence[seqNb] = x;
+                        seqNb++;
+                    }
+                }
+
+                if (sequence != null) {
+                    // TraceManager.addDev("Sequence=" + sequence + "length=" + sequence.length());
+                    // printSequence(sequence);
+                }
+
+                if ((sequence != null) && (seqNb == 2)) {
+
+                    // UP?
+                    if ((sequence[0] == 91) && (sequence[1] == 65)) {
+                        // TraceManager.addDev("UP");
+                        // System.out.println("UP buffersize=" + buffer.size() + " bufferpointer=" +
+                        // bufferPointer);
+                        if (buffer.size() > 0) {
+                            delCurrent(currentBuf);
+                            bufferPointer = (bufferPointer > 0) ? bufferPointer - 1 : bufferPointer;
+                            currentBuf = buffer.get(bufferPointer);
+                            // printPrompt(cpt);
+                            myPrint(currentBuf);
+                            cursorPosition = currentBuf.length();
+                            sequence = null;
+                            val = -1;
+                        } else {
+                            sequence = null;
+                            val = -1;
+                        }
+
+                        // DOWN
+                    } else if ((sequence[0] == 91) && (sequence[1] == 66)) {
+                        // System.out.println("DOWN buffersize=" + buffer.size());
+                        if (buffer.size() > 0) {
+                            // System.out.println("DOWN");
+                            delCurrent(currentBuf);
+                            bufferPointer = (bufferPointer == (buffer.size() - 1)) ? bufferPointer : bufferPointer + 1;
+                            currentBuf = buffer.get(bufferPointer);
+                            // printPrompt(cpt);
+                            myPrint(currentBuf);
+                            cursorPosition = currentBuf.length();
+                            sequence = null;
+                            val = -1;
+                        } else {
+                            sequence = null;
+                            val = -1;
+                        }
+
+                        // BACKWARD
+                    } else if ((sequence[0] == 91) && (sequence[1] == 68)) {
+
+                        // System.out.println("BACKWARD");
+                        backward();
+                        sequence = null;
+                        val = -1;
+
+                        // FORWARD
+                    } else if ((sequence[0] == 91) && (sequence[1] == 67)) {
+
+                        forward(currentBuf);
+                        sequence = null;
+                        val = -1;
+                        // DEL
+                        // TraceManager.addDev("DEL");
+                    }
+                }
+
+                if ((sequence != null) && (seqNb == 3)) {
+
+                    // DEL
+                    if ((sequence[0] == 91) && (sequence[1] == 51) && (sequence[2] == 126)) {
+                        // TraceManager.addDev("DEL");
+                        currentBuf = del(currentBuf);
+                        // cursorPosition--;
+
+                        sequence = null;
+                        val = -1;
+                        //
+                    }
+
+                }
+
+                // Usual CHAR
+                if ((sequence == null) && (val != -1)) {
+
+                    // CR
+                    if (val == CR) {
+                        cursorPosition = 0;
+                        if (currentBuf.length() == 0) {
+                            myPrint("\n");
+                            printPrompt(cpt);
+                        } else {
+                            cpt++;
+
+                            // if (!(os.startsWith("mac"))) {
+                            myPrint("\n");
+                            // }
+                            addToBuffer(currentBuf);
+                            return currentBuf;
+                        }
+                    }
+
+                    // BACKSPACE
+                    if ((val == BACKSPACE) || (val == DEL)) {
+                        // System.out.println("BACKSPACE/DEL");
+                        currentBuf = del(currentBuf);
+
+                        // TAB
+                    } else if (val == TAB) {
+                        System.out.println("TAB");
+                        if (terminalProvider != null) {
+                            boolean b = terminalProvider.tabAction(currentBuf);
+                            if (b) {
+                                printPrompt(cpt);
+                            }
+                        }
+
+                        // Regular character
+                    } else if (val >= 32) {
+                        // System.out.print("" + x + "(val=" + val + ");");
+                        if (cursorPosition == currentBuf.length()) {
+                            myPrint("" + x);
+                            currentBuf += x;
+                        } else {
+                            // System.out.println("Tricky cursor position");
+                            int sep = currentBuf.length() - cursorPosition;
+                            currentBuf = currentBuf.substring(0, cursorPosition) + x
+                                    + currentBuf.substring(cursorPosition, currentBuf.length());
+                            // TraceManager.addDev("buffer=" + currentBuf);
+                            myPrint(currentBuf.substring(cursorPosition, currentBuf.length()));
+                            // Must move cursor to previous psition + 1
+                            for (int i = 0; i < sep; i++) {
+                                backwardCode();
+                            }
+                            // TraceManager.addDev("buffer=" + currentBuf);
+                        }
+                        cursorPosition++;
+
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in terminal:" + e.getMessage());
+            return null;
+        }
+
+        return "";
+    }
+
+    private void addToBuffer(String newBuf) {
+        // Add at bufferPointer
+        // Therefore remove all elements after bufferPointer
+
+        buffer.add(newBuf);
+
+        if (buffer.size() > maxbufferSize) {
+            buffer.removeElementAt(0);
+        }
+
+        bufferPointer = buffer.size();
+        // System.out.println("new BufferPointer=" + bufferPointer + " size buffer=" +
+        // buffer.size());
+
+        /*
+         * for(int j=0; j<buffer.size(); j++) { System.out.println("Buffer at" + j +
+         * " = " + buffer.get(j)); }
+         */
+    }
+
+    private String del(String currentBuf) {
+        // TraceManager.addDev("DEL");
+        if (cursorPosition > 0) {
+            if (currentBuf.length() > 0) {
+                if (cursorPosition == currentBuf.length()) {
+                    myPrint("\b \b");
+                    currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
+                    cursorPosition--;
+                } else {
+                    currentBuf = currentBuf.substring(0, cursorPosition - 1)
+                            + currentBuf.substring(cursorPosition, currentBuf.length());
+                    backwardCode();
+                    cursorPosition--;
+                    myPrint(currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
+                    int sep = currentBuf.length() + 1 - cursorPosition;
+                    for (int i = 0; i < sep; i++) {
+                        backwardCode();
+                    }
+
+                }
+            }
+        }
+        return currentBuf;
+    }
+
+    public void myPrint(String s) {
+        // if (os.compareTo("mac") != 0) {
+        System.out.print(s);
+        // }
+        System.out.flush();
+    }
+
+    private String delCurrent(String currentBuf) {
+        if (buffer.size() > 0) {
+            int size = currentBuf.length();
+            for (int i = 0; i < size; i++) {
+                currentBuf = del(currentBuf);
+            }
+        }
+        return currentBuf;
+
+    }
+
+    public void printPrompt(int cpt) {
+        String p = "" + cpt + "> ";
+        promptLength = p.length();
+        System.out.print(p);
+    }
+
+    private void backward() {
+        if (cursorPosition == 0) {
+            return;
+        }
+        backwardCode();
+        cursorPosition--;
+    }
+
+    private void backwardCode() {
+        System.out.print("\033[1D");
+    }
+
+    private void forward(String currentBuf) {
+        if (cursorPosition >= currentBuf.length()) {
+            return;
+        }
+        System.out.print("\033[1C");
+        cursorPosition++;
+    }
 
     /*
-     * for(int j=0; j<buffer.size(); j++) { System.out.println("Buffer at" + j +
-     * " = " + buffer.get(j)); }
+     * private void printSequence(String seq) {
+     * 
+     * }
      */
-  }
-
-  private String del(String currentBuf) {
-    // TraceManager.addDev("DEL");
-    if (cursorPosition > 0) {
-      if (currentBuf.length() > 0) {
-        if (cursorPosition == currentBuf.length()) {
-          myPrint("\b \b");
-          currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
-          cursorPosition--;
-        } else {
-          currentBuf = currentBuf.substring(0, cursorPosition - 1)
-              + currentBuf.substring(cursorPosition, currentBuf.length());
-          backwardCode();
-          cursorPosition--;
-          myPrint(currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
-          int sep = currentBuf.length() + 1 - cursorPosition;
-          for (int i = 0; i < sep; i++) {
-            backwardCode();
-          }
-
-        }
-      }
-    }
-    return currentBuf;
-  }
-
-  public void myPrint(String s) {
-    // if (os.compareTo("mac") != 0) {
-    System.out.print(s);
-    // }
-    System.out.flush();
-  }
-
-  private String delCurrent(String currentBuf) {
-    if (buffer.size() > 0) {
-      int size = currentBuf.length();
-      for (int i = 0; i < size; i++) {
-        currentBuf = del(currentBuf);
-      }
-    }
-    return currentBuf;
-
-  }
-
-  public void printPrompt(int cpt) {
-    String p = "" + cpt + "> ";
-    promptLength = p.length();
-    System.out.print(p);
-  }
-
-  private void backward() {
-    if (cursorPosition == 0) {
-      return;
-    }
-    backwardCode();
-    cursorPosition--;
-  }
-
-  private void backwardCode() {
-    System.out.print("\033[1D");
-  }
-
-  private void forward(String currentBuf) {
-    if (cursorPosition >= currentBuf.length()) {
-      return;
-    }
-    System.out.print("\033[1C");
-    cursorPosition++;
-  }
-
-  /*
-   * private void printSequence(String seq) {
-   * 
-   * }
-   */
 
 }

@@ -64,135 +64,135 @@ import ui.ad.TADActionState;
  * @author Ludovic APVRILLE
  */
 public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText */ implements PreJavaCode, PostJavaCode,
-    CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-
-  // Issue #31
-  // protected int lineLength = 5;
-  // protected int textX = 5;
-  // protected int textY = 15;
-  // protected int arc = 5;
-  //
-  // protected int stateOfError = 0; // Not yet checked
-
-  public TMLADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    //
-    // width = 30;
-    // height = 20;
-    // minWidth = 30;
-    //
-    // nbConnectingPoint = 2;
-    // connectingPoint = new TGConnectingPoint[2];
-    // connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true,
-    // false, 0.5, 0.0);
-    // connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
-    // true, 0.5, 1.0);
-    //
-    // moveable = true;
-    // editable = true;
-    // removable = true;
-    //
-    // value = "action";
-    // name = "action state";
-    //
-    // myImageIcon = IconManager.imgic204;
-  }
-
-  @Override
-  protected void createConnectingPoints() {
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-  }
-
-  @Override
-  protected void internalDrawing(Graphics g) {
+        CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
 
     // Issue #31
-    final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value);
-    // int w1 = Math.max(minWidth, w + 2 * textX);
-    // if ((w1 != width) /*& (!tdp.isScaled())*/) {
-    // setCd(x + width/2 - w1/2, y);
-    // width = w1;
-    // //updateConnectingPoints();
+    // protected int lineLength = 5;
+    // protected int textX = 5;
+    // protected int textY = 15;
+    // protected int arc = 5;
+    //
+    // protected int stateOfError = 0; // Not yet checked
+
+    public TMLADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        //
+        // width = 30;
+        // height = 20;
+        // minWidth = 30;
+        //
+        // nbConnectingPoint = 2;
+        // connectingPoint = new TGConnectingPoint[2];
+        // connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true,
+        // false, 0.5, 0.0);
+        // connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
+        // true, 0.5, 1.0);
+        //
+        // moveable = true;
+        // editable = true;
+        // removable = true;
+        //
+        // value = "action";
+        // name = "action state";
+        //
+        // myImageIcon = IconManager.imgic204;
+    }
+
+    @Override
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+    }
+
+    @Override
+    protected void internalDrawing(Graphics g) {
+
+        // Issue #31
+        final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value);
+        // int w1 = Math.max(minWidth, w + 2 * textX);
+        // if ((w1 != width) /*& (!tdp.isScaled())*/) {
+        // setCd(x + width/2 - w1/2, y);
+        // width = w1;
+        // //updateConnectingPoints();
+        // }
+
+        if (stateAction > 0) {
+            Color c = g.getColor();
+            switch (stateAction) {
+                case ErrorHighlight.OK:
+                    g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            g.fillRoundRect(x, y, width, height, arc, arc);
+            g.setColor(c);
+        }
+
+        g.drawRoundRect(x, y, width, height, arc, arc);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        drawSingleString(g, value, x + (width - w) / 2, y + textY);
+    }
+
+    // public TGComponent isOnMe(int _x, int _y) {
+    // if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+    // return this;
+    // }
+    //
+    // if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength, x+width/2, y +
+    // lineLength + height, _x, _y)) < distanceSelected) {
+    // return this;
+    // }
+    //
+    // return null;
+    // }
+    //
+    // public String getAction() {
+    // return value;
     // }
 
-    if (stateAction > 0) {
-      Color c = g.getColor();
-      switch (stateAction) {
-        case ErrorHighlight.OK:
-          g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
-          break;
-        default:
-          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-      }
-      g.fillRoundRect(x, y, width, height, arc, arc);
-      g.setColor(c);
+    @Override
+    public String getAction(int cpt) {
+        if (cpt < 0) {
+            return value;
+        }
+
+        String ret;
+
+        try {
+            ret = value;
+            while (cpt > 0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt--;
+            }
+
+            int index = ret.indexOf(';');
+
+            if (index > 0) {
+                ret = ret.substring(0, index + 1);
+            }
+        } catch (Exception e) {
+            return value;
+        }
+        return ret;
     }
 
-    g.drawRoundRect(x, y, width, height, arc, arc);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-
-    drawSingleString(g, value, x + (width - w) / 2, y + textY);
-  }
-
-  // public TGComponent isOnMe(int _x, int _y) {
-  // if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-  // return this;
-  // }
-  //
-  // if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength, x+width/2, y +
-  // lineLength + height, _x, _y)) < distanceSelected) {
-  // return this;
-  // }
-  //
-  // return null;
-  // }
-  //
-  // public String getAction() {
-  // return value;
-  // }
-
-  @Override
-  public String getAction(int cpt) {
-    if (cpt < 0) {
-      return value;
+    @Override
+    public int getType() {
+        return TGComponentManager.TMLAD_ACTION_STATE;
     }
 
-    String ret;
-
-    try {
-      ret = value;
-      while (cpt > 0) {
-        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-        cpt--;
-      }
-
-      int index = ret.indexOf(';');
-
-      if (index > 0) {
-        ret = ret.substring(0, index + 1);
-      }
-    } catch (Exception e) {
-      return value;
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TMLAD;
     }
-    return ret;
-  }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TMLAD_ACTION_STATE;
-  }
-
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_TMLAD;
-  }
-
-  // public void setStateAction(int _stateAction) {
-  // stateOfError = _stateAction;
-  // }
+    // public void setStateAction(int _stateAction) {
+    // stateOfError = _stateAction;
+    // }
 }

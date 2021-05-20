@@ -48,16 +48,16 @@ package dseengine;
  * @author Ludovic APVRILLE
  */
 public class BusContentionResult {
-  public int id;
-  public String name;
+    public int id;
+    public String name;
 
-  public long contention;
+    public long contention;
 
-  public BusContentionResult() {
-  }
+    public BusContentionResult() {
+    }
 
-  public String toStringResult(int cpuid, String cpuname) {
-    return "CPU_BUS_CONTENTION " + cpuid + " " + cpuname + " " + id + " " + name + " " + contention;
-  }
+    public String toStringResult(int cpuid, String cpuname) {
+        return "CPU_BUS_CONTENTION " + cpuid + " " + cpuname + " " + id + " " + name + " " + contention;
+    }
 
 } // Class BusResult

@@ -56,157 +56,158 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class ATDAttackConnector
-    extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
-  // protected int arrowLength = 10;
-  // protected int widthValue, heightValue, maxWidthValue, h;
-  protected int c = 5; // square length
-  // protected double oldScaleFactor;
-  protected int fontSize = 12;
+        extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
+    // protected int arrowLength = 10;
+    // protected int widthValue, heightValue, maxWidthValue, h;
+    protected int c = 5; // square length
+    // protected double oldScaleFactor;
+    protected int fontSize = 12;
 
-  public ATDAttackConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public ATDAttackConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    myImageIcon = IconManager.imgic202;
-    value = "";
-    editable = true;
-    // oldScaleFactor = tdp.getZoom();
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    /*
-     * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-     * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
-     * x1, y1, x2, y2, true); }
-     */
-
-    // g.drawLine(x1, y1, x2, y2);
-    int cz = (int) (tdp.getZoom() * c);
-
-    // white squares only if ATDConstraint
-
-    TGConnectingPoint cp = p1;
-    CDElement comp = cp.getFather();
-    int decX = 0;
-    int decY = 0;
-    // Origin = constraint?
-    if (comp instanceof ATDConstraint) {
-      if (comp.getX() == cp.getX()) {
-        decX = 0;
-      } else if (comp.getX() + comp.getWidth() == cp.getX()) {
-        decX = -cz;
-      } else {
-        decX = -cz / 2;
-      }
-
-      if (comp.getY() == cp.getY()) {
-        decY = 0;
-      } else if (comp.getY() + comp.getHeight() == cp.getY()) {
-        decY = -cz;
-      } else {
-        decY = -cz / 2;
-      }
-
-      g.drawRect(cp.getX() + decX, cp.getY() + decY, cz, cz);
-    }
-    cp = p2;
-    comp = cp.getFather();
-    if (comp instanceof ATDConstraint) {
-      if (comp.getX() == cp.getX()) {
-        decX = 0;
-      } else if (comp.getX() + comp.getWidth() == cp.getX()) {
-        decX = -cz;
-      } else {
-        decX = -cz / 2;
-      }
-
-      if (comp.getY() == cp.getY()) {
-        decY = 0;
-      } else if (comp.getY() + comp.getHeight() == cp.getY()) {
-        decY = -cz;
-      } else {
-        decY = -cz / 2;
-      }
-      g.drawRect(x2 + decX, y2 + decY, cz, cz);
+        myImageIcon = IconManager.imgic202;
+        value = "";
+        editable = true;
+        // oldScaleFactor = tdp.getZoom();
     }
 
-    /*
-     * g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz); g.fillRect(p1.getX()-(cz/2),
-     * p1.getY()-(cz/2), cz, cz);
-     */
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        /*
+         * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+         * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
+         * x1, y1, x2, y2, true); }
+         */
 
-    Point p = new Point(x2, y2);
-    // if (p == null) {
+        // g.drawLine(x1, y1, x2, y2);
+        int cz = (int) (tdp.getZoom() * c);
+
+        // white squares only if ATDConstraint
+
+        TGConnectingPoint cp = p1;
+        CDElement comp = cp.getFather();
+        int decX = 0;
+        int decY = 0;
+        // Origin = constraint?
+        if (comp instanceof ATDConstraint) {
+            if (comp.getX() == cp.getX()) {
+                decX = 0;
+            } else if (comp.getX() + comp.getWidth() == cp.getX()) {
+                decX = -cz;
+            } else {
+                decX = -cz / 2;
+            }
+
+            if (comp.getY() == cp.getY()) {
+                decY = 0;
+            } else if (comp.getY() + comp.getHeight() == cp.getY()) {
+                decY = -cz;
+            } else {
+                decY = -cz / 2;
+            }
+
+            g.drawRect(cp.getX() + decX, cp.getY() + decY, cz, cz);
+        }
+        cp = p2;
+        comp = cp.getFather();
+        if (comp instanceof ATDConstraint) {
+            if (comp.getX() == cp.getX()) {
+                decX = 0;
+            } else if (comp.getX() + comp.getWidth() == cp.getX()) {
+                decX = -cz;
+            } else {
+                decX = -cz / 2;
+            }
+
+            if (comp.getY() == cp.getY()) {
+                decY = 0;
+            } else if (comp.getY() + comp.getHeight() == cp.getY()) {
+                decY = -cz;
+            } else {
+                decY = -cz / 2;
+            }
+            g.drawRect(x2 + decX, y2 + decY, cz, cz);
+        }
+
+        /*
+         * g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz); g.fillRect(p1.getX()-(cz/2),
+         * p1.getY()-(cz/2), cz, cz);
+         */
+
+        Point p = new Point(x2, y2);
+        // if (p == null) {
+        // //
+        // } else {
+        if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
+            //
+            if ((p.x != x1) || (p.y != y1)) {
+                g.drawLine(x1, y1, p.x, p.y);
+                //
+            }
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
+        }
+        // }
+
+        if (value.length() > 0) {
+            Font f = g.getFont();
+            if (tdp.getZoom() < 1) {
+                Font f0 = f.deriveFont((float) (fontSize * tdp.getZoom()));
+                g.setFont(f0);
+            }
+            g.drawString(value, x2 + (cz / 2) + 1, y2);
+            g.setFont(f);
+        }
+    }
+
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        String oldValue = value;
+        String text = getName() + "Connector";
+        String s = (String) JOptionPane.showInputDialog(frame, text, "Setting value", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic101, null, getValue());
+
+        if (s != null) {
+            s = Conversion.removeFirstSpaces(s);
+        }
+
+        if ((s != null) && (!s.equals(oldValue))) {
+            setValue(s);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.ATD_ATTACK_CONNECTOR;
+    }
+
+    // @Override Issue #31 Now managed in upper class
+    // public void rescale(double scaleFactor){
     // //
-    // } else {
-    if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
-      //
-      if ((p.x != x1) || (p.y != y1)) {
-        g.drawLine(x1, y1, p.x, p.y);
-        //
-      }
-    } else {
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
-    }
+    // int xx, yy;
+    //
+    // for(int i=0; i<nbInternalTGComponent; i++) {
+    // xx = tgcomponent[i].getX();
+    // yy = tgcomponent[i].getY();
+    // //
+    // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+    // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+    // xx = (int)(tgcomponent[i].dx);
+    // tgcomponent[i].dx = tgcomponent[i].dx - xx;
+    // yy = (int)(tgcomponent[i].dy);
+    // tgcomponent[i].dy = tgcomponent[i].dy - yy;
+    //
+    // tgcomponent[i].setCd(xx, yy);
+    //
+    // //
     // }
-
-    if (value.length() > 0) {
-      Font f = g.getFont();
-      if (tdp.getZoom() < 1) {
-        Font f0 = f.deriveFont((float) (fontSize * tdp.getZoom()));
-        g.setFont(f0);
-      }
-      g.drawString(value, x2 + (cz / 2) + 1, y2);
-      g.setFont(f);
-    }
-  }
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    String oldValue = value;
-    String text = getName() + "Connector";
-    String s = (String) JOptionPane.showInputDialog(frame, text, "Setting value", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic101, null, getValue());
-
-    if (s != null) {
-      s = Conversion.removeFirstSpaces(s);
-    }
-
-    if ((s != null) && (!s.equals(oldValue))) {
-      setValue(s);
-      return true;
-    }
-
-    return false;
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.ATD_ATTACK_CONNECTOR;
-  }
-
-  // @Override Issue #31 Now managed in upper class
-  // public void rescale(double scaleFactor){
-  // //
-  // int xx, yy;
-  //
-  // for(int i=0; i<nbInternalTGComponent; i++) {
-  // xx = tgcomponent[i].getX();
-  // yy = tgcomponent[i].getY();
-  // //
-  // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-  // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-  // xx = (int)(tgcomponent[i].dx);
-  // tgcomponent[i].dx = tgcomponent[i].dx - xx;
-  // yy = (int)(tgcomponent[i].dy);
-  // tgcomponent[i].dy = tgcomponent[i].dy - yy;
-  //
-  // tgcomponent[i].setCd(xx, yy);
-  //
-  // //
-  // }
-  //
-  // oldScaleFactor = scaleFactor;
-  // }
+    //
+    // oldScaleFactor = scaleFactor;
+    // }
 }

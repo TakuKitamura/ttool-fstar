@@ -46,13 +46,13 @@ import translator.Gate;
  * @author Ludovic APVRILLE
  */
 public class DDStructLink {
-  public Gate lgate;
-  public Gate rgate;
-  public Gate linklg;
-  public Gate linkrg;
-  public boolean added;
+    public Gate lgate;
+    public Gate rgate;
+    public Gate linklg;
+    public Gate linkrg;
+    public boolean added;
 
-  public DDStructLink() {
-  }
+    public DDStructLink() {
+    }
 
 } // Class

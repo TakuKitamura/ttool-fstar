@@ -45,148 +45,148 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class TClassChannelBRNBW extends TClass {
-  protected String channelName;
+    protected String channelName;
 
-  public TClassChannelBRNBW(String name, String _channelName) {
-    super(name, true);
-    channelName = _channelName;
-  }
-
-  public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
-    //
-
-    Gate read, write, loss = null, notloss = null;
-    ADActionStateWithGate acread, acwrite, aclost, acnotlost;
-    ADChoice choice, choiceLoss;
-    ADActionStateWithParam adap1, adap2;
-    // ADStop adstop;
-    ADJunction adj;
-
-    ActivityDiagram ad = new ActivityDiagram();
-
-    Param sample = new Param("samples", Param.NAT, "0");
-    addParameter(sample);
-
-    Param max = null;
-    Param currentLoss = null;
-
-    if ((_lossy) && (_maxNbOfLoss > -1)) {
-      max = new Param("maxLoss", Param.NAT, "" + _maxNbOfLoss);
-      addParameter(max);
-      currentLoss = new Param("currentLoss", Param.NAT, "0");
-      addParameter(currentLoss);
+    public TClassChannelBRNBW(String name, String _channelName) {
+        super(name, true);
+        channelName = _channelName;
     }
 
-    /*
-     * Param nb = new Param("nb", Param.NAT, "0"); addParameter(nb);
-     */
+    public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
+        //
 
-    read = addNewGateIfApplicable("rd__" + channelName);
-    write = addNewGateIfApplicable("wr__" + channelName);
+        Gate read, write, loss = null, notloss = null;
+        ADActionStateWithGate acread, acwrite, aclost, acnotlost;
+        ADChoice choice, choiceLoss;
+        ADActionStateWithParam adap1, adap2;
+        // ADStop adstop;
+        ADJunction adj;
 
-    if (_lossy) {
-      loss = addNewGateIfApplicable("msglost__" + channelName);
-      notloss = addNewGateIfApplicable("msgNotLost__" + channelName);
-    }
+        ActivityDiagram ad = new ActivityDiagram();
 
-    adj = new ADJunction();
-    ad.getStartState().addNext(adj);
-    ad.add(adj);
+        Param sample = new Param("samples", Param.NAT, "0");
+        addParameter(sample);
 
-    choice = new ADChoice();
-    choice.addGuard("[]");
-    choice.addGuard("[samples > 0]");
-    adj.addNext(choice);
-    ad.add(choice);
+        Param max = null;
+        Param currentLoss = null;
 
-    acwrite = new ADActionStateWithGate(write);
-    // acwrite.setActionValue("?nb:nat");
-    acwrite.setActionValue("");
-    choice.addNext(acwrite);
-    ad.add(acwrite);
+        if ((_lossy) && (_maxNbOfLoss > -1)) {
+            max = new Param("maxLoss", Param.NAT, "" + _maxNbOfLoss);
+            addParameter(max);
+            currentLoss = new Param("currentLoss", Param.NAT, "0");
+            addParameter(currentLoss);
+        }
 
-    if (_lossy) {
-      if (_maxNbOfLoss > -1) {
-        choiceLoss = new ADChoice();
-        choiceLoss
-            .addGuard("[ (" + _percentage + "  < 100) or ((" + _percentage + ">99) and (not(currentLoss < maxLoss)))]");
-        choiceLoss.addGuard("[((" + _percentage + "  < 100) and (currentLoss < maxLoss)) or ((" + _percentage
-            + ">99) and (currentLoss < maxLoss))]");
-        acwrite.addNext(choiceLoss);
+        /*
+         * Param nb = new Param("nb", Param.NAT, "0"); addParameter(nb);
+         */
 
-        acnotlost = new ADActionStateWithGate(notloss);
-        acnotlost.setActionValue("");
-        ad.add(acnotlost);
-        choiceLoss.addNext(acnotlost);
+        read = addNewGateIfApplicable("rd__" + channelName);
+        write = addNewGateIfApplicable("wr__" + channelName);
 
-        aclost = new ADActionStateWithGate(loss);
-        aclost.setActionValue("");
-        ad.add(aclost);
-        adap1 = new ADActionStateWithParam(sample);
-        adap1.setActionValue("samples + 1");
+        if (_lossy) {
+            loss = addNewGateIfApplicable("msglost__" + channelName);
+            notloss = addNewGateIfApplicable("msgNotLost__" + channelName);
+        }
 
-        choiceLoss.addNext(aclost);
+        adj = new ADJunction();
+        ad.getStartState().addNext(adj);
+        ad.add(adj);
 
-        adap2 = new ADActionStateWithParam(currentLoss);
-        adap2.setActionValue("currentLoss + 1");
+        choice = new ADChoice();
+        choice.addGuard("[]");
+        choice.addGuard("[samples > 0]");
+        adj.addNext(choice);
+        ad.add(choice);
+
+        acwrite = new ADActionStateWithGate(write);
+        // acwrite.setActionValue("?nb:nat");
+        acwrite.setActionValue("");
+        choice.addNext(acwrite);
+        ad.add(acwrite);
+
+        if (_lossy) {
+            if (_maxNbOfLoss > -1) {
+                choiceLoss = new ADChoice();
+                choiceLoss.addGuard("[ (" + _percentage + "  < 100) or ((" + _percentage
+                        + ">99) and (not(currentLoss < maxLoss)))]");
+                choiceLoss.addGuard("[((" + _percentage + "  < 100) and (currentLoss < maxLoss)) or ((" + _percentage
+                        + ">99) and (currentLoss < maxLoss))]");
+                acwrite.addNext(choiceLoss);
+
+                acnotlost = new ADActionStateWithGate(notloss);
+                acnotlost.setActionValue("");
+                ad.add(acnotlost);
+                choiceLoss.addNext(acnotlost);
+
+                aclost = new ADActionStateWithGate(loss);
+                aclost.setActionValue("");
+                ad.add(aclost);
+                adap1 = new ADActionStateWithParam(sample);
+                adap1.setActionValue("samples + 1");
+
+                choiceLoss.addNext(aclost);
+
+                adap2 = new ADActionStateWithParam(currentLoss);
+                adap2.setActionValue("currentLoss + 1");
+                adap2.addNext(adj);
+                aclost.addNext(adap2);
+
+                acnotlost.addNext(adap1);
+                adap1.addNext(adj);
+
+                ad.add(choiceLoss);
+                ad.add(adap1);
+                ad.add(adap2);
+                ad.add(aclost);
+                ad.add(acnotlost);
+            } else {
+                choiceLoss = new ADChoice();
+                choiceLoss.addGuard("[ " + _percentage + " < 100]");
+                choiceLoss.addGuard("[ ]");
+                acwrite.addNext(choiceLoss);
+
+                acnotlost = new ADActionStateWithGate(notloss);
+                acnotlost.setActionValue("");
+                ad.add(acnotlost);
+                choiceLoss.addNext(acnotlost);
+
+                aclost = new ADActionStateWithGate(loss);
+                aclost.setActionValue("");
+                ad.add(aclost);
+
+                choiceLoss.addNext(aclost);
+                aclost.addNext(adj);
+
+                adap1 = new ADActionStateWithParam(sample);
+                adap1.setActionValue("samples + 1");
+                acnotlost.addNext(adap1);
+                adap1.addNext(adj);
+
+                ad.add(choiceLoss);
+                ad.add(adap1);
+                ad.add(aclost);
+                ad.add(acnotlost);
+            }
+        } else {
+            adap1 = new ADActionStateWithParam(sample);
+            adap1.setActionValue("samples + 1");
+            adap1.addNext(adj);
+            ad.add(adap1);
+            acwrite.addNext(adap1);
+        }
+
+        acread = new ADActionStateWithGate(read);
+        acread.setActionValue("");
+        ad.add(acread);
+        choice.addNext(acread);
+
+        adap2 = new ADActionStateWithParam(sample);
+        adap2.setActionValue("samples - 1");
         adap2.addNext(adj);
-        aclost.addNext(adap2);
-
-        acnotlost.addNext(adap1);
-        adap1.addNext(adj);
-
-        ad.add(choiceLoss);
-        ad.add(adap1);
         ad.add(adap2);
-        ad.add(aclost);
-        ad.add(acnotlost);
-      } else {
-        choiceLoss = new ADChoice();
-        choiceLoss.addGuard("[ " + _percentage + " < 100]");
-        choiceLoss.addGuard("[ ]");
-        acwrite.addNext(choiceLoss);
+        acread.addNext(adap2);
 
-        acnotlost = new ADActionStateWithGate(notloss);
-        acnotlost.setActionValue("");
-        ad.add(acnotlost);
-        choiceLoss.addNext(acnotlost);
-
-        aclost = new ADActionStateWithGate(loss);
-        aclost.setActionValue("");
-        ad.add(aclost);
-
-        choiceLoss.addNext(aclost);
-        aclost.addNext(adj);
-
-        adap1 = new ADActionStateWithParam(sample);
-        adap1.setActionValue("samples + 1");
-        acnotlost.addNext(adap1);
-        adap1.addNext(adj);
-
-        ad.add(choiceLoss);
-        ad.add(adap1);
-        ad.add(aclost);
-        ad.add(acnotlost);
-      }
-    } else {
-      adap1 = new ADActionStateWithParam(sample);
-      adap1.setActionValue("samples + 1");
-      adap1.addNext(adj);
-      ad.add(adap1);
-      acwrite.addNext(adap1);
+        setActivityDiagram(ad);
     }
-
-    acread = new ADActionStateWithGate(read);
-    acread.setActionValue("");
-    ad.add(acread);
-    choice.addNext(acread);
-
-    adap2 = new ADActionStateWithParam(sample);
-    adap2.setActionValue("samples - 1");
-    adap2.addNext(adj);
-    ad.add(adap2);
-    acread.addNext(adap2);
-
-    setActivityDiagram(ad);
-  }
 }

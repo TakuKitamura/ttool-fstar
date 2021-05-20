@@ -57,17 +57,17 @@ import java.awt.event.ActionListener;
  * @author Ludovic APVRILLE
  */
 public class TGTextFieldWithHelp extends JTextField {
-  public TGHelpButton myButton;
+    public TGHelpButton myButton;
 
-  public TGTextFieldWithHelp(String value, int nbOfColums) {
-    super(value, nbOfColums);
-  }
+    public TGTextFieldWithHelp(String value, int nbOfColums) {
+        super(value, nbOfColums);
+    }
 
-  // helpword can reference a HTML file or a master keyword
-  public void makeEndHelpButton(String helpWord, MainGUI mgui, HelpManager hm, JPanel panel, GridBagConstraints c) {
-    Icon myIcon = IconManager.imgic32;
-    myButton = new TGHelpButton(myIcon, helpWord, mgui, hm);
-    myButton.addToPanel(panel, c);
-  }
+    // helpword can reference a HTML file or a master keyword
+    public void makeEndHelpButton(String helpWord, MainGUI mgui, HelpManager hm, JPanel panel, GridBagConstraints c) {
+        Icon myIcon = IconManager.imgic32;
+        myButton = new TGHelpButton(myIcon, helpWord, mgui, hm);
+        myButton.addToPanel(panel, c);
+    }
 
 }

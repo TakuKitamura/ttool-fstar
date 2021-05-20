@@ -47,33 +47,33 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TEPE extends Vector<TEPEComponent> {
-  private String name;
-  private Object referenceObject;
+    private String name;
+    private Object referenceObject;
 
-  public TEPE(String _name, Object _referenceObject) {
-    name = _name;
-    referenceObject = _referenceObject;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public TEPEComponent getTEPEComponent(int index) {
-    return get(index);
-  }
-
-  public Object getReferenceObject() {
-    return referenceObject;
-  }
-
-  public String toString() {
-    String ret = "TEPE model: " + name + "\n";
-    for (TEPEComponent tepec : this) {
-      ret += tepec.toString() + "\n";
+    public TEPE(String _name, Object _referenceObject) {
+        name = _name;
+        referenceObject = _referenceObject;
     }
-    return ret;
 
-  }
+    public String getName() {
+        return name;
+    }
+
+    public TEPEComponent getTEPEComponent(int index) {
+        return get(index);
+    }
+
+    public Object getReferenceObject() {
+        return referenceObject;
+    }
+
+    public String toString() {
+        String ret = "TEPE model: " + name + "\n";
+        for (TEPEComponent tepec : this) {
+            ret += tepec.toString() + "\n";
+        }
+        return ret;
+
+    }
 
 }

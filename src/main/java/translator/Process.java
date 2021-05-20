@@ -47,309 +47,309 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class Process {
-  protected String name;
-  protected Vector<Gate> gateList;
-  protected Vector<Param> paramList;
-  protected String body;
-  protected int languageID;
+    protected String name;
+    protected Vector<Gate> gateList;
+    protected Vector<Param> paramList;
+    protected String body;
+    protected int languageID;
 
-  protected static final String BEGIN_DEC = "process ";
-  protected static final String SEP1G = "[";
-  protected static final String SEP2G = ", ";
-  protected static final String SEP3G = "]";
-  protected static final String SEP1P = "(";
-  protected static final String SEP2P = ", ";
-  protected static final String SEP3P = ")";
-  protected static final String END_DEC = " : noexit := \n";
-  protected static final String END_DEC_LOTOS = " : exit := \n";
-  protected static final String END_PROC = "\nendproc";
+    protected static final String BEGIN_DEC = "process ";
+    protected static final String SEP1G = "[";
+    protected static final String SEP2G = ", ";
+    protected static final String SEP3G = "]";
+    protected static final String SEP1P = "(";
+    protected static final String SEP2P = ", ";
+    protected static final String SEP3P = ")";
+    protected static final String END_DEC = " : noexit := \n";
+    protected static final String END_DEC_LOTOS = " : exit := \n";
+    protected static final String END_PROC = "\nendproc";
 
-  protected static final String HIDE = "hide ";
-  protected static final String SEP1H = ", ";
-  protected static final String HIDE_END = " in\n(";
-  protected static final String HIDE_END_PROC = "\n)";
+    protected static final String HIDE = "hide ";
+    protected static final String SEP1H = ", ";
+    protected static final String HIDE_END = " in\n(";
+    protected static final String HIDE_END_PROC = "\n)";
 
-  public Process(String _name, Vector<Gate> _gateList, Vector<Param> _paramList, int _languageID) {
-    name = _name;
-    gateList = _gateList;
-    paramList = _paramList;
-    languageID = _languageID;
-  }
-
-  public void setLanguageID(int _languageID) {
-    languageID = _languageID;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setBody(String s) {
-    body = s;
-  }
-
-  public void setGateList(Vector<Gate> v) {
-    gateList = v;
-  }
-
-  public Vector<Gate> getGateList() {
-    return gateList;
-  }
-
-  public void addGate(Gate g) {
-    gateList.addElement(g);
-  }
-
-  public Vector<Param> getParamList() {
-    return paramList;
-  }
-
-  public String toString() {
-    String head = BEGIN_DEC + name;
-    if (hasNonInternalGates()) {
-      head = head + SEP1G + listNonInternalGates() + SEP3G;
-    }
-    if (hasParameters()) {
-      head = head + SEP1P + listParameters() + SEP3P;
-    }
-    if (hasInternalGates()) {
-      if (languageID == TURTLETranslator.LOTOS) {
-        head = head + END_DEC_LOTOS + HIDE + listInternalGates() + HIDE_END + body + HIDE_END_PROC + END_PROC;
-      } else {
-        head = head + END_DEC + HIDE + listInternalGates() + HIDE_END + body + HIDE_END_PROC + END_PROC;
-      }
-    } else {
-      if (languageID == TURTLETranslator.LOTOS) {
-        head = head + END_DEC_LOTOS + body + END_PROC;
-      } else {
-        head = head + END_DEC + body + END_PROC;
-      }
-    }
-    return head;
-  }
-
-  public String getCallToMe() {
-    String s = name;
-    if (hasNonInternalGates()) {
-      s = s + SEP1G + listNonInternalGates() + SEP3G;
-    }
-    if (hasParameters()) {
-      s = s + SEP1P + listCallParameters() + SEP3P;
-    }
-    return s;
-  }
-
-  public String getCallToMe(Param p, String expr) {
-    String s = name;
-    if (hasNonInternalGates()) {
-      s = s + SEP1G + listNonInternalGates() + SEP3G;
-    }
-    if (hasParameters()) {
-      s = s + SEP1P + listCallParameters(p, expr) + SEP3P;
-    }
-    return s;
-  }
-
-  public String getCallToMe(Param[] p, String[] expr) {
-    String s = name;
-    if (hasNonInternalGates()) {
-      s = s + SEP1G + listNonInternalGates() + SEP3G;
-    }
-    if (hasParameters()) {
-      s = s + SEP1P + listCallParameters(p, expr) + SEP3P;
-    }
-    return s;
-  }
-
-  public String getHighLevelCallToMe(int languageID) {
-    String s = name;
-    if (hasNonInternalGates()) {
-      s = s + SEP1G + listNonInternalGates() + SEP3G;
-    }
-    if (hasParameters()) {
-      s = s + SEP1P + listInitParameters(languageID) + SEP3P;
-    }
-    return s;
-  }
-
-  public boolean hasNonInternalGates() {
-    if (gateList == null) {
-      return false;
+    public Process(String _name, Vector<Gate> _gateList, Vector<Param> _paramList, int _languageID) {
+        name = _name;
+        gateList = _gateList;
+        paramList = _paramList;
+        languageID = _languageID;
     }
 
-    Gate g;
-    for (int i = 0; i < gateList.size(); i++) {
-      g = gateList.elementAt(i);
-      if (!g.isInternal()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public boolean hasInternalGates() {
-    if (gateList == null) {
-      return false;
+    public void setLanguageID(int _languageID) {
+        languageID = _languageID;
     }
 
-    Gate g;
-    for (int i = 0; i < gateList.size(); i++) {
-      g = gateList.elementAt(i);
-      if (g.isInternal()) {
-        return true;
-      }
+    public String getName() {
+        return name;
     }
-    return false;
-  }
 
-  public boolean hasParameters() {
-    return ((paramList != null) && (paramList.size() > 0));
-  }
+    public void setBody(String s) {
+        body = s;
+    }
 
-  public String listNonInternalGates() {
-    String s = "";
-    boolean find = false;
-    Gate g;
+    public void setGateList(Vector<Gate> v) {
+        gateList = v;
+    }
 
-    for (int i = 0; i < gateList.size(); i++) {
-      g = gateList.elementAt(i);
-      if (!g.isInternal()) {
-        if (!find) {
-          find = true;
-          s = s + g.getLotosName();
+    public Vector<Gate> getGateList() {
+        return gateList;
+    }
+
+    public void addGate(Gate g) {
+        gateList.addElement(g);
+    }
+
+    public Vector<Param> getParamList() {
+        return paramList;
+    }
+
+    public String toString() {
+        String head = BEGIN_DEC + name;
+        if (hasNonInternalGates()) {
+            head = head + SEP1G + listNonInternalGates() + SEP3G;
+        }
+        if (hasParameters()) {
+            head = head + SEP1P + listParameters() + SEP3P;
+        }
+        if (hasInternalGates()) {
+            if (languageID == TURTLETranslator.LOTOS) {
+                head = head + END_DEC_LOTOS + HIDE + listInternalGates() + HIDE_END + body + HIDE_END_PROC + END_PROC;
+            } else {
+                head = head + END_DEC + HIDE + listInternalGates() + HIDE_END + body + HIDE_END_PROC + END_PROC;
+            }
         } else {
-          s = s + SEP2G + g.getLotosName();
+            if (languageID == TURTLETranslator.LOTOS) {
+                head = head + END_DEC_LOTOS + body + END_PROC;
+            } else {
+                head = head + END_DEC + body + END_PROC;
+            }
         }
-      }
+        return head;
     }
-    return s;
-  }
 
-  public String listInternalGates() {
-    String s = "";
-    boolean find = false;
-    Gate g;
-
-    for (int i = 0; i < gateList.size(); i++) {
-      g = gateList.elementAt(i);
-      if (g.isInternal()) {
-        if (!find) {
-          find = true;
-          s = s + g.getLotosName();
-        } else {
-          s = s + SEP2G + g.getLotosName();
+    public String getCallToMe() {
+        String s = name;
+        if (hasNonInternalGates()) {
+            s = s + SEP1G + listNonInternalGates() + SEP3G;
         }
-      }
-    }
-    return s;
-  }
-
-  public String listParameters() {
-    String s = "";
-    boolean find = false;
-    Param par;
-
-    for (int i = 0; i < paramList.size(); i++) {
-      par = paramList.elementAt(i);
-      if (!find) {
-        find = true;
-        s = s + par.getLotosTranslation();
-      } else {
-        s = s + SEP2P + par.getLotosTranslation();
-      }
-    }
-    return s;
-  }
-
-  public String listCallParameters() {
-    String s = "";
-    boolean find = false;
-    Param par;
-
-    for (int i = 0; i < paramList.size(); i++) {
-      par = paramList.elementAt(i);
-      if (!find) {
-        find = true;
-        s = s + par.getLotosName();
-      } else {
-        s = s + SEP2P + par.getLotosName();
-      }
-    }
-    return s;
-  }
-
-  public String listCallParameters(Param p, String expr) {
-    String s = "";
-    boolean find = false;
-    Param par;
-
-    for (int i = 0; i < paramList.size(); i++) {
-      par = paramList.elementAt(i);
-      if (!find) {
-        find = true;
-        if (par == p) {
-          s = s + expr;
-        } else {
-          s = s + par.getLotosName();
+        if (hasParameters()) {
+            s = s + SEP1P + listCallParameters() + SEP3P;
         }
-      } else {
-        if (par == p) {
-          s = s + SEP2P + expr;
-        } else {
-          s = s + SEP2P + par.getLotosName();
-        }
-      }
+        return s;
     }
-    return s;
-  }
 
-  public String listCallParameters(Param[] p, String[] expr) {
-    String s = "";
-    boolean find = false;
-    Param par;
-    int j;
-
-    for (int i = 0; i < paramList.size(); i++) {
-      par = paramList.elementAt(i);
-      find = false;
-      for (j = 0; j < p.length; j++) {
-        if (p[j] == par) {
-          find = true;
-          if (i == 0) {
-            s = s + expr[j];
-          } else {
-            s = s + SEP2P + expr[j];
-          }
+    public String getCallToMe(Param p, String expr) {
+        String s = name;
+        if (hasNonInternalGates()) {
+            s = s + SEP1G + listNonInternalGates() + SEP3G;
         }
-      }
-      //
-      if (!find) {
-        if (i == 0) {
-          s = s + par.getLotosName();
-        } else {
-          s = s + SEP2P + par.getLotosName();
+        if (hasParameters()) {
+            s = s + SEP1P + listCallParameters(p, expr) + SEP3P;
         }
-      }
-      //
+        return s;
     }
-    return s;
-  }
 
-  public String listInitParameters(int languageID) {
-    String s = "";
-    boolean find = false;
-    Param par;
-
-    for (int i = 0; i < paramList.size(); i++) {
-      par = paramList.elementAt(i);
-      if (!find) {
-        find = true;
-        s = s + TURTLETranslator.modifyAction(par.getValue(), languageID); // "0";
-      } else {
-        s = s + SEP2P + TURTLETranslator.modifyAction(par.getValue(), languageID);// "0";
-      }
+    public String getCallToMe(Param[] p, String[] expr) {
+        String s = name;
+        if (hasNonInternalGates()) {
+            s = s + SEP1G + listNonInternalGates() + SEP3G;
+        }
+        if (hasParameters()) {
+            s = s + SEP1P + listCallParameters(p, expr) + SEP3P;
+        }
+        return s;
     }
-    return s;
-  }
+
+    public String getHighLevelCallToMe(int languageID) {
+        String s = name;
+        if (hasNonInternalGates()) {
+            s = s + SEP1G + listNonInternalGates() + SEP3G;
+        }
+        if (hasParameters()) {
+            s = s + SEP1P + listInitParameters(languageID) + SEP3P;
+        }
+        return s;
+    }
+
+    public boolean hasNonInternalGates() {
+        if (gateList == null) {
+            return false;
+        }
+
+        Gate g;
+        for (int i = 0; i < gateList.size(); i++) {
+            g = gateList.elementAt(i);
+            if (!g.isInternal()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasInternalGates() {
+        if (gateList == null) {
+            return false;
+        }
+
+        Gate g;
+        for (int i = 0; i < gateList.size(); i++) {
+            g = gateList.elementAt(i);
+            if (g.isInternal()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasParameters() {
+        return ((paramList != null) && (paramList.size() > 0));
+    }
+
+    public String listNonInternalGates() {
+        String s = "";
+        boolean find = false;
+        Gate g;
+
+        for (int i = 0; i < gateList.size(); i++) {
+            g = gateList.elementAt(i);
+            if (!g.isInternal()) {
+                if (!find) {
+                    find = true;
+                    s = s + g.getLotosName();
+                } else {
+                    s = s + SEP2G + g.getLotosName();
+                }
+            }
+        }
+        return s;
+    }
+
+    public String listInternalGates() {
+        String s = "";
+        boolean find = false;
+        Gate g;
+
+        for (int i = 0; i < gateList.size(); i++) {
+            g = gateList.elementAt(i);
+            if (g.isInternal()) {
+                if (!find) {
+                    find = true;
+                    s = s + g.getLotosName();
+                } else {
+                    s = s + SEP2G + g.getLotosName();
+                }
+            }
+        }
+        return s;
+    }
+
+    public String listParameters() {
+        String s = "";
+        boolean find = false;
+        Param par;
+
+        for (int i = 0; i < paramList.size(); i++) {
+            par = paramList.elementAt(i);
+            if (!find) {
+                find = true;
+                s = s + par.getLotosTranslation();
+            } else {
+                s = s + SEP2P + par.getLotosTranslation();
+            }
+        }
+        return s;
+    }
+
+    public String listCallParameters() {
+        String s = "";
+        boolean find = false;
+        Param par;
+
+        for (int i = 0; i < paramList.size(); i++) {
+            par = paramList.elementAt(i);
+            if (!find) {
+                find = true;
+                s = s + par.getLotosName();
+            } else {
+                s = s + SEP2P + par.getLotosName();
+            }
+        }
+        return s;
+    }
+
+    public String listCallParameters(Param p, String expr) {
+        String s = "";
+        boolean find = false;
+        Param par;
+
+        for (int i = 0; i < paramList.size(); i++) {
+            par = paramList.elementAt(i);
+            if (!find) {
+                find = true;
+                if (par == p) {
+                    s = s + expr;
+                } else {
+                    s = s + par.getLotosName();
+                }
+            } else {
+                if (par == p) {
+                    s = s + SEP2P + expr;
+                } else {
+                    s = s + SEP2P + par.getLotosName();
+                }
+            }
+        }
+        return s;
+    }
+
+    public String listCallParameters(Param[] p, String[] expr) {
+        String s = "";
+        boolean find = false;
+        Param par;
+        int j;
+
+        for (int i = 0; i < paramList.size(); i++) {
+            par = paramList.elementAt(i);
+            find = false;
+            for (j = 0; j < p.length; j++) {
+                if (p[j] == par) {
+                    find = true;
+                    if (i == 0) {
+                        s = s + expr[j];
+                    } else {
+                        s = s + SEP2P + expr[j];
+                    }
+                }
+            }
+            //
+            if (!find) {
+                if (i == 0) {
+                    s = s + par.getLotosName();
+                } else {
+                    s = s + SEP2P + par.getLotosName();
+                }
+            }
+            //
+        }
+        return s;
+    }
+
+    public String listInitParameters(int languageID) {
+        String s = "";
+        boolean find = false;
+        Param par;
+
+        for (int i = 0; i < paramList.size(); i++) {
+            par = paramList.elementAt(i);
+            if (!find) {
+                find = true;
+                s = s + TURTLETranslator.modifyAction(par.getValue(), languageID); // "0";
+            } else {
+                s = s + SEP2P + TURTLETranslator.modifyAction(par.getValue(), languageID);// "0";
+            }
+        }
+        return s;
+    }
 
 } // Class

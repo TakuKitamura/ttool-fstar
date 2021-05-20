@@ -54,23 +54,23 @@ import ui.TAttribute;
 public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance {// implements ActionListener,
                                                                           // ListSelectionListener {
 
-  /* Creates new form */
-  public JDialogTMLCPControllerInstance(List<TAttribute> _attributes, List<TAttribute> _forbidden, Frame f,
-      String title, String attrib, String _name) {
-    super(_attributes, _forbidden, f, title, attrib, _name);
-  }
+    /* Creates new form */
+    public JDialogTMLCPControllerInstance(List<TAttribute> _attributes, List<TAttribute> _forbidden, Frame f,
+            String title, String attrib, String _name) {
+        super(_attributes, _forbidden, f, title, attrib, _name);
+    }
 
-  // Issue #55: Components are now managed in the superclass
+    // Issue #55: Components are now managed in the superclass
 
-  //
-  // @Override
-  // public void closeDialog() {
-  // cancelled = false;
-  // attributesPar.clear ();
-  // for(int i=0; i<attributes.size(); i++) {
-  // attributesPar.add (attributes.get (i));
-  // }
-  // this.name = nameOfInstance.getText();
-  // dispose();
-  // }
+    //
+    // @Override
+    // public void closeDialog() {
+    // cancelled = false;
+    // attributesPar.clear ();
+    // for(int i=0; i<attributes.size(); i++) {
+    // attributesPar.add (attributes.get (i));
+    // }
+    // this.name = nameOfInstance.getText();
+    // dispose();
+    // }
 } // End of class

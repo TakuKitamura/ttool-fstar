@@ -51,50 +51,50 @@ import java.util.List;
  */
 public class SyntaxAnalysisErrorTree implements GenericTree {
 
-  private String name = "Error(s)";
-  private MainGUI mgui;
+    private String name = "Error(s)";
+    private MainGUI mgui;
 
-  public SyntaxAnalysisErrorTree(MainGUI _mgui) {
-    mgui = _mgui;
-  }
-
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    List<CheckingError> errors = mgui.getCheckingErrors();
-    if (errors == null) {
-      return 1;
-    } else {
-      if (errors.size() > 0) {
-        return errors.size();
-      } else {
-        return 1;
-      }
+    public SyntaxAnalysisErrorTree(MainGUI _mgui) {
+        mgui = _mgui;
     }
-  }
 
-  public Object getChild(int index) {
-    List<CheckingError> errors = mgui.getCheckingErrors();
-    if (errors == null) {
-      return "Not yet performed";
-    } else {
-      if ((errors.size() > 0) && (errors.size() > index)) {
-        return errors.get(index);
-      } else {
-        return "No error found";
-      }
+    public String toString() {
+        return name;
     }
-  }
 
-  public int getIndexOfChild(Object child) {
-    if (child instanceof String) {
-      return 0;
+    public int getChildCount() {
+        List<CheckingError> errors = mgui.getCheckingErrors();
+        if (errors == null) {
+            return 1;
+        } else {
+            if (errors.size() > 0) {
+                return errors.size();
+            } else {
+                return 1;
+            }
+        }
     }
-    if (child instanceof CheckingError)
-      return mgui.getCheckingErrors().indexOf(child);
-    return -1;
-  }
+
+    public Object getChild(int index) {
+        List<CheckingError> errors = mgui.getCheckingErrors();
+        if (errors == null) {
+            return "Not yet performed";
+        } else {
+            if ((errors.size() > 0) && (errors.size() > index)) {
+                return errors.get(index);
+            } else {
+                return "No error found";
+            }
+        }
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof String) {
+            return 0;
+        }
+        if (child instanceof CheckingError)
+            return mgui.getCheckingErrors().indexOf(child);
+        return -1;
+    }
 
 }

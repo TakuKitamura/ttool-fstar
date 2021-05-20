@@ -45,6 +45,6 @@ package myutil;
  * @author Ludovic APVRILLE
  */
 public interface DraggableTabbedPaneCallbackInterface {
-  public void hasBeenDragged(int initialPosition, int destinationPosition);
+    public void hasBeenDragged(int initialPosition, int destinationPosition);
 
 }

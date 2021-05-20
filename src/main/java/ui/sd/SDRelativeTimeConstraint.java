@@ -53,43 +53,43 @@ import java.awt.*;
  */
 public class SDRelativeTimeConstraint extends TGCWithoutInternalComponent implements SwallowedTGComponent {
 
-  public SDRelativeTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SDRelativeTimeConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 40;
-    height = 15;
+        width = 40;
+        height = 15;
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new TGConnectingPointTimeConstraintSD(this, 10, 0, true, true);
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TGConnectingPointTimeConstraintSD(this, 10, 0, true, true);
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "Line of relative time constraint";
-    value = "rtc";
+        name = "Line of relative time constraint";
+        value = "rtc";
 
-    myImageIcon = IconManager.imgic508;
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.drawLine(x, y, x + width, y);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y - height / 2, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic508;
     }
 
-    return null;
-  }
+    public void internalDrawing(Graphics g) {
+        g.drawLine(x, y, x + width, y);
+    }
 
-  public int getType() {
-    return TGComponentManager.SD_RELATIVE_TIME_CONSTRAINT;
-  }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y - height / 2, width, height)) {
+            return this;
+        }
+
+        return null;
+    }
+
+    public int getType() {
+        return TGComponentManager.SD_RELATIVE_TIME_CONSTRAINT;
+    }
 }

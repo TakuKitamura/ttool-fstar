@@ -48,50 +48,50 @@ import ui.MainGUI;
  */
 public class SyntaxAnalysisTree implements GenericTree {
 
-  private MainGUI mgui;
-  private String name = "Syntax analysis";
-  private SyntaxAnalysisErrorTree errort;
-  private SyntaxAnalysisWarningTree warningt;
+    private MainGUI mgui;
+    private String name = "Syntax analysis";
+    private SyntaxAnalysisErrorTree errort;
+    private SyntaxAnalysisWarningTree warningt;
 
-  public SyntaxAnalysisTree(MainGUI _mgui) {
-    mgui = _mgui;
-    errort = new SyntaxAnalysisErrorTree(mgui);
-    warningt = new SyntaxAnalysisWarningTree(mgui);
-  }
+    public SyntaxAnalysisTree(MainGUI _mgui) {
+        mgui = _mgui;
+        errort = new SyntaxAnalysisErrorTree(mgui);
+        warningt = new SyntaxAnalysisWarningTree(mgui);
+    }
 
-  // TREE MANAGEMENT
-  public String toString() {
-    return name;
-  }
+    // TREE MANAGEMENT
+    public String toString() {
+        return name;
+    }
 
-  public SyntaxAnalysisErrorTree getSyntaxAnalysisErrorTree() {
-    return errort;
-  }
-
-  public SyntaxAnalysisWarningTree getSyntaxAnalysisWarningTree() {
-    return warningt;
-  }
-
-  public int getChildCount() {
-    return 2;
-  }
-
-  public Object getChild(int index) {
-    switch (index) {
-      case 0:
-        return warningt;
-      case 1:
+    public SyntaxAnalysisErrorTree getSyntaxAnalysisErrorTree() {
         return errort;
     }
-    return null;
-  }
 
-  public int getIndexOfChild(Object child) {
-    if (child instanceof SyntaxAnalysisWarningTree) {
-      return 0;
-    } else if (child instanceof SyntaxAnalysisErrorTree) {
-      return 1;
+    public SyntaxAnalysisWarningTree getSyntaxAnalysisWarningTree() {
+        return warningt;
     }
-    return -1;
-  }
+
+    public int getChildCount() {
+        return 2;
+    }
+
+    public Object getChild(int index) {
+        switch (index) {
+            case 0:
+                return warningt;
+            case 1:
+                return errort;
+        }
+        return null;
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof SyntaxAnalysisWarningTree) {
+            return 0;
+        } else if (child instanceof SyntaxAnalysisErrorTree) {
+            return 1;
+        }
+        return -1;
+    }
 }

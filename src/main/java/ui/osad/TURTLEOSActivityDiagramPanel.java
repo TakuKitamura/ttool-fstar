@@ -49,63 +49,63 @@ import ui.*;
  */
 public class TURTLEOSActivityDiagramPanel extends TDiagramPanel implements ActivityDiagramPanelInterface {
 
-  public TURTLEOSActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    // addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
+    public TURTLEOSActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        // addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
+    }
 
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return false;
-  }
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return false;
+    }
 
-  public boolean actionOnAdd(TGComponent tgc) {
-    return false;
-  }
+    public boolean actionOnAdd(TGComponent tgc) {
+        return false;
+    }
 
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    return false;
-  }
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        return false;
+    }
 
-  public boolean actionOnRemove(TGComponent tgc) {
-    return false;
-  }
+    public boolean actionOnRemove(TGComponent tgc) {
+        return false;
+    }
 
-  public String getXMLHead() {
-    return "<TURTLEOSActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
-  }
+    public String getXMLHead() {
+        return "<TURTLEOSActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+    }
 
-  public String getXMLTail() {
-    return "</TURTLEOSActivityDiagramPanel>";
-  }
+    public String getXMLTail() {
+        return "</TURTLEOSActivityDiagramPanel>";
+    }
 
-  public String getXMLSelectedHead() {
-    return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
-        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
+    public String getXMLSelectedHead() {
+        return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+                + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
 
-  public String getXMLSelectedTail() {
-    return "</TURTLEOSActivityDiagramPanelCopy>";
-  }
+    public String getXMLSelectedTail() {
+        return "</TURTLEOSActivityDiagramPanelCopy>";
+    }
 
-  public String getXMLCloneHead() {
-    return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\""
-        + 0 + "\" heightSel=\"" + 0 + "\" >";
-  }
+    public String getXMLCloneHead() {
+        return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+                + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+    }
 
-  public String getXMLCloneTail() {
-    return "</TURTLEOSActivityDiagramPanelCopy>";
-  }
+    public String getXMLCloneTail() {
+        return "</TURTLEOSActivityDiagramPanelCopy>";
+    }
 
-  public void makeGraphicalOptimizations() {
-    // Segments of connector that mask components
+    public void makeGraphicalOptimizations() {
+        // Segments of connector that mask components
 
-    // Components over others
+        // Components over others
 
-    // Position correctly guards of choice
-  }
+        // Position correctly guards of choice
+    }
 
 }

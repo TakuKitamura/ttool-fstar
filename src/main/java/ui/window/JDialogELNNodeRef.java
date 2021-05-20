@@ -58,110 +58,110 @@ import javax.swing.*;
 
 public class JDialogELNNodeRef extends JDialog implements ActionListener {
 
-  /** Access to ActionPerformed **/
-  private JTextField nameTextField;
-
-  /** Parameters **/
-  private ELNNodeRef gnd;
-
-  /* Constructor **/
-  public JDialogELNNodeRef(ELNNodeRef _gnd) {
-    /** Set JDialog **/
-    setTitle("Setting the reference node");
-    setLocationRelativeTo(null);
-    setVisible(true);
-    setAlwaysOnTop(true);
-    setResizable(false);
+    /** Access to ActionPerformed **/
+    private JTextField nameTextField;
 
     /** Parameters **/
-    gnd = _gnd;
+    private ELNNodeRef gnd;
 
-    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-    getRootPane().getActionMap().put("close", new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        dispose();
-      }
-    });
+    /* Constructor **/
+    public JDialogELNNodeRef(ELNNodeRef _gnd) {
+        /** Set JDialog **/
+        setTitle("Setting the reference node");
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setAlwaysOnTop(true);
+        setResizable(false);
 
-    dialog();
-  }
+        /** Parameters **/
+        gnd = _gnd;
 
-  public void dialog() {
-    /** JPanel **/
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    this.add(mainPanel);
-
-    JPanel attributesMainPanel = new JPanel(new GridLayout());
-    mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
-
-    // Left Side
-    Box box = Box.createVerticalBox();
-    box.setBorder(BorderFactory.createTitledBorder("Setting reference node attributes"));
-
-    GridBagLayout gridBag = new GridBagLayout();
-    GridBagConstraints constraints = new GridBagConstraints();
-    JPanel boxPanel = new JPanel();
-    boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-    boxPanel.setLayout(gridBag);
-
-    JLabel labelName = new JLabel("nm : ");
-    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(labelName, constraints);
-    boxPanel.add(labelName);
-
-    nameTextField = new JTextField(gnd.getValue().toString(), 10); // name not empty
-    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(nameTextField, constraints);
-    boxPanel.add(nameTextField);
-
-    box.add(boxPanel); // add border to box
-    attributesMainPanel.add(box); // add grid to grid
-
-    // Down Side
-    JPanel downPanel = new JPanel(new FlowLayout());
-
-    JButton saveCloseButton = new JButton("Save and close");
-    saveCloseButton.setIcon(IconManager.imgic25);
-    saveCloseButton.setActionCommand("Save_Close");
-    saveCloseButton.addActionListener(this);
-    saveCloseButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(saveCloseButton);
-
-    JButton cancelButton = new JButton("Cancel");
-    cancelButton.setIcon(IconManager.imgic27);
-    cancelButton.setActionCommand("Cancel");
-    cancelButton.addActionListener(this);
-    cancelButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(cancelButton);
-
-    mainPanel.add(downPanel, BorderLayout.CENTER);
-    pack();
-    this.getRootPane().setDefaultButton(saveCloseButton);
-  }
-
-  public void actionPerformed(ActionEvent e) {
-    if ("Save_Close".equals(e.getActionCommand())) {
-      gnd.setValue(new String(nameTextField.getText()));
-
-      for (TGComponent tgc : gnd.getTDiagramPanel().getComponentList()) {
-        if (tgc instanceof ELNModule) {
-          if (gnd.getFather() != null) {
-            if (gnd.getFather().equals(tgc)) {
-              for (ELNNodeRef t : ((ELNModule) tgc).getAllComponentNodeRef()) {
-                t.setValue(gnd.getValue());
-              }
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
             }
-          }
+        });
+
+        dialog();
+    }
+
+    public void dialog() {
+        /** JPanel **/
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        this.add(mainPanel);
+
+        JPanel attributesMainPanel = new JPanel(new GridLayout());
+        mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
+
+        // Left Side
+        Box box = Box.createVerticalBox();
+        box.setBorder(BorderFactory.createTitledBorder("Setting reference node attributes"));
+
+        GridBagLayout gridBag = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        JPanel boxPanel = new JPanel();
+        boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+        boxPanel.setLayout(gridBag);
+
+        JLabel labelName = new JLabel("nm : ");
+        constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(labelName, constraints);
+        boxPanel.add(labelName);
+
+        nameTextField = new JTextField(gnd.getValue().toString(), 10); // name not empty
+        constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(nameTextField, constraints);
+        boxPanel.add(nameTextField);
+
+        box.add(boxPanel); // add border to box
+        attributesMainPanel.add(box); // add grid to grid
+
+        // Down Side
+        JPanel downPanel = new JPanel(new FlowLayout());
+
+        JButton saveCloseButton = new JButton("Save and close");
+        saveCloseButton.setIcon(IconManager.imgic25);
+        saveCloseButton.setActionCommand("Save_Close");
+        saveCloseButton.addActionListener(this);
+        saveCloseButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(saveCloseButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setIcon(IconManager.imgic27);
+        cancelButton.setActionCommand("Cancel");
+        cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(cancelButton);
+
+        mainPanel.add(downPanel, BorderLayout.CENTER);
+        pack();
+        this.getRootPane().setDefaultButton(saveCloseButton);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if ("Save_Close".equals(e.getActionCommand())) {
+            gnd.setValue(new String(nameTextField.getText()));
+
+            for (TGComponent tgc : gnd.getTDiagramPanel().getComponentList()) {
+                if (tgc instanceof ELNModule) {
+                    if (gnd.getFather() != null) {
+                        if (gnd.getFather().equals(tgc)) {
+                            for (ELNNodeRef t : ((ELNModule) tgc).getAllComponentNodeRef()) {
+                                t.setValue(gnd.getValue());
+                            }
+                        }
+                    }
+                }
+            }
+
+            this.dispose();
         }
-      }
 
-      this.dispose();
+        if ("Cancel".equals(e.getActionCommand())) {
+            this.dispose();
+        }
     }
-
-    if ("Cancel".equals(e.getActionCommand())) {
-      this.dispose();
-    }
-  }
 }

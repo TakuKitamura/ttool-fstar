@@ -48,113 +48,113 @@ import translator.*;
  * @author Ludovic APVRILLE
  */
 public class TClassLinkNode extends TClass {
-  private static int id = 0;
+    private static int id = 0;
 
-  private String delay = "10";
+    private String delay = "10";
 
-  private ADParallel mainpar;
-  private int idGate = 0;
+    private ADParallel mainpar;
+    private int idGate = 0;
 
-  public TClassLinkNode(String name) {
-    super(name, true);
-  }
-
-  public static String generateName() {
-    id++;
-    return "Link__" + (id - 1);
-  }
-
-  public int getIdGate() {
-    int ret = idGate;
-    idGate++;
-    return (idGate - 1);
-  }
-
-  public static void reinitName() {
-    id = 0;
-  }
-
-  public void prepareTClass() {
-    ActivityDiagram ad = new ActivityDiagram();
-    mainpar = new ADParallel();
-    ad.getStartState().addNext(mainpar);
-    ad.add(mainpar);
-    setActivityDiagram(ad);
-  }
-
-  /*
-   * public Gate addInputGate(String name) {
-   * 
-   * }
-   * 
-   * public Gate addOutputGate(String name) {
-   * 
-   * }
-   */
-
-  public void addGateManagement(Gate g1, String call, Gate g2) {
-    addGateManagement(g1, call, g2, delay);
-  }
-
-  public void addGateManagement(Gate g1, String call, Gate g2, String delay) {
-    ActivityDiagram ad = getActivityDiagram();
-    ADJunction adj1 = new ADJunction();
-
-    //
-    ADActionStateWithGate ad1 = new ADActionStateWithGate(g1);
-    ad1.setActionValue(call);
-
-    ADParallel para = new ADParallel();
-
-    ADDelay addelay = new ADDelay();
-    addelay.setValue(delay);
-
-    ADActionStateWithGate ad2 = new ADActionStateWithGate(g2);
-    call = Conversion.replaceAllChar(call, '?', "!");
-    call = Conversion.replaceOp(call, ":nat", "");
-    //
-    ad2.setActionValue(call);
-
-    ADStop adstop = new ADStop();
-
-    mainpar.addNext(adj1);
-    adj1.addNext(ad1);
-    ad1.addNext(para);
-    para.addNext(adj1);
-    para.addNext(addelay);
-    addelay.addNext(ad2);
-    ad2.addNext(adstop);
-
-    ad.add(adj1);
-    ad.add(ad1);
-    ad.add(para);
-    ad.add(addelay);
-    ad.add(ad2);
-    ad.add(adstop);
-  }
-
-  public void finishTClass() {
-    // Parallel with more than 5 nexts -> manage it !
-
-  }
-
-  public int getNbNext() {
-    return mainpar.getNbNext();
-  }
-
-  public void makeBoolParameters(int nb) {
-    for (int i = 0; i < nb; i++) {
-      addNewParamIfApplicable("b" + i, Param.BOOL, "false");
+    public TClassLinkNode(String name) {
+        super(name, true);
     }
-  }
 
-  public void makeNatParameters(int nb) {
-    for (int i = 0; i < nb; i++) {
-      addNewParamIfApplicable("x" + i, Param.NAT, "0");
+    public static String generateName() {
+        id++;
+        return "Link__" + (id - 1);
     }
-  }
 
-  public void setDelay(String _delay) {
-    delay = _delay;
-  }
+    public int getIdGate() {
+        int ret = idGate;
+        idGate++;
+        return (idGate - 1);
+    }
+
+    public static void reinitName() {
+        id = 0;
+    }
+
+    public void prepareTClass() {
+        ActivityDiagram ad = new ActivityDiagram();
+        mainpar = new ADParallel();
+        ad.getStartState().addNext(mainpar);
+        ad.add(mainpar);
+        setActivityDiagram(ad);
+    }
+
+    /*
+     * public Gate addInputGate(String name) {
+     * 
+     * }
+     * 
+     * public Gate addOutputGate(String name) {
+     * 
+     * }
+     */
+
+    public void addGateManagement(Gate g1, String call, Gate g2) {
+        addGateManagement(g1, call, g2, delay);
+    }
+
+    public void addGateManagement(Gate g1, String call, Gate g2, String delay) {
+        ActivityDiagram ad = getActivityDiagram();
+        ADJunction adj1 = new ADJunction();
+
+        //
+        ADActionStateWithGate ad1 = new ADActionStateWithGate(g1);
+        ad1.setActionValue(call);
+
+        ADParallel para = new ADParallel();
+
+        ADDelay addelay = new ADDelay();
+        addelay.setValue(delay);
+
+        ADActionStateWithGate ad2 = new ADActionStateWithGate(g2);
+        call = Conversion.replaceAllChar(call, '?', "!");
+        call = Conversion.replaceOp(call, ":nat", "");
+        //
+        ad2.setActionValue(call);
+
+        ADStop adstop = new ADStop();
+
+        mainpar.addNext(adj1);
+        adj1.addNext(ad1);
+        ad1.addNext(para);
+        para.addNext(adj1);
+        para.addNext(addelay);
+        addelay.addNext(ad2);
+        ad2.addNext(adstop);
+
+        ad.add(adj1);
+        ad.add(ad1);
+        ad.add(para);
+        ad.add(addelay);
+        ad.add(ad2);
+        ad.add(adstop);
+    }
+
+    public void finishTClass() {
+        // Parallel with more than 5 nexts -> manage it !
+
+    }
+
+    public int getNbNext() {
+        return mainpar.getNbNext();
+    }
+
+    public void makeBoolParameters(int nb) {
+        for (int i = 0; i < nb; i++) {
+            addNewParamIfApplicable("b" + i, Param.BOOL, "false");
+        }
+    }
+
+    public void makeNatParameters(int nb) {
+        for (int i = 0; i < nb; i++) {
+            addNewParamIfApplicable("x" + i, Param.NAT, "0");
+        }
+    }
+
+    public void setDelay(String _delay) {
+        delay = _delay;
+    }
 }

@@ -48,68 +48,68 @@ import java.io.InputStreamReader;
  * @author Ludovic APVRILLE
  */
 public class ProcessThread extends Thread {
-  private String cmd;
-  private MasterProcessInterface mpi;
-  BufferedReader proc_in, proc_err;
-  private Process proc;
-  private boolean isStarted = false;
-  private boolean go = true;
-  private ErrorThread et;
+    private String cmd;
+    private MasterProcessInterface mpi;
+    BufferedReader proc_in, proc_err;
+    private Process proc;
+    private boolean isStarted = false;
+    private boolean go = true;
+    private ErrorThread et;
 
-  public ProcessThread(String _cmd, MasterProcessInterface _mpi) {
-    cmd = _cmd;
-    mpi = _mpi;
-  }
-
-  public boolean isStarted() {
-    return isStarted;
-  }
-
-  public void stopProcess() {
-    go = false;
-    proc.destroy();
-    proc_in = null;
-    if (et != null) {
-      et.stopProcess();
-    }
-  }
-
-  public void run() {
-    isStarted = true;
-    System.out.println("Starting process for command " + cmd);
-    proc = null;
-    // BufferedReader in = null;
-    String str = null;
-    // PrintStream out = null;
-
-    try {
-      System.out.println("Going to start command " + cmd);
-
-      proc = Runtime.getRuntime().exec(cmd);
-
-      proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-      proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-
-      et = new ErrorThread(proc_err, mpi);
-      et.start();
-
-      while (((str = proc_in.readLine()) != null) && (go == true) && (mpi.hasToContinue())) {
-        System.out.println("Out " + str);
-        mpi.appendOut(str + "\n");
-      }
-
-      et.stopProcess();
-
-    } catch (Exception e) {
-      System.out.println("Exception [" + e.getMessage() + "] occurred when executing " + cmd);
-    }
-    System.out.println("Ending command " + cmd);
-
-    if (proc != null) {
-      proc.destroy();
+    public ProcessThread(String _cmd, MasterProcessInterface _mpi) {
+        cmd = _cmd;
+        mpi = _mpi;
     }
 
-    isStarted = false;
+    public boolean isStarted() {
+        return isStarted;
+    }
 
-  }
+    public void stopProcess() {
+        go = false;
+        proc.destroy();
+        proc_in = null;
+        if (et != null) {
+            et.stopProcess();
+        }
+    }
+
+    public void run() {
+        isStarted = true;
+        System.out.println("Starting process for command " + cmd);
+        proc = null;
+        // BufferedReader in = null;
+        String str = null;
+        // PrintStream out = null;
+
+        try {
+            System.out.println("Going to start command " + cmd);
+
+            proc = Runtime.getRuntime().exec(cmd);
+
+            proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+            et = new ErrorThread(proc_err, mpi);
+            et.start();
+
+            while (((str = proc_in.readLine()) != null) && (go == true) && (mpi.hasToContinue())) {
+                System.out.println("Out " + str);
+                mpi.appendOut(str + "\n");
+            }
+
+            et.stopProcess();
+
+        } catch (Exception e) {
+            System.out.println("Exception [" + e.getMessage() + "] occurred when executing " + cmd);
+        }
+        System.out.println("Ending command " + cmd);
+
+        if (proc != null) {
+            proc.destroy();
+        }
+
+        isStarted = false;
+
+    }
 }

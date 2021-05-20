@@ -49,44 +49,44 @@ import java.util.Objects;
  * @author Ludovic APVRILLE
  */
 public abstract class HwNode extends DIPLOElement {
-  public static final int DEFAULT_CLOCK_RATIO = 1;
+    public static final int DEFAULT_CLOCK_RATIO = 1;
 
-  protected int maximumNbOfMappedElement;
-  protected String name;
-  protected ArchUnitMEC mec;
+    protected int maximumNbOfMappedElement;
+    protected String name;
+    protected ArchUnitMEC mec;
 
-  public int clockRatio = DEFAULT_CLOCK_RATIO; /* 2 means 1 cycle out of 2, etc. */
+    public int clockRatio = DEFAULT_CLOCK_RATIO; /* 2 means 1 cycle out of 2, etc. */
 
-  public HwNode(String _name) {
-    name = _name;
-  }
+    public HwNode(String _name) {
+        name = _name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void addMECToHwExecutionNode(ArchUnitMEC _mec) {
-    mec = _mec;
-  }
+    public void addMECToHwExecutionNode(ArchUnitMEC _mec) {
+        mec = _mec;
+    }
 
-  public ArchUnitMEC getArchUnitMEC() {
-    return mec;
-  }
+    public ArchUnitMEC getArchUnitMEC() {
+        return mec;
+    }
 
-  public abstract String toXML();
+    public abstract String toXML();
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof HwNode))
-      return false;
-    HwNode hwNode = (HwNode) o;
-    if (mec != null && (!mec.equalSpec(hwNode.getArchUnitMEC())))
-      return false;
-    return maximumNbOfMappedElement == hwNode.maximumNbOfMappedElement && clockRatio == hwNode.clockRatio
-        && name.equals(hwNode.getName());
-  }
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwNode))
+            return false;
+        HwNode hwNode = (HwNode) o;
+        if (mec != null && (!mec.equalSpec(hwNode.getArchUnitMEC())))
+            return false;
+        return maximumNbOfMappedElement == hwNode.maximumNbOfMappedElement && clockRatio == hwNode.clockRatio
+                && name.equals(hwNode.getName());
+    }
 
-  public void setName(String _name) {
-    name = _name;
-  }
+    public void setName(String _name) {
+        name = _name;
+    }
 
 }

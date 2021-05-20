@@ -49,17 +49,17 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointGroup {
-  protected boolean free;
+    protected boolean free;
 
-  public TGConnectingPointGroup(boolean b) {
-    free = b;
-  }
+    public TGConnectingPointGroup(boolean b) {
+        free = b;
+    }
 
-  public boolean isFree() {
-    return free;
-  }
+    public boolean isFree() {
+        return free;
+    }
 
-  public void setFree(boolean b) {
-    free = b;
-  }
+    public void setFree(boolean b) {
+        free = b;
+    }
 }

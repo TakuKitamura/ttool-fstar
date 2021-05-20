@@ -49,161 +49,161 @@ import java.util.List;
  */
 public class AvatarMethod extends AvatarElement {
 
-  protected boolean implementationProvided;
+    protected boolean implementationProvided;
 
-  protected List<AvatarAttribute> parameters;
-  protected List<AvatarAttribute> returnParameters;
+    protected List<AvatarAttribute> parameters;
+    protected List<AvatarAttribute> returnParameters;
 
-  public AvatarMethod(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    parameters = new LinkedList<AvatarAttribute>();
-    returnParameters = new LinkedList<AvatarAttribute>();
-  }
+    public AvatarMethod(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        parameters = new LinkedList<AvatarAttribute>();
+        returnParameters = new LinkedList<AvatarAttribute>();
+    }
 
-  public void setImplementationProvided(boolean _imp) {
-    implementationProvided = _imp;
-  }
+    public void setImplementationProvided(boolean _imp) {
+        implementationProvided = _imp;
+    }
 
-  public boolean isImplementationProvided() {
-    return implementationProvided;
-  }
+    public boolean isImplementationProvided() {
+        return implementationProvided;
+    }
 
-  public void addParameter(AvatarAttribute _attribute) {
-    parameters.add(_attribute);
-  }
+    public void addParameter(AvatarAttribute _attribute) {
+        parameters.add(_attribute);
+    }
 
-  public void addReturnParameter(AvatarAttribute _attribute) {
-    returnParameters.add(_attribute);
-  }
+    public void addReturnParameter(AvatarAttribute _attribute) {
+        returnParameters.add(_attribute);
+    }
 
-  public List<AvatarAttribute> getListOfAttributes() {
-    return parameters;
-  }
+    public List<AvatarAttribute> getListOfAttributes() {
+        return parameters;
+    }
 
-  public List<AvatarAttribute> getListOfReturnAttributes() {
-    return returnParameters;
-  }
+    public List<AvatarAttribute> getListOfReturnAttributes() {
+        return returnParameters;
+    }
 
-  public static boolean isAValidMethodName(String _method) {
-    return AvatarTerm.isValidName(_method);
-  }
+    public static boolean isAValidMethodName(String _method) {
+        return AvatarTerm.isValidName(_method);
+    }
 
-  @Override
-  public String toString() {
-    int cpt = 0;
-    String ret = "";
+    @Override
+    public String toString() {
+        int cpt = 0;
+        String ret = "";
 
-    if (returnParameters.size() != 0) {
-      if (returnParameters.size() == 1) {
-        ret += returnParameters.get(0).getType().getStringType() + " ";
-      } else {
-        int index = 0;
-        for (AvatarAttribute aa : returnParameters) {
-          if (index == 0) {
-            index++;
-          } else {
-            ret = ret + ",";
-          }
-          ret += aa.getType().getStringType();
+        if (returnParameters.size() != 0) {
+            if (returnParameters.size() == 1) {
+                ret += returnParameters.get(0).getType().getStringType() + " ";
+            } else {
+                int index = 0;
+                for (AvatarAttribute aa : returnParameters) {
+                    if (index == 0) {
+                        index++;
+                    } else {
+                        ret = ret + ",";
+                    }
+                    ret += aa.getType().getStringType();
+                }
+                ret = "(" + ret + ") ";
+            }
+
         }
-        ret = "(" + ret + ") ";
-      }
 
-    }
-
-    ret += getName() + "(";
-    for (AvatarAttribute attribute : parameters) {
-      if (cpt != 0) {
-        ret += ",";
-      }
-      cpt++;
-      ret += attribute.toString();
-    }
-
-    ret += ")";
-    return ret;
-  }
-
-  public String toBasicString() {
-    int cpt = 0;
-    String ret = "";
-
-    if (returnParameters.size() != 0) {
-      if (returnParameters.size() == 1) {
-        ret += returnParameters.get(0).getType().getStringType() + " ";
-      } else {
-        int index = 0;
-        for (AvatarAttribute aa : returnParameters) {
-          if (index == 0) {
-            index++;
-          } else {
-            ret = ret + ",";
-          }
-          ret += aa.getType().getStringType();
+        ret += getName() + "(";
+        for (AvatarAttribute attribute : parameters) {
+            if (cpt != 0) {
+                ret += ",";
+            }
+            cpt++;
+            ret += attribute.toString();
         }
-        ret = "(" + ret + ") ";
-      }
 
+        ret += ")";
+        return ret;
     }
 
-    ret += getName() + "(";
+    public String toBasicString() {
+        int cpt = 0;
+        String ret = "";
 
-    for (AvatarAttribute attribute : parameters) {
-      if (cpt != 0) {
-        ret += ",";
-      }
-      cpt++;
-      ret += attribute.toBasicString();
+        if (returnParameters.size() != 0) {
+            if (returnParameters.size() == 1) {
+                ret += returnParameters.get(0).getType().getStringType() + " ";
+            } else {
+                int index = 0;
+                for (AvatarAttribute aa : returnParameters) {
+                    if (index == 0) {
+                        index++;
+                    } else {
+                        ret = ret + ",";
+                    }
+                    ret += aa.getType().getStringType();
+                }
+                ret = "(" + ret + ") ";
+            }
+
+        }
+
+        ret += getName() + "(";
+
+        for (AvatarAttribute attribute : parameters) {
+            if (cpt != 0) {
+                ret += ",";
+            }
+            cpt++;
+            ret += attribute.toBasicString();
+        }
+
+        ret += ")";
+        return ret;
     }
 
-    ret += ")";
-    return ret;
-  }
+    public boolean isCompatibleWith(AvatarMethod _am) {
+        if (parameters.size() != _am.getListOfAttributes().size()) {
+            return false;
+        }
 
-  public boolean isCompatibleWith(AvatarMethod _am) {
-    if (parameters.size() != _am.getListOfAttributes().size()) {
-      return false;
+        AvatarAttribute _ama;
+        int cpt = 0;
+        for (AvatarAttribute aa : parameters) {
+            _ama = _am.getListOfAttributes().get(cpt);
+            if (_ama.getType() != aa.getType()) {
+                return false;
+            }
+            cpt++;
+        }
+
+        if (returnParameters.size() != _am.getListOfReturnAttributes().size()) {
+            return false;
+        }
+
+        cpt = 0;
+        for (AvatarAttribute aa : returnParameters) {
+            _ama = _am.getListOfReturnAttributes().get(cpt);
+            if (_ama.getType() != aa.getType()) {
+                return false;
+            }
+            cpt++;
+        }
+
+        return true;
     }
 
-    AvatarAttribute _ama;
-    int cpt = 0;
-    for (AvatarAttribute aa : parameters) {
-      _ama = _am.getListOfAttributes().get(cpt);
-      if (_ama.getType() != aa.getType()) {
-        return false;
-      }
-      cpt++;
+    protected void setAdvancedClone(AvatarMethod am, AvatarStateMachineOwner _block) {
+        am.setImplementationProvided(isImplementationProvided());
+        for (AvatarAttribute param : parameters) {
+            am.addParameter(param.advancedClone(_block));
+        }
+        for (AvatarAttribute ret : returnParameters) {
+            am.addReturnParameter(ret.advancedClone(_block));
+        }
     }
 
-    if (returnParameters.size() != _am.getListOfReturnAttributes().size()) {
-      return false;
+    public AvatarMethod advancedClone(AvatarStateMachineOwner _block) {
+        AvatarMethod am = new AvatarMethod(getName(), getReferenceObject());
+        setAdvancedClone(am, _block);
+        return am;
     }
-
-    cpt = 0;
-    for (AvatarAttribute aa : returnParameters) {
-      _ama = _am.getListOfReturnAttributes().get(cpt);
-      if (_ama.getType() != aa.getType()) {
-        return false;
-      }
-      cpt++;
-    }
-
-    return true;
-  }
-
-  protected void setAdvancedClone(AvatarMethod am, AvatarStateMachineOwner _block) {
-    am.setImplementationProvided(isImplementationProvided());
-    for (AvatarAttribute param : parameters) {
-      am.addParameter(param.advancedClone(_block));
-    }
-    for (AvatarAttribute ret : returnParameters) {
-      am.addReturnParameter(ret.advancedClone(_block));
-    }
-  }
-
-  public AvatarMethod advancedClone(AvatarStateMachineOwner _block) {
-    AvatarMethod am = new AvatarMethod(getName(), getReferenceObject());
-    setAdvancedClone(am, _block);
-    return am;
-  }
 }

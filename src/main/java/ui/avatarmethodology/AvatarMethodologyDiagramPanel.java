@@ -49,89 +49,89 @@ import ui.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-  // public Vector validated, ignored;
+    // public Vector validated, ignored;
 
-  public AvatarMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
+    public AvatarMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
+    }
 
-  @Override
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return true;
-  }
+    @Override
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return true;
+    }
 
-  @Override
-  public boolean actionOnAdd(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.addTClass(tgcc.getClassName()); return true; }
-     */
-    return false;
-  }
+    @Override
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.addTClass(tgcc.getClassName()); return true; }
+         */
+        return false;
+    }
 
-  @Override
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
+    @Override
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
 
-  @Override
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
+    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
 
-  @Override
-  public String getXMLHead() {
-    return "<AvatarMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-  }
+    @Override
+    public String getXMLHead() {
+        return "<AvatarMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+    }
 
-  @Override
-  public String getXMLTail() {
-    return "</AvatarMethodologyDiagramPanel>";
-  }
+    @Override
+    public String getXMLTail() {
+        return "</AvatarMethodologyDiagramPanel>";
+    }
 
-  @Override
-  public String getXMLSelectedHead() {
-    return "<AvatarMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
-        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
+    @Override
+    public String getXMLSelectedHead() {
+        return "<AvatarMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+                + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
 
-  @Override
-  public String getXMLSelectedTail() {
-    return "</AvatarMethodologyDiagramPanelCopy>";
-  }
+    @Override
+    public String getXMLSelectedTail() {
+        return "</AvatarMethodologyDiagramPanelCopy>";
+    }
 
-  @Override
-  public String getXMLCloneHead() {
-    return "<AvatarMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\""
-        + 0 + "\" heightSel=\"" + 0 + "\" >";
-  }
+    @Override
+    public String getXMLCloneHead() {
+        return "<AvatarMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+                + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+    }
 
-  @Override
-  public String getXMLCloneTail() {
-    return "</AvatarMethodologyDiagramPanelCopy>";
-  }
+    @Override
+    public String getXMLCloneTail() {
+        return "</AvatarMethodologyDiagramPanelCopy>";
+    }
 
-  public void makePostLoadingProcessing() throws MalformedModelingException {
+    public void makePostLoadingProcessing() throws MalformedModelingException {
 
-  }
+    }
 
-  @Override
-  public void enhance() {
-    autoAdjust();
-  }
+    @Override
+    public void enhance() {
+        autoAdjust();
+    }
 
-  public void loadExtraParameters(Element elt) {
-  }
+    public void loadExtraParameters(Element elt) {
+    }
 }

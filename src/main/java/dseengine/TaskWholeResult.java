@@ -48,81 +48,81 @@ package dseengine;
  * @author Ludovic APVRILLE
  */
 public class TaskWholeResult {
-  public int id;
-  public String name;
+    public int id;
+    public String name;
 
-  public double minNbOfExecutedCycles;
-  public double maxNbOfExecutedCycles;
-  public double averageNbOfExecutedCycles;
-  public int nbOfResults;
+    public double minNbOfExecutedCycles;
+    public double maxNbOfExecutedCycles;
+    public double averageNbOfExecutedCycles;
+    public int nbOfResults;
 
-  public int nbOfRunningStates;
-  public int nbOfRunnableStates;
-  public int nbOfSuspendedStates;
-  public int nbOfTerminatedStates;
+    public int nbOfRunningStates;
+    public int nbOfRunnableStates;
+    public int nbOfSuspendedStates;
+    public int nbOfTerminatedStates;
 
-  public TaskWholeResult(TaskResult taskres) {
+    public TaskWholeResult(TaskResult taskres) {
 
-    id = taskres.id;
-    name = taskres.name;
-    minNbOfExecutedCycles = taskres.nbOfExecutedCycles;
-    maxNbOfExecutedCycles = taskres.nbOfExecutedCycles;
-    averageNbOfExecutedCycles = taskres.nbOfExecutedCycles;
-    nbOfResults = 1;
+        id = taskres.id;
+        name = taskres.name;
+        minNbOfExecutedCycles = taskres.nbOfExecutedCycles;
+        maxNbOfExecutedCycles = taskres.nbOfExecutedCycles;
+        averageNbOfExecutedCycles = taskres.nbOfExecutedCycles;
+        nbOfResults = 1;
 
-    if (taskres.state.toLowerCase().compareTo("runnable") == 0) {
-      nbOfRunnableStates = 1;
-    } else {
-      nbOfRunnableStates = 0;
+        if (taskres.state.toLowerCase().compareTo("runnable") == 0) {
+            nbOfRunnableStates = 1;
+        } else {
+            nbOfRunnableStates = 0;
+        }
+
+        if (taskres.state.toLowerCase().compareTo("running") == 0) {
+            nbOfRunningStates = 1;
+        } else {
+            nbOfRunningStates = 0;
+        }
+
+        if (taskres.state.toLowerCase().compareTo("suspended") == 0) {
+            nbOfSuspendedStates = 1;
+        } else {
+            nbOfSuspendedStates = 0;
+        }
+
+        if (taskres.state.toLowerCase().compareTo("terminated") == 0) {
+            nbOfTerminatedStates = 1;
+        } else {
+            nbOfTerminatedStates = 0;
+        }
     }
 
-    if (taskres.state.toLowerCase().compareTo("running") == 0) {
-      nbOfRunningStates = 1;
-    } else {
-      nbOfRunningStates = 0;
+    public void updateResults(TaskResult restask) {
+        minNbOfExecutedCycles = Math.min(minNbOfExecutedCycles, restask.nbOfExecutedCycles);
+        maxNbOfExecutedCycles = Math.max(maxNbOfExecutedCycles, restask.nbOfExecutedCycles);
+        averageNbOfExecutedCycles = ((averageNbOfExecutedCycles * nbOfResults) + restask.nbOfExecutedCycles)
+                / (nbOfResults + 1);
+
+        if (restask.state.toLowerCase().compareTo("running") == 0) {
+            nbOfRunningStates++;
+        }
+        if (restask.state.toLowerCase().compareTo("runnable") == 0) {
+            nbOfRunnableStates++;
+        }
+        if (restask.state.toLowerCase().compareTo("suspended") == 0) {
+            nbOfSuspendedStates++;
+        }
+        if (restask.state.toLowerCase().compareTo("terminated") == 0) {
+            nbOfRunnableStates++;
+        }
+        nbOfResults++;
     }
 
-    if (taskres.state.toLowerCase().compareTo("suspended") == 0) {
-      nbOfSuspendedStates = 1;
-    } else {
-      nbOfSuspendedStates = 0;
-    }
+    public String toStringResult() {
+        StringBuffer sb = new StringBuffer("");
+        sb.append("TASK " + id + " " + name + " " + nbOfResults + " " + minNbOfExecutedCycles + " "
+                + averageNbOfExecutedCycles + " " + maxNbOfExecutedCycles + " " + nbOfRunnableStates + " "
+                + nbOfRunningStates + " " + nbOfSuspendedStates + " " + nbOfTerminatedStates);
 
-    if (taskres.state.toLowerCase().compareTo("terminated") == 0) {
-      nbOfTerminatedStates = 1;
-    } else {
-      nbOfTerminatedStates = 0;
+        return sb.toString();
     }
-  }
-
-  public void updateResults(TaskResult restask) {
-    minNbOfExecutedCycles = Math.min(minNbOfExecutedCycles, restask.nbOfExecutedCycles);
-    maxNbOfExecutedCycles = Math.max(maxNbOfExecutedCycles, restask.nbOfExecutedCycles);
-    averageNbOfExecutedCycles = ((averageNbOfExecutedCycles * nbOfResults) + restask.nbOfExecutedCycles)
-        / (nbOfResults + 1);
-
-    if (restask.state.toLowerCase().compareTo("running") == 0) {
-      nbOfRunningStates++;
-    }
-    if (restask.state.toLowerCase().compareTo("runnable") == 0) {
-      nbOfRunnableStates++;
-    }
-    if (restask.state.toLowerCase().compareTo("suspended") == 0) {
-      nbOfSuspendedStates++;
-    }
-    if (restask.state.toLowerCase().compareTo("terminated") == 0) {
-      nbOfRunnableStates++;
-    }
-    nbOfResults++;
-  }
-
-  public String toStringResult() {
-    StringBuffer sb = new StringBuffer("");
-    sb.append("TASK " + id + " " + name + " " + nbOfResults + " " + minNbOfExecutedCycles + " "
-        + averageNbOfExecutedCycles + " " + maxNbOfExecutedCycles + " " + nbOfRunnableStates + " " + nbOfRunningStates
-        + " " + nbOfSuspendedStates + " " + nbOfTerminatedStates);
-
-    return sb.toString();
-  }
 
 } // Class BusResult

@@ -47,20 +47,20 @@ package elntranslator;
  */
 
 public class ELNTClusterTerminal extends ELNTComponent {
-  private String name;
+    private String name;
 
-  private ELNTCluster cluster;
+    private ELNTCluster cluster;
 
-  public ELNTClusterTerminal(String _name, ELNTCluster _cluster) {
-    name = _name;
-    cluster = _cluster;
-  }
+    public ELNTClusterTerminal(String _name, ELNTCluster _cluster) {
+        name = _name;
+        cluster = _cluster;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public ELNTCluster getCluster() {
-    return cluster;
-  }
+    public ELNTCluster getCluster() {
+        return cluster;
+    }
 }

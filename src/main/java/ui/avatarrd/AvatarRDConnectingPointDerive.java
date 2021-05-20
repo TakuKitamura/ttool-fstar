@@ -51,36 +51,36 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class AvatarRDConnectingPointDerive extends TGConnectingPointWidthHeight {
 
-  public AvatarRDConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h, int _orientation) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-    orientation = _orientation;
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    //
-    if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
-      //
-      return true;
+    public AvatarRDConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h, int _orientation) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+        orientation = _orientation;
     }
 
-    if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
-      //
-      return true;
-    }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        //
+        if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
+            //
+            return true;
+        }
 
-    if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
-      //
-      return true;
-    }
+        if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
+            //
+            return true;
+        }
 
-    if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
-      //
-      return true;
+        if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
+            //
+            return true;
+        }
+
+        if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
+            //
+            return true;
+        }
+        // System.out.pr
+        //
+        return false;
     }
-    // System.out.pr
-    //
-    return false;
-  }
 }

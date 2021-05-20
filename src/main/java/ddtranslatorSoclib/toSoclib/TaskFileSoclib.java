@@ -48,56 +48,56 @@ import ddtranslatorSoclib.toTopCell.TopCellGenerator;
  */
 public class TaskFileSoclib {
 
-  // deleted pthread.h
-  // added mwmr.h
+    // deleted pthread.h
+    // added mwmr.h
 
-  private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-  private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n";
+    private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n";
 
-  private final static String CR = "\n";
+    private final static String CR = "\n";
 
-  private String name;
-  private int cpuId = 0;
+    private String name;
+    private int cpuId = 0;
 
-  private String headerCode;
-  private String mainCode;
+    private String headerCode;
+    private String mainCode;
 
-  public TaskFileSoclib(String _name, int cpuid) {
-    name = _name;
-    headerCode = "";
-    mainCode = "";
-    cpuId = cpuid;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getCPUId() {
-    return cpuId;
-  }
-
-  public String getFullHeaderCode() {
-    String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-    s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER;
-    if (TopCellGenerator.avatardd.getNbAmsCluster() > 0) {
-      s += "#include \"gpio2vci_iface.h\"\n";
+    public TaskFileSoclib(String _name, int cpuid) {
+        name = _name;
+        headerCode = "";
+        mainCode = "";
+        cpuId = cpuid;
     }
 
-    s += CR + headerCode;
-    s += "#endif\n";
-    return s;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getMainCode() {
-    return "#include \"" + name + ".h\"" + CR + CR + mainCode;
-  }
+    public int getCPUId() {
+        return cpuId;
+    }
 
-  public void addToHeaderCode(String _code) {
-    headerCode += _code;
-  }
+    public String getFullHeaderCode() {
+        String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+        s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER;
+        if (TopCellGenerator.avatardd.getNbAmsCluster() > 0) {
+            s += "#include \"gpio2vci_iface.h\"\n";
+        }
 
-  public void addToMainCode(String _code) {
-    mainCode += _code;
-  }
+        s += CR + headerCode;
+        s += "#endif\n";
+        return s;
+    }
+
+    public String getMainCode() {
+        return "#include \"" + name + ".h\"" + CR + CR + mainCode;
+    }
+
+    public void addToHeaderCode(String _code) {
+        headerCode += _code;
+    }
+
+    public void addToMainCode(String _code) {
+        mainCode += _code;
+    }
 }

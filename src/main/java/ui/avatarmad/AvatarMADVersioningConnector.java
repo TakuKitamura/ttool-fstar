@@ -59,159 +59,160 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class AvatarMADVersioningConnector extends TGConnectorWithCommentConnectionPoints {
-  int w, h, w1;
+    int w, h, w1;
 
-  int oldVersion = 1;
-  int newVersion = 2;
+    int oldVersion = 1;
+    int newVersion = 2;
 
-  public AvatarMADVersioningConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    value = "<<versioning>>";
+    public AvatarMADVersioningConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        value = "<<versioning>>";
 
-    editable = true;
+        editable = true;
 
-    myImageIcon = IconManager.imgic1008;
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-
-    // g.drawLine(x1, y1, x2, y2);
-    GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-
-    // Indicate semantics
-
-    Font f = g.getFont();
-    Font old = f;
-    if (f.getSize() != tdp.getFontSize()) {
-      f = f.deriveFont((float) tdp.getFontSize());
-      g.setFont(f);
+        myImageIcon = IconManager.imgic1008;
     }
 
-    w = g.getFontMetrics().stringWidth(value);
-    h = g.getFontMetrics().getHeight();
-    g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
-    String s = "{" + oldVersion + "->" + newVersion + "}";
-    w1 = g.getFontMetrics().stringWidth(s);
-    g.drawString(s, (x1 + x2 - w1) / 2, ((y1 + y2) / 2) + h);
-    g.setFont(old);
-  }
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
 
-  @Override
-  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY()) / 2 - h, w, h)) {
-      return this;
-    }
-    if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w1) / 2, (p1.getY() + p2.getY()) / 2, w1, h)) {
-      return this;
-    }
+        // g.drawLine(x1, y1, x2, y2);
+        GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
 
-    return null;
-  }
+        // Indicate semantics
 
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    JDialogVersioningConnector jdvc = new JDialogVersioningConnector(frame, oldVersion, newVersion);
-    // jdvc.setSize(400, 300);
-    GraphicLib.centerOnParent(jdvc, 400, 300);
-    jdvc.setVisible(true); // blocked until dialog has been closed
-
-    if (jdvc.hasBeenCancelled()) {
-      return false;
-    }
-
-    try {
-      oldVersion = Integer.decode(jdvc.getOldVersion().trim()).intValue();
-    } catch (Exception e) {
-
-    }
-
-    try {
-      newVersion = Integer.decode(jdvc.getNewVersion().trim()).intValue();
-    } catch (Exception e) {
-
-    }
-
-    return true;
-  }
-
-  @Override
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<oldVersion data=\"");
-    sb.append(oldVersion);
-    sb.append("\" />\n");
-    sb.append("<newVersion data=\"");
-    sb.append(newVersion);
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      String s;
-
-      //
-      //
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("oldVersion")) {
-
-                //
-                s = elt.getAttribute("data");
-                if (s.equals("null")) {
-                  oldVersion = 0;
-                } else {
-                  try {
-                    oldVersion = Integer.decode(s).intValue();
-                  } catch (Exception e) {
-                    oldVersion = 0;
-                  }
-                }
-
-              } else if (elt.getTagName().equals("newVersion")) {
-                //
-                s = elt.getAttribute("data");
-                if (s.equals("null")) {
-                  newVersion = 1;
-                } else {
-                  try {
-                    newVersion = Integer.decode(s).intValue();
-                  } catch (Exception e) {
-                    newVersion = 1;
-                  }
-                }
-
-              }
-              //
-            }
-          }
+        Font f = g.getFont();
+        Font old = f;
+        if (f.getSize() != tdp.getFontSize()) {
+            f = f.deriveFont((float) tdp.getFontSize());
+            g.setFont(f);
         }
-      }
 
-    } catch (Exception e) {
-      TraceManager.addError("Failed when loading requirement extra parameters (AVATARRD)");
-      throw new MalformedModelingException();
+        w = g.getFontMetrics().stringWidth(value);
+        h = g.getFontMetrics().getHeight();
+        g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+        String s = "{" + oldVersion + "->" + newVersion + "}";
+        w1 = g.getFontMetrics().stringWidth(s);
+        g.drawString(s, (x1 + x2 - w1) / 2, ((y1 + y2) / 2) + h);
+        g.setFont(old);
     }
 
-  }
+    @Override
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY()) / 2 - h, w, h)) {
+            return this;
+        }
+        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w1) / 2, (p1.getY() + p2.getY()) / 2, w1, h)) {
+            return this;
+        }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
-  }
+        return null;
+    }
+
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        JDialogVersioningConnector jdvc = new JDialogVersioningConnector(frame, oldVersion, newVersion);
+        // jdvc.setSize(400, 300);
+        GraphicLib.centerOnParent(jdvc, 400, 300);
+        jdvc.setVisible(true); // blocked until dialog has been closed
+
+        if (jdvc.hasBeenCancelled()) {
+            return false;
+        }
+
+        try {
+            oldVersion = Integer.decode(jdvc.getOldVersion().trim()).intValue();
+        } catch (Exception e) {
+
+        }
+
+        try {
+            newVersion = Integer.decode(jdvc.getNewVersion().trim()).intValue();
+        } catch (Exception e) {
+
+        }
+
+        return true;
+    }
+
+    @Override
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<oldVersion data=\"");
+        sb.append(oldVersion);
+        sb.append("\" />\n");
+        sb.append("<newVersion data=\"");
+        sb.append(newVersion);
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            String s;
+
+            //
+            //
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("oldVersion")) {
+
+                                //
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    oldVersion = 0;
+                                } else {
+                                    try {
+                                        oldVersion = Integer.decode(s).intValue();
+                                    } catch (Exception e) {
+                                        oldVersion = 0;
+                                    }
+                                }
+
+                            } else if (elt.getTagName().equals("newVersion")) {
+                                //
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    newVersion = 1;
+                                } else {
+                                    try {
+                                        newVersion = Integer.decode(s).intValue();
+                                    } catch (Exception e) {
+                                        newVersion = 1;
+                                    }
+                                }
+
+                            }
+                            //
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            TraceManager.addError("Failed when loading requirement extra parameters (AVATARRD)");
+            throw new MalformedModelingException();
+        }
+
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
+    }
 
 }

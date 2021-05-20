@@ -46,32 +46,32 @@ package nc;
  */
 public class NCTimeUnit {
 
-  public static final String US = "us";
-  public static final String MS = "ms";
-  public static final String S = "s";
+    public static final String US = "us";
+    public static final String MS = "ms";
+    public static final String S = "s";
 
-  private String unit;
+    private String unit;
 
-  public NCTimeUnit() {
-    unit = MS;
-  }
-
-  public void setUnit(String s) {
-    if (s.equals(US)) {
-      unit = US;
+    public NCTimeUnit() {
+        unit = MS;
     }
 
-    if (s.equals(MS)) {
-      unit = MS;
+    public void setUnit(String s) {
+        if (s.equals(US)) {
+            unit = US;
+        }
+
+        if (s.equals(MS)) {
+            unit = MS;
+        }
+
+        if (s.equals(S)) {
+            unit = S;
+        }
     }
 
-    if (s.equals(S)) {
-      unit = S;
+    public String getStringUnit() {
+        return unit;
     }
-  }
-
-  public String getStringUnit() {
-    return unit;
-  }
 
 }

@@ -50,87 +50,87 @@ import ui.*;
  */
 public class AvatarMethodologyReferenceToDesign extends AvatarMethodologyDiagramReference {
 
-  public AvatarMethodologyReferenceToDesign(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public AvatarMethodologyReferenceToDesign(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(300, 70);
+        initScaling(300, 70);
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
-        TGConnectingPoint.WEST);
-    connectingPoint[1] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.20, 1.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
+                TGConnectingPoint.WEST);
+        connectingPoint[1] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.20, 1.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = DESIGN;
+        typeOfReference = DESIGN;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
-
-  public int getType() {
-    return TGComponentManager.AVATARMETHODOLOGY_REF_DESIGN;
-  }
-
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof AvatarDesignPanel;
-
-  }
-
-  public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
-    dn.setValidationsNumber(4);
-    dn.setValidationsInfo(0, AvatarMethodologyDiagramName.SIM_ANIM);
-    dn.setValidationsInfo(1, AvatarMethodologyDiagramName.UPP);
-    dn.setValidationsInfo(2, AvatarMethodologyDiagramName.PROVERIF);
-    dn.setValidationsInfo(3, AvatarMethodologyDiagramName.INVARIANTS);
-  }
-
-  public boolean makeCall(String diagramName, int index) {
-    String tmp;
-
-    switch (index) {
-      case 0:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().avatarSimulation();
-          return true;
-        }
-        return false;
-      case 1:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().avatarUPPAALVerification();
-          return true;
-        }
-        return false;
-      case 2:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().avatarProVerifVerification();
-          return true;
-        }
-        return false;
-      case 3:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().avatarStaticAnalysis();
-          return true;
-        }
-        return false;
-
-      default:
-        return false;
     }
 
-  }
+    public int getType() {
+        return TGComponentManager.AVATARMETHODOLOGY_REF_DESIGN;
+    }
+
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof AvatarDesignPanel;
+
+    }
+
+    public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
+        dn.setValidationsNumber(4);
+        dn.setValidationsInfo(0, AvatarMethodologyDiagramName.SIM_ANIM);
+        dn.setValidationsInfo(1, AvatarMethodologyDiagramName.UPP);
+        dn.setValidationsInfo(2, AvatarMethodologyDiagramName.PROVERIF);
+        dn.setValidationsInfo(3, AvatarMethodologyDiagramName.INVARIANTS);
+    }
+
+    public boolean makeCall(String diagramName, int index) {
+        String tmp;
+
+        switch (index) {
+            case 0:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarSimulation();
+                    return true;
+                }
+                return false;
+            case 1:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarUPPAALVerification();
+                    return true;
+                }
+                return false;
+            case 2:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarProVerifVerification();
+                    return true;
+                }
+                return false;
+            case 3:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarStaticAnalysis();
+                    return true;
+                }
+                return false;
+
+            default:
+                return false;
+        }
+
+    }
 
 }

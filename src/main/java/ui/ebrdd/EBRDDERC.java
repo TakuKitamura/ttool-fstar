@@ -55,184 +55,184 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGComponent {
-  /*
-   * private int textY1 = 15; private int textY2 = 30; private int derivationx =
-   * 2; private int derivationy = 3; private String stereotype = "CPU";
-   */
-
-  protected int lineLength = 5;
-
-  public EBRDDERC(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-    width = 250;
-    height = 200;
-    minWidth = 150;
-    minHeight = 100;
-
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0);
-
-    addTGConnectingPointsComment();
-
-    nbInternalTGComponent = 0;
-
-    moveable = true;
-    editable = true;
-    removable = true;
-    userResizable = true;
-
-    name = tdp.findNodeName("ERC");
-    value = "name";
-
-    myImageIcon = IconManager.imgic1050;
-  }
-
-  public void internalDrawing(Graphics g) {
-    Color c = g.getColor();
-    g.draw3DRect(x, y, width, height, true);
-
-    // Top lines
     /*
-     * g.drawLine(x, y, x + derivationx, y - derivationy); g.drawLine(x + width, y,
-     * x + width + derivationx, y - derivationy); g.drawLine(x + derivationx, y -
-     * derivationy, x + width + derivationx, y - derivationy);
-     * 
-     * // Right lines g.drawLine(x + width, y + height, x + width + derivationx, y -
-     * derivationy + height); g.drawLine(x + derivationx + width, y - derivationy, x
-     * + width + derivationx, y - derivationy + height);
+     * private int textY1 = 15; private int textY2 = 30; private int derivationx =
+     * 2; private int derivationy = 3; private String stereotype = "CPU";
      */
 
-    // Filling color
-    g.setColor(ColorManager.CPU_BOX_1);
-    g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
-    g.setColor(c);
+    protected int lineLength = 5;
 
-    // Connecting lines
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+    public EBRDDERC(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    // String
-    int w = g.getFontMetrics().stringWidth(name);
-    g.drawString(value, x + (width - w) / 2, y + 15);
+        width = 250;
+        height = 200;
+        minWidth = 150;
+        minHeight = 100;
 
-    // Icon
-    // g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-    // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-  }
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0);
 
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-      return this;
+        addTGConnectingPointsComment();
+
+        nbInternalTGComponent = 0;
+
+        moveable = true;
+        editable = true;
+        removable = true;
+        userResizable = true;
+
+        name = tdp.findNodeName("ERC");
+        value = "name";
+
+        myImageIcon = IconManager.imgic1050;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
-        y1)) < distanceSelected) {
-      return this;
+    public void internalDrawing(Graphics g) {
+        Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
+
+        // Top lines
+        /*
+         * g.drawLine(x, y, x + derivationx, y - derivationy); g.drawLine(x + width, y,
+         * x + width + derivationx, y - derivationy); g.drawLine(x + derivationx, y -
+         * derivationy, x + width + derivationx, y - derivationy);
+         * 
+         * // Right lines g.drawLine(x + width, y + height, x + width + derivationx, y -
+         * derivationy + height); g.drawLine(x + derivationx + width, y - derivationy, x
+         * + width + derivationx, y - derivationy + height);
+         */
+
+        // Filling color
+        g.setColor(ColorManager.CPU_BOX_1);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+        g.setColor(c);
+
+        // Connecting lines
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        // String
+        int w = g.getFontMetrics().stringWidth(name);
+        g.drawString(value, x + (width - w) / 2, y + 15);
+
+        // Icon
+        // g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
+        // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
-    return null;
-  }
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+            return this;
+        }
 
-  public boolean editOnDoubleClick(JFrame frame) {
-    //
-    String text = getName() + ": ";
-    if (hasFather()) {
-      text = getTopLevelName() + " / " + text;
-    }
-    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic100, null, getValue());
-    if ((s != null) && (s.length() > 0)) {
-      setValue(s);
-      return true;
-    }
-    return false;
-  }
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
+                y1)) < distanceSelected) {
+            return this;
+        }
 
-  public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-    if (tgc instanceof EBRDDESO) {
-      return true;
+        return null;
     }
 
-    return tgc instanceof EBRDDERB;
-
-  }
-
-  public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-    if (!acceptSwallowedTGComponent(tgc)) {
-      return false;
+    public boolean editOnDoubleClick(JFrame frame) {
+        //
+        String text = getName() + ": ";
+        if (hasFather()) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic100, null, getValue());
+        if ((s != null) && (s.length() > 0)) {
+            setValue(s);
+            return true;
+        }
+        return false;
     }
 
-    //
-    // Choose its position
+    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+        if (tgc instanceof EBRDDESO) {
+            return true;
+        }
 
-    // Make it an internal component
-    // It's one of my son
-    tgc.setFather(this);
-    tgc.setDrawingZone(true);
+        return tgc instanceof EBRDDERB;
 
-    // Set its coordinates
-    if (tgc instanceof EBRDDESO) {
-      // tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt,
-      // height-spacePt);
-      //
-      tgc.resizeWithFather();
-      // tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
-      // tgc.setCd(x, y);
     }
 
-    if (tgc instanceof EBRDDERB) {
-      // tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt,
-      // height-spacePt);
-      //
-      tgc.resizeWithFather();
-      // tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
-      // tgc.setCd(x, y);
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+        if (!acceptSwallowedTGComponent(tgc)) {
+            return false;
+        }
+
+        //
+        // Choose its position
+
+        // Make it an internal component
+        // It's one of my son
+        tgc.setFather(this);
+        tgc.setDrawingZone(true);
+
+        // Set its coordinates
+        if (tgc instanceof EBRDDESO) {
+            // tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt,
+            // height-spacePt);
+            //
+            tgc.resizeWithFather();
+            // tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
+            // tgc.setCd(x, y);
+        }
+
+        if (tgc instanceof EBRDDERB) {
+            // tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt,
+            // height-spacePt);
+            //
+            tgc.resizeWithFather();
+            // tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
+            // tgc.setCd(x, y);
+        }
+
+        // else unknown*/
+
+        // add it
+        addInternalComponent(tgc, 0);
+
+        return true;
     }
 
-    // else unknown*/
-
-    // add it
-    addInternalComponent(tgc, 0);
-
-    return true;
-  }
-
-  public void removeSwallowedTGComponent(TGComponent tgc) {
-    removeInternalComponent(tgc);
-  }
-
-  public Vector<TGComponent> getElementList() {
-    Vector<TGComponent> v = new Vector<>();
-    for (int i = 0; i < nbInternalTGComponent; i++) {
-      if ((tgcomponent[i] instanceof EBRDDESO) || (tgcomponent[i] instanceof EBRDDERB)) {
-        v.add(tgcomponent[i]);
-      }
-    }
-    return v;
-  }
-
-  public void hasBeenResized() {
-    for (int i = 0; i < nbInternalTGComponent; i++) {
-      if (tgcomponent[i] instanceof EBRDDESO) {
-        tgcomponent[i].resizeWithFather();
-      }
-      if (tgcomponent[i] instanceof EBRDDERB) {
-        tgcomponent[i].resizeWithFather();
-      }
+    public void removeSwallowedTGComponent(TGComponent tgc) {
+        removeInternalComponent(tgc);
     }
 
-  }
+    public Vector<TGComponent> getElementList() {
+        Vector<TGComponent> v = new Vector<>();
+        for (int i = 0; i < nbInternalTGComponent; i++) {
+            if ((tgcomponent[i] instanceof EBRDDESO) || (tgcomponent[i] instanceof EBRDDERB)) {
+                v.add(tgcomponent[i]);
+            }
+        }
+        return v;
+    }
 
-  public int getType() {
-    return TGComponentManager.EBRDD_ERC;
-  }
+    public void hasBeenResized() {
+        for (int i = 0; i < nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof EBRDDESO) {
+                tgcomponent[i].resizeWithFather();
+            }
+            if (tgcomponent[i] instanceof EBRDDERB) {
+                tgcomponent[i].resizeWithFather();
+            }
+        }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_EBRDD;
-  }
+    }
+
+    public int getType() {
+        return TGComponentManager.EBRDD_ERC;
+    }
+
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_EBRDD;
+    }
 
 }

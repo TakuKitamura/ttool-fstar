@@ -46,9 +46,9 @@ package faulttrees;
  */
 public class SequenceNode extends FaultNode {
 
-  public SequenceNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "SEQUENCE";
-  }
+    public SequenceNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "SEQUENCE";
+    }
 
 }

@@ -54,138 +54,139 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADSelectEvt extends TADComponentWithoutSubcomponents
-    /* Issue #69 TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-
-  // Issue #31
-  // private int lineLength = 10;
-  // private int textX1, textY1, textX2, textY2, textX3, textY3;
-  // private int lineOutLength;// = 25;
-
-  protected static final int OUT_LINE_LENGTH = 25;
-
-  protected int stateOfError = 0; // Not yet checked
-
-  public TMLADSelectEvt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        /* Issue #69 TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
 
     // Issue #31
-    nbConnectingPoint = 10;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
-    connectingPoint[2] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
-    connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH, false, true, 0.5, 1.0);
-    connectingPoint[4] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
-    connectingPoint[5] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
-    connectingPoint[6] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH, false, true, 0.5, 1.0);
-    connectingPoint[7] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
-    connectingPoint[8] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
-    connectingPoint[9] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH, false, true, 0.5, 1.0);
-    // width = 30;
-    // height = 30;
-    initScaling(30, 30);
+    // private int lineLength = 10;
+    // private int textX1, textY1, textX2, textY2, textX3, textY3;
+    // private int lineOutLength;// = 25;
+
+    protected static final int OUT_LINE_LENGTH = 25;
+
+    protected int stateOfError = 0; // Not yet checked
+
+    public TMLADSelectEvt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+        // Issue #31
+        nbConnectingPoint = 10;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH, false, true, 0.5, 1.0);
+        connectingPoint[4] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[5] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[6] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH, false, true, 0.5, 1.0);
+        connectingPoint[7] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[8] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[9] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH, false, true, 0.5, 1.0);
+        // width = 30;
+        // height = 30;
+        initScaling(30, 30);
+        /*
+         * textX1 = -lineOutLength; textY1 = height/2 - 5; textX2 = width + 5; textY2 =
+         * height/2 - 5; textX3 = width /2 + 5; textY3 = height + 15;
+         */
+
+        moveable = true;
+        editable = false;
+        removable = true;
+
+        name = "select";
+
+        myImageIcon = IconManager.imgic208;
+    }
+
+    @Override
+    protected void internalDrawing(Graphics g) {
+        if (stateOfError > 0) {
+            Color c = g.getColor();
+            switch (stateOfError) {
+                case ErrorHighlight.OK:
+                    g.setColor(ColorManager.CHOICE);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            // Making the polygon
+            int[] px1 = { x + (width / 2), x + width, x + (width / 2), x };
+            int[] py1 = { y, y + height / 2, y + height, y + height / 2 };
+            g.fillPolygon(px1, py1, 4);
+            g.setColor(c);
+        }
+
+        g.drawLine(x + (width / 2), y, x + width, y + height / 2);
+        g.drawLine(x, y + height / 2, x + width / 2, y + height);
+        g.drawLine(x + width / 2, y, x, y + height / 2);
+        g.drawLine(x + width, y + height / 2, x + width / 2, y + height);
+
+        // Issue #31
+        final int scaledLineOutLength = scale(OUT_LINE_LENGTH);
+
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x, y + height / 2, x - scaledLineOutLength, y + height / 2); // Issue #31
+        g.drawLine(x + width, y + height / 2, x + width + scaledLineOutLength, y + height / 2); // Issue #31
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + height + scaledLineOutLength); // Issue #31
+
+        drawSingleString(g, "evt", x + scale(5), y + height / 2 + scale(3)); // Issue #31
+    }
+
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+
+        // Issue #31
+        final int scaledLineOutLength = scale(OUT_LINE_LENGTH);
+
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + height + scaledLineOutLength,
+                _x, _y)) < distanceSelected) { // Issue #31
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + scaledLineOutLength, y + height / 2, _x,
+                _y)) < distanceSelected) { // Issue #31
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x, y + height / 2, x - scaledLineOutLength, y + height / 2, _x,
+                _y)) < distanceSelected) { // Issue #31
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y, x + (width / 2), y - lineLength, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.TMLAD_SELECT_EVT;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TMLAD;
+    }
+
+    @Override
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
+
     /*
-     * textX1 = -lineOutLength; textY1 = height/2 - 5; textX2 = width + 5; textY2 =
-     * height/2 - 5; textX3 = width /2 + 5; textY3 = height + 15;
+     * Issue #69 (non-Javadoc)
+     * 
+     * @see ui.AbstractCDElement#canBeDisabled()
      */
-
-    moveable = true;
-    editable = false;
-    removable = true;
-
-    name = "select";
-
-    myImageIcon = IconManager.imgic208;
-  }
-
-  @Override
-  protected void internalDrawing(Graphics g) {
-    if (stateOfError > 0) {
-      Color c = g.getColor();
-      switch (stateOfError) {
-        case ErrorHighlight.OK:
-          g.setColor(ColorManager.CHOICE);
-          break;
-        default:
-          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-      }
-      // Making the polygon
-      int[] px1 = { x + (width / 2), x + width, x + (width / 2), x };
-      int[] py1 = { y, y + height / 2, y + height, y + height / 2 };
-      g.fillPolygon(px1, py1, 4);
-      g.setColor(c);
+    @Override
+    public boolean canBeDisabled() {
+        return false;
     }
-
-    g.drawLine(x + (width / 2), y, x + width, y + height / 2);
-    g.drawLine(x, y + height / 2, x + width / 2, y + height);
-    g.drawLine(x + width / 2, y, x, y + height / 2);
-    g.drawLine(x + width, y + height / 2, x + width / 2, y + height);
-
-    // Issue #31
-    final int scaledLineOutLength = scale(OUT_LINE_LENGTH);
-
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x, y + height / 2, x - scaledLineOutLength, y + height / 2); // Issue #31
-    g.drawLine(x + width, y + height / 2, x + width + scaledLineOutLength, y + height / 2); // Issue #31
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + height + scaledLineOutLength); // Issue #31
-
-    drawSingleString(g, "evt", x + scale(5), y + height / 2 + scale(3)); // Issue #31
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
-
-    // Issue #31
-    final int scaledLineOutLength = scale(OUT_LINE_LENGTH);
-
-    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + height + scaledLineOutLength, _x,
-        _y)) < distanceSelected) { // Issue #31
-      return this;
-    }
-
-    if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + scaledLineOutLength, y + height / 2, _x,
-        _y)) < distanceSelected) { // Issue #31
-      return this;
-    }
-
-    if ((int) (Line2D.ptSegDistSq(x, y + height / 2, x - scaledLineOutLength, y + height / 2, _x,
-        _y)) < distanceSelected) { // Issue #31
-      return this;
-    }
-
-    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y, x + (width / 2), y - lineLength, _x, _y)) < distanceSelected) {
-      return this;
-    }
-
-    return null;
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.TMLAD_SELECT_EVT;
-  }
-
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_TMLAD;
-  }
-
-  @Override
-  public void setStateAction(int _stateAction) {
-    stateOfError = _stateAction;
-  }
-
-  /*
-   * Issue #69 (non-Javadoc)
-   * 
-   * @see ui.AbstractCDElement#canBeDisabled()
-   */
-  @Override
-  public boolean canBeDisabled() {
-    return false;
-  }
 }

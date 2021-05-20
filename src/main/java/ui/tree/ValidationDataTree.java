@@ -48,71 +48,71 @@ import ui.MainGUI;
  */
 public class ValidationDataTree implements GenericTree {
 
-  private MainGUI mgui;
-  private String name = "Validation";
-  private TClassesValidationDataTree tvdt;
-  private SyntaxAnalysisTree mcvdt;
-  private CorrespondanceValidationDataTree cvdt;
-  private InvariantDataTree idt;
-  private GraphTree gt;
-  private SimulationTraceTree stt;
+    private MainGUI mgui;
+    private String name = "Validation";
+    private TClassesValidationDataTree tvdt;
+    private SyntaxAnalysisTree mcvdt;
+    private CorrespondanceValidationDataTree cvdt;
+    private InvariantDataTree idt;
+    private GraphTree gt;
+    private SimulationTraceTree stt;
 
-  public ValidationDataTree(MainGUI _mgui) {
-    mgui = _mgui;
-    tvdt = new TClassesValidationDataTree(mgui);
-    mcvdt = new SyntaxAnalysisTree(mgui);
-    cvdt = new CorrespondanceValidationDataTree();
-    idt = new InvariantDataTree(mgui);
-    gt = new GraphTree(mgui);
-    stt = new SimulationTraceTree(mgui);
-  }
-
-  // TREE MANAGEMENT
-
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    //
-    return 6;
-  }
-
-  public Object getChild(int index) {
-    //
-    switch (index) {
-      case 0:
-        return tvdt;
-      case 1:
-        return mcvdt;
-      case 2:
-        return cvdt;
-      case 3:
-        return stt;
-      case 4:
-        return gt;
-      case 5:
-        return idt;
+    public ValidationDataTree(MainGUI _mgui) {
+        mgui = _mgui;
+        tvdt = new TClassesValidationDataTree(mgui);
+        mcvdt = new SyntaxAnalysisTree(mgui);
+        cvdt = new CorrespondanceValidationDataTree();
+        idt = new InvariantDataTree(mgui);
+        gt = new GraphTree(mgui);
+        stt = new SimulationTraceTree(mgui);
     }
-    return null;
-  }
 
-  public int getIndexOfChild(Object child) {
-    //
-    if (child instanceof TClassesValidationDataTree) {
-      return 0;
-    } else if (child instanceof SyntaxAnalysisTree) {
-      return 1;
-    } else if (child instanceof CorrespondanceValidationDataTree) {
-      return 2;
-    } else if (child instanceof SimulationTraceTree) {
-      return 3;
-    } else if (child instanceof GraphTree) {
-      return 4;
-    } else if (child instanceof InvariantDataTree) {
-      return 5;
+    // TREE MANAGEMENT
+
+    public String toString() {
+        return name;
     }
-    return -1;
-  }
+
+    public int getChildCount() {
+        //
+        return 6;
+    }
+
+    public Object getChild(int index) {
+        //
+        switch (index) {
+            case 0:
+                return tvdt;
+            case 1:
+                return mcvdt;
+            case 2:
+                return cvdt;
+            case 3:
+                return stt;
+            case 4:
+                return gt;
+            case 5:
+                return idt;
+        }
+        return null;
+    }
+
+    public int getIndexOfChild(Object child) {
+        //
+        if (child instanceof TClassesValidationDataTree) {
+            return 0;
+        } else if (child instanceof SyntaxAnalysisTree) {
+            return 1;
+        } else if (child instanceof CorrespondanceValidationDataTree) {
+            return 2;
+        } else if (child instanceof SimulationTraceTree) {
+            return 3;
+        } else if (child instanceof GraphTree) {
+            return 4;
+        } else if (child instanceof InvariantDataTree) {
+            return 5;
+        }
+        return -1;
+    }
 
 }

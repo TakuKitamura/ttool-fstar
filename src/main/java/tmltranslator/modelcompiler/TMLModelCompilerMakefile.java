@@ -48,36 +48,39 @@ package tmltranslator.modelcompiler;
  */
 public class TMLModelCompilerMakefile implements CCodeGenConstants {
 
-  // private String CR = "\n";
-  // private String CR2 = "\n\n";
-  private StringBuffer code = new StringBuffer();
+    // private String CR = "\n";
+    // private String CR2 = "\n\n";
+    private StringBuffer code = new StringBuffer();
 
-  public TMLModelCompilerMakefile(String ApplicationName) {
+    public TMLModelCompilerMakefile(String ApplicationName) {
 
-    code.append("#In order to compile wpd, please define EMBB_INSTALL, either as an environment" + CR
-        + "# variable or as a Makefile variable by uncommenting and editing the following" + CR + "# line:" + CR
-        + " EMBB_INSTALL	= /home/libembb2" + CR
-        + "# where <someplace> is the full path of the directory in which you installed" + CR
-        + "# libembb. $(EMBB_INSTALL)/include shall contain embb/fep.h and" + CR
-        + "# $(EMBB_INSTALL)/lib shall contain libembb.so and libembbemu.so" + CR + "CXX		= g++" + CR
-        + "LD		= g++" + CR + "CXXFLAGS	= -c -g -Wall -Wno-unused-variable" + CR + "ifndef EMBB_INSTALL" + CR
-        + "all:" + CR
-        + "\t@echo \"**************************************************************************************\"; \\" + CR
-        + "\techo \"* Please define the EMBB_INSTALL environment variable and assign it the absolute path\"; \\" + CR
-        + "\techo \"* of the libembb install directory. $(EMBB_INSTALL)/include shall contain embb/fep.h\"; \\" + CR
-        + "\techo \"* and $(EMBB_INSTALL)/lib shall contain libembb.so and libembbemu.so\"; \\" + CR
-        + "\techo \"**************************************************************************************\"; \\" + CR
-        + "\texit 1" + CR + "else" + CR2 + "EMBBINCLUDEDIR	= $(EMBB_INSTALL)/include" + CR
-        + "EMBBLIBDIR	= $(EMBB_INSTALL)/lib" + CR + "OBJS	= $(patsubst %.c,%.o,$(wildcard *.c))" + CR
-        + "HRDS	= $(wildcard *.h)" + CR + "EXECS	= waveform.x" + CR2 + "print-%:" + CR + "\t@echo '$(OBJS)'" + CR2
-        + "all: $(EXECS)" + CR2 + "%.o: %.c" + CR2 + "\t$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<" + CR
-        + "$(OBJS): INCLUDES += -I$(EMBBINCLUDEDIR)" + CR2
-        + "$(EXECS): LDFLAGS += -L$(EMBBLIBDIR) -Wl,-rpath,$(EMBBLIBDIR)" + CR + "$(EXECS): LIBS += -lembb -lembbemu"
-        + CR + "$(EXECS): $(OBJS)" + CR + "\t$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)" + CR2 + "clean:" + CR
-        + "\trm -rf $(OBJS)" + CR2 + "ultraclean:" + CR + "\trm -rf $(OBJS) $(EXECS)" + CR + "endif");
-  }
+        code.append("#In order to compile wpd, please define EMBB_INSTALL, either as an environment" + CR
+                + "# variable or as a Makefile variable by uncommenting and editing the following" + CR + "# line:" + CR
+                + " EMBB_INSTALL	= /home/libembb2" + CR
+                + "# where <someplace> is the full path of the directory in which you installed" + CR
+                + "# libembb. $(EMBB_INSTALL)/include shall contain embb/fep.h and" + CR
+                + "# $(EMBB_INSTALL)/lib shall contain libembb.so and libembbemu.so" + CR + "CXX		= g++" + CR
+                + "LD		= g++" + CR + "CXXFLAGS	= -c -g -Wall -Wno-unused-variable" + CR + "ifndef EMBB_INSTALL"
+                + CR + "all:" + CR
+                + "\t@echo \"**************************************************************************************\"; \\"
+                + CR
+                + "\techo \"* Please define the EMBB_INSTALL environment variable and assign it the absolute path\"; \\"
+                + CR
+                + "\techo \"* of the libembb install directory. $(EMBB_INSTALL)/include shall contain embb/fep.h\"; \\"
+                + CR + "\techo \"* and $(EMBB_INSTALL)/lib shall contain libembb.so and libembbemu.so\"; \\" + CR
+                + "\techo \"**************************************************************************************\"; \\"
+                + CR + "\texit 1" + CR + "else" + CR2 + "EMBBINCLUDEDIR	= $(EMBB_INSTALL)/include" + CR
+                + "EMBBLIBDIR	= $(EMBB_INSTALL)/lib" + CR + "OBJS	= $(patsubst %.c,%.o,$(wildcard *.c))" + CR
+                + "HRDS	= $(wildcard *.h)" + CR + "EXECS	= waveform.x" + CR2 + "print-%:" + CR + "\t@echo '$(OBJS)'"
+                + CR2 + "all: $(EXECS)" + CR2 + "%.o: %.c" + CR2 + "\t$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<" + CR
+                + "$(OBJS): INCLUDES += -I$(EMBBINCLUDEDIR)" + CR2
+                + "$(EXECS): LDFLAGS += -L$(EMBBLIBDIR) -Wl,-rpath,$(EMBBLIBDIR)" + CR
+                + "$(EXECS): LIBS += -lembb -lembbemu" + CR + "$(EXECS): $(OBJS)" + CR
+                + "\t$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)" + CR2 + "clean:" + CR + "\trm -rf $(OBJS)" + CR2 + "ultraclean:"
+                + CR + "\trm -rf $(OBJS) $(EXECS)" + CR + "endif");
+    }
 
-  public String getCode() {
-    return code.toString();
-  }
+    public String getCode() {
+        return code.toString();
+    }
 } // End of class

@@ -51,116 +51,116 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class SimpleNode implements Node {
-  protected Node parent;
-  protected Node[] children;
-  protected int id;
-  protected TMLExprParser parser;
+    protected Node parent;
+    protected Node[] children;
+    protected int id;
+    protected TMLExprParser parser;
 
-  public String kind = "noKind", value = "noValue";
+    public String kind = "noKind", value = "noValue";
 
-  public SimpleNode(int i) {
-    id = i;
-  }
-
-  public SimpleNode(TMLExprParser p, int i) {
-    this(i);
-    parser = p;
-  }
-
-  public void setInfo(String _kind, String _value) {
-    kind = _kind;
-    value = _value;
-  }
-
-  public void jjtOpen() {
-  }
-
-  public void jjtClose() {
-  }
-
-  public void jjtSetParent(Node n) {
-    parent = n;
-  }
-
-  public Node jjtGetParent() {
-    return parent;
-  }
-
-  public void jjtAddChild(Node n, int i) {
-    if (children == null) {
-      children = new Node[i + 1];
-    } else if (i >= children.length) {
-      Node c[] = new Node[i + 1];
-      System.arraycopy(children, 0, c, 0, children.length);
-      children = c;
+    public SimpleNode(int i) {
+        id = i;
     }
-    children[i] = n;
-  }
 
-  public Node jjtGetChild(int i) {
-    return children[i];
-  }
+    public SimpleNode(TMLExprParser p, int i) {
+        this(i);
+        parser = p;
+    }
 
-  public int jjtGetNumChildren() {
-    return (children == null) ? 0 : children.length;
-  }
+    public void setInfo(String _kind, String _value) {
+        kind = _kind;
+        value = _value;
+    }
 
-  /*
-   * You can override these two methods in subclasses of SimpleNode to customize
-   * the way the node appears when the tree is dumped. If your output uses more
-   * than one line you should override toString(String), otherwise overriding
-   * toString() is probably all you need to do.
-   */
+    public void jjtOpen() {
+    }
 
-  // public String toString() { return TMLExprParserTreeConstants.jjtNodeName[id];
-  // }
-  @Override
-  public String toString() {
-    return TMLExprParserTreeConstants.jjtNodeName[id] + "/" + kind + "/" + value;
-  }
+    public void jjtClose() {
+    }
 
-  public String toString(String prefix) {
-    return prefix + toString();
-  }
+    public void jjtSetParent(Node n) {
+        parent = n;
+    }
 
-  /*
-   * Override this method if you want to customize how the node dumps out its
-   * children.
-   */
+    public Node jjtGetParent() {
+        return parent;
+    }
 
-  public void dump(String prefix) {
-    System.out.println(toString(prefix));
-    if (children != null) {
-      for (int i = 0; i < children.length; ++i) {
-        SimpleNode n = (SimpleNode) children[i];
-        if (n != null) {
-          n.dump(prefix + " ");
+    public void jjtAddChild(Node n, int i) {
+        if (children == null) {
+            children = new Node[i + 1];
+        } else if (i >= children.length) {
+            Node c[] = new Node[i + 1];
+            System.arraycopy(children, 0, c, 0, children.length);
+            children = c;
         }
-      }
-    }
-  }
-
-  public List<String> getVariables() {
-    List<String> list = new ArrayList<String>();
-    getVariables(list);
-    return list;
-  }
-
-  public void getVariables(List<String> list) {
-    String s;
-
-    s = TMLExprParserTreeConstants.jjtNodeName[id];
-    if (s.indexOf("ID") > -1) {
-      list.add(value);
+        children[i] = n;
     }
 
-    if (children != null) {
-      for (int i = 0; i < children.length; ++i) {
-        SimpleNode n = (SimpleNode) children[i];
-        if (n != null) {
-          n.getVariables(list);
+    public Node jjtGetChild(int i) {
+        return children[i];
+    }
+
+    public int jjtGetNumChildren() {
+        return (children == null) ? 0 : children.length;
+    }
+
+    /*
+     * You can override these two methods in subclasses of SimpleNode to customize
+     * the way the node appears when the tree is dumped. If your output uses more
+     * than one line you should override toString(String), otherwise overriding
+     * toString() is probably all you need to do.
+     */
+
+    // public String toString() { return TMLExprParserTreeConstants.jjtNodeName[id];
+    // }
+    @Override
+    public String toString() {
+        return TMLExprParserTreeConstants.jjtNodeName[id] + "/" + kind + "/" + value;
+    }
+
+    public String toString(String prefix) {
+        return prefix + toString();
+    }
+
+    /*
+     * Override this method if you want to customize how the node dumps out its
+     * children.
+     */
+
+    public void dump(String prefix) {
+        System.out.println(toString(prefix));
+        if (children != null) {
+            for (int i = 0; i < children.length; ++i) {
+                SimpleNode n = (SimpleNode) children[i];
+                if (n != null) {
+                    n.dump(prefix + " ");
+                }
+            }
         }
-      }
     }
-  }
+
+    public List<String> getVariables() {
+        List<String> list = new ArrayList<String>();
+        getVariables(list);
+        return list;
+    }
+
+    public void getVariables(List<String> list) {
+        String s;
+
+        s = TMLExprParserTreeConstants.jjtNodeName[id];
+        if (s.indexOf("ID") > -1) {
+            list.add(value);
+        }
+
+        if (children != null) {
+            for (int i = 0; i < children.length; ++i) {
+                SimpleNode n = (SimpleNode) children[i];
+                if (n != null) {
+                    n.getVariables(list);
+                }
+            }
+        }
+    }
 }

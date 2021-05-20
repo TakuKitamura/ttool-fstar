@@ -58,163 +58,163 @@ import java.util.Vector;
  * @version 1.0 14/12/2003
  */
 public class DiagramTreeModel implements TreeModel {
-  private MainGUI mgui;
-  private Vector<TreeModelListener> treeModelListeners = new Vector<>();
+    private MainGUI mgui;
+    private Vector<TreeModelListener> treeModelListeners = new Vector<>();
 
-  public DiagramTreeModel(MainGUI _mgui) {
-    // super(_mgui.gtm);
-    mgui = _mgui;
-  }
-
-  /**
-   * Adds a listener for the TreeModelEvent posted after the tree changes.
-   */
-  public void addTreeModelListener(TreeModelListener l) {
-    treeModelListeners.addElement(l);
-  }
-
-  /**
-   * Returns the child of parent at index index in the parent's child array.
-   */
-  public Object getChild(Object parent, int index) {
-    //
-    if (parent instanceof GenericTree) {
-      return ((GenericTree) parent).getChild(index);
-    } else if (parent instanceof GTURTLEModeling) {
-      return mgui.gtm.getChild(index);
-    }
-    return null;
-  }
-
-  /**
-   * Returns the number of children of parent.
-   */
-  public int getChildCount(Object parent) {
-    //
-    if (parent instanceof GenericTree) {
-      return ((GenericTree) parent).getChildCount();
-    } else if (parent instanceof GTURTLEModeling) {
-      return mgui.gtm.getChildCount();
+    public DiagramTreeModel(MainGUI _mgui) {
+        // super(_mgui.gtm);
+        mgui = _mgui;
     }
 
-    return 0;
-  }
-
-  /**
-   * Returns the index of child in parent.
-   */
-  public int getIndexOfChild(Object parent, Object child) {
-    if (parent instanceof GenericTree) {
-      return ((GenericTree) parent).getIndexOfChild(child);
-    } else if (parent instanceof GTURTLEModeling) {
-      return mgui.gtm.getIndexOfChild(child);
+    /**
+     * Adds a listener for the TreeModelEvent posted after the tree changes.
+     */
+    public void addTreeModelListener(TreeModelListener l) {
+        treeModelListeners.addElement(l);
     }
 
-    return -1;
-  }
-
-  /**
-   * Returns the root of the tree.
-   */
-  public Object getRoot() {
-    return mgui.gtm;
-  }
-
-  /**
-   * Returns true if node is a leaf.
-   */
-  public boolean isLeaf(Object node) {
-    if ((node instanceof GTURTLEModeling) || (node instanceof TURTLEPanel) || (node instanceof TDiagramPanel)) {
-      return false;
-    } else {
-      if (node instanceof ValidationDataTree) {
-        return false;
-      }
-
-      if (node instanceof TClassesValidationDataTree) {
-        return false;
-      }
-
-      if (node instanceof SyntaxAnalysisTree) {
-        return false;
-      }
-
-      if (node instanceof SearchTree) {
-        return false;
-      }
-
-      if (node instanceof SyntaxAnalysisErrorTree) {
-        return false;
-      }
-
-      if (node instanceof SyntaxAnalysisWarningTree) {
-        return false;
-      }
-
-      if (node instanceof CorrespondanceValidationDataTree) {
-        return false;
-      }
-
-      if (node instanceof InvariantDataTree) {
-        return false;
-      }
-
-      if (node instanceof GraphTree) {
-        return false;
-      }
-
-      if (node instanceof SimulationTraceTree) {
-        return false;
-      }
-
-      if (node instanceof Invariant) {
-        return false;
-      }
-
-      if (node instanceof GroupOfGates) {
-        return false;
-      }
-
-      if (node instanceof HelpEntry) {
-        return !((HelpEntry) node).hasKids();
-      }
-
-      if (node instanceof HelpTree) {
-        return false;
-      }
-
-      if (node instanceof TGComponent) {
-        if (node instanceof AvatarBDBlock) {
-          return !((AvatarBDBlock) node).hasDefinitions();
+    /**
+     * Returns the child of parent at index index in the parent's child array.
+     */
+    public Object getChild(Object parent, int index) {
+        //
+        if (parent instanceof GenericTree) {
+            return ((GenericTree) parent).getChild(index);
+        } else if (parent instanceof GTURTLEModeling) {
+            return mgui.gtm.getChild(index);
         }
-        if (((TGComponent) node).getNbInternalTGComponent() > 0) {
-          return false;
+        return null;
+    }
+
+    /**
+     * Returns the number of children of parent.
+     */
+    public int getChildCount(Object parent) {
+        //
+        if (parent instanceof GenericTree) {
+            return ((GenericTree) parent).getChildCount();
+        } else if (parent instanceof GTURTLEModeling) {
+            return mgui.gtm.getChildCount();
         }
-        if (node instanceof TGCAttributeBox) {
-          if (((TGCAttributeBox) node).getChildCount() > 0)
+
+        return 0;
+    }
+
+    /**
+     * Returns the index of child in parent.
+     */
+    public int getIndexOfChild(Object parent, Object child) {
+        if (parent instanceof GenericTree) {
+            return ((GenericTree) parent).getIndexOfChild(child);
+        } else if (parent instanceof GTURTLEModeling) {
+            return mgui.gtm.getIndexOfChild(child);
+        }
+
+        return -1;
+    }
+
+    /**
+     * Returns the root of the tree.
+     */
+    public Object getRoot() {
+        return mgui.gtm;
+    }
+
+    /**
+     * Returns true if node is a leaf.
+     */
+    public boolean isLeaf(Object node) {
+        if ((node instanceof GTURTLEModeling) || (node instanceof TURTLEPanel) || (node instanceof TDiagramPanel)) {
             return false;
-        }
-        if (node instanceof AvatarBDDataType) {
-          return (((AvatarBDDataType) node).getChildCount() == 0);
-        }
-      }
+        } else {
+            if (node instanceof ValidationDataTree) {
+                return false;
+            }
 
-      return !(node instanceof InvariantSynchro);
+            if (node instanceof TClassesValidationDataTree) {
+                return false;
+            }
+
+            if (node instanceof SyntaxAnalysisTree) {
+                return false;
+            }
+
+            if (node instanceof SearchTree) {
+                return false;
+            }
+
+            if (node instanceof SyntaxAnalysisErrorTree) {
+                return false;
+            }
+
+            if (node instanceof SyntaxAnalysisWarningTree) {
+                return false;
+            }
+
+            if (node instanceof CorrespondanceValidationDataTree) {
+                return false;
+            }
+
+            if (node instanceof InvariantDataTree) {
+                return false;
+            }
+
+            if (node instanceof GraphTree) {
+                return false;
+            }
+
+            if (node instanceof SimulationTraceTree) {
+                return false;
+            }
+
+            if (node instanceof Invariant) {
+                return false;
+            }
+
+            if (node instanceof GroupOfGates) {
+                return false;
+            }
+
+            if (node instanceof HelpEntry) {
+                return !((HelpEntry) node).hasKids();
+            }
+
+            if (node instanceof HelpTree) {
+                return false;
+            }
+
+            if (node instanceof TGComponent) {
+                if (node instanceof AvatarBDBlock) {
+                    return !((AvatarBDBlock) node).hasDefinitions();
+                }
+                if (((TGComponent) node).getNbInternalTGComponent() > 0) {
+                    return false;
+                }
+                if (node instanceof TGCAttributeBox) {
+                    if (((TGCAttributeBox) node).getChildCount() > 0)
+                        return false;
+                }
+                if (node instanceof AvatarBDDataType) {
+                    return (((AvatarBDDataType) node).getChildCount() == 0);
+                }
+            }
+
+            return !(node instanceof InvariantSynchro);
+        }
     }
-  }
 
-  /**
-   * Removes a listener previously added with addTreeModelListener().
-   */
-  public void removeTreeModelListener(TreeModelListener l) {
-    treeModelListeners.removeElement(l);
-  }
+    /**
+     * Removes a listener previously added with addTreeModelListener().
+     */
+    public void removeTreeModelListener(TreeModelListener l) {
+        treeModelListeners.removeElement(l);
+    }
 
-  /**
-   * Messaged when the user has altered the value for the item identified by path
-   * to newValue. Not used by this model.
-   */
-  public void valueForPathChanged(TreePath path, Object newValue) {
-    //
-  }
+    /**
+     * Messaged when the user has altered the value for the item identified by path
+     * to newValue. Not used by this model.
+     */
+    public void valueForPathChanged(TreePath path, Object newValue) {
+        //
+    }
 }

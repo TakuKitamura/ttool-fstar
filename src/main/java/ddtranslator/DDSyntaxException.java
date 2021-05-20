@@ -45,12 +45,12 @@ package ddtranslator;
  */
 public class DDSyntaxException extends Exception {
 
-  public DDSyntaxException() {
-    super("DD does not follows the restricted format");
-  }
+    public DDSyntaxException() {
+        super("DD does not follows the restricted format");
+    }
 
-  public DDSyntaxException(String msg) {
-    super("DD does not follows the restricted format: " + msg);
-  }
+    public DDSyntaxException(String msg) {
+        super("DD does not follows the restricted format: " + msg);
+    }
 
 } // Class

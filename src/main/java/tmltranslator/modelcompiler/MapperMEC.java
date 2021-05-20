@@ -48,15 +48,15 @@ package tmltranslator.modelcompiler;
  */
 public class MapperMEC extends ArchUnitMEC {
 
-  public static final String CONTEXT_CLEANUP = "mapper_ctx_cleanup";
-  public static final String OPERATION = "Mapper operation";
-  public static final String CONTEXT = "MAPPER_CONTEXT";
+    public static final String CONTEXT_CLEANUP = "mapper_ctx_cleanup";
+    public static final String OPERATION = "Mapper operation";
+    public static final String CONTEXT = "MAPPER_CONTEXT";
 
-  public MapperMEC() {
+    public MapperMEC() {
 
-    index = 3;
-    initCtxRoutine = "mapper_ctx_init";
-    localMemoryPointer = "mapper_mss";
-    ctxCleanupRoutine = "mapper_ctx_cleanup";
-  }
+        index = 3;
+        initCtxRoutine = "mapper_ctx_init";
+        localMemoryPointer = "mapper_mss";
+        ctxCleanupRoutine = "mapper_ctx_cleanup";
+    }
 } // End of class

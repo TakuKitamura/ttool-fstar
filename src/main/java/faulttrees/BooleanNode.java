@@ -46,8 +46,8 @@ package faulttrees;
  */
 public abstract class BooleanNode extends FaultNode {
 
-  public BooleanNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public BooleanNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

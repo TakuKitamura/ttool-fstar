@@ -50,80 +50,80 @@ import ui.*;
  * @author Ludovic APVRILLE
  */
 public class VerificationPropertyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-  // public Vector validated, ignored;
+    // public Vector validated, ignored;
 
-  public VerificationPropertyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
+    public VerificationPropertyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
 
-    // TraceManager.addDev("Sysmlsec metho diagram created");
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
+        // TraceManager.addDev("Sysmlsec metho diagram created");
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
+    }
 
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return true;
-  }
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return true;
+    }
 
-  public boolean actionOnAdd(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.addTClass(tgcc.getClassName()); return true; }
-     */
-    return false;
-  }
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.addTClass(tgcc.getClassName()); return true; }
+         */
+        return false;
+    }
 
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
 
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
 
-  public String getXMLHead() {
-    return "<VerificationPropertyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-  }
+    public String getXMLHead() {
+        return "<VerificationPropertyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+    }
 
-  public String getXMLTail() {
-    return "</VerificationPropertyDiagramPanel>";
-  }
+    public String getXMLTail() {
+        return "</VerificationPropertyDiagramPanel>";
+    }
 
-  public String getXMLSelectedHead() {
-    return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
-        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
+    public String getXMLSelectedHead() {
+        return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+                + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
 
-  public String getXMLSelectedTail() {
-    return "</VerificationPropertyDiagramPanelCopy>";
-  }
+    public String getXMLSelectedTail() {
+        return "</VerificationPropertyDiagramPanelCopy>";
+    }
 
-  public String getXMLCloneHead() {
-    return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
-        + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-  }
+    public String getXMLCloneHead() {
+        return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+                + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+    }
 
-  public String getXMLCloneTail() {
-    return "</VerificationPropertyDiagramPanelCopy>";
-  }
+    public String getXMLCloneTail() {
+        return "</VerificationPropertyDiagramPanelCopy>";
+    }
 
-  public void makePostLoadingProcessing() throws MalformedModelingException {
+    public void makePostLoadingProcessing() throws MalformedModelingException {
 
-  }
+    }
 
-  public void enhance() {
-    autoAdjust();
-  }
+    public void enhance() {
+        autoAdjust();
+    }
 
-  public void loadExtraParameters(Element elt) {
-  }
+    public void loadExtraParameters(Element elt) {
+    }
 }

@@ -46,12 +46,12 @@ package tmltranslator;
  */
 public class TMLStopState extends TMLActivityElement {
 
-  public TMLStopState(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLStopState(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public String customExtraToXML() {
-    return "";
-  }
+    public String customExtraToXML() {
+        return "";
+    }
 
 }

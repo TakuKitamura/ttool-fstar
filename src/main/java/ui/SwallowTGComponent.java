@@ -46,9 +46,9 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface SwallowTGComponent {
-  boolean acceptSwallowedTGComponent(TGComponent tgc);
+    boolean acceptSwallowedTGComponent(TGComponent tgc);
 
-  boolean addSwallowedTGComponent(TGComponent tgc, int x, int y);
+    boolean addSwallowedTGComponent(TGComponent tgc, int x, int y);
 
-  void removeSwallowedTGComponent(TGComponent tgc);
+    void removeSwallowedTGComponent(TGComponent tgc);
 }

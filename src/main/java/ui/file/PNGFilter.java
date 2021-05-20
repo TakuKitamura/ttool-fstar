@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class PNGFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.png);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.png);
+    public String getDescription() {
+        return "PNG images";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "PNG images";
-  }
-
-  public static String getExtension() {
-    return FileUtils.png;
-  }
+    public static String getExtension() {
+        return FileUtils.png;
+    }
 
 }

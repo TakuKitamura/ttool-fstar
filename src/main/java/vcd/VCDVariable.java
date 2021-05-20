@@ -45,43 +45,43 @@ package vcd;
  * @author Ludovic APVRILLE
  */
 public class VCDVariable {
-  private String name;
-  private int bitwidth;
-  private String type = "integer";
-  private char shortcut;
+    private String name;
+    private int bitwidth;
+    private String type = "integer";
+    private char shortcut;
 
-  private static int IDShortcut;
+    private static int IDShortcut;
 
-  public VCDVariable(String _name) {
-    name = _name;
-    shortcut = getShortcut();
-  }
+    public VCDVariable(String _name) {
+        name = _name;
+        shortcut = getShortcut();
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public char getLocalShortcut() {
-    return shortcut;
-  }
+    public char getLocalShortcut() {
+        return shortcut;
+    }
 
-  public void setBitwidth(int _bitwidth) {
-    bitwidth = _bitwidth;
-  }
+    public void setBitwidth(int _bitwidth) {
+        bitwidth = _bitwidth;
+    }
 
-  public String decToString() {
-    String s = "$var " + type + " " + bitwidth + " " + shortcut + " " + name + " $end\n";
-    return s;
-  }
+    public String decToString() {
+        String s = "$var " + type + " " + bitwidth + " " + shortcut + " " + name + " $end\n";
+        return s;
+    }
 
-  public static void reinitShortcut() {
-    IDShortcut = 35;
-  }
+    public static void reinitShortcut() {
+        IDShortcut = 35;
+    }
 
-  public static char getShortcut() {
-    int tmp = IDShortcut;
-    IDShortcut++;
-    return (char) tmp;
-  }
+    public static char getShortcut() {
+        int tmp = IDShortcut;
+        IDShortcut++;
+        return (char) tmp;
+    }
 
 }

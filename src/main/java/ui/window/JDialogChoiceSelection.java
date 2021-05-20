@@ -62,98 +62,98 @@ import java.util.Vector;
  */
 public class JDialogChoiceSelection extends JDialogBase implements ActionListener {
 
-  private String[] availableElements;
-  private int indexOfInitialElement;
+    private String[] availableElements;
+    private int indexOfInitialElement;
 
-  private JPanel panel1;
+    private JPanel panel1;
 
-  // Panel1
-  private JComboBox<String> listOfElements;
+    // Panel1
+    private JComboBox<String> listOfElements;
 
-  private boolean cancelled;
+    private boolean cancelled;
 
-  /* Creates new form */
-  public JDialogChoiceSelection(Frame _f, String _title, String[] _availableElements, int _indexOfCurrentElements) {
+    /* Creates new form */
+    public JDialogChoiceSelection(Frame _f, String _title, String[] _availableElements, int _indexOfCurrentElements) {
 
-    super(_f, _title, true);
+        super(_f, _title, true);
 
-    availableElements = _availableElements;
-    indexOfInitialElement = _indexOfCurrentElements;
+        availableElements = _availableElements;
+        indexOfInitialElement = _indexOfCurrentElements;
 
-    initComponents();
-    myInitComponents();
+        initComponents();
+        myInitComponents();
 
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    // GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    // GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(new BorderLayout());
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-
-    panel1.setBorder(new javax.swing.border.TitledBorder("Requirement"));
-
-    // panel1.setPreferredSize(new Dimension(500, 250));
-
-    // first line panel1
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.gridheight = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel(" "), c1);
-
-    // Combo box
-    listOfElements = new JComboBox<String>(availableElements);
-    listOfElements.setSelectedIndex(indexOfInitialElement);
-    panel1.add(listOfElements, c1);
-
-    c.add(panel1, BorderLayout.CENTER);
-
-    JPanel buttons = initBasicButtons(this);
-    c.add(buttons, BorderLayout.SOUTH);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    // String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (evt.getSource() == closeButton) {
-      closeDialog();
-    } else if (evt.getSource() == cancelButton) {
-      cancelDialog();
+        pack();
     }
-  }
 
-  public void closeDialog() {
-    cancelled = false;
-    dispose();
-  }
+    private void myInitComponents() {
+    }
 
-  public int getIndexOfSelectedElement() {
-    return listOfElements.getSelectedIndex();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        // GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        // GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-  public boolean hasBeenCancelled() {
-    return cancelled;
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(new BorderLayout());
 
-  public void cancelDialog() {
-    cancelled = true;
-    dispose();
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+
+        panel1.setBorder(new javax.swing.border.TitledBorder("Requirement"));
+
+        // panel1.setPreferredSize(new Dimension(500, 250));
+
+        // first line panel1
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.gridheight = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel(" "), c1);
+
+        // Combo box
+        listOfElements = new JComboBox<String>(availableElements);
+        listOfElements.setSelectedIndex(indexOfInitialElement);
+        panel1.add(listOfElements, c1);
+
+        c.add(panel1, BorderLayout.CENTER);
+
+        JPanel buttons = initBasicButtons(this);
+        c.add(buttons, BorderLayout.SOUTH);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        // String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (evt.getSource() == closeButton) {
+            closeDialog();
+        } else if (evt.getSource() == cancelButton) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        cancelled = false;
+        dispose();
+    }
+
+    public int getIndexOfSelectedElement() {
+        return listOfElements.getSelectedIndex();
+    }
+
+    public boolean hasBeenCancelled() {
+        return cancelled;
+    }
+
+    public void cancelDialog() {
+        cancelled = true;
+        dispose();
+    }
 }

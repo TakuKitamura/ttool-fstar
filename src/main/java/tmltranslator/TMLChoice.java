@@ -52,308 +52,308 @@ import java.util.Objects;
  * @author Ludovic APVRILLE
  */
 public class TMLChoice extends TMLActivityElement {
-  private List<String> guards;
+    private List<String> guards;
 
-  public TMLChoice(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    guards = new ArrayList<String>();
-  }
-
-  public void addGuard(String _g) {
-    String g = _g.trim();
-    if (!(g.startsWith("["))) {
-      g = "[" + g;
-    }
-    if (!(g.endsWith("]"))) {
-      g = g + "]";
-    }
-    guards.add(g);
-  }
-
-  public int getNbGuard() {
-    return guards.size();
-  }
-
-  public String getGuard(int i) {
-    if (i < getNbGuard()) {
-      return guards.get(i);
-    } else {
-      return null;
-    }
-  }
-
-  public boolean isNonDeterministicGuard(int i) {
-    if (i < getNbGuard()) {
-      String guard = guards.get(i);
-      guard = guard.trim();
-      if (guard.length() == 0) {
-        return true;
-      }
-      guard = Conversion.replaceAllChar(guard, ' ', "");
-      return (guard.compareTo("[]") == 0);
-    }
-    return false;
-  }
-
-  public boolean isStochasticGuard(int i) {
-    if (i < getNbGuard()) {
-      String guard = guards.get(i);
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if (guard.length() < 1) {
-        return false;
-      }
-      if (guard.charAt(guard.length() - 1) == '%') {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public String getStochasticGuard(int i) {
-    if (i < getNbGuard()) {
-      String guard = guards.get(i);
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      return guard.substring(0, guard.length() - 1);
-    }
-    return "50%";
-  }
-
-  public int nbOfNonDeterministicGuard() {
-    int nb = 0;
-
-    if (getNbGuard() == 0) {
-      return nb;
+    public TMLChoice(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        guards = new ArrayList<String>();
     }
 
-    orderGuards();
-
-    int index1 = getElseGuard();
-    int index2 = getAfterGuard();
-    int index = 0;
-    if (index1 == -1) {
-      if (index2 == -1) {
-        index = getNbGuard();
-      }
-    } else {
-      if (index2 == -1) {
-        index = index1;
-      } else {
-        index = Math.min(index1, index2);
-      }
-    }
-
-    // String guard;
-    for (int i = 0; i < index; i++) {
-      if (isNonDeterministicGuard(i)) {
-        nb++;
-      }
-
-    }
-
-    return nb;
-  }
-
-  public int nbOfStochasticGuard() {
-    int nb = 0;
-
-    if (getNbGuard() == 0) {
-      return nb;
-    }
-
-    orderGuards();
-
-    int index1 = getElseGuard();
-    int index2 = getAfterGuard();
-    int index = 0;
-    if (index1 == -1) {
-      if (index2 == -1) {
-        index = getNbGuard();
-      }
-    } else {
-      if (index2 == -1) {
-        index = index1;
-      } else {
-        index = Math.min(index1, index2);
-      }
-    }
-
-    // String guard;
-    for (int i = 0; i < index; i++) {
-      if (isStochasticGuard(i)) {
-        nb++;
-      }
-
-    }
-
-    return nb;
-  }
-
-  public void setGuardAt(int _i, String _g) {
-    guards.set(_i, _g);
-  }
-
-  public boolean hasMoreThanOneElse() {
-    int cpt = 0;
-    String guard;
-    for (int i = 0; i < getNbGuard(); i++) {
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if (guard.compareTo("else") == 0) {
-        cpt++;
-      }
-    }
-
-    return (cpt > 1);
-  }
-
-  public int nbOfElseAndAfterGuards() {
-    int cpt = 0;
-    String guard;
-    for (int i = 0; i < getNbGuard(); i++) {
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if (guard.compareTo("else") == 0) {
-        cpt++;
-      }
-      if (guard.compareTo("after") == 0) {
-        cpt++;
-      }
-    }
-
-    return cpt;
-  }
-
-  public boolean hasMoreThanOneAfter() {
-    int cpt = 0;
-    String guard;
-    for (int i = 0; i < getNbGuard(); i++) {
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if (guard.compareTo("after") == 0) {
-        cpt++;
-      }
-    }
-
-    return (cpt > 1);
-  }
-
-  public int getElseGuard() {
-    // int cpt = 0;
-    String guard;
-    for (int i = 0; i < getNbGuard(); i++) {
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if (guard.compareTo("else") == 0) {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  public String getValueOfElse() {
-    String g = "";
-    int cpt = 0;
-    String guard;
-
-    for (int i = 0; i < getNbGuard(); i++) {
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if ((!(guard.compareTo("else") == 0)) && (!(guard.compareTo("after") == 0))) {
-        guard = getGuard(i);
-        guard = Conversion.replaceAllChar(guard, '[', "(");
-        guard = Conversion.replaceAllChar(guard, ']', ")");
-        guard = "(" + guard + ")";
-        if (cpt == 0) {
-          g = guard;
-        } else {
-          g = g + " or " + guard;
+    public void addGuard(String _g) {
+        String g = _g.trim();
+        if (!(g.startsWith("["))) {
+            g = "[" + g;
         }
-        cpt++;
-      }
+        if (!(g.endsWith("]"))) {
+            g = g + "]";
+        }
+        guards.add(g);
     }
 
-    return "[not(" + g + ")]";
-  }
-
-  public int getAfterGuard() {
-    // int cpt = 0;
-    String guard;
-    for (int i = 0; i < getNbGuard(); i++) {
-      guard = getGuard(i);
-      guard = Conversion.replaceAllChar(guard, '[', " ");
-      guard = Conversion.replaceAllChar(guard, ']', " ");
-      guard = guard.trim();
-      if (guard.compareTo("after") == 0) {
-        return i;
-      }
+    public int getNbGuard() {
+        return guards.size();
     }
 
-    return -1;
-  }
-
-  // regular first, then [else] if applicable, then [after]
-  public void orderGuards() {
-    int index;
-    String guard;
-    TMLActivityElement next;
-
-    // Put else at the end
-    index = getElseGuard();
-    if ((index > -1) && (index != (getNbGuard() - 1))) {
-      next = getNextElement(index);
-      guard = getGuard(index);
-      guards.remove(index);
-      removeNext(index);
-      addNext(next);
-      addGuard(guard);
+    public String getGuard(int i) {
+        if (i < getNbGuard()) {
+            return guards.get(i);
+        } else {
+            return null;
+        }
     }
 
-    index = getAfterGuard();
-    if ((index > -1) && (index != (getNbGuard() - 1))) {
-      next = getNextElement(index);
-      guard = getGuard(index);
-      guards.remove(index);
-      removeNext(index);
-      addNext(next);
-      addGuard(guard);
+    public boolean isNonDeterministicGuard(int i) {
+        if (i < getNbGuard()) {
+            String guard = guards.get(i);
+            guard = guard.trim();
+            if (guard.length() == 0) {
+                return true;
+            }
+            guard = Conversion.replaceAllChar(guard, ' ', "");
+            return (guard.compareTo("[]") == 0);
+        }
+        return false;
     }
-  }
 
-  public String customExtraToXML() {
-    String g = "";
-    for (String s : guards) {
-      g += Conversion.transformToXMLString(s) + ";";
+    public boolean isStochasticGuard(int i) {
+        if (i < getNbGuard()) {
+            String guard = guards.get(i);
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if (guard.length() < 1) {
+                return false;
+            }
+            if (guard.charAt(guard.length() - 1) == '%') {
+                return true;
+            }
+        }
+        return false;
     }
-    return " guards=\"" + g + "\" ";
-  }
 
-  private List<String> getGuards() {
-    return guards;
-  }
+    public String getStochasticGuard(int i) {
+        if (i < getNbGuard()) {
+            String guard = guards.get(i);
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            return guard.substring(0, guard.length() - 1);
+        }
+        return "50%";
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLChoice))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    TMLChoice tmlChoice = (TMLChoice) o;
-    return (new HashSet<>(guards)).equals(new HashSet<>(tmlChoice.getGuards()));
-  }
+    public int nbOfNonDeterministicGuard() {
+        int nb = 0;
+
+        if (getNbGuard() == 0) {
+            return nb;
+        }
+
+        orderGuards();
+
+        int index1 = getElseGuard();
+        int index2 = getAfterGuard();
+        int index = 0;
+        if (index1 == -1) {
+            if (index2 == -1) {
+                index = getNbGuard();
+            }
+        } else {
+            if (index2 == -1) {
+                index = index1;
+            } else {
+                index = Math.min(index1, index2);
+            }
+        }
+
+        // String guard;
+        for (int i = 0; i < index; i++) {
+            if (isNonDeterministicGuard(i)) {
+                nb++;
+            }
+
+        }
+
+        return nb;
+    }
+
+    public int nbOfStochasticGuard() {
+        int nb = 0;
+
+        if (getNbGuard() == 0) {
+            return nb;
+        }
+
+        orderGuards();
+
+        int index1 = getElseGuard();
+        int index2 = getAfterGuard();
+        int index = 0;
+        if (index1 == -1) {
+            if (index2 == -1) {
+                index = getNbGuard();
+            }
+        } else {
+            if (index2 == -1) {
+                index = index1;
+            } else {
+                index = Math.min(index1, index2);
+            }
+        }
+
+        // String guard;
+        for (int i = 0; i < index; i++) {
+            if (isStochasticGuard(i)) {
+                nb++;
+            }
+
+        }
+
+        return nb;
+    }
+
+    public void setGuardAt(int _i, String _g) {
+        guards.set(_i, _g);
+    }
+
+    public boolean hasMoreThanOneElse() {
+        int cpt = 0;
+        String guard;
+        for (int i = 0; i < getNbGuard(); i++) {
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if (guard.compareTo("else") == 0) {
+                cpt++;
+            }
+        }
+
+        return (cpt > 1);
+    }
+
+    public int nbOfElseAndAfterGuards() {
+        int cpt = 0;
+        String guard;
+        for (int i = 0; i < getNbGuard(); i++) {
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if (guard.compareTo("else") == 0) {
+                cpt++;
+            }
+            if (guard.compareTo("after") == 0) {
+                cpt++;
+            }
+        }
+
+        return cpt;
+    }
+
+    public boolean hasMoreThanOneAfter() {
+        int cpt = 0;
+        String guard;
+        for (int i = 0; i < getNbGuard(); i++) {
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if (guard.compareTo("after") == 0) {
+                cpt++;
+            }
+        }
+
+        return (cpt > 1);
+    }
+
+    public int getElseGuard() {
+        // int cpt = 0;
+        String guard;
+        for (int i = 0; i < getNbGuard(); i++) {
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if (guard.compareTo("else") == 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public String getValueOfElse() {
+        String g = "";
+        int cpt = 0;
+        String guard;
+
+        for (int i = 0; i < getNbGuard(); i++) {
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if ((!(guard.compareTo("else") == 0)) && (!(guard.compareTo("after") == 0))) {
+                guard = getGuard(i);
+                guard = Conversion.replaceAllChar(guard, '[', "(");
+                guard = Conversion.replaceAllChar(guard, ']', ")");
+                guard = "(" + guard + ")";
+                if (cpt == 0) {
+                    g = guard;
+                } else {
+                    g = g + " or " + guard;
+                }
+                cpt++;
+            }
+        }
+
+        return "[not(" + g + ")]";
+    }
+
+    public int getAfterGuard() {
+        // int cpt = 0;
+        String guard;
+        for (int i = 0; i < getNbGuard(); i++) {
+            guard = getGuard(i);
+            guard = Conversion.replaceAllChar(guard, '[', " ");
+            guard = Conversion.replaceAllChar(guard, ']', " ");
+            guard = guard.trim();
+            if (guard.compareTo("after") == 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    // regular first, then [else] if applicable, then [after]
+    public void orderGuards() {
+        int index;
+        String guard;
+        TMLActivityElement next;
+
+        // Put else at the end
+        index = getElseGuard();
+        if ((index > -1) && (index != (getNbGuard() - 1))) {
+            next = getNextElement(index);
+            guard = getGuard(index);
+            guards.remove(index);
+            removeNext(index);
+            addNext(next);
+            addGuard(guard);
+        }
+
+        index = getAfterGuard();
+        if ((index > -1) && (index != (getNbGuard() - 1))) {
+            next = getNextElement(index);
+            guard = getGuard(index);
+            guards.remove(index);
+            removeNext(index);
+            addNext(next);
+            addGuard(guard);
+        }
+    }
+
+    public String customExtraToXML() {
+        String g = "";
+        for (String s : guards) {
+            g += Conversion.transformToXMLString(s) + ";";
+        }
+        return " guards=\"" + g + "\" ";
+    }
+
+    private List<String> getGuards() {
+        return guards;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLChoice))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        TMLChoice tmlChoice = (TMLChoice) o;
+        return (new HashSet<>(guards)).equals(new HashSet<>(tmlChoice.getGuards()));
+    }
 }

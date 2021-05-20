@@ -58,148 +58,148 @@ import java.awt.event.ActionListener;
  */
 public class JDialogAttack extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2;
-  private Frame frame;
+    private JPanel panel2;
+    private Frame frame;
 
-  // protected JTextField taskName;
-  protected JTextField name, description, attackCostField;
-  protected JComboBox<String> attackExperienceBox;
-  protected JCheckBox isRootAttack;
+    // protected JTextField taskName;
+    protected JTextField name, description, attackCostField;
+    protected JComboBox<String> attackExperienceBox;
+    protected JCheckBox isRootAttack;
 
-  private ATDAttack attack;
+    private ATDAttack attack;
 
-  /* Creates new form */
-  public JDialogAttack(Frame _frame, String _title, ATDAttack _attack) {
-    super(_frame, _title, true);
-    frame = _frame;
-    attack = _attack;
+    /* Creates new form */
+    public JDialogAttack(Frame _frame, String _title, ATDAttack _attack) {
+        super(_frame, _title, true);
+        frame = _frame;
+        attack = _attack;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("Attack attributes"));
-    panel2.setPreferredSize(new Dimension(350, 250));
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    isRootAttack = new JCheckBox("root attack");
-    isRootAttack.setSelected(attack.isRootAttack());
-    panel2.add(isRootAttack, c1);
-
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Name:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    name = new JTextField(attack.getAttackName());
-    panel2.add(name, c1);
-
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Description:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    description = new JTextField(attack.getDescription());
-    panel2.add(description, c1);
-
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Cost:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    attackCostField = new JTextField("" + attack.getAttackCost());
-    panel2.add(attackCostField, c1);
-
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Experience:"), c2);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    attackExperienceBox = new JComboBox<String>(Attack.EXPERIENCES);
-    if ((attack.getAttackExperience() < Attack.EXPERIENCES.length) && (attack.getAttackExperience() >= 0)) {
-      attackExperienceBox.setSelectedIndex(attack.getAttackExperience());
+        initComponents();
+        myInitComponents();
+        pack();
     }
-    panel2.add(attackExperienceBox, c1);
 
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c0.fill = GridBagConstraints.BOTH;
-    c.add(panel2, c0);
-
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+    private void myInitComponents() {
     }
-  }
 
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
-  public void cancelDialog() {
-    dispose();
-  }
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-  public boolean isRegularClose() {
-    return regularClose;
-  }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-  public String getDescription() {
-    return description.getText();
-  }
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Attack attributes"));
+        panel2.setPreferredSize(new Dimension(350, 250));
 
-  public String getName() {
-    return name.getText();
-  }
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        isRootAttack = new JCheckBox("root attack");
+        isRootAttack.setSelected(attack.isRootAttack());
+        panel2.add(isRootAttack, c1);
 
-  public boolean isRootAttack() {
-    return isRootAttack.isSelected();
-  }
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Name:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        name = new JTextField(attack.getAttackName());
+        panel2.add(name, c1);
 
-  public int getAttackExperience() {
-    return attackExperienceBox.getSelectedIndex();
-  }
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Description:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        description = new JTextField(attack.getDescription());
+        panel2.add(description, c1);
 
-  public String getAttackCost() {
-    return attackCostField.getText();
-  }
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Cost:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        attackCostField = new JTextField("" + attack.getAttackCost());
+        panel2.add(attackCostField, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Experience:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        attackExperienceBox = new JComboBox<String>(Attack.EXPERIENCES);
+        if ((attack.getAttackExperience() < Attack.EXPERIENCES.length) && (attack.getAttackExperience() >= 0)) {
+            attackExperienceBox.setSelectedIndex(attack.getAttackExperience());
+        }
+        panel2.add(attackExperienceBox, c1);
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c0.fill = GridBagConstraints.BOTH;
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public String getDescription() {
+        return description.getText();
+    }
+
+    public String getName() {
+        return name.getText();
+    }
+
+    public boolean isRootAttack() {
+        return isRootAttack.isSelected();
+    }
+
+    public int getAttackExperience() {
+        return attackExperienceBox.getSelectedIndex();
+    }
+
+    public String getAttackCost() {
+        return attackCostField.getText();
+    }
 
 }

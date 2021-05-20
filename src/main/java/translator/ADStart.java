@@ -46,15 +46,15 @@ package translator;
  */
 public class ADStart extends ADComponent {
 
-  public ADStart() {
-    nbNext = 1;
-  }
+    public ADStart() {
+        nbNext = 1;
+    }
 
-  public ADComponent makeSame() {
-    return new ADStart();
-  }
+    public ADComponent makeSame() {
+        return new ADStart();
+    }
 
-  public String toString() {
-    return "Start state";
-  }
+    public String toString() {
+        return "Start state";
+    }
 }

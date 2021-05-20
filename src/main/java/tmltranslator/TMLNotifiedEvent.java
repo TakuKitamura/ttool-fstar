@@ -46,15 +46,15 @@ package tmltranslator;
  */
 public class TMLNotifiedEvent extends TMLActivityElementEvent {
 
-  public TMLNotifiedEvent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLNotifiedEvent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public String toString() {
-    return "Notified event: " + event.getName() + "(" + getAllParams() + ")";
-  }
+    public String toString() {
+        return "Notified event: " + event.getName() + "(" + getAllParams() + ")";
+    }
 
-  public String customExtraToXML() {
-    return " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" variable=\"" + variable + "\" ";
-  }
+    public String customExtraToXML() {
+        return " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" variable=\"" + variable + "\" ";
+    }
 }

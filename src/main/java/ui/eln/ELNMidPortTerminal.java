@@ -51,63 +51,63 @@ import java.awt.*;
  */
 
 public class ELNMidPortTerminal extends ui.TGCPointOfConnector {
-  private int width = 10;
-  private int height = 10;
-  private int oldwidth, oldheight;
+    private int width = 10;
+    private int height = 10;
+    private int oldwidth, oldheight;
 
-  public ELNMidPortTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ELNMidPortTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(width, height);
+        initScaling(width, height);
 
-    initConnectingPoint(1);
+        initConnectingPoint(1);
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    oldwidth = width;
-    oldheight = height;
+        oldwidth = width;
+        oldheight = height;
 
-    moveable = true;
-    editable = false;
-    removable = true;
-    canBeCloned = false;
-  }
-
-  public void initConnectingPoint(int nb) {
-    nbConnectingPoint = nb;
-    connectingPoint = new TGConnectingPoint[nb];
-    connectingPoint[0] = new ELNConnectingPoint(this, -width / 2, -height / 2, true, true, 0.5, 0.5, "");
-  }
-
-  public void internalDrawing(Graphics g) {
-    width = (int) (oldwidth * tdp.getZoom());
-    height = (int) (oldheight * tdp.getZoom());
-    g.drawOval(x - width / 2, y - height / 2, width, height);
-    g.fillOval(x - width / 2, y - height / 2, width, height);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y - height / 2, width, height)) {
-      return this;
+        moveable = true;
+        editable = false;
+        removable = true;
+        canBeCloned = false;
     }
-    return null;
-  }
 
-  public void myActionWhenRemoved() {
-    if (father != null) {
-      if (father instanceof TGConnector) {
-        TGConnector tg = (TGConnector) father;
-        tg.pointHasBeenRemoved(this);
-      }
+    public void initConnectingPoint(int nb) {
+        nbConnectingPoint = nb;
+        connectingPoint = new TGConnectingPoint[nb];
+        connectingPoint[0] = new ELNConnectingPoint(this, -width / 2, -height / 2, true, true, 0.5, 0.5, "");
     }
-  }
 
-  public int getCurrentMaxX() {
-    return getX() + getWidth();
-  }
+    public void internalDrawing(Graphics g) {
+        width = (int) (oldwidth * tdp.getZoom());
+        height = (int) (oldheight * tdp.getZoom());
+        g.drawOval(x - width / 2, y - height / 2, width, height);
+        g.fillOval(x - width / 2, y - height / 2, width, height);
+    }
 
-  public int getCurrentMaxY() {
-    return getY() + getHeight();
-  }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y - height / 2, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public void myActionWhenRemoved() {
+        if (father != null) {
+            if (father instanceof TGConnector) {
+                TGConnector tg = (TGConnector) father;
+                tg.pointHasBeenRemoved(this);
+            }
+        }
+    }
+
+    public int getCurrentMaxX() {
+        return getX() + getWidth();
+    }
+
+    public int getCurrentMaxY() {
+        return getY() + getHeight();
+    }
 }

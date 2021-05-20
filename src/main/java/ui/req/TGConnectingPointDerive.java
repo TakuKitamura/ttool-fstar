@@ -51,30 +51,30 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class TGConnectingPointDerive extends TGConnectingPointWidthHeight {
 
-  public TGConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h,
-      int _orientation) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-    orientation = _orientation;
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    //
-    if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {
-      //
-      return true;
+    public TGConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h, int _orientation) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+        orientation = _orientation;
     }
 
-    if (type == TGComponentManager.CONNECTOR_COMPOSITION_REQ) {
-      //
-      return true;
-    }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        //
+        if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {
+            //
+            return true;
+        }
 
-    if (type == TGComponentManager.CONNECTOR_COPY_REQ) {
-      //
-      return true;
+        if (type == TGComponentManager.CONNECTOR_COMPOSITION_REQ) {
+            //
+            return true;
+        }
+
+        if (type == TGComponentManager.CONNECTOR_COPY_REQ) {
+            //
+            return true;
+        }
+        //
+        return false;
     }
-    //
-    return false;
-  }
 }

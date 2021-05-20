@@ -47,83 +47,83 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
-  AvatarTuple args;
-  AvatarMethod method;
+    AvatarTuple args;
+    AvatarMethod method;
 
-  public AvatarTermFunction(AvatarMethod _method, AvatarTuple _args, Object _referenceObject) {
-    super(_method.getName() + " " + _args.toString(), _referenceObject);
-    this.args = _args;
-    this.method = _method;
-  }
-
-  public static AvatarTermFunction createFromString(AvatarStateMachineOwner block, String toParse) {
-    int indexLParen = toParse.indexOf("(");
-    String methodName;
-    AvatarTuple argsTuple;
-
-    if (indexLParen == -1) {
-      // No left parenthesis: this must be a 0-arity function call
-      methodName = toParse.trim();
-      argsTuple = new AvatarTuple(block);
-    } else {
-      // Left parenthesis present
-      methodName = toParse.substring(0, indexLParen).trim();
-      argsTuple = AvatarTuple.createFromString(block, toParse.substring(indexLParen));
+    public AvatarTermFunction(AvatarMethod _method, AvatarTuple _args, Object _referenceObject) {
+        super(_method.getName() + " " + _args.toString(), _referenceObject);
+        this.args = _args;
+        this.method = _method;
     }
 
-    AvatarMethod meth = block.getAvatarMethodWithName(methodName);
-    if (meth != null && argsTuple != null && meth.getListOfAttributes().size() == argsTuple.getComponents().size())
-      // Method was found and the arguments provided are correct
-      return new AvatarTermFunction(meth, argsTuple, block);
+    public static AvatarTermFunction createFromString(AvatarStateMachineOwner block, String toParse) {
+        int indexLParen = toParse.indexOf("(");
+        String methodName;
+        AvatarTuple argsTuple;
 
-    return null;
-  }
+        if (indexLParen == -1) {
+            // No left parenthesis: this must be a 0-arity function call
+            methodName = toParse.trim();
+            argsTuple = new AvatarTuple(block);
+        } else {
+            // Left parenthesis present
+            methodName = toParse.substring(0, indexLParen).trim();
+            argsTuple = AvatarTuple.createFromString(block, toParse.substring(indexLParen));
+        }
 
-  public AvatarMethod getMethod() {
-    return this.method;
-  }
+        AvatarMethod meth = block.getAvatarMethodWithName(methodName);
+        if (meth != null && argsTuple != null && meth.getListOfAttributes().size() == argsTuple.getComponents().size())
+            // Method was found and the arguments provided are correct
+            return new AvatarTermFunction(meth, argsTuple, block);
 
-  public AvatarTuple getArgs() {
-    return this.args;
-  }
+        return null;
+    }
 
-  public void addArgument(AvatarTerm term) {
-    this.args.addComponent(term);
-  }
+    public AvatarMethod getMethod() {
+        return this.method;
+    }
 
-  public boolean isAMethodCall() {
-    return true;
-  }
+    public AvatarTuple getArgs() {
+        return this.args;
+    }
 
-  public boolean isAVariableSetting() {
-    return false;
-  }
+    public void addArgument(AvatarTerm term) {
+        this.args.addComponent(term);
+    }
 
-  public boolean isABasicVariableSetting() {
-    return false;
-  }
+    public boolean isAMethodCall() {
+        return true;
+    }
 
-  public boolean isLeftHand() {
-    return false;
-  }
+    public boolean isAVariableSetting() {
+        return false;
+    }
 
-  @Override
-  public String toString() {
-    return this.method.getName() + " " + this.args.toString();
-  }
+    public boolean isABasicVariableSetting() {
+        return false;
+    }
 
-  @Override
-  public boolean containsAMethodCall() {
-    return true;
-  }
+    public boolean isLeftHand() {
+        return false;
+    }
 
-  @Override
-  public AvatarTermFunction clone() {
-    return new AvatarTermFunction(this.method, this.args.clone(), this.referenceObject);
-  }
+    @Override
+    public String toString() {
+        return this.method.getName() + " " + this.args.toString();
+    }
 
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-    this.args.replaceAttributes(attributesMapping);
-  }
+    @Override
+    public boolean containsAMethodCall() {
+        return true;
+    }
+
+    @Override
+    public AvatarTermFunction clone() {
+        return new AvatarTermFunction(this.method, this.args.clone(), this.referenceObject);
+    }
+
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.args.replaceAttributes(attributesMapping);
+    }
 }

@@ -58,92 +58,92 @@ import java.util.ListIterator;
  */
 public class TURTLEOSClassDiagramPanel extends TDiagramPanel implements ClassDiagramPanelInterface {
 
-  public TURTLEOSClassDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
-
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    // TraceManager.addDev("Action");
-    if (tgc instanceof TOSClass) {
-      TOSClass t = (TOSClass) tgc;
-      return mgui.newTOSClassName(tp, t.oldValue, t.getValue());
-    } else if (tgc instanceof TOSCDActivityDiagramBox) {
-      if (tgc.getFather() instanceof TOSClass) {
-        mgui.selectTab(tp, tgc.getFather().getValue());
-      }
-      return false; // because no change made on any diagram
-    }
-    return false;
-  }
-
-  public boolean actionOnAdd(TGComponent tgc) {
-    if (tgc instanceof TOSClass) {
-      TOSClass tgcc = (TOSClass) (tgc);
-      // TraceManager.addDev(" *** add tclass *** name=" + tgcc.getClassName());
-      mgui.addTOSClass(tp, tgcc.getClassName());
-      return true;
-    }
-    return false;
-  }
-
-  public boolean actionOnRemove(TGComponent tgc) {
-    if (tgc instanceof TOSClass) {
-      TOSClass tgcc = (TOSClass) (tgc);
-      mgui.removeTOSClass(tp, tgcc.getClassName());
-      return true;
-    }
-    return false;
-  }
-
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    if (tgc instanceof TOSClass) {
-      return actionOnDoubleClick(tgc);
-    }
-    return false;
-  }
-
-  public String getXMLHead() {
-    return "<TURTLEOSClassDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
-  }
-
-  public String getXMLTail() {
-    return "</TURTLEOSClassDiagramPanel>";
-  }
-
-  public String getXMLSelectedHead() {
-    return "<TURTLEOSClassDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
-        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  public String getXMLSelectedTail() {
-    return "</TURTLEOSClassDiagramPanelCopy>";
-  }
-
-  public String getXMLCloneHead() {
-    return "<TURTLEOSClassDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  public String getXMLCloneTail() {
-    return "</TURTLEOSClassDiagramPanelCopy>";
-  }
-
-  public LinkedList<TClassInterface> getAllClasses() {
-    LinkedList<TClassInterface> v = new LinkedList<TClassInterface>();
-
-    ListIterator iterator = getComponentList().listIterator();
-
-    while (iterator.hasNext()) {
-      TGComponent tgc = (TGComponent) (iterator.next());
-      if (tgc instanceof TClassInterface) {
-        v.add((TClassInterface) tgc);
-      }
+    public TURTLEOSClassDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
     }
 
-    return v;
-  }
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        // TraceManager.addDev("Action");
+        if (tgc instanceof TOSClass) {
+            TOSClass t = (TOSClass) tgc;
+            return mgui.newTOSClassName(tp, t.oldValue, t.getValue());
+        } else if (tgc instanceof TOSCDActivityDiagramBox) {
+            if (tgc.getFather() instanceof TOSClass) {
+                mgui.selectTab(tp, tgc.getFather().getValue());
+            }
+            return false; // because no change made on any diagram
+        }
+        return false;
+    }
+
+    public boolean actionOnAdd(TGComponent tgc) {
+        if (tgc instanceof TOSClass) {
+            TOSClass tgcc = (TOSClass) (tgc);
+            // TraceManager.addDev(" *** add tclass *** name=" + tgcc.getClassName());
+            mgui.addTOSClass(tp, tgcc.getClassName());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean actionOnRemove(TGComponent tgc) {
+        if (tgc instanceof TOSClass) {
+            TOSClass tgcc = (TOSClass) (tgc);
+            mgui.removeTOSClass(tp, tgcc.getClassName());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        if (tgc instanceof TOSClass) {
+            return actionOnDoubleClick(tgc);
+        }
+        return false;
+    }
+
+    public String getXMLHead() {
+        return "<TURTLEOSClassDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+    }
+
+    public String getXMLTail() {
+        return "</TURTLEOSClassDiagramPanel>";
+    }
+
+    public String getXMLSelectedHead() {
+        return "<TURTLEOSClassDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+                + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    public String getXMLSelectedTail() {
+        return "</TURTLEOSClassDiagramPanelCopy>";
+    }
+
+    public String getXMLCloneHead() {
+        return "<TURTLEOSClassDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\""
+                + 0 + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    public String getXMLCloneTail() {
+        return "</TURTLEOSClassDiagramPanelCopy>";
+    }
+
+    public LinkedList<TClassInterface> getAllClasses() {
+        LinkedList<TClassInterface> v = new LinkedList<TClassInterface>();
+
+        ListIterator iterator = getComponentList().listIterator();
+
+        while (iterator.hasNext()) {
+            TGComponent tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof TClassInterface) {
+                v.add((TClassInterface) tgc);
+            }
+        }
+
+        return v;
+    }
 }

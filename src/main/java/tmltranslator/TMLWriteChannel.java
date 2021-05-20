@@ -46,19 +46,19 @@ package tmltranslator;
  */
 public class TMLWriteChannel extends TMLActivityElementChannel {
 
-  public TMLWriteChannel(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
-
-  public String toString() {
-    String tmp = "Write " + nbOfSamples + " sample(s) in channel(s): ";
-    for (int k = 0; k < getNbOfChannels(); k++) {
-      if (k != 0) {
-        tmp += " ,";
-      }
-      tmp += getChannel(k).getName();
+    public TMLWriteChannel(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
     }
-    return tmp;
-  }
+
+    public String toString() {
+        String tmp = "Write " + nbOfSamples + " sample(s) in channel(s): ";
+        for (int k = 0; k < getNbOfChannels(); k++) {
+            if (k != 0) {
+                tmp += " ,";
+            }
+            tmp += getChannel(k).getName();
+        }
+        return tmp;
+    }
 
 }

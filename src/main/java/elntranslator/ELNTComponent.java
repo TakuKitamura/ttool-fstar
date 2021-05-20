@@ -46,9 +46,9 @@ package elntranslator;
  */
 
 public class ELNTComponent {
-  public String name;
+    public String name;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

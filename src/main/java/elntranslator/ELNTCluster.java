@@ -49,54 +49,54 @@ import java.util.LinkedList;
  */
 
 public class ELNTCluster extends ELNTComponent {
-  private String name;
+    private String name;
 
-  private LinkedList<ELNTClusterTerminal> clusterTerminal;
-  private LinkedList<ELNTClusterPortDE> clusterPortDE;
-  private LinkedList<ELNTClusterPortTDF> clusterPortTDF;
-  private LinkedList<ELNTModule> module;
+    private LinkedList<ELNTClusterTerminal> clusterTerminal;
+    private LinkedList<ELNTClusterPortDE> clusterPortDE;
+    private LinkedList<ELNTClusterPortTDF> clusterPortTDF;
+    private LinkedList<ELNTModule> module;
 
-  public ELNTCluster(String _name) {
-    name = _name;
-    clusterTerminal = new LinkedList<ELNTClusterTerminal>();
-    clusterPortDE = new LinkedList<ELNTClusterPortDE>();
-    clusterPortTDF = new LinkedList<ELNTClusterPortTDF>();
-    module = new LinkedList<ELNTModule>();
-  }
+    public ELNTCluster(String _name) {
+        name = _name;
+        clusterTerminal = new LinkedList<ELNTClusterTerminal>();
+        clusterPortDE = new LinkedList<ELNTClusterPortDE>();
+        clusterPortTDF = new LinkedList<ELNTClusterPortTDF>();
+        module = new LinkedList<ELNTModule>();
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public LinkedList<ELNTClusterTerminal> getClusterTerminal() {
-    return clusterTerminal;
-  }
+    public LinkedList<ELNTClusterTerminal> getClusterTerminal() {
+        return clusterTerminal;
+    }
 
-  public void addClusterTerminal(ELNTClusterTerminal _clusterTerminal) {
-    clusterTerminal.add(_clusterTerminal);
-  }
+    public void addClusterTerminal(ELNTClusterTerminal _clusterTerminal) {
+        clusterTerminal.add(_clusterTerminal);
+    }
 
-  public LinkedList<ELNTClusterPortDE> getClusterPortDE() {
-    return clusterPortDE;
-  }
+    public LinkedList<ELNTClusterPortDE> getClusterPortDE() {
+        return clusterPortDE;
+    }
 
-  public void addClusterPortDE(ELNTClusterPortDE _clusterPortDE) {
-    clusterPortDE.add(_clusterPortDE);
-  }
+    public void addClusterPortDE(ELNTClusterPortDE _clusterPortDE) {
+        clusterPortDE.add(_clusterPortDE);
+    }
 
-  public LinkedList<ELNTClusterPortTDF> getClusterPortTDF() {
-    return clusterPortTDF;
-  }
+    public LinkedList<ELNTClusterPortTDF> getClusterPortTDF() {
+        return clusterPortTDF;
+    }
 
-  public void addClusterPortTDF(ELNTClusterPortTDF _clusterPortTDF) {
-    clusterPortTDF.add(_clusterPortTDF);
-  }
+    public void addClusterPortTDF(ELNTClusterPortTDF _clusterPortTDF) {
+        clusterPortTDF.add(_clusterPortTDF);
+    }
 
-  public LinkedList<ELNTModule> getModule() {
-    return module;
-  }
+    public LinkedList<ELNTModule> getModule() {
+        return module;
+    }
 
-  public void addModule(ELNTModule _module) {
-    module.add(_module);
-  }
+    public void addModule(ELNTModule _module) {
+        module.add(_module);
+    }
 }

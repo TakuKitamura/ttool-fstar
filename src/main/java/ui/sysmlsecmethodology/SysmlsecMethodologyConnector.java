@@ -55,34 +55,35 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class SysmlsecMethodologyConnector extends TGConnectorWithCommentConnectionPoints {
-  int w, h;
+    int w, h;
 
-  public SysmlsecMethodologyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    value = "<<deriveReqt>>";
+    public SysmlsecMethodologyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        value = "<<deriveReqt>>";
 
-    myImageIcon = IconManager.imgic1008;
+        myImageIcon = IconManager.imgic1008;
 
-    removable = false;
-  }
-
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-
-    // g.drawLine(x1, y1, x2, y2);
-    GraphicLib.arrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-
-  }
-
-  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY()) / 2 - h, w, h)) {
-      return this;
+        removable = false;
     }
-    return null;
-  }
 
-  public int getType() {
-    return TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR;
-  }
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+
+        // g.drawLine(x1, y1, x2, y2);
+        GraphicLib.arrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+
+    }
+
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY()) / 2 - h, w, h)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getType() {
+        return TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR;
+    }
 
 }

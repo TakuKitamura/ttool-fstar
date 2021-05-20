@@ -52,163 +52,163 @@ import translator.RTLOTOSKeyword;
  */
 public abstract class AvatarTerm extends AvatarElement {
 
-  public abstract boolean isLeftHand();
+    public abstract boolean isLeftHand();
 
-  public AvatarTerm(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
-
-  public static AvatarTerm createFromString(AvatarStateMachineOwner block, String toParse) {
-    return AvatarTerm.createFromString(block, toParse, false);
-  }
-
-  public static AvatarTerm createFromString(AvatarStateMachineOwner block, String toParse, boolean allowRaw) {
-    if (toParse == null || toParse.isEmpty())
-      return null;
-
-    // TraceManager.addDev("toParse:" + toParse);
-
-    AvatarTerm result = AvatarTermFunction.createFromString(block, toParse);
-    if (result != null) {
-      // TraceManager.addDev("Result1=" + result);
-      return result;
+    public AvatarTerm(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
     }
 
-    result = AvatarTuple.createFromString(block, toParse);
-    if (result != null) {
-      // TraceManager.addDev("Parsed:" + toParse);
-      // TraceManager.addDev("Result2=" + result);
-      return result;
+    public static AvatarTerm createFromString(AvatarStateMachineOwner block, String toParse) {
+        return AvatarTerm.createFromString(block, toParse, false);
     }
 
-    result = AvatarArithmeticOp.createFromString(block, toParse);
-    if (result != null) {
-      // TraceManager.addDev("Result3=" + result);
-      return result;
+    public static AvatarTerm createFromString(AvatarStateMachineOwner block, String toParse, boolean allowRaw) {
+        if (toParse == null || toParse.isEmpty())
+            return null;
+
+        // TraceManager.addDev("toParse:" + toParse);
+
+        AvatarTerm result = AvatarTermFunction.createFromString(block, toParse);
+        if (result != null) {
+            // TraceManager.addDev("Result1=" + result);
+            return result;
+        }
+
+        result = AvatarTuple.createFromString(block, toParse);
+        if (result != null) {
+            // TraceManager.addDev("Parsed:" + toParse);
+            // TraceManager.addDev("Result2=" + result);
+            return result;
+        }
+
+        result = AvatarArithmeticOp.createFromString(block, toParse);
+        if (result != null) {
+            // TraceManager.addDev("Result3=" + result);
+            return result;
+        }
+
+        toParse = toParse.trim();
+        result = block.getAvatarAttributeWithName(toParse);
+        if (result != null) {
+            // TraceManager.addDev("Result4=" + result);
+            return result;
+        }
+        // TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
+
+        result = block.getAvatarSpecification().getAvatarConstantWithName(toParse);
+        if (result != null) {
+            // TraceManager.addDev("Result5=" + result);
+            return result;
+        }
+
+        try {
+            // TODO: replace that by a true AvatarNumeric
+            // int i = Integer.parseInt (toParse);
+            result = new AvatarConstant(toParse, block);
+            block.getAvatarSpecification().addConstant((AvatarConstant) result);
+            // TraceManager.addDev("Result6=" + result);
+            return result;
+        } catch (NumberFormatException e) {
+        }
+
+        // Consider that new names are constants
+        if (AvatarTerm.isValidName(toParse)) {
+            result = new AvatarConstant(toParse, block);
+            block.getAvatarSpecification().addConstant((AvatarConstant) result);
+            // TraceManager.addDev("Result7=" + result);
+            return result;
+        }
+        // TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
+
+        // TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
+        // if (allowRaw)
+        // TraceManager.addDev("Result7: return new term");
+        return new AvatarTermRaw(toParse, block);
+        // else
+        // return null;
     }
 
-    toParse = toParse.trim();
-    result = block.getAvatarAttributeWithName(toParse);
-    if (result != null) {
-      // TraceManager.addDev("Result4=" + result);
-      return result;
-    }
-    // TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
+    public static AvatarAction createActionFromString(AvatarStateMachineOwner block, String toParse) {
+        // TraceManager.addDev("Parsing >" + toParse + "<");
 
-    result = block.getAvatarSpecification().getAvatarConstantWithName(toParse);
-    if (result != null) {
-      // TraceManager.addDev("Result5=" + result);
-      return result;
-    }
+        AvatarAction result = null;
 
-    try {
-      // TODO: replace that by a true AvatarNumeric
-      // int i = Integer.parseInt (toParse);
-      result = new AvatarConstant(toParse, block);
-      block.getAvatarSpecification().addConstant((AvatarConstant) result);
-      // TraceManager.addDev("Result6=" + result);
-      return result;
-    } catch (NumberFormatException e) {
-    }
+        int indexEq = toParse.indexOf("=");
+        if (indexEq == -1)
+            // No equal sign: this must be a function call
+            result = AvatarTermFunction.createFromString(block, toParse);
 
-    // Consider that new names are constants
-    if (AvatarTerm.isValidName(toParse)) {
-      result = new AvatarConstant(toParse, block);
-      block.getAvatarSpecification().addConstant((AvatarConstant) result);
-      // TraceManager.addDev("Result7=" + result);
-      return result;
-    }
-    // TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
+        else {
+            // This should be an assignment or a function with assignment
+            AvatarTerm leftHand = AvatarTerm.createFromString(block, toParse.substring(0, indexEq));
+            AvatarTerm rightHand = AvatarTermFunction.createFromString(block, toParse.substring(indexEq + 1));
 
-    // TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
-    // if (allowRaw)
-    // TraceManager.addDev("Result7: return new term");
-    return new AvatarTermRaw(toParse, block);
-    // else
-    // return null;
-  }
+            if (rightHand == null) {
+                // TraceManager.addDev("Not a function?");
+                rightHand = AvatarTerm.createFromString(block, toParse.substring(indexEq + 1));
+            } else {
+                // TraceManager.addDev("Function!");
+            }
 
-  public static AvatarAction createActionFromString(AvatarStateMachineOwner block, String toParse) {
-    // TraceManager.addDev("Parsing >" + toParse + "<");
+            // TraceManager.addDev("right hand of /" + toParse + "/ : >" + rightHand + "<
+            // leftHand=" + leftHand + " isLeftHand" + leftHand
+            // .isLeftHand ());
 
-    AvatarAction result = null;
+            if (leftHand != null && rightHand != null && leftHand.isLeftHand()) {
+                // TraceManager.addDev("Creating result");
+                result = new AvatarActionAssignment((AvatarLeftHand) leftHand, rightHand);
+            }
 
-    int indexEq = toParse.indexOf("=");
-    if (indexEq == -1)
-      // No equal sign: this must be a function call
-      result = AvatarTermFunction.createFromString(block, toParse);
+        }
 
-    else {
-      // This should be an assignment or a function with assignment
-      AvatarTerm leftHand = AvatarTerm.createFromString(block, toParse.substring(0, indexEq));
-      AvatarTerm rightHand = AvatarTermFunction.createFromString(block, toParse.substring(indexEq + 1));
+        if (result == null)
+            TraceManager.addDev("Action '" + toParse + "' couldn't be parsed");
 
-      if (rightHand == null) {
-        // TraceManager.addDev("Not a function?");
-        rightHand = AvatarTerm.createFromString(block, toParse.substring(indexEq + 1));
-      } else {
-        // TraceManager.addDev("Function!");
-      }
-
-      // TraceManager.addDev("right hand of /" + toParse + "/ : >" + rightHand + "<
-      // leftHand=" + leftHand + " isLeftHand" + leftHand
-      // .isLeftHand ());
-
-      if (leftHand != null && rightHand != null && leftHand.isLeftHand()) {
-        // TraceManager.addDev("Creating result");
-        result = new AvatarActionAssignment((AvatarLeftHand) leftHand, rightHand);
-      }
-
+        return result;
     }
 
-    if (result == null)
-      TraceManager.addDev("Action '" + toParse + "' couldn't be parsed");
+    public static boolean isValidName(String _name) {
+        String toParse = _name.trim();
+        String lowerid = toParse.toLowerCase();
+        boolean b1, b2, b3, b4, b5;
+        b1 = (toParse.substring(0, 1)).matches("[a-zA-Z]");
+        b2 = toParse.matches("\\w*");
+        b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
+        b4 = true;
+        for (AvatarType type : AvatarType.values())
+            if (lowerid.equals(type.getStringType().toLowerCase()))
+                b4 = false;
+        b5 = !JKeyword.isAKeyword(lowerid);
 
-    return result;
-  }
+        return (b1 && b2 && b3 && b4 && b5);
+    }
 
-  public static boolean isValidName(String _name) {
-    String toParse = _name.trim();
-    String lowerid = toParse.toLowerCase();
-    boolean b1, b2, b3, b4, b5;
-    b1 = (toParse.substring(0, 1)).matches("[a-zA-Z]");
-    b2 = toParse.matches("\\w*");
-    b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
-    b4 = true;
-    for (AvatarType type : AvatarType.values())
-      if (lowerid.equals(type.getStringType().toLowerCase()))
-        b4 = false;
-    b5 = !JKeyword.isAKeyword(lowerid);
+    /**
+     * Returns True if the whole action contains a method call.
+     *
+     * @return True if the whole action contains a method call. False otherwise.
+     */
+    public abstract boolean containsAMethodCall();
 
-    return (b1 && b2 && b3 && b4 && b5);
-  }
+    /**
+     * Returns a full clone of the term.
+     *
+     * <p>
+     * Note that this is a full clone except for {@link AvatarAttribute} and
+     * {@link AvatarConstant} that shouldn't be cloned
+     * </p>
+     *
+     * @return A clone of the term.
+     */
+    public abstract AvatarTerm clone();
 
-  /**
-   * Returns True if the whole action contains a method call.
-   *
-   * @return True if the whole action contains a method call. False otherwise.
-   */
-  public abstract boolean containsAMethodCall();
-
-  /**
-   * Returns a full clone of the term.
-   *
-   * <p>
-   * Note that this is a full clone except for {@link AvatarAttribute} and
-   * {@link AvatarConstant} that shouldn't be cloned
-   * </p>
-   *
-   * @return A clone of the term.
-   */
-  public abstract AvatarTerm clone();
-
-  /**
-   * Replaces attributes in this term according to the provided mapping.
-   *
-   * @param attributesMapping The mapping used to replace the attributes of the
-   *                          term. All the attributes of the block should be
-   *                          present as keys.
-   */
-  public abstract void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
+    /**
+     * Replaces attributes in this term according to the provided mapping.
+     *
+     * @param attributesMapping The mapping used to replace the attributes of the
+     *                          term. All the attributes of the block should be
+     *                          present as keys.
+     */
+    public abstract void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
 
 }

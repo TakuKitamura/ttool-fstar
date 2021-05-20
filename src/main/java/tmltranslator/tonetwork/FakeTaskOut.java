@@ -50,53 +50,53 @@ import java.util.Vector;
  */
 public class FakeTaskOut extends TMLTask {
 
-  public FakeTaskOut(String name, Object referenceToClass, Object referenceToActivityDiagram) {
-    super(name, referenceToClass, referenceToActivityDiagram);
-    setDaemon(TMAP2Network.DAEMON);
-  }
+    public FakeTaskOut(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(TMAP2Network.DAEMON);
+    }
 
-  // Output Channels are given in the order of VCs
+    // Output Channels are given in the order of VCs
 
-  public void generate(TMLEvent packetIn) {
+    public void generate(TMLEvent packetIn) {
 
-    // Attributes
-    TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(pktlen);
-    TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstX);
-    TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstY);
-    TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(vc);
-    TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(eop);
-    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(chid);
+        // Attributes
+        TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(pktlen);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
+        TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(vc);
+        TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
 
-    // Events
-    addTMLEvent(packetIn);
+        // Events
+        addTMLEvent(packetIn);
 
-    // Activity Diagram
-    TMLStartState start = new TMLStartState("mainStart", referenceObject);
-    activity.setFirst(start);
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
 
-    TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
-    loop.setInfinite(true);
-    addElement(start, loop);
+        TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
+        loop.setInfinite(true);
+        addElement(start, loop);
 
-    TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
-    waitingForPacketFromOUT.setEvent(packetIn);
-    waitingForPacketFromOUT.addParam("pktlen");
-    waitingForPacketFromOUT.addParam("dstX");
-    waitingForPacketFromOUT.addParam("dstY");
-    waitingForPacketFromOUT.addParam("vc");
-    waitingForPacketFromOUT.addParam("eop");
-    waitingForPacketFromOUT.addParam("chid");
-    addElement(loop, waitingForPacketFromOUT);
+        TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
+        waitingForPacketFromOUT.setEvent(packetIn);
+        waitingForPacketFromOUT.addParam("pktlen");
+        waitingForPacketFromOUT.addParam("dstX");
+        waitingForPacketFromOUT.addParam("dstY");
+        waitingForPacketFromOUT.addParam("vc");
+        waitingForPacketFromOUT.addParam("eop");
+        waitingForPacketFromOUT.addParam("chid");
+        addElement(loop, waitingForPacketFromOUT);
 
-    TMLStopState stopMain = new TMLStopState("ReturnToInfiniteLoop", referenceObject);
-    addElement(waitingForPacketFromOUT, stopMain);
+        TMLStopState stopMain = new TMLStopState("ReturnToInfiniteLoop", referenceObject);
+        addElement(waitingForPacketFromOUT, stopMain);
 
-  }
+    }
 
 }

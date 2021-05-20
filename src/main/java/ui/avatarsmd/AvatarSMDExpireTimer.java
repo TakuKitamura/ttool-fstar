@@ -69,201 +69,204 @@ import ui.window.JDialogAvatarTimer;
  * @author Ludovic APVRILLE
  */
 public class AvatarSMDExpireTimer extends AvatarSMDBasicCanBeDisabledComponent
-    /* Issue #69 AvatarSMDBasicComponent */ implements BasicErrorHighlight, PartOfInvariant {
+        /* Issue #69 AvatarSMDBasicComponent */ implements BasicErrorHighlight, PartOfInvariant {
 
-  protected int lineLength = 5;
+    protected int lineLength = 5;
 
-  // protected int textX = 5;
-  //
-  // protected int textY = 15;
-
-  protected int arc = 5;
-
-  protected int linebreak = 10;
-
-  protected int hourglassWidth = 10;
-
-  protected int hourglassSpace = 2;
-
-  protected int stateOfError = 0; // Not yet checked
-
-  public AvatarSMDExpireTimer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-    width = 30;
-    height = 20;
-    minWidth = 30;
-    textX = 5;
-    textY = 15;
-    initScaling(30, 20);
-
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
-
-    addTGConnectingPointsComment();
-
-    moveable = true;
-    editable = true;
-    removable = true;
-
-    name = "Reset timer";
-    value = "expire(timer1)";
-    // makeValue();
-
-    myImageIcon = IconManager.imgic904;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    int w = g.getFontMetrics().stringWidth(value);
-    int w1 = Math.max(minWidth, w + 2 * textX + linebreak);
-    if ((w1 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w1 / 2, y);
-      width = w1; // updateConnectingPoints();
-    }
-
-    if (stateOfError > 0) {
-      Color c = g.getColor();
-      switch (stateOfError) {
-        case ErrorHighlight.OK:
-          g.setColor(ColorManager.AVATAR_EXPIRE_TIMER);
-          break;
-        default:
-          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-      }
-      // Making the polygon
-      int[] px1 = { x, x + width - linebreak, x + width, x + width - linebreak, x };
-      int[] py1 = { y, y, y + (height / 2), y + height, y + height };
-      g.fillPolygon(px1, py1, 5);
-      g.setColor(c);
-    }
-
-    // g.drawRoundRect(x, y, width, height, arc, arc);
-    Color c = g.getColor();
+    // protected int textX = 5;
     //
+    // protected int textY = 15;
 
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+    protected int arc = 5;
 
-    /*
-     * if (g.getColor().equals(ColorManager.NORMAL_0)) {
-     * g.setColor(ColorManager.TML_PORT_EVENT); }
-     */
+    protected int linebreak = 10;
 
-    int x1 = x + 1;
-    int y1 = y + 1;
-    int height1 = height;
-    int width1 = width;
-    g.setColor(ColorManager.AVATAR_EXPIRE_TIMER);
-    g.drawLine(x1, y1, x1 + width1, y1);
-    g.drawLine(x1 + width1, y1, x1 + width1, y1 + height1);
-    g.drawLine(x1, y1 + height1, x1 + width1, y1 + height1);
-    g.drawLine(x1, y1, x1 + linebreak, y1 + height1 / 2);
-    g.drawLine(x1, y1 + height1, x1 + linebreak, y1 + height1 / 2);
-    g.setColor(c);
+    protected int hourglassWidth = 10;
 
-    final Polygon shape = new Polygon();
-    shape.addPoint(x, y);
-    shape.addPoint(x + width, y);
-    shape.addPoint(x + width, y + height);
-    shape.addPoint(x, y + height);
-    shape.addPoint(x + linebreak, y + height / 2);
-    g.drawPolygon(shape);
-    // g.drawLine(x, y, x+width, y);
-    // g.drawLine(x+width, y, x+width, y+height);
-    // g.drawLine(x, y+height, x+width, y+height);
-    // g.drawLine(x, y, x+linebreak, y+height/2);
-    // g.drawLine(x, y+height, x+linebreak, y+height/2);
+    protected int hourglassSpace = 2;
 
-    // Issue #69
-    if (!isEnabled() && isContainedInEnabledState()) {
-      g.setColor(ColorManager.DISABLED_FILLING);
-      g.fillPolygon(shape);
-      g.setColor(c);
+    protected int stateOfError = 0; // Not yet checked
+
+    public AvatarSMDExpireTimer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+        width = 30;
+        height = 20;
+        minWidth = 30;
+        textX = 5;
+        textY = 15;
+        initScaling(30, 20);
+
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+
+        addTGConnectingPointsComment();
+
+        moveable = true;
+        editable = true;
+        removable = true;
+
+        name = "Reset timer";
+        value = "expire(timer1)";
+        // makeValue();
+
+        myImageIcon = IconManager.imgic904;
     }
 
-    // hourglass
-    g.setColor(ColorManager.AVATAR_SET_TIMER);
-    g.drawLine(x + width + hourglassSpace + 1, y + 1, x + width + hourglassSpace + hourglassWidth + 1, y + 1);
-    g.drawLine(x + width + hourglassSpace + 1, y + height + 1, x + width + hourglassSpace + hourglassWidth + 1,
-        y + height + 1);
-    g.drawLine(x + width + hourglassSpace + 1, y + 1, x + width + hourglassSpace + hourglassWidth + 1, y + height + 1);
-    g.drawLine(x + width + hourglassSpace + 1, y + height + 1, x + width + hourglassSpace + hourglassWidth + 1, y + 1);
-    g.setColor(c);
-    g.drawLine(x + width + hourglassSpace, y, x + width + hourglassSpace + hourglassWidth, y);
-    g.drawLine(x + width + hourglassSpace, y + height, x + width + hourglassSpace + hourglassWidth, y + height);
-    g.drawLine(x + width + hourglassSpace, y, x + width + hourglassSpace + hourglassWidth, y + height);
-    g.drawLine(x + width + hourglassSpace, y + height, x + width + hourglassSpace + hourglassWidth, y);
+    @Override
+    public void internalDrawing(Graphics g) {
+        int w = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, w + 2 * textX + linebreak);
+        if ((w1 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w1 / 2, y);
+            width = w1; // updateConnectingPoints();
+        }
 
-    // g.drawString("sig()", x+(width-w) / 2, y);
-    // g.drawString(value, x + (width - w) / 2 + textX, y + textY);
-    drawSingleString(g, value, x + (width - w) / 2 + textX, y + textY);
-  }
+        if (stateOfError > 0) {
+            Color c = g.getColor();
+            switch (stateOfError) {
+                case ErrorHighlight.OK:
+                    g.setColor(ColorManager.AVATAR_EXPIRE_TIMER);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            // Making the polygon
+            int[] px1 = { x, x + width - linebreak, x + width, x + width - linebreak, x };
+            int[] py1 = { y, y, y + (height / 2), y + height, y + height };
+            g.fillPolygon(px1, py1, 5);
+            g.setColor(c);
+        }
 
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width + hourglassSpace + hourglassWidth, height)) {
-      return this;
+        // g.drawRoundRect(x, y, width, height, arc, arc);
+        Color c = g.getColor();
+        //
+
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        /*
+         * if (g.getColor().equals(ColorManager.NORMAL_0)) {
+         * g.setColor(ColorManager.TML_PORT_EVENT); }
+         */
+
+        int x1 = x + 1;
+        int y1 = y + 1;
+        int height1 = height;
+        int width1 = width;
+        g.setColor(ColorManager.AVATAR_EXPIRE_TIMER);
+        g.drawLine(x1, y1, x1 + width1, y1);
+        g.drawLine(x1 + width1, y1, x1 + width1, y1 + height1);
+        g.drawLine(x1, y1 + height1, x1 + width1, y1 + height1);
+        g.drawLine(x1, y1, x1 + linebreak, y1 + height1 / 2);
+        g.drawLine(x1, y1 + height1, x1 + linebreak, y1 + height1 / 2);
+        g.setColor(c);
+
+        final Polygon shape = new Polygon();
+        shape.addPoint(x, y);
+        shape.addPoint(x + width, y);
+        shape.addPoint(x + width, y + height);
+        shape.addPoint(x, y + height);
+        shape.addPoint(x + linebreak, y + height / 2);
+        g.drawPolygon(shape);
+        // g.drawLine(x, y, x+width, y);
+        // g.drawLine(x+width, y, x+width, y+height);
+        // g.drawLine(x, y+height, x+width, y+height);
+        // g.drawLine(x, y, x+linebreak, y+height/2);
+        // g.drawLine(x, y+height, x+linebreak, y+height/2);
+
+        // Issue #69
+        if (!isEnabled() && isContainedInEnabledState()) {
+            g.setColor(ColorManager.DISABLED_FILLING);
+            g.fillPolygon(shape);
+            g.setColor(c);
+        }
+
+        // hourglass
+        g.setColor(ColorManager.AVATAR_SET_TIMER);
+        g.drawLine(x + width + hourglassSpace + 1, y + 1, x + width + hourglassSpace + hourglassWidth + 1, y + 1);
+        g.drawLine(x + width + hourglassSpace + 1, y + height + 1, x + width + hourglassSpace + hourglassWidth + 1,
+                y + height + 1);
+        g.drawLine(x + width + hourglassSpace + 1, y + 1, x + width + hourglassSpace + hourglassWidth + 1,
+                y + height + 1);
+        g.drawLine(x + width + hourglassSpace + 1, y + height + 1, x + width + hourglassSpace + hourglassWidth + 1,
+                y + 1);
+        g.setColor(c);
+        g.drawLine(x + width + hourglassSpace, y, x + width + hourglassSpace + hourglassWidth, y);
+        g.drawLine(x + width + hourglassSpace, y + height, x + width + hourglassSpace + hourglassWidth, y + height);
+        g.drawLine(x + width + hourglassSpace, y, x + width + hourglassSpace + hourglassWidth, y + height);
+        g.drawLine(x + width + hourglassSpace, y + height, x + width + hourglassSpace + hourglassWidth, y);
+
+        // g.drawString("sig()", x+(width-w) / 2, y);
+        // g.drawString(value, x + (width - w) / 2 + textX, y + textY);
+        drawSingleString(g, value, x + (width - w) / 2 + textX, y + textY);
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width + hourglassSpace + hourglassWidth, height)) {
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    // public void makeValue() {
+    // }
 
-  // public void makeValue() {
-  // }
-
-  public String getTimerName() {
-    return AvatarSignal.getValue(value, 0);
-  }
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    List<String> timers = tdp.getMGUI().getAllTimers();
-    TraceManager.addDev("Nb of timers:" + timers.size());
-
-    JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Timer expiration", getTimerName(), "", timers, false);
-    // jdat.setSize(350, 300);
-    GraphicLib.centerOnParent(jdat, 350, 300);
-    jdat.setVisible(true); // blocked until dialog has been closed
-
-    if (jdat.hasBeenCancelled()) {
-      return false;
+    public String getTimerName() {
+        return AvatarSignal.getValue(value, 0);
     }
 
-    String val0 = jdat.getTimer();
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        List<String> timers = tdp.getMGUI().getAllTimers();
+        TraceManager.addDev("Nb of timers:" + timers.size());
 
-    // valid signal?
-    if (!AvatarSignal.isAValidUseSignal(val0)) {
-      JOptionPane.showMessageDialog(frame, "Could not change the setting of the timer: invalid name for the timer",
-          "Error", JOptionPane.INFORMATION_MESSAGE);
-      return false;
+        JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Timer expiration", getTimerName(), "", timers, false);
+        // jdat.setSize(350, 300);
+        GraphicLib.centerOnParent(jdat, 350, 300);
+        jdat.setVisible(true); // blocked until dialog has been closed
+
+        if (jdat.hasBeenCancelled()) {
+            return false;
+        }
+
+        String val0 = jdat.getTimer();
+
+        // valid signal?
+        if (!AvatarSignal.isAValidUseSignal(val0)) {
+            JOptionPane.showMessageDialog(frame,
+                    "Could not change the setting of the timer: invalid name for the timer", "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+
+        value = "expire(" + val0 + ")";
+
+        return true;
     }
 
-    value = "expire(" + val0 + ")";
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARSMD_EXPIRE_TIMER;
+    }
 
-    return true;
-  }
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.AVATARSMD_CONNECTOR;
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARSMD_EXPIRE_TIMER;
-  }
-
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.AVATARSMD_CONNECTOR;
-  }
-
-  @Override
-  public void setStateAction(int _stateAction) {
-    stateOfError = _stateAction;
-  }
+    @Override
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
 }

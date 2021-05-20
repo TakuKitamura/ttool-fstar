@@ -53,78 +53,78 @@ import java.awt.*;
  */
 public class TADStopState extends TADComponentWithoutSubcomponents /* Issue #69 TGCWithoutInternalComponent */ {
 
-  // private int internalCircleSize = 16;
-  private static final double INTERNAL_CIRCLE_RATIO = 0.8;
+    // private int internalCircleSize = 16;
+    private static final double INTERNAL_CIRCLE_RATIO = 0.8;
 
-  // protected int lineLength = 5;
+    // protected int lineLength = 5;
 
-  public TADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    // Issue #31
-    createConnectingPoints();
-    // width = 20;
-    // height = 20;
-    initScaling(20, 20);
+        // Issue #31
+        createConnectingPoints();
+        // width = 20;
+        // height = 20;
+        initScaling(20, 20);
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "stop state";
+        name = "stop state";
 
-    myImageIcon = IconManager.imgic210;
-  }
-
-  protected void createConnectingPoints() {
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[1];
-    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-  }
-
-  @Override
-  protected void internalDrawing(Graphics g) {
-
-    // Issue #69
-    ColorManager.setColor(g, state, 0, isEnabled());
-    // ColorManager.setColor(g, state, 0);
-
-    // Issue #3&
-    final int internalCircleSize = (int) (width * INTERNAL_CIRCLE_RATIO);
-    g.fillOval(x + (width - internalCircleSize) / 2, y + (height - internalCircleSize) / 2, internalCircleSize,
-        internalCircleSize);
-    g.drawOval(x, y, width, height);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic210;
     }
-    return null;
-  }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TAD_STOP_STATE;
-  }
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[1];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-  }
+    @Override
+    protected void internalDrawing(Graphics g) {
 
-  /*
-   * Issue #69 (non-Javadoc)
-   * 
-   * @see ui.AbstractCDElement#canBeDisabled()
-   */
-  @Override
-  public boolean canBeDisabled() {
-    return false;
-  }
+        // Issue #69
+        ColorManager.setColor(g, state, 0, isEnabled());
+        // ColorManager.setColor(g, state, 0);
+
+        // Issue #3&
+        final int internalCircleSize = (int) (width * INTERNAL_CIRCLE_RATIO);
+        g.fillOval(x + (width - internalCircleSize) / 2, y + (height - internalCircleSize) / 2, internalCircleSize,
+                internalCircleSize);
+        g.drawOval(x, y, width, height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    }
+
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.TAD_STOP_STATE;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
+
+    /*
+     * Issue #69 (non-Javadoc)
+     * 
+     * @see ui.AbstractCDElement#canBeDisabled()
+     */
+    @Override
+    public boolean canBeDisabled() {
+        return false;
+    }
 }

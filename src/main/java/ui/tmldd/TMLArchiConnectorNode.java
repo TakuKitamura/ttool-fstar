@@ -61,175 +61,176 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TMLArchiConnectorNode extends TGConnector implements WithAttributes {
-  protected int arrowLength = 10;
-  protected int widthValue, heightValue, maxWidthValue, h;
-  public static final String NO_SPY = "Remove spy";
-  public static final String ADD_SPY = "Add spy";
-  protected boolean hasASpy;
-  protected int priority = 0; // Between 0 and 10
+    protected int arrowLength = 10;
+    protected int widthValue, heightValue, maxWidthValue, h;
+    public static final String NO_SPY = "Remove spy";
+    public static final String ADD_SPY = "Add spy";
+    protected boolean hasASpy;
+    protected int priority = 0; // Between 0 and 10
 
-  public TMLArchiConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    myImageIcon = IconManager.imgic202;
-    value = "{info}";
-    editable = true;
-  }
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
-    // dialog.setSize(350, 300);
-    GraphicLib.centerOnParent(dialog, 450, 300);
-    dialog.setVisible(true); // blocked until dialog has been closed
-
-    if (!dialog.isRegularClose()) {
-      return false;
+    public TMLArchiConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic202;
+        value = "{info}";
+        editable = true;
     }
 
-    priority = dialog.getPriority();
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
+        // dialog.setSize(350, 300);
+        GraphicLib.centerOnParent(dialog, 450, 300);
+        dialog.setVisible(true); // blocked until dialog has been closed
 
-    return true;
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if (hasASpy) {
-      g.drawImage(IconManager.img5200, (x1 + x2) / 2, (y1 + y2) / 2, null);
-    }
-    g.drawLine(x1, y1, x2, y2);
-    /*
-     * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-     * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
-     * x1, y1, x2, y2, true); }
-     */
-  }
-
-  public boolean hasASpy() {
-    return hasASpy;
-  }
-
-  @Override
-  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-    componentMenu.addSeparator();
-    JMenuItem generate = null;
-    // Should verify first whether it is connected to a formal requirement with a
-    // verify relation, or not
-    if (hasASpy) {
-      generate = new JMenuItem(NO_SPY);
-    } else {
-      generate = new JMenuItem(ADD_SPY);
-    }
-
-    generate.addActionListener(menuAL);
-    componentMenu.add(generate);
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
-  }
-
-  @Override
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info priority=\"");
-    sb.append(priority);
-    sb.append("\" />\n");
-    sb.append("<spy value=\"" + hasASpy + "\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int t1id;
-      String prio;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-
-          // Issue #17 copy-paste error on j index
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                prio = elt.getAttribute("priority");
-                if (elt != null) {
-                  priority = Integer.decode(prio).intValue();
-                }
-              }
-              if (elt.getTagName().equals("spy")) {
-                String tmp = elt.getAttribute("value").trim();
-                // TraceManager.addDev("[DD] value=" + tmp);
-                if (tmp.compareTo("true") == 0) {
-                  hasASpy = true;
-                }
-              }
-            }
-          }
+        if (!dialog.isRegularClose()) {
+            return false;
         }
-      }
 
-    } catch (Exception e) {
-      throw new MalformedModelingException();
-    }
-  }
+        priority = dialog.getPriority();
 
-  @Override
-  public boolean eventOnPopup(ActionEvent e) {
-    String s = e.getActionCommand();
-    TraceManager.addDev("action: " + s);
-
-    if (s.indexOf(NO_SPY) > -1) {
-      hasASpy = false;
-      tdp.repaint();
+        return true;
     }
 
-    if (s.indexOf(ADD_SPY) > -1) {
-      hasASpy = true;
-      tdp.repaint();
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if (hasASpy) {
+            g.drawImage(IconManager.img5200, (x1 + x2) / 2, (y1 + y2) / 2, null);
+        }
+        g.drawLine(x1, y1, x2, y2);
+        /*
+         * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+         * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
+         * x1, y1, x2, y2, true); }
+         */
     }
 
-    return true;
-  }
-
-  public TMLArchiCPUNode getOriginNode() {
-    TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP1());
-    if (tgc instanceof TMLArchiCPUNode) {
-      return (TMLArchiCPUNode) tgc;
-    } else {
-      return null;
+    public boolean hasASpy() {
+        return hasASpy;
     }
-  }
 
-  public TMLArchiCPUNode getDestinationNode() {
-    TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP2());
-    if (tgc instanceof TMLArchiCPUNode) {
-      return (TMLArchiCPUNode) tgc;
-    } else {
-      return null;
+    @Override
+    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+        componentMenu.addSeparator();
+        JMenuItem generate = null;
+        // Should verify first whether it is connected to a formal requirement with a
+        // verify relation, or not
+        if (hasASpy) {
+            generate = new JMenuItem(NO_SPY);
+        } else {
+            generate = new JMenuItem(ADD_SPY);
+        }
+
+        generate.addActionListener(menuAL);
+        componentMenu.add(generate);
     }
-  }
 
-  public int getPriority() {
-    return priority;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
+    }
 
-  @Override
-  public String getAttributes() {
-    return "Priority = " + priority;
-  }
+    @Override
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info priority=\"");
+        sb.append(priority);
+        sb.append("\" />\n");
+        sb.append("<spy value=\"" + hasASpy + "\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int t1id;
+            String prio;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                prio = elt.getAttribute("priority");
+                                if (elt != null) {
+                                    priority = Integer.decode(prio).intValue();
+                                }
+                            }
+                            if (elt.getTagName().equals("spy")) {
+                                String tmp = elt.getAttribute("value").trim();
+                                // TraceManager.addDev("[DD] value=" + tmp);
+                                if (tmp.compareTo("true") == 0) {
+                                    hasASpy = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
+
+    @Override
+    public boolean eventOnPopup(ActionEvent e) {
+        String s = e.getActionCommand();
+        TraceManager.addDev("action: " + s);
+
+        if (s.indexOf(NO_SPY) > -1) {
+            hasASpy = false;
+            tdp.repaint();
+        }
+
+        if (s.indexOf(ADD_SPY) > -1) {
+            hasASpy = true;
+            tdp.repaint();
+        }
+
+        return true;
+    }
+
+    public TMLArchiCPUNode getOriginNode() {
+        TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP1());
+        if (tgc instanceof TMLArchiCPUNode) {
+            return (TMLArchiCPUNode) tgc;
+        } else {
+            return null;
+        }
+    }
+
+    public TMLArchiCPUNode getDestinationNode() {
+        TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP2());
+        if (tgc instanceof TMLArchiCPUNode) {
+            return (TMLArchiCPUNode) tgc;
+        } else {
+            return null;
+        }
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    @Override
+    public String getAttributes() {
+        return "Priority = " + priority;
+    }
 
 }

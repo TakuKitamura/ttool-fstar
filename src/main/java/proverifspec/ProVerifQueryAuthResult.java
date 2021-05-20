@@ -45,24 +45,24 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifQueryAuthResult extends ProVerifQueryResult {
-  protected boolean weakSatisfied, weakProved;
+    protected boolean weakSatisfied, weakProved;
 
-  public ProVerifQueryAuthResult(boolean proved, boolean satisfied) {
-    super(proved, satisfied);
-    this.weakSatisfied = true;
-    this.weakProved = (proved && satisfied);
-  }
+    public ProVerifQueryAuthResult(boolean proved, boolean satisfied) {
+        super(proved, satisfied);
+        this.weakSatisfied = true;
+        this.weakProved = (proved && satisfied);
+    }
 
-  public boolean isWeakProved() {
-    return this.weakProved;
-  }
+    public boolean isWeakProved() {
+        return this.weakProved;
+    }
 
-  public boolean isWeakSatisfied() {
-    return this.weakSatisfied;
-  }
+    public boolean isWeakSatisfied() {
+        return this.weakSatisfied;
+    }
 
-  public void setWeakSatisfied(boolean satisfied) {
-    this.weakProved = true;
-    this.weakSatisfied = satisfied;
-  }
+    public void setWeakSatisfied(boolean satisfied) {
+        this.weakProved = true;
+        this.weakSatisfied = satisfied;
+    }
 }

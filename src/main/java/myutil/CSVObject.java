@@ -48,110 +48,110 @@ import java.util.UUID;
  * @author Ludovic APVRILLE
  */
 public class CSVObject {
-  public ArrayList<String[]> lines;
+    public ArrayList<String[]> lines;
 
-  public CSVObject() {
-  }
-
-  public CSVObject(String _toParse) {
-    parse(_toParse);
-  }
-
-  public boolean parse(String _toParse) {
-    if (_toParse == null) {
-      return false;
+    public CSVObject() {
     }
 
-    _toParse = _toParse.trim();
-    if (_toParse.length() == 0) {
-      return false;
+    public CSVObject(String _toParse) {
+        parse(_toParse);
     }
 
-    String[] allLines = _toParse.split(System.getProperty("line.separator"));
-
-    if (lines == null) {
-      lines = new ArrayList<>(allLines.length);
-    } else {
-      lines.clear();
-    }
-
-    int lineLength = 0;
-    for (int i = 0; i < allLines.length; i++) {
-      String[] elt = allLines[i].split(",");
-      if (i == 0) {
-        lineLength = elt.length;
-      } else {
-        if (elt.length != lineLength) {
-          lines = null;
-          return false;
+    public boolean parse(String _toParse) {
+        if (_toParse == null) {
+            return false;
         }
-      }
-      lines.add(elt);
+
+        _toParse = _toParse.trim();
+        if (_toParse.length() == 0) {
+            return false;
+        }
+
+        String[] allLines = _toParse.split(System.getProperty("line.separator"));
+
+        if (lines == null) {
+            lines = new ArrayList<>(allLines.length);
+        } else {
+            lines.clear();
+        }
+
+        int lineLength = 0;
+        for (int i = 0; i < allLines.length; i++) {
+            String[] elt = allLines[i].split(",");
+            if (i == 0) {
+                lineLength = elt.length;
+            } else {
+                if (elt.length != lineLength) {
+                    lines = null;
+                    return false;
+                }
+            }
+            lines.add(elt);
+        }
+
+        // Remove spaces
+        removeSpaces();
+
+        return true;
+
     }
 
-    // Remove spaces
-    removeSpaces();
-
-    return true;
-
-  }
-
-  private void removeSpaces() {
-    for (String[] ss : lines) {
-      for (int i = 0; i < ss.length; i++) {
-        ss[i] = ss[i].trim();
-      }
-    }
-  }
-
-  public int getNbOfLines() {
-    if (lines == null) {
-      return -1;
-    }
-    return lines.size();
-  }
-
-  public int getNbOfEltsPerLine() {
-    if (lines == null) {
-      return -1;
+    private void removeSpaces() {
+        for (String[] ss : lines) {
+            for (int i = 0; i < ss.length; i++) {
+                ss[i] = ss[i].trim();
+            }
+        }
     }
 
-    if (lines.size() == 0) {
-      return -1;
+    public int getNbOfLines() {
+        if (lines == null) {
+            return -1;
+        }
+        return lines.size();
     }
 
-    return lines.get(0).length;
-  }
+    public int getNbOfEltsPerLine() {
+        if (lines == null) {
+            return -1;
+        }
 
-  public String get(int line, int col) {
-    if (lines == null) {
-      return null;
+        if (lines.size() == 0) {
+            return -1;
+        }
+
+        return lines.get(0).length;
     }
 
-    if (line >= lines.size()) {
-      return null;
+    public String get(int line, int col) {
+        if (lines == null) {
+            return null;
+        }
+
+        if (line >= lines.size()) {
+            return null;
+        }
+
+        String[] selectedLine = lines.get(line);
+        if (col >= selectedLine.length) {
+            return null;
+        }
+
+        return selectedLine[col];
     }
 
-    String[] selectedLine = lines.get(line);
-    if (col >= selectedLine.length) {
-      return null;
+    public int getInt(int line, int col) throws NumberFormatException {
+        String val = get(line, col);
+        return Integer.decode(val);
     }
 
-    return selectedLine[col];
-  }
-
-  public int getInt(int line, int col) throws NumberFormatException {
-    String val = get(line, col);
-    return Integer.decode(val);
-  }
-
-  public UUID getUUID(int line, int col) throws IllegalArgumentException {
-    String val = get(line, col);
-    if (val == null) {
-      return null;
+    public UUID getUUID(int line, int col) throws IllegalArgumentException {
+        String val = get(line, col);
+        if (val == null) {
+            return null;
+        }
+        UUID uuid = UUID.fromString(val);
+        return uuid;
     }
-    UUID uuid = UUID.fromString(val);
-    return uuid;
-  }
 
 }

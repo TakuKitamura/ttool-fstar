@@ -56,166 +56,166 @@ import java.util.Vector;
  */
 public class JDialogParam extends JDialogBase implements ActionListener {
 
-  private String name;
-  private int type1, type2, type3;
+    private String name;
+    private int type1, type2, type3;
 
-  public boolean data;
+    public boolean data;
 
-  // Panel1
-  private JTextField nameText;
-  private JComboBox<String> typeList1, typeList2, typeList3;
-  private Vector<String> types1, types2, types3;
+    // Panel1
+    private JTextField nameText;
+    private JComboBox<String> typeList1, typeList2, typeList3;
+    private Vector<String> types1, types2, types3;
 
-  /* Creates new form */
-  public JDialogParam(String _name, int _type1, int _type2, int _type3, Frame f, String title) {
-    super(f, title, true);
+    /* Creates new form */
+    public JDialogParam(String _name, int _type1, int _type2, int _type3, Frame f, String title) {
+        super(f, title, true);
 
-    name = _name;
-    type1 = _type1;
-    type2 = _type2;
-    type3 = _type3;
+        name = _name;
+        type1 = _type1;
+        type2 = _type2;
+        type3 = _type3;
 
-    data = false;
+        data = false;
 
-    myInitComponents();
-    initComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-    types1 = new Vector<>();
-    types2 = new Vector<>();
-    types3 = new Vector<>();
-    types1.add(TType.getStringType(0));
-    types1.add(TType.getStringType(1));
-    types1.add(TType.getStringType(2));
-    types2.add(TType.getStringType(0));
-    types2.add(TType.getStringType(1));
-    types2.add(TType.getStringType(2));
-    types3.add(TType.getStringType(0));
-    types3.add(TType.getStringType(1));
-    types3.add(TType.getStringType(2));
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    JPanel panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-    panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters "));
-    panel1.setPreferredSize(new Dimension(300, 150));
-
-    // first line panel1
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 3;
-    panel1.add(new JLabel(" "), c1);
-
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel("name:"), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    nameText = new JTextField(name);
-    panel1.add(nameText, c1);
-
-    // second line panel1
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel("type:"), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    typeList1 = new JComboBox<>(types1);
-    typeList1.setSelectedIndex(type1);
-    panel1.add(typeList1, c1);
-
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel("type:"), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    typeList2 = new JComboBox<>(types2);
-    typeList2.setSelectedIndex(type2);
-    panel1.add(typeList2, c1);
-
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel("type:"), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    typeList3 = new JComboBox<>(types3);
-    typeList3.setSelectedIndex(type3);
-    panel1.add(typeList3, c1);
-
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-
-    c.add(panel1, c0);
-
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
-    }
-  }
-
-  public void closeDialog() {
-    data = true;
-    dispose();
-  }
-
-  public void cancelDialog() {
-    dispose();
-  }
-
-  public boolean hasNewData() {
-    return data;
-  }
-
-  public String getParamName() {
-    return nameText.getText();
-  }
-
-  public int getType(int i) {
-    switch (i) {
-      case 0:
-        return typeList1.getSelectedIndex();
-      case 1:
-        return typeList2.getSelectedIndex();
-      case 2:
-        return typeList3.getSelectedIndex();
-      default:
-        return typeList1.getSelectedIndex();
+        myInitComponents();
+        initComponents();
+        pack();
     }
 
-  }
+    private void myInitComponents() {
+        types1 = new Vector<>();
+        types2 = new Vector<>();
+        types3 = new Vector<>();
+        types1.add(TType.getStringType(0));
+        types1.add(TType.getStringType(1));
+        types1.add(TType.getStringType(2));
+        types2.add(TType.getStringType(0));
+        types2.add(TType.getStringType(1));
+        types2.add(TType.getStringType(2));
+        types3.add(TType.getStringType(0));
+        types3.add(TType.getStringType(1));
+        types3.add(TType.getStringType(2));
+    }
+
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+        panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters "));
+        panel1.setPreferredSize(new Dimension(300, 150));
+
+        // first line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 3;
+        panel1.add(new JLabel(" "), c1);
+
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("name:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        nameText = new JTextField(name);
+        panel1.add(nameText, c1);
+
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("type:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        typeList1 = new JComboBox<>(types1);
+        typeList1.setSelectedIndex(type1);
+        panel1.add(typeList1, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("type:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        typeList2 = new JComboBox<>(types2);
+        typeList2.setSelectedIndex(type2);
+        panel1.add(typeList2, c1);
+
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("type:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        typeList3 = new JComboBox<>(types3);
+        typeList3.setSelectedIndex(type3);
+        panel1.add(typeList3, c1);
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        c.add(panel1, c0);
+
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
+    }
+
+    public void closeDialog() {
+        data = true;
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean hasNewData() {
+        return data;
+    }
+
+    public String getParamName() {
+        return nameText.getText();
+    }
+
+    public int getType(int i) {
+        switch (i) {
+            case 0:
+                return typeList1.getSelectedIndex();
+            case 1:
+                return typeList2.getSelectedIndex();
+            case 2:
+                return typeList3.getSelectedIndex();
+            default:
+                return typeList1.getSelectedIndex();
+        }
+
+    }
 }

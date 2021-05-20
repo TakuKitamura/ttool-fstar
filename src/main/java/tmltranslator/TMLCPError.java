@@ -49,20 +49,20 @@ import tmltranslator.tmlcp.TMLCPElement;
  */
 public class TMLCPError {
 
-  // type
-  public final static int ERROR_STRUCTURE = 0;
-  public final static int WARNING_STRUCTURE = 1;
-  public final static int ERROR_BEHAVIOR = 2;
-  public final static int WARNING_BEHAVIOR = 3;
+    // type
+    public final static int ERROR_STRUCTURE = 0;
+    public final static int WARNING_STRUCTURE = 1;
+    public final static int ERROR_BEHAVIOR = 2;
+    public final static int WARNING_BEHAVIOR = 3;
 
-  public int type; // ERROR, WARNING
-  public String message;
-  public TMLTask task;
-  // public reference to the diagram...
-  public TMLActivityElement element;
-  public TMLCPElement cpElement;
+    public int type; // ERROR, WARNING
+    public String message;
+    public TMLTask task;
+    // public reference to the diagram...
+    public TMLActivityElement element;
+    public TMLCPElement cpElement;
 
-  public TMLCPError(int _type) {
-    type = _type;
-  }
+    public TMLCPError(int _type) {
+        type = _type;
+    }
 }

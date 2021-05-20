@@ -48,7 +48,7 @@ import ui.tmlad.TMLActivityDiagramPanel;
  * @author Ludovic APVRILLE
  */
 public interface TMLTaskInterface {
-  String getTaskName();
+    String getTaskName();
 
-  TMLActivityDiagramPanel getTMLActivityDiagramPanel();
+    TMLActivityDiagramPanel getTMLActivityDiagramPanel();
 }

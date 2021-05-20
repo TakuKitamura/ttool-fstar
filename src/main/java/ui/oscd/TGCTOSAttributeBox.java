@@ -62,14 +62,14 @@ import ui.TGConnectingPoint;
  */
 public abstract class TGCTOSAttributeBox extends TGCAttributeBox {
 
-  public TGCTOSAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TGCTOSAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.0, 0.5);
-    connectingPoint[1] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 1.0, 0.5);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[1] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 1.0, 0.5);
 
-  }
+    }
 }

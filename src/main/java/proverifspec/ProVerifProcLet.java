@@ -46,15 +46,15 @@ package proverifspec;
  */
 public class ProVerifProcLet extends ProVerifProcInstr {
 
-  protected ProVerifVar[] vars;
-  protected String value;
+    protected ProVerifVar[] vars;
+    protected String value;
 
-  public ProVerifProcLet(ProVerifVar[] _vars, String _value) {
-    this.vars = _vars;
-    this.value = _value;
-  }
+    public ProVerifProcLet(ProVerifVar[] _vars, String _value) {
+        this.vars = _vars;
+        this.value = _value;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateProcLet(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateProcLet(this, _alinea);
+    }
 }

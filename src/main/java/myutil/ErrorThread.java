@@ -47,32 +47,32 @@ import java.io.BufferedReader;
  * @author Ludovic APVRILLE
  */
 public class ErrorThread extends Thread {
-  private BufferedReader br;
-  private MasterProcessInterface mpi;
-  private boolean go = true;
+    private BufferedReader br;
+    private MasterProcessInterface mpi;
+    private boolean go = true;
 
-  public ErrorThread(BufferedReader _br, MasterProcessInterface _mpi) {
-    br = _br;
-    mpi = _mpi;
-  }
-
-  public void stopProcess() {
-    go = false;
-  }
-
-  public void run() {
-    String err;
-
-    try {
-      while (((err = br.readLine()) != null) && go && mpi.hasToContinue()) {
-        System.out.println("Error " + err);
-        mpi.appendOut(err + "\n");
-        mpi.setError();
-      }
-
-    } catch (Exception e) {
-      System.out.println("Exception [" + e.getMessage() + "] occured");
+    public ErrorThread(BufferedReader _br, MasterProcessInterface _mpi) {
+        br = _br;
+        mpi = _mpi;
     }
 
-  }
+    public void stopProcess() {
+        go = false;
+    }
+
+    public void run() {
+        String err;
+
+        try {
+            while (((err = br.readLine()) != null) && go && mpi.hasToContinue()) {
+                System.out.println("Error " + err);
+                mpi.appendOut(err + "\n");
+                mpi.setError();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Exception [" + e.getMessage() + "] occured");
+        }
+
+    }
 }

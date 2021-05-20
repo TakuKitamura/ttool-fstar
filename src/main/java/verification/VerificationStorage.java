@@ -53,6 +53,6 @@ import java.util.Vector;
  */
 public interface VerificationStorage {
 
-  public boolean addProperty(Property p);
+    public boolean addProperty(Property p);
 
 }

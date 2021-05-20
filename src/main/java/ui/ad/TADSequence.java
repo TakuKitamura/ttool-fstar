@@ -55,103 +55,103 @@ import ui.util.IconManager;
  */
 public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent */ {
 
-  // Issue #31
-  // protected int lineLength = 0;
-
-  // private int textX, textY;
-
-  public TADSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-    lineLength = 0;
-
     // Issue #31
-    createConnectingPoints();
-    // width = 150;
-    // height = 5;
-    initScaling(150, 5);
+    // protected int lineLength = 0;
 
-    textX = width - scale(6);
-    textY = height + scale(2);
+    // private int textX, textY;
 
-    nbInternalTGComponent = 1;
-    tgcomponent = new TGComponent[nbInternalTGComponent];
+    public TADSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    TGCOneLineText tgc = new TGCOneLineText(x + textX + 10, y + textY, textX + 10, textX + 10, textY, textY, true, this,
-        _tdp);
-    tgc.setValue(">>");
-    tgc.setName("Sequence information");
-    tgc.setEditable(false);
+        lineLength = 0;
 
-    tgcomponent[0] = tgc;
+        // Issue #31
+        createConnectingPoints();
+        // width = 150;
+        // height = 5;
+        initScaling(150, 5);
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        textX = width - scale(6);
+        textY = height + scale(2);
 
-    name = "sequence";
+        nbInternalTGComponent = 1;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
 
-    myImageIcon = IconManager.imgic206;
-  }
+        TGCOneLineText tgc = new TGCOneLineText(x + textX + 10, y + textY, textX + 10, textX + 10, textY, textY, true,
+                this, _tdp);
+        tgc.setValue(">>");
+        tgc.setName("Sequence information");
+        tgc.setEditable(false);
 
-  protected void createConnectingPoints() {
-    nbConnectingPoint = 6;
-    connectingPoint = new TGConnectingPoint[6];
-    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
-    connectingPoint[2] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
-    connectingPoint[3] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-    connectingPoint[4] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
-    connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
-    addTGConnectingPointsCommentCorner();
-  }
+        tgcomponent[0] = tgc;
 
-  @Override
-  protected void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.fillRect(x, y, width, height);
-  }
+        moveable = true;
+        editable = false;
+        removable = true;
 
-  @Override
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-      return this;
+        name = "sequence";
+
+        myImageIcon = IconManager.imgic206;
     }
-    return null;
-  }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TAD_SEQUENCE;
-  }
-
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-  }
-
-  public TGConnectingPoint getEnterConnectingPoint() {
-    return connectingPoint[0];
-  }
-
-  public List<TGConnectingPoint> getExitConnectingPoints() {
-    return Arrays.asList(Arrays.copyOfRange(connectingPoint, 1, connectingPoint.length));
-  }
-
-  /**
-   * Issue #69
-   * 
-   * @param _enabled : boolean data
-   */
-  @Override
-  public void setEnabled(final boolean _enabled) {
-    super.setEnabled(_enabled);
-
-    for (final TGConnectingPoint point : connectingPoint) {
-      if (point != getEnterConnectingPoint()) {
-        point.acceptForward(new EnablingADConnectorVisitor(_enabled));
-      }
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 6;
+        connectingPoint = new TGConnectingPoint[6];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
+        connectingPoint[2] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
+        connectingPoint[3] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+        connectingPoint[4] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
+        connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
+        addTGConnectingPointsCommentCorner();
     }
-  }
+
+    @Override
+    protected void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.fillRect(x, y, width, height);
+    }
+
+    @Override
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.TAD_SEQUENCE;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
+
+    public TGConnectingPoint getEnterConnectingPoint() {
+        return connectingPoint[0];
+    }
+
+    public List<TGConnectingPoint> getExitConnectingPoints() {
+        return Arrays.asList(Arrays.copyOfRange(connectingPoint, 1, connectingPoint.length));
+    }
+
+    /**
+     * Issue #69
+     * 
+     * @param _enabled : boolean data
+     */
+    @Override
+    public void setEnabled(final boolean _enabled) {
+        super.setEnabled(_enabled);
+
+        for (final TGConnectingPoint point : connectingPoint) {
+            if (point != getEnterConnectingPoint()) {
+                point.acceptForward(new EnablingADConnectorVisitor(_enabled));
+            }
+        }
+    }
 }

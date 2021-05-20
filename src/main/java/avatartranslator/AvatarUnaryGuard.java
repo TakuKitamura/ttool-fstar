@@ -47,54 +47,54 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarUnaryGuard extends AvatarComposedGuard {
-  AvatarComposedGuard guard;
+    AvatarComposedGuard guard;
 
-  String unary;
+    String unary;
 
-  String before;
-  String after;
+    String before;
+    String after;
 
-  public AvatarUnaryGuard(String _unary, String _before, String _after, AvatarComposedGuard _guard) {
-    this.unary = _unary;
-    this.before = _before;
-    this.after = _after;
-    this.guard = _guard;
-  }
+    public AvatarUnaryGuard(String _unary, String _before, String _after, AvatarComposedGuard _guard) {
+        this.unary = _unary;
+        this.before = _before;
+        this.after = _after;
+        this.guard = _guard;
+    }
 
-  public String getUnaryOp() {
-    return this.unary;
-  }
+    public String getUnaryOp() {
+        return this.unary;
+    }
 
-  public String getBefore() {
-    return this.before;
-  }
+    public String getBefore() {
+        return this.before;
+    }
 
-  public String getAfter() {
-    return this.after;
-  }
+    public String getAfter() {
+        return this.after;
+    }
 
-  public AvatarComposedGuard getGuard() {
-    return this.guard;
-  }
+    public AvatarComposedGuard getGuard() {
+        return this.guard;
+    }
 
-  public AvatarComposedGuard getOpposite() {
-    /*
-     * if (this.unary.equals ("not")) { return this.guard; }
-     */
-    return new AvatarUnaryGuard("", "not(", ")", this);
-  }
+    public AvatarComposedGuard getOpposite() {
+        /*
+         * if (this.unary.equals ("not")) { return this.guard; }
+         */
+        return new AvatarUnaryGuard("", "not(", ")", this);
+    }
 
-  public String getAsString(AvatarSyntaxTranslator translator) {
-    return translator.translateUnaryOp(this.unary) + this.before + this.guard.getAsString(translator) + this.after;
-  }
+    public String getAsString(AvatarSyntaxTranslator translator) {
+        return translator.translateUnaryOp(this.unary) + this.before + this.guard.getAsString(translator) + this.after;
+    }
 
-  @Override
-  public AvatarUnaryGuard clone() {
-    return new AvatarUnaryGuard(this.unary, this.before, this.after, this.guard.clone());
-  }
+    @Override
+    public AvatarUnaryGuard clone() {
+        return new AvatarUnaryGuard(this.unary, this.before, this.after, this.guard.clone());
+    }
 
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-    this.guard.replaceAttributes(attributesMapping);
-  }
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.guard.replaceAttributes(attributesMapping);
+    }
 }

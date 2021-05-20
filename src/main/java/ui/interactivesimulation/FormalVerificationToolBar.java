@@ -52,48 +52,48 @@ import javax.swing.*;
  */
 public class FormalVerificationToolBar extends InteractiveSimulationBar {
 
-  public FormalVerificationToolBar(JFrameInteractiveSimulation _jfis) {
-    super(_jfis);
-  }
+    public FormalVerificationToolBar(JFrameInteractiveSimulation _jfis) {
+        super(_jfis);
+    }
 
-  protected void setActive(boolean b) {
-    jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
-    jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
-    jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
-    jfis.actions[InteractiveSimulationActions.ACT_ANALYSIS_RG].setEnabled(b);
-    jfis.actions[InteractiveSimulationActions.ACT_VIEW_RG].setEnabled(b);
-    jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
-  }
+    protected void setActive(boolean b) {
+        jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_ANALYSIS_RG].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_VIEW_RG].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU]);
+        button.addMouseListener(jfis.mouseHandler);
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
+        button.addMouseListener(jfis.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU]);
+        button.addMouseListener(jfis.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION]);
+        button.addMouseListener(jfis.mouseHandler);
 
-    this.addSeparator();
-    this.addSeparator();
+        this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_ANALYSIS_RG]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_ANALYSIS_RG]);
+        button.addMouseListener(jfis.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_VIEW_RG]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_VIEW_RG]);
+        button.addMouseListener(jfis.mouseHandler);
 
-  }
+    }
 } // Class

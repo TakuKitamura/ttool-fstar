@@ -48,9 +48,9 @@ package tmltranslator.modelcompiler;
  */
 public abstract class FepOperationMEC extends OperationMEC {
 
-  public FepOperationMEC() {
-    name = "FepOperationMEC";
-    context = "FEP_CONTEXT";
-  }
+    public FepOperationMEC() {
+        name = "FepOperationMEC";
+        context = "FEP_CONTEXT";
+    }
 
 } // End of class

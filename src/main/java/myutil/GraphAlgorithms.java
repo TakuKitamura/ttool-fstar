@@ -49,305 +49,305 @@ import java.util.ArrayList;
  * @version 1.0 16/09/2004
  */
 public class GraphAlgorithms {
-  public static boolean go = true;
+    public static boolean go = true;
 
-  // Assume that states are numbered from 0 to nbState - 1
+    // Assume that states are numbered from 0 to nbState - 1
 
-  public static boolean hasCycle(Graph g) {
-    int nbState = g.getNbOfStates();
-    int i, j;
+    public static boolean hasCycle(Graph g) {
+        int nbState = g.getNbOfStates();
+        int i, j;
 
-    if (nbState == 0) {
-      return false;
-    }
-
-    TraceManager.addDev("cycle0? Nb state = " + nbState + "\n");
-    DijkstraState[] states = new DijkstraState[nbState];
-
-    for (i = 0; i < nbState; i++) {
-      states[i] = new DijkstraState(i);
-      states[i].previous = -1;
-      states[i].used = false;
-      states[i].weight = 0;
-    }
-
-    if (go == false) {
-      return false;
-    }
-
-    TraceManager.addDev("cycle1? Nb state = " + nbState + "\n");
-    // Succ
-    int succ;
-    for (i = 0; i < nbState; i++) {
-      /*
-       * if ((i % 100) == 0) { TraceManager.addDev("i=" + i); }
-       */
-      for (j = 0; j < nbState; j++) {
-        succ = g.getWeightOfTransition(i, j);
-        if (succ > 0) {
-          states[j].weight++;
+        if (nbState == 0) {
+            return false;
         }
-      }
-    }
 
-    if (go == false) {
-      return false;
-    }
+        TraceManager.addDev("cycle0? Nb state = " + nbState + "\n");
+        DijkstraState[] states = new DijkstraState[nbState];
 
-    int nb = 0;
-    ArrayList<Integer> list = new ArrayList<Integer>();
-    TraceManager.addDev("cycle2? Nb state = " + nbState + "\n");
-    for (i = 0; i < nbState; i++) {
-      if (states[i].weight == 0) {
-        list.add(i);
-        nb++;
-      }
-    }
-
-    TraceManager.addDev("cycle3? Nb state = " + nbState + " nb=" + nb + "\n");
-    int index;
-    while ((list.size() > 0) && (go)) {
-      index = list.get(0);
-      list.remove(0);
-      for (j = 0; j < nbState; j++) {
-        succ = g.getWeightOfTransition(index, j);
-        if (succ > 0) {
-          states[j].weight--;
-          if (states[j].weight == 0) {
-            list.add(j);
-            nb++;
-          }
-        }
-      }
-    }
-
-    TraceManager.addDev("cycle4? Nb state = " + nbState + " nb=" + nb + "\n");
-
-    return !(nb == nbState);
-
-  }
-
-  public static DijkstraState[] ShortestPathFrom(Graph g, int startState) {
-
-    int nbState = g.getNbOfStates();
-    if (nbState == 0) {
-      return null;
-    }
-    // TraceManager.addDev("Nb state = " + nbState + " startState = " + startState);
-    DijkstraState[] states = new DijkstraState[nbState];
-    int i;
-
-    /* init of states */
-    for (i = 0; i < nbState; i++) {
-      states[i] = new DijkstraState(i);
-      states[i].previous = -1;
-      states[i].used = false;
-      states[i].weight = Integer.MAX_VALUE;
-    }
-
-    states[startState].used = false;
-    states[startState].weight = 0;
-    states[startState].previous = -1;
-
-    if (go) {
-      iterativeShortestPathFrom(g, states, startState);
-    }
-
-    if (go) {
-      computePaths(states, startState);
-    }
-
-    if (!go) {
-      // TraceManager.addDev("Algorithm stopped");
-      return null;
-    }
-    return states;
-  }
-
-  public static void iterativeShortestPathFrom(Graph g, DijkstraState[] states, int startState) {
-    // DijkstraState ds;
-    int weight;
-    // int[] path;
-    int currentState;
-
-    while (((currentState = getNextStateToCompute(states, startState)) != -1) && (go)) {
-      // TraceManager.addDev("State managed:" + currentState);
-      states[currentState].used = true;
-      for (int i = 0; (i < states.length) && (go); i++) {
-        weight = g.getWeightOfTransition(currentState, i);
-        // adjacent state
-        if (weight > 0) {
-          if (!states[i].used) {
-            if ((states[currentState].weight + weight) < states[i].weight) {
-              states[i].weight = states[currentState].weight + weight;
-              states[i].previous = currentState;
-            }
-          }
-        }
-      }
-      if (!go) {
-        return;
-      }
-    }
-  }
-
-  private static int getNextStateToCompute(DijkstraState[] states, int startState) {
-    int minWeight = Integer.MAX_VALUE;
-    int state = -1;
-    for (int i = 0; i < states.length; i++) {
-      if (!go) {
-        return 0;
-      }
-      if ((!states[i].used) && (states[i].weight <= minWeight)) {
-        state = i;
-        minWeight = states[i].weight;
-        // TraceManager.addDev("MinWeight = " + minWeight + " state=" + i);
-      }
-    }
-    return state;
-  }
-
-  // Assumes no cycle!
-  public static DijkstraState[] LongestPathFrom(Graph g, int startState) {
-
-    // TraceManager.addDev("Cycle detection");
-    /*
-     * boolean result = hasCycle(g); if (result) {
-     * TraceManager.addDev("The graph contains cycles"); return null; } else {
-     * TraceManager.addDev("The graph has no cycle"); }
-     */
-
-    int nbState = g.getNbOfStates();
-    if (nbState == 0) {
-      return null;
-    }
-    // TraceManager.addDev("Longest path Nb state = " + nbState + " startState = " +
-    // startState);
-    DijkstraState[] states = new DijkstraState[nbState];
-    int i;
-
-    /* init of states */
-    for (i = 0; i < nbState; i++) {
-      states[i] = new DijkstraState(i);
-      states[i].previous = -1;
-      states[i].used = false;
-      states[i].weight = -1;
-    }
-
-    states[startState].used = false;
-    states[startState].weight = 0;
-    states[startState].previous = -1;
-
-    if (go) {
-      iterativeLongestPathFrom(g, states, startState);
-    }
-
-    if (go) {
-      computePaths(states, startState);
-    }
-
-    if (go) {
-      // TraceManager.addDev("Algorithm stopped");
-      return null;
-    }
-    return states;
-  }
-
-  public static void iterativeLongestPathFrom(Graph g, DijkstraState[] states, int startState) {
-    // DijkstraState ds;
-    int weight;
-    // int[] path;
-    int currentState;
-    int tmp;
-
-    while (((currentState = getNextLongestStateToCompute(states, startState)) != -1) && (go)) {
-      // TraceManager.addDev("State managed:" + currentState + " weight=" +
-      // states[currentState].weight);
-      states[currentState].used = true;
-      for (int i = 0; (i < states.length) && (go); i++) {
-        weight = g.getWeightOfTransition(currentState, i);
-        // adjacent state
-        if (weight > 0) {
-          // if (!states[i].used) {
-          if (states[currentState].weight + weight > states[i].weight) {
-            tmp = states[i].weight;
-            // if (!states[i].used) {
-            states[i].weight = states[currentState].weight + weight;
-            states[i].previous = currentState;
+        for (i = 0; i < nbState; i++) {
+            states[i] = new DijkstraState(i);
+            states[i].previous = -1;
             states[i].used = false;
-            // TraceManager.addDev("Changing weight of state " + i + " former=" + tmp + "
-            // new=" +states[i].weight);
-            // }
-          }
-          // }
+            states[i].weight = 0;
         }
-      }
-      if (!go) {
-        return;
-      }
-    }
-  }
 
-  private static int getNextLongestStateToCompute(DijkstraState[] states, int startState) {
-    int maxWeight = -2;
-    int state = -1;
-    for (int i = 0; i < states.length; i++) {
-      if (!go) {
-        return 0;
-      }
-      if ((!states[i].used) && (states[i].weight > maxWeight)) {
-        state = i;
-        maxWeight = states[i].weight;
-        // TraceManager.addDev("MaxWeight = " + maxWeight + " state=" + i);
-      }
-    }
-    return state;
-  }
+        if (go == false) {
+            return false;
+        }
 
-  private static void computePaths(DijkstraState[] states, int startState) {
-    int size;
-    int[] path;
+        TraceManager.addDev("cycle1? Nb state = " + nbState + "\n");
+        // Succ
+        int succ;
+        for (i = 0; i < nbState; i++) {
+            /*
+             * if ((i % 100) == 0) { TraceManager.addDev("i=" + i); }
+             */
+            for (j = 0; j < nbState; j++) {
+                succ = g.getWeightOfTransition(i, j);
+                if (succ > 0) {
+                    states[j].weight++;
+                }
+            }
+        }
 
-    for (int i = 0; (i < states.length) && (go); i++) {
-      size = computePathLength(states, i, startState);
-      // TraceManager.addDev("i = " + i + " size=" + size);
-      if (size == 0) {
-        states[i].path = new int[0];
-      } else {
-        path = new int[size + 1];
-        states[i].path = path;
-        makePath(states, i, path, path.length - 1);
-      }
+        if (go == false) {
+            return false;
+        }
+
+        int nb = 0;
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        TraceManager.addDev("cycle2? Nb state = " + nbState + "\n");
+        for (i = 0; i < nbState; i++) {
+            if (states[i].weight == 0) {
+                list.add(i);
+                nb++;
+            }
+        }
+
+        TraceManager.addDev("cycle3? Nb state = " + nbState + " nb=" + nb + "\n");
+        int index;
+        while ((list.size() > 0) && (go)) {
+            index = list.get(0);
+            list.remove(0);
+            for (j = 0; j < nbState; j++) {
+                succ = g.getWeightOfTransition(index, j);
+                if (succ > 0) {
+                    states[j].weight--;
+                    if (states[j].weight == 0) {
+                        list.add(j);
+                        nb++;
+                    }
+                }
+            }
+        }
+
+        TraceManager.addDev("cycle4? Nb state = " + nbState + " nb=" + nb + "\n");
+
+        return !(nb == nbState);
 
     }
-  }
 
-  private static int computePathLength(DijkstraState[] states, int state, int startState) {
-    // TraceManager.addDev("Compute path, state = " + state);
-    if (!go) {
-      return 0;
+    public static DijkstraState[] ShortestPathFrom(Graph g, int startState) {
+
+        int nbState = g.getNbOfStates();
+        if (nbState == 0) {
+            return null;
+        }
+        // TraceManager.addDev("Nb state = " + nbState + " startState = " + startState);
+        DijkstraState[] states = new DijkstraState[nbState];
+        int i;
+
+        /* init of states */
+        for (i = 0; i < nbState; i++) {
+            states[i] = new DijkstraState(i);
+            states[i].previous = -1;
+            states[i].used = false;
+            states[i].weight = Integer.MAX_VALUE;
+        }
+
+        states[startState].used = false;
+        states[startState].weight = 0;
+        states[startState].previous = -1;
+
+        if (go) {
+            iterativeShortestPathFrom(g, states, startState);
+        }
+
+        if (go) {
+            computePaths(states, startState);
+        }
+
+        if (!go) {
+            // TraceManager.addDev("Algorithm stopped");
+            return null;
+        }
+        return states;
     }
 
-    if (state == startState) {
-      return 0;
-    }
-    if (states[state].previous == -1) {
-      return -1;
-    } else {
-      int ret = computePathLength(states, states[state].previous, startState);
-      if (ret == -1)
-        return -1;
-      else
-        return 1 + ret;
-    }
-  }
+    public static void iterativeShortestPathFrom(Graph g, DijkstraState[] states, int startState) {
+        // DijkstraState ds;
+        int weight;
+        // int[] path;
+        int currentState;
 
-  private static void makePath(DijkstraState[] states, int state, int[] path, int index) {
-    while (index >= 0) {
-      path[index] = state;
-      index--;
-      state = states[state].previous;
+        while (((currentState = getNextStateToCompute(states, startState)) != -1) && (go)) {
+            // TraceManager.addDev("State managed:" + currentState);
+            states[currentState].used = true;
+            for (int i = 0; (i < states.length) && (go); i++) {
+                weight = g.getWeightOfTransition(currentState, i);
+                // adjacent state
+                if (weight > 0) {
+                    if (!states[i].used) {
+                        if ((states[currentState].weight + weight) < states[i].weight) {
+                            states[i].weight = states[currentState].weight + weight;
+                            states[i].previous = currentState;
+                        }
+                    }
+                }
+            }
+            if (!go) {
+                return;
+            }
+        }
     }
-  }
+
+    private static int getNextStateToCompute(DijkstraState[] states, int startState) {
+        int minWeight = Integer.MAX_VALUE;
+        int state = -1;
+        for (int i = 0; i < states.length; i++) {
+            if (!go) {
+                return 0;
+            }
+            if ((!states[i].used) && (states[i].weight <= minWeight)) {
+                state = i;
+                minWeight = states[i].weight;
+                // TraceManager.addDev("MinWeight = " + minWeight + " state=" + i);
+            }
+        }
+        return state;
+    }
+
+    // Assumes no cycle!
+    public static DijkstraState[] LongestPathFrom(Graph g, int startState) {
+
+        // TraceManager.addDev("Cycle detection");
+        /*
+         * boolean result = hasCycle(g); if (result) {
+         * TraceManager.addDev("The graph contains cycles"); return null; } else {
+         * TraceManager.addDev("The graph has no cycle"); }
+         */
+
+        int nbState = g.getNbOfStates();
+        if (nbState == 0) {
+            return null;
+        }
+        // TraceManager.addDev("Longest path Nb state = " + nbState + " startState = " +
+        // startState);
+        DijkstraState[] states = new DijkstraState[nbState];
+        int i;
+
+        /* init of states */
+        for (i = 0; i < nbState; i++) {
+            states[i] = new DijkstraState(i);
+            states[i].previous = -1;
+            states[i].used = false;
+            states[i].weight = -1;
+        }
+
+        states[startState].used = false;
+        states[startState].weight = 0;
+        states[startState].previous = -1;
+
+        if (go) {
+            iterativeLongestPathFrom(g, states, startState);
+        }
+
+        if (go) {
+            computePaths(states, startState);
+        }
+
+        if (go) {
+            // TraceManager.addDev("Algorithm stopped");
+            return null;
+        }
+        return states;
+    }
+
+    public static void iterativeLongestPathFrom(Graph g, DijkstraState[] states, int startState) {
+        // DijkstraState ds;
+        int weight;
+        // int[] path;
+        int currentState;
+        int tmp;
+
+        while (((currentState = getNextLongestStateToCompute(states, startState)) != -1) && (go)) {
+            // TraceManager.addDev("State managed:" + currentState + " weight=" +
+            // states[currentState].weight);
+            states[currentState].used = true;
+            for (int i = 0; (i < states.length) && (go); i++) {
+                weight = g.getWeightOfTransition(currentState, i);
+                // adjacent state
+                if (weight > 0) {
+                    // if (!states[i].used) {
+                    if (states[currentState].weight + weight > states[i].weight) {
+                        tmp = states[i].weight;
+                        // if (!states[i].used) {
+                        states[i].weight = states[currentState].weight + weight;
+                        states[i].previous = currentState;
+                        states[i].used = false;
+                        // TraceManager.addDev("Changing weight of state " + i + " former=" + tmp + "
+                        // new=" +states[i].weight);
+                        // }
+                    }
+                    // }
+                }
+            }
+            if (!go) {
+                return;
+            }
+        }
+    }
+
+    private static int getNextLongestStateToCompute(DijkstraState[] states, int startState) {
+        int maxWeight = -2;
+        int state = -1;
+        for (int i = 0; i < states.length; i++) {
+            if (!go) {
+                return 0;
+            }
+            if ((!states[i].used) && (states[i].weight > maxWeight)) {
+                state = i;
+                maxWeight = states[i].weight;
+                // TraceManager.addDev("MaxWeight = " + maxWeight + " state=" + i);
+            }
+        }
+        return state;
+    }
+
+    private static void computePaths(DijkstraState[] states, int startState) {
+        int size;
+        int[] path;
+
+        for (int i = 0; (i < states.length) && (go); i++) {
+            size = computePathLength(states, i, startState);
+            // TraceManager.addDev("i = " + i + " size=" + size);
+            if (size == 0) {
+                states[i].path = new int[0];
+            } else {
+                path = new int[size + 1];
+                states[i].path = path;
+                makePath(states, i, path, path.length - 1);
+            }
+
+        }
+    }
+
+    private static int computePathLength(DijkstraState[] states, int state, int startState) {
+        // TraceManager.addDev("Compute path, state = " + state);
+        if (!go) {
+            return 0;
+        }
+
+        if (state == startState) {
+            return 0;
+        }
+        if (states[state].previous == -1) {
+            return -1;
+        } else {
+            int ret = computePathLength(states, states[state].previous, startState);
+            if (ret == -1)
+                return -1;
+            else
+                return 1 + ret;
+        }
+    }
+
+    private static void makePath(DijkstraState[] states, int state, int[] path, int index) {
+        while (index >= 0) {
+            path[index] = state;
+            index--;
+            state = states[state].previous;
+        }
+    }
 
 }

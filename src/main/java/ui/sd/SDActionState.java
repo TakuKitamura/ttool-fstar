@@ -51,85 +51,85 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class SDActionState extends TGCOneLineText implements SwallowedTGComponent {
-  protected int lineLength = 5;
-  // protected int textX = 5;
-  // protected int textY = 15;
-  protected int arc = 5;
-  protected int w; // w1;
+    protected int lineLength = 5;
+    // protected int textX = 5;
+    // protected int textY = 15;
+    protected int arc = 5;
+    protected int w; // w1;
 
-  public SDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 30;
-    height = 20;
-    minWidth = 30;
-    textX = 5;
-    textY = 15;
-    initScaling(30, 20);
+        width = 30;
+        height = 20;
+        minWidth = 30;
+        textX = 5;
+        textY = 15;
+        initScaling(30, 20);
 
-    nbConnectingPoint = 0;
-    addTGConnectingPointsCommentMiddle();
+        nbConnectingPoint = 0;
+        addTGConnectingPointsCommentMiddle();
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    value = "action";
-    name = "action state";
+        value = "action";
+        name = "action state";
 
-    myImageIcon = IconManager.imgic512;
-  }
-
-  public void internalDrawing(Graphics g) {
-    w = g.getFontMetrics().stringWidth(value);
-    int w1 = Math.max(minWidth, w + 2 * textX);
-    if ((w1 != width) && (!tdp.isScaled())) {
-      width = w1;
-    }
-    g.drawRoundRect(x - width / 2, y, width, height, arc, arc);
-
-    drawSingleString(g, value, x - width / 2 + textX, y + textY);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
-      return this;
-    }
-    return null;
-  }
-
-  public String getAction() {
-    return value;
-  }
-
-  public String getAction(int cpt) {
-    if (cpt < 0) {
-      return value;
+        myImageIcon = IconManager.imgic512;
     }
 
-    String ret;
+    public void internalDrawing(Graphics g) {
+        w = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, w + 2 * textX);
+        if ((w1 != width) && (!tdp.isScaled())) {
+            width = w1;
+        }
+        g.drawRoundRect(x - width / 2, y, width, height, arc, arc);
 
-    try {
-      ret = value;
-      while (cpt > 0) {
-        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-        cpt--;
-      }
-
-      int index = ret.indexOf(';');
-
-      if (index > 0) {
-        ret = ret.substring(0, index + 1);
-      }
-    } catch (Exception e) {
-      return value;
+        drawSingleString(g, value, x - width / 2 + textX, y + textY);
     }
-    return ret;
-  }
 
-  public int getType() {
-    return TGComponentManager.SD_ACTION_STATE;
-  }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public String getAction() {
+        return value;
+    }
+
+    public String getAction(int cpt) {
+        if (cpt < 0) {
+            return value;
+        }
+
+        String ret;
+
+        try {
+            ret = value;
+            while (cpt > 0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt--;
+            }
+
+            int index = ret.indexOf(';');
+
+            if (index > 0) {
+                ret = ret.substring(0, index + 1);
+            }
+        } catch (Exception e) {
+            return value;
+        }
+        return ret;
+    }
+
+    public int getType() {
+        return TGComponentManager.SD_ACTION_STATE;
+    }
 
 }

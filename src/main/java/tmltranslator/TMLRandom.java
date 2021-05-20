@@ -47,61 +47,61 @@ import java.util.Objects;
  * @author Ludovic APVRILLE
  */
 public class TMLRandom extends TMLActivityElement {
-  public static final int EQUIPROBABLE = 0;
+    public static final int EQUIPROBABLE = 0;
 
-  private String variable, minValue, maxValue;
-  private int functionId = EQUIPROBABLE;
+    private String variable, minValue, maxValue;
+    private int functionId = EQUIPROBABLE;
 
-  public TMLRandom(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLRandom(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void setVariable(String _variable) {
-    variable = _variable;
-  }
+    public void setVariable(String _variable) {
+        variable = _variable;
+    }
 
-  public void setMinValue(String _minValue) {
-    minValue = _minValue;
-  }
+    public void setMinValue(String _minValue) {
+        minValue = _minValue;
+    }
 
-  public void setMaxValue(String _maxValue) {
-    maxValue = _maxValue;
-  }
+    public void setMaxValue(String _maxValue) {
+        maxValue = _maxValue;
+    }
 
-  public void setFunctionId(int _functionId) {
-    functionId = _functionId;
-  }
+    public void setFunctionId(int _functionId) {
+        functionId = _functionId;
+    }
 
-  public String getVariable() {
-    return variable;
-  }
+    public String getVariable() {
+        return variable;
+    }
 
-  public String getMinValue() {
-    return minValue;
-  }
+    public String getMinValue() {
+        return minValue;
+    }
 
-  public String getMaxValue() {
-    return maxValue;
-  }
+    public String getMaxValue() {
+        return maxValue;
+    }
 
-  public int getFunctionId() {
-    return functionId;
-  }
+    public int getFunctionId() {
+        return functionId;
+    }
 
-  public String customExtraToXML() {
-    return " politics=\"" + functionId + "\" variable=\"" + variable + "\" minValue=\"" + minValue + "\" maxValue=\""
-        + maxValue + "\" ";
-  }
+    public String customExtraToXML() {
+        return " politics=\"" + functionId + "\" variable=\"" + variable + "\" minValue=\"" + minValue
+                + "\" maxValue=\"" + maxValue + "\" ";
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLRandom))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLRandom))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
 
-    TMLRandom tmlRandom = (TMLRandom) o;
-    return Objects.equals(variable, tmlRandom.getVariable()) && Objects.equals(minValue, tmlRandom.getMinValue())
-        && Objects.equals(maxValue, tmlRandom.getMaxValue()) && functionId == tmlRandom.getFunctionId();
-  }
+        TMLRandom tmlRandom = (TMLRandom) o;
+        return Objects.equals(variable, tmlRandom.getVariable()) && Objects.equals(minValue, tmlRandom.getMinValue())
+                && Objects.equals(maxValue, tmlRandom.getMaxValue()) && functionId == tmlRandom.getFunctionId();
+    }
 
 }

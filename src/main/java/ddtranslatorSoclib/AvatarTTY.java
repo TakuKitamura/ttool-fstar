@@ -45,29 +45,29 @@ package ddtranslatorSoclib;
 
 public class AvatarTTY extends AvatarComponent {
 
-  private int index;
-  private String ttyName;
+    private int index;
+    private String ttyName;
 
-  public int no_target;
+    public int no_target;
 
-  public AvatarTTY(String _ttyName, int _index) {
-    index = _index;
-    ttyName = _ttyName;
-  }
+    public AvatarTTY(String _ttyName, int _index) {
+        index = _index;
+        ttyName = _ttyName;
+    }
 
-  public String getTTYName() {
-    return ttyName;
-  }
+    public String getTTYName() {
+        return ttyName;
+    }
 
-  public int getIndex() {
-    return index;
-  }
+    public int getIndex() {
+        return index;
+    }
 
-  public int getNo_target() {
-    return no_target;
-  }
+    public int getNo_target() {
+        return no_target;
+    }
 
-  public void setNo_target(int _no_target) {
-    no_target = _no_target;
-  }
+    public void setNo_target(int _no_target) {
+        no_target = _no_target;
+    }
 }

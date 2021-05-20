@@ -47,51 +47,51 @@ import translator.JKeyword;
  * @author Ludovic APVRILLE
  */
 public class JSimuGate implements Comparable {
-  private String name;
-  private String jName;
-  private String access;
+    private String name;
+    private String jName;
+    private String access;
 
-  public JSimuGate(String _name, boolean _internal) {
-    name = _name;
-    jName = name;
-    if (_internal == true) {
-      access = JKeyword.PRIVATE;
-    } else {
-      access = JKeyword.PUBLIC;
-    }
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setJName(String _name) {
-    jName = _name;
-  }
-
-  public String getJName() {
-    return jName;
-  }
-
-  public String getAccess() {
-    return access;
-  }
-
-  public String getJavaDeclaration() {
-    return access + " " + TURTLE2SimuJava.JGATE + " " + jName + JKeyword.END_OP;
-  }
-
-  public String getJavaCreation() {
-    return TURTLE2SimuJava.JGATE + " " + jName + " = new " + TURTLE2SimuJava.JGATE + "(" + jName + ")"
-        + JKeyword.END_OP;
-  }
-
-  public int compareTo(Object o) {
-    if (!(o instanceof JSimuGate)) {
-      return 0;
-    } else {
-      return toString().compareTo(o.toString());
+    public JSimuGate(String _name, boolean _internal) {
+        name = _name;
+        jName = name;
+        if (_internal == true) {
+            access = JKeyword.PRIVATE;
+        } else {
+            access = JKeyword.PUBLIC;
+        }
     }
 
-  }
+    public String getName() {
+        return name;
+    }
+
+    public void setJName(String _name) {
+        jName = _name;
+    }
+
+    public String getJName() {
+        return jName;
+    }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public String getJavaDeclaration() {
+        return access + " " + TURTLE2SimuJava.JGATE + " " + jName + JKeyword.END_OP;
+    }
+
+    public String getJavaCreation() {
+        return TURTLE2SimuJava.JGATE + " " + jName + " = new " + TURTLE2SimuJava.JGATE + "(" + jName + ")"
+                + JKeyword.END_OP;
+    }
+
+    public int compareTo(Object o) {
+        if (!(o instanceof JSimuGate)) {
+            return 0;
+        } else {
+            return toString().compareTo(o.toString());
+        }
+
+    }
 }

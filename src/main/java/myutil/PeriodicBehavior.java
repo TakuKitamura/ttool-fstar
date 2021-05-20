@@ -47,5 +47,5 @@ package myutil;
  */
 public interface PeriodicBehavior {
 
-  void periodicAction();
+    void periodicAction();
 }

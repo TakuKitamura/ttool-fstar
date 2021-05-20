@@ -52,96 +52,96 @@ import ui.window.JDialogSystemCGeneration;
  */
 public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMethodologyDiagramReference {
 
-  public DiplodocusMethodologyDiagramReferenceToMapping(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
-      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public DiplodocusMethodologyDiagramReferenceToMapping(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+            boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(200, 120);
+        initScaling(200, 120);
 
-    nbConnectingPoint = 3;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0,
-        TGConnectingPoint.WEST);
-    connectingPoint[1] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.7, 0.0,
-        TGConnectingPoint.WEST);
-    connectingPoint[2] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 3;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0,
+                TGConnectingPoint.WEST);
+        connectingPoint[1] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.7, 0.0,
+                TGConnectingPoint.WEST);
+        connectingPoint[2] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = MAPPING;
+        typeOfReference = MAPPING;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_MAPPING;
-  }
-
-  @Override
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof TMLArchiPanel;
-
-  }
-
-  @Override
-  public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-    dn.setValidationsNumber(4);
-    dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_MAPPING_DIPLO);
-    dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.SIM_TRACE_MAPPING_DIPLO);
-    dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.FV_MAPPING_DIPLO);
-    dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_MAPPING_DIPLO);
-  }
-
-  @Override
-  public boolean makeCall(String diagramName, int index) {
-    String tmp;
-
-    switch (index) {
-      case 0:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ANIMATION);
-          return true;
-        }
-        return false;
-      case 1:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
-          return true;
-        }
-        return false;
-      case 2:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.FORMAL_VERIFICATION);
-          return true;
-        }
-        return false;
-      case 3:
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          TraceManager.addDev("Generate TML");
-          tmp = tdp.getMGUI().generateTMLTxt();
-          if (tmp == null) {
-            giveInformation("TML generation failed");
-            return false;
-          }
-          giveInformation("TML files generated in " + tmp);
-        }
-        break;
-      default:
-        return false;
     }
 
-    return true;
+    @Override
+    public int getType() {
+        return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_MAPPING;
+    }
 
-  }
+    @Override
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof TMLArchiPanel;
+
+    }
+
+    @Override
+    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+        dn.setValidationsNumber(4);
+        dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_MAPPING_DIPLO);
+        dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.SIM_TRACE_MAPPING_DIPLO);
+        dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.FV_MAPPING_DIPLO);
+        dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_MAPPING_DIPLO);
+    }
+
+    @Override
+    public boolean makeCall(String diagramName, int index) {
+        String tmp;
+
+        switch (index) {
+            case 0:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ANIMATION);
+                    return true;
+                }
+                return false;
+            case 1:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
+                    return true;
+                }
+                return false;
+            case 2:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.FORMAL_VERIFICATION);
+                    return true;
+                }
+                return false;
+            case 3:
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    TraceManager.addDev("Generate TML");
+                    tmp = tdp.getMGUI().generateTMLTxt();
+                    if (tmp == null) {
+                        giveInformation("TML generation failed");
+                        return false;
+                    }
+                    giveInformation("TML files generated in " + tmp);
+                }
+                break;
+            default:
+                return false;
+        }
+
+        return true;
+
+    }
 
 }

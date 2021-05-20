@@ -52,17 +52,17 @@ import ui.TGComponentManager;
  */
 public class TCDSequenceOperator extends TCDCompositionOperator {
 
-  public TCDSequenceOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDSequenceOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "Sequence composition operator";
-    value = "Sequence";
+        name = "Sequence composition operator";
+        value = "Sequence";
 
-    myImageIcon = IconManager.imgic114;
-  }
+        myImageIcon = IconManager.imgic114;
+    }
 
-  public int getType() {
-    return TGComponentManager.TCD_SEQUENCE_OPERATOR;
-  }
+    public int getType() {
+        return TGComponentManager.TCD_SEQUENCE_OPERATOR;
+    }
 }

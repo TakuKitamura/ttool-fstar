@@ -46,5 +46,5 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface PreJavaCode {
-  void setPreJavaCode(String code);
+    void setPreJavaCode(String code);
 }

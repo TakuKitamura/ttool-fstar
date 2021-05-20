@@ -50,30 +50,30 @@ import java.util.Vector;
  */
 public class SortedVector<T extends Comparable<T>> extends Vector<T> {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = -7882498373642597896L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7882498373642597896L;
 
-  public SortedVector(int cpt) {
-    super(cpt);
-  }
-
-  public SortedVector() {
-    super();
-  }
-
-  public boolean add(T o) {
-    if (o != null) {
-      int i = 0;
-      while ((i < size()) && (o.compareTo(elementAt(i)) >= 0)) {
-        i++;
-      }
-      add(i, o);
-    } else {
-      super.add(o);
+    public SortedVector(int cpt) {
+        super(cpt);
     }
-    return true;
-  }
+
+    public SortedVector() {
+        super();
+    }
+
+    public boolean add(T o) {
+        if (o != null) {
+            int i = 0;
+            while ((i < size()) && (o.compareTo(elementAt(i)) >= 0)) {
+                i++;
+            }
+            add(i, o);
+        } else {
+            super.add(o);
+        }
+        return true;
+    }
 
 } // Class SortedVector

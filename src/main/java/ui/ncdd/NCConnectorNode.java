@@ -57,260 +57,262 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class NCConnectorNode extends TGConnector implements WithAttributes {
-  protected int arrowLength = 10;
-  protected int widthValue, heightValue, maxWidthValue, h;
+    protected int arrowLength = 10;
+    protected int widthValue, heightValue, maxWidthValue, h;
 
-  protected boolean hasCapacity = false;
-  protected int capacity = 10;
+    protected boolean hasCapacity = false;
+    protected int capacity = 10;
 
-  protected boolean hasParameter = false;
-  protected int parameter = 1;
+    protected boolean hasParameter = false;
+    protected int parameter = 1;
 
-  protected String capacityUnit = "Mbs";
-  protected String interfaceName;
+    protected String capacityUnit = "Mbs";
+    protected String interfaceName;
 
-  public NCConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    myImageIcon = IconManager.imgic202;
+    public NCConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic202;
 
-    editable = true;
-    interfaceName = tdp.findNodeName("i");
-    makeValue();
-  }
-
-  public void makeValue() {
-    value = "{" + interfaceName;
-    if (hasCapacity) {
-      value += ", capacity = " + capacity + " " + capacityUnit;
-    }
-    if (hasParameter) {
-      value += ", parameter = " + parameter;
-    }
-    value += "}";
-  }
-
-  public String getInterfaceName() {
-    return interfaceName;
-  }
-
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    g.drawLine(x1, y1, x2, y2);
-    /*
-     * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-     * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
-     * x1, y1, x2, y2, true); }
-     */
-
-    h = g.getFontMetrics().getHeight();
-    if (!tdp.isScaled()) {
-      maxWidthValue = 0;
-      heightValue = h;
+        editable = true;
+        interfaceName = tdp.findNodeName("i");
+        makeValue();
     }
 
-    widthValue = g.getFontMetrics().stringWidth(interfaceName);
-    if (!tdp.isScaled()) {
-      maxWidthValue = Math.max(maxWidthValue, widthValue);
-    }
-    g.drawString(interfaceName, ((p1.getX() + p2.getX()) / 2) - widthValue / 2,
-        ((p1.getY() + p2.getY()) / 2) - (h / 2));
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    //
-    int oldCapacity = capacity;
-    int oldParameter = parameter;
-    String oldInterfaceName = interfaceName;
-    String tmp;
-    String interfaceNameTmp;
-
-    JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity,
-        capacityUnit, hasParameter, parameter, interfaceName);
-    // jdlncn.setSize(650, 650);
-    GraphicLib.centerOnParent(jdlncn, 650, 650);
-    jdlncn.setVisible(true); // Blocked until dialog has been closed
-
-    interfaceNameTmp = jdlncn.getInterfaceName().trim();
-    tmp = jdlncn.getCapacity();
-    try {
-      capacity = Integer.decode(tmp).intValue();
-    } catch (Exception e) {
-      capacity = oldCapacity;
-    }
-
-    tmp = jdlncn.getParameter();
-    try {
-      parameter = Integer.decode(tmp).intValue();
-    } catch (Exception e) {
-      parameter = oldParameter;
-    }
-
-    if ((interfaceNameTmp == null) || (jdlncn.hasBeenCancelled())) {
-      return !jdlncn.hasBeenCancelled();
-    }
-
-    if ((interfaceNameTmp != null) && (interfaceNameTmp.length() > 0) && (!interfaceNameTmp.equals(oldInterfaceName))) {
-      // boolean b;
-      if (!TAttribute.isAValidId(interfaceNameTmp, false, false, false)) {
-        JOptionPane.showMessageDialog(frame,
-            "Could not change the name of the Equipment: the new name is not a valid name", "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-        return false;
-      }
-
-      if (!tdp.isNCNameUnique(interfaceNameTmp)) {
-        JOptionPane.showMessageDialog(frame,
-            "Could not change the name of the Equipment: the new name is already in use", "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-        return false;
-      }
-    }
-
-    if ((capacity < 0) || (jdlncn.hasBeenCancelled())) {
-      capacity = oldCapacity;
-    }
-
-    if (!jdlncn.hasBeenCancelled()) {
-      interfaceName = interfaceNameTmp;
-      capacityUnit = jdlncn.getCapacityUnit();
-      hasCapacity = jdlncn.hasCapacity();
-      hasParameter = jdlncn.hasParameter();
-      makeValue();
-    }
-
-    return !jdlncn.hasBeenCancelled();
-  }
-
-  public int getType() {
-    return TGComponentManager.CONNECTOR_NODE_NC;
-  }
-
-  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-    //
-    if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2) - maxWidthValue / 2,
-        ((p1.getY() + p2.getY()) / 2) - h / 2 - heightValue + 2, maxWidthValue, heightValue)) {
-      return this;
-    }
-    return null;
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info capacity=\"");
-    sb.append(capacity);
-    sb.append("\" capacityUnit=\"");
-    sb.append(capacityUnit);
-    sb.append("\" hasCapacity=\"");
-    sb.append(hasCapacity);
-    sb.append("\" parameter=\"");
-    sb.append(parameter);
-    sb.append("\" hasParameter=\"");
-    sb.append(hasParameter);
-    sb.append("\" interfaceName=\"");
-    sb.append(interfaceName);
-    sb.append("\"/>\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int t1id;
-      String prio;
-      String unit;
-      String has;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                prio = elt.getAttribute("capacity");
-                if (elt != null) {
-                  capacity = Integer.decode(prio).intValue();
-                }
-                prio = elt.getAttribute("interfaceName");
-                if (elt != null) {
-                  interfaceName = prio;
-                }
-
-                unit = elt.getAttribute("capacityUnit");
-                if ((unit != null) && (unit.length() > 0)) {
-                  capacityUnit = unit;
-                }
-
-                has = elt.getAttribute("hasCapacity");
-                if ((has != null) && (has.length() > 0)) {
-                  hasCapacity = has.equals("true");
-                }
-
-                // for backward compatiblity: exception catching
-                try {
-                  prio = elt.getAttribute("parameter");
-                  if (elt != null) {
-                    parameter = Integer.decode(prio).intValue();
-                  }
-
-                  has = elt.getAttribute("hasParameter");
-                  if ((has != null) && (has.length() > 0)) {
-                    hasParameter = has.equals("true");
-                  }
-                } catch (Exception e) {
-                }
-
-              }
-            }
-          }
+    public void makeValue() {
+        value = "{" + interfaceName;
+        if (hasCapacity) {
+            value += ", capacity = " + capacity + " " + capacityUnit;
         }
-      }
-
-    } catch (Exception e) {
-
-      throw new MalformedModelingException();
+        if (hasParameter) {
+            value += ", parameter = " + parameter;
+        }
+        value += "}";
     }
-  }
 
-  public int getCapacity() {
-    return capacity;
-  }
-
-  public boolean hasCapacity() {
-    return hasCapacity;
-  }
-
-  public int getParameter() {
-    return parameter;
-  }
-
-  public boolean hasParameter() {
-    return hasParameter;
-  }
-
-  public String getCapacityUnit() {
-    return capacityUnit;
-  }
-
-  public String getAttributes() {
-    String ret = interfaceName;
-    if (hasCapacity) {
-      ret += "\nCapacity = " + capacity + " " + capacityUnit;
+    public String getInterfaceName() {
+        return interfaceName;
     }
-    if (hasParameter) {
-      ret += "\nParameter = " + parameter;
+
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        g.drawLine(x1, y1, x2, y2);
+        /*
+         * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+         * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
+         * x1, y1, x2, y2, true); }
+         */
+
+        h = g.getFontMetrics().getHeight();
+        if (!tdp.isScaled()) {
+            maxWidthValue = 0;
+            heightValue = h;
+        }
+
+        widthValue = g.getFontMetrics().stringWidth(interfaceName);
+        if (!tdp.isScaled()) {
+            maxWidthValue = Math.max(maxWidthValue, widthValue);
+        }
+        g.drawString(interfaceName, ((p1.getX() + p2.getX()) / 2) - widthValue / 2,
+                ((p1.getY() + p2.getY()) / 2) - (h / 2));
     }
-    return ret;
-  }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        //
+        int oldCapacity = capacity;
+        int oldParameter = parameter;
+        String oldInterfaceName = interfaceName;
+        String tmp;
+        String interfaceNameTmp;
+
+        JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity,
+                capacityUnit, hasParameter, parameter, interfaceName);
+        // jdlncn.setSize(650, 650);
+        GraphicLib.centerOnParent(jdlncn, 650, 650);
+        jdlncn.setVisible(true); // Blocked until dialog has been closed
+
+        interfaceNameTmp = jdlncn.getInterfaceName().trim();
+        tmp = jdlncn.getCapacity();
+        try {
+            capacity = Integer.decode(tmp).intValue();
+        } catch (Exception e) {
+            capacity = oldCapacity;
+        }
+
+        tmp = jdlncn.getParameter();
+        try {
+            parameter = Integer.decode(tmp).intValue();
+        } catch (Exception e) {
+            parameter = oldParameter;
+        }
+
+        if ((interfaceNameTmp == null) || (jdlncn.hasBeenCancelled())) {
+            return !jdlncn.hasBeenCancelled();
+        }
+
+        if ((interfaceNameTmp != null) && (interfaceNameTmp.length() > 0)
+                && (!interfaceNameTmp.equals(oldInterfaceName))) {
+            // boolean b;
+            if (!TAttribute.isAValidId(interfaceNameTmp, false, false, false)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the Equipment: the new name is not a valid name", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+
+            if (!tdp.isNCNameUnique(interfaceNameTmp)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the Equipment: the new name is already in use", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+
+        if ((capacity < 0) || (jdlncn.hasBeenCancelled())) {
+            capacity = oldCapacity;
+        }
+
+        if (!jdlncn.hasBeenCancelled()) {
+            interfaceName = interfaceNameTmp;
+            capacityUnit = jdlncn.getCapacityUnit();
+            hasCapacity = jdlncn.hasCapacity();
+            hasParameter = jdlncn.hasParameter();
+            makeValue();
+        }
+
+        return !jdlncn.hasBeenCancelled();
+    }
+
+    public int getType() {
+        return TGComponentManager.CONNECTOR_NODE_NC;
+    }
+
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        //
+        if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2) - maxWidthValue / 2,
+                ((p1.getY() + p2.getY()) / 2) - h / 2 - heightValue + 2, maxWidthValue, heightValue)) {
+            return this;
+        }
+        return null;
+    }
+
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info capacity=\"");
+        sb.append(capacity);
+        sb.append("\" capacityUnit=\"");
+        sb.append(capacityUnit);
+        sb.append("\" hasCapacity=\"");
+        sb.append(hasCapacity);
+        sb.append("\" parameter=\"");
+        sb.append(parameter);
+        sb.append("\" hasParameter=\"");
+        sb.append(hasParameter);
+        sb.append("\" interfaceName=\"");
+        sb.append(interfaceName);
+        sb.append("\"/>\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int t1id;
+            String prio;
+            String unit;
+            String has;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                prio = elt.getAttribute("capacity");
+                                if (elt != null) {
+                                    capacity = Integer.decode(prio).intValue();
+                                }
+                                prio = elt.getAttribute("interfaceName");
+                                if (elt != null) {
+                                    interfaceName = prio;
+                                }
+
+                                unit = elt.getAttribute("capacityUnit");
+                                if ((unit != null) && (unit.length() > 0)) {
+                                    capacityUnit = unit;
+                                }
+
+                                has = elt.getAttribute("hasCapacity");
+                                if ((has != null) && (has.length() > 0)) {
+                                    hasCapacity = has.equals("true");
+                                }
+
+                                // for backward compatiblity: exception catching
+                                try {
+                                    prio = elt.getAttribute("parameter");
+                                    if (elt != null) {
+                                        parameter = Integer.decode(prio).intValue();
+                                    }
+
+                                    has = elt.getAttribute("hasParameter");
+                                    if ((has != null) && (has.length() > 0)) {
+                                        hasParameter = has.equals("true");
+                                    }
+                                } catch (Exception e) {
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+            throw new MalformedModelingException();
+        }
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public boolean hasCapacity() {
+        return hasCapacity;
+    }
+
+    public int getParameter() {
+        return parameter;
+    }
+
+    public boolean hasParameter() {
+        return hasParameter;
+    }
+
+    public String getCapacityUnit() {
+        return capacityUnit;
+    }
+
+    public String getAttributes() {
+        String ret = interfaceName;
+        if (hasCapacity) {
+            ret += "\nCapacity = " + capacity + " " + capacityUnit;
+        }
+        if (hasParameter) {
+            ret += "\nParameter = " + parameter;
+        }
+        return ret;
+    }
 
 }

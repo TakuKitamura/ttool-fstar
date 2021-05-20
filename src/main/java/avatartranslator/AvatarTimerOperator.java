@@ -45,29 +45,29 @@ package avatartranslator;
  * @version 1.0 15/07/2010
  */
 public abstract class AvatarTimerOperator extends AvatarStateMachineElement {
-  protected AvatarAttribute timer;
+    protected AvatarAttribute timer;
 
-  public AvatarTimerOperator(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
-
-  public void setTimer(AvatarAttribute _timer) {
-    timer = _timer;
-  }
-
-  public AvatarAttribute getTimer() {
-    return timer;
-  }
-
-  public String specificToString() {
-    if (timer != null) {
-      return "\n  timer: " + timer.getName();
+    public AvatarTimerOperator(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
     }
 
-    return "";
-  }
+    public void setTimer(AvatarAttribute _timer) {
+        timer = _timer;
+    }
 
-  public void translate(AvatarTranslator translator, Object arg) {
-    translator.translateTimerOperator(this, arg);
-  }
+    public AvatarAttribute getTimer() {
+        return timer;
+    }
+
+    public String specificToString() {
+        if (timer != null) {
+            return "\n  timer: " + timer.getName();
+        }
+
+        return "";
+    }
+
+    public void translate(AvatarTranslator translator, Object arg) {
+        translator.translateTimerOperator(this, arg);
+    }
 }

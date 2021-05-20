@@ -45,64 +45,65 @@ package avatartranslator.toexecutable;
  * @author Ludovic APVRILLE, Raja GATGOUT
  */
 public class TaskFileMbed {
-  ///////////////////// RG
-  // 1) enlever pthread.h
-  // 2) ajouter : srl.h et mwmr.h
-  private final static String INCLUDE_HEADER = "#include <mbed.h>\n#include <rtos.h>\n";// "#include <stdio.h>\n#include
-                                                                                        // <pthread.h>\n#include
-                                                                                        // <unistd.h>\n#include
-                                                                                        // <stdlib.h>\n";
-  private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"";
+    ///////////////////// RG
+    // 1) enlever pthread.h
+    // 2) ajouter : srl.h et mwmr.h
+    private final static String INCLUDE_HEADER = "#include <mbed.h>\n#include <rtos.h>\n";// "#include
+                                                                                          // <stdio.h>\n#include
+                                                                                          // <pthread.h>\n#include
+                                                                                          // <unistd.h>\n#include
+                                                                                          // <stdlib.h>\n";
+    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"";
 
-  private final static String INCLUDE_HEADER_SOCLIB = "#include <mbed.h>\n#include <rtos.h>\n";// "#include
-                                                                                               // <stdio.h>\n#include
-                                                                                               // <unistd.h>\n#include
-                                                                                               // <stdlib.h>\n";
-  private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"/Users/ludovicapvrille/Prog/mutekh/libmwmr/include/mwmr/mwmr.h\"\n ";
+    private final static String INCLUDE_HEADER_SOCLIB = "#include <mbed.h>\n#include <rtos.h>\n";// "#include
+                                                                                                 // <stdio.h>\n#include
+                                                                                                 // <unistd.h>\n#include
+                                                                                                 // <stdlib.h>\n";
+    private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"/Users/ludovicapvrille/Prog/mutekh/libmwmr/include/mwmr/mwmr.h\"\n ";
 
-  private final static String CR = "\n";
+    private final static String CR = "\n";
 
-  private String name;
+    private String name;
 
-  private String headerCode;
-  private String mainCode;
+    private String headerCode;
+    private String mainCode;
 
-  public TaskFileMbed(String _name) {
-    name = _name;
-    headerCode = "";
-    mainCode = "";
-  }
+    public TaskFileMbed(String _name) {
+        name = _name;
+        headerCode = "";
+        mainCode = "";
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getFullHeaderCode() {
-    String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-    s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
-    s += headerCode;
-    s += "#endif\n";
-    return s;
-  }
+    public String getFullHeaderCode() {
+        String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+        s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
+        s += headerCode;
+        s += "#endif\n";
+        return s;
+    }
 
-  public String getFullHeaderCodeSoclib() {
-    String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-    s += INCLUDE_HEADER_SOCLIB + CR + LOCAL_INCLUDE_HEADER_SOCLIB + CR + CR;
-    s += headerCode;
-    s += "#endif\n";
-    return s;
-  }
+    public String getFullHeaderCodeSoclib() {
+        String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+        s += INCLUDE_HEADER_SOCLIB + CR + LOCAL_INCLUDE_HEADER_SOCLIB + CR + CR;
+        s += headerCode;
+        s += "#endif\n";
+        return s;
+    }
 
-  public String getMainCode() {
-    return "#include \"" + name + ".h\"" + CR + CR + mainCode;
-  }
+    public String getMainCode() {
+        return "#include \"" + name + ".h\"" + CR + CR + mainCode;
+    }
 
-  public void addToHeaderCode(String _code) {
-    headerCode += _code;
-  }
+    public void addToHeaderCode(String _code) {
+        headerCode += _code;
+    }
 
-  public void addToMainCode(String _code) {
-    mainCode += _code;
-  }
+    public void addToMainCode(String _code) {
+        mainCode += _code;
+    }
 
 }

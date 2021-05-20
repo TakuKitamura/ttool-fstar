@@ -46,22 +46,22 @@ package avatartranslator;
  */
 public class AvatarStartState extends AvatarStateElement {
 
-  public AvatarStartState(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarStartState(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-    AvatarStartState astart = new AvatarStartState(getName(), getReferenceObject());
-    astart.setAsVerifiable(canBeVerified());
-    return astart;
-  }
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+        AvatarStartState astart = new AvatarStartState(getName(), getReferenceObject());
+        astart.setAsVerifiable(canBeVerified());
+        return astart;
+    }
 
-  public String getNiceName() {
-    return "Start state";
-  }
+    public String getNiceName() {
+        return "Start state";
+    }
 
-  public void translate(AvatarTranslator translator, Object arg) {
-    translator.translateStartState(this, arg);
-  }
+    public void translate(AvatarTranslator translator, Object arg) {
+        translator.translateStartState(this, arg);
+    }
 
 }

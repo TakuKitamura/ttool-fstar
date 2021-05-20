@@ -62,164 +62,164 @@ import java.util.Vector;
  * @version 1.0 27/04/2007
  */
 public class ThreadGUIElement extends Thread {
-  private String param0, param1, param2;// , param3;
-  private Object obj0, obj1, obj2, obj3;
-  private int function;
-  private StoppableGUIElement sge;
-  private JFrameStatistics jfs;
-  private DocumentationGenerator docgen;
-  private JDialogCancel jdc;
-  private Frame frame;
-  private ExternalCall ec;
-  private AUTGraph graph;
-  private RG rg;
-  private boolean showStat;
+    private String param0, param1, param2;// , param3;
+    private Object obj0, obj1, obj2, obj3;
+    private int function;
+    private StoppableGUIElement sge;
+    private JFrameStatistics jfs;
+    private DocumentationGenerator docgen;
+    private JDialogCancel jdc;
+    private Frame frame;
+    private ExternalCall ec;
+    private AUTGraph graph;
+    private RG rg;
+    private boolean showStat;
 
-  public ThreadGUIElement(Frame _frame, int _function, String _param0, String _param1, String _param2, AUTGraph _graph,
-      RG _rg, boolean _showStat) {
-    frame = _frame;
-    function = _function;
-    param0 = _param0;
-    param1 = _param1;
-    param2 = _param2;
-    graph = _graph;
-    rg = _rg;
-    showStat = _showStat;
-  }
-
-  public ThreadGUIElement(Frame _frame, int _function, String _param0, String _param1, String _param2) {
-    frame = _frame;
-    function = _function;
-    param0 = _param0;
-    param1 = _param1;
-    param2 = _param2;
-  }
-
-  public ThreadGUIElement(Frame _frame, int _function, Object _obj0, Object _obj1, Object _obj2, Object _obj3,
-      String _param0, String _param2) {
-    frame = _frame;
-    function = _function;
-    obj0 = _obj0;
-    obj1 = _obj1;
-    obj2 = _obj2;
-    obj3 = _obj3;
-    param0 = _param0;
-    param2 = _param2;
-  }
-
-  public void setExternalCall(ExternalCall _ec) {
-    ec = _ec;
-  }
-
-  public void setStoppableGUIElement(StoppableGUIElement _sge) {
-    sge = _sge;
-  }
-
-  @SuppressWarnings("unchecked")
-  public void go() {
-    if (ec != null) {
-      jdc = new JDialogCancel(frame, param0, param1, sge);
-      start();
-      GraphicLib.centerOnParent(jdc, 300, 200);
-      // jdc.setSize(300, 200);
-      jdc.setVisible(true);
-      // jdc = null;
-    } else {
-      switch (function) {
-        case 1:
-          docgen = new DocumentationGenerator((Vector<TURTLEPanel>) obj0, (JTabbedPane) obj1, (String) obj2,
-              (String) obj3);
-          docgen.setFirstHeadingNumber(2);
-          sge = docgen;
-          break;
-        case 0:
-        default:
-          TraceManager.addDev("Creating jframe statistics");
-          jfs = new JFrameStatistics(param0, param1, graph);
-          sge = jfs;
-      }
-
-      TraceManager.addDev("Dialog creation");
-      jdc = new JDialogCancel(frame, param0, param2, sge);
-      start();
-      GraphicLib.centerOnParent(jdc, 400, 200);
-      jdc.setVisible(true);
+    public ThreadGUIElement(Frame _frame, int _function, String _param0, String _param1, String _param2,
+            AUTGraph _graph, RG _rg, boolean _showStat) {
+        frame = _frame;
+        function = _function;
+        param0 = _param0;
+        param1 = _param1;
+        param2 = _param2;
+        graph = _graph;
+        rg = _rg;
+        showStat = _showStat;
     }
-  }
 
-  @Override
-  public void run() {
-    Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 1);
+    public ThreadGUIElement(Frame _frame, int _function, String _param0, String _param1, String _param2) {
+        frame = _frame;
+        function = _function;
+        param0 = _param0;
+        param1 = _param1;
+        param2 = _param2;
+    }
 
-    if (ec != null) {
-      ec.computeFunction(function);
+    public ThreadGUIElement(Frame _frame, int _function, Object _obj0, Object _obj1, Object _obj2, Object _obj3,
+            String _param0, String _param2) {
+        frame = _frame;
+        function = _function;
+        obj0 = _obj0;
+        obj1 = _obj1;
+        obj2 = _obj2;
+        obj3 = _obj3;
+        param0 = _param0;
+        param2 = _param2;
+    }
 
-      if (jdc != null) {
-        jdc.stopAll();
-        jdc = null;
-      }
-    } else {
-      switch (function) {
-        case 1:
-          boolean res = docgen.generateDocumentation();
-          if (jdc != null) {
-            jdc.stopAll();
-          }
+    public void setExternalCall(ExternalCall _ec) {
+        ec = _ec;
+    }
 
-          // Issue #32: Inform on location of generated documentation
-          final File folder = new File(docgen.getPath());
+    public void setStoppableGUIElement(StoppableGUIElement _sge) {
+        sge = _sge;
+    }
 
-          String canPath = null;
-
-          try {
-            canPath = folder.getCanonicalPath();
-          } catch (final IOException e) {
-            e.printStackTrace();
-
-            canPath = docgen.getPath();
-          }
-
-          if (res && !docgen.hasBeenStopped()) {
-            JOptionPane.showMessageDialog(frame,
-                // "All done!",
-                "Documentation generated successfully in directory '" + canPath + "'.", "Documentation generation",
-                JOptionPane.INFORMATION_MESSAGE);
-          } else {
-            JOptionPane.showMessageDialog(frame,
-                "The documentation generation could not be performed for dirrectory '" + canPath + "'.", "Error",
-                JOptionPane.INFORMATION_MESSAGE);
-          }
-
-          break;
-        case 0:
-        default:
-          jfs.goElement();
-
-          if (jfs.hasBeenStopped()) {
-            return;
-          }
-
-          if (jdc != null) {
-            jdc.stopAll();
-          }
-
-          if (showStat) {
-            jfs.setIconImage(IconManager.img8);
-            GraphicLib.centerOnParent(jfs, 600, 600);
-            jfs.setVisible(true);
-          } else {
-            // Display graph
-            jfs.displayGraph();
-          }
-
-          if (rg != null) {
-            rg.graph = jfs.getGraph();
-
-            if (rg.graph != null) {
-              rg.data = null;
+    @SuppressWarnings("unchecked")
+    public void go() {
+        if (ec != null) {
+            jdc = new JDialogCancel(frame, param0, param1, sge);
+            start();
+            GraphicLib.centerOnParent(jdc, 300, 200);
+            // jdc.setSize(300, 200);
+            jdc.setVisible(true);
+            // jdc = null;
+        } else {
+            switch (function) {
+                case 1:
+                    docgen = new DocumentationGenerator((Vector<TURTLEPanel>) obj0, (JTabbedPane) obj1, (String) obj2,
+                            (String) obj3);
+                    docgen.setFirstHeadingNumber(2);
+                    sge = docgen;
+                    break;
+                case 0:
+                default:
+                    TraceManager.addDev("Creating jframe statistics");
+                    jfs = new JFrameStatistics(param0, param1, graph);
+                    sge = jfs;
             }
-          }
-      }
+
+            TraceManager.addDev("Dialog creation");
+            jdc = new JDialogCancel(frame, param0, param2, sge);
+            start();
+            GraphicLib.centerOnParent(jdc, 400, 200);
+            jdc.setVisible(true);
+        }
     }
-  }
+
+    @Override
+    public void run() {
+        Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 1);
+
+        if (ec != null) {
+            ec.computeFunction(function);
+
+            if (jdc != null) {
+                jdc.stopAll();
+                jdc = null;
+            }
+        } else {
+            switch (function) {
+                case 1:
+                    boolean res = docgen.generateDocumentation();
+                    if (jdc != null) {
+                        jdc.stopAll();
+                    }
+
+                    // Issue #32: Inform on location of generated documentation
+                    final File folder = new File(docgen.getPath());
+
+                    String canPath = null;
+
+                    try {
+                        canPath = folder.getCanonicalPath();
+                    } catch (final IOException e) {
+                        e.printStackTrace();
+
+                        canPath = docgen.getPath();
+                    }
+
+                    if (res && !docgen.hasBeenStopped()) {
+                        JOptionPane.showMessageDialog(frame,
+                                // "All done!",
+                                "Documentation generated successfully in directory '" + canPath + "'.",
+                                "Documentation generation", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(frame,
+                                "The documentation generation could not be performed for dirrectory '" + canPath + "'.",
+                                "Error", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                    break;
+                case 0:
+                default:
+                    jfs.goElement();
+
+                    if (jfs.hasBeenStopped()) {
+                        return;
+                    }
+
+                    if (jdc != null) {
+                        jdc.stopAll();
+                    }
+
+                    if (showStat) {
+                        jfs.setIconImage(IconManager.img8);
+                        GraphicLib.centerOnParent(jfs, 600, 600);
+                        jfs.setVisible(true);
+                    } else {
+                        // Display graph
+                        jfs.displayGraph();
+                    }
+
+                    if (rg != null) {
+                        rg.graph = jfs.getGraph();
+
+                        if (rg.graph != null) {
+                            rg.data = null;
+                        }
+                    }
+            }
+        }
+    }
 }

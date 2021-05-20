@@ -64,35 +64,35 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Generic extends Command {
-  private final static String GENERIC = "generic";
+    private final static String GENERIC = "generic";
 
-  public Generic() {
+    public Generic() {
 
-  }
-
-  public String getCommand() {
-    return GENERIC;
-  }
-
-  public String getShortCommand() {
-    return "g";
-  }
-
-  public String getDescription() {
-    return "Apply a generic function of TTool";
-  }
-
-  public String executeCommand(String command, Interpreter interpreter) {
-    if (!interpreter.isTToolStarted()) {
-      return Interpreter.TTOOL_NOT_STARTED;
     }
 
-    ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
+    public String getCommand() {
+        return GENERIC;
+    }
 
-    return null;
-  }
+    public String getShortCommand() {
+        return "g";
+    }
 
-  public void fillSubCommands() {
-  }
+    public String getDescription() {
+        return "Apply a generic function of TTool";
+    }
+
+    public String executeCommand(String command, Interpreter interpreter) {
+        if (!interpreter.isTToolStarted()) {
+            return Interpreter.TTOOL_NOT_STARTED;
+        }
+
+        ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
+
+        return null;
+    }
+
+    public void fillSubCommands() {
+    }
 
 }

@@ -47,7 +47,7 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface TGConnectorBetweenElementsInterface {
-  TGConnectingPoint getTGConnectingPointP1();
+    TGConnectingPoint getTGConnectingPointP1();
 
-  TGConnectingPoint getTGConnectingPointP2();
+    TGConnectingPoint getTGConnectingPointP2();
 }

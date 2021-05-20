@@ -54,116 +54,116 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADDelay extends TADComponentWithSubcomponents
-    /* Issue #69 TGCWithInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-
-  // Issue #31
-  // private int lineLength = 5;
-  // private int textX, textY;
-  // private int ilength = 10;
-  // private int lineLength1 = 2;
-
-  protected int stateOfError = 0; // Not yet checked
-
-  public TMLADDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        /* Issue #69 TGCWithInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
 
     // Issue #31
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, +lineLength, false, true, 0.5, 1.0);
-    // width = 10;
-    // height = 30;
-    initScaling(10, 30);
+    // private int lineLength = 5;
+    // private int textX, textY;
+    // private int ilength = 10;
+    // private int lineLength1 = 2;
 
-    textX = width + scale(5);
-    textY = height / 2 + scale(5);
+    protected int stateOfError = 0; // Not yet checked
 
-    nbInternalTGComponent = 1;
-    tgcomponent = new TGComponent[nbInternalTGComponent];
+    public TMLADDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    TGCTimeDelay tgc = new TGCTimeDelay(x + textX, y + textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
-    tgc.setMinDelay("10");
-    tgc.setMaxDelay("nope");
-    tgc.setHasMaxValue(false);
-    tgc.setActiveDelay(false);
-    tgc.setUnit("ms");
-    tgc.setName("value of the delay");
-    tgc.makeValue();
-    tgcomponent[0] = tgc;
+        // Issue #31
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, +lineLength, false, true, 0.5, 1.0);
+        // width = 10;
+        // height = 30;
+        initScaling(10, 30);
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        textX = width + scale(5);
+        textY = height / 2 + scale(5);
 
-    name = "delay";
+        nbInternalTGComponent = 1;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
 
-    myImageIcon = IconManager.imgic214;
-  }
+        TGCTimeDelay tgc = new TGCTimeDelay(x + textX, y + textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
+        tgc.setMinDelay("10");
+        tgc.setMaxDelay("nope");
+        tgc.setHasMaxValue(false);
+        tgc.setActiveDelay(false);
+        tgc.setUnit("ms");
+        tgc.setName("value of the delay");
+        tgc.makeValue();
+        tgcomponent[0] = tgc;
 
-  @Override
-  protected void internalDrawing(Graphics g) {
-    if (stateOfError > 0) {
-      Color c = g.getColor();
-      switch (stateOfError) {
-        case ErrorHighlight.OK:
-          g.setColor(ColorManager.EXEC);
-          break;
-        default:
-          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-      }
-      g.fillRect(x, y, width, height);
-      g.setColor(c);
+        moveable = true;
+        editable = false;
+        removable = true;
+
+        name = "delay";
+
+        myImageIcon = IconManager.imgic214;
     }
 
-    g.drawRect(x, y, width, height);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-  }
+    @Override
+    protected void internalDrawing(Graphics g) {
+        if (stateOfError > 0) {
+            Color c = g.getColor();
+            switch (stateOfError) {
+                case ErrorHighlight.OK:
+                    g.setColor(ColorManager.EXEC);
+                    break;
+                default:
+                    g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+            }
+            g.fillRect(x, y, width, height);
+            g.setColor(c);
+        }
 
-  @Override
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-      return this;
+        g.drawRect(x, y, width, height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
-        y1)) < distanceSelected) {
-      return this;
+    @Override
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
+                y1)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    public String getDelayValue() {
+        return ((TGCTimeDelay) tgcomponent[0]).getMinDelay();
+    }
 
-  public String getDelayValue() {
-    return ((TGCTimeDelay) tgcomponent[0]).getMinDelay();
-  }
+    public void setDelayValue(String value) {
+        ((TGCTimeDelay) tgcomponent[0]).setMinDelay(value);
+    }
 
-  public void setDelayValue(String value) {
-    ((TGCTimeDelay) tgcomponent[0]).setMinDelay(value);
-  }
+    public String getUnit() {
+        return ((TGCTimeDelay) tgcomponent[0]).getUnit();
+    }
 
-  public String getUnit() {
-    return ((TGCTimeDelay) tgcomponent[0]).getUnit();
-  }
+    public boolean getActiveDelayEnable() {
+        return ((TGCTimeDelay) tgcomponent[0]).getActiveDelay();
+    }
 
-  public boolean getActiveDelayEnable() {
-    return ((TGCTimeDelay) tgcomponent[0]).getActiveDelay();
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.TMLAD_DELAY;
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TMLAD_DELAY;
-  }
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TMLAD;
+    }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_TMLAD;
-  }
-
-  @Override
-  public void setStateAction(int _stateAction) {
-    stateOfError = _stateAction;
-  }
+    @Override
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
 }

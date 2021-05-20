@@ -51,49 +51,49 @@ import javax.swing.table.AbstractTableModel;
  * @author Ludovic APVRILLE
  */
 public class SwitchesNCTableModel extends AbstractTableModel {
-  private NCStructure ncs;
+    private NCStructure ncs;
 
-  // private String [] names;
-  public SwitchesNCTableModel(NCStructure _ncs) {
-    ncs = _ncs;
-    // computeData(_ncs);
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return ncs.switches.size();
-  }
-
-  public int getColumnCount() {
-    return 5;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (column == 0) {
-      return ncs.switches.get(row).getName();
-    } else if (column == 1) {
-      return NCSwitch.getStringSwitchingTechnique(ncs.switches.get(row).getSwitchingTechnique());
-    } else if (column == 2) {
-      return NCSwitch.getStringSchedulingPolicy(ncs.switches.get(row).getSchedulingPolicy());
-    } else if (column == 3) {
-      return ncs.switches.get(row).getCapacity() + " " + ncs.switches.get(row).getCapacityUnit().getStringUnit();
-    } else {
-      return ncs.switches.get(row).getTechnicalLatency() + " us";
+    // private String [] names;
+    public SwitchesNCTableModel(NCStructure _ncs) {
+        ncs = _ncs;
+        // computeData(_ncs);
     }
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Switch";
-      case 1:
-        return "Switching tech.";
-      case 2:
-        return "Scheduling policy";
-      case 3:
-        return "Capacity";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return ncs.switches.size();
     }
-    return "Tech. latency";
-  }
+
+    public int getColumnCount() {
+        return 5;
+    }
+
+    public Object getValueAt(int row, int column) {
+        if (column == 0) {
+            return ncs.switches.get(row).getName();
+        } else if (column == 1) {
+            return NCSwitch.getStringSwitchingTechnique(ncs.switches.get(row).getSwitchingTechnique());
+        } else if (column == 2) {
+            return NCSwitch.getStringSchedulingPolicy(ncs.switches.get(row).getSchedulingPolicy());
+        } else if (column == 3) {
+            return ncs.switches.get(row).getCapacity() + " " + ncs.switches.get(row).getCapacityUnit().getStringUnit();
+        } else {
+            return ncs.switches.get(row).getTechnicalLatency() + " us";
+        }
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Switch";
+            case 1:
+                return "Switching tech.";
+            case 2:
+                return "Scheduling policy";
+            case 3:
+                return "Capacity";
+        }
+        return "Tech. latency";
+    }
 
 }

@@ -55,302 +55,304 @@ import java.util.Vector;
  * @version 1.0 06/04/2010
  */
 public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints implements WithAttributes {
-  protected int arrowLength = 10;
-  // protected AvatarSMDTransitionInfo myTransitionInfo;
+    protected int arrowLength = 10;
+    // protected AvatarSMDTransitionInfo myTransitionInfo;
 
-  public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    // nbInternalTGComponent = 1;
-    // tgcomponent = new TGComponent[nbInternalTGComponent];
+        // nbInternalTGComponent = 1;
+        // tgcomponent = new TGComponent[nbInternalTGComponent];
 
-    AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo((_p1.getX() + _p2.getX()) / 2,
-        (_p1.getY() + _p2.getY()) / 2, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
-    tgc.setValue("");
-    tgc.setName("List of all parameters of an Avatar SMD transition");
-    tgc.setMoveWithFather(false);
-    addInternalComponent(tgc, getNbInternalTGComponent());
+        AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo((_p1.getX() + _p2.getX()) / 2,
+                (_p1.getY() + _p2.getY()) / 2, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this,
+                _tdp);
+        tgc.setValue("");
+        tgc.setName("List of all parameters of an Avatar SMD transition");
+        tgc.setMoveWithFather(false);
+        addInternalComponent(tgc, getNbInternalTGComponent());
 
-    editable = true;
+        editable = true;
 
-    myImageIcon = IconManager.imgic202;
-  }
-
-  /*
-   * public void internalDrawing(Graphics g) {
-   * 
-   * TGComponent p3, p4; int previousx = 0, previousy = 0;
-   * 
-   * if (nbInternalTGComponent>0) { p3 = tgcomponent[0]; p4 = tgcomponent[0]; //
-   * if (!(tgcomponent[0] instanceof AvatarSMDTransitionInfo)) {
-   * drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY()); } else {
-   * previousx = p1.getX(); previousy = p1.getY(); }
-   * 
-   * for(int i=0; i<nbInternalTGComponent-1; i++) {
-   * 
-   * if (p4 instanceof AvatarSMDTransitionInfo) { } else { p4 = tgcomponent[i+1];
-   * drawMiddleSegment(g, previousx, previousy, p4.getX(), p4.getY()); previousx =
-   * p4.getX(); previousy = p4.getY(); } } drawLastSegment(g, previousx,
-   * previousy, p2.getX(), p2.getY()); } else { drawLastSegment(g, p1.getX(),
-   * p1.getY(), p2.getX(), p2.getY()); } }
-   */
-
-  public void setTransitionInfo(String guard, String action) {
-    AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
-    if (!guard.isEmpty()) {
-      tgc.setGuard(guard);
-    }
-    if (!action.isEmpty()) {
-      tgc.addAction(action);
-    }
-  }
-
-  public void setTransitionTime(String minDelay, String maxDelay, String minCompute, String maxCompute) {
-    AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
-    tgc.setTimes(minDelay, maxDelay, minCompute, maxCompute);
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-      g.drawLine(x1, y1, x2, y2);
-    } else {
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-    }
-  }
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    AvatarSMDTransitionInfo info = getAvatarSMDTransitionInfo();
-    if (info == null) {
-      return false;
-    }
-    return info.editOnDoubleClick(frame);
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARSMD_CONNECTOR;
-  }
-
-  public AvatarSMDTransitionInfo getAvatarSMDTransitionInfo() {
-    for (int i = 0; i < tgcomponent.length; i++) {
-      if (tgcomponent[i] instanceof AvatarSMDTransitionInfo) {
-        return (AvatarSMDTransitionInfo) (tgcomponent[i]);
-      }
-    }
-    return null;
-  }
-
-  public String getGuard() {
-    return getAvatarSMDTransitionInfo().getGuard();
-  }
-
-  public String getEffectiveGuard() {
-    return getAvatarSMDTransitionInfo().getEffectiveGuard();
-  }
-  //
-  // public String getTotalMinDelay() {
-  // String s1 = getAvatarSMDTransitionInfo().getAfterMinDelay();
-  // String s2 = getAvatarSMDTransitionInfo().getComputeMinDelay();
-  // return addedDelays(s1, s2);
-  // }
-  //
-  // public String getTotalMaxDelay() {
-  // String s1 = getAvatarSMDTransitionInfo().getAfterMaxDelay();
-  // String s2 = getAvatarSMDTransitionInfo().getComputeMaxDelay();
-  // return addedDelays(s1, s2);
-  // }
-  //
-  // public String addedDelays(String s1, String s2) {
-  // if (s1.trim().length() == 0) {
-  // return s2.trim();
-  // } else {
-  // if (s2.trim().length() == 0) {
-  // return s1;
-  // } else {
-  // return "(" + s1 + ") + (" + s2 + ")";
-  // }
-  // }
-  // }
-
-  public Vector<String> getActions() {
-    return getAvatarSMDTransitionInfo().getActions();
-  }
-
-  public Vector<String> getEffectiveActions() {
-    return getAvatarSMDTransitionInfo().getEffectiveActions();
-  }
-
-  public String getAfterMinDelay() {
-    return getAvatarSMDTransitionInfo().getAfterMinDelay();
-  }
-
-  public String getEffectiveAfterMinDelay() {
-    return getAvatarSMDTransitionInfo().getEffectiveAfterMinDelay();
-  }
-
-  public String getAfterMaxDelay() {
-    return getAvatarSMDTransitionInfo().getAfterMaxDelay();
-  }
-
-  public String getEffectiveAfterMaxDelay() {
-    return getAvatarSMDTransitionInfo().getEffectiveAfterMaxDelay();
-  }
-
-  public int getEffectiveDelayDistributionLaw() {
-    return getAvatarSMDTransitionInfo().getDelayDistributionLaw();
-  }
-
-  public String getExtraDelay1() {
-    return getAvatarSMDTransitionInfo().getExtraDelay1();
-  }
-
-  public String getExtraDelay2() {
-    return getAvatarSMDTransitionInfo().getExtraDelay2();
-  }
-
-  public String getComputeMinDelay() {
-    return getAvatarSMDTransitionInfo().getComputeMinDelay();
-  }
-
-  public String getEffectiveComputeMinDelay() {
-    return getAvatarSMDTransitionInfo().getEffectiveComputeMinDelay();
-  }
-
-  public String getComputeMaxDelay() {
-    return getAvatarSMDTransitionInfo().getComputeMaxDelay();
-  }
-
-  public String getEffectiveComputeMaxDelay() {
-    return getAvatarSMDTransitionInfo().getEffectiveComputeMaxDelay();
-  }
-
-  public String getProbability() {
-    return getAvatarSMDTransitionInfo().getProbability();
-  }
-
-  public String getEffectiveProbability() {
-    return getAvatarSMDTransitionInfo().getEffectiveProbability();
-  }
-  //
-  // public String getFilesToInclude() {
-  // return getAvatarSMDTransitionInfo().getFilesToInclude();
-  // }
-  //
-  // public String getCodeToInclude() {
-  // return getAvatarSMDTransitionInfo().getCodeToInclude();
-  // }
-
-  public String getAttributes() {
-    return getAvatarSMDTransitionInfo().getAttributes();
-  }
-
-  /**
-   * Issue #69
-   * 
-   * @param _enabled : boolean data
-   */
-  @Override
-  public void setEnabled(final boolean _enabled) {
-    if (p2 != null) {
-      p2.acceptForward(new EnablingAvatarSMDConnectorVisitor(_enabled));
-    }
-  }
-
-  /**
-   * Issue #69
-   * 
-   * @return boolean value
-   */
-  @Override
-  public boolean canBeDisabled() {
-    if (p2 != null) {
-      if (p2.getFather() instanceof AvatarSMDStopState) {
-        return false;
-      }
+        myImageIcon = IconManager.imgic202;
     }
 
-    return canBeDisabledContainer();
-  }
+    /*
+     * public void internalDrawing(Graphics g) {
+     * 
+     * TGComponent p3, p4; int previousx = 0, previousy = 0;
+     * 
+     * if (nbInternalTGComponent>0) { p3 = tgcomponent[0]; p4 = tgcomponent[0]; //
+     * if (!(tgcomponent[0] instanceof AvatarSMDTransitionInfo)) {
+     * drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY()); } else {
+     * previousx = p1.getX(); previousy = p1.getY(); }
+     * 
+     * for(int i=0; i<nbInternalTGComponent-1; i++) {
+     * 
+     * if (p4 instanceof AvatarSMDTransitionInfo) { } else { p4 = tgcomponent[i+1];
+     * drawMiddleSegment(g, previousx, previousy, p4.getX(), p4.getY()); previousx =
+     * p4.getX(); previousy = p4.getY(); } } drawLastSegment(g, previousx,
+     * previousy, p2.getX(), p2.getY()); } else { drawLastSegment(g, p1.getX(),
+     * p1.getY(), p2.getX(), p2.getY()); } }
+     */
 
-  public boolean canBeDisabledContainer() {
-    if (p2 != null) {
-      if (p2.getFather() instanceof TGComponent
-          && ((TGComponent) p2.getFather()).getFather() instanceof AvatarSMDState) {
-        if (!((TGComponent) p2.getFather()).getFather().isEnabled()) {
-          return false;
+    public void setTransitionInfo(String guard, String action) {
+        AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
+        if (!guard.isEmpty()) {
+            tgc.setGuard(guard);
         }
-      }
-    }
-
-    if (p1 != null) {
-      if (p1.getFather() instanceof TGComponent
-          && ((TGComponent) p1.getFather()).getFather() instanceof AvatarSMDState) {
-        if (!((TGComponent) p1.getFather()).getFather().isEnabled()) {
-          return false;
+        if (!action.isEmpty()) {
+            tgc.addAction(action);
         }
-      }
     }
 
-    return true;
-  }
-
-  public boolean isContainedInEnabledState() {
-    final AvatarSMDState sourceContainingState = getContainingState(p1);
-
-    if (sourceContainingState != null && sourceContainingState.isEnabled()) {
-      return true;
+    public void setTransitionTime(String minDelay, String maxDelay, String minCompute, String maxCompute) {
+        AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
+        tgc.setTimes(minDelay, maxDelay, minCompute, maxCompute);
     }
 
-    final AvatarSMDState targetContainingState = getContainingState(p2);
-
-    return targetContainingState != null && targetContainingState.isEnabled();
-  }
-
-  public AvatarSMDState getContainingState() {
-    final AvatarSMDState sourceContainingState = getContainingState(p1);
-
-    final AvatarSMDState targetContainingState = getContainingState(p2);
-
-    if (sourceContainingState == targetContainingState) {
-      return sourceContainingState;
+    @Override
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+        }
     }
 
-    return null;
-  }
-
-  private AvatarSMDState getContainingState(final TGConnectingPoint point) {
-    if (p1 == null) {
-      return null;
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        AvatarSMDTransitionInfo info = getAvatarSMDTransitionInfo();
+        if (info == null) {
+            return false;
+        }
+        return info.editOnDoubleClick(frame);
     }
 
-    if (point.getFather() instanceof TGComponent) {
-      final TGComponent sourceComponent = (TGComponent) point.getFather();
-
-      if (sourceComponent.getFather() instanceof AvatarSMDState) {
-        return (AvatarSMDState) sourceComponent.getFather();
-      }
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 
-    return null;
-  }
-
-  /**
-   * Issue #69
-   * 
-   * @param checkBranch boolean data
-   * @return boolean value
-   */
-  public boolean isEnabled(boolean checkBranch) {
-    if (checkBranch && p2 != null) {
-      final ForwardComponentsEnabledVisitor visitor = new ForwardComponentsEnabledVisitor();
-      p2.acceptForward(visitor);
-
-      return visitor.isEnabled();
+    public AvatarSMDTransitionInfo getAvatarSMDTransitionInfo() {
+        for (int i = 0; i < tgcomponent.length; i++) {
+            if (tgcomponent[i] instanceof AvatarSMDTransitionInfo) {
+                return (AvatarSMDTransitionInfo) (tgcomponent[i]);
+            }
+        }
+        return null;
     }
 
-    return super.isEnabled();
-  }
+    public String getGuard() {
+        return getAvatarSMDTransitionInfo().getGuard();
+    }
+
+    public String getEffectiveGuard() {
+        return getAvatarSMDTransitionInfo().getEffectiveGuard();
+    }
+    //
+    // public String getTotalMinDelay() {
+    // String s1 = getAvatarSMDTransitionInfo().getAfterMinDelay();
+    // String s2 = getAvatarSMDTransitionInfo().getComputeMinDelay();
+    // return addedDelays(s1, s2);
+    // }
+    //
+    // public String getTotalMaxDelay() {
+    // String s1 = getAvatarSMDTransitionInfo().getAfterMaxDelay();
+    // String s2 = getAvatarSMDTransitionInfo().getComputeMaxDelay();
+    // return addedDelays(s1, s2);
+    // }
+    //
+    // public String addedDelays(String s1, String s2) {
+    // if (s1.trim().length() == 0) {
+    // return s2.trim();
+    // } else {
+    // if (s2.trim().length() == 0) {
+    // return s1;
+    // } else {
+    // return "(" + s1 + ") + (" + s2 + ")";
+    // }
+    // }
+    // }
+
+    public Vector<String> getActions() {
+        return getAvatarSMDTransitionInfo().getActions();
+    }
+
+    public Vector<String> getEffectiveActions() {
+        return getAvatarSMDTransitionInfo().getEffectiveActions();
+    }
+
+    public String getAfterMinDelay() {
+        return getAvatarSMDTransitionInfo().getAfterMinDelay();
+    }
+
+    public String getEffectiveAfterMinDelay() {
+        return getAvatarSMDTransitionInfo().getEffectiveAfterMinDelay();
+    }
+
+    public String getAfterMaxDelay() {
+        return getAvatarSMDTransitionInfo().getAfterMaxDelay();
+    }
+
+    public String getEffectiveAfterMaxDelay() {
+        return getAvatarSMDTransitionInfo().getEffectiveAfterMaxDelay();
+    }
+
+    public int getEffectiveDelayDistributionLaw() {
+        return getAvatarSMDTransitionInfo().getDelayDistributionLaw();
+    }
+
+    public String getExtraDelay1() {
+        return getAvatarSMDTransitionInfo().getExtraDelay1();
+    }
+
+    public String getExtraDelay2() {
+        return getAvatarSMDTransitionInfo().getExtraDelay2();
+    }
+
+    public String getComputeMinDelay() {
+        return getAvatarSMDTransitionInfo().getComputeMinDelay();
+    }
+
+    public String getEffectiveComputeMinDelay() {
+        return getAvatarSMDTransitionInfo().getEffectiveComputeMinDelay();
+    }
+
+    public String getComputeMaxDelay() {
+        return getAvatarSMDTransitionInfo().getComputeMaxDelay();
+    }
+
+    public String getEffectiveComputeMaxDelay() {
+        return getAvatarSMDTransitionInfo().getEffectiveComputeMaxDelay();
+    }
+
+    public String getProbability() {
+        return getAvatarSMDTransitionInfo().getProbability();
+    }
+
+    public String getEffectiveProbability() {
+        return getAvatarSMDTransitionInfo().getEffectiveProbability();
+    }
+    //
+    // public String getFilesToInclude() {
+    // return getAvatarSMDTransitionInfo().getFilesToInclude();
+    // }
+    //
+    // public String getCodeToInclude() {
+    // return getAvatarSMDTransitionInfo().getCodeToInclude();
+    // }
+
+    public String getAttributes() {
+        return getAvatarSMDTransitionInfo().getAttributes();
+    }
+
+    /**
+     * Issue #69
+     * 
+     * @param _enabled : boolean data
+     */
+    @Override
+    public void setEnabled(final boolean _enabled) {
+        if (p2 != null) {
+            p2.acceptForward(new EnablingAvatarSMDConnectorVisitor(_enabled));
+        }
+    }
+
+    /**
+     * Issue #69
+     * 
+     * @return boolean value
+     */
+    @Override
+    public boolean canBeDisabled() {
+        if (p2 != null) {
+            if (p2.getFather() instanceof AvatarSMDStopState) {
+                return false;
+            }
+        }
+
+        return canBeDisabledContainer();
+    }
+
+    public boolean canBeDisabledContainer() {
+        if (p2 != null) {
+            if (p2.getFather() instanceof TGComponent
+                    && ((TGComponent) p2.getFather()).getFather() instanceof AvatarSMDState) {
+                if (!((TGComponent) p2.getFather()).getFather().isEnabled()) {
+                    return false;
+                }
+            }
+        }
+
+        if (p1 != null) {
+            if (p1.getFather() instanceof TGComponent
+                    && ((TGComponent) p1.getFather()).getFather() instanceof AvatarSMDState) {
+                if (!((TGComponent) p1.getFather()).getFather().isEnabled()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isContainedInEnabledState() {
+        final AvatarSMDState sourceContainingState = getContainingState(p1);
+
+        if (sourceContainingState != null && sourceContainingState.isEnabled()) {
+            return true;
+        }
+
+        final AvatarSMDState targetContainingState = getContainingState(p2);
+
+        return targetContainingState != null && targetContainingState.isEnabled();
+    }
+
+    public AvatarSMDState getContainingState() {
+        final AvatarSMDState sourceContainingState = getContainingState(p1);
+
+        final AvatarSMDState targetContainingState = getContainingState(p2);
+
+        if (sourceContainingState == targetContainingState) {
+            return sourceContainingState;
+        }
+
+        return null;
+    }
+
+    private AvatarSMDState getContainingState(final TGConnectingPoint point) {
+        if (p1 == null) {
+            return null;
+        }
+
+        if (point.getFather() instanceof TGComponent) {
+            final TGComponent sourceComponent = (TGComponent) point.getFather();
+
+            if (sourceComponent.getFather() instanceof AvatarSMDState) {
+                return (AvatarSMDState) sourceComponent.getFather();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Issue #69
+     * 
+     * @param checkBranch boolean data
+     * @return boolean value
+     */
+    public boolean isEnabled(boolean checkBranch) {
+        if (checkBranch && p2 != null) {
+            final ForwardComponentsEnabledVisitor visitor = new ForwardComponentsEnabledVisitor();
+            p2.acceptForward(visitor);
+
+            return visitor.isEnabled();
+        }
+
+        return super.isEnabled();
+    }
 }

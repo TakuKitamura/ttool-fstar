@@ -54,62 +54,62 @@ import ui.ad.TADStopState;
  * @author Ludovic APVRILLE
  */
 public class TMLADStopState extends TADStopState
-    /* Issue #69 TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint {
-  // private int internalCircleSize = 16;
-  // private int lineLength = 5;
+        /* Issue #69 TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint {
+    // private int internalCircleSize = 16;
+    // private int lineLength = 5;
 
-  public TMLADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    //
-    // width = 20;
-    // height = 20;
-    //
-    // nbConnectingPoint = 1;
-    // connectingPoint = new TGConnectingPoint[1];
-    // connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, - lineLength, true,
-    // false, 0.5, 0.0);
-    //
-    // nbInternalTGComponent = 0;
-    //
-    // moveable = true;
-    // editable = false;
-    // removable = true;
-    //
-    // name = "stop state";
-    //
-    // myImageIcon = IconManager.imgic210;
-  }
+    public TMLADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        //
+        // width = 20;
+        // height = 20;
+        //
+        // nbConnectingPoint = 1;
+        // connectingPoint = new TGConnectingPoint[1];
+        // connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, - lineLength, true,
+        // false, 0.5, 0.0);
+        //
+        // nbInternalTGComponent = 0;
+        //
+        // moveable = true;
+        // editable = false;
+        // removable = true;
+        //
+        // name = "stop state";
+        //
+        // myImageIcon = IconManager.imgic210;
+    }
 
-  @Override
-  protected void createConnectingPoints() {
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[1];
-    connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-  }
-  // public void internalDrawing(Graphics g) {
-  // ColorManager.setColor(g, state, 0);
-  // g.fillOval(x + (width - internalCircleSize)/2, y + (height -
-  // internalCircleSize)/2, internalCircleSize, internalCircleSize);
-  // g.drawOval(x, y, width, height);
-  // g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-  // }
-  //
-  //
-  // public TGComponent isOnMe(int _x, int _y) {
-  // if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-  // return this;
-  // }
-  // return null;
-  // }
+    @Override
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[1];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    }
+    // public void internalDrawing(Graphics g) {
+    // ColorManager.setColor(g, state, 0);
+    // g.fillOval(x + (width - internalCircleSize)/2, y + (height -
+    // internalCircleSize)/2, internalCircleSize, internalCircleSize);
+    // g.drawOval(x, y, width, height);
+    // g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+    // }
+    //
+    //
+    // public TGComponent isOnMe(int _x, int _y) {
+    // if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+    // return this;
+    // }
+    // return null;
+    // }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TMLAD_STOP_STATE;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.TMLAD_STOP_STATE;
+    }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_TMLAD;
-  }
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TMLAD;
+    }
 }

@@ -45,28 +45,28 @@ package ddtranslatorSoclib;
 
 public class AvatarICU extends AvatarComponent {
 
-  private String ICUName;
-  private int index;
-  private int nbIRQ;
+    private String ICUName;
+    private int index;
+    private int nbIRQ;
 
-  public AvatarICU(String _ICUName, int _index, int _nbIRQ) {
+    public AvatarICU(String _ICUName, int _index, int _nbIRQ) {
 
-    ICUName = _ICUName;
-    index = _index;
-    nbIRQ = _nbIRQ;
+        ICUName = _ICUName;
+        index = _index;
+        nbIRQ = _nbIRQ;
 
-  }
+    }
 
-  String getICUName() {
-    return ICUName;
-  }
+    String getICUName() {
+        return ICUName;
+    }
 
-  int getIndex() {
-    return index;
-  }
+    int getIndex() {
+        return index;
+    }
 
-  int getNbIRQ() {
-    return nbIRQ;
-  }
+    int getNbIRQ() {
+        return nbIRQ;
+    }
 
 }

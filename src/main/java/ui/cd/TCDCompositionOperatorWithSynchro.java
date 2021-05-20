@@ -50,38 +50,38 @@ import java.util.LinkedList;
  * @author Ludovic APVRILLE
  */
 public abstract class TCDCompositionOperatorWithSynchro extends TCDCompositionOperator {
-  protected TClassSynchroInterface t1;
-  protected TClassSynchroInterface t2;
+    protected TClassSynchroInterface t1;
+    protected TClassSynchroInterface t2;
 
-  public TCDCompositionOperatorWithSynchro(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-  }
+    public TCDCompositionOperatorWithSynchro(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    }
 
-  public LinkedList<TTwoAttributes> getGates() {
-    return ((TCDSynchroGateList) tgcomponent[0]).getGates();
-  }
+    public LinkedList<TTwoAttributes> getGates() {
+        return ((TCDSynchroGateList) tgcomponent[0]).getGates();
+    }
 
-  public TClassInterface getT1() {
-    return t1;
-  }
+    public TClassInterface getT1() {
+        return t1;
+    }
 
-  public TClassInterface getT2() {
-    return t2;
-  }
+    public TClassInterface getT2() {
+        return t2;
+    }
 
-  public TCDSynchroGateList getSynchroGateList() {
-    return (TCDSynchroGateList) (tgcomponent[0]);
-  }
+    public TCDSynchroGateList getSynchroGateList() {
+        return (TCDSynchroGateList) (tgcomponent[0]);
+    }
 
-  public void setT1(TClassSynchroInterface t) {
-    t1 = t;
-  }
+    public void setT1(TClassSynchroInterface t) {
+        t1 = t;
+    }
 
-  public void setT2(TClassSynchroInterface t) {
-    t2 = t;
-  }
+    public void setT2(TClassSynchroInterface t) {
+        t2 = t;
+    }
 
-  public abstract void structureChanged();
+    public abstract void structureChanged();
 
 }

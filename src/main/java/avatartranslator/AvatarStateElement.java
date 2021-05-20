@@ -46,11 +46,11 @@ package avatartranslator;
  */
 public abstract class AvatarStateElement extends AvatarStateMachineElement {
 
-  public AvatarStateElement(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarStateElement(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public AvatarStateElement(String _name, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
-    super(_name, _referenceObject, _isCheckable, _isChecked);
-  }
+    public AvatarStateElement(String _name, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
+        super(_name, _referenceObject, _isCheckable, _isChecked);
+    }
 }

@@ -51,99 +51,99 @@ import javax.swing.DefaultListModel;
  */
 
 public class SysCAMSTBlockDE extends SysCAMSTComponent {
-  private String name;
-  private String clockName;
-  private String clockSensitiveMethod;
-  // private int period;
-  // private String time;
-  private String nameFn;
-  private String code;
-  private DefaultListModel<String> listStruct;
-  private String nameTemplate;
-  private String typeTemplate;
-  private String valueTemplate;
-  private DefaultListModel<String> listTypedef;
+    private String name;
+    private String clockName;
+    private String clockSensitiveMethod;
+    // private int period;
+    // private String time;
+    private String nameFn;
+    private String code;
+    private DefaultListModel<String> listStruct;
+    private String nameTemplate;
+    private String typeTemplate;
+    private String valueTemplate;
+    private DefaultListModel<String> listTypedef;
 
-  private SysCAMSTCluster cluster;
+    private SysCAMSTCluster cluster;
 
-  private LinkedList<SysCAMSTPortDE> portDE;
+    private LinkedList<SysCAMSTPortDE> portDE;
 
-  public SysCAMSTBlockDE(String _name, String _clockName, String _clockSensitiveMethod, String _nameFn, String _code,
-      DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate,
-      DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
-    name = _name;
-    clockName = _clockName;
-    clockSensitiveMethod = _clockSensitiveMethod;
-    // period = _period;
-    // time = _time;
-    nameFn = _nameFn;
-    code = _code;
-    listStruct = _listStruct;
-    nameTemplate = _nameTemplate;
-    typeTemplate = _typeTemplate;
-    valueTemplate = _valueTemplate;
-    listTypedef = _listTypedef;
-    cluster = _cluster;
-    portDE = new LinkedList<SysCAMSTPortDE>();
-  }
+    public SysCAMSTBlockDE(String _name, String _clockName, String _clockSensitiveMethod, String _nameFn, String _code,
+            DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate,
+            DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+        name = _name;
+        clockName = _clockName;
+        clockSensitiveMethod = _clockSensitiveMethod;
+        // period = _period;
+        // time = _time;
+        nameFn = _nameFn;
+        code = _code;
+        listStruct = _listStruct;
+        nameTemplate = _nameTemplate;
+        typeTemplate = _typeTemplate;
+        valueTemplate = _valueTemplate;
+        listTypedef = _listTypedef;
+        cluster = _cluster;
+        portDE = new LinkedList<SysCAMSTPortDE>();
+    }
 
-  // public int getPeriod() {
-  // return period;
-  // }
-  //
-  // public String getTime() {
-  // return time;
-  // }
+    // public int getPeriod() {
+    // return period;
+    // }
+    //
+    // public String getTime() {
+    // return time;
+    // }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getClockName() {
-    return clockName;
-  }
+    public String getClockName() {
+        return clockName;
+    }
 
-  public String getClockSensitiveMethod() {
-    return clockSensitiveMethod;
-  }
+    public String getClockSensitiveMethod() {
+        return clockSensitiveMethod;
+    }
 
-  public String getNameFn() {
-    return nameFn;
-  }
+    public String getNameFn() {
+        return nameFn;
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public DefaultListModel<String> getListStruct() {
-    return listStruct;
-  }
+    public DefaultListModel<String> getListStruct() {
+        return listStruct;
+    }
 
-  public String getNameTemplate() {
-    return nameTemplate;
-  }
+    public String getNameTemplate() {
+        return nameTemplate;
+    }
 
-  public String getTypeTemplate() {
-    return typeTemplate;
-  }
+    public String getTypeTemplate() {
+        return typeTemplate;
+    }
 
-  public String getValueTemplate() {
-    return valueTemplate;
-  }
+    public String getValueTemplate() {
+        return valueTemplate;
+    }
 
-  public DefaultListModel<String> getListTypedef() {
-    return listTypedef;
-  }
+    public DefaultListModel<String> getListTypedef() {
+        return listTypedef;
+    }
 
-  public SysCAMSTCluster getCluster() {
-    return cluster;
-  }
+    public SysCAMSTCluster getCluster() {
+        return cluster;
+    }
 
-  public LinkedList<SysCAMSTPortDE> getPortDE() {
-    return portDE;
-  }
+    public LinkedList<SysCAMSTPortDE> getPortDE() {
+        return portDE;
+    }
 
-  public void addPortDE(SysCAMSTPortDE de) {
-    portDE.add(de);
-  }
+    public void addPortDE(SysCAMSTPortDE de) {
+        portDE.add(de);
+    }
 }

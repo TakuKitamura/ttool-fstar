@@ -58,104 +58,104 @@ import java.util.Iterator;
  */
 public class AvatarCDPanel extends TDiagramPanel implements TDPWithAttributes {
 
-  public static int ARC = 20;
+    public static int ARC = 20;
 
-  public AvatarCDPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    // addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
-
-  @Override
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return true;
-  }
-
-  @Override
-  public boolean actionOnAdd(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public boolean actionOnRemove(TGComponent tgc) {
-    return false;
-  }
-
-  @Override
-  public String getXMLHead() {
-    return "<AvatarCDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-  }
-
-  @Override
-  public String getXMLTail() {
-    return "</AvatarCDPanel>";
-  }
-
-  @Override
-  public String getXMLSelectedHead() {
-    return "<AvatarCDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel
-        + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  @Override
-  public String getXMLSelectedTail() {
-    return "</AvatarCDPanelCopy>";
-  }
-
-  @Override
-  public String getXMLCloneHead() {
-    return "<AvatarCDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  @Override
-  public String getXMLCloneTail() {
-    return "</AvatarCDPanelCopy>";
-  }
-
-  public void makeGraphicalOptimizations() {
-    // Segments of connector that mask components
-
-    // Components over others
-
-    // Position correctly guards of choice
-  }
-
-  @Override
-  public boolean hasAutoConnect() {
-    return false;
-  }
-
-  public void setConnectorsToFront() {
-    TGComponent tgc;
-
-    //
-
-    Iterator iterator = componentList.listIterator();
-
-    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if (!(tgc instanceof TGConnector)) {
-        list.add(tgc);
-      }
+    public AvatarCDPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        // addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
     }
 
-    //
-    for (TGComponent tgc1 : list) {
-      //
-      componentList.remove(tgc1);
-      componentList.add(tgc1);
+    @Override
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return true;
     }
-  }
+
+    @Override
+    public boolean actionOnAdd(TGComponent tgc) {
+        return false;
+    }
+
+    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        return false;
+    }
+
+    @Override
+    public boolean actionOnRemove(TGComponent tgc) {
+        return false;
+    }
+
+    @Override
+    public String getXMLHead() {
+        return "<AvatarCDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+    }
+
+    @Override
+    public String getXMLTail() {
+        return "</AvatarCDPanel>";
+    }
+
+    @Override
+    public String getXMLSelectedHead() {
+        return "<AvatarCDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+                + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    @Override
+    public String getXMLSelectedTail() {
+        return "</AvatarCDPanelCopy>";
+    }
+
+    @Override
+    public String getXMLCloneHead() {
+        return "<AvatarCDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+                + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    @Override
+    public String getXMLCloneTail() {
+        return "</AvatarCDPanelCopy>";
+    }
+
+    public void makeGraphicalOptimizations() {
+        // Segments of connector that mask components
+
+        // Components over others
+
+        // Position correctly guards of choice
+    }
+
+    @Override
+    public boolean hasAutoConnect() {
+        return false;
+    }
+
+    public void setConnectorsToFront() {
+        TGComponent tgc;
+
+        //
+
+        Iterator iterator = componentList.listIterator();
+
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if (!(tgc instanceof TGConnector)) {
+                list.add(tgc);
+            }
+        }
+
+        //
+        for (TGComponent tgc1 : list) {
+            //
+            componentList.remove(tgc1);
+            componentList.add(tgc1);
+        }
+    }
 
 }

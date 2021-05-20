@@ -49,102 +49,102 @@ import java.util.LinkedList;
  */
 public class AvatarBroadcast extends AvatarElement {
 
-  // public AvatarBlock block1, block2;
+    // public AvatarBlock block1, block2;
 
-  // This two lists contain send and receive signals
-  // Signals with no correspondance are sent to the environment
-  private LinkedList<AvatarSignal> sendSignals, receiveSignals;
-  private boolean[] hasSendCorrespondance; // For send signals only
+    // This two lists contain send and receive signals
+    // Signals with no correspondance are sent to the environment
+    private LinkedList<AvatarSignal> sendSignals, receiveSignals;
+    private boolean[] hasSendCorrespondance; // For send signals only
 
-  public AvatarBroadcast(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    sendSignals = new LinkedList<AvatarSignal>();
-    receiveSignals = new LinkedList<AvatarSignal>();
-  }
-
-  public boolean containsSignal(AvatarSignal _as) {
-    if (_as.isOut()) {
-      return sendSignals.contains(_as);
+    public AvatarBroadcast(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        sendSignals = new LinkedList<AvatarSignal>();
+        receiveSignals = new LinkedList<AvatarSignal>();
     }
-    return receiveSignals.contains(_as);
-  }
 
-  public void addSignal(AvatarSignal _sig) {
-    if (_sig.isOut()) {
-      sendSignals.add(_sig);
-    } else {
-      receiveSignals.add(_sig);
+    public boolean containsSignal(AvatarSignal _as) {
+        if (_as.isOut()) {
+            return sendSignals.contains(_as);
+        }
+        return receiveSignals.contains(_as);
     }
-    computeCorrespondance();
-  }
 
-  public int nbOfSendSignals() {
-    return sendSignals.size();
-  }
-
-  public AvatarSignal getSendSignal(int _index) {
-    return sendSignals.get(_index);
-  }
-
-  public int nbOfReceiveSignals() {
-    return receiveSignals.size();
-  }
-
-  public AvatarSignal getReceiveSignal(int _index) {
-    return receiveSignals.get(_index);
-  }
-
-  public String toString() {
-    StringBuffer sb = new StringBuffer("Send signals: ");
-    for (int i = 0; i < sendSignals.size(); i++) {
-      if (i > 0) {
-        sb.append(" ; ");
-      }
-      sb.append(sendSignals.get(i).getName());
+    public void addSignal(AvatarSignal _sig) {
+        if (_sig.isOut()) {
+            sendSignals.add(_sig);
+        } else {
+            receiveSignals.add(_sig);
+        }
+        computeCorrespondance();
     }
-    sb.append("  ;  receive signals: ");
-    for (int j = 0; j < receiveSignals.size(); j++) {
-      if (j > 0) {
-        sb.append(" ; ");
-      }
-      sb.append(receiveSignals.get(j).getName());
-    }
-    return sb.toString();
-  }
 
-  // Return index of signal. If not found, return -1
-  public boolean hasSignal(AvatarSignal _sig) {
-    if (_sig.isOut()) {
-      return sendSignals.contains(_sig);
+    public int nbOfSendSignals() {
+        return sendSignals.size();
     }
-    return receiveSignals.contains(_sig);
-  }
 
-  public int getIndexOfSignal(AvatarSignal _sig) {
-    if (_sig.isOut()) {
-      return sendSignals.indexOf(_sig);
+    public AvatarSignal getSendSignal(int _index) {
+        return sendSignals.get(_index);
     }
-    return receiveSignals.indexOf(_sig);
-  }
 
-  private void computeCorrespondance() {
-    hasSendCorrespondance = new boolean[sendSignals.size()];
-
-    int cpt = 0;
-    for (AvatarSignal ss : sendSignals) {
-      computeCorrespondance(ss, cpt);
-      cpt++;
+    public int nbOfReceiveSignals() {
+        return receiveSignals.size();
     }
-  }
 
-  private void computeCorrespondance(AvatarSignal _ss, int _index) {
-    for (AvatarSignal rs : receiveSignals) {
-      if (rs.isCompatibleWith(_ss)) {
-        hasSendCorrespondance[_index] = true;
-        return;
-      }
+    public AvatarSignal getReceiveSignal(int _index) {
+        return receiveSignals.get(_index);
     }
-    hasSendCorrespondance[_index] = false;
-  }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("Send signals: ");
+        for (int i = 0; i < sendSignals.size(); i++) {
+            if (i > 0) {
+                sb.append(" ; ");
+            }
+            sb.append(sendSignals.get(i).getName());
+        }
+        sb.append("  ;  receive signals: ");
+        for (int j = 0; j < receiveSignals.size(); j++) {
+            if (j > 0) {
+                sb.append(" ; ");
+            }
+            sb.append(receiveSignals.get(j).getName());
+        }
+        return sb.toString();
+    }
+
+    // Return index of signal. If not found, return -1
+    public boolean hasSignal(AvatarSignal _sig) {
+        if (_sig.isOut()) {
+            return sendSignals.contains(_sig);
+        }
+        return receiveSignals.contains(_sig);
+    }
+
+    public int getIndexOfSignal(AvatarSignal _sig) {
+        if (_sig.isOut()) {
+            return sendSignals.indexOf(_sig);
+        }
+        return receiveSignals.indexOf(_sig);
+    }
+
+    private void computeCorrespondance() {
+        hasSendCorrespondance = new boolean[sendSignals.size()];
+
+        int cpt = 0;
+        for (AvatarSignal ss : sendSignals) {
+            computeCorrespondance(ss, cpt);
+            cpt++;
+        }
+    }
+
+    private void computeCorrespondance(AvatarSignal _ss, int _index) {
+        for (AvatarSignal rs : receiveSignals) {
+            if (rs.isCompatibleWith(_ss)) {
+                hasSendCorrespondance[_index] = true;
+                return;
+            }
+        }
+        hasSendCorrespondance[_index] = false;
+    }
 
 }

@@ -46,23 +46,23 @@ package avatartranslator;
  */
 public class AvatarStopState extends AvatarStateElement {
 
-  public AvatarStopState(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarStopState(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-    AvatarStopState astop = new AvatarStopState(getName(), getReferenceObject());
-    astop.setAsVerifiable(canBeVerified());
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+        AvatarStopState astop = new AvatarStopState(getName(), getReferenceObject());
+        astop.setAsVerifiable(canBeVerified());
 
-    return astop;
-    // return null;
-  }
+        return astop;
+        // return null;
+    }
 
-  public String getNiceName() {
-    return "Stop state";
-  }
+    public String getNiceName() {
+        return "Stop state";
+    }
 
-  public void translate(AvatarTranslator translator, Object arg) {
-    translator.translateStopState(this, arg);
-  }
+    public void translate(AvatarTranslator translator, Object arg) {
+        translator.translateStopState(this, arg);
+    }
 }

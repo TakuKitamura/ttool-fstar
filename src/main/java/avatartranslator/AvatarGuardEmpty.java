@@ -48,23 +48,23 @@ import java.util.Map;
  */
 public class AvatarGuardEmpty extends AvatarGuard {
 
-  public AvatarGuardEmpty() {
-  }
+    public AvatarGuardEmpty() {
+    }
 
-  public boolean isGuarded() {
-    return false;
-  }
+    public boolean isGuarded() {
+        return false;
+    }
 
-  public String getAsString(AvatarSyntaxTranslator translator) {
-    return "";
-  }
+    public String getAsString(AvatarSyntaxTranslator translator) {
+        return "";
+    }
 
-  @Override
-  public AvatarGuardEmpty clone() {
-    return new AvatarGuardEmpty();
-  }
+    @Override
+    public AvatarGuardEmpty clone() {
+        return new AvatarGuardEmpty();
+    }
 
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-  }
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    }
 }

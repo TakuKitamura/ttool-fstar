@@ -47,63 +47,63 @@ import java.util.LinkedList;
 
 public class AvatarRAM extends AvatarComponent {
 
-  private String memoryName;
+    private String memoryName;
 
-  private int dataSize;
+    private int dataSize;
 
-  public int index;
-  public int cluster_index;
-  public int no_target;
-  public int no_target_local;
-  public int monitored;
+    public int index;
+    public int cluster_index;
+    public int no_target;
+    public int no_target_local;
+    public int monitored;
 
-  LinkedList<AvatarChannel> channelMapped;
+    LinkedList<AvatarChannel> channelMapped;
 
-  public AvatarRAM(String _memoryName, int _dataSize, int _index, int _monitored) {
-    memoryName = _memoryName;
-    dataSize = _dataSize;
-    index = _index;
-    monitored = _monitored;
-    channelMapped = new LinkedList<AvatarChannel>();
-  }
+    public AvatarRAM(String _memoryName, int _dataSize, int _index, int _monitored) {
+        memoryName = _memoryName;
+        dataSize = _dataSize;
+        index = _index;
+        monitored = _monitored;
+        channelMapped = new LinkedList<AvatarChannel>();
+    }
 
-  public String getMemoryName() {
-    return memoryName;
-  }
+    public String getMemoryName() {
+        return memoryName;
+    }
 
-  public int getNo_target() {
-    return no_target;
-  }
+    public int getNo_target() {
+        return no_target;
+    }
 
-  public int getIndex() {
-    return index;
-  }
+    public int getIndex() {
+        return index;
+    }
 
-  public void setNo_target(int _no_target) {
-    no_target = _no_target;
-  }
+    public void setNo_target(int _no_target) {
+        no_target = _no_target;
+    }
 
-  public int getDataSize() {
-    return dataSize;
-  }
+    public int getDataSize() {
+        return dataSize;
+    }
 
-  public void setDataSize(int _dataSize) {
-    dataSize = _dataSize;
-  }
+    public void setDataSize(int _dataSize) {
+        dataSize = _dataSize;
+    }
 
-  public int getMonitored() {
-    return monitored;
-  }
+    public int getMonitored() {
+        return monitored;
+    }
 
-  public void setMonitored(int _monitored) {
-    monitored = _monitored;
-  }
+    public void setMonitored(int _monitored) {
+        monitored = _monitored;
+    }
 
-  public LinkedList<AvatarChannel> getChannels() {
-    return channelMapped;
-  }
+    public LinkedList<AvatarChannel> getChannels() {
+        return channelMapped;
+    }
 
-  public void addChannel(AvatarChannel avcl) {
-    channelMapped.add(avcl);
-  }
+    public void addChannel(AvatarChannel avcl) {
+        channelMapped.add(avcl);
+    }
 }

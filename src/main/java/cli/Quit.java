@@ -56,38 +56,38 @@ import java.util.*;
  */
 public class Quit extends Command {
 
-  public Quit() {
+    public Quit() {
 
-  }
+    }
 
-  public String getCommand() {
-    return "quit";
-  }
+    public String getCommand() {
+        return "quit";
+    }
 
-  public String getShortCommand() {
-    return "q";
-  }
+    public String getShortCommand() {
+        return "q";
+    }
 
-  public String getUsage() {
-    return "quit";
-  }
+    public String getUsage() {
+        return "quit";
+    }
 
-  public String getDescription() {
-    return "Quits the interaction and closes all opened windows";
-  }
+    public String getDescription() {
+        return "Quits the interaction and closes all opened windows";
+    }
 
-  public String getExample() {
-    return "quit";
-  }
+    public String getExample() {
+        return "quit";
+    }
 
-  public String executeCommand(String command, Interpreter interpreter) {
-    System.exit(-1);
+    public String executeCommand(String command, Interpreter interpreter) {
+        System.exit(-1);
 
-    return null;
+        return null;
 
-  }
+    }
 
-  public void fillSubCommands() {
+    public void fillSubCommands() {
 
-  }
+    }
 }

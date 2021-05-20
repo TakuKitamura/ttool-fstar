@@ -58,220 +58,220 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class JFrameSimulationTrace extends JFrame implements ActionListener {
-  private Vector<GateSimulationTrace> trace;
+    private Vector<GateSimulationTrace> trace;
 
-  private JSimulationPanelInterface jsimu;
-  private JScrollPane jsp;
-  private JTextField time;
-  private JTextField rtlotos;
-  private JTextField turtle;
-  private JTextField action;
-  private JTextField values;
+    private JSimulationPanelInterface jsimu;
+    private JScrollPane jsp;
+    private JTextField time;
+    private JTextField rtlotos;
+    private JTextField turtle;
+    private JTextField action;
+    private JTextField values;
 
-  private JButton buttonZL;
-  private JButton buttonZP;
+    private JButton buttonZL;
+    private JButton buttonZP;
 
-  private int type = 0; // 1 -> function of time // 2-> ordering
+    private int type = 0; // 1 -> function of time // 2-> ordering
 
-  public JFrameSimulationTrace(String title, String _simuData, int _type) {
-    super(title);
+    public JFrameSimulationTrace(String title, String _simuData, int _type) {
+        super(title);
 
-    type = _type;
-    makeTraceSimu(_simuData);
-    makeComponents();
-  }
+        type = _type;
+        makeTraceSimu(_simuData);
+        makeComponents();
+    }
 
-  public boolean makeTraceSimu(String simuData) {
+    public boolean makeTraceSimu(String simuData) {
 
-    // TraceManager.addDev("New simulation trace with" + simuData);
+        // TraceManager.addDev("New simulation trace with" + simuData);
 
-    trace = new Vector<>();
+        trace = new Vector<>();
 
-    StringReader sr = new StringReader(simuData);
-    BufferedReader br = new BufferedReader(sr);
-    String s;
-    int ind0, ind1, ind2, ind4, ind5;
-    String gateId;
-    String timeId;
-    String actionNumber;
-    String values;
-    int t, act;
-    MasterGateManager mgm = new MasterGateManager();
-    Gate g;
-    GroupOfGates gog;
-    GateSimulationTrace gst;
+        StringReader sr = new StringReader(simuData);
+        BufferedReader br = new BufferedReader(sr);
+        String s;
+        int ind0, ind1, ind2, ind4, ind5;
+        String gateId;
+        String timeId;
+        String actionNumber;
+        String values;
+        int t, act;
+        MasterGateManager mgm = new MasterGateManager();
+        Gate g;
+        GroupOfGates gog;
+        GateSimulationTrace gst;
 
-    try {
-      while ((s = br.readLine()) != null) {
-        ind0 = s.indexOf(' ');
-        ind1 = s.indexOf('(');
-        ind2 = s.indexOf(')');
-        if ((ind0 > -1) && (ind1 > ind0) && (ind2 > ind1)) {
-          timeId = s.substring(0, ind0);
-          gateId = s.substring(ind1 + 1, ind2);
+        try {
+            while ((s = br.readLine()) != null) {
+                ind0 = s.indexOf(' ');
+                ind1 = s.indexOf('(');
+                ind2 = s.indexOf(')');
+                if ((ind0 > -1) && (ind1 > ind0) && (ind2 > ind1)) {
+                    timeId = s.substring(0, ind0);
+                    gateId = s.substring(ind1 + 1, ind2);
 
-          ind4 = gateId.indexOf('<');
-          ind5 = gateId.indexOf('>');
-          if ((ind4 > -1) && (ind5 > ind4)) {
-            values = gateId.substring(ind4 + 1, ind5);
-            gateId = gateId.substring(0, ind4);
-          } else {
-            values = "";
-          }
+                    ind4 = gateId.indexOf('<');
+                    ind5 = gateId.indexOf('>');
+                    if ((ind4 > -1) && (ind5 > ind4)) {
+                        values = gateId.substring(ind4 + 1, ind5);
+                        gateId = gateId.substring(0, ind4);
+                    } else {
+                        values = "";
+                    }
 
-          actionNumber = s.substring(ind2 + 2);
-          //
-          t = Integer.decode(timeId).intValue();
-          act = Integer.decode(actionNumber).intValue();
-          g = mgm.getGate(gateId);
+                    actionNumber = s.substring(ind2 + 2);
+                    //
+                    t = Integer.decode(timeId).intValue();
+                    act = Integer.decode(actionNumber).intValue();
+                    g = mgm.getGate(gateId);
 
-          if (g != null) {
-            gog = mgm.getGroupOfGatesByGate(g);
-            if (gog != null) {
-              gst = gstOfGate(g);
-              if (gst == null) {
-                //
-                gst = new GateSimulationTrace(g, gog);
-                trace.add(gst);
-              }
-              gst.addTimeAction(t, act, values);
+                    if (g != null) {
+                        gog = mgm.getGroupOfGatesByGate(g);
+                        if (gog != null) {
+                            gst = gstOfGate(g);
+                            if (gst == null) {
+                                //
+                                gst = new GateSimulationTrace(g, gog);
+                                trace.add(gst);
+                            }
+                            gst.addTimeAction(t, act, values);
+                        }
+                    }
+                }
             }
-          }
+        } catch (Exception e) {
+
+            return false;
         }
-      }
-    } catch (Exception e) {
-
-      return false;
-    }
-    return true;
-  }
-
-  public GateSimulationTrace gstOfGate(Gate g) {
-    GateSimulationTrace gst;
-
-    for (int i = 0; i < trace.size(); i++) {
-      gst = trace.elementAt(i);
-      if (gst.getGate() == g) {
-        return gst;
-      }
+        return true;
     }
 
-    return null;
-  }
+    public GateSimulationTrace gstOfGate(Gate g) {
+        GateSimulationTrace gst;
 
-  public void makeComponents() {
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
+        for (int i = 0; i < trace.size(); i++) {
+            gst = trace.elementAt(i);
+            if (gst.getGate() == g) {
+                return gst;
+            }
+        }
 
-    if (type == 1) {
-      jsimu = new JSimulationPanel(this, trace);
-    } else {
-      jsimu = new JSimulationPanelChrono(this, trace);
+        return null;
     }
-    jsp = new JScrollPane((JPanel) jsimu);
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(10);
 
-    framePanel.add(jsp, BorderLayout.CENTER);
+    public void makeComponents() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
 
-    // Buttons
-    buttonZL = new JButton("Zoom -", IconManager.imgic315);
-    buttonZL.addActionListener(this);
+        if (type == 1) {
+            jsimu = new JSimulationPanel(this, trace);
+        } else {
+            jsimu = new JSimulationPanelChrono(this, trace);
+        }
+        jsp = new JScrollPane((JPanel) jsimu);
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(10);
 
-    buttonZP = new JButton("Zoom +", IconManager.imgic317);
-    buttonZP.addActionListener(this);
+        framePanel.add(jsp, BorderLayout.CENTER);
 
-    JButton button1 = new JButton("Close", IconManager.imgic27);
-    button1.addActionListener(this);
+        // Buttons
+        buttonZL = new JButton("Zoom -", IconManager.imgic315);
+        buttonZL.addActionListener(this);
 
-    JPanel jp = new JPanel();
-    jp.add(buttonZL);
-    jp.add(buttonZP);
-    jp.add(button1);
+        buttonZP = new JButton("Zoom +", IconManager.imgic317);
+        buttonZP.addActionListener(this);
 
-    framePanel.add(jp, BorderLayout.SOUTH);
+        JButton button1 = new JButton("Close", IconManager.imgic27);
+        button1.addActionListener(this);
 
-    // upper information
-    jp = new JPanel();
+        JPanel jp = new JPanel();
+        jp.add(buttonZL);
+        jp.add(buttonZP);
+        jp.add(button1);
 
-    jp.add(new JLabel("Time:"));
-    time = new JTextField(5);
-    time.setEditable(false);
-    jp.add(time);
+        framePanel.add(jp, BorderLayout.SOUTH);
 
-    jp.add(new JLabel("TURTLE action(s):"));
-    turtle = new JTextField(15);
-    turtle.setEditable(false);
-    jp.add(turtle);
+        // upper information
+        jp = new JPanel();
 
-    jp.add(new JLabel("Values:"));
-    values = new JTextField(10);
-    values.setEditable(false);
-    jp.add(values);
+        jp.add(new JLabel("Time:"));
+        time = new JTextField(5);
+        time.setEditable(false);
+        jp.add(time);
 
-    jp.add(new JLabel("RT-LOTOS action:"));
-    rtlotos = new JTextField(10);
-    rtlotos.setEditable(false);
-    jp.add(rtlotos);
+        jp.add(new JLabel("TURTLE action(s):"));
+        turtle = new JTextField(15);
+        turtle.setEditable(false);
+        jp.add(turtle);
 
-    jp.add(new JLabel("Action No:"));
-    action = new JTextField(5);
-    action.setEditable(false);
-    jp.add(action);
+        jp.add(new JLabel("Values:"));
+        values = new JTextField(10);
+        values.setEditable(false);
+        jp.add(values);
 
-    framePanel.add(jp, BorderLayout.NORTH);
+        jp.add(new JLabel("RT-LOTOS action:"));
+        rtlotos = new JTextField(10);
+        rtlotos.setEditable(false);
+        jp.add(rtlotos);
 
-    pack();
-  }
+        jp.add(new JLabel("Action No:"));
+        action = new JTextField(5);
+        action.setEditable(false);
+        jp.add(action);
 
-  public void setTime(int _time) {
-    time.setText(String.valueOf(_time));
-  }
+        framePanel.add(jp, BorderLayout.NORTH);
 
-  public void reinitTime() {
-    time.setText("");
-  }
-
-  public void setAction(int _action, Gate g, GroupOfGates gog, String _values) {
-    action.setText(String.valueOf(_action));
-    rtlotos.setText(g.getLotosName());
-    turtle.setText(gog.printAll());
-    values.setText(_values);
-  }
-
-  private void zoomOut() {
-    jsimu.zoomOut();
-    // jsp.revalidate();
-    // repaint();
-    // jsp.paint(jsp.getGraphics());
-    /*
-     * revalidate(); repaint();
-     */
-  }
-
-  private void zoomIn() {
-    jsimu.zoomIn();
-    // jsp.revalidate();
-    // repaint();
-    // jsp.paint(jsp.getGraphics());
-    // repaint();
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-    //
-
-    if (command.equals("Close")) {
-      dispose();
-      return;
-    } else if (command.equals("Zoom -")) {
-      zoomOut();
-      return;
-    } else if (command.equals("Zoom +")) {
-      zoomIn();
-      return;
+        pack();
     }
-  }
+
+    public void setTime(int _time) {
+        time.setText(String.valueOf(_time));
+    }
+
+    public void reinitTime() {
+        time.setText("");
+    }
+
+    public void setAction(int _action, Gate g, GroupOfGates gog, String _values) {
+        action.setText(String.valueOf(_action));
+        rtlotos.setText(g.getLotosName());
+        turtle.setText(gog.printAll());
+        values.setText(_values);
+    }
+
+    private void zoomOut() {
+        jsimu.zoomOut();
+        // jsp.revalidate();
+        // repaint();
+        // jsp.paint(jsp.getGraphics());
+        /*
+         * revalidate(); repaint();
+         */
+    }
+
+    private void zoomIn() {
+        jsimu.zoomIn();
+        // jsp.revalidate();
+        // repaint();
+        // jsp.paint(jsp.getGraphics());
+        // repaint();
+    }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+        //
+
+        if (command.equals("Close")) {
+            dispose();
+            return;
+        } else if (command.equals("Zoom -")) {
+            zoomOut();
+            return;
+        } else if (command.equals("Zoom +")) {
+            zoomIn();
+            return;
+        }
+    }
 
 } // Class

@@ -45,13 +45,13 @@ package sddescription;
  * @author Ludovic APVRILLE
  */
 public class Instance {
-  private String name;
+    private String name;
 
-  public Instance(String _name) {
-    name = _name;
-  }
+    public Instance(String _name) {
+        name = _name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

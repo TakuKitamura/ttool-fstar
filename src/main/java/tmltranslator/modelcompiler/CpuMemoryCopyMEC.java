@@ -50,54 +50,54 @@ import java.util.Vector;
  */
 public class CpuMemoryCopyMEC extends CPMEC {
 
-  // Issue #38
-  // private static final int MaxParameters = 3;
-  // private static final int destinationAddressIndex = 0;
-  // private static final int sourceAddressIndex = 1;
-  // private static final int counterIndex = 2;
+    // Issue #38
+    // private static final int MaxParameters = 3;
+    // private static final int destinationAddressIndex = 0;
+    // private static final int sourceAddressIndex = 1;
+    // private static final int counterIndex = 2;
 
-  // Issue #98: Undefined embb_mss address
-  private final String memoryBaseAddress;// = "embb_mss";
+    // Issue #98: Undefined embb_mss address
+    private final String memoryBaseAddress;// = "embb_mss";
 
-  private final String srcAddress;// = USER_TO_DO;
-  private final String dataToTransfer;// = USER_TO_DO;
+    private final String srcAddress;// = USER_TO_DO;
+    private final String dataToTransfer;// = USER_TO_DO;
 
-  public CpuMemoryCopyMEC(final String ctxName, final Vector<String> attributes, int srcMemoryType) {
-    super(attributes);
+    public CpuMemoryCopyMEC(final String ctxName, final Vector<String> attributes, int srcMemoryType) {
+        super(attributes);
 
-    // if( attributes.size() > 0 ) {
-    srcAddress = getAttributeValue(SOURCE_ADDRESS_ATTRIBUTE_NAME, "0");// attributes.get( sourceAddressIndex );
-    dataToTransfer = getAttributeValue(SAMPLES_LOAD_ATTRIBUTE_NAME, "0");// attributes.get( counterIndex );
-    // apparently there is no need to use destinationAddress
+        // if( attributes.size() > 0 ) {
+        srcAddress = getAttributeValue(SOURCE_ADDRESS_ATTRIBUTE_NAME, "0");// attributes.get( sourceAddressIndex );
+        dataToTransfer = getAttributeValue(SAMPLES_LOAD_ATTRIBUTE_NAME, "0");// attributes.get( counterIndex );
+        // apparently there is no need to use destinationAddress
+        // }
+        memoryBaseAddress = getMemoryBaseAddress(srcMemoryType);
+
+        CpuMEC cpu = new CpuMEC();
+        exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", "
+                + srcAddress + ", " + dataToTransfer + " );" + CR;
+        init_code = TAB + cpu.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) "
+                + cpu.getLocalMemoryPointer() + " );" + CR;
+        cleanup_code = TAB + cpu.getCtxCleanupCode() + "(&" + ctxName + ");";
+    }
+
+    // Issue #38
+    // public static Vector<String> sortAttributes( Vector<String>
+    // assignedAttributes ) {
+    // temporary manual workaround
+    // newVector.add("0");
+    // newVector.add("0");
+    // newVector.add("0");
+    // for( String s: assignedAttributes ) {
+    // if( s.contains( destinationAddress ) ) {
+    // newVector.set( destinationAddressIndex, getAttributeValue(s) );
     // }
-    memoryBaseAddress = getMemoryBaseAddress(srcMemoryType);
-
-    CpuMEC cpu = new CpuMEC();
-    exec_code = TAB + "embb_mem2ip((EMBB_CONTEXT *)&" + ctxName + ", (uintptr_t) " + memoryBaseAddress + ", "
-        + srcAddress + ", " + dataToTransfer + " );" + CR;
-    init_code = TAB + cpu.getCtxInitCode() + "((EMBB_CONTEXT *)&" + ctxName + ", " + "(uintptr_t) "
-        + cpu.getLocalMemoryPointer() + " );" + CR;
-    cleanup_code = TAB + cpu.getCtxCleanupCode() + "(&" + ctxName + ");";
-  }
-
-  // Issue #38
-  // public static Vector<String> sortAttributes( Vector<String>
-  // assignedAttributes ) {
-  // temporary manual workaround
-  // newVector.add("0");
-  // newVector.add("0");
-  // newVector.add("0");
-  // for( String s: assignedAttributes ) {
-  // if( s.contains( destinationAddress ) ) {
-  // newVector.set( destinationAddressIndex, getAttributeValue(s) );
-  // }
-  // if( s.contains( sourceAddress ) ) {
-  // newVector.set( sourceAddressIndex, getAttributeValue(s) );
-  // }
-  // if( s.contains( counter ) ) {
-  // newVector.set( counterIndex, getAttributeValue(s) );
-  // }
-  // }
-  // return newVector;
-  // }
+    // if( s.contains( sourceAddress ) ) {
+    // newVector.set( sourceAddressIndex, getAttributeValue(s) );
+    // }
+    // if( s.contains( counter ) ) {
+    // newVector.set( counterIndex, getAttributeValue(s) );
+    // }
+    // }
+    // return newVector;
+    // }
 } // End of class

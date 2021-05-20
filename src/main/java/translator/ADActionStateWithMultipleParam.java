@@ -46,54 +46,54 @@ package translator;
  */
 public class ADActionStateWithMultipleParam extends ADActionState {
 
-  public ADActionStateWithMultipleParam() {
-  }
-
-  public String toString() {
-    return "Action state (" + actionValue + ")";
-  }
-
-  public int nbOfActions() {
-    int cpt = 0;
-    // int index;
-
-    for (int i = 0; i < actionValue.length(); i++) {
-      if (actionValue.charAt(i) == ';') {
-        cpt++;
-      }
+    public ADActionStateWithMultipleParam() {
     }
 
-    return cpt;
-  }
-
-  public String getAction(int cpt) {
-    if (cpt < 0) {
-      return actionValue;
+    public String toString() {
+        return "Action state (" + actionValue + ")";
     }
 
-    String ret;
+    public int nbOfActions() {
+        int cpt = 0;
+        // int index;
 
-    try {
-      ret = actionValue;
-      while (cpt > 0) {
-        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-        cpt--;
-      }
+        for (int i = 0; i < actionValue.length(); i++) {
+            if (actionValue.charAt(i) == ';') {
+                cpt++;
+            }
+        }
 
-      int index = ret.indexOf(';');
-
-      if (index > 0) {
-        ret = ret.substring(0, index);
-      }
-    } catch (Exception e) {
-      return actionValue;
+        return cpt;
     }
-    return ret;
-  }
 
-  public ADComponent makeSame() {
-    ADActionStateWithMultipleParam adap = new ADActionStateWithMultipleParam();
-    adap.setActionValue(getActionValue());
-    return adap;
-  }
+    public String getAction(int cpt) {
+        if (cpt < 0) {
+            return actionValue;
+        }
+
+        String ret;
+
+        try {
+            ret = actionValue;
+            while (cpt > 0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt--;
+            }
+
+            int index = ret.indexOf(';');
+
+            if (index > 0) {
+                ret = ret.substring(0, index);
+            }
+        } catch (Exception e) {
+            return actionValue;
+        }
+        return ret;
+    }
+
+    public ADComponent makeSame() {
+        ADActionStateWithMultipleParam adap = new ADActionStateWithMultipleParam();
+        adap.setActionValue(getActionValue());
+        return adap;
+    }
 }

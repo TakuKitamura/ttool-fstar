@@ -54,1210 +54,1226 @@ import java.util.Vector;
  */
 public class TML2TURTLE {
 
-  // private static int gateId;
+    // private static int gateId;
 
-  private static String nameChannelNBRNBW = "ChannelNBRNBW__";
-  private static String nameChannelBRNBW = "ChannelBRNBW__";
-  // private static String nameChannelBRBW = "ChannelBRBW__";
+    private static String nameChannelNBRNBW = "ChannelNBRNBW__";
+    private static String nameChannelBRNBW = "ChannelBRNBW__";
+    // private static String nameChannelBRBW = "ChannelBRBW__";
 
-  private static String nameEvent = "Event__";
+    private static String nameEvent = "Event__";
 
-  private static String nameRequest = "Request__";
+    private static String nameRequest = "Request__";
 
-  private TMLModeling<?> tmlmodeling;
-  private TURTLEModeling tm;
-  private Vector<CheckingError> checkingErrors;
+    private TMLModeling<?> tmlmodeling;
+    private TURTLEModeling tm;
+    private Vector<CheckingError> checkingErrors;
 
-  private int nbClass;
+    private int nbClass;
 
-  public TML2TURTLE(TMLModeling<?> _tmlmodeling) {
-    // TraceManager.addDev("New TURTLE modeling");
-    tmlmodeling = _tmlmodeling;
-  }
-
-  public Vector<CheckingError> getCheckingErrors() {
-    return checkingErrors;
-  }
-
-  public TURTLEModeling generateTURTLEModeling() {
-    // TraceManager.addDev("generate TM");
-    tmlmodeling.removeAllRandomSequences();
-
-    tm = new TURTLEModeling();
-    checkingErrors = new Vector<CheckingError>();
-
-    // Create TClasses -> same name as TML tasks
-    nbClass = 0;
-    TraceManager.addDev("Tclasses");
-    createTClasses();
-    TraceManager.addDev("Channels");
-    createChannelTClasses();
-    TraceManager.addDev("Events");
-    createEventTClasses();
-    TraceManager.addDev("Requests");
-    createRequestTClasses();
-    TraceManager.addDev("AD of tclasses");
-    createADOfTClasses();
-    TraceManager.addDev("All done");
-
-    return tm;
-  }
-
-  private void createTClasses() {
-    Iterator<TMLTask> iterator = tmlmodeling.getListIteratorTasks();
-    TMLTask task;
-    TClass tcl;
-
-    while (iterator.hasNext()) {
-      task = iterator.next();
-
-      tcl = new TClass(task.getName(), true);
-      tm.addTClass(tcl);
-      tcl.setActivityDiagram(new ActivityDiagram());
-      nbClass++;
-      makeAttributes(task, tcl);
+    public TML2TURTLE(TMLModeling<?> _tmlmodeling) {
+        // TraceManager.addDev("New TURTLE modeling");
+        tmlmodeling = _tmlmodeling;
     }
-  }
 
-  private void createChannelTClasses() {
-    Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
-    TMLChannel channel;
-    TClassChannelBRNBW tch1;
-    TClassChannelNBRNBW tch2;
-    TClassChannelBRBW tch3;
-    String name;
-
-    while (iterator.hasNext()) {
-      channel = iterator.next();
-      name = getChannelString(channel);
-      switch (channel.getType()) {
-        case TMLChannel.BRNBW:
-          tch1 = new TClassChannelBRNBW(name, channel.getName());
-          tch1.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
-          tm.addTClass(tch1);
-          break;
-        case TMLChannel.BRBW:
-          tch3 = new TClassChannelBRBW(name, channel.getName());
-          tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
-          tm.addTClass(tch3);
-          break;
-        default:
-          tch2 = new TClassChannelNBRNBW(name, channel.getName());
-          tch2.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
-          tm.addTClass(tch2);
-      }
+    public Vector<CheckingError> getCheckingErrors() {
+        return checkingErrors;
     }
-  }
 
-  private String getChannelString(TMLChannel channel) {
-    String name;
-    switch (channel.getType()) {
-      case TMLChannel.BRNBW:
-        name = nameChannelBRNBW + channel.getName();
-        break;
-      default:
-        name = nameChannelNBRNBW + channel.getName();
+    public TURTLEModeling generateTURTLEModeling() {
+        // TraceManager.addDev("generate TM");
+        tmlmodeling.removeAllRandomSequences();
+
+        tm = new TURTLEModeling();
+        checkingErrors = new Vector<CheckingError>();
+
+        // Create TClasses -> same name as TML tasks
+        nbClass = 0;
+        TraceManager.addDev("Tclasses");
+        createTClasses();
+        TraceManager.addDev("Channels");
+        createChannelTClasses();
+        TraceManager.addDev("Events");
+        createEventTClasses();
+        TraceManager.addDev("Requests");
+        createRequestTClasses();
+        TraceManager.addDev("AD of tclasses");
+        createADOfTClasses();
+        TraceManager.addDev("All done");
+
+        return tm;
     }
-    return name;
-  }
 
-  private void createEventTClasses() {
-    Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
-    TMLEvent event;
-    TClassEventInfinite tce;
-    TClassEventFinite tcef;
-    TClassEventFiniteBlocking tcefb;
+    private void createTClasses() {
+        Iterator<TMLTask> iterator = tmlmodeling.getListIteratorTasks();
+        TMLTask task;
+        TClass tcl;
 
-    while (iterator.hasNext()) {
-      event = iterator.next();
-      TraceManager.addDev("Making event");
-      if (event.isInfinite()) {
-        TraceManager.addDev("Making event infinite");
-        tce = new TClassEventInfinite(nameEvent + event.getName(), event.getName(), event.getNbOfParams());
-        tce.addWriteGate();
-        tce.addReadGate();
-        // if (event.canBeNotified()) {
-        tce.addSizeGate();
-        // }
-        tce.makeTClass(event.isLossy(), event.getLossPercentage(), event.getMaxNbOfLoss());
-        tm.addTClass(tce);
-      } else {
-        if (event.isBlocking()) {
-          tcefb = new TClassEventFiniteBlocking(nameEvent + event.getName(), event.getName(), event.getNbOfParams(),
-              event.getMaxSize());
-          tcefb.addWriteGate();
-          tcefb.addReadGate();
-          // if (event.canBeNotified()) {
-          tcefb.addSizeGate();
-          // }
-          tcefb.makeTClass();
-          tm.addTClass(tcefb);
-        } else {
-          tcef = new TClassEventFinite(nameEvent + event.getName(), event.getName(), event.getNbOfParams(),
-              event.getMaxSize());
-          tcef.addWriteGate();
-          tcef.addReadGate();
-          // if (event.canBeNotified()) {
-          tcef.addSizeGate();
-          // }
-          tcef.makeTClass();
-          tm.addTClass(tcef);
+        while (iterator.hasNext()) {
+            task = iterator.next();
+
+            tcl = new TClass(task.getName(), true);
+            tm.addTClass(tcl);
+            tcl.setActivityDiagram(new ActivityDiagram());
+            nbClass++;
+            makeAttributes(task, tcl);
         }
-      }
     }
-  }
 
-  private void createRequestTClasses() {
-    Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
-    TMLRequest request;
-    TClassRequest tcr;
-    Iterator<TMLTask> ite;
-    TMLTask task;
+    private void createChannelTClasses() {
+        Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
+        TMLChannel channel;
+        TClassChannelBRNBW tch1;
+        TClassChannelNBRNBW tch2;
+        TClassChannelBRBW tch3;
+        String name;
 
-    while (iterator.hasNext()) {
-      request = iterator.next();
-      tcr = new TClassRequest(nameRequest + request.getName(), request.getName(), request.getNbOfParams());
-      ite = request.getOriginTasks().listIterator();
-      while (ite.hasNext()) {
-        task = ite.next();
-        tcr.addWriteGate(task.getName());
-      }
-      tcr.addReadGate(); // Assume that request is going to only one class
-      tcr.makeTClass();
-      tm.addTClass(tcr);
+        while (iterator.hasNext()) {
+            channel = iterator.next();
+            name = getChannelString(channel);
+            switch (channel.getType()) {
+                case TMLChannel.BRNBW:
+                    tch1 = new TClassChannelBRNBW(name, channel.getName());
+                    tch1.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
+                    tm.addTClass(tch1);
+                    break;
+                case TMLChannel.BRBW:
+                    tch3 = new TClassChannelBRBW(name, channel.getName());
+                    tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getLossPercentage(),
+                            channel.getMaxNbOfLoss());
+                    tm.addTClass(tch3);
+                    break;
+                default:
+                    tch2 = new TClassChannelNBRNBW(name, channel.getName());
+                    tch2.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
+                    tm.addTClass(tch2);
+            }
+        }
     }
-  }
 
-  private void createADOfTClasses() {
-    TClass t;
-
-    for (int i = 0; i < nbClass; i++) {
-      t = tm.getTClassAtIndex(i);
-      // TraceManager.addDev("Create AD");
-      createADOfTClass(t, tmlmodeling.getTasks().get(i));
-      // TraceManager.addDev("End create AD");
+    private String getChannelString(TMLChannel channel) {
+        String name;
+        switch (channel.getType()) {
+            case TMLChannel.BRNBW:
+                name = nameChannelBRNBW + channel.getName();
+                break;
+            default:
+                name = nameChannelNBRNBW + channel.getName();
+        }
+        return name;
     }
-  }
 
-  private void createADOfTClass(TClass tclass, TMLTask task) {
-    // For each element, make a translation
-    Vector<ADComponent> newElements = new Vector<ADComponent>(); // elements of AD
-    Vector<TMLActivityElement> baseElements = new Vector<TMLActivityElement>(); // elements of basic task
+    private void createEventTClasses() {
+        Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
+        TMLEvent event;
+        TClassEventInfinite tce;
+        TClassEventFinite tcef;
+        TClassEventFiniteBlocking tcefb;
 
-    // TraceManager.addDev("Making AD of " + tclass.getName());
-    translateAD(newElements, baseElements, tclass, task, task.getActivityDiagram().getFirst(), null, null);
-
-    // DANGER: if task may be requested, the AD must be modified!!!!
-    // TraceManager.addDev("task requested?");
-    if (task.isRequested()) {
-      setADRequested(tclass, task);
+        while (iterator.hasNext()) {
+            event = iterator.next();
+            TraceManager.addDev("Making event");
+            if (event.isInfinite()) {
+                TraceManager.addDev("Making event infinite");
+                tce = new TClassEventInfinite(nameEvent + event.getName(), event.getName(), event.getNbOfParams());
+                tce.addWriteGate();
+                tce.addReadGate();
+                // if (event.canBeNotified()) {
+                tce.addSizeGate();
+                // }
+                tce.makeTClass(event.isLossy(), event.getLossPercentage(), event.getMaxNbOfLoss());
+                tm.addTClass(tce);
+            } else {
+                if (event.isBlocking()) {
+                    tcefb = new TClassEventFiniteBlocking(nameEvent + event.getName(), event.getName(),
+                            event.getNbOfParams(), event.getMaxSize());
+                    tcefb.addWriteGate();
+                    tcefb.addReadGate();
+                    // if (event.canBeNotified()) {
+                    tcefb.addSizeGate();
+                    // }
+                    tcefb.makeTClass();
+                    tm.addTClass(tcefb);
+                } else {
+                    tcef = new TClassEventFinite(nameEvent + event.getName(), event.getName(), event.getNbOfParams(),
+                            event.getMaxSize());
+                    tcef.addWriteGate();
+                    tcef.addReadGate();
+                    // if (event.canBeNotified()) {
+                    tcef.addSizeGate();
+                    // }
+                    tcef.makeTClass();
+                    tm.addTClass(tcef);
+                }
+            }
+        }
     }
-    // TraceManager.addDev("end task requested?");
 
-    setGatesToTask(tclass, task);
-  }
+    private void createRequestTClasses() {
+        Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
+        TMLRequest request;
+        TClassRequest tcr;
+        Iterator<TMLTask> ite;
+        TMLTask task;
 
-  /*
-   * ADJunction adjunc represents the junction to which the activity should be
-   * branched when it terminates
-   */
-  private ADComponent translateAD(Vector<ADComponent> newElements, Vector<TMLActivityElement> baseElements,
-      TClass tclass, TMLTask task, TMLActivityElement tmle, ADComponent previous, ADJunction adjunc) {
-    // ADEmpty empty;
-    ADActionStateWithParam adacparam, adacparam1, adacparam2, adacparam3, adacparam4;
-    ADChoice adchoice;
-    ADDelay addelay;
-    ADTimeInterval adinterval;
-    ADJunction adj, adj1, adj2;
-    ADActionStateWithGate adag, adagtmp;
-    // ADStop adstop;
-    // ADSequence adseq;
+        while (iterator.hasNext()) {
+            request = iterator.next();
+            tcr = new TClassRequest(nameRequest + request.getName(), request.getName(), request.getNbOfParams());
+            ite = request.getOriginTasks().listIterator();
+            while (ite.hasNext()) {
+                task = ite.next();
+                tcr.addWriteGate(task.getName());
+            }
+            tcr.addReadGate(); // Assume that request is going to only one class
+            tcr.makeTClass();
+            tm.addTClass(tcr);
+        }
+    }
 
-    Gate g, g1;
+    private void createADOfTClasses() {
+        TClass t;
 
-    TMLChoice tmlchoice;
-    TMLForLoop tmlforloop;
-    TMLActivityElementChannel acch;
-    TMLActivityElementEvent acevt;
-    TMLSendRequest tmlreq;
-    TMLSequence tmlseq;
-    TMLSelectEvt tmlselectevt;
-    TMLRandom tmlrandom;
+        for (int i = 0; i < nbClass; i++) {
+            t = tm.getTClassAtIndex(i);
+            // TraceManager.addDev("Create AD");
+            createADOfTClass(t, tmlmodeling.getTasks().get(i));
+            // TraceManager.addDev("End create AD");
+        }
+    }
 
-    ADComponent adc, adc1, adc2;
+    private void createADOfTClass(TClass tclass, TMLTask task) {
+        // For each element, make a translation
+        Vector<ADComponent> newElements = new Vector<ADComponent>(); // elements of AD
+        Vector<TMLActivityElement> baseElements = new Vector<TMLActivityElement>(); // elements of basic task
 
-    String action, tmp;
-    // String param;
-    Param parameter, parameter0, parameter1, parameter2;
+        // TraceManager.addDev("Making AD of " + tclass.getName());
+        translateAD(newElements, baseElements, tclass, task, task.getActivityDiagram().getFirst(), null, null);
 
-    int i;
-    // int j, k;
+        // DANGER: if task may be requested, the AD must be modified!!!!
+        // TraceManager.addDev("task requested?");
+        if (task.isRequested()) {
+            setADRequested(tclass, task);
+        }
+        // TraceManager.addDev("end task requested?");
 
-    // Translate AD components
+        setGatesToTask(tclass, task);
+    }
 
-    // START STATE
+    /*
+     * ADJunction adjunc represents the junction to which the activity should be
+     * branched when it terminates
+     */
+    private ADComponent translateAD(Vector<ADComponent> newElements, Vector<TMLActivityElement> baseElements,
+            TClass tclass, TMLTask task, TMLActivityElement tmle, ADComponent previous, ADJunction adjunc) {
+        // ADEmpty empty;
+        ADActionStateWithParam adacparam, adacparam1, adacparam2, adacparam3, adacparam4;
+        ADChoice adchoice;
+        ADDelay addelay;
+        ADTimeInterval adinterval;
+        ADJunction adj, adj1, adj2;
+        ADActionStateWithGate adag, adagtmp;
+        // ADStop adstop;
+        // ADSequence adseq;
 
-    // TraceManager.addDev("Call to TMLE=" + tmle.toString());
-    try {
+        Gate g, g1;
 
-      if (tmle instanceof TMLStartState) {
-        adc = tclass.getActivityDiagram().getStartState();
-        baseElements.add(tmle);
-        newElements.add(adc);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adc, adjunc);
-        adc.addNext(adc1);
-        return adc;
+        TMLChoice tmlchoice;
+        TMLForLoop tmlforloop;
+        TMLActivityElementChannel acch;
+        TMLActivityElementEvent acevt;
+        TMLSendRequest tmlreq;
+        TMLSequence tmlseq;
+        TMLSelectEvt tmlselectevt;
+        TMLRandom tmlrandom;
 
-        // STOP State
-      } else if (tmle instanceof TMLStopState) {
-        return endOfActivity(newElements, baseElements, tclass, adjunc);
+        ADComponent adc, adc1, adc2;
 
-        // TML Junction
-      } else if (tmle instanceof TMLJunction) {
-        return translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
+        String action, tmp;
+        // String param;
+        Param parameter, parameter0, parameter1, parameter2;
 
-        // EXECIInterval
-      } else if (tmle instanceof TMLActionState) {
-        action = ((TMLActionState) tmle).getAction();
-        // Eliminate cout <<
-        if (printAnalyzer(action)) {
-          adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
-          return adc1;
-        } else {
-          action = modifyString(action);
-          action = removeLastSemicolon(action);
-          parameter = null;
-          if ((parameter = paramAnalyzer(action, tclass)) != null) {
-            adacparam = new ADActionStateWithParam(parameter);
-            adacparam.setActionValue(getActionValueParam(action, tclass));
-            newElements.add(adacparam);
-            baseElements.add(tmle);
-            tclass.getActivityDiagram().add(adacparam);
-            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam, adjunc);
-            adacparam.addNext(adc1);
-            return adacparam;
-          } else {
-            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
-            return adc1;
-          }
+        int i;
+        // int j, k;
+
+        // Translate AD components
+
+        // START STATE
+
+        // TraceManager.addDev("Call to TMLE=" + tmle.toString());
+        try {
+
+            if (tmle instanceof TMLStartState) {
+                adc = tclass.getActivityDiagram().getStartState();
+                baseElements.add(tmle);
+                newElements.add(adc);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adc, adjunc);
+                adc.addNext(adc1);
+                return adc;
+
+                // STOP State
+            } else if (tmle instanceof TMLStopState) {
+                return endOfActivity(newElements, baseElements, tclass, adjunc);
+
+                // TML Junction
+            } else if (tmle instanceof TMLJunction) {
+                return translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
+
+                // EXECIInterval
+            } else if (tmle instanceof TMLActionState) {
+                action = ((TMLActionState) tmle).getAction();
+                // Eliminate cout <<
+                if (printAnalyzer(action)) {
+                    adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous,
+                            adjunc);
+                    return adc1;
+                } else {
+                    action = modifyString(action);
+                    action = removeLastSemicolon(action);
+                    parameter = null;
+                    if ((parameter = paramAnalyzer(action, tclass)) != null) {
+                        adacparam = new ADActionStateWithParam(parameter);
+                        adacparam.setActionValue(getActionValueParam(action, tclass));
+                        newElements.add(adacparam);
+                        baseElements.add(tmle);
+                        tclass.getActivityDiagram().add(adacparam);
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam,
+                                adjunc);
+                        adacparam.addNext(adc1);
+                        return adacparam;
+                    } else {
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous,
+                                adjunc);
+                        return adc1;
+                    }
+                }
+
+                // CHOICE
+            } else if (tmle instanceof TMLChoice) {
+                // TraceManager.addDev("TML Choice!");
+                tmlchoice = (TMLChoice) tmle;
+                adchoice = new ADChoice();
+                newElements.add(adchoice);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adchoice);
+
+                // TraceManager.addDev("Get guards nb=" + tmlchoice.getNbGuard());
+                // String guard = "";
+
+                if (tmlchoice.getNbGuard() != 0) {
+                    int index1 = tmlchoice.getElseGuard(), index2 = tmlchoice.getAfterGuard();
+                    if (index2 != -1) {
+                        // TraceManager.addDev("Managing after");
+                        adj = new ADJunction();
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(index2),
+                                adchoice, adj);
+                        tclass.getActivityDiagram().add(adj);
+                    } else {
+                        adj = adjunc;
+                    }
+
+                    for (i = 0; i < tmlchoice.getNbGuard(); i++) {
+                        // TraceManager.addDev("Get guards i=" + i);
+                        // TraceManager.addDev("ADjunc=" + adjunc);
+                        if (i == index1) {
+                            /* else guard */
+                            action = modifyString(tmlchoice.getValueOfElse());
+                        } else {
+                            if (tmlchoice.isStochasticGuard(i)) {
+                                action = "[ ]";
+                            } else {
+                                action = modifyString(tmlchoice.getGuard(i));
+                            }
+
+                        }
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice,
+                                adj);
+                        if (adc1 == null) {
+                            // TraceManager.addDev("Null adc1");
+                        } else {
+                            // TraceManager.addDev("adc1 = " +adc1);
+                        }
+                        g = tclass.addNewGateIfApplicable("branching");
+                        adag = new ADActionStateWithGate(g);
+                        adag.setActionValue("");
+                        adag.addNext(adc1);
+                        tclass.getActivityDiagram().add(adag);
+                        adchoice.addGuard(action);
+                        adchoice.addNext(adag);
+                    }
+                    // TraceManager.addDev("Return adchoice ...");
+                    return adchoice;
+                } else {
+                    return endOfActivity(newElements, baseElements, tclass, adjunc);
+                }
+
+            } else if (tmle instanceof TMLSelectEvt) {
+                tmlselectevt = (TMLSelectEvt) (tmle);
+                adchoice = new ADChoice();
+                newElements.add(adchoice);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adchoice);
+                for (i = 0; i < tmlselectevt.getNbNext(); i++) {
+                    adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice,
+                            adjunc);
+                    adchoice.addNext(adc1);
+                    adchoice.addGuard("[]");
+                }
+                return adchoice;
+
+                // EXECI
+            } else if (tmle instanceof TMLExecI) {
+                addelay = new ADDelay();
+                newElements.add(addelay);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(addelay);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), addelay, adjunc);
+                addelay.setValue(modifyString(((TMLExecI) tmle).getAction()));
+                addelay.addNext(adc1);
+                return addelay;
+
+                // EXECIInterval
+            } else if (tmle instanceof TMLExecIInterval) {
+                adinterval = new ADTimeInterval();
+                newElements.add(adinterval);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adinterval);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
+                adinterval.setValue(modifyString(((TMLExecIInterval) tmle).getMinDelay()),
+                        modifyString(((TMLExecIInterval) tmle).getMaxDelay()));
+                adinterval.addNext(adc1);
+                return adinterval;
+
+                // EXECC
+            } else if (tmle instanceof TMLExecC) {
+                addelay = new ADDelay();
+                newElements.add(addelay);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(addelay);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), addelay, adjunc);
+                addelay.setValue(modifyString(((TMLExecC) tmle).getAction()));
+                addelay.addNext(adc1);
+                return addelay;
+
+                // EXECCInterval
+            } else if (tmle instanceof TMLExecCInterval) {
+                adinterval = new ADTimeInterval();
+                newElements.add(adinterval);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adinterval);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
+                adinterval.setValue(modifyString(((TMLExecCInterval) tmle).getMinDelay()),
+                        modifyString(((TMLExecCInterval) tmle).getMaxDelay()));
+                adinterval.addNext(adc1);
+                return adinterval;
+
+                // DELAY
+            } else if (tmle instanceof TMLDelay) {
+                adinterval = new ADTimeInterval();
+                newElements.add(adinterval);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adinterval);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
+                adinterval.setValue(modifyString(((TMLDelay) tmle).getMinDelay()),
+                        modifyString(((TMLDelay) tmle).getMaxDelay()));
+                adinterval.addNext(adc1);
+                return adinterval;
+
+                // TMLRandom
+            } else if (tmle instanceof TMLRandom) {
+                tmlrandom = (TMLRandom) tmle;
+
+                parameter0 = tclass.addNewParamIfApplicable("min__random", Param.NAT, "0");
+                parameter1 = tclass.addNewParamIfApplicable("max__random", Param.NAT, "0");
+                parameter2 = tclass.addNewParamIfApplicable(tmlrandom.getVariable(), Param.NAT, "0");
+
+                adacparam1 = new ADActionStateWithParam(parameter0);
+                action = modifyString("min(" + tmlrandom.getMinValue() + ", " + tmlrandom.getMaxValue() + ")");
+                adacparam1.setActionValue(action);
+                newElements.add(adacparam1);
+                baseElements.add(tmle);
+
+                adacparam2 = new ADActionStateWithParam(parameter1);
+                action = modifyString("max(" + tmlrandom.getMinValue() + ", " + tmlrandom.getMaxValue() + ")");
+                adacparam2.setActionValue(action);
+
+                adacparam3 = new ADActionStateWithParam(parameter2);
+                action = modifyString("min__random");
+                adacparam3.setActionValue(action);
+
+                adacparam4 = new ADActionStateWithParam(parameter0);
+                action = modifyString("min__random + 1");
+                adacparam4.setActionValue(action);
+
+                tclass.getActivityDiagram().add(adacparam1);
+
+                adacparam1.addNext(adacparam2);
+
+                adj1 = new ADJunction();
+                adacparam2.addNext(adj1);
+
+                adchoice = new ADChoice();
+                adj1.addNext(adchoice);
+                adchoice.addGuard("[min__random < (max__random + 1)]");
+                adchoice.addNext(adacparam3);
+                adchoice.addGuard("[min__random < max__random]");
+                adchoice.addNext(adacparam4);
+                adacparam4.addNext(adj1);
+
+                tclass.getActivityDiagram().add(adacparam1);
+                tclass.getActivityDiagram().add(adacparam2);
+                tclass.getActivityDiagram().add(adacparam3);
+                tclass.getActivityDiagram().add(adacparam4);
+                tclass.getActivityDiagram().add(adj1);
+                tclass.getActivityDiagram().add(adchoice);
+
+                adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam3, adjunc);
+                adacparam3.addNext(adc2);
+
+                return adacparam1;
+
+                // TMLFORLOOP
+            } else if (tmle instanceof TMLForLoop) {
+                tmlforloop = (TMLForLoop) tmle;
+                action = modifyString(tmlforloop.getInit());
+                // TraceManager.addDev("FOR action = " + action);
+                parameter = null;
+                if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
+                    // TraceManager.addDev("parameter1 ok");
+                    if (action.length() != 0) {
+                        adacparam1 = new ADActionStateWithParam(parameter);
+                        adacparam1.setActionValue(getActionValueParam(action, tclass));
+                    } else {
+                        adacparam1 = null;
+                    }
+
+                    action = modifyString(tmlforloop.getIncrement());
+                    parameter = null;
+                    if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
+                        // TraceManager.addDev("New loop");
+                        if (action.length() != 0) {
+                            adacparam2 = new ADActionStateWithParam(parameter);
+                            adacparam2.setActionValue(getActionValueParam(action, tclass));
+                        } else {
+                            adacparam2 = null;
+                        }
+
+                        adchoice = new ADChoice();
+                        adj1 = new ADJunction();
+                        adj2 = new ADJunction();
+
+                        newElements.add(adacparam1);
+                        baseElements.add(tmle);
+
+                        if (adacparam1 != null) {
+                            tclass.getActivityDiagram().add(adacparam1);
+                            newElements.add(adacparam1);
+                        } else {
+                            newElements.add(adj1);
+                        }
+                        if (adacparam2 != null) {
+                            tclass.getActivityDiagram().add(adacparam2);
+                        }
+                        tclass.getActivityDiagram().add(adchoice);
+                        tclass.getActivityDiagram().add(adj1);
+                        tclass.getActivityDiagram().add(adj2);
+
+                        if (adacparam1 != null) {
+                            adacparam1.addNext(adj1);
+                        }
+                        adj1.addNext(adchoice);
+                        if (adacparam2 != null) {
+                            adacparam2.addNext(adj1);
+                            adj2.addNext(adacparam2);
+                        } else {
+                            adj2.addNext(adj1);
+                        }
+
+                        action = (modifyString(tmlforloop.getCondition()));
+                        if (action.length() == 0) {
+                            action = "true";
+                        }
+                        adchoice.addGuard("[" + action + "]");
+                        if (adacparam1 != null) {
+                            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0),
+                                    adacparam1, adj2);
+                        } else {
+                            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adj1,
+                                    adj2);
+                        }
+                        adchoice.addNext(adc1);
+
+                        action = Conversion.replaceAllChar(action, '[', "(");
+                        action = Conversion.replaceAllChar(action, ']', ")");
+                        adchoice.addGuard("[not(" + action + ")]");
+                        if (adacparam1 != null) {
+                            adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1),
+                                    adacparam1, adjunc);
+                        } else {
+                            adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1), adj1,
+                                    adjunc);
+                        }
+                        adchoice.addNext(adc2);
+
+                        if (adacparam1 != null) {
+                            return adacparam1;
+                        } else {
+                            return adj1;
+                        }
+                    }
+                }
+                // Error! -> bad parameter
+                // return translateAD(newElements, baseElements, tclass, task,
+                // tmle.getNextElement(0), previous, adjunc);
+                CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR,
+                        "Parameter undeclared in For operator:" + action);
+                error.setTClass(tclass);
+                checkingErrors.add(error);
+
+                // TML Sequence
+            } else if (tmle instanceof TMLSequence) {
+                // TraceManager.addDev("TML sequence !");
+                tmlseq = (TMLSequence) tmle;
+
+                if (tmlseq.getNbNext() == 0) {
+                    return endOfActivity(newElements, baseElements, tclass, adjunc);
+                }
+
+                if (tmlseq.getNbNext() == 1) {
+                    return translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous,
+                            adjunc);
+                }
+
+                tmlseq.sortNexts();
+                // At least 2 next elements
+                adj2 = null;
+                adc2 = null;
+                for (i = 1; i < tmlseq.getNbNext(); i++) {
+                    adj1 = new ADJunction();
+                    if (adj2 == null) {
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i - 1),
+                                previous, adj1);
+                    } else {
+                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i - 1), adj2,
+                                adj1);
+                    }
+                    if (adj2 == null) {
+                        adc2 = adc1;
+                        // newElements.add(adc1);
+                        // baseElements.add(tmle);
+                    } else {
+                        adj2.addNext(adc1);
+                    }
+                    // tclass.getActivityDiagram().add(adc1);
+                    tclass.getActivityDiagram().add(adj1);
+                    adj2 = adj1;
+                }
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(tmlseq.getNbNext() - 1),
+                        previous, adjunc);
+                // tclass.getActivityDiagram().add(adc1);
+                adj2.addNext(adc1);
+                return adc2;
+
+                // TML Read Channel
+            } else if (tmle instanceof TMLReadChannel) { // READ MUST BE MODIFIED
+                acch = (TMLActivityElementChannel) tmle;
+
+                if ((acch.getNbOfSamples().trim().compareTo("1")) == 0) {
+                    g = addGateChannel("rd", acch, 0, tclass);
+                    TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(0)));
+                    g1 = tcl.getGateByName("rd__" + acch.getChannel(0).getName());
+                    tm.addSynchroRelation(tclass, g, tcl, g1);
+                    adag = new ADActionStateWithGate(g);
+                    adag.setActionValue("");
+                    tclass.getActivityDiagram().add(adag);
+                    adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
+                    adag.addNext(adc1);
+                    newElements.add(adag);
+                    baseElements.add(tmle);
+                    return adag;
+
+                } else {
+                    parameter = tclass.addNewParamIfApplicable("cpt__0", "nat", "0");
+                    adacparam = new ADActionStateWithParam(parameter);
+                    adacparam.setActionValue(acch.getNbOfSamples());
+                    tclass.getActivityDiagram().add(adacparam);
+
+                    adj = new ADJunction();
+                    tclass.getActivityDiagram().add(adj);
+                    adacparam.addNext(adj);
+
+                    adchoice = new ADChoice();
+                    tclass.getActivityDiagram().add(adchoice);
+                    adj.addNext(adchoice);
+
+                    adacparam1 = new ADActionStateWithParam(parameter);
+                    adacparam1.setActionValue("cpt__0 - 1");
+                    tclass.getActivityDiagram().add(adacparam1);
+                    adacparam1.addNext(adj);
+
+                    g = addGateChannel("rd", acch, 0, tclass);
+                    TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(0)));
+                    g1 = tcl.getGateByName("rd__" + acch.getChannel(0).getName());
+                    tm.addSynchroRelation(tclass, g, tcl, g1);
+
+                    adag = new ADActionStateWithGate(g);
+                    adag.setActionValue("");
+                    tclass.getActivityDiagram().add(adag);
+                    adag.addNext(adacparam1);
+
+                    adchoice.addNext(adag);
+                    adchoice.addGuard("[cpt__0 > 0]");
+
+                    newElements.add(adacparam);
+                    baseElements.add(tmle);
+
+                    adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam,
+                            adjunc);
+                    adchoice.addNext(adc1);
+                    adchoice.addGuard("[cpt__0 == 0]");
+                    return adacparam;
+                }
+
+                // TMLSendEvent
+            } else if (tmle instanceof TMLSendEvent) {
+                acevt = (TMLActivityElementEvent) tmle;
+                g = tclass.addNewGateIfApplicable("notify__" + acevt.getEvent().getName());
+                TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
+                g1 = ((TClassEventCommon) (tcl)).getGateWrite();
+                tm.addSynchroRelation(tclass, g, tcl, g1);
+
+                adacparam2 = null;
+                adacparam = null;
+                adag = new ADActionStateWithGate(g);
+                action = "";
+                for (i = 0; i < acevt.getNbOfParams(); i++) {
+                    if (acevt.getParam(i).length() > 0) {
+                        if (!Conversion.isNumeralOrId(acevt.getParam(i))) {
+                            tmp = "ntmp__" + i;
+                            if (acevt.getEvent().getType(i).getType() == TMLType.NATURAL) {
+                                parameter = tclass.addNewParamIfApplicable(tmp, Param.NAT, "0");
+                            } else {
+                                parameter = tclass.addNewParamIfApplicable(tmp, Param.BOOL, "false");
+                            }
+
+                            adacparam1 = new ADActionStateWithParam(parameter);
+                            adacparam1.setActionValue(modifyString(acevt.getParam(i)));
+                            tclass.getActivityDiagram().add(adacparam1);
+                            if (adacparam == null) {
+                                adacparam2 = adacparam1;
+                                adacparam = adacparam1;
+                            } else {
+                                adacparam.addNext(adacparam1);
+                                adacparam = adacparam1;
+                            }
+                        } else {
+                            tmp = modifyString(acevt.getParam(i));
+                        }
+                        action += "!" + modifyString(tmp);
+                    }
+                }
+                if (adacparam != null) {
+                    adacparam.addNext(adag);
+                }
+                adag.setActionValue(action);
+
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adag);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
+                adag.addNext(adc1);
+
+                if (adacparam2 != null) {
+                    newElements.add(adacparam2);
+                    return adacparam2;
+                }
+                newElements.add(adag);
+                return adag;
+
+                // TMLSendRequest
+            } else if (tmle instanceof TMLSendRequest) {
+                tmlreq = (TMLSendRequest) tmle;
+                g = tclass.addNewGateIfApplicable("sendReq__" + tmlreq.getRequest().getName() + "__" + task.getName());
+                TClass tcl = tm.getTClassWithName(nameRequest + tmlreq.getRequest().getName());
+                // g1 = tcl.getGateByName("sendReq");
+                // int index = tmlreq.getRequest().getOriginTasks().indexOf(task);
+                // TraceManager.addDev("task=" + task.getName() + " index=" + index);
+                // g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
+                g1 = ((TClassRequest) tcl).getGateWrite(task.getName());
+                // TraceManager.addDev("task=" + task.getName() + " index=" + index + "gate=" +
+                // g.getName());
+                tm.addSynchroRelation(tclass, g, tcl, g1);
+
+                adacparam2 = null;
+                adacparam = null;
+                adag = new ADActionStateWithGate(g);
+                action = "";
+                for (i = 0; i < tmlreq.getNbOfParams(); i++) {
+                    if (tmlreq.getParam(i).length() > 0) {
+                        if (!Conversion.isNumeralOrId(tmlreq.getParam(i))) {
+                            tmp = "ntmp__" + i;
+                            if (tmlreq.getRequest().getType(i).getType() == TMLType.NATURAL) {
+                                parameter = tclass.addNewParamIfApplicable(tmp, Param.NAT, "0");
+                            } else {
+                                parameter = tclass.addNewParamIfApplicable(tmp, Param.BOOL, "false");
+                            }
+
+                            adacparam1 = new ADActionStateWithParam(parameter);
+                            adacparam1.setActionValue(modifyString(tmlreq.getParam(i)));
+                            tclass.getActivityDiagram().add(adacparam1);
+                            if (adacparam == null) {
+                                adacparam2 = adacparam1;
+                                adacparam = adacparam1;
+                            } else {
+                                adacparam.addNext(adacparam1);
+                                adacparam = adacparam1;
+                            }
+                        } else {
+                            tmp = modifyString(tmlreq.getParam(i));
+                        }
+                        action += "!" + modifyString(tmp);
+                    }
+                }
+                if (adacparam != null) {
+                    adacparam.addNext(adag);
+                }
+                adag.setActionValue(action);
+
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adag);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
+                adag.addNext(adc1);
+
+                if (adacparam2 != null) {
+                    newElements.add(adacparam2);
+                    return adacparam2;
+                }
+                newElements.add(adag);
+                return adag;
+
+                // TMLWaitEvent
+            } else if (tmle instanceof TMLWaitEvent) {
+                acevt = (TMLActivityElementEvent) tmle;
+                g = tclass.addNewGateIfApplicable("wait__" + acevt.getEvent().getName());
+                TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
+                g1 = ((TClassEventCommon) (tcl)).getGateRead();
+                tm.addSynchroRelation(tclass, g, tcl, g1);
+
+                adag = new ADActionStateWithGate(g);
+                action = "";
+                for (i = 0; i < acevt.getNbOfParams(); i++) {
+                    if (acevt.getParam(i).length() > 0) {
+                        action += "?" + modifyString(acevt.getParam(i)) + ":"
+                                + TMLType.getLOTOSStringType(acevt.getEvent().getType(i).getType());
+                    }
+                }
+                adag.setActionValue(action);
+
+                newElements.add(adag);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adag);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
+                adag.addNext(adc1);
+                return adag;
+
+                // TMLNotifiedEvent
+            } else if (tmle instanceof TMLNotifiedEvent) {
+                acevt = (TMLActivityElementEvent) tmle;
+                g = tclass.addNewGateIfApplicable("notified__" + acevt.getEvent().getName());
+                TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
+                g1 = ((TClassEventCommon) (tcl)).getGateSize();
+
+                if (g1 == null) {
+                    return null;
+                }
+
+                tm.addSynchroRelation(tclass, g, tcl, g1);
+
+                adag = new ADActionStateWithGate(g);
+                action = "?" + acevt.getVariable() + ":nat";
+                adag.setActionValue(action);
+
+                newElements.add(adag);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adag);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
+                adag.addNext(adc1);
+                return adag;
+
+                // TMLWriteChannel
+            } else if (tmle instanceof TMLWriteChannel) {
+                acch = (TMLActivityElementChannel) tmle;
+                if ((acch.getNbOfSamples().trim().compareTo("1")) == 0) {
+                    adag = null;
+                    adagtmp = null;
+                    for (int k = 0; k < acch.getNbOfChannels(); k++) {
+                        g = addGateChannel("wr", acch, k, tclass);
+                        TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
+                        g1 = tcl.getGateByName("wr__" + acch.getChannel(k).getName());
+                        tm.addSynchroRelation(tclass, g, tcl, g1);
+                        adag = new ADActionStateWithGate(g);
+                        adag.setActionValue("");
+                        tclass.getActivityDiagram().add(adag);
+                        if (adagtmp != null) {
+                            adagtmp.addNext(adag);
+                        }
+                        adagtmp = adag;
+
+                    }
+                    adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
+                    adag.addNext(adc1);
+                    newElements.add(adag);
+                    baseElements.add(tmle);
+                    return adag;
+                } else {
+                    parameter = tclass.addNewParamIfApplicable("cpt__0", "nat", "0");
+                    adchoice = null;
+                    adacparam2 = null;
+
+                    for (int k = 0; k < acch.getNbOfChannels(); k++) {
+
+                        adacparam = new ADActionStateWithParam(parameter);
+                        adacparam.setActionValue(acch.getNbOfSamples());
+                        tclass.getActivityDiagram().add(adacparam);
+
+                        if (k == 0) {
+                            newElements.add(adacparam);
+                            baseElements.add(tmle);
+                            adacparam2 = adacparam;
+                        } else {
+                            adchoice.addNext(adacparam);
+                        }
+
+                        adj = new ADJunction();
+                        tclass.getActivityDiagram().add(adj);
+                        adacparam.addNext(adj);
+
+                        adchoice = new ADChoice();
+                        tclass.getActivityDiagram().add(adchoice);
+                        adj.addNext(adchoice);
+
+                        adacparam1 = new ADActionStateWithParam(parameter);
+                        adacparam1.setActionValue("cpt__0 - 1");
+                        tclass.getActivityDiagram().add(adacparam1);
+                        adacparam1.addNext(adj);
+
+                        g = addGateChannel("wr", acch, k, tclass);
+                        TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
+                        g1 = tcl.getGateByName("wr__" + acch.getChannel(k).getName());
+                        tm.addSynchroRelation(tclass, g, tcl, g1);
+
+                        adag = new ADActionStateWithGate(g);
+                        adag.setActionValue("");
+                        tclass.getActivityDiagram().add(adag);
+                        adchoice.addNext(adag);
+                        adchoice.addGuard("[cpt__0 > 0]");
+
+                        adag.addNext(adacparam1);
+
+                        if (k == (acch.getNbOfChannels() - 1)) {
+                            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0),
+                                    adacparam1, adjunc);
+                            adchoice.addNext(adc1);
+                        }
+
+                        adchoice.addGuard("[cpt__0 == 0]");
+                    }
+
+                    return adacparam2;
+
+                    /*
+                     * adacparam = new ADActionStateWithParam(parameter);
+                     * adacparam.setActionValue(acch.getNbOfSamples());
+                     * tclass.getActivityDiagram().add(adacparam);
+                     * 
+                     * adj = new ADJunction(); tclass.getActivityDiagram().add(adj);
+                     * adacparam.addNext(adj);
+                     * 
+                     * adchoice = new ADChoice(); tclass.getActivityDiagram().add(adchoice);
+                     * adj.addNext(adchoice);
+                     * 
+                     * adacparam1 = new ADActionStateWithParam(parameter);
+                     * adacparam1.setActionValue("cpt__0 - 1");
+                     * tclass.getActivityDiagram().add(adacparam1); adacparam1.addNext(adj);
+                     * 
+                     * adagtmp = null; adag = null; for(int k=0; k<acch.getNbOfChannels(); k++) { g
+                     * = addGateChannel("wr", acch, k, tclass); TClass tcl =
+                     * tm.getTClassWithName(getChannelString(acch.getChannel(k))); g1 =
+                     * tcl.getGateByName("wr__"+acch.getChannel(k).getName());
+                     * tm.addSynchroRelation(tclass, g, tcl, g1);
+                     * 
+                     * adag = new ADActionStateWithGate(g); adag.setActionValue("");
+                     * tclass.getActivityDiagram().add(adag); if (adagtmp == null) {
+                     * adchoice.addNext(adag); adchoice.addGuard("[cpt__0 > 0]"); } else {
+                     * adagtmp.addNext(adag); } adagtmp = adag; } adag.addNext(adacparam1);
+                     * 
+                     * newElements.add(adacparam); baseElements.add(tmle);
+                     * 
+                     * adc1 = translateAD(newElements, baseElements, tclass, task,
+                     * tmle.getNextElement(0), adacparam, adjunc); adchoice.addNext(adc1);
+                     * adchoice.addGuard("[cpt__0 == 0]"); return adacparam;
+                     */
+                }
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in AD diagram analysis -> " + e.getMessage());
+            return null;
         }
 
-        // CHOICE
-      } else if (tmle instanceof TMLChoice) {
-        // TraceManager.addDev("TML Choice!");
-        tmlchoice = (TMLChoice) tmle;
-        adchoice = new ADChoice();
-        newElements.add(adchoice);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adchoice);
+        return null;
 
-        // TraceManager.addDev("Get guards nb=" + tmlchoice.getNbGuard());
-        // String guard = "";
+    }
 
-        if (tmlchoice.getNbGuard() != 0) {
-          int index1 = tmlchoice.getElseGuard(), index2 = tmlchoice.getAfterGuard();
-          if (index2 != -1) {
-            // TraceManager.addDev("Managing after");
-            adj = new ADJunction();
-            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(index2), adchoice, adj);
-            tclass.getActivityDiagram().add(adj);
-          } else {
-            adj = adjunc;
-          }
+    private void setADRequested(TClass tclass, TMLTask task) {
+        // attributes
+        int n = task.getRequest().getNbOfParams();
+        int i;
+        // String type;
 
-          for (i = 0; i < tmlchoice.getNbGuard(); i++) {
-            // TraceManager.addDev("Get guards i=" + i);
-            // TraceManager.addDev("ADjunc=" + adjunc);
-            if (i == index1) {
-              /* else guard */
-              action = modifyString(tmlchoice.getValueOfElse());
-            } else {
-              if (tmlchoice.isStochasticGuard(i)) {
-                action = "[ ]";
-              } else {
-                action = modifyString(tmlchoice.getGuard(i));
-              }
-
+        for (i = 0; i < n; i++) {
+            switch (task.getRequest().getType(i).getType()) {
+                case TMLType.NATURAL:
+                    tclass.addNewParamIfApplicable("arg" + (i + 1) + "__req", "nat", "0");
+                    break;
+                default:
+                    tclass.addNewParamIfApplicable("arg" + (i + 1) + "__req", "bool", "0");
             }
-            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice, adj);
-            if (adc1 == null) {
-              // TraceManager.addDev("Null adc1");
-            } else {
-              // TraceManager.addDev("adc1 = " +adc1);
-            }
-            g = tclass.addNewGateIfApplicable("branching");
-            adag = new ADActionStateWithGate(g);
-            adag.setActionValue("");
-            adag.addNext(adc1);
-            tclass.getActivityDiagram().add(adag);
-            adchoice.addGuard(action);
-            adchoice.addNext(adag);
-          }
-          // TraceManager.addDev("Return adchoice ...");
-          return adchoice;
-        } else {
-          return endOfActivity(newElements, baseElements, tclass, adjunc);
         }
 
-      } else if (tmle instanceof TMLSelectEvt) {
-        tmlselectevt = (TMLSelectEvt) (tmle);
-        adchoice = new ADChoice();
-        newElements.add(adchoice);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adchoice);
-        for (i = 0; i < tmlselectevt.getNbNext(); i++) {
-          adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i), adchoice, adjunc);
-          adchoice.addNext(adc1);
-          adchoice.addGuard("[]");
-        }
-        return adchoice;
+        // Modifying AD
+        ADStart start = tclass.getActivityDiagram().getStartState();
+        ADComponent adc = start.getNext(0);
+        ADJunction adj = new ADJunction();
+        ADActionStateWithGate adag;
+        // ADSequence adseq;
+        Gate g, g1;
+        String action;
 
-        // EXECI
-      } else if (tmle instanceof TMLExecI) {
-        addelay = new ADDelay();
-        newElements.add(addelay);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(addelay);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), addelay, adjunc);
-        addelay.setValue(modifyString(((TMLExecI) tmle).getAction()));
-        addelay.addNext(adc1);
-        return addelay;
-
-        // EXECIInterval
-      } else if (tmle instanceof TMLExecIInterval) {
-        adinterval = new ADTimeInterval();
-        newElements.add(adinterval);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adinterval);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
-        adinterval.setValue(modifyString(((TMLExecIInterval) tmle).getMinDelay()),
-            modifyString(((TMLExecIInterval) tmle).getMaxDelay()));
-        adinterval.addNext(adc1);
-        return adinterval;
-
-        // EXECC
-      } else if (tmle instanceof TMLExecC) {
-        addelay = new ADDelay();
-        newElements.add(addelay);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(addelay);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), addelay, adjunc);
-        addelay.setValue(modifyString(((TMLExecC) tmle).getAction()));
-        addelay.addNext(adc1);
-        return addelay;
-
-        // EXECCInterval
-      } else if (tmle instanceof TMLExecCInterval) {
-        adinterval = new ADTimeInterval();
-        newElements.add(adinterval);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adinterval);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
-        adinterval.setValue(modifyString(((TMLExecCInterval) tmle).getMinDelay()),
-            modifyString(((TMLExecCInterval) tmle).getMaxDelay()));
-        adinterval.addNext(adc1);
-        return adinterval;
-
-        // DELAY
-      } else if (tmle instanceof TMLDelay) {
-        adinterval = new ADTimeInterval();
-        newElements.add(adinterval);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adinterval);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
-        adinterval.setValue(modifyString(((TMLDelay) tmle).getMinDelay()),
-            modifyString(((TMLDelay) tmle).getMaxDelay()));
-        adinterval.addNext(adc1);
-        return adinterval;
-
-        // TMLRandom
-      } else if (tmle instanceof TMLRandom) {
-        tmlrandom = (TMLRandom) tmle;
-
-        parameter0 = tclass.addNewParamIfApplicable("min__random", Param.NAT, "0");
-        parameter1 = tclass.addNewParamIfApplicable("max__random", Param.NAT, "0");
-        parameter2 = tclass.addNewParamIfApplicable(tmlrandom.getVariable(), Param.NAT, "0");
-
-        adacparam1 = new ADActionStateWithParam(parameter0);
-        action = modifyString("min(" + tmlrandom.getMinValue() + ", " + tmlrandom.getMaxValue() + ")");
-        adacparam1.setActionValue(action);
-        newElements.add(adacparam1);
-        baseElements.add(tmle);
-
-        adacparam2 = new ADActionStateWithParam(parameter1);
-        action = modifyString("max(" + tmlrandom.getMinValue() + ", " + tmlrandom.getMaxValue() + ")");
-        adacparam2.setActionValue(action);
-
-        adacparam3 = new ADActionStateWithParam(parameter2);
-        action = modifyString("min__random");
-        adacparam3.setActionValue(action);
-
-        adacparam4 = new ADActionStateWithParam(parameter0);
-        action = modifyString("min__random + 1");
-        adacparam4.setActionValue(action);
-
-        tclass.getActivityDiagram().add(adacparam1);
-
-        adacparam1.addNext(adacparam2);
-
-        adj1 = new ADJunction();
-        adacparam2.addNext(adj1);
-
-        adchoice = new ADChoice();
-        adj1.addNext(adchoice);
-        adchoice.addGuard("[min__random < (max__random + 1)]");
-        adchoice.addNext(adacparam3);
-        adchoice.addGuard("[min__random < max__random]");
-        adchoice.addNext(adacparam4);
-        adacparam4.addNext(adj1);
-
-        tclass.getActivityDiagram().add(adacparam1);
-        tclass.getActivityDiagram().add(adacparam2);
-        tclass.getActivityDiagram().add(adacparam3);
-        tclass.getActivityDiagram().add(adacparam4);
-        tclass.getActivityDiagram().add(adj1);
-        tclass.getActivityDiagram().add(adchoice);
-
-        adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam3, adjunc);
-        adacparam3.addNext(adc2);
-
-        return adacparam1;
-
-        // TMLFORLOOP
-      } else if (tmle instanceof TMLForLoop) {
-        tmlforloop = (TMLForLoop) tmle;
-        action = modifyString(tmlforloop.getInit());
-        // TraceManager.addDev("FOR action = " + action);
-        parameter = null;
-        if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
-          // TraceManager.addDev("parameter1 ok");
-          if (action.length() != 0) {
-            adacparam1 = new ADActionStateWithParam(parameter);
-            adacparam1.setActionValue(getActionValueParam(action, tclass));
-          } else {
-            adacparam1 = null;
-          }
-
-          action = modifyString(tmlforloop.getIncrement());
-          parameter = null;
-          if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
-            // TraceManager.addDev("New loop");
-            if (action.length() != 0) {
-              adacparam2 = new ADActionStateWithParam(parameter);
-              adacparam2.setActionValue(getActionValueParam(action, tclass));
-            } else {
-              adacparam2 = null;
-            }
-
-            adchoice = new ADChoice();
-            adj1 = new ADJunction();
-            adj2 = new ADJunction();
-
-            newElements.add(adacparam1);
-            baseElements.add(tmle);
-
-            if (adacparam1 != null) {
-              tclass.getActivityDiagram().add(adacparam1);
-              newElements.add(adacparam1);
-            } else {
-              newElements.add(adj1);
-            }
-            if (adacparam2 != null) {
-              tclass.getActivityDiagram().add(adacparam2);
-            }
-            tclass.getActivityDiagram().add(adchoice);
-            tclass.getActivityDiagram().add(adj1);
-            tclass.getActivityDiagram().add(adj2);
-
-            if (adacparam1 != null) {
-              adacparam1.addNext(adj1);
-            }
-            adj1.addNext(adchoice);
-            if (adacparam2 != null) {
-              adacparam2.addNext(adj1);
-              adj2.addNext(adacparam2);
-            } else {
-              adj2.addNext(adj1);
-            }
-
-            action = (modifyString(tmlforloop.getCondition()));
-            if (action.length() == 0) {
-              action = "true";
-            }
-            adchoice.addGuard("[" + action + "]");
-            if (adacparam1 != null) {
-              adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adj2);
-            } else {
-              adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adj1, adj2);
-            }
-            adchoice.addNext(adc1);
-
-            action = Conversion.replaceAllChar(action, '[', "(");
-            action = Conversion.replaceAllChar(action, ']', ")");
-            adchoice.addGuard("[not(" + action + ")]");
-            if (adacparam1 != null) {
-              adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1), adacparam1, adjunc);
-            } else {
-              adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1), adj1, adjunc);
-            }
-            adchoice.addNext(adc2);
-
-            if (adacparam1 != null) {
-              return adacparam1;
-            } else {
-              return adj1;
-            }
-          }
-        }
-        // Error! -> bad parameter
-        // return translateAD(newElements, baseElements, tclass, task,
-        // tmle.getNextElement(0), previous, adjunc);
-        CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR,
-            "Parameter undeclared in For operator:" + action);
-        error.setTClass(tclass);
-        checkingErrors.add(error);
-
-        // TML Sequence
-      } else if (tmle instanceof TMLSequence) {
-        // TraceManager.addDev("TML sequence !");
-        tmlseq = (TMLSequence) tmle;
-
-        if (tmlseq.getNbNext() == 0) {
-          return endOfActivity(newElements, baseElements, tclass, adjunc);
-        }
-
-        if (tmlseq.getNbNext() == 1) {
-          return translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
-        }
-
-        tmlseq.sortNexts();
-        // At least 2 next elements
-        adj2 = null;
-        adc2 = null;
-        for (i = 1; i < tmlseq.getNbNext(); i++) {
-          adj1 = new ADJunction();
-          if (adj2 == null) {
-            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i - 1), previous, adj1);
-          } else {
-            adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(i - 1), adj2, adj1);
-          }
-          if (adj2 == null) {
-            adc2 = adc1;
-            // newElements.add(adc1);
-            // baseElements.add(tmle);
-          } else {
-            adj2.addNext(adc1);
-          }
-          // tclass.getActivityDiagram().add(adc1);
-          tclass.getActivityDiagram().add(adj1);
-          adj2 = adj1;
-        }
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(tmlseq.getNbNext() - 1),
-            previous, adjunc);
-        // tclass.getActivityDiagram().add(adc1);
-        adj2.addNext(adc1);
-        return adc2;
-
-        // TML Read Channel
-      } else if (tmle instanceof TMLReadChannel) { // READ MUST BE MODIFIED
-        acch = (TMLActivityElementChannel) tmle;
-
-        if ((acch.getNbOfSamples().trim().compareTo("1")) == 0) {
-          g = addGateChannel("rd", acch, 0, tclass);
-          TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(0)));
-          g1 = tcl.getGateByName("rd__" + acch.getChannel(0).getName());
-          tm.addSynchroRelation(tclass, g, tcl, g1);
-          adag = new ADActionStateWithGate(g);
-          adag.setActionValue("");
-          tclass.getActivityDiagram().add(adag);
-          adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
-          adag.addNext(adc1);
-          newElements.add(adag);
-          baseElements.add(tmle);
-          return adag;
-
-        } else {
-          parameter = tclass.addNewParamIfApplicable("cpt__0", "nat", "0");
-          adacparam = new ADActionStateWithParam(parameter);
-          adacparam.setActionValue(acch.getNbOfSamples());
-          tclass.getActivityDiagram().add(adacparam);
-
-          adj = new ADJunction();
-          tclass.getActivityDiagram().add(adj);
-          adacparam.addNext(adj);
-
-          adchoice = new ADChoice();
-          tclass.getActivityDiagram().add(adchoice);
-          adj.addNext(adchoice);
-
-          adacparam1 = new ADActionStateWithParam(parameter);
-          adacparam1.setActionValue("cpt__0 - 1");
-          tclass.getActivityDiagram().add(adacparam1);
-          adacparam1.addNext(adj);
-
-          g = addGateChannel("rd", acch, 0, tclass);
-          TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(0)));
-          g1 = tcl.getGateByName("rd__" + acch.getChannel(0).getName());
-          tm.addSynchroRelation(tclass, g, tcl, g1);
-
-          adag = new ADActionStateWithGate(g);
-          adag.setActionValue("");
-          tclass.getActivityDiagram().add(adag);
-          adag.addNext(adacparam1);
-
-          adchoice.addNext(adag);
-          adchoice.addGuard("[cpt__0 > 0]");
-
-          newElements.add(adacparam);
-          baseElements.add(tmle);
-
-          adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam, adjunc);
-          adchoice.addNext(adc1);
-          adchoice.addGuard("[cpt__0 == 0]");
-          return adacparam;
-        }
-
-        // TMLSendEvent
-      } else if (tmle instanceof TMLSendEvent) {
-        acevt = (TMLActivityElementEvent) tmle;
-        g = tclass.addNewGateIfApplicable("notify__" + acevt.getEvent().getName());
-        TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
-        g1 = ((TClassEventCommon) (tcl)).getGateWrite();
+        g = tclass.addNewGateIfApplicable("waitReq__" + task.getRequest().getName());
+        TClass tcl = tm.getTClassWithName(nameRequest + task.getRequest().getName());
+        g1 = ((TClassRequest) (tcl)).getGateRead();
         tm.addSynchroRelation(tclass, g, tcl, g1);
 
-        adacparam2 = null;
-        adacparam = null;
         adag = new ADActionStateWithGate(g);
         action = "";
-        for (i = 0; i < acevt.getNbOfParams(); i++) {
-          if (acevt.getParam(i).length() > 0) {
-            if (!Conversion.isNumeralOrId(acevt.getParam(i))) {
-              tmp = "ntmp__" + i;
-              if (acevt.getEvent().getType(i).getType() == TMLType.NATURAL) {
-                parameter = tclass.addNewParamIfApplicable(tmp, Param.NAT, "0");
-              } else {
-                parameter = tclass.addNewParamIfApplicable(tmp, Param.BOOL, "false");
-              }
+        for (i = 0; i < task.getRequest().getNbOfParams(); i++) {
+            action += "?arg" + (i + 1) + "__req:nat";
+        }
+        adag.setActionValue(action);
 
-              adacparam1 = new ADActionStateWithParam(parameter);
-              adacparam1.setActionValue(modifyString(acevt.getParam(i)));
-              tclass.getActivityDiagram().add(adacparam1);
-              if (adacparam == null) {
-                adacparam2 = adacparam1;
-                adacparam = adacparam1;
-              } else {
-                adacparam.addNext(adacparam1);
-                adacparam = adacparam1;
-              }
-            } else {
-              tmp = modifyString(acevt.getParam(i));
+        // Search for all adcomponents which next is a stop ... Replace this next to a
+        // next to the first adjunction
+        // TraceManager.addDev("Remove all elements ..");
+        try {
+            tm.removeAllElement(Class.forName("translator.ADStop"), adj, tclass.getActivityDiagram());
+        } catch (ClassNotFoundException cnfe) {
+        }
+        // TraceManager.addDev("All elements removed ...");
+        tclass.getActivityDiagram().add(adag);
+        tclass.getActivityDiagram().add(adj);
+
+        // End of AD should be linked to the beginning!
+        start.removeAllNext();
+        start.addNext(adj);
+        adj.addNext(adag);
+        adag.addNext(adc);
+
+    }
+
+    private void setGatesToTask(TClass tclass, TMLTask task) {
+        setGatesEvt(tclass, task);
+        setGatesRequest(tclass, task);
+        setGatesChannel(tclass, task);
+    }
+
+    private void setGatesEvt(TClass tclass, TMLTask task) {
+        Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
+        TMLEvent event;
+        Gate g, g1;
+        TClass tcl;
+
+        while (iterator.hasNext()) {
+            event = iterator.next();
+
+            if (task == event.getOriginTask()) {
+                g = tclass.addNewGateIfApplicable("notify__" + event.getName());
+                tcl = tm.getTClassWithName(nameEvent + event.getName());
+                g1 = ((TClassEventCommon) (tcl)).getGateWrite();
+                tm.addSynchroRelation(tclass, g, tcl, g1);
             }
-            action += "!" + modifyString(tmp);
-          }
-        }
-        if (adacparam != null) {
-          adacparam.addNext(adag);
-        }
-        adag.setActionValue(action);
 
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adag);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
-        adag.addNext(adc1);
+            if (task == event.getDestinationTask()) {
+                // Wait
+                g = tclass.addNewGateIfApplicable("wait__" + event.getName());
+                tcl = tm.getTClassWithName(nameEvent + event.getName());
+                g1 = ((TClassEventCommon) (tcl)).getGateRead();
+                tm.addSynchroRelation(tclass, g, tcl, g1);
 
-        if (adacparam2 != null) {
-          newElements.add(adacparam2);
-          return adacparam2;
-        }
-        newElements.add(adag);
-        return adag;
-
-        // TMLSendRequest
-      } else if (tmle instanceof TMLSendRequest) {
-        tmlreq = (TMLSendRequest) tmle;
-        g = tclass.addNewGateIfApplicable("sendReq__" + tmlreq.getRequest().getName() + "__" + task.getName());
-        TClass tcl = tm.getTClassWithName(nameRequest + tmlreq.getRequest().getName());
-        // g1 = tcl.getGateByName("sendReq");
-        // int index = tmlreq.getRequest().getOriginTasks().indexOf(task);
-        // TraceManager.addDev("task=" + task.getName() + " index=" + index);
-        // g1 = (Gate)(((TClassRequest)tcl).getGatesWrite().get(index));
-        g1 = ((TClassRequest) tcl).getGateWrite(task.getName());
-        // TraceManager.addDev("task=" + task.getName() + " index=" + index + "gate=" +
-        // g.getName());
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-
-        adacparam2 = null;
-        adacparam = null;
-        adag = new ADActionStateWithGate(g);
-        action = "";
-        for (i = 0; i < tmlreq.getNbOfParams(); i++) {
-          if (tmlreq.getParam(i).length() > 0) {
-            if (!Conversion.isNumeralOrId(tmlreq.getParam(i))) {
-              tmp = "ntmp__" + i;
-              if (tmlreq.getRequest().getType(i).getType() == TMLType.NATURAL) {
-                parameter = tclass.addNewParamIfApplicable(tmp, Param.NAT, "0");
-              } else {
-                parameter = tclass.addNewParamIfApplicable(tmp, Param.BOOL, "false");
-              }
-
-              adacparam1 = new ADActionStateWithParam(parameter);
-              adacparam1.setActionValue(modifyString(tmlreq.getParam(i)));
-              tclass.getActivityDiagram().add(adacparam1);
-              if (adacparam == null) {
-                adacparam2 = adacparam1;
-                adacparam = adacparam1;
-              } else {
-                adacparam.addNext(adacparam1);
-                adacparam = adacparam1;
-              }
-            } else {
-              tmp = modifyString(tmlreq.getParam(i));
+                // Notified
+                g = tclass.addNewGateIfApplicable("notified__" + event.getName());
+                tcl = tm.getTClassWithName(nameEvent + event.getName());
+                g1 = ((TClassEventCommon) (tcl)).getGateSize();
+                tm.addSynchroRelation(tclass, g, tcl, g1);
             }
-            action += "!" + modifyString(tmp);
-          }
         }
-        if (adacparam != null) {
-          adacparam.addNext(adag);
-        }
-        adag.setActionValue(action);
+    }
 
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adag);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
-        adag.addNext(adc1);
+    private void setGatesRequest(TClass tclass, TMLTask task) {
+        Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
+        TMLRequest request;
+        Gate g, g1;
+        TClass tcl;
+        int index;
 
-        if (adacparam2 != null) {
-          newElements.add(adacparam2);
-          return adacparam2;
-        }
-        newElements.add(adag);
-        return adag;
-
-        // TMLWaitEvent
-      } else if (tmle instanceof TMLWaitEvent) {
-        acevt = (TMLActivityElementEvent) tmle;
-        g = tclass.addNewGateIfApplicable("wait__" + acevt.getEvent().getName());
-        TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
-        g1 = ((TClassEventCommon) (tcl)).getGateRead();
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-
-        adag = new ADActionStateWithGate(g);
-        action = "";
-        for (i = 0; i < acevt.getNbOfParams(); i++) {
-          if (acevt.getParam(i).length() > 0) {
-            action += "?" + modifyString(acevt.getParam(i)) + ":"
-                + TMLType.getLOTOSStringType(acevt.getEvent().getType(i).getType());
-          }
-        }
-        adag.setActionValue(action);
-
-        newElements.add(adag);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adag);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
-        adag.addNext(adc1);
-        return adag;
-
-        // TMLNotifiedEvent
-      } else if (tmle instanceof TMLNotifiedEvent) {
-        acevt = (TMLActivityElementEvent) tmle;
-        g = tclass.addNewGateIfApplicable("notified__" + acevt.getEvent().getName());
-        TClass tcl = tm.getTClassWithName(nameEvent + acevt.getEvent().getName());
-        g1 = ((TClassEventCommon) (tcl)).getGateSize();
-
-        if (g1 == null) {
-          return null;
-        }
-
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-
-        adag = new ADActionStateWithGate(g);
-        action = "?" + acevt.getVariable() + ":nat";
-        adag.setActionValue(action);
-
-        newElements.add(adag);
-        baseElements.add(tmle);
-        tclass.getActivityDiagram().add(adag);
-        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
-        adag.addNext(adc1);
-        return adag;
-
-        // TMLWriteChannel
-      } else if (tmle instanceof TMLWriteChannel) {
-        acch = (TMLActivityElementChannel) tmle;
-        if ((acch.getNbOfSamples().trim().compareTo("1")) == 0) {
-          adag = null;
-          adagtmp = null;
-          for (int k = 0; k < acch.getNbOfChannels(); k++) {
-            g = addGateChannel("wr", acch, k, tclass);
-            TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
-            g1 = tcl.getGateByName("wr__" + acch.getChannel(k).getName());
-            tm.addSynchroRelation(tclass, g, tcl, g1);
-            adag = new ADActionStateWithGate(g);
-            adag.setActionValue("");
-            tclass.getActivityDiagram().add(adag);
-            if (adagtmp != null) {
-              adagtmp.addNext(adag);
+        while (iterator.hasNext()) {
+            request = iterator.next();
+            g = tclass.addNewGateIfApplicable("sendReq__" + request.getName() + "__" + task.getName());
+            tcl = tm.getTClassWithName(nameRequest + request.getName());
+            // g1 = tcl.getGateByName("sendReq");
+            index = request.getOriginTasks().indexOf(task);
+            if (index != -1) {
+                // TraceManager.addDev("task=" + task.getName() + " index=" + index);
+                g1 = ((TClassRequest) tcl).getGatesWrite().get(index);
+                // TraceManager.addDev("task=" + task.getName() + " index=" + index + "gate=" +
+                // g.getName());
+                tm.addSynchroRelation(tclass, g, tcl, g1);
             }
-            adagtmp = adag;
+        }
+    }
 
-          }
-          adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adag, adjunc);
-          adag.addNext(adc1);
-          newElements.add(adag);
-          baseElements.add(tmle);
-          return adag;
+    private void setGatesChannel(TClass tclass, TMLTask task) {
+        Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
+        TMLChannel channel;
+        Gate g, g1;
+        TClass tcl;
+        // int index;
+        // String name;
+
+        while (iterator.hasNext()) {
+            channel = iterator.next();
+
+            if (task == channel.getOriginTask()) {
+                g = tclass.addNewGateIfApplicable("wr__" + channel.getName());
+                tcl = tm.getTClassWithName(getChannelString(channel));
+                g1 = tcl.getGateByName("wr__" + channel.getName());
+                tm.addSynchroRelation(tclass, g, tcl, g1);
+            }
+
+            if (task == channel.getDestinationTask()) {
+                g = tclass.addNewGateIfApplicable("rd__" + channel.getName());
+                tcl = tm.getTClassWithName(getChannelString(channel));
+                g1 = tcl.getGateByName("rd__" + channel.getName());
+                tm.addSynchroRelation(tclass, g, tcl, g1);
+
+            }
+        }
+    }
+
+    private ADComponent endOfActivity(Vector<ADComponent> newElements, Vector<TMLActivityElement> baseElements,
+            TClass tclass, ADJunction adjunc) {
+        if (adjunc == null) {
+            ADStop adstop = new ADStop();
+            newElements.add(adstop);
+
+            // DB Issue #17: This is not a type that can be added to this list
+            // baseElements.add(adstop);
+            tclass.getActivityDiagram().add(adstop);
+            return adstop;
         } else {
-          parameter = tclass.addNewParamIfApplicable("cpt__0", "nat", "0");
-          adchoice = null;
-          adacparam2 = null;
-
-          for (int k = 0; k < acch.getNbOfChannels(); k++) {
-
-            adacparam = new ADActionStateWithParam(parameter);
-            adacparam.setActionValue(acch.getNbOfSamples());
-            tclass.getActivityDiagram().add(adacparam);
-
-            if (k == 0) {
-              newElements.add(adacparam);
-              baseElements.add(tmle);
-              adacparam2 = adacparam;
-            } else {
-              adchoice.addNext(adacparam);
-            }
-
-            adj = new ADJunction();
-            tclass.getActivityDiagram().add(adj);
-            adacparam.addNext(adj);
-
-            adchoice = new ADChoice();
-            tclass.getActivityDiagram().add(adchoice);
-            adj.addNext(adchoice);
-
-            adacparam1 = new ADActionStateWithParam(parameter);
-            adacparam1.setActionValue("cpt__0 - 1");
-            tclass.getActivityDiagram().add(adacparam1);
-            adacparam1.addNext(adj);
-
-            g = addGateChannel("wr", acch, k, tclass);
-            TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
-            g1 = tcl.getGateByName("wr__" + acch.getChannel(k).getName());
-            tm.addSynchroRelation(tclass, g, tcl, g1);
-
-            adag = new ADActionStateWithGate(g);
-            adag.setActionValue("");
-            tclass.getActivityDiagram().add(adag);
-            adchoice.addNext(adag);
-            adchoice.addGuard("[cpt__0 > 0]");
-
-            adag.addNext(adacparam1);
-
-            if (k == (acch.getNbOfChannels() - 1)) {
-              adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adjunc);
-              adchoice.addNext(adc1);
-            }
-
-            adchoice.addGuard("[cpt__0 == 0]");
-          }
-
-          return adacparam2;
-
-          /*
-           * adacparam = new ADActionStateWithParam(parameter);
-           * adacparam.setActionValue(acch.getNbOfSamples());
-           * tclass.getActivityDiagram().add(adacparam);
-           * 
-           * adj = new ADJunction(); tclass.getActivityDiagram().add(adj);
-           * adacparam.addNext(adj);
-           * 
-           * adchoice = new ADChoice(); tclass.getActivityDiagram().add(adchoice);
-           * adj.addNext(adchoice);
-           * 
-           * adacparam1 = new ADActionStateWithParam(parameter);
-           * adacparam1.setActionValue("cpt__0 - 1");
-           * tclass.getActivityDiagram().add(adacparam1); adacparam1.addNext(adj);
-           * 
-           * adagtmp = null; adag = null; for(int k=0; k<acch.getNbOfChannels(); k++) { g
-           * = addGateChannel("wr", acch, k, tclass); TClass tcl =
-           * tm.getTClassWithName(getChannelString(acch.getChannel(k))); g1 =
-           * tcl.getGateByName("wr__"+acch.getChannel(k).getName());
-           * tm.addSynchroRelation(tclass, g, tcl, g1);
-           * 
-           * adag = new ADActionStateWithGate(g); adag.setActionValue("");
-           * tclass.getActivityDiagram().add(adag); if (adagtmp == null) {
-           * adchoice.addNext(adag); adchoice.addGuard("[cpt__0 > 0]"); } else {
-           * adagtmp.addNext(adag); } adagtmp = adag; } adag.addNext(adacparam1);
-           * 
-           * newElements.add(adacparam); baseElements.add(tmle);
-           * 
-           * adc1 = translateAD(newElements, baseElements, tclass, task,
-           * tmle.getNextElement(0), adacparam, adjunc); adchoice.addNext(adc1);
-           * adchoice.addGuard("[cpt__0 == 0]"); return adacparam;
-           */
+            return adjunc;
         }
-      }
-    } catch (Exception e) {
-      TraceManager.addDev("Exception in AD diagram analysis -> " + e.getMessage());
-      return null;
     }
 
-    return null;
-
-  }
-
-  private void setADRequested(TClass tclass, TMLTask task) {
-    // attributes
-    int n = task.getRequest().getNbOfParams();
-    int i;
-    // String type;
-
-    for (i = 0; i < n; i++) {
-      switch (task.getRequest().getType(i).getType()) {
-        case TMLType.NATURAL:
-          tclass.addNewParamIfApplicable("arg" + (i + 1) + "__req", "nat", "0");
-          break;
-        default:
-          tclass.addNewParamIfApplicable("arg" + (i + 1) + "__req", "bool", "0");
-      }
+    private Gate addGateChannel(String name, TMLActivityElementChannel tmle, int _index, TClass tclass) {
+        name = name + "__" + tmle.getChannel(_index).getName();
+        return tclass.addNewGateIfApplicable(name);
     }
 
-    // Modifying AD
-    ADStart start = tclass.getActivityDiagram().getStartState();
-    ADComponent adc = start.getNext(0);
-    ADJunction adj = new ADJunction();
-    ADActionStateWithGate adag;
-    // ADSequence adseq;
-    Gate g, g1;
-    String action;
+    private boolean printAnalyzer(String action) {
+        action = action.trim();
+        return action.startsWith("cout") || action.startsWith("std::cout");
 
-    g = tclass.addNewGateIfApplicable("waitReq__" + task.getRequest().getName());
-    TClass tcl = tm.getTClassWithName(nameRequest + task.getRequest().getName());
-    g1 = ((TClassRequest) (tcl)).getGateRead();
-    tm.addSynchroRelation(tclass, g, tcl, g1);
-
-    adag = new ADActionStateWithGate(g);
-    action = "";
-    for (i = 0; i < task.getRequest().getNbOfParams(); i++) {
-      action += "?arg" + (i + 1) + "__req:nat";
     }
-    adag.setActionValue(action);
 
-    // Search for all adcomponents which next is a stop ... Replace this next to a
-    // next to the first adjunction
-    // TraceManager.addDev("Remove all elements ..");
-    try {
-      tm.removeAllElement(Class.forName("translator.ADStop"), adj, tclass.getActivityDiagram());
-    } catch (ClassNotFoundException cnfe) {
+    private String modifyString(String _input) {
+        _input = Conversion.replaceAllString(_input, "<<", "*");
+        _input = Conversion.replaceAllString(_input, ">>", "/");
+
+        // Replaces &&, || and !
+        _input = Conversion.replaceAllString(_input, "&&", "and");
+        _input = Conversion.replaceAllString(_input, "||", "or");
+        _input = Conversion.replaceAllString(_input, "!", "not");
+        _input = Conversion.replaceAllStringNonAlphanumerical(_input, "i", "i_0");
+
+        return _input;
     }
-    // TraceManager.addDev("All elements removed ...");
-    tclass.getActivityDiagram().add(adag);
-    tclass.getActivityDiagram().add(adj);
 
-    // End of AD should be linked to the beginning!
-    start.removeAllNext();
-    start.addNext(adj);
-    adj.addNext(adag);
-    adag.addNext(adc);
+    private void makeAttributes(TMLTask task, TClass tcl) {
+        Iterator<TMLAttribute> iterator = task.getAttributes().listIterator();
+        TMLAttribute tmla;
+        // Param para;
 
-  }
-
-  private void setGatesToTask(TClass tclass, TMLTask task) {
-    setGatesEvt(tclass, task);
-    setGatesRequest(tclass, task);
-    setGatesChannel(tclass, task);
-  }
-
-  private void setGatesEvt(TClass tclass, TMLTask task) {
-    Iterator<TMLEvent> iterator = tmlmodeling.getListIteratorEvents();
-    TMLEvent event;
-    Gate g, g1;
-    TClass tcl;
-
-    while (iterator.hasNext()) {
-      event = iterator.next();
-
-      if (task == event.getOriginTask()) {
-        g = tclass.addNewGateIfApplicable("notify__" + event.getName());
-        tcl = tm.getTClassWithName(nameEvent + event.getName());
-        g1 = ((TClassEventCommon) (tcl)).getGateWrite();
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-      }
-
-      if (task == event.getDestinationTask()) {
-        // Wait
-        g = tclass.addNewGateIfApplicable("wait__" + event.getName());
-        tcl = tm.getTClassWithName(nameEvent + event.getName());
-        g1 = ((TClassEventCommon) (tcl)).getGateRead();
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-
-        // Notified
-        g = tclass.addNewGateIfApplicable("notified__" + event.getName());
-        tcl = tm.getTClassWithName(nameEvent + event.getName());
-        g1 = ((TClassEventCommon) (tcl)).getGateSize();
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-      }
+        while (iterator.hasNext()) {
+            tmla = iterator.next();
+            switch (tmla.type.getType()) {
+                case TMLType.NATURAL:
+                    // TraceManager.addDev("Adding nat attribute:" + modifyString(tmla.name));
+                    tcl.addNewParamIfApplicable(modifyString(tmla.name), "nat", modifyString(tmla.initialValue));
+                    break;
+                default:
+                    tcl.addNewParamIfApplicable(modifyString(tmla.name), "bool", modifyString(tmla.initialValue));
+            }
+        }
     }
-  }
 
-  private void setGatesRequest(TClass tclass, TMLTask task) {
-    Iterator<TMLRequest> iterator = tmlmodeling.getListIteratorRequests();
-    TMLRequest request;
-    Gate g, g1;
-    TClass tcl;
-    int index;
-
-    while (iterator.hasNext()) {
-      request = iterator.next();
-      g = tclass.addNewGateIfApplicable("sendReq__" + request.getName() + "__" + task.getName());
-      tcl = tm.getTClassWithName(nameRequest + request.getName());
-      // g1 = tcl.getGateByName("sendReq");
-      index = request.getOriginTasks().indexOf(task);
-      if (index != -1) {
-        // TraceManager.addDev("task=" + task.getName() + " index=" + index);
-        g1 = ((TClassRequest) tcl).getGatesWrite().get(index);
-        // TraceManager.addDev("task=" + task.getName() + " index=" + index + "gate=" +
-        // g.getName());
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-      }
-    }
-  }
-
-  private void setGatesChannel(TClass tclass, TMLTask task) {
-    Iterator<TMLChannel> iterator = tmlmodeling.getListIteratorChannels();
-    TMLChannel channel;
-    Gate g, g1;
-    TClass tcl;
-    // int index;
-    // String name;
-
-    while (iterator.hasNext()) {
-      channel = iterator.next();
-
-      if (task == channel.getOriginTask()) {
-        g = tclass.addNewGateIfApplicable("wr__" + channel.getName());
-        tcl = tm.getTClassWithName(getChannelString(channel));
-        g1 = tcl.getGateByName("wr__" + channel.getName());
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-      }
-
-      if (task == channel.getDestinationTask()) {
-        g = tclass.addNewGateIfApplicable("rd__" + channel.getName());
-        tcl = tm.getTClassWithName(getChannelString(channel));
-        g1 = tcl.getGateByName("rd__" + channel.getName());
-        tm.addSynchroRelation(tclass, g, tcl, g1);
-
-      }
-    }
-  }
-
-  private ADComponent endOfActivity(Vector<ADComponent> newElements, Vector<TMLActivityElement> baseElements,
-      TClass tclass, ADJunction adjunc) {
-    if (adjunc == null) {
-      ADStop adstop = new ADStop();
-      newElements.add(adstop);
-
-      // DB Issue #17: This is not a type that can be added to this list
-      // baseElements.add(adstop);
-      tclass.getActivityDiagram().add(adstop);
-      return adstop;
-    } else {
-      return adjunc;
-    }
-  }
-
-  private Gate addGateChannel(String name, TMLActivityElementChannel tmle, int _index, TClass tclass) {
-    name = name + "__" + tmle.getChannel(_index).getName();
-    return tclass.addNewGateIfApplicable(name);
-  }
-
-  private boolean printAnalyzer(String action) {
-    action = action.trim();
-    return action.startsWith("cout") || action.startsWith("std::cout");
-
-  }
-
-  private String modifyString(String _input) {
-    _input = Conversion.replaceAllString(_input, "<<", "*");
-    _input = Conversion.replaceAllString(_input, ">>", "/");
-
-    // Replaces &&, || and !
-    _input = Conversion.replaceAllString(_input, "&&", "and");
-    _input = Conversion.replaceAllString(_input, "||", "or");
-    _input = Conversion.replaceAllString(_input, "!", "not");
-    _input = Conversion.replaceAllStringNonAlphanumerical(_input, "i", "i_0");
-
-    return _input;
-  }
-
-  private void makeAttributes(TMLTask task, TClass tcl) {
-    Iterator<TMLAttribute> iterator = task.getAttributes().listIterator();
-    TMLAttribute tmla;
-    // Param para;
-
-    while (iterator.hasNext()) {
-      tmla = iterator.next();
-      switch (tmla.type.getType()) {
-        case TMLType.NATURAL:
-          // TraceManager.addDev("Adding nat attribute:" + modifyString(tmla.name));
-          tcl.addNewParamIfApplicable(modifyString(tmla.name), "nat", modifyString(tmla.initialValue));
-          break;
-        default:
-          tcl.addNewParamIfApplicable(modifyString(tmla.name), "bool", modifyString(tmla.initialValue));
-      }
-    }
-  }
-
-  // Returns Param if action starts with a Param ...
-  private Param paramAnalyzer(String action, TClass tcl) {
-    int index = action.indexOf("=");
-    if (index < 0) {
-      // ++ expression ?
-      index = action.indexOf("++");
-      if (index < 0) {
-        // -- expression
-        index = action.indexOf("--");
+    // Returns Param if action starts with a Param ...
+    private Param paramAnalyzer(String action, TClass tcl) {
+        int index = action.indexOf("=");
         if (index < 0) {
-          return null;
+            // ++ expression ?
+            index = action.indexOf("++");
+            if (index < 0) {
+                // -- expression
+                index = action.indexOf("--");
+                if (index < 0) {
+                    return null;
+                }
+            }
         }
-      }
-    }
 
-    action = action.substring(0, index);
-    action = action.trim();
-
-    return tcl.getParamByName(action);
-  }
-
-  private String getActionValueParam(String action, TClass tcl) {
-    int index = action.indexOf("=");
-    if (index < 0) {
-      // ++ expression ?
-      index = action.indexOf("++");
-      if (index < 0) {
-        // -- expression
-        index = action.indexOf("--");
-        if (index < 0) {
-          return null;
-        } else {
-          action = action.substring(0, index);
-          action = action.trim();
-          return action + "-1";
-        }
-      } else {
         action = action.substring(0, index);
         action = action.trim();
-        return action + "+1";
-      }
+
+        return tcl.getParamByName(action);
     }
 
-    return action = action.substring(index + 1, action.length()).trim();
-  }
+    private String getActionValueParam(String action, TClass tcl) {
+        int index = action.indexOf("=");
+        if (index < 0) {
+            // ++ expression ?
+            index = action.indexOf("++");
+            if (index < 0) {
+                // -- expression
+                index = action.indexOf("--");
+                if (index < 0) {
+                    return null;
+                } else {
+                    action = action.substring(0, index);
+                    action = action.trim();
+                    return action + "-1";
+                }
+            } else {
+                action = action.substring(0, index);
+                action = action.trim();
+                return action + "+1";
+            }
+        }
 
-  private String removeLastSemicolon(String action) {
-    action = action.trim();
-    if (action.charAt(action.length() - 1) == ';') {
-      return action.substring(0, action.length() - 1);
+        return action = action.substring(index + 1, action.length()).trim();
     }
-    return action;
-  }
+
+    private String removeLastSemicolon(String action) {
+        action = action.trim();
+        if (action.charAt(action.length() - 1) == ';') {
+            return action.substring(0, action.length() - 1);
+        }
+        return action;
+    }
 }

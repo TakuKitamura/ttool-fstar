@@ -47,19 +47,19 @@ import javax.swing.*;
  */
 public class JScrollDiagramPanel extends JScrollPane {
 
-  private TDiagramPanel tdp;
+    private TDiagramPanel tdp;
 
-  // Constructor
-  public JScrollDiagramPanel(TDiagramPanel _tdp) {
-    // super(_tdp, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-    // ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-    super(_tdp);
-    tdp = _tdp;
-    setVisible(true);
-  }
+    // Constructor
+    public JScrollDiagramPanel(TDiagramPanel _tdp) {
+        // super(_tdp, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+        // ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        super(_tdp);
+        tdp = _tdp;
+        setVisible(true);
+    }
 
-  public TDiagramPanel getTDiagramPanel() {
-    return tdp;
-  }
+    public TDiagramPanel getTDiagramPanel() {
+        return tdp;
+    }
 
 }

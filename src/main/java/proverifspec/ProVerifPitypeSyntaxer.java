@@ -46,262 +46,262 @@ package proverifspec;
  */
 public class ProVerifPitypeSyntaxer extends ProVerifSyntaxer {
 
-  protected void translateConst(ProVerifConst _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "const " + _node.name + ": " + _node.type + " [data].";
-  }
-
-  protected void translateFunc(ProVerifFunc _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "fun " + _node.name + " (";
-    boolean first = true;
-    for (String type : _node.types) {
-      if (first)
-        first = false;
-      else
-        this.fullSpec += ", ";
-      this.fullSpec += type;
+    protected void translateConst(ProVerifConst _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "const " + _node.name + ": " + _node.type + " [data].";
     }
-    this.fullSpec += "): " + _node.returnType;
-    if (_node.reduc != null)
-      this.translateReducAux(_node.reduc, _alinea + 1);
-    if (_node.priv)
-      this.fullSpec += " [private]";
-    this.fullSpec += ".";
-  }
 
-  private void translateReducAux(ProVerifReduc _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "reduc ";
-    if (_node.vars.length > 0) {
-      this.fullSpec += "forall ";
-      boolean first = true;
-      for (ProVerifVar var : _node.vars) {
-        if (first)
-          first = false;
-        else
-          this.fullSpec += ", ";
-        this.fullSpec += var.name + ": " + var.type;
-      }
-      this.fullSpec += "; ";
-    }
-    this.fullSpec += _node.formula;
-
-    ProVerifReduc otherwise = _node.otherwise;
-    while (otherwise != null) {
-      this.fullSpec += "\n" + printAlinea(_alinea);
-      this.fullSpec += "      otherwise ";
-      if (otherwise.vars.length > 0) {
-        this.fullSpec += "forall ";
+    protected void translateFunc(ProVerifFunc _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "fun " + _node.name + " (";
         boolean first = true;
-        for (ProVerifVar var : otherwise.vars) {
-          if (first)
-            first = false;
-          else
-            this.fullSpec += ", ";
-          this.fullSpec += var.name + ": " + var.type;
+        for (String type : _node.types) {
+            if (first)
+                first = false;
+            else
+                this.fullSpec += ", ";
+            this.fullSpec += type;
         }
-        this.fullSpec += "; ";
-      }
-      this.fullSpec += otherwise.formula;
-      otherwise = otherwise.otherwise;
+        this.fullSpec += "): " + _node.returnType;
+        if (_node.reduc != null)
+            this.translateReducAux(_node.reduc, _alinea + 1);
+        if (_node.priv)
+            this.fullSpec += " [private]";
+        this.fullSpec += ".";
     }
-  }
 
-  protected void translateReduc(ProVerifReduc _node, int _alinea) {
-    this.translateReducAux(_node, _alinea);
+    private void translateReducAux(ProVerifReduc _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "reduc ";
+        if (_node.vars.length > 0) {
+            this.fullSpec += "forall ";
+            boolean first = true;
+            for (ProVerifVar var : _node.vars) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name + ": " + var.type;
+            }
+            this.fullSpec += "; ";
+        }
+        this.fullSpec += _node.formula;
 
-    if (_node.priv)
-      this.fullSpec += " [private]";
-    this.fullSpec += ".";
-  }
+        ProVerifReduc otherwise = _node.otherwise;
+        while (otherwise != null) {
+            this.fullSpec += "\n" + printAlinea(_alinea);
+            this.fullSpec += "      otherwise ";
+            if (otherwise.vars.length > 0) {
+                this.fullSpec += "forall ";
+                boolean first = true;
+                for (ProVerifVar var : otherwise.vars) {
+                    if (first)
+                        first = false;
+                    else
+                        this.fullSpec += ", ";
+                    this.fullSpec += var.name + ": " + var.type;
+                }
+                this.fullSpec += "; ";
+            }
+            this.fullSpec += otherwise.formula;
+            otherwise = otherwise.otherwise;
+        }
+    }
 
-  protected void translateEquation(ProVerifEquation _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "equation ";
-    if (_node.vars.length > 0) {
-      this.fullSpec += "forall ";
-      boolean first = true;
-      for (ProVerifVar var : _node.vars) {
-        if (first)
-          first = false;
+    protected void translateReduc(ProVerifReduc _node, int _alinea) {
+        this.translateReducAux(_node, _alinea);
+
+        if (_node.priv)
+            this.fullSpec += " [private]";
+        this.fullSpec += ".";
+    }
+
+    protected void translateEquation(ProVerifEquation _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "equation ";
+        if (_node.vars.length > 0) {
+            this.fullSpec += "forall ";
+            boolean first = true;
+            for (ProVerifVar var : _node.vars) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name + ": " + var.type;
+            }
+            this.fullSpec += "; ";
+        }
+        this.fullSpec += _node.formula + ".";
+    }
+
+    protected void translateVar(ProVerifVar _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "free " + _node.name + ": " + _node.type;
+        if (_node.priv)
+            this.fullSpec += " [private]";
+        this.fullSpec += ".";
+    }
+
+    protected void translateQueryAtt(ProVerifQueryAtt _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "query attacker(";
+        if (_node.isNew)
+            this.fullSpec += "new ";
+        this.fullSpec += _node.name + ").";
+    }
+
+    protected void translateQueryEv(ProVerifQueryEv _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "query ";
+        if (_node.vars.length > 0) {
+            boolean first = true;
+            for (ProVerifVar var : _node.vars) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name + ": " + var.type;
+            }
+            this.fullSpec += "; ";
+        }
+        this.fullSpec += "event(" + _node.name + "()).";
+    }
+
+    protected void translateQueryEvinj(ProVerifQueryEvinj _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "query ";
+        if (_node.vars.length > 0) {
+            boolean first = true;
+            for (ProVerifVar var : _node.vars) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name + ": " + var.type;
+            }
+            this.fullSpec += "; ";
+        }
+        this.fullSpec += "inj-event(" + _node.ev1 + ") ==> inj-event(" + _node.ev2 + ").";
+    }
+
+    protected void translateEvDecl(ProVerifEvDecl _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "event " + _node.name + "(";
+        boolean first = true;
+        for (String arg : _node.args) {
+            if (first)
+                first = false;
+            else
+                this.fullSpec += ", ";
+            this.fullSpec += arg;
+        }
+        this.fullSpec += ").";
+    }
+
+    protected void translateProcess(ProVerifProcess _node, int _alinea) {
+        this.fullSpec += "\n\n" + printAlinea(_alinea);
+        this.fullSpec += "let " + _node.name;
+        if (_node.args.length > 0) {
+            boolean first = true;
+            this.fullSpec += " (";
+            for (ProVerifVar var : _node.args) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name + ": " + var.type;
+            }
+            this.fullSpec += ")";
+        }
+        this.fullSpec += " =";
+        if (_node.next != null)
+            this.translate(_node.next, _alinea + 1);
         else
-          this.fullSpec += ", ";
-        this.fullSpec += var.name + ": " + var.type;
-      }
-      this.fullSpec += "; ";
-    }
-    this.fullSpec += _node.formula + ".";
-  }
-
-  protected void translateVar(ProVerifVar _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "free " + _node.name + ": " + _node.type;
-    if (_node.priv)
-      this.fullSpec += " [private]";
-    this.fullSpec += ".";
-  }
-
-  protected void translateQueryAtt(ProVerifQueryAtt _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "query attacker(";
-    if (_node.isNew)
-      this.fullSpec += "new ";
-    this.fullSpec += _node.name + ").";
-  }
-
-  protected void translateQueryEv(ProVerifQueryEv _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "query ";
-    if (_node.vars.length > 0) {
-      boolean first = true;
-      for (ProVerifVar var : _node.vars) {
-        if (first)
-          first = false;
-        else
-          this.fullSpec += ", ";
-        this.fullSpec += var.name + ": " + var.type;
-      }
-      this.fullSpec += "; ";
-    }
-    this.fullSpec += "event(" + _node.name + "()).";
-  }
-
-  protected void translateQueryEvinj(ProVerifQueryEvinj _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "query ";
-    if (_node.vars.length > 0) {
-      boolean first = true;
-      for (ProVerifVar var : _node.vars) {
-        if (first)
-          first = false;
-        else
-          this.fullSpec += ", ";
-        this.fullSpec += var.name + ": " + var.type;
-      }
-      this.fullSpec += "; ";
-    }
-    this.fullSpec += "inj-event(" + _node.ev1 + ") ==> inj-event(" + _node.ev2 + ").";
-  }
-
-  protected void translateEvDecl(ProVerifEvDecl _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "event " + _node.name + "(";
-    boolean first = true;
-    for (String arg : _node.args) {
-      if (first)
-        first = false;
-      else
-        this.fullSpec += ", ";
-      this.fullSpec += arg;
-    }
-    this.fullSpec += ").";
-  }
-
-  protected void translateProcess(ProVerifProcess _node, int _alinea) {
-    this.fullSpec += "\n\n" + printAlinea(_alinea);
-    this.fullSpec += "let " + _node.name;
-    if (_node.args.length > 0) {
-      boolean first = true;
-      this.fullSpec += " (";
-      for (ProVerifVar var : _node.args) {
-        if (first)
-          first = false;
-        else
-          this.fullSpec += ", ";
-        this.fullSpec += var.name + ": " + var.type;
-      }
-      this.fullSpec += ")";
-    }
-    this.fullSpec += " =";
-    if (_node.next != null)
-      this.translate(_node.next, _alinea + 1);
-    else
-      this.fullSpec += " 0";
-    this.fullSpec += ".";
-  }
-
-  protected void translateProcNew(ProVerifProcNew _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "new " + _node.name + "[]: " + _node.type + ";";
-    if (_node.next == null) {
-      this.fullSpec += "\n" + printAlinea(_alinea);
-      this.fullSpec += "0";
-    } else
-      this.translate(_node.next, _alinea);
-  }
-
-  protected void translateProcIn(ProVerifProcIn _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "in (" + _node.channel + ", ";
-    if (_node.vars.length > 1) {
-      this.fullSpec += "(";
-    }
-    boolean first = true;
-    for (ProVerifVar var : _node.vars) {
-      if (first)
-        first = false;
-      else
-        this.fullSpec += ", ";
-      this.fullSpec += var.name + ": " + var.type;
-    }
-    this.fullSpec += ")";
-    if (_node.vars.length > 1) {
-      this.fullSpec += ")";
-    }
-    if (_node.next != null) {
-      this.fullSpec += ";";
-      this.translate(_node.next, _alinea);
-    }
-  }
-
-  protected void translateProcCall(ProVerifProcCall _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += _node.name;
-    if (_node.args.length > 0) {
-      boolean first = true;
-      this.fullSpec += " (";
-      for (ProVerifVar var : _node.args) {
-        if (first)
-          first = false;
-        else
-          this.fullSpec += ", ";
-        this.fullSpec += var.name;
-      }
-      this.fullSpec += ")";
+            this.fullSpec += " 0";
+        this.fullSpec += ".";
     }
 
-    if (_node.next != null) {
-      this.fullSpec += ";";
-      this.translate(_node.next, _alinea);
+    protected void translateProcNew(ProVerifProcNew _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "new " + _node.name + "[]: " + _node.type + ";";
+        if (_node.next == null) {
+            this.fullSpec += "\n" + printAlinea(_alinea);
+            this.fullSpec += "0";
+        } else
+            this.translate(_node.next, _alinea);
     }
-  }
 
-  protected void translateProcLet(ProVerifProcLet _node, int _alinea) {
-    this.fullSpec += "\n" + printAlinea(_alinea);
-    this.fullSpec += "let ";
-    boolean first = true;
-    if (_node.vars.length > 1)
-      this.fullSpec += "(";
-    for (ProVerifVar var : _node.vars) {
-      if (first)
-        first = false;
-      else
-        this.fullSpec += ", ";
+    protected void translateProcIn(ProVerifProcIn _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "in (" + _node.channel + ", ";
+        if (_node.vars.length > 1) {
+            this.fullSpec += "(";
+        }
+        boolean first = true;
+        for (ProVerifVar var : _node.vars) {
+            if (first)
+                first = false;
+            else
+                this.fullSpec += ", ";
+            this.fullSpec += var.name + ": " + var.type;
+        }
+        this.fullSpec += ")";
+        if (_node.vars.length > 1) {
+            this.fullSpec += ")";
+        }
+        if (_node.next != null) {
+            this.fullSpec += ";";
+            this.translate(_node.next, _alinea);
+        }
+    }
 
-      if (var.patternEqual)
-        this.fullSpec += "=" + var.name;
-      else
-        this.fullSpec += var.name + ": " + var.type;
+    protected void translateProcCall(ProVerifProcCall _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += _node.name;
+        if (_node.args.length > 0) {
+            boolean first = true;
+            this.fullSpec += " (";
+            for (ProVerifVar var : _node.args) {
+                if (first)
+                    first = false;
+                else
+                    this.fullSpec += ", ";
+                this.fullSpec += var.name;
+            }
+            this.fullSpec += ")";
+        }
+
+        if (_node.next != null) {
+            this.fullSpec += ";";
+            this.translate(_node.next, _alinea);
+        }
     }
-    if (_node.vars.length > 1)
-      this.fullSpec += ")";
-    this.fullSpec += " = " + _node.value + " in";
-    if (_node.next != null)
-      this.translate(_node.next, _alinea);
-    else {
-      this.fullSpec += "\n" + printAlinea(_alinea);
-      this.fullSpec += "0";
+
+    protected void translateProcLet(ProVerifProcLet _node, int _alinea) {
+        this.fullSpec += "\n" + printAlinea(_alinea);
+        this.fullSpec += "let ";
+        boolean first = true;
+        if (_node.vars.length > 1)
+            this.fullSpec += "(";
+        for (ProVerifVar var : _node.vars) {
+            if (first)
+                first = false;
+            else
+                this.fullSpec += ", ";
+
+            if (var.patternEqual)
+                this.fullSpec += "=" + var.name;
+            else
+                this.fullSpec += var.name + ": " + var.type;
+        }
+        if (_node.vars.length > 1)
+            this.fullSpec += ")";
+        this.fullSpec += " = " + _node.value + " in";
+        if (_node.next != null)
+            this.translate(_node.next, _alinea);
+        else {
+            this.fullSpec += "\n" + printAlinea(_alinea);
+            this.fullSpec += "0";
+        }
     }
-  }
 }

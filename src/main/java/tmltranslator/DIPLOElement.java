@@ -48,33 +48,33 @@ import myutil.TraceManager;
  */
 public class DIPLOElement {
 
-  protected static int ID = 0;
-  protected String customData = "";
+    protected static int ID = 0;
+    protected String customData = "";
 
-  private int myID;
+    private int myID;
 
-  public DIPLOElement() {
-    myID = ++ID;
-  }
+    public DIPLOElement() {
+        myID = ++ID;
+    }
 
-  public int getID() {
-    return myID;
-  }
+    public int getID() {
+        return myID;
+    }
 
-  public static void setGeneralID(int _IDValue) {
-    ID = _IDValue;
-  }
+    public static void setGeneralID(int _IDValue) {
+        ID = _IDValue;
+    }
 
-  public static void resetID() {
-    TraceManager.addDev("Reset DIPLOID");
-    ID = 0;
-  }
+    public static void resetID() {
+        TraceManager.addDev("Reset DIPLOID");
+        ID = 0;
+    }
 
-  public String getCustomData() {
-    return customData;
-  };
+    public String getCustomData() {
+        return customData;
+    };
 
-  public void setCustomData(String _customData) {
-    customData = _customData;
-  }
+    public void setCustomData(String _customData) {
+        customData = _customData;
+    }
 }

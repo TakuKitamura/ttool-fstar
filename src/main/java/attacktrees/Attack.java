@@ -49,102 +49,102 @@ import java.util.ArrayList;
  */
 public class Attack extends AttackElement {
 
-  public final static int EXPERIENCE_BEGINNER = 0;
-  public final static int EXPERIENCE_AVERAGE = 1;
-  public final static int EXPERIENCE_EXPERT = 2;
+    public final static int EXPERIENCE_BEGINNER = 0;
+    public final static int EXPERIENCE_AVERAGE = 1;
+    public final static int EXPERIENCE_EXPERT = 2;
 
-  public final static String EXPERIENCES[] = { "Beginner", "Intermediate", "Expert" };
+    public final static String EXPERIENCES[] = { "Beginner", "Intermediate", "Expert" };
 
-  private AttackNode originNode; // If no origin node -> leaf attack
-  private ArrayList<AttackNode> destinationNodes;
-  private boolean isRoot;
-  private boolean isEnabled = true;
+    private AttackNode originNode; // If no origin node -> leaf attack
+    private ArrayList<AttackNode> destinationNodes;
+    private boolean isRoot;
+    private boolean isEnabled = true;
 
-  private int attackCost;
-  private int attackExperience;
+    private int attackCost;
+    private int attackExperience;
 
-  public Attack(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    destinationNodes = new ArrayList<>();
-  }
-
-  public boolean isRoot() {
-    return isRoot;
-  }
-
-  public void setRoot(boolean _root) {
-    isRoot = _root;
-  }
-
-  public boolean isEnabled() {
-    return isEnabled;
-  }
-
-  public void setEnabled(boolean _enabled) {
-    isEnabled = _enabled;
-  }
-
-  public void setOriginNode(AttackNode _node) {
-    originNode = _node;
-  }
-
-  public void addDestinationNode(AttackNode _node) {
-    destinationNodes.add(_node);
-  }
-
-  public void setAttackCost(int _attackCost) {
-    attackCost = _attackCost;
-  }
-
-  public void setAttackExperience(int _experience) {
-    attackExperience = _experience;
-  }
-
-  public int getAttackCost() {
-    return attackCost;
-  }
-
-  public int getAttackExperience() {
-    return attackExperience;
-  }
-
-  public boolean isLeaf() {
-    return (originNode == null);
-  }
-
-  public boolean isFinal() {
-    return destinationNodes.size() == 0;
-
-  }
-
-  public boolean canPerformAttack(int _resource, int _expertise) {
-
-    // Leaf attack?
-    if (originNode == null) {
-      return (attackCost <= _resource) && (attackExperience <= _expertise);
+    public Attack(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        destinationNodes = new ArrayList<>();
     }
 
-    // Intermediate attack. Needs to compute its resulting cost and experience
-    int cost = originNode.getLowestCost(_expertise);
-    if (cost == -1) {
-      // nothing was found
-      return false;
-    } else {
-      return cost <= _resource;
+    public boolean isRoot() {
+        return isRoot;
     }
-  }
 
-  public int getLowestCost(int _expertise) {
-    if (originNode == null) {
-      if (attackExperience <= _expertise) {
+    public void setRoot(boolean _root) {
+        isRoot = _root;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean _enabled) {
+        isEnabled = _enabled;
+    }
+
+    public void setOriginNode(AttackNode _node) {
+        originNode = _node;
+    }
+
+    public void addDestinationNode(AttackNode _node) {
+        destinationNodes.add(_node);
+    }
+
+    public void setAttackCost(int _attackCost) {
+        attackCost = _attackCost;
+    }
+
+    public void setAttackExperience(int _experience) {
+        attackExperience = _experience;
+    }
+
+    public int getAttackCost() {
         return attackCost;
-      } else {
-        return -1;
-      }
     }
 
-    return originNode.getLowestCost(_expertise);
+    public int getAttackExperience() {
+        return attackExperience;
+    }
 
-  }
+    public boolean isLeaf() {
+        return (originNode == null);
+    }
+
+    public boolean isFinal() {
+        return destinationNodes.size() == 0;
+
+    }
+
+    public boolean canPerformAttack(int _resource, int _expertise) {
+
+        // Leaf attack?
+        if (originNode == null) {
+            return (attackCost <= _resource) && (attackExperience <= _expertise);
+        }
+
+        // Intermediate attack. Needs to compute its resulting cost and experience
+        int cost = originNode.getLowestCost(_expertise);
+        if (cost == -1) {
+            // nothing was found
+            return false;
+        } else {
+            return cost <= _resource;
+        }
+    }
+
+    public int getLowestCost(int _expertise) {
+        if (originNode == null) {
+            if (attackExperience <= _expertise) {
+                return attackCost;
+            } else {
+                return -1;
+            }
+        }
+
+        return originNode.getLowestCost(_expertise);
+
+    }
 
 }

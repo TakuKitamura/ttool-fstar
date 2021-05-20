@@ -48,50 +48,50 @@ import java.util.Vector;
  */
 public class TEPEPropertyComponent extends TEPEComponent {
 
-  public static final int LIVENESS = 0;
-  public static final int NON_LIVENESS = 1;
-  public static final int REACHABILITY = 2;
-  public static final int NON_REACHABILITY = 3;
-  public static final int SAFETY = 4;
-  public static final int NON_SAFETY = 5;
+    public static final int LIVENESS = 0;
+    public static final int NON_LIVENESS = 1;
+    public static final int REACHABILITY = 2;
+    public static final int NON_REACHABILITY = 3;
+    public static final int SAFETY = 4;
+    public static final int NON_SAFETY = 5;
 
-  protected int type;
+    protected int type;
 
-  public TEPEPropertyComponent(String _name, Object _referenceObject, int _type) {
-    super(_name, _referenceObject);
-    type = _type;
-    inPropertyComponents = new Vector<TEPEComponent>();
-    inNegatedProperty = new Vector<Boolean>();
-    outPropertyComponents = new Vector<TEPEComponent>();
-  }
-
-  public int getType() {
-    return type;
-  }
-
-  public String getExtraString() {
-    String ret = "\ntype:";
-    switch (type) {
-      case 0:
-        ret += "liveness";
-        break;
-      case 1:
-        ret += "non liveness";
-        break;
-      case 2:
-        ret += "reachability";
-        break;
-      case 3:
-        ret += "non reachability";
-        break;
-      case 4:
-        ret += "safety";
-        break;
-      default:
-        ret += "non safety";
+    public TEPEPropertyComponent(String _name, Object _referenceObject, int _type) {
+        super(_name, _referenceObject);
+        type = _type;
+        inPropertyComponents = new Vector<TEPEComponent>();
+        inNegatedProperty = new Vector<Boolean>();
+        outPropertyComponents = new Vector<TEPEComponent>();
     }
 
-    return ret;
-  }
+    public int getType() {
+        return type;
+    }
+
+    public String getExtraString() {
+        String ret = "\ntype:";
+        switch (type) {
+            case 0:
+                ret += "liveness";
+                break;
+            case 1:
+                ret += "non liveness";
+                break;
+            case 2:
+                ret += "reachability";
+                break;
+            case 3:
+                ret += "non reachability";
+                break;
+            case 4:
+                ret += "safety";
+                break;
+            default:
+                ret += "non safety";
+        }
+
+        return ret;
+    }
 
 }

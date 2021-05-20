@@ -55,232 +55,233 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class ADDBridgeNode extends ADDCommunicationNode implements WithAttributes {
-  // private int textY1 = 15;
-  private int textY2 = 30;
-  private int derivationx = 2;
-  private int derivationy = 3;
-  private String stereotype = "BRIDGE";
+    // private int textY1 = 15;
+    private int textY2 = 30;
+    private int derivationx = 2;
+    private int derivationy = 3;
+    private String stereotype = "BRIDGE";
 
-  public ADDBridgeNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ADDBridgeNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    // Issue #31
-    textY = 15;
-    width = 250;
-    height = 100;
-    minWidth = 100;
-    minHeight = 35;
-    initScaling(250, 100);
+        // Issue #31
+        textY = 15;
+        width = 250;
+        height = 100;
+        minWidth = 100;
+        minHeight = 35;
+        initScaling(250, 100);
 
-    nbConnectingPoint = 16;
-    connectingPoint = new TGConnectingPoint[16];
+        nbConnectingPoint = 16;
+        connectingPoint = new TGConnectingPoint[16];
 
-    connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
-    connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
-    connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
-    connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
-    connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-    connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
-    connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
-    connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
+        connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
+        connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+        connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
+        connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+        connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+        connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
+        connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+        connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
 
-    connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
-    connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
-    connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
-    connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
-    connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
-    connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
-    connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
-    connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
+        connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+        connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+        connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+        connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+        connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+        connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 
-    addTGConnectingPointsComment();
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = true;
-    removable = true;
-    userResizable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
+        userResizable = true;
 
-    name = tdp.findNodeName("Bridge");
-    value = "name";
+        name = tdp.findNodeName("Bridge");
+        value = "name";
 
-    myImageIcon = IconManager.imgic700;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    Color c = g.getColor();
-    g.draw3DRect(x, y, width, height, true);
-
-    // Top lines
-    g.drawLine(x, y, x + derivationx, y - derivationy);
-    g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-    g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
-
-    // Right lines
-    g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-    g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
-
-    // Filling color
-    g.setColor(ColorManager.BRIDGE_BOX);
-    g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
-    g.setColor(c);
-
-    // Strings
-    String ster = "<<" + stereotype + ">>";
-    int w = g.getFontMetrics().stringWidth(ster);
-    drawSingleString(g, ster, x + (width - w) / 2, y + textY);
-    w = g.getFontMetrics().stringWidth(name);
-    drawSingleString(g, name, x + (width - w) / 2, y + textY2);
-
-    // Icon
-    // g.drawImage(IconManager.imgic1104.getImage(), x + width - 20, y + 4, null);
-
-    int borders = scale(4);
-    g.drawImage(scale(IconManager.imgic1104.getImage()), x + borders, y + borders, null);
-
-  }
-
-  @Override
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    Polygon pol = new Polygon();
-    pol.addPoint(x, y);
-    pol.addPoint(x + derivationx, y - derivationy);
-    pol.addPoint(x + derivationx + width, y - derivationy);
-    pol.addPoint(x + derivationx + width, y + height - derivationy);
-    pol.addPoint(x + width, y + height);
-    pol.addPoint(x, y + height);
-    if (pol.contains(x1, y1)) {
-      return this;
+        myImageIcon = IconManager.imgic700;
     }
 
-    return null;
-  }
+    @Override
+    public void internalDrawing(Graphics g) {
+        Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
 
-  public String getStereotype() {
-    return stereotype;
+        // Top lines
+        g.drawLine(x, y, x + derivationx, y - derivationy);
+        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
+        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
 
-  }
+        // Right lines
+        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
 
-  public String getNodeName() {
-    return name;
-  }
+        // Filling color
+        g.setColor(ColorManager.BRIDGE_BOX);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+        g.setColor(c);
 
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    // boolean error = false;
-    // String errors = "";
-    // int tmp;
-    // String tmpName;
+        // Strings
+        String ster = "<<" + stereotype + ">>";
+        int w = g.getFontMetrics().stringWidth(ster);
+        drawSingleString(g, ster, x + (width - w) / 2, y + textY);
+        w = g.getFontMetrics().stringWidth(name);
+        drawSingleString(g, name, x + (width - w) / 2, y + textY2);
 
-    /*
-     * JDialogBridgeNode dialog = new JDialogBridgeNode(frame,
-     * "Setting bridge attributes", this); dialog.setSize(350, 350);
-     * GraphicLib.centerOnParent(dialog); dialog.show(); // blocked until dialog has
-     * been closed
-     * 
-     * if (!dialog.isRegularClose()) { return false; }
-     * 
-     * if (dialog.getNodeName().length() != 0) { tmpName = dialog.getNodeName();
-     * tmpName = tmpName.trim(); if (!TAttribute.isAValidId(tmpName, false, false))
-     * { error = true; errors += "Name of the node  "; } else { name = tmpName; } }
-     * 
-     * if (dialog.getBufferByteDataSize().length() != 0) { try { tmp =
-     * bufferByteDataSize; bufferByteDataSize =
-     * Integer.decode(dialog.getBufferByteDataSize()).intValue(); if
-     * (bufferByteDataSize <= 0) { bufferByteDataSize = tmp; error = true; errors +=
-     * "Data size  "; } } catch (Exception e) { error = true; errors +=
-     * "Data size  "; } }
-     * 
-     * if (dialog.getClockRatio().length() != 0) { try { tmp = clockRatio;
-     * clockRatio = Integer.decode(dialog.getClockRatio()).intValue(); if
-     * (clockRatio <= 0) { clockRatio = tmp; error = true; errors +=
-     * "Clock ratio  "; } } catch (Exception e) { error = true; errors +=
-     * "Clock ratio  "; } }
-     * 
-     * 
-     * if (error) { JOptionPane.showMessageDialog(frame,
-     * "Invalid value for the following attributes: " + errors, "Error",
-     * JOptionPane.INFORMATION_MESSAGE); return false; }
-     */
+        // Icon
+        // g.drawImage(IconManager.imgic1104.getImage(), x + width - 20, y + 4, null);
 
-    return true;
-  }
+        int borders = scale(4);
+        g.drawImage(scale(IconManager.imgic1104.getImage()), x + borders, y + borders, null);
 
-  @Override
-  public int getType() {
-    return TGComponentManager.ADD_BRIDGENODE;
-  }
+    }
 
-  @Override
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
-    sb.append("\" />\n");
-    /*
-     * sb.append("<attributes bufferByteDataSize=\"" + bufferByteDataSize + "\" ");
-     * sb.append(" clockRatio=\"" + clockRatio + "\" "); sb.append("/>\n");
-     */
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int t1id;
-      String sstereotype = null, snodeName = null;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-
-          // Issue #17 copy-paste error on j index
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                sstereotype = elt.getAttribute("stereotype");
-                snodeName = elt.getAttribute("nodeName");
-              }
-              if (sstereotype != null) {
-                stereotype = sstereotype;
-              }
-              if (snodeName != null) {
-                name = snodeName;
-              }
-
-              if (elt.getTagName().equals("attributes")) {
-                if ((elt.getAttribute("clockRatio") != null) && (elt.getAttribute("clockRatio").length() > 0)) {
-                  clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
-                }
-              }
-            }
-          }
+    @Override
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        Polygon pol = new Polygon();
+        pol.addPoint(x, y);
+        pol.addPoint(x + derivationx, y - derivationy);
+        pol.addPoint(x + derivationx + width, y - derivationy);
+        pol.addPoint(x + derivationx + width, y + height - derivationy);
+        pol.addPoint(x + width, y + height);
+        pol.addPoint(x, y + height);
+        if (pol.contains(x1, y1)) {
+            return this;
         }
-      }
 
-    } catch (Exception e) {
-      throw new MalformedModelingException(e);
+        return null;
     }
-  }
 
-  @Override
-  public String getAttributes() {
-    String attr = "";
-    // attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";
-    // attr += "Clock ratio = " + clockRatio + "\n";
-    return attr;
-  }
+    public String getStereotype() {
+        return stereotype;
+
+    }
+
+    public String getNodeName() {
+        return name;
+    }
+
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        // boolean error = false;
+        // String errors = "";
+        // int tmp;
+        // String tmpName;
+
+        /*
+         * JDialogBridgeNode dialog = new JDialogBridgeNode(frame,
+         * "Setting bridge attributes", this); dialog.setSize(350, 350);
+         * GraphicLib.centerOnParent(dialog); dialog.show(); // blocked until dialog has
+         * been closed
+         * 
+         * if (!dialog.isRegularClose()) { return false; }
+         * 
+         * if (dialog.getNodeName().length() != 0) { tmpName = dialog.getNodeName();
+         * tmpName = tmpName.trim(); if (!TAttribute.isAValidId(tmpName, false, false))
+         * { error = true; errors += "Name of the node  "; } else { name = tmpName; } }
+         * 
+         * if (dialog.getBufferByteDataSize().length() != 0) { try { tmp =
+         * bufferByteDataSize; bufferByteDataSize =
+         * Integer.decode(dialog.getBufferByteDataSize()).intValue(); if
+         * (bufferByteDataSize <= 0) { bufferByteDataSize = tmp; error = true; errors +=
+         * "Data size  "; } } catch (Exception e) { error = true; errors +=
+         * "Data size  "; } }
+         * 
+         * if (dialog.getClockRatio().length() != 0) { try { tmp = clockRatio;
+         * clockRatio = Integer.decode(dialog.getClockRatio()).intValue(); if
+         * (clockRatio <= 0) { clockRatio = tmp; error = true; errors +=
+         * "Clock ratio  "; } } catch (Exception e) { error = true; errors +=
+         * "Clock ratio  "; } }
+         * 
+         * 
+         * if (error) { JOptionPane.showMessageDialog(frame,
+         * "Invalid value for the following attributes: " + errors, "Error",
+         * JOptionPane.INFORMATION_MESSAGE); return false; }
+         */
+
+        return true;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.ADD_BRIDGENODE;
+    }
+
+    @Override
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
+        sb.append("\" />\n");
+        /*
+         * sb.append("<attributes bufferByteDataSize=\"" + bufferByteDataSize + "\" ");
+         * sb.append(" clockRatio=\"" + clockRatio + "\" "); sb.append("/>\n");
+         */
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int t1id;
+            String sstereotype = null, snodeName = null;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                sstereotype = elt.getAttribute("stereotype");
+                                snodeName = elt.getAttribute("nodeName");
+                            }
+                            if (sstereotype != null) {
+                                stereotype = sstereotype;
+                            }
+                            if (snodeName != null) {
+                                name = snodeName;
+                            }
+
+                            if (elt.getTagName().equals("attributes")) {
+                                if ((elt.getAttribute("clockRatio") != null)
+                                        && (elt.getAttribute("clockRatio").length() > 0)) {
+                                    clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException(e);
+        }
+    }
+
+    @Override
+    public String getAttributes() {
+        String attr = "";
+        // attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";
+        // attr += "Clock ratio = " + clockRatio + "\n";
+        return attr;
+    }
 }

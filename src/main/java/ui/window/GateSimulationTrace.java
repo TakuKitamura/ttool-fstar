@@ -51,80 +51,80 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class GateSimulationTrace extends Vector<TraceData> {
-  private Gate g;
-  private GroupOfGates gog;
+    private Gate g;
+    private GroupOfGates gog;
 
-  public GateSimulationTrace(Gate _g, GroupOfGates _gog) {
-    g = _g;
-    gog = _gog;
-  }
-
-  public Gate getGate() {
-    return g;
-  }
-
-  public GroupOfGates getGroupOfGates() {
-    return gog;
-  }
-
-  public void addTimeAction(int t, int action, String values) {
-    add(new TraceData(t, action, values));
-  }
-
-  public int getTime(int i) {
-    if (i < size()) {
-      TraceData td = this.elementAt(i);
-      return td.time;
+    public GateSimulationTrace(Gate _g, GroupOfGates _gog) {
+        g = _g;
+        gog = _gog;
     }
-    return -1;
-  }
 
-  public int getAction(int i) {
-    if (i < size()) {
-      TraceData td = this.elementAt(i);
-      return td.action;
+    public Gate getGate() {
+        return g;
     }
-    return -1;
-  }
 
-  public String getValues(int i) {
-    if (i < size()) {
-      TraceData td = this.elementAt(i);
-      return td.values;
+    public GroupOfGates getGroupOfGates() {
+        return gog;
     }
-    return "";
-  }
 
-  public int getMaxTime() {
-    int cpt = 0;
-    TraceData td;
-    for (int i = 0; i < size(); i++) {
-      td = elementAt(i);
-      cpt = Math.max(td.time, cpt);
+    public void addTimeAction(int t, int action, String values) {
+        add(new TraceData(t, action, values));
     }
-    return cpt;
-  }
 
-  public int getMaxAction() {
-    int cpt = 0;
-    TraceData td;
-    for (int i = 0; i < size(); i++) {
-      td = elementAt(i);
-      cpt = Math.max(td.action, cpt);
+    public int getTime(int i) {
+        if (i < size()) {
+            TraceData td = this.elementAt(i);
+            return td.time;
+        }
+        return -1;
     }
-    return cpt;
-  }
 
-  // max time for actions <= actionNb
-  public int calculateMaxTimeOf(int actionNb) {
-    int maxTime = 0;
-    TraceData td;
-    for (int i = 0; i < size(); i++) {
-      td = elementAt(i);
-      if (td.action <= actionNb) {
-        maxTime = Math.max(maxTime, td.time);
-      }
+    public int getAction(int i) {
+        if (i < size()) {
+            TraceData td = this.elementAt(i);
+            return td.action;
+        }
+        return -1;
     }
-    return maxTime;
-  }
+
+    public String getValues(int i) {
+        if (i < size()) {
+            TraceData td = this.elementAt(i);
+            return td.values;
+        }
+        return "";
+    }
+
+    public int getMaxTime() {
+        int cpt = 0;
+        TraceData td;
+        for (int i = 0; i < size(); i++) {
+            td = elementAt(i);
+            cpt = Math.max(td.time, cpt);
+        }
+        return cpt;
+    }
+
+    public int getMaxAction() {
+        int cpt = 0;
+        TraceData td;
+        for (int i = 0; i < size(); i++) {
+            td = elementAt(i);
+            cpt = Math.max(td.action, cpt);
+        }
+        return cpt;
+    }
+
+    // max time for actions <= actionNb
+    public int calculateMaxTimeOf(int actionNb) {
+        int maxTime = 0;
+        TraceData td;
+        for (int i = 0; i < size(); i++) {
+            td = elementAt(i);
+            if (td.action <= actionNb) {
+                maxTime = Math.max(maxTime, td.time);
+            }
+        }
+        return maxTime;
+    }
 }

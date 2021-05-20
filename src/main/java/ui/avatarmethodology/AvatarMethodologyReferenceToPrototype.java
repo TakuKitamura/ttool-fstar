@@ -50,57 +50,57 @@ import ui.*;
  */
 public class AvatarMethodologyReferenceToPrototype extends AvatarMethodologyDiagramReference {
 
-  public AvatarMethodologyReferenceToPrototype(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public AvatarMethodologyReferenceToPrototype(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+            boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(300, 70);
+        initScaling(300, 70);
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = PROTOTYPING;
+        typeOfReference = PROTOTYPING;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARMETHODOLOGY_REF_PROTOTYPE;
-  }
-
-  @Override
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof AvatarDesignPanel;
-
-  }
-
-  @Override
-  public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
-    dn.setValidationsNumber(1);
-
-    dn.setValidationsInfo(0, AvatarMethodologyDiagramName.PROTO);
-  }
-
-  @Override
-  public boolean makeCall(String diagramName, int index) {
-    switch (index) {
-      case 0:
-        if (!openDiagram(diagramName)) {
-          return false;
-        }
-        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-          tdp.getMGUI().avatarExecutableCodeGeneration();
-          return true;
-        }
-        return false;
-      default:
-        return false;
     }
 
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARMETHODOLOGY_REF_PROTOTYPE;
+    }
+
+    @Override
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof AvatarDesignPanel;
+
+    }
+
+    @Override
+    public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
+        dn.setValidationsNumber(1);
+
+        dn.setValidationsInfo(0, AvatarMethodologyDiagramName.PROTO);
+    }
+
+    @Override
+    public boolean makeCall(String diagramName, int index) {
+        switch (index) {
+            case 0:
+                if (!openDiagram(diagramName)) {
+                    return false;
+                }
+                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+                    tdp.getMGUI().avatarExecutableCodeGeneration();
+                    return true;
+                }
+                return false;
+            default:
+                return false;
+        }
+
+    }
 
 }

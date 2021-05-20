@@ -52,70 +52,70 @@ import java.util.GregorianCalendar;
  * @author Ludovic APVRILLE
  */
 public class VCDContent {
-  private String timeScale = "1 ns";
-  private ArrayList<VCDVariable> variables;
-  private ArrayList<VCDTimeChange> changes;
+    private String timeScale = "1 ns";
+    private ArrayList<VCDVariable> variables;
+    private ArrayList<VCDTimeChange> changes;
 
-  public VCDContent() {
-    variables = new ArrayList<VCDVariable>();
-    changes = new ArrayList<VCDTimeChange>();
-    VCDVariable.reinitShortcut();
-  }
-
-  public void addVariable(VCDVariable _variable) {
-    variables.add(_variable);
-  }
-
-  public void addTimeChange(VCDTimeChange _change) {
-    changes.add(_change);
-  }
-
-  public VCDVariable getVariableByName(String _name) {
-    for (VCDVariable var : variables) {
-      if (var.getName().equals(_name)) {
-        return var;
-      }
-    }
-    return null;
-  }
-
-  public String toString() {
-    StringBuffer sb = new StringBuffer("");
-
-    // Header
-    GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
-    Date date = calendar.getTime();
-    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-    String formattedDate = formatter.format(date);
-
-    sb.append("$date " + formattedDate + " $end\n");
-    sb.append("$version TTool VCD generator " + DefaultText.getFullVersion() + " $end\n");
-    sb.append("$timescale " + timeScale + "$end\n");
-    sb.append("$scope module Simulation $end\n");
-
-    // Variables
-    for (VCDVariable v : variables) {
-      sb.append(v.decToString());
+    public VCDContent() {
+        variables = new ArrayList<VCDVariable>();
+        changes = new ArrayList<VCDTimeChange>();
+        VCDVariable.reinitShortcut();
     }
 
-    // End definitions
-    sb.append("$upscope $end\n");
-    sb.append("$enddefinitions $end\n");
-
-    // Time with value changes
-    for (VCDTimeChange tc : changes) {
-      sb.append(tc.toString());
+    public void addVariable(VCDVariable _variable) {
+        variables.add(_variable);
     }
 
-    // All done
-    return sb.toString();
-  }
+    public void addTimeChange(VCDTimeChange _change) {
+        changes.add(_change);
+    }
 
-  /*
-   * $var wire 8 # data $end $var wire 1 $ data_valid $end $var wire 1 % en $end
-   * $var wire 1 & rx_en $end $var wire 1 ' tx_en $end $var wire 1 ( empty $end
-   * $var wire 1 ) underrun $end $upscope $end $enddefinitions $end #0 b10000001 #
-   * 0$ 1% 0& 1' 0( 0) #2211 0' #2296 b0 # 1$ #2302 0$ #2303
-   */
+    public VCDVariable getVariableByName(String _name) {
+        for (VCDVariable var : variables) {
+            if (var.getName().equals(_name)) {
+                return var;
+            }
+        }
+        return null;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("");
+
+        // Header
+        GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+        Date date = calendar.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        String formattedDate = formatter.format(date);
+
+        sb.append("$date " + formattedDate + " $end\n");
+        sb.append("$version TTool VCD generator " + DefaultText.getFullVersion() + " $end\n");
+        sb.append("$timescale " + timeScale + "$end\n");
+        sb.append("$scope module Simulation $end\n");
+
+        // Variables
+        for (VCDVariable v : variables) {
+            sb.append(v.decToString());
+        }
+
+        // End definitions
+        sb.append("$upscope $end\n");
+        sb.append("$enddefinitions $end\n");
+
+        // Time with value changes
+        for (VCDTimeChange tc : changes) {
+            sb.append(tc.toString());
+        }
+
+        // All done
+        return sb.toString();
+    }
+
+    /*
+     * $var wire 8 # data $end $var wire 1 $ data_valid $end $var wire 1 % en $end
+     * $var wire 1 & rx_en $end $var wire 1 ' tx_en $end $var wire 1 ( empty $end
+     * $var wire 1 ) underrun $end $upscope $end $enddefinitions $end #0 b10000001 #
+     * 0$ 1% 0& 1' 0( 0) #2211 0' #2296 b0 # 1$ #2302 0$ #2303
+     */
 
 }

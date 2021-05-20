@@ -49,101 +49,101 @@ import myutil.FileUtils;
  */
 public class MainClass {
 
-  private String javaName;
-  private String header = "";
-  private String importCode = "";
-  private String classDeclationCode = "";
-  private String attributesCode = "";
-  private String operationCode = "";
-  private String gateCode = "";
-  private String synchroCode = "";
-  private String startingCode = "";
-  private String classEndCode = "}";
-  private String path = "";
+    private String javaName;
+    private String header = "";
+    private String importCode = "";
+    private String classDeclationCode = "";
+    private String attributesCode = "";
+    private String operationCode = "";
+    private String gateCode = "";
+    private String synchroCode = "";
+    private String startingCode = "";
+    private String classEndCode = "}";
+    private String path = "";
 
-  private int jgateId;
+    private int jgateId;
 
-  public final static String JAVA_EXTENSION = "java";
+    public final static String JAVA_EXTENSION = "java";
 
-  public MainClass(String _name) {
-    javaName = _name;
-  }
+    public MainClass(String _name) {
+        javaName = _name;
+    }
 
-  public String getName() {
-    return javaName;
-  }
+    public String getName() {
+        return javaName;
+    }
 
-  public int getUniqueGateId() {
-    jgateId++;
-    return jgateId - 1;
-  }
+    public int getUniqueGateId() {
+        jgateId++;
+        return jgateId - 1;
+    }
 
-  private int getGateId() {
-    return jgateId;
-  }
+    private int getGateId() {
+        return jgateId;
+    }
 
-  public void setDeclarationCode(String _code) {
-    classDeclationCode = _code;
-  }
+    public void setDeclarationCode(String _code) {
+        classDeclationCode = _code;
+    }
 
-  public void addImportCode(String _code) {
-    importCode += _code;
-  }
+    public void addImportCode(String _code) {
+        importCode += _code;
+    }
 
-  public void addAttributeCode(String _code) {
-    attributesCode += _code;
-  }
+    public void addAttributeCode(String _code) {
+        attributesCode += _code;
+    }
 
-  public void addOperationCode(String _code) {
-    operationCode += _code;
-  }
+    public void addOperationCode(String _code) {
+        operationCode += _code;
+    }
 
-  public void addGateCode(String _code) {
-    gateCode += _code;
-  }
+    public void addGateCode(String _code) {
+        gateCode += _code;
+    }
 
-  public void addSynchroCode(String _code) {
-    synchroCode += _code;
-  }
+    public void addSynchroCode(String _code) {
+        synchroCode += _code;
+    }
 
-  public void addStartingCode(String _code) {
-    startingCode += _code;
-  }
+    public void addStartingCode(String _code) {
+        startingCode += _code;
+    }
 
-  public void setHeader(String _header) {
-    header = _header;
-  }
+    public void setHeader(String _header) {
+        header = _header;
+    }
 
-  public String getfullCode() {
-    return header + "\n\n" + importCode + "\n\n" + classDeclationCode + "\n\n" + attributesCode + "\n\n" + operationCode
-        + "\n\n" + classEndCode;
-  }
+    public String getfullCode() {
+        return header + "\n\n" + importCode + "\n\n" + classDeclationCode + "\n\n" + attributesCode + "\n\n"
+                + operationCode + "\n\n" + classEndCode;
+    }
 
-  public String toString() {
-    return getfullCode();
-  }
+    public String toString() {
+        return getfullCode();
+    }
 
-  public void saveAsFileIn(String _path) throws FileException {
-    path = _path;
-    FileUtils.saveFile(path + javaName + "." + JAVA_EXTENSION, getfullCode());
-  }
+    public void saveAsFileIn(String _path) throws FileException {
+        path = _path;
+        FileUtils.saveFile(path + javaName + "." + JAVA_EXTENSION, getfullCode());
+    }
 
-  public void generateBasicCode() {
-    addImportCode("import jttool.*;\nimport java.util.*;\n");
-    setDeclarationCode(TURTLE2Java.DECL_CODE_01 + getName() + " " + translator.JKeyword.START_CODE);
-    addAttributeCode("private static LinkedList internalThreads = new LinkedList();\n");
-  }
+    public void generateBasicCode() {
+        addImportCode("import jttool.*;\nimport java.util.*;\n");
+        setDeclarationCode(TURTLE2Java.DECL_CODE_01 + getName() + " " + translator.JKeyword.START_CODE);
+        addAttributeCode("private static LinkedList internalThreads = new LinkedList();\n");
+    }
 
-  public void generateOperationCode() {
-    addOperationCode(translator.JKeyword.INDENT + translator.JKeyword.PUBLIC + " " + translator.JKeyword.STATIC + " "
-        + " void " + "main(String[] args)" + translator.JKeyword.START_CODE + "\n");
-    addOperationCode("\n" + translator.JKeyword.INDENT + "/* JGate: creation */\n");
-    addOperationCode(gateCode);
-    addOperationCode("\n\n" + translator.JKeyword.INDENT + "/* JGate: synchronization */\n");
-    addOperationCode(synchroCode);
-    addOperationCode("\n\n" + translator.JKeyword.INDENT + "/* Starting instances */\n");
-    addOperationCode(startingCode);
-    addOperationCode("\n\n" + translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE);
-  }
+    public void generateOperationCode() {
+        addOperationCode(translator.JKeyword.INDENT + translator.JKeyword.PUBLIC + " " + translator.JKeyword.STATIC
+                + " " + " void " + "main(String[] args)" + translator.JKeyword.START_CODE + "\n");
+        addOperationCode("\n" + translator.JKeyword.INDENT + "/* JGate: creation */\n");
+        addOperationCode(gateCode);
+        addOperationCode("\n\n" + translator.JKeyword.INDENT + "/* JGate: synchronization */\n");
+        addOperationCode(synchroCode);
+        addOperationCode("\n\n" + translator.JKeyword.INDENT + "/* Starting instances */\n");
+        addOperationCode(startingCode);
+        addOperationCode("\n\n" + translator.JKeyword.INDENT + translator.JKeyword.STOP_CODE);
+    }
 
 }

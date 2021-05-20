@@ -45,30 +45,30 @@ package avatartranslator;
  * @author Florian LUGOU
  */
 public class AvatarPragmaReachability extends AvatarPragma {
-  private AvatarState state;
-  private AvatarBlock block;
+    private AvatarState state;
+    private AvatarBlock block;
 
-  public AvatarPragmaReachability(String _name, Object _referenceObject, AvatarBlock block, AvatarState state) {
-    super(_name, _referenceObject);
-    this.block = block;
-    this.state = state;
-  }
+    public AvatarPragmaReachability(String _name, Object _referenceObject, AvatarBlock block, AvatarState state) {
+        super(_name, _referenceObject);
+        this.block = block;
+        this.state = state;
+    }
 
-  public AvatarState getState() {
-    return this.state;
-  }
+    public AvatarState getState() {
+        return this.state;
+    }
 
-  public AvatarBlock getBlock() {
-    return this.block;
-  }
+    public AvatarBlock getBlock() {
+        return this.block;
+    }
 
-  public String toString() {
-    return this.block.getName().replaceAll("__", ".") + "." + this.state.getName();
-  }
+    public String toString() {
+        return this.block.getName().replaceAll("__", ".") + "." + this.state.getName();
+    }
 
-  @Override
-  public AvatarPragmaReachability advancedClone(AvatarSpecification avspec) {
-    // !!! Should never be called !!!
-    return null;
-  }
+    @Override
+    public AvatarPragmaReachability advancedClone(AvatarSpecification avspec) {
+        // !!! Should never be called !!!
+        return null;
+    }
 }

@@ -45,28 +45,28 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class ADDelay extends ADComponent {
-  protected String value;
+    protected String value;
 
-  public ADDelay() {
-    nbNext = 1;
-  }
+    public ADDelay() {
+        nbNext = 1;
+    }
 
-  public void setValue(String s) {
-    value = s;
-  }
+    public void setValue(String s) {
+        value = s;
+    }
 
-  public String getValue() {
-    return value;
-  }
+    public String getValue() {
+        return value;
+    }
 
-  public String toString() {
-    return "Delay (" + value + ")";
-  }
+    public String toString() {
+        return "Delay (" + value + ")";
+    }
 
-  public ADComponent makeSame() {
-    ADDelay adc = new ADDelay();
-    adc.setValue(getValue());
-    return adc;
-  }
+    public ADComponent makeSame() {
+        ADDelay adc = new ADDelay();
+        adc.setValue(getValue());
+        return adc;
+    }
 
 }

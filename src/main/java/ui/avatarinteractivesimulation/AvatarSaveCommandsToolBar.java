@@ -49,37 +49,37 @@ import javax.swing.*;
  */
 public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
 
-  public AvatarSaveCommandsToolBar(JFrameAvatarInteractiveSimulation _jfais) {
-    super(_jfais);
-  }
+    public AvatarSaveCommandsToolBar(JFrameAvatarInteractiveSimulation _jfais) {
+        super(_jfais);
+    }
 
-  protected void setActive(boolean b) {
-    jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
-    jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].setEnabled(b);
-    jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
-    jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_CSV].setEnabled(b);
-  }
+    protected void setActive(boolean b) {
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].setEnabled(b);
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_CSV].setEnabled(b);
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG]);
-    button.addMouseListener(jfais.mouseHandler);
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG]);
+        button.addMouseListener(jfais.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG]);
-    button.addMouseListener(jfais.mouseHandler);
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG]);
+        button.addMouseListener(jfais.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT]);
-    button.addMouseListener(jfais.mouseHandler);
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT]);
+        button.addMouseListener(jfais.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_CSV]);
-    button.addMouseListener(jfais.mouseHandler);
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_CSV]);
+        button.addMouseListener(jfais.mouseHandler);
 
-  }
+    }
 } // Class

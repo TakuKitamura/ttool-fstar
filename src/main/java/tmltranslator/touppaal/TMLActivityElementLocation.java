@@ -48,28 +48,28 @@ import uppaaldesc.UPPAALLocation;
  * @author Ludovic APVRILLE
  */
 public class TMLActivityElementLocation {
-  public TMLActivityElement elt;
-  public UPPAALLocation beginloc;
-  public UPPAALLocation endloc;
+    public TMLActivityElement elt;
+    public UPPAALLocation beginloc;
+    public UPPAALLocation endloc;
 
-  public TMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
-    elt = _elt;
-    beginloc = _beginloc;
-    endloc = _endloc;
-  }
+    public TMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
+        elt = _elt;
+        beginloc = _beginloc;
+        endloc = _endloc;
+    }
 
-  public String toString() {
-    String s = "";
-    if (elt != null) {
-      s += "component: " + elt.toString() + " ";
+    public String toString() {
+        String s = "";
+        if (elt != null) {
+            s += "component: " + elt.toString() + " ";
+        }
+        if (beginloc != null) {
+            s += "beginloc=" + beginloc.id + " ";
+        }
+        if (endloc != null) {
+            s += "endloc=" + endloc.id + " ";
+        }
+        return s;
     }
-    if (beginloc != null) {
-      s += "beginloc=" + beginloc.id + " ";
-    }
-    if (endloc != null) {
-      s += "endloc=" + endloc.id + " ";
-    }
-    return s;
-  }
 
 }

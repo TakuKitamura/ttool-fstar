@@ -49,42 +49,42 @@ import ui.*;
  */
 public class AvatarMethodologyReferenceToAssumptions extends AvatarMethodologyDiagramReference {
 
-  public AvatarMethodologyReferenceToAssumptions(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
-      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public AvatarMethodologyReferenceToAssumptions(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+            boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(200, 70);
+        initScaling(200, 70);
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.30, 1.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.30, 1.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = ASSUMPTIONS;
+        typeOfReference = ASSUMPTIONS;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS;
+    }
 
-  @Override
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof AvatarMADsPanel;
+    @Override
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof AvatarMADsPanel;
 
-  }
+    }
 
-  @Override
-  public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
-    dn.setValidationsNumber(0);
-  }
+    @Override
+    public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
+        dn.setValidationsNumber(0);
+    }
 
-  @Override
-  public boolean makeCall(String diagramName, int index) {
-    return true;
-  }
+    @Override
+    public boolean makeCall(String diagramName, int index) {
+        return true;
+    }
 
 }

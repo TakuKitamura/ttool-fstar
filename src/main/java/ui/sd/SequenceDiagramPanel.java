@@ -55,339 +55,339 @@ import java.util.Vector;
  */
 public class SequenceDiagramPanel extends TDiagramPanel {
 
-  public SequenceDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
+    public SequenceDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
+    }
 
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    //
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
-     * mgui.newTClassName(t.oldValue, t.getValue()); } else if (tgc instanceof
-     * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
-     * mgui.selectTab(tgc.getFather().getValue()); } else if (tgc.getFather()
-     * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
-     * TCDTClass t = to.getMasterTClass(); if (t != null) {
-     * mgui.selectTab(t.getValue()); } } return false; // because no change made on
-     * any diagram }
-     */
-    return false;
-  }
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        //
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
+         * mgui.newTClassName(t.oldValue, t.getValue()); } else if (tgc instanceof
+         * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
+         * mgui.selectTab(tgc.getFather().getValue()); } else if (tgc.getFather()
+         * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
+         * TCDTClass t = to.getMasterTClass(); if (t != null) {
+         * mgui.selectTab(t.getValue()); } } return false; // because no change made on
+         * any diagram }
+         */
+        return false;
+    }
 
-  public boolean actionOnAdd(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.addTClass(tgcc.getClassName()); return true; }
-     */
-    return false;
-  }
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.addTClass(tgcc.getClassName()); return true; }
+         */
+        return false;
+    }
 
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
 
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
 
-  public String getXMLHead() {
-    return "<SequenceDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
-  }
+    public String getXMLHead() {
+        return "<SequenceDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+    }
 
-  public String getXMLTail() {
-    return "</SequenceDiagramPanel>";
-  }
+    public String getXMLTail() {
+        return "</SequenceDiagramPanel>";
+    }
 
-  public String getXMLSelectedHead() {
-    return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
-        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
+    public String getXMLSelectedHead() {
+        return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+                + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
 
-  public String getXMLSelectedTail() {
-    return "</SequenceDiagramPanelCopy>";
-  }
+    public String getXMLSelectedTail() {
+        return "</SequenceDiagramPanelCopy>";
+    }
 
-  public String getXMLCloneHead() {
-    return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
+    public String getXMLCloneHead() {
+        return "<SequenceDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+                + "\" heightSel=\"" + 0 + "\" >";
+    }
 
-  public String getXMLCloneTail() {
-    return "</SequenceDiagramPanelCopy>";
-  }
+    public String getXMLCloneTail() {
+        return "</SequenceDiagramPanelCopy>";
+    }
 
-  public void makePostLoadingProcessing() throws MalformedModelingException {
-    TGComponent tgc;
+    public void makePostLoadingProcessing() throws MalformedModelingException {
+        TGComponent tgc;
 
-    /*
-     * for(int i=0; i<componentList.size(); i++) { tgc =
-     * (TGComponent)(componentList.elementAt(i)); if (tgc instanceof TCDTObject) {
-     * ((TCDTObject)tgc).postLoadingProcessing(); } }
-     */
-  }
+        /*
+         * for(int i=0; i<componentList.size(); i++) { tgc =
+         * (TGComponent)(componentList.elementAt(i)); if (tgc instanceof TCDTObject) {
+         * ((TCDTObject)tgc).postLoadingProcessing(); } }
+         */
+    }
 
-  public SDInstance getSDInstance(String name) {
-    TGComponent tgc;
-    Iterator iterator = componentList.listIterator();
+    public SDInstance getSDInstance(String name) {
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
 
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if (tgc instanceof SDInstance) {
-        if (tgc.getValue().compareTo(name) == 0) {
-          return (SDInstance) tgc;
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof SDInstance) {
+                if (tgc.getValue().compareTo(name) == 0) {
+                    return (SDInstance) tgc;
+                }
+            }
         }
-      }
+        return null;
     }
-    return null;
-  }
 
-  public void alignInstances() {
-    SDInstance ontheLeft = null, sdi;
-    int x = getMaxX(), xtmp;
-    int y;
-    int i;
-    TGComponent tgc;
-    Iterator iterator = componentList.listIterator();
+    public void alignInstances() {
+        SDInstance ontheLeft = null, sdi;
+        int x = getMaxX(), xtmp;
+        int y;
+        int i;
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
 
-    // search for the instances which is the most on the left
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if (tgc instanceof SDInstance) {
-        xtmp = tgc.getX();
-        if (xtmp < x) {
-          x = xtmp;
-          ontheLeft = (SDInstance) tgc;
+        // search for the instances which is the most on the left
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof SDInstance) {
+                xtmp = tgc.getX();
+                if (xtmp < x) {
+                    x = xtmp;
+                    ontheLeft = (SDInstance) tgc;
+                }
+            }
         }
-      }
-    }
 
-    if (ontheLeft == null)
-      return;
+        if (ontheLeft == null)
+            return;
 
-    // move accordingly other instances
-    y = ontheLeft.getY();
-    iterator = componentList.listIterator();
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if ((tgc instanceof SDInstance) && (tgc != ontheLeft)) {
-        tgc.setCd(tgc.getX(), y);
-      }
-    }
-
-  }
-
-  public TGConnectorRelativeTimeSD firstAndConnectedSDRelativeTimeConstraint(TGComponent tgc) {
-    TGComponent tmp;
-    TGConnectingPoint p1;
-    Iterator iterator = componentList.listIterator();
-
-    while (iterator.hasNext()) {
-      tmp = (TGComponent) (iterator.next());
-      if (tmp instanceof TGConnectorRelativeTimeSD) {
-        p1 = ((TGConnector) tmp).getTGConnectingPointP1();
-        if (tgc.belongsToMe(p1)) {
-          return (TGConnectorRelativeTimeSD) tmp;
+        // move accordingly other instances
+        y = ontheLeft.getY();
+        iterator = componentList.listIterator();
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if ((tgc instanceof SDInstance) && (tgc != ontheLeft)) {
+                tgc.setCd(tgc.getX(), y);
+            }
         }
-      }
-    }
-    return null;
-  }
 
-  public TGComponent getSecondTGComponent(TGConnector tgco) {
-    TGComponent tmp;
-    TGComponent tmp1;
-    TGConnectingPoint p2 = tgco.getTGConnectingPointP2();
-    Iterator iterator = componentList.listIterator();
-
-    while (iterator.hasNext()) {
-      tmp = (TGComponent) (iterator.next());
-      tmp1 = tmp.belongsToMeOrSon(p2);
-      if (tmp1 != null) {
-        return tmp1;
-      }
     }
 
-    return null;
-  }
+    public TGConnectorRelativeTimeSD firstAndConnectedSDRelativeTimeConstraint(TGComponent tgc) {
+        TGComponent tmp;
+        TGConnectingPoint p1;
+        Iterator iterator = componentList.listIterator();
 
-  public TGConnector messageActionCloserTo(TGComponent tgc, SDInstance sd) {
-    int distance = 25;
-    TGConnector found = null;
-    TGComponent tmp;
-    TGConnectingPoint p;
-    Iterator iterator = componentList.listIterator();
-
-    while (iterator.hasNext()) {
-      tmp = (TGComponent) (iterator.next());
-      if (tmp instanceof TGConnectorMessageSD) {
-        p = ((TGConnector) tmp).getTGConnectingPointP1();
-        if (sd.belongsToMe(p)) {
-          if (Math.abs(p.getY() - tgc.getY()) < distance) {
-            distance = Math.abs(p.getY() - tgc.getY());
-            found = (TGConnector) tmp;
-          }
+        while (iterator.hasNext()) {
+            tmp = (TGComponent) (iterator.next());
+            if (tmp instanceof TGConnectorRelativeTimeSD) {
+                p1 = ((TGConnector) tmp).getTGConnectingPointP1();
+                if (tgc.belongsToMe(p1)) {
+                    return (TGConnectorRelativeTimeSD) tmp;
+                }
+            }
         }
-        p = ((TGConnector) tmp).getTGConnectingPointP2();
-        if (sd.belongsToMe(p)) {
-          if (Math.abs(p.getY() - tgc.getY()) < distance) {
-            distance = Math.abs(p.getY() - tgc.getY());
-            found = (TGConnector) tmp;
-          }
+        return null;
+    }
+
+    public TGComponent getSecondTGComponent(TGConnector tgco) {
+        TGComponent tmp;
+        TGComponent tmp1;
+        TGConnectingPoint p2 = tgco.getTGConnectingPointP2();
+        Iterator iterator = componentList.listIterator();
+
+        while (iterator.hasNext()) {
+            tmp = (TGComponent) (iterator.next());
+            tmp1 = tmp.belongsToMeOrSon(p2);
+            if (tmp1 != null) {
+                return tmp1;
+            }
         }
-      }
-    }
-    return found;
-  }
 
-  public TGConnectingPoint TGConnectingPointActionCloserTo(TGComponent tc1, TGConnector tgco, SDInstance sdi) {
-    TGConnectingPoint p1, p2;
-    p1 = tgco.getTGConnectingPointP1();
-    p2 = tgco.getTGConnectingPointP2();
-
-    boolean hasp1 = sdi.belongsToMe(p1);
-    boolean hasp2 = sdi.belongsToMe(p2);
-
-    if ((!hasp1) && (!hasp2)) {
-      return null;
+        return null;
     }
 
-    if ((hasp1) && (!hasp2)) {
-      return p1;
+    public TGConnector messageActionCloserTo(TGComponent tgc, SDInstance sd) {
+        int distance = 25;
+        TGConnector found = null;
+        TGComponent tmp;
+        TGConnectingPoint p;
+        Iterator iterator = componentList.listIterator();
+
+        while (iterator.hasNext()) {
+            tmp = (TGComponent) (iterator.next());
+            if (tmp instanceof TGConnectorMessageSD) {
+                p = ((TGConnector) tmp).getTGConnectingPointP1();
+                if (sd.belongsToMe(p)) {
+                    if (Math.abs(p.getY() - tgc.getY()) < distance) {
+                        distance = Math.abs(p.getY() - tgc.getY());
+                        found = (TGConnector) tmp;
+                    }
+                }
+                p = ((TGConnector) tmp).getTGConnectingPointP2();
+                if (sd.belongsToMe(p)) {
+                    if (Math.abs(p.getY() - tgc.getY()) < distance) {
+                        distance = Math.abs(p.getY() - tgc.getY());
+                        found = (TGConnector) tmp;
+                    }
+                }
+            }
+        }
+        return found;
     }
 
-    if ((!hasp1) && (hasp2)) {
-      return p2;
-    }
+    public TGConnectingPoint TGConnectingPointActionCloserTo(TGComponent tc1, TGConnector tgco, SDInstance sdi) {
+        TGConnectingPoint p1, p2;
+        p1 = tgco.getTGConnectingPointP1();
+        p2 = tgco.getTGConnectingPointP2();
 
-    // both belongs to the sdinstance
-    int y1 = p1.getY();
-    int y2 = p2.getY();
+        boolean hasp1 = sdi.belongsToMe(p1);
+        boolean hasp2 = sdi.belongsToMe(p2);
 
-    if ((Math.abs(y2 - tc1.getY())) < ((Math.abs(y1 - tc1.getY())))) {
-      return p2;
-    } else {
-      return p1;
-    }
-  }
+        if ((!hasp1) && (!hasp2)) {
+            return null;
+        }
 
-  public TGComponent getActionCloserTo(int y, SDInstance sdi) {
-    int distance = 25;
-    TGComponent tgc, found = null;
-    //
-    for (int i = 0; i < sdi.getNbInternalTGComponent(); i++) {
-      tgc = sdi.getInternalTGComponent(i);
-      //
-      if (tgc instanceof SDActionState) {
-        if (Math.abs(y - tgc.getY()) < distance) {
-          //
-          found = tgc;
-          distance = Math.abs(y - tgc.getY());
+        if ((hasp1) && (!hasp2)) {
+            return p1;
+        }
+
+        if ((!hasp1) && (hasp2)) {
+            return p2;
+        }
+
+        // both belongs to the sdinstance
+        int y1 = p1.getY();
+        int y2 = p2.getY();
+
+        if ((Math.abs(y2 - tc1.getY())) < ((Math.abs(y1 - tc1.getY())))) {
+            return p2;
         } else {
-          //
+            return p1;
         }
-      }
-    }
-    return found;
-  }
-
-  public void increaseInstanceSize(int size) {
-    Iterator iterator = componentList.listIterator();
-    TGComponent tgc;
-    int maxYH = 0;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-
-      if (tgc instanceof SDInstance) {
-        tgc.setUserResize(tgc.getX(), tgc.getY(), tgc.getWidth(), tgc.getHeight() + size);
-      }
-
-      maxYH = Math.max(maxYH, tgc.getY() + tgc.getHeight());
     }
 
-    if (maxYH > getMaxY()) {
-      setMaxY(getMaxY() + increment);
-      updateSize();
-    }
-  }
-
-  public void updateAllInstanceMinMaxSize() {
-    Iterator iterator = componentList.listIterator();
-    TGComponent tgc;
-
-    int minSize = 0;
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-
-      if (tgc instanceof SDInstance) {
-        minSize = Math.max(((SDInstance) tgc).getMinHeightSize(), minSize);
-      }
-    }
-
-    iterator = componentList.listIterator();
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-
-      if (tgc instanceof SDInstance) {
-        ((SDInstance) tgc).setMinHeight(minSize);
-      }
+    public TGComponent getActionCloserTo(int y, SDInstance sdi) {
+        int distance = 25;
+        TGComponent tgc, found = null;
+        //
+        for (int i = 0; i < sdi.getNbInternalTGComponent(); i++) {
+            tgc = sdi.getInternalTGComponent(i);
+            //
+            if (tgc instanceof SDActionState) {
+                if (Math.abs(y - tgc.getY()) < distance) {
+                    //
+                    found = tgc;
+                    distance = Math.abs(y - tgc.getY());
+                } else {
+                    //
+                }
+            }
+        }
+        return found;
     }
 
-  }
+    public void increaseInstanceSize(int size) {
+        Iterator iterator = componentList.listIterator();
+        TGComponent tgc;
+        int maxYH = 0;
 
-  public void instanceHasBeenResized(SDInstance _ins, int _w, int _h) {
-    Iterator iterator = componentList.listIterator();
-    TGComponent tgc;
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
 
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
+            if (tgc instanceof SDInstance) {
+                tgc.setUserResize(tgc.getX(), tgc.getY(), tgc.getWidth(), tgc.getHeight() + size);
+            }
 
-      if ((tgc instanceof SDInstance) && (tgc != _ins)) {
-        tgc.actionOnUserResize(_w, _h);
-      }
+            maxYH = Math.max(maxYH, tgc.getY() + tgc.getHeight());
+        }
+
+        if (maxYH > getMaxY()) {
+            setMaxY(getMaxY() + increment);
+            updateSize();
+        }
     }
-  }
 
-  public void switchToSynchronousMessage(TGConnectorMessageAsyncSD oldOne) {
-    int x1 = oldOne.getX();
-    int y1 = oldOne.getY();
-    TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
-    TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
+    public void updateAllInstanceMinMaxSize() {
+        Iterator iterator = componentList.listIterator();
+        TGComponent tgc;
 
-    Vector<Point> listPoint = oldOne.getListOfPoints();
-    removeComponent(oldOne);
-    TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, this, p1,
-        p2, listPoint);
-    addBuiltConnector(newOne);
-    // TraceManager.addDev("Element added");
-    repaint();
-  }
+        int minSize = 0;
 
-  public void switchToAsynchronousMessage(TGConnectorMessageSyncSD oldOne) {
-    int x1 = oldOne.getX();
-    int y1 = oldOne.getY();
-    TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
-    TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
 
-    Vector<Point> listPoint = oldOne.getListOfPoints();
-    removeComponent(oldOne);
-    TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD, this,
-        p1, p2, listPoint);
-    addBuiltConnector(newOne);
-    // TraceManager.addDev("Element added");
-    repaint();
-  }
+            if (tgc instanceof SDInstance) {
+                minSize = Math.max(((SDInstance) tgc).getMinHeightSize(), minSize);
+            }
+        }
+
+        iterator = componentList.listIterator();
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+
+            if (tgc instanceof SDInstance) {
+                ((SDInstance) tgc).setMinHeight(minSize);
+            }
+        }
+
+    }
+
+    public void instanceHasBeenResized(SDInstance _ins, int _w, int _h) {
+        Iterator iterator = componentList.listIterator();
+        TGComponent tgc;
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+
+            if ((tgc instanceof SDInstance) && (tgc != _ins)) {
+                tgc.actionOnUserResize(_w, _h);
+            }
+        }
+    }
+
+    public void switchToSynchronousMessage(TGConnectorMessageAsyncSD oldOne) {
+        int x1 = oldOne.getX();
+        int y1 = oldOne.getY();
+        TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
+        TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
+
+        Vector<Point> listPoint = oldOne.getListOfPoints();
+        removeComponent(oldOne);
+        TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, this,
+                p1, p2, listPoint);
+        addBuiltConnector(newOne);
+        // TraceManager.addDev("Element added");
+        repaint();
+    }
+
+    public void switchToAsynchronousMessage(TGConnectorMessageSyncSD oldOne) {
+        int x1 = oldOne.getX();
+        int y1 = oldOne.getY();
+        TGConnectingPoint p1 = oldOne.getTGConnectingPointP1();
+        TGConnectingPoint p2 = oldOne.getTGConnectingPointP2();
+
+        Vector<Point> listPoint = oldOne.getListOfPoints();
+        removeComponent(oldOne);
+        TGConnector newOne = TGComponentManager.addConnector(x1, y1, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD,
+                this, p1, p2, listPoint);
+        addBuiltConnector(newOne);
+        // TraceManager.addDev("Element added");
+        repaint();
+    }
 }

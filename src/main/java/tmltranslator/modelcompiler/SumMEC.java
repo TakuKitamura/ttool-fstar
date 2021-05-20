@@ -48,35 +48,38 @@ package tmltranslator.modelcompiler;
  */
 public class SumMEC extends FepOperationMEC {
 
-  public SumMEC(String _ctxName, String inSignalName, String outSignalName) {
-    name = "Sum MEC";
-    exec_code = TAB + "/*firm instruction*/" + CR + TAB +
+    public SumMEC(String _ctxName, String inSignalName, String outSignalName) {
+        name = "Sum MEC";
+        exec_code = TAB + "/*firm instruction*/" + CR + TAB +
 
-    // Issue #98: Already defined
-    // "int status;" + CR + TAB +
-        "/*start execution*/" + CR + TAB + "status = fep_do(&" + _ctxName + ");" + CR;
+        // Issue #98: Already defined
+        // "int status;" + CR + TAB +
+                "/*start execution*/" + CR + TAB + "status = fep_do(&" + _ctxName + ");" + CR;
 
-    init_code = "void init_" + _ctxName.split("_ctx")[0] + "(void){" + CR + TAB + "fep_init(&"
-        + _ctxName.split("_ctx")[0] + ", (uintprt_t) fep_mss );" + CR + TAB + "// initialize context" + CR + TAB
-        + "fep_set_op(&" + _ctxName + ", FEP_OP_SUM );" + CR + TAB + "// X vector configuration => Zk=Y[Xi]" + CR + TAB
-        +
+        init_code = "void init_" + _ctxName.split("_ctx")[0] + "(void){" + CR + TAB + "fep_init(&"
+                + _ctxName.split("_ctx")[0] + ", (uintprt_t) fep_mss );" + CR + TAB + "// initialize context" + CR + TAB
+                + "fep_set_op(&" + _ctxName + ", FEP_OP_SUM );" + CR + TAB + "// X vector configuration => Zk=Y[Xi]"
+                + CR + TAB +
 
-        // Issue #98: Provide default values for compilation
-        "fep_set_r(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_l(&"
-        + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_bx(&" + _ctxName
-        + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_qx(&" + _ctxName + ", (uint64_t)"
-        + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_wx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL
-        + USER_TO_DO + " );" + CR + TAB + "fep_set_tx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO
-        + " );" + CR + TAB + "fep_set_sx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR
-        + TAB + "fep_set_nx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
-        + "fep_set_mx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_px(&"
-        + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_dx(&" + _ctxName
-        + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_vrx(&" + _ctxName + ", (uint64_t)"
-        + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_vix(&" + _ctxName + ", (uint64_t)"
-        + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "// Operation configuration" + CR + TAB + "fep_set_sma(&"
-        + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_qs(&" + _ctxName
-        + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB + "fep_set_bs(&" + _ctxName
-        + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB + "}" + CR;
-    cleanup_code = "fep_ctx_cleanup(&" + _ctxName + ");";
-  }
+                // Issue #98: Provide default values for compilation
+                "fep_set_r(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_l(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_bx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_qx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_wx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_tx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_sx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_nx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_mx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_px(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_dx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_vrx(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "fep_set_vix(&" + _ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+                + "// Operation configuration" + CR + TAB + "fep_set_sma(&" + _ctxName + ", (uint64_t)"
+                + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "fep_set_qs(&" + _ctxName
+                + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->bank);" + CR + TAB + "fep_set_bs(&"
+                + _ctxName + ", ((FEP_BUFFER_TYPE*)sig[" + outSignalName + "].pBuff)->base_address);" + CR + TAB + "}"
+                + CR;
+        cleanup_code = "fep_ctx_cleanup(&" + _ctxName + ");";
+    }
 } // End of class

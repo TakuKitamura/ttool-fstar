@@ -46,8 +46,8 @@ package tmltranslator.tmlcp;
  */
 public class TMLCPSequence extends TMLCPElement {
 
-  public TMLCPSequence(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLCPSequence(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

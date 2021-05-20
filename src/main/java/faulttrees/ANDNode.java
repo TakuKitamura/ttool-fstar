@@ -46,9 +46,9 @@ package faulttrees;
  */
 public class ANDNode extends BooleanNode {
 
-  public ANDNode(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    type = "AND";
-  }
+    public ANDNode(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        type = "AND";
+    }
 
 }

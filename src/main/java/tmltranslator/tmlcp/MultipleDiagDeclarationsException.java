@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class MultipleDiagDeclarationsException extends Exception {
 
-  public MultipleDiagDeclarationsException() {
-    super("TMLCP COMPILER ERROR: multiple declarations of diagrams");
-  }
+    public MultipleDiagDeclarationsException() {
+        super("TMLCP COMPILER ERROR: multiple declarations of diagrams");
+    }
 
-  public MultipleDiagDeclarationsException(String message) {
-    super(message);
-  }
+    public MultipleDiagDeclarationsException(String message) {
+        super(message);
+    }
 }

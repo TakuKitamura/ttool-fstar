@@ -45,21 +45,21 @@ package req.ebrdd;
  * @author Ludovic APVRILLE
  */
 public class EBRDDActionState extends EBRDDComponent {
-  protected String action;
+    protected String action;
 
-  public EBRDDActionState(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public EBRDDActionState(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public String toString() {
-    return "Action: " + action;
-  }
+    public String toString() {
+        return "Action: " + action;
+    }
 
-  public String getAction() {
-    return action;
-  }
+    public String getAction() {
+        return action;
+    }
 
-  public void setAction(String _action) {
-    action = _action;
-  }
+    public void setAction(String _action) {
+        action = _action;
+    }
 }

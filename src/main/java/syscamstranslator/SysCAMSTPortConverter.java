@@ -48,89 +48,89 @@ package syscamstranslator;
 
 public class SysCAMSTPortConverter extends SysCAMSTComponent {
 
-  private String name;
-  private double period;
-  private String time;
-  private int rate;
-  private int delay;
-  private int origin;
-  private int nbits;
-  private String ConvType;
-  private boolean recompute;
+    private String name;
+    private double period;
+    private String time;
+    private int rate;
+    private int delay;
+    private int origin;
+    private int nbits;
+    private String ConvType;
+    private boolean recompute;
 
-  private SysCAMSTBlockTDF blockTDF;
+    private SysCAMSTBlockTDF blockTDF;
 
-  public SysCAMSTPortConverter(String _name, double _period, String _time, int _rate, int _delay, int _origin,
-      int _nbits, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
-    name = _name;
-    period = _period;
-    time = _time;
-    rate = _rate;
-    delay = _delay;
-    origin = _origin;
-    nbits = _nbits;
-    ConvType = _ConvType;
-    blockTDF = _blockTDF;
-    recompute = false;
-  }
+    public SysCAMSTPortConverter(String _name, double _period, String _time, int _rate, int _delay, int _origin,
+            int _nbits, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
+        name = _name;
+        period = _period;
+        time = _time;
+        rate = _rate;
+        delay = _delay;
+        origin = _origin;
+        nbits = _nbits;
+        ConvType = _ConvType;
+        blockTDF = _blockTDF;
+        recompute = false;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public double getPeriod() {
-    return period;
-  }
+    public double getPeriod() {
+        return period;
+    }
 
-  public void setPeriod(double _period) {
-    period = _period;
-  }
+    public void setPeriod(double _period) {
+        period = _period;
+    }
 
-  public String getTime() {
-    return time;
-  }
+    public String getTime() {
+        return time;
+    }
 
-  public int getRate() {
-    return rate;
-  }
+    public int getRate() {
+        return rate;
+    }
 
-  public int getNbits() {
-    return nbits;
-  }
+    public int getNbits() {
+        return nbits;
+    }
 
-  public void setRate(int _rate) {
-    rate = _rate;
-  }
+    public void setRate(int _rate) {
+        rate = _rate;
+    }
 
-  public int getDelay() {
-    return delay;
-  }
+    public int getDelay() {
+        return delay;
+    }
 
-  public void setDelay(int _delay) {
-    delay = _delay;
-  }
+    public void setDelay(int _delay) {
+        delay = _delay;
+    }
 
-  public boolean getRecompute() {
-    return recompute;
-  }
+    public boolean getRecompute() {
+        return recompute;
+    }
 
-  public void setRecompute(boolean _recompute) {
-    recompute = _recompute;
-  }
+    public void setRecompute(boolean _recompute) {
+        recompute = _recompute;
+    }
 
-  public int getOrigin() {
-    return origin;
-  }
+    public int getOrigin() {
+        return origin;
+    }
 
-  public String getConvType() {
-    return ConvType;
-  }
+    public String getConvType() {
+        return ConvType;
+    }
 
-  public void setConvType(String _ConvType) {
-    ConvType = _ConvType;
-  }
+    public void setConvType(String _ConvType) {
+        ConvType = _ConvType;
+    }
 
-  public SysCAMSTBlockTDF getBlockTDF() {
-    return blockTDF;
-  }
+    public SysCAMSTBlockTDF getBlockTDF() {
+        return blockTDF;
+    }
 }

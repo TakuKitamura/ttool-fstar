@@ -49,11 +49,11 @@ import java.awt.*;
  */
 public interface ColorCustomizable {
 
-  public Color getMainColor();
+    public Color getMainColor();
 
-  public Color getCurrentColor();
+    public Color getCurrentColor();
 
-  public void setCurrentColor(int _rgb);
+    public void setCurrentColor(int _rgb);
 
-  public void setCurrentColor(Color _c);
+    public void setCurrentColor(Color _c);
 }

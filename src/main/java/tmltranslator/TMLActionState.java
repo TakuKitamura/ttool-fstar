@@ -46,8 +46,8 @@ package tmltranslator;
  */
 public class TMLActionState extends TMLActivityElementWithAction {
 
-  public TMLActionState(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLActionState(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

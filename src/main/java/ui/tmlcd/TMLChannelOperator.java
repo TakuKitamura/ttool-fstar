@@ -52,67 +52,67 @@ import java.awt.*;
  */
 public class TMLChannelOperator extends TMLCompositionOperator {
 
-  public TMLChannelOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TMLChannelOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    nbInternalTGComponent = 1;
-    tgcomponent = new TGComponent[nbInternalTGComponent];
-    TMLChannelProperties tgc = new TMLChannelProperties(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
-        tdp.getMaxY(), false, this, _tdp);
-    tgc.setName("Channel properties");
-    tgc.setMoveWithFather(false);
-    tgcomponent[0] = tgc;
+        nbInternalTGComponent = 1;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
+        TMLChannelProperties tgc = new TMLChannelProperties(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
+                tdp.getMaxY(), false, this, _tdp);
+        tgc.setName("Channel properties");
+        tgc.setMoveWithFather(false);
+        tgcomponent[0] = tgc;
 
-    name = "Channel TML composition operator";
-    value = "Channel";
+        name = "Channel TML composition operator";
+        value = "Channel";
 
-    myImageIcon = IconManager.imgic802;
-  }
-
-  public void internalDrawing(Graphics g) {
-    if (((TMLTaskDiagramPanel) (tdp)).areChannelsVisible()) {
-      g.drawRect(x, y, width, height);
-      g.setColor(getMyColor());
-      g.fillRect(x + 1, y + 1, width - 1, height - 1);
-      // g.drawImage(IconManager.img8, x + width - 20, y + 3,
-      // ColorManager.COMPOSITION_OPERATOR, null);
-      ColorManager.setColor(g, getState(), 0);
-      g.setFont((g.getFont()).deriveFont(Font.BOLD));
-      drawSingleString(g, value, x + textX, y + textY);
-      g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+        myImageIcon = IconManager.imgic802;
     }
-  }
 
-  public boolean isToggledVisible() {
-    return (((TMLTaskDiagramPanel) (tdp)).areChannelsVisible());
-  }
+    public void internalDrawing(Graphics g) {
+        if (((TMLTaskDiagramPanel) (tdp)).areChannelsVisible()) {
+            g.drawRect(x, y, width, height);
+            g.setColor(getMyColor());
+            g.fillRect(x + 1, y + 1, width - 1, height - 1);
+            // g.drawImage(IconManager.img8, x + width - 20, y + 3,
+            // ColorManager.COMPOSITION_OPERATOR, null);
+            ColorManager.setColor(g, getState(), 0);
+            g.setFont((g.getFont()).deriveFont(Font.BOLD));
+            drawSingleString(g, value, x + textX, y + textY);
+            g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+        }
+    }
 
-  public int getType() {
-    return TGComponentManager.TMLTD_CHANNEL_OPERATOR;
-  }
+    public boolean isToggledVisible() {
+        return (((TMLTaskDiagramPanel) (tdp)).areChannelsVisible());
+    }
 
-  public TMLChannelProperties getTMLChannelProperties() {
-    return (TMLChannelProperties) tgcomponent[0];
-  }
+    public int getType() {
+        return TGComponentManager.TMLTD_CHANNEL_OPERATOR;
+    }
 
-  public String getChannelName() {
-    return getTMLChannelProperties().getChannelName();
-  }
+    public TMLChannelProperties getTMLChannelProperties() {
+        return (TMLChannelProperties) tgcomponent[0];
+    }
 
-  public int getChannelSize() {
-    return getTMLChannelProperties().getChannelSize();
-  }
+    public String getChannelName() {
+        return getTMLChannelProperties().getChannelName();
+    }
 
-  public int getChannelMax() {
-    return getTMLChannelProperties().getChannelMax();
-  }
+    public int getChannelSize() {
+        return getTMLChannelProperties().getChannelSize();
+    }
 
-  public int getChannelType() {
-    return getTMLChannelProperties().getChannelType();
-  }
+    public int getChannelMax() {
+        return getTMLChannelProperties().getChannelMax();
+    }
 
-  public Color getMyColor() {
-    return ColorManager.TML_PORT_CHANNEL;
-  }
+    public int getChannelType() {
+        return getTMLChannelProperties().getChannelType();
+    }
+
+    public Color getMyColor() {
+        return ColorManager.TML_PORT_CHANNEL;
+    }
 }

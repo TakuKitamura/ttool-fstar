@@ -52,44 +52,44 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TOSADStartState extends TGCWithoutInternalComponent {
-  private int lineLength = 5;
+    private int lineLength = 5;
 
-  public TOSADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TOSADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 15;
-    height = 15;
+        width = 15;
+        height = 15;
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[1];
-    connectingPoint[0] = new TOSADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[1];
+        connectingPoint[0] = new TOSADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "start state";
+        name = "start state";
 
-    myImageIcon = IconManager.imgic222;
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.fillOval(x, y, width, height);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic222;
     }
-    return null;
-  }
 
-  public int getType() {
-    return TGComponentManager.TOSAD_START_STATE;
-  }
+    public void internalDrawing(Graphics g) {
+        g.fillOval(x, y, width, height);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+    }
+
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getType() {
+        return TGComponentManager.TOSAD_START_STATE;
+    }
 
 }

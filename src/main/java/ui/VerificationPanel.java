@@ -62,97 +62,97 @@ import java.util.Date;
  * @see MainGUI
  */
 public class VerificationPanel extends TURTLEPanel {
-  public VerificationPropertyDiagramPanel vpdp;
+    public VerificationPropertyDiagramPanel vpdp;
 
-  public VerificationPanel(MainGUI _mgui) {
-    super(_mgui);
+    public VerificationPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
-    UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
-    UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
-    SwingUtilities.updateComponentTreeUI(tabbedPane);
-    // tabbedPane.setOpaque(true);
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
+        SwingUtilities.updateComponentTreeUI(tabbedPane);
+        // tabbedPane.setOpaque(true);
 
-    cl = new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDiplodocusMethodologyAction(e);
-      }
-    };
+        cl = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDiplodocusMethodologyAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
-  }
-
-  public void initElements() {
-  }
-
-  public void init() {
-    init("Verification tracking");
-  }
-
-  public void init(String name) {
-    addVerificationPanel(name);
-
-  }
-
-  public boolean addVerificationPanel(String s) {
-    VerificationPropertyDiagramToolbar vpdt = new VerificationPropertyDiagramToolbar(mgui);
-    toolbars.add(vpdt);
-
-    toolBarPanel = new JPanel();
-    // toolBarPanel.setBackground(Color.red);
-    toolBarPanel.setLayout(new BorderLayout());
-    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
-
-    vpdp = new VerificationPropertyDiagramPanel(mgui, vpdt);
-    vpdp.setName(s);
-    vpdp.tp = this;
-    tdp = vpdp;
-    panels.add(vpdp);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(vpdp);
-    vpdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(vpdt, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-    Date date = new Date();
-    String dateAndTime = dateFormat.format(date);
-    tabbedPane.addTab("VerificationTracking" + dateAndTime, IconManager.imgic99, toolBarPanel,
-        "VerificationTracking" + dateAndTime);
-    tabbedPane.setSelectedIndex(0);
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    mgui.changeMade(vpdp, TDiagramPanel.NEW_COMPONENT);
-
-    return true;
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"VerificationPropertyPanel\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
-    return "<Modeling type=\"VerificationPropertyPanel\" nameTab=\"" + mgui.getTabName(this) + extensionToName
-        + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+    public void initElements() {
+    }
 
-  public String toString() {
-    return mgui.getTitleAt(this) + " (VerificationPropertyPanel)";
-  }
+    public void init() {
+        init("Verification tracking");
+    }
 
-  public boolean removeEnabled(int index) {
-    return panels.size() > 1;
-  }
+    public void init(String name) {
+        addVerificationPanel(name);
 
-  public boolean renameEnabled(int index) {
-    return panels.size() != 0;
-  }
+    }
+
+    public boolean addVerificationPanel(String s) {
+        VerificationPropertyDiagramToolbar vpdt = new VerificationPropertyDiagramToolbar(mgui);
+        toolbars.add(vpdt);
+
+        toolBarPanel = new JPanel();
+        // toolBarPanel.setBackground(Color.red);
+        toolBarPanel.setLayout(new BorderLayout());
+        // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+
+        vpdp = new VerificationPropertyDiagramPanel(mgui, vpdt);
+        vpdp.setName(s);
+        vpdp.tp = this;
+        tdp = vpdp;
+        panels.add(vpdp);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(vpdp);
+        vpdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(vpdt, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String dateAndTime = dateFormat.format(date);
+        tabbedPane.addTab("VerificationTracking" + dateAndTime, IconManager.imgic99, toolBarPanel,
+                "VerificationTracking" + dateAndTime);
+        tabbedPane.setSelectedIndex(0);
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        mgui.changeMade(vpdp, TDiagramPanel.NEW_COMPONENT);
+
+        return true;
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"VerificationPropertyPanel\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"VerificationPropertyPanel\" nameTab=\"" + mgui.getTabName(this) + extensionToName
+                + "\" >\n";
+    }
+
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return mgui.getTitleAt(this) + " (VerificationPropertyPanel)";
+    }
+
+    public boolean removeEnabled(int index) {
+        return panels.size() > 1;
+    }
+
+    public boolean renameEnabled(int index) {
+        return panels.size() != 0;
+    }
 
 }

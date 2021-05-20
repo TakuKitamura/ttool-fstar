@@ -48,21 +48,21 @@ import java.util.ArrayList;
  */
 public class HwRouter extends HwCommunicationNode {
 
-  public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
+    public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
 
-  public int latency = 0;
-  public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
-  public int size = 2; // 2x2 by default
+    public int latency = 0;
+    public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public int size = 2; // 2x2 by default
 
-  public HwRouter(String _name) {
-    super(_name);
-  }
+    public HwRouter(String _name) {
+        super(_name);
+    }
 
-  @Override
-  public String toXML() {
-    String s = "<ROUTER name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize
-        + "\" />\n";
-    return s;
-  }
+    @Override
+    public String toXML() {
+        String s = "<ROUTER name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize
+                + "\" />\n";
+        return s;
+    }
 
 }

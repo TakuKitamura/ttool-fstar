@@ -59,241 +59,241 @@ import java.awt.*;
  */
 
 public class ADDClusterNode extends ADDNode implements WithAttributes {
-  // private int textY1 = 15;
-  private int textY2 = 30;
-  private int derivationx = 2;
-  private int derivationy = 3;
-  private String stereotype = "SystemC-AMS Cluster";
+    // private int textY1 = 15;
+    private int textY2 = 30;
+    private int derivationx = 2;
+    private int derivationy = 3;
+    private String stereotype = "SystemC-AMS Cluster";
 
-  private SysCAMSCompositeComponent cluster;
+    private SysCAMSCompositeComponent cluster;
 
-  private int index = 0;
+    private int index = 0;
 
-  public ADDClusterNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ADDClusterNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    textY = 15;
-    width = 250;
-    height = 200;
-    minWidth = 150;
-    minHeight = 100;
-    initScaling(250, 200);
+        textY = 15;
+        width = 250;
+        height = 200;
+        minWidth = 150;
+        minHeight = 100;
+        initScaling(250, 200);
 
-    nbConnectingPoint = 16;
-    connectingPoint = new TGConnectingPoint[16];
+        nbConnectingPoint = 16;
+        connectingPoint = new TGConnectingPoint[16];
 
-    connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
-    connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
-    connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
-    connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
-    connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-    connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
-    connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
-    connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
+        connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
+        connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+        connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
+        connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+        connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+        connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
+        connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+        connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
 
-    connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
-    connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
-    connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
-    connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
-    connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
-    connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
-    connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
-    connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
+        connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+        connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+        connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+        connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+        connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+        connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 
-    addTGConnectingPointsComment();
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    multieditable = true;
-    editable = true;
-    removable = true;
-    userResizable = true;
+        moveable = true;
+        multieditable = true;
+        editable = true;
+        removable = true;
+        userResizable = true;
 
-    name = tdp.findNodeName("Cluster");
-    value = "name";
-  }
-
-  public void internalDrawing(Graphics g) {
-    Color c = g.getColor();
-    g.draw3DRect(x, y, width, height, true);
-
-    // Top lines
-    g.drawLine(x, y, x + derivationx, y - derivationy);
-    g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-    g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
-
-    // Right lines
-    g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-    g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
-
-    // Filling color
-    g.setColor(Color.lightGray);
-    g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
-    g.setColor(c);
-
-    // Strings
-    String ster = "<<" + stereotype + ">>";
-    int w = g.getFontMetrics().stringWidth(ster);
-    Font f = g.getFont();
-    g.setFont(f.deriveFont(Font.BOLD));
-    drawSingleString(g, ster, x + (width - w) / 2, y + textY);
-    g.setFont(f);
-    w = g.getFontMetrics().stringWidth(name);
-    drawSingleString(g, name, x + (width - w) / 2, y + textY2);
-
-    // Icon
-
-    int borders = scale(4);
-    g.drawImage(scale(IconManager.imgic8006.getImage()), x + borders, y + borders, null);
-    // g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders,
-    // null);
-
-    // g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);
-    // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-
-  }
-
-  @Override
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    Polygon pol = new Polygon();
-    pol.addPoint(x, y);
-    pol.addPoint(x + derivationx, y - derivationy);
-    pol.addPoint(x + derivationx + width, y - derivationy);
-    pol.addPoint(x + derivationx + width, y + height - derivationy);
-    pol.addPoint(x + width, y + height);
-    pol.addPoint(x, y + height);
-    if (pol.contains(x1, y1)) {
-      return this;
+        name = tdp.findNodeName("Cluster");
+        value = "name";
     }
-    return null;
-  }
 
-  public String getStereotype() {
-    return stereotype;
-  }
+    public void internalDrawing(Graphics g) {
+        Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
 
-  public String getNodeName() {
-    return name;
-  }
+        // Top lines
+        g.drawLine(x, y, x + derivationx, y - derivationy);
+        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
+        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
 
-  public int getIndex() {
-    return index;
-  }
+        // Right lines
+        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
 
-  @Override
-  public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
-    int i;
-    MainGUI mgui = getTDiagramPanel().getMainGUI();
+        // Filling color
+        g.setColor(Color.lightGray);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+        g.setColor(c);
 
-    // On the name ?
-    if (_y <= y + textY2) {
-      String s = (String) JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
-          JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName());
-      if ((s != null) && (s.length() > 0)) {
-        if (!TAttribute.isAValidId(s, false, false, false)) {
-          JOptionPane.showMessageDialog(frame,
-              "Could not change the name of the component: the new name is not a valid name", "Error",
-              JOptionPane.INFORMATION_MESSAGE);
-          return false;
+        // Strings
+        String ster = "<<" + stereotype + ">>";
+        int w = g.getFontMetrics().stringWidth(ster);
+        Font f = g.getFont();
+        g.setFont(f.deriveFont(Font.BOLD));
+        drawSingleString(g, ster, x + (width - w) / 2, y + textY);
+        g.setFont(f);
+        w = g.getFontMetrics().stringWidth(name);
+        drawSingleString(g, name, x + (width - w) / 2, y + textY2);
+
+        // Icon
+
+        int borders = scale(4);
+        g.drawImage(scale(IconManager.imgic8006.getImage()), x + borders, y + borders, null);
+        // g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders,
+        // null);
+
+        // g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);
+        // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
+    }
+
+    @Override
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        Polygon pol = new Polygon();
+        pol.addPoint(x, y);
+        pol.addPoint(x + derivationx, y - derivationy);
+        pol.addPoint(x + derivationx + width, y - derivationy);
+        pol.addPoint(x + derivationx + width, y + height - derivationy);
+        pol.addPoint(x + width, y + height);
+        pol.addPoint(x, y + height);
+        if (pol.contains(x1, y1)) {
+            return this;
         }
-        setName(s);
-        setComponentName(s);
-        setValueWithChange(s);
-        return true;
-      }
-      return false;
+        return null;
     }
 
-    if (mgui.getListSysCAMSPanel() != null) {
-      for (i = 0; i < mgui.getListSysCAMSPanel().size(); i++) {
-        SysCAMSComponentTaskDiagramPanel tdp = mgui.getListSysCAMSPanel().get(i);
-        if (tdp.getCompositeComponent().getValue().equals(getName())) {
-          mgui.selectTab(tdp);
-          setCluster(tdp.getCompositeComponent());
-          return true;
-        }
-      }
+    public String getStereotype() {
+        return stereotype;
     }
 
-    JOptionPane.showMessageDialog(frame,
-        "Could not find a SystemC-AMS Component Diagram that correspond to the name : " + getName(), "Warning message",
-        JOptionPane.WARNING_MESSAGE);
-    return false;
-  }
+    public String getNodeName() {
+        return name;
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.ADD_CLUSTERNODE;
-  }
+    public int getIndex() {
+        return index;
+    }
 
-  @Override
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
-    sb.append("\" />\n");
-    sb.append("<attributes index=\"" + index + "\" ");
-    sb.append("/>\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
+    @Override
+    public boolean editOnDoubleClick(JFrame frame, int _x, int _y) {
+        int i;
+        MainGUI mgui = getTDiagramPanel().getMainGUI();
 
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      String sstereotype = null, snodeName = null;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                sstereotype = elt.getAttribute("stereotype");
-                snodeName = elt.getAttribute("nodeName");
-              }
-              if (sstereotype != null) {
-                stereotype = sstereotype;
-              }
-              if (snodeName != null) {
-                name = snodeName;
-              }
-              if (elt.getTagName().equals("attributes")) {
-                index = Integer.decode(elt.getAttribute("index")).intValue();
-              }
+        // On the name ?
+        if (_y <= y + textY2) {
+            String s = (String) JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+                    JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName());
+            if ((s != null) && (s.length() > 0)) {
+                if (!TAttribute.isAValidId(s, false, false, false)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the name of the component: the new name is not a valid name", "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+                setName(s);
+                setComponentName(s);
+                setValueWithChange(s);
+                return true;
             }
-          }
+            return false;
         }
-      }
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+
+        if (mgui.getListSysCAMSPanel() != null) {
+            for (i = 0; i < mgui.getListSysCAMSPanel().size(); i++) {
+                SysCAMSComponentTaskDiagramPanel tdp = mgui.getListSysCAMSPanel().get(i);
+                if (tdp.getCompositeComponent().getValue().equals(getName())) {
+                    mgui.selectTab(tdp);
+                    setCluster(tdp.getCompositeComponent());
+                    return true;
+                }
+            }
+        }
+
+        JOptionPane.showMessageDialog(frame,
+                "Could not find a SystemC-AMS Component Diagram that correspond to the name : " + getName(),
+                "Warning message", JOptionPane.WARNING_MESSAGE);
+        return false;
     }
-  }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.ADD_CONNECTOR;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.ADD_CLUSTERNODE;
+    }
 
-  @Override
-  public String getAttributes() {
-    String attr = "";
-    attr += "index = " + index + "\n";
-    return attr;
-  }
+    @Override
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
+        sb.append("\" />\n");
+        sb.append("<attributes index=\"" + index + "\" ");
+        sb.append("/>\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
 
-  public SysCAMSCompositeComponent getCluster() {
-    return cluster;
-  }
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            String sstereotype = null, snodeName = null;
 
-  public void setCluster(SysCAMSCompositeComponent cluster) {
-    this.cluster = cluster;
-  }
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                sstereotype = elt.getAttribute("stereotype");
+                                snodeName = elt.getAttribute("nodeName");
+                            }
+                            if (sstereotype != null) {
+                                stereotype = sstereotype;
+                            }
+                            if (snodeName != null) {
+                                name = snodeName;
+                            }
+                            if (elt.getTagName().equals("attributes")) {
+                                index = Integer.decode(elt.getAttribute("index")).intValue();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.ADD_CONNECTOR;
+    }
+
+    @Override
+    public String getAttributes() {
+        String attr = "";
+        attr += "index = " + index + "\n";
+        return attr;
+    }
+
+    public SysCAMSCompositeComponent getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(SysCAMSCompositeComponent cluster) {
+        this.cluster = cluster;
+    }
 }

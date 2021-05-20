@@ -47,29 +47,29 @@ import java.util.List;
  */
 public interface AvatarStateMachineOwner {
 
-  String getName();
+    String getName();
 
-  AvatarStateMachine getStateMachine();
+    AvatarStateMachine getStateMachine();
 
-  AvatarSignal getAvatarSignalWithName(String signalName);
+    AvatarSignal getAvatarSignalWithName(String signalName);
 
-  AvatarMethod getAvatarMethodWithName(String methodName);
+    AvatarMethod getAvatarMethodWithName(String methodName);
 
-  /**
-   * Look for an attribute in the list of local attributes, parameters and return
-   * values.
-   *
-   * @param attributeName The name of the attribute to look for.
-   *
-   * @return The corresponding attribute if found, null otherwise.
-   */
-  AvatarAttribute getAvatarAttributeWithName(String attributeName);
+    /**
+     * Look for an attribute in the list of local attributes, parameters and return
+     * values.
+     *
+     * @param attributeName The name of the attribute to look for.
+     *
+     * @return The corresponding attribute if found, null otherwise.
+     */
+    AvatarAttribute getAvatarAttributeWithName(String attributeName);
 
-  AvatarSpecification getAvatarSpecification();
+    AvatarSpecification getAvatarSpecification();
 
-  List<AvatarAttribute> getAttributes();
+    List<AvatarAttribute> getAttributes();
 
-  void addAttribute(AvatarAttribute attribute);
+    void addAttribute(AvatarAttribute attribute);
 
-  AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
+    AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
 }

@@ -46,19 +46,19 @@ package graph;
  */
 public class AUTElement implements Comparable<AUTElement> {
 
-  public String value;
+    public String value;
 
-  public AUTElement(String _value) {
-    value = _value;
-  }
+    public AUTElement(String _value) {
+        value = _value;
+    }
 
-  @Override
-  public int compareTo(AUTElement o1) {
-    return this.value.compareTo(o1.value);
-  }
+    @Override
+    public int compareTo(AUTElement o1) {
+        return this.value.compareTo(o1.value);
+    }
 
-  public String toString() {
-    return value;
-  }
+    public String toString() {
+        return value;
+    }
 
 }

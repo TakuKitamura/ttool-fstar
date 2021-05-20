@@ -49,13 +49,13 @@ import javax.swing.*;
  */
 public class ScrolledJTextArea extends JTextArea {
 
-  public ScrolledJTextArea() {
-    super();
-  }
+    public ScrolledJTextArea() {
+        super();
+    }
 
-  public void append(String str) {
-    super.append(str);
-    setCaretPosition(getDocument().getLength());
-  }
+    public void append(String str) {
+        super.append(str);
+        setCaretPosition(getDocument().getLength());
+    }
 
 }

@@ -45,128 +45,128 @@ package nc;
  * @author Ludovic APVRILLE
  */
 public class NCTraffic extends NCElement {
-  protected int periodicType = 0; // 0: periodic ; 1: aperiodic
-  protected int deadline = 10;
-  protected int period = 10;
-  protected NCTimeUnit periodUnit;
-  protected NCTimeUnit deadlineUnit;
-  protected int minPacketSize = 20;
-  protected int maxPacketSize = 40;
-  protected int priority = 0; // 0 to 3
+    protected int periodicType = 0; // 0: periodic ; 1: aperiodic
+    protected int deadline = 10;
+    protected int period = 10;
+    protected NCTimeUnit periodUnit;
+    protected NCTimeUnit deadlineUnit;
+    protected int minPacketSize = 20;
+    protected int maxPacketSize = 40;
+    protected int priority = 0; // 0 to 3
 
-  public NCTraffic() {
-  }
-
-  public void setPeriodicType(int _periodicType) {
-    periodicType = _periodicType;
-    deadlineUnit = new NCTimeUnit();
-  }
-
-  public void setPeriod(int _period) {
-    period = _period;
-  }
-
-  public void setPeriodUnit(NCTimeUnit _periodUnit) {
-    periodUnit = _periodUnit;
-  }
-
-  public void setDeadline(int _deadline) {
-    deadline = _deadline;
-  }
-
-  public void setDeadlineUnit(NCTimeUnit _deadlineUnit) {
-    deadlineUnit = _deadlineUnit;
-  }
-
-  public void setMaxPacketSize(int _maxPacketSize) {
-    maxPacketSize = _maxPacketSize;
-  }
-
-  public void setMinPacketSize(int _minPacketSize) {
-    minPacketSize = _minPacketSize;
-  }
-
-  public void setPriority(int _priority) {
-    priority = _priority;
-  }
-
-  public int getPeriodicType() {
-    return periodicType;
-  }
-
-  public static String getStringPeriodicType(int periodicType) {
-    if (periodicType == 0) {
-      return "periodic";
-    } else {
-      return "aperiodic";
+    public NCTraffic() {
     }
-  }
 
-  public int getMaxLengthInBytes() {
-    return maxPacketSize;
-  }
-
-  public static String getISAEStringPeriodicType(int periodicType) {
-    if (periodicType == 0) {
-      return "CC"; // periodic
-    } else {
-      return "AL"; // aperiodic
+    public void setPeriodicType(int _periodicType) {
+        periodicType = _periodicType;
+        deadlineUnit = new NCTimeUnit();
     }
-  }
 
-  public int getPeriod() {
-    return period;
-  }
-
-  public int getPeriodMs() {
-    if (periodUnit.getStringUnit().equals(NCTimeUnit.US)) {
-      return period * 1000;
+    public void setPeriod(int _period) {
+        period = _period;
     }
-    return period;
-  }
 
-  public int getDeadline() {
-    return deadline;
-  }
-
-  public int getDeadlineMs() {
-    if (deadlineUnit.getStringUnit().equals(NCTimeUnit.US)) {
-      return deadline * 1000;
+    public void setPeriodUnit(NCTimeUnit _periodUnit) {
+        periodUnit = _periodUnit;
     }
-    return deadline;
-  }
 
-  public NCTimeUnit getPeriodUnit() {
-    return periodUnit;
-  }
+    public void setDeadline(int _deadline) {
+        deadline = _deadline;
+    }
 
-  public NCTimeUnit getDeadlineUnit() {
-    return deadlineUnit;
-  }
+    public void setDeadlineUnit(NCTimeUnit _deadlineUnit) {
+        deadlineUnit = _deadlineUnit;
+    }
 
-  public int getMinPacketSize() {
-    return minPacketSize;
-  }
+    public void setMaxPacketSize(int _maxPacketSize) {
+        maxPacketSize = _maxPacketSize;
+    }
 
-  public int getMaxPacketSize() {
-    return maxPacketSize;
-  }
+    public void setMinPacketSize(int _minPacketSize) {
+        minPacketSize = _minPacketSize;
+    }
 
-  public int getPriority() {
-    return priority;
-  }
+    public void setPriority(int _priority) {
+        priority = _priority;
+    }
 
-  public NCTraffic cloneTraffic() {
-    NCTraffic traffic = new NCTraffic();
-    NCTimeUnit unit = new NCTimeUnit();
-    unit.setUnit(deadlineUnit.getStringUnit());
-    traffic.setPeriodicType(periodicType);
-    traffic.setDeadline(deadline);
-    traffic.setMinPacketSize(minPacketSize);
-    traffic.setMaxPacketSize(maxPacketSize);
-    traffic.setPriority(priority);
-    traffic.setDeadlineUnit(unit);
-    //
-    return traffic;
-  }
+    public int getPeriodicType() {
+        return periodicType;
+    }
+
+    public static String getStringPeriodicType(int periodicType) {
+        if (periodicType == 0) {
+            return "periodic";
+        } else {
+            return "aperiodic";
+        }
+    }
+
+    public int getMaxLengthInBytes() {
+        return maxPacketSize;
+    }
+
+    public static String getISAEStringPeriodicType(int periodicType) {
+        if (periodicType == 0) {
+            return "CC"; // periodic
+        } else {
+            return "AL"; // aperiodic
+        }
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public int getPeriodMs() {
+        if (periodUnit.getStringUnit().equals(NCTimeUnit.US)) {
+            return period * 1000;
+        }
+        return period;
+    }
+
+    public int getDeadline() {
+        return deadline;
+    }
+
+    public int getDeadlineMs() {
+        if (deadlineUnit.getStringUnit().equals(NCTimeUnit.US)) {
+            return deadline * 1000;
+        }
+        return deadline;
+    }
+
+    public NCTimeUnit getPeriodUnit() {
+        return periodUnit;
+    }
+
+    public NCTimeUnit getDeadlineUnit() {
+        return deadlineUnit;
+    }
+
+    public int getMinPacketSize() {
+        return minPacketSize;
+    }
+
+    public int getMaxPacketSize() {
+        return maxPacketSize;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public NCTraffic cloneTraffic() {
+        NCTraffic traffic = new NCTraffic();
+        NCTimeUnit unit = new NCTimeUnit();
+        unit.setUnit(deadlineUnit.getStringUnit());
+        traffic.setPeriodicType(periodicType);
+        traffic.setDeadline(deadline);
+        traffic.setMinPacketSize(minPacketSize);
+        traffic.setMaxPacketSize(maxPacketSize);
+        traffic.setPriority(priority);
+        traffic.setDeadlineUnit(unit);
+        //
+        return traffic;
+    }
 }

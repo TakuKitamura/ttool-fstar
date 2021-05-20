@@ -45,51 +45,51 @@ package avatartranslator;
  * @author Ludovic APVRILLE
  */
 public enum AvatarType {
-  // Types of parameters
-  BOOLEAN("bool", "false", "f", 0), INTEGER("int", "0", "0", 0), TIMER("timer", "0", "0", 0),
+    // Types of parameters
+    BOOLEAN("bool", "false", "f", 0), INTEGER("int", "0", "0", 0), TIMER("timer", "0", "0", 0),
 
-  UNDEFINED("undefined", "", "", -1);
+    UNDEFINED("undefined", "", "", -1);
 
-  private String name = "";
-  private String defaultValue = "";
-  private String defaultValueTF = "";
-  private int defaultValueInInt = -1;
+    private String name = "";
+    private String defaultValue = "";
+    private String defaultValueTF = "";
+    private int defaultValueInInt = -1;
 
-  AvatarType(String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
-    this.name = name;
-    this.defaultValue = defaultValue;
-    this.defaultValueTF = defaultValueTF;
-    this.defaultValueInInt = defaultValueInInt;
-  }
+    AvatarType(String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.defaultValueTF = defaultValueTF;
+        this.defaultValueInInt = defaultValueInInt;
+    }
 
-  public static AvatarType getType(String s) {
-    if (s.equals("bool") || s.equals("Boolean"))
-      return AvatarType.BOOLEAN;
-    else if (s.equals("int") || s.equals("Integer"))
-      return AvatarType.INTEGER;
-    else if (s.equals("Timer"))
-      return AvatarType.TIMER;
-    return AvatarType.UNDEFINED;
-  }
+    public static AvatarType getType(String s) {
+        if (s.equals("bool") || s.equals("Boolean"))
+            return AvatarType.BOOLEAN;
+        else if (s.equals("int") || s.equals("Integer"))
+            return AvatarType.INTEGER;
+        else if (s.equals("Timer"))
+            return AvatarType.TIMER;
+        return AvatarType.UNDEFINED;
+    }
 
-  public String getStringType() {
-    return this.name;
-  }
+    public String getStringType() {
+        return this.name;
+    }
 
-  public String getDefaultInitialValue() {
-    return this.defaultValue;
-  }
+    public String getDefaultInitialValue() {
+        return this.defaultValue;
+    }
 
-  public String getDefaultInitialValueTF() {
-    return this.defaultValueTF;
-  }
+    public String getDefaultInitialValueTF() {
+        return this.defaultValueTF;
+    }
 
-  public int getDefaultInitialValueInInt() {
-    return this.defaultValueInInt;
-  }
+    public int getDefaultInitialValueInInt() {
+        return this.defaultValueInInt;
+    }
 
-  /*
-   * public AvatarType advancedClone() { AvatarType at = new AvatarType(name,
-   * defaultValue, defaultValueTF, defaultValueInt); return at; }
-   */
+    /*
+     * public AvatarType advancedClone() { AvatarType at = new AvatarType(name,
+     * defaultValue, defaultValueTF, defaultValueInt); return at; }
+     */
 }

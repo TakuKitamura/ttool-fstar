@@ -50,52 +50,52 @@ import myutil.GenericTree;
  */
 public class InvariantSynchro implements GenericTree {
 
-  private TGComponent from;
-  private TGComponent to;
-  private String name;
+    private TGComponent from;
+    private TGComponent to;
+    private String name;
 
-  public InvariantSynchro(String _name, TGComponent _from, TGComponent _to) {
-    from = _from;
-    to = _to;
-    name = _name;
-  }
-
-  public String toString() {
-    return name;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public TGComponent getFrom() {
-    return from;
-  }
-
-  public TGComponent getTo() {
-    return to;
-  }
-
-  public int getChildCount() {
-    return 2;
-  }
-
-  public Object getChild(int index) {
-    if (index == 0) {
-      return from;
+    public InvariantSynchro(String _name, TGComponent _from, TGComponent _to) {
+        from = _from;
+        to = _to;
+        name = _name;
     }
 
-    return to;
-  }
-
-  public int getIndexOfChild(Object child) {
-    if (child == from) {
-      return 0;
+    public String toString() {
+        return name;
     }
-    return 1;
-  }
 
-  public boolean containsComponent(TGComponent tgc) {
-    return (from == tgc) || (to == tgc);
-  }
+    public String getName() {
+        return name;
+    }
+
+    public TGComponent getFrom() {
+        return from;
+    }
+
+    public TGComponent getTo() {
+        return to;
+    }
+
+    public int getChildCount() {
+        return 2;
+    }
+
+    public Object getChild(int index) {
+        if (index == 0) {
+            return from;
+        }
+
+        return to;
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child == from) {
+            return 0;
+        }
+        return 1;
+    }
+
+    public boolean containsComponent(TGComponent tgc) {
+        return (from == tgc) || (to == tgc);
+    }
 }

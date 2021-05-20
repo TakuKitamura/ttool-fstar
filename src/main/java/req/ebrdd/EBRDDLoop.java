@@ -45,42 +45,42 @@ package req.ebrdd;
  * @author Ludovic APVRILLE
  */
 public class EBRDDLoop extends EBRDDComponent {
-  // next #0 -> loop
-  // next #1 -> after loop
+    // next #0 -> loop
+    // next #1 -> after loop
 
-  private String init, condition, increment;
+    private String init, condition, increment;
 
-  public EBRDDLoop(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    nbNext = 2;
-  }
+    public EBRDDLoop(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        nbNext = 2;
+    }
 
-  public void setInit(String _init) {
-    init = _init;
-  }
+    public void setInit(String _init) {
+        init = _init;
+    }
 
-  public void setCondition(String _condition) {
-    condition = _condition;
-  }
+    public void setCondition(String _condition) {
+        condition = _condition;
+    }
 
-  public void setIncrement(String _increment) {
-    increment = _increment;
-  }
+    public void setIncrement(String _increment) {
+        increment = _increment;
+    }
 
-  public String getInit() {
-    return init;
-  }
+    public String getInit() {
+        return init;
+    }
 
-  public String getCondition() {
-    return condition;
-  }
+    public String getCondition() {
+        return condition;
+    }
 
-  public String getIncrement() {
-    return increment;
-  }
+    public String getIncrement() {
+        return increment;
+    }
 
-  public String toString() {
-    return "Loop: (" + init + ";" + condition + ";" + increment + ")";
-  }
+    public String toString() {
+        return "Loop: (" + init + ";" + condition + ";" + increment + ")";
+    }
 
 }

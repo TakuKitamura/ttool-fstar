@@ -49,55 +49,55 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class StatisticsItem implements Comparable<StatisticsItem> {
-  private String name;
-  private Integer occurrence;
-  private Vector<Point> originDestination;
+    private String name;
+    private Integer occurrence;
+    private Vector<Point> originDestination;
 
-  public StatisticsItem(String _name) {
-    name = _name;
-    originDestination = new Vector<>();
-    occurrence = 0;
-  }
-
-  // observers
-  public String getName() {
-    return name;
-  }
-
-  public Integer getOccurrence() {
-    return occurrence;
-  }
-
-  public String getOriginDestination() {
-    Point p;
-    StringBuffer ret = new StringBuffer();
-
-    for (int i = 0; i < originDestination.size(); i++) {
-      p = originDestination.elementAt(i);
-      if (i != 0) {
-        ret.append(", ");
-      }
-      ret.append("(");
-      ret.append(p.x);
-      ret.append(", ");
-      ret.append(p.y);
-      ret.append(")");
+    public StatisticsItem(String _name) {
+        name = _name;
+        originDestination = new Vector<>();
+        occurrence = 0;
     }
 
-    return new String(ret);
-  }
+    // observers
+    public String getName() {
+        return name;
+    }
 
-  // modifiers
-  public void increaseOccurence() {
-    occurrence = occurrence + 1;
-  }
+    public Integer getOccurrence() {
+        return occurrence;
+    }
 
-  public void addOriginDestination(int origin, int destination) {
-    originDestination.add(new Point(origin, destination));
-  }
+    public String getOriginDestination() {
+        Point p;
+        StringBuffer ret = new StringBuffer();
 
-  // comparable interface
-  public int compareTo(StatisticsItem o) {
-    return getName().compareTo(o.getName());
-  }
+        for (int i = 0; i < originDestination.size(); i++) {
+            p = originDestination.elementAt(i);
+            if (i != 0) {
+                ret.append(", ");
+            }
+            ret.append("(");
+            ret.append(p.x);
+            ret.append(", ");
+            ret.append(p.y);
+            ret.append(")");
+        }
+
+        return new String(ret);
+    }
+
+    // modifiers
+    public void increaseOccurence() {
+        occurrence = occurrence + 1;
+    }
+
+    public void addOriginDestination(int origin, int destination) {
+        originDestination.add(new Point(origin, destination));
+    }
+
+    // comparable interface
+    public int compareTo(StatisticsItem o) {
+        return getName().compareTo(o.getName());
+    }
 }

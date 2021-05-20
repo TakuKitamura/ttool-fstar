@@ -24,44 +24,44 @@ typedef struct timespec timespec;
 
 struct setOfRequests
 {
-  char *owner;
-  struct request *head;
-  timespec startTime;
-  timespec completionTime;
-  pthread_cond_t *wakeupCondition;
-  pthread_mutex_t *mutex;
+    char *owner;
+    struct request *head;
+    timespec startTime;
+    timespec completionTime;
+    pthread_cond_t *wakeupCondition;
+    pthread_mutex_t *mutex;
 
-  int hasATimeRequest; // Means that at least on request of the list hasn't completed yet its time delay
-  timespec minTimeToWait;
-  struct request *selectedRequest;
+    int hasATimeRequest; // Means that at least on request of the list hasn't completed yet its time delay
+    timespec minTimeToWait;
+    struct request *selectedRequest;
 };
 
 typedef struct setOfRequests setOfRequests;
 
 struct request
 {
-  struct request *next;
-  struct setOfRequests *listOfRequests;
-  struct request *nextRequestInList;
-  struct request *relatedRequest; // For synchro and broadcast
-  struct syncchannel *syncChannel;
-  struct asyncchannel *asyncChannel;
+    struct request *next;
+    struct setOfRequests *listOfRequests;
+    struct request *nextRequestInList;
+    struct request *relatedRequest; // For synchro and broadcast
+    struct syncchannel *syncChannel;
+    struct asyncchannel *asyncChannel;
 
-  int type;
-  int ID;
-  int hasDelay;
-  ;
-  timespec delay;
-  int nbOfParams; // synchronous com. and query
-  int **params;   // synchronous com. and query
-  message *msg;   // Asynchronous comm.
+    int type;
+    int ID;
+    int hasDelay;
+    ;
+    timespec delay;
+    int nbOfParams; // synchronous com. and query
+    int **params;   // synchronous com. and query
+    message *msg;   // Asynchronous comm.
 
-  // Filled by the request manager
-  int executable;
-  int selected;
-  int alreadyPending; // Whether it has been taken into account for execution or not
-  int delayElapsed;
-  timespec myStartTime; // Time at which the delay has expired
+    // Filled by the request manager
+    int executable;
+    int selected;
+    int alreadyPending; // Whether it has been taken into account for execution or not
+    int delayElapsed;
+    timespec myStartTime; // Time at which the delay has expired
 };
 
 typedef struct request request;

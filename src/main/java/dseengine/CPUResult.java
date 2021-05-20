@@ -50,34 +50,34 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class CPUResult {
-  public int id;
-  public String name;
+    public int id;
+    public String name;
 
-  public double utilization;
+    public double utilization;
 
-  public Vector<BusContentionResult> contentions;
+    public Vector<BusContentionResult> contentions;
 
-  public CPUResult() {
-  }
-
-  public void addContentionOnBus(BusContentionResult ct) {
-    if (contentions == null) {
-      contentions = new Vector<BusContentionResult>();
+    public CPUResult() {
     }
 
-    contentions.add(ct);
-  }
+    public void addContentionOnBus(BusContentionResult ct) {
+        if (contentions == null) {
+            contentions = new Vector<BusContentionResult>();
+        }
 
-  public String toStringResult() {
-    StringBuffer sb = new StringBuffer("CPU " + id + " " + name + " " + utilization);
-    if (contentions != null) {
-      // sb.append("");
-      for (BusContentionResult bcr : contentions) {
-        sb.append("\n" + bcr.toStringResult(id, name));
-      }
+        contentions.add(ct);
     }
-    return sb.toString();
 
-  }
+    public String toStringResult() {
+        StringBuffer sb = new StringBuffer("CPU " + id + " " + name + " " + utilization);
+        if (contentions != null) {
+            // sb.append("");
+            for (BusContentionResult bcr : contentions) {
+                sb.append("\n" + bcr.toStringResult(id, name));
+            }
+        }
+        return sb.toString();
+
+    }
 
 } // Class BusResult

@@ -58,133 +58,137 @@ import myutil.GraphicLib;
  */
 
 public class SysCAMSPortConnector extends TGConnector
-    implements /* Issue #31 ScalableTGComponent, */ SpecificActionAfterAdd, SpecificActionAfterMove {
-  // protected double oldScaleFactor;
+        implements /* Issue #31 ScalableTGComponent, */ SpecificActionAfterAdd, SpecificActionAfterMove {
+    // protected double oldScaleFactor;
 
-  public SysCAMSPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public SysCAMSPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    myImageIcon = IconManager.imgic202;
-    value = "";
-    editable = true;
-    // oldScaleFactor = tdp.getZoom();
+        myImageIcon = IconManager.imgic202;
+        value = "";
+        editable = true;
+        // oldScaleFactor = tdp.getZoom();
 
-    p1 = _p1;
-    p2 = _p2;
-  }
-
-  public TGConnectingPoint get_p1() {
-    return p1;
-  }
-
-  public TGConnectingPoint get_p2() {
-    return p2;
-  }
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    JDialogSysCAMSConnector jde = new JDialogSysCAMSConnector(this);
-    jde.setVisible(true);
-    return true;
-  }
-
-  @Override
-  protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
-    Graphics2D g = (Graphics2D) gr;
-
-    try {
-      SysCAMSPortConnectingPoint pt1 = (SysCAMSPortConnectingPoint) p1;
-      SysCAMSPortConnectingPoint pt2 = (SysCAMSPortConnectingPoint) p2;
-      if (!pt1.positionned) {
-        pt1.positionned = true;
-        if (pt1.getFather() instanceof SysCAMSPrimitivePort) {
-          pt1.port = (SysCAMSPrimitivePort) (pt1.getFather());
-        }
-      }
-      if (!pt2.positionned) {
-        pt2.positionned = true;
-        if (pt2.getFather() instanceof SysCAMSPrimitivePort) {
-          pt2.port = (SysCAMSPrimitivePort) (pt2.getFather());
-        }
-      }
-      if ((pt1.port != null) && (pt2.port != null)) {
-        String name1 = pt1.port.getPortName();
-        String name2 = pt2.port.getPortName();
-        if (name1.equals(name2)) {
-          value = name1;
-        }
-        if ((pt1.port instanceof SysCAMSPortConverter) && (pt2.port instanceof SysCAMSPortDE)) {
-          if (pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          } else {
-            Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
-            g.setStroke(dashed);
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          }
-        } else if ((pt2.port instanceof SysCAMSPortConverter) && (pt1.port instanceof SysCAMSPortDE)) {
-          if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          } else {
-            Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
-            g.setStroke(dashed);
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          }
-        } else if ((pt1.port instanceof SysCAMSPortDE) && (pt2.port instanceof SysCAMSPortDE)
-            || (pt2.port instanceof SysCAMSPortDE) && (pt1.port instanceof SysCAMSPortDE)) {
-          if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent
-              && pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          } else {
-            Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
-            g.setStroke(dashed);
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          }
-        } else if ((pt1.port instanceof SysCAMSPortTDF) && (pt2.port instanceof SysCAMSPortTDF)
-            || (pt2.port instanceof SysCAMSPortTDF) && (pt1.port instanceof SysCAMSPortTDF)) {
-          GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-        }
-      }
-
-      int w = g.getFontMetrics().stringWidth(value);
-      Font fold = g.getFont();
-      Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
-      g.setFont(f);
-      g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
-      g.setFont(fold);
-
-      return;
-    } catch (Exception e) {
+        p1 = _p1;
+        p2 = _p2;
     }
-  }
-  // Issue #31: Moved to upper class
-  // public void rescale(double scaleFactor) {
-  // int xx, yy;
-  //
-  // for (int i = 0; i < nbInternalTGComponent; i++) {
-  // xx = tgcomponent[i].getX();
-  // yy = tgcomponent[i].getY();
-  // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-  // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-  // xx = (int) (tgcomponent[i].dx);
-  // tgcomponent[i].dx = tgcomponent[i].dx - xx;
-  // yy = (int) (tgcomponent[i].dy);
-  // tgcomponent[i].dy = tgcomponent[i].dy - yy;
-  // tgcomponent[i].setCd(xx, yy);
-  // }
-  // oldScaleFactor = scaleFactor;
-  // }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.CAMS_CONNECTOR;
-  }
+    public TGConnectingPoint get_p1() {
+        return p1;
+    }
 
-  public void specificActionAfterAdd() {
-    ((SysCAMSComponentTaskDiagramPanel) tdp).updatePorts();
-  }
+    public TGConnectingPoint get_p2() {
+        return p2;
+    }
 
-  public void specificActionAfterMove() {
-    ((SysCAMSComponentTaskDiagramPanel) tdp).updatePorts();
-  }
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        JDialogSysCAMSConnector jde = new JDialogSysCAMSConnector(this);
+        jde.setVisible(true);
+        return true;
+    }
+
+    @Override
+    protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
+        Graphics2D g = (Graphics2D) gr;
+
+        try {
+            SysCAMSPortConnectingPoint pt1 = (SysCAMSPortConnectingPoint) p1;
+            SysCAMSPortConnectingPoint pt2 = (SysCAMSPortConnectingPoint) p2;
+            if (!pt1.positionned) {
+                pt1.positionned = true;
+                if (pt1.getFather() instanceof SysCAMSPrimitivePort) {
+                    pt1.port = (SysCAMSPrimitivePort) (pt1.getFather());
+                }
+            }
+            if (!pt2.positionned) {
+                pt2.positionned = true;
+                if (pt2.getFather() instanceof SysCAMSPrimitivePort) {
+                    pt2.port = (SysCAMSPrimitivePort) (pt2.getFather());
+                }
+            }
+            if ((pt1.port != null) && (pt2.port != null)) {
+                String name1 = pt1.port.getPortName();
+                String name2 = pt2.port.getPortName();
+                if (name1.equals(name2)) {
+                    value = name1;
+                }
+                if ((pt1.port instanceof SysCAMSPortConverter) && (pt2.port instanceof SysCAMSPortDE)) {
+                    if (pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+                        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                    } else {
+                        Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
+                                new float[] { 9 }, 0);
+                        g.setStroke(dashed);
+                        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                    }
+                } else if ((pt2.port instanceof SysCAMSPortConverter) && (pt1.port instanceof SysCAMSPortDE)) {
+                    if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+                        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                    } else {
+                        Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
+                                new float[] { 9 }, 0);
+                        g.setStroke(dashed);
+                        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                    }
+                } else if ((pt1.port instanceof SysCAMSPortDE) && (pt2.port instanceof SysCAMSPortDE)
+                        || (pt2.port instanceof SysCAMSPortDE) && (pt1.port instanceof SysCAMSPortDE)) {
+                    if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent
+                            && pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+                        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                    } else {
+                        Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
+                                new float[] { 9 }, 0);
+                        g.setStroke(dashed);
+                        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                    }
+                } else if ((pt1.port instanceof SysCAMSPortTDF) && (pt2.port instanceof SysCAMSPortTDF)
+                        || (pt2.port instanceof SysCAMSPortTDF) && (pt1.port instanceof SysCAMSPortTDF)) {
+                    GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+                }
+            }
+
+            int w = g.getFontMetrics().stringWidth(value);
+            Font fold = g.getFont();
+            Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
+            g.setFont(f);
+            g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+            g.setFont(fold);
+
+            return;
+        } catch (Exception e) {
+        }
+    }
+    // Issue #31: Moved to upper class
+    // public void rescale(double scaleFactor) {
+    // int xx, yy;
+    //
+    // for (int i = 0; i < nbInternalTGComponent; i++) {
+    // xx = tgcomponent[i].getX();
+    // yy = tgcomponent[i].getY();
+    // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+    // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+    // xx = (int) (tgcomponent[i].dx);
+    // tgcomponent[i].dx = tgcomponent[i].dx - xx;
+    // yy = (int) (tgcomponent[i].dy);
+    // tgcomponent[i].dy = tgcomponent[i].dy - yy;
+    // tgcomponent[i].setCd(xx, yy);
+    // }
+    // oldScaleFactor = scaleFactor;
+    // }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.CAMS_CONNECTOR;
+    }
+
+    public void specificActionAfterAdd() {
+        ((SysCAMSComponentTaskDiagramPanel) tdp).updatePorts();
+    }
+
+    public void specificActionAfterMove() {
+        ((SysCAMSComponentTaskDiagramPanel) tdp).updatePorts();
+    }
 }

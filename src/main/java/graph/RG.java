@@ -46,70 +46,70 @@ import myutil.*;
  * @author Ludovic APVRILLE
  */
 public class RG {
-  public String name;
-  public AUTGraph graph;
-  public String fileName;
-  public String data;
-  public int nbOfStates = -1;
-  public int nbOfTransitions = -1;
+    public String name;
+    public AUTGraph graph;
+    public String fileName;
+    public String data;
+    public int nbOfStates = -1;
+    public int nbOfTransitions = -1;
 
-  public RG(String _name) {
-    name = _name;
-  }
-
-  public String getToolTip() {
-    return name;
-  }
-
-  public String toString() {
-    if (nbOfStates == -1) {
-      return name;
-    }
-    return name + " " + nbOfStates + " states, " + nbOfTransitions + " transitions";
-  }
-
-  public RG generateRefusalGraph() {
-    if (graph == null) {
-      if (data == null) {
-        return null;
-      }
-      graph = new AUTGraph();
-      graph.buildGraph(data);
+    public RG(String _name) {
+        name = _name;
     }
 
-    TraceManager.addDev("Making Ref. G");
-    AUTGraph refusalGraph = graph.generateRefusalGraph();
-    // TraceManager.addDev("Null graph?");
-    if (refusalGraph == null) {
-      TraceManager.addDev("Null graph...");
-      return null;
+    public String getToolTip() {
+        return name;
     }
 
-    RG ret = new RG(name + "_RF");
-    ret.graph = refusalGraph;
-    return ret;
-  }
-
-  public RG generateTestSequences() {
-    if (graph == null) {
-      if (data == null) {
-        return null;
-      }
-      graph = new AUTGraph();
-      graph.buildGraph(data);
+    public String toString() {
+        if (nbOfStates == -1) {
+            return name;
+        }
+        return name + " " + nbOfStates + " states, " + nbOfTransitions + " transitions";
     }
 
-    TraceManager.addDev("Making Test sequences");
-    AUTGraph testSequencesGraph = graph.makeTestSequencesFromRefusalGraph();
-    // TraceManager.addDev("Null graph?");
-    if (testSequencesGraph == null) {
-      TraceManager.addDev("Null graph...");
-      return null;
+    public RG generateRefusalGraph() {
+        if (graph == null) {
+            if (data == null) {
+                return null;
+            }
+            graph = new AUTGraph();
+            graph.buildGraph(data);
+        }
+
+        TraceManager.addDev("Making Ref. G");
+        AUTGraph refusalGraph = graph.generateRefusalGraph();
+        // TraceManager.addDev("Null graph?");
+        if (refusalGraph == null) {
+            TraceManager.addDev("Null graph...");
+            return null;
+        }
+
+        RG ret = new RG(name + "_RF");
+        ret.graph = refusalGraph;
+        return ret;
     }
 
-    RG ret = new RG("TestSeq_" + name);
-    ret.graph = testSequencesGraph;
-    return ret;
-  }
+    public RG generateTestSequences() {
+        if (graph == null) {
+            if (data == null) {
+                return null;
+            }
+            graph = new AUTGraph();
+            graph.buildGraph(data);
+        }
+
+        TraceManager.addDev("Making Test sequences");
+        AUTGraph testSequencesGraph = graph.makeTestSequencesFromRefusalGraph();
+        // TraceManager.addDev("Null graph?");
+        if (testSequencesGraph == null) {
+            TraceManager.addDev("Null graph...");
+            return null;
+        }
+
+        RG ret = new RG("TestSeq_" + name);
+        ret.graph = testSequencesGraph;
+        return ret;
+    }
 
 }

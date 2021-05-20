@@ -45,121 +45,121 @@ package graph;
  */
 public class AUTTransition implements Comparable<AUTTransition> {
 
-  public int origin;
-  public int destination;
-  public String transition;
-  public AUTElement elt;
-  public boolean isTau;
+    public int origin;
+    public int destination;
+    public String transition;
+    public AUTElement elt;
+    public boolean isTau;
 
-  public AUTTransition(int _origin, String _transition, int _destination) {
-    origin = _origin;
-    destination = _destination;
-    transition = _transition;
-  }
-
-  public AUTTransition(String _origin, String _transition, String _destination) {
-    origin = Integer.decode(_origin).intValue();
-    destination = Integer.decode(_destination).intValue();
-    transition = _transition;
-  }
-
-  public int compareTo(AUTTransition _t) {
-    if (origin != _t.origin) {
-      return -1;
-    }
-    if (destination != _t.destination) {
-      return -1;
-    }
-    if (elt != null) {
-      if (elt != _t.elt) {
-        return -1;
-      } else {
-        return 0;
-      }
+    public AUTTransition(int _origin, String _transition, int _destination) {
+        origin = _origin;
+        destination = _destination;
+        transition = _transition;
     }
 
-    return transition.compareTo(_t.transition);
-  }
-
-  public String toString() {
-    return "(" + origin + " ," + transition + ", " + destination + ")";
-  }
-
-  public String getLabel() {
-    int index0 = transition.indexOf("(");
-    int index1 = transition.indexOf(")");
-    String s;
-    if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
-      s = transition;
-    } else {
-      s = transition.substring(index0 + 1, index1);
+    public AUTTransition(String _origin, String _transition, String _destination) {
+        origin = Integer.decode(_origin).intValue();
+        destination = Integer.decode(_destination).intValue();
+        transition = _transition;
     }
 
-    index0 = s.indexOf("<");
-    index1 = s.indexOf(">");
-
-    if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
-      // TraceManager.addDev("0 s=" + s);
-      return s;
-    }
-    // TraceManager.addDev("1 s=" + s);
-    return s.substring(0, index0);
-  }
-
-  public int getNbOfIntParameters() {
-    int index0 = transition.indexOf("<");
-    int index1 = transition.indexOf(">");
-    if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
-      return 0;
-    }
-
-    String s = transition.substring(index0 + 1, index1);
-    String[] ss = s.split(",");
-
-    int cpt = 0;
-    int a;
-    for (int i = 0; i < ss.length; i++) {
-      // TraceManager.addDev("ss[" + i + "] =" + ss[i]);
-      try {
-        a = Integer.decode(ss[i].trim()).intValue();
-        // TraceManager.addDev(">" + ss[i] + "< This is an int!");
-        cpt++;
-      } catch (Exception e) {
-      }
-    }
-    return cpt;
-  }
-
-  public int getIntParameter(int _index) {
-    int index0 = transition.indexOf("<");
-    int index1 = transition.indexOf(">");
-    if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
-      return -1;
-    }
-
-    String s = transition.substring(index0 + 1, index1);
-    String[] ss = s.split(",");
-
-    int cpt = 0;
-    int a;
-    for (int i = 0; i < ss.length; i++) {
-      // TraceManager.addDev("gip ss[" + i + "] =" + ss[i]);
-      try {
-        a = Integer.decode(ss[i].trim()).intValue();
-        if (cpt == _index) {
-          return a;
+    public int compareTo(AUTTransition _t) {
+        if (origin != _t.origin) {
+            return -1;
         }
-        cpt++;
-      } catch (Exception e) {
-      }
-    }
-    return -1;
-  }
+        if (destination != _t.destination) {
+            return -1;
+        }
+        if (elt != null) {
+            if (elt != _t.elt) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
 
-  public AUTTransition basicClone() {
-    AUTTransition tr = new AUTTransition(origin, transition, destination);
-    tr.isTau = isTau;
-    return tr;
-  }
+        return transition.compareTo(_t.transition);
+    }
+
+    public String toString() {
+        return "(" + origin + " ," + transition + ", " + destination + ")";
+    }
+
+    public String getLabel() {
+        int index0 = transition.indexOf("(");
+        int index1 = transition.indexOf(")");
+        String s;
+        if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+            s = transition;
+        } else {
+            s = transition.substring(index0 + 1, index1);
+        }
+
+        index0 = s.indexOf("<");
+        index1 = s.indexOf(">");
+
+        if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+            // TraceManager.addDev("0 s=" + s);
+            return s;
+        }
+        // TraceManager.addDev("1 s=" + s);
+        return s.substring(0, index0);
+    }
+
+    public int getNbOfIntParameters() {
+        int index0 = transition.indexOf("<");
+        int index1 = transition.indexOf(">");
+        if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+            return 0;
+        }
+
+        String s = transition.substring(index0 + 1, index1);
+        String[] ss = s.split(",");
+
+        int cpt = 0;
+        int a;
+        for (int i = 0; i < ss.length; i++) {
+            // TraceManager.addDev("ss[" + i + "] =" + ss[i]);
+            try {
+                a = Integer.decode(ss[i].trim()).intValue();
+                // TraceManager.addDev(">" + ss[i] + "< This is an int!");
+                cpt++;
+            } catch (Exception e) {
+            }
+        }
+        return cpt;
+    }
+
+    public int getIntParameter(int _index) {
+        int index0 = transition.indexOf("<");
+        int index1 = transition.indexOf(">");
+        if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+            return -1;
+        }
+
+        String s = transition.substring(index0 + 1, index1);
+        String[] ss = s.split(",");
+
+        int cpt = 0;
+        int a;
+        for (int i = 0; i < ss.length; i++) {
+            // TraceManager.addDev("gip ss[" + i + "] =" + ss[i]);
+            try {
+                a = Integer.decode(ss[i].trim()).intValue();
+                if (cpt == _index) {
+                    return a;
+                }
+                cpt++;
+            } catch (Exception e) {
+            }
+        }
+        return -1;
+    }
+
+    public AUTTransition basicClone() {
+        AUTTransition tr = new AUTTransition(origin, transition, destination);
+        tr.isTau = isTau;
+        return tr;
+    }
 
 }

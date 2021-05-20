@@ -47,42 +47,42 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarBinaryGuard extends AvatarComposedGuard {
-  AvatarComposedGuard guardA;
-  AvatarComposedGuard guardB;
+    AvatarComposedGuard guardA;
+    AvatarComposedGuard guardB;
 
-  String binaryOp;
+    String binaryOp;
 
-  public AvatarBinaryGuard(AvatarComposedGuard _guardA, AvatarComposedGuard _guardB, String _binaryOp) {
-    this.guardA = _guardA;
-    this.guardB = _guardB;
-    this.binaryOp = _binaryOp;
-  }
+    public AvatarBinaryGuard(AvatarComposedGuard _guardA, AvatarComposedGuard _guardB, String _binaryOp) {
+        this.guardA = _guardA;
+        this.guardB = _guardB;
+        this.binaryOp = _binaryOp;
+    }
 
-  public AvatarComposedGuard getGuardA() {
-    return this.guardA;
-  }
+    public AvatarComposedGuard getGuardA() {
+        return this.guardA;
+    }
 
-  public AvatarComposedGuard getGuardB() {
-    return this.guardB;
-  }
+    public AvatarComposedGuard getGuardB() {
+        return this.guardB;
+    }
 
-  public String getBinaryOp() {
-    return this.binaryOp;
-  }
+    public String getBinaryOp() {
+        return this.binaryOp;
+    }
 
-  public String getAsString(AvatarSyntaxTranslator translator) {
-    return this.guardA.getAsString(translator) + translator.translateBinaryOp(this.binaryOp)
-        + this.guardB.getAsString(translator);
-  }
+    public String getAsString(AvatarSyntaxTranslator translator) {
+        return this.guardA.getAsString(translator) + translator.translateBinaryOp(this.binaryOp)
+                + this.guardB.getAsString(translator);
+    }
 
-  @Override
-  public AvatarBinaryGuard clone() {
-    return new AvatarBinaryGuard(this.guardA.clone(), this.guardB.clone(), this.binaryOp);
-  }
+    @Override
+    public AvatarBinaryGuard clone() {
+        return new AvatarBinaryGuard(this.guardA.clone(), this.guardB.clone(), this.binaryOp);
+    }
 
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-    this.guardA.replaceAttributes(attributesMapping);
-    this.guardB.replaceAttributes(attributesMapping);
-  }
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        this.guardA.replaceAttributes(attributesMapping);
+        this.guardB.replaceAttributes(attributesMapping);
+    }
 }

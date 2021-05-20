@@ -48,48 +48,48 @@ import java.util.Map;
  * @author Florian LUGOU
  */
 public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
-  AvatarTerm termA;
-  AvatarTerm termB;
-  String binaryOp;
+    AvatarTerm termA;
+    AvatarTerm termB;
+    String binaryOp;
 
-  public AvatarSimpleGuardDuo(AvatarTerm _termA, AvatarTerm _termB, String _binaryOp) {
-    this.termA = _termA;
-    this.termB = _termB;
-    this.binaryOp = _binaryOp;
-  }
-
-  public AvatarTerm getTermA() {
-    return this.termA;
-  }
-
-  public AvatarTerm getTermB() {
-    return this.termB;
-  }
-
-  public String getBinaryOp() {
-    return this.binaryOp;
-  }
-
-  public String getAsString(AvatarSyntaxTranslator translator) {
-    return this.termA.getName() + " " + translator.translateBinaryOp(this.binaryOp) + " " + this.termB.getName();
-  }
-
-  @Override
-  public AvatarSimpleGuardDuo clone() {
-    return new AvatarSimpleGuardDuo(this.termA.clone(), this.termB.clone(), this.binaryOp);
-  }
-
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-    if (this.termA instanceof AvatarAttribute) {
-      this.termA = attributesMapping.get(this.termA);
-    } else {
-      this.termA.replaceAttributes(attributesMapping);
+    public AvatarSimpleGuardDuo(AvatarTerm _termA, AvatarTerm _termB, String _binaryOp) {
+        this.termA = _termA;
+        this.termB = _termB;
+        this.binaryOp = _binaryOp;
     }
-    if (this.termB instanceof AvatarAttribute) {
-      this.termB = attributesMapping.get(this.termB);
-    } else {
-      this.termB.replaceAttributes(attributesMapping);
+
+    public AvatarTerm getTermA() {
+        return this.termA;
     }
-  }
+
+    public AvatarTerm getTermB() {
+        return this.termB;
+    }
+
+    public String getBinaryOp() {
+        return this.binaryOp;
+    }
+
+    public String getAsString(AvatarSyntaxTranslator translator) {
+        return this.termA.getName() + " " + translator.translateBinaryOp(this.binaryOp) + " " + this.termB.getName();
+    }
+
+    @Override
+    public AvatarSimpleGuardDuo clone() {
+        return new AvatarSimpleGuardDuo(this.termA.clone(), this.termB.clone(), this.binaryOp);
+    }
+
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        if (this.termA instanceof AvatarAttribute) {
+            this.termA = attributesMapping.get(this.termA);
+        } else {
+            this.termA.replaceAttributes(attributesMapping);
+        }
+        if (this.termB instanceof AvatarAttribute) {
+            this.termB = attributesMapping.get(this.termB);
+        } else {
+            this.termB.replaceAttributes(attributesMapping);
+        }
+    }
 }

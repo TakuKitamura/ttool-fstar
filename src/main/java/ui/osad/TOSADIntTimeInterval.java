@@ -53,39 +53,39 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TOSADIntTimeInterval extends TOSADTimeInterval {
-  private int lineLength = 5;
-  // private int textX, textY;
-  private int incrementY = 3;
-  private int segment = 4;
+    private int lineLength = 5;
+    // private int textX, textY;
+    private int incrementY = 3;
+    private int segment = 4;
 
-  public TOSADIntTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TOSADIntTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "interruptible time interval";
+        name = "interruptible time interval";
 
-    myImageIcon = IconManager.imgic224;
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-
-    int y1 = y + 4;
-    int x1 = x + 2;
-    int width1 = width - 4;
-
-    for (int i = 0; i < segment; i++) {
-      g.drawLine(x1, y1, x1 + width1, y1 + incrementY);
-      y1 += incrementY;
-      g.drawLine(x1 + width1, y1, x1, y1 + incrementY);
-      y1 += incrementY;
+        myImageIcon = IconManager.imgic224;
     }
-  }
 
-  public int getType() {
-    return TGComponentManager.TOSAD_TIME_INTERVAL;
-  }
+    public void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        int y1 = y + 4;
+        int x1 = x + 2;
+        int width1 = width - 4;
+
+        for (int i = 0; i < segment; i++) {
+            g.drawLine(x1, y1, x1 + width1, y1 + incrementY);
+            y1 += incrementY;
+            g.drawLine(x1 + width1, y1, x1, y1 + incrementY);
+            y1 += incrementY;
+        }
+    }
+
+    public int getType() {
+        return TGComponentManager.TOSAD_TIME_INTERVAL;
+    }
 
 }

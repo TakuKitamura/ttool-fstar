@@ -53,127 +53,127 @@ import java.util.LinkedList;
  */
 public class Invariant implements GenericTree {
 
-  private String name;
-  private int tokenValue; // Invariant on a given nb of tokens;
-  private int value; // value on the incidence matrix after computation of the invariant
-  private LinkedList<TGComponent> components;
-  private LinkedList<InvariantSynchro> synchros;
+    private String name;
+    private int tokenValue; // Invariant on a given nb of tokens;
+    private int value; // value on the incidence matrix after computation of the invariant
+    private LinkedList<TGComponent> components;
+    private LinkedList<InvariantSynchro> synchros;
 
-  public Invariant(String _name) {
-    name = _name;
-    components = new LinkedList<TGComponent>();
-    synchros = new LinkedList<InvariantSynchro>();
-  }
-
-  public void setTokenValue(int _value) {
-    tokenValue = _value;
-  }
-
-  public void setValue(int _value) {
-    value = _value;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getTokenValue() {
-    return tokenValue;
-  }
-
-  public int getValue() {
-    return value;
-  }
-
-  public LinkedList<TGComponent> getComponents() {
-    return components;
-  }
-
-  public void addSynchro(InvariantSynchro _synchro) {
-    // Look for similar synchro
-    for (InvariantSynchro is : synchros) {
-      if ((is.getFrom() == _synchro.getFrom()) && (is.getTo() == _synchro.getTo())) {
-        return;
-      }
+    public Invariant(String _name) {
+        name = _name;
+        components = new LinkedList<TGComponent>();
+        synchros = new LinkedList<InvariantSynchro>();
     }
 
-    synchros.add(_synchro);
-  }
-
-  public void addComponent(TGComponent _tgc) {
-    if (_tgc == null) {
-      TraceManager.addDev("NULL Component added to invariant -> IGNORING");
-      return;
+    public void setTokenValue(int _value) {
+        tokenValue = _value;
     }
 
-    // Component already belongs to invariant?
+    public void setValue(int _value) {
+        value = _value;
+    }
 
-    if (components.contains(_tgc)) {
-      // TraceManager.addDev("Duplicated component:" + _tgc);
-      return;
+    public String getName() {
+        return name;
+    }
+
+    public int getTokenValue() {
+        return tokenValue;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public LinkedList<TGComponent> getComponents() {
+        return components;
+    }
+
+    public void addSynchro(InvariantSynchro _synchro) {
+        // Look for similar synchro
+        for (InvariantSynchro is : synchros) {
+            if ((is.getFrom() == _synchro.getFrom()) && (is.getTo() == _synchro.getTo())) {
+                return;
+            }
+        }
+
+        synchros.add(_synchro);
+    }
+
+    public void addComponent(TGComponent _tgc) {
+        if (_tgc == null) {
+            TraceManager.addDev("NULL Component added to invariant -> IGNORING");
+            return;
+        }
+
+        // Component already belongs to invariant?
+
+        if (components.contains(_tgc)) {
+            // TraceManager.addDev("Duplicated component:" + _tgc);
+            return;
+
+        }
+
+        components.add(_tgc);
+    }
+
+    public void computeValue() {
+        value = components.size() + synchros.size();
+    }
+
+    public String toString() {
+        return "(" + value + ") " + name;
+    }
+
+    public int getChildCount() {
+        return 2 + synchros.size() + components.size();
+    }
+
+    public Object getChild(int index) {
+        if (index == 0) {
+            return "Nb of elements: " + value;
+        }
+
+        if (index == 1) {
+            return "Token value: " + tokenValue;
+        }
+
+        if (index - 2 < synchros.size()) {
+            return synchros.get(index - 2);
+        }
+
+        index -= synchros.size();
+
+        TGComponent tgc = components.get(index - 2);
+        // TraceManager.addDev("Getting at index #" + (index-2) + " = " + tgc);
+
+        return components.get(index - 2);
 
     }
 
-    components.add(_tgc);
-  }
+    public int getIndexOfChild(Object child) {
+        if (child instanceof String) {
+            String s = (String) child;
+            if (s.startsWith("value")) {
+                return 0;
+            }
+            return 1;
+        }
 
-  public void computeValue() {
-    value = components.size() + synchros.size();
-  }
+        if (child instanceof InvariantSynchro) {
+            return synchros.indexOf(child) + 2;
+        }
 
-  public String toString() {
-    return "(" + value + ") " + name;
-  }
-
-  public int getChildCount() {
-    return 2 + synchros.size() + components.size();
-  }
-
-  public Object getChild(int index) {
-    if (index == 0) {
-      return "Nb of elements: " + value;
+        return components.indexOf(child) + 2 + synchros.size();
     }
 
-    if (index == 1) {
-      return "Token value: " + tokenValue;
+    public boolean containsComponent(TGComponent tgc) {
+        for (InvariantSynchro is : synchros) {
+            if (is.containsComponent(tgc)) {
+                return true;
+            }
+        }
+        return components.contains(tgc);
     }
-
-    if (index - 2 < synchros.size()) {
-      return synchros.get(index - 2);
-    }
-
-    index -= synchros.size();
-
-    TGComponent tgc = components.get(index - 2);
-    // TraceManager.addDev("Getting at index #" + (index-2) + " = " + tgc);
-
-    return components.get(index - 2);
-
-  }
-
-  public int getIndexOfChild(Object child) {
-    if (child instanceof String) {
-      String s = (String) child;
-      if (s.startsWith("value")) {
-        return 0;
-      }
-      return 1;
-    }
-
-    if (child instanceof InvariantSynchro) {
-      return synchros.indexOf(child) + 2;
-    }
-
-    return components.indexOf(child) + 2 + synchros.size();
-  }
-
-  public boolean containsComponent(TGComponent tgc) {
-    for (InvariantSynchro is : synchros) {
-      if (is.containsComponent(tgc)) {
-        return true;
-      }
-    }
-    return components.contains(tgc);
-  }
 
 }

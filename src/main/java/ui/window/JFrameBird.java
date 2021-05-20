@@ -51,51 +51,51 @@ import java.awt.event.WindowListener;
  * @author Ludovic APVRILLE
  */
 public class JFrameBird extends JFrame implements WindowListener {
-  private MainGUI mgui;
-  private JBirdPanel birdpanel;
+    private MainGUI mgui;
+    private JBirdPanel birdpanel;
 
-  public JFrameBird(MainGUI _mgui) {
-    super("Bird eyes'view");
+    public JFrameBird(MainGUI _mgui) {
+        super("Bird eyes'view");
 
-    mgui = _mgui;
+        mgui = _mgui;
 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
-    // Font f = new Font("Courrier", Font.BOLD, 12);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
+        // Font f = new Font("Courrier", Font.BOLD, 12);
 
-    birdpanel = new JBirdPanel(mgui);
-    framePanel.add(birdpanel, BorderLayout.CENTER);
-    addWindowListener(this);
-    pack();
-  }
+        birdpanel = new JBirdPanel(mgui);
+        framePanel.add(birdpanel, BorderLayout.CENTER);
+        addWindowListener(this);
+        pack();
+    }
 
-  public void updatePanel() {
-    birdpanel.repaint();
-  }
+    public void updatePanel() {
+        birdpanel.repaint();
+    }
 
-  public void windowClosing(WindowEvent e) {
-    // frame.setVisible(false);
-    birdpanel.setGo(false);
-    mgui.unsetBirdFrame();
-  }
+    public void windowClosing(WindowEvent e) {
+        // frame.setVisible(false);
+        birdpanel.setGo(false);
+        mgui.unsetBirdFrame();
+    }
 
-  public void windowClosed(WindowEvent e) {
-  }
+    public void windowClosed(WindowEvent e) {
+    }
 
-  public void windowOpened(WindowEvent e) {
-  }
+    public void windowOpened(WindowEvent e) {
+    }
 
-  public void windowIconified(WindowEvent e) {
-  }
+    public void windowIconified(WindowEvent e) {
+    }
 
-  public void windowDeiconified(WindowEvent e) {
-  }
+    public void windowDeiconified(WindowEvent e) {
+    }
 
-  public void windowActivated(WindowEvent e) {
-  }
+    public void windowActivated(WindowEvent e) {
+    }
 
-  public void windowDeactivated(WindowEvent e) {
-  }
+    public void windowDeactivated(WindowEvent e) {
+    }
 
 } // Class

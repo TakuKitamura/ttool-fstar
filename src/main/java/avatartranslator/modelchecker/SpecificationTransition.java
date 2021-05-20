@@ -48,79 +48,79 @@ import avatartranslator.AvatarTransition;
  * @author Ludovic APVRILLE
  */
 public class SpecificationTransition {
-  public int clockMin, clockMax;
-  public boolean fromStateWithMoreThanOneTransition;
-  public AvatarTransition[] transitions;
+    public int clockMin, clockMax;
+    public boolean fromStateWithMoreThanOneTransition;
+    public AvatarTransition[] transitions;
 
-  public SpecificationTransition() {
-  }
-
-  public void init(int _nbOfElements, AvatarTransition _at, int _blockIndex) {
-    transitions = new AvatarTransition[_nbOfElements];
-    transitions[0] = _at;
-  }
-
-  public int getType() {
-    if (transitions == null) {
-      return AvatarTransition.UNDEFINED;
-    }
-    return transitions[0].type;
-
-  }
-
-  public void makeFromTwoSynchronous(SpecificationTransition _tr1, SpecificationTransition _tr2) {
-    int nbOfElements = 2;
-    transitions = new AvatarTransition[nbOfElements];
-    transitions[0] = _tr1.transitions[0];
-    transitions[1] = _tr2.transitions[0];
-
-    clockMin = Math.max(_tr1.clockMin, _tr2.clockMin);
-    clockMax = Math.max(_tr1.clockMax, _tr2.clockMax);
-  }
-
-  public boolean hasBlockOf(SpecificationTransition _tr) {
-    if (transitions == null) {
-      return false;
+    public SpecificationTransition() {
     }
 
-    if (_tr.transitions == null) {
-      return false;
+    public void init(int _nbOfElements, AvatarTransition _at, int _blockIndex) {
+        transitions = new AvatarTransition[_nbOfElements];
+        transitions[0] = _at;
     }
 
-    for (int i = 0; i < transitions.length; i++) {
-      for (int j = 0; j < _tr.transitions.length; j++) {
-        if (transitions[i].getBlock() == _tr.transitions[j].getBlock()) {
-          return true;
+    public int getType() {
+        if (transitions == null) {
+            return AvatarTransition.UNDEFINED;
         }
-      }
+        return transitions[0].type;
+
     }
 
-    return false;
-  }
+    public void makeFromTwoSynchronous(SpecificationTransition _tr1, SpecificationTransition _tr2) {
+        int nbOfElements = 2;
+        transitions = new AvatarTransition[nbOfElements];
+        transitions[0] = _tr1.transitions[0];
+        transitions[1] = _tr2.transitions[0];
 
-  public boolean hasBlockIndex(int _index) {
-    if (transitions == null) {
-      return false;
+        clockMin = Math.max(_tr1.clockMin, _tr2.clockMin);
+        clockMax = Math.max(_tr1.clockMax, _tr2.clockMax);
     }
 
-    for (int i = 0; i < transitions.length; i++) {
-      if (((AvatarBlock) transitions[i].getBlock()).getBlockIndex() == _index) {
-        return true;
-      }
+    public boolean hasBlockOf(SpecificationTransition _tr) {
+        if (transitions == null) {
+            return false;
+        }
+
+        if (_tr.transitions == null) {
+            return false;
+        }
+
+        for (int i = 0; i < transitions.length; i++) {
+            for (int j = 0; j < _tr.transitions.length; j++) {
+                if (transitions[i].getBlock() == _tr.transitions[j].getBlock()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
-    return false;
-  }
 
-  public String toString() {
-    String ret = "Trans: ";
+    public boolean hasBlockIndex(int _index) {
+        if (transitions == null) {
+            return false;
+        }
 
-    if (transitions != null) {
-      for (int i = 0; i < transitions.length; i++) {
-        ret += "/ Block" + i + ": " + transitions[i].getBlock().getName() + "/" + transitions[i];
-      }
+        for (int i = 0; i < transitions.length; i++) {
+            if (((AvatarBlock) transitions[i].getBlock()).getBlockIndex() == _index) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    return ret;
-  }
+    public String toString() {
+        String ret = "Trans: ";
+
+        if (transitions != null) {
+            for (int i = 0; i < transitions.length; i++) {
+                ret += "/ Block" + i + ": " + transitions[i].getBlock().getName() + "/" + transitions[i];
+            }
+        }
+
+        return ret;
+    }
 
 } // Class

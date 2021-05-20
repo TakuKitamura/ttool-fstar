@@ -49,45 +49,45 @@ import java.util.LinkedList;
  */
 
 public class SysCAMSTCluster extends SysCAMSTComponent {
-  private String clusterName;
+    private String clusterName;
 
-  private LinkedList<SysCAMSTBlockTDF> blockTDF;
-  private LinkedList<SysCAMSTBlockDE> blockDE;
-  private LinkedList<SysCAMSTClock> clock;
+    private LinkedList<SysCAMSTBlockTDF> blockTDF;
+    private LinkedList<SysCAMSTBlockDE> blockDE;
+    private LinkedList<SysCAMSTClock> clock;
 
-  public SysCAMSTCluster(String _clusterName) {
-    clusterName = _clusterName;
-    blockTDF = new LinkedList<SysCAMSTBlockTDF>();
-    blockDE = new LinkedList<SysCAMSTBlockDE>();
-    clock = new LinkedList<SysCAMSTClock>();
-  }
+    public SysCAMSTCluster(String _clusterName) {
+        clusterName = _clusterName;
+        blockTDF = new LinkedList<SysCAMSTBlockTDF>();
+        blockDE = new LinkedList<SysCAMSTBlockDE>();
+        clock = new LinkedList<SysCAMSTClock>();
+    }
 
-  public String getClusterName() {
-    return clusterName;
-  }
+    public String getClusterName() {
+        return clusterName;
+    }
 
-  public LinkedList<SysCAMSTBlockTDF> getBlockTDF() {
-    return blockTDF;
-  }
+    public LinkedList<SysCAMSTBlockTDF> getBlockTDF() {
+        return blockTDF;
+    }
 
-  public void addBlockTDF(SysCAMSTBlockTDF _blockTDF) {
-    blockTDF.add(_blockTDF);
-  }
+    public void addBlockTDF(SysCAMSTBlockTDF _blockTDF) {
+        blockTDF.add(_blockTDF);
+    }
 
-  public LinkedList<SysCAMSTBlockDE> getBlockDE() {
-    return blockDE;
-  }
+    public LinkedList<SysCAMSTBlockDE> getBlockDE() {
+        return blockDE;
+    }
 
-  public void addBlockDE(SysCAMSTBlockDE _blockDE) {
-    blockDE.add(_blockDE);
-  }
+    public void addBlockDE(SysCAMSTBlockDE _blockDE) {
+        blockDE.add(_blockDE);
+    }
 
-  public void addClock(SysCAMSTClock _clock) {
-    clock.add(_clock);
-  }
+    public void addClock(SysCAMSTClock _clock) {
+        clock.add(_clock);
+    }
 
-  public LinkedList<SysCAMSTClock> getClock() {
-    return clock;
-  }
+    public LinkedList<SysCAMSTClock> getClock() {
+        return clock;
+    }
 
 }

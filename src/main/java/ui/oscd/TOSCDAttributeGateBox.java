@@ -58,31 +58,31 @@ import ui.window.JDialogAttribute;
  */
 public class TOSCDAttributeGateBox extends TGCAttributeBox {
 
-  public TOSCDAttributeGateBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TOSCDAttributeGateBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "Tclass gates";
-    value = "";
+        name = "Tclass gates";
+        value = "";
 
-    attributeText = "Gate";
+        attributeText = "Gate";
 
-    attributes = false; // It contains gates
+        attributes = false; // It contains gates
 
-    myColor = ColorManager.GATE_BOX;
+        myColor = ColorManager.GATE_BOX;
 
-    myImageIcon = IconManager.imgic120;
-  }
+        myImageIcon = IconManager.imgic120;
+    }
 
-  protected void setJDialogOptions(JDialogAttribute jda) {
-    jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
-    jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-    jda.addType(TAttribute.getStringType(TAttribute.GATE));
-    jda.addType(TAttribute.getStringType(TAttribute.OUTGATE));
-    jda.addType(TAttribute.getStringType(TAttribute.INGATE));
-    jda.enableInitialValue(false);
-    jda.enableRTLOTOSKeyword(true);
-    jda.enableJavaKeyword(true);
-  }
+    protected void setJDialogOptions(JDialogAttribute jda) {
+        jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+        jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+        jda.addType(TAttribute.getStringType(TAttribute.GATE));
+        jda.addType(TAttribute.getStringType(TAttribute.OUTGATE));
+        jda.addType(TAttribute.getStringType(TAttribute.INGATE));
+        jda.enableInitialValue(false);
+        jda.enableRTLOTOSKeyword(true);
+        jda.enableJavaKeyword(true);
+    }
 
 }

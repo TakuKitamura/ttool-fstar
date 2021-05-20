@@ -46,12 +46,12 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public interface CheckableInvariant {
-  // public static final int UNKNOWN;
-  // public static final int NON_REACHABLE;
+    // public static final int UNKNOWN;
+    // public static final int NON_REACHABLE;
 
-  void setCheckableInvariant(boolean b);
+    void setCheckableInvariant(boolean b);
 
-  boolean getCheckableInvariant();
+    boolean getCheckableInvariant();
 
-  // public void setReachability();
+    // public void setReachability();
 }

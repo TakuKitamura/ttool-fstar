@@ -49,22 +49,22 @@ import avatartranslator.AvatarRelation;
  * @see ui.TGComponent
  */
 public class AvatarInteractiveSimulationFIFOData {
-  public AvatarRelation fifo;
-  public int nb = 0;
+    public AvatarRelation fifo;
+    public int nb = 0;
 
-  public AvatarInteractiveSimulationFIFOData(AvatarRelation _ar) {
-    fifo = _ar;
-  }
-
-  public String toString() {
-    String ret = fifo.block1.getName() + " -> " + fifo.block2.getName() + ": ";
-    if (nb < 1) {
-      return ret + "no message";
-    } else if (nb == 1) {
-      return ret + "1 message";
-    } else {
-      return ret + nb + " messages";
+    public AvatarInteractiveSimulationFIFOData(AvatarRelation _ar) {
+        fifo = _ar;
     }
-  }
+
+    public String toString() {
+        String ret = fifo.block1.getName() + " -> " + fifo.block2.getName() + ": ";
+        if (nb < 1) {
+            return ret + "no message";
+        } else if (nb == 1) {
+            return ret + "1 message";
+        } else {
+            return ret + nb + " messages";
+        }
+    }
 
 } // Class

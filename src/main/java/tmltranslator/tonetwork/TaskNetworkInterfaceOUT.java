@@ -49,158 +49,158 @@ import java.util.Vector;
  * @version 1.0 07/05/2019
  */
 public class TaskNetworkInterfaceOUT extends TMLTask {
-  protected int nbOfVCs;
-  private TMLChoice packetChoice;
+    protected int nbOfVCs;
+    private TMLChoice packetChoice;
 
-  public TaskNetworkInterfaceOUT(String name, Object referenceToClass, Object referenceToActivityDiagram) {
-    super(name, referenceToClass, referenceToActivityDiagram);
-    setDaemon(TMAP2Network.DAEMON);
-  }
-
-  // feedbackEvents: one per vc
-  // inputEvt, channels: one per task
-  // outputChannel, output event: only one, common: this is a network interface,
-  // only one exit!
-  public void generate(int nbOfVCs, Vector<TMLEvent> outputFeedbackEvents, TMLEvent packetOutFromOUT,
-      TMLChannel outputChannelFromOUT) {
-    int i;
-
-    this.nbOfVCs = nbOfVCs;
-
-    // Attributes
-    TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstX);
-    TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstY);
-    TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(pktlen);
-    TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(vc);
-    TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(eop);
-    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(chid);
-    TMLAttribute memSpace = new TMLAttribute("memSpace", "memSpace", new TMLType(TMLType.NATURAL), "4096");
-    this.addAttribute(memSpace);
-
-    // Events and channels
-    for (TMLEvent evt : outputFeedbackEvents) {
-      addTMLEvent(evt);
-    }
-    addTMLEvent(packetOutFromOUT);
-
-    addReadTMLChannel(outputChannelFromOUT);
-
-    // Activity Diagram
-    TMLStartState start = new TMLStartState("mainStart", referenceObject);
-    activity.setFirst(start);
-
-    // Main Sequence
-    TMLSequence mainSequence = new TMLSequence("mainSequence", referenceObject);
-    addElement(start, mainSequence);
-
-    // Left branch of left sequence
-    // For each VC, send a feedback
-    TMLActivityElement previous = mainSequence;
-    for (i = 0; i < nbOfVCs; i++) {
-      TMLSendEvent sendEvtFeedback = new TMLSendEvent("sendEvtFeedback_VC" + i, referenceObject);
-      sendEvtFeedback.setEvent(outputFeedbackEvents.get(i));
-      addElement(previous, sendEvtFeedback);
-      previous = sendEvtFeedback;
+    public TaskNetworkInterfaceOUT(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
-    TMLStopState stopOfLeftBranch = new TMLStopState("stopStateOfLeftBranchOfMainSequence", referenceObject);
-    addElement(previous, stopOfLeftBranch);
+    // feedbackEvents: one per vc
+    // inputEvt, channels: one per task
+    // outputChannel, output event: only one, common: this is a network interface,
+    // only one exit!
+    public void generate(int nbOfVCs, Vector<TMLEvent> outputFeedbackEvents, TMLEvent packetOutFromOUT,
+            TMLChannel outputChannelFromOUT) {
+        int i;
 
-    // Right branch of main sequence
-    //
-    TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
-    loop.setInfinite(true);
-    addElement(mainSequence, loop);
+        this.nbOfVCs = nbOfVCs;
 
-    // Waiting for a packet from OUT
-    TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
-    waitingForPacketFromOUT.setEvent(packetOutFromOUT);
-    waitingForPacketFromOUT.addParam("pktlen");
-    waitingForPacketFromOUT.addParam("dstX");
-    waitingForPacketFromOUT.addParam("dstY");
-    waitingForPacketFromOUT.addParam("vc");
-    waitingForPacketFromOUT.addParam("eop");
-    waitingForPacketFromOUT.addParam("chid");
-    addElement(loop, waitingForPacketFromOUT);
+        // Attributes
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
+        TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(pktlen);
+        TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(vc);
+        TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
+        TMLAttribute memSpace = new TMLAttribute("memSpace", "memSpace", new TMLType(TMLType.NATURAL), "4096");
+        this.addAttribute(memSpace);
 
-    // Reading on channel
-    TMLReadChannel readFromOUT = new TMLReadChannel("readFromOUT", referenceObject);
-    readFromOUT.setNbOfSamples("1");
-    readFromOUT.addChannel(outputChannelFromOUT);
-    addElement(waitingForPacketFromOUT, readFromOUT);
+        // Events and channels
+        for (TMLEvent evt : outputFeedbackEvents) {
+            addTMLEvent(evt);
+        }
+        addTMLEvent(packetOutFromOUT);
 
-    // subsequence
-    TMLSequence internalSeq = new TMLSequence("internalSeq", referenceObject);
-    addElement(readFromOUT, internalSeq);
+        addReadTMLChannel(outputChannelFromOUT);
 
-    // Left branch: test on eop
-    TMLChoice testingEOP = new TMLChoice("testingEOP", referenceObject);
-    addElement(internalSeq, testingEOP);
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
 
-    // Left branch of choice: eop==1
-    // New choice on all possible destination depending on chid
-    packetChoice = new TMLChoice("testingPacket", referenceObject);
-    addElement(testingEOP, packetChoice);
-    testingEOP.addGuard("eop == 1");
+        // Main Sequence
+        TMLSequence mainSequence = new TMLSequence("mainSequence", referenceObject);
+        addElement(start, mainSequence);
 
-    // Right branch of choice
-    TMLStopState stopOfRightBranchOfChoice = new TMLStopState("stopOfRightBranchOfChoice", referenceObject);
-    addElement(testingEOP, stopOfRightBranchOfChoice);
-    testingEOP.addGuard("else");
+        // Left branch of left sequence
+        // For each VC, send a feedback
+        TMLActivityElement previous = mainSequence;
+        for (i = 0; i < nbOfVCs; i++) {
+            TMLSendEvent sendEvtFeedback = new TMLSendEvent("sendEvtFeedback_VC" + i, referenceObject);
+            sendEvtFeedback.setEvent(outputFeedbackEvents.get(i));
+            addElement(previous, sendEvtFeedback);
+            previous = sendEvtFeedback;
+        }
 
-    // Right branch of internal seg
-    // Test on vc
-    TMLChoice testingVC = new TMLChoice("testingVC", referenceObject);
-    addElement(internalSeq, testingVC);
+        TMLStopState stopOfLeftBranch = new TMLStopState("stopStateOfLeftBranchOfMainSequence", referenceObject);
+        addElement(previous, stopOfLeftBranch);
 
-    for (i = 0; i < nbOfVCs; i++) {
-      TMLSendEvent sendEvtFeedback = new TMLSendEvent("sendEvtFeedback_VC" + i, referenceObject);
-      sendEvtFeedback.setEvent(outputFeedbackEvents.get(i));
-      addElement(testingVC, sendEvtFeedback);
-      testingVC.addGuard("vc == " + i);
+        // Right branch of main sequence
+        //
+        TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
+        loop.setInfinite(true);
+        addElement(mainSequence, loop);
 
-      TMLStopState stopVC = new TMLStopState("stopVC" + i, referenceObject);
-      addElement(sendEvtFeedback, stopVC);
+        // Waiting for a packet from OUT
+        TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
+        waitingForPacketFromOUT.setEvent(packetOutFromOUT);
+        waitingForPacketFromOUT.addParam("pktlen");
+        waitingForPacketFromOUT.addParam("dstX");
+        waitingForPacketFromOUT.addParam("dstY");
+        waitingForPacketFromOUT.addParam("vc");
+        waitingForPacketFromOUT.addParam("eop");
+        waitingForPacketFromOUT.addParam("chid");
+        addElement(loop, waitingForPacketFromOUT);
+
+        // Reading on channel
+        TMLReadChannel readFromOUT = new TMLReadChannel("readFromOUT", referenceObject);
+        readFromOUT.setNbOfSamples("1");
+        readFromOUT.addChannel(outputChannelFromOUT);
+        addElement(waitingForPacketFromOUT, readFromOUT);
+
+        // subsequence
+        TMLSequence internalSeq = new TMLSequence("internalSeq", referenceObject);
+        addElement(readFromOUT, internalSeq);
+
+        // Left branch: test on eop
+        TMLChoice testingEOP = new TMLChoice("testingEOP", referenceObject);
+        addElement(internalSeq, testingEOP);
+
+        // Left branch of choice: eop==1
+        // New choice on all possible destination depending on chid
+        packetChoice = new TMLChoice("testingPacket", referenceObject);
+        addElement(testingEOP, packetChoice);
+        testingEOP.addGuard("eop == 1");
+
+        // Right branch of choice
+        TMLStopState stopOfRightBranchOfChoice = new TMLStopState("stopOfRightBranchOfChoice", referenceObject);
+        addElement(testingEOP, stopOfRightBranchOfChoice);
+        testingEOP.addGuard("else");
+
+        // Right branch of internal seg
+        // Test on vc
+        TMLChoice testingVC = new TMLChoice("testingVC", referenceObject);
+        addElement(internalSeq, testingVC);
+
+        for (i = 0; i < nbOfVCs; i++) {
+            TMLSendEvent sendEvtFeedback = new TMLSendEvent("sendEvtFeedback_VC" + i, referenceObject);
+            sendEvtFeedback.setEvent(outputFeedbackEvents.get(i));
+            addElement(testingVC, sendEvtFeedback);
+            testingVC.addGuard("vc == " + i);
+
+            TMLStopState stopVC = new TMLStopState("stopVC" + i, referenceObject);
+            addElement(sendEvtFeedback, stopVC);
+        }
+
     }
 
-  }
+    public void postProcessing(Vector<TMLEvent> packetsAvailable, Vector<String> channelIDs) {
+        if (packetsAvailable.size() == 0) {
+            TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopNoDestinationTask", referenceObject);
+            addElement(packetChoice, stopOfLeftBranchOfChoice);
+            packetChoice.addGuard("chid == (0-1)");
+            return;
+        }
 
-  public void postProcessing(Vector<TMLEvent> packetsAvailable, Vector<String> channelIDs) {
-    if (packetsAvailable.size() == 0) {
-      TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopNoDestinationTask", referenceObject);
-      addElement(packetChoice, stopOfLeftBranchOfChoice);
-      packetChoice.addGuard("chid == (0-1)");
-      return;
+        for (TMLEvent packetAvailable : packetsAvailable) {
+            addTMLEvent(packetAvailable);
+        }
+
+        int i = 0;
+        for (TMLEvent packetAvailable : packetsAvailable) {
+            TMLSendEvent sendEvtPktAvailable = new TMLSendEvent("sendEvtPktAvailable", referenceObject);
+            sendEvtPktAvailable.setEvent(packetAvailable);
+            sendEvtPktAvailable.addParam("pktlen");
+            sendEvtPktAvailable.addParam("dstX");
+            sendEvtPktAvailable.addParam("dstY");
+            sendEvtPktAvailable.addParam("vc");
+            sendEvtPktAvailable.addParam("eop");
+            sendEvtPktAvailable.addParam("chid");
+            addElement(packetChoice, sendEvtPktAvailable);
+            packetChoice.addGuard("chid == " + channelIDs.get(i));
+            TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopOfLeftBranchOfChoice__" + channelIDs.get(i),
+                    referenceObject);
+            addElement(sendEvtPktAvailable, stopOfLeftBranchOfChoice);
+            i++;
+        }
+
     }
-
-    for (TMLEvent packetAvailable : packetsAvailable) {
-      addTMLEvent(packetAvailable);
-    }
-
-    int i = 0;
-    for (TMLEvent packetAvailable : packetsAvailable) {
-      TMLSendEvent sendEvtPktAvailable = new TMLSendEvent("sendEvtPktAvailable", referenceObject);
-      sendEvtPktAvailable.setEvent(packetAvailable);
-      sendEvtPktAvailable.addParam("pktlen");
-      sendEvtPktAvailable.addParam("dstX");
-      sendEvtPktAvailable.addParam("dstY");
-      sendEvtPktAvailable.addParam("vc");
-      sendEvtPktAvailable.addParam("eop");
-      sendEvtPktAvailable.addParam("chid");
-      addElement(packetChoice, sendEvtPktAvailable);
-      packetChoice.addGuard("chid == " + channelIDs.get(i));
-      TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopOfLeftBranchOfChoice__" + channelIDs.get(i),
-          referenceObject);
-      addElement(sendEvtPktAvailable, stopOfLeftBranchOfChoice);
-      i++;
-    }
-
-  }
 
 }

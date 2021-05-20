@@ -47,31 +47,31 @@ package myutil;
  */
 public class PeriodicBehaviorThread extends Thread {
 
-  private PeriodicBehavior pb;
-  private long periodValue;
+    private PeriodicBehavior pb;
+    private long periodValue;
 
-  public PeriodicBehaviorThread(PeriodicBehavior _pb, long _periodValue) {
-    pb = _pb;
-    periodValue = _periodValue;
-    this.setDaemon(true);
-    this.start();
+    public PeriodicBehaviorThread(PeriodicBehavior _pb, long _periodValue) {
+        pb = _pb;
+        periodValue = _periodValue;
+        this.setDaemon(true);
+        this.start();
 
-  }
-
-  public void run() {
-
-    if (pb == null) {
-      return;
     }
 
-    while (true) {
+    public void run() {
 
-      try {
-        Thread.sleep(periodValue); // sleep for about 1s
-      } catch (InterruptedException e) {
+        if (pb == null) {
+            return;
+        }
 
-      }
-      pb.periodicAction();
+        while (true) {
+
+            try {
+                Thread.sleep(periodValue); // sleep for about 1s
+            } catch (InterruptedException e) {
+
+            }
+            pb.periodicAction();
+        }
     }
-  }
 }

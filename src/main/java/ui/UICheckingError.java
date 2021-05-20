@@ -48,37 +48,37 @@ import translator.CheckingError;
  */
 public class UICheckingError extends CheckingError {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = -6532490783339577084L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6532490783339577084L;
 
-  public static final String MESSAGE_CHOICE_BOTH_STOCHASTIC_DETERMINISTIC = "Badly formatted choice: it has both non-determinitic/ stochastic and regular guards";
+    public static final String MESSAGE_CHOICE_BOTH_STOCHASTIC_DETERMINISTIC = "Badly formatted choice: it has both non-determinitic/ stochastic and regular guards";
 
-  private TDiagramPanel tdp;
-  private TGComponent tgc;
+    private TDiagramPanel tdp;
+    private TGComponent tgc;
 
-  public UICheckingError(int _type, String _message) {
-    super(_type, _message);
-  }
+    public UICheckingError(int _type, String _message) {
+        super(_type, _message);
+    }
 
-  public UICheckingError(CheckingError ce) {
-    super(ce);
-  }
+    public UICheckingError(CheckingError ce) {
+        super(ce);
+    }
 
-  public void setTDiagramPanel(TDiagramPanel _tdp) {
-    tdp = _tdp;
-  }
+    public void setTDiagramPanel(TDiagramPanel _tdp) {
+        tdp = _tdp;
+    }
 
-  public void setTGComponent(TGComponent _tgc) {
-    tgc = _tgc;
-  }
+    public void setTGComponent(TGComponent _tgc) {
+        tgc = _tgc;
+    }
 
-  public TDiagramPanel getTDiagramPanel() {
-    return tdp;
-  }
+    public TDiagramPanel getTDiagramPanel() {
+        return tdp;
+    }
 
-  public TGComponent getTGComponent() {
-    return tgc;
-  }
+    public TGComponent getTGComponent() {
+        return tgc;
+    }
 }

@@ -52,93 +52,93 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TOSADChoice extends TGCWithInternalComponent {
-  private int lineLength = 10;
-  private int lineOutLength = 25;
-  private int textX1, textY1, textX2, textY2, textX3, textY3;
+    private int lineLength = 10;
+    private int lineOutLength = 25;
+    private int textX1, textY1, textX2, textY2, textX3, textY3;
 
-  public TOSADChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TOSADChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 30;
-    height = 30;
-    textX1 = -lineOutLength;
-    textY1 = height / 2 - 5;
-    textX2 = width + 5;
-    textY2 = height / 2 - 5;
-    textX3 = width / 2 + 5;
-    textY3 = height + 15;
+        width = 30;
+        height = 30;
+        textX1 = -lineOutLength;
+        textY1 = height / 2 - 5;
+        textX2 = width + 5;
+        textY2 = height / 2 - 5;
+        textX3 = width / 2 + 5;
+        textY3 = height + 15;
 
-    nbConnectingPoint = 4;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new TOSADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TOSADConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-    connectingPoint[2] = new TOSADConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
-    connectingPoint[3] = new TOSADConnectingPoint(this, 0, lineOutLength, false, true, 0.5, 1.0);
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 4;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TOSADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TOSADConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new TOSADConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
+        connectingPoint[3] = new TOSADConnectingPoint(this, 0, lineOutLength, false, true, 0.5, 1.0);
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 3;
-    tgcomponent = new TGComponent[nbInternalTGComponent];
+        nbInternalTGComponent = 3;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
 
-    TGCOneLineText tgc = new TGCOneLineText(x + textX1 - 50, y + textY1, textX1 - 50, textX1 + 5, textY1, textY1 + 25,
-        true, this, _tdp);
-    tgc.setValue("[ ]");
-    tgc.setName("guard 1");
-    tgcomponent[0] = tgc;
+        TGCOneLineText tgc = new TGCOneLineText(x + textX1 - 50, y + textY1, textX1 - 50, textX1 + 5, textY1,
+                textY1 + 25, true, this, _tdp);
+        tgc.setValue("[ ]");
+        tgc.setName("guard 1");
+        tgcomponent[0] = tgc;
 
-    tgc = new TGCOneLineText(x + textX2, y + textY2, textX2, textX2 + 20, textY2, textY2 + 25, true, this, _tdp);
-    tgc.setValue("[ ]");
-    tgc.setName("guard 2");
-    tgcomponent[1] = tgc;
+        tgc = new TGCOneLineText(x + textX2, y + textY2, textX2, textX2 + 20, textY2, textY2 + 25, true, this, _tdp);
+        tgc.setValue("[ ]");
+        tgc.setName("guard 2");
+        tgcomponent[1] = tgc;
 
-    tgc = new TGCOneLineText(x + textX3, y + textY3, textX3, textX3 + 20, textY3, textY3 + 25, true, this, _tdp);
-    tgc.setValue("[ ]");
-    tgc.setName("guard 3");
-    tgcomponent[2] = tgc;
+        tgc = new TGCOneLineText(x + textX3, y + textY3, textX3, textX3 + 20, textY3, textY3 + 25, true, this, _tdp);
+        tgc.setValue("[ ]");
+        tgc.setName("guard 3");
+        tgcomponent[2] = tgc;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "choice";
+        name = "choice";
 
-    myImageIcon = IconManager.imgic208;
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.drawLine(x + (width / 2), y, x + width, y + height / 2);
-    g.drawLine(x, y + height / 2, x + width / 2, y + height);
-    g.drawLine(x + width / 2, y, x, y + height / 2);
-    g.drawLine(x + width, y + height / 2, x + width / 2, y + height);
-
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x, y + height / 2, x - lineOutLength, y + height / 2);
-    g.drawLine(x + width, y + height / 2, x + width + lineOutLength, y + height / 2);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + height + lineOutLength);
-  }
-
-  public TGComponent isOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic208;
     }
-    return null;
-  }
 
-  public String getGuard(int i) {
-    if ((i >= 0) && (i < nbInternalTGComponent)) {
-      return tgcomponent[i].getValue();
+    public void internalDrawing(Graphics g) {
+        g.drawLine(x + (width / 2), y, x + width, y + height / 2);
+        g.drawLine(x, y + height / 2, x + width / 2, y + height);
+        g.drawLine(x + width / 2, y, x, y + height / 2);
+        g.drawLine(x + width, y + height / 2, x + width / 2, y + height);
+
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x, y + height / 2, x - lineOutLength, y + height / 2);
+        g.drawLine(x + width, y + height / 2, x + width + lineOutLength, y + height / 2);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + height + lineOutLength);
     }
-    return "";
-  }
 
-  public void setGuard(String guard, int i) {
-    if ((i >= 0) && (i < nbInternalTGComponent)) {
-      tgcomponent[i].setValue(guard);
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+            return this;
+        }
+        return null;
     }
-  }
 
-  public int getType() {
-    return TGComponentManager.TOSAD_CHOICE;
-  }
+    public String getGuard(int i) {
+        if ((i >= 0) && (i < nbInternalTGComponent)) {
+            return tgcomponent[i].getValue();
+        }
+        return "";
+    }
+
+    public void setGuard(String guard, int i) {
+        if ((i >= 0) && (i < nbInternalTGComponent)) {
+            tgcomponent[i].setValue(guard);
+        }
+    }
+
+    public int getType() {
+        return TGComponentManager.TOSAD_CHOICE;
+    }
 
 }

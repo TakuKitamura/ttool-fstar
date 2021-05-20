@@ -48,43 +48,43 @@ import java.util.LinkedList;
  */
 public class AvatarPragmaConstant extends AvatarPragma {
 
-  private LinkedList<AvatarConstant> constants;
-  private boolean isPublic;
+    private LinkedList<AvatarConstant> constants;
+    private boolean isPublic;
 
-  public AvatarPragmaConstant(String _name, Object _referenceObject, LinkedList<AvatarConstant> _consts,
-      boolean _isPublic) {
-    super(_name, _referenceObject);
-    constants = _consts;
-    this.isPublic = _isPublic;
-  }
+    public AvatarPragmaConstant(String _name, Object _referenceObject, LinkedList<AvatarConstant> _consts,
+            boolean _isPublic) {
+        super(_name, _referenceObject);
+        constants = _consts;
+        this.isPublic = _isPublic;
+    }
 
-  public LinkedList<AvatarConstant> getConstants() {
-    return constants;
-  }
+    public LinkedList<AvatarConstant> getConstants() {
+        return constants;
+    }
 
-  public AvatarConstant getConstantWithName(String name) {
-    for (AvatarConstant c : this.constants)
-      if (c.getName().equals(name))
-        return c;
-    return null;
-  }
+    public AvatarConstant getConstantWithName(String name) {
+        for (AvatarConstant c : this.constants)
+            if (c.getName().equals(name))
+                return c;
+        return null;
+    }
 
-  public boolean hasConstantWithName(String name) {
-    return this.getConstantWithName(name) != null;
-  }
+    public boolean hasConstantWithName(String name) {
+        return this.getConstantWithName(name) != null;
+    }
 
-  public boolean isPublic() {
-    return this.isPublic;
-  }
+    public boolean isPublic() {
+        return this.isPublic;
+    }
 
-  @Override
-  public AvatarPragmaConstant advancedClone(AvatarSpecification avspec) {
-    LinkedList<AvatarConstant> cs = new LinkedList<AvatarConstant>();
-    for (AvatarConstant c : this.constants)
-      cs.add(c.advancedClone());
+    @Override
+    public AvatarPragmaConstant advancedClone(AvatarSpecification avspec) {
+        LinkedList<AvatarConstant> cs = new LinkedList<AvatarConstant>();
+        for (AvatarConstant c : this.constants)
+            cs.add(c.advancedClone());
 
-    AvatarPragmaConstant result = new AvatarPragmaConstant(this.name, this.referenceObject, cs, this.isPublic);
-    this.cloneLinkToReferenceObjects(result);
-    return result;
-  }
+        AvatarPragmaConstant result = new AvatarPragmaConstant(this.name, this.referenceObject, cs, this.isPublic);
+        this.cloneLinkToReferenceObjects(result);
+        return result;
+    }
 }

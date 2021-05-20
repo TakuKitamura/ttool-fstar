@@ -45,52 +45,52 @@ package tpndescription;
  * @author Ludovic APVRILLE
  */
 public class Place {
-  public static int INDEX = 0;
+    public static int INDEX = 0;
 
-  public int nbOfTokens = 0;
-  public String name;
-  public int x, y;
+    public int nbOfTokens = 0;
+    public String name;
+    public int x, y;
 
-  public Place() {
-    name = generateName();
-  }
+    public Place() {
+        name = generateName();
+    }
 
-  public Place(String _name) {
-    name = _name;
-  }
+    public Place(String _name) {
+        name = _name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public int getMarking() {
-    return nbOfTokens;
-  }
+    public int getMarking() {
+        return nbOfTokens;
+    }
 
-  public String generateName() {
-    int index = INDEX;
-    INDEX++;
-    return "p" + index;
-  }
+    public String generateName() {
+        int index = INDEX;
+        INDEX++;
+        return "p" + index;
+    }
 
-  public void setMark() {
-    nbOfTokens = 1;
-  }
+    public void setMark() {
+        nbOfTokens = 1;
+    }
 
-  public void addMark() {
-    nbOfTokens++;
-  }
+    public void addMark() {
+        nbOfTokens++;
+    }
 
-  public String toString() {
-    return name;
-  }
+    public String toString() {
+        return name;
+    }
 
-  public String toTINAString() {
-    return "pl " + name + " (" + nbOfTokens + ")";
-  }
+    public String toTINAString() {
+        return "pl " + name + " (" + nbOfTokens + ")";
+    }
 
-  public String toNDRFormat() {
-    return "p " + x + " " + y + " " + name + " " + nbOfTokens + " n\n";
-  }
+    public String toNDRFormat() {
+        return "p " + x + " " + y + " " + name + " " + nbOfTokens + " n\n";
+    }
 
 }

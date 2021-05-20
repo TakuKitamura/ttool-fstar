@@ -51,42 +51,42 @@ import java.util.List;
  */
 public class SimulationTraceTree implements GenericTree {
 
-  private MainGUI mgui;
-  private String name = "Simulation Traces";
+    private MainGUI mgui;
+    private String name = "Simulation Traces";
 
-  public SimulationTraceTree(MainGUI _mgui) {
-    mgui = _mgui;
-  }
-
-  // TREE MANAGEMENT
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    // TraceManager.addDev("Getting nb of child in SimulationTraceTree");
-    int nb = mgui.getSimulationTraces().size();
-    // TraceManager.addDev("size of simulation tree:" + nb);
-    if (nb == 0) {
-      return 1;
+    public SimulationTraceTree(MainGUI _mgui) {
+        mgui = _mgui;
     }
-    return nb;
-  }
 
-  public Object getChild(int index) {
-    // TraceManager.addDev("Getting child of SimulationTraceTree at index:" +
-    // index);
-    List<SimulationTrace> sts = mgui.getSimulationTraces();
-    if (sts.size() == 0) {
-      return "No simulation trace";
+    // TREE MANAGEMENT
+    public String toString() {
+        return name;
     }
-    return mgui.getSimulationTraces().get(index);
-  }
 
-  public int getIndexOfChild(Object child) {
-    if (child instanceof String) {
-      return 0;
+    public int getChildCount() {
+        // TraceManager.addDev("Getting nb of child in SimulationTraceTree");
+        int nb = mgui.getSimulationTraces().size();
+        // TraceManager.addDev("size of simulation tree:" + nb);
+        if (nb == 0) {
+            return 1;
+        }
+        return nb;
     }
-    return mgui.getSimulationTraces().indexOf(child);
-  }
+
+    public Object getChild(int index) {
+        // TraceManager.addDev("Getting child of SimulationTraceTree at index:" +
+        // index);
+        List<SimulationTrace> sts = mgui.getSimulationTraces();
+        if (sts.size() == 0) {
+            return "No simulation trace";
+        }
+        return mgui.getSimulationTraces().get(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof String) {
+            return 0;
+        }
+        return mgui.getSimulationTraces().indexOf(child);
+    }
 }

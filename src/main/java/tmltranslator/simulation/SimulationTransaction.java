@@ -47,29 +47,30 @@ package tmltranslator.simulation;
  */
 public class SimulationTransaction {
 
-  public final static int NODE_TYPE_CPU = 0;
-  public final static int NOTE_TYPE_BUS = 1;
+    public final static int NODE_TYPE_CPU = 0;
+    public final static int NOTE_TYPE_BUS = 1;
 
-  public String nodeType;
-  public String deviceName;
-  public String coreNumber;
-  public String taskName;
-  public String command;
-  public String startTime;
-  public String endTime;
-  public String length; /* Used for identifiying asynchronous messages */
-  public String virtualLength;
-  public String channelName;
-  public String id;
-  public long uniqueID = -1;
-  public int index = 0;
-  public String runnableTime;
+    public String nodeType;
+    public String deviceName;
+    public String coreNumber;
+    public String taskName;
+    public String command;
+    public String startTime;
+    public String endTime;
+    public String length; /* Used for identifiying asynchronous messages */
+    public String virtualLength;
+    public String channelName;
+    public String id;
+    public long uniqueID = -1;
+    public int index = 0;
+    public String runnableTime;
 
-  public SimulationTransaction() {
-  }
+    public SimulationTransaction() {
+    }
 
-  public String toString() {
-    return "ID=" + uniqueID + " nodeType=" + nodeType + " name= " + deviceName + " id=" + id + " command=" + command;
-  }
+    public String toString() {
+        return "ID=" + uniqueID + " nodeType=" + nodeType + " name= " + deviceName + " id=" + id + " command="
+                + command;
+    }
 
 }

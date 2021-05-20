@@ -48,28 +48,28 @@ import uppaaldesc.UPPAALTemplate;
  * @author Ludovic APVRILLE
  */
 public class TMLTaskTemplate {
-  public TMLTask task;
-  public UPPAALTemplate template;
-  public int beginid; // Instanciation information
-  public int endid; // Instanciation information
+    public TMLTask task;
+    public UPPAALTemplate template;
+    public int beginid; // Instanciation information
+    public int endid; // Instanciation information
 
-  public TMLTaskTemplate() {
-  }
-
-  public TMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
-    task = _task;
-    template = _template;
-  }
-
-  public String toString() {
-    String s = "";
-    if (task != null) {
-      s += "task: " + task.getName() + " ";
+    public TMLTaskTemplate() {
     }
-    if (template != null) {
-      s += "template:" + template.getName() + " ";
+
+    public TMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
+        task = _task;
+        template = _template;
     }
-    s += "beginid=" + beginid + " endid=" + endid;
-    return s;
-  }
+
+    public String toString() {
+        String s = "";
+        if (task != null) {
+            s += "task: " + task.getName() + " ";
+        }
+        if (template != null) {
+            s += "template:" + template.getName() + " ";
+        }
+        s += "beginid=" + beginid + " endid=" + endid;
+        return s;
+    }
 }

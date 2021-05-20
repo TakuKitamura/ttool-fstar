@@ -85,333 +85,333 @@ import static myutil.FileUtils.saveFile;
  */
 public class JDialogNoCManagement extends JDialog implements ActionListener, ListSelectionListener, Runnable {
 
-  protected MainGUI mgui;
+    protected MainGUI mgui;
 
-  protected final static int NOT_SELECTED = 0;
-  protected final static int NOT_STARTED = 1;
-  protected final static int STARTED = 2;
-  protected final static int STOPPED = 3;
-  int mode;
+    protected final static int NOT_SELECTED = 0;
+    protected final static int NOT_STARTED = 1;
+    protected final static int STARTED = 2;
+    protected final static int STOPPED = 3;
+    int mode;
 
-  protected JButton start;
-  protected JButton stop;
-  protected JButton close;
+    protected JButton start;
+    protected JButton stop;
+    protected JButton close;
 
-  protected JTextArea outputText;
-  protected String output = "";
+    protected JTextArea outputText;
+    protected String output = "";
 
-  private Thread t;
-  private boolean go = false;
+    private Thread t;
+    private boolean go = false;
 
-  protected RshClient rshc;
+    protected RshClient rshc;
 
-  private TMLMapping map;
-  private InputInstance inputInstance;
-  private OptimizationModel optimizationModel;
-
-  /*
-   * Creates new form
-   */
-  public JDialogNoCManagement(Frame f, MainGUI _mgui, String title, TMLMapping map) {
-    super(f, title, true);
-
-    mgui = _mgui;
-
-    this.map = map;
-
-    initComponents();
-    myInitComponents();
-
-    pack();
-
-    // getGlassPane().addMouseListener( new MouseAdapter() {});
-    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-  }
-
-  protected void myInitComponents() {
-    mode = NOT_STARTED;
-    setButtons();
-    handleStartButton();
-  }
-
-  protected void initComponents() {
-
-    Container c = getContentPane();
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(new BorderLayout());
-
-    JPanel jp03 = new JPanel();
-    GridBagLayout gridbag03 = new GridBagLayout();
-    GridBagConstraints c03 = new GridBagConstraints();
-    jp03.setLayout(gridbag03);
-    jp03.setBorder(new javax.swing.border.TitledBorder("NoC Management Options"));
-    c03.weighty = 1.0;
-    c03.weightx = 1.0;
-    c03.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c03.fill = GridBagConstraints.BOTH;
-    c03.gridheight = 1;
-
-    JPanel jp04 = new JPanel();
-
-    GridBagLayout gridbag04 = new GridBagLayout();
-    GridBagConstraints c04 = new GridBagConstraints();
-    jp04.setLayout(gridbag04);
-
-    c04.weighty = 1.0;
-    c04.weightx = 1.0;
-    c04.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c04.fill = GridBagConstraints.BOTH;
-    c04.gridheight = 1;
-
-    // jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
-    // jp04.add(new JLabel("Design Space Exploration Output"), c04);
-
-    outputText = new ScrolledJTextArea();
-    outputText.setEditable(false);
-    outputText.setMargin(new Insets(10, 10, 10, 10));
-    outputText.setTabSize(3);
-    outputText.append("How to start?" + "\n - Simply click on start ^^\n");
-    JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    jsp.setPreferredSize(new Dimension(300, 300));
-    Font f = new Font("Courrier", Font.BOLD, 12);
-    outputText.setFont(f);
-    jp04.add(jsp, c04);
-    // jp1.add("Results", jp04);
-
-    c.add(jp03, BorderLayout.NORTH);
-    c.add(jp04, BorderLayout.CENTER);
-
-    start = new JButton("Start", IconManager.imgic53);
-    stop = new JButton("Stop", IconManager.imgic55);
-    close = new JButton("Close", IconManager.imgic27);
-
-    start.setPreferredSize(new Dimension(100, 30));
-    stop.setPreferredSize(new Dimension(100, 30));
-    close.setPreferredSize(new Dimension(120, 30));
-
-    start.addActionListener(this);
-    stop.addActionListener(this);
-    close.addActionListener(this);
-
-    JPanel jp2 = new JPanel();
-
-    jp2.add(start);
-    jp2.add(stop);
-    jp2.add(close);
-
-    c.add(jp2, BorderLayout.SOUTH);
-
-  }
-
-  private void handleStartButton() {
-    // TraceManager.addDev("Handle start button");
+    private TMLMapping map;
+    private InputInstance inputInstance;
+    private OptimizationModel optimizationModel;
 
     /*
-     * boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
-     * nbOfMappings.setEnabled(b); infoNbOfMappings.setEnabled(b);
-     * randomMappingBox.setEnabled(b); randomMappingNb.setEnabled(b);
-     * outputTML.setEnabled(b); outputGUI.setEnabled(b);
+     * Creates new form
      */
-    // dseOptions.repaint();
+    public JDialogNoCManagement(Frame f, MainGUI _mgui, String title, TMLMapping map) {
+        super(f, title, true);
 
-    if (mode != NOT_STARTED && mode != NOT_SELECTED) {
-      return;
+        mgui = _mgui;
+
+        this.map = map;
+
+        initComponents();
+        myInitComponents();
+
+        pack();
+
+        // getGlassPane().addMouseListener( new MouseAdapter() {});
+        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
-    setButtons();
-
-  }
-
-  public void valueChanged(ListSelectionEvent e) {
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-
-    if (evt.getSource() == start) {
-      startProcess();
-    } else if (evt.getSource() == stop) {
-      stopProcess();
-    } else if (evt.getSource() == close) {
-      closeDialog();
-    }
-  }
-
-  public void closeDialog() {
-    if (mode == STARTED) {
-      stopProcess();
-    }
-    dispose();
-  }
-
-  public void stopProcess() {
-    mode = STOPPED;
-    setButtons();
-    go = false;
-
-  }
-
-  public void startProcess() {
-    t = new Thread(this);
-    mode = STARTED;
-    setButtons();
-    go = true;
-    t.start();
-  }
-  //
-  // private void testGo() throws InterruptedException {
-  // if (go == false) {
-  // throw new InterruptedException("Stopped by user");
-  // }
-  // }
-
-  @SuppressWarnings("unchecked")
-  public void run() {
-    // String cmd;
-    // String list, data;
-    // int cycle = 0;
-    output = "";
-
-    // hasError = false;
-    // try {
-
-    TraceManager.addDev("Thread started");
-
-    outputText.append("\nGenerating XML With NoC\n");
-    String XML = map.toXML();
-    String dir = SpecConfigTTool.TMLCodeDirectory;
-    try {
-      saveFile(SpecConfigTTool.TMLCodeDirectory + "/WithNoC.xml", XML);
-    } catch (Exception e) {
-      outputText.append("\nException when generating XML file\n");
-      stopProcess();
-      return;
+    protected void myInitComponents() {
+        mode = NOT_STARTED;
+        setButtons();
+        handleStartButton();
     }
 
-    outputText.append("\nSpecification generated in " + dir + "/WithNoC.xml\n");
+    protected void initComponents() {
 
-    outputText.append("\nPreparing model\n");
+        Container c = getContentPane();
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(new BorderLayout());
 
-    int size = map.getTMLArchitecture().getSizeOfNoC();
+        JPanel jp03 = new JPanel();
+        GridBagLayout gridbag03 = new GridBagLayout();
+        GridBagConstraints c03 = new GridBagConstraints();
+        jp03.setLayout(gridbag03);
+        jp03.setBorder(new javax.swing.border.TitledBorder("NoC Management Options"));
+        c03.weighty = 1.0;
+        c03.weightx = 1.0;
+        c03.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c03.fill = GridBagConstraints.BOTH;
+        c03.gridheight = 1;
 
-    if (size < 0) {
-      outputText.append("\nNo NoC found. Aborting.\n");
-      return;
+        JPanel jp04 = new JPanel();
+
+        GridBagLayout gridbag04 = new GridBagLayout();
+        GridBagConstraints c04 = new GridBagConstraints();
+        jp04.setLayout(gridbag04);
+
+        c04.weighty = 1.0;
+        c04.weightx = 1.0;
+        c04.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c04.fill = GridBagConstraints.BOTH;
+        c04.gridheight = 1;
+
+        // jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
+        // jp04.add(new JLabel("Design Space Exploration Output"), c04);
+
+        outputText = new ScrolledJTextArea();
+        outputText.setEditable(false);
+        outputText.setMargin(new Insets(10, 10, 10, 10));
+        outputText.setTabSize(3);
+        outputText.append("How to start?" + "\n - Simply click on start ^^\n");
+        JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 300));
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        outputText.setFont(f);
+        jp04.add(jsp, c04);
+        // jp1.add("Results", jp04);
+
+        c.add(jp03, BorderLayout.NORTH);
+        c.add(jp04, BorderLayout.CENTER);
+
+        start = new JButton("Start", IconManager.imgic53);
+        stop = new JButton("Stop", IconManager.imgic55);
+        close = new JButton("Close", IconManager.imgic27);
+
+        start.setPreferredSize(new Dimension(100, 30));
+        stop.setPreferredSize(new Dimension(100, 30));
+        close.setPreferredSize(new Dimension(120, 30));
+
+        start.addActionListener(this);
+        stop.addActionListener(this);
+        close.addActionListener(this);
+
+        JPanel jp2 = new JPanel();
+
+        jp2.add(start);
+        jp2.add(stop);
+        jp2.add(close);
+
+        c.add(jp2, BorderLayout.SOUTH);
+
     }
 
-    if (size < 2) {
-      outputText.append("\nNoC must be at least of size 2x2. Currently: " + size + ". Aborting.\n");
-      return;
+    private void handleStartButton() {
+        // TraceManager.addDev("Handle start button");
+
+        /*
+         * boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
+         * nbOfMappings.setEnabled(b); infoNbOfMappings.setEnabled(b);
+         * randomMappingBox.setEnabled(b); randomMappingNb.setEnabled(b);
+         * outputTML.setEnabled(b); outputGUI.setEnabled(b);
+         */
+        // dseOptions.repaint();
+
+        if (mode != NOT_STARTED && mode != NOT_SELECTED) {
+            return;
+        }
+
+        setButtons();
+
     }
 
-    TMAP2Network t2n = new TMAP2Network<>(map, size);
-    String error = t2n.removeAllRouterNodes();
-    if (error != null) {
-      outputText.append("\nERROR: " + error + ". Aborting.\n");
-      stopProcess();
-      return;
+    public void valueChanged(ListSelectionEvent e) {
     }
 
-    outputText.append("\nNoC removed\n");
+    public void actionPerformed(ActionEvent evt) {
 
-    outputText.append("\nChecking syntax of the specification\n");
-    TMLMapping<?> mapping = t2n.getTMLMapping();
-
-    mgui.gtm.setTMLMapping(mapping);
-    TMLSyntaxChecking tmlsc = new TMLSyntaxChecking(mapping);
-    mapping.forceMakeAutomata();
-    tmlsc.checkSyntax();
-
-    outputText.append("\n" + tmlsc.hasErrors() + " errors, " + tmlsc.hasWarnings() + "  warnings:\n");
-    if (tmlsc.hasErrors() > 0) {
-      for (TMLError err : tmlsc.getErrors()) {
-        outputText.append("Error:" + err.toString() + "\n");
-      }
-    }
-    if (tmlsc.hasWarnings() > 0) {
-      for (TMLError err : tmlsc.getWarnings()) {
-        outputText.append("Warning:" + err.toString() + "\n");
-      }
+        if (evt.getSource() == start) {
+            startProcess();
+        } else if (evt.getSource() == stop) {
+            stopProcess();
+        } else if (evt.getSource() == close) {
+            closeDialog();
+        }
     }
 
-    outputText.append("\nGenerating TML\n");
-
-    TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
-    ts.toTextFormat(mapping);
-
-    dir = SpecConfigTTool.TMLCodeDirectory;
-    try {
-      ts.saveFile(SpecConfigTTool.TMLCodeDirectory, "NoNoC");
-    } catch (Exception e) {
-      outputText.append("\nException when generating TML/TMAP file\n");
-      stopProcess();
-      return;
+    public void closeDialog() {
+        if (mode == STARTED) {
+            stopProcess();
+        }
+        dispose();
     }
 
-    outputText.append("\nSpecification generated in " + dir + "\n");
+    public void stopProcess() {
+        mode = STOPPED;
+        setButtons();
+        go = false;
 
-    outputText.append("\nGenerating XML without NoC\n");
-    XML = mapping.toXML();
-    dir = SpecConfigTTool.TMLCodeDirectory;
-    try {
-      saveFile(SpecConfigTTool.TMLCodeDirectory + "/NoNoC.xml", XML);
-    } catch (Exception e) {
-      outputText.append("\nException when generating XML file\n");
-      stopProcess();
-      return;
     }
 
-    outputText.append("\nSpecification generated in " + dir + "/NoNoC.xml\n");
-
-    outputText.append("\nAll done\n");
-
-    stopProcess();
-
-  }
-
-  protected void checkMode() {
-    mode = NOT_SELECTED;
-  }
-
-  protected void setButtons() {
-    switch (mode) {
-      case NOT_SELECTED:
-        start.setEnabled(false);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        // setCursor(CursoretPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        getGlassPane().setVisible(false);
-        break;
-      case NOT_STARTED:
-        start.setEnabled(true);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        // setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        getGlassPane().setVisible(false);
-        break;
-      case STARTED:
-        start.setEnabled(false);
-        stop.setEnabled(true);
-        close.setEnabled(false);
-        getGlassPane().setVisible(true);
-        // setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        break;
-      case STOPPED:
-      default:
-        start.setEnabled(false);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        getGlassPane().setVisible(false);
-        break;
+    public void startProcess() {
+        t = new Thread(this);
+        mode = STARTED;
+        setButtons();
+        go = true;
+        t.start();
     }
-  }
+    //
+    // private void testGo() throws InterruptedException {
+    // if (go == false) {
+    // throw new InterruptedException("Stopped by user");
+    // }
+    // }
 
-  public boolean hasToContinue() {
-    return (go == true);
-  }
-  //
-  // public void setError() {
-  // hasError = true;
-  // }
-  //
+    @SuppressWarnings("unchecked")
+    public void run() {
+        // String cmd;
+        // String list, data;
+        // int cycle = 0;
+        output = "";
+
+        // hasError = false;
+        // try {
+
+        TraceManager.addDev("Thread started");
+
+        outputText.append("\nGenerating XML With NoC\n");
+        String XML = map.toXML();
+        String dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            saveFile(SpecConfigTTool.TMLCodeDirectory + "/WithNoC.xml", XML);
+        } catch (Exception e) {
+            outputText.append("\nException when generating XML file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "/WithNoC.xml\n");
+
+        outputText.append("\nPreparing model\n");
+
+        int size = map.getTMLArchitecture().getSizeOfNoC();
+
+        if (size < 0) {
+            outputText.append("\nNo NoC found. Aborting.\n");
+            return;
+        }
+
+        if (size < 2) {
+            outputText.append("\nNoC must be at least of size 2x2. Currently: " + size + ". Aborting.\n");
+            return;
+        }
+
+        TMAP2Network t2n = new TMAP2Network<>(map, size);
+        String error = t2n.removeAllRouterNodes();
+        if (error != null) {
+            outputText.append("\nERROR: " + error + ". Aborting.\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nNoC removed\n");
+
+        outputText.append("\nChecking syntax of the specification\n");
+        TMLMapping<?> mapping = t2n.getTMLMapping();
+
+        mgui.gtm.setTMLMapping(mapping);
+        TMLSyntaxChecking tmlsc = new TMLSyntaxChecking(mapping);
+        mapping.forceMakeAutomata();
+        tmlsc.checkSyntax();
+
+        outputText.append("\n" + tmlsc.hasErrors() + " errors, " + tmlsc.hasWarnings() + "  warnings:\n");
+        if (tmlsc.hasErrors() > 0) {
+            for (TMLError err : tmlsc.getErrors()) {
+                outputText.append("Error:" + err.toString() + "\n");
+            }
+        }
+        if (tmlsc.hasWarnings() > 0) {
+            for (TMLError err : tmlsc.getWarnings()) {
+                outputText.append("Warning:" + err.toString() + "\n");
+            }
+        }
+
+        outputText.append("\nGenerating TML\n");
+
+        TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
+        ts.toTextFormat(mapping);
+
+        dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            ts.saveFile(SpecConfigTTool.TMLCodeDirectory, "NoNoC");
+        } catch (Exception e) {
+            outputText.append("\nException when generating TML/TMAP file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "\n");
+
+        outputText.append("\nGenerating XML without NoC\n");
+        XML = mapping.toXML();
+        dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            saveFile(SpecConfigTTool.TMLCodeDirectory + "/NoNoC.xml", XML);
+        } catch (Exception e) {
+            outputText.append("\nException when generating XML file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "/NoNoC.xml\n");
+
+        outputText.append("\nAll done\n");
+
+        stopProcess();
+
+    }
+
+    protected void checkMode() {
+        mode = NOT_SELECTED;
+    }
+
+    protected void setButtons() {
+        switch (mode) {
+            case NOT_SELECTED:
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                // setCursor(CursoretPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                getGlassPane().setVisible(false);
+                break;
+            case NOT_STARTED:
+                start.setEnabled(true);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                // setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                getGlassPane().setVisible(false);
+                break;
+            case STARTED:
+                start.setEnabled(false);
+                stop.setEnabled(true);
+                close.setEnabled(false);
+                getGlassPane().setVisible(true);
+                // setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                break;
+            case STOPPED:
+            default:
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
+        }
+    }
+
+    public boolean hasToContinue() {
+        return (go == true);
+    }
+    //
+    // public void setError() {
+    // hasError = true;
+    // }
+    //
 }

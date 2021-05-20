@@ -47,17 +47,17 @@ package dseengine;
  * @author Ludovic APVRILLE
  */
 public class TaskResult {
-  public int id;
-  public String name;
+    public int id;
+    public String name;
 
-  public long nbOfExecutedCycles;
-  public String state;
+    public long nbOfExecutedCycles;
+    public String state;
 
-  public TaskResult() {
-  }
+    public TaskResult() {
+    }
 
-  public String toStringResult() {
-    return "TASK " + id + " " + name + " " + nbOfExecutedCycles + " " + state;
-  }
+    public String toStringResult() {
+        return "TASK " + id + " " + name + " " + nbOfExecutedCycles + " " + state;
+    }
 
 } // Class TaskResult

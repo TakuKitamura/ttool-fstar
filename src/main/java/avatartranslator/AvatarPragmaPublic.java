@@ -48,24 +48,24 @@ import java.util.LinkedList;
  */
 public class AvatarPragmaPublic extends AvatarPragma {
 
-  private LinkedList<AvatarAttribute> arguments;
+    private LinkedList<AvatarAttribute> arguments;
 
-  public AvatarPragmaPublic(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
-    super(_name, _referenceObject);
-    arguments = args;
-  }
+    public AvatarPragmaPublic(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
+        super(_name, _referenceObject);
+        arguments = args;
+    }
 
-  public LinkedList<AvatarAttribute> getArgs() {
-    return arguments;
-  }
+    public LinkedList<AvatarAttribute> getArgs() {
+        return arguments;
+    }
 
-  @Override
-  public AvatarPragmaPublic advancedClone(AvatarSpecification avspec) {
-    LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
-    for (AvatarAttribute aa : this.arguments)
-      l.add(avspec.getMatchingAttribute(aa));
-    AvatarPragmaPublic result = new AvatarPragmaPublic(this.name, this.referenceObject, l);
-    this.cloneLinkToReferenceObjects(result);
-    return result;
-  }
+    @Override
+    public AvatarPragmaPublic advancedClone(AvatarSpecification avspec) {
+        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
+        for (AvatarAttribute aa : this.arguments)
+            l.add(avspec.getMatchingAttribute(aa));
+        AvatarPragmaPublic result = new AvatarPragmaPublic(this.name, this.referenceObject, l);
+        this.cloneLinkToReferenceObjects(result);
+        return result;
+    }
 }

@@ -49,139 +49,139 @@ import elntranslator.*;
 
 public class SysCAMSTPortDE extends SysCAMSTComponent {
 
-  private String name;
-  // private int period;
-  // private String time;
-  // private int rate;
-  // private int delay;
-  private int origin;
-  private int nbits;
-  private String DEType;
-  private boolean sensitive;
-  private String sensitiveMethod;
+    private String name;
+    // private int period;
+    // private String time;
+    // private int rate;
+    // private int delay;
+    private int origin;
+    private int nbits;
+    private String DEType;
+    private boolean sensitive;
+    private String sensitiveMethod;
 
-  private SysCAMSTBlockDE blockDE;
-  private SysCAMSTBlockGPIO2VCI blockGPIO2VCI;
-  private ELNTCluster cluster;
-  private ELNTModule module;
+    private SysCAMSTBlockDE blockDE;
+    private SysCAMSTBlockGPIO2VCI blockGPIO2VCI;
+    private ELNTCluster cluster;
+    private ELNTModule module;
 
-  public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
-      String _sensitiveMethod, SysCAMSTBlockDE _blockDE) {
-    name = _name;
-    // period = _period;
-    // time = _time;
-    // rate = _rate;
-    // delay = _delay;
-    origin = _origin;
-    nbits = _nbits;
-    DEType = _DEType;
-    sensitive = _sensitive;
-    sensitiveMethod = _sensitiveMethod;
-    blockDE = _blockDE;
-  }
+    public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
+            String _sensitiveMethod, SysCAMSTBlockDE _blockDE) {
+        name = _name;
+        // period = _period;
+        // time = _time;
+        // rate = _rate;
+        // delay = _delay;
+        origin = _origin;
+        nbits = _nbits;
+        DEType = _DEType;
+        sensitive = _sensitive;
+        sensitiveMethod = _sensitiveMethod;
+        blockDE = _blockDE;
+    }
 
-  public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
-      String _sensitiveMethod, SysCAMSTBlockGPIO2VCI _blockGPIO2VCI) {
-    name = _name;
-    // period = _period;
-    // time = _time;
-    // rate = _rate;
-    // delay = _delay;
-    origin = _origin;
-    nbits = _nbits;
-    DEType = _DEType;
-    sensitive = _sensitive;
-    sensitiveMethod = _sensitiveMethod;
-    blockGPIO2VCI = _blockGPIO2VCI;
-  }
+    public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
+            String _sensitiveMethod, SysCAMSTBlockGPIO2VCI _blockGPIO2VCI) {
+        name = _name;
+        // period = _period;
+        // time = _time;
+        // rate = _rate;
+        // delay = _delay;
+        origin = _origin;
+        nbits = _nbits;
+        DEType = _DEType;
+        sensitive = _sensitive;
+        sensitiveMethod = _sensitiveMethod;
+        blockGPIO2VCI = _blockGPIO2VCI;
+    }
 
-  public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
-      String _sensitiveMethod, ELNTCluster _cluster) {
-    name = _name;
-    // period = _period;
-    // time = _time;
-    // rate = _rate;
-    // delay = _delay;ELNTCluster
-    origin = _origin;
-    nbits = _nbits;
-    DEType = _DEType;
-    sensitive = _sensitive;
-    sensitiveMethod = _sensitiveMethod;
-    cluster = _cluster;
-  }
+    public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
+            String _sensitiveMethod, ELNTCluster _cluster) {
+        name = _name;
+        // period = _period;
+        // time = _time;
+        // rate = _rate;
+        // delay = _delay;ELNTCluster
+        origin = _origin;
+        nbits = _nbits;
+        DEType = _DEType;
+        sensitive = _sensitive;
+        sensitiveMethod = _sensitiveMethod;
+        cluster = _cluster;
+    }
 
-  public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
-      String _sensitiveMethod, ELNTModule _module) {
-    name = _name;
-    // period = _period;
-    // time = _time;
-    // rate = _rate;
-    // delay = _delay;ELNTCluster
-    origin = _origin;
-    nbits = _nbits;
-    DEType = _DEType;
-    sensitive = _sensitive;
-    sensitiveMethod = _sensitiveMethod;
-    module = _module;
-  }
+    public SysCAMSTPortDE(String _name, int _origin, int _nbits, String _DEType, boolean _sensitive,
+            String _sensitiveMethod, ELNTModule _module) {
+        name = _name;
+        // period = _period;
+        // time = _time;
+        // rate = _rate;
+        // delay = _delay;ELNTCluster
+        origin = _origin;
+        nbits = _nbits;
+        DEType = _DEType;
+        sensitive = _sensitive;
+        sensitiveMethod = _sensitiveMethod;
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  // public int getPeriod() {
-  // return period;
-  // }
-  //
-  // public String getTime() {
-  // return time;
-  // }
-  //
-  // public int getRate() {
-  // return rate;
-  // }
-  //
-  // public int getDelay() {
-  // return delay;
-  // }
+    // public int getPeriod() {
+    // return period;
+    // }
+    //
+    // public String getTime() {
+    // return time;
+    // }
+    //
+    // public int getRate() {
+    // return rate;
+    // }
+    //
+    // public int getDelay() {
+    // return delay;
+    // }
 
-  public int getOrigin() {
-    return origin;
-  }
+    public int getOrigin() {
+        return origin;
+    }
 
-  public int getNbits() {
-    return nbits;
-  }
+    public int getNbits() {
+        return nbits;
+    }
 
-  public String getDEType() {
-    return DEType;
-  }
+    public String getDEType() {
+        return DEType;
+    }
 
-  public void setDEType(String _DEType) {
-    DEType = _DEType;
-  }
+    public void setDEType(String _DEType) {
+        DEType = _DEType;
+    }
 
-  public boolean getSensitive() {
-    return sensitive;
-  }
+    public boolean getSensitive() {
+        return sensitive;
+    }
 
-  public String getSensitiveMethod() {
-    return sensitiveMethod;
-  }
+    public String getSensitiveMethod() {
+        return sensitiveMethod;
+    }
 
-  public SysCAMSTBlockDE getBlockDE() {
-    return blockDE;
-  }
+    public SysCAMSTBlockDE getBlockDE() {
+        return blockDE;
+    }
 
-  public SysCAMSTBlockGPIO2VCI getBlockGPIO2VCI() {
-    return blockGPIO2VCI;
-  }
+    public SysCAMSTBlockGPIO2VCI getBlockGPIO2VCI() {
+        return blockGPIO2VCI;
+    }
 
-  public ELNTCluster getCluster() {
-    return cluster;
-  }
+    public ELNTCluster getCluster() {
+        return cluster;
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

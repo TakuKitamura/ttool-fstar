@@ -21,20 +21,20 @@ import java.util.List;
 
 public class OptimizationResult {
 
-  public String result = "";
-  public boolean mappingFound = false;
-  public String error = null;
-  public TMLMapping resultingMapping;
+    public String result = "";
+    public boolean mappingFound = false;
+    public String error = null;
+    public TMLMapping resultingMapping;
 
-  public OptimizationResult() {
-  }
+    public OptimizationResult() {
+    }
 
-  public boolean hasError() {
-    return error != null;
-  }
+    public boolean hasError() {
+        return error != null;
+    }
 
-  public boolean mappingfound() {
-    return mappingFound;
-  }
+    public boolean mappingfound() {
+        return mappingFound;
+    }
 
 }

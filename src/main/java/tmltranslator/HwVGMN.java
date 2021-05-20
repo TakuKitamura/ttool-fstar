@@ -46,29 +46,29 @@ package tmltranslator;
  */
 public class HwVGMN extends HwCommunicationNode {
 
-  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 
-  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
 
-  public HwVGMN(String _name) {
-    super(_name);
-  }
+    public HwVGMN(String _name) {
+        super(_name);
+    }
 
-  @Override
-  public String toXML() {
-    String s = "<VGMN name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
-        + "\" />\n";
-    return s;
-  }
+    @Override
+    public String toXML() {
+        String s = "<VGMN name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+                + "\" />\n";
+        return s;
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof HwVGMN))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwVGMN))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
 
-    HwVGMN hwVGMN = (HwVGMN) o;
-    return byteDataSize == hwVGMN.byteDataSize;
-  }
+        HwVGMN hwVGMN = (HwVGMN) o;
+        return byteDataSize == hwVGMN.byteDataSize;
+    }
 
 }

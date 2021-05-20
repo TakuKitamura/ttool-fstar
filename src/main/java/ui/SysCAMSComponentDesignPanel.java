@@ -59,120 +59,120 @@ import java.util.Vector;
 
 public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 
-  public SysCAMSComponentTaskDiagramPanel syscamsctdp;
+    public SysCAMSComponentTaskDiagramPanel syscamsctdp;
 
-  public Vector<TGComponent> validated, ignored;
+    public Vector<TGComponent> validated, ignored;
 
-  public SysCAMSComponentDesignPanel(MainGUI _mgui) {
-    super(_mgui);
+    public SysCAMSComponentDesignPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    tabbedPane = GraphicLib.createTabbedPane();
+        tabbedPane = GraphicLib.createTabbedPane();
 
-    cl = new ChangeListener() {
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDesignAction(e);
-      }
-    };
+        cl = new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
-    tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-  }
-
-  public void init() {
-    mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"SystemC-AMS\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     }
-    return "<Modeling type=\"SystemC-AMS\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
-
-  public String toString() {
-    return mgui.getTitleAt(this) + "(SystemC-AMS Component Application diagram)";
-  }
-
-  public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {
-    return syscamsctdp.getBlockTDFComponentByName(_name);
-  }
-
-  public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
-    return syscamsctdp.getBlockDEComponentByName(_name);
-  }
-
-  public SysCAMSClock getClockComponentByName(String _name) {
-    return syscamsctdp.getClockComponentByName(_name);
-  }
-
-  public java.util.List<String> getAllCompositeComponent(String _name) {
-    return syscamsctdp.getAllCompositeComponent(_name);
-  }
-
-  public String[] getAllOutTDF(String nameOfComponent) {
-    return syscamsctdp.getAllOutTDF(nameOfComponent);
-  }
-
-  public String[] getAllInTDF(String nameOfComponent) {
-    return syscamsctdp.getAllInTDF(nameOfComponent);
-  }
-
-  public String[] getAllOutDE(String nameOfComponent) {
-    return syscamsctdp.getAllOutDE(nameOfComponent);
-  }
-
-  public String[] getAllInDE(String nameOfComponent) {
-    return syscamsctdp.getAllInDE(nameOfComponent);
-  }
-
-  public boolean canFirstDiagramBeMoved() {
-    return true;
-  }
-
-  public boolean removeEnabled(int index) {
-    return panels.size() > 1;
-  }
-
-  public boolean renameEnabled(int index) {
-    if (panels.size() == 0) {
-      return false;
+    public void init() {
+        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
     }
-    return (panels.elementAt(index) instanceof SysCAMSComponentTaskDiagramPanel);
-  }
 
-  public boolean isSystemCAMSEnabled() {
-    return true;
-  }
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"SystemC-AMS\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"SystemC-AMS\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+    }
 
-  public boolean addSysCAMS(String s) {
-    SysCAMSComponentTaskDiagramToolBar ardtb = new SysCAMSComponentTaskDiagramToolBar(mgui);
-    toolbars.add(ardtb);
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
 
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
+    public String toString() {
+        return mgui.getTitleAt(this) + "(SystemC-AMS Component Application diagram)";
+    }
 
-    syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, ardtb);
-    syscamsctdp.setName(s);
-    syscamsctdp.tp = this;
-    tdp = syscamsctdp;
-    panels.add(syscamsctdp);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
-    syscamsctdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(ardtb, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(s, IconManager.imgic1208, toolBarPanel, "Opens SysCAMS component diagram");
-    tabbedPane.setSelectedIndex(0);
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
+    public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {
+        return syscamsctdp.getBlockTDFComponentByName(_name);
+    }
 
-    return true;
-  }
+    public SysCAMSBlockDE getBlockDEComponentByName(String _name) {
+        return syscamsctdp.getBlockDEComponentByName(_name);
+    }
+
+    public SysCAMSClock getClockComponentByName(String _name) {
+        return syscamsctdp.getClockComponentByName(_name);
+    }
+
+    public java.util.List<String> getAllCompositeComponent(String _name) {
+        return syscamsctdp.getAllCompositeComponent(_name);
+    }
+
+    public String[] getAllOutTDF(String nameOfComponent) {
+        return syscamsctdp.getAllOutTDF(nameOfComponent);
+    }
+
+    public String[] getAllInTDF(String nameOfComponent) {
+        return syscamsctdp.getAllInTDF(nameOfComponent);
+    }
+
+    public String[] getAllOutDE(String nameOfComponent) {
+        return syscamsctdp.getAllOutDE(nameOfComponent);
+    }
+
+    public String[] getAllInDE(String nameOfComponent) {
+        return syscamsctdp.getAllInDE(nameOfComponent);
+    }
+
+    public boolean canFirstDiagramBeMoved() {
+        return true;
+    }
+
+    public boolean removeEnabled(int index) {
+        return panels.size() > 1;
+    }
+
+    public boolean renameEnabled(int index) {
+        if (panels.size() == 0) {
+            return false;
+        }
+        return (panels.elementAt(index) instanceof SysCAMSComponentTaskDiagramPanel);
+    }
+
+    public boolean isSystemCAMSEnabled() {
+        return true;
+    }
+
+    public boolean addSysCAMS(String s) {
+        SysCAMSComponentTaskDiagramToolBar ardtb = new SysCAMSComponentTaskDiagramToolBar(mgui);
+        toolbars.add(ardtb);
+
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        syscamsctdp = new SysCAMSComponentTaskDiagramPanel(mgui, ardtb);
+        syscamsctdp.setName(s);
+        syscamsctdp.tp = this;
+        tdp = syscamsctdp;
+        panels.add(syscamsctdp);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(syscamsctdp);
+        syscamsctdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(ardtb, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic1208, toolBarPanel, "Opens SysCAMS component diagram");
+        tabbedPane.setSelectedIndex(0);
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        return true;
+    }
 }

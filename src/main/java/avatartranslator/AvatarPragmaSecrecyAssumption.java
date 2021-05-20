@@ -48,24 +48,24 @@ import java.util.LinkedList;
  */
 public class AvatarPragmaSecrecyAssumption extends AvatarPragma {
 
-  private LinkedList<AvatarAttribute> arguments;
+    private LinkedList<AvatarAttribute> arguments;
 
-  public AvatarPragmaSecrecyAssumption(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
-    super(_name, _referenceObject);
-    arguments = args;
-  }
+    public AvatarPragmaSecrecyAssumption(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
+        super(_name, _referenceObject);
+        arguments = args;
+    }
 
-  public LinkedList<AvatarAttribute> getArgs() {
-    return arguments;
-  }
+    public LinkedList<AvatarAttribute> getArgs() {
+        return arguments;
+    }
 
-  @Override
-  public AvatarPragmaSecrecyAssumption advancedClone(AvatarSpecification avspec) {
-    LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
-    for (AvatarAttribute aa : this.arguments)
-      l.add(avspec.getMatchingAttribute(aa));
-    AvatarPragmaSecrecyAssumption result = new AvatarPragmaSecrecyAssumption(this.name, this.referenceObject, l);
-    this.cloneLinkToReferenceObjects(result);
-    return result;
-  }
+    @Override
+    public AvatarPragmaSecrecyAssumption advancedClone(AvatarSpecification avspec) {
+        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
+        for (AvatarAttribute aa : this.arguments)
+            l.add(avspec.getMatchingAttribute(aa));
+        AvatarPragmaSecrecyAssumption result = new AvatarPragmaSecrecyAssumption(this.name, this.referenceObject, l);
+        this.cloneLinkToReferenceObjects(result);
+        return result;
+    }
 }

@@ -58,280 +58,284 @@ import java.util.Vector;
  * @see MainGUI
  */
 public class SysmlsecMethodologyPanel extends TURTLEPanel {
-  public SysmlsecMethodologyDiagramPanel dmd;
+    public SysmlsecMethodologyDiagramPanel dmd;
 
-  public SysmlsecMethodologyPanel(MainGUI _mgui) {
-    super(_mgui);
+    public SysmlsecMethodologyPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
-    UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
-    UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
-    SwingUtilities.updateComponentTreeUI(tabbedPane);
-    // tabbedPane.setOpaque(true);
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
+        SwingUtilities.updateComponentTreeUI(tabbedPane);
+        // tabbedPane.setOpaque(true);
 
-    cl = new ChangeListener() {
+        cl = new ChangeListener() {
 
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDiplodocusMethodologyAction(e);
-      }
-    };
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDiplodocusMethodologyAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
-  }
-
-  // Put the methodology
-  public void initElements() {
-    TGComponent tgc1 = dmd.addComponent(50, 350, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS, false);
-    TGComponent tgc2 = dmd.addComponent(350, 350, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_REQUIREMENT, false);
-    TGComponent tgc10 = dmd.addComponent(350, 550, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ATTACK, false);
-    TGComponent tgc12 = dmd.addComponent(350, 150, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FAULT, false);
-
-    // Partitioning
-    TGComponent tgc7 = dmd.addComponent(650, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW, false);
-    TGComponent tgc8 = dmd.addComponent(1150, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW,
-        false);
-    TGComponent tgc9 = dmd.addComponent(900, 225, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW, false);
-    TGComponent tgc11 = dmd.addComponent(887, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_CP_VIEW, false);
-
-    int xa = 900;
-    int ya = 400;
-    // Software dev.
-    TGComponent tgc3 = dmd.addComponent(xa, ya, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ANALYSIS, false);
-    TGComponent tgc4 = dmd.addComponent(xa + 100, ya + 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_DESIGN, false);
-    TGComponent tgc5 = dmd.addComponent(xa + 200, ya + 200, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROTOTYPE,
-        false);
-    TGComponent tgc6 = dmd.addComponent(xa - 250, ya + 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES,
-        false);
-
-    TGCPanelInfo infoParti = (TGCPanelInfo) (dmd.addComponent(630, 65, TGComponentManager.INFO_PANEL, false));
-    infoParti.resize(750, 250);
-    infoParti.setValue("SW/HW Partitioning");
-    infoParti.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
-    infoParti.setFillColor(ColorManager.SYSMLSEC_PARTITIONING);
-    infoParti.setTextColor(Color.white);
-
-    TGCPanelInfo infoSw = (TGCPanelInfo) (dmd.addComponent(xa - 270, ya - 25, TGComponentManager.INFO_PANEL, false));
-    infoSw.resize(750, 325);
-    infoSw.setValue("SW Design");
-    infoSw.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
-    infoSw.setFillColor(ColorManager.SYSMLSEC_SWDESIGN);
-    infoSw.setTextColor(Color.white);
-
-    TGCPanelInfo infoReq = (TGCPanelInfo) (dmd.addComponent(330, 100, TGComponentManager.INFO_PANEL, false));
-    infoReq.resize(241, 550);
-    infoReq.setValue("Req / faults / attacks");
-    infoReq.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
-    infoReq.setTextColor(Color.white);
-    infoReq.setFillColor(ColorManager.SYSMLSEC_REQ);
-
-    // Connectors
-
-    // Assumptions -> reqs
-    TGConnectingPoint p1, p2;
-    p1 = tgc1.getTGConnectingPointAtIndex(0);
-    p2 = tgc2.getTGConnectingPointAtIndex(0);
-    Vector<Point> listPoint = new Vector<Point>();
-    Point p = new Point(210, 235);
-    listPoint.add(p);
-    TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(),
-        TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    // dmd.getComponentList().add(0, tgco);
-
-    // Reqs -> Attacks
-    p1 = tgc2.getTGConnectingPointAtIndex(1);
-    p2 = tgc10.getTGConnectingPointAtIndex(0);
-    listPoint = new Vector<Point>();
-    // p = new Point(375, 370);
-    // listPoint.add(p);
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Reqs -> Faults
-    p1 = tgc2.getTGConnectingPointAtIndex(4);
-    p2 = tgc12.getTGConnectingPointAtIndex(0);
-    listPoint = new Vector<Point>();
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Faults -> Reqs
-    p1 = tgc12.getTGConnectingPointAtIndex(1);
-    p2 = tgc2.getTGConnectingPointAtIndex(3);
-    listPoint = new Vector<Point>();
-    // p = new Point(375, 370);
-    // listPoint.add(p);
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Attacks -> Reqs
-    p1 = tgc10.getTGConnectingPointAtIndex(1);
-    p2 = tgc2.getTGConnectingPointAtIndex(2);
-    listPoint = new Vector<Point>();
-    // p = new Point(375, 370);
-    // listPoint.add(p);
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Analysis -> Design
-    p1 = tgc3.getTGConnectingPointAtIndex(1);
-    p2 = tgc4.getTGConnectingPointAtIndex(0);
-    listPoint = new Vector<Point>();
-    p = new Point(xa + 60, ya + 125);
-    listPoint.add(p);
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Design -> Prototyping
-    p1 = tgc4.getTGConnectingPointAtIndex(1);
-    p2 = tgc5.getTGConnectingPointAtIndex(0);
-    listPoint = new Vector<Point>();
-    p = new Point(xa + 160, ya + 225);
-    listPoint.add(p);
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Reqs -> Prop
-    p1 = tgc2.getTGConnectingPointAtIndex(0);
-    p2 = tgc6.getTGConnectingPointAtIndex(0);
-    listPoint = new Vector<Point>();
-    p = new Point(xa - 305, 385);
-    listPoint.add(p);
-    p = new Point(xa - 305, ya + 50);
-    listPoint.add(p);
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd,
-        p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Partitioning
-    // App -> mapping
-    p1 = tgc7.getTGConnectingPointAtIndex(0);
-    p2 = tgc9.getTGConnectingPointAtIndex(0);
-    listPoint = new Vector<Point>();
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR,
-        dmd, p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // cp -> mapping
-    p1 = tgc11.getTGConnectingPointAtIndex(0);
-    p2 = tgc9.getTGConnectingPointAtIndex(2);
-    listPoint = new Vector<Point>();
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR,
-        dmd, p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    // Archi -> mapping
-    p1 = tgc8.getTGConnectingPointAtIndex(0);
-    p2 = tgc9.getTGConnectingPointAtIndex(1);
-    listPoint = new Vector<Point>();
-    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR,
-        dmd, p1, p2, listPoint);
-    p1.setFree(false);
-    p2.setFree(false);
-    dmd.getComponentList().add(0, tgco);
-
-    dmd.bringToBack(infoParti);
-    dmd.bringToBack(infoSw);
-    dmd.bringToBack(infoReq);
-  }
-
-  public void init() {
-    init("SysML-Sec methodology");
-  }
-
-  public void init(String name) {
-    addSysmlsecMethodologyDiagram(name);
-
-    // Requirement Diagram toolbar
-    // addRequirementDiagram("Requirement Diagram");
-
-    // jsp.setVisible(true);
-  }
-
-  public boolean addSysmlsecMethodologyDiagram(String s) {
-    SysmlsecMethodologyDiagramToolbar dmdt = new SysmlsecMethodologyDiagramToolbar(mgui);
-    toolbars.add(dmdt);
-
-    toolBarPanel = new JPanel();
-    // toolBarPanel.setBackground(Color.red);
-    toolBarPanel.setLayout(new BorderLayout());
-    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
-
-    // Class diagram
-    dmd = new SysmlsecMethodologyDiagramPanel(mgui, dmdt);
-    dmd.setName(s);
-    dmd.tp = this;
-    tdp = dmd;
-    panels.add(dmd);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
-    dmd.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(dmdt, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens SysMLSec methodology");
-    tabbedPane.setSelectedIndex(0);
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
-
-    return true;
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
-    return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+    // Put the methodology
+    public void initElements() {
+        TGComponent tgc1 = dmd.addComponent(50, 350, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ASSUMPTIONS, false);
+        TGComponent tgc2 = dmd.addComponent(350, 350, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_REQUIREMENT, false);
+        TGComponent tgc10 = dmd.addComponent(350, 550, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ATTACK, false);
+        TGComponent tgc12 = dmd.addComponent(350, 150, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FAULT, false);
 
-  public String toString() {
-    return mgui.getTitleAt(this) + " (SysMLSec Methodology)";
-  }
+        // Partitioning
+        TGComponent tgc7 = dmd.addComponent(650, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_FUNCTIONAL_VIEW,
+                false);
+        TGComponent tgc8 = dmd.addComponent(1150, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW,
+                false);
+        TGComponent tgc9 = dmd.addComponent(900, 225, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_MAPPING_VIEW, false);
+        TGComponent tgc11 = dmd.addComponent(887, 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_CP_VIEW, false);
 
-  public boolean removeEnabled(int index) {
-    return panels.size() > 1;
-  }
+        int xa = 900;
+        int ya = 400;
+        // Software dev.
+        TGComponent tgc3 = dmd.addComponent(xa, ya, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ANALYSIS, false);
+        TGComponent tgc4 = dmd.addComponent(xa + 100, ya + 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_DESIGN,
+                false);
+        TGComponent tgc5 = dmd.addComponent(xa + 200, ya + 200, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROTOTYPE,
+                false);
+        TGComponent tgc6 = dmd.addComponent(xa - 250, ya + 100, TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES,
+                false);
 
-  public boolean renameEnabled(int index) {
-    return panels.size() != 0;
-  }
+        TGCPanelInfo infoParti = (TGCPanelInfo) (dmd.addComponent(630, 65, TGComponentManager.INFO_PANEL, false));
+        infoParti.resize(750, 250);
+        infoParti.setValue("SW/HW Partitioning");
+        infoParti.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
+        infoParti.setFillColor(ColorManager.SYSMLSEC_PARTITIONING);
+        infoParti.setTextColor(Color.white);
 
-  public boolean isSysmlsecMethodologyEnabled() {
-    return true;
-  }
+        TGCPanelInfo infoSw = (TGCPanelInfo) (dmd.addComponent(xa - 270, ya - 25, TGComponentManager.INFO_PANEL,
+                false));
+        infoSw.resize(750, 325);
+        infoSw.setValue("SW Design");
+        infoSw.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
+        infoSw.setFillColor(ColorManager.SYSMLSEC_SWDESIGN);
+        infoSw.setTextColor(Color.white);
+
+        TGCPanelInfo infoReq = (TGCPanelInfo) (dmd.addComponent(330, 100, TGComponentManager.INFO_PANEL, false));
+        infoReq.resize(241, 550);
+        infoReq.setValue("Req / faults / attacks");
+        infoReq.setStringPos(TGCPanelInfo.UPPER_MIDDLE);
+        infoReq.setTextColor(Color.white);
+        infoReq.setFillColor(ColorManager.SYSMLSEC_REQ);
+
+        // Connectors
+
+        // Assumptions -> reqs
+        TGConnectingPoint p1, p2;
+        p1 = tgc1.getTGConnectingPointAtIndex(0);
+        p2 = tgc2.getTGConnectingPointAtIndex(0);
+        Vector<Point> listPoint = new Vector<Point>();
+        Point p = new Point(210, 235);
+        listPoint.add(p);
+        TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(),
+                TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        // dmd.getComponentList().add(0, tgco);
+
+        // Reqs -> Attacks
+        p1 = tgc2.getTGConnectingPointAtIndex(1);
+        p2 = tgc10.getTGConnectingPointAtIndex(0);
+        listPoint = new Vector<Point>();
+        // p = new Point(375, 370);
+        // listPoint.add(p);
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Reqs -> Faults
+        p1 = tgc2.getTGConnectingPointAtIndex(4);
+        p2 = tgc12.getTGConnectingPointAtIndex(0);
+        listPoint = new Vector<Point>();
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Faults -> Reqs
+        p1 = tgc12.getTGConnectingPointAtIndex(1);
+        p2 = tgc2.getTGConnectingPointAtIndex(3);
+        listPoint = new Vector<Point>();
+        // p = new Point(375, 370);
+        // listPoint.add(p);
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Attacks -> Reqs
+        p1 = tgc10.getTGConnectingPointAtIndex(1);
+        p2 = tgc2.getTGConnectingPointAtIndex(2);
+        listPoint = new Vector<Point>();
+        // p = new Point(375, 370);
+        // listPoint.add(p);
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Analysis -> Design
+        p1 = tgc3.getTGConnectingPointAtIndex(1);
+        p2 = tgc4.getTGConnectingPointAtIndex(0);
+        listPoint = new Vector<Point>();
+        p = new Point(xa + 60, ya + 125);
+        listPoint.add(p);
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Design -> Prototyping
+        p1 = tgc4.getTGConnectingPointAtIndex(1);
+        p2 = tgc5.getTGConnectingPointAtIndex(0);
+        listPoint = new Vector<Point>();
+        p = new Point(xa + 160, ya + 225);
+        listPoint.add(p);
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Reqs -> Prop
+        p1 = tgc2.getTGConnectingPointAtIndex(0);
+        p2 = tgc6.getTGConnectingPointAtIndex(0);
+        listPoint = new Vector<Point>();
+        p = new Point(xa - 305, 385);
+        listPoint.add(p);
+        p = new Point(xa - 305, ya + 50);
+        listPoint.add(p);
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Partitioning
+        // App -> mapping
+        p1 = tgc7.getTGConnectingPointAtIndex(0);
+        p2 = tgc9.getTGConnectingPointAtIndex(0);
+        listPoint = new Vector<Point>();
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // cp -> mapping
+        p1 = tgc11.getTGConnectingPointAtIndex(0);
+        p2 = tgc9.getTGConnectingPointAtIndex(2);
+        listPoint = new Vector<Point>();
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        // Archi -> mapping
+        p1 = tgc8.getTGConnectingPointAtIndex(0);
+        p2 = tgc9.getTGConnectingPointAtIndex(1);
+        listPoint = new Vector<Point>();
+        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR,
+                dmd, p1, p2, listPoint);
+        p1.setFree(false);
+        p2.setFree(false);
+        dmd.getComponentList().add(0, tgco);
+
+        dmd.bringToBack(infoParti);
+        dmd.bringToBack(infoSw);
+        dmd.bringToBack(infoReq);
+    }
+
+    public void init() {
+        init("SysML-Sec methodology");
+    }
+
+    public void init(String name) {
+        addSysmlsecMethodologyDiagram(name);
+
+        // Requirement Diagram toolbar
+        // addRequirementDiagram("Requirement Diagram");
+
+        // jsp.setVisible(true);
+    }
+
+    public boolean addSysmlsecMethodologyDiagram(String s) {
+        SysmlsecMethodologyDiagramToolbar dmdt = new SysmlsecMethodologyDiagramToolbar(mgui);
+        toolbars.add(dmdt);
+
+        toolBarPanel = new JPanel();
+        // toolBarPanel.setBackground(Color.red);
+        toolBarPanel.setLayout(new BorderLayout());
+        // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+
+        // Class diagram
+        dmd = new SysmlsecMethodologyDiagramPanel(mgui, dmdt);
+        dmd.setName(s);
+        dmd.tp = this;
+        tdp = dmd;
+        panels.add(dmd);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
+        dmd.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(dmdt, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens SysMLSec methodology");
+        tabbedPane.setSelectedIndex(0);
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
+
+        return true;
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+        return "<Modeling type=\"Sysmlsec Methodology\" nameTab=\"" + mgui.getTabName(this) + extensionToName
+                + "\" >\n";
+    }
+
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return mgui.getTitleAt(this) + " (SysMLSec Methodology)";
+    }
+
+    public boolean removeEnabled(int index) {
+        return panels.size() > 1;
+    }
+
+    public boolean renameEnabled(int index) {
+        return panels.size() != 0;
+    }
+
+    public boolean isSysmlsecMethodologyEnabled() {
+        return true;
+    }
 
 }

@@ -57,313 +57,315 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class NCTrafficArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
-  protected int lineLength = 5;
-  protected int textX = 5;
-  protected int textY = 15;
-  protected int textY2 = 40;
-  protected int space = 5;
-  protected int fileX = 15;
-  protected int fileY = 20;
-  protected int cran = 5;
+    protected int lineLength = 5;
+    protected int textX = 5;
+    protected int textY = 15;
+    protected int textY2 = 40;
+    protected int space = 5;
+    protected int fileX = 15;
+    protected int fileY = 20;
+    protected int cran = 5;
 
-  protected String oldValue = "";
+    protected String oldValue = "";
 
-  protected int periodicType = 0; // 0: periodic ; 1: aperiodic
-  protected int deadline = 10;
-  protected int period = 10;
-  protected String periodUnit = "ms"; // "us", "ms";
-  protected String deadlineUnit = "ms"; // "us", "ms";
-  protected int minPacketSize = 20;
-  protected int maxPacketSize = 40;
-  protected int priority = 0; // 0 to 3
+    protected int periodicType = 0; // 0: periodic ; 1: aperiodic
+    protected int deadline = 10;
+    protected int period = 10;
+    protected String periodUnit = "ms"; // "us", "ms";
+    protected String deadlineUnit = "ms"; // "us", "ms";
+    protected int minPacketSize = 20;
+    protected int maxPacketSize = 40;
+    protected int priority = 0; // 0 to 3
 
-  public NCTrafficArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public NCTrafficArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 60;
-    height = 38;
-    minWidth = 60;
+        width = 60;
+        height = 38;
+        minWidth = 60;
 
-    nbConnectingPoint = 0;
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 0;
+        addTGConnectingPointsComment();
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    value = tdp.findNodeName("T");
+        value = tdp.findNodeName("T");
 
-    // makeFullValue();
+        // makeFullValue();
 
-    myImageIcon = IconManager.imgic702;
-  }
-
-  public void internalDrawing(Graphics g) {
-
-    if (oldValue.compareTo(value) != 0) {
-      setValue(value, g);
+        myImageIcon = IconManager.imgic702;
     }
 
-    g.drawRect(x, y, width, height);
-    Color c = g.getColor();
-    g.setColor(ColorManager.CPU_BOX_2);
-    g.fillRect(x + 1, y + 1, width - 1, height - 1);
-    g.setColor(c);
+    public void internalDrawing(Graphics g) {
 
-    // g.drawRoundRect(x, y, width, height, arc, arc);
-    g.drawLine(x + width - space - fileX, y + space, x + width - space - fileX, y + space + fileY);
-    g.drawLine(x + width - space - fileX, y + space, x + width - space - cran, y + space);
-    g.drawLine(x + width - space - cran, y + space, x + width - space, y + space + cran);
-    g.drawLine(x + width - space, y + space + cran, x + width - space, y + space + fileY);
-    g.drawLine(x + width - space, y + space + fileY, x + width - space - fileX, y + space + fileY);
-    g.drawLine(x + width - space - cran, y + space, x + width - space - cran, y + space + cran);
-    g.drawLine(x + width - space - cran, y + space + cran, x + width - space, y + space + cran);
-
-    g.drawString(value, x + textX, y + textY);
-
-  }
-
-  public void setValue(String val, Graphics g) {
-    oldValue = value;
-    int w = g.getFontMetrics().stringWidth(value);
-    int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
-
-    //
-    if (w1 != width) {
-      width = w1;
-      resizeWithFather();
-    }
-    //
-  }
-
-  public void resizeWithFather() {
-    if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
-      //
-      setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-      // setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y,
-      // father.getHeight() - getHeight()));
-      setMoveCd(x, y);
-    }
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    String tmp;
-    boolean error = false;
-    String oldValue = value;
-
-    JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, period,
-        periodUnit, deadline, deadlineUnit, minPacketSize, maxPacketSize, priority);
-    // dialog.setSize(300, 350);
-    GraphicLib.centerOnParent(dialog, 300, 350);
-    dialog.setVisible(true); // blocked until dialog has been closed
-
-    if (dialog.hasBeenCancelled()) {
-      return false;
-    }
-
-    tmp = dialog.getValue().trim();
-
-    if (tmp == null) {
-      error = true;
-    }
-
-    if ((tmp != null) && (tmp.length() > 0) && (!tmp.equals(oldValue))) {
-      if (!TAttribute.isAValidId(tmp, false, false, false)) {
-        JOptionPane.showMessageDialog(frame,
-            "Could not change the name of the Traffic: the new name is not a valid name", "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-        error = true;
-      }
-
-      if (!tdp.isNCNameUnique(tmp)) {
-        JOptionPane.showMessageDialog(frame, "Could not change the name of the Traffic: the new name is already in use",
-            "Error", JOptionPane.INFORMATION_MESSAGE);
-        error = true;
-      }
-    }
-
-    if (!error) {
-      value = tmp;
-    }
-
-    periodicType = dialog.getPeriodicType();
-    priority = dialog.getPriority();
-    period = dialog.getPeriod();
-    periodUnit = dialog.getPeriodUnit();
-    deadline = dialog.getDeadline();
-    deadlineUnit = dialog.getDeadlineUnit();
-    maxPacketSize = dialog.getMaxPacketSize();
-    minPacketSize = dialog.getMinPacketSize();
-
-    return !error;
-
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
-    return null;
-  }
-
-  public int getType() {
-    return TGComponentManager.NCDD_TRAFFIC_ARTIFACT;
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<info value=\"" + value + "\" periodicType=\"");
-    sb.append(periodicType);
-    sb.append("\" period=\"");
-    sb.append(period);
-    sb.append("\" periodUnit=\"");
-    sb.append(deadlineUnit);
-    sb.append("\" deadline=\"");
-    sb.append(deadline);
-    sb.append("\" deadlineUnit=\"");
-    sb.append(deadlineUnit);
-    sb.append("\" minPacketSize=\"");
-    sb.append(minPacketSize);
-    sb.append("\" maxPacketSize=\"");
-    sb.append(maxPacketSize);
-    sb.append("\" priority=\"");
-    sb.append(priority);
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      // int t1id;
-      String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null, s4 = null, s5 = null, s6 = null, s7 = null;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("info")) {
-                svalue = elt.getAttribute("value");
-                s0 = elt.getAttribute("periodicType");
-                s1 = elt.getAttribute("deadline");
-                s4 = elt.getAttribute("deadlineUnit");
-                s5 = elt.getAttribute("minPacketSize");
-                s2 = elt.getAttribute("maxPacketSize");
-                s3 = elt.getAttribute("priority");
-                s6 = elt.getAttribute("period");
-                s7 = elt.getAttribute("periodUnit");
-              }
-              //
-              if (svalue != null) {
-                value = svalue;
-              }
-              //
-
-              if (s0 != null) {
-                periodicType = Integer.decode(s0).intValue();
-              }
-              //
-
-              if (s6 != null) {
-                period = Integer.decode(s6).intValue();
-              }
-              //
-
-              if ((s7 != null) && (s7.length() > 0)) {
-                periodUnit = s7;
-              }
-
-              if (s1 != null) {
-                deadline = Integer.decode(s1).intValue();
-              }
-              //
-
-              if ((s4 != null) && (s4.length() > 0)) {
-                deadlineUnit = s4;
-              }
-
-              if ((s5 != null) && (s5.length() > 0)) {
-                minPacketSize = Integer.decode(s5).intValue();
-              }
-
-              if (s2 != null) {
-                maxPacketSize = Integer.decode(s2).intValue();
-              }
-              //
-
-              if (s3 != null) {
-                priority = Integer.decode(s3).intValue();
-              }
-            }
-          }
+        if (oldValue.compareTo(value) != 0) {
+            setValue(value, g);
         }
-      }
 
-    } catch (Exception e) {
+        g.drawRect(x, y, width, height);
+        Color c = g.getColor();
+        g.setColor(ColorManager.CPU_BOX_2);
+        g.fillRect(x + 1, y + 1, width - 1, height - 1);
+        g.setColor(c);
 
-      throw new MalformedModelingException();
+        // g.drawRoundRect(x, y, width, height, arc, arc);
+        g.drawLine(x + width - space - fileX, y + space, x + width - space - fileX, y + space + fileY);
+        g.drawLine(x + width - space - fileX, y + space, x + width - space - cran, y + space);
+        g.drawLine(x + width - space - cran, y + space, x + width - space, y + space + cran);
+        g.drawLine(x + width - space, y + space + cran, x + width - space, y + space + fileY);
+        g.drawLine(x + width - space, y + space + fileY, x + width - space - fileX, y + space + fileY);
+        g.drawLine(x + width - space - cran, y + space, x + width - space - cran, y + space + cran);
+        g.drawLine(x + width - space - cran, y + space + cran, x + width - space, y + space + cran);
+
+        g.drawString(value, x + textX, y + textY);
+
     }
-    // makeFullValue();
-  }
 
-  public int getPeriodicType() {
-    return periodicType;
-  }
+    public void setValue(String val, Graphics g) {
+        oldValue = value;
+        int w = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 
-  public int getPeriod() {
-    return period;
-  }
-
-  public String getPeriodUnit() {
-    return periodUnit;
-  }
-
-  public int getDeadline() {
-    return deadline;
-  }
-
-  public String getDeadlineUnit() {
-    return deadlineUnit;
-  }
-
-  public int getMaxPacketSize() {
-    return maxPacketSize;
-  }
-
-  public int getMinPacketSize() {
-    return minPacketSize;
-  }
-
-  public int getPriority() {
-    return priority;
-  }
-
-  public String getAttributes() {
-    String ret = "";
-    if (periodicType == 0) {
-      ret += "Periodic\n";
-    } else {
-      ret += "Aperioridic\n";
+        //
+        if (w1 != width) {
+            width = w1;
+            resizeWithFather();
+        }
+        //
     }
-    ret += "Period = " + period + " " + periodUnit + "\n";
-    ret += "Deadline = " + deadline + " " + deadlineUnit + "\n";
-    ret += "Min packet size = " + minPacketSize + " B\n";
-    ret += "Max packet size = " + maxPacketSize + " B\n";
-    ret += "Priority = " + priority;
 
-    return ret;
-  }
+    public void resizeWithFather() {
+        if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
+            //
+            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+            // setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y,
+            // father.getHeight() - getHeight()));
+            setMoveCd(x, y);
+        }
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        String tmp;
+        boolean error = false;
+        String oldValue = value;
+
+        JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, period,
+                periodUnit, deadline, deadlineUnit, minPacketSize, maxPacketSize, priority);
+        // dialog.setSize(300, 350);
+        GraphicLib.centerOnParent(dialog, 300, 350);
+        dialog.setVisible(true); // blocked until dialog has been closed
+
+        if (dialog.hasBeenCancelled()) {
+            return false;
+        }
+
+        tmp = dialog.getValue().trim();
+
+        if (tmp == null) {
+            error = true;
+        }
+
+        if ((tmp != null) && (tmp.length() > 0) && (!tmp.equals(oldValue))) {
+            if (!TAttribute.isAValidId(tmp, false, false, false)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the Traffic: the new name is not a valid name", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                error = true;
+            }
+
+            if (!tdp.isNCNameUnique(tmp)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the Traffic: the new name is already in use", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                error = true;
+            }
+        }
+
+        if (!error) {
+            value = tmp;
+        }
+
+        periodicType = dialog.getPeriodicType();
+        priority = dialog.getPriority();
+        period = dialog.getPeriod();
+        periodUnit = dialog.getPeriodUnit();
+        deadline = dialog.getDeadline();
+        deadlineUnit = dialog.getDeadlineUnit();
+        maxPacketSize = dialog.getMaxPacketSize();
+        minPacketSize = dialog.getMinPacketSize();
+
+        return !error;
+
+    }
+
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getType() {
+        return TGComponentManager.NCDD_TRAFFIC_ARTIFACT;
+    }
+
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info value=\"" + value + "\" periodicType=\"");
+        sb.append(periodicType);
+        sb.append("\" period=\"");
+        sb.append(period);
+        sb.append("\" periodUnit=\"");
+        sb.append(deadlineUnit);
+        sb.append("\" deadline=\"");
+        sb.append(deadline);
+        sb.append("\" deadlineUnit=\"");
+        sb.append(deadlineUnit);
+        sb.append("\" minPacketSize=\"");
+        sb.append(minPacketSize);
+        sb.append("\" maxPacketSize=\"");
+        sb.append(maxPacketSize);
+        sb.append("\" priority=\"");
+        sb.append(priority);
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            // int t1id;
+            String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null, s4 = null, s5 = null, s6 = null,
+                    s7 = null;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                svalue = elt.getAttribute("value");
+                                s0 = elt.getAttribute("periodicType");
+                                s1 = elt.getAttribute("deadline");
+                                s4 = elt.getAttribute("deadlineUnit");
+                                s5 = elt.getAttribute("minPacketSize");
+                                s2 = elt.getAttribute("maxPacketSize");
+                                s3 = elt.getAttribute("priority");
+                                s6 = elt.getAttribute("period");
+                                s7 = elt.getAttribute("periodUnit");
+                            }
+                            //
+                            if (svalue != null) {
+                                value = svalue;
+                            }
+                            //
+
+                            if (s0 != null) {
+                                periodicType = Integer.decode(s0).intValue();
+                            }
+                            //
+
+                            if (s6 != null) {
+                                period = Integer.decode(s6).intValue();
+                            }
+                            //
+
+                            if ((s7 != null) && (s7.length() > 0)) {
+                                periodUnit = s7;
+                            }
+
+                            if (s1 != null) {
+                                deadline = Integer.decode(s1).intValue();
+                            }
+                            //
+
+                            if ((s4 != null) && (s4.length() > 0)) {
+                                deadlineUnit = s4;
+                            }
+
+                            if ((s5 != null) && (s5.length() > 0)) {
+                                minPacketSize = Integer.decode(s5).intValue();
+                            }
+
+                            if (s2 != null) {
+                                maxPacketSize = Integer.decode(s2).intValue();
+                            }
+                            //
+
+                            if (s3 != null) {
+                                priority = Integer.decode(s3).intValue();
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+
+            throw new MalformedModelingException();
+        }
+        // makeFullValue();
+    }
+
+    public int getPeriodicType() {
+        return periodicType;
+    }
+
+    public int getPeriod() {
+        return period;
+    }
+
+    public String getPeriodUnit() {
+        return periodUnit;
+    }
+
+    public int getDeadline() {
+        return deadline;
+    }
+
+    public String getDeadlineUnit() {
+        return deadlineUnit;
+    }
+
+    public int getMaxPacketSize() {
+        return maxPacketSize;
+    }
+
+    public int getMinPacketSize() {
+        return minPacketSize;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public String getAttributes() {
+        String ret = "";
+        if (periodicType == 0) {
+            ret += "Periodic\n";
+        } else {
+            ret += "Aperioridic\n";
+        }
+        ret += "Period = " + period + " " + periodUnit + "\n";
+        ret += "Deadline = " + deadline + " " + deadlineUnit + "\n";
+        ret += "Min packet size = " + minPacketSize + " B\n";
+        ret += "Max packet size = " + maxPacketSize + " B\n";
+        ret += "Priority = " + priority;
+
+        return ret;
+    }
 
 }

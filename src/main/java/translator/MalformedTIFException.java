@@ -45,12 +45,12 @@ package translator;
  */
 public class MalformedTIFException extends Exception {
 
-  public MalformedTIFException() {
-    super("TIF Exception");
-  }
+    public MalformedTIFException() {
+        super("TIF Exception");
+    }
 
-  public MalformedTIFException(String msg) {
-    super("TIF Exception: " + msg);
-  }
+    public MalformedTIFException(String msg) {
+        super("TIF Exception: " + msg);
+    }
 
 } // Class

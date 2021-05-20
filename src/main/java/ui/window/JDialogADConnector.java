@@ -54,262 +54,262 @@ import java.awt.*;
  */
 public class JDialogADConnector extends JDialog {// implements ActionListener {
 
-  // private Vector<String> actions;
-  private String guard;// , afterMin, afterMax, computeMin, computeMax;
-  /*
-   * private Vector myAttributes, myMethods; private Vector<String> allElements,
-   * insertElements;
-   * 
-   * protected String [] filesToInclude; protected String [] codeToInclude;
-   */
-
-  private boolean cancelled = false;
-
-  private JPanel panel1;
-  // private JPanel panel2;
-
-  // Panel1
-  private JTextField guardT;// , afterMinT, afterMaxT, computeMinT, computeMaxT;
-  // private JTextArea actionsT;
-  // private JComboBox<String> elements;
-  // private JButton insertElement;
-
-  // Main Panel
-  private JButton closeButton;
-  private JButton cancelButton;
-
-  // Panel of code and files
-  protected JTextArea jtaCode, jtaFiles;
-
-  /* Creates new form */
-  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-  public JDialogADConnector(Frame _f, String _title, String _guard)
-  /*
-   * , String _afterMin, String _afterMax, String _computeMin, String _computeMax,
-   * Vector<String> _actions, Vector _myAttributes, Vector _myMethods, String[]
-   * _filesToInclude, String[] _codeToInclude)
-   */ {
-
-    super(_f, _title, true);
-
-    guard = _guard;
+    // private Vector<String> actions;
+    private String guard;// , afterMin, afterMax, computeMin, computeMax;
     /*
-     * afterMin = _afterMin; afterMax = _afterMax; computeMin = _computeMin;
-     * computeMax = _computeMax; actions = _actions;
+     * private Vector myAttributes, myMethods; private Vector<String> allElements,
+     * insertElements;
      * 
-     * myAttributes = _myAttributes; myMethods = _myMethods;
-     * 
-     * filesToInclude = _filesToInclude; codeToInclude = _codeToInclude;
+     * protected String [] filesToInclude; protected String [] codeToInclude;
      */
 
-    // makeElements();
+    private boolean cancelled = false;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
+    private JPanel panel1;
+    // private JPanel panel2;
 
-  /*
-   * private void makeElements() { int i; TAttribute ta; AvatarMethod am;
-   * 
-   * allElements = new Vector<String>(); insertElements = new Vector<String>();
-   * 
-   * for(i=0; i<myAttributes.size(); i++) { ta =
-   * (TAttribute)(myAttributes.get(i)); allElements.add(ta.toString());
-   * insertElements.add(ta.getId()); }
-   * 
-   * for(i=0; i<myMethods.size(); i++) { am = (AvatarMethod)(myMethods.get(i));
-   * allElements.add(am.toString()); insertElements.add(am.getUseDescription()); }
-   * }
-   */
+    // Panel1
+    private JTextField guardT;// , afterMinT, afterMaxT, computeMinT, computeMaxT;
+    // private JTextArea actionsT;
+    // private JComboBox<String> elements;
+    // private JButton insertElement;
 
-  private void myInitComponents() {
-  }
+    // Main Panel
+    private JButton closeButton;
+    private JButton cancelButton;
 
-  private void initComponents() {
-    // int i;
+    // Panel of code and files
+    protected JTextArea jtaCode, jtaFiles;
 
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    // GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    // GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-
-    panel1.setBorder(new javax.swing.border.TitledBorder("Transition parameters"));
-
-    // panel1.setPreferredSize(new Dimension(350, 350));
-
-    // guard
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 1;
-    panel1.add(new JLabel("guard = "), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    guardT = new JTextField(guard);
-    panel1.add(guardT, c1);
-
-    // After
+    /* Creates new form */
+    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+    public JDialogADConnector(Frame _f, String _title, String _guard)
     /*
-     * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
-     * panel1.add(new JLabel("after ("), c1); afterMinT = new JTextField(afterMin,
-     * 10); panel1.add(afterMinT, c1); panel1.add(new JLabel(","), c1); afterMaxT =
-     * new JTextField(afterMax, 10); panel1.add(afterMaxT, c1); c1.gridwidth =
-     * GridBagConstraints.REMAINDER; //end row panel1.add(new JLabel(")"), c1);
-     */
+     * , String _afterMin, String _afterMax, String _computeMin, String _computeMax,
+     * Vector<String> _actions, Vector _myAttributes, Vector _myMethods, String[]
+     * _filesToInclude, String[] _codeToInclude)
+     */ {
 
-    // Compute
-    /*
-     * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
-     * panel1.add(new JLabel("compute for ("), c1); computeMinT = new
-     * JTextField(computeMin, 10); panel1.add(computeMinT, c1); panel1.add(new
-     * JLabel(","), c1); computeMaxT = new JTextField(computeMax, 10);
-     * panel1.add(computeMaxT, c1); c1.gridwidth = GridBagConstraints.REMAINDER;
-     * //end row panel1.add(new JLabel(")"), c1);
-     */
+        super(_f, _title, true);
 
-    // actions
+        guard = _guard;
+        /*
+         * afterMin = _afterMin; afterMax = _afterMax; computeMin = _computeMin;
+         * computeMax = _computeMax; actions = _actions;
+         * 
+         * myAttributes = _myAttributes; myMethods = _myMethods;
+         * 
+         * filesToInclude = _filesToInclude; codeToInclude = _codeToInclude;
+         */
+
+        // makeElements();
+
+        initComponents();
+        myInitComponents();
+        pack();
+    }
 
     /*
-     * elements = new JComboBox(allElements); panel1.add(elements, c1);
+     * private void makeElements() { int i; TAttribute ta; AvatarMethod am;
      * 
-     * insertElement = new JButton("Insert");
-     * insertElement.setEnabled(allElements.size() > 0);
-     * insertElement.addActionListener(this); panel1.add(insertElement, c1);
+     * allElements = new Vector<String>(); insertElements = new Vector<String>();
      * 
-     * c1.gridheight = 5; c1.weighty = 5.0; c1.weightx = 5.0; c1.gridwidth =
-     * GridBagConstraints.REMAINDER; //end row c1.fill = GridBagConstraints.BOTH;
-     * actionsT = new JTextArea(); actionsT.setEditable(true);
-     * actionsT.setMargin(new Insets(10, 10, 10, 10)); actionsT.setTabSize(3);
-     * actionsT.setFont(new Font("times", Font.PLAIN, 12));
-     * actionsT.setPreferredSize(new Dimension(350, 250)); JScrollPane jsp = new
-     * JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-     * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); for(i=0; i<actions.size(); i++) {
-     * actionsT.append(actions.get(i) + "\n"); } panel1.add(jsp, c1);
+     * for(i=0; i<myAttributes.size(); i++) { ta =
+     * (TAttribute)(myAttributes.get(i)); allElements.add(ta.toString());
+     * insertElements.add(ta.getId()); }
+     * 
+     * for(i=0; i<myMethods.size(); i++) { am = (AvatarMethod)(myMethods.get(i));
+     * allElements.add(am.toString()); insertElements.add(am.getUseDescription()); }
+     * }
+     */
+
+    private void myInitComponents() {
+    }
+
+    private void initComponents() {
+        // int i;
+
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        // GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        // GridBagConstraints c2 = new GridBagConstraints();
+
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+
+        panel1.setBorder(new javax.swing.border.TitledBorder("Transition parameters"));
+
+        // panel1.setPreferredSize(new Dimension(350, 350));
+
+        // guard
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 1;
+        panel1.add(new JLabel("guard = "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        guardT = new JTextField(guard);
+        panel1.add(guardT, c1);
+
+        // After
+        /*
+         * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
+         * panel1.add(new JLabel("after ("), c1); afterMinT = new JTextField(afterMin,
+         * 10); panel1.add(afterMinT, c1); panel1.add(new JLabel(","), c1); afterMaxT =
+         * new JTextField(afterMax, 10); panel1.add(afterMaxT, c1); c1.gridwidth =
+         * GridBagConstraints.REMAINDER; //end row panel1.add(new JLabel(")"), c1);
+         */
+
+        // Compute
+        /*
+         * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
+         * panel1.add(new JLabel("compute for ("), c1); computeMinT = new
+         * JTextField(computeMin, 10); panel1.add(computeMinT, c1); panel1.add(new
+         * JLabel(","), c1); computeMaxT = new JTextField(computeMax, 10);
+         * panel1.add(computeMaxT, c1); c1.gridwidth = GridBagConstraints.REMAINDER;
+         * //end row panel1.add(new JLabel(")"), c1);
+         */
+
+        // actions
+
+        /*
+         * elements = new JComboBox(allElements); panel1.add(elements, c1);
+         * 
+         * insertElement = new JButton("Insert");
+         * insertElement.setEnabled(allElements.size() > 0);
+         * insertElement.addActionListener(this); panel1.add(insertElement, c1);
+         * 
+         * c1.gridheight = 5; c1.weighty = 5.0; c1.weightx = 5.0; c1.gridwidth =
+         * GridBagConstraints.REMAINDER; //end row c1.fill = GridBagConstraints.BOTH;
+         * actionsT = new JTextArea(); actionsT.setEditable(true);
+         * actionsT.setMargin(new Insets(10, 10, 10, 10)); actionsT.setTabSize(3);
+         * actionsT.setFont(new Font("times", Font.PLAIN, 12));
+         * actionsT.setPreferredSize(new Dimension(350, 250)); JScrollPane jsp = new
+         * JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+         * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); for(i=0; i<actions.size(); i++) {
+         * actionsT.append(actions.get(i) + "\n"); } panel1.add(jsp, c1);
+         */
+
+        /*
+         * panel2 = new JPanel(); panel2.setLayout(gridbag2);
+         * 
+         * panel2.setBorder(new javax.swing.border.TitledBorder("Code")); // guard
+         * c2.weighty = 1.0; c2.weightx = 1.0; c2.gridwidth = 1; c2.gridheight = 1;
+         * c2.fill = GridBagConstraints.BOTH; c2.gridwidth =
+         * GridBagConstraints.REMAINDER; c2.gridheight = 1; panel2.add(new
+         * JLabel("Files to include:"), c2); jtaFiles = new JTextArea();
+         * jtaFiles.setEditable(true); jtaFiles.setMargin(new Insets(10, 10, 10, 10));
+         * jtaFiles.setTabSize(3); String files = ""; if (filesToInclude != null) {
+         * for(i=0; i<filesToInclude.length; i++) { files += filesToInclude[i] + "\n"; }
+         * } jtaFiles.append(files); jtaFiles.setFont(new Font("times", Font.PLAIN,
+         * 12)); jsp = new JScrollPane(jtaFiles, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+         * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); //jsp.setPreferredSize(new
+         * Dimension(300, 300)); panel2.add(jsp, c2); panel2.add(new
+         * JLabel("Code to execute at the end of the transition"), c2); jtaCode = new
+         * JTextArea(); jtaCode.setEditable(true); jtaCode.setMargin(new Insets(10, 10,
+         * 10, 10)); jtaCode.setTabSize(3); String code = ""; if (codeToInclude != null)
+         * { for(i=0; i<codeToInclude.length; i++) { code += codeToInclude[i] + "\n"; }
+         * } jtaCode.append(code); jtaCode.setFont(new Font("times", Font.PLAIN, 12));
+         * jsp = new JScrollPane(jtaCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+         * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); //jsp.setPreferredSize(new
+         * Dimension(300, 300)); panel2.add(jsp, c2);
+         */
+
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+        // Issue #41 Ordering of tabbed panes
+        JTabbedPane jtp = GraphicLib.createTabbedPane();// new JTabbedPane();
+        jtp.add("General", panel1);
+        // jtp.add("Prototyping", panel2);
+        c.add(jtp, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+        closeButton = new JButton("Save and Close", IconManager.imgic25);
+        // closeButton.setPreferredSize(new Dimension(600, 50));
+
+        // closeButton.addActionListener(this);
+        c.add(closeButton, c0);
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        // cancelButton.addActionListener(this);
+        c.add(cancelButton, c0);
+    }
+    //
+    // public void actionPerformed(ActionEvent evt) {
+    // //String command = evt.getActionCommand();
+    // // int fake = 0;
+    // // Compare the action command to the known actions.
+    // if (evt.getSource() == closeButton) {
+    // //closeDialog();
+    // fake++;
+    // } else if (evt.getSource() == cancelButton) {
+    // //cancelDialog();
+    // fake++;
+    // } else if (evt.getSource() == insertElement) {
+    // //insertElements();
+    // fake++;
+    // }
+    // }
+
+    /*
+     * public void insertElements() { int index = elements.getSelectedIndex();
+     * actionsT.append(insertElements.get(index)); }
+     * 
+     * public void closeDialog() { actions.removeAllElements(); String[] act =
+     * actionsT.getText().split("\n"); for(int i=0; i<act.length; i++) { if
+     * (act[0].length() > 0) { actions.add(act[i]); } } filesToInclude =
+     * Conversion.wrapText(jtaFiles.getText()); codeToInclude =
+     * Conversion.wrapText(jtaCode.getText()); dispose(); }
      */
 
     /*
-     * panel2 = new JPanel(); panel2.setLayout(gridbag2);
-     * 
-     * panel2.setBorder(new javax.swing.border.TitledBorder("Code")); // guard
-     * c2.weighty = 1.0; c2.weightx = 1.0; c2.gridwidth = 1; c2.gridheight = 1;
-     * c2.fill = GridBagConstraints.BOTH; c2.gridwidth =
-     * GridBagConstraints.REMAINDER; c2.gridheight = 1; panel2.add(new
-     * JLabel("Files to include:"), c2); jtaFiles = new JTextArea();
-     * jtaFiles.setEditable(true); jtaFiles.setMargin(new Insets(10, 10, 10, 10));
-     * jtaFiles.setTabSize(3); String files = ""; if (filesToInclude != null) {
-     * for(i=0; i<filesToInclude.length; i++) { files += filesToInclude[i] + "\n"; }
-     * } jtaFiles.append(files); jtaFiles.setFont(new Font("times", Font.PLAIN,
-     * 12)); jsp = new JScrollPane(jtaFiles, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-     * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); //jsp.setPreferredSize(new
-     * Dimension(300, 300)); panel2.add(jsp, c2); panel2.add(new
-     * JLabel("Code to execute at the end of the transition"), c2); jtaCode = new
-     * JTextArea(); jtaCode.setEditable(true); jtaCode.setMargin(new Insets(10, 10,
-     * 10, 10)); jtaCode.setTabSize(3); String code = ""; if (codeToInclude != null)
-     * { for(i=0; i<codeToInclude.length; i++) { code += codeToInclude[i] + "\n"; }
-     * } jtaCode.append(code); jtaCode.setFont(new Font("times", Font.PLAIN, 12));
-     * jsp = new JScrollPane(jtaCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-     * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); //jsp.setPreferredSize(new
-     * Dimension(300, 300)); panel2.add(jsp, c2);
+     * public String getActions() { return signal.getText(); }
      */
 
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    public String getGuard() {
+        return guardT.getText();
+    }
 
-    // Issue #41 Ordering of tabbed panes
-    JTabbedPane jtp = GraphicLib.createTabbedPane();// new JTabbedPane();
-    jtp.add("General", panel1);
-    // jtp.add("Prototyping", panel2);
-    c.add(jtp, c0);
+    /*
+     * public String getAfterMin() { return afterMinT.getText(); }
+     * 
+     * public String getAfterMax() { return afterMaxT.getText(); }
+     * 
+     * public String getComputeMin() { return computeMinT.getText(); }
+     * 
+     * public String getComputeMax() { return computeMaxT.getText(); }
+     */
 
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-    closeButton = new JButton("Save and Close", IconManager.imgic25);
-    // closeButton.setPreferredSize(new Dimension(600, 50));
+    public boolean hasBeenCancelled() {
+        return cancelled;
+    }
 
-    // closeButton.addActionListener(this);
-    c.add(closeButton, c0);
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    cancelButton = new JButton("Cancel", IconManager.imgic27);
-    // cancelButton.addActionListener(this);
-    c.add(cancelButton, c0);
-  }
-  //
-  // public void actionPerformed(ActionEvent evt) {
-  // //String command = evt.getActionCommand();
-  // // int fake = 0;
-  // // Compare the action command to the known actions.
-  // if (evt.getSource() == closeButton) {
-  // //closeDialog();
-  // fake++;
-  // } else if (evt.getSource() == cancelButton) {
-  // //cancelDialog();
-  // fake++;
-  // } else if (evt.getSource() == insertElement) {
-  // //insertElements();
-  // fake++;
-  // }
-  // }
+    public void cancelDialog() {
+        cancelled = true;
+        dispose();
+    }
 
-  /*
-   * public void insertElements() { int index = elements.getSelectedIndex();
-   * actionsT.append(insertElements.get(index)); }
-   * 
-   * public void closeDialog() { actions.removeAllElements(); String[] act =
-   * actionsT.getText().split("\n"); for(int i=0; i<act.length; i++) { if
-   * (act[0].length() > 0) { actions.add(act[i]); } } filesToInclude =
-   * Conversion.wrapText(jtaFiles.getText()); codeToInclude =
-   * Conversion.wrapText(jtaCode.getText()); dispose(); }
-   */
-
-  /*
-   * public String getActions() { return signal.getText(); }
-   */
-
-  public String getGuard() {
-    return guardT.getText();
-  }
-
-  /*
-   * public String getAfterMin() { return afterMinT.getText(); }
-   * 
-   * public String getAfterMax() { return afterMaxT.getText(); }
-   * 
-   * public String getComputeMin() { return computeMinT.getText(); }
-   * 
-   * public String getComputeMax() { return computeMaxT.getText(); }
-   */
-
-  public boolean hasBeenCancelled() {
-    return cancelled;
-  }
-
-  public void cancelDialog() {
-    cancelled = true;
-    dispose();
-  }
-
-  /*
-   * public String[] getFilesToInclude() { return filesToInclude; }
-   * 
-   * public String[] getCodeToInclude() { return codeToInclude; }
-   */
+    /*
+     * public String[] getFilesToInclude() { return filesToInclude; }
+     * 
+     * public String[] getCodeToInclude() { return codeToInclude; }
+     */
 
 }

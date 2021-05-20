@@ -51,40 +51,40 @@ import ui.req.RequirementObserver;
  * @author Ludovic APVRILLE
  */
 public class Requirements {
-  public Requirement req;
-  public RequirementObserver ro;
-  public String diagramName;
-  public TURTLEModeling tm;
-  public String formalSpec;
-  public String graphDot;
-  public String graphAut;
-  public boolean satisfiedStudied = false;
-  public boolean satisfied = false;
+    public Requirement req;
+    public RequirementObserver ro;
+    public String diagramName;
+    public TURTLEModeling tm;
+    public String formalSpec;
+    public String graphDot;
+    public String graphAut;
+    public boolean satisfiedStudied = false;
+    public boolean satisfied = false;
 
-  public Requirements() {
-  }
-
-  public String toString() {
-    String ret = "";
-    ret += req.getValue() + "\t";
-    ret += ro.getValue() + "\t";
-    ret += diagramName + "\t";
-    if (satisfiedStudied) {
-      ret += "satisfied=" + satisfied;
-    } else {
-      ret += "not yet studied";
+    public Requirements() {
     }
 
-    return ret;
-  }
+    public String toString() {
+        String ret = "";
+        ret += req.getValue() + "\t";
+        ret += ro.getValue() + "\t";
+        ret += diagramName + "\t";
+        if (satisfiedStudied) {
+            ret += "satisfied=" + satisfied;
+        } else {
+            ret += "not yet studied";
+        }
 
-  public void setGraphAut(String data) {
-    graphAut = data;
-    satisfiedStudied = true;
+        return ret;
+    }
 
-    // Study graph data
-    AUTGraph graph = new AUTGraph();
-    graph.buildGraph(data);
-    satisfied = !(graph.hasTransitionWithAction(req.getViolatedAction()));
-  }
+    public void setGraphAut(String data) {
+        graphAut = data;
+        satisfiedStudied = true;
+
+        // Study graph data
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        satisfied = !(graph.hasTransitionWithAction(req.getViolatedAction()));
+    }
 }

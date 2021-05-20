@@ -50,42 +50,42 @@ import ui.*;
  */
 public class DiplodocusMethodologyDiagramReferenceToRequirement extends DiplodocusMethodologyDiagramReference {
 
-  public DiplodocusMethodologyDiagramReferenceToRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
-      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public DiplodocusMethodologyDiagramReferenceToRequirement(int _x, int _y, int _minX, int _maxX, int _minY,
+            int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(200, 120);
+        initScaling(200, 120);
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = REQUIREMENT;
+        typeOfReference = REQUIREMENT;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
+    }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
+    }
 
-  @Override
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof AvatarRequirementPanel;
+    @Override
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof AvatarRequirementPanel;
 
-  }
+    }
 
-  @Override
-  public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-    dn.setValidationsNumber(0);
-  }
+    @Override
+    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+        dn.setValidationsNumber(0);
+    }
 
-  @Override
-  public boolean makeCall(String diagramName, int index) {
-    return true;
-  }
+    @Override
+    public boolean makeCall(String diagramName, int index) {
+        return true;
+    }
 
 }

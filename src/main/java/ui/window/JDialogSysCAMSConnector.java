@@ -56,96 +56,96 @@ import javax.swing.*;
 
 public class JDialogSysCAMSConnector extends JDialog implements ActionListener {
 
-  private JTextField nameTextField;
+    private JTextField nameTextField;
 
-  private SysCAMSPortConnector con;
+    private SysCAMSPortConnector con;
 
-  public JDialogSysCAMSConnector(SysCAMSPortConnector con) {
-    this.setTitle("Setting Connector Attributes");
-    this.setLocationRelativeTo(null);
-    this.setVisible(true);
-    this.setAlwaysOnTop(true);
-    this.setResizable(false);
+    public JDialogSysCAMSConnector(SysCAMSPortConnector con) {
+        this.setTitle("Setting Connector Attributes");
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+        this.setAlwaysOnTop(true);
+        this.setResizable(false);
 
-    this.con = con;
+        this.con = con;
 
-    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-    getRootPane().getActionMap().put("close", new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        dispose();
-      }
-    });
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
 
-    dialog();
-  }
-
-  public void dialog() {
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    this.add(mainPanel);
-
-    JPanel attributesMainPanel = new JPanel();
-    mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
-
-    attributesMainPanel.setLayout(new BorderLayout());
-
-    Box attributesBox = Box.createVerticalBox();
-    attributesBox.setBorder(BorderFactory.createTitledBorder("Setting connector attributes"));
-
-    GridBagLayout gridBag = new GridBagLayout();
-    GridBagConstraints constraints = new GridBagConstraints();
-    JPanel attributesBoxPanel = new JPanel();
-    attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-    attributesBoxPanel.setLayout(gridBag);
-
-    JLabel labelName = new JLabel("Name : ");
-    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(15, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(labelName, constraints);
-    attributesBoxPanel.add(labelName);
-
-    if (con.getValue().toString().equals("")) {
-      nameTextField = new JTextField(10);
-    } else {
-      nameTextField = new JTextField(con.getValue().toString(), 10);
-    }
-    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(15, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(nameTextField, constraints);
-    attributesBoxPanel.add(nameTextField);
-
-    attributesBox.add(attributesBoxPanel);
-
-    attributesMainPanel.add(attributesBox, BorderLayout.NORTH);
-
-    JPanel downPanel = new JPanel(new FlowLayout());
-
-    JButton saveCloseButton = new JButton("Save and close");
-    saveCloseButton.setIcon(IconManager.imgic25);
-    saveCloseButton.setActionCommand("Save_Close");
-    saveCloseButton.addActionListener(this);
-    saveCloseButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(saveCloseButton);
-
-    JButton cancelButton = new JButton("Cancel");
-    cancelButton.setIcon(IconManager.imgic27);
-    cancelButton.setActionCommand("Cancel");
-    cancelButton.addActionListener(this);
-    cancelButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(cancelButton);
-
-    mainPanel.add(downPanel, BorderLayout.CENTER);
-    pack();
-    this.getRootPane().setDefaultButton(saveCloseButton);
-  }
-
-  public void actionPerformed(ActionEvent e) {
-    if ("Save_Close".equals(e.getActionCommand())) {
-      con.setValue(new String(nameTextField.getText()));
-      this.dispose();
+        dialog();
     }
 
-    if ("Cancel".equals(e.getActionCommand())) {
-      this.dispose();
+    public void dialog() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        this.add(mainPanel);
+
+        JPanel attributesMainPanel = new JPanel();
+        mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
+
+        attributesMainPanel.setLayout(new BorderLayout());
+
+        Box attributesBox = Box.createVerticalBox();
+        attributesBox.setBorder(BorderFactory.createTitledBorder("Setting connector attributes"));
+
+        GridBagLayout gridBag = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        JPanel attributesBoxPanel = new JPanel();
+        attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+        attributesBoxPanel.setLayout(gridBag);
+
+        JLabel labelName = new JLabel("Name : ");
+        constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(15, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(labelName, constraints);
+        attributesBoxPanel.add(labelName);
+
+        if (con.getValue().toString().equals("")) {
+            nameTextField = new JTextField(10);
+        } else {
+            nameTextField = new JTextField(con.getValue().toString(), 10);
+        }
+        constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(15, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(nameTextField, constraints);
+        attributesBoxPanel.add(nameTextField);
+
+        attributesBox.add(attributesBoxPanel);
+
+        attributesMainPanel.add(attributesBox, BorderLayout.NORTH);
+
+        JPanel downPanel = new JPanel(new FlowLayout());
+
+        JButton saveCloseButton = new JButton("Save and close");
+        saveCloseButton.setIcon(IconManager.imgic25);
+        saveCloseButton.setActionCommand("Save_Close");
+        saveCloseButton.addActionListener(this);
+        saveCloseButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(saveCloseButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setIcon(IconManager.imgic27);
+        cancelButton.setActionCommand("Cancel");
+        cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(cancelButton);
+
+        mainPanel.add(downPanel, BorderLayout.CENTER);
+        pack();
+        this.getRootPane().setDefaultButton(saveCloseButton);
     }
-  }
+
+    public void actionPerformed(ActionEvent e) {
+        if ("Save_Close".equals(e.getActionCommand())) {
+            con.setValue(new String(nameTextField.getText()));
+            this.dispose();
+        }
+
+        if ("Cancel".equals(e.getActionCommand())) {
+            this.dispose();
+        }
+    }
 }

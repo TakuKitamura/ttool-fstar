@@ -45,6 +45,6 @@ package myutil;
  * @author Ludovic APVRILLE
  */
 public interface ExternalCall {
-  void computeFunction(int id);
+    void computeFunction(int id);
 
 }

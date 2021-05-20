@@ -45,8 +45,8 @@ package myutil;
  */
 public class FileException extends Exception {
 
-  public FileException(String msg) {
-    super("Operation on file could not be performed: " + msg);
-  }
+    public FileException(String msg) {
+        super("Operation on file could not be performed: " + msg);
+    }
 
 } // Class

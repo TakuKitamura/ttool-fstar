@@ -49,36 +49,36 @@ import java.util.Arrays;
  */
 public class AUTSplitter {
 
-  public ArrayList<AUTPartition> partitions;
+    public ArrayList<AUTPartition> partitions;
 
-  public AUTSplitter() {
-    partitions = new ArrayList<AUTPartition>();
-  }
-
-  public void addPartition(AUTPartition _p) {
-    partitions.add(_p);
-  }
-
-  public String toString() {
-    StringBuffer sb = new StringBuffer("");
-    for (AUTPartition partition : partitions) {
-      sb.append("{" + partition.toString() + "}");
+    public AUTSplitter() {
+        partitions = new ArrayList<AUTPartition>();
     }
-    return sb.toString();
-  }
 
-  public int size() {
-    return partitions.size();
-  }
-
-  public int getHashCode() {
-    int[] values = new int[partitions.size()];
-    int cpt = 0;
-    for (AUTPartition p : partitions) {
-      values[cpt] = p.getHashCode();
-      cpt++;
+    public void addPartition(AUTPartition _p) {
+        partitions.add(_p);
     }
-    return Arrays.hashCode(values);
-  }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("");
+        for (AUTPartition partition : partitions) {
+            sb.append("{" + partition.toString() + "}");
+        }
+        return sb.toString();
+    }
+
+    public int size() {
+        return partitions.size();
+    }
+
+    public int getHashCode() {
+        int[] values = new int[partitions.size()];
+        int cpt = 0;
+        for (AUTPartition p : partitions) {
+            values[cpt] = p.getHashCode();
+            cpt++;
+        }
+        return Arrays.hashCode(values);
+    }
 
 }

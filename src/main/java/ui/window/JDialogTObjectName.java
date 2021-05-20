@@ -56,137 +56,137 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class JDialogTObjectName extends JDialogBase implements ActionListener {
-  TCDTObject to;
-  Vector<TCDTClass> tclasses;
+    TCDTObject to;
+    Vector<TCDTClass> tclasses;
 
-  private JPanel panel1;
-  private Frame frame;
+    private JPanel panel1;
+    private Frame frame;
 
-  // Panel1
-  private JTextField identifierText;
-  private JComboBox<TCDTClass> tclassList;
+    // Panel1
+    private JTextField identifierText;
+    private JComboBox<TCDTClass> tclassList;
 
-  /* Creates new form */
-  public JDialogTObjectName(TCDTObject _to, Frame f, String title) {
-    super(f, title, true);
-    to = _to;
-    frame = f;
+    /* Creates new form */
+    public JDialogTObjectName(TCDTObject _to, Frame f, String title) {
+        super(f, title, true);
+        to = _to;
+        frame = f;
 
-    tclasses = to.getTDiagramPanel().getTClasses();
+        tclasses = to.getTDiagramPanel().getTClasses();
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
+        initComponents();
+        myInitComponents();
+        pack();
+    }
 
-  private void myInitComponents() {
-    identifierText.setText(to.getObjectName());
-    tclassList.setSelectedIndex(0);
-    TCDTClass t = to.getMasterTClass();
-    if (t != null) {
-      TCDTClass t1;
-      for (int i = 1; i < tclasses.size(); i++) {
-        t1 = tclasses.elementAt(i);
-        if (t1 == t) {
-          tclassList.setSelectedIndex(i);
-          break;
+    private void myInitComponents() {
+        identifierText.setText(to.getObjectName());
+        tclassList.setSelectedIndex(0);
+        TCDTClass t = to.getMasterTClass();
+        if (t != null) {
+            TCDTClass t1;
+            for (int i = 1; i < tclasses.size(); i++) {
+                t1 = tclasses.elementAt(i);
+                if (t1 == t) {
+                    tclassList.setSelectedIndex(i);
+                    break;
+                }
+            }
         }
-      }
     }
-  }
 
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
 
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
 
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    panel1 = new JPanel();
-    panel1.setLayout(gridbag1);
-    panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and tclass "));
-    panel1.setPreferredSize(new Dimension(300, 150));
+        panel1 = new JPanel();
+        panel1.setLayout(gridbag1);
+        panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and tclass "));
+        panel1.setPreferredSize(new Dimension(300, 150));
 
-    // first line panel1
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.BOTH;
-    c1.gridheight = 3;
-    panel1.add(new JLabel(" "), c1);
+        // first line panel1
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.BOTH;
+        c1.gridheight = 3;
+        panel1.add(new JLabel(" "), c1);
 
-    c1.gridwidth = 1;
-    c1.gridheight = 1;
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.anchor = GridBagConstraints.CENTER;
-    panel1.add(new JLabel("identifier"), c1);
-    panel1.add(new JLabel("::"), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    panel1.add(new JLabel("tclass "), c1);
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("identifier"), c1);
+        panel1.add(new JLabel("::"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        panel1.add(new JLabel("tclass "), c1);
 
-    // second line panel1
-    c1.gridwidth = 1;
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.anchor = GridBagConstraints.CENTER;
-    identifierText = new JTextField(to.getObjectName());
-    identifierText.setColumns(20);
-    identifierText.setEditable(true);
-    panel1.add(identifierText, c1);
+        // second line panel1
+        c1.gridwidth = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.anchor = GridBagConstraints.CENTER;
+        identifierText = new JTextField(to.getObjectName());
+        identifierText.setColumns(20);
+        identifierText.setEditable(true);
+        panel1.add(identifierText, c1);
 
-    panel1.add(new JLabel(" :: "), c1);
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        panel1.add(new JLabel(" :: "), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
 
-    tclassList = new JComboBox<>(tclasses);
-    panel1.add(tclassList, c1);
+        tclassList = new JComboBox<>(tclasses);
+        panel1.add(tclassList, c1);
 
-    // main panel;
-    c0.gridwidth = 1;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
 
-    c.add(panel1, c0);
+        c.add(panel1, c0);
 
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
 
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
+        initButtons(c0, c, this);
     }
-  }
 
-  public void closeDialog() {
-    to.setObjectName(identifierText.getText());
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
 
-    int selected = tclassList.getSelectedIndex();
-    if (selected == 0) {
-      to.setMasterTClass(null);
-    } else {
-      to.setMasterTClass(tclasses.elementAt(selected));
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        }
     }
-    dispose();
-  }
 
-  public void cancelDialog() {
-    dispose();
-  }
+    public void closeDialog() {
+        to.setObjectName(identifierText.getText());
+
+        int selected = tclassList.getSelectedIndex();
+        if (selected == 0) {
+            to.setMasterTClass(null);
+        } else {
+            to.setMasterTClass(tclasses.elementAt(selected));
+        }
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
 
 }

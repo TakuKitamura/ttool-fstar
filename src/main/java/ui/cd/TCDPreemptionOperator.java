@@ -52,18 +52,18 @@ import ui.TGComponentManager;
  */
 public class TCDPreemptionOperator extends TCDCompositionOperator {
 
-  public TCDPreemptionOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TCDPreemptionOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    name = "Preemption composition operator";
-    value = "Preemption";
+        name = "Preemption composition operator";
+        value = "Preemption";
 
-    myImageIcon = IconManager.imgic116;
-  }
+        myImageIcon = IconManager.imgic116;
+    }
 
-  public int getType() {
-    return TGComponentManager.TCD_PREEMPTION_OPERATOR;
-  }
+    public int getType() {
+        return TGComponentManager.TCD_PREEMPTION_OPERATOR;
+    }
 
 }

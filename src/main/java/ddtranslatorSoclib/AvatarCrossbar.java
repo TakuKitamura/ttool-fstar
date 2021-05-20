@@ -45,57 +45,57 @@ package ddtranslatorSoclib;
 
 public class AvatarCrossbar extends AvatarComponent {
 
-  private String crossbarName;
-  private int nbOfAttachedInitiators;
-  private int nbOfAttachedTargets;
-  private int cluster_index;
-  private int cluster_address;
+    private String crossbarName;
+    private int nbOfAttachedInitiators;
+    private int nbOfAttachedTargets;
+    private int cluster_index;
+    private int cluster_address;
 
-  public AvatarCrossbar(String _crossbarName, int _nbOfAttachedInitiators, int _nbOfAttachedTargets, int _cluster_index,
-      int _cluster_address) {
+    public AvatarCrossbar(String _crossbarName, int _nbOfAttachedInitiators, int _nbOfAttachedTargets,
+            int _cluster_index, int _cluster_address) {
 
-    crossbarName = _crossbarName;
-    nbOfAttachedInitiators = _nbOfAttachedInitiators;
-    nbOfAttachedTargets = _nbOfAttachedTargets;
-    cluster_index = _cluster_index;
-    cluster_address = _cluster_address;
+        crossbarName = _crossbarName;
+        nbOfAttachedInitiators = _nbOfAttachedInitiators;
+        nbOfAttachedTargets = _nbOfAttachedTargets;
+        cluster_index = _cluster_index;
+        cluster_address = _cluster_address;
 
-  }
+    }
 
-  public String getCrossbarName() {
-    return crossbarName;
-  }
+    public String getCrossbarName() {
+        return crossbarName;
+    }
 
-  public int getNbOfAttachedInitiators() {
-    return nbOfAttachedInitiators;
-  }
+    public int getNbOfAttachedInitiators() {
+        return nbOfAttachedInitiators;
+    }
 
-  public int getNbOfAttachedTargets() {
-    return nbOfAttachedTargets;
-  }
+    public int getNbOfAttachedTargets() {
+        return nbOfAttachedTargets;
+    }
 
-  public int getClusterIndex() {
-    return cluster_index;
-  }
+    public int getClusterIndex() {
+        return cluster_index;
+    }
 
-  public int getClusterAddress() {
-    return cluster_address;
-  }
+    public int getClusterAddress() {
+        return cluster_address;
+    }
 
-  public void setClusterIndex(int nb) {
-    cluster_index = nb;
-  }
+    public void setClusterIndex(int nb) {
+        cluster_index = nb;
+    }
 
-  public void setClusterAddress(int nb) {
-    cluster_address = nb;
-  }
+    public void setClusterAddress(int nb) {
+        cluster_address = nb;
+    }
 
-  public void setNbOfAttachedInitiators(int nb) {
-    nbOfAttachedInitiators = nb;
-  }
+    public void setNbOfAttachedInitiators(int nb) {
+        nbOfAttachedInitiators = nb;
+    }
 
-  public void setNbOfAttachedTargets(int nb) {
-    nbOfAttachedTargets = nb;
-  }
+    public void setNbOfAttachedTargets(int nb) {
+        nbOfAttachedTargets = nb;
+    }
 
 }

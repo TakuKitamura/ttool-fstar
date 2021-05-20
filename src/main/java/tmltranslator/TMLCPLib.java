@@ -51,125 +51,125 @@ import java.util.Vector;
  */
 public class TMLCPLib extends TMLElement {
 
-  private List<TMLCPLibArtifact> artifacts;
-  private Vector<String> mappedUnits = new Vector<String>();
-  private int cpMECType;
-  private String typeName;
-  private Vector<String> assignedAttributes;
-  private List<Integer> transferTypes;
+    private List<TMLCPLibArtifact> artifacts;
+    private Vector<String> mappedUnits = new Vector<String>();
+    private int cpMECType;
+    private String typeName;
+    private Vector<String> assignedAttributes;
+    private List<Integer> transferTypes;
 
-  public TMLCPLib(String _name, String _typeName, Object _referenceObject, int _cpMECType) {
-    super(_name, _referenceObject);
+    public TMLCPLib(String _name, String _typeName, Object _referenceObject, int _cpMECType) {
+        super(_name, _referenceObject);
 
-    typeName = _typeName;
-    cpMECType = _cpMECType;
-    init();
-  }
-
-  public TMLCPLib() {
-    super("DefaultCP", null); // no reference to any object in the default constructor
-
-    init();
-  }
-
-  public void setMappedUnits(Vector<String> _mappedUnits) {
-    mappedUnits = _mappedUnits;
-  }
-
-  private void init() {
-    artifacts = new ArrayList<TMLCPLibArtifact>();
-  }
-
-  public void addArtifact(TMLCPLibArtifact _arti) {
-    artifacts.add(_arti);
-  }
-
-  public List<TMLCPLibArtifact> getArtifacts() {
-    return artifacts;
-  }
-
-  public Vector<String> getMappedUnits() {
-    return mappedUnits;
-  }
-
-  public String getTypeName() {
-    return typeName;
-  }
-
-  public boolean isDMATransfer() {
-    return typeName.compareTo("DMA_transfer") == 0;
-  }
-
-  public boolean isDoubleDMATransfer() {
-    return typeName.compareTo("Double_DMA_transfer") == 0;
-  }
-
-  public boolean isMemoryCopy() {
-    return typeName.compareTo("CP_Memory_Copy") == 0;
-  }
-
-  public String getUnitByName(String id) {
-    id = "." + id + " : ";
-    for (String s : mappedUnits) {
-      if (s.indexOf(id) > -1) {
-        return s.substring(s.indexOf(":") + 1, s.length()).trim();
-      }
-    }
-    return null;
-  }
-
-  public int getCPMECType() {
-    return cpMECType;
-  }
-
-  public void setAssignedAttributes(Vector<String> _assignedAttributes) {
-    assignedAttributes = _assignedAttributes;
-  }
-
-  public Vector<String> getAssignedAttributes() {
-    return assignedAttributes;
-  }
-
-  public void setTransferTypes(List<Integer> _transferTypes) {
-    transferTypes = _transferTypes;
-  }
-
-  public List<Integer> getTransferTypes() {
-    return transferTypes;
-  }
-
-  public String toXML() {
-    String s = "<TMLCPLIB name=\"" + name + "\" cpMECType=\"" + cpMECType + "\" typeName=\"" + typeName + "\">\n";
-    if (artifacts != null) {
-      for (TMLCPLibArtifact arti : artifacts) {
-        s += arti.toXML();
-      }
+        typeName = _typeName;
+        cpMECType = _cpMECType;
+        init();
     }
 
-    if (mappedUnits != null) {
-      for (String mu : mappedUnits) {
-        if (mu != null) {
-          s += "<MAPPEUNIT unit=\"" + mu + "\" />\n";
+    public TMLCPLib() {
+        super("DefaultCP", null); // no reference to any object in the default constructor
+
+        init();
+    }
+
+    public void setMappedUnits(Vector<String> _mappedUnits) {
+        mappedUnits = _mappedUnits;
+    }
+
+    private void init() {
+        artifacts = new ArrayList<TMLCPLibArtifact>();
+    }
+
+    public void addArtifact(TMLCPLibArtifact _arti) {
+        artifacts.add(_arti);
+    }
+
+    public List<TMLCPLibArtifact> getArtifacts() {
+        return artifacts;
+    }
+
+    public Vector<String> getMappedUnits() {
+        return mappedUnits;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public boolean isDMATransfer() {
+        return typeName.compareTo("DMA_transfer") == 0;
+    }
+
+    public boolean isDoubleDMATransfer() {
+        return typeName.compareTo("Double_DMA_transfer") == 0;
+    }
+
+    public boolean isMemoryCopy() {
+        return typeName.compareTo("CP_Memory_Copy") == 0;
+    }
+
+    public String getUnitByName(String id) {
+        id = "." + id + " : ";
+        for (String s : mappedUnits) {
+            if (s.indexOf(id) > -1) {
+                return s.substring(s.indexOf(":") + 1, s.length()).trim();
+            }
         }
-      }
+        return null;
     }
 
-    if (assignedAttributes != null) {
-      for (String aa : assignedAttributes) {
-        if (aa != null) {
-          s += "<ASSIGNEDATTRIBUTE attr=\"" + aa + "\" />\n";
-        }
-      }
+    public int getCPMECType() {
+        return cpMECType;
     }
 
-    if (transferTypes != null) {
-      for (Integer i : transferTypes) {
-        if (i != null) {
-          s += "<TRANSFERTYPE type=\"" + i.toString() + "\" />\n";
-        }
-      }
+    public void setAssignedAttributes(Vector<String> _assignedAttributes) {
+        assignedAttributes = _assignedAttributes;
     }
-    s += "</TMLCPLIB>";
-    return s;
-  }
+
+    public Vector<String> getAssignedAttributes() {
+        return assignedAttributes;
+    }
+
+    public void setTransferTypes(List<Integer> _transferTypes) {
+        transferTypes = _transferTypes;
+    }
+
+    public List<Integer> getTransferTypes() {
+        return transferTypes;
+    }
+
+    public String toXML() {
+        String s = "<TMLCPLIB name=\"" + name + "\" cpMECType=\"" + cpMECType + "\" typeName=\"" + typeName + "\">\n";
+        if (artifacts != null) {
+            for (TMLCPLibArtifact arti : artifacts) {
+                s += arti.toXML();
+            }
+        }
+
+        if (mappedUnits != null) {
+            for (String mu : mappedUnits) {
+                if (mu != null) {
+                    s += "<MAPPEUNIT unit=\"" + mu + "\" />\n";
+                }
+            }
+        }
+
+        if (assignedAttributes != null) {
+            for (String aa : assignedAttributes) {
+                if (aa != null) {
+                    s += "<ASSIGNEDATTRIBUTE attr=\"" + aa + "\" />\n";
+                }
+            }
+        }
+
+        if (transferTypes != null) {
+            for (Integer i : transferTypes) {
+                if (i != null) {
+                    s += "<TRANSFERTYPE type=\"" + i.toString() + "\" />\n";
+                }
+            }
+        }
+        s += "</TMLCPLIB>";
+        return s;
+    }
 } // End of the class

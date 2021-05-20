@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class RTLFileFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.rtl);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.rtl);
+    public String getDescription() {
+        return "RT-LOTOS specifications";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "RT-LOTOS specifications";
-  }
-
-  public static String getExtension() {
-    return FileUtils.rtl;
-  }
+    public static String getExtension() {
+        return FileUtils.rtl;
+    }
 
 }

@@ -49,36 +49,36 @@ import avatartranslator.AvatarStateMachineElement;
  * @version 1.0 21/06/2016
  */
 public class SpecificationLiveness {
-  public Object ref1, ref2; // ref1 must be provided, ref2 might be null
-  public boolean result;
+    public Object ref1, ref2; // ref1 must be provided, ref2 might be null
+    public boolean result;
 
-  public SpecificationLiveness(Object _ref1, Object _ref2) {
-    ref1 = _ref1;
-    ref2 = _ref2;
-    result = true;
-  }
-
-  public String toString() {
-    String name;
-    if (ref1 instanceof AvatarStateMachineElement) {
-      name = "Element " + ((AvatarStateMachineElement) ref1).getExtendedName();
-    } else {
-      name = ref1.toString();
+    public SpecificationLiveness(Object _ref1, Object _ref2) {
+        ref1 = _ref1;
+        ref2 = _ref2;
+        result = true;
     }
 
-    if (ref2 != null) {
-      if (ref2 instanceof AvatarBlock) {
-        name += " of block " + ((AvatarBlock) ref2).getName();
-      } else {
-        name += ref2.toString();
-      }
-    }
+    public String toString() {
+        String name;
+        if (ref1 instanceof AvatarStateMachineElement) {
+            name = "Element " + ((AvatarStateMachineElement) ref1).getExtendedName();
+        } else {
+            name = ref1.toString();
+        }
 
-    if (result) {
-      return name + " -> liveness is satisfied";
-    }
-    return name + " -> liveness is NOT satisfied";
+        if (ref2 != null) {
+            if (ref2 instanceof AvatarBlock) {
+                name += " of block " + ((AvatarBlock) ref2).getName();
+            } else {
+                name += ref2.toString();
+            }
+        }
 
-  }
+        if (result) {
+            return name + " -> liveness is satisfied";
+        }
+        return name + " -> liveness is NOT satisfied";
+
+    }
 
 }

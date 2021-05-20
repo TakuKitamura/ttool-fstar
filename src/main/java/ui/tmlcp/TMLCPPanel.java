@@ -52,212 +52,213 @@ import java.util.Vector;
  */
 public class TMLCPPanel extends TDiagramPanel {
 
-  public TMLCPPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-  }
-
-  @Override
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    //
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
-     * mgui.newTClassName(t.oldValue, t.getValue()); } else if (tgc instanceof
-     * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
-     * mgui.selectTab(tgc.getFather().getValue()); } else if (tgc.getFather()
-     * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
-     * TCDTClass t = to.getMasterTClass(); if (t != null) {
-     * mgui.selectTab(t.getValue()); } } return false; // because no change made on
-     * any diagram }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnAdd(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.addTClass(tgcc.getClassName()); return true; }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
-
-  @Override
-  public String getXMLHead() { // Issue #31
-    return "<CommunicationPatternDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >"; // Issue #31
-  }
-
-  @Override
-  public String getXMLTail() {
-    return "</CommunicationPatternDiagramPanel>";
-  }
-
-  @Override
-  public String getXMLSelectedHead() {
-    return "<CommunicationPatternDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
-        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  @Override
-  public String getXMLSelectedTail() {
-    return "</CommunicationPatternDiagramPanelCopy>";
-  }
-
-  @Override
-  public String getXMLCloneHead() {
-    return "<CommunicationPatternDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
-        + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  @Override
-  public String getXMLCloneTail() {
-    return "</CommunicationPatternDiagramPanelCopy>";
-  }
-
-  /*
-   * public TClassInterface getTClass1ToWhichIamConnected(TCDCompositionOperator
-   * tcd) { TGConnectorAssociation tgca = getTGConnectorAssociationOf(tcd);
-   * TGComponent tgc; if (tgca != null) { tgc =
-   * getTopComponentToWhichBelongs(tgca.getTGConnectingPointP1()); if ((tgc !=
-   * null) && (tgc instanceof TClassInterface)) { return (TClassInterface) tgc; }
-   * } return null; }
-   * 
-   * public TClassInterface getTClass2ToWhichIamConnected(TCDCompositionOperator
-   * tcd) { TGConnectorAssociation tgca = getTGConnectorAssociationOf(tcd);
-   * TGComponent tgc; if (tgca != null) { tgc =
-   * getTopComponentToWhichBelongs(tgca.getTGConnectingPointP2()); if ((tgc !=
-   * null) && (tgc instanceof TClassInterface)) { return (TClassInterface) tgc; }
-   * } return null; }
-   * 
-   * public TGConnectorAssociation
-   * getTGConnectorAssociationOf(TCDCompositionOperator tcd) { int i;
-   * TGConnectingPoint p1, p2; TGConnector tgco; TGConnectorAttribute tgca;
-   * TGComponent tgc;
-   * 
-   * for(i=0; i<tcd.getNbConnectingPoint(); i++) { p1 =
-   * tcd.tgconnectingPointAtIndex(i); tgco = getConnectorConnectedTo(p1); if
-   * ((tgco != null) && (tgco instanceof TGConnectorAttribute)){ tgca =
-   * (TGConnectorAttribute)tgco; if (p1 == tgca.getTGConnectingPointP1()) { p2 =
-   * tgca.getTGConnectingPointP2(); } else { p2 = tgca.getTGConnectingPointP1(); }
-   * 
-   * // p2 now contains the connecting point of a association tgc =
-   * getComponentToWhichBelongs(p2); if ((tgc != null) && (!p2.isFree()) && (tgc
-   * instanceof TGConnectorAssociation)) { return (TGConnectorAssociation)tgc; } }
-   * } return null; }
-   */
-
-  // public void makePostLoadingProcessing() throws MalformedModelingException {
-  // TGComponent tgc;
-
-  /*
-   * for(int i=0; i<componentList.size(); i++) { tgc =
-   * (TGComponent)(componentList.elementAt(i)); if (tgc instanceof TCDTObject) {
-   * ((TCDTObject)tgc).postLoadingProcessing(); } }
-   */
-  // }
-
-  public boolean isTMLCPSDCreated(String name) {
-    return mgui.isTMLCPSDCreated(tp, name);
-  }
-
-  public boolean isTMLCPCreated(String name) {
-    return mgui.isTMLCPCreated(tp, name);
-  }
-
-  public boolean openTMLCPSequenceDiagram(String name) {
-    return mgui.openTMLCPSequenceDiagram(name);
-  }
-
-  public boolean openTMLCPDiagram(String name) {
-    return mgui.openTMLCPDiagram(name);
-  }
-
-  public boolean createTMLCPSequenceDiagram(String name) {
-    boolean b = mgui.createTMLCPSequenceDiagram(tp, name);
-    // mgui.changeMade(mgui.getSequenceDiagramPanel(name),
-    // TDiagramPanel.NEW_COMPONENT);
-    return b;
-  }
-
-  public boolean createTMLCPDiagram(String name) {
-    boolean b = mgui.createTMLCPDiagram(tp, name);
-    // mgui.changeMade(mgui.getSequenceDiagramPanel(name),
-    // TDiagramPanel.NEW_COMPONENT);
-    return b;
-  }
-
-  @Override
-  public void enhance() {
-    //
-    Vector<TGComponent> v = new Vector<>();
-    Object o;
-    Iterator<TGComponent> iterator = componentList.listIterator();
-
-    while (iterator.hasNext()) {
-      o = iterator.next();
-      if (o instanceof TMLCPStartState) {
-        enhance(v, (TMLCPStartState) o);
-      }
+    public TMLCPPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
     }
 
-    mgui.changeMade(this, MOVE_CONNECTOR);
-    repaint();
-  }
-
-  public void enhance(Vector<TGComponent> v, TGComponent tgc) {
-    TGComponent tgc1;
-    TGConnector tgcon;
-    int i;
-
-    if (tgc == null) {
-      return;
+    @Override
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        //
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
+         * mgui.newTClassName(t.oldValue, t.getValue()); } else if (tgc instanceof
+         * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
+         * mgui.selectTab(tgc.getFather().getValue()); } else if (tgc.getFather()
+         * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
+         * TCDTClass t = to.getMasterTClass(); if (t != null) {
+         * mgui.selectTab(t.getValue()); } } return false; // because no change made on
+         * any diagram }
+         */
+        return false;
     }
 
-    if (v.contains(tgc)) {
-      return;
+    @Override
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.addTClass(tgcc.getClassName()); return true; }
+         */
+        return false;
     }
 
-    v.add(tgc);
+    @Override
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
 
-    //
-    if (!(tgc instanceof TMLCPStartState)) {
-      for (i = 0; i < tgc.getNbNext(); i++) {
-        tgc1 = getNextTGComponent(tgc, i);
-        tgcon = getNextTGConnector(tgc, i);
-        if (tgcon.getAutomaticDrawing()) {
-          if ((tgc1 != null) && (tgcon != null)) {
-            tgcon.alignOrMakeSquareTGComponents();
-          }
+    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
+
+    @Override
+    public String getXMLHead() { // Issue #31
+        return "<CommunicationPatternDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >"; // Issue
+                                                                                                             // #31
+    }
+
+    @Override
+    public String getXMLTail() {
+        return "</CommunicationPatternDiagramPanel>";
+    }
+
+    @Override
+    public String getXMLSelectedHead() {
+        return "<CommunicationPatternDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+                + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    @Override
+    public String getXMLSelectedTail() {
+        return "</CommunicationPatternDiagramPanelCopy>";
+    }
+
+    @Override
+    public String getXMLCloneHead() {
+        return "<CommunicationPatternDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+                + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    @Override
+    public String getXMLCloneTail() {
+        return "</CommunicationPatternDiagramPanelCopy>";
+    }
+
+    /*
+     * public TClassInterface getTClass1ToWhichIamConnected(TCDCompositionOperator
+     * tcd) { TGConnectorAssociation tgca = getTGConnectorAssociationOf(tcd);
+     * TGComponent tgc; if (tgca != null) { tgc =
+     * getTopComponentToWhichBelongs(tgca.getTGConnectingPointP1()); if ((tgc !=
+     * null) && (tgc instanceof TClassInterface)) { return (TClassInterface) tgc; }
+     * } return null; }
+     * 
+     * public TClassInterface getTClass2ToWhichIamConnected(TCDCompositionOperator
+     * tcd) { TGConnectorAssociation tgca = getTGConnectorAssociationOf(tcd);
+     * TGComponent tgc; if (tgca != null) { tgc =
+     * getTopComponentToWhichBelongs(tgca.getTGConnectingPointP2()); if ((tgc !=
+     * null) && (tgc instanceof TClassInterface)) { return (TClassInterface) tgc; }
+     * } return null; }
+     * 
+     * public TGConnectorAssociation
+     * getTGConnectorAssociationOf(TCDCompositionOperator tcd) { int i;
+     * TGConnectingPoint p1, p2; TGConnector tgco; TGConnectorAttribute tgca;
+     * TGComponent tgc;
+     * 
+     * for(i=0; i<tcd.getNbConnectingPoint(); i++) { p1 =
+     * tcd.tgconnectingPointAtIndex(i); tgco = getConnectorConnectedTo(p1); if
+     * ((tgco != null) && (tgco instanceof TGConnectorAttribute)){ tgca =
+     * (TGConnectorAttribute)tgco; if (p1 == tgca.getTGConnectingPointP1()) { p2 =
+     * tgca.getTGConnectingPointP2(); } else { p2 = tgca.getTGConnectingPointP1(); }
+     * 
+     * // p2 now contains the connecting point of a association tgc =
+     * getComponentToWhichBelongs(p2); if ((tgc != null) && (!p2.isFree()) && (tgc
+     * instanceof TGConnectorAssociation)) { return (TGConnectorAssociation)tgc; } }
+     * } return null; }
+     */
+
+    // public void makePostLoadingProcessing() throws MalformedModelingException {
+    // TGComponent tgc;
+
+    /*
+     * for(int i=0; i<componentList.size(); i++) { tgc =
+     * (TGComponent)(componentList.elementAt(i)); if (tgc instanceof TCDTObject) {
+     * ((TCDTObject)tgc).postLoadingProcessing(); } }
+     */
+    // }
+
+    public boolean isTMLCPSDCreated(String name) {
+        return mgui.isTMLCPSDCreated(tp, name);
+    }
+
+    public boolean isTMLCPCreated(String name) {
+        return mgui.isTMLCPCreated(tp, name);
+    }
+
+    public boolean openTMLCPSequenceDiagram(String name) {
+        return mgui.openTMLCPSequenceDiagram(name);
+    }
+
+    public boolean openTMLCPDiagram(String name) {
+        return mgui.openTMLCPDiagram(name);
+    }
+
+    public boolean createTMLCPSequenceDiagram(String name) {
+        boolean b = mgui.createTMLCPSequenceDiagram(tp, name);
+        // mgui.changeMade(mgui.getSequenceDiagramPanel(name),
+        // TDiagramPanel.NEW_COMPONENT);
+        return b;
+    }
+
+    public boolean createTMLCPDiagram(String name) {
+        boolean b = mgui.createTMLCPDiagram(tp, name);
+        // mgui.changeMade(mgui.getSequenceDiagramPanel(name),
+        // TDiagramPanel.NEW_COMPONENT);
+        return b;
+    }
+
+    @Override
+    public void enhance() {
+        //
+        Vector<TGComponent> v = new Vector<>();
+        Object o;
+        Iterator<TGComponent> iterator = componentList.listIterator();
+
+        while (iterator.hasNext()) {
+            o = iterator.next();
+            if (o instanceof TMLCPStartState) {
+                enhance(v, (TMLCPStartState) o);
+            }
         }
-      }
+
+        mgui.changeMade(this, MOVE_CONNECTOR);
+        repaint();
     }
 
-    // Explore next elements
-    for (i = 0; i < tgc.getNbNext(); i++) {
-      tgc1 = getNextTGComponent(tgc, i);
-      enhance(v, tgc1);
-    }
-  }
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
+        TGComponent tgc1;
+        TGConnector tgcon;
+        int i;
 
-  @Override
-  public boolean hasAutoConnect() {
-    return true;
-  }
+        if (tgc == null) {
+            return;
+        }
+
+        if (v.contains(tgc)) {
+            return;
+        }
+
+        v.add(tgc);
+
+        //
+        if (!(tgc instanceof TMLCPStartState)) {
+            for (i = 0; i < tgc.getNbNext(); i++) {
+                tgc1 = getNextTGComponent(tgc, i);
+                tgcon = getNextTGConnector(tgc, i);
+                if (tgcon.getAutomaticDrawing()) {
+                    if ((tgc1 != null) && (tgcon != null)) {
+                        tgcon.alignOrMakeSquareTGComponents();
+                    }
+                }
+            }
+        }
+
+        // Explore next elements
+        for (i = 0; i < tgc.getNbNext(); i++) {
+            tgc1 = getNextTGComponent(tgc, i);
+            enhance(v, tgc1);
+        }
+    }
+
+    @Override
+    public boolean hasAutoConnect() {
+        return true;
+    }
 }

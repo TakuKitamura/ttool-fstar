@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class MSCFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.xml);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.xml);
+    public String getDescription() {
+        return "MSC XML files";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "MSC XML files";
-  }
-
-  public static String getExtension() {
-    return FileUtils.xml;
-  }
+    public static String getExtension() {
+        return FileUtils.xml;
+    }
 
 }

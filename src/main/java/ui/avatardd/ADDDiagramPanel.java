@@ -58,186 +58,186 @@ import ui.TToolBar;
  * @version 1.0 30/06/2014
  */
 public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-  private int masterClockFrequency = 200; // in MHz
+    private int masterClockFrequency = 200; // in MHz
 
-  public ADDDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
-
-  @Override
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    //
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
-     * mgui.newTClassName(tp, t.oldValue, t.getValue()); } else if (tgc instanceof
-     * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
-     * mgui.selectTab(tp, tgc.getFather().getValue()); } else if (tgc.getFather()
-     * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
-     * TCDTClass t = to.getMasterTClass(); if (t != null) { mgui.selectTab(tp,
-     * t.getValue()); } } return false; // because no change made on any diagram }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnAdd(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc); //
-     * mgui.addTClass(tp, tgcc.getClassName()); return true; }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnRemove(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
-     * mgui.removeTClass(tp, tgcc.getClassName()); resetAllInstancesOf(tgcc); return
-     * true; }
-     */
-    return false;
-  }
-
-  @Override
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    /*
-     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
-     */
-    return false;
-  }
-
-  public int getMasterClockFrequency() {
-    return masterClockFrequency;
-  }
-
-  public void setMasterClockFrequency(int _masterClockFrequency) {
-    masterClockFrequency = _masterClockFrequency;
-  }
-
-  @Override
-  public String getXMLHead() {
-    return "<ADDDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + " >";
-  }
-
-  @Override
-  public String getXMLTail() {
-    return "</ADDDiagramPanel>";
-  }
-
-  @Override
-  public String getXMLSelectedHead() {
-    return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
-        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  @Override
-  public String getXMLSelectedTail() {
-    return "</ADDDiagramPanelCopy>";
-  }
-
-  @Override
-  public String getXMLCloneHead() {
-    return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  @Override
-  public String getXMLCloneTail() {
-    return "</ADDDiagramPanelCopy>";
-  }
-
-  public String displayParam() {
-    String s = " attributes=\"";
-    s += getAttributeState();
-    s += "\"";
-    return s;
-  }
-
-  public String displayClock() {
-    String s = " masterClockFrequency=\"";
-    s += masterClockFrequency;
-    s += "\"";
-    return s;
-  }
-
-  public void loadExtraParameters(Element elt) {
-    String s;
-    //
-    try {
-      s = elt.getAttribute("attributes");
-      //
-      int attr = Integer.decode(s).intValue();
-      setAttributes(attr % 3);
-    } catch (Exception e) {
-      // Model was saved in an older version of TTool
-      //
-      setAttributes(0);
+    public ADDDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
     }
 
-    try {
-      s = elt.getAttribute("masterClockFrequency");
-      //
-      masterClockFrequency = Math.abs(Integer.decode(s).intValue());
-    } catch (Exception e) {
-      // Model was saved in an older version of TTool
-      //
-      masterClockFrequency = 200;
+    @Override
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        //
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
+         * mgui.newTClassName(tp, t.oldValue, t.getValue()); } else if (tgc instanceof
+         * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
+         * mgui.selectTab(tp, tgc.getFather().getValue()); } else if (tgc.getFather()
+         * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
+         * TCDTClass t = to.getMasterTClass(); if (t != null) { mgui.selectTab(tp,
+         * t.getValue()); } } return false; // because no change made on any diagram }
+         */
+        return false;
     }
-  }
 
-  public boolean isMapped(String _ref, String _name) {
-    Iterator<TGComponent> iterator = componentList.listIterator();
-    TGComponent tgc;
-    // ADDCPUNode node;
-    Vector<ADDBlockArtifact> v;
-    ADDBlockArtifact artifact;
-    int i;
-    String name = _ref + "::" + _name;
+    @Override
+    public boolean actionOnAdd(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc); //
+         * mgui.addTClass(tp, tgcc.getClassName()); return true; }
+         */
+        return false;
+    }
 
-    while (iterator.hasNext()) {
-      tgc = iterator.next();
-      if (tgc instanceof ADDCPUNode) {
-        v = ((ADDCPUNode) (tgc)).getArtifactList();
-        for (i = 0; i < v.size(); i++) {
-          artifact = v.get(i);
-          if (artifact.getValue().equals(name)) {
-            return true;
-          }
+    @Override
+    public boolean actionOnRemove(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+         * mgui.removeTClass(tp, tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+         * true; }
+         */
+        return false;
+    }
+
+    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        /*
+         * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+         */
+        return false;
+    }
+
+    public int getMasterClockFrequency() {
+        return masterClockFrequency;
+    }
+
+    public void setMasterClockFrequency(int _masterClockFrequency) {
+        masterClockFrequency = _masterClockFrequency;
+    }
+
+    @Override
+    public String getXMLHead() {
+        return "<ADDDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + " >";
+    }
+
+    @Override
+    public String getXMLTail() {
+        return "</ADDDiagramPanel>";
+    }
+
+    @Override
+    public String getXMLSelectedHead() {
+        return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+                + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    @Override
+    public String getXMLSelectedTail() {
+        return "</ADDDiagramPanelCopy>";
+    }
+
+    @Override
+    public String getXMLCloneHead() {
+        return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+                + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    @Override
+    public String getXMLCloneTail() {
+        return "</ADDDiagramPanelCopy>";
+    }
+
+    public String displayParam() {
+        String s = " attributes=\"";
+        s += getAttributeState();
+        s += "\"";
+        return s;
+    }
+
+    public String displayClock() {
+        String s = " masterClockFrequency=\"";
+        s += masterClockFrequency;
+        s += "\"";
+        return s;
+    }
+
+    public void loadExtraParameters(Element elt) {
+        String s;
+        //
+        try {
+            s = elt.getAttribute("attributes");
+            //
+            int attr = Integer.decode(s).intValue();
+            setAttributes(attr % 3);
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            //
+            setAttributes(0);
         }
-      }
-    }
 
-    return false;
-  }
-
-  public boolean isChannelMapped(String _ref, String _name) {
-    Iterator<TGComponent> iterator = componentList.listIterator();
-    TGComponent tgc;
-    // ADDMemoryNode node;
-    Vector<ADDChannelArtifact> v;
-    ADDChannelArtifact artifact;
-    int i;
-    String name = _ref + "::" + _name;
-
-    while (iterator.hasNext()) {
-      tgc = iterator.next();
-      if (tgc instanceof ADDRAMNode) {
-        v = ((ADDRAMNode) (tgc)).getArtifactList();
-        for (i = 0; i < v.size(); i++) {
-          artifact = v.get(i);
-          TraceManager.addDev("Comparing " + artifact.getLongChannelName() + " with " + name);
-          if (artifact.getLongChannelName().equals(name)) {
-            return true;
-          }
+        try {
+            s = elt.getAttribute("masterClockFrequency");
+            //
+            masterClockFrequency = Math.abs(Integer.decode(s).intValue());
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            //
+            masterClockFrequency = 200;
         }
-      }
     }
 
-    return false;
-  }
+    public boolean isMapped(String _ref, String _name) {
+        Iterator<TGComponent> iterator = componentList.listIterator();
+        TGComponent tgc;
+        // ADDCPUNode node;
+        Vector<ADDBlockArtifact> v;
+        ADDBlockArtifact artifact;
+        int i;
+        String name = _ref + "::" + _name;
+
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+            if (tgc instanceof ADDCPUNode) {
+                v = ((ADDCPUNode) (tgc)).getArtifactList();
+                for (i = 0; i < v.size(); i++) {
+                    artifact = v.get(i);
+                    if (artifact.getValue().equals(name)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isChannelMapped(String _ref, String _name) {
+        Iterator<TGComponent> iterator = componentList.listIterator();
+        TGComponent tgc;
+        // ADDMemoryNode node;
+        Vector<ADDChannelArtifact> v;
+        ADDChannelArtifact artifact;
+        int i;
+        String name = _ref + "::" + _name;
+
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+            if (tgc instanceof ADDRAMNode) {
+                v = ((ADDRAMNode) (tgc)).getArtifactList();
+                for (i = 0; i < v.size(); i++) {
+                    artifact = v.get(i);
+                    TraceManager.addDev("Comparing " + artifact.getLongChannelName() + " with " + name);
+                    if (artifact.getLongChannelName().equals(name)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 
 }// End of class

@@ -58,317 +58,317 @@ import java.awt.event.ActionListener;
  * @version 1.0 11/07/2006
  */
 public class ProCSDDelegatePort extends ProCSDPort implements SwallowedTGComponent, ActionListener {
-  // private int textY1 = 15;
-  private int textY2 = 15;
-  private int position = 4; // for rotate. must be saved
-  // private int derivationx = 20;
-  // private int derivationy = 30;
-  int interfaceLength = 20;
+    // private int textY1 = 15;
+    private int textY2 = 15;
+    private int position = 4; // for rotate. must be saved
+    // private int derivationx = 20;
+    // private int derivationy = 30;
+    int interfaceLength = 20;
 
-  public ProCSDDelegatePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public ProCSDDelegatePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 20;
-    height = 20;
-    minWidth = 5;
-    minHeight = 5;
+        width = 20;
+        height = 20;
+        minWidth = 5;
+        minHeight = 5;
 
-    // addTGConnectingPointsComment();
+        // addTGConnectingPointsComment();
 
-    nbConnectingPoint = 4;
-    connectingPoint = new TGConnectingPointProCSD[nbConnectingPoint];
+        nbConnectingPoint = 4;
+        connectingPoint = new TGConnectingPointProCSD[nbConnectingPoint];
 
-    // up point
-    // connectingPoint[0] = new TGConnectingPointProSMD(this, -height/2, width/2,
-    // true, true, 0.5, 0.0);
-    // connectingPoint[1] = new TGConnectingPointProSMD(this, height/2, 0, true,
-    // true, 0.5, 0.0);
-    // connectingPoint[2] = new TGConnectingPointProSMD(this, height/2, width, true,
-    // true, 0.5, 0.0);
-    // connectingPoint[3] = new TGConnectingPointProSMD(this, height, width/2, true,
-    // true, 0.5, 0.0);
-    // addTGConnectingPointsComment();
-    connectingPoint[0] = new TGConnectingPointProCSD(this, 0, 0, true, true, 0.5, 0.0, this);
-    connectingPoint[1] = new TGConnectingPointProCSD(this, 0, width, true, true, 0.5, 0.0, this);
-    connectingPoint[2] = new TGConnectingPointProCSD(this, -height / 2, width / 2, true, true, 0.5, 0.0, this);
-    connectingPoint[3] = new TGConnectingPointProCSD(this, height / 2, width / 2, true, true, 0.5, 0.0, this);
+        // up point
+        // connectingPoint[0] = new TGConnectingPointProSMD(this, -height/2, width/2,
+        // true, true, 0.5, 0.0);
+        // connectingPoint[1] = new TGConnectingPointProSMD(this, height/2, 0, true,
+        // true, 0.5, 0.0);
+        // connectingPoint[2] = new TGConnectingPointProSMD(this, height/2, width, true,
+        // true, 0.5, 0.0);
+        // connectingPoint[3] = new TGConnectingPointProSMD(this, height, width/2, true,
+        // true, 0.5, 0.0);
+        // addTGConnectingPointsComment();
+        connectingPoint[0] = new TGConnectingPointProCSD(this, 0, 0, true, true, 0.5, 0.0, this);
+        connectingPoint[1] = new TGConnectingPointProCSD(this, 0, width, true, true, 0.5, 0.0, this);
+        connectingPoint[2] = new TGConnectingPointProCSD(this, -height / 2, width / 2, true, true, 0.5, 0.0, this);
+        connectingPoint[3] = new TGConnectingPointProCSD(this, height / 2, width / 2, true, true, 0.5, 0.0, this);
 
-    moveable = true;
-    editable = true;
-    removable = true;
-    userResizable = false;
+        moveable = true;
+        editable = true;
+        removable = true;
+        userResizable = false;
 
-    name = "Port";
-    value = "p";
+        name = "Port";
+        value = "p";
 
-    // Delegate port image removed, I put another for not having an error here. By
-    // Solange
-    myImageIcon = IconManager.imgic2104;
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.setColor(Color.BLUE);
-    g.drawRect(x, y, width, height);
-
-    g.setColor(Color.ORANGE);
-    g.fillRect(x, y, width, height);
-    g.setColor(Color.BLUE);
-
-    // String
-    int w = g.getFontMetrics().stringWidth(value);
-    g.drawString(value, x + (width - w) / 2, y + textY2);
-
-    g.setColor(Color.BLACK);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    int xx = x;
-    int yy = y;
-    int ww = width;
-    int hh = height;
-
-    if (position == 1)
-      ww *= 2;
-
-    if (position == 2)
-      hh *= 2;
-
-    if (position == 3) {
-      xx -= ww;
-      ww *= 2;
-    }
-    if (position == 4) {
-      yy -= hh;
-      hh *= 2;
+        // Delegate port image removed, I put another for not having an error here. By
+        // Solange
+        myImageIcon = IconManager.imgic2104;
     }
 
-    if (GraphicLib.isInRectangle(_x, _y, xx, yy, ww, hh)) {
-      return this;
-    }
-    return null;
-  }
+    public void internalDrawing(Graphics g) {
+        g.setColor(Color.BLUE);
+        g.drawRect(x, y, width, height);
 
-  private int min(int tab[]) {
-    int min = tab[0];
-    for (int i = 1; i < tab.length; i++) {
-      if (min > tab[i])
-        min = tab[i];
-    }
-    return min;
-  }
+        g.setColor(Color.ORANGE);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.BLUE);
 
-  private int[] computeXY(int x, int y) {
-    int[] tab = new int[2];
-    if (father == null) {
-      tab[0] = x;
-      tab[1] = y;
-      return tab;
-    }
-    // with x y relatives to father
-    int fx = father.getX();
-    int fy = father.getY();
+        // String
+        int w = g.getFontMetrics().stringWidth(value);
+        g.drawString(value, x + (width - w) / 2, y + textY2);
 
-    int[] d = new int[4];
-    d[0] = Math.abs(x - fx);
-    d[2] = Math.abs(fx + father.getWidth() - x);
-    d[3] = Math.abs(y - fy);
-    d[1] = Math.abs(fy + father.getHeight() - y);
-
-    int min = min(d);
-    if (min == d[0]) {
-      x = fx - width / 2;
-    } else if (min == d[1]) {
-      y = fy + father.getHeight() - height / 2;
-    } else if (min == d[2]) {
-      x = fx + father.getWidth() - width / 2;
-    } else if (min == d[3]) {
-      y = fy - height / 2;
+        g.setColor(Color.BLACK);
     }
 
-    if (x > fx + father.getWidth())
-      x = fx + father.getWidth() - width / 2;
-    if (x < fx)
-      x = fx - width / 2;
-    if (y > fy + father.getHeight())
-      y = fy + father.getHeight() - height / 2;
-    if (y < fy)
-      y = fy - height / 2;
+    public TGComponent isOnMe(int _x, int _y) {
+        int xx = x;
+        int yy = y;
+        int ww = width;
+        int hh = height;
 
-    tab[0] = x;
-    tab[1] = y;
+        if (position == 1)
+            ww *= 2;
 
-    return (tab);
+        if (position == 2)
+            hh *= 2;
 
-  }
-
-  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-
-    componentMenu.addSeparator();
-    JMenuItem rotate = new JMenuItem("rotate");
-    rotate.addActionListener(this);
-    componentMenu.add(rotate);
-  }
-
-  // to write:
-  public void resizeWithFather() {
-    if ((father != null) && (father instanceof ProCSDComponent)) {
-      //
-      setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-      // setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y,
-      // father.getHeight() - getHeight()));
-      setMoveCd(x, y);
-    }
-  }
-
-  public String getComponentID() {
-    return value;
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    String oldValue = value;
-    String text = getName() + ": ";
-    if (hasFather()) {
-      text = this.getFather().getValue() + " / " + text;
-    }
-    String s = (String) JOptionPane.showInputDialog(frame, text, "port name", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic101, null, getValue());
-
-    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-
-      if (!TAttribute.isAValidId(s, false, false, false)) {
-        JOptionPane.showMessageDialog(frame,
-            "Could not change the name of the Component: the new name is not a valid name", "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-        return false;
-      }
-
-      /*
-       * 
-       * a faire: l'unicite if (!tdp.isTClassNameUnique(s)) {
-       * JOptionPane.showMessageDialog(frame,
-       * "Could not change the name of the TClass: the new name is already in use",
-       * "Error", JOptionPane.INFORMATION_MESSAGE); return false; }
-       */
-
-      /*
-       * a faire : modifier taille
-       * 
-       * int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
-       * minDesiredWidth = Math.max(size, minWidth); if (minDesiredWidth != width) {
-       * //forceSize(w, getHeight()); //newWidthForSon(); newSizeForSon(null); }
-       */
-      setValue(s);
-
-      /*
-       * if (tdp.actionOnDoubleClick(this)) { return true; } else {
-       * JOptionPane.showMessageDialog(frame,
-       * "Could not change the name of the TClass: this name is already in use",
-       * "Error", JOptionPane.INFORMATION_MESSAGE); setValue(oldValue); }
-       */
-    }
-
-    return false;
-
-  }
-
-  /*
-   * No more delegate ports, by Solange public int getType() { return
-   * TGComponentManager.PROCSD_DELEGATE_PORT; }
-   */
-
-  public void setMoveCd(int _x, int _y) {
-
-    //
-    //
-    int[] xy = computeXY(_x, _y);
-    //
-    // super.setMoveCd(xy[0], xy[1], false);
-    x = xy[0];
-    y = xy[1];
-
-  }
-
-  public void setCd(int _x, int _y) {
-
-    //
-    //
-    int[] xy = computeXY(_x, _y);
-    //
-    // super.setMoveCd(xy[0], xy[1], false);
-    x = xy[0];
-    y = xy[1];
-
-  }
-
-  private void rotate(int pos) { // pos=0 ->clockwise
-    // pos=i ->rotate to position i;
-
-    if (pos > 0) {
-
-      this.position = pos;
-      // this.repaint();
-      return;
-    }
-    if (position < 4)
-      position++;
-    else
-      position = 1;
-    tdp.repaint();
-
-  }
-
-  public String myType() {
-    return "delegatePort";
-
-  }
-
-  public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals("rotate"))
-      this.rotate(0);
-
-  }
-
-  protected String translateExtraParam() {
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<Rotate position=\"");
-    sb.append(position);
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              if (elt.getTagName().equals("Rotate")) {
-                position = Integer.parseInt(elt.getAttribute("position"));
-
-              }
-            }
-          }
+        if (position == 3) {
+            xx -= ww;
+            ww *= 2;
         }
-      }
+        if (position == 4) {
+            yy -= hh;
+            hh *= 2;
+        }
 
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+        if (GraphicLib.isInRectangle(_x, _y, xx, yy, ww, hh)) {
+            return this;
+        }
+        return null;
     }
 
-  }
+    private int min(int tab[]) {
+        int min = tab[0];
+        for (int i = 1; i < tab.length; i++) {
+            if (min > tab[i])
+                min = tab[i];
+        }
+        return min;
+    }
+
+    private int[] computeXY(int x, int y) {
+        int[] tab = new int[2];
+        if (father == null) {
+            tab[0] = x;
+            tab[1] = y;
+            return tab;
+        }
+        // with x y relatives to father
+        int fx = father.getX();
+        int fy = father.getY();
+
+        int[] d = new int[4];
+        d[0] = Math.abs(x - fx);
+        d[2] = Math.abs(fx + father.getWidth() - x);
+        d[3] = Math.abs(y - fy);
+        d[1] = Math.abs(fy + father.getHeight() - y);
+
+        int min = min(d);
+        if (min == d[0]) {
+            x = fx - width / 2;
+        } else if (min == d[1]) {
+            y = fy + father.getHeight() - height / 2;
+        } else if (min == d[2]) {
+            x = fx + father.getWidth() - width / 2;
+        } else if (min == d[3]) {
+            y = fy - height / 2;
+        }
+
+        if (x > fx + father.getWidth())
+            x = fx + father.getWidth() - width / 2;
+        if (x < fx)
+            x = fx - width / 2;
+        if (y > fy + father.getHeight())
+            y = fy + father.getHeight() - height / 2;
+        if (y < fy)
+            y = fy - height / 2;
+
+        tab[0] = x;
+        tab[1] = y;
+
+        return (tab);
+
+    }
+
+    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+
+        componentMenu.addSeparator();
+        JMenuItem rotate = new JMenuItem("rotate");
+        rotate.addActionListener(this);
+        componentMenu.add(rotate);
+    }
+
+    // to write:
+    public void resizeWithFather() {
+        if ((father != null) && (father instanceof ProCSDComponent)) {
+            //
+            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+            // setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y,
+            // father.getHeight() - getHeight()));
+            setMoveCd(x, y);
+        }
+    }
+
+    public String getComponentID() {
+        return value;
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        String oldValue = value;
+        String text = getName() + ": ";
+        if (hasFather()) {
+            text = this.getFather().getValue() + " / " + text;
+        }
+        String s = (String) JOptionPane.showInputDialog(frame, text, "port name", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic101, null, getValue());
+
+        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+
+            if (!TAttribute.isAValidId(s, false, false, false)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the Component: the new name is not a valid name", "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+
+            /*
+             * 
+             * a faire: l'unicite if (!tdp.isTClassNameUnique(s)) {
+             * JOptionPane.showMessageDialog(frame,
+             * "Could not change the name of the TClass: the new name is already in use",
+             * "Error", JOptionPane.INFORMATION_MESSAGE); return false; }
+             */
+
+            /*
+             * a faire : modifier taille
+             * 
+             * int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+             * minDesiredWidth = Math.max(size, minWidth); if (minDesiredWidth != width) {
+             * //forceSize(w, getHeight()); //newWidthForSon(); newSizeForSon(null); }
+             */
+            setValue(s);
+
+            /*
+             * if (tdp.actionOnDoubleClick(this)) { return true; } else {
+             * JOptionPane.showMessageDialog(frame,
+             * "Could not change the name of the TClass: this name is already in use",
+             * "Error", JOptionPane.INFORMATION_MESSAGE); setValue(oldValue); }
+             */
+        }
+
+        return false;
+
+    }
+
+    /*
+     * No more delegate ports, by Solange public int getType() { return
+     * TGComponentManager.PROCSD_DELEGATE_PORT; }
+     */
+
+    public void setMoveCd(int _x, int _y) {
+
+        //
+        //
+        int[] xy = computeXY(_x, _y);
+        //
+        // super.setMoveCd(xy[0], xy[1], false);
+        x = xy[0];
+        y = xy[1];
+
+    }
+
+    public void setCd(int _x, int _y) {
+
+        //
+        //
+        int[] xy = computeXY(_x, _y);
+        //
+        // super.setMoveCd(xy[0], xy[1], false);
+        x = xy[0];
+        y = xy[1];
+
+    }
+
+    private void rotate(int pos) { // pos=0 ->clockwise
+        // pos=i ->rotate to position i;
+
+        if (pos > 0) {
+
+            this.position = pos;
+            // this.repaint();
+            return;
+        }
+        if (position < 4)
+            position++;
+        else
+            position = 1;
+        tdp.repaint();
+
+    }
+
+    public String myType() {
+        return "delegatePort";
+
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("rotate"))
+            this.rotate(0);
+
+    }
+
+    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<Rotate position=\"");
+        sb.append(position);
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("Rotate")) {
+                                position = Integer.parseInt(elt.getAttribute("position"));
+
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+
+    }
 
 }

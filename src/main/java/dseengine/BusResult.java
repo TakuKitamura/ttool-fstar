@@ -48,16 +48,16 @@ package dseengine;
  * @author Ludovic APVRILLE
  */
 public class BusResult {
-  public int id;
-  public String name;
+    public int id;
+    public String name;
 
-  public double utilization;
+    public double utilization;
 
-  public BusResult() {
-  }
+    public BusResult() {
+    }
 
-  public String toStringResult() {
-    return "BUS " + id + " " + name + " " + utilization;
-  }
+    public String toStringResult() {
+        return "BUS " + id + " " + name + " " + utilization;
+    }
 
 } // Class BusResult

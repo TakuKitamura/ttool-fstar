@@ -50,258 +50,258 @@ import java.util.List;
  */
 
 public class SysCAMSSpecification {
-  private List<SysCAMSTComponent> components;
-  private List<SysCAMSTConnector> connectors;
+    private List<SysCAMSTComponent> components;
+    private List<SysCAMSTConnector> connectors;
 
-  public SysCAMSSpecification(List<SysCAMSTComponent> _components, List<SysCAMSTConnector> _connectors) {
-    components = _components;
-    connectors = _connectors;
-  }
-
-  public List<SysCAMSTComponent> getComponents() {
-    return components;
-  }
-
-  public List<SysCAMSTConnector> getConnectors() {
-    return connectors;
-  }
-
-  public LinkedList<SysCAMSTBlockTDF> getAllBlockTDF() {
-    LinkedList<SysCAMSTBlockTDF> blocksTDF = new LinkedList<SysCAMSTBlockTDF>();
-    for (SysCAMSTComponent blockTDF : components) {
-      if (blockTDF instanceof SysCAMSTBlockTDF) {
-        blocksTDF.add((SysCAMSTBlockTDF) blockTDF);
-      }
+    public SysCAMSSpecification(List<SysCAMSTComponent> _components, List<SysCAMSTConnector> _connectors) {
+        components = _components;
+        connectors = _connectors;
     }
-    return blocksTDF;
-  }
 
-  public LinkedList<SysCAMSTBlockDE> getAllBlockDE() {
-    LinkedList<SysCAMSTBlockDE> blocksDE = new LinkedList<SysCAMSTBlockDE>();
-    for (SysCAMSTComponent blockDE : components) {
-      if (blockDE instanceof SysCAMSTBlockDE) {
-        blocksDE.add((SysCAMSTBlockDE) blockDE);
-      }
+    public List<SysCAMSTComponent> getComponents() {
+        return components;
     }
-    return blocksDE;
-  }
 
-  public LinkedList<SysCAMSTBlockGPIO2VCI> getAllBlockGPIO2VCI() {
-    LinkedList<SysCAMSTBlockGPIO2VCI> blocksGPIO2VCI = new LinkedList<SysCAMSTBlockGPIO2VCI>();
-    for (SysCAMSTComponent blockGPIO2VCI : components) {
-      if (blockGPIO2VCI instanceof SysCAMSTBlockGPIO2VCI) {
-        blocksGPIO2VCI.add((SysCAMSTBlockGPIO2VCI) blockGPIO2VCI);
-      }
+    public List<SysCAMSTConnector> getConnectors() {
+        return connectors;
     }
-    return blocksGPIO2VCI;
-  }
 
-  public SysCAMSTCluster getCluster() {
-    for (SysCAMSTComponent comp : components) {
-      if (comp instanceof SysCAMSTCluster) {
-        return (SysCAMSTCluster) comp;
-      }
-    }
-    return null;
-  }
-
-  public LinkedList<SysCAMSTPortConverter> getAllPortConverter() {
-    LinkedList<SysCAMSTPortConverter> portsConv = new LinkedList<SysCAMSTPortConverter>();
-    for (SysCAMSTComponent portConv : components) {
-      if (portConv instanceof SysCAMSTPortConverter) {
-        portsConv.add((SysCAMSTPortConverter) portConv);
-      }
-    }
-    return portsConv;
-  }
-
-  public LinkedList<SysCAMSTPortTDF> getAllPortTDF() {
-    LinkedList<SysCAMSTPortTDF> portsTDF = new LinkedList<SysCAMSTPortTDF>();
-    for (SysCAMSTComponent portTDF : components) {
-      if (portTDF instanceof SysCAMSTPortTDF) {
-        portsTDF.add((SysCAMSTPortTDF) portTDF);
-      }
-    }
-    return portsTDF;
-  }
-
-  public LinkedList<SysCAMSTPortDE> getAllPortDE() {
-    LinkedList<SysCAMSTPortDE> portsDE = new LinkedList<SysCAMSTPortDE>();
-    for (SysCAMSTComponent portDE : components) {
-      if (portDE instanceof SysCAMSTPortDE) {
-        portsDE.add((SysCAMSTPortDE) portDE);
-      }
-    }
-    return portsDE;
-  }
-
-  public LinkedList<SysCAMSTClock> getAllClock() {
-    LinkedList<SysCAMSTClock> clocks = new LinkedList<SysCAMSTClock>();
-    for (SysCAMSTComponent clock : components) {
-      if (clock instanceof SysCAMSTClock) {
-        clocks.add((SysCAMSTClock) clock);
-      }
-    }
-    return clocks;
-  }
-
-  public LinkedList<SysCAMSTConnector> getAllConnectorCluster() {
-    LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
-    for (SysCAMSTConnector con : connectors) {
-      if (con instanceof SysCAMSTConnector) {
-        if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
-            && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
-          cons.add(con);
-        } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter
-            && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
+    public LinkedList<SysCAMSTBlockTDF> getAllBlockTDF() {
+        LinkedList<SysCAMSTBlockTDF> blocksTDF = new LinkedList<SysCAMSTBlockTDF>();
+        for (SysCAMSTComponent blockTDF : components) {
+            if (blockTDF instanceof SysCAMSTBlockTDF) {
+                blocksTDF.add((SysCAMSTBlockTDF) blockTDF);
             }
-          }
-        } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter
-            && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
-            }
-          }
-        } else if (con.get_p1().getComponent() instanceof SysCAMSTPortDE
-            && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null
-              && ((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null
-                && (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
-            }
-          }
         }
-      }
+        return blocksTDF;
     }
-    return cons;
-  }
 
-  public LinkedList<SysCAMSTConnector> getAllConnectorsCluster4Soclib() {
-    LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
-    for (SysCAMSTConnector con : connectors) {
-      if (con instanceof SysCAMSTConnector) {
-        if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
-            && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
-          cons.add(con);
-        } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter
-            && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
+    public LinkedList<SysCAMSTBlockDE> getAllBlockDE() {
+        LinkedList<SysCAMSTBlockDE> blocksDE = new LinkedList<SysCAMSTBlockDE>();
+        for (SysCAMSTComponent blockDE : components) {
+            if (blockDE instanceof SysCAMSTBlockDE) {
+                blocksDE.add((SysCAMSTBlockDE) blockDE);
             }
-          } else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
-            cons.add(con);
-          }
-        } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter
-            && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
-            }
-          } else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
-            cons.add(con);
-          }
-        } else if (con.get_p1().getComponent() instanceof SysCAMSTPortDE
-            && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null
-              && ((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null
-                && (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
-            }
-          }
         }
-      }
+        return blocksDE;
     }
-    return cons;
-  }
 
-  public LinkedList<SysCAMSTConnector> getAllConnectorsCluster4Matrix() {
-    LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
-    for (SysCAMSTConnector con : connectors) {
-      if (con instanceof SysCAMSTConnector) {
-        if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
-            && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
-          cons.add(con);
-        }
-      }
-    }
-    return cons;
-  }
-
-  public LinkedList<SysCAMSTConnector> getAllConnectorsTdfDe() {
-    LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
-    for (SysCAMSTConnector con : connectors) {
-      if (con instanceof SysCAMSTConnector) {
-        if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
-            && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
-          cons.add(con);
-        } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter
-            && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
+    public LinkedList<SysCAMSTBlockGPIO2VCI> getAllBlockGPIO2VCI() {
+        LinkedList<SysCAMSTBlockGPIO2VCI> blocksGPIO2VCI = new LinkedList<SysCAMSTBlockGPIO2VCI>();
+        for (SysCAMSTComponent blockGPIO2VCI : components) {
+            if (blockGPIO2VCI instanceof SysCAMSTBlockGPIO2VCI) {
+                blocksGPIO2VCI.add((SysCAMSTBlockGPIO2VCI) blockGPIO2VCI);
             }
-          } else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
-            cons.add(con);
-          }
-        } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter
-            && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
-          if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
-            if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
-              cons.add(con);
-            }
-          } else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
-            cons.add(con);
-          }
         }
-      }
+        return blocksGPIO2VCI;
     }
-    return cons;
-  }
 
-  public LinkedList<SysCAMSTConnector> getAllConnectors() {
-    LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
-    for (SysCAMSTConnector con : connectors) {
-      cons.add(con);
+    public SysCAMSTCluster getCluster() {
+        for (SysCAMSTComponent comp : components) {
+            if (comp instanceof SysCAMSTCluster) {
+                return (SysCAMSTCluster) comp;
+            }
+        }
+        return null;
     }
-    return cons;
-  }
 
-  public int getNbBlockTDF() {
-    return (getAllBlockTDF()).size();
-  }
+    public LinkedList<SysCAMSTPortConverter> getAllPortConverter() {
+        LinkedList<SysCAMSTPortConverter> portsConv = new LinkedList<SysCAMSTPortConverter>();
+        for (SysCAMSTComponent portConv : components) {
+            if (portConv instanceof SysCAMSTPortConverter) {
+                portsConv.add((SysCAMSTPortConverter) portConv);
+            }
+        }
+        return portsConv;
+    }
 
-  public int getNbBlockDE() {
-    return (getAllBlockDE()).size();
-  }
+    public LinkedList<SysCAMSTPortTDF> getAllPortTDF() {
+        LinkedList<SysCAMSTPortTDF> portsTDF = new LinkedList<SysCAMSTPortTDF>();
+        for (SysCAMSTComponent portTDF : components) {
+            if (portTDF instanceof SysCAMSTPortTDF) {
+                portsTDF.add((SysCAMSTPortTDF) portTDF);
+            }
+        }
+        return portsTDF;
+    }
 
-  public int getNbBlockGPIO2VCI() {
-    return (getAllBlockGPIO2VCI()).size();
-  }
+    public LinkedList<SysCAMSTPortDE> getAllPortDE() {
+        LinkedList<SysCAMSTPortDE> portsDE = new LinkedList<SysCAMSTPortDE>();
+        for (SysCAMSTComponent portDE : components) {
+            if (portDE instanceof SysCAMSTPortDE) {
+                portsDE.add((SysCAMSTPortDE) portDE);
+            }
+        }
+        return portsDE;
+    }
 
-  public int getNbPortConverter() {
-    return (getAllPortConverter()).size();
-  }
+    public LinkedList<SysCAMSTClock> getAllClock() {
+        LinkedList<SysCAMSTClock> clocks = new LinkedList<SysCAMSTClock>();
+        for (SysCAMSTComponent clock : components) {
+            if (clock instanceof SysCAMSTClock) {
+                clocks.add((SysCAMSTClock) clock);
+            }
+        }
+        return clocks;
+    }
 
-  public int getNbPortTDF() {
-    return (getAllPortTDF()).size();
-  }
+    public LinkedList<SysCAMSTConnector> getAllConnectorCluster() {
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            if (con instanceof SysCAMSTConnector) {
+                if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+                    cons.add(con);
+                } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    }
+                } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter
+                        && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    }
+                } else if (con.get_p1().getComponent() instanceof SysCAMSTPortDE
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null
+                            && ((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null
+                                && (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    }
+                }
+            }
+        }
+        return cons;
+    }
 
-  public int getNbPortDE() {
-    return (getAllPortDE()).size();
-  }
+    public LinkedList<SysCAMSTConnector> getAllConnectorsCluster4Soclib() {
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            if (con instanceof SysCAMSTConnector) {
+                if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+                    cons.add(con);
+                } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    } else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
+                        cons.add(con);
+                    }
+                } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter
+                        && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    } else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
+                        cons.add(con);
+                    }
+                } else if (con.get_p1().getComponent() instanceof SysCAMSTPortDE
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null
+                            && ((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null
+                                && (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    }
+                }
+            }
+        }
+        return cons;
+    }
 
-  public int getNbConnectorCluster() {
-    return (getAllConnectorCluster()).size();
-  }
+    public LinkedList<SysCAMSTConnector> getAllConnectorsCluster4Matrix() {
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            if (con instanceof SysCAMSTConnector) {
+                if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+                    cons.add(con);
+                }
+            }
+        }
+        return cons;
+    }
 
-  /*
-   * public int getNbClocks(){ return (getAllClocks()).size(); }
-   */
+    public LinkedList<SysCAMSTConnector> getAllConnectorsTdfDe() {
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            if (con instanceof SysCAMSTConnector) {
+                if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+                    cons.add(con);
+                } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter
+                        && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    } else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
+                        cons.add(con);
+                    }
+                } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter
+                        && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    } else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
+                        cons.add(con);
+                    }
+                }
+            }
+        }
+        return cons;
+    }
+
+    public LinkedList<SysCAMSTConnector> getAllConnectors() {
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            cons.add(con);
+        }
+        return cons;
+    }
+
+    public int getNbBlockTDF() {
+        return (getAllBlockTDF()).size();
+    }
+
+    public int getNbBlockDE() {
+        return (getAllBlockDE()).size();
+    }
+
+    public int getNbBlockGPIO2VCI() {
+        return (getAllBlockGPIO2VCI()).size();
+    }
+
+    public int getNbPortConverter() {
+        return (getAllPortConverter()).size();
+    }
+
+    public int getNbPortTDF() {
+        return (getAllPortTDF()).size();
+    }
+
+    public int getNbPortDE() {
+        return (getAllPortDE()).size();
+    }
+
+    public int getNbConnectorCluster() {
+        return (getAllConnectorCluster()).size();
+    }
+
+    /*
+     * public int getNbClocks(){ return (getAllClocks()).size(); }
+     */
 }

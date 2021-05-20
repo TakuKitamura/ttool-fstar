@@ -54,156 +54,156 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class MetElementsTableModel extends AbstractTableModel {
-  private static String ERROR_STRING = "-";
+    private static String ERROR_STRING = "-";
 
-  private AvatarSpecificationSimulation ass;
+    private AvatarSpecificationSimulation ass;
 
-  private int nbOfRows;
+    private int nbOfRows;
 
-  // private String [] names;
-  public MetElementsTableModel(AvatarSpecificationSimulation _ass) {
-    ass = _ass;
-    computeData();
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return nbOfRows;
-  }
-
-  public int getColumnCount() {
-    return 3;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (ass == null) {
-      return ERROR_STRING;
+    // private String [] names;
+    public MetElementsTableModel(AvatarSpecificationSimulation _ass) {
+        ass = _ass;
+        computeData();
     }
 
-    if (column == 0) {
-      return getBlockName(row);
-    } else if (column == 1) {
-      return getElementID(row);
-    } else if (column == 2) {
-      return getMetValue(row);
-    }
-    return "";
-  }
-
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Block Name";
-      case 1:
-        return "Elt";
-      case 2:
-        return "Met value";
-    }
-    return "unknown";
-  }
-
-  private AvatarSimulationBlock getBlockByRow(int _row) {
-    int indexBlock = 0;
-    AvatarSimulationBlock block = null;
-
-    Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
-    if (blocks.size() == 0) {
-      return null;
+    // From AbstractTableModel
+    public int getRowCount() {
+        return nbOfRows;
     }
 
-    while (_row >= 0) {
-      block = blocks.get(indexBlock);
-      if (_row < block.getBlock().stateNb()) {
+    public int getColumnCount() {
+        return 3;
+    }
+
+    public Object getValueAt(int row, int column) {
+        if (ass == null) {
+            return ERROR_STRING;
+        }
+
+        if (column == 0) {
+            return getBlockName(row);
+        } else if (column == 1) {
+            return getElementID(row);
+        } else if (column == 2) {
+            return getMetValue(row);
+        }
+        return "";
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Block Name";
+            case 1:
+                return "Elt";
+            case 2:
+                return "Met value";
+        }
+        return "unknown";
+    }
+
+    private AvatarSimulationBlock getBlockByRow(int _row) {
+        int indexBlock = 0;
+        AvatarSimulationBlock block = null;
+
+        Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+        if (blocks.size() == 0) {
+            return null;
+        }
+
+        while (_row >= 0) {
+            block = blocks.get(indexBlock);
+            if (_row < block.getBlock().stateNb()) {
+                return block;
+            }
+            _row = _row - block.getBlock().stateNb();
+            indexBlock++;
+        }
+
         return block;
-      }
-      _row = _row - block.getBlock().stateNb();
-      indexBlock++;
     }
 
-    return block;
-  }
+    private AvatarState getStateByRow(int _row) {
+        int indexBlock = 0;
+        Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+        if (blocks.size() == 0) {
+            return null;
+        }
 
-  private AvatarState getStateByRow(int _row) {
-    int indexBlock = 0;
-    Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
-    if (blocks.size() == 0) {
-      return null;
+        AvatarSimulationBlock block = null;
+        while (_row >= 0) {
+            block = blocks.get(indexBlock);
+            if (_row < block.getBlock().stateNb()) {
+                return block.getBlock().getState(_row);
+            }
+            _row = _row - block.getBlock().stateNb();
+            indexBlock++;
+        }
+
+        return null;
     }
 
-    AvatarSimulationBlock block = null;
-    while (_row >= 0) {
-      block = blocks.get(indexBlock);
-      if (_row < block.getBlock().stateNb()) {
-        return block.getBlock().getState(_row);
-      }
-      _row = _row - block.getBlock().stateNb();
-      indexBlock++;
+    private String getAttributeValueByRow(int _row) {
+        int indexBlock = 0;
+        Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+        if (blocks.size() == 0) {
+            return ERROR_STRING;
+        }
+
+        AvatarSimulationBlock block;
+        while (_row >= 0) {
+            block = blocks.get(indexBlock);
+            if (_row < block.getBlock().stateNb()) {
+                return block.getAttributeValue(_row);
+            }
+            _row = _row - block.getBlock().stateNb();
+            indexBlock++;
+        }
+
+        return ERROR_STRING;
     }
 
-    return null;
-  }
-
-  private String getAttributeValueByRow(int _row) {
-    int indexBlock = 0;
-    Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
-    if (blocks.size() == 0) {
-      return ERROR_STRING;
+    // Assumes tmlm != null
+    private String getBlockName(int row) {
+        return getBlockByRow(row).getName();
     }
 
-    AvatarSimulationBlock block;
-    while (_row >= 0) {
-      block = blocks.get(indexBlock);
-      if (_row < block.getBlock().stateNb()) {
-        return block.getAttributeValue(_row);
-      }
-      _row = _row - block.getBlock().stateNb();
-      indexBlock++;
+    // Assumes tmlm != null
+    private String getElementID(int row) {
+        AvatarState as = getStateByRow(row);
+        if (as == null) {
+            return ERROR_STRING;
+        }
+        return as.getName();
     }
 
-    return ERROR_STRING;
-  }
-
-  // Assumes tmlm != null
-  private String getBlockName(int row) {
-    return getBlockByRow(row).getName();
-  }
-
-  // Assumes tmlm != null
-  private String getElementID(int row) {
-    AvatarState as = getStateByRow(row);
-    if (as == null) {
-      return ERROR_STRING;
-    }
-    return as.getName();
-  }
-
-  private String getMetValue(int row) {
-    AvatarState as = getStateByRow(row);
-    try {
-      AvatarSMDState asmds = (AvatarSMDState) (as.getReferenceObject());
-      return "" + asmds.getAVATARMet();
-    } catch (Exception e) {
-      return ERROR_STRING;
-    }
-  }
-
-  private void computeData() {
-    nbOfRows = 0;
-    if (ass == null) {
-      return;
+    private String getMetValue(int row) {
+        AvatarState as = getStateByRow(row);
+        try {
+            AvatarSMDState asmds = (AvatarSMDState) (as.getReferenceObject());
+            return "" + asmds.getAVATARMet();
+        } catch (Exception e) {
+            return ERROR_STRING;
+        }
     }
 
-    Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+    private void computeData() {
+        nbOfRows = 0;
+        if (ass == null) {
+            return;
+        }
 
-    if (blocks.size() == 0) {
-      return;
+        Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+
+        if (blocks.size() == 0) {
+            return;
+        }
+
+        for (AvatarSimulationBlock block : blocks) {
+            nbOfRows += block.getBlock().stateNb();
+        }
+
+        return;
     }
-
-    for (AvatarSimulationBlock block : blocks) {
-      nbOfRows += block.getBlock().stateNb();
-    }
-
-    return;
-  }
 
 }

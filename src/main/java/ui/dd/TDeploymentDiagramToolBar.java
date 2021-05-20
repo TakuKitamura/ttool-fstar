@@ -57,54 +57,54 @@ import javax.swing.*;
  */
 public class TDeploymentDiagramToolBar extends TToolBar {
 
-  public TDeploymentDiagramToolBar(MainGUI _mgui) {
-    super(_mgui);
+    public TDeploymentDiagramToolBar(MainGUI _mgui) {
+        super(_mgui);
 
-  }
+    }
 
-  protected void setActive(boolean b) {
-    mgui.actions[TGUIAction.TDD_EDIT].setEnabled(b);
-    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-    mgui.actions[TGUIAction.TDD_LINK].setEnabled(b);
-    mgui.actions[TGUIAction.TDD_NODE].setEnabled(b);
-    mgui.actions[TGUIAction.TDD_ARTIFACT].setEnabled(b);
+    protected void setActive(boolean b) {
+        mgui.actions[TGUIAction.TDD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+        mgui.actions[TGUIAction.TDD_LINK].setEnabled(b);
+        mgui.actions[TGUIAction.TDD_NODE].setEnabled(b);
+        mgui.actions[TGUIAction.TDD_ARTIFACT].setEnabled(b);
 
-    // Issue #31
-    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-    mgui.updateZoomInfo();
-  }
+        // Issue #31
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+        mgui.updateZoomInfo();
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(mgui.actions[TGUIAction.TDD_EDIT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TDD_EDIT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.TDD_LINK]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TDD_LINK]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.TDD_NODE]);
-    button.addMouseListener(mgui.mouseHandler);
-    button = this.add(mgui.actions[TGUIAction.TDD_ARTIFACT]);
-    button.addMouseListener(mgui.mouseHandler);
-  }
+        button = this.add(mgui.actions[TGUIAction.TDD_NODE]);
+        button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TDD_ARTIFACT]);
+        button.addMouseListener(mgui.mouseHandler);
+    }
 
 } // Class

@@ -55,124 +55,125 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TGConnectorAssociationProCSD extends TGConnector {
-  protected TGConnectingPointGroup tg;
-  // Added by Solange
-  boolean show = true;
+    protected TGConnectingPointGroup tg;
+    // Added by Solange
+    boolean show = true;
 
-  public TGConnectorAssociationProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    public TGConnectorAssociationProCSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    // We create a connecting point per segment i.e :
-    nbConnectingPoint = nbInternalTGComponent + 1;
-    // Connecting points have cd relatives to 2 component
-    connectingPoint = new TGConnectingPointTwoFathers[nbConnectingPoint];
-    if (nbConnectingPoint == 1) {
-      connectingPoint[0] = new TGConnectingPointAssociationProCSD(p1, p2, 0, 0, false, true);
-    } else {
-      connectingPoint[0] = new TGConnectingPointAssociationProCSD(p1, tgcomponent[0], 0, 0, false, true);
-      for (int i = 1; i < nbInternalTGComponent; i++) {
-        connectingPoint[i] = new TGConnectingPointAssociationProCSD(tgcomponent[i - 1], tgcomponent[i], 0, 0, false,
-            true);
-      }
-      connectingPoint[nbInternalTGComponent] = new TGConnectingPointAssociationProCSD(
-          tgcomponent[nbInternalTGComponent - 1], p2, 0, 0, false, true);
-    }
-
-    tg = new TGConnectingPointGroup(true);
-    addGroup(tg);
-
-    myImageIcon = IconManager.imgic102;
-
-    //
-  }
-
-  public void setP1(TGConnectingPoint p) {
-    p1 = p;
-    if (nbConnectingPoint > 0) {
-      connectingPoint[0].setFather(p);
-    }
-  }
-
-  public void setP2(TGConnectingPoint p) {
-    p2 = p;
-    if (nbConnectingPoint > 0) {
-      ((TGConnectingPointTwoFathers) (connectingPoint[nbInternalTGComponent])).setFather2(p);
-    }
-  }
-
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if (show)
-      g.drawLine(x1, y1, x2, y2);
-  }
-
-  public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
-
-    int i, index = 0;
-    TGConnectingPointTwoFathers cp1, cp2;
-
-    // looking for connecting point to be removed
-    for (i = 0; i < nbInternalTGComponent; i++) {
-      if (tgcomponent[i] == tgc) {
-        index = i;
-      }
-    }
-
-    // remove potential connector connected to the cp to be removed
-    cp1 = (TGConnectingPointTwoFathers) (connectingPoint[index + 1]);
-    tdp.removeOneConnector(cp1);
-
-    // changing father of points.
-    cp2 = (TGConnectingPointTwoFathers) (connectingPoint[index]);
-    cp2.setFather2(cp1.getFather2());
-
-    // modifying array of connecting points
-    for (i = index + 1; i < nbConnectingPoint - 1; i++) {
-      connectingPoint[i] = connectingPoint[i + 1];
-    }
-    nbConnectingPoint--;
-  }
-
-  public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
-    int ind = index + indexCon;
-    CDElement tg1, tg2;
-    nbConnectingPoint = nbInternalTGComponent + 1;
-    TGConnectingPoint[] tmpPt = new TGConnectingPointTwoFathers[nbConnectingPoint];
-
-    for (int i = 0; i < nbConnectingPoint; i++) {
-      if (i < ind) {
-        tmpPt[i] = connectingPoint[i];
-        if ((i == ind - 1) && (indexCon == 1)) {
-          ((TGConnectingPointTwoFathers) (tmpPt[i])).setFather2(tgcomponent[i]);
-        }
-      } else if (i == ind) {
-        if (i == 0) {
-          tg1 = p1;
+        // We create a connecting point per segment i.e :
+        nbConnectingPoint = nbInternalTGComponent + 1;
+        // Connecting points have cd relatives to 2 component
+        connectingPoint = new TGConnectingPointTwoFathers[nbConnectingPoint];
+        if (nbConnectingPoint == 1) {
+            connectingPoint[0] = new TGConnectingPointAssociationProCSD(p1, p2, 0, 0, false, true);
         } else {
-          tg1 = tgcomponent[i - 1];
+            connectingPoint[0] = new TGConnectingPointAssociationProCSD(p1, tgcomponent[0], 0, 0, false, true);
+            for (int i = 1; i < nbInternalTGComponent; i++) {
+                connectingPoint[i] = new TGConnectingPointAssociationProCSD(tgcomponent[i - 1], tgcomponent[i], 0, 0,
+                        false, true);
+            }
+            connectingPoint[nbInternalTGComponent] = new TGConnectingPointAssociationProCSD(
+                    tgcomponent[nbInternalTGComponent - 1], p2, 0, 0, false, true);
         }
-        if (i < nbConnectingPoint - 1) {
-          tg2 = tgcomponent[i];
-        } else {
-          tg2 = p2;
-        }
-        tmpPt[i] = new TGConnectingPointAssociationProCSD(tg1, tg2, 0, 0, false, true);
-        tmpPt[i].setGroup(tg);
-      } else {
-        tmpPt[i] = connectingPoint[i - 1];
-        if ((i == ind + 1) && (indexCon == 0)) {
-          tmpPt[i].setFather(tgcomponent[i - 1]);
-        }
-      }
+
+        tg = new TGConnectingPointGroup(true);
+        addGroup(tg);
+
+        myImageIcon = IconManager.imgic102;
+
+        //
     }
 
-    connectingPoint = tmpPt;
+    public void setP1(TGConnectingPoint p) {
+        p1 = p;
+        if (nbConnectingPoint > 0) {
+            connectingPoint[0].setFather(p);
+        }
+    }
 
-    return;
-  }
+    public void setP2(TGConnectingPoint p) {
+        p2 = p;
+        if (nbConnectingPoint > 0) {
+            ((TGConnectingPointTwoFathers) (connectingPoint[nbInternalTGComponent])).setFather2(p);
+        }
+    }
 
-  public int getType() {
-    return TGComponentManager.CONNECTOR_ASSOCIATION;
-  }
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if (show)
+            g.drawLine(x1, y1, x2, y2);
+    }
+
+    public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
+
+        int i, index = 0;
+        TGConnectingPointTwoFathers cp1, cp2;
+
+        // looking for connecting point to be removed
+        for (i = 0; i < nbInternalTGComponent; i++) {
+            if (tgcomponent[i] == tgc) {
+                index = i;
+            }
+        }
+
+        // remove potential connector connected to the cp to be removed
+        cp1 = (TGConnectingPointTwoFathers) (connectingPoint[index + 1]);
+        tdp.removeOneConnector(cp1);
+
+        // changing father of points.
+        cp2 = (TGConnectingPointTwoFathers) (connectingPoint[index]);
+        cp2.setFather2(cp1.getFather2());
+
+        // modifying array of connecting points
+        for (i = index + 1; i < nbConnectingPoint - 1; i++) {
+            connectingPoint[i] = connectingPoint[i + 1];
+        }
+        nbConnectingPoint--;
+    }
+
+    public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
+        int ind = index + indexCon;
+        CDElement tg1, tg2;
+        nbConnectingPoint = nbInternalTGComponent + 1;
+        TGConnectingPoint[] tmpPt = new TGConnectingPointTwoFathers[nbConnectingPoint];
+
+        for (int i = 0; i < nbConnectingPoint; i++) {
+            if (i < ind) {
+                tmpPt[i] = connectingPoint[i];
+                if ((i == ind - 1) && (indexCon == 1)) {
+                    ((TGConnectingPointTwoFathers) (tmpPt[i])).setFather2(tgcomponent[i]);
+                }
+            } else if (i == ind) {
+                if (i == 0) {
+                    tg1 = p1;
+                } else {
+                    tg1 = tgcomponent[i - 1];
+                }
+                if (i < nbConnectingPoint - 1) {
+                    tg2 = tgcomponent[i];
+                } else {
+                    tg2 = p2;
+                }
+                tmpPt[i] = new TGConnectingPointAssociationProCSD(tg1, tg2, 0, 0, false, true);
+                tmpPt[i].setGroup(tg);
+            } else {
+                tmpPt[i] = connectingPoint[i - 1];
+                if ((i == ind + 1) && (indexCon == 0)) {
+                    tmpPt[i].setFather(tgcomponent[i - 1]);
+                }
+            }
+        }
+
+        connectingPoint = tmpPt;
+
+        return;
+    }
+
+    public int getType() {
+        return TGComponentManager.CONNECTOR_ASSOCIATION;
+    }
 
 }

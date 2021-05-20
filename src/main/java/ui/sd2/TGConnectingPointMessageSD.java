@@ -51,22 +51,22 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class TGConnectingPointMessageSD extends TGConnectingPointWidthHeight {
 
-  public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    // TraceManager.addDev("is compatible with " + type);
-    if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)
-        || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
-      // TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" +
-      // getY()) ;
-      //
-      return true;
+    public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
-    //
-    return false;
-  }
+
+    @Override
+    public boolean isCompatibleWith(int type) {
+        // TraceManager.addDev("is compatible with " + type);
+        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)
+                || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
+            // TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" +
+            // getY()) ;
+            //
+            return true;
+        }
+        //
+        return false;
+    }
 }

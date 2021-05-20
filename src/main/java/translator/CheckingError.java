@@ -49,64 +49,64 @@ import translator.TClass;
  */
 public class CheckingError extends Exception {
 
-  public final static int STRUCTURE_ERROR = 0;
-  public final static int BEHAVIOR_ERROR = 1;
-  public final static int INFO = 2;
+    public final static int STRUCTURE_ERROR = 0;
+    public final static int BEHAVIOR_ERROR = 1;
+    public final static int INFO = 2;
 
-  protected int type;
-  protected String message;
-  protected TClass t; // only one if BEHAVIOR_ERROR,
-  protected Relation r; // non-null if BEHAVIOR_ERROR
+    protected int type;
+    protected String message;
+    protected TClass t; // only one if BEHAVIOR_ERROR,
+    protected Relation r; // non-null if BEHAVIOR_ERROR
 
-  public CheckingError(int _type, String _message) {
-    type = _type;
-    message = _message;
-  }
-
-  public CheckingError(CheckingError ce) {
-    this.type = ce.getType();
-    this.message = ce.getMessage();
-    this.t = ce.getTClass();
-    this.r = ce.getRelation();
-  }
-
-  public void setTClass(TClass _t) {
-    t = _t;
-  }
-
-  public void addMessagePrefix(String prefix) {
-    this.message = prefix + this.message;
-  }
-
-  public void setRelation(Relation _r) {
-    r = _r;
-  }
-
-  public int getType() {
-    return type;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public Relation getRelation() {
-    return r;
-  }
-
-  public TClass getTClass() {
-    return t;
-  }
-
-  public String toString() {
-    if (t != null) {
-      return t.getName() + ": " + message;
+    public CheckingError(int _type, String _message) {
+        type = _type;
+        message = _message;
     }
 
-    if (r != null) {
-      return r.getName() + ": " + message;
+    public CheckingError(CheckingError ce) {
+        this.type = ce.getType();
+        this.message = ce.getMessage();
+        this.t = ce.getTClass();
+        this.r = ce.getRelation();
     }
 
-    return message;
-  }
+    public void setTClass(TClass _t) {
+        t = _t;
+    }
+
+    public void addMessagePrefix(String prefix) {
+        this.message = prefix + this.message;
+    }
+
+    public void setRelation(Relation _r) {
+        r = _r;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Relation getRelation() {
+        return r;
+    }
+
+    public TClass getTClass() {
+        return t;
+    }
+
+    public String toString() {
+        if (t != null) {
+            return t.getName() + ": " + message;
+        }
+
+        if (r != null) {
+            return r.getName() + ": " + message;
+        }
+
+        return message;
+    }
 }

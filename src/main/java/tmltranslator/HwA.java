@@ -48,41 +48,41 @@ import java.util.Objects;
  */
 public class HwA extends HwExecutionNode {
 
-  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-  public static final int DEFAULT_EXECI_TIME = 0;
+    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+    public static final int DEFAULT_EXECI_TIME = 0;
 
-  public static final int DEFAULT_PIPELINE_SIZE = 1;
-  public static final int DEFAULT_TASK_SWITCHING_TIME = 1;
-  public static final int DEFAULT_BRANCHING_PREDICTION_PENALTY = 0;
-  public static final int DEFAULT_GO_IDLE_TIME = 10;
-  public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
-  public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
+    public static final int DEFAULT_PIPELINE_SIZE = 1;
+    public static final int DEFAULT_TASK_SWITCHING_TIME = 1;
+    public static final int DEFAULT_BRANCHING_PREDICTION_PENALTY = 0;
+    public static final int DEFAULT_GO_IDLE_TIME = 10;
+    public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
+    public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
 
-  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
 
-  public HwA(String _name) {
-    super(_name);
-  }
+    public HwA(String _name) {
+        super(_name);
+    }
 
-  @Override
-  public String getType() {
-    return "HWA";
-  }
+    @Override
+    public String getType() {
+        return "HWA";
+    }
 
-  @Override
-  public String toXML() {
-    String s = "<HWA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
-        + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" />\n";
-    return s;
-  }
+    @Override
+    public String toXML() {
+        String s = "<HWA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+                + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" />\n";
+        return s;
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof HwA))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    HwA hwA = (HwA) o;
-    return byteDataSize == hwA.byteDataSize;
-  }
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwA))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        HwA hwA = (HwA) o;
+        return byteDataSize == hwA.byteDataSize;
+    }
 
 }

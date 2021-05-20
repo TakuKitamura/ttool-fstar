@@ -58,301 +58,301 @@ import test.AbstractTest;
 
 public class CLIDiploToAvatarTest extends AbstractTest implements InterpreterOutputInterface {
 
-  private final static String PATH_TO_TEST_FILE = "cli/input/";
-  private final static String PATH_TO_EXPECTED_FILE = "cli/expected/";
-  private StringBuilder outputResult;
+    private final static String PATH_TO_TEST_FILE = "cli/input/";
+    private final static String PATH_TO_EXPECTED_FILE = "cli/expected/";
+    private StringBuilder outputResult;
 
-  private final int[] statesInfo = { 10, 10, 10 };
-  private final int[] transitionsInfo = { 10, 10, 10 };
+    private final int[] statesInfo = { 10, 10, 10 };
+    private final int[] transitionsInfo = { 10, 10, 10 };
 
-  public CLIDiploToAvatarTest() {
-    //
-  }
-
-  public void exit(int reason) {
-    System.out.println("Exit reason=" + reason);
-    assertTrue(reason == 0);
-  }
-
-  public void printError(String error) {
-    System.out.println("Error=" + error);
-  }
-
-  public void print(String s) {
-    System.out.println("info from interpreter:" + s);
-    outputResult.append(s);
-  }
-
-  @Test
-  public void testTranslationFromScript() {
-    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptdiplotoavatar";
-    String script;
-
-    outputResult = new StringBuilder();
-
-    File f = new File(filePath);
-    assertTrue(myutil.FileUtils.checkFileForOpen(f));
-
-    script = myutil.FileUtils.loadFileData(f);
-
-    assertTrue(script.length() > 0);
-
-    boolean show = false;
-    Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface) this, show);
-    interpret.interpret();
-
-    System.out.println("Interpret done");
-
-    // Must now load the graph
-    for (int i = 0; i < 3; i++) {
-      System.out.println("Handling graph #" + i);
-      filePath = "rgmodelchecker_diplo_" + i + ".aut";
-      f = new File(filePath);
-      assertTrue(myutil.FileUtils.checkFileForOpen(f));
-      String data = myutil.FileUtils.loadFileData(f);
-
-      assertTrue(data.length() > 0);
-      AUTGraph graph = new AUTGraph();
-      graph.buildGraph(data);
-      graph.computeStates();
-
-      System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
-
-      // Minimizing the graph
-      // Getting all actions starting from i
-      AUTGraph newRG = graph.minimize(graph.getInternalActions(), false);
-
-      System.out.println("states=" + newRG.getNbOfStates() + " transitions=" + newRG.getNbOfTransitions());
-
-      assertTrue(newRG.getNbOfStates() == statesInfo[i]);
-      assertTrue(newRG.getNbOfTransitions() == transitionsInfo[i]);
+    public CLIDiploToAvatarTest() {
+        //
     }
 
-  }
+    public void exit(int reason) {
+        System.out.println("Exit reason=" + reason);
+        assertTrue(reason == 0);
+    }
 
-  /*
-   * @Test public void testStateLimitCoffeeMachine() { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_n"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * boolean show = false; Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, show); interpret.interpret();
-   * 
-   * // Must now load the graph filePath = "rgmodelchecker.aut"; f = new
-   * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
-   * = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
-   * graph.buildGraph(data); graph.computeStates();
-   * 
-   * System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
-   * graph.getNbOfTransitions()); assertTrue(graph.getNbOfStates() == 12); }
-   * 
-   * @Test public void testReachabilityLivenessCoffeeMachine() { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_rl"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * boolean show = false; Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, show); interpret.interpret();
-   * 
-   * // Must now load the graph filePath = "rgmodelchecker.aut"; f = new
-   * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
-   * = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
-   * graph.buildGraph(data); graph.computeStates();
-   * 
-   * filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE +
-   * "modelchecker_rl_expected"; f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f)); String expectedOutput =
-   * myutil.FileUtils.loadFileData(f);
-   * 
-   * System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
-   * graph.getNbOfTransitions()); assertTrue(graph.getNbOfStates() == 14);
-   * assertTrue(graph.getNbOfTransitions() == 16); assertEquals(expectedOutput,
-   * outputResult.toString()); }
-   * 
-   * @Test public void testReachabilityLivenessSafetyAirbusDoor_V2() { String
-   * filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE +
-   * "scriptmodelchecker_s"; String script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * boolean show = false; Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, show); interpret.interpret();
-   * 
-   * // Must now load the graph filePath = "rgmodelchecker.aut"; f = new
-   * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
-   * = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
-   * graph.buildGraph(data); graph.computeStates();
-   * 
-   * filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE +
-   * "modelchecker_s_expected"; f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f)); String expectedOutput =
-   * myutil.FileUtils.loadFileData(f);
-   * 
-   * System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
-   * graph.getNbOfTransitions()); assertTrue(graph.getNbOfStates() == 251);
-   * assertTrue(graph.getNbOfTransitions() > 750);
-   * assertTrue(graph.getNbOfTransitions() < 770);
-   * 
-   * 
-   * assertEquals(expectedOutput, outputResult.toString()); }
-   * 
-   * @Test public void testValidateCoffeeMachine() { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val1"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, false); interpret.interpret();
-   * 
-   * assertTrue(outputResult.toString().contains("true")); }
-   * 
-   * @Test public void testValidateAirbusDoor_V2() { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val2"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, false); interpret.interpret();
-   * 
-   * assertTrue(outputResult.toString().contains("true")); }
-   * 
-   * @Test public void testValidatePressureController() { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val3"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, false); interpret.interpret();
-   * 
-   * assertTrue(outputResult.toString().contains("true")); }
-   * 
-   * @Test public void testCoffeeMachineAsync() { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val4"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, false); interpret.interpret();
-   * 
-   * assertTrue(outputResult.toString().contains("true")); }
-   * 
-   * @Test public void testCliCustomQuery () { String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_q"; String
-   * script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, false); interpret.interpret();
-   * 
-   * filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE +
-   * "modelchecker_q_expected"; f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f)); String expectedOutput =
-   * myutil.FileUtils.loadFileData(f);
-   * 
-   * assertEquals(expectedOutput, outputResult.toString()+"\n"); }
-   * 
-   * @Test public void testAdvancedRandom() {
-   * System.out.println("advanced random model checker test"); String filePath =
-   * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelcheckerrandom";
-   * String script;
-   * 
-   * outputResult = new StringBuilder();
-   * 
-   * File f = new File(filePath);
-   * assertTrue(myutil.FileUtils.checkFileForOpen(f));
-   * 
-   * script = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(script.length() > 0);
-   * 
-   * boolean show = false; Interpreter interpret = new Interpreter(script,
-   * (InterpreterOutputInterface)this, show); interpret.interpret();
-   * System.out.println("Graph generated");
-   * 
-   * // Must now load the graph filePath = "rgmodelcheckerrandom.aut"; f = new
-   * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
-   * = myutil.FileUtils.loadFileData(f);
-   * 
-   * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
-   * graph.buildGraph(data); graph.computeStates();
-   * 
-   * System.out.println("random Cstates=" + graph.getNbOfStates() +
-   * " transitions=" + graph.getNbOfTransitions());
-   * assertTrue(graph.getNbOfStates() == 6); assertTrue(graph.getNbOfTransitions()
-   * == 5);
-   * 
-   * 
-   * }
-   */
+    public void printError(String error) {
+        System.out.println("Error=" + error);
+    }
+
+    public void print(String s) {
+        System.out.println("info from interpreter:" + s);
+        outputResult.append(s);
+    }
+
+    @Test
+    public void testTranslationFromScript() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptdiplotoavatar";
+        String script;
+
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface) this, show);
+        interpret.interpret();
+
+        System.out.println("Interpret done");
+
+        // Must now load the graph
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Handling graph #" + i);
+            filePath = "rgmodelchecker_diplo_" + i + ".aut";
+            f = new File(filePath);
+            assertTrue(myutil.FileUtils.checkFileForOpen(f));
+            String data = myutil.FileUtils.loadFileData(f);
+
+            assertTrue(data.length() > 0);
+            AUTGraph graph = new AUTGraph();
+            graph.buildGraph(data);
+            graph.computeStates();
+
+            System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
+
+            // Minimizing the graph
+            // Getting all actions starting from i
+            AUTGraph newRG = graph.minimize(graph.getInternalActions(), false);
+
+            System.out.println("states=" + newRG.getNbOfStates() + " transitions=" + newRG.getNbOfTransitions());
+
+            assertTrue(newRG.getNbOfStates() == statesInfo[i]);
+            assertTrue(newRG.getNbOfTransitions() == transitionsInfo[i]);
+        }
+
+    }
+
+    /*
+     * @Test public void testStateLimitCoffeeMachine() { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_n"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * boolean show = false; Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, show); interpret.interpret();
+     * 
+     * // Must now load the graph filePath = "rgmodelchecker.aut"; f = new
+     * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
+     * = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
+     * graph.buildGraph(data); graph.computeStates();
+     * 
+     * System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
+     * graph.getNbOfTransitions()); assertTrue(graph.getNbOfStates() == 12); }
+     * 
+     * @Test public void testReachabilityLivenessCoffeeMachine() { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_rl"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * boolean show = false; Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, show); interpret.interpret();
+     * 
+     * // Must now load the graph filePath = "rgmodelchecker.aut"; f = new
+     * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
+     * = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
+     * graph.buildGraph(data); graph.computeStates();
+     * 
+     * filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE +
+     * "modelchecker_rl_expected"; f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f)); String expectedOutput =
+     * myutil.FileUtils.loadFileData(f);
+     * 
+     * System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
+     * graph.getNbOfTransitions()); assertTrue(graph.getNbOfStates() == 14);
+     * assertTrue(graph.getNbOfTransitions() == 16); assertEquals(expectedOutput,
+     * outputResult.toString()); }
+     * 
+     * @Test public void testReachabilityLivenessSafetyAirbusDoor_V2() { String
+     * filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE +
+     * "scriptmodelchecker_s"; String script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * boolean show = false; Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, show); interpret.interpret();
+     * 
+     * // Must now load the graph filePath = "rgmodelchecker.aut"; f = new
+     * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
+     * = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
+     * graph.buildGraph(data); graph.computeStates();
+     * 
+     * filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE +
+     * "modelchecker_s_expected"; f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f)); String expectedOutput =
+     * myutil.FileUtils.loadFileData(f);
+     * 
+     * System.out.println("states=" + graph.getNbOfStates() + " transitions=" +
+     * graph.getNbOfTransitions()); assertTrue(graph.getNbOfStates() == 251);
+     * assertTrue(graph.getNbOfTransitions() > 750);
+     * assertTrue(graph.getNbOfTransitions() < 770);
+     * 
+     * 
+     * assertEquals(expectedOutput, outputResult.toString()); }
+     * 
+     * @Test public void testValidateCoffeeMachine() { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val1"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, false); interpret.interpret();
+     * 
+     * assertTrue(outputResult.toString().contains("true")); }
+     * 
+     * @Test public void testValidateAirbusDoor_V2() { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val2"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, false); interpret.interpret();
+     * 
+     * assertTrue(outputResult.toString().contains("true")); }
+     * 
+     * @Test public void testValidatePressureController() { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val3"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, false); interpret.interpret();
+     * 
+     * assertTrue(outputResult.toString().contains("true")); }
+     * 
+     * @Test public void testCoffeeMachineAsync() { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val4"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, false); interpret.interpret();
+     * 
+     * assertTrue(outputResult.toString().contains("true")); }
+     * 
+     * @Test public void testCliCustomQuery () { String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_q"; String
+     * script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, false); interpret.interpret();
+     * 
+     * filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE +
+     * "modelchecker_q_expected"; f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f)); String expectedOutput =
+     * myutil.FileUtils.loadFileData(f);
+     * 
+     * assertEquals(expectedOutput, outputResult.toString()+"\n"); }
+     * 
+     * @Test public void testAdvancedRandom() {
+     * System.out.println("advanced random model checker test"); String filePath =
+     * getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelcheckerrandom";
+     * String script;
+     * 
+     * outputResult = new StringBuilder();
+     * 
+     * File f = new File(filePath);
+     * assertTrue(myutil.FileUtils.checkFileForOpen(f));
+     * 
+     * script = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(script.length() > 0);
+     * 
+     * boolean show = false; Interpreter interpret = new Interpreter(script,
+     * (InterpreterOutputInterface)this, show); interpret.interpret();
+     * System.out.println("Graph generated");
+     * 
+     * // Must now load the graph filePath = "rgmodelcheckerrandom.aut"; f = new
+     * File(filePath); assertTrue(myutil.FileUtils.checkFileForOpen(f)); String data
+     * = myutil.FileUtils.loadFileData(f);
+     * 
+     * assertTrue(data.length() > 0); AUTGraph graph = new AUTGraph();
+     * graph.buildGraph(data); graph.computeStates();
+     * 
+     * System.out.println("random Cstates=" + graph.getNbOfStates() +
+     * " transitions=" + graph.getNbOfTransitions());
+     * assertTrue(graph.getNbOfStates() == 6); assertTrue(graph.getNbOfTransitions()
+     * == 5);
+     * 
+     * 
+     * }
+     */
 
 }

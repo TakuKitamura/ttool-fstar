@@ -44,71 +44,71 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 public class CSVObjectTest {
-  private static String GOOD_CSV = "student, teacher, class\nfoo, 86e65064-2361-4a60-8871-efe389f6e549, 1\nfii, tii, os and uml ";
-  private static String BAD_CSV_1 = "student, teacher, 1\nfoo, too\nfii, tii, os";
-  private static String BAD_CSV_2 = "student, teacher, class\nfoo, 86e65064-2361-4a60-8871-efe389f6e549, uml, os\nfii, tii, os";
+    private static String GOOD_CSV = "student, teacher, class\nfoo, 86e65064-2361-4a60-8871-efe389f6e549, 1\nfii, tii, os and uml ";
+    private static String BAD_CSV_1 = "student, teacher, 1\nfoo, too\nfii, tii, os";
+    private static String BAD_CSV_2 = "student, teacher, class\nfoo, 86e65064-2361-4a60-8871-efe389f6e549, uml, os\nfii, tii, os";
 
-  @Test
-  public void parsingTest() {
+    @Test
+    public void parsingTest() {
 
-    CSVObject csv = new CSVObject();
+        CSVObject csv = new CSVObject();
 
-    assertFalse(csv.parse(null));
-    assertFalse(csv.parse(""));
-    assertFalse(csv.parse(" "));
+        assertFalse(csv.parse(null));
+        assertFalse(csv.parse(""));
+        assertFalse(csv.parse(" "));
 
-    assertFalse(csv.parse(BAD_CSV_1));
-    assertFalse(csv.parse(BAD_CSV_2));
+        assertFalse(csv.parse(BAD_CSV_1));
+        assertFalse(csv.parse(BAD_CSV_2));
 
-    assertTrue(csv.parse(GOOD_CSV));
+        assertTrue(csv.parse(GOOD_CSV));
 
-    assertEquals(csv.getNbOfLines(), 3);
-    assertEquals(csv.getNbOfEltsPerLine(), 3);
+        assertEquals(csv.getNbOfLines(), 3);
+        assertEquals(csv.getNbOfEltsPerLine(), 3);
 
-    assertEquals(csv.get(0, 0), "student");
-    assertEquals(csv.get(0, 1), "teacher");
-    assertEquals(csv.get(0, 2), "class");
-    assertEquals(csv.get(1, 0), "foo");
-    assertEquals(csv.get(1, 1), "86e65064-2361-4a60-8871-efe389f6e549");
-    assertEquals(csv.get(1, 2), "1");
-    assertEquals(csv.get(2, 0), "fii");
-    assertEquals(csv.get(2, 1), "tii");
-    assertEquals(csv.get(2, 2), "os and uml");
+        assertEquals(csv.get(0, 0), "student");
+        assertEquals(csv.get(0, 1), "teacher");
+        assertEquals(csv.get(0, 2), "class");
+        assertEquals(csv.get(1, 0), "foo");
+        assertEquals(csv.get(1, 1), "86e65064-2361-4a60-8871-efe389f6e549");
+        assertEquals(csv.get(1, 2), "1");
+        assertEquals(csv.get(2, 0), "fii");
+        assertEquals(csv.get(2, 1), "tii");
+        assertEquals(csv.get(2, 2), "os and uml");
 
-    // Testing int
-    boolean hasException = false;
-    try {
-      int test = csv.getInt(0, 0);
-    } catch (NumberFormatException nfe) {
-      hasException = true;
+        // Testing int
+        boolean hasException = false;
+        try {
+            int test = csv.getInt(0, 0);
+        } catch (NumberFormatException nfe) {
+            hasException = true;
+        }
+        assertTrue(hasException);
+
+        hasException = false;
+        try {
+            int test = csv.getInt(1, 2);
+        } catch (NumberFormatException nfe) {
+            hasException = true;
+        }
+        assertFalse(hasException);
+
+        // Testing UUID
+        boolean isIllegal = false;
+        try {
+            UUID myUUID = csv.getUUID(0, 0);
+        } catch (IllegalArgumentException iae) {
+            isIllegal = true;
+        }
+        assertTrue(isIllegal);
+
+        isIllegal = false;
+        try {
+            UUID myUUID = csv.getUUID(1, 1);
+        } catch (IllegalArgumentException iae) {
+            isIllegal = true;
+        }
+        assertFalse(isIllegal);
+
     }
-    assertTrue(hasException);
-
-    hasException = false;
-    try {
-      int test = csv.getInt(1, 2);
-    } catch (NumberFormatException nfe) {
-      hasException = true;
-    }
-    assertFalse(hasException);
-
-    // Testing UUID
-    boolean isIllegal = false;
-    try {
-      UUID myUUID = csv.getUUID(0, 0);
-    } catch (IllegalArgumentException iae) {
-      isIllegal = true;
-    }
-    assertTrue(isIllegal);
-
-    isIllegal = false;
-    try {
-      UUID myUUID = csv.getUUID(1, 1);
-    } catch (IllegalArgumentException iae) {
-      isIllegal = true;
-    }
-    assertFalse(isIllegal);
-
-  }
 
 }

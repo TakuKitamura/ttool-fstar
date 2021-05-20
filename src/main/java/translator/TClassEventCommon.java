@@ -47,18 +47,18 @@ import java.util.LinkedList;
  * @author Ludovic APVRILLE
  */
 public interface TClassEventCommon {
-  int getNbPara();
+    int getNbPara();
 
-  Gate getGateWrite(); // Returns the first write gate
+    Gate getGateWrite(); // Returns the first write gate
 
-  Gate getGateRead(); // Returns the first read gate
+    Gate getGateRead(); // Returns the first read gate
 
-  LinkedList getGatesWrite();
+    LinkedList getGatesWrite();
 
-  LinkedList getGatesRead();
+    LinkedList getGatesRead();
 
-  LinkedList getGatesSize();
+    LinkedList getGatesSize();
 
-  Gate getGateSize(); // Returns the first size gate
+    Gate getGateSize(); // Returns the first size gate
 
 }

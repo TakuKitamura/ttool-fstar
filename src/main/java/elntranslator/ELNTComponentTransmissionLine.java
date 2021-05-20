@@ -49,59 +49,59 @@ import java.util.LinkedList;
  */
 
 public class ELNTComponentTransmissionLine extends ELNTComponent implements ELNTPrimitiveComponent {
-  private String name;
-  private double z0, delta0;
-  private String delay;
-  private String unit0, unit2;
-  private LinkedList<ELNTConnectingPoint> cp;
+    private String name;
+    private double z0, delta0;
+    private String delay;
+    private String unit0, unit2;
+    private LinkedList<ELNTConnectingPoint> cp;
 
-  private ELNTModule module;
+    private ELNTModule module;
 
-  public ELNTComponentTransmissionLine(String _name, double _z0, double _delta0, String _delay, String _unit0,
-      String _unit2, ELNTModule _module) {
-    name = _name;
-    z0 = _z0;
-    delta0 = _delta0;
-    delay = _delay;
-    unit0 = _unit0;
-    unit2 = _unit2;
-    cp = new LinkedList<ELNTConnectingPoint>();
-    module = _module;
-  }
+    public ELNTComponentTransmissionLine(String _name, double _z0, double _delta0, String _delay, String _unit0,
+            String _unit2, ELNTModule _module) {
+        name = _name;
+        z0 = _z0;
+        delta0 = _delta0;
+        delay = _delay;
+        unit0 = _unit0;
+        unit2 = _unit2;
+        cp = new LinkedList<ELNTConnectingPoint>();
+        module = _module;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public double getZ0() {
-    return z0;
-  }
+    public double getZ0() {
+        return z0;
+    }
 
-  public double getDelta0() {
-    return delta0;
-  }
+    public double getDelta0() {
+        return delta0;
+    }
 
-  public String getDelay() {
-    return delay;
-  }
+    public String getDelay() {
+        return delay;
+    }
 
-  public String getUnit0() {
-    return unit0;
-  }
+    public String getUnit0() {
+        return unit0;
+    }
 
-  public String getUnit2() {
-    return unit2;
-  }
+    public String getUnit2() {
+        return unit2;
+    }
 
-  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-    return cp;
-  }
+    public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+        return cp;
+    }
 
-  public void addConnectingPoint(ELNTConnectingPoint _cp) {
-    cp.add(_cp);
-  }
+    public void addConnectingPoint(ELNTConnectingPoint _cp) {
+        cp.add(_cp);
+    }
 
-  public ELNTModule getModule() {
-    return module;
-  }
+    public ELNTModule getModule() {
+        return module;
+    }
 }

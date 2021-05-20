@@ -57,127 +57,127 @@ import java.awt.event.MouseMotionListener;
  */
 public class JBirdPanel extends JPanel implements MouseListener, MouseMotionListener {
 
-  private MainGUI mgui;
-  private int w, h, wc, wh;
-  // private Image image, scaledImage;
-  // private Graphics graphics;
-  private TDiagramPanel currentTdp;
-  // private int startX;
-  // private int startY;
-  private JScrollBar horizontal, vertical;
-  // private int valueH, valueV;
-  private double wratio, hratio;
-  private boolean go;
-  // private Thread t;
-  private Rectangle rect;
-  private TDiagramPanel tdp;
+    private MainGUI mgui;
+    private int w, h, wc, wh;
+    // private Image image, scaledImage;
+    // private Graphics graphics;
+    private TDiagramPanel currentTdp;
+    // private int startX;
+    // private int startY;
+    private JScrollBar horizontal, vertical;
+    // private int valueH, valueV;
+    private double wratio, hratio;
+    private boolean go;
+    // private Thread t;
+    private Rectangle rect;
+    private TDiagramPanel tdp;
 
-  // Constructor
-  public JBirdPanel(MainGUI _mgui) {
-    setBackground(ColorManager.DIAGRAM_BACKGROUND);
-    mgui = _mgui;
-    addMouseListener(this);
-    addMouseMotionListener(this);
-    startProcess();
-  }
+    // Constructor
+    public JBirdPanel(MainGUI _mgui) {
+        setBackground(ColorManager.DIAGRAM_BACKGROUND);
+        mgui = _mgui;
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        startProcess();
+    }
 
-  @Override
-  protected void paintComponent(Graphics g) {
-    if (isShowing()) {
-      super.paintComponent(g);
-      tdp = mgui.getCurrentTDiagramPanel();
-      if ((tdp != null) && (go == true)) {
-        currentTdp = tdp;
-        rect = currentTdp.getVisibleRect();
-        wc = getSize().width;
-        wh = getSize().height;
-        w = currentTdp.getWidth();
-        h = currentTdp.getHeight();
+    @Override
+    protected void paintComponent(Graphics g) {
+        if (isShowing()) {
+            super.paintComponent(g);
+            tdp = mgui.getCurrentTDiagramPanel();
+            if ((tdp != null) && (go == true)) {
+                currentTdp = tdp;
+                rect = currentTdp.getVisibleRect();
+                wc = getSize().width;
+                wh = getSize().height;
+                w = currentTdp.getWidth();
+                h = currentTdp.getHeight();
 
-        wratio = ((double) wc) / w;
-        hratio = ((double) wh) / h;
-        if (hratio < wratio) {
-          wratio = hratio;
-        } else {
-          hratio = wratio;
+                wratio = ((double) wc) / w;
+                hratio = ((double) wh) / h;
+                if (hratio < wratio) {
+                    wratio = hratio;
+                } else {
+                    hratio = wratio;
+                }
+                currentTdp.paintMycomponents(g, false, wratio, hratio);
+                g.drawRect(rect.x, rect.y, rect.width, rect.height);
+            }
         }
-        currentTdp.paintMycomponents(g, false, wratio, hratio);
-        g.drawRect(rect.x, rect.y, rect.width, rect.height);
-      }
     }
-  }
 
-  private void centerRectangle(int x, int y) {
-    if (rect != null) {
-      x = (int) (x - rect.width * wratio / 2);
-      y = (int) (y - rect.height * hratio / 2);
-      if (horizontal != null) {
-        horizontal.setValue((int) (x / wratio));
-      }
-      if (vertical != null) {
-        vertical.setValue((int) (y / hratio));
-      }
+    private void centerRectangle(int x, int y) {
+        if (rect != null) {
+            x = (int) (x - rect.width * wratio / 2);
+            y = (int) (y - rect.height * hratio / 2);
+            if (horizontal != null) {
+                horizontal.setValue((int) (x / wratio));
+            }
+            if (vertical != null) {
+                vertical.setValue((int) (y / hratio));
+            }
 
-      if ((horizontal != null) || (vertical != null)) {
+            if ((horizontal != null) || (vertical != null)) {
+                repaint();
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //
+        // startX = e.getX();
+        // startY = e.getY();
+        if ((currentTdp != null) && (currentTdp.jsp != null)) {
+            //
+            horizontal = currentTdp.jsp.getHorizontalScrollBar();
+            vertical = currentTdp.jsp.getVerticalScrollBar();
+            centerRectangle(e.getX(), e.getY());
+            // valueH = horizontal.getValue();
+            // valueV = vertical.getValue();
+        } else {
+            //
+            horizontal = null;
+            vertical = null;
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        centerRectangle(e.getX(), e.getY());
+    }
+
+    public void startProcess() {
+        setGo(true);
+    }
+
+    public void setGo(boolean b) {
+        go = b;
         repaint();
-      }
     }
-  }
 
-  @Override
-  public void mousePressed(MouseEvent e) {
-    //
-    // startX = e.getX();
-    // startY = e.getY();
-    if ((currentTdp != null) && (currentTdp.jsp != null)) {
-      //
-      horizontal = currentTdp.jsp.getHorizontalScrollBar();
-      vertical = currentTdp.jsp.getVerticalScrollBar();
-      centerRectangle(e.getX(), e.getY());
-      // valueH = horizontal.getValue();
-      // valueV = vertical.getValue();
-    } else {
-      //
-      horizontal = null;
-      vertical = null;
+    public boolean getGo() {
+        return go;
     }
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-  }
-
-  @Override
-  public void mouseEntered(MouseEvent e) {
-  }
-
-  @Override
-  public void mouseExited(MouseEvent e) {
-  }
-
-  @Override
-  public void mouseClicked(MouseEvent e) {
-  }
-
-  @Override
-  public void mouseMoved(MouseEvent e) {
-  }
-
-  @Override
-  public void mouseDragged(MouseEvent e) {
-    centerRectangle(e.getX(), e.getY());
-  }
-
-  public void startProcess() {
-    setGo(true);
-  }
-
-  public void setGo(boolean b) {
-    go = b;
-    repaint();
-  }
-
-  public boolean getGo() {
-    return go;
-  }
 }

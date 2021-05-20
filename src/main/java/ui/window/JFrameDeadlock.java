@@ -60,99 +60,102 @@ import java.awt.event.ActionListener;
  * @author Ludovic APVRILLE
  */
 public class JFrameDeadlock extends JFrame implements ActionListener {
-  private String data;
-  // private int nbState;
-  // private int nbTransition;
+    private String data;
+    // private int nbState;
+    // private int nbTransition;
 
-  // private JStatisticsPanel jstat;
-  private JScrollPane jsp;
-  private JTextField state;
-  private JTextField transition;
+    // private JStatisticsPanel jstat;
+    private JScrollPane jsp;
+    private JTextField state;
+    private JTextField transition;
 
-  public JFrameDeadlock(String title, String dataAUT) {
-    super(title);
-    data = dataAUT;
-    makeComponents();
-  }
-
-  public void makeComponents() {
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
-
-    AUTGraph graph = new AUTGraph();
-    graph.buildGraph(data);
-    DeadlockTableModel tm = new DeadlockTableModel(graph, 25000);
-    TableSorter sorter = new TableSorter(tm);
-    JTable jtable = new JTable(sorter);
-    sorter.setTableHeader(jtable.getTableHeader());
-
-    ((jtable.getColumnModel()).getColumn(0)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tm, 0) + 20, 50));
-    ((jtable.getColumnModel()).getColumn(1)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tm, 1) + 15, 100));
-    ((jtable.getColumnModel()).getColumn(2)).setPreferredWidth(Math.max(maxLengthColumn(framePanel, tm, 1) + 15, 400));
-    jtable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jsp = new JScrollPane(jtable);
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(10);
-    // jsp.setMaximumSize(new Dimension(250, 50));
-
-    framePanel.add(jsp, BorderLayout.CENTER);
-
-    // Buttons
-
-    JButton button1 = new JButton("Close", IconManager.imgic27);
-    button1.addActionListener(this);
-    JPanel jp = new JPanel();
-    jp.add(button1);
-
-    framePanel.add(jp, BorderLayout.SOUTH);
-
-    // upper information
-    Point p = FormatManager.nbStateTransitionRGAldebaran(data);
-    jp = new JPanel();
-
-    jp.add(new JLabel("States:"));
-    state = new JTextField(5);
-    state.setEditable(false);
-    state.setText(String.valueOf(p.x));
-    jp.add(state);
-
-    jp.add(new JLabel("Transitions:"));
-    transition = new JTextField(15);
-    transition.setEditable(false);
-    transition.setText(String.valueOf(p.y));
-    jp.add(transition);
-
-    framePanel.add(jp, BorderLayout.NORTH);
-
-    pack();
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-    //
-
-    if (command.equals("Close")) {
-      dispose();
-      return;
-    }
-  }
-
-  private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
-    int w = 0, wtmp;
-    FontMetrics fm = c.getFontMetrics(c.getFont());
-    if (fm == null) {
-      return 0;
+    public JFrameDeadlock(String title, String dataAUT) {
+        super(title);
+        data = dataAUT;
+        makeComponents();
     }
 
-    String s;
+    public void makeComponents() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
 
-    for (int i = 0; i < tm.getRowCount(); i++) {
-      s = tm.getValueAt(i, index).toString();
-      wtmp = fm.stringWidth(s);
-      w = Math.max(w, wtmp);
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        DeadlockTableModel tm = new DeadlockTableModel(graph, 25000);
+        TableSorter sorter = new TableSorter(tm);
+        JTable jtable = new JTable(sorter);
+        sorter.setTableHeader(jtable.getTableHeader());
+
+        ((jtable.getColumnModel()).getColumn(0))
+                .setPreferredWidth(Math.max(maxLengthColumn(framePanel, tm, 0) + 20, 50));
+        ((jtable.getColumnModel()).getColumn(1))
+                .setPreferredWidth(Math.max(maxLengthColumn(framePanel, tm, 1) + 15, 100));
+        ((jtable.getColumnModel()).getColumn(2))
+                .setPreferredWidth(Math.max(maxLengthColumn(framePanel, tm, 1) + 15, 400));
+        jtable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jsp = new JScrollPane(jtable);
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(10);
+        // jsp.setMaximumSize(new Dimension(250, 50));
+
+        framePanel.add(jsp, BorderLayout.CENTER);
+
+        // Buttons
+
+        JButton button1 = new JButton("Close", IconManager.imgic27);
+        button1.addActionListener(this);
+        JPanel jp = new JPanel();
+        jp.add(button1);
+
+        framePanel.add(jp, BorderLayout.SOUTH);
+
+        // upper information
+        Point p = FormatManager.nbStateTransitionRGAldebaran(data);
+        jp = new JPanel();
+
+        jp.add(new JLabel("States:"));
+        state = new JTextField(5);
+        state.setEditable(false);
+        state.setText(String.valueOf(p.x));
+        jp.add(state);
+
+        jp.add(new JLabel("Transitions:"));
+        transition = new JTextField(15);
+        transition.setEditable(false);
+        transition.setText(String.valueOf(p.y));
+        jp.add(transition);
+
+        framePanel.add(jp, BorderLayout.NORTH);
+
+        pack();
     }
-    return w;
-  }
+
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+        //
+
+        if (command.equals("Close")) {
+            dispose();
+            return;
+        }
+    }
+
+    private int maxLengthColumn(Component c, AbstractTableModel tm, int index) {
+        int w = 0, wtmp;
+        FontMetrics fm = c.getFontMetrics(c.getFont());
+        if (fm == null) {
+            return 0;
+        }
+
+        String s;
+
+        for (int i = 0; i < tm.getRowCount(); i++) {
+            s = tm.getValueAt(i, index).toString();
+            wtmp = fm.stringWidth(s);
+            w = Math.max(w, wtmp);
+        }
+        return w;
+    }
 
 } // Class

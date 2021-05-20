@@ -50,47 +50,47 @@ import javax.swing.table.AbstractTableModel;
  */
 public class GeneralInfoNCTableModel extends AbstractTableModel {
 
-  private String[] names = { "Equipments", "Switches", "Traffics", "Links", "Paths" };
-  private String[] sizes;
+    private String[] names = { "Equipments", "Switches", "Traffics", "Links", "Paths" };
+    private String[] sizes;
 
-  public GeneralInfoNCTableModel(NCStructure _ncs) {
-    // ncs = _ncs;
-    sizes = new String[5];
-    computeData(_ncs);
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return 5;
-  }
-
-  public int getColumnCount() {
-    return 2;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (column == 0) {
-      return names[row];
-    } else {
-      return sizes[row];
+    public GeneralInfoNCTableModel(NCStructure _ncs) {
+        // ncs = _ncs;
+        sizes = new String[5];
+        computeData(_ncs);
     }
-  }
 
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Element";
-      case 1:
-        return "#";
+    // From AbstractTableModel
+    public int getRowCount() {
+        return 5;
     }
-    return "none";
-  }
 
-  private void computeData(NCStructure _ncs) {
-    sizes[0] = "" + _ncs.equipments.size();
-    sizes[1] = "" + _ncs.switches.size();
-    sizes[2] = "" + _ncs.traffics.size();
-    sizes[3] = "" + _ncs.links.size();
-    sizes[4] = "" + _ncs.paths.size();
-  }
+    public int getColumnCount() {
+        return 2;
+    }
+
+    public Object getValueAt(int row, int column) {
+        if (column == 0) {
+            return names[row];
+        } else {
+            return sizes[row];
+        }
+    }
+
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Element";
+            case 1:
+                return "#";
+        }
+        return "none";
+    }
+
+    private void computeData(NCStructure _ncs) {
+        sizes[0] = "" + _ncs.equipments.size();
+        sizes[1] = "" + _ncs.switches.size();
+        sizes[2] = "" + _ncs.traffics.size();
+        sizes[3] = "" + _ncs.links.size();
+        sizes[4] = "" + _ncs.paths.size();
+    }
 }

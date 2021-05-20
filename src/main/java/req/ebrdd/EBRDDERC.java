@@ -47,192 +47,192 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public class EBRDDERC extends EBRDDComponent {
-  protected ArrayList<ERCElement> treeElements;
-  protected ESO root;
+    protected ArrayList<ERCElement> treeElements;
+    protected ESO root;
 
-  public EBRDDERC(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    treeElements = new ArrayList<ERCElement>();
-  }
-
-  public String toString() {
-    return "EBRDERC: " + treeElements.size();
-  }
-
-  public void setRoot(ESO _root) {
-    root = _root;
-  }
-
-  public ESO getRoot() {
-    return root;
-  }
-
-  public ArrayList<ERCElement> getTreeElements() {
-    return treeElements;
-  }
-
-  public void addTreeElement(ERCElement elt) {
-    treeElements.add(elt);
-  }
-
-  // From its list of tree elements, it tries to find the root
-  // of the tree. If it returns false, no root could be found,
-  // either because the tree contains no element or because
-  // there are several roots. Otherwise, it returns true
-  // Additionally, there shall be no loop in the system
-
-  public boolean makeRoot() {
-    if (treeElements.size() == 0) {
-
-      return false;
+    public EBRDDERC(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        treeElements = new ArrayList<ERCElement>();
     }
 
-    if (treeElements.size() == 1) {
-      ERCElement elt = treeElements.get(0);
-      if (elt instanceof ESO) {
-
-        return false;
-      }
-
-      // Must add a new ESO
-
-      ESO eso = new ESO("ESO", null);
-      eso.addSon(elt);
-      addTreeElement(eso);
-      setRoot(eso);
-      return true;
+    public String toString() {
+        return "EBRDERC: " + treeElements.size();
     }
 
-    boolean b;
-    int cpt;
-    ESO root = null;
+    public void setRoot(ESO _root) {
+        root = _root;
+    }
 
-    for (ERCElement elt : treeElements) {
-      if (elt instanceof ERB) {
-        cpt = nbOfESOLeadingTo(elt);
-        if (cpt != 1) {
-          // The ERB is the son of several ESOs or
-          // The ERB is not attached to an ESO
+    public ESO getRoot() {
+        return root;
+    }
 
-          return false;
-        }
-      }
+    public ArrayList<ERCElement> getTreeElements() {
+        return treeElements;
+    }
 
-      if (elt instanceof ESO) {
-        // Must check that all ESO have at least one son
-        if (((ESO) elt).getNbOfSons() == 0) {
+    public void addTreeElement(ERCElement elt) {
+        treeElements.add(elt);
+    }
 
-          return false;
-        }
+    // From its list of tree elements, it tries to find the root
+    // of the tree. If it returns false, no root could be found,
+    // either because the tree contains no element or because
+    // there are several roots. Otherwise, it returns true
+    // Additionally, there shall be no loop in the system
 
-        // Check whether it is a root of a tree, or not
-        if (isRoot((ESO) elt)) {
-          if (root != null) {
-            // Second root!!
+    public boolean makeRoot() {
+        if (treeElements.size() == 0) {
 
             return false;
-          } else {
-            root = (ESO) elt;
-          }
         }
-      }
-    }
 
-    // no root found!
-    if (root == null) {
+        if (treeElements.size() == 1) {
+            ERCElement elt = treeElements.get(0);
+            if (elt instanceof ESO) {
 
-      return false;
-    }
+                return false;
+            }
 
-    setRoot(root);
+            // Must add a new ESO
 
-    // Must check that there is no cycle in the tree
-    ArrayList<ERCElement> mets = new ArrayList<ERCElement>();
-    if (hasCycle(root, mets)) {
-
-      return false;
-    }
-
-    return true;
-  }
-
-  private boolean hasCycle(ESO _eso, ArrayList<ERCElement> _mets) {
-    if (_mets.contains(_eso)) {
-      return true;
-    }
-
-    _mets.add(_eso);
-    ArrayList<ERCElement> list = _eso.getAllSons();
-
-    for (ERCElement elt : list) {
-      if (elt instanceof ESO) {
-        if (hasCycle((ESO) elt, _mets)) {
-          return true;
+            ESO eso = new ESO("ESO", null);
+            eso.addSon(elt);
+            addTreeElement(eso);
+            setRoot(eso);
+            return true;
         }
-      }
-    }
 
-    return false;
-  }
+        boolean b;
+        int cpt;
+        ESO root = null;
 
-  // Check whether this is a son, or not.
-  private boolean isRoot(ESO eso) {
-    for (ERCElement elt : treeElements) {
-      if (elt instanceof ESO) {
-        if (((ESO) elt).isOneOfMySon(eso)) {
-          return false;
+        for (ERCElement elt : treeElements) {
+            if (elt instanceof ERB) {
+                cpt = nbOfESOLeadingTo(elt);
+                if (cpt != 1) {
+                    // The ERB is the son of several ESOs or
+                    // The ERB is not attached to an ESO
+
+                    return false;
+                }
+            }
+
+            if (elt instanceof ESO) {
+                // Must check that all ESO have at least one son
+                if (((ESO) elt).getNbOfSons() == 0) {
+
+                    return false;
+                }
+
+                // Check whether it is a root of a tree, or not
+                if (isRoot((ESO) elt)) {
+                    if (root != null) {
+                        // Second root!!
+
+                        return false;
+                    } else {
+                        root = (ESO) elt;
+                    }
+                }
+            }
         }
-      }
-    }
-    return true;
-  }
 
-  private int nbOfESOLeadingTo(ERCElement son) {
-    int cpt = 0;
+        // no root found!
+        if (root == null) {
 
-    for (ERCElement elt : treeElements) {
-      if (elt instanceof ESO) {
-        cpt += ((ESO) elt).nbOfSonsEqualTo(son);
-      }
-    }
+            return false;
+        }
 
-    return cpt;
-  }
+        setRoot(root);
 
-  public void sortNexts() {
-    for (ERCElement elt : treeElements) {
-      if (elt instanceof ESO) {
-        ((ESO) elt).sortNexts();
-      }
-    }
-  }
+        // Must check that there is no cycle in the tree
+        ArrayList<ERCElement> mets = new ArrayList<ERCElement>();
+        if (hasCycle(root, mets)) {
 
-  public void exploreString(ERCElement elt, StringBuffer sb, int tabLevel) {
-    if (elt == null) {
-      return;
+            return false;
+        }
+
+        return true;
     }
 
-    int j;
-    for (j = 0; j < tabLevel; j++) {
-      sb.append("\t");
-    }
-    sb.append(elt.toString() + "\n");
+    private boolean hasCycle(ESO _eso, ArrayList<ERCElement> _mets) {
+        if (_mets.contains(_eso)) {
+            return true;
+        }
 
-    if (elt instanceof ESO) {
-      ESO eso = (ESO) elt;
-      tabLevel++;
-      for (int i = 0; i < eso.getNbOfSons(); i++) {
+        _mets.add(_eso);
+        ArrayList<ERCElement> list = _eso.getAllSons();
+
+        for (ERCElement elt : list) {
+            if (elt instanceof ESO) {
+                if (hasCycle((ESO) elt, _mets)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Check whether this is a son, or not.
+    private boolean isRoot(ESO eso) {
+        for (ERCElement elt : treeElements) {
+            if (elt instanceof ESO) {
+                if (((ESO) elt).isOneOfMySon(eso)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private int nbOfESOLeadingTo(ERCElement son) {
+        int cpt = 0;
+
+        for (ERCElement elt : treeElements) {
+            if (elt instanceof ESO) {
+                cpt += ((ESO) elt).nbOfSonsEqualTo(son);
+            }
+        }
+
+        return cpt;
+    }
+
+    public void sortNexts() {
+        for (ERCElement elt : treeElements) {
+            if (elt instanceof ESO) {
+                ((ESO) elt).sortNexts();
+            }
+        }
+    }
+
+    public void exploreString(ERCElement elt, StringBuffer sb, int tabLevel) {
+        if (elt == null) {
+            return;
+        }
+
+        int j;
         for (j = 0; j < tabLevel; j++) {
-          sb.append("\t");
+            sb.append("\t");
         }
-        sb.append("#" + i);
-        if (eso.getSon(i).isNegated()) {
-          sb.append(" [negated] ");
-        }
-        sb.append(":\n");
-        exploreString(eso.getSon(i), sb, tabLevel + 1);
-      }
-    }
+        sb.append(elt.toString() + "\n");
 
-  }
+        if (elt instanceof ESO) {
+            ESO eso = (ESO) elt;
+            tabLevel++;
+            for (int i = 0; i < eso.getNbOfSons(); i++) {
+                for (j = 0; j < tabLevel; j++) {
+                    sb.append("\t");
+                }
+                sb.append("#" + i);
+                if (eso.getSon(i).isNegated()) {
+                    sb.append(" [negated] ");
+                }
+                sb.append(":\n");
+                exploreString(eso.getSon(i), sb, tabLevel + 1);
+            }
+        }
+
+    }
 }

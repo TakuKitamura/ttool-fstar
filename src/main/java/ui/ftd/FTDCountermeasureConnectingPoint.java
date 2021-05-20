@@ -52,27 +52,27 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class FTDCountermeasureConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public FTDCountermeasureConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR;
-  }
-
-  public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
-    if (outPoint != null) {
-      if ((outPoint.getFather() instanceof FTDCountermeasure) && (getFather() instanceof FTDCountermeasure)) {
-        return false;
-      }
-
-      if ((outPoint.getFather() instanceof FTDFault) && (getFather() instanceof FTDFault)) {
-        return false;
-      }
-
+    public FTDCountermeasureConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
-    return isCompatibleWith(type);
-  }
+
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR;
+    }
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+        if (outPoint != null) {
+            if ((outPoint.getFather() instanceof FTDCountermeasure) && (getFather() instanceof FTDCountermeasure)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof FTDFault) && (getFather() instanceof FTDFault)) {
+                return false;
+            }
+
+        }
+        return isCompatibleWith(type);
+    }
 }

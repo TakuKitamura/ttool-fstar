@@ -46,20 +46,20 @@ package proverifspec;
  */
 public class ProVerifProcRaw extends ProVerifProcInstr {
 
-  protected String raw;
-  protected boolean nextOptional;
+    protected String raw;
+    protected boolean nextOptional;
 
-  public ProVerifProcRaw(String _raw) {
-    this.raw = _raw;
-    this.nextOptional = false;
-  }
+    public ProVerifProcRaw(String _raw) {
+        this.raw = _raw;
+        this.nextOptional = false;
+    }
 
-  public ProVerifProcRaw(String _raw, boolean _nextOptional) {
-    this.raw = _raw;
-    this.nextOptional = _nextOptional;
-  }
+    public ProVerifProcRaw(String _raw, boolean _nextOptional) {
+        this.raw = _raw;
+        this.nextOptional = _nextOptional;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateProcRaw(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateProcRaw(this, _alinea);
+    }
 }

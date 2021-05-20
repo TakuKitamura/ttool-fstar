@@ -47,37 +47,37 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public class NCPath extends NCElement {
-  public NCTraffic traffic;
-  public NCEquipment origin;
-  public NCEquipment destination;
-  public ArrayList<NCSwitch> switches;
-  public ArrayList<NCLink> links;
+    public NCTraffic traffic;
+    public NCEquipment origin;
+    public NCEquipment destination;
+    public ArrayList<NCSwitch> switches;
+    public ArrayList<NCLink> links;
 
-  public NCPath() {
-    switches = new ArrayList<NCSwitch>();
-    links = new ArrayList<NCLink>();
-  }
+    public NCPath() {
+        switches = new ArrayList<NCSwitch>();
+        links = new ArrayList<NCLink>();
+    }
 
-  public Object clone() {
-    NCPath path = new NCPath();
-    path.origin = origin;
-    path.destination = destination;
-    path.traffic = traffic;
-    for (NCSwitch sw : switches) {
-      path.switches.add(sw);
+    public Object clone() {
+        NCPath path = new NCPath();
+        path.origin = origin;
+        path.destination = destination;
+        path.traffic = traffic;
+        for (NCSwitch sw : switches) {
+            path.switches.add(sw);
+        }
+        for (NCLink link : links) {
+            path.links.add(link);
+        }
+        return path;
     }
-    for (NCLink link : links) {
-      path.links.add(link);
-    }
-    return path;
-  }
 
-  public String getLinksString() {
-    String tmp = "";
-    //
-    for (NCLink link : links) {
-      tmp += link.getName() + " ";
+    public String getLinksString() {
+        String tmp = "";
+        //
+        for (NCLink link : links) {
+            tmp += link.getName() + " ";
+        }
+        return tmp;
     }
-    return tmp;
-  }
 }

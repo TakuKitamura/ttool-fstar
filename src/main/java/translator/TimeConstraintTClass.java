@@ -45,30 +45,30 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public abstract class TimeConstraintTClass extends TClass {
-  protected Gate g1, g2, g3, g4;
-  protected Param cpt;
+    protected Gate g1, g2, g3, g4;
+    protected Param cpt;
 
-  public TimeConstraintTClass(String name, int time1, int time2) {
-    super(name, true);
-    makeActivityDiagram(time1, time2);
-  }
+    public TimeConstraintTClass(String name, int time1, int time2) {
+        super(name, true);
+        makeActivityDiagram(time1, time2);
+    }
 
-  public Gate getGateG1() {
-    return g1;
-  }
+    public Gate getGateG1() {
+        return g1;
+    }
 
-  public Gate getGateG2() {
-    return g2;
-  }
+    public Gate getGateG2() {
+        return g2;
+    }
 
-  public Gate getGateG3() {
-    return g3;
-  }
+    public Gate getGateG3() {
+        return g3;
+    }
 
-  public Gate getGateG4() {
-    return g4;
-  }
+    public Gate getGateG4() {
+        return g4;
+    }
 
-  protected abstract void makeActivityDiagram(int time1, int time2);
+    protected abstract void makeActivityDiagram(int time1, int time2);
 
 }

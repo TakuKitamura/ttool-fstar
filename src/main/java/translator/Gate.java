@@ -45,108 +45,108 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class Gate implements Comparable<Gate> {
-  private String name;
-  private String lotosName;
-  public String tmp = null;
-  public int translation; // May be used by code translators
-  private int type;
-  private boolean internal = false;
+    private String name;
+    private String lotosName;
+    public String tmp = null;
+    public int translation; // May be used by code translators
+    private int type;
+    private boolean internal = false;
 
-  private int protocolJava = 0;
-  private int localPortJava = 0;
-  private int destPortJava = 0;
-  private String destHostJava = "";
-  private String localHostJava = "";
+    private int protocolJava = 0;
+    private int localPortJava = 0;
+    private int destPortJava = 0;
+    private String destHostJava = "";
+    private String localHostJava = "";
 
-  public static final int GATE = 0;
-  public static final int OUTGATE = 1;
-  public static final int INGATE = 2;
+    public static final int GATE = 0;
+    public static final int OUTGATE = 1;
+    public static final int INGATE = 2;
 
-  public Gate(String _name, int _type, boolean _internal) {
-    name = _name;
-    type = _type;
-    internal = _internal;
-  }
+    public Gate(String _name, int _type, boolean _internal) {
+        name = _name;
+        type = _type;
+        internal = _internal;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public int getType() {
-    return type;
-  }
+    public int getType() {
+        return type;
+    }
 
-  public String getTranslation() {
-    return name;
-  }
+    public String getTranslation() {
+        return name;
+    }
 
-  public String getLotosTranslation() {
-    return name;
-  }
+    public String getLotosTranslation() {
+        return name;
+    }
 
-  public boolean isInternal() {
-    return internal;
-  }
+    public boolean isInternal() {
+        return internal;
+    }
 
-  public String getLotosName() {
-    return lotosName;
-  }
+    public String getLotosName() {
+        return lotosName;
+    }
 
-  public void setLotosName(String _lotosName) {
-    lotosName = _lotosName;
-  }
+    public void setLotosName(String _lotosName) {
+        lotosName = _lotosName;
+    }
 
-  public String toString() {
-    return name;
-  }
+    public String toString() {
+        return name;
+    }
 
-  @Override
-  public int compareTo(Gate o) {
-    // if (!(o instanceof Gate)) {
-    // return 0;
-    // } else {
-    return toString().compareTo(o.toString());
-    // }
+    @Override
+    public int compareTo(Gate o) {
+        // if (!(o instanceof Gate)) {
+        // return 0;
+        // } else {
+        return toString().compareTo(o.toString());
+        // }
 
-  }
+    }
 
-  public void setProtocolJava(int proto) {
-    protocolJava = proto;
-  }
+    public void setProtocolJava(int proto) {
+        protocolJava = proto;
+    }
 
-  public int getProtocolJava() {
-    return protocolJava;
-  }
+    public int getProtocolJava() {
+        return protocolJava;
+    }
 
-  public void setLocalPortJava(int port) {
-    localPortJava = port;
-  }
+    public void setLocalPortJava(int port) {
+        localPortJava = port;
+    }
 
-  public int getLocalPortJava() {
-    return localPortJava;
-  }
+    public int getLocalPortJava() {
+        return localPortJava;
+    }
 
-  public void setDestPortJava(int port) {
-    destPortJava = port;
-  }
+    public void setDestPortJava(int port) {
+        destPortJava = port;
+    }
 
-  public int getDestPortJava() {
-    return destPortJava;
-  }
+    public int getDestPortJava() {
+        return destPortJava;
+    }
 
-  public void setDestHostJava(String _host) {
-    destHostJava = _host;
-  }
+    public void setDestHostJava(String _host) {
+        destHostJava = _host;
+    }
 
-  public String getDestHostJava() {
-    return destHostJava;
-  }
+    public String getDestHostJava() {
+        return destHostJava;
+    }
 
-  public void setLocalHostJava(String _host) {
-    localHostJava = _host;
-  }
+    public void setLocalHostJava(String _host) {
+        localHostJava = _host;
+    }
 
-  public String getLocalHostJava() {
-    return localHostJava;
-  }
+    public String getLocalHostJava() {
+        return localHostJava;
+    }
 }

@@ -45,13 +45,13 @@ package ui.window;
  * @author Ludovic APVRILLE
  */
 public class TraceData {
-  public int time;
-  public int action;
-  public String values;
+    public int time;
+    public int action;
+    public String values;
 
-  public TraceData(int _time, int _action, String _values) {
-    time = _time;
-    action = _action;
-    values = _values;
-  }
+    public TraceData(int _time, int _action, String _values) {
+        time = _time;
+        action = _action;
+        values = _values;
+    }
 }

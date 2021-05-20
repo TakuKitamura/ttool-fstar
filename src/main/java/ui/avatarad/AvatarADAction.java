@@ -53,137 +53,137 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent
-    /* Issue #69 AvatarADBasicComponent */ implements EmbeddedComment, BasicErrorHighlight, ColorCustomizable {
-  protected int lineLength = 5;
-  // protected int textX = 5;
-  // protected int textY = 15;
-  protected int arc = 5;
+        /* Issue #69 AvatarADBasicComponent */ implements EmbeddedComment, BasicErrorHighlight, ColorCustomizable {
+    protected int lineLength = 5;
+    // protected int textX = 5;
+    // protected int textY = 15;
+    protected int arc = 5;
 
-  protected int stateOfError = 0; // Not yet checked
+    protected int stateOfError = 0; // Not yet checked
 
-  public String oldValue;
+    public String oldValue;
 
-  public AvatarADAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public AvatarADAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    textX = 5;
-    textY = 15;
-    initScaling(30, 20);
+        textX = 5;
+        textY = 15;
+        initScaling(30, 20);
 
-    minWidth = (int) (30 * tdp.getZoom());
-    oldScaleFactor = tdp.getZoom();
+        minWidth = (int) (30 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    value = "action";
-    name = "action state";
+        value = "action";
+        name = "action state";
 
-    myImageIcon = IconManager.imgic204;
-  }
-
-  @Override
-  public void internalDrawing(Graphics g) {
-    int w = g.getFontMetrics().stringWidth(value);
-    int w1 = Math.max(minWidth, w + 2 * textX);
-    if ((w1 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w1 / 2, y);
-      width = w1;
-      // updateConnectingPoints();
+        myImageIcon = IconManager.imgic204;
     }
 
-    Color c = g.getColor();
-    g.setColor(getCurrentColor());
-    g.fillRoundRect(x, y, width, height, arc, arc);
-    g.setColor(c);
-    g.drawRoundRect(x, y, width, height, arc, arc);
+    @Override
+    public void internalDrawing(Graphics g) {
+        int w = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, w + 2 * textX);
+        if ((w1 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w1 / 2, y);
+            width = w1;
+            // updateConnectingPoints();
+        }
 
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+        Color c = g.getColor();
+        g.setColor(getCurrentColor());
+        g.fillRoundRect(x, y, width, height, arc, arc);
+        g.setColor(c);
+        g.drawRoundRect(x, y, width, height, arc, arc);
 
-    drawSingleString(g, value, x + (width - w) / 2, y + textY);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
 
-  }
+        drawSingleString(g, value, x + (width - w) / 2, y + textY);
 
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        oldValue = value;
 
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    oldValue = value;
+        // String text = getName() + ": ";
+        String s = (String) JOptionPane.showInputDialog(frame, "Action", "Setting value", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic101, null, getValue());
 
-    // String text = getName() + ": ";
-    String s = (String) JOptionPane.showInputDialog(frame, "Action", "Setting value", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic101, null, getValue());
+        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            // boolean b;
 
-    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-      // boolean b;
-
-      setValue(s);
-      recalculateSize();
-    }
-    return true;
-  }
-
-  public String getAction() {
-    return value;
-  }
-
-  public String getAction(int cpt) {
-    if (cpt < 0) {
-      return value;
+            setValue(s);
+            recalculateSize();
+        }
+        return true;
     }
 
-    String ret;
-
-    try {
-      ret = value;
-      while (cpt > 0) {
-        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-        cpt--;
-      }
-
-      int index = ret.indexOf(';');
-
-      if (index > 0) {
-        ret = ret.substring(0, index + 1);
-      }
-    } catch (Exception e) {
-      return value;
+    public String getAction() {
+        return value;
     }
-    return ret;
-  }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.AAD_ACTION;
-  }
+    public String getAction(int cpt) {
+        if (cpt < 0) {
+            return value;
+        }
 
-  @Override
-  public void setStateAction(int _stateAction) {
-    stateOfError = _stateAction;
-  }
+        String ret;
 
-  public Color getMainColor() {
-    return Color.WHITE;
-  }
+        try {
+            ret = value;
+            while (cpt > 0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt--;
+            }
+
+            int index = ret.indexOf(';');
+
+            if (index > 0) {
+                ret = ret.substring(0, index + 1);
+            }
+        } catch (Exception e) {
+            return value;
+        }
+        return ret;
+    }
+
+    @Override
+    public int getType() {
+        return TGComponentManager.AAD_ACTION;
+    }
+
+    @Override
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
+
+    public Color getMainColor() {
+        return Color.WHITE;
+    }
 
 }

@@ -13,7 +13,7 @@ package avatartranslator;
  */
 public class AvatarDummyState extends AvatarState {
 
-  public AvatarDummyState(final String name, final Object _referenceObject) {
-    super(name + "_converted_to_dummy_state", _referenceObject);
-  }
+    public AvatarDummyState(final String name, final Object _referenceObject) {
+        super(name + "_converted_to_dummy_state", _referenceObject);
+    }
 }

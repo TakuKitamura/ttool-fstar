@@ -56,341 +56,341 @@ import java.awt.event.ActionListener;
  */
 public class JDialogUPPAALGeneration extends JDialog implements ActionListener, Runnable, MasterProcessInterface {
 
-  protected MainGUI mgui;
+    protected MainGUI mgui;
 
-  // private String textJava1 = "Generate UPPAAL code in";
+    // private String textJava1 = "Generate UPPAAL code in";
 
-  public final static int TURTLE_MODE = 0;
-  public final static int DIPLODOCUS_MODE = 1;
+    public final static int TURTLE_MODE = 0;
+    public final static int DIPLODOCUS_MODE = 1;
 
-  private int editionMode;
+    private int editionMode;
 
-  protected static String pathCode;
-  protected static String nbProcesses = "10";
-  protected static String sizeInfiniteFIFO = "8";
-  protected static boolean debugGen = false;
-  protected static boolean choicesDeterministicStatic = false;
-  protected static boolean variablesAsActionsStatic = true;
+    protected static String pathCode;
+    protected static String nbProcesses = "10";
+    protected static String sizeInfiniteFIFO = "8";
+    protected static boolean debugGen = false;
+    protected static boolean choicesDeterministicStatic = false;
+    protected static boolean variablesAsActionsStatic = true;
 
-  protected final static int NOT_STARTED = 1;
-  protected final static int STARTED = 2;
-  protected final static int STOPPED = 3;
+    protected final static int NOT_STARTED = 1;
+    protected final static int STARTED = 2;
+    protected final static int STOPPED = 3;
 
-  int mode;
+    int mode;
 
-  // components
-  protected JTextArea jta;
-  protected JButton start;
-  protected JButton stop;
-  protected JButton close;
+    // components
+    protected JTextArea jta;
+    protected JButton start;
+    protected JButton stop;
+    protected JButton close;
 
-  protected JLabel genJava;
-  protected JTextField nbOfProcesses;
-  protected JTextField sizeOfInfiniteFIFO;
-  protected JTabbedPane jp1;
-  protected JScrollPane jsp;
-  protected JCheckBox debugmode, choicesDeterministic, variablesAsActions;
+    protected JLabel genJava;
+    protected JTextField nbOfProcesses;
+    protected JTextField sizeOfInfiniteFIFO;
+    protected JTabbedPane jp1;
+    protected JScrollPane jsp;
+    protected JCheckBox debugmode, choicesDeterministic, variablesAsActions;
 
-  private Thread t;
-  private boolean go = false;
-  private ProcessThread pt;
-  // private boolean hasError = false;
+    private Thread t;
+    private boolean go = false;
+    private ProcessThread pt;
+    // private boolean hasError = false;
 
-  /* Creates new form */
-  public JDialogUPPAALGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, int _mode) {
-    super(f, title, true);
+    /* Creates new form */
+    public JDialogUPPAALGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, int _mode) {
+        super(f, title, true);
 
-    mgui = _mgui;
+        mgui = _mgui;
 
-    pathCode = _pathCode;
+        pathCode = _pathCode;
 
-    editionMode = _mode;
+        editionMode = _mode;
 
-    initComponents();
-    myInitComponents();
-    pack();
+        initComponents();
+        myInitComponents();
+        pack();
 
-    // getGlassPane().addMouseListener( new MouseAdapter() {});
-    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-  }
-
-  protected void myInitComponents() {
-    mode = NOT_STARTED;
-    setButtons();
-
-    if (editionMode == TURTLE_MODE) {
-      sizeOfInfiniteFIFO.setEnabled(false);
-    } else if (editionMode == DIPLODOCUS_MODE) {
-      nbOfProcesses.setEnabled(false);
-    }
-  }
-
-  protected void initComponents() {
-
-    Container c = getContentPane();
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(new BorderLayout());
-
-    // Issue #41 Ordering of tabbed panes
-    jp1 = GraphicLib.createTabbedPane();// new JTabbedPane();
-
-    JPanel jp01 = new JPanel();
-    GridBagLayout gridbag01 = new GridBagLayout();
-    GridBagConstraints c01 = new GridBagConstraints();
-    jp01.setLayout(gridbag01);
-    jp01.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-
-    // first line panel01
-    // c1.gridwidth = 3;
-
-    c01.gridheight = 1;
-    c01.weighty = 1.0;
-    c01.weightx = 1.0;
-    c01.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c01.fill = GridBagConstraints.BOTH;
-    c01.gridheight = 1;
-
-    nbOfProcesses = new JTextField(nbProcesses, 10);
-    if (editionMode == TURTLE_MODE) {
-      c01.gridwidth = 1;
-      jp01.add(new JLabel("Nb of processes = "), c01);
-      c01.gridwidth = GridBagConstraints.REMAINDER; // end row
-      jp01.add(nbOfProcesses, c01);
+        // getGlassPane().addMouseListener( new MouseAdapter() {});
+        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
-    sizeOfInfiniteFIFO = new JTextField(sizeInfiniteFIFO, 10);
-    if (editionMode == DIPLODOCUS_MODE) {
-      c01.gridwidth = 1;
-      jp01.add(new JLabel("Size of infinite FIFO = "), c01);
-      c01.gridwidth = GridBagConstraints.REMAINDER; // end row
-      jp01.add(sizeOfInfiniteFIFO, c01);
+    protected void myInitComponents() {
+        mode = NOT_STARTED;
+        setButtons();
+
+        if (editionMode == TURTLE_MODE) {
+            sizeOfInfiniteFIFO.setEnabled(false);
+        } else if (editionMode == DIPLODOCUS_MODE) {
+            nbOfProcesses.setEnabled(false);
+        }
     }
 
-    debugmode = new JCheckBox("Print debug information");
-    debugmode.setSelected(debugGen);
-    jp01.add(debugmode, c01);
+    protected void initComponents() {
 
-    choicesDeterministic = new JCheckBox("Assume all choices as deterministic");
-    choicesDeterministic.setSelected(choicesDeterministicStatic);
-    if (editionMode == TURTLE_MODE) {
-      jp01.add(choicesDeterministic, c01);
-    }
+        Container c = getContentPane();
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(new BorderLayout());
 
-    variablesAsActions = new JCheckBox("Assume variable setting as actions for branch selection");
-    variablesAsActions.setSelected(variablesAsActionsStatic);
-    if (editionMode == TURTLE_MODE) {
-      jp01.add(variablesAsActions, c01);
-    }
+        // Issue #41 Ordering of tabbed panes
+        jp1 = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
-    if (tp instanceof TMLDesignPanel) {
-      variablesAsActions.setEnabled(false);
-    }
+        JPanel jp01 = new JPanel();
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+        jp01.setLayout(gridbag01);
+        jp01.setBorder(new javax.swing.border.TitledBorder("Code generation"));
 
-    jp01.add(new JLabel(" "), c01);
-    jp1.add("Generate code", jp01);
+        // first line panel01
+        // c1.gridwidth = 3;
 
-    c.add(jp1, BorderLayout.NORTH);
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c01.fill = GridBagConstraints.BOTH;
+        c01.gridheight = 1;
 
-    jta = new ScrolledJTextArea();
-    jta.setEditable(false);
-    jta.setMargin(new Insets(10, 10, 10, 10));
-    jta.setTabSize(3);
-    jta.append("Select options and then, click on 'start' to launch UPPAAL code generation \n");
-    Font f = new Font("Courrier", Font.BOLD, 12);
-    jta.setFont(f);
-    jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-    c.add(jsp, BorderLayout.CENTER);
-
-    start = new JButton("Start", IconManager.imgic53);
-    stop = new JButton("Stop", IconManager.imgic55);
-    close = new JButton("Close", IconManager.imgic27);
-
-    start.setPreferredSize(new Dimension(100, 30));
-    stop.setPreferredSize(new Dimension(100, 30));
-    close.setPreferredSize(new Dimension(100, 30));
-
-    start.addActionListener(this);
-    stop.addActionListener(this);
-    close.addActionListener(this);
-
-    JPanel jp2 = new JPanel();
-    jp2.add(start);
-    jp2.add(stop);
-    jp2.add(close);
-
-    c.add(jp2, BorderLayout.SOUTH);
-
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-    //
-
-    // Compare the action command to the known actions.
-    if (command.equals("Start")) {
-      startProcess();
-    } else if (command.equals("Stop")) {
-      stopProcess();
-    } else if (command.equals("Close")) {
-      closeDialog();
-    }
-  }
-
-  public void closeDialog() {
-    if (mode == STARTED) {
-      stopProcess();
-    }
-    dispose();
-    nbProcesses = nbOfProcesses.getText();
-    sizeInfiniteFIFO = sizeOfInfiniteFIFO.getText();
-    debugGen = debugmode.isSelected();
-    choicesDeterministicStatic = choicesDeterministic.isSelected();
-  }
-
-  public void stopProcess() {
-    go = false;
-    if (pt != null) {
-      pt.stopProcess();
-    }
-    mode = STOPPED;
-    setButtons();
-  }
-
-  public void startProcess() {
-    t = new Thread(this);
-    mode = STARTED;
-    setButtons();
-    go = true;
-    t.start();
-  }
-  //
-  // private void testGo() throws InterruptedException {
-  // if (go == false) {
-  // throw new InterruptedException("Stopped by user");
-  // }
-  // }
-
-  public void run() {
-    // String cmd;
-    // String list;
-
-    boolean debug, choices, variables;
-    int nb = 0;
-    int nb1;
-
-    int size = 0, size1;
-
-    // Code generation
-    if (jp1.getSelectedIndex() == 0) {
-      jta.append("Generating UPPAAL code\n");
-
-      // Manage debug
-      debug = debugmode.isSelected();
-      choices = choicesDeterministic.isSelected();
-      variables = variablesAsActions.isSelected();
-
-      // Manage nb of processes
-      try {
-        nb = Integer.decode(nbOfProcesses.getText()).intValue();
-      } catch (Exception e) {
-        jta.append("Non valid number of processes");
-        jta.append("Nb of processes is assumed to be: " + 10);
-        nb = 10;
-      }
-
-      nb1 = Math.max(nb, 1);
-
-      if (nb1 != nb) {
-        jta.append("Nb of processes is assumed to be: " + nb1);
-      }
-
-      // Manage size of infinite FIFO
-      try {
-        size = Integer.decode(sizeOfInfiniteFIFO.getText()).intValue();
-      } catch (Exception e) {
-        jta.append("Non valid size for infinite FIFO");
-        jta.append("Size is assumed to be: " + 1024);
-        size = 1024;
-      }
-
-      size1 = Math.max(size, 1);
-
-      if (size1 != size) {
-        jta.append("Size of infinite FIFO is assumed to be: " + size1);
-      }
-
-      TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
-      boolean result;
-      if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
-        result = mgui.gtm.generateUPPAALFromTML(pathCode, debug, size1, choices);
-      } else {
-        result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices, variables);
-        jta.append("UPPAAL specification generated\n");
-        jta.append("Checking the regularity of the TIF specification\n");
-        TraceManager.addDev("Regularity?");
-        boolean b = mgui.gtm.isRegularTM();
-        if (b) {
-          jta.append("UPPAAL code was optimized since the TIF specification is regular\n");
-        } else {
-          jta.append("UPPAAL code was NOT optimized since the TIF specification is NOT regular\n");
+        nbOfProcesses = new JTextField(nbProcesses, 10);
+        if (editionMode == TURTLE_MODE) {
+            c01.gridwidth = 1;
+            jp01.add(new JLabel("Nb of processes = "), c01);
+            c01.gridwidth = GridBagConstraints.REMAINDER; // end row
+            jp01.add(nbOfProcesses, c01);
         }
 
-      }
-      if (result) {
-        jta.append("UPPAAL code generated in " + pathCode);
-      } else {
-        jta.append("Error during UPPAAL code generation");
-      }
+        sizeOfInfiniteFIFO = new JTextField(sizeInfiniteFIFO, 10);
+        if (editionMode == DIPLODOCUS_MODE) {
+            c01.gridwidth = 1;
+            jp01.add(new JLabel("Size of infinite FIFO = "), c01);
+            c01.gridwidth = GridBagConstraints.REMAINDER; // end row
+            jp01.add(sizeOfInfiniteFIFO, c01);
+        }
+
+        debugmode = new JCheckBox("Print debug information");
+        debugmode.setSelected(debugGen);
+        jp01.add(debugmode, c01);
+
+        choicesDeterministic = new JCheckBox("Assume all choices as deterministic");
+        choicesDeterministic.setSelected(choicesDeterministicStatic);
+        if (editionMode == TURTLE_MODE) {
+            jp01.add(choicesDeterministic, c01);
+        }
+
+        variablesAsActions = new JCheckBox("Assume variable setting as actions for branch selection");
+        variablesAsActions.setSelected(variablesAsActionsStatic);
+        if (editionMode == TURTLE_MODE) {
+            jp01.add(variablesAsActions, c01);
+        }
+
+        TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
+        if (tp instanceof TMLDesignPanel) {
+            variablesAsActions.setEnabled(false);
+        }
+
+        jp01.add(new JLabel(" "), c01);
+        jp1.add("Generate code", jp01);
+
+        c.add(jp1, BorderLayout.NORTH);
+
+        jta = new ScrolledJTextArea();
+        jta.setEditable(false);
+        jta.setMargin(new Insets(10, 10, 10, 10));
+        jta.setTabSize(3);
+        jta.append("Select options and then, click on 'start' to launch UPPAAL code generation \n");
+        Font f = new Font("Courrier", Font.BOLD, 12);
+        jta.setFont(f);
+        jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        c.add(jsp, BorderLayout.CENTER);
+
+        start = new JButton("Start", IconManager.imgic53);
+        stop = new JButton("Stop", IconManager.imgic55);
+        close = new JButton("Close", IconManager.imgic27);
+
+        start.setPreferredSize(new Dimension(100, 30));
+        stop.setPreferredSize(new Dimension(100, 30));
+        close.setPreferredSize(new Dimension(100, 30));
+
+        start.addActionListener(this);
+        stop.addActionListener(this);
+        close.addActionListener(this);
+
+        JPanel jp2 = new JPanel();
+        jp2.add(start);
+        jp2.add(stop);
+        jp2.add(close);
+
+        c.add(jp2, BorderLayout.SOUTH);
+
     }
 
-    jta.append("\n\nReady to process next command\n");
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+        //
 
-    checkMode();
-    setButtons();
-  }
-
-  protected void checkMode() {
-    mode = NOT_STARTED;
-  }
-
-  protected void setButtons() {
-    switch (mode) {
-      case NOT_STARTED:
-        start.setEnabled(true);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        // setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        getGlassPane().setVisible(false);
-        break;
-      case STARTED:
-        start.setEnabled(false);
-        stop.setEnabled(true);
-        close.setEnabled(false);
-        getGlassPane().setVisible(true);
-        // setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        break;
-      case STOPPED:
-      default:
-        start.setEnabled(false);
-        stop.setEnabled(false);
-        close.setEnabled(true);
-        getGlassPane().setVisible(false);
-        break;
+        // Compare the action command to the known actions.
+        if (command.equals("Start")) {
+            startProcess();
+        } else if (command.equals("Stop")) {
+            stopProcess();
+        } else if (command.equals("Close")) {
+            closeDialog();
+        }
     }
-  }
 
-  public boolean hasToContinue() {
-    return go;
-  }
+    public void closeDialog() {
+        if (mode == STARTED) {
+            stopProcess();
+        }
+        dispose();
+        nbProcesses = nbOfProcesses.getText();
+        sizeInfiniteFIFO = sizeOfInfiniteFIFO.getText();
+        debugGen = debugmode.isSelected();
+        choicesDeterministicStatic = choicesDeterministic.isSelected();
+    }
 
-  public void appendOut(String s) {
-    jta.append(s);
-  }
+    public void stopProcess() {
+        go = false;
+        if (pt != null) {
+            pt.stopProcess();
+        }
+        mode = STOPPED;
+        setButtons();
+    }
 
-  @Override
-  public void setError() {
-    // hasError = true;
-  }
+    public void startProcess() {
+        t = new Thread(this);
+        mode = STARTED;
+        setButtons();
+        go = true;
+        t.start();
+    }
+    //
+    // private void testGo() throws InterruptedException {
+    // if (go == false) {
+    // throw new InterruptedException("Stopped by user");
+    // }
+    // }
+
+    public void run() {
+        // String cmd;
+        // String list;
+
+        boolean debug, choices, variables;
+        int nb = 0;
+        int nb1;
+
+        int size = 0, size1;
+
+        // Code generation
+        if (jp1.getSelectedIndex() == 0) {
+            jta.append("Generating UPPAAL code\n");
+
+            // Manage debug
+            debug = debugmode.isSelected();
+            choices = choicesDeterministic.isSelected();
+            variables = variablesAsActions.isSelected();
+
+            // Manage nb of processes
+            try {
+                nb = Integer.decode(nbOfProcesses.getText()).intValue();
+            } catch (Exception e) {
+                jta.append("Non valid number of processes");
+                jta.append("Nb of processes is assumed to be: " + 10);
+                nb = 10;
+            }
+
+            nb1 = Math.max(nb, 1);
+
+            if (nb1 != nb) {
+                jta.append("Nb of processes is assumed to be: " + nb1);
+            }
+
+            // Manage size of infinite FIFO
+            try {
+                size = Integer.decode(sizeOfInfiniteFIFO.getText()).intValue();
+            } catch (Exception e) {
+                jta.append("Non valid size for infinite FIFO");
+                jta.append("Size is assumed to be: " + 1024);
+                size = 1024;
+            }
+
+            size1 = Math.max(size, 1);
+
+            if (size1 != size) {
+                jta.append("Size of infinite FIFO is assumed to be: " + size1);
+            }
+
+            TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
+            boolean result;
+            if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+                result = mgui.gtm.generateUPPAALFromTML(pathCode, debug, size1, choices);
+            } else {
+                result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices, variables);
+                jta.append("UPPAAL specification generated\n");
+                jta.append("Checking the regularity of the TIF specification\n");
+                TraceManager.addDev("Regularity?");
+                boolean b = mgui.gtm.isRegularTM();
+                if (b) {
+                    jta.append("UPPAAL code was optimized since the TIF specification is regular\n");
+                } else {
+                    jta.append("UPPAAL code was NOT optimized since the TIF specification is NOT regular\n");
+                }
+
+            }
+            if (result) {
+                jta.append("UPPAAL code generated in " + pathCode);
+            } else {
+                jta.append("Error during UPPAAL code generation");
+            }
+        }
+
+        jta.append("\n\nReady to process next command\n");
+
+        checkMode();
+        setButtons();
+    }
+
+    protected void checkMode() {
+        mode = NOT_STARTED;
+    }
+
+    protected void setButtons() {
+        switch (mode) {
+            case NOT_STARTED:
+                start.setEnabled(true);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                // setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                getGlassPane().setVisible(false);
+                break;
+            case STARTED:
+                start.setEnabled(false);
+                stop.setEnabled(true);
+                close.setEnabled(false);
+                getGlassPane().setVisible(true);
+                // setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                break;
+            case STOPPED:
+            default:
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                close.setEnabled(true);
+                getGlassPane().setVisible(false);
+                break;
+        }
+    }
+
+    public boolean hasToContinue() {
+        return go;
+    }
+
+    public void appendOut(String s) {
+        jta.append(s);
+    }
+
+    @Override
+    public void setError() {
+        // hasError = true;
+    }
 }

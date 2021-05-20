@@ -51,134 +51,134 @@ import avatartranslator.modelchecker.SpecificationBlock;
  * @author Florian LUGOU
  */
 public class AvatarActionAssignment implements AvatarAction {
-  AvatarLeftHand leftHand;
-  AvatarTerm rightHand;
-  AvatarExpressionSolver actionSolver;
-  private AvatarExpressionAttribute leftAttribute;
+    AvatarLeftHand leftHand;
+    AvatarTerm rightHand;
+    AvatarExpressionSolver actionSolver;
+    private AvatarExpressionAttribute leftAttribute;
 
-  public AvatarActionAssignment(AvatarLeftHand _leftHand, AvatarTerm _rightHand) {
-    this.leftHand = _leftHand;
-    this.rightHand = _rightHand;
-    this.actionSolver = null;
-    this.leftAttribute = null;
-  }
-
-  public boolean isAVariableSetting() {
-    return true;
-  }
-
-  public boolean isAMethodCall() {
-    return false;
-  }
-
-  public AvatarLeftHand getLeftHand() {
-    return this.leftHand;
-  }
-
-  public AvatarTerm getRightHand() {
-    return this.rightHand;
-  }
-
-  public AvatarExpressionSolver getActionSolver() {
-    return actionSolver;
-  }
-
-  public boolean isABasicVariableSetting() {
-    return (this.leftHand instanceof AvatarAttribute || this.leftHand instanceof AvatarTuple)
-        && (!(this.rightHand instanceof AvatarTermFunction));
-  }
-
-  public String getName() {
-    return this.toString();
-  }
-
-  public String toString() {
-    return this.leftHand.getName() + " = " + this.rightHand.getName();
-  }
-
-  public boolean buildActionSolver(AvatarBlock block) {
-    boolean res;
-    actionSolver = new AvatarExpressionSolver(rightHand.getName());
-    res = actionSolver.buildExpression(block);
-    AvatarElement ae = AvatarExpressionAttribute.getElement(leftHand.getName(), block);
-    if (AvatarExpressionSolver.containsElementAttribute(ae)) {
-      leftAttribute = AvatarExpressionSolver.getElementAttribute(ae);
-    } else {
-      leftAttribute = new AvatarExpressionAttribute(block, leftHand.getName());
-      res &= !leftAttribute.hasError();
-      if (res) {
-        AvatarExpressionSolver.addElementAttribute(ae, leftAttribute);
-      }
+    public AvatarActionAssignment(AvatarLeftHand _leftHand, AvatarTerm _rightHand) {
+        this.leftHand = _leftHand;
+        this.rightHand = _rightHand;
+        this.actionSolver = null;
+        this.leftAttribute = null;
     }
-    return res;
-  }
 
-  public void executeActionSolver(SpecificationBlock sb) {
-    leftAttribute.setValue(sb, actionSolver.getResult(sb));
-  }
-
-  @Override
-  public boolean containsAMethodCall() {
-    return this.rightHand.containsAMethodCall();
-  }
-
-  @Override
-  public AvatarActionAssignment clone() {
-    return new AvatarActionAssignment(this.leftHand.clone(), this.rightHand.clone());
-  }
-
-  @Override
-  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-    if (this.leftHand instanceof AvatarAttribute) {
-      AvatarAttribute at = attributesMapping.get(this.leftHand);
-      if (at == null) {
-        // Search by name
-        for (AvatarAttribute atbis : attributesMapping.keySet()) {
-          if (atbis.getName().equals(this.leftHand.getName())) {
-            at = attributesMapping.get(atbis);
-            break;
-          }
-        }
-
-      }
-
-      if (at == null) {
-        // TraceManager.addDev("No correspondance for " + this.term1.getName());
-      } else {
-        // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
-        // " / " + at.getName());
-        this.leftHand = at;
-        // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
-        // this.term1.getName());
-      }
-    } else
-      this.leftHand.replaceAttributes(attributesMapping);
-
-    if (this.rightHand instanceof AvatarAttribute) {
-      AvatarAttribute at = attributesMapping.get(this.leftHand);
-      if (at == null) {
-        // Search by name
-        for (AvatarAttribute atbis : attributesMapping.keySet()) {
-          if (atbis.getName().equals(this.rightHand.getName())) {
-            at = attributesMapping.get(atbis);
-            break;
-          }
-        }
-
-      }
-
-      if (at == null) {
-        // TraceManager.addDev("No correspondance for " + this.term1.getName());
-      } else {
-        // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
-        // " / " + at.getName());
-        this.rightHand = at;
-        // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
-        // this.term1.getName());
-      }
-    } else {
-      TraceManager.addDev("Right:" + this.rightHand.getClass().getCanonicalName());
-      this.rightHand.replaceAttributes(attributesMapping);
+    public boolean isAVariableSetting() {
+        return true;
     }
-  }
+
+    public boolean isAMethodCall() {
+        return false;
+    }
+
+    public AvatarLeftHand getLeftHand() {
+        return this.leftHand;
+    }
+
+    public AvatarTerm getRightHand() {
+        return this.rightHand;
+    }
+
+    public AvatarExpressionSolver getActionSolver() {
+        return actionSolver;
+    }
+
+    public boolean isABasicVariableSetting() {
+        return (this.leftHand instanceof AvatarAttribute || this.leftHand instanceof AvatarTuple)
+                && (!(this.rightHand instanceof AvatarTermFunction));
+    }
+
+    public String getName() {
+        return this.toString();
+    }
+
+    public String toString() {
+        return this.leftHand.getName() + " = " + this.rightHand.getName();
+    }
+
+    public boolean buildActionSolver(AvatarBlock block) {
+        boolean res;
+        actionSolver = new AvatarExpressionSolver(rightHand.getName());
+        res = actionSolver.buildExpression(block);
+        AvatarElement ae = AvatarExpressionAttribute.getElement(leftHand.getName(), block);
+        if (AvatarExpressionSolver.containsElementAttribute(ae)) {
+            leftAttribute = AvatarExpressionSolver.getElementAttribute(ae);
+        } else {
+            leftAttribute = new AvatarExpressionAttribute(block, leftHand.getName());
+            res &= !leftAttribute.hasError();
+            if (res) {
+                AvatarExpressionSolver.addElementAttribute(ae, leftAttribute);
+            }
+        }
+        return res;
+    }
+
+    public void executeActionSolver(SpecificationBlock sb) {
+        leftAttribute.setValue(sb, actionSolver.getResult(sb));
+    }
+
+    @Override
+    public boolean containsAMethodCall() {
+        return this.rightHand.containsAMethodCall();
+    }
+
+    @Override
+    public AvatarActionAssignment clone() {
+        return new AvatarActionAssignment(this.leftHand.clone(), this.rightHand.clone());
+    }
+
+    @Override
+    public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        if (this.leftHand instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.leftHand);
+            if (at == null) {
+                // Search by name
+                for (AvatarAttribute atbis : attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.leftHand.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+
+            }
+
+            if (at == null) {
+                // TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                // " / " + at.getName());
+                this.leftHand = at;
+                // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
+                // this.term1.getName());
+            }
+        } else
+            this.leftHand.replaceAttributes(attributesMapping);
+
+        if (this.rightHand instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.leftHand);
+            if (at == null) {
+                // Search by name
+                for (AvatarAttribute atbis : attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.rightHand.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+
+            }
+
+            if (at == null) {
+                // TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                // TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                // " / " + at.getName());
+                this.rightHand = at;
+                // TraceManager.addDev("Next expr " + this.toString() + " name of var=" +
+                // this.term1.getName());
+            }
+        } else {
+            TraceManager.addDev("Right:" + this.rightHand.getClass().getCanonicalName());
+            this.rightHand.replaceAttributes(attributesMapping);
+        }
+    }
 }

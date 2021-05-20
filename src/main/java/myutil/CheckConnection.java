@@ -51,114 +51,114 @@ import java.net.URLConnection;
  * @author Huy TRUONG
  */
 public final class CheckConnection {
-  // TODO: input: URL or IPADRESS in STRING FORMAT. //should return true or false
+    // TODO: input: URL or IPADRESS in STRING FORMAT. //should return true or false
 
-  private static final String default_url_1 = "google.com";
-  private static final String default_ip = "8.8.8.8";
+    private static final String default_url_1 = "google.com";
+    private static final String default_ip = "8.8.8.8";
 
-  public static final boolean checkInternetConnection() {
-    try {
-      if (checkConnectionWithAddr(default_url_1) && checkConnectionWithAddr(default_ip)) {
-        return Boolean.TRUE;
-      } else {
-        return Boolean.FALSE;
-      }
-    } catch (IOException e) {
-      return Boolean.FALSE;
-    } catch (InterruptedException e) {
-      return Boolean.FALSE;
+    public static final boolean checkInternetConnection() {
+        try {
+            if (checkConnectionWithAddr(default_url_1) && checkConnectionWithAddr(default_ip)) {
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
+        } catch (IOException e) {
+            return Boolean.FALSE;
+        } catch (InterruptedException e) {
+            return Boolean.FALSE;
+        }
     }
-  }
 
-  public static final boolean checkConnectionWithAddr(String addr) throws IOException, InterruptedException {
-    Process ping = Runtime.getRuntime().exec("ping -c 2 " + addr);
-    int returnVal = ping.waitFor();
-    boolean reachable = (returnVal == 0);
-    return reachable;
-  }
-
-  public static final boolean checkConnectionWithURL(String _url) {
-    Boolean isConnect = false;
-    URL url;
-    try {
-      url = new URL(_url);
-      URLConnection conn = url.openConnection();
-      conn.connect();
-      isConnect = true;
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
+    public static final boolean checkConnectionWithAddr(String addr) throws IOException, InterruptedException {
+        Process ping = Runtime.getRuntime().exec("ping -c 2 " + addr);
+        int returnVal = ping.waitFor();
+        boolean reachable = (returnVal == 0);
+        return reachable;
     }
-    return isConnect;
-  }
 
-  /*
-   * public static final int KO_RESOLVE_DOMAIN = 2; public static final int
-   * OK_DEFAULT_URL = 1;
-   * 
-   * private static final String CHECK_DEFAULT_URL = "www.google.com"; private
-   * static final String CHECK_DEAFULT_IP = "8.8.8.8";
-   * 
-   * 
-   * 
-   * 
-   * public void
-   * 
-   *//**
-      * Check connection to specific ip address
-      * 
-      * @return
-      */
-  /*
-   * public boolean canConnectToAddr(){ InetAddress addr = new InetAddress()
-   * return Boolean.TRUE; }
-   * 
-   *//**
-      * Check connection to default ipaddr : 8.8.8.8
-      * 
-      * @return
-      */
-  /*
-   * private boolean canConnectToDefaultAddr(){ return Boolean.TRUE; }
-   * 
-   *//**
-      * Check connection to default URL: www.google.com
-      * 
-      * @return
-      */
-  /*
-   * private boolean canConnectToDefaultURL(){ Boolean isConnect = Boolean.FALSE;
-   * URL url; try { url = new URL(CHECK_DEFAULT_URL); URLConnection conn =
-   * url.openConnection(); conn.connect(); isConnect= true; } catch
-   * (MalformedURLException e) { e.printStackTrace(); } catch (IOException e) {
-   * e.printStackTrace(); } return isConnect; }
-   * 
-   *//**
-      * check the connection to specific URL
-      * 
-      * @param u: string of url
-      * @return: TRUE: be able to connect to URL.
-      * @return: FALSE: not be able to connect to URL.
-      */
-  /*
-   * public boolean canConnectToURL(String u){ Boolean isConnect = Boolean.FALSE;
-   * URL url; try { url = new URL(u); URLConnection conn = url.openConnection();
-   * conn.connect(); isConnect= true; } catch (MalformedURLException e) {
-   * e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
-   * 
-   * return isConnect; }
-   * 
-   *//**
-      * Check the Internet connection by try to connect to URL "www.google.com" and
-      * ip address 8.8.8.8
-      *
-      * @return: OK_DEFAULT_URL = be able to connect to www.google.com
-      * @return: KO_RESOLVE_DOMAIN = be able to connect to ip 8.8.8.8, but can
-      *          resolve www.google.com
-      *//*
-         * public int isInternetConnection(){ if (canConnectToDefaultURL()) return
-         * OK_DEFAULT_URL; if (!canConnectToDefaultURL()){ if
-         * (canConnectToDefaultAddr()) return KO_RESOLVE_DOMAIN; } return 0; }
-         */
+    public static final boolean checkConnectionWithURL(String _url) {
+        Boolean isConnect = false;
+        URL url;
+        try {
+            url = new URL(_url);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+            isConnect = true;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isConnect;
+    }
+
+    /*
+     * public static final int KO_RESOLVE_DOMAIN = 2; public static final int
+     * OK_DEFAULT_URL = 1;
+     * 
+     * private static final String CHECK_DEFAULT_URL = "www.google.com"; private
+     * static final String CHECK_DEAFULT_IP = "8.8.8.8";
+     * 
+     * 
+     * 
+     * 
+     * public void
+     * 
+     *//**
+        * Check connection to specific ip address
+        * 
+        * @return
+        */
+    /*
+     * public boolean canConnectToAddr(){ InetAddress addr = new InetAddress()
+     * return Boolean.TRUE; }
+     * 
+     *//**
+        * Check connection to default ipaddr : 8.8.8.8
+        * 
+        * @return
+        */
+    /*
+     * private boolean canConnectToDefaultAddr(){ return Boolean.TRUE; }
+     * 
+     *//**
+        * Check connection to default URL: www.google.com
+        * 
+        * @return
+        */
+    /*
+     * private boolean canConnectToDefaultURL(){ Boolean isConnect = Boolean.FALSE;
+     * URL url; try { url = new URL(CHECK_DEFAULT_URL); URLConnection conn =
+     * url.openConnection(); conn.connect(); isConnect= true; } catch
+     * (MalformedURLException e) { e.printStackTrace(); } catch (IOException e) {
+     * e.printStackTrace(); } return isConnect; }
+     * 
+     *//**
+        * check the connection to specific URL
+        * 
+        * @param u: string of url
+        * @return: TRUE: be able to connect to URL.
+        * @return: FALSE: not be able to connect to URL.
+        */
+    /*
+     * public boolean canConnectToURL(String u){ Boolean isConnect = Boolean.FALSE;
+     * URL url; try { url = new URL(u); URLConnection conn = url.openConnection();
+     * conn.connect(); isConnect= true; } catch (MalformedURLException e) {
+     * e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+     * 
+     * return isConnect; }
+     * 
+     *//**
+        * Check the Internet connection by try to connect to URL "www.google.com" and
+        * ip address 8.8.8.8
+        *
+        * @return: OK_DEFAULT_URL = be able to connect to www.google.com
+        * @return: KO_RESOLVE_DOMAIN = be able to connect to ip 8.8.8.8, but can
+        *          resolve www.google.com
+        *//*
+           * public int isInternetConnection(){ if (canConnectToDefaultURL()) return
+           * OK_DEFAULT_URL; if (!canConnectToDefaultURL()){ if
+           * (canConnectToDefaultAddr()) return KO_RESOLVE_DOMAIN; } return 0; }
+           */
 }

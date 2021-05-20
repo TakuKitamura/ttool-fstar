@@ -51,155 +51,155 @@ import java.util.List;
  * @author Ludovic APVRILLE
  */
 public class DDStructSynchro {
-  private List<String> list;
+    private List<String> list;
 
-  public DDStructSynchro() {
-    list = new LinkedList<String>();
-  }
+    public DDStructSynchro() {
+        list = new LinkedList<String>();
+    }
 
-  public DDStructSynchro(String actionValue, TClass t) {
-    list = new LinkedList<String>();
-    constructList(actionValue, t);
-  }
+    public DDStructSynchro(String actionValue, TClass t) {
+        list = new LinkedList<String>();
+        constructList(actionValue, t);
+    }
 
-  // assumes that it contains no "!" operator
-  public void constructList(String actionValue, TClass t) {
-    String stmp, paramName;
-    Param p;
-    char c = '?';
+    // assumes that it contains no "!" operator
+    public void constructList(String actionValue, TClass t) {
+        String stmp, paramName;
+        Param p;
+        char c = '?';
 
-    int index, index1, index2, index3, index4, index5;
-    String s = actionValue;
+        int index, index1, index2, index3, index4, index5;
+        String s = actionValue;
 
-    if ((s == null) || (s.length() == 0))
-      return;
+        if ((s == null) || (s.length() == 0))
+            return;
 
-    while ((index = s.indexOf(c)) != -1) {
-      stmp = s.substring(index + 1, s.length());
-      index1 = stmp.indexOf('!');
-      index2 = stmp.indexOf('?');
-      index3 = stmp.length();
-      if (index1 == -1) {
-        index1 = index3;
-      }
-      if (index2 == -1) {
-        index2 = index3;
-      }
-      index4 = Math.min(index1, index2);
-      index4 = Math.min(index4, index3);
+        while ((index = s.indexOf(c)) != -1) {
+            stmp = s.substring(index + 1, s.length());
+            index1 = stmp.indexOf('!');
+            index2 = stmp.indexOf('?');
+            index3 = stmp.length();
+            if (index1 == -1) {
+                index1 = index3;
+            }
+            if (index2 == -1) {
+                index2 = index3;
+            }
+            index4 = Math.min(index1, index2);
+            index4 = Math.min(index4, index3);
 
-      if (index4 > 0) {
-        paramName = s.substring(index + 1, index4 + index + 1);
-        paramName = paramName.trim();
-        index5 = paramName.indexOf(":");
-        if (index5 > 0) {
-          paramName = paramName.substring(0, index5);
+            if (index4 > 0) {
+                paramName = s.substring(index + 1, index4 + index + 1);
+                paramName = paramName.trim();
+                index5 = paramName.indexOf(":");
+                if (index5 > 0) {
+                    paramName = paramName.substring(0, index5);
+                }
+                p = t.getParamByName(paramName);
+                // TraceManager.addDevln("Param=" + paramName);
+                if (p != null) {
+                    list.add(p.getType());
+                } else {
+                    return;
+                }
+            }
+            s = s.substring(index4 + index + 1, s.length());
         }
-        p = t.getParamByName(paramName);
-        // TraceManager.addDevln("Param=" + paramName);
-        if (p != null) {
-          list.add(p.getType());
-        } else {
-          return;
+    }
+
+    public String getRegularCall() {
+
+        // TraceManager.addDevln("synchro size=" + list.size());
+
+        String call = "";
+        int x = 0;
+        int b = 0;
+        String type;
+
+        Iterator<String> iterator = list.listIterator();
+
+        while (iterator.hasNext()) {
+            type = iterator.next();
+            if (type.compareTo(Param.NAT) == 0) {
+                call += "?x" + x + ":nat";
+                x++;
+            } else {
+                call += "?b" + b + ":nat";
+                b++;
+            }
         }
-      }
-      s = s.substring(index4 + index + 1, s.length());
-    }
-  }
 
-  public String getRegularCall() {
-
-    // TraceManager.addDevln("synchro size=" + list.size());
-
-    String call = "";
-    int x = 0;
-    int b = 0;
-    String type;
-
-    Iterator<String> iterator = list.listIterator();
-
-    while (iterator.hasNext()) {
-      type = iterator.next();
-      if (type.compareTo(Param.NAT) == 0) {
-        call += "?x" + x + ":nat";
-        x++;
-      } else {
-        call += "?b" + b + ":nat";
-        b++;
-      }
+        return call;
     }
 
-    return call;
-  }
+    public int nbNat() {
+        int nb = 0;
+        Iterator<String> iterator = list.listIterator();
+        String type;
 
-  public int nbNat() {
-    int nb = 0;
-    Iterator<String> iterator = list.listIterator();
-    String type;
+        while (iterator.hasNext()) {
+            type = iterator.next();
+            if (type.compareTo(Param.NAT) == 0) {
+                nb++;
+            }
+        }
 
-    while (iterator.hasNext()) {
-      type = iterator.next();
-      if (type.compareTo(Param.NAT) == 0) {
-        nb++;
-      }
+        return nb;
     }
 
-    return nb;
-  }
+    public int nbBool() {
+        int nb = 0;
+        Iterator<String> iterator = list.listIterator();
+        String type;
+        while (iterator.hasNext()) {
+            type = iterator.next();
+            if (type.compareTo(Param.BOOL) == 0) {
+                nb++;
+            }
+        }
 
-  public int nbBool() {
-    int nb = 0;
-    Iterator<String> iterator = list.listIterator();
-    String type;
-    while (iterator.hasNext()) {
-      type = iterator.next();
-      if (type.compareTo(Param.BOOL) == 0) {
-        nb++;
-      }
+        return nb;
     }
 
-    return nb;
-  }
-
-  public int compareTo(Object o) {
-    if (o instanceof DDStructSynchro) {
-      DDStructSynchro ddss = (DDStructSynchro) o;
-      List<String> listd = ddss.getList();
-      if (list.size() == listd.size()) {
-        Iterator<String> li1 = list.listIterator();
-        Iterator<String> li2 = listd.listIterator();
-        String s1, s2;
-        while (li1.hasNext()) {
-          s1 = li1.next();
-          s2 = li2.next();
-          if (s1.compareTo(s2) != 0) {
+    public int compareTo(Object o) {
+        if (o instanceof DDStructSynchro) {
+            DDStructSynchro ddss = (DDStructSynchro) o;
+            List<String> listd = ddss.getList();
+            if (list.size() == listd.size()) {
+                Iterator<String> li1 = list.listIterator();
+                Iterator<String> li2 = listd.listIterator();
+                String s1, s2;
+                while (li1.hasNext()) {
+                    s1 = li1.next();
+                    s2 = li2.next();
+                    if (s1.compareTo(s2) != 0) {
+                        return -1;
+                    }
+                }
+                return 0;
+            }
             return -1;
-          }
         }
-        return 0;
-      }
-      return -1;
+        return -1;
     }
-    return -1;
-  }
 
-  public List<String> getList() {
-    return list;
-  }
-
-  public int size() {
-    return list.size();
-  }
-
-  public boolean isInList(List<DDStructSynchro> _list) {
-    Iterator<DDStructSynchro> iterator = _list.listIterator();
-    DDStructSynchro ddss;
-    while (iterator.hasNext()) {
-      ddss = iterator.next();
-      if (compareTo(ddss) == 0) {
-        return true;
-      }
+    public List<String> getList() {
+        return list;
     }
-    return false;
-  }
+
+    public int size() {
+        return list.size();
+    }
+
+    public boolean isInList(List<DDStructSynchro> _list) {
+        Iterator<DDStructSynchro> iterator = _list.listIterator();
+        DDStructSynchro ddss;
+        while (iterator.hasNext()) {
+            ddss = iterator.next();
+            if (compareTo(ddss) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 } // Class

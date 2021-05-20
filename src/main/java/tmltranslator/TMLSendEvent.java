@@ -46,18 +46,18 @@ package tmltranslator;
  */
 public class TMLSendEvent extends TMLActivityElementEvent {
 
-  public TMLSendEvent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLSendEvent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public String toString() {
-    return "Send event:" + event.getName() + "(" + getAllParams() + ")";
-  }
+    public String toString() {
+        return "Send event:" + event.getName() + "(" + getAllParams() + ")";
+    }
 
-  public String customExtraToXML() {
-    String ret = " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" ";
-    ret += " blocking=\"" + event.isBlocking() + "\" ";
-    return ret;
-  }
+    public String customExtraToXML() {
+        String ret = " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" ";
+        ret += " blocking=\"" + event.isBlocking() + "\" ";
+        return ret;
+    }
 
 }

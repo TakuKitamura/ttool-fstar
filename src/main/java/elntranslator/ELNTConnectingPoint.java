@@ -47,33 +47,33 @@ package elntranslator;
  */
 
 public class ELNTConnectingPoint {
-  private String name;
+    private String name;
 
-  private ELNTConnector ownerConnector;
-  private ELNTComponent ownerComponent;
+    private ELNTConnector ownerConnector;
+    private ELNTComponent ownerComponent;
 
-  public ELNTConnectingPoint(String _name, ELNTComponent _ownerComponent) {
-    name = _name;
-    ownerComponent = _ownerComponent;
-  }
+    public ELNTConnectingPoint(String _name, ELNTComponent _ownerComponent) {
+        name = _name;
+        ownerComponent = _ownerComponent;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public ELNTConnector getConnector() {
-    return ownerConnector;
-  }
+    public ELNTConnector getConnector() {
+        return ownerConnector;
+    }
 
-  public void setOwnerConnector(ELNTConnector _ownerConnector) {
-    ownerConnector = _ownerConnector;
-  }
+    public void setOwnerConnector(ELNTConnector _ownerConnector) {
+        ownerConnector = _ownerConnector;
+    }
 
-  public ELNTComponent getComponent() {
-    return ownerComponent;
-  }
+    public ELNTComponent getComponent() {
+        return ownerComponent;
+    }
 
-  boolean ConnectingPointIsFree() {
-    return ownerConnector == null;
-  }
+    boolean ConnectingPointIsFree() {
+        return ownerConnector == null;
+    }
 }

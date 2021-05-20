@@ -48,55 +48,55 @@ import java.util.Objects;
  */
 public class TMLDelay extends TMLActivityElementWithIntervalAction {
 
-  private String timeUnit = "ns"; // Shall be either "ns" or "us" or "ms" or "s"
+    private String timeUnit = "ns"; // Shall be either "ns" or "us" or "ms" or "s"
 
-  public TMLDelay(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
-
-  public void setUnit(String _timeUnit) {
-    timeUnit = _timeUnit;
-  }
-
-  public String getUnit() {
-    return timeUnit;
-  }
-
-  public static boolean isAValidUnit(String unit) {
-    if (unit.equals("ns")) {
-      return true;
-    } else if (unit.equals("us")) {
-      return true;
-    } else if (unit.equals("ms")) {
-      return true;
-    } else if (unit.equals("s")) {
-      return true;
+    public TMLDelay(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
     }
 
-    return false;
-  }
-
-  public String getMasterClockFactor() {
-    if (timeUnit.equals("ns")) {
-      return "/1000";
-    } else if (timeUnit.equals("us")) {
-      return "";
-    } else if (timeUnit.equals("ms")) {
-      return "*1000";
-    } else if (timeUnit.equals("s")) {
-      return "*1000000";
+    public void setUnit(String _timeUnit) {
+        timeUnit = _timeUnit;
     }
-    return "";
-  }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLDelay))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
+    public String getUnit() {
+        return timeUnit;
+    }
 
-    TMLDelay tmlDelay = (TMLDelay) o;
-    return Objects.equals(timeUnit, tmlDelay.getUnit());
-  }
+    public static boolean isAValidUnit(String unit) {
+        if (unit.equals("ns")) {
+            return true;
+        } else if (unit.equals("us")) {
+            return true;
+        } else if (unit.equals("ms")) {
+            return true;
+        } else if (unit.equals("s")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public String getMasterClockFactor() {
+        if (timeUnit.equals("ns")) {
+            return "/1000";
+        } else if (timeUnit.equals("us")) {
+            return "";
+        } else if (timeUnit.equals("ms")) {
+            return "*1000";
+        } else if (timeUnit.equals("s")) {
+            return "*1000000";
+        }
+        return "";
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLDelay))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+
+        TMLDelay tmlDelay = (TMLDelay) o;
+        return Objects.equals(timeUnit, tmlDelay.getUnit());
+    }
 
 }

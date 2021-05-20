@@ -53,150 +53,150 @@ import org.apache.commons.math3.distribution.*;
  */
 public class MyMath {
 
-  public static int gcd(int[] numbers) {
-    if ((numbers == null) || (numbers.length == 0)) {
-      return -1;
+    public static int gcd(int[] numbers) {
+        if ((numbers == null) || (numbers.length == 0)) {
+            return -1;
+        }
+
+        if (numbers.length == 1) {
+            return Math.abs(numbers[0]);
+        }
+
+        int egcd = egcd(Math.abs(numbers[0]), Math.abs(numbers[1]));
+        int index = 2;
+        while (index < numbers.length) {
+            egcd = egcd(egcd, Math.abs(numbers[index]));
+            index++;
+        }
+
+        return egcd;
+
     }
 
-    if (numbers.length == 1) {
-      return Math.abs(numbers[0]);
+    // Euclidian algorithm for GCD
+    // a and b must be positive
+    public static int egcd(int a, int b) {
+
+        if (a == 0)
+
+            return b;
+
+        while (b != 0) {
+            if (a > b)
+                a = a - b;
+            else
+                b = b - a;
+        }
+
+        return a;
+
     }
 
-    int egcd = egcd(Math.abs(numbers[0]), Math.abs(numbers[1]));
-    int index = 2;
-    while (index < numbers.length) {
-      egcd = egcd(egcd, Math.abs(numbers[index]));
-      index++;
+    // Triangular distribution
+    // a,b: interval min and max
+    // c: std deviation
+    public static double triangularDistribution(double a, double b, double c) {
+        double F = (c - a) / (b - a);
+        double rand = Math.random();
+        if (rand < F) {
+            return a + Math.sqrt(rand * (b - a) * (c - a));
+        } else {
+            return b - Math.sqrt((1 - rand) * (b - a) * (b - c));
+        }
     }
 
-    return egcd;
-
-  }
-
-  // Euclidian algorithm for GCD
-  // a and b must be positive
-  public static int egcd(int a, int b) {
-
-    if (a == 0)
-
-      return b;
-
-    while (b != 0) {
-      if (a > b)
-        a = a - b;
-      else
-        b = b - a;
+    // Gaussian distribution
+    // a: min of interval
+    // b : max of interval
+    // c: standard deviation
+    public static double gaussianDistribution(double a, double b, double c) {
+        Random r = new Random();
+        double n = r.nextGaussian();
+        // System.out.println("1. n=" + n);
+        n = n * c;
+        // System.out.println("1.1 n=" + n);
+        n = n + (b + a) / 2;
+        // System.out.println("1.2 n=" + n);
+        if (n < a) {
+            return gaussianDistribution(a, b, c);
+        }
+        // System.out.println("1.3 n=" + n);
+        if (n > b) {
+            return gaussianDistribution(a, b, c);
+        }
+        // n = Math.max(a, n);
+        // System.out.println("2. n=" + n);
+        return n;
     }
 
-    return a;
-
-  }
-
-  // Triangular distribution
-  // a,b: interval min and max
-  // c: std deviation
-  public static double triangularDistribution(double a, double b, double c) {
-    double F = (c - a) / (b - a);
-    double rand = Math.random();
-    if (rand < F) {
-      return a + Math.sqrt(rand * (b - a) * (c - a));
-    } else {
-      return b - Math.sqrt((1 - rand) * (b - a) * (b - c));
+    public static double logNormalDistribution(double a, double b, double sigma, double mean) {
+        // TraceManager.addDev("LOG NORMAL. SIGMA=" + sigma + " MEAN=" + mean);
+        LogNormalDistribution lnd = new LogNormalDistribution(sigma, mean);
+        double val = lnd.sample();
+        val += a;
+        if (val > b) {
+            return logNormalDistribution(a, b, sigma, mean);
+        }
+        return val;
     }
-  }
 
-  // Gaussian distribution
-  // a: min of interval
-  // b : max of interval
-  // c: standard deviation
-  public static double gaussianDistribution(double a, double b, double c) {
-    Random r = new Random();
-    double n = r.nextGaussian();
-    // System.out.println("1. n=" + n);
-    n = n * c;
-    // System.out.println("1.1 n=" + n);
-    n = n + (b + a) / 2;
-    // System.out.println("1.2 n=" + n);
-    if (n < a) {
-      return gaussianDistribution(a, b, c);
+    public static double exponentialDistribution(double a, double b, double mean) {
+        ExponentialDistribution ed = new ExponentialDistribution(mean);
+        double val = ed.sample();
+        val += a;
+        if (val > b) {
+            return exponentialDistribution(a, b, mean);
+        }
+        return val;
     }
-    // System.out.println("1.3 n=" + n);
-    if (n > b) {
-      return gaussianDistribution(a, b, c);
+
+    public static double weibullDistribution(double a, double b, double shape, double scale) {
+        WeibullDistribution wd = new WeibullDistribution(shape, scale);
+        double val = wd.sample();
+        val += a;
+        if (val > b) {
+            return weibullDistribution(a, b, shape, scale);
+        }
+        return val;
     }
-    // n = Math.max(a, n);
-    // System.out.println("2. n=" + n);
-    return n;
-  }
 
-  public static double logNormalDistribution(double a, double b, double sigma, double mean) {
-    // TraceManager.addDev("LOG NORMAL. SIGMA=" + sigma + " MEAN=" + mean);
-    LogNormalDistribution lnd = new LogNormalDistribution(sigma, mean);
-    double val = lnd.sample();
-    val += a;
-    if (val > b) {
-      return logNormalDistribution(a, b, sigma, mean);
+    /**
+     * Extract the positive or negative int values from a String "-" is considered
+     * only as an unary operator
+     *
+     *
+     * @param s Input String
+     */
+    public static List<Integer> extractIntegerValues(String s) {
+        ArrayList<Integer> retList = new ArrayList<>();
+
+        Pattern p = Pattern.compile("-?\\d+");
+        Matcher m = p.matcher(s);
+        while (m.find()) {
+            try {
+                retList.add(Integer.decode(m.group()));
+            } catch (Exception e) {
+
+            }
+        }
+        return retList;
     }
-    return val;
-  }
 
-  public static double exponentialDistribution(double a, double b, double mean) {
-    ExponentialDistribution ed = new ExponentialDistribution(mean);
-    double val = ed.sample();
-    val += a;
-    if (val > b) {
-      return exponentialDistribution(a, b, mean);
+    /**
+     * @param s    Input String
+     * @param maxV Maximum of the interval. Expected to be higher than minV
+     * @return whether the provided String contains positive or negative int values
+     *         outside of the input interval
+     */
+    public static boolean hasIntegerValueOverMax(String s, int maxV) {
+        List<Integer> listOfInt = extractIntegerValues(s);
+        for (Integer i : listOfInt) {
+            int v = Math.abs(i.intValue());
+            if (v > maxV) {
+                return true;
+            }
+        }
+        return false;
     }
-    return val;
-  }
-
-  public static double weibullDistribution(double a, double b, double shape, double scale) {
-    WeibullDistribution wd = new WeibullDistribution(shape, scale);
-    double val = wd.sample();
-    val += a;
-    if (val > b) {
-      return weibullDistribution(a, b, shape, scale);
-    }
-    return val;
-  }
-
-  /**
-   * Extract the positive or negative int values from a String "-" is considered
-   * only as an unary operator
-   *
-   *
-   * @param s Input String
-   */
-  public static List<Integer> extractIntegerValues(String s) {
-    ArrayList<Integer> retList = new ArrayList<>();
-
-    Pattern p = Pattern.compile("-?\\d+");
-    Matcher m = p.matcher(s);
-    while (m.find()) {
-      try {
-        retList.add(Integer.decode(m.group()));
-      } catch (Exception e) {
-
-      }
-    }
-    return retList;
-  }
-
-  /**
-   * @param s    Input String
-   * @param maxV Maximum of the interval. Expected to be higher than minV
-   * @return whether the provided String contains positive or negative int values
-   *         outside of the input interval
-   */
-  public static boolean hasIntegerValueOverMax(String s, int maxV) {
-    List<Integer> listOfInt = extractIntegerValues(s);
-    for (Integer i : listOfInt) {
-      int v = Math.abs(i.intValue());
-      if (v > maxV) {
-        return true;
-      }
-    }
-    return false;
-  }
 
 }

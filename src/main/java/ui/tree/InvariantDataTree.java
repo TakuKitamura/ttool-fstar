@@ -51,38 +51,38 @@ import java.util.List;
  */
 public class InvariantDataTree implements GenericTree {
 
-  private MainGUI mgui;
-  private String name = "Invariants";
+    private MainGUI mgui;
+    private String name = "Invariants";
 
-  public InvariantDataTree(MainGUI _mgui) {
-    mgui = _mgui;
-  }
-
-  // TREE MANAGEMENT
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    int nb = mgui.getInvariants().size();
-    if (nb == 0) {
-      return 1;
+    public InvariantDataTree(MainGUI _mgui) {
+        mgui = _mgui;
     }
-    return nb;
-  }
 
-  public Object getChild(int index) {
-    List<Invariant> invs = mgui.getInvariants();
-    if (invs.size() == 0) {
-      return "No invariant";
+    // TREE MANAGEMENT
+    public String toString() {
+        return name;
     }
-    return mgui.getInvariants().get(index);
-  }
 
-  public int getIndexOfChild(Object child) {
-    if (child instanceof String) {
-      return 0;
+    public int getChildCount() {
+        int nb = mgui.getInvariants().size();
+        if (nb == 0) {
+            return 1;
+        }
+        return nb;
     }
-    return mgui.getInvariants().indexOf(child);
-  }
+
+    public Object getChild(int index) {
+        List<Invariant> invs = mgui.getInvariants();
+        if (invs.size() == 0) {
+            return "No invariant";
+        }
+        return mgui.getInvariants().get(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof String) {
+            return 0;
+        }
+        return mgui.getInvariants().indexOf(child);
+    }
 }

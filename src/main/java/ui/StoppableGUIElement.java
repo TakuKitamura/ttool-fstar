@@ -48,18 +48,18 @@ package ui;
  */
 public interface StoppableGUIElement {
 
-  void goElement();
+    void goElement();
 
-  void stopElement();
+    void stopElement();
 
-  boolean hasFinished();
+    boolean hasFinished();
 
-  void setFinished();
+    void setFinished();
 
-  boolean hasBeenStopped();
+    boolean hasBeenStopped();
 
-  int getPercentage();
+    int getPercentage();
 
-  String getCurrentActivity();
+    String getCurrentActivity();
 
 }

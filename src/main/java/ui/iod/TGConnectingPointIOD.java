@@ -52,18 +52,18 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class TGConnectingPointIOD extends TGConnectingPointWidthHeight {
 
-  public TGConnectingPointIOD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
-
-  public boolean isCompatibleWith(int type) {
-    //
-    if (type == TGComponentManager.CONNECTOR_INTERACTION) {
-      //
-      return true;
+    public TGConnectingPointIOD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
-    //
-    return false;
-  }
+
+    public boolean isCompatibleWith(int type) {
+        //
+        if (type == TGComponentManager.CONNECTOR_INTERACTION) {
+            //
+            return true;
+        }
+        //
+        return false;
+    }
 
 }

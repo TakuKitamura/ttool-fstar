@@ -46,18 +46,18 @@ package nc;
  */
 public class NCElement extends Object {
 
-  protected String name;
+    protected String name;
 
-  public NCElement() {
+    public NCElement() {
 
-  }
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String _name) {
-    name = _name;
-  }
+    public void setName(String _name) {
+        name = _name;
+    }
 
 }

@@ -49,47 +49,47 @@ import ui.*;
  */
 public class AvatarMethodologyReferenceToAnalysis extends AvatarMethodologyDiagramReference {
 
-  public AvatarMethodologyReferenceToAnalysis(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public AvatarMethodologyReferenceToAnalysis(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+            boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(200, 70);
+        initScaling(200, 70);
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
-        TGConnectingPoint.WEST);
-    connectingPoint[1] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
+                TGConnectingPoint.WEST);
+        connectingPoint[1] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = ANALYSIS;
+        typeOfReference = ANALYSIS;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
-
-  @Override
-  public int getType() {
-    return TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS;
-  }
-
-  @Override
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    if (panel instanceof AvatarAnalysisPanel) {
-      return true;
     }
-    return panel instanceof AttackTreePanel;
 
-  }
+    @Override
+    public int getType() {
+        return TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS;
+    }
 
-  @Override
-  public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
-    dn.setValidationsNumber(0);
-  }
+    @Override
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        if (panel instanceof AvatarAnalysisPanel) {
+            return true;
+        }
+        return panel instanceof AttackTreePanel;
 
-  @Override
-  public boolean makeCall(String diagramName, int index) {
-    return true;
-  }
+    }
+
+    @Override
+    public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
+        dn.setValidationsNumber(0);
+    }
+
+    @Override
+    public boolean makeCall(String diagramName, int index) {
+        return true;
+    }
 
 }

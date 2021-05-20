@@ -48,13 +48,13 @@ import translator.ADComponent;
  * @author Ludovic APVRILLE
  */
 public class ComponentId {
-  public ADComponent adc;
-  public int id;
-  public int count = 0;
+    public ADComponent adc;
+    public int id;
+    public int count = 0;
 
-  public ComponentId(ADComponent _adc, int _id) {
-    adc = _adc;
-    id = _id;
-  }
+    public ComponentId(ADComponent _adc, int _id) {
+        adc = _adc;
+        id = _id;
+    }
 
 }

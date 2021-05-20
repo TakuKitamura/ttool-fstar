@@ -47,13 +47,13 @@ package elntranslator;
  */
 
 public class ELNTMidPortTerminal extends ELNTComponent {
-  private ELNTConnector connector;
+    private ELNTConnector connector;
 
-  public ELNTMidPortTerminal(ELNTConnector _connector) {
-    connector = _connector;
-  }
+    public ELNTMidPortTerminal(ELNTConnector _connector) {
+        connector = _connector;
+    }
 
-  public ELNTConnector getConnector() {
-    return connector;
-  }
+    public ELNTConnector getConnector() {
+        return connector;
+    }
 }

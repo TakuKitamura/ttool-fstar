@@ -51,6 +51,6 @@ import java.awt.*;
  */
 public interface ComponentPluginInterface {
 
-  public void setPlugin(Plugin _plugin);
+    public void setPlugin(Plugin _plugin);
 
 }

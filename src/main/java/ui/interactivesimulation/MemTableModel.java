@@ -55,91 +55,91 @@ import java.util.Map;
  */
 public class MemTableModel extends AbstractTableModel {
 
-  private TMLMapping<?> tmap;
-  private List<HwMemory> mems;
-  private Map<Integer, String> valueTable;
-  private Map<Integer, Integer> rowTable;
+    private TMLMapping<?> tmap;
+    private List<HwMemory> mems;
+    private Map<Integer, String> valueTable;
+    private Map<Integer, Integer> rowTable;
 
-  private int nbOfRows;
+    private int nbOfRows;
 
-  // private String [] names;
-  public MemTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
-    tmap = _tmap;
-    valueTable = _valueTable;
-    rowTable = _rowTable;
-    computeData();
-  }
-
-  // From AbstractTableModel
-  public int getRowCount() {
-    return nbOfRows;
-  }
-
-  public int getColumnCount() {
-    return 3;
-  }
-
-  public Object getValueAt(int row, int column) {
-    if (tmap == null) {
-      return "-";
+    // private String [] names;
+    public MemTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
+        tmap = _tmap;
+        valueTable = _valueTable;
+        rowTable = _rowTable;
+        computeData();
     }
 
-    if (column == 0) {
-      return mems.get(row).getName();
-    } else if (column == 1) {
-      return mems.get(row).getID();
-    } else if (column == 2) {
-      return getMemStatus(row);
-    }
-    return "";
-  }
-
-  public String getColumnName(int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return "Memory Name";
-      case 1:
-        return "Memory ID";
-      case 2:
-        return "State";
-    }
-    return "unknown";
-  }
-
-  // Assumes tmlm != null
-  private String getMemStatus(int row) {
-    int ID = mems.get(row).getID();
-    String s = valueTable.get(ID);
-
-    if (s != null) {
-      return s;
+    // From AbstractTableModel
+    public int getRowCount() {
+        return nbOfRows;
     }
 
-    valueTable.put(ID, "-");
-    rowTable.put(ID, row);
-    return "-";
-
-  }
-
-  private void computeData() {
-    if (tmap == null) {
-      nbOfRows = 0;
-      return;
+    public int getColumnCount() {
+        return 3;
     }
 
-    mems = new ArrayList<HwMemory>();
+    public Object getValueAt(int row, int column) {
+        if (tmap == null) {
+            return "-";
+        }
 
-    for (HwNode node : tmap.getTMLArchitecture().getHwNodes()) {
-      if (node instanceof HwMemory) {
-        mems.add((HwMemory) node);
-      }
+        if (column == 0) {
+            return mems.get(row).getName();
+        } else if (column == 1) {
+            return mems.get(row).getID();
+        } else if (column == 2) {
+            return getMemStatus(row);
+        }
+        return "";
     }
 
-    nbOfRows = mems.size();
-
-    for (int i = 0; i < nbOfRows; i++) {
-      getMemStatus(i);
+    public String getColumnName(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return "Memory Name";
+            case 1:
+                return "Memory ID";
+            case 2:
+                return "State";
+        }
+        return "unknown";
     }
-    return;
-  }
+
+    // Assumes tmlm != null
+    private String getMemStatus(int row) {
+        int ID = mems.get(row).getID();
+        String s = valueTable.get(ID);
+
+        if (s != null) {
+            return s;
+        }
+
+        valueTable.put(ID, "-");
+        rowTable.put(ID, row);
+        return "-";
+
+    }
+
+    private void computeData() {
+        if (tmap == null) {
+            nbOfRows = 0;
+            return;
+        }
+
+        mems = new ArrayList<HwMemory>();
+
+        for (HwNode node : tmap.getTMLArchitecture().getHwNodes()) {
+            if (node instanceof HwMemory) {
+                mems.add((HwMemory) node);
+            }
+        }
+
+        nbOfRows = mems.size();
+
+        for (int i = 0; i < nbOfRows; i++) {
+            getMemStatus(i);
+        }
+        return;
+    }
 }

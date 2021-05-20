@@ -52,25 +52,25 @@ import javax.swing.*;
  */
 public class StateCommandsToolBar extends InteractiveSimulationBar {
 
-  public StateCommandsToolBar(JFrameInteractiveSimulation _jfis) {
-    super(_jfis);
-  }
+    public StateCommandsToolBar(JFrameInteractiveSimulation _jfis) {
+        super(_jfis);
+    }
 
-  protected void setActive(boolean b) {
-    jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
-    jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
-  }
+    protected void setActive(boolean b) {
+        jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE]);
+        button.addMouseListener(jfis.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE]);
-    button.addMouseListener(jfis.mouseHandler);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE]);
+        button.addMouseListener(jfis.mouseHandler);
 
-  }
+    }
 } // Class

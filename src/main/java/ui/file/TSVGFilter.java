@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class TSVGFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.svg);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.svg);
+    public String getDescription() {
+        return "SVG images";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "SVG images";
-  }
-
-  public static String getExtension() {
-    return FileUtils.svg;
-  }
+    public static String getExtension() {
+        return FileUtils.svg;
+    }
 
 }

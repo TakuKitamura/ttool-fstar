@@ -53,134 +53,134 @@ import javax.swing.*;
  */
 public class TActivityDiagramToolBar extends TToolBar {
 
-  public TActivityDiagramToolBar(MainGUI _mgui) {
-    super(_mgui);
-  }
+    public TActivityDiagramToolBar(MainGUI _mgui) {
+        super(_mgui);
+    }
 
-  protected void setActive(boolean b) {
-    mgui.actions[TGUIAction.AD_EDIT].setEnabled(b);
-    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-    mgui.actions[TGUIAction.AD_CONNECTOR].setEnabled(b);
-    mgui.actions[TGUIAction.AD_ACTION_STATE].setEnabled(b);
-    mgui.actions[TGUIAction.AD_PARALLEL].setEnabled(b);
-    mgui.actions[TGUIAction.AD_SEQUENCE].setEnabled(b);
-    mgui.actions[TGUIAction.AD_PREEMPTION].setEnabled(b);
-    mgui.actions[TGUIAction.AD_CHOICE].setEnabled(b);
-    mgui.actions[TGUIAction.AD_START].setEnabled(b);
-    mgui.actions[TGUIAction.AD_STOP].setEnabled(b);
-    mgui.actions[TGUIAction.AD_JUNCTION].setEnabled(b);
-    mgui.actions[TGUIAction.AD_DETERMINISTIC_DELAY].setEnabled(b);
-    mgui.actions[TGUIAction.AD_NON_DETERMINISTIC_DELAY].setEnabled(b);
-    mgui.actions[TGUIAction.AD_DELAY_NON_DETERMINISTIC_DELAY].setEnabled(b);
-    mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER].setEnabled(b);
-    mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY].setEnabled(b);
-    mgui.actions[TGUIAction.AD_TIME_CAPTURE].setEnabled(b);
-    mgui.actions[TGUIAction.AD_ARRAY_GET].setEnabled(b);
-    mgui.actions[TGUIAction.AD_ARRAY_SET].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_TOGGLE_JAVA].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+    protected void setActive(boolean b) {
+        mgui.actions[TGUIAction.AD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+        mgui.actions[TGUIAction.AD_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.AD_ACTION_STATE].setEnabled(b);
+        mgui.actions[TGUIAction.AD_PARALLEL].setEnabled(b);
+        mgui.actions[TGUIAction.AD_SEQUENCE].setEnabled(b);
+        mgui.actions[TGUIAction.AD_PREEMPTION].setEnabled(b);
+        mgui.actions[TGUIAction.AD_CHOICE].setEnabled(b);
+        mgui.actions[TGUIAction.AD_START].setEnabled(b);
+        mgui.actions[TGUIAction.AD_STOP].setEnabled(b);
+        mgui.actions[TGUIAction.AD_JUNCTION].setEnabled(b);
+        mgui.actions[TGUIAction.AD_DETERMINISTIC_DELAY].setEnabled(b);
+        mgui.actions[TGUIAction.AD_NON_DETERMINISTIC_DELAY].setEnabled(b);
+        mgui.actions[TGUIAction.AD_DELAY_NON_DETERMINISTIC_DELAY].setEnabled(b);
+        mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER].setEnabled(b);
+        mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY].setEnabled(b);
+        mgui.actions[TGUIAction.AD_TIME_CAPTURE].setEnabled(b);
+        mgui.actions[TGUIAction.AD_ARRAY_GET].setEnabled(b);
+        mgui.actions[TGUIAction.AD_ARRAY_SET].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_TOGGLE_JAVA].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 
-    // Issue #31
-    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+        // Issue #31
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 
-    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(b);
 
-    mgui.updateZoomInfo();
-  }
+        mgui.updateZoomInfo();
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(mgui.actions[TGUIAction.AD_EDIT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_EDIT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.AD_CONNECTOR]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.AD_START]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_START]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_STOP]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_STOP]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.AD_ACTION_STATE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_ACTION_STATE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_PARALLEL]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_PARALLEL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_SEQUENCE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_SEQUENCE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_PREEMPTION]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_PREEMPTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_CHOICE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_CHOICE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_JUNCTION]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_JUNCTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.AD_DETERMINISTIC_DELAY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_DETERMINISTIC_DELAY]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_NON_DETERMINISTIC_DELAY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_NON_DETERMINISTIC_DELAY]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_DELAY_NON_DETERMINISTIC_DELAY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_DELAY_NON_DETERMINISTIC_DELAY]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    /*
-     * button = this.add(mgui.actions[TGUIAction.AD_TIME_CAPTURE]);
-     * button.addMouseListener(mgui.mouseHandler);
-     */
+        /*
+         * button = this.add(mgui.actions[TGUIAction.AD_TIME_CAPTURE]);
+         * button.addMouseListener(mgui.mouseHandler);
+         */
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.AD_ARRAY_GET]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_ARRAY_GET]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.AD_ARRAY_SET]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.AD_ARRAY_SET]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_JAVA]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_JAVA]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-    button.addMouseListener(mgui.mouseHandler);
-  }
+        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+        button.addMouseListener(mgui.mouseHandler);
+    }
 } // Class

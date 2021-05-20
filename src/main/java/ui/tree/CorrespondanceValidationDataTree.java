@@ -50,31 +50,31 @@ import translator.MasterGateManager;
  */
 public class CorrespondanceValidationDataTree implements GenericTree {
 
-  private MasterGateManager mgm;
-  private String name = "Actions -> TURTLE gates";
+    private MasterGateManager mgm;
+    private String name = "Actions -> TURTLE gates";
 
-  public CorrespondanceValidationDataTree() {
-    mgm = new MasterGateManager();
-  }
-
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    return mgm.getTotalGateNumber();
-  }
-
-  public Object getChild(int index) {
-    return mgm.getMasterGroupOfGates(index);
-  }
-
-  public int getIndexOfChild(Object child) {
-    if (child instanceof GroupOfGates) {
-      return mgm.getMasterIndexOf((GroupOfGates) child);
-    } else {
-      return -1;
+    public CorrespondanceValidationDataTree() {
+        mgm = new MasterGateManager();
     }
-  }
+
+    public String toString() {
+        return name;
+    }
+
+    public int getChildCount() {
+        return mgm.getTotalGateNumber();
+    }
+
+    public Object getChild(int index) {
+        return mgm.getMasterGroupOfGates(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof GroupOfGates) {
+            return mgm.getMasterIndexOf((GroupOfGates) child);
+        } else {
+            return -1;
+        }
+    }
 
 }

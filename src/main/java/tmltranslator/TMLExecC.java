@@ -46,8 +46,8 @@ package tmltranslator;
  */
 public class TMLExecC extends TMLActivityElementWithAction {
 
-  public TMLExecC(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLExecC(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
 }

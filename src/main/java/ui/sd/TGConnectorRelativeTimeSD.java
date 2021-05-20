@@ -59,134 +59,135 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TGConnectorRelativeTimeSD extends TGConnector {
-  protected int arrowLength = 10;
-  private String minConstraint = "0";
-  private String maxConstraint = "0";
-  private int widthValue, heightValue;
+    protected int arrowLength = 10;
+    private String minConstraint = "0";
+    private String maxConstraint = "0";
+    private int widthValue, heightValue;
 
-  public TGConnectorRelativeTimeSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-    myImageIcon = IconManager.imgic510;
-    name = "relative time constraint";
-    value = "{0..0}";
-    editable = true;
-  }
-
-  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-      g.drawLine(x1, y1, x2, y2);
-    } else {
-      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+    public TGConnectorRelativeTimeSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+            Vector<Point> _listPoint) {
+        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        myImageIcon = IconManager.imgic510;
+        name = "relative time constraint";
+        value = "{0..0}";
+        editable = true;
     }
 
-    if (!tdp.isScaled()) {
-      widthValue = g.getFontMetrics().stringWidth(value);
-      heightValue = g.getFontMetrics().getHeight();
-    }
-
-    drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2) - widthValue - 2, ((p1.getY() + p2.getY()) / 2));
-  }
-
-  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2) - widthValue - 2,
-        ((p1.getY() + p2.getY()) / 2 - heightValue), widthValue, heightValue)) {
-      return this;
-    }
-    return null;
-  }
-
-  public int getMyCurrentMinX() {
-    return ((p1.getX() + p2.getX()) / 2) - widthValue - 2;
-  }
-
-  public int getType() {
-    return TGComponentManager.CONNECTOR_RELATIVE_TIME_SD;
-  }
-
-  public String getMinConstraint() {
-    return minConstraint;
-  }
-
-  public String getMaxConstraint() {
-    return maxConstraint;
-  }
-
-  public void makeValue() {
-    //
-    value = "{" + minConstraint + ".." + maxConstraint + "}";
-  }
-
-  public boolean editOnDoubleClick(JFrame frame) {
-    String oldMin = getMinConstraint();
-    String oldMax = getMaxConstraint();
-    String[] array = new String[2];
-    array[0] = getMinConstraint();
-    array[1] = getMaxConstraint();
-
-    JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting relative time constraints");
-    jdti.setSize(350, 250);
-    GraphicLib.centerOnParent(jdti);
-    jdti.setVisible(true); // blocked until dialog has been closed
-
-    minConstraint = array[0];
-    maxConstraint = array[1];
-
-    if ((minConstraint != null) && (maxConstraint != null)
-        && ((!minConstraint.equals(oldMin)) || (!maxConstraint.equals(oldMax)))) {
-      makeValue();
-      return true;
-    }
-    minConstraint = oldMin;
-    maxConstraint = oldMax;
-    return false;
-  }
-
-  protected String translateExtraParam() {
-    //
-    StringBuffer sb = new StringBuffer("<extraparam>\n");
-    sb.append("<Interval minConstraint=\"");
-    sb.append(getMinConstraint());
-    sb.append("\" maxConstraint=\"");
-    sb.append(getMaxConstraint());
-    sb.append("\" />\n");
-    sb.append("</extraparam>\n");
-    return new String(sb);
-  }
-
-  @Override
-  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-    //
-    try {
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-
-      for (int i = 0; i < nl.getLength(); i++) {
-        n1 = nl.item(i);
-        //
-        if (n1.getNodeType() == Node.ELEMENT_NODE) {
-          nli = n1.getChildNodes();
-
-          // Issue #17 copy-paste error on j index
-          for (int j = 0; j < nli.getLength(); j++) {
-            n2 = nli.item(j);
-            //
-            if (n2.getNodeType() == Node.ELEMENT_NODE) {
-              elt = (Element) n2;
-              //
-              if (elt.getTagName().equals("Interval")) {
-                minConstraint = elt.getAttribute("minConstraint");
-                maxConstraint = elt.getAttribute("maxConstraint");
-              }
-            }
-          }
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         }
-      }
 
-    } catch (Exception e) {
-      throw new MalformedModelingException();
+        if (!tdp.isScaled()) {
+            widthValue = g.getFontMetrics().stringWidth(value);
+            heightValue = g.getFontMetrics().getHeight();
+        }
+
+        drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2) - widthValue - 2, ((p1.getY() + p2.getY()) / 2));
     }
-    makeValue();
-  }
+
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2) - widthValue - 2,
+                ((p1.getY() + p2.getY()) / 2 - heightValue), widthValue, heightValue)) {
+            return this;
+        }
+        return null;
+    }
+
+    public int getMyCurrentMinX() {
+        return ((p1.getX() + p2.getX()) / 2) - widthValue - 2;
+    }
+
+    public int getType() {
+        return TGComponentManager.CONNECTOR_RELATIVE_TIME_SD;
+    }
+
+    public String getMinConstraint() {
+        return minConstraint;
+    }
+
+    public String getMaxConstraint() {
+        return maxConstraint;
+    }
+
+    public void makeValue() {
+        //
+        value = "{" + minConstraint + ".." + maxConstraint + "}";
+    }
+
+    public boolean editOnDoubleClick(JFrame frame) {
+        String oldMin = getMinConstraint();
+        String oldMax = getMaxConstraint();
+        String[] array = new String[2];
+        array[0] = getMinConstraint();
+        array[1] = getMaxConstraint();
+
+        JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting relative time constraints");
+        jdti.setSize(350, 250);
+        GraphicLib.centerOnParent(jdti);
+        jdti.setVisible(true); // blocked until dialog has been closed
+
+        minConstraint = array[0];
+        maxConstraint = array[1];
+
+        if ((minConstraint != null) && (maxConstraint != null)
+                && ((!minConstraint.equals(oldMin)) || (!maxConstraint.equals(oldMax)))) {
+            makeValue();
+            return true;
+        }
+        minConstraint = oldMin;
+        maxConstraint = oldMax;
+        return false;
+    }
+
+    protected String translateExtraParam() {
+        //
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<Interval minConstraint=\"");
+        sb.append(getMinConstraint());
+        sb.append("\" maxConstraint=\"");
+        sb.append(getMaxConstraint());
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+
+    @Override
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+
+            for (int i = 0; i < nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+
+                    // Issue #17 copy-paste error on j index
+                    for (int j = 0; j < nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        //
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            //
+                            if (elt.getTagName().equals("Interval")) {
+                                minConstraint = elt.getAttribute("minConstraint");
+                                maxConstraint = elt.getAttribute("maxConstraint");
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+        makeValue();
+    }
 }

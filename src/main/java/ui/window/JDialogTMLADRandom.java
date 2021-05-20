@@ -57,217 +57,217 @@ import java.awt.event.ActionListener;
  */
 public class JDialogTMLADRandom extends JDialogBase implements ActionListener {
 
-  private boolean regularClose;
+    private boolean regularClose;
 
-  private JPanel panel2;
-  private Frame frame;
-  private String variable, minValue, maxValue, extraAttribute1, extraAttribute2;
+    private JPanel panel2;
+    private Frame frame;
+    private String variable, minValue, maxValue, extraAttribute1, extraAttribute2;
 
-  private int functionId;
+    private int functionId;
 
-  // Panel2
-  private JTextField jvariable, jminValue, jmaxValue, jextraAttribute1, jextraAttribute2;
-  private JLabel jextraAttribute1L, jextraAttribute2L;
-  private JComboBox<String> randomFunction;
+    // Panel2
+    private JTextField jvariable, jminValue, jmaxValue, jextraAttribute1, jextraAttribute2;
+    private JLabel jextraAttribute1L, jextraAttribute2L;
+    private JComboBox<String> randomFunction;
 
-  /* Creates new form */
-  public JDialogTMLADRandom(Frame _frame, String _title, String _variable, String _minValue, String _maxValue,
-      int _functionId, String _extraAttribute1, String _extraAttribute2) {
-    super(_frame, _title, true);
-    frame = _frame;
-    variable = _variable;
-    minValue = _minValue;
-    maxValue = _maxValue;
-    functionId = _functionId;
-    extraAttribute1 = _extraAttribute1;
-    extraAttribute2 = _extraAttribute2;
+    /* Creates new form */
+    public JDialogTMLADRandom(Frame _frame, String _title, String _variable, String _minValue, String _maxValue,
+            int _functionId, String _extraAttribute1, String _extraAttribute2) {
+        super(_frame, _title, true);
+        frame = _frame;
+        variable = _variable;
+        minValue = _minValue;
+        maxValue = _maxValue;
+        functionId = _functionId;
+        extraAttribute1 = _extraAttribute1;
+        extraAttribute2 = _extraAttribute2;
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
-
-  private void myInitComponents() {
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag0 = new GridBagLayout();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c0 = new GridBagConstraints();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagConstraints c2 = new GridBagConstraints();
-
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-    c.setLayout(gridbag0);
-
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    panel2 = new JPanel();
-    panel2.setLayout(gridbag2);
-    panel2.setBorder(new javax.swing.border.TitledBorder("RANDOM Attributes"));
-    panel2.setPreferredSize(new Dimension(250, 200));
-
-    c2.gridwidth = 1;
-    c2.gridheight = 1;
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    panel2.add(new JLabel("Variable name:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    jvariable = new JTextField(variable, 30);
-    jvariable.setEditable(true);
-    jvariable.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(jvariable, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Minimum value:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    jminValue = new JTextField(minValue, 30);
-    jminValue.setEditable(true);
-    jminValue.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(jminValue, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Maximum value:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    jmaxValue = new JTextField(maxValue, 30);
-    jmaxValue.setEditable(true);
-    jmaxValue.setFont(new Font("times", Font.PLAIN, 12));
-    panel2.add(jmaxValue, c2);
-
-    c2.gridwidth = 1;
-    panel2.add(new JLabel("Distribution law:"), c2);
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    if (extraAttribute1 != null) {
-      randomFunction = new JComboBox<>(AvatarRandom.DISTRIBUTION_LAWS);
-    } else {
-      randomFunction = new JComboBox<String>();
-      randomFunction.addItem("Uniform");
+        initComponents();
+        myInitComponents();
+        pack();
     }
 
-    randomFunction.setSelectedIndex(functionId);
-    randomFunction.addActionListener(this);
-    panel2.add(randomFunction, c2);
-
-    if (extraAttribute1 != null) {
-      c2.gridwidth = 1;
-      jextraAttribute1L = new JLabel("");
-      panel2.add(jextraAttribute1L, c2);
-      c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-      jextraAttribute1 = new JTextField(extraAttribute1, 30);
-      jextraAttribute1.setEditable(true);
-      jextraAttribute1.setFont(new Font("times", Font.PLAIN, 12));
-      panel2.add(jextraAttribute1, c2);
+    private void myInitComponents() {
     }
 
-    if (extraAttribute2 != null) {
-      c2.gridwidth = 1;
-      jextraAttribute2L = new JLabel("");
-      panel2.add(jextraAttribute2L, c2);
-      c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-      jextraAttribute2 = new JTextField(extraAttribute2, 30);
-      jextraAttribute2.setEditable(true);
-      jextraAttribute2.setFont(new Font("times", Font.PLAIN, 12));
-      panel2.add(jextraAttribute2, c2);
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
+
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+        c.setLayout(gridbag0);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("RANDOM Attributes"));
+        panel2.setPreferredSize(new Dimension(250, 200));
+
+        c2.gridwidth = 1;
+        c2.gridheight = 1;
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        panel2.add(new JLabel("Variable name:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        jvariable = new JTextField(variable, 30);
+        jvariable.setEditable(true);
+        jvariable.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(jvariable, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Minimum value:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        jminValue = new JTextField(minValue, 30);
+        jminValue.setEditable(true);
+        jminValue.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(jminValue, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Maximum value:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        jmaxValue = new JTextField(maxValue, 30);
+        jmaxValue.setEditable(true);
+        jmaxValue.setFont(new Font("times", Font.PLAIN, 12));
+        panel2.add(jmaxValue, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Distribution law:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        if (extraAttribute1 != null) {
+            randomFunction = new JComboBox<>(AvatarRandom.DISTRIBUTION_LAWS);
+        } else {
+            randomFunction = new JComboBox<String>();
+            randomFunction.addItem("Uniform");
+        }
+
+        randomFunction.setSelectedIndex(functionId);
+        randomFunction.addActionListener(this);
+        panel2.add(randomFunction, c2);
+
+        if (extraAttribute1 != null) {
+            c2.gridwidth = 1;
+            jextraAttribute1L = new JLabel("");
+            panel2.add(jextraAttribute1L, c2);
+            c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+            jextraAttribute1 = new JTextField(extraAttribute1, 30);
+            jextraAttribute1.setEditable(true);
+            jextraAttribute1.setFont(new Font("times", Font.PLAIN, 12));
+            panel2.add(jextraAttribute1, c2);
+        }
+
+        if (extraAttribute2 != null) {
+            c2.gridwidth = 1;
+            jextraAttribute2L = new JLabel("");
+            panel2.add(jextraAttribute2L, c2);
+            c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+            jextraAttribute2 = new JTextField(extraAttribute2, 30);
+            jextraAttribute2.setEditable(true);
+            jextraAttribute2.setFont(new Font("times", Font.PLAIN, 12));
+            panel2.add(jextraAttribute2, c2);
+        }
+
+        checkAttributesDistributionLawB();
+
+        // main panel;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c0.fill = GridBagConstraints.BOTH;
+        c.add(panel2, c0);
+
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+
+        initButtons(c0, c, this);
     }
 
-    checkAttributesDistributionLawB();
+    public void actionPerformed(ActionEvent evt) {
+        /*
+         * if (evt.getSource() == typeBox) { boolean b =
+         * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+         * initialValue.setEnabled(b); return; }
+         */
 
-    // main panel;
-    c0.gridheight = 10;
-    c0.weighty = 1.0;
-    c0.weightx = 1.0;
-    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c0.fill = GridBagConstraints.BOTH;
-    c.add(panel2, c0);
+        String command = evt.getActionCommand();
 
-    c0.gridwidth = 1;
-    c0.gridheight = 1;
-    c0.fill = GridBagConstraints.HORIZONTAL;
-
-    initButtons(c0, c, this);
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    /*
-     * if (evt.getSource() == typeBox) { boolean b =
-     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-     * initialValue.setEnabled(b); return; }
-     */
-
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Save and Close")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
-    } else if (evt.getSource() == randomFunction) {
-      checkAttributesDistributionLawB();
-    }
-  }
-
-  public void closeDialog() {
-    regularClose = true;
-    dispose();
-  }
-
-  public void cancelDialog() {
-    dispose();
-  }
-
-  public boolean isRegularClose() {
-    return regularClose;
-  }
-
-  public String getVariable() {
-    return jvariable.getText();
-  }
-
-  public String getMinValue() {
-    return jminValue.getText();
-  }
-
-  public String getMaxValue() {
-    return jmaxValue.getText();
-  }
-
-  public int getFunctionId() {
-    return randomFunction.getSelectedIndex();
-  }
-
-  public String getExtraAttribute1() {
-    return jextraAttribute1.getText();
-  }
-
-  public String getExtraAttribute2() {
-    return jextraAttribute2.getText();
-  }
-
-  private void checkAttributesDistributionLawB() {
-    if (extraAttribute1 != null) {
-      functionId = randomFunction.getSelectedIndex();
-      int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
-      jextraAttribute1.setEnabled(nbOfExtras > 0);
-      if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_1[functionId].length() > 0)
-        jextraAttribute1L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_1[functionId] + ":");
-      else {
-        jextraAttribute1L.setText("");
-      }
+        // Compare the action command to the known actions.
+        if (command.equals("Save and Close")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        } else if (evt.getSource() == randomFunction) {
+            checkAttributesDistributionLawB();
+        }
     }
 
-    if (extraAttribute2 != null) {
-      functionId = randomFunction.getSelectedIndex();
-      int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
-      jextraAttribute2.setEnabled(nbOfExtras > 1);
-      if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_2[functionId].length() > 0)
-        jextraAttribute2L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_2[functionId] + ":");
-      else {
-        jextraAttribute2L.setText("");
-      }
+    public void closeDialog() {
+        regularClose = true;
+        dispose();
     }
-  }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    public boolean isRegularClose() {
+        return regularClose;
+    }
+
+    public String getVariable() {
+        return jvariable.getText();
+    }
+
+    public String getMinValue() {
+        return jminValue.getText();
+    }
+
+    public String getMaxValue() {
+        return jmaxValue.getText();
+    }
+
+    public int getFunctionId() {
+        return randomFunction.getSelectedIndex();
+    }
+
+    public String getExtraAttribute1() {
+        return jextraAttribute1.getText();
+    }
+
+    public String getExtraAttribute2() {
+        return jextraAttribute2.getText();
+    }
+
+    private void checkAttributesDistributionLawB() {
+        if (extraAttribute1 != null) {
+            functionId = randomFunction.getSelectedIndex();
+            int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
+            jextraAttribute1.setEnabled(nbOfExtras > 0);
+            if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_1[functionId].length() > 0)
+                jextraAttribute1L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_1[functionId] + ":");
+            else {
+                jextraAttribute1L.setText("");
+            }
+        }
+
+        if (extraAttribute2 != null) {
+            functionId = randomFunction.getSelectedIndex();
+            int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
+            jextraAttribute2.setEnabled(nbOfExtras > 1);
+            if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_2[functionId].length() > 0)
+                jextraAttribute2L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_2[functionId] + ":");
+            else {
+                jextraAttribute2L.setText("");
+            }
+        }
+    }
 
 }

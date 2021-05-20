@@ -58,93 +58,93 @@ import javax.swing.*;
  */
 public class InteractionOverviewDiagramToolBar extends TToolBar {
 
-  public InteractionOverviewDiagramToolBar(MainGUI _mgui) {
-    super(_mgui);
+    public InteractionOverviewDiagramToolBar(MainGUI _mgui) {
+        super(_mgui);
 
-  }
+    }
 
-  protected void setActive(boolean b) {
-    mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
-    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_CONNECTOR].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_REF_SD].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_REF_IOD].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_PARALLEL].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_PREEMPTION].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_SEQUENCE].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_CHOICE].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_START].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_STOP].setEnabled(b);
-    mgui.actions[TGUIAction.IOD_JUNCTION].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+    protected void setActive(boolean b) {
+        mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_CONNECTOR].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_REF_SD].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_REF_IOD].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_PARALLEL].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_PREEMPTION].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_SEQUENCE].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_CHOICE].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_START].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_STOP].setEnabled(b);
+        mgui.actions[TGUIAction.IOD_JUNCTION].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 
-    // Issue #31
-    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-    mgui.updateZoomInfo();
+        // Issue #31
+        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+        // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+        // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+        mgui.updateZoomInfo();
 
-  }
+    }
 
-  protected void setButtons() {
-    JButton button;
+    protected void setButtons() {
+        JButton button;
 
-    button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.IOD_CONNECTOR]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.IOD_START]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_START]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_STOP]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_STOP]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.IOD_REF_SD]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_REF_SD]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_REF_IOD]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_REF_IOD]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_PARALLEL]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_PARALLEL]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_CHOICE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_CHOICE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    button = this.add(mgui.actions[TGUIAction.IOD_JUNCTION]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.IOD_JUNCTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
-    this.addSeparator();
+        this.addSeparator();
 
-    button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-    button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+        button.addMouseListener(mgui.mouseHandler);
 
-  }
+    }
 
 } // Class

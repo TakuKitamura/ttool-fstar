@@ -12,21 +12,21 @@ import ui.TGComponent;
  */
 public abstract class TADComponentWithSubcomponents extends TGCScalableWithInternalComponent {
 
-  public TADComponentWithSubcomponents(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-      TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-  }
+    public TADComponentWithSubcomponents(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    }
 
-  /**
-   * Issue #69
-   * 
-   * @return : true if can be able to disable ElementVisitor in Activity Diagram
-   */
-  @Override
-  public boolean canBeDisabled() {
-    final CanBeDisabledADElementVisitor visitor = new CanBeDisabledADElementVisitor();
-    acceptBackward(visitor);
+    /**
+     * Issue #69
+     * 
+     * @return : true if can be able to disable ElementVisitor in Activity Diagram
+     */
+    @Override
+    public boolean canBeDisabled() {
+        final CanBeDisabledADElementVisitor visitor = new CanBeDisabledADElementVisitor();
+        acceptBackward(visitor);
 
-    return visitor.isCanBeDisabled();
-  }
+        return visitor.isCanBeDisabled();
+    }
 }

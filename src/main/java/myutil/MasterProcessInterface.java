@@ -46,9 +46,9 @@ package myutil;
  */
 public interface MasterProcessInterface {
 
-  boolean hasToContinue();
+    boolean hasToContinue();
 
-  void appendOut(String s);
+    void appendOut(String s);
 
-  void setError();
+    void setError();
 }

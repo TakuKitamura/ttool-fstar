@@ -47,22 +47,22 @@ import java.util.LinkedList;
  * @author Florian LUGOU
  */
 public class ProVerifComment implements ProVerifDeclaration {
-  protected LinkedList<String> lines;
+    protected LinkedList<String> lines;
 
-  public ProVerifComment() {
-    this.lines = new LinkedList<String>();
-  }
+    public ProVerifComment() {
+        this.lines = new LinkedList<String>();
+    }
 
-  public ProVerifComment(String _line) {
-    this();
-    this.addLine(_line);
-  }
+    public ProVerifComment(String _line) {
+        this();
+        this.addLine(_line);
+    }
 
-  public void addLine(String _line) {
-    this.lines.add(_line);
-  }
+    public void addLine(String _line) {
+        this.lines.add(_line);
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateComment(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateComment(this, _alinea);
+    }
 }

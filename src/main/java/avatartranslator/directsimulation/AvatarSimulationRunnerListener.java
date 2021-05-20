@@ -57,6 +57,6 @@ import java.util.Vector;
  */
 
 public interface AvatarSimulationRunnerListener {
-  public void setSimulationDone(int nb);
+    public void setSimulationDone(int nb);
 
 }

@@ -45,45 +45,45 @@ package tmltranslator.tmlcp;
  * @author Ludovic APVRILLE
  */
 public class TMLCPForLoop extends TMLCPElement {
-  // next #0 -> loop
-  // next #1 -> after loop
+    // next #0 -> loop
+    // next #1 -> after loop
 
-  private String init, condition, increment;
+    private String init, condition, increment;
 
-  // private boolean isInfinite;
+    // private boolean isInfinite;
 
-  public TMLCPForLoop(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public TMLCPForLoop(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public void setInit(String _init) {
-    init = _init;
-  }
+    public void setInit(String _init) {
+        init = _init;
+    }
 
-  public void setCondition(String _condition) {
-    condition = _condition;
-  }
+    public void setCondition(String _condition) {
+        condition = _condition;
+    }
 
-  public void setIncrement(String _increment) {
-    increment = _increment;
-  }
+    public void setIncrement(String _increment) {
+        increment = _increment;
+    }
 
-  public String getInit() {
-    return init;
-  }
+    public String getInit() {
+        return init;
+    }
 
-  public String getCondition() {
-    return condition;
-  }
+    public String getCondition() {
+        return condition;
+    }
 
-  public String getIncrement() {
-    return increment;
-  }
+    public String getIncrement() {
+        return increment;
+    }
 
-  /*
-   * public void setInfinite(boolean b) { isInfinite = b; }
-   * 
-   * public boolean isInfinite() { return isInfinite; }
-   */
+    /*
+     * public void setInfinite(boolean b) { isInfinite = b; }
+     * 
+     * public boolean isInfinite() { return isInfinite; }
+     */
 
 }

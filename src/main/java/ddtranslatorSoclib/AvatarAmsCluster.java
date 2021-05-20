@@ -48,38 +48,38 @@ package ddtranslatorSoclib;
 
 public class AvatarAmsCluster extends AvatarComponent {
 
-  private String amsClusterName;
-  private int no_amsCluster;
-  private int no_cluster;
-  private int no_target;
+    private String amsClusterName;
+    private int no_amsCluster;
+    private int no_cluster;
+    private int no_target;
 
-  public AvatarAmsCluster(String _amsClusterName, int _no_amsCluster, int _no_cluster) {
-    amsClusterName = _amsClusterName;
-    no_amsCluster = _no_amsCluster;
-    no_cluster = _no_cluster;
-  }
+    public AvatarAmsCluster(String _amsClusterName, int _no_amsCluster, int _no_cluster) {
+        amsClusterName = _amsClusterName;
+        no_amsCluster = _no_amsCluster;
+        no_cluster = _no_cluster;
+    }
 
-  public String getAmsClusterName() {
-    return amsClusterName;
-  }
+    public String getAmsClusterName() {
+        return amsClusterName;
+    }
 
-  public int getNo_amsCluster() {
-    return no_amsCluster;
-  }
+    public int getNo_amsCluster() {
+        return no_amsCluster;
+    }
 
-  public int getNo_cluster() {
-    return no_cluster;
-  }
+    public int getNo_cluster() {
+        return no_cluster;
+    }
 
-  public int getNo_target() {
-    return no_target;
-  }
+    public int getNo_target() {
+        return no_target;
+    }
 
-  public void setNo_cluster(int _no_cluster) {
-    no_cluster = _no_cluster;
-  }
+    public void setNo_cluster(int _no_cluster) {
+        no_cluster = _no_cluster;
+    }
 
-  public void setNo_target(int _no_target) {
-    no_target = _no_target;
-  }
+    public void setNo_target(int _no_target) {
+        no_target = _no_target;
+    }
 }

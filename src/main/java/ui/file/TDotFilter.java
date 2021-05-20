@@ -50,26 +50,26 @@ import java.io.File;
  */
 public class TDotFilter extends FileFilter {
 
-  // Accept all directories and xml files
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
+    // Accept all directories and xml files
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+
+        String extension = FileUtils.getExtension(f);
+        if (extension != null) {
+            return extension.equals(FileUtils.dot);
+        }
+
+        return false;
     }
 
-    String extension = FileUtils.getExtension(f);
-    if (extension != null) {
-      return extension.equals(FileUtils.dot);
+    public String getDescription() {
+        return "Graphs";
     }
 
-    return false;
-  }
-
-  public String getDescription() {
-    return "Graphs";
-  }
-
-  public static String getExtension() {
-    return FileUtils.dot;
-  }
+    public static String getExtension() {
+        return FileUtils.dot;
+    }
 
 }

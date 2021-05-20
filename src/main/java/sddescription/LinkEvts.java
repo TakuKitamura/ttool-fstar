@@ -45,43 +45,43 @@ package sddescription;
  * @version 1.1 17/08/2004
  */
 public class LinkEvts {
-  public Evt evt1;
-  public Evt evt2;
+    public Evt evt1;
+    public Evt evt2;
 
-  public LinkEvts(Evt _evt1, Evt _evt2) {
-    evt1 = _evt1;
-    evt2 = _evt2;
-  }
-
-  public LinkEvts() {
-  }
-
-  public Evt getEvt1() {
-    return evt1;
-  }
-
-  public Evt getEvt2() {
-    return evt2;
-  }
-
-  public boolean areCompatible(Evt _evt1, Evt _evt2) {
-    int type1 = evt1.getType();
-    int type2 = evt2.getType();
-
-    boolean b = areCompatibleType(type1, type2);
-    if (b) {
-      return true;
+    public LinkEvts(Evt _evt1, Evt _evt2) {
+        evt1 = _evt1;
+        evt2 = _evt2;
     }
 
-    return areCompatibleType(type2, type1);
-  }
-
-  public boolean areCompatibleType(int type1, int type2) {
-    if ((type1 == Evt.SEND_SYNC) && (type2 == Evt.RECV_SYNC)) {
-      return true;
+    public LinkEvts() {
     }
 
-    return (type1 == Evt.SEND_MSG) && (type2 == Evt.RECV_MSG);
+    public Evt getEvt1() {
+        return evt1;
+    }
 
-  }
+    public Evt getEvt2() {
+        return evt2;
+    }
+
+    public boolean areCompatible(Evt _evt1, Evt _evt2) {
+        int type1 = evt1.getType();
+        int type2 = evt2.getType();
+
+        boolean b = areCompatibleType(type1, type2);
+        if (b) {
+            return true;
+        }
+
+        return areCompatibleType(type2, type1);
+    }
+
+    public boolean areCompatibleType(int type1, int type2) {
+        if ((type1 == Evt.SEND_SYNC) && (type2 == Evt.RECV_SYNC)) {
+            return true;
+        }
+
+        return (type1 == Evt.SEND_MSG) && (type2 == Evt.RECV_MSG);
+
+    }
 }

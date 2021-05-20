@@ -45,42 +45,42 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifQueryResult {
-  protected boolean satisfied, proved;
-  protected ProVerifResultTrace trace;
+    protected boolean satisfied, proved;
+    protected ProVerifResultTrace trace;
 
-  public ProVerifQueryResult(boolean proved, boolean satisfied) {
-    this.satisfied = satisfied;
-    this.proved = proved;
-    this.trace = null;
-  }
+    public ProVerifQueryResult(boolean proved, boolean satisfied) {
+        this.satisfied = satisfied;
+        this.proved = proved;
+        this.trace = null;
+    }
 
-  public ProVerifQueryResult() {
-    this.proved = true;
-    this.satisfied = true;
-    this.trace = null;
-  }
+    public ProVerifQueryResult() {
+        this.proved = true;
+        this.satisfied = true;
+        this.trace = null;
+    }
 
-  public boolean isProved() {
-    return this.proved;
-  }
+    public boolean isProved() {
+        return this.proved;
+    }
 
-  public boolean isSatisfied() {
-    return this.satisfied;
-  }
+    public boolean isSatisfied() {
+        return this.satisfied;
+    }
 
-  public void setSatisfied(boolean satisfied) {
-    this.satisfied = satisfied;
-  }
+    public void setSatisfied(boolean satisfied) {
+        this.satisfied = satisfied;
+    }
 
-  public void setProved(boolean proved) {
-    this.proved = proved;
-  }
+    public void setProved(boolean proved) {
+        this.proved = proved;
+    }
 
-  public void setTrace(ProVerifResultTrace trace) {
-    this.trace = trace;
-  }
+    public void setTrace(ProVerifResultTrace trace) {
+        this.trace = trace;
+    }
 
-  public ProVerifResultTrace getTrace() {
-    return this.trace;
-  }
+    public ProVerifResultTrace getTrace() {
+        return this.trace;
+    }
 }

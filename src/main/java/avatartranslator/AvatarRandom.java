@@ -45,94 +45,94 @@ package avatartranslator;
  * @author Ludovic APVRILLE
  */
 public class AvatarRandom extends AvatarStateMachineElement {
-  protected String variable;
-  protected String minValue;
-  protected String maxValue;
+    protected String variable;
+    protected String minValue;
+    protected String maxValue;
 
-  public final static int RANDOM_UNIFORM_LAW = 0;
-  public final static int RANDOM_TRIANGULAR_LAW = 1;
-  public final static int RANDOM_GAUSSIAN_LAW = 2;
-  public final static int RANDOM_LOG_NORMAL_LAW = 3;
-  public final static int RANDOM_EXPONENTIAL_LAW = 4;
-  public final static int RANDOM_WEIBULL_LAW = 5;
-  public final static String[] DISTRIBUTION_LAWS = { "Uniform", "Triangular", "Gaussian", "Log normal", "Exponential",
-      "Weibull" };
-  public final static String[] DISTRIBUTION_LAWS_SHORT = { "", " ^", "ĝ", "ln", "e^", "w" };
+    public final static int RANDOM_UNIFORM_LAW = 0;
+    public final static int RANDOM_TRIANGULAR_LAW = 1;
+    public final static int RANDOM_GAUSSIAN_LAW = 2;
+    public final static int RANDOM_LOG_NORMAL_LAW = 3;
+    public final static int RANDOM_EXPONENTIAL_LAW = 4;
+    public final static int RANDOM_WEIBULL_LAW = 5;
+    public final static String[] DISTRIBUTION_LAWS = { "Uniform", "Triangular", "Gaussian", "Log normal", "Exponential",
+            "Weibull" };
+    public final static String[] DISTRIBUTION_LAWS_SHORT = { "", " ^", "ĝ", "ln", "e^", "w" };
 
-  public final static int[] NB_OF_EXTRA_ATTRIBUTES = { 0, 1, 1, 2, 1, 2 };
-  public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = { "", "triangle top", "standard deviation",
-      "standard deviation", "mean", "shape" };
-  public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = { "", "", "", "mean", "", "scale" };
-  protected int functionId;
-  protected String extraAttribute1;
-  protected String extraAttribute2;
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = { 0, 1, 1, 2, 1, 2 };
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = { "", "triangle top", "standard deviation",
+            "standard deviation", "mean", "shape" };
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = { "", "", "", "mean", "", "scale" };
+    protected int functionId;
+    protected String extraAttribute1;
+    protected String extraAttribute2;
 
-  public AvatarRandom(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
+    public AvatarRandom(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 
-  public String getVariable() {
-    return variable;
-  }
+    public String getVariable() {
+        return variable;
+    }
 
-  public String getMinValue() {
-    return minValue;
-  }
+    public String getMinValue() {
+        return minValue;
+    }
 
-  public String getMaxValue() {
-    return maxValue;
-  }
+    public String getMaxValue() {
+        return maxValue;
+    }
 
-  public int getFunctionId() {
-    return functionId;
-  }
+    public int getFunctionId() {
+        return functionId;
+    }
 
-  public String getExtraAttribute1() {
-    return extraAttribute1;
-  }
+    public String getExtraAttribute1() {
+        return extraAttribute1;
+    }
 
-  public String getExtraAttribute2() {
-    return extraAttribute2;
-  }
+    public String getExtraAttribute2() {
+        return extraAttribute2;
+    }
 
-  public void setVariable(String _variable) {
-    variable = _variable;
-  }
+    public void setVariable(String _variable) {
+        variable = _variable;
+    }
 
-  public void setValues(String _minValue, String _maxValue) {
-    minValue = _minValue;
-    maxValue = _maxValue;
-  }
+    public void setValues(String _minValue, String _maxValue) {
+        minValue = _minValue;
+        maxValue = _maxValue;
+    }
 
-  public void setFunctionId(int _functionId) {
-    functionId = _functionId;
-  }
+    public void setFunctionId(int _functionId) {
+        functionId = _functionId;
+    }
 
-  public void setExtraAttribute1(String _extraAttribute1) {
-    extraAttribute1 = _extraAttribute1;
-  }
+    public void setExtraAttribute1(String _extraAttribute1) {
+        extraAttribute1 = _extraAttribute1;
+    }
 
-  public void setExtraAttribute2(String _extraAttribute2) {
-    extraAttribute2 = _extraAttribute2;
-  }
+    public void setExtraAttribute2(String _extraAttribute2) {
+        extraAttribute2 = _extraAttribute2;
+    }
 
-  public String getNiceName() {
-    return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
-  }
+    public String getNiceName() {
+        return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
+    }
 
-  public void translate(AvatarTranslator translator, Object arg) {
-    translator.translateRandom(this, arg);
-  }
+    public void translate(AvatarTranslator translator, Object arg) {
+        translator.translateRandom(this, arg);
+    }
 
-  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-    AvatarRandom ar = new AvatarRandom(getName() + "_clone", getReferenceObject());
+    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+        AvatarRandom ar = new AvatarRandom(getName() + "_clone", getReferenceObject());
 
-    ar.setVariable(variable);
-    ar.setValues(minValue, maxValue);
-    ar.setFunctionId(functionId);
-    ar.setExtraAttribute1(extraAttribute1);
-    ar.setExtraAttribute2(extraAttribute2);
+        ar.setVariable(variable);
+        ar.setValues(minValue, maxValue);
+        ar.setFunctionId(functionId);
+        ar.setExtraAttribute1(extraAttribute1);
+        ar.setExtraAttribute2(extraAttribute2);
 
-    return ar;
-  }
+        return ar;
+    }
 }

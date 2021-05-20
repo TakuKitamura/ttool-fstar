@@ -69,360 +69,361 @@ import java.util.Set;
  * @version 1.0 11/01/2021
  */
 public class JTreeStats extends javax.swing.JTree
-    implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable {
-  protected JMenuItem showAllSelectedCharts;
-  protected JMenuItem showHistogram, showPieChart, showTimeValueChart, showValueEvolutionChart;
-  protected JMenuItem saveAsCSVMI, saveSonCSVMI;
-  protected JPopupMenu popupTree;
-  protected DataElement selectedDataElement;
-  // private boolean m_nodeWasSelected = false;
-  private boolean toUpdate = false;
-  private JFrameDataElementStatistics jFStats;
-  private TreeModelStats dtm;
-  // for update
-  private Set<TreePath> m_expandedTreePaths = new HashSet<>();
-  private TreePath[] m_selectedTreePaths = new TreePath[0];
+        implements ActionListener, MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable {
+    protected JMenuItem showAllSelectedCharts;
+    protected JMenuItem showHistogram, showPieChart, showTimeValueChart, showValueEvolutionChart;
+    protected JMenuItem saveAsCSVMI, saveSonCSVMI;
+    protected JPopupMenu popupTree;
+    protected DataElement selectedDataElement;
+    // private boolean m_nodeWasSelected = false;
+    private boolean toUpdate = false;
+    private JFrameDataElementStatistics jFStats;
+    private TreeModelStats dtm;
+    // for update
+    private Set<TreePath> m_expandedTreePaths = new HashSet<>();
+    private TreePath[] m_selectedTreePaths = new TreePath[0];
 
-  /*
-   * Creates new form
-   */
-  public JTreeStats(JFrameDataElementStatistics _jFStats) {
-    super(new TreeModelStats(_jFStats));
+    /*
+     * Creates new form
+     */
+    public JTreeStats(JFrameDataElementStatistics _jFStats) {
+        super(new TreeModelStats(_jFStats));
 
-    // TraceManager.addDev("TREE CREATED");
+        // TraceManager.addDev("TREE CREATED");
 
-    jFStats = _jFStats;
-    getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-    setEditable(false);
-    addMouseListener(this);
-    addTreeExpansionListener(this);
-    addTreeSelectionListener(this);
-  }
-
-  public void reinit() {
-    m_expandedTreePaths.clear();
-    m_selectedTreePaths = new TreePath[0];
-  }
-
-  public void toBeUpdated() {
-    toUpdate = true;
-  }
-
-  public void updateNow() {
-    if (toUpdate) {
-      forceUpdate();
-    }
-  }
-
-  public void forceUpdate() {
-    toUpdate = false;
-    dtm = new TreeModelStats(jFStats);
-    setModel(dtm);
-    update();
-  }
-
-  public void mousePressed(MouseEvent e) {
-    // TraceManager.addDev("Mouse event");
-    if (SwingUtilities.isRightMouseButton(e)) {
-      // TraceManager.addDev("right mouse event. popup trigger? " +
-      // e.isPopupTrigger());
-      if (e.isPopupTrigger())
-        myPopupEvent(e);
-    }
-  }
-
-  public void mouseReleased(MouseEvent e) {
-    // TraceManager.addDev("Mouse event");
-    if (SwingUtilities.isRightMouseButton(e)) {
-      // TraceManager.addDev("right mouse event. popup trigger? " +
-      // e.isPopupTrigger());
-      if (e.isPopupTrigger())
-        myPopupEvent(e);
-    }
-  }
-
-  public void mouseEntered(MouseEvent e) {
-    updateNow();
-  }
-
-  public void mouseExited(MouseEvent e) {
-    setSelectionPath(null);
-    m_selectedTreePaths = new TreePath[0];
-  }
-
-  public void mouseClicked(MouseEvent e) {
-
-  }
-
-  private void myPopupEvent(MouseEvent e) {
-
-    // TraceManager.addDev("myPopupEvent");
-
-    int x = e.getX();
-    int y = e.getY();
-    JTree tree = (JTree) e.getSource();
-    TreePath path = tree.getPathForLocation(x, y);
-
-    // TraceManager.addDev("Path=" + path);
-
-    if (path == null) {
-      // TraceManager.addDev("Null path");
-      return;
+        jFStats = _jFStats;
+        getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        setEditable(false);
+        addMouseListener(this);
+        addTreeExpansionListener(this);
+        addTreeSelectionListener(this);
     }
 
-    tree.setSelectionPath(path);
-
-    Object obj = path.getLastPathComponent();
-
-    // TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
-    selectedDataElement = null;
-
-    if (obj instanceof DataElement) {
-      selectedDataElement = (DataElement) obj;
-      if (popupTree == null) {
-        popupTree = new JPopupMenu();
-
-        showAllSelectedCharts = new JMenuItem("Show all selected Charts");
-        showAllSelectedCharts.addActionListener(this);
-
-        showHistogram = new JMenuItem("Show Histogram");
-        showHistogram.addActionListener(this);
-
-        showPieChart = new JMenuItem("Show Pie Chart");
-        showPieChart.addActionListener(this);
-
-        showTimeValueChart = new JMenuItem("Show Value = f(t) Chart");
-        showTimeValueChart.addActionListener(this);
-
-        showValueEvolutionChart = new JMenuItem("Show Value = f(t) per Simulation Chart");
-        showValueEvolutionChart.addActionListener(this);
-
-        saveAsCSVMI = new JMenuItem("Save data in CSV format");
-        saveAsCSVMI.addActionListener(this);
-
-        saveSonCSVMI = new JMenuItem("Save data of *sons* in CSV format");
-        saveSonCSVMI.addActionListener(this);
-
-        popupTree.add(showAllSelectedCharts);
-        popupTree.addSeparator();
-        popupTree.add(showHistogram);
-        popupTree.add(showPieChart);
-        popupTree.add(showTimeValueChart);
-        popupTree.add(showValueEvolutionChart);
-        popupTree.addSeparator();
-        popupTree.add(saveAsCSVMI);
-        popupTree.add(saveSonCSVMI);
-      }
-      showAllSelectedCharts.setEnabled(jFStats.canShowHistogram(selectedDataElement)
-          || jFStats.canShowPieChart(selectedDataElement) || jFStats.canShowTimeValueChart(selectedDataElement)
-          || jFStats.canShowValueEvolutionChart(selectedDataElement));
-      showHistogram.setEnabled(jFStats.canShowHistogram(selectedDataElement));
-      showPieChart.setEnabled(jFStats.canShowPieChart(selectedDataElement));
-      showTimeValueChart.setEnabled(jFStats.canShowTimeValueChart(selectedDataElement));
-      showValueEvolutionChart.setEnabled(jFStats.canShowValueEvolutionChart(selectedDataElement));
-      saveAsCSVMI.setEnabled(selectedDataElement.hasCSVData());
-      saveSonCSVMI.setEnabled(selectedDataElement.hasCSVSonData());
-      popupTree.show(tree, x, y);
+    public void reinit() {
+        m_expandedTreePaths.clear();
+        m_selectedTreePaths = new TreePath[0];
     }
 
-  }
+    public void toBeUpdated() {
+        toUpdate = true;
+    }
 
-  public synchronized void run() {
-    checkPaths();
-    Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
-    TreePath l_path = null;
-    while (l_keys.hasNext()) {
-      try {
-        l_path = l_keys.next();
-        TreePath parent = l_path.getParentPath();
-        //
-        //
-        if ((l_path.getPathCount() == 2) || (m_expandedTreePaths.contains(parent))) {
-          // TraceManager.addDev("Path=" + l_path);
-          expandPath(l_path);
+    public void updateNow() {
+        if (toUpdate) {
+            forceUpdate();
         }
-      } catch (Exception e) {
-        //
-        if (l_path != null) {
-          //
-          m_expandedTreePaths.remove(l_path);
+    }
+
+    public void forceUpdate() {
+        toUpdate = false;
+        dtm = new TreeModelStats(jFStats);
+        setModel(dtm);
+        update();
+    }
+
+    public void mousePressed(MouseEvent e) {
+        // TraceManager.addDev("Mouse event");
+        if (SwingUtilities.isRightMouseButton(e)) {
+            // TraceManager.addDev("right mouse event. popup trigger? " +
+            // e.isPopupTrigger());
+            if (e.isPopupTrigger())
+                myPopupEvent(e);
         }
-      }
-    }
-    getSelectionModel().setSelectionPaths(m_selectedTreePaths);
-  }
-
-  private void checkPaths() {
-    TreePath l_path = null;
-    Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
-    while (l_keys.hasNext()) {
-      l_path = l_keys.next();
-      if (!isAPathOf(l_path)) {
-        m_expandedTreePaths.remove(l_path);
-      }
     }
 
-  }
-
-  private boolean isAPathOf(TreePath tp) {
-    if ((dtm == null) || (tp == null)) {
-      return false;
-    }
-
-    Object[] objs = tp.getPath();
-
-    if (objs.length == 0) {
-      return false;
-    }
-
-    if (objs[0] != dtm.getRoot()) {
-      return false;
-    }
-
-    int index;
-
-    for (int i = 0; i < objs.length - 2; i++) {
-      index = dtm.getIndexOfChild(objs[i], objs[i + 1]);
-      if (index == -1) {
-        return false;
-      }
-    }
-
-    return true;
-
-  }
-
-  public synchronized void update() {
-    SwingUtilities.invokeLater(this);
-  }
-
-  public void treeExpanded(TreeExpansionEvent treeExpansionEvent) {
-    TreePath tp = treeExpansionEvent.getPath();
-    m_expandedTreePaths.add(tp);
-    for (TreePath m_expandedTreePath : m_expandedTreePaths) {
-      TreePath l_path = null;
-      try {
-        l_path = m_expandedTreePath;
-        TreePath parent = l_path.getParentPath();
-        if ((l_path.getPathCount() == 1) || (m_expandedTreePaths.contains(parent))) {
-          expandPath(l_path);
+    public void mouseReleased(MouseEvent e) {
+        // TraceManager.addDev("Mouse event");
+        if (SwingUtilities.isRightMouseButton(e)) {
+            // TraceManager.addDev("right mouse event. popup trigger? " +
+            // e.isPopupTrigger());
+            if (e.isPopupTrigger())
+                myPopupEvent(e);
         }
-      } catch (Exception e) {
-        if (l_path != null) {
-          //
-          m_expandedTreePaths.remove(l_path);
+    }
+
+    public void mouseEntered(MouseEvent e) {
+        updateNow();
+    }
+
+    public void mouseExited(MouseEvent e) {
+        setSelectionPath(null);
+        m_selectedTreePaths = new TreePath[0];
+    }
+
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    private void myPopupEvent(MouseEvent e) {
+
+        // TraceManager.addDev("myPopupEvent");
+
+        int x = e.getX();
+        int y = e.getY();
+        JTree tree = (JTree) e.getSource();
+        TreePath path = tree.getPathForLocation(x, y);
+
+        // TraceManager.addDev("Path=" + path);
+
+        if (path == null) {
+            // TraceManager.addDev("Null path");
+            return;
         }
-      }
+
+        tree.setSelectionPath(path);
+
+        Object obj = path.getLastPathComponent();
+
+        // TraceManager.addDev("Adding popup menu to " + obj.getClass() + "/" + obj);
+        selectedDataElement = null;
+
+        if (obj instanceof DataElement) {
+            selectedDataElement = (DataElement) obj;
+            if (popupTree == null) {
+                popupTree = new JPopupMenu();
+
+                showAllSelectedCharts = new JMenuItem("Show all selected Charts");
+                showAllSelectedCharts.addActionListener(this);
+
+                showHistogram = new JMenuItem("Show Histogram");
+                showHistogram.addActionListener(this);
+
+                showPieChart = new JMenuItem("Show Pie Chart");
+                showPieChart.addActionListener(this);
+
+                showTimeValueChart = new JMenuItem("Show Value = f(t) Chart");
+                showTimeValueChart.addActionListener(this);
+
+                showValueEvolutionChart = new JMenuItem("Show Value = f(t) per Simulation Chart");
+                showValueEvolutionChart.addActionListener(this);
+
+                saveAsCSVMI = new JMenuItem("Save data in CSV format");
+                saveAsCSVMI.addActionListener(this);
+
+                saveSonCSVMI = new JMenuItem("Save data of *sons* in CSV format");
+                saveSonCSVMI.addActionListener(this);
+
+                popupTree.add(showAllSelectedCharts);
+                popupTree.addSeparator();
+                popupTree.add(showHistogram);
+                popupTree.add(showPieChart);
+                popupTree.add(showTimeValueChart);
+                popupTree.add(showValueEvolutionChart);
+                popupTree.addSeparator();
+                popupTree.add(saveAsCSVMI);
+                popupTree.add(saveSonCSVMI);
+            }
+            showAllSelectedCharts.setEnabled(
+                    jFStats.canShowHistogram(selectedDataElement) || jFStats.canShowPieChart(selectedDataElement)
+                            || jFStats.canShowTimeValueChart(selectedDataElement)
+                            || jFStats.canShowValueEvolutionChart(selectedDataElement));
+            showHistogram.setEnabled(jFStats.canShowHistogram(selectedDataElement));
+            showPieChart.setEnabled(jFStats.canShowPieChart(selectedDataElement));
+            showTimeValueChart.setEnabled(jFStats.canShowTimeValueChart(selectedDataElement));
+            showValueEvolutionChart.setEnabled(jFStats.canShowValueEvolutionChart(selectedDataElement));
+            saveAsCSVMI.setEnabled(selectedDataElement.hasCSVData());
+            saveSonCSVMI.setEnabled(selectedDataElement.hasCSVSonData());
+            popupTree.show(tree, x, y);
+        }
+
     }
 
-  }
-
-  public void expandMyPath(TreePath tp) {
-    // TraceManager.addDev("Path=" + tp);
-    expandPath(tp);
-  }
-
-  public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
-    m_expandedTreePaths.remove(treeExpansionEvent.getPath());
-  }
-
-  public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
-    // TraceManager.addDev("Value changed");
-
-    if (getSelectionPaths() != null && getSelectionPaths().length > 0) {
-      m_selectedTreePaths = getSelectionModel().getSelectionPaths();
+    public synchronized void run() {
+        checkPaths();
+        Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
+        TreePath l_path = null;
+        while (l_keys.hasNext()) {
+            try {
+                l_path = l_keys.next();
+                TreePath parent = l_path.getParentPath();
+                //
+                //
+                if ((l_path.getPathCount() == 2) || (m_expandedTreePaths.contains(parent))) {
+                    // TraceManager.addDev("Path=" + l_path);
+                    expandPath(l_path);
+                }
+            } catch (Exception e) {
+                //
+                if (l_path != null) {
+                    //
+                    m_expandedTreePaths.remove(l_path);
+                }
+            }
+        }
+        getSelectionModel().setSelectionPaths(m_selectedTreePaths);
     }
 
-    TreePath tp = treeSelectionEvent.getNewLeadSelectionPath();
+    private void checkPaths() {
+        TreePath l_path = null;
+        Iterator<TreePath> l_keys = m_expandedTreePaths.iterator();
+        while (l_keys.hasNext()) {
+            l_path = l_keys.next();
+            if (!isAPathOf(l_path)) {
+                m_expandedTreePaths.remove(l_path);
+            }
+        }
 
-    // TraceManager.addDev("Expanded path=" + tp);
-
-    if (tp == null) {
-      return;
     }
 
-    Object nodeInfo = tp.getLastPathComponent();
-    // TraceManager.addDev("NodeInfo:" + nodeInfo);
-    Object o;
+    private boolean isAPathOf(TreePath tp) {
+        if ((dtm == null) || (tp == null)) {
+            return false;
+        }
 
-    if (nodeInfo instanceof DataElement) {
-      // if ( ((DataElement)(nodeInfo)).isLeaf()) {
-      // jFStats.showStats((DataElement) nodeInfo);
-      // }
-    }
-  }
+        Object[] objs = tp.getPath();
 
-  public void actionPerformed(ActionEvent ae) {
+        if (objs.length == 0) {
+            return false;
+        }
 
-    if (ae.getSource() == saveAsCSVMI) {
-      saveCSV();
+        if (objs[0] != dtm.getRoot()) {
+            return false;
+        }
 
-    } else if (ae.getSource() == saveSonCSVMI) {
-      saveSonsCSV();
+        int index;
 
-      // Find the related DataElement
-    } else if (ae.getSource() == showAllSelectedCharts) {
-      if (selectedDataElement != null) {
-        jFStats.showStats(selectedDataElement);
-      }
-    } else if (ae.getSource() == showHistogram) {
-      if (selectedDataElement != null) {
-        jFStats.showHistogram(selectedDataElement);
-      }
-    } else if (ae.getSource() == showPieChart) {
-      if (selectedDataElement != null) {
-        jFStats.showPieChart(selectedDataElement);
-      }
-    } else if (ae.getSource() == showTimeValueChart) {
-      if (selectedDataElement != null) {
-        jFStats.showTimeValueChart(selectedDataElement);
-      }
-    } else if (ae.getSource() == showValueEvolutionChart) {
-      if (selectedDataElement != null) {
-        jFStats.showValueEvolutionChart(selectedDataElement);
-      }
+        for (int i = 0; i < objs.length - 2; i++) {
+            index = dtm.getIndexOfChild(objs[i], objs[i + 1]);
+            if (index == -1) {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 
-  }
-
-  public void saveCSV() {
-    if (selectedDataElement != null) {
-      TraceManager.addDev("Save in CSV format");
-      String csvData = selectedDataElement.getCSVData();
-      saveCSVData(csvData);
-    }
-  }
-
-  public void saveSonsCSV() {
-    if (selectedDataElement != null) {
-      TraceManager.addDev("Save sons in CSV format");
-      String csvData = selectedDataElement.getCSVDataSons();
-      saveCSVData(csvData);
-    }
-  }
-
-  public void saveCSVData(String csvData) {
-    if ((csvData == null) || (csvData.length() == 0)) {
-      JOptionPane.showMessageDialog(jFStats, "Empty data", "Error", JOptionPane.INFORMATION_MESSAGE);
-      return;
+    public synchronized void update() {
+        SwingUtilities.invokeLater(this);
     }
 
-    JFileChooser jfc = new JFileChooser();
-    int returnVal = jfc.showDialog(this, "Select file");
-    if (returnVal != JFileChooser.APPROVE_OPTION) {
-      return;
+    public void treeExpanded(TreeExpansionEvent treeExpansionEvent) {
+        TreePath tp = treeExpansionEvent.getPath();
+        m_expandedTreePaths.add(tp);
+        for (TreePath m_expandedTreePath : m_expandedTreePaths) {
+            TreePath l_path = null;
+            try {
+                l_path = m_expandedTreePath;
+                TreePath parent = l_path.getParentPath();
+                if ((l_path.getPathCount() == 1) || (m_expandedTreePaths.contains(parent))) {
+                    expandPath(l_path);
+                }
+            } catch (Exception e) {
+                if (l_path != null) {
+                    //
+                    m_expandedTreePaths.remove(l_path);
+                }
+            }
+        }
+
     }
 
-    File selectedFile = jfc.getSelectedFile();
-
-    if (selectedFile != null) {
-      try {
-        FileUtils.saveFile(selectedFile, csvData);
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(jFStats, "Could not save the file: " + e.getMessage(), "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-      }
+    public void expandMyPath(TreePath tp) {
+        // TraceManager.addDev("Path=" + tp);
+        expandPath(tp);
     }
-  }
+
+    public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
+        m_expandedTreePaths.remove(treeExpansionEvent.getPath());
+    }
+
+    public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+        // TraceManager.addDev("Value changed");
+
+        if (getSelectionPaths() != null && getSelectionPaths().length > 0) {
+            m_selectedTreePaths = getSelectionModel().getSelectionPaths();
+        }
+
+        TreePath tp = treeSelectionEvent.getNewLeadSelectionPath();
+
+        // TraceManager.addDev("Expanded path=" + tp);
+
+        if (tp == null) {
+            return;
+        }
+
+        Object nodeInfo = tp.getLastPathComponent();
+        // TraceManager.addDev("NodeInfo:" + nodeInfo);
+        Object o;
+
+        if (nodeInfo instanceof DataElement) {
+            // if ( ((DataElement)(nodeInfo)).isLeaf()) {
+            // jFStats.showStats((DataElement) nodeInfo);
+            // }
+        }
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+
+        if (ae.getSource() == saveAsCSVMI) {
+            saveCSV();
+
+        } else if (ae.getSource() == saveSonCSVMI) {
+            saveSonsCSV();
+
+            // Find the related DataElement
+        } else if (ae.getSource() == showAllSelectedCharts) {
+            if (selectedDataElement != null) {
+                jFStats.showStats(selectedDataElement);
+            }
+        } else if (ae.getSource() == showHistogram) {
+            if (selectedDataElement != null) {
+                jFStats.showHistogram(selectedDataElement);
+            }
+        } else if (ae.getSource() == showPieChart) {
+            if (selectedDataElement != null) {
+                jFStats.showPieChart(selectedDataElement);
+            }
+        } else if (ae.getSource() == showTimeValueChart) {
+            if (selectedDataElement != null) {
+                jFStats.showTimeValueChart(selectedDataElement);
+            }
+        } else if (ae.getSource() == showValueEvolutionChart) {
+            if (selectedDataElement != null) {
+                jFStats.showValueEvolutionChart(selectedDataElement);
+            }
+        }
+
+    }
+
+    public void saveCSV() {
+        if (selectedDataElement != null) {
+            TraceManager.addDev("Save in CSV format");
+            String csvData = selectedDataElement.getCSVData();
+            saveCSVData(csvData);
+        }
+    }
+
+    public void saveSonsCSV() {
+        if (selectedDataElement != null) {
+            TraceManager.addDev("Save sons in CSV format");
+            String csvData = selectedDataElement.getCSVDataSons();
+            saveCSVData(csvData);
+        }
+    }
+
+    public void saveCSVData(String csvData) {
+        if ((csvData == null) || (csvData.length() == 0)) {
+            JOptionPane.showMessageDialog(jFStats, "Empty data", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        JFileChooser jfc = new JFileChooser();
+        int returnVal = jfc.showDialog(this, "Select file");
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File selectedFile = jfc.getSelectedFile();
+
+        if (selectedFile != null) {
+            try {
+                FileUtils.saveFile(selectedFile, csvData);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(jFStats, "Could not save the file: " + e.getMessage(), "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
 
 }

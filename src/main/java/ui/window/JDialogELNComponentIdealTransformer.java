@@ -76,129 +76,129 @@ import javax.swing.KeyStroke;
 
 public class JDialogELNComponentIdealTransformer extends JDialog implements ActionListener {
 
-  /** Access to ActionPerformed **/
-  private JTextField nameTextField;
-  private JTextField ratioTextField;
-
-  /** Parameters **/
-  private ELNComponentIdealTransformer idealTransformer;
-
-  /* Constructor **/
-  public JDialogELNComponentIdealTransformer(ELNComponentIdealTransformer _idealTransformer) {
-    /** Set JDialog **/
-    setTitle("Setting the ideal transformer");
-    setLocationRelativeTo(null);
-    setVisible(true);
-    setAlwaysOnTop(true);
-    setResizable(false);
+    /** Access to ActionPerformed **/
+    private JTextField nameTextField;
+    private JTextField ratioTextField;
 
     /** Parameters **/
-    idealTransformer = _idealTransformer;
+    private ELNComponentIdealTransformer idealTransformer;
 
-    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-    getRootPane().getActionMap().put("close", new AbstractAction() {
-      public void actionPerformed(ActionEvent e) {
-        dispose();
-      }
-    });
+    /* Constructor **/
+    public JDialogELNComponentIdealTransformer(ELNComponentIdealTransformer _idealTransformer) {
+        /** Set JDialog **/
+        setTitle("Setting the ideal transformer");
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setAlwaysOnTop(true);
+        setResizable(false);
 
-    dialog();
-  }
+        /** Parameters **/
+        idealTransformer = _idealTransformer;
 
-  public void dialog() {
-    /** JPanel **/
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    this.add(mainPanel);
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
 
-    JPanel attributesMainPanel = new JPanel(new GridLayout());
-    mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
-
-    // Left Side
-    Box box = Box.createVerticalBox();
-    box.setBorder(BorderFactory.createTitledBorder("Setting ideal transformer attributes"));
-
-    GridBagLayout gridBag = new GridBagLayout();
-    GridBagConstraints constraints = new GridBagConstraints();
-    JPanel boxPanel = new JPanel();
-    boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-    boxPanel.setLayout(gridBag);
-
-    JLabel labelName = new JLabel("nm : ");
-    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(labelName, constraints);
-    boxPanel.add(labelName);
-
-    nameTextField = new JTextField(idealTransformer.getValue().toString(), 10); // name not empty
-    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(nameTextField, constraints);
-    boxPanel.add(nameTextField);
-
-    JLabel ratioLabel = new JLabel("ratio : ");
-    constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(ratioLabel, constraints);
-    boxPanel.add(ratioLabel);
-
-    ratioTextField = new JTextField("" + idealTransformer.getRatio(), 10); // name not empty
-    constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-        new Insets(5, 10, 5, 10), 0, 0);
-    gridBag.setConstraints(ratioTextField, constraints);
-    boxPanel.add(ratioTextField);
-
-    box.add(boxPanel); // add border to box
-    attributesMainPanel.add(box); // add grid to grid
-
-    // Down Side
-    JPanel downPanel = new JPanel(new FlowLayout());
-
-    JButton saveCloseButton = new JButton("Save and close");
-    saveCloseButton.setIcon(IconManager.imgic25);
-    saveCloseButton.setActionCommand("Save_Close");
-    saveCloseButton.addActionListener(this);
-    saveCloseButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(saveCloseButton);
-
-    JButton cancelButton = new JButton("Cancel");
-    cancelButton.setIcon(IconManager.imgic27);
-    cancelButton.setActionCommand("Cancel");
-    cancelButton.addActionListener(this);
-    cancelButton.setPreferredSize(new Dimension(200, 30));
-    downPanel.add(cancelButton);
-
-    mainPanel.add(downPanel, BorderLayout.CENTER);
-    pack();
-    this.getRootPane().setDefaultButton(saveCloseButton);
-  }
-
-  public void actionPerformed(ActionEvent e) {
-    if ("Save_Close".equals(e.getActionCommand())) {
-      idealTransformer.setValue(new String(nameTextField.getText()));
-
-      if (!(ratioTextField.getText().isEmpty())) {
-        Boolean ratioValueDouble = false;
-        try {
-          Double.parseDouble(ratioTextField.getText());
-        } catch (NumberFormatException e1) {
-          JDialog msg = new JDialog(this);
-          msg.setLocationRelativeTo(null);
-          JOptionPane.showMessageDialog(msg, "The transformation ratio is not a Double", "Warning !",
-              JOptionPane.WARNING_MESSAGE);
-          ratioValueDouble = true;
-        }
-        if (ratioValueDouble == false) {
-          idealTransformer.setRatio(Double.parseDouble(ratioTextField.getText()));
-        }
-      } else {
-        idealTransformer.setRatio(1.0);
-      }
-
-      this.dispose();
+        dialog();
     }
 
-    if ("Cancel".equals(e.getActionCommand())) {
-      this.dispose();
+    public void dialog() {
+        /** JPanel **/
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        this.add(mainPanel);
+
+        JPanel attributesMainPanel = new JPanel(new GridLayout());
+        mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
+
+        // Left Side
+        Box box = Box.createVerticalBox();
+        box.setBorder(BorderFactory.createTitledBorder("Setting ideal transformer attributes"));
+
+        GridBagLayout gridBag = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        JPanel boxPanel = new JPanel();
+        boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+        boxPanel.setLayout(gridBag);
+
+        JLabel labelName = new JLabel("nm : ");
+        constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(labelName, constraints);
+        boxPanel.add(labelName);
+
+        nameTextField = new JTextField(idealTransformer.getValue().toString(), 10); // name not empty
+        constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(nameTextField, constraints);
+        boxPanel.add(nameTextField);
+
+        JLabel ratioLabel = new JLabel("ratio : ");
+        constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(ratioLabel, constraints);
+        boxPanel.add(ratioLabel);
+
+        ratioTextField = new JTextField("" + idealTransformer.getRatio(), 10); // name not empty
+        constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                new Insets(5, 10, 5, 10), 0, 0);
+        gridBag.setConstraints(ratioTextField, constraints);
+        boxPanel.add(ratioTextField);
+
+        box.add(boxPanel); // add border to box
+        attributesMainPanel.add(box); // add grid to grid
+
+        // Down Side
+        JPanel downPanel = new JPanel(new FlowLayout());
+
+        JButton saveCloseButton = new JButton("Save and close");
+        saveCloseButton.setIcon(IconManager.imgic25);
+        saveCloseButton.setActionCommand("Save_Close");
+        saveCloseButton.addActionListener(this);
+        saveCloseButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(saveCloseButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setIcon(IconManager.imgic27);
+        cancelButton.setActionCommand("Cancel");
+        cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(new Dimension(200, 30));
+        downPanel.add(cancelButton);
+
+        mainPanel.add(downPanel, BorderLayout.CENTER);
+        pack();
+        this.getRootPane().setDefaultButton(saveCloseButton);
     }
-  }
+
+    public void actionPerformed(ActionEvent e) {
+        if ("Save_Close".equals(e.getActionCommand())) {
+            idealTransformer.setValue(new String(nameTextField.getText()));
+
+            if (!(ratioTextField.getText().isEmpty())) {
+                Boolean ratioValueDouble = false;
+                try {
+                    Double.parseDouble(ratioTextField.getText());
+                } catch (NumberFormatException e1) {
+                    JDialog msg = new JDialog(this);
+                    msg.setLocationRelativeTo(null);
+                    JOptionPane.showMessageDialog(msg, "The transformation ratio is not a Double", "Warning !",
+                            JOptionPane.WARNING_MESSAGE);
+                    ratioValueDouble = true;
+                }
+                if (ratioValueDouble == false) {
+                    idealTransformer.setRatio(Double.parseDouble(ratioTextField.getText()));
+                }
+            } else {
+                idealTransformer.setRatio(1.0);
+            }
+
+            this.dispose();
+        }
+
+        if ("Cancel".equals(e.getActionCommand())) {
+            this.dispose();
+        }
+    }
 }

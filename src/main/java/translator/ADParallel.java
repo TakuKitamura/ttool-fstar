@@ -49,188 +49,188 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class ADParallel extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
-  protected String valueGate;
-  protected Vector<Gate> synchroGate;
-  protected Vector<Gate> gateList;
-  protected Vector<ADComponent> component;
-  protected Gate specialGate;
-  protected boolean isMulti;
+    protected String valueGate;
+    protected Vector<Gate> synchroGate;
+    protected Vector<Gate> gateList;
+    protected Vector<ADComponent> component;
+    protected Gate specialGate;
+    protected boolean isMulti;
 
-  public ADParallel() {
-    nbNext = 100;
-    gateList = new Vector<>();
-    component = new Vector<>();
-    valueGate = "[]";
-  }
-
-  public void setValueGate(String s) {
-    valueGate = s;
-  }
-
-  public String getValueGate() {
-    if ((synchroGate == null) || (synchroGate.size() == 0)) {
-      return valueGate;
-    } else {
-      Gate g;
-      StringBuffer sb = new StringBuffer("[");
-      for (int i = 0; i < synchroGate.size(); i++) {
-        g = synchroGate.elementAt(i);
-        if (i > 0) {
-          sb.append(",");
-        }
-        sb.append(g.getName());
-      }
-      sb.append("]");
-      return new String(sb);
-    }
-  }
-
-  public String getLotosValueGate() {
-    if ((synchroGate == null) || (synchroGate.size() == 0)) {
-      return valueGate;
-    } else {
-      Gate g;
-      StringBuffer sb = new StringBuffer("[");
-      for (int i = 0; i < synchroGate.size(); i++) {
-        g = synchroGate.elementAt(i);
-        if (i > 0) {
-          sb.append(",");
-        }
-        sb.append(g.getLotosName());
-      }
-      sb.append("]");
-      return new String(sb);
-    }
-  }
-
-  public void setMulti(boolean b) {
-    isMulti = b;
-  }
-
-  public boolean isMulti() {
-    return isMulti;
-  }
-
-  public void setSpecialGate(Gate g) {
-    specialGate = g;
-  }
-
-  public Gate getSpecialGate() {
-    return specialGate;
-  }
-
-  public Vector<Gate> getNewAllGateList() {
-    Vector<Gate> v = new Vector<>();
-    int i;
-
-    for (i = 0; i < gateList.size(); i++) {
-      v.add(gateList.elementAt(i));
+    public ADParallel() {
+        nbNext = 100;
+        gateList = new Vector<>();
+        component = new Vector<>();
+        valueGate = "[]";
     }
 
-    return v;
-  }
-
-  public String getAction(ADComponent ad) {
-    //
-    int index = component.indexOf(ad);
-    if ((index >= 0) && (index < gateList.size())) {
-      Gate g = gateList.elementAt(index);
-      return g.getName() + ";";
-    }
-    //
-    return "";
-  }
-
-  public int nbGate() {
-    if (synchroGate == null) {
-      return 0;
-    }
-    return synchroGate.size();
-  }
-
-  public Vector getGateList() {
-    return synchroGate;
-  }
-
-  public void addCoupleGateComponent(Gate g, ADComponent ad) {
-    gateList.add(g);
-    component.add(ad);
-  }
-
-  public Gate getGate(int index) {
-    if (index < synchroGate.size()) {
-      return synchroGate.elementAt(index);
-    }
-    return null;
-  }
-
-  public void removeSynchroGateIfApplicable(Gate g) {
-    synchroGate.remove(g);
-  }
-
-  public String toString() {
-    return "Parallel / Synchro (" + valueGate + ")";
-  }
-
-  public boolean isAValidMotif(TClass t) {
-    //
-    if (valueGate == null) {
-      valueGate = "[]";
-    }
-    String s = valueGate;
-    Vector<Gate> gates = new Vector<>();
-
-    // remove spaces
-    s = Conversion.replaceAllChar(s, ' ', "");
-
-    // checks for '['and ']'
-    if (s.charAt(0) != '[') {
-      return false;
+    public void setValueGate(String s) {
+        valueGate = s;
     }
 
-    if (s.charAt(s.length() - 1) != ']') {
-      return false;
-    }
-
-    s = s.substring(1, s.length() - 1);
-    //
-
-    String[] array = s.split(",");
-
-    // check gate name
-    Gate g;
-    for (int i = 0; i < array.length; i++) {
-      if (!array[i].equals("")) {
-        g = t.getGateByName(array[i]);
-        //
-        if (g == null) {
-          return false;
-        }
-        if (gates.contains(g)) {
-          return false;
+    public String getValueGate() {
+        if ((synchroGate == null) || (synchroGate.size() == 0)) {
+            return valueGate;
         } else {
-          //
-          gates.addElement(g);
+            Gate g;
+            StringBuffer sb = new StringBuffer("[");
+            for (int i = 0; i < synchroGate.size(); i++) {
+                g = synchroGate.elementAt(i);
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(g.getName());
+            }
+            sb.append("]");
+            return new String(sb);
         }
-      }
     }
 
-    synchroGate = gates;
-    //
+    public String getLotosValueGate() {
+        if ((synchroGate == null) || (synchroGate.size() == 0)) {
+            return valueGate;
+        } else {
+            Gate g;
+            StringBuffer sb = new StringBuffer("[");
+            for (int i = 0; i < synchroGate.size(); i++) {
+                g = synchroGate.elementAt(i);
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(g.getLotosName());
+            }
+            sb.append("]");
+            return new String(sb);
+        }
+    }
 
-    /*
-     * for(int j=0; j<gates.size(); j++) { g = (Gate)(gates.elementAt(j));
-     * 
-     * }
-     */
+    public void setMulti(boolean b) {
+        isMulti = b;
+    }
 
-    return true;
-  }
+    public boolean isMulti() {
+        return isMulti;
+    }
 
-  public ADComponent makeSame() {
-    ADParallel adp = new ADParallel();
-    adp.setValueGate(getValueGate());
-    return adp;
-  }
+    public void setSpecialGate(Gate g) {
+        specialGate = g;
+    }
+
+    public Gate getSpecialGate() {
+        return specialGate;
+    }
+
+    public Vector<Gate> getNewAllGateList() {
+        Vector<Gate> v = new Vector<>();
+        int i;
+
+        for (i = 0; i < gateList.size(); i++) {
+            v.add(gateList.elementAt(i));
+        }
+
+        return v;
+    }
+
+    public String getAction(ADComponent ad) {
+        //
+        int index = component.indexOf(ad);
+        if ((index >= 0) && (index < gateList.size())) {
+            Gate g = gateList.elementAt(index);
+            return g.getName() + ";";
+        }
+        //
+        return "";
+    }
+
+    public int nbGate() {
+        if (synchroGate == null) {
+            return 0;
+        }
+        return synchroGate.size();
+    }
+
+    public Vector getGateList() {
+        return synchroGate;
+    }
+
+    public void addCoupleGateComponent(Gate g, ADComponent ad) {
+        gateList.add(g);
+        component.add(ad);
+    }
+
+    public Gate getGate(int index) {
+        if (index < synchroGate.size()) {
+            return synchroGate.elementAt(index);
+        }
+        return null;
+    }
+
+    public void removeSynchroGateIfApplicable(Gate g) {
+        synchroGate.remove(g);
+    }
+
+    public String toString() {
+        return "Parallel / Synchro (" + valueGate + ")";
+    }
+
+    public boolean isAValidMotif(TClass t) {
+        //
+        if (valueGate == null) {
+            valueGate = "[]";
+        }
+        String s = valueGate;
+        Vector<Gate> gates = new Vector<>();
+
+        // remove spaces
+        s = Conversion.replaceAllChar(s, ' ', "");
+
+        // checks for '['and ']'
+        if (s.charAt(0) != '[') {
+            return false;
+        }
+
+        if (s.charAt(s.length() - 1) != ']') {
+            return false;
+        }
+
+        s = s.substring(1, s.length() - 1);
+        //
+
+        String[] array = s.split(",");
+
+        // check gate name
+        Gate g;
+        for (int i = 0; i < array.length; i++) {
+            if (!array[i].equals("")) {
+                g = t.getGateByName(array[i]);
+                //
+                if (g == null) {
+                    return false;
+                }
+                if (gates.contains(g)) {
+                    return false;
+                } else {
+                    //
+                    gates.addElement(g);
+                }
+            }
+        }
+
+        synchroGate = gates;
+        //
+
+        /*
+         * for(int j=0; j<gates.size(); j++) { g = (Gate)(gates.elementAt(j));
+         * 
+         * }
+         */
+
+        return true;
+    }
+
+    public ADComponent makeSame() {
+        ADParallel adp = new ADParallel();
+        adp.setValueGate(getValueGate());
+        return adp;
+    }
 
 }

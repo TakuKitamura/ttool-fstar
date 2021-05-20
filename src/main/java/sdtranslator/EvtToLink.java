@@ -50,49 +50,49 @@ import translator.TClass;
  * @author Ludovic APVRILLE
  */
 public class EvtToLink {
-  public static final int SYNC = 0;
-  public final static int TIMER_SET = 5;
-  public final static int TIMER_RESET = 6;
-  public final static int TIMER_EXP = 7;
-  public final static int SEND_MSG = 9;
-  public final static int RECV_MSG = 10;
-  public final static int INTERNAL_ACTION = 8;
-  public final static int VARIABLE_SET = 11;
-  public final static int TIME_INTERVAL = 12;
+    public static final int SYNC = 0;
+    public final static int TIMER_SET = 5;
+    public final static int TIMER_RESET = 6;
+    public final static int TIMER_EXP = 7;
+    public final static int SEND_MSG = 9;
+    public final static int RECV_MSG = 10;
+    public final static int INTERNAL_ACTION = 8;
+    public final static int VARIABLE_SET = 11;
+    public final static int TIME_INTERVAL = 12;
 
-  public Evt evt;
-  public TClass t;
-  public Gate g;
-  public Param p;
-  public int type;
-  public int nbOfParams;
+    public Evt evt;
+    public TClass t;
+    public Gate g;
+    public Param p;
+    public int type;
+    public int nbOfParams;
 
-  public EvtToLink(Evt _evt, TClass _t, Gate _g, int _type) {
-    evt = _evt;
-    t = _t;
-    g = _g;
-    type = _type;
-  }
+    public EvtToLink(Evt _evt, TClass _t, Gate _g, int _type) {
+        evt = _evt;
+        t = _t;
+        g = _g;
+        type = _type;
+    }
 
-  public EvtToLink(Evt _evt, TClass _t, Gate _g, int _type, int _nbOfParams) {
-    evt = _evt;
-    t = _t;
-    g = _g;
-    type = _type;
-    nbOfParams = _nbOfParams;
-  }
+    public EvtToLink(Evt _evt, TClass _t, Gate _g, int _type, int _nbOfParams) {
+        evt = _evt;
+        t = _t;
+        g = _g;
+        type = _type;
+        nbOfParams = _nbOfParams;
+    }
 
-  public EvtToLink(Evt _evt, TClass _t, Param _p, int _type) {
-    evt = _evt;
-    t = _t;
-    p = _p;
-    type = _type;
-  }
+    public EvtToLink(Evt _evt, TClass _t, Param _p, int _type) {
+        evt = _evt;
+        t = _t;
+        p = _p;
+        type = _type;
+    }
 
-  public EvtToLink(Evt _evt, TClass _t, int _type) {
-    evt = _evt;
-    t = _t;
-    type = _type;
-  }
+    public EvtToLink(Evt _evt, TClass _t, int _type) {
+        evt = _evt;
+        t = _t;
+        type = _type;
+    }
 
 }

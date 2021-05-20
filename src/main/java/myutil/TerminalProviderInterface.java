@@ -45,8 +45,8 @@ package myutil;
  */
 public interface TerminalProviderInterface {
 
-  public String getMidPrompt();
+    public String getMidPrompt();
 
-  public boolean tabAction(String buffer);
+    public boolean tabAction(String buffer);
 
 }

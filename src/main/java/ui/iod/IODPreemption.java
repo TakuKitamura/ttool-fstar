@@ -53,60 +53,60 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class IODPreemption extends TGCWithoutInternalComponent {
-  private int lineLength = 0;
-  // private int textX, textY;
+    private int lineLength = 0;
+    // private int textX, textY;
 
-  public IODPreemption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public IODPreemption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 150;
-    height = 5;
+        width = 150;
+        height = 5;
 
-    nbConnectingPoint = 6;
-    connectingPoint = new TGConnectingPoint[6];
-    connectingPoint[0] = new TGConnectingPointIOD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.167, 1.0);
-    connectingPoint[2] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.333, 1.0);
-    connectingPoint[3] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.5, 1.0);
-    connectingPoint[4] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.667, 1.0);
-    connectingPoint[5] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.833, 1.0);
+        nbConnectingPoint = 6;
+        connectingPoint = new TGConnectingPoint[6];
+        connectingPoint[0] = new TGConnectingPointIOD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.167, 1.0);
+        connectingPoint[2] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.333, 1.0);
+        connectingPoint[3] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.5, 1.0);
+        connectingPoint[4] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.667, 1.0);
+        connectingPoint[5] = new TGConnectingPointIOD(this, 0, lineLength, false, true, 0.833, 1.0);
 
-    addTGConnectingPointsComment();
+        addTGConnectingPointsComment();
 
-    nbInternalTGComponent = 0;
+        nbInternalTGComponent = 0;
 
-    moveable = true;
-    editable = false;
-    removable = true;
+        moveable = true;
+        editable = false;
+        removable = true;
 
-    name = "parallel / synchro";
+        name = "parallel / synchro";
 
-    myImageIcon = IconManager.imgic206;
-  }
-
-  public void internalDrawing(Graphics g) {
-    g.drawRect(x, y, width, height);
-    g.fillRect(x, y, width, height);
-    g.drawString("[>", x + width + 2, y + height + 1);
-  }
-
-  public TGComponent isOnMe(int x1, int y1) {
-    if (GraphicLib.isInRectangle(x1, y1, x, y, width + 10, height)) {
-      return this;
+        myImageIcon = IconManager.imgic206;
     }
-    return null;
-  }
 
-  public String getValueGate() {
-    return tgcomponent[0].getValue();
-  }
+    public void internalDrawing(Graphics g) {
+        g.drawRect(x, y, width, height);
+        g.fillRect(x, y, width, height);
+        g.drawString("[>", x + width + 2, y + height + 1);
+    }
 
-  public int getType() {
-    return TGComponentManager.IOD_PREEMPTION;
-  }
+    public TGComponent isOnMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width + 10, height)) {
+            return this;
+        }
+        return null;
+    }
 
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_INTERACTION;
-  }
+    public String getValueGate() {
+        return tgcomponent[0].getValue();
+    }
+
+    public int getType() {
+        return TGComponentManager.IOD_PREEMPTION;
+    }
+
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_INTERACTION;
+    }
 }

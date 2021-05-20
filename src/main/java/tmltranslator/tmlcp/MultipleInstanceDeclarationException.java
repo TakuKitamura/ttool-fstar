@@ -46,11 +46,11 @@ package tmltranslator.tmlcp;
  */
 public class MultipleInstanceDeclarationException extends Exception {
 
-  public MultipleInstanceDeclarationException() {
-    super("TMLCP COMPILER ERROR: multiple declarations of instances");
-  }
+    public MultipleInstanceDeclarationException() {
+        super("TMLCP COMPILER ERROR: multiple declarations of instances");
+    }
 
-  public MultipleInstanceDeclarationException(String message) {
-    super(message);
-  }
+    public MultipleInstanceDeclarationException(String message) {
+        super(message);
+    }
 }

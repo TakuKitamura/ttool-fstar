@@ -69,633 +69,644 @@ import java.util.List;
  */
 public class AvatarDesignPanel extends TURTLEPanel {
 
-  public AvatarBDPanel abdp;
+    public AvatarBDPanel abdp;
 
-  public AvatarDesignPanel(MainGUI _mgui) {
-    super(_mgui);
-    if (_mgui == null) {
-      // for unit testing only
-      abdp = new AvatarBDPanel(null, null);
-      return;
-    }
-    // Issue #41 Ordering of tabbed panes
-    // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-    tabbedPane = GraphicLib.createDraggableEnhancedTabbedPaneFixedAt0(this);// new JTabbedPane();
-
-    cl = new ChangeListener() {
-
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneDesignAction(e);
-      }
-    };
-
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-  }
-
-  public void setValidated(List<AvatarBDStateMachineOwner> _validated) {
-    if (abdp != null) {
-      abdp.setValidated(_validated);
-    }
-  }
-
-  public void setIgnored(List<AvatarBDStateMachineOwner> _ignored) {
-    if (abdp != null) {
-      abdp.setIgnored(_ignored);
-    }
-  }
-
-  public void setOptimized(boolean _optimized) {
-    if (abdp != null) {
-      abdp.setOptimized(_optimized);
-    }
-  }
-
-  public void setConsiderTimingOperators(boolean _considerTimingOperators) {
-    if (abdp != null) {
-      abdp.setConsiderTimingOperators(_considerTimingOperators);
-    }
-  }
-
-  public List<AvatarBDStateMachineOwner> getValidated() {
-    if (abdp != null) {
-      return abdp.getValidated();
-    }
-    return null;
-  }
-
-  public List<AvatarBDStateMachineOwner> getIgnored() {
-    if (abdp != null) {
-      return abdp.getIgnored();
-    }
-    return null;
-  }
-
-  public boolean getOptimized() {
-    if (abdp != null) {
-      return abdp.getOptimized();
-    }
-    return true;
-  }
-
-  public boolean getConsiderTimingOperators() {
-    if (abdp != null) {
-      return abdp.getConsiderTimingOperators();
-    }
-    return true;
-  }
-
-  public AvatarBDPanel getAvatarBDPanel() {
-    return abdp;
-  }
-
-  public AvatarSMDPanel getAvatarSMDPanel(String name) {
-    AvatarSMDPanel asmdp;
-    for (int i = 1; i < panels.size(); i++) {
-      asmdp = (AvatarSMDPanel) (panels.elementAt(i));
-      if (asmdp.getName().compareTo(name) == 0) {
-        return asmdp;
-      }
-    }
-    return null;
-  }
-
-  public void addAvatarStateMachineDiagramPanel(String s) {
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    AvatarSMDToolBar toolBarActivity = new AvatarSMDToolBar(mgui);
-    toolbars.add(toolBarActivity);
-
-    AvatarSMDPanel asmdp = new AvatarSMDPanel(mgui, toolBarActivity);
-    asmdp.tp = this;
-    asmdp.setName(s);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(asmdp);
-    asmdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    panels.add(asmdp);
-    tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the state machine of " + s);
-    // tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
-    return;
-  }
-
-  @Override
-  public void init() {
-
-    // Class Diagram toolbar
-    AvatarBDToolBar toolBarAvatarBD = new AvatarBDToolBar(mgui);
-    toolbars.add(toolBarAvatarBD);
-
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    // Class diagram
-    abdp = new AvatarBDPanel(mgui, toolBarAvatarBD);
-    abdp.setName("Block Diagram");
-    abdp.tp = this;
-    tdp = abdp;
-    panels.add(abdp); // Always first in list
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(abdp);
-    abdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarAvatarBD, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab("Design", IconManager.imgic80, toolBarPanel, "Opens the Design");
-    tabbedPane.setSelectedIndex(0);
-    // tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
-    mgui.changeMade(abdp, TDiagramPanel.NEW_COMPONENT);
-
-    // jsp.setVisible(true);
-
-  }
-
-  public List<AvatarBDLibraryFunction> getAllLibraryFunctions(String _name) {
-    return abdp.getAllLibraryFunctionsForBlock(_name);
-  }
-
-  public List<TAttribute> getAllAttributes(String _name) {
-    return abdp.getAllAttributesOfBlock(_name);
-  }
-
-  public List<AvatarMethod> getAllMethods(String _name) {
-    return abdp.getAllMethodsOfBlock(_name);
-  }
-
-  public List<AvatarSignal> getAllSignals(String _name) {
-    return abdp.getAllSignalsOfBlock(_name);
-  }
-
-  public List<String> getAllTimers(String _name) {
-    return abdp.getAllTimersOfBlock(_name);
-  }
-
-  @Override
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" tabs=\"" + getAllTabsName()
-          + "\" >\n";
-    }
-
-    return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" tabs=\""
-        + getAllTabsName() + "\" >\n";
-  }
-
-  @Override
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
-
-  @Override
-  public String toString() {
-    return mgui.getTitleAt(this) + " (Design)";
-  }
-
-  public void resetMetElements() {
-    // TraceManager.addDev("Reset met elements");
-    TGComponent tgc;
-
-    for (int i = 0; i < panels.size(); i++) {
-      Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-      while (iterator.hasNext()) {
-        tgc = iterator.next();
-        tgc.setAVATARMet(0);
-        tgc.setInternalAvatarMet(0);
-
-      }
-    }
-
-  }
-
-  public List<TGComponent> getListOfComponentsInMutex() {
-    TGComponent tgc;
-    TDiagramPanel tdp;
-
-    List<TGComponent> list = new LinkedList<TGComponent>();
-
-    for (int i = 0; i < panels.size(); i++) {
-      tdp = panels.get(i);
-      if (tdp instanceof AvatarSMDPanel) {
-        Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-        while (iterator.hasNext()) {
-          tgc = iterator.next();
-          tgc.getAllCheckableInvariant(list);
+    public AvatarDesignPanel(MainGUI _mgui) {
+        super(_mgui);
+        if (_mgui == null) {
+            // for unit testing only
+            abdp = new AvatarBDPanel(null, null);
+            return;
         }
-      }
-    }
+        // Issue #41 Ordering of tabbed panes
+        // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPaneFixedAt0(this);// new JTabbedPane();
 
-    return list;
+        cl = new ChangeListener() {
 
-  }
-
-  public TGComponent hasCheckableMasterMutex() {
-    TGComponent tgc, tgctmp;
-    for (int i = 0; i < panels.size(); i++) {
-      tdp = panels.get(i);
-      if (tdp instanceof AvatarSMDPanel) {
-        Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-        while (iterator.hasNext()) {
-          tgc = iterator.next();
-          tgctmp = tgc.hasCheckableMasterMutex();
-          if (tgctmp != null) {
-            // TraceManager.addDev("Found element with master mutex: " + tgctmp);
-            return tgctmp;
-          }
-        }
-      }
-    }
-
-    return null;
-  }
-
-  public void removeAllMutualExclusionWithMasterMutex() {
-    TGComponent tgc;
-    for (int i = 0; i < panels.size(); i++) {
-      tdp = panels.get(i);
-      if (tdp instanceof AvatarSMDPanel) {
-        Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-        while (iterator.hasNext()) {
-          tgc = iterator.next();
-          tgc.removeAllMutualExclusionWithMasterMutex();
-        }
-      }
-    }
-  }
-
-  public void reinitMutualExclusionStates() {
-    TGComponent tgc;
-    for (int i = 0; i < panels.size(); i++) {
-      tdp = panels.get(i);
-      if (tdp instanceof AvatarSMDPanel) {
-        Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-        while (iterator.hasNext()) {
-          tgc = iterator.next();
-          if (tgc instanceof AvatarSMDState) {
-            ((AvatarSMDState) tgc).reinitMutualExclusionStates();
-          }
-        }
-      }
-    }
-  }
-
-  public void clearGraphicalInfoOnInvariants() {
-
-  }
-
-  public List<String> getPropertyPragmas() {
-    List<String> result = new LinkedList<String>();
-    for (Object tgc : abdp.getComponentList()) {
-      if (tgc instanceof AvatarBDPragma) {
-        result.addAll(((AvatarBDPragma) tgc).getProperties());
-      }
-    }
-
-    return result;
-  }
-
-  public List<String> getModelPragmas() {
-    List<String> result = new LinkedList<String>();
-    for (Object tgc : abdp.getComponentList()) {
-      if (tgc instanceof AvatarBDPragma) {
-        result.addAll(((AvatarBDPragma) tgc).getModels());
-      }
-    }
-
-    return result;
-  }
-
-  public void resetModelBacktracingProVerif() {
-    if (abdp == null) {
-      return;
-    }
-
-    // Reset confidential attributes
-    for (AvatarBDBlock block1 : abdp.getFullBlockList()) {
-      block1.resetConfidentialityOfAttributes();
-    }
-    for (Object tgc : abdp.getComponentList()) {
-      if (tgc instanceof AvatarBDPragma) {
-        AvatarBDPragma pragma = (AvatarBDPragma) tgc;
-        pragma.authStrongMap.clear();
-        pragma.authWeakMap.clear();
-
-      }
-    }
-    // Reset reachable states
-    for (int i = 0; i < panels.size(); i++) {
-      tdp = panels.get(i);
-      if (tdp instanceof AvatarSMDPanel) {
-        ((AvatarSMDPanel) tdp).resetStateSecurityInfo();
-      }
-    }
-  }
-
-  public void modelBacktracingUppaal(Map<String, Integer> verifMap) {
-    for (Object ob : abdp.getComponentList()) {
-      if (ob instanceof AvatarBDSafetyPragma) {
-        AvatarBDSafetyPragma pragma = (AvatarBDSafetyPragma) ob;
-        pragma.verifMap = verifMap;
-      }
-    }
-  }
-
-  public void modelBacktracingLatency(Vector<SimulationLatency> latencies) {
-    // Search for Safety Pragma
-    for (Object ob : abdp.getComponentList()) {
-      if (ob instanceof AvatarBDPerformancePragma) {
-        AvatarBDPerformancePragma bdpragma = (AvatarBDPerformancePragma) ob;
-        // Match each safety pragma to latency result
-        for (String s : bdpragma.getProperties()) {
-          for (SimulationLatency latency : latencies) {
-            for (AvatarPragmaLatency pragma : latency.getPragmas()) {
-              if (pragma.getPragmaString().equals(s)) {
-                // Check if the latency statement is true
-                int refTime = pragma.getTime();
-                float time = 0;
-                // System.out.println("time " + latency.getAverageTime() + " " + refTime);
-                try {
-                  time = Float.valueOf(latency.getAverageTime());
-                } catch (Exception e) {
-                  continue;
-                }
-                if (pragma.getSymbolType() == AvatarPragmaLatency.lessThan) {
-                  if (time < refTime) {
-                    bdpragma.verifMap.put(s, "PROVED_TRUE");
-                    // mark as true
-                  } else {
-                    bdpragma.verifMap.put(s, "PROVED_FALSE");
-                  }
-                } else if (pragma.getSymbolType() == AvatarPragmaLatency.greaterThan) {
-                  if (time > refTime) {
-                    bdpragma.verifMap.put(s, "PROVED_TRUE");
-                    // mark as true
-                  } else {
-                    bdpragma.verifMap.put(s, "PROVED_FALSE");
-                  }
-                } else if (pragma.getSymbolType() == AvatarPragmaLatency.query) {
-                  // Draw average time on verif map
-                  bdpragma.verifMap.put(s, Float.toString(time));
-                }
-              }
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneDesignAction(e);
             }
-          }
+        };
+
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+    }
+
+    public void setValidated(List<AvatarBDStateMachineOwner> _validated) {
+        if (abdp != null) {
+            abdp.setValidated(_validated);
         }
-      }
-    }
-  }
-
-  public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
-
-    if (abdp == null) {
-      return;
     }
 
-    resetModelBacktracingProVerif();
-
-    // Confidential attributes
-    Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
-    Map<AvatarAttribute, AvatarPragma> secretAttributes = new HashMap<AvatarAttribute, AvatarPragma>();
-    Map<AvatarAttribute, AvatarPragma> nonSecretAttributes = new HashMap<AvatarAttribute, AvatarPragma>();
-    for (AvatarPragmaSecret pragma : confResults.keySet()) {
-      ProVerifQueryResult result = confResults.get(pragma);
-      if (result.isProved()) {
-        if (result.isSatisfied())
-          secretAttributes.put(pragma.getArg(), pragma);
-        else
-          nonSecretAttributes.put(pragma.getArg(), pragma);
-      }
+    public void setIgnored(List<AvatarBDStateMachineOwner> _ignored) {
+        if (abdp != null) {
+            abdp.setIgnored(_ignored);
+        }
     }
 
-    for (AvatarBDBlock bdBlock : abdp.getFullBlockList())
-      for (TAttribute tattr : bdBlock.getAttributeList()) {
-        if (tattr.getType() == TAttribute.OTHER) {
-          List<TAttribute> types = abdp.getAttributesOfDataType(tattr.getTypeOther());
-          int toBeFound = types.size();
-          boolean ko = false;
-          for (TAttribute type : types) {
-            for (AvatarAttribute attribute : secretAttributes.keySet())
-              if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
-                  && attribute.getName().equals(tattr.getId() + "__" + type.getId())) {
-                toBeFound--;
-                ProVerifResultTrace trace = confResults.get(secretAttributes.get(attribute)).getTrace();
-                if (trace != null) {
-                  bdBlock.addProVerifTrace(tattr, trace);
-                }
-                break;
-              }
+    public void setOptimized(boolean _optimized) {
+        if (abdp != null) {
+            abdp.setOptimized(_optimized);
+        }
+    }
 
-            for (AvatarAttribute attribute : nonSecretAttributes.keySet())
-              if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
-                  && attribute.getName().equals(tattr.getId() + "__" + type.getId())) {
-                ko = true;
-                ProVerifResultTrace trace = confResults.get(nonSecretAttributes.get(attribute)).getTrace();
-                if (trace != null) {
-                  bdBlock.addProVerifTrace(tattr, trace);
-                }
-                break;
-              }
+    public void setConsiderTimingOperators(boolean _considerTimingOperators) {
+        if (abdp != null) {
+            abdp.setConsiderTimingOperators(_considerTimingOperators);
+        }
+    }
 
-            if (ko)
-              break;
-          }
+    public List<AvatarBDStateMachineOwner> getValidated() {
+        if (abdp != null) {
+            return abdp.getValidated();
+        }
+        return null;
+    }
 
-          if (ko) {
-            tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+    public List<AvatarBDStateMachineOwner> getIgnored() {
+        if (abdp != null) {
+            return abdp.getIgnored();
+        }
+        return null;
+    }
 
-          } else if (toBeFound == 0) {
-            tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+    public boolean getOptimized() {
+        if (abdp != null) {
+            return abdp.getOptimized();
+        }
+        return true;
+    }
 
-          }
-        } else {
-          for (AvatarAttribute attribute : secretAttributes.keySet())
-            if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
-                && attribute.getName().equals(tattr.getId())) {
-              tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
-              ProVerifResultTrace trace = confResults.get(secretAttributes.get(attribute)).getTrace();
-              if (trace != null) {
-                bdBlock.addProVerifTrace(tattr, trace);
-              }
-            }
-          for (AvatarAttribute attribute : nonSecretAttributes.keySet())
-            if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
-                && attribute.getName().equals(tattr.getId())) {
-              tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
-              ProVerifResultTrace trace = confResults.get(nonSecretAttributes.get(attribute)).getTrace();
-              if (trace != null) {
-                bdBlock.addProVerifTrace(tattr, trace);
-              }
+    public boolean getConsiderTimingOperators() {
+        if (abdp != null) {
+            return abdp.getConsiderTimingOperators();
+        }
+        return true;
+    }
+
+    public AvatarBDPanel getAvatarBDPanel() {
+        return abdp;
+    }
+
+    public AvatarSMDPanel getAvatarSMDPanel(String name) {
+        AvatarSMDPanel asmdp;
+        for (int i = 1; i < panels.size(); i++) {
+            asmdp = (AvatarSMDPanel) (panels.elementAt(i));
+            if (asmdp.getName().compareTo(name) == 0) {
+                return asmdp;
             }
         }
-      }
+        return null;
+    }
 
-    // Reachable states
-    Map<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
-    for (AvatarPragmaReachability pragma : reachResults.keySet()) {
-      ProVerifQueryResult result = reachResults.get(pragma);
-      if (result.isProved()) {
+    public void addAvatarStateMachineDiagramPanel(String s) {
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        AvatarSMDToolBar toolBarActivity = new AvatarSMDToolBar(mgui);
+        toolbars.add(toolBarActivity);
+
+        AvatarSMDPanel asmdp = new AvatarSMDPanel(mgui, toolBarActivity);
+        asmdp.tp = this;
+        asmdp.setName(s);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(asmdp);
+        asmdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        panels.add(asmdp);
+        tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the state machine of " + s);
+        // tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
+        return;
+    }
+
+    @Override
+    public void init() {
+
+        // Class Diagram toolbar
+        AvatarBDToolBar toolBarAvatarBD = new AvatarBDToolBar(mgui);
+        toolbars.add(toolBarAvatarBD);
+
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        // Class diagram
+        abdp = new AvatarBDPanel(mgui, toolBarAvatarBD);
+        abdp.setName("Block Diagram");
+        abdp.tp = this;
+        tdp = abdp;
+        panels.add(abdp); // Always first in list
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(abdp);
+        abdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarAvatarBD, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab("Design", IconManager.imgic80, toolBarPanel, "Opens the Design");
+        tabbedPane.setSelectedIndex(0);
+        // tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
+        mgui.changeMade(abdp, TDiagramPanel.NEW_COMPONENT);
+
+        // jsp.setVisible(true);
+
+    }
+
+    public List<AvatarBDLibraryFunction> getAllLibraryFunctions(String _name) {
+        return abdp.getAllLibraryFunctionsForBlock(_name);
+    }
+
+    public List<TAttribute> getAllAttributes(String _name) {
+        return abdp.getAllAttributesOfBlock(_name);
+    }
+
+    public List<AvatarMethod> getAllMethods(String _name) {
+        return abdp.getAllMethodsOfBlock(_name);
+    }
+
+    public List<AvatarSignal> getAllSignals(String _name) {
+        return abdp.getAllSignalsOfBlock(_name);
+    }
+
+    public List<String> getAllTimers(String _name) {
+        return abdp.getAllTimersOfBlock(_name);
+    }
+
+    @Override
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" tabs=\""
+                    + getAllTabsName() + "\" >\n";
+        }
+
+        return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" tabs=\""
+                + getAllTabsName() + "\" >\n";
+    }
+
+    @Override
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    @Override
+    public String toString() {
+        return mgui.getTitleAt(this) + " (Design)";
+    }
+
+    public void resetMetElements() {
+        // TraceManager.addDev("Reset met elements");
+        TGComponent tgc;
+
         for (int i = 0; i < panels.size(); i++) {
-          tdp = panels.get(i);
-          if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(pragma.getBlock().getName()) == 0)) {
             Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
             while (iterator.hasNext()) {
-              TGComponent tgc = iterator.next();
-              if (tgc instanceof AvatarSMDState) {
-                ((AvatarSMDState) tgc).setSecurityInfo(
-                    result.isSatisfied() ? AvatarSMDState.REACHABLE : AvatarSMDState.NOT_REACHABLE,
-                    pragma.getState().getName());
-              }
-            }
+                tgc = iterator.next();
+                tgc.setAVATARMet(0);
+                tgc.setInternalAvatarMet(0);
 
-            break;
-          }
+            }
         }
-      }
+
     }
 
-    Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
-    for (Object ob : abdp.getComponentList())
-      if (ob instanceof AvatarBDPragma) {
-        AvatarBDPragma pragma = (AvatarBDPragma) ob;
-        for (String prop : pragma.getProperties()) {
-          String[] split = prop.trim().split("\\s+");
-          if (split.length != 3)
-            continue;
-          if (split[0].equals("#Authenticity")) {
-            String[] argA = split[1].split("\\.");
-            String[] argB = split[2].split("\\.");
+    public List<TGComponent> getListOfComponentsInMutex() {
+        TGComponent tgc;
+        TDiagramPanel tdp;
 
-            if (argA.length != 3 || argB.length != 3)
-              continue;
+        List<TGComponent> list = new LinkedList<TGComponent>();
 
-            TAttribute tattrA = abdp.getAttributeByBlockName(argA[0], argA[2]);
-            TAttribute tattrB = abdp.getAttributeByBlockName(argB[0], argB[2]);
-
-            if (tattrA == null || tattrB == null)
-              continue;
-
-            if (tattrA.getType() != tattrB.getType())
-              continue;
-
-            if (tattrA.getType() == TAttribute.OTHER) {
-              if (!tattrA.getTypeOther().equals(tattrB.getTypeOther()))
-                continue;
-
-              List<TAttribute> types = abdp.getAttributesOfDataType(tattrA.getTypeOther());
-              int toBeFound = types.size();
-              boolean ko = false;
-              boolean weakKo = false;
-              boolean isNotProved = false;
-              boolean weakIsNotProved = false;
-              ProVerifQueryAuthResult result = new ProVerifQueryAuthResult(false, false);
-              for (TAttribute type : types) {
-                for (AvatarPragmaAuthenticity pragmaAuth : authResults.keySet()) {
-                  if (!pragmaAuth.getAttrA().getAttribute().getBlock().getName().equals(argA[0].replaceAll("\\.", "__"))
-                      || !pragmaAuth.getAttrB().getAttribute().getBlock().getName()
-                          .equals(argB[0].replaceAll("\\.", "__"))
-                      || !pragmaAuth.getAttrA().getAttribute().getName().equals(argA[2] + "__" + type.getId())
-                      || !pragmaAuth.getAttrB().getAttribute().getName().equals(argB[2] + "__" + type.getId())
-                      || !pragmaAuth.getAttrA().getState().getName().equals(argA[1].replaceAll("\\.", "__"))
-                      || !pragmaAuth.getAttrB().getState().getName().equals(argB[1].replaceAll("\\.", "__")))
-                    continue;
-
-                  result = authResults.get(pragmaAuth);
-                  toBeFound--;
-
-                  if (result.isProved()) {
-                    if (!result.isSatisfied()) {
-                      ko = true;
-                    }
-                  } else {
-                    isNotProved = true;
-                  }
-
-                  if (result.isWeakProved()) {
-                    if (!result.isWeakSatisfied()) {
-                      weakKo = true;
-                    }
-                  } else {
-                    weakIsNotProved = true;
-                  }
-
-                  break;
+        for (int i = 0; i < panels.size(); i++) {
+            tdp = panels.get(i);
+            if (tdp instanceof AvatarSMDPanel) {
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+                while (iterator.hasNext()) {
+                    tgc = iterator.next();
+                    tgc.getAllCheckableInvariant(list);
                 }
-              }
-
-              if (ko)
-                pragma.authStrongMap.put(prop, 2);
-              else if (toBeFound == 0) {
-                if (isNotProved)
-                  pragma.authStrongMap.put(prop, 3);
-                else
-                  pragma.authStrongMap.put(prop, 1);
-              }
-
-              if (weakKo)
-                pragma.authWeakMap.put(prop, 2);
-              else if (toBeFound == 0) {
-                if (weakIsNotProved)
-                  pragma.authWeakMap.put(prop, 3);
-                else
-                  pragma.authWeakMap.put(prop, 1);
-              }
-              ProVerifResultTrace trace = result.getTrace();
-              if (trace != null) {
-                pragma.pragmaTraceMap.put(prop, trace);
-              }
-            } else {
-              for (AvatarPragmaAuthenticity pragmaAuth : authResults.keySet()) {
-                if (!pragmaAuth.getAttrA().getAttribute().getBlock().getName().equals(argA[0].replaceAll("\\.", "__"))
-                    || !pragmaAuth.getAttrB().getAttribute().getBlock().getName()
-                        .equals(argB[0].replaceAll("\\.", "__"))
-                    || !pragmaAuth.getAttrA().getAttribute().getName().equals(argA[2])
-                    || !pragmaAuth.getAttrB().getAttribute().getName().equals(argB[2])
-                    || !pragmaAuth.getAttrA().getState().getName().equals(argA[1].replaceAll("\\.", "__"))
-                    || !pragmaAuth.getAttrB().getState().getName().equals(argB[1].replaceAll("\\.", "__")))
-                  continue;
-
-                ProVerifQueryAuthResult result = authResults.get(pragmaAuth);
-
-                if (result.isProved()) {
-                  if (result.isSatisfied()) {
-                    pragma.authStrongMap.put(prop, 1);
-                  } else {
-                    pragma.authStrongMap.put(prop, 2);
-                  }
-                } else {
-                  pragma.authStrongMap.put(prop, 3);
-                }
-
-                if (result.isWeakProved()) {
-                  if (result.isWeakSatisfied()) {
-                    pragma.authWeakMap.put(prop, 1);
-                  } else {
-                    pragma.authWeakMap.put(prop, 2);
-                  }
-                } else {
-                  pragma.authWeakMap.put(prop, 3);
-                }
-                // Add ProVerif Result Trace to pragma
-                ProVerifResultTrace trace = pvoa.getResults().get(pragmaAuth).getTrace();
-                if (trace != null) {
-                  pragma.pragmaTraceMap.put(prop, trace);
-                }
-                break;
-              }
             }
-          }
         }
-      }
-  }
 
-  public List<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
-    return abdp.getAllNonMappedAvatarBlockNames(_name, _tadp, ref, name);
-  }
+        return list;
 
-  public List<String> getAllNonMappedAvatarChannelNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
-    return abdp.getAllNonMappedAvatarChannelNames(_name, _tadp);
-  }
+    }
+
+    public TGComponent hasCheckableMasterMutex() {
+        TGComponent tgc, tgctmp;
+        for (int i = 0; i < panels.size(); i++) {
+            tdp = panels.get(i);
+            if (tdp instanceof AvatarSMDPanel) {
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+                while (iterator.hasNext()) {
+                    tgc = iterator.next();
+                    tgctmp = tgc.hasCheckableMasterMutex();
+                    if (tgctmp != null) {
+                        // TraceManager.addDev("Found element with master mutex: " + tgctmp);
+                        return tgctmp;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void removeAllMutualExclusionWithMasterMutex() {
+        TGComponent tgc;
+        for (int i = 0; i < panels.size(); i++) {
+            tdp = panels.get(i);
+            if (tdp instanceof AvatarSMDPanel) {
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+                while (iterator.hasNext()) {
+                    tgc = iterator.next();
+                    tgc.removeAllMutualExclusionWithMasterMutex();
+                }
+            }
+        }
+    }
+
+    public void reinitMutualExclusionStates() {
+        TGComponent tgc;
+        for (int i = 0; i < panels.size(); i++) {
+            tdp = panels.get(i);
+            if (tdp instanceof AvatarSMDPanel) {
+                Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+                while (iterator.hasNext()) {
+                    tgc = iterator.next();
+                    if (tgc instanceof AvatarSMDState) {
+                        ((AvatarSMDState) tgc).reinitMutualExclusionStates();
+                    }
+                }
+            }
+        }
+    }
+
+    public void clearGraphicalInfoOnInvariants() {
+
+    }
+
+    public List<String> getPropertyPragmas() {
+        List<String> result = new LinkedList<String>();
+        for (Object tgc : abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                result.addAll(((AvatarBDPragma) tgc).getProperties());
+            }
+        }
+
+        return result;
+    }
+
+    public List<String> getModelPragmas() {
+        List<String> result = new LinkedList<String>();
+        for (Object tgc : abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                result.addAll(((AvatarBDPragma) tgc).getModels());
+            }
+        }
+
+        return result;
+    }
+
+    public void resetModelBacktracingProVerif() {
+        if (abdp == null) {
+            return;
+        }
+
+        // Reset confidential attributes
+        for (AvatarBDBlock block1 : abdp.getFullBlockList()) {
+            block1.resetConfidentialityOfAttributes();
+        }
+        for (Object tgc : abdp.getComponentList()) {
+            if (tgc instanceof AvatarBDPragma) {
+                AvatarBDPragma pragma = (AvatarBDPragma) tgc;
+                pragma.authStrongMap.clear();
+                pragma.authWeakMap.clear();
+
+            }
+        }
+        // Reset reachable states
+        for (int i = 0; i < panels.size(); i++) {
+            tdp = panels.get(i);
+            if (tdp instanceof AvatarSMDPanel) {
+                ((AvatarSMDPanel) tdp).resetStateSecurityInfo();
+            }
+        }
+    }
+
+    public void modelBacktracingUppaal(Map<String, Integer> verifMap) {
+        for (Object ob : abdp.getComponentList()) {
+            if (ob instanceof AvatarBDSafetyPragma) {
+                AvatarBDSafetyPragma pragma = (AvatarBDSafetyPragma) ob;
+                pragma.verifMap = verifMap;
+            }
+        }
+    }
+
+    public void modelBacktracingLatency(Vector<SimulationLatency> latencies) {
+        // Search for Safety Pragma
+        for (Object ob : abdp.getComponentList()) {
+            if (ob instanceof AvatarBDPerformancePragma) {
+                AvatarBDPerformancePragma bdpragma = (AvatarBDPerformancePragma) ob;
+                // Match each safety pragma to latency result
+                for (String s : bdpragma.getProperties()) {
+                    for (SimulationLatency latency : latencies) {
+                        for (AvatarPragmaLatency pragma : latency.getPragmas()) {
+                            if (pragma.getPragmaString().equals(s)) {
+                                // Check if the latency statement is true
+                                int refTime = pragma.getTime();
+                                float time = 0;
+                                // System.out.println("time " + latency.getAverageTime() + " " + refTime);
+                                try {
+                                    time = Float.valueOf(latency.getAverageTime());
+                                } catch (Exception e) {
+                                    continue;
+                                }
+                                if (pragma.getSymbolType() == AvatarPragmaLatency.lessThan) {
+                                    if (time < refTime) {
+                                        bdpragma.verifMap.put(s, "PROVED_TRUE");
+                                        // mark as true
+                                    } else {
+                                        bdpragma.verifMap.put(s, "PROVED_FALSE");
+                                    }
+                                } else if (pragma.getSymbolType() == AvatarPragmaLatency.greaterThan) {
+                                    if (time > refTime) {
+                                        bdpragma.verifMap.put(s, "PROVED_TRUE");
+                                        // mark as true
+                                    } else {
+                                        bdpragma.verifMap.put(s, "PROVED_FALSE");
+                                    }
+                                } else if (pragma.getSymbolType() == AvatarPragmaLatency.query) {
+                                    // Draw average time on verif map
+                                    bdpragma.verifMap.put(s, Float.toString(time));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
+
+        if (abdp == null) {
+            return;
+        }
+
+        resetModelBacktracingProVerif();
+
+        // Confidential attributes
+        Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
+        Map<AvatarAttribute, AvatarPragma> secretAttributes = new HashMap<AvatarAttribute, AvatarPragma>();
+        Map<AvatarAttribute, AvatarPragma> nonSecretAttributes = new HashMap<AvatarAttribute, AvatarPragma>();
+        for (AvatarPragmaSecret pragma : confResults.keySet()) {
+            ProVerifQueryResult result = confResults.get(pragma);
+            if (result.isProved()) {
+                if (result.isSatisfied())
+                    secretAttributes.put(pragma.getArg(), pragma);
+                else
+                    nonSecretAttributes.put(pragma.getArg(), pragma);
+            }
+        }
+
+        for (AvatarBDBlock bdBlock : abdp.getFullBlockList())
+            for (TAttribute tattr : bdBlock.getAttributeList()) {
+                if (tattr.getType() == TAttribute.OTHER) {
+                    List<TAttribute> types = abdp.getAttributesOfDataType(tattr.getTypeOther());
+                    int toBeFound = types.size();
+                    boolean ko = false;
+                    for (TAttribute type : types) {
+                        for (AvatarAttribute attribute : secretAttributes.keySet())
+                            if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
+                                    && attribute.getName().equals(tattr.getId() + "__" + type.getId())) {
+                                toBeFound--;
+                                ProVerifResultTrace trace = confResults.get(secretAttributes.get(attribute)).getTrace();
+                                if (trace != null) {
+                                    bdBlock.addProVerifTrace(tattr, trace);
+                                }
+                                break;
+                            }
+
+                        for (AvatarAttribute attribute : nonSecretAttributes.keySet())
+                            if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
+                                    && attribute.getName().equals(tattr.getId() + "__" + type.getId())) {
+                                ko = true;
+                                ProVerifResultTrace trace = confResults.get(nonSecretAttributes.get(attribute))
+                                        .getTrace();
+                                if (trace != null) {
+                                    bdBlock.addProVerifTrace(tattr, trace);
+                                }
+                                break;
+                            }
+
+                        if (ko)
+                            break;
+                    }
+
+                    if (ko) {
+                        tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+
+                    } else if (toBeFound == 0) {
+                        tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+
+                    }
+                } else {
+                    for (AvatarAttribute attribute : secretAttributes.keySet())
+                        if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
+                                && attribute.getName().equals(tattr.getId())) {
+                            tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+                            ProVerifResultTrace trace = confResults.get(secretAttributes.get(attribute)).getTrace();
+                            if (trace != null) {
+                                bdBlock.addProVerifTrace(tattr, trace);
+                            }
+                        }
+                    for (AvatarAttribute attribute : nonSecretAttributes.keySet())
+                        if (attribute.getBlock().getName().equals(bdBlock.getBlockName())
+                                && attribute.getName().equals(tattr.getId())) {
+                            tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+                            ProVerifResultTrace trace = confResults.get(nonSecretAttributes.get(attribute)).getTrace();
+                            if (trace != null) {
+                                bdBlock.addProVerifTrace(tattr, trace);
+                            }
+                        }
+                }
+            }
+
+        // Reachable states
+        Map<AvatarPragmaReachability, ProVerifQueryResult> reachResults = pvoa.getReachabilityResults();
+        for (AvatarPragmaReachability pragma : reachResults.keySet()) {
+            ProVerifQueryResult result = reachResults.get(pragma);
+            if (result.isProved()) {
+                for (int i = 0; i < panels.size(); i++) {
+                    tdp = panels.get(i);
+                    if ((tdp instanceof AvatarSMDPanel)
+                            && (tdp.getName().compareTo(pragma.getBlock().getName()) == 0)) {
+                        Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+                        while (iterator.hasNext()) {
+                            TGComponent tgc = iterator.next();
+                            if (tgc instanceof AvatarSMDState) {
+                                ((AvatarSMDState) tgc).setSecurityInfo(
+                                        result.isSatisfied() ? AvatarSMDState.REACHABLE : AvatarSMDState.NOT_REACHABLE,
+                                        pragma.getState().getName());
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        Map<AvatarPragmaAuthenticity, ProVerifQueryAuthResult> authResults = pvoa.getAuthenticityResults();
+        for (Object ob : abdp.getComponentList())
+            if (ob instanceof AvatarBDPragma) {
+                AvatarBDPragma pragma = (AvatarBDPragma) ob;
+                for (String prop : pragma.getProperties()) {
+                    String[] split = prop.trim().split("\\s+");
+                    if (split.length != 3)
+                        continue;
+                    if (split[0].equals("#Authenticity")) {
+                        String[] argA = split[1].split("\\.");
+                        String[] argB = split[2].split("\\.");
+
+                        if (argA.length != 3 || argB.length != 3)
+                            continue;
+
+                        TAttribute tattrA = abdp.getAttributeByBlockName(argA[0], argA[2]);
+                        TAttribute tattrB = abdp.getAttributeByBlockName(argB[0], argB[2]);
+
+                        if (tattrA == null || tattrB == null)
+                            continue;
+
+                        if (tattrA.getType() != tattrB.getType())
+                            continue;
+
+                        if (tattrA.getType() == TAttribute.OTHER) {
+                            if (!tattrA.getTypeOther().equals(tattrB.getTypeOther()))
+                                continue;
+
+                            List<TAttribute> types = abdp.getAttributesOfDataType(tattrA.getTypeOther());
+                            int toBeFound = types.size();
+                            boolean ko = false;
+                            boolean weakKo = false;
+                            boolean isNotProved = false;
+                            boolean weakIsNotProved = false;
+                            ProVerifQueryAuthResult result = new ProVerifQueryAuthResult(false, false);
+                            for (TAttribute type : types) {
+                                for (AvatarPragmaAuthenticity pragmaAuth : authResults.keySet()) {
+                                    if (!pragmaAuth.getAttrA().getAttribute().getBlock().getName()
+                                            .equals(argA[0].replaceAll("\\.", "__"))
+                                            || !pragmaAuth.getAttrB().getAttribute().getBlock().getName()
+                                                    .equals(argB[0].replaceAll("\\.", "__"))
+                                            || !pragmaAuth.getAttrA().getAttribute().getName()
+                                                    .equals(argA[2] + "__" + type.getId())
+                                            || !pragmaAuth.getAttrB().getAttribute().getName()
+                                                    .equals(argB[2] + "__" + type.getId())
+                                            || !pragmaAuth.getAttrA().getState().getName()
+                                                    .equals(argA[1].replaceAll("\\.", "__"))
+                                            || !pragmaAuth.getAttrB().getState().getName()
+                                                    .equals(argB[1].replaceAll("\\.", "__")))
+                                        continue;
+
+                                    result = authResults.get(pragmaAuth);
+                                    toBeFound--;
+
+                                    if (result.isProved()) {
+                                        if (!result.isSatisfied()) {
+                                            ko = true;
+                                        }
+                                    } else {
+                                        isNotProved = true;
+                                    }
+
+                                    if (result.isWeakProved()) {
+                                        if (!result.isWeakSatisfied()) {
+                                            weakKo = true;
+                                        }
+                                    } else {
+                                        weakIsNotProved = true;
+                                    }
+
+                                    break;
+                                }
+                            }
+
+                            if (ko)
+                                pragma.authStrongMap.put(prop, 2);
+                            else if (toBeFound == 0) {
+                                if (isNotProved)
+                                    pragma.authStrongMap.put(prop, 3);
+                                else
+                                    pragma.authStrongMap.put(prop, 1);
+                            }
+
+                            if (weakKo)
+                                pragma.authWeakMap.put(prop, 2);
+                            else if (toBeFound == 0) {
+                                if (weakIsNotProved)
+                                    pragma.authWeakMap.put(prop, 3);
+                                else
+                                    pragma.authWeakMap.put(prop, 1);
+                            }
+                            ProVerifResultTrace trace = result.getTrace();
+                            if (trace != null) {
+                                pragma.pragmaTraceMap.put(prop, trace);
+                            }
+                        } else {
+                            for (AvatarPragmaAuthenticity pragmaAuth : authResults.keySet()) {
+                                if (!pragmaAuth.getAttrA().getAttribute().getBlock().getName()
+                                        .equals(argA[0].replaceAll("\\.", "__"))
+                                        || !pragmaAuth.getAttrB().getAttribute().getBlock().getName()
+                                                .equals(argB[0].replaceAll("\\.", "__"))
+                                        || !pragmaAuth.getAttrA().getAttribute().getName().equals(argA[2])
+                                        || !pragmaAuth.getAttrB().getAttribute().getName().equals(argB[2])
+                                        || !pragmaAuth.getAttrA().getState().getName()
+                                                .equals(argA[1].replaceAll("\\.", "__"))
+                                        || !pragmaAuth.getAttrB().getState().getName()
+                                                .equals(argB[1].replaceAll("\\.", "__")))
+                                    continue;
+
+                                ProVerifQueryAuthResult result = authResults.get(pragmaAuth);
+
+                                if (result.isProved()) {
+                                    if (result.isSatisfied()) {
+                                        pragma.authStrongMap.put(prop, 1);
+                                    } else {
+                                        pragma.authStrongMap.put(prop, 2);
+                                    }
+                                } else {
+                                    pragma.authStrongMap.put(prop, 3);
+                                }
+
+                                if (result.isWeakProved()) {
+                                    if (result.isWeakSatisfied()) {
+                                        pragma.authWeakMap.put(prop, 1);
+                                    } else {
+                                        pragma.authWeakMap.put(prop, 2);
+                                    }
+                                } else {
+                                    pragma.authWeakMap.put(prop, 3);
+                                }
+                                // Add ProVerif Result Trace to pragma
+                                ProVerifResultTrace trace = pvoa.getResults().get(pragmaAuth).getTrace();
+                                if (trace != null) {
+                                    pragma.pragmaTraceMap.put(prop, trace);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+    }
+
+    public List<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
+        return abdp.getAllNonMappedAvatarBlockNames(_name, _tadp, ref, name);
+    }
+
+    public List<String> getAllNonMappedAvatarChannelNames(String _name, ADDDiagramPanel _tadp, boolean ref,
+            String name) {
+        return abdp.getAllNonMappedAvatarChannelNames(_name, _tadp);
+    }
 }

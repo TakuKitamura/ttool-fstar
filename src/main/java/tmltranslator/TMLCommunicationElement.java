@@ -49,55 +49,55 @@ import java.util.Objects;
  * @author Ludovic APVRILLE
  */
 public abstract class TMLCommunicationElement extends TMLElement {
-  // private boolean infected;
+    // private boolean infected;
 
-  protected boolean isLossy;
-  protected int lossPercentage;
-  protected int maxNbOfLoss;
+    protected boolean isLossy;
+    protected int lossPercentage;
+    protected int maxNbOfLoss;
 
-  public TMLCommunicationElement(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-  }
-
-  public abstract boolean isBlockingAtOrigin();
-
-  public abstract boolean isBlockingAtDestination();
-
-  // No maxNbOfLoss -> set it to -1
-  public void setLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
-    if (_isLossy) {
-      TraceManager
-          .addDev("***** Setting lossy " + this + " precentage = " + _percentage + " maxLoss = " + _maxNbOfLoss);
+    public TMLCommunicationElement(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
     }
-    isLossy = _isLossy;
-    lossPercentage = _percentage;
-    maxNbOfLoss = _maxNbOfLoss;
-  }
 
-  public boolean isLossy() {
-    return (isLossy) && (lossPercentage > 0);
-  }
+    public abstract boolean isBlockingAtOrigin();
 
-  public int getLossPercentage() {
-    return lossPercentage;
-  }
+    public abstract boolean isBlockingAtDestination();
 
-  public int getMaxNbOfLoss() {
-    return maxNbOfLoss;
-  }
+    // No maxNbOfLoss -> set it to -1
+    public void setLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
+        if (_isLossy) {
+            TraceManager.addDev(
+                    "***** Setting lossy " + this + " precentage = " + _percentage + " maxLoss = " + _maxNbOfLoss);
+        }
+        isLossy = _isLossy;
+        lossPercentage = _percentage;
+        maxNbOfLoss = _maxNbOfLoss;
+    }
 
-  public void configLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
-    isLossy = _isLossy;
-    lossPercentage = _percentage;
-    maxNbOfLoss = _maxNbOfLoss;
-  }
+    public boolean isLossy() {
+        return (isLossy) && (lossPercentage > 0);
+    }
 
-  public boolean equalSpec(Object o) {
-    if (!(o instanceof TMLCommunicationElement))
-      return false;
-    if (!super.equalSpec(o))
-      return false;
-    TMLCommunicationElement that = (TMLCommunicationElement) o;
-    return isLossy == that.isLossy && lossPercentage == that.lossPercentage && maxNbOfLoss == that.maxNbOfLoss;
-  }
+    public int getLossPercentage() {
+        return lossPercentage;
+    }
+
+    public int getMaxNbOfLoss() {
+        return maxNbOfLoss;
+    }
+
+    public void configLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
+        isLossy = _isLossy;
+        lossPercentage = _percentage;
+        maxNbOfLoss = _maxNbOfLoss;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLCommunicationElement))
+            return false;
+        if (!super.equalSpec(o))
+            return false;
+        TMLCommunicationElement that = (TMLCommunicationElement) o;
+        return isLossy == that.isLossy && lossPercentage == that.lossPercentage && maxNbOfLoss == that.maxNbOfLoss;
+    }
 }

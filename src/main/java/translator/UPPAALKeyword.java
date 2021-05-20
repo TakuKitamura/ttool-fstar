@@ -45,19 +45,19 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class UPPAALKeyword {
-  private final static String[] words = { "branch", "clock", "double", "bool", "int", "commit", "const", "urgent",
-      "broadcast", "init", "process", "state", "invariant", "location", "guard", "sync", "assign", "system", "trans",
-      "deadlock", "and", "or", "not", "imply", "true", "false", "for", "forall", "exists", "while", "do", "if", "else",
-      "return", "typedef", "struct", "rate", "before_update", "after_update", "meta", "priority", "progress", "scalar",
-      "select", "void", "default" };
+    private final static String[] words = { "branch", "clock", "double", "bool", "int", "commit", "const", "urgent",
+            "broadcast", "init", "process", "state", "invariant", "location", "guard", "sync", "assign", "system",
+            "trans", "deadlock", "and", "or", "not", "imply", "true", "false", "for", "forall", "exists", "while", "do",
+            "if", "else", "return", "typedef", "struct", "rate", "before_update", "after_update", "meta", "priority",
+            "progress", "scalar", "select", "void", "default" };
 
-  public static boolean isAKeyword(String s) {
-    for (int i = 0; i < words.length; i++) {
-      if (words[i].equals(s)) {
-        return true;
-      }
+    public static boolean isAKeyword(String s) {
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].equals(s)) {
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
 }

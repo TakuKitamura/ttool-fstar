@@ -47,156 +47,156 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Command implements CommandInterface {
-  protected List<Command> subcommands;
+    protected List<Command> subcommands;
 
-  public Command() {
-    subcommands = new LinkedList<Command>();
-    fillSubCommands();
-  }
-
-  public List<Command> getListOfSubCommands() {
-    return subcommands;
-  }
-
-  public String getCommand() {
-    return "default";
-  }
-
-  public String getShortCommand() {
-    return getCommand();
-  }
-
-  public String getExample() {
-    return "";
-  }
-
-  public String executeCommand(String command, Interpreter interpreter) {
-    int index = command.indexOf(" ");
-    String nextCommand;
-    String args;
-
-    if (index == -1) {
-      nextCommand = command;
-      args = "";
-    } else {
-      nextCommand = command.substring(0, index);
-      args = command.substring(index + 1, command.length());
+    public Command() {
+        subcommands = new LinkedList<Command>();
+        fillSubCommands();
     }
 
-    // Analyzing next command
-    for (Command c : subcommands) {
-      if ((c.getCommand().compareTo(nextCommand) == 0) || (c.getShortCommand().compareTo(nextCommand) == 0)) {
-        return c.executeCommand(args, interpreter);
-      }
-    }
-    /*
-     * if (nextCommand.compareTo(OPEN) == 0) { return openModel(args); } else if
-     * (nextCommand.compareTo(START) == 0) { return startTTool(); } else if
-     * (nextCommand.compareTo(QUIT) == 0) { return exitCLI(); }
-     */
-
-    String error = Interpreter.UNKNOWN_NEXT_COMMAND + nextCommand;
-    return error;
-  }
-
-  public void fillSubCommands() {
-
-  }
-
-  public String getUsage() {
-    return "";
-  }
-
-  public String getDescription() {
-    return "";
-  }
-
-  public String getHelp(int level) {
-    String dec = getLevelString(level);
-    /*
-     * String h = ""; h+= getCommand() + " (" + getShortCommand() + "): " +
-     * getUsage() + "\n" + getDescription() + "\n";
-     * 
-     * for (Command c: subcommands) { h+= "\t" + c.getHelp(); }
-     */
-
-    StringBuffer b = new StringBuffer(dec + "* " + getCommand() + " (" + getShortCommand() + "): " + getUsage() + "\n"
-        + dec + "   " + getDescription() + "\n");
-    if (getExample().length() > 0) {
-      b.append(dec + "Example: " + getExample() + "\n");
+    public List<Command> getListOfSubCommands() {
+        return subcommands;
     }
 
-    subcommands.forEach((c) -> {
-      b.append(c.getHelp(level + 1));
-    });
-
-    return b.toString();
-  }
-
-  public String getLevelString(int level) {
-    String ret = "";
-    while (level > 0) {
-      ret += "\t";
-      level--;
-    }
-    return ret;
-  }
-
-  public Vector<Command> findCommands(String[] split, int index) {
-    if (split == null) {
-      return null;
+    public String getCommand() {
+        return "default";
     }
 
-    if (index >= split.length) {
-      return null;
+    public String getShortCommand() {
+        return getCommand();
     }
 
-    String s = split[index];
-    Vector<Command> couldBe = new Vector<>();
-
-    // Search of all compatible commands starting with s
-    for (Command c : subcommands) {
-      if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
-        Vector<Command> others = c.findCommands(split, index + 1);
-        if (others != null) {
-          couldBe.addAll(others);
-        }
-      }
+    public String getExample() {
+        return "";
     }
 
-    return couldBe;
-  }
+    public String executeCommand(String command, Interpreter interpreter) {
+        int index = command.indexOf(" ");
+        String nextCommand;
+        String args;
 
-  public void addAndSortSubcommand(Command c) {
-
-    int index = 0;
-    for (Command cmd : subcommands) {
-      if (c.getCommand().compareTo(cmd.getCommand()) < 0) {
-        break;
-      }
-      index++;
-    }
-    subcommands.add(index, c);
-  }
-
-  public Command getSubCommandByName(String cmd) {
-    String comm = cmd;
-
-    int index = cmd.indexOf(" ");
-
-    if (index > 0) {
-      comm = cmd.substring(0, index);
-    }
-
-    for (Command c : subcommands) {
-      if ((c.getShortCommand().compareTo(cmd) == 0) || (c.getCommand().compareTo(cmd) == 0)) {
         if (index == -1) {
-          return c;
+            nextCommand = command;
+            args = "";
+        } else {
+            nextCommand = command.substring(0, index);
+            args = command.substring(index + 1, command.length());
         }
-        return c.getSubCommandByName(cmd.substring(index + 1, cmd.length()).trim());
-      }
+
+        // Analyzing next command
+        for (Command c : subcommands) {
+            if ((c.getCommand().compareTo(nextCommand) == 0) || (c.getShortCommand().compareTo(nextCommand) == 0)) {
+                return c.executeCommand(args, interpreter);
+            }
+        }
+        /*
+         * if (nextCommand.compareTo(OPEN) == 0) { return openModel(args); } else if
+         * (nextCommand.compareTo(START) == 0) { return startTTool(); } else if
+         * (nextCommand.compareTo(QUIT) == 0) { return exitCLI(); }
+         */
+
+        String error = Interpreter.UNKNOWN_NEXT_COMMAND + nextCommand;
+        return error;
     }
-    return null;
-  }
+
+    public void fillSubCommands() {
+
+    }
+
+    public String getUsage() {
+        return "";
+    }
+
+    public String getDescription() {
+        return "";
+    }
+
+    public String getHelp(int level) {
+        String dec = getLevelString(level);
+        /*
+         * String h = ""; h+= getCommand() + " (" + getShortCommand() + "): " +
+         * getUsage() + "\n" + getDescription() + "\n";
+         * 
+         * for (Command c: subcommands) { h+= "\t" + c.getHelp(); }
+         */
+
+        StringBuffer b = new StringBuffer(dec + "* " + getCommand() + " (" + getShortCommand() + "): " + getUsage()
+                + "\n" + dec + "   " + getDescription() + "\n");
+        if (getExample().length() > 0) {
+            b.append(dec + "Example: " + getExample() + "\n");
+        }
+
+        subcommands.forEach((c) -> {
+            b.append(c.getHelp(level + 1));
+        });
+
+        return b.toString();
+    }
+
+    public String getLevelString(int level) {
+        String ret = "";
+        while (level > 0) {
+            ret += "\t";
+            level--;
+        }
+        return ret;
+    }
+
+    public Vector<Command> findCommands(String[] split, int index) {
+        if (split == null) {
+            return null;
+        }
+
+        if (index >= split.length) {
+            return null;
+        }
+
+        String s = split[index];
+        Vector<Command> couldBe = new Vector<>();
+
+        // Search of all compatible commands starting with s
+        for (Command c : subcommands) {
+            if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
+                Vector<Command> others = c.findCommands(split, index + 1);
+                if (others != null) {
+                    couldBe.addAll(others);
+                }
+            }
+        }
+
+        return couldBe;
+    }
+
+    public void addAndSortSubcommand(Command c) {
+
+        int index = 0;
+        for (Command cmd : subcommands) {
+            if (c.getCommand().compareTo(cmd.getCommand()) < 0) {
+                break;
+            }
+            index++;
+        }
+        subcommands.add(index, c);
+    }
+
+    public Command getSubCommandByName(String cmd) {
+        String comm = cmd;
+
+        int index = cmd.indexOf(" ");
+
+        if (index > 0) {
+            comm = cmd.substring(0, index);
+        }
+
+        for (Command c : subcommands) {
+            if ((c.getShortCommand().compareTo(cmd) == 0) || (c.getCommand().compareTo(cmd) == 0)) {
+                if (index == -1) {
+                    return c;
+                }
+                return c.getSubCommandByName(cmd.substring(index + 1, cmd.length()).trim());
+            }
+        }
+        return null;
+    }
 
 }

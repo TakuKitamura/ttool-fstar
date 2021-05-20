@@ -52,22 +52,22 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class AvatarRDConnectingPointSatisfy extends TGConnectingPointWidthHeight {
 
-  public AvatarRDConnectingPointSatisfy(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    //
-    if (type == TGComponentManager.AVATARRD_SATISFY_CONNECTOR) {
-      //
-      return true;
+    public AvatarRDConnectingPointSatisfy(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
 
-    // System.out.pr
-    //
-    return false;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        //
+        if (type == TGComponentManager.AVATARRD_SATISFY_CONNECTOR) {
+            //
+            return true;
+        }
+
+        // System.out.pr
+        //
+        return false;
+    }
 
 }

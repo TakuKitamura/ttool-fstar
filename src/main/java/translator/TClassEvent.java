@@ -47,63 +47,63 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public class TClassEvent extends TClass {
-  private int nbPara;
-  // private int max;
+    private int nbPara;
+    // private int max;
 
-  public TClassEvent(String name, int _nbPara, int _max) {
-    super(name, true);
-    nbPara = _nbPara;
-  }
+    public TClassEvent(String name, int _nbPara, int _max) {
+        super(name, true);
+        nbPara = _nbPara;
+    }
 
-  public void makeTClass() {
+    public void makeTClass() {
 
-    Gate wait, notify;
-    ADActionStateWithGate acnotify, acwait;
-    ADChoice choice;
-    ADActionStateWithParam adap1, adap2;
-    // ADStop adstop;
-    ADJunction adj;
+        Gate wait, notify;
+        ADActionStateWithGate acnotify, acwait;
+        ADChoice choice;
+        ADActionStateWithParam adap1, adap2;
+        // ADStop adstop;
+        ADJunction adj;
 
-    ActivityDiagram ad = new ActivityDiagram();
+        ActivityDiagram ad = new ActivityDiagram();
 
-    Param events = new Param("events", Param.NAT, "0");
-    addParameter(events);
+        Param events = new Param("events", Param.NAT, "0");
+        addParameter(events);
 
-    wait = addNewGateIfApplicable("wait");
-    notify = addNewGateIfApplicable("notify");
+        wait = addNewGateIfApplicable("wait");
+        notify = addNewGateIfApplicable("notify");
 
-    adj = new ADJunction();
-    ad.getStartState().addNext(adj);
-    ad.add(adj);
+        adj = new ADJunction();
+        ad.getStartState().addNext(adj);
+        ad.add(adj);
 
-    choice = new ADChoice();
-    choice.addGuard("[]");
-    choice.addGuard("[events > 0]");
-    adj.addNext(choice);
-    ad.add(choice);
+        choice = new ADChoice();
+        choice.addGuard("[]");
+        choice.addGuard("[events > 0]");
+        adj.addNext(choice);
+        ad.add(choice);
 
-    acnotify = new ADActionStateWithGate(notify);
-    acnotify.setActionValue("");
-    choice.addNext(acnotify);
-    ad.add(acnotify);
+        acnotify = new ADActionStateWithGate(notify);
+        acnotify.setActionValue("");
+        choice.addNext(acnotify);
+        ad.add(acnotify);
 
-    adap1 = new ADActionStateWithParam(events);
-    adap1.setActionValue("1");
-    adap1.addNext(adj);
-    ad.add(adap1);
-    acnotify.addNext(adap1);
+        adap1 = new ADActionStateWithParam(events);
+        adap1.setActionValue("1");
+        adap1.addNext(adj);
+        ad.add(adap1);
+        acnotify.addNext(adap1);
 
-    acwait = new ADActionStateWithGate(wait);
-    acwait.setActionValue("");
-    ad.add(acwait);
-    choice.addNext(acwait);
+        acwait = new ADActionStateWithGate(wait);
+        acwait.setActionValue("");
+        ad.add(acwait);
+        choice.addNext(acwait);
 
-    adap2 = new ADActionStateWithParam(events);
-    adap2.setActionValue("0");
-    adap2.addNext(adj);
-    ad.add(adap2);
-    acwait.addNext(adap2);
+        adap2 = new ADActionStateWithParam(events);
+        adap2.setActionValue("0");
+        adap2.addNext(adj);
+        ad.add(adap2);
+        acwait.addNext(adap2);
 
-    setActivityDiagram(ad);
-  }
+        setActivityDiagram(ad);
+    }
 }

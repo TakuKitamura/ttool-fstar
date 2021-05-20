@@ -46,29 +46,29 @@ package graph;
  */
 public class CorePowerConsumption {
 
-  private int nbOfModes;
-  private long ticks[];
-  private long powerConsumptionPerTick[];
+    private int nbOfModes;
+    private long ticks[];
+    private long powerConsumptionPerTick[];
 
-  public CorePowerConsumption(int _nbOfModes) {
-    nbOfModes = _nbOfModes;
-    ticks = new long[nbOfModes];
-    powerConsumptionPerTick = new long[nbOfModes];
-  }
-
-  public void addPowerConsumption(int _mode, long _ticks) {
-    ticks[_mode] = ticks[_mode] + _ticks;
-  }
-
-  public void setPowerConsumptionInMode(long _value, int _index) {
-    powerConsumptionPerTick[_index] = _value;
-  }
-
-  public long computePowerConsumption() {
-    long pc = 0;
-    for (int i = 0; i < nbOfModes; i++) {
-      pc += ticks[i] * powerConsumptionPerTick[i];
+    public CorePowerConsumption(int _nbOfModes) {
+        nbOfModes = _nbOfModes;
+        ticks = new long[nbOfModes];
+        powerConsumptionPerTick = new long[nbOfModes];
     }
-    return pc;
-  }
+
+    public void addPowerConsumption(int _mode, long _ticks) {
+        ticks[_mode] = ticks[_mode] + _ticks;
+    }
+
+    public void setPowerConsumptionInMode(long _value, int _index) {
+        powerConsumptionPerTick[_index] = _value;
+    }
+
+    public long computePowerConsumption() {
+        long pc = 0;
+        for (int i = 0; i < nbOfModes; i++) {
+            pc += ticks[i] * powerConsumptionPerTick[i];
+        }
+        return pc;
+    }
 }

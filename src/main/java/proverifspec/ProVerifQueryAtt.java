@@ -45,15 +45,15 @@ package proverifspec;
  * @author Florian LUGOU
  */
 public class ProVerifQueryAtt implements ProVerifDeclaration {
-  protected String name;
-  protected boolean isNew;
+    protected String name;
+    protected boolean isNew;
 
-  public ProVerifQueryAtt(String _name, boolean _isNew) {
-    this.name = _name;
-    this.isNew = _isNew;
-  }
+    public ProVerifQueryAtt(String _name, boolean _isNew) {
+        this.name = _name;
+        this.isNew = _isNew;
+    }
 
-  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
-    _syntaxer.translateQueryAtt(this, _alinea);
-  }
+    public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+        _syntaxer.translateQueryAtt(this, _alinea);
+    }
 }

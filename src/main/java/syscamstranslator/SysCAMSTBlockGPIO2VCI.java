@@ -50,17 +50,17 @@ import java.util.LinkedList;
 
 public class SysCAMSTBlockGPIO2VCI extends SysCAMSTComponent {
 
-  private LinkedList<SysCAMSTPortDE> portDE;
+    private LinkedList<SysCAMSTPortDE> portDE;
 
-  public SysCAMSTBlockGPIO2VCI() {
-    portDE = new LinkedList<SysCAMSTPortDE>();
-  }
+    public SysCAMSTBlockGPIO2VCI() {
+        portDE = new LinkedList<SysCAMSTPortDE>();
+    }
 
-  public LinkedList<SysCAMSTPortDE> getPortDE() {
-    return portDE;
-  }
+    public LinkedList<SysCAMSTPortDE> getPortDE() {
+        return portDE;
+    }
 
-  public void addPortDE(SysCAMSTPortDE de) {
-    portDE.add(de);
-  }
+    public void addPortDE(SysCAMSTPortDE de) {
+        portDE.add(de);
+    }
 }

@@ -45,33 +45,33 @@ package ui.ncdd;
  * @author Ludovic APVRILLE
  */
 public class NCRoute {
-  public String inputInterface = "";
-  public String traffic = "";
-  public String outputInterface = "";
+    public String inputInterface = "";
+    public String traffic = "";
+    public String outputInterface = "";
 
-  public NCRoute() {
-  }
-
-  public NCRoute(String _inputInterface, String _traffic, String _outputInterface) {
-    inputInterface = _inputInterface;
-    traffic = _traffic;
-    outputInterface = _outputInterface;
-  }
-
-  public String toString() {
-    return inputInterface + "/" + traffic + " -> " + outputInterface;
-  }
-
-  public boolean equals(NCRoute route) {
-    if (!(route.inputInterface.equals(inputInterface))) {
-      return false;
+    public NCRoute() {
     }
 
-    if (!(route.traffic.equals(traffic))) {
-      return false;
+    public NCRoute(String _inputInterface, String _traffic, String _outputInterface) {
+        inputInterface = _inputInterface;
+        traffic = _traffic;
+        outputInterface = _outputInterface;
     }
 
-    return route.outputInterface.equals(outputInterface);
-  }
+    public String toString() {
+        return inputInterface + "/" + traffic + " -> " + outputInterface;
+    }
+
+    public boolean equals(NCRoute route) {
+        if (!(route.inputInterface.equals(inputInterface))) {
+            return false;
+        }
+
+        if (!(route.traffic.equals(traffic))) {
+            return false;
+        }
+
+        return route.outputInterface.equals(outputInterface);
+    }
 
 }

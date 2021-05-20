@@ -52,88 +52,88 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TOSADActionState extends TGCOneLineText {
-  protected int lineLength = 5;
-  protected int textX = 5;
-  protected int textY = 15;
-  protected int arc = 5;
+    protected int lineLength = 5;
+    protected int textX = 5;
+    protected int textY = 15;
+    protected int arc = 5;
 
-  public TOSADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public TOSADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+            TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    width = 30;
-    height = 20;
-    minWidth = 30;
+        width = 30;
+        height = 20;
+        minWidth = 30;
 
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TOSADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TOSADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
-    addTGConnectingPointsComment();
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TOSADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TOSADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+        addTGConnectingPointsComment();
 
-    moveable = true;
-    editable = true;
-    removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
-    value = "action";
-    name = "action state";
+        value = "action";
+        name = "action state";
 
-    myImageIcon = IconManager.imgic204;
-  }
-
-  public void internalDrawing(Graphics g) {
-    int w = g.getFontMetrics().stringWidth(value);
-    int w1 = Math.max(minWidth, w + 2 * textX);
-    if ((w1 != width) & (!tdp.isScaled())) {
-      setCd(x + width / 2 - w1 / 2, y);
-      width = w1;
-      // updateConnectingPoints();
-    }
-    g.drawRoundRect(x, y, width, height, arc, arc);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-
-    g.drawString(value, x + (width - w) / 2, y + textY);
-  }
-
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
-    }
-    return null;
-  }
-
-  public String getAction() {
-    return value;
-  }
-
-  public String getAction(int cpt) {
-    if (cpt < 0) {
-      return value;
+        myImageIcon = IconManager.imgic204;
     }
 
-    String ret;
+    public void internalDrawing(Graphics g) {
+        int w = g.getFontMetrics().stringWidth(value);
+        int w1 = Math.max(minWidth, w + 2 * textX);
+        if ((w1 != width) & (!tdp.isScaled())) {
+            setCd(x + width / 2 - w1 / 2, y);
+            width = w1;
+            // updateConnectingPoints();
+        }
+        g.drawRoundRect(x, y, width, height, arc, arc);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
 
-    try {
-      ret = value;
-      while (cpt > 0) {
-        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-        cpt--;
-      }
-
-      int index = ret.indexOf(';');
-
-      if (index > 0) {
-        ret = ret.substring(0, index + 1);
-      }
-    } catch (Exception e) {
-      return value;
+        g.drawString(value, x + (width - w) / 2, y + textY);
     }
-    return ret;
-  }
 
-  public int getType() {
-    return TGComponentManager.TOSAD_ACTION_STATE;
-  }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        return null;
+    }
+
+    public String getAction() {
+        return value;
+    }
+
+    public String getAction(int cpt) {
+        if (cpt < 0) {
+            return value;
+        }
+
+        String ret;
+
+        try {
+            ret = value;
+            while (cpt > 0) {
+                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+                cpt--;
+            }
+
+            int index = ret.indexOf(';');
+
+            if (index > 0) {
+                ret = ret.substring(0, index + 1);
+            }
+        } catch (Exception e) {
+            return value;
+        }
+        return ret;
+    }
+
+    public int getType() {
+        return TGComponentManager.TOSAD_ACTION_STATE;
+    }
 
 }

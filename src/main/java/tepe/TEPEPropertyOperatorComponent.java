@@ -48,43 +48,43 @@ import java.util.Vector;
  */
 public class TEPEPropertyOperatorComponent extends TEPEComponent {
 
-  public static final int OR = 0;
-  public static final int AND = 1;
-  public static final int IMPLY = 2;
-  public static final int EQUIVALENT = 3;
+    public static final int OR = 0;
+    public static final int AND = 1;
+    public static final int IMPLY = 2;
+    public static final int EQUIVALENT = 3;
 
-  protected int type;
+    protected int type;
 
-  public TEPEPropertyOperatorComponent(String _name, Object _referenceObject, int _type) {
-    super(_name, _referenceObject);
-    type = _type;
-    inPropertyComponents = new Vector<TEPEComponent>();
-    inNegatedProperty = new Vector<Boolean>();
-    outPropertyComponents = new Vector<TEPEComponent>();
-  }
-
-  public int getType() {
-    return type;
-  }
-
-  public String getExtraString() {
-    String ret = "\ntype:";
-    switch (type) {
-      case OR:
-        ret += "OR";
-        break;
-      case AND:
-        ret += "AND";
-        break;
-      case IMPLY:
-        ret += " =>";
-        break;
-      case 3:
-      default:
-        ret += "<=>";
+    public TEPEPropertyOperatorComponent(String _name, Object _referenceObject, int _type) {
+        super(_name, _referenceObject);
+        type = _type;
+        inPropertyComponents = new Vector<TEPEComponent>();
+        inNegatedProperty = new Vector<Boolean>();
+        outPropertyComponents = new Vector<TEPEComponent>();
     }
 
-    return ret;
-  }
+    public int getType() {
+        return type;
+    }
+
+    public String getExtraString() {
+        String ret = "\ntype:";
+        switch (type) {
+            case OR:
+                ret += "OR";
+                break;
+            case AND:
+                ret += "AND";
+                break;
+            case IMPLY:
+                ret += " =>";
+                break;
+            case 3:
+            default:
+                ret += "<=>";
+        }
+
+        return ret;
+    }
 
 }

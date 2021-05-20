@@ -47,17 +47,17 @@ package tmltranslator;
  */
 public class TMLTXTError {
 
-  // type
-  public final static int ERROR = 0;
-  public final static int WARNING = 1;
+    // type
+    public final static int ERROR = 0;
+    public final static int WARNING = 1;
 
-  public int type; // ERROR, WARNING
-  public String message;
-  public int lineNb;
-  public int charNb;
-  public String lineString;
+    public int type; // ERROR, WARNING
+    public String message;
+    public int lineNb;
+    public int charNb;
+    public String lineString;
 
-  public TMLTXTError(int _type) {
-    type = _type;
-  }
+    public TMLTXTError(int _type) {
+        type = _type;
+    }
 }

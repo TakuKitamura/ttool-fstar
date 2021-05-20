@@ -47,12 +47,12 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public class TGComponentAndUPPAALQuery {
-  public TGComponent tgc;
-  public String uppaalQuery;
+    public TGComponent tgc;
+    public String uppaalQuery;
 
-  public TGComponentAndUPPAALQuery(TGComponent _tgc, String _uppaalQuery) {
-    tgc = _tgc;
-    uppaalQuery = _uppaalQuery;
-  }
+    public TGComponentAndUPPAALQuery(TGComponent _tgc, String _uppaalQuery) {
+        tgc = _tgc;
+        uppaalQuery = _uppaalQuery;
+    }
 
 }

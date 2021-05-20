@@ -51,45 +51,45 @@ import java.util.List;
  */
 public class SyntaxAnalysisWarningTree implements GenericTree {
 
-  private String name = "Warning(s)";
-  private MainGUI mgui;
+    private String name = "Warning(s)";
+    private MainGUI mgui;
 
-  public SyntaxAnalysisWarningTree(MainGUI _mgui) {
-    mgui = _mgui;
-  }
-
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    List<CheckingError> warnings = mgui.getCheckingWarnings();
-    if (warnings == null) {
-      return 1;
-    } else {
-      if (warnings.size() > 0) {
-        return warnings.size();
-      } else {
-        return 1;
-      }
+    public SyntaxAnalysisWarningTree(MainGUI _mgui) {
+        mgui = _mgui;
     }
-  }
 
-  public Object getChild(int index) {
-    List<CheckingError> warnings = mgui.getCheckingWarnings();
-    if (warnings == null) {
-      return "Not yet performed";
-    } else {
-      if ((warnings.size() > 0) && (warnings.size() > index)) {
-        return warnings.get(index);
-      } else {
-        return "No warning encountered";
-      }
+    public String toString() {
+        return name;
     }
-  }
 
-  public int getIndexOfChild(Object child) {
-    return mgui.getCheckingWarnings().indexOf(child);
-  }
+    public int getChildCount() {
+        List<CheckingError> warnings = mgui.getCheckingWarnings();
+        if (warnings == null) {
+            return 1;
+        } else {
+            if (warnings.size() > 0) {
+                return warnings.size();
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    public Object getChild(int index) {
+        List<CheckingError> warnings = mgui.getCheckingWarnings();
+        if (warnings == null) {
+            return "Not yet performed";
+        } else {
+            if ((warnings.size() > 0) && (warnings.size() > index)) {
+                return warnings.get(index);
+            } else {
+                return "No warning encountered";
+            }
+        }
+    }
+
+    public int getIndexOfChild(Object child) {
+        return mgui.getCheckingWarnings().indexOf(child);
+    }
 
 }

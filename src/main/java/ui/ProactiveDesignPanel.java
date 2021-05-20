@@ -61,226 +61,226 @@ import java.awt.*;
  */
 public class ProactiveDesignPanel extends TURTLEPanel {
 
-  public ProactiveCSDPanel procsdp;
+    public ProactiveCSDPanel procsdp;
 
-  public ProactiveDesignPanel(MainGUI _mgui) {
-    super(_mgui);
+    public ProactiveDesignPanel(MainGUI _mgui) {
+        super(_mgui);
 
-    // Issue #41 Ordering of tabbed panes
-    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+        // Issue #41 Ordering of tabbed panes
+        tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    cl = new ChangeListener() {
+        cl = new ChangeListener() {
 
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        mgui.paneAnalysisAction(e);
-      }
-    };
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mgui.paneAnalysisAction(e);
+            }
+        };
 
-    tabbedPane.addChangeListener(cl);
-    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-  }
-
-  public void init() {
-
-    // Add class diagram and composite structure diagram
-    // addProClassDiagram();
-    addCompositeStructureDiagram("Main Composite Structure Diagram");
-    // tdp = procsdp;
-    tabbedPane.setSelectedIndex(0);
-  }
-
-  public ProActiveCompSpecificationCSDPanel addProActiveCompSpecificationPanel(String name) {
-    ProactiveCSDToolBar toolBarCSD = new ProactiveCSDToolBar(mgui);
-    toolbars.add(toolBarCSD);
-
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    // Class diagram
-
-    ProActiveCompSpecificationCSDPanel newCSDPanel = new ProActiveCompSpecificationCSDPanel(mgui, toolBarCSD, name);
-    newCSDPanel.tp = this;
-
-    if (procsdp == null) {
-      procsdp = newCSDPanel;
-      tdp = procsdp;
+        tabbedPane.addChangeListener(cl);
+        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
 
-    panels.add(newCSDPanel);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(newCSDPanel);
-    newCSDPanel.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarCSD, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(name, IconManager.imgic17, toolBarPanel, "Opens composite structure diagram");
-    return newCSDPanel;
-  }
+    public void init() {
 
-  public ProactiveCSDPanel addCompositeStructureDiagram(String name) {
-    ProactiveCSDToolBar toolBarCSD = new ProactiveCSDToolBar(mgui);
-    toolbars.add(toolBarCSD);
-
-    toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    // Class diagram
-
-    ProactiveCSDPanel newCSDPanel = new ProactiveCSDPanel(mgui, toolBarCSD);
-    newCSDPanel.setName(name);
-    newCSDPanel.tp = this;
-
-    if (procsdp == null) {
-      procsdp = newCSDPanel;
-      tdp = procsdp;
+        // Add class diagram and composite structure diagram
+        // addProClassDiagram();
+        addCompositeStructureDiagram("Main Composite Structure Diagram");
+        // tdp = procsdp;
+        tabbedPane.setSelectedIndex(0);
     }
 
-    panels.add(newCSDPanel);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(newCSDPanel);
-    newCSDPanel.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBarCSD, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(name, IconManager.imgic17, toolBarPanel, "Opens composite structure diagram");
-    return newCSDPanel;
-  }
+    public ProActiveCompSpecificationCSDPanel addProActiveCompSpecificationPanel(String name) {
+        ProactiveCSDToolBar toolBarCSD = new ProactiveCSDToolBar(mgui);
+        toolbars.add(toolBarCSD);
 
-  public String addSMD(String s) {
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
 
-    // for (int k=0;k<panels.size();k++)
-    // {
-    // TDiagramPanel tg=(TDiagramPanel)panels.get(k);
-    // //
-    // }
+        // Class diagram
 
-    // Ensure that s is unique
-    // Otherwise -> add an index
-    s = generateNameIfInUse(s);
-    addSMD2(s);
-    return (s);
-  }
+        ProActiveCompSpecificationCSDPanel newCSDPanel = new ProActiveCompSpecificationCSDPanel(mgui, toolBarCSD, name);
+        newCSDPanel.tp = this;
 
-  public void addSMD2(String s) {
+        if (procsdp == null) {
+            procsdp = newCSDPanel;
+            tdp = procsdp;
+        }
 
-    JPanel toolBarPanel = new JPanel();
-    toolBarPanel.setLayout(new BorderLayout());
-
-    ProactiveSMDToolBar toolBar = new ProactiveSMDToolBar(mgui);
-    toolbars.add(toolBar);
-    ProactiveSMDPanel psmdp = new ProactiveSMDPanel(mgui, toolBar);
-    psmdp.setName(s);
-    psmdp.tp = this;
-    panels.add(psmdp);
-    JScrollDiagramPanel jsp = new JScrollDiagramPanel(psmdp);
-    psmdp.jsp = jsp;
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    toolBarPanel.add(toolBar, BorderLayout.NORTH);
-    toolBarPanel.add(jsp, BorderLayout.CENTER);
-    tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the state machine diagram diagram of " + s);
-  }
-
-  public String saveHeaderInXml(String extensionToName) {
-    if (extensionToName == null) {
-      return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        panels.add(newCSDPanel);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(newCSDPanel);
+        newCSDPanel.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarCSD, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(name, IconManager.imgic17, toolBarPanel, "Opens composite structure diagram");
+        return newCSDPanel;
     }
 
-    return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-  }
+    public ProactiveCSDPanel addCompositeStructureDiagram(String name) {
+        ProactiveCSDToolBar toolBarCSD = new ProactiveCSDToolBar(mgui);
+        toolbars.add(toolBarCSD);
 
-  public String saveTailInXml() {
-    return "</Modeling>\n\n\n";
-  }
+        toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
 
-  public String toString() {
-    return "TURTLE Proactive: " + mgui.getTitleAt(this);
-  }
+        // Class diagram
 
-  public boolean removeEnabled(int index) {
-    if ((panels.elementAt(index) instanceof ProactiveSMDPanel)) {
-      return true;
+        ProactiveCSDPanel newCSDPanel = new ProactiveCSDPanel(mgui, toolBarCSD);
+        newCSDPanel.setName(name);
+        newCSDPanel.tp = this;
+
+        if (procsdp == null) {
+            procsdp = newCSDPanel;
+            tdp = procsdp;
+        }
+
+        panels.add(newCSDPanel);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(newCSDPanel);
+        newCSDPanel.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBarCSD, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(name, IconManager.imgic17, toolBarPanel, "Opens composite structure diagram");
+        return newCSDPanel;
     }
-    if (index != 0)
-      if ((panels.elementAt(index) instanceof ProactiveCSDPanel)) {
+
+    public String addSMD(String s) {
+
+        // for (int k=0;k<panels.size();k++)
+        // {
+        // TDiagramPanel tg=(TDiagramPanel)panels.get(k);
+        // //
+        // }
+
+        // Ensure that s is unique
+        // Otherwise -> add an index
+        s = generateNameIfInUse(s);
+        addSMD2(s);
+        return (s);
+    }
+
+    public void addSMD2(String s) {
+
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+
+        ProactiveSMDToolBar toolBar = new ProactiveSMDToolBar(mgui);
+        toolbars.add(toolBar);
+        ProactiveSMDPanel psmdp = new ProactiveSMDPanel(mgui, toolBar);
+        psmdp.setName(s);
+        psmdp.tp = this;
+        panels.add(psmdp);
+        JScrollDiagramPanel jsp = new JScrollDiagramPanel(psmdp);
+        psmdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        toolBarPanel.add(toolBar, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the state machine diagram diagram of " + s);
+    }
+
+    public String saveHeaderInXml(String extensionToName) {
+        if (extensionToName == null) {
+            return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        }
+
+        return "<Modeling type=\"ProActive Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+    }
+
+    public String saveTailInXml() {
+        return "</Modeling>\n\n\n";
+    }
+
+    public String toString() {
+        return "TURTLE Proactive: " + mgui.getTitleAt(this);
+    }
+
+    public boolean removeEnabled(int index) {
+        if ((panels.elementAt(index) instanceof ProactiveSMDPanel)) {
+            return true;
+        }
+        if (index != 0)
+            if ((panels.elementAt(index) instanceof ProactiveCSDPanel)) {
+                return true;
+            }
+        return false;
+    }
+
+    public boolean renameEnabled(int index) {
+        if ((panels.elementAt(index) instanceof ProactiveSMDPanel)) {
+            return true;
+        }
+        if (index != 0)
+            if ((panels.elementAt(index) instanceof ProactiveCSDPanel)) {
+                return true;
+            }
+        return false;
+    }
+
+    public boolean isProSMDEnabled() {
         return true;
-      }
-    return false;
-  }
-
-  public boolean renameEnabled(int index) {
-    if ((panels.elementAt(index) instanceof ProactiveSMDPanel)) {
-      return true;
-    }
-    if (index != 0)
-      if ((panels.elementAt(index) instanceof ProactiveCSDPanel)) {
-        return true;
-      }
-    return false;
-  }
-
-  public boolean isProSMDEnabled() {
-    return true;
-  }
-
-  public boolean removeSMDPanel(String name) {
-    ProactiveSMDPanel psmdp;
-    for (int i = 1; i < panels.size(); i++) {
-      psmdp = (ProactiveSMDPanel) (panels.elementAt(i));
-      if (psmdp.getName().compareTo(name) == 0) {
-        // tabbedPane.remove((ProactiveSMDPanel)panels.elementAt(i));
-        // panels.remove(i);
-        toolbars.remove(i);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public ProactiveSMDPanel getSMDPanel(String name) {
-    TDiagramPanel psmdp;
-    for (int i = 1; i < panels.size(); i++) {
-      psmdp = panels.elementAt(i);
-      if ((psmdp instanceof ProactiveSMDPanel) && (psmdp.getName().compareTo(name) == 0)) {
-        return (ProactiveSMDPanel) psmdp;
-      }
-    }
-    return null;
-  }
-
-  public void updateAllMembranes() {
-    for (int i = 1; i < panels.size(); i++) {
-      TDiagramPanel psmdp = panels.elementAt(i);
-      if ((psmdp instanceof ProactiveCSDPanel)) {
-
-        ProactiveCSDPanel pcsdp = (ProactiveCSDPanel) psmdp;
-        pcsdp.updateAllMembranes();
-
-      }
     }
 
-  }
-
-  public ProActiveCompSpecificationCSDPanel getCompSpecPanel(String name) {
-    TDiagramPanel psmdp;
-    for (int i = 1; i < panels.size(); i++) {
-      psmdp = panels.elementAt(i);
-      if ((psmdp instanceof ProActiveCompSpecificationCSDPanel) && (psmdp.getName().compareTo(name) == 0)) {
-        return (ProActiveCompSpecificationCSDPanel) psmdp;
-      }
+    public boolean removeSMDPanel(String name) {
+        ProactiveSMDPanel psmdp;
+        for (int i = 1; i < panels.size(); i++) {
+            psmdp = (ProactiveSMDPanel) (panels.elementAt(i));
+            if (psmdp.getName().compareTo(name) == 0) {
+                // tabbedPane.remove((ProactiveSMDPanel)panels.elementAt(i));
+                // panels.remove(i);
+                toolbars.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
-    return null;
-  }
 
-  public void renamePanel(TDiagramPanel tdp, String newName) {
-    // int index=this.tabbedPane.indexOfComponent((ProactiveSMDPanel)tdp);
-    int index = tabbedPane.indexOfTab(tdp.name);
-
-    if (index != -1) {
-      tabbedPane.setTitleAt(index, newName);
-      panels.elementAt(index).setName(newName);
-      mgui.changeMade(null, -1);
+    public ProactiveSMDPanel getSMDPanel(String name) {
+        TDiagramPanel psmdp;
+        for (int i = 1; i < panels.size(); i++) {
+            psmdp = panels.elementAt(i);
+            if ((psmdp instanceof ProactiveSMDPanel) && (psmdp.getName().compareTo(name) == 0)) {
+                return (ProactiveSMDPanel) psmdp;
+            }
+        }
+        return null;
     }
-  }
+
+    public void updateAllMembranes() {
+        for (int i = 1; i < panels.size(); i++) {
+            TDiagramPanel psmdp = panels.elementAt(i);
+            if ((psmdp instanceof ProactiveCSDPanel)) {
+
+                ProactiveCSDPanel pcsdp = (ProactiveCSDPanel) psmdp;
+                pcsdp.updateAllMembranes();
+
+            }
+        }
+
+    }
+
+    public ProActiveCompSpecificationCSDPanel getCompSpecPanel(String name) {
+        TDiagramPanel psmdp;
+        for (int i = 1; i < panels.size(); i++) {
+            psmdp = panels.elementAt(i);
+            if ((psmdp instanceof ProActiveCompSpecificationCSDPanel) && (psmdp.getName().compareTo(name) == 0)) {
+                return (ProActiveCompSpecificationCSDPanel) psmdp;
+            }
+        }
+        return null;
+    }
+
+    public void renamePanel(TDiagramPanel tdp, String newName) {
+        // int index=this.tabbedPane.indexOfComponent((ProactiveSMDPanel)tdp);
+        int index = tabbedPane.indexOfTab(tdp.name);
+
+        if (index != -1) {
+            tabbedPane.setTitleAt(index, newName);
+            panels.elementAt(index).setName(newName);
+            mgui.changeMade(null, -1);
+        }
+    }
 }

@@ -44,16 +44,16 @@ import ui.cd.TGConnectingPointCompositionOperator;
 
 public class TGConnectingPointPROCSDInterface extends TGConnectingPointCompositionOperator {
 
-  public TGConnectingPointPROCSDInterface(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
-    super(_container1, _x, _y, _in, _out);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
-      return true;
+    public TGConnectingPointPROCSDInterface(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
+        super(_container1, _x, _y, _in, _out);
     }
 
-    return type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
+            return true;
+        }
+
+        return type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE;
+    }
 }

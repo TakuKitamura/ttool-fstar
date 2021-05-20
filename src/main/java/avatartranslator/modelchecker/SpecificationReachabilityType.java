@@ -45,5 +45,5 @@ package avatartranslator.modelchecker;
  * @author Ludovic APVRILLE
  */
 public enum SpecificationReachabilityType {
-  NOTCOMPUTED, REACHABLE, NONREACHABLE
+    NOTCOMPUTED, REACHABLE, NONREACHABLE
 }

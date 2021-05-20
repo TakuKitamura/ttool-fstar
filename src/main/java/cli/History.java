@@ -57,47 +57,47 @@ import java.util.*;
  */
 public class History extends Command {
 
-  public History() {
+    public History() {
 
-  }
-
-  public List<Command> getListOfSubCommands() {
-    return subcommands;
-  }
-
-  public String getCommand() {
-    return "history";
-  }
-
-  public String getShortCommand() {
-    return "hi";
-  }
-
-  public String getUsage() {
-    return "history [command id (optional)]";
-  }
-
-  public String getDescription() {
-    return "Prints or recall previous commands \n";
-  }
-
-  public String executeCommand(String command, Interpreter interpreter) {
-    // TraceManager.addDev("History command:" + command);
-
-    if (command.length() == 0) {
-      return interpreter.printAllFormerCommands();
     }
 
-    try {
-      return interpreter.executeFormerCommand(Integer.parseInt(command));
-    } catch (Exception e) {
-      return "Invalid argument. Must provide an int";
+    public List<Command> getListOfSubCommands() {
+        return subcommands;
     }
 
-  }
+    public String getCommand() {
+        return "history";
+    }
 
-  public void fillSubCommands() {
+    public String getShortCommand() {
+        return "hi";
+    }
 
-  }
+    public String getUsage() {
+        return "history [command id (optional)]";
+    }
+
+    public String getDescription() {
+        return "Prints or recall previous commands \n";
+    }
+
+    public String executeCommand(String command, Interpreter interpreter) {
+        // TraceManager.addDev("History command:" + command);
+
+        if (command.length() == 0) {
+            return interpreter.printAllFormerCommands();
+        }
+
+        try {
+            return interpreter.executeFormerCommand(Integer.parseInt(command));
+        } catch (Exception e) {
+            return "Invalid argument. Must provide an int";
+        }
+
+    }
+
+    public void fillSubCommands() {
+
+    }
 
 }

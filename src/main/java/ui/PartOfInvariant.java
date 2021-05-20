@@ -48,5 +48,5 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public interface PartOfInvariant {
-  void drawInvariantInformation(Graphics g);
+    void drawInvariantInformation(Graphics g);
 }

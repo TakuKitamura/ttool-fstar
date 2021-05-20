@@ -47,21 +47,21 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class TEPEAttributeComponent extends TEPEComponent {
-  protected String blockName;
+    protected String blockName;
 
-  public TEPEAttributeComponent(String _name, Object _referenceObject, String _blockName) {
-    super(_name, _referenceObject);
-    blockName = _blockName;
-    outAttributeComponents = new Vector<TEPEComponent>();
-    outSignalComponents = new Vector<TEPEComponent>(); // toggle
-  }
+    public TEPEAttributeComponent(String _name, Object _referenceObject, String _blockName) {
+        super(_name, _referenceObject);
+        blockName = _blockName;
+        outAttributeComponents = new Vector<TEPEComponent>();
+        outSignalComponents = new Vector<TEPEComponent>(); // toggle
+    }
 
-  public String getBlockName() {
-    return blockName;
-  }
+    public String getBlockName() {
+        return blockName;
+    }
 
-  public String getExtraString() {
-    return "\nDeclared in block: " + blockName;
-  }
+    public String getExtraString() {
+        return "\nDeclared in block: " + blockName;
+    }
 
 }

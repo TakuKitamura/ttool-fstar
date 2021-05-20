@@ -3,10 +3,10 @@
 
 struct message
 {
-  struct message *next;
-  int nbOfParams;
-  int *params;
-  long id;
+    struct message *next;
+    int nbOfParams;
+    int *params;
+    long id;
 };
 
 typedef struct message message;

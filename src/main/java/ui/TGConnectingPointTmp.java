@@ -46,20 +46,20 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointTmp extends TGConnectingPoint {
-  private int id;
+    private int id;
 
-  public TGConnectingPointTmp(CDElement _container, int _x, int _y, int _id) {
-    super(_container, _x, _y, true, true);
-    id = _id;
-  }
+    public TGConnectingPointTmp(CDElement _container, int _x, int _y, int _id) {
+        super(_container, _x, _y, true, true);
+        id = _id;
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return false;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return false;
+    }
 
-  @Override
-  public int getId() {
-    return id;
-  }
+    @Override
+    public int getId() {
+        return id;
+    }
 }

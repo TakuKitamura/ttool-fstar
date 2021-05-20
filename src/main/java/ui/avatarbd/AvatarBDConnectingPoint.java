@@ -52,16 +52,16 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class AvatarBDConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public AvatarBDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    if (type == TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR) {
-      return true;
+    public AvatarBDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
     }
-    return type == TGComponentManager.AVATARBD_PORT_CONNECTOR;
-  }
+
+    @Override
+    public boolean isCompatibleWith(int type) {
+        if (type == TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR) {
+            return true;
+        }
+        return type == TGComponentManager.AVATARBD_PORT_CONNECTOR;
+    }
 }

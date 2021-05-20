@@ -63,53 +63,53 @@ import java.io.*;
  */
 public class SVGGeneration {
 
-  public SVGGeneration() {
+    public SVGGeneration() {
 
-  }
-
-  public SVGGraphics2D getSVGGenerator(JPanel panel) {
-    // Get a DOMImplementation.
-    DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
-
-    // Create an instance of org.w3c.dom.Document.
-    String svgNS = "http://www.w3.org/2000/svg";
-    Document document = domImpl.createDocument(svgNS, "svg", null);
-
-    // Create an instance of the SVG Generator.
-    SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-
-    // Ask the test to render into the SVG Graphics2D implementation.
-    panel.paint(svgGenerator);
-
-    return svgGenerator;
-  }
-
-  public void saveInSVG(JPanel panel, String fileName) {
-    SVGGraphics2D svgGenerator = getSVGGenerator(panel);
-    boolean useCSS = true; // we want to use CSS style attributes
-    try {
-      File fileSave = new File(fileName);
-      FileOutputStream fos = new FileOutputStream(fileSave);
-      Writer out = new OutputStreamWriter(fos, "UTF-8");
-      svgGenerator.stream(out, useCSS);
-    } catch (Exception e) {
-      TraceManager.addDev("SVG generation failed: " + e.getMessage());
     }
-  }
 
-  public String getSVGString(JPanel panel) {
-    SVGGraphics2D svgGenerator = getSVGGenerator(panel);
+    public SVGGraphics2D getSVGGenerator(JPanel panel) {
+        // Get a DOMImplementation.
+        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
 
-    boolean useCSS = true; // we want to use CSS style attributes
-    try {
-      StringWriter ouS = new StringWriter();
-      svgGenerator.stream(ouS, useCSS);
-      String tmp = ouS.toString();
-      return tmp;
-    } catch (Exception e) {
-      TraceManager.addDev("SVG generation failed: " + e.getMessage());
-      return null;
+        // Create an instance of org.w3c.dom.Document.
+        String svgNS = "http://www.w3.org/2000/svg";
+        Document document = domImpl.createDocument(svgNS, "svg", null);
+
+        // Create an instance of the SVG Generator.
+        SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+
+        // Ask the test to render into the SVG Graphics2D implementation.
+        panel.paint(svgGenerator);
+
+        return svgGenerator;
     }
-  }
+
+    public void saveInSVG(JPanel panel, String fileName) {
+        SVGGraphics2D svgGenerator = getSVGGenerator(panel);
+        boolean useCSS = true; // we want to use CSS style attributes
+        try {
+            File fileSave = new File(fileName);
+            FileOutputStream fos = new FileOutputStream(fileSave);
+            Writer out = new OutputStreamWriter(fos, "UTF-8");
+            svgGenerator.stream(out, useCSS);
+        } catch (Exception e) {
+            TraceManager.addDev("SVG generation failed: " + e.getMessage());
+        }
+    }
+
+    public String getSVGString(JPanel panel) {
+        SVGGraphics2D svgGenerator = getSVGGenerator(panel);
+
+        boolean useCSS = true; // we want to use CSS style attributes
+        try {
+            StringWriter ouS = new StringWriter();
+            svgGenerator.stream(ouS, useCSS);
+            String tmp = ouS.toString();
+            return tmp;
+        } catch (Exception e) {
+            TraceManager.addDev("SVG generation failed: " + e.getMessage());
+            return null;
+        }
+    }
 
 }

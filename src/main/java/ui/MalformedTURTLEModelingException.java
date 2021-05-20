@@ -46,12 +46,12 @@ package ui;
  */
 public class MalformedTURTLEModelingException extends Exception {
 
-  public MalformedTURTLEModelingException() {
-    super("Modeling cannot be drawn with TTool");
-  }
+    public MalformedTURTLEModelingException() {
+        super("Modeling cannot be drawn with TTool");
+    }
 
-  public MalformedTURTLEModelingException(String msg) {
-    super("Modeling cannot be drawn with TTool: " + msg);
-  }
+    public MalformedTURTLEModelingException(String msg) {
+        super("Modeling cannot be drawn with TTool: " + msg);
+    }
 
 } // Class

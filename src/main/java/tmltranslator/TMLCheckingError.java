@@ -48,36 +48,36 @@ import translator.CheckingError;
  */
 public class TMLCheckingError extends CheckingError {
 
-  private TMLTask tmlt;
+    private TMLTask tmlt;
 
-  private TMLActivityElement tmlae;
+    private TMLActivityElement tmlae;
 
-  public TMLCheckingError(int _type, String _message) {
-    super(_type, _message);
-  }
-
-  public void setTMLTask(TMLTask _tmlt) {
-    tmlt = _tmlt;
-  }
-
-  public TMLTask getTMLTask() {
-    return tmlt;
-  }
-
-  public void setTMLActivityElement(TMLActivityElement tmlae) {
-    this.tmlae = tmlae;
-  }
-
-  public TMLActivityElement getTMLActivityElement() {
-    return tmlae;
-  }
-
-  @Override
-  public String toString() {
-    if (tmlt != null) {
-      return tmlt.getName() + ": " + message;
+    public TMLCheckingError(int _type, String _message) {
+        super(_type, _message);
     }
 
-    return message;
-  }
+    public void setTMLTask(TMLTask _tmlt) {
+        tmlt = _tmlt;
+    }
+
+    public TMLTask getTMLTask() {
+        return tmlt;
+    }
+
+    public void setTMLActivityElement(TMLActivityElement tmlae) {
+        this.tmlae = tmlae;
+    }
+
+    public TMLActivityElement getTMLActivityElement() {
+        return tmlae;
+    }
+
+    @Override
+    public String toString() {
+        if (tmlt != null) {
+            return tmlt.getName() + ": " + message;
+        }
+
+        return message;
+    }
 }

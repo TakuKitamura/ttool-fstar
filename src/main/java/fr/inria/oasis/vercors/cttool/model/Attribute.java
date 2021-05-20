@@ -46,30 +46,30 @@ package fr.inria.oasis.vercors.cttool.model;
  */
 public interface Attribute {
 
-  // access
-  int PRIVATE = 0;
-  int PROTECTED = 1;
-  int PUBLIC = 2;
+    // access
+    int PRIVATE = 0;
+    int PROTECTED = 1;
+    int PUBLIC = 2;
 
-  // type
-  int NATURAL = 0;
-  int BOOLEAN = 4;
-  int OTHER = 5;
+    // type
+    int NATURAL = 0;
+    int BOOLEAN = 4;
+    int OTHER = 5;
 
-  String getName();
+    String getName();
 
-  void setName(String name);
+    void setName(String name);
 
-  int getAccess();
+    int getAccess();
 
-  void setAccess(int access);
+    void setAccess(int access);
 
-  int getType();
+    int getType();
 
-  void setType(int type);
+    void setType(int type);
 
-  String getInitialValue();
+    String getInitialValue();
 
-  void setInitialValue(String o);
+    void setInitialValue(String o);
 
 }

@@ -50,38 +50,38 @@ import ui.*;
  */
 public class SysmlsecMethodologyReferenceToProperties extends SysmlsecMethodologyDiagramReference {
 
-  public SysmlsecMethodologyReferenceToProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
-      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    public SysmlsecMethodologyReferenceToProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+            boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    initScaling(180, 70);
+        initScaling(180, 70);
 
-    nbConnectingPoint = 1;
-    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-    connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0,
-        TGConnectingPoint.WEST);
+        nbConnectingPoint = 1;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0,
+                TGConnectingPoint.WEST);
 
-    typeOfReference = PROPERTY;
+        typeOfReference = PROPERTY;
 
-    addTGConnectingPointsCommentTop();
+        addTGConnectingPointsCommentTop();
 
-  }
+    }
 
-  public int getType() {
-    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
-  }
+    public int getType() {
+        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
+    }
 
-  public boolean isAValidPanelType(TURTLEPanel panel) {
-    return panel instanceof AvatarRequirementPanel;
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof AvatarRequirementPanel;
 
-  }
+    }
 
-  public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-    dn.setValidationsNumber(0);
-  }
+    public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
+        dn.setValidationsNumber(0);
+    }
 
-  public boolean makeCall(String diagramName, int index) {
-    return true;
-  }
+    public boolean makeCall(String diagramName, int index) {
+        return true;
+    }
 
 }

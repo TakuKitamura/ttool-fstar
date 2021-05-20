@@ -57,152 +57,152 @@ import java.io.BufferedReader;
  */
 public class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 
-  public InteractiveSimulationActions[] actions;
+    public InteractiveSimulationActions[] actions;
 
-  private static String[] unitTab = { "sec", "msec", "usec", "nsec" };
-  private static int[] clockDivisers = { 1000000000, 1000000, 1000, 1 };
-  protected JComboBox<String> units;
+    private static String[] unitTab = { "sec", "msec", "usec", "nsec" };
+    private static int[] clockDivisers = { 1000000000, 1000000, 1000, 1 };
+    protected JComboBox<String> units;
 
-  private JSimulationSDPanel sdpanel;
-  protected JLabel status;
-  // , buttonStart, buttonStopAndClose;
-  // protected JTextArea jta;
-  // protected JScrollPane jsp;
+    private JSimulationSDPanel sdpanel;
+    protected JLabel status;
+    // , buttonStart, buttonStopAndClose;
+    // protected JTextArea jta;
+    // protected JScrollPane jsp;
 
-  public JFrameSimulationSDPanel(Frame _f, MainGUI _mgui, String _title) {
-    super(_title);
+    public JFrameSimulationSDPanel(Frame _f, MainGUI _mgui, String _title) {
+        super(_title);
 
-    initActions();
-    makeComponents();
-    // setComponents();
-    this.addComponentListener(new ComponentAdapter() {
-      @Override
-      public void componentResized(ComponentEvent e) {
-        if (JFrameSimulationSDPanel.this.sdpanel != null)
-          JFrameSimulationSDPanel.this.sdpanel.resized();
-      }
-    });
-  }
-
-  private JLabel createStatusBar() {
-    status = new JLabel("Ready...");
-    status.setForeground(ColorManager.InteractiveSimulationText);
-    status.setBorder(BorderFactory.createEtchedBorder());
-    return status;
-  }
-
-  public void makeComponents() {
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    Container framePanel = getContentPane();
-    framePanel.setLayout(new BorderLayout());
-
-    // Top panel
-    JPanel topPanel = new JPanel();
-    JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW]);
-    topPanel.add(buttonClose);
-    topPanel.add(new JLabel(" time unit:"));
-    units = new JComboBox<>(unitTab);
-    units.setSelectedIndex(1);
-    units.addActionListener(this);
-    topPanel.add(units);
-    JButton buttonRefresh = new JButton(actions[InteractiveSimulationActions.ACT_REFRESH]);
-    topPanel.add(buttonRefresh);
-    framePanel.add(topPanel, BorderLayout.NORTH);
-
-    // Simulation panel
-    sdpanel = new JSimulationSDPanel(this);
-    JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    sdpanel.setMyScrollPanel(jsp);
-    jsp.setWheelScrollingEnabled(true);
-    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-    framePanel.add(jsp, BorderLayout.CENTER);
-
-    // statusBar
-    status = createStatusBar();
-    framePanel.add(status, BorderLayout.SOUTH);
-
-    // Mouse handler
-    // mouseHandler = new MouseHandler(status);
-
-    pack();
-
-    //
-    //
-  }
-
-  private void initActions() {
-    actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
-    for (int i = 0; i < InteractiveSimulationActions.NB_ACTION; i++) {
-      actions[i] = new InteractiveSimulationActions(i);
-      actions[i].addActionListener(this);
-      // actions[i].addKeyListener(this);
+        initActions();
+        makeComponents();
+        // setComponents();
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (JFrameSimulationSDPanel.this.sdpanel != null)
+                    JFrameSimulationSDPanel.this.sdpanel.resized();
+            }
+        });
     }
-  }
 
-  public void close() {
-    dispose();
-    setVisible(false);
-
-  }
-
-  private void refresh() {
-    if (sdpanel != null) {
-      sdpanel.refresh();
+    private JLabel createStatusBar() {
+        status = new JLabel("Ready...");
+        status.setForeground(ColorManager.InteractiveSimulationText);
+        status.setBorder(BorderFactory.createEtchedBorder());
+        return status;
     }
-  }
 
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-    // TraceManager.addDev("Command:" + command);
+    public void makeComponents() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Container framePanel = getContentPane();
+        framePanel.setLayout(new BorderLayout());
 
-    if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand())) {
-      close();
-    } else if (command.equals(actions[InteractiveSimulationActions.ACT_REFRESH].getActionCommand())) {
-      refresh();
-    } else if (evt.getSource() == units) {
-      if (sdpanel != null) {
-        switch (units.getSelectedIndex()) {
-          case 0:
+        // Top panel
+        JPanel topPanel = new JPanel();
+        JButton buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW]);
+        topPanel.add(buttonClose);
+        topPanel.add(new JLabel(" time unit:"));
+        units = new JComboBox<>(unitTab);
+        units.setSelectedIndex(1);
+        units.addActionListener(this);
+        topPanel.add(units);
+        JButton buttonRefresh = new JButton(actions[InteractiveSimulationActions.ACT_REFRESH]);
+        topPanel.add(buttonRefresh);
+        framePanel.add(topPanel, BorderLayout.NORTH);
 
+        // Simulation panel
+        sdpanel = new JSimulationSDPanel(this);
+        JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        sdpanel.setMyScrollPanel(jsp);
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        framePanel.add(jsp, BorderLayout.CENTER);
+
+        // statusBar
+        status = createStatusBar();
+        framePanel.add(status, BorderLayout.SOUTH);
+
+        // Mouse handler
+        // mouseHandler = new MouseHandler(status);
+
+        pack();
+
+        //
+        //
+    }
+
+    private void initActions() {
+        actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
+        for (int i = 0; i < InteractiveSimulationActions.NB_ACTION; i++) {
+            actions[i] = new InteractiveSimulationActions(i);
+            actions[i].addActionListener(this);
+            // actions[i].addKeyListener(this);
         }
-        sdpanel.setClockDiviser(clockDivisers[units.getSelectedIndex()]);
-      }
     }
-  }
 
-  public void setFileReference(String _fileReference) {
-    if (sdpanel != null) {
-      // TraceManager.addDev("Setting file:" + _fileReference);
-      sdpanel.setFileReference(_fileReference);
-    } else {
-      // TraceManager.addDev("Null SD Panel");
+    public void close() {
+        dispose();
+        setVisible(false);
+
     }
-  }
 
-  public void setFileReference(BufferedReader inputStream) {
-    if (sdpanel != null) {
-      // TraceManager.addDev("Setting input stream");
-      sdpanel.setFileReference(inputStream);
-    } else {
-      // TraceManager.addDev("Null SD Panel");
+    private void refresh() {
+        if (sdpanel != null) {
+            sdpanel.refresh();
+        }
     }
-  }
 
-  public void setCurrentTime(long timeValue) {
-    status.setText("time = " + timeValue);
-  }
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
+        // TraceManager.addDev("Command:" + command);
 
-  public void setStatus(String _status) {
-    status.setText(_status);
-  }
+        if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand())) {
+            close();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_REFRESH].getActionCommand())) {
+            refresh();
+        } else if (evt.getSource() == units) {
+            if (sdpanel != null) {
+                switch (units.getSelectedIndex()) {
+                    case 0:
 
-  public void setNbOfTransactions(int x, long minTime, long maxTime) {
-    status.setText("" + x + " transactions, min time=" + minTime + ", max time=" + maxTime);
-  }
+                }
+                sdpanel.setClockDiviser(clockDivisers[units.getSelectedIndex()]);
+            }
+        }
+    }
 
-  public void setLimitEntity(boolean limit) {
-    sdpanel.setLimitEntity(limit);
-  }
+    public void setFileReference(String _fileReference) {
+        if (sdpanel != null) {
+            // TraceManager.addDev("Setting file:" + _fileReference);
+            sdpanel.setFileReference(_fileReference);
+        } else {
+            // TraceManager.addDev("Null SD Panel");
+        }
+    }
+
+    public void setFileReference(BufferedReader inputStream) {
+        if (sdpanel != null) {
+            // TraceManager.addDev("Setting input stream");
+            sdpanel.setFileReference(inputStream);
+        } else {
+            // TraceManager.addDev("Null SD Panel");
+        }
+    }
+
+    public void setCurrentTime(long timeValue) {
+        status.setText("time = " + timeValue);
+    }
+
+    public void setStatus(String _status) {
+        status.setText(_status);
+    }
+
+    public void setNbOfTransactions(int x, long minTime, long maxTime) {
+        status.setText("" + x + " transactions, min time=" + minTime + ", max time=" + maxTime);
+    }
+
+    public void setLimitEntity(boolean limit) {
+        sdpanel.setLimitEntity(limit);
+    }
 
 } // Class

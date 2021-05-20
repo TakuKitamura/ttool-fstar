@@ -47,52 +47,52 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class HLProcess extends Process {
-  private TClass tc;
+    private TClass tc;
 
-  public HLProcess(String _name, Vector<Gate> _gateList, Vector<Param> _paramList, TClass _tc, int _languageID) {
-    super(_name, _gateList, _paramList, _languageID);
-    tc = _tc;
-  }
-
-  public boolean isNameOfMyTClass(String s) {
-    return tc.getLotosName().equals(s);
-  }
-
-  public TClass getTClass() {
-    return tc;
-  }
-
-  public String getHighLevelCallToMe(MasterGateManager mgm, int languageID) {
-    String s = name;
-    if (hasNonInternalGates()) {
-      s = s + SEP1G + listNonInternalGates(mgm) + SEP3G;
+    public HLProcess(String _name, Vector<Gate> _gateList, Vector<Param> _paramList, TClass _tc, int _languageID) {
+        super(_name, _gateList, _paramList, _languageID);
+        tc = _tc;
     }
-    if (hasParameters()) {
-      s = s + SEP1P + listInitParameters(languageID) + SEP3P;
+
+    public boolean isNameOfMyTClass(String s) {
+        return tc.getLotosName().equals(s);
     }
-    return s;
-  }
 
-  public String listNonInternalGates(MasterGateManager mgm) {
-    String s = "";
-    boolean find = false;
-    Gate g;
+    public TClass getTClass() {
+        return tc;
+    }
 
-    for (int i = 0; i < gateList.size(); i++) {
-      g = gateList.elementAt(i);
-      if (!g.isInternal()) {
-        //
-        g = mgm.getMasterGateOf(tc, g);
-        //
-        if (!find) {
-          find = true;
-          s = s + g.getLotosName();
-        } else {
-          s = s + SEP2G + g.getLotosName();
+    public String getHighLevelCallToMe(MasterGateManager mgm, int languageID) {
+        String s = name;
+        if (hasNonInternalGates()) {
+            s = s + SEP1G + listNonInternalGates(mgm) + SEP3G;
         }
-      }
+        if (hasParameters()) {
+            s = s + SEP1P + listInitParameters(languageID) + SEP3P;
+        }
+        return s;
     }
-    return s;
-  }
+
+    public String listNonInternalGates(MasterGateManager mgm) {
+        String s = "";
+        boolean find = false;
+        Gate g;
+
+        for (int i = 0; i < gateList.size(); i++) {
+            g = gateList.elementAt(i);
+            if (!g.isInternal()) {
+                //
+                g = mgm.getMasterGateOf(tc, g);
+                //
+                if (!find) {
+                    find = true;
+                    s = s + g.getLotosName();
+                } else {
+                    s = s + SEP2G + g.getLotosName();
+                }
+            }
+        }
+        return s;
+    }
 
 } // Class

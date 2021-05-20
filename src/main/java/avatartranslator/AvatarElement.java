@@ -51,98 +51,98 @@ import java.util.Vector;
  */
 public class AvatarElement {
 
-  private static int ID = 0;
+    private static int ID = 0;
 
-  protected String name;
-  protected Object referenceObject;
-  protected Vector<Object> otherReferenceObjects;
-  private int myID;
+    protected String name;
+    protected Object referenceObject;
+    protected Vector<Object> otherReferenceObjects;
+    private int myID;
 
-  public AvatarElement(String _name, Object _referenceObject) {
-    myID = ++ID;
-    name = _name;
-    referenceObject = _referenceObject;
-  }
-
-  public void addReferenceObjectFrom(AvatarElement _elt) {
-    addReferenceObject(_elt.getReferenceObject());
-    Vector<Object> others = _elt.getReferenceObjects();
-    if (others != null) {
-      for (Object o : others) {
-        addReferenceObject(o);
-      }
+    public AvatarElement(String _name, Object _referenceObject) {
+        myID = ++ID;
+        name = _name;
+        referenceObject = _referenceObject;
     }
 
-  }
-
-  public void addReferenceObject(Object _ref) {
-    if (otherReferenceObjects == null) {
-      otherReferenceObjects = new Vector<Object>();
-    }
-    otherReferenceObjects.add(_ref);
-  }
-
-  public boolean hasReferenceObject(Object _ref) {
-    if (referenceObject == _ref) {
-      return true;
-    }
-
-    if (otherReferenceObjects != null) {
-      for (Object obj : otherReferenceObjects) {
-        if (obj == _ref) {
-          return true;
+    public void addReferenceObjectFrom(AvatarElement _elt) {
+        addReferenceObject(_elt.getReferenceObject());
+        Vector<Object> others = _elt.getReferenceObjects();
+        if (others != null) {
+            for (Object o : others) {
+                addReferenceObject(o);
+            }
         }
-      }
+
     }
 
-    return false;
-  }
-
-  public void setName(String _name) {
-    name = _name;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Object getReferenceObject() {
-    return referenceObject;
-  }
-
-  public Vector<Object> getReferenceObjects() {
-    return otherReferenceObjects;
-  }
-
-  public int getID() {
-    return myID;
-  }
-
-  public UUID getUUID() {
-    if (referenceObject != null) {
-      if (referenceObject instanceof ElementWithUUID) {
-        return ((ElementWithUUID) referenceObject).getUUID();
-      }
+    public void addReferenceObject(Object _ref) {
+        if (otherReferenceObjects == null) {
+            otherReferenceObjects = new Vector<Object>();
+        }
+        otherReferenceObjects.add(_ref);
     }
-    return null;
-  }
 
-  public static void resetID() {
-    TraceManager.addDev("Reset AvatarID");
-    ID = 0;
-  }
+    public boolean hasReferenceObject(Object _ref) {
+        if (referenceObject == _ref) {
+            return true;
+        }
 
-  @Override
-  public String toString() {
-    return getName();
-  }
+        if (otherReferenceObjects != null) {
+            for (Object obj : otherReferenceObjects) {
+                if (obj == _ref) {
+                    return true;
+                }
+            }
+        }
 
-  public void cloneLinkToReferenceObjects(AvatarElement ae) {
-    if (otherReferenceObjects == null) {
-      return;
+        return false;
     }
-    for (Object o : otherReferenceObjects) {
-      ae.addReferenceObject(o);
+
+    public void setName(String _name) {
+        name = _name;
     }
-  }
+
+    public String getName() {
+        return name;
+    }
+
+    public Object getReferenceObject() {
+        return referenceObject;
+    }
+
+    public Vector<Object> getReferenceObjects() {
+        return otherReferenceObjects;
+    }
+
+    public int getID() {
+        return myID;
+    }
+
+    public UUID getUUID() {
+        if (referenceObject != null) {
+            if (referenceObject instanceof ElementWithUUID) {
+                return ((ElementWithUUID) referenceObject).getUUID();
+            }
+        }
+        return null;
+    }
+
+    public static void resetID() {
+        TraceManager.addDev("Reset AvatarID");
+        ID = 0;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    public void cloneLinkToReferenceObjects(AvatarElement ae) {
+        if (otherReferenceObjects == null) {
+            return;
+        }
+        for (Object o : otherReferenceObjects) {
+            ae.addReferenceObject(o);
+        }
+    }
 }

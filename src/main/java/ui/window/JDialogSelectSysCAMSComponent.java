@@ -65,350 +65,350 @@ import java.util.Vector;
 @SuppressWarnings("serial")
 
 public class JDialogSelectSysCAMSComponent extends JDialogBase implements ActionListener, ListSelectionListener {
-  public static Vector<TGComponent> validated, ignored;
-  private static boolean optimized = true;
+    public static Vector<TGComponent> validated, ignored;
+    private static boolean optimized = true;
 
-  private Vector<TGComponent> val;
-  private Vector<TGComponent> ign, back;
+    private Vector<TGComponent> val;
+    private Vector<TGComponent> ign, back;
 
-  // subpanels
-  private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
-  private JList<TGComponent> listIgnored;
-  private JList<TGComponent> listValidated;
-  private JButton allValidated;
-  private JButton addOneValidated;
-  private JButton addOneIgnored;
-  private JButton allIgnored;
-  protected JCheckBox optimize;
+    // subpanels
+    private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
+    private JList<TGComponent> listIgnored;
+    private JList<TGComponent> listValidated;
+    private JButton allValidated;
+    private JButton addOneValidated;
+    private JButton addOneIgnored;
+    private JButton allIgnored;
+    protected JCheckBox optimize;
 
-  /** Creates new form */
-  public JDialogSelectSysCAMSComponent(Frame f, Vector<TGComponent> _back, List<TGComponent> componentList,
-      String title) {
-    super(f, title, true);
+    /** Creates new form */
+    public JDialogSelectSysCAMSComponent(Frame f, Vector<TGComponent> _back, List<TGComponent> componentList,
+            String title) {
+        super(f, title, true);
 
-    back = _back;
+        back = _back;
 
-    List<TGComponent> pcl = new LinkedList<TGComponent>();
-    makeComponentList(pcl, componentList);
+        List<TGComponent> pcl = new LinkedList<TGComponent>();
+        makeComponentList(pcl, componentList);
 
-    if ((validated == null) || (ignored == null)) {
-      val = makeNewVal(pcl);
-      ign = new Vector<TGComponent>();
-    } else {
-      val = validated;
-      ign = ignored;
-      checkTask(val, pcl);
-      checkTask(ign, pcl);
-      addNewTask(val, pcl, ign);
+        if ((validated == null) || (ignored == null)) {
+            val = makeNewVal(pcl);
+            ign = new Vector<TGComponent>();
+        } else {
+            val = validated;
+            ign = ignored;
+            checkTask(val, pcl);
+            checkTask(ign, pcl);
+            addNewTask(val, pcl, ign);
+        }
+
+        initComponents();
+        myInitComponents();
+        pack();
     }
 
-    initComponents();
-    myInitComponents();
-    pack();
-  }
+    private void makeComponentList(List<TGComponent> cs, List<TGComponent> lcs) {
+        TGComponent tgc;
+        SysCAMSCompositeComponent ccomp;
 
-  private void makeComponentList(List<TGComponent> cs, List<TGComponent> lcs) {
-    TGComponent tgc;
-    SysCAMSCompositeComponent ccomp;
-
-    for (int i = 0; i < lcs.size(); i++) {
-      tgc = lcs.get(i);
-      if (tgc instanceof SysCAMSCompositeComponent) {
-        ccomp = (SysCAMSCompositeComponent) tgc;
-        // cs.addAll(ccomp.getAllBlockDEComponents());
-        cs.addAll(ccomp.getAllBlockTDFComponents());
-      }
-      if (tgc instanceof SysCAMSBlockTDF) {
-        cs.add(tgc);
-      }
-      if (tgc instanceof SysCAMSBlockDE) {
-        cs.add(tgc);
-      }
-    }
-  }
-
-  private Vector<TGComponent> makeNewVal(List<TGComponent> list) {
-    Vector<TGComponent> v = new Vector<TGComponent>();
-    TGComponent tgc;
-
-    for (int i = 0; i < list.size(); i++) {
-      tgc = list.get(i);
-      //
-      if (tgc instanceof SysCAMSBlockTDF) {
-        v.addElement(tgc);
-      }
-      if (tgc instanceof SysCAMSBlockDE) {
-        v.addElement(tgc);
-      }
-    }
-    return v;
-  }
-
-  private void checkTask(Vector<? extends TGComponent> tobeChecked, List<TGComponent> source) {
-    TGComponent t;
-
-    for (int i = 0; i < tobeChecked.size(); i++) {
-      t = tobeChecked.elementAt(i);
-
-      if (!source.contains(t)) {
-        tobeChecked.removeElementAt(i);
-        i--;
-      }
-    }
-  }
-
-  public void addNewTask(Vector<TGComponent> added, List<TGComponent> source, Vector<TGComponent> notSource) {
-    TGComponent tgc;
-
-    for (int i = 0; i < source.size(); i++) {
-      tgc = source.get(i);
-
-      if (((tgc instanceof SysCAMSBlockTDF) || (tgc instanceof SysCAMSBlockDE)) && (!added.contains(tgc))
-          && (!notSource.contains(tgc))) {
-        added.addElement(tgc);
-        //
-      }
-    }
-  }
-
-  private void myInitComponents() {
-    setButtons();
-  }
-
-  private void initComponents() {
-    Container c = getContentPane();
-    GridBagLayout gridbag1 = new GridBagLayout();
-    GridBagConstraints c1 = new GridBagConstraints();
-    GridBagLayout gridbag2 = new GridBagLayout();
-    GridBagConstraints c2 = new GridBagConstraints();
-    setFont(new Font("Helvetica", Font.PLAIN, 14));
-
-    c.setLayout(gridbag2);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    c2.weighty = 1.0;
-    c2.weightx = 1.0;
-    c2.gridwidth = 1;
-    c2.fill = GridBagConstraints.HORIZONTAL;
-    c2.gridheight = 1;
-
-    // ignored list
-    panel1 = new JPanel();
-    panel1.setLayout(new BorderLayout());
-    panel1.setBorder(new javax.swing.border.TitledBorder("Ignored components"));
-    listIgnored = new JList<TGComponent>(ign);
-    // listIgnored.setPreferredSize(new Dimension(200, 250));
-    listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    listIgnored.addListSelectionListener(this);
-    JScrollPane scrollPane1 = new JScrollPane(listIgnored);
-    panel1.add(scrollPane1, BorderLayout.CENTER);
-    panel1.setPreferredSize(new Dimension(200, 250));
-    c.add(panel1, c2);
-
-    // central buttons
-    panel3 = new JPanel();
-    panel3.setLayout(gridbag1);
-
-    c1.weighty = 1.0;
-    c1.weightx = 1.0;
-    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c1.fill = GridBagConstraints.HORIZONTAL;
-    c1.gridheight = 1;
-
-    allValidated = new JButton(IconManager.imgic50);
-    allValidated.setPreferredSize(new Dimension(50, 25));
-    allValidated.addActionListener(this);
-    allValidated.setActionCommand("allValidated");
-    panel3.add(allValidated, c1);
-
-    addOneValidated = new JButton(IconManager.imgic48);
-    addOneValidated.setPreferredSize(new Dimension(50, 25));
-    addOneValidated.addActionListener(this);
-    addOneValidated.setActionCommand("addOneValidated");
-    panel3.add(addOneValidated, c1);
-
-    panel3.add(new JLabel(" "), c1);
-
-    addOneIgnored = new JButton(IconManager.imgic46);
-    addOneIgnored.addActionListener(this);
-    addOneIgnored.setPreferredSize(new Dimension(50, 25));
-    addOneIgnored.setActionCommand("addOneIgnored");
-    panel3.add(addOneIgnored, c1);
-
-    allIgnored = new JButton(IconManager.imgic44);
-    allIgnored.addActionListener(this);
-    allIgnored.setPreferredSize(new Dimension(50, 25));
-    allIgnored.setActionCommand("allIgnored");
-    panel3.add(allIgnored, c1);
-
-    c.add(panel3, c2);
-
-    // validated list
-    panel2 = new JPanel();
-    panel2.setLayout(new BorderLayout());
-    panel2.setBorder(new javax.swing.border.TitledBorder("Used components"));
-    listValidated = new JList<TGComponent>(val);
-    // listValidated.setPreferredSize(new Dimension(200, 250));
-    listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-    listValidated.addListSelectionListener(this);
-    JScrollPane scrollPane2 = new JScrollPane(listValidated);
-    panel2.add(scrollPane2, BorderLayout.CENTER);
-    panel2.setPreferredSize(new Dimension(200, 250));
-    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
-    c.add(panel2, c2);
-
-    // main panel;
-    panel6 = new JPanel();
-    panel6.setLayout(new BorderLayout());
-
-    panel5 = new JPanel();
-    panel5.setLayout(new FlowLayout());
-
-    optimize = new JCheckBox("Optimize TML specification");
-    optimize.setSelected(optimized);
-    panel5.add(optimize);
-
-    panel4 = new JPanel();
-    panel4.setLayout(new FlowLayout());
-
-    closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
-    // closeButton.setPreferredSize(new Dimension(600, 50));
-    closeButton.addActionListener(this);
-    closeButton.setPreferredSize(new Dimension(200, 30));
-
-    cancelButton = new JButton("Cancel", IconManager.imgic27);
-    cancelButton.addActionListener(this);
-    cancelButton.setPreferredSize(new Dimension(200, 30));
-    panel4.add(cancelButton);
-    panel4.add(closeButton);
-
-    panel6.add(panel5, BorderLayout.NORTH);
-    panel6.add(panel4, BorderLayout.SOUTH);
-
-    c.add(panel6, c2);
-
-  }
-
-  public void actionPerformed(ActionEvent evt) {
-    String command = evt.getActionCommand();
-
-    // Compare the action command to the known actions.
-    if (command.equals("Start Syntax Analysis")) {
-      closeDialog();
-    } else if (command.equals("Cancel")) {
-      cancelDialog();
-    } else if (command.equals("addOneIgnored")) {
-      addOneIgnored();
-    } else if (command.equals("addOneValidated")) {
-      addOneValidated();
-    } else if (command.equals("allValidated")) {
-      allValidated();
-    } else if (command.equals("allIgnored")) {
-      allIgnored();
-    }
-  }
-
-  private void addOneIgnored() {
-    int[] list = listValidated.getSelectedIndices();
-    Vector<TGComponent> v = new Vector<TGComponent>();
-    TGComponent o;
-    for (int i = 0; i < list.length; i++) {
-      o = val.elementAt(list[i]);
-      ign.addElement(o);
-      v.addElement(o);
+        for (int i = 0; i < lcs.size(); i++) {
+            tgc = lcs.get(i);
+            if (tgc instanceof SysCAMSCompositeComponent) {
+                ccomp = (SysCAMSCompositeComponent) tgc;
+                // cs.addAll(ccomp.getAllBlockDEComponents());
+                cs.addAll(ccomp.getAllBlockTDFComponents());
+            }
+            if (tgc instanceof SysCAMSBlockTDF) {
+                cs.add(tgc);
+            }
+            if (tgc instanceof SysCAMSBlockDE) {
+                cs.add(tgc);
+            }
+        }
     }
 
-    val.removeAll(v);
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
+    private Vector<TGComponent> makeNewVal(List<TGComponent> list) {
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent tgc;
 
-  private void addOneValidated() {
-    int[] list = listIgnored.getSelectedIndices();
-    Vector<TGComponent> v = new Vector<TGComponent>();
-    TGComponent o;
-    for (int i = 0; i < list.length; i++) {
-      o = ign.elementAt(list[i]);
-      val.addElement(o);
-      v.addElement(o);
+        for (int i = 0; i < list.size(); i++) {
+            tgc = list.get(i);
+            //
+            if (tgc instanceof SysCAMSBlockTDF) {
+                v.addElement(tgc);
+            }
+            if (tgc instanceof SysCAMSBlockDE) {
+                v.addElement(tgc);
+            }
+        }
+        return v;
     }
 
-    ign.removeAll(v);
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
+    private void checkTask(Vector<? extends TGComponent> tobeChecked, List<TGComponent> source) {
+        TGComponent t;
 
-  private void allValidated() {
-    val.addAll(ign);
-    ign.removeAllElements();
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
+        for (int i = 0; i < tobeChecked.size(); i++) {
+            t = tobeChecked.elementAt(i);
 
-  private void allIgnored() {
-    ign.addAll(val);
-    val.removeAllElements();
-    listIgnored.setListData(ign);
-    listValidated.setListData(val);
-    setButtons();
-  }
-
-  public void closeDialog() {
-    back.removeAllElements();
-    for (int i = 0; i < val.size(); i++) {
-      back.addElement(val.elementAt(i));
-    }
-    validated = val;
-    ignored = ign;
-    optimized = optimize.isSelected();
-    dispose();
-  }
-
-  public void cancelDialog() {
-    dispose();
-  }
-
-  private void setButtons() {
-    int i1 = listIgnored.getSelectedIndex();
-    int i2 = listValidated.getSelectedIndex();
-
-    if (i1 == -1) {
-      addOneValidated.setEnabled(false);
-    } else {
-      addOneValidated.setEnabled(true);
-      // listValidated.clearSelection();
+            if (!source.contains(t)) {
+                tobeChecked.removeElementAt(i);
+                i--;
+            }
+        }
     }
 
-    if (i2 == -1) {
-      addOneIgnored.setEnabled(false);
-    } else {
-      addOneIgnored.setEnabled(true);
-      // listIgnored.clearSelection();
+    public void addNewTask(Vector<TGComponent> added, List<TGComponent> source, Vector<TGComponent> notSource) {
+        TGComponent tgc;
+
+        for (int i = 0; i < source.size(); i++) {
+            tgc = source.get(i);
+
+            if (((tgc instanceof SysCAMSBlockTDF) || (tgc instanceof SysCAMSBlockDE)) && (!added.contains(tgc))
+                    && (!notSource.contains(tgc))) {
+                added.addElement(tgc);
+                //
+            }
+        }
     }
 
-    if (ign.size() == 0) {
-      allValidated.setEnabled(false);
-    } else {
-      allValidated.setEnabled(true);
+    private void myInitComponents() {
+        setButtons();
     }
 
-    if (val.size() == 0) {
-      allIgnored.setEnabled(false);
-      closeButton.setEnabled(false);
-    } else {
-      allIgnored.setEnabled(true);
-      closeButton.setEnabled(true);
+    private void initComponents() {
+        Container c = getContentPane();
+        GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagConstraints c1 = new GridBagConstraints();
+        GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c2 = new GridBagConstraints();
+        setFont(new Font("Helvetica", Font.PLAIN, 14));
+
+        c.setLayout(gridbag2);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.gridheight = 1;
+
+        // ignored list
+        panel1 = new JPanel();
+        panel1.setLayout(new BorderLayout());
+        panel1.setBorder(new javax.swing.border.TitledBorder("Ignored components"));
+        listIgnored = new JList<TGComponent>(ign);
+        // listIgnored.setPreferredSize(new Dimension(200, 250));
+        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listIgnored.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+        panel1.add(scrollPane1, BorderLayout.CENTER);
+        panel1.setPreferredSize(new Dimension(200, 250));
+        c.add(panel1, c2);
+
+        // central buttons
+        panel3 = new JPanel();
+        panel3.setLayout(gridbag1);
+
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c1.fill = GridBagConstraints.HORIZONTAL;
+        c1.gridheight = 1;
+
+        allValidated = new JButton(IconManager.imgic50);
+        allValidated.setPreferredSize(new Dimension(50, 25));
+        allValidated.addActionListener(this);
+        allValidated.setActionCommand("allValidated");
+        panel3.add(allValidated, c1);
+
+        addOneValidated = new JButton(IconManager.imgic48);
+        addOneValidated.setPreferredSize(new Dimension(50, 25));
+        addOneValidated.addActionListener(this);
+        addOneValidated.setActionCommand("addOneValidated");
+        panel3.add(addOneValidated, c1);
+
+        panel3.add(new JLabel(" "), c1);
+
+        addOneIgnored = new JButton(IconManager.imgic46);
+        addOneIgnored.addActionListener(this);
+        addOneIgnored.setPreferredSize(new Dimension(50, 25));
+        addOneIgnored.setActionCommand("addOneIgnored");
+        panel3.add(addOneIgnored, c1);
+
+        allIgnored = new JButton(IconManager.imgic44);
+        allIgnored.addActionListener(this);
+        allIgnored.setPreferredSize(new Dimension(50, 25));
+        allIgnored.setActionCommand("allIgnored");
+        panel3.add(allIgnored, c1);
+
+        c.add(panel3, c2);
+
+        // validated list
+        panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        panel2.setBorder(new javax.swing.border.TitledBorder("Used components"));
+        listValidated = new JList<TGComponent>(val);
+        // listValidated.setPreferredSize(new Dimension(200, 250));
+        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        listValidated.addListSelectionListener(this);
+        JScrollPane scrollPane2 = new JScrollPane(listValidated);
+        panel2.add(scrollPane2, BorderLayout.CENTER);
+        panel2.setPreferredSize(new Dimension(200, 250));
+        c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+        c.add(panel2, c2);
+
+        // main panel;
+        panel6 = new JPanel();
+        panel6.setLayout(new BorderLayout());
+
+        panel5 = new JPanel();
+        panel5.setLayout(new FlowLayout());
+
+        optimize = new JCheckBox("Optimize TML specification");
+        optimize.setSelected(optimized);
+        panel5.add(optimize);
+
+        panel4 = new JPanel();
+        panel4.setLayout(new FlowLayout());
+
+        closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
+        // closeButton.setPreferredSize(new Dimension(600, 50));
+        closeButton.addActionListener(this);
+        closeButton.setPreferredSize(new Dimension(200, 30));
+
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        cancelButton.addActionListener(this);
+        cancelButton.setPreferredSize(new Dimension(200, 30));
+        panel4.add(cancelButton);
+        panel4.add(closeButton);
+
+        panel6.add(panel5, BorderLayout.NORTH);
+        panel6.add(panel4, BorderLayout.SOUTH);
+
+        c.add(panel6, c2);
+
     }
-  }
 
-  public void valueChanged(ListSelectionEvent e) {
-    setButtons();
-  }
+    public void actionPerformed(ActionEvent evt) {
+        String command = evt.getActionCommand();
 
-  public boolean getOptimize() {
-    return optimized;
-  }
+        // Compare the action command to the known actions.
+        if (command.equals("Start Syntax Analysis")) {
+            closeDialog();
+        } else if (command.equals("Cancel")) {
+            cancelDialog();
+        } else if (command.equals("addOneIgnored")) {
+            addOneIgnored();
+        } else if (command.equals("addOneValidated")) {
+            addOneValidated();
+        } else if (command.equals("allValidated")) {
+            allValidated();
+        } else if (command.equals("allIgnored")) {
+            allIgnored();
+        }
+    }
+
+    private void addOneIgnored() {
+        int[] list = listValidated.getSelectedIndices();
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        for (int i = 0; i < list.length; i++) {
+            o = val.elementAt(list[i]);
+            ign.addElement(o);
+            v.addElement(o);
+        }
+
+        val.removeAll(v);
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void addOneValidated() {
+        int[] list = listIgnored.getSelectedIndices();
+        Vector<TGComponent> v = new Vector<TGComponent>();
+        TGComponent o;
+        for (int i = 0; i < list.length; i++) {
+            o = ign.elementAt(list[i]);
+            val.addElement(o);
+            v.addElement(o);
+        }
+
+        ign.removeAll(v);
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void allValidated() {
+        val.addAll(ign);
+        ign.removeAllElements();
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    private void allIgnored() {
+        ign.addAll(val);
+        val.removeAllElements();
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setButtons();
+    }
+
+    public void closeDialog() {
+        back.removeAllElements();
+        for (int i = 0; i < val.size(); i++) {
+            back.addElement(val.elementAt(i));
+        }
+        validated = val;
+        ignored = ign;
+        optimized = optimize.isSelected();
+        dispose();
+    }
+
+    public void cancelDialog() {
+        dispose();
+    }
+
+    private void setButtons() {
+        int i1 = listIgnored.getSelectedIndex();
+        int i2 = listValidated.getSelectedIndex();
+
+        if (i1 == -1) {
+            addOneValidated.setEnabled(false);
+        } else {
+            addOneValidated.setEnabled(true);
+            // listValidated.clearSelection();
+        }
+
+        if (i2 == -1) {
+            addOneIgnored.setEnabled(false);
+        } else {
+            addOneIgnored.setEnabled(true);
+            // listIgnored.clearSelection();
+        }
+
+        if (ign.size() == 0) {
+            allValidated.setEnabled(false);
+        } else {
+            allValidated.setEnabled(true);
+        }
+
+        if (val.size() == 0) {
+            allIgnored.setEnabled(false);
+            closeButton.setEnabled(false);
+        } else {
+            allIgnored.setEnabled(true);
+            closeButton.setEnabled(true);
+        }
+    }
+
+    public void valueChanged(ListSelectionEvent e) {
+        setButtons();
+    }
+
+    public boolean getOptimize() {
+        return optimized;
+    }
 }

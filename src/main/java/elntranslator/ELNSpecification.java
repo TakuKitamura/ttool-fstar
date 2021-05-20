@@ -50,438 +50,438 @@ import java.util.List;
  */
 
 public class ELNSpecification {
-  private List<ELNTComponent> elnComponents;
-  private List<ELNTConnector> elnConnectors;
+    private List<ELNTComponent> elnComponents;
+    private List<ELNTConnector> elnConnectors;
 
-  public ELNSpecification(List<ELNTComponent> _elnComponents, List<ELNTConnector> _elnConnectors) {
-    elnComponents = _elnComponents;
-    elnConnectors = _elnConnectors;
-  }
-
-  public List<ELNTComponent> getELNComponents() {
-    return elnComponents;
-  }
-
-  public List<ELNTConnector> getELNConnectors() {
-    return elnConnectors;
-  }
-
-  public LinkedList<ELNTConnector> getAllConnectorsInCluster() {
-    LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
-    for (ELNTConnector con : elnConnectors) {
-      if ((con.get_p1().getComponent() instanceof ELNTModuleTerminal
-          && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
-          || (con.get_p1().getComponent() instanceof ELNTModuleTerminal
-              && con.get_p2().getComponent() instanceof ELNTClusterTerminal)
-          || (con.get_p1().getComponent() instanceof ELNTClusterTerminal
-              && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
-          || (con.get_p1().getComponent() instanceof ELNTModulePortDE
-              && con.get_p2().getComponent() instanceof ELNTClusterPortDE)
-          || (con.get_p1().getComponent() instanceof ELNTClusterPortDE
-              && con.get_p2().getComponent() instanceof ELNTModulePortDE)
-          || (con.get_p1().getComponent() instanceof ELNTModulePortTDF
-              && con.get_p2().getComponent() instanceof ELNTClusterPortTDF)
-          || (con.get_p1().getComponent() instanceof ELNTClusterPortTDF
-              && con.get_p2().getComponent() instanceof ELNTModulePortTDF)) {
-        cons.add(con);
-      }
+    public ELNSpecification(List<ELNTComponent> _elnComponents, List<ELNTConnector> _elnConnectors) {
+        elnComponents = _elnComponents;
+        elnConnectors = _elnConnectors;
     }
-    return cons;
-  }
 
-  public LinkedList<ELNTConnector> getAllConnectorsInModule() {
-    LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
-    for (ELNTConnector con : elnConnectors) {
-      if (!((con.get_p1().getComponent() instanceof ELNTModuleTerminal
-          && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
-          || (con.get_p1().getComponent() instanceof ELNTModuleTerminal
-              && con.get_p2().getComponent() instanceof ELNTClusterTerminal)
-          || (con.get_p1().getComponent() instanceof ELNTClusterTerminal
-              && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
-          || (con.get_p1().getComponent() instanceof ELNTModulePortDE
-              && con.get_p2().getComponent() instanceof ELNTClusterPortDE)
-          || (con.get_p1().getComponent() instanceof ELNTClusterPortDE
-              && con.get_p2().getComponent() instanceof ELNTModulePortDE)
-          || (con.get_p1().getComponent() instanceof ELNTModulePortTDF
-              && con.get_p2().getComponent() instanceof ELNTClusterPortTDF)
-          || (con.get_p1().getComponent() instanceof ELNTClusterPortTDF
-              && con.get_p2().getComponent() instanceof ELNTModulePortTDF))) {
-        cons.add(con);
-      }
+    public List<ELNTComponent> getELNComponents() {
+        return elnComponents;
     }
-    return cons;
-  }
 
-  public ELNTCluster getCluster() {
-    for (ELNTComponent comp : elnComponents) {
-      if (comp instanceof ELNTCluster) {
-        return (ELNTCluster) comp;
-      }
+    public List<ELNTConnector> getELNConnectors() {
+        return elnConnectors;
     }
-    return null;
-  }
 
-  public LinkedList<ELNTClusterTerminal> getAllClusterTerminal() {
-    LinkedList<ELNTClusterTerminal> clusterTerminals = new LinkedList<ELNTClusterTerminal>();
-    for (ELNTComponent clusterTerminal : elnComponents) {
-      if (clusterTerminal instanceof ELNTClusterTerminal) {
-        clusterTerminals.add((ELNTClusterTerminal) clusterTerminal);
-      }
+    public LinkedList<ELNTConnector> getAllConnectorsInCluster() {
+        LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
+        for (ELNTConnector con : elnConnectors) {
+            if ((con.get_p1().getComponent() instanceof ELNTModuleTerminal
+                    && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
+                    || (con.get_p1().getComponent() instanceof ELNTModuleTerminal
+                            && con.get_p2().getComponent() instanceof ELNTClusterTerminal)
+                    || (con.get_p1().getComponent() instanceof ELNTClusterTerminal
+                            && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
+                    || (con.get_p1().getComponent() instanceof ELNTModulePortDE
+                            && con.get_p2().getComponent() instanceof ELNTClusterPortDE)
+                    || (con.get_p1().getComponent() instanceof ELNTClusterPortDE
+                            && con.get_p2().getComponent() instanceof ELNTModulePortDE)
+                    || (con.get_p1().getComponent() instanceof ELNTModulePortTDF
+                            && con.get_p2().getComponent() instanceof ELNTClusterPortTDF)
+                    || (con.get_p1().getComponent() instanceof ELNTClusterPortTDF
+                            && con.get_p2().getComponent() instanceof ELNTModulePortTDF)) {
+                cons.add(con);
+            }
+        }
+        return cons;
     }
-    return clusterTerminals;
-  }
 
-  public LinkedList<ELNTClusterPortDE> getAllClusterPortDE() {
-    LinkedList<ELNTClusterPortDE> clusterPortsDE = new LinkedList<ELNTClusterPortDE>();
-    for (ELNTComponent clusterPortDE : elnComponents) {
-      if (clusterPortDE instanceof ELNTClusterPortDE) {
-        clusterPortsDE.add((ELNTClusterPortDE) clusterPortDE);
-      }
+    public LinkedList<ELNTConnector> getAllConnectorsInModule() {
+        LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
+        for (ELNTConnector con : elnConnectors) {
+            if (!((con.get_p1().getComponent() instanceof ELNTModuleTerminal
+                    && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
+                    || (con.get_p1().getComponent() instanceof ELNTModuleTerminal
+                            && con.get_p2().getComponent() instanceof ELNTClusterTerminal)
+                    || (con.get_p1().getComponent() instanceof ELNTClusterTerminal
+                            && con.get_p2().getComponent() instanceof ELNTModuleTerminal)
+                    || (con.get_p1().getComponent() instanceof ELNTModulePortDE
+                            && con.get_p2().getComponent() instanceof ELNTClusterPortDE)
+                    || (con.get_p1().getComponent() instanceof ELNTClusterPortDE
+                            && con.get_p2().getComponent() instanceof ELNTModulePortDE)
+                    || (con.get_p1().getComponent() instanceof ELNTModulePortTDF
+                            && con.get_p2().getComponent() instanceof ELNTClusterPortTDF)
+                    || (con.get_p1().getComponent() instanceof ELNTClusterPortTDF
+                            && con.get_p2().getComponent() instanceof ELNTModulePortTDF))) {
+                cons.add(con);
+            }
+        }
+        return cons;
     }
-    return clusterPortsDE;
-  }
 
-  public LinkedList<ELNTClusterPortTDF> getAllClusterPortTDF() {
-    LinkedList<ELNTClusterPortTDF> clusterPortsTDF = new LinkedList<ELNTClusterPortTDF>();
-    for (ELNTComponent clusterPortTDF : elnComponents) {
-      if (clusterPortTDF instanceof ELNTClusterPortTDF) {
-        clusterPortsTDF.add((ELNTClusterPortTDF) clusterPortTDF);
-      }
+    public ELNTCluster getCluster() {
+        for (ELNTComponent comp : elnComponents) {
+            if (comp instanceof ELNTCluster) {
+                return (ELNTCluster) comp;
+            }
+        }
+        return null;
     }
-    return clusterPortsTDF;
-  }
 
-  public LinkedList<ELNTComponentCapacitor> getAllComponentCapacitor() {
-    LinkedList<ELNTComponentCapacitor> capacitors = new LinkedList<ELNTComponentCapacitor>();
-    for (ELNTComponent capacitor : elnComponents) {
-      if (capacitor instanceof ELNTComponentCapacitor) {
-        capacitors.add((ELNTComponentCapacitor) capacitor);
-      }
+    public LinkedList<ELNTClusterTerminal> getAllClusterTerminal() {
+        LinkedList<ELNTClusterTerminal> clusterTerminals = new LinkedList<ELNTClusterTerminal>();
+        for (ELNTComponent clusterTerminal : elnComponents) {
+            if (clusterTerminal instanceof ELNTClusterTerminal) {
+                clusterTerminals.add((ELNTClusterTerminal) clusterTerminal);
+            }
+        }
+        return clusterTerminals;
     }
-    return capacitors;
-  }
 
-  public LinkedList<ELNTComponentCurrentSinkDE> getAllComponentCurrentSinkDE() {
-    LinkedList<ELNTComponentCurrentSinkDE> DE_isinks = new LinkedList<ELNTComponentCurrentSinkDE>();
-    for (ELNTComponent DE_isink : elnComponents) {
-      if (DE_isink instanceof ELNTComponentCurrentSinkDE) {
-        DE_isinks.add((ELNTComponentCurrentSinkDE) DE_isink);
-      }
+    public LinkedList<ELNTClusterPortDE> getAllClusterPortDE() {
+        LinkedList<ELNTClusterPortDE> clusterPortsDE = new LinkedList<ELNTClusterPortDE>();
+        for (ELNTComponent clusterPortDE : elnComponents) {
+            if (clusterPortDE instanceof ELNTClusterPortDE) {
+                clusterPortsDE.add((ELNTClusterPortDE) clusterPortDE);
+            }
+        }
+        return clusterPortsDE;
     }
-    return DE_isinks;
-  }
 
-  public LinkedList<ELNTComponentCurrentSourceDE> getAllComponentCurrentSourceDE() {
-    LinkedList<ELNTComponentCurrentSourceDE> DE_isources = new LinkedList<ELNTComponentCurrentSourceDE>();
-    for (ELNTComponent DE_isource : elnComponents) {
-      if (DE_isource instanceof ELNTComponentCurrentSourceDE) {
-        DE_isources.add((ELNTComponentCurrentSourceDE) DE_isource);
-      }
+    public LinkedList<ELNTClusterPortTDF> getAllClusterPortTDF() {
+        LinkedList<ELNTClusterPortTDF> clusterPortsTDF = new LinkedList<ELNTClusterPortTDF>();
+        for (ELNTComponent clusterPortTDF : elnComponents) {
+            if (clusterPortTDF instanceof ELNTClusterPortTDF) {
+                clusterPortsTDF.add((ELNTClusterPortTDF) clusterPortTDF);
+            }
+        }
+        return clusterPortsTDF;
     }
-    return DE_isources;
-  }
 
-  public LinkedList<ELNTComponentCurrentSinkTDF> getAllComponentCurrentSinkTDF() {
-    LinkedList<ELNTComponentCurrentSinkTDF> TDF_isinks = new LinkedList<ELNTComponentCurrentSinkTDF>();
-    for (ELNTComponent TDF_isink : elnComponents) {
-      if (TDF_isink instanceof ELNTComponentCurrentSinkTDF) {
-        TDF_isinks.add((ELNTComponentCurrentSinkTDF) TDF_isink);
-      }
+    public LinkedList<ELNTComponentCapacitor> getAllComponentCapacitor() {
+        LinkedList<ELNTComponentCapacitor> capacitors = new LinkedList<ELNTComponentCapacitor>();
+        for (ELNTComponent capacitor : elnComponents) {
+            if (capacitor instanceof ELNTComponentCapacitor) {
+                capacitors.add((ELNTComponentCapacitor) capacitor);
+            }
+        }
+        return capacitors;
     }
-    return TDF_isinks;
-  }
 
-  public LinkedList<ELNTComponentCurrentSourceTDF> getAllComponentCurrentSourceTDF() {
-    LinkedList<ELNTComponentCurrentSourceTDF> TDF_isources = new LinkedList<ELNTComponentCurrentSourceTDF>();
-    for (ELNTComponent TDF_isource : elnComponents) {
-      if (TDF_isource instanceof ELNTComponentCurrentSourceTDF) {
-        TDF_isources.add((ELNTComponentCurrentSourceTDF) TDF_isource);
-      }
+    public LinkedList<ELNTComponentCurrentSinkDE> getAllComponentCurrentSinkDE() {
+        LinkedList<ELNTComponentCurrentSinkDE> DE_isinks = new LinkedList<ELNTComponentCurrentSinkDE>();
+        for (ELNTComponent DE_isink : elnComponents) {
+            if (DE_isink instanceof ELNTComponentCurrentSinkDE) {
+                DE_isinks.add((ELNTComponentCurrentSinkDE) DE_isink);
+            }
+        }
+        return DE_isinks;
     }
-    return TDF_isources;
-  }
 
-  public LinkedList<ELNTComponentIdealTransformer> getAllComponentIdealTransformer() {
-    LinkedList<ELNTComponentIdealTransformer> idealTransformers = new LinkedList<ELNTComponentIdealTransformer>();
-    for (ELNTComponent idealTransformer : elnComponents) {
-      if (idealTransformer instanceof ELNTComponentIdealTransformer) {
-        idealTransformers.add((ELNTComponentIdealTransformer) idealTransformer);
-      }
+    public LinkedList<ELNTComponentCurrentSourceDE> getAllComponentCurrentSourceDE() {
+        LinkedList<ELNTComponentCurrentSourceDE> DE_isources = new LinkedList<ELNTComponentCurrentSourceDE>();
+        for (ELNTComponent DE_isource : elnComponents) {
+            if (DE_isource instanceof ELNTComponentCurrentSourceDE) {
+                DE_isources.add((ELNTComponentCurrentSourceDE) DE_isource);
+            }
+        }
+        return DE_isources;
     }
-    return idealTransformers;
-  }
 
-  public LinkedList<ELNTComponentIndependentCurrentSource> getAllComponentIndependentCurrentSource() {
-    LinkedList<ELNTComponentIndependentCurrentSource> isources = new LinkedList<ELNTComponentIndependentCurrentSource>();
-    for (ELNTComponent isource : elnComponents) {
-      if (isource instanceof ELNTComponentIndependentCurrentSource) {
-        isources.add((ELNTComponentIndependentCurrentSource) isource);
-      }
+    public LinkedList<ELNTComponentCurrentSinkTDF> getAllComponentCurrentSinkTDF() {
+        LinkedList<ELNTComponentCurrentSinkTDF> TDF_isinks = new LinkedList<ELNTComponentCurrentSinkTDF>();
+        for (ELNTComponent TDF_isink : elnComponents) {
+            if (TDF_isink instanceof ELNTComponentCurrentSinkTDF) {
+                TDF_isinks.add((ELNTComponentCurrentSinkTDF) TDF_isink);
+            }
+        }
+        return TDF_isinks;
     }
-    return isources;
-  }
 
-  public LinkedList<ELNTComponentIndependentVoltageSource> getAllComponentIndependentVoltageSource() {
-    LinkedList<ELNTComponentIndependentVoltageSource> vsources = new LinkedList<ELNTComponentIndependentVoltageSource>();
-    for (ELNTComponent vsource : elnComponents) {
-      if (vsource instanceof ELNTComponentIndependentVoltageSource) {
-        vsources.add((ELNTComponentIndependentVoltageSource) vsource);
-      }
+    public LinkedList<ELNTComponentCurrentSourceTDF> getAllComponentCurrentSourceTDF() {
+        LinkedList<ELNTComponentCurrentSourceTDF> TDF_isources = new LinkedList<ELNTComponentCurrentSourceTDF>();
+        for (ELNTComponent TDF_isource : elnComponents) {
+            if (TDF_isource instanceof ELNTComponentCurrentSourceTDF) {
+                TDF_isources.add((ELNTComponentCurrentSourceTDF) TDF_isource);
+            }
+        }
+        return TDF_isources;
     }
-    return vsources;
-  }
 
-  public LinkedList<ELNTComponentInductor> getAllComponentInductor() {
-    LinkedList<ELNTComponentInductor> inductors = new LinkedList<ELNTComponentInductor>();
-    for (ELNTComponent inductor : elnComponents) {
-      if (inductor instanceof ELNTComponentInductor) {
-        inductors.add((ELNTComponentInductor) inductor);
-      }
+    public LinkedList<ELNTComponentIdealTransformer> getAllComponentIdealTransformer() {
+        LinkedList<ELNTComponentIdealTransformer> idealTransformers = new LinkedList<ELNTComponentIdealTransformer>();
+        for (ELNTComponent idealTransformer : elnComponents) {
+            if (idealTransformer instanceof ELNTComponentIdealTransformer) {
+                idealTransformers.add((ELNTComponentIdealTransformer) idealTransformer);
+            }
+        }
+        return idealTransformers;
     }
-    return inductors;
-  }
 
-  public LinkedList<ELNTNodeRef> getAllComponentNodeRef() {
-    LinkedList<ELNTNodeRef> nodeRefs = new LinkedList<ELNTNodeRef>();
-    for (ELNTComponent nodeRef : elnComponents) {
-      if (nodeRef instanceof ELNTNodeRef) {
-        nodeRefs.add((ELNTNodeRef) nodeRef);
-      }
+    public LinkedList<ELNTComponentIndependentCurrentSource> getAllComponentIndependentCurrentSource() {
+        LinkedList<ELNTComponentIndependentCurrentSource> isources = new LinkedList<ELNTComponentIndependentCurrentSource>();
+        for (ELNTComponent isource : elnComponents) {
+            if (isource instanceof ELNTComponentIndependentCurrentSource) {
+                isources.add((ELNTComponentIndependentCurrentSource) isource);
+            }
+        }
+        return isources;
     }
-    return nodeRefs;
-  }
 
-  public LinkedList<ELNTComponentResistor> getAllComponentResistor() {
-    LinkedList<ELNTComponentResistor> resistors = new LinkedList<ELNTComponentResistor>();
-    for (ELNTComponent resistor : elnComponents) {
-      if (resistor instanceof ELNTComponentResistor) {
-        resistors.add((ELNTComponentResistor) resistor);
-      }
+    public LinkedList<ELNTComponentIndependentVoltageSource> getAllComponentIndependentVoltageSource() {
+        LinkedList<ELNTComponentIndependentVoltageSource> vsources = new LinkedList<ELNTComponentIndependentVoltageSource>();
+        for (ELNTComponent vsource : elnComponents) {
+            if (vsource instanceof ELNTComponentIndependentVoltageSource) {
+                vsources.add((ELNTComponentIndependentVoltageSource) vsource);
+            }
+        }
+        return vsources;
     }
-    return resistors;
-  }
 
-  public LinkedList<ELNTComponentTransmissionLine> getAllComponentTransmissionLine() {
-    LinkedList<ELNTComponentTransmissionLine> transmissionLines = new LinkedList<ELNTComponentTransmissionLine>();
-    for (ELNTComponent transmissionLine : elnComponents) {
-      if (transmissionLine instanceof ELNTComponentTransmissionLine) {
-        transmissionLines.add((ELNTComponentTransmissionLine) transmissionLine);
-      }
+    public LinkedList<ELNTComponentInductor> getAllComponentInductor() {
+        LinkedList<ELNTComponentInductor> inductors = new LinkedList<ELNTComponentInductor>();
+        for (ELNTComponent inductor : elnComponents) {
+            if (inductor instanceof ELNTComponentInductor) {
+                inductors.add((ELNTComponentInductor) inductor);
+            }
+        }
+        return inductors;
     }
-    return transmissionLines;
-  }
 
-  public LinkedList<ELNTComponentVoltageControlledCurrentSource> getAllComponentVoltageControlledCurrentSource() {
-    LinkedList<ELNTComponentVoltageControlledCurrentSource> vccss = new LinkedList<ELNTComponentVoltageControlledCurrentSource>();
-    for (ELNTComponent vccs : elnComponents) {
-      if (vccs instanceof ELNTComponentVoltageControlledCurrentSource) {
-        vccss.add((ELNTComponentVoltageControlledCurrentSource) vccs);
-      }
+    public LinkedList<ELNTNodeRef> getAllComponentNodeRef() {
+        LinkedList<ELNTNodeRef> nodeRefs = new LinkedList<ELNTNodeRef>();
+        for (ELNTComponent nodeRef : elnComponents) {
+            if (nodeRef instanceof ELNTNodeRef) {
+                nodeRefs.add((ELNTNodeRef) nodeRef);
+            }
+        }
+        return nodeRefs;
     }
-    return vccss;
-  }
 
-  public LinkedList<ELNTComponentVoltageControlledVoltageSource> getAllComponentVoltageControlledVoltageSource() {
-    LinkedList<ELNTComponentVoltageControlledVoltageSource> vcvss = new LinkedList<ELNTComponentVoltageControlledVoltageSource>();
-    for (ELNTComponent vcvs : elnComponents) {
-      if (vcvs instanceof ELNTComponentVoltageControlledVoltageSource) {
-        vcvss.add((ELNTComponentVoltageControlledVoltageSource) vcvs);
-      }
+    public LinkedList<ELNTComponentResistor> getAllComponentResistor() {
+        LinkedList<ELNTComponentResistor> resistors = new LinkedList<ELNTComponentResistor>();
+        for (ELNTComponent resistor : elnComponents) {
+            if (resistor instanceof ELNTComponentResistor) {
+                resistors.add((ELNTComponentResistor) resistor);
+            }
+        }
+        return resistors;
     }
-    return vcvss;
-  }
 
-  public LinkedList<ELNTComponentVoltageSinkDE> getAllComponentVoltageSinkDE() {
-    LinkedList<ELNTComponentVoltageSinkDE> DE_vsinks = new LinkedList<ELNTComponentVoltageSinkDE>();
-    for (ELNTComponent DE_vsink : elnComponents) {
-      if (DE_vsink instanceof ELNTComponentVoltageSinkDE) {
-        DE_vsinks.add((ELNTComponentVoltageSinkDE) DE_vsink);
-      }
+    public LinkedList<ELNTComponentTransmissionLine> getAllComponentTransmissionLine() {
+        LinkedList<ELNTComponentTransmissionLine> transmissionLines = new LinkedList<ELNTComponentTransmissionLine>();
+        for (ELNTComponent transmissionLine : elnComponents) {
+            if (transmissionLine instanceof ELNTComponentTransmissionLine) {
+                transmissionLines.add((ELNTComponentTransmissionLine) transmissionLine);
+            }
+        }
+        return transmissionLines;
     }
-    return DE_vsinks;
-  }
 
-  public LinkedList<ELNTComponentVoltageSourceDE> getAllComponentVoltageSourceDE() {
-    LinkedList<ELNTComponentVoltageSourceDE> DE_vsources = new LinkedList<ELNTComponentVoltageSourceDE>();
-    for (ELNTComponent DE_vsource : elnComponents) {
-      if (DE_vsource instanceof ELNTComponentVoltageSourceDE) {
-        DE_vsources.add((ELNTComponentVoltageSourceDE) DE_vsource);
-      }
+    public LinkedList<ELNTComponentVoltageControlledCurrentSource> getAllComponentVoltageControlledCurrentSource() {
+        LinkedList<ELNTComponentVoltageControlledCurrentSource> vccss = new LinkedList<ELNTComponentVoltageControlledCurrentSource>();
+        for (ELNTComponent vccs : elnComponents) {
+            if (vccs instanceof ELNTComponentVoltageControlledCurrentSource) {
+                vccss.add((ELNTComponentVoltageControlledCurrentSource) vccs);
+            }
+        }
+        return vccss;
     }
-    return DE_vsources;
-  }
 
-  public LinkedList<ELNTComponentVoltageSinkTDF> getAllComponentVoltageSinkTDF() {
-    LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsinks = new LinkedList<ELNTComponentVoltageSinkTDF>();
-    for (ELNTComponent TDF_vsink : elnComponents) {
-      if (TDF_vsink instanceof ELNTComponentVoltageSinkTDF) {
-        TDF_vsinks.add((ELNTComponentVoltageSinkTDF) TDF_vsink);
-      }
+    public LinkedList<ELNTComponentVoltageControlledVoltageSource> getAllComponentVoltageControlledVoltageSource() {
+        LinkedList<ELNTComponentVoltageControlledVoltageSource> vcvss = new LinkedList<ELNTComponentVoltageControlledVoltageSource>();
+        for (ELNTComponent vcvs : elnComponents) {
+            if (vcvs instanceof ELNTComponentVoltageControlledVoltageSource) {
+                vcvss.add((ELNTComponentVoltageControlledVoltageSource) vcvs);
+            }
+        }
+        return vcvss;
     }
-    return TDF_vsinks;
-  }
 
-  public LinkedList<ELNTComponentVoltageSourceTDF> getAllComponentVoltageSourceTDF() {
-    LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsources = new LinkedList<ELNTComponentVoltageSourceTDF>();
-    for (ELNTComponent TDF_vsource : elnComponents) {
-      if (TDF_vsource instanceof ELNTComponentVoltageSourceTDF) {
-        TDF_vsources.add((ELNTComponentVoltageSourceTDF) TDF_vsource);
-      }
+    public LinkedList<ELNTComponentVoltageSinkDE> getAllComponentVoltageSinkDE() {
+        LinkedList<ELNTComponentVoltageSinkDE> DE_vsinks = new LinkedList<ELNTComponentVoltageSinkDE>();
+        for (ELNTComponent DE_vsink : elnComponents) {
+            if (DE_vsink instanceof ELNTComponentVoltageSinkDE) {
+                DE_vsinks.add((ELNTComponentVoltageSinkDE) DE_vsink);
+            }
+        }
+        return DE_vsinks;
     }
-    return TDF_vsources;
-  }
 
-  public LinkedList<ELNTMidPortTerminal> getAllMidPortTerminal() {
-    LinkedList<ELNTMidPortTerminal> midPortTerminals = new LinkedList<ELNTMidPortTerminal>();
-    for (ELNTComponent midPortTerminal : elnComponents) {
-      if (midPortTerminal instanceof ELNTMidPortTerminal) {
-        midPortTerminals.add((ELNTMidPortTerminal) midPortTerminal);
-      }
+    public LinkedList<ELNTComponentVoltageSourceDE> getAllComponentVoltageSourceDE() {
+        LinkedList<ELNTComponentVoltageSourceDE> DE_vsources = new LinkedList<ELNTComponentVoltageSourceDE>();
+        for (ELNTComponent DE_vsource : elnComponents) {
+            if (DE_vsource instanceof ELNTComponentVoltageSourceDE) {
+                DE_vsources.add((ELNTComponentVoltageSourceDE) DE_vsource);
+            }
+        }
+        return DE_vsources;
     }
-    return midPortTerminals;
-  }
 
-  public LinkedList<ELNTModule> getAllModule() {
-    LinkedList<ELNTModule> modules = new LinkedList<ELNTModule>();
-    for (ELNTComponent module : elnComponents) {
-      if (module instanceof ELNTModule) {
-        modules.add((ELNTModule) module);
-      }
+    public LinkedList<ELNTComponentVoltageSinkTDF> getAllComponentVoltageSinkTDF() {
+        LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsinks = new LinkedList<ELNTComponentVoltageSinkTDF>();
+        for (ELNTComponent TDF_vsink : elnComponents) {
+            if (TDF_vsink instanceof ELNTComponentVoltageSinkTDF) {
+                TDF_vsinks.add((ELNTComponentVoltageSinkTDF) TDF_vsink);
+            }
+        }
+        return TDF_vsinks;
     }
-    return modules;
-  }
 
-  public LinkedList<ELNTModuleTerminal> getAllModuleTerminal() {
-    LinkedList<ELNTModuleTerminal> moduleTerminals = new LinkedList<ELNTModuleTerminal>();
-    for (ELNTComponent moduleTerminal : elnComponents) {
-      if (moduleTerminal instanceof ELNTModuleTerminal) {
-        moduleTerminals.add((ELNTModuleTerminal) moduleTerminal);
-      }
+    public LinkedList<ELNTComponentVoltageSourceTDF> getAllComponentVoltageSourceTDF() {
+        LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsources = new LinkedList<ELNTComponentVoltageSourceTDF>();
+        for (ELNTComponent TDF_vsource : elnComponents) {
+            if (TDF_vsource instanceof ELNTComponentVoltageSourceTDF) {
+                TDF_vsources.add((ELNTComponentVoltageSourceTDF) TDF_vsource);
+            }
+        }
+        return TDF_vsources;
     }
-    return moduleTerminals;
-  }
 
-  public LinkedList<ELNTModulePortDE> getAllModulePortDE() {
-    LinkedList<ELNTModulePortDE> modulePortsDE = new LinkedList<ELNTModulePortDE>();
-    for (ELNTComponent modulePortDE : elnComponents) {
-      if (modulePortDE instanceof ELNTModulePortDE) {
-        modulePortsDE.add((ELNTModulePortDE) modulePortDE);
-      }
+    public LinkedList<ELNTMidPortTerminal> getAllMidPortTerminal() {
+        LinkedList<ELNTMidPortTerminal> midPortTerminals = new LinkedList<ELNTMidPortTerminal>();
+        for (ELNTComponent midPortTerminal : elnComponents) {
+            if (midPortTerminal instanceof ELNTMidPortTerminal) {
+                midPortTerminals.add((ELNTMidPortTerminal) midPortTerminal);
+            }
+        }
+        return midPortTerminals;
     }
-    return modulePortsDE;
-  }
 
-  public LinkedList<ELNTModulePortTDF> getAllModulePortTDF() {
-    LinkedList<ELNTModulePortTDF> modulePortsTDF = new LinkedList<ELNTModulePortTDF>();
-    for (ELNTComponent modulePortTDF : elnComponents) {
-      if (modulePortTDF instanceof ELNTModulePortTDF) {
-        modulePortsTDF.add((ELNTModulePortTDF) modulePortTDF);
-      }
+    public LinkedList<ELNTModule> getAllModule() {
+        LinkedList<ELNTModule> modules = new LinkedList<ELNTModule>();
+        for (ELNTComponent module : elnComponents) {
+            if (module instanceof ELNTModule) {
+                modules.add((ELNTModule) module);
+            }
+        }
+        return modules;
     }
-    return modulePortsTDF;
-  }
 
-  public int getNbClusterTerminal() {
-    return (getAllClusterTerminal()).size();
-  }
+    public LinkedList<ELNTModuleTerminal> getAllModuleTerminal() {
+        LinkedList<ELNTModuleTerminal> moduleTerminals = new LinkedList<ELNTModuleTerminal>();
+        for (ELNTComponent moduleTerminal : elnComponents) {
+            if (moduleTerminal instanceof ELNTModuleTerminal) {
+                moduleTerminals.add((ELNTModuleTerminal) moduleTerminal);
+            }
+        }
+        return moduleTerminals;
+    }
 
-  public int getNbClusterPortDE() {
-    return (getAllClusterPortDE()).size();
-  }
+    public LinkedList<ELNTModulePortDE> getAllModulePortDE() {
+        LinkedList<ELNTModulePortDE> modulePortsDE = new LinkedList<ELNTModulePortDE>();
+        for (ELNTComponent modulePortDE : elnComponents) {
+            if (modulePortDE instanceof ELNTModulePortDE) {
+                modulePortsDE.add((ELNTModulePortDE) modulePortDE);
+            }
+        }
+        return modulePortsDE;
+    }
 
-  public int getNbClusterPortTDF() {
-    return (getAllClusterPortTDF()).size();
-  }
+    public LinkedList<ELNTModulePortTDF> getAllModulePortTDF() {
+        LinkedList<ELNTModulePortTDF> modulePortsTDF = new LinkedList<ELNTModulePortTDF>();
+        for (ELNTComponent modulePortTDF : elnComponents) {
+            if (modulePortTDF instanceof ELNTModulePortTDF) {
+                modulePortsTDF.add((ELNTModulePortTDF) modulePortTDF);
+            }
+        }
+        return modulePortsTDF;
+    }
 
-  public int getNbComponentCapacitor() {
-    return (getAllComponentCapacitor()).size();
-  }
+    public int getNbClusterTerminal() {
+        return (getAllClusterTerminal()).size();
+    }
 
-  public int getNbComponentCurrentSinkDE() {
-    return (getAllComponentCurrentSinkDE()).size();
-  }
+    public int getNbClusterPortDE() {
+        return (getAllClusterPortDE()).size();
+    }
 
-  public int getNbComponentCurrentSourceDE() {
-    return (getAllComponentCurrentSourceDE()).size();
-  }
+    public int getNbClusterPortTDF() {
+        return (getAllClusterPortTDF()).size();
+    }
 
-  public int getNbComponentCurrentSinkTDF() {
-    return (getAllComponentCurrentSinkTDF()).size();
-  }
+    public int getNbComponentCapacitor() {
+        return (getAllComponentCapacitor()).size();
+    }
 
-  public int getNbComponentCurrentSourceTDF() {
-    return (getAllComponentCurrentSourceTDF()).size();
-  }
+    public int getNbComponentCurrentSinkDE() {
+        return (getAllComponentCurrentSinkDE()).size();
+    }
 
-  public int getNbComponentIdealTransformer() {
-    return (getAllComponentIdealTransformer()).size();
-  }
+    public int getNbComponentCurrentSourceDE() {
+        return (getAllComponentCurrentSourceDE()).size();
+    }
 
-  public int getNbComponentIndependentCurrentSource() {
-    return (getAllComponentIndependentCurrentSource()).size();
-  }
+    public int getNbComponentCurrentSinkTDF() {
+        return (getAllComponentCurrentSinkTDF()).size();
+    }
 
-  public int getNbComponentIndependentVoltageSource() {
-    return (getAllComponentIndependentVoltageSource()).size();
-  }
+    public int getNbComponentCurrentSourceTDF() {
+        return (getAllComponentCurrentSourceTDF()).size();
+    }
 
-  public int getNbComponentInductor() {
-    return (getAllComponentInductor()).size();
-  }
+    public int getNbComponentIdealTransformer() {
+        return (getAllComponentIdealTransformer()).size();
+    }
 
-  public int getNbComponentNodeRef() {
-    return (getAllComponentNodeRef()).size();
-  }
+    public int getNbComponentIndependentCurrentSource() {
+        return (getAllComponentIndependentCurrentSource()).size();
+    }
 
-  public int getNbComponentResistor() {
-    return (getAllComponentResistor()).size();
-  }
+    public int getNbComponentIndependentVoltageSource() {
+        return (getAllComponentIndependentVoltageSource()).size();
+    }
 
-  public int getNbComponentTransmissionLine() {
-    return (getAllComponentTransmissionLine()).size();
-  }
+    public int getNbComponentInductor() {
+        return (getAllComponentInductor()).size();
+    }
 
-  public int getNbComponentVoltageControlledCurrentSource() {
-    return (getAllComponentVoltageControlledCurrentSource()).size();
-  }
+    public int getNbComponentNodeRef() {
+        return (getAllComponentNodeRef()).size();
+    }
 
-  public int getNbComponentVoltageControlledVoltageSource() {
-    return (getAllComponentVoltageControlledVoltageSource()).size();
-  }
+    public int getNbComponentResistor() {
+        return (getAllComponentResistor()).size();
+    }
 
-  public int getNbComponentVoltageSinkDE() {
-    return (getAllComponentVoltageSinkDE()).size();
-  }
+    public int getNbComponentTransmissionLine() {
+        return (getAllComponentTransmissionLine()).size();
+    }
 
-  public int getNbComponentVoltageSourceDE() {
-    return (getAllComponentVoltageSourceDE()).size();
-  }
+    public int getNbComponentVoltageControlledCurrentSource() {
+        return (getAllComponentVoltageControlledCurrentSource()).size();
+    }
 
-  public int getNbComponentVoltageSinkTDF() {
-    return (getAllComponentVoltageSinkTDF()).size();
-  }
+    public int getNbComponentVoltageControlledVoltageSource() {
+        return (getAllComponentVoltageControlledVoltageSource()).size();
+    }
 
-  public int getNbComponentVoltageSourceTDF() {
-    return (getAllComponentVoltageSourceTDF()).size();
-  }
+    public int getNbComponentVoltageSinkDE() {
+        return (getAllComponentVoltageSinkDE()).size();
+    }
 
-  public int getNbMidPortTerminal() {
-    return (getAllMidPortTerminal()).size();
-  }
+    public int getNbComponentVoltageSourceDE() {
+        return (getAllComponentVoltageSourceDE()).size();
+    }
 
-  public int getNbModule() {
-    return (getAllModule()).size();
-  }
+    public int getNbComponentVoltageSinkTDF() {
+        return (getAllComponentVoltageSinkTDF()).size();
+    }
 
-  public int getNbModuleTerminal() {
-    return (getAllModuleTerminal()).size();
-  }
+    public int getNbComponentVoltageSourceTDF() {
+        return (getAllComponentVoltageSourceTDF()).size();
+    }
 
-  public int getNbModulePortDE() {
-    return (getAllModulePortDE()).size();
-  }
+    public int getNbMidPortTerminal() {
+        return (getAllMidPortTerminal()).size();
+    }
 
-  public int getNbModulePortTDF() {
-    return (getAllModulePortTDF()).size();
-  }
+    public int getNbModule() {
+        return (getAllModule()).size();
+    }
+
+    public int getNbModuleTerminal() {
+        return (getAllModuleTerminal()).size();
+    }
+
+    public int getNbModulePortDE() {
+        return (getAllModulePortDE()).size();
+    }
+
+    public int getNbModulePortTDF() {
+        return (getAllModulePortTDF()).size();
+    }
 }

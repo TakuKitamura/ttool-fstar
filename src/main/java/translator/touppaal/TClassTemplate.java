@@ -48,35 +48,35 @@ import uppaaldesc.UPPAALTemplate;
  * @author Ludovic APVRILLE
  */
 public class TClassTemplate {
-  public TClass tclass;
-  public int idTClass = 0;
-  public UPPAALTemplate template;
-  public int beginid; // Instanciation information
-  public int endid; // Instanciation information
+    public TClass tclass;
+    public int idTClass = 0;
+    public UPPAALTemplate template;
+    public int beginid; // Instanciation information
+    public int endid; // Instanciation information
 
-  public TClassTemplate() {
-  }
-
-  public TClassTemplate(TClass _t, UPPAALTemplate _template) {
-    tclass = _t;
-    template = _template;
-  }
-
-  public TClassTemplate(TClass _t, UPPAALTemplate _template, int _id) {
-    tclass = _t;
-    template = _template;
-    idTClass = _id;
-  }
-
-  public String toString() {
-    String s = "";
-    if (tclass != null) {
-      s += "tclass: " + tclass.getName() + " ";
+    public TClassTemplate() {
     }
-    if (template != null) {
-      s += "template:" + template.getName() + " ";
+
+    public TClassTemplate(TClass _t, UPPAALTemplate _template) {
+        tclass = _t;
+        template = _template;
     }
-    s += "beginid=" + beginid + " endid=" + endid;
-    return s;
-  }
+
+    public TClassTemplate(TClass _t, UPPAALTemplate _template, int _id) {
+        tclass = _t;
+        template = _template;
+        idTClass = _id;
+    }
+
+    public String toString() {
+        String s = "";
+        if (tclass != null) {
+            s += "tclass: " + tclass.getName() + " ";
+        }
+        if (template != null) {
+            s += "template:" + template.getName() + " ";
+        }
+        s += "beginid=" + beginid + " endid=" + endid;
+        return s;
+    }
 }

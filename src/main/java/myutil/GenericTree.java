@@ -45,9 +45,9 @@ package myutil;
  */
 public interface GenericTree {
 
-  int getChildCount();
+    int getChildCount();
 
-  Object getChild(int index);
+    Object getChild(int index);
 
-  int getIndexOfChild(Object child);
+    int getIndexOfChild(Object child);
 }

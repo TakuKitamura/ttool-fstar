@@ -49,86 +49,86 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class UPPAALLocation {
-  public int int_id;
-  public String id; // Internal id to identify locations -> not shown on diagram
-  public Point idPoint;
-  public String name = "default"; // Name shown on graph
-  public Point namePoint;
-  public String invariant;
-  public boolean urgent = false;
-  public boolean committed = false;
+    public int int_id;
+    public String id; // Internal id to identify locations -> not shown on diagram
+    public Point idPoint;
+    public String name = "default"; // Name shown on graph
+    public Point namePoint;
+    public String invariant;
+    public boolean urgent = false;
+    public boolean committed = false;
 
-  // For optimization of UPPAAL templates
-  public boolean optimizable = true;
+    // For optimization of UPPAAL templates
+    public boolean optimizable = true;
 
-  private static int currentId = 0;
-  private static int invariantX = 5;
-  private static int invariantY = 15;
+    private static int currentId = 0;
+    private static int invariantX = 5;
+    private static int invariantY = 15;
 
-  public static void reinitID() {
-    currentId = 0;
-  }
-
-  public UPPAALLocation() {
-    int_id = currentId;
-    id = "id" + currentId;
-    idPoint = new Point();
-    name = id;
-    namePoint = new Point();
-    currentId++;
-  }
-
-  public void setUrgent() {
-    urgent = true;
-    committed = false;
-  }
-
-  public void unsetUrgent() {
-    urgent = false;
-  }
-
-  public void setCommitted() {
-    committed = true;
-    urgent = false;
-  }
-
-  public void unsetCommitted() {
-    committed = false;
-  }
-
-  public void unsetOptimizable() {
-    optimizable = false;
-  }
-
-  public boolean isOptimizable() {
-    return optimizable;
-  }
-
-  public void setInvariant(String _invariant) {
-    invariant = _invariant;
-  }
-
-  public boolean hasInvariant() {
-    return ((invariant != null) && (invariant.length() > 0));
-  }
-
-  public String getXML() {
-    String ret = "<location id=\"" + id + "\" x=\"" + idPoint.x + "\" y=\"" + idPoint.y + "\">\n";
-    ret += "<name x=\"" + namePoint.x + "\" y=\"" + namePoint.y + "\">" + name + "</name>\n";
-    if ((invariant != null) && (invariant.length() > 0)) {
-      ret += "<label kind=\"invariant\"  x=\"" + (idPoint.x + invariantX) + "\" y=\"" + (idPoint.y + invariantY)
-          + "\">";
-      ret += Conversion.transformToXMLString(invariant);
-      ret += "</label>\n";
+    public static void reinitID() {
+        currentId = 0;
     }
-    if (urgent) {
-      ret += "<urgent />\n";
+
+    public UPPAALLocation() {
+        int_id = currentId;
+        id = "id" + currentId;
+        idPoint = new Point();
+        name = id;
+        namePoint = new Point();
+        currentId++;
     }
-    if (committed) {
-      ret += "<committed />\n";
+
+    public void setUrgent() {
+        urgent = true;
+        committed = false;
     }
-    ret += "</location>\n";
-    return ret;
-  }
+
+    public void unsetUrgent() {
+        urgent = false;
+    }
+
+    public void setCommitted() {
+        committed = true;
+        urgent = false;
+    }
+
+    public void unsetCommitted() {
+        committed = false;
+    }
+
+    public void unsetOptimizable() {
+        optimizable = false;
+    }
+
+    public boolean isOptimizable() {
+        return optimizable;
+    }
+
+    public void setInvariant(String _invariant) {
+        invariant = _invariant;
+    }
+
+    public boolean hasInvariant() {
+        return ((invariant != null) && (invariant.length() > 0));
+    }
+
+    public String getXML() {
+        String ret = "<location id=\"" + id + "\" x=\"" + idPoint.x + "\" y=\"" + idPoint.y + "\">\n";
+        ret += "<name x=\"" + namePoint.x + "\" y=\"" + namePoint.y + "\">" + name + "</name>\n";
+        if ((invariant != null) && (invariant.length() > 0)) {
+            ret += "<label kind=\"invariant\"  x=\"" + (idPoint.x + invariantX) + "\" y=\"" + (idPoint.y + invariantY)
+                    + "\">";
+            ret += Conversion.transformToXMLString(invariant);
+            ret += "</label>\n";
+        }
+        if (urgent) {
+            ret += "<urgent />\n";
+        }
+        if (committed) {
+            ret += "<committed />\n";
+        }
+        ret += "</location>\n";
+        return ret;
+    }
 
 }

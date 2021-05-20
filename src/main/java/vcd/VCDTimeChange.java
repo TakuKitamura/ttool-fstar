@@ -47,50 +47,50 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public class VCDTimeChange {
-  private String timeValue;
-  private ArrayList<VCDVariable> variables;
-  private ArrayList<String> values; // In binary format, without the "b"
+    private String timeValue;
+    private ArrayList<VCDVariable> variables;
+    private ArrayList<String> values; // In binary format, without the "b"
 
-  // private static int IDShortcut;
+    // private static int IDShortcut;
 
-  public VCDTimeChange(String _timeValue) {
-    timeValue = _timeValue;
-    variables = new ArrayList<VCDVariable>();
-    values = new ArrayList<String>();
-  }
-
-  public void addVariable(VCDVariable _variable, String _value) {
-    variables.add(_variable);
-    values.add(_value);
-  }
-
-  public int getNbOfVariables() {
-    return variables.size();
-  }
-
-  public VCDVariable getVariable(int _index) {
-    return variables.get(_index);
-  }
-
-  public String getValue(int _index) {
-    return values.get(_index);
-  }
-
-  public String toString() {
-    String s = "#" + timeValue + "\n";
-    for (int i = 0; i < variables.size(); i++) {
-      s += "b" + values.get(i) + " " + variables.get(i).getLocalShortcut() + "\n";
+    public VCDTimeChange(String _timeValue) {
+        timeValue = _timeValue;
+        variables = new ArrayList<VCDVariable>();
+        values = new ArrayList<String>();
     }
-    return s;
-  }
 
-  public boolean hasValueChangeOnVariable(VCDVariable _variable) {
-    for (VCDVariable var : variables) {
-      if (var == _variable) {
-        return true;
-      }
+    public void addVariable(VCDVariable _variable, String _value) {
+        variables.add(_variable);
+        values.add(_value);
     }
-    return false;
-  }
+
+    public int getNbOfVariables() {
+        return variables.size();
+    }
+
+    public VCDVariable getVariable(int _index) {
+        return variables.get(_index);
+    }
+
+    public String getValue(int _index) {
+        return values.get(_index);
+    }
+
+    public String toString() {
+        String s = "#" + timeValue + "\n";
+        for (int i = 0; i < variables.size(); i++) {
+            s += "b" + values.get(i) + " " + variables.get(i).getLocalShortcut() + "\n";
+        }
+        return s;
+    }
+
+    public boolean hasValueChangeOnVariable(VCDVariable _variable) {
+        for (VCDVariable var : variables) {
+            if (var == _variable) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

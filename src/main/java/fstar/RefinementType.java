@@ -11,13 +11,13 @@ import rationals.converters.ToString;
  */
 
 public class RefinementType {
-  String refinementTypeString;
+    String refinementTypeString;
 
-  public RefinementType(String s) {
-    refinementTypeString = s;
-  }
+    public RefinementType(String s) {
+        refinementTypeString = s;
+    }
 
-  public String toString() {
-    return refinementTypeString;
-  }
+    public String toString() {
+        return refinementTypeString;
+    }
 }

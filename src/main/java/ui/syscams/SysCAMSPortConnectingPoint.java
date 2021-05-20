@@ -52,16 +52,16 @@ import ui.TGConnectingPointWidthHeight;
  */
 
 public class SysCAMSPortConnectingPoint extends TGConnectingPointWidthHeight {
-  public SysCAMSPrimitivePort port;
-  public boolean positionned;
+    public SysCAMSPrimitivePort port;
+    public boolean positionned;
 
-  public SysCAMSPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
+    public SysCAMSPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.CAMS_CONNECTOR;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.CAMS_CONNECTOR;
+    }
 }

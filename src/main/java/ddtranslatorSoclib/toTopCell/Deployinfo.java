@@ -86,229 +86,230 @@ import java.util.Vector;
 
 public class Deployinfo {
 
-  private final static String CR = "\n";
-  private final static String CR2 = "\n\n";
+    private final static String CR = "\n";
+    private final static String CR2 = "\n\n";
 
-  public static AvatarSpecification avspec;// DG 15.05.2017
-  public static AvatarddSpecification avddspec;
-  private Vector<?> warnings;
+    public static AvatarSpecification avspec;// DG 15.05.2017
+    public static AvatarddSpecification avddspec;
+    private Vector<?> warnings;
 
-  private MainFileSoclib mainFile;
-  private Vector<TaskFileSoclib> taskFiles;
-  private String makefile_src;
-  private String makefile_SocLib;
-  //
-  /* for the moment, this is specific to PowerPC */
+    private MainFileSoclib mainFile;
+    private Vector<TaskFileSoclib> taskFiles;
+    private String makefile_src;
+    private String makefile_SocLib;
+    //
+    /* for the moment, this is specific to PowerPC */
 
-  public Deployinfo(AvatarddSpecification _avddspec, AvatarSpecification _avspec) {
-    avspec = _avspec;
-    avddspec = _avddspec;
-    taskFiles = new Vector<TaskFileSoclib>();
-  }
+    public Deployinfo(AvatarddSpecification _avddspec, AvatarSpecification _avspec) {
+        avspec = _avspec;
+        avddspec = _avddspec;
+        taskFiles = new Vector<TaskFileSoclib>();
+    }
 
-  public static String getDeployInfo() {
+    public static String getDeployInfo() {
 
-    int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size();
+        int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size();
 
-    String deployinfo = CR;
+        String deployinfo = CR;
+
+        /*
+         * we will have to dimension the segments according to the number of clusters,
+         * number of RAMS etc.
+         */
+
+        /* first, determine the "step" between segments dedicated to a cluster */
+
+        int CLUSTER_SIZE;
+
+        // if the user does not specify the size, take default value
+        if (nb_clusters < 16) {
+            CLUSTER_SIZE = 268435456;
+        } else {
+            CLUSTER_SIZE = 134217728;
+        } // to be refined, cf DSX -> dynamically adapt
+
+        int size;
+
+        /* there can be many RAMS, but then must be smaller dimensioned */
+
+        int i = 0;
+        for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+
+            /* data memory always starts at 0x10000000 */
+            int address_start = 268435456;
+            String string_adress_start = Integer.toHexString(i * 268435456);
+
+            /* segment size is either given by the user or a default value is calculated */
+            if (ram.getDataSize() == 0) {
+
+                if ((nb_clusters < 16) || (TopCellGenerator.avatardd.getAllRAM().size() < 16)) {
+                    size = 268435456;
+
+                } else {// smaller segments
+                    size = 134217728;
+                } // to be refined, a la DSX
+            } else {
+                size = ram.getDataSize();
+            }
+            ram.setDataSize(size);
+            // ram.setDataSize(0);
+            size = ram.getDataSize(); // this is the hardware RAM size
+
+            String string_size_half = (Integer.toHexString(size / 2)); // segments on this are half uram, half cram
+
+            deployinfo += "#define CACHED_RAM" + ram.getIndex() + "_NAME cram" + ram.getIndex() + CR;
+            deployinfo = deployinfo + "#define CACHED_RAM" + ram.getIndex() + "_ADDR 0x"
+                    + Integer.toHexString(address_start + i * CLUSTER_SIZE) + CR;
+            // 31.08. simplifie
+            deployinfo = deployinfo + "#define CACHED_RAM" + ram.getIndex() + "_SIZE 0x" + string_size_half + CR;
+            deployinfo += "#define DEPLOY_RAM" + ram.getIndex() + "_NAME uram" + ram.getIndex() + CR;
+            int cacheability_bit = 2097152; // 0x00200000
+            deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getIndex() + "_ADDR 0x"
+                    + Integer.toHexString(address_start + i * CLUSTER_SIZE + size / 2 + cacheability_bit) + CR;
+            // 31.08. simplifie
+            deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getIndex() + "_SIZE 0x" + (string_size_half) + CR;
+
+            i++;
+        }
+        // Calculate Adresses of MWMR segments, one for each hardware accellerator
+        i = 0;
+
+        for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+            deployinfo = deployinfo + "#define MWMR_RAM" + i + "_NAME mwmr_ram" + i + CR;
+            deployinfo = deployinfo + "#define MWMR_RAM" + i + "_ADDR 0xA02" + Integer.toHexString(i * 4096) + CR;
+            deployinfo = deployinfo + "#define MWMR_RAM" + i + "_SIZE 0x1000" + CR;
+            i++;
+        }
+
+        return deployinfo;
+    }
 
     /*
-     * we will have to dimension the segments according to the number of clusters,
-     * number of RAMS etc.
+     * public static String getDeployInfoMap() { int i=0; String deployinfo_map =
+     * CR; int nb_signals=0; deployinfo_map += "#define MAP_A\\" + CR;
+     * 
+     * 
+     * for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { //if
+     * (!(ram.getChannels().isEmpty())){ // for (AvatarChannel channel :
+     * ram.getChannels()) {
+     * 
+     * //DG 15.05.2017 for (AvatarRelation relation : avspec.getRelations()) { //if
+     * (!(ram.getRelations().isEmpty())){ // for(i=0; i<relation.nbOfSignals() ;
+     * i++) {//DG 15.05.2017 deployinfo_map = deployinfo_map
+     * +"\n .channel"+nb_signals+" : { \\" + CR; deployinfo_map = deployinfo_map +
+     * "*(section_channel"+nb_signals+ ")\\"+ CR;
+     * 
+     * deployinfo_map=deployinfo_map+ "} > uram"+ram.getIndex()+"\\"+ CR;
+     * i++;nb_signals++; } }
+     * 
+     * i=0;nb_signals=0;
+     * 
+     * // for (AvatarChannel channel : ram.getChannels()) { for (AvatarRelation
+     * relation : avspec.getRelations()) { //DG 15.05.2017
+     * 
+     * for(i=0; i<relation.nbOfSignals() ; i++) {//DG 15.05.2017
+     * 
+     * 
+     * deployinfo_map = deployinfo_map +"\n .lock"+nb_signals+" : { \\" + CR;
+     * deployinfo_map = deployinfo_map + "*(section_lock"+nb_signals+ ")\\"+ CR; //
+     * if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
+     * deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks i++;
+     * nb_signals++; }
+     * 
+     * } } return deployinfo_map; }
      */
 
-    /* first, determine the "step" between segments dedicated to a cluster */
+    public static String getDeployInfoMap(AvatarSpecification _avspec) {
+        avspec = _avspec;
+        int i = 0;
+        String deployinfo_map = CR;
+        int j;
 
-    int CLUSTER_SIZE;
+        deployinfo_map += "#define MAP_A\\" + CR;
+        try {
+            for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
+                // if (/*!*/(ram.getChannels().isEmpty())){ //"!" removed because it returned
+                // the wrong results. Logic is now incorrect but results are correct (needs
+                // further investigating) CD 20.6
+                if (!(ram.getChannels().isEmpty())) {
+                    for (AvatarRelation ar : avspec.getRelations()) {
+                        for (j = 0; j < ar.nbOfSignals(); j++) {
+                            deployinfo_map = deployinfo_map + "\n .channel" + i + " : {";
+                            deployinfo_map = deployinfo_map + "*(section_channel" + i + ")";
+                            deployinfo_map = deployinfo_map + "} > uram" + ram.getIndex() + CR; // ram n° was incorrect
+                                                                                                // (see above)
+                            i++;
+                        }
+                    }
 
-    // if the user does not specify the size, take default value
-    if (nb_clusters < 16) {
-      CLUSTER_SIZE = 268435456;
-    } else {
-      CLUSTER_SIZE = 134217728;
-    } // to be refined, cf DSX -> dynamically adapt
-
-    int size;
-
-    /* there can be many RAMS, but then must be smaller dimensioned */
-
-    int i = 0;
-    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-
-      /* data memory always starts at 0x10000000 */
-      int address_start = 268435456;
-      String string_adress_start = Integer.toHexString(i * 268435456);
-
-      /* segment size is either given by the user or a default value is calculated */
-      if (ram.getDataSize() == 0) {
-
-        if ((nb_clusters < 16) || (TopCellGenerator.avatardd.getAllRAM().size() < 16)) {
-          size = 268435456;
-
-        } else {// smaller segments
-          size = 134217728;
-        } // to be refined, a la DSX
-      } else {
-        size = ram.getDataSize();
-      }
-      ram.setDataSize(size);
-      // ram.setDataSize(0);
-      size = ram.getDataSize(); // this is the hardware RAM size
-
-      String string_size_half = (Integer.toHexString(size / 2)); // segments on this are half uram, half cram
-
-      deployinfo += "#define CACHED_RAM" + ram.getIndex() + "_NAME cram" + ram.getIndex() + CR;
-      deployinfo = deployinfo + "#define CACHED_RAM" + ram.getIndex() + "_ADDR 0x"
-          + Integer.toHexString(address_start + i * CLUSTER_SIZE) + CR;
-      // 31.08. simplifie
-      deployinfo = deployinfo + "#define CACHED_RAM" + ram.getIndex() + "_SIZE 0x" + string_size_half + CR;
-      deployinfo += "#define DEPLOY_RAM" + ram.getIndex() + "_NAME uram" + ram.getIndex() + CR;
-      int cacheability_bit = 2097152; // 0x00200000
-      deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getIndex() + "_ADDR 0x"
-          + Integer.toHexString(address_start + i * CLUSTER_SIZE + size / 2 + cacheability_bit) + CR;
-      // 31.08. simplifie
-      deployinfo = deployinfo + "#define DEPLOY_RAM" + ram.getIndex() + "_SIZE 0x" + (string_size_half) + CR;
-
-      i++;
-    }
-    // Calculate Adresses of MWMR segments, one for each hardware accellerator
-    i = 0;
-
-    for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
-      deployinfo = deployinfo + "#define MWMR_RAM" + i + "_NAME mwmr_ram" + i + CR;
-      deployinfo = deployinfo + "#define MWMR_RAM" + i + "_ADDR 0xA02" + Integer.toHexString(i * 4096) + CR;
-      deployinfo = deployinfo + "#define MWMR_RAM" + i + "_SIZE 0x1000" + CR;
-      i++;
-    }
-
-    return deployinfo;
-  }
-
-  /*
-   * public static String getDeployInfoMap() { int i=0; String deployinfo_map =
-   * CR; int nb_signals=0; deployinfo_map += "#define MAP_A\\" + CR;
-   * 
-   * 
-   * for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { //if
-   * (!(ram.getChannels().isEmpty())){ // for (AvatarChannel channel :
-   * ram.getChannels()) {
-   * 
-   * //DG 15.05.2017 for (AvatarRelation relation : avspec.getRelations()) { //if
-   * (!(ram.getRelations().isEmpty())){ // for(i=0; i<relation.nbOfSignals() ;
-   * i++) {//DG 15.05.2017 deployinfo_map = deployinfo_map
-   * +"\n .channel"+nb_signals+" : { \\" + CR; deployinfo_map = deployinfo_map +
-   * "*(section_channel"+nb_signals+ ")\\"+ CR;
-   * 
-   * deployinfo_map=deployinfo_map+ "} > uram"+ram.getIndex()+"\\"+ CR;
-   * i++;nb_signals++; } }
-   * 
-   * i=0;nb_signals=0;
-   * 
-   * // for (AvatarChannel channel : ram.getChannels()) { for (AvatarRelation
-   * relation : avspec.getRelations()) { //DG 15.05.2017
-   * 
-   * for(i=0; i<relation.nbOfSignals() ; i++) {//DG 15.05.2017
-   * 
-   * 
-   * deployinfo_map = deployinfo_map +"\n .lock"+nb_signals+" : { \\" + CR;
-   * deployinfo_map = deployinfo_map + "*(section_lock"+nb_signals+ ")\\"+ CR; //
-   * if(use_vcilocks) deployinfo_map=deployinfo_map+ "} > vci_locks\\"+ CR;
-   * deployinfo_map=deployinfo_map+ "} > uram0\\"+ CR;//DG 27.06. no ramlocks i++;
-   * nb_signals++; }
-   * 
-   * } } return deployinfo_map; }
-   */
-
-  public static String getDeployInfoMap(AvatarSpecification _avspec) {
-    avspec = _avspec;
-    int i = 0;
-    String deployinfo_map = CR;
-    int j;
-
-    deployinfo_map += "#define MAP_A\\" + CR;
-    try {
-      for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {
-        // if (/*!*/(ram.getChannels().isEmpty())){ //"!" removed because it returned
-        // the wrong results. Logic is now incorrect but results are correct (needs
-        // further investigating) CD 20.6
-        if (!(ram.getChannels().isEmpty())) {
-          for (AvatarRelation ar : avspec.getRelations()) {
-            for (j = 0; j < ar.nbOfSignals(); j++) {
-              deployinfo_map = deployinfo_map + "\n .channel" + i + " : {";
-              deployinfo_map = deployinfo_map + "*(section_channel" + i + ")";
-              deployinfo_map = deployinfo_map + "} > uram" + ram.getIndex() + CR; // ram n° was incorrect (see above)
-              i++;
+                    i = 0;
+                    for (AvatarRelation ar : avspec.getRelations()) {
+                        for (j = 0; j < ar.nbOfSignals(); j++) { // CD 15.06 dynamic to signal number
+                            deployinfo_map = deployinfo_map + "\n .lock" + i + " : { ";
+                            deployinfo_map = deployinfo_map + "*(section_lock" + i + ")";
+                            deployinfo_map = deployinfo_map + "} > uram" + ram.getIndex() + CR;
+                            i++;
+                        }
+                    }
+                }
             }
-          }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return deployinfo_map;
+    }
 
-          i = 0;
-          for (AvatarRelation ar : avspec.getRelations()) {
-            for (j = 0; j < ar.nbOfSignals(); j++) { // CD 15.06 dynamic to signal number
-              deployinfo_map = deployinfo_map + "\n .lock" + i + " : { ";
-              deployinfo_map = deployinfo_map + "*(section_lock" + i + ")";
-              deployinfo_map = deployinfo_map + "} > uram" + ram.getIndex() + CR;
-              i++;
+    // ajout C.D.
+    public static String getDeployInfoRam(AvatarSpecification _avspec) {
+        avspec = _avspec;
+        int i = 0;
+        int j;
+        String deployinfo_ram = CR;
+        try {
+            for (AvatarRelation ar : avspec.getRelations()) {
+                for (j = 0; j < ar.nbOfSignals(); j++) {
+                    deployinfo_ram += "#if defined(DEPLOY_RAM" + i + "_NAME)" + CR;
+                    deployinfo_ram += "\tDEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i
+                            + "_ADDR, LENGTH = DEPLOY_RAM" + i + "_SIZE" + CR;
+                    deployinfo_ram += "#endif" + CR;
+                    deployinfo_ram += "#if defined(CACHED_RAM" + i + "_NAME)" + CR;
+                    deployinfo_ram += "\tCACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i
+                            + "_ADDR, LENGTH = CACHED_RAM" + i + "_SIZE" + CR;
+                    deployinfo_ram += "#endif" + CR;
+                    i++;
+                }
             }
-          }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+        return deployinfo_ram;
     }
-    return deployinfo_map;
-  }
 
-  // ajout C.D.
-  public static String getDeployInfoRam(AvatarSpecification _avspec) {
-    avspec = _avspec;
-    int i = 0;
-    int j;
-    String deployinfo_ram = CR;
-    try {
-      for (AvatarRelation ar : avspec.getRelations()) {
-        for (j = 0; j < ar.nbOfSignals(); j++) {
-          deployinfo_ram += "#if defined(DEPLOY_RAM" + i + "_NAME)" + CR;
-          deployinfo_ram += "\tDEPLOY_RAM" + i + "_NAME (RWAL) : ORIGIN = DEPLOY_RAM" + i + "_ADDR, LENGTH = DEPLOY_RAM"
-              + i + "_SIZE" + CR;
-          deployinfo_ram += "#endif" + CR;
-          deployinfo_ram += "#if defined(CACHED_RAM" + i + "_NAME)" + CR;
-          deployinfo_ram += "\tCACHED_RAM" + i + "_NAME (RWAL) : ORIGIN = CACHED_RAM" + i + "_ADDR, LENGTH = CACHED_RAM"
-              + i + "_SIZE" + CR;
-          deployinfo_ram += "#endif" + CR;
-          i++;
+    // fin ajout C.D.
+
+    public static String getProcInfo() {
+        int i = 0;
+
+        String procinfo = "SOCLIB_CPU_COUNT = ";
+
+        for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) {
+            i++;
         }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return deployinfo_ram;
-  }
 
-  // fin ajout C.D.
-
-  public static String getProcInfo() {
-    int i = 0;
-
-    String procinfo = "SOCLIB_CPU_COUNT = ";
-
-    for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) {
-      i++;
+        procinfo += i + CR;
+        return procinfo;
     }
 
-    procinfo += i + CR;
-    return procinfo;
-  }
+    public static String getNbProc() {
+        int i = 0;
 
-  public static String getNbProc() {
-    int i = 0;
+        String nbproc = "CONFIG_CPU_MAXCOUNT ";
 
-    String nbproc = "CONFIG_CPU_MAXCOUNT ";
+        for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) {
+            i++;
+        }
 
-    for (AvatarCPU cpu : TopCellGenerator.avatardd.getAllCPU()) {
-      i++;
+        nbproc += i + CR;
+        return nbproc;
     }
-
-    nbproc += i + CR;
-    return nbproc;
-  }
 }

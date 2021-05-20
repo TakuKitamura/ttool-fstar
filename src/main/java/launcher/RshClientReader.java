@@ -55,120 +55,120 @@ import java.net.SocketTimeoutException;
  */
 public class RshClientReader extends Reader implements Runnable {
 
-  private PipedOutputStream pos;
-  private InputStreamReader pis;
-  private Socket clientSocket;
+    private PipedOutputStream pos;
+    private InputStreamReader pis;
+    private Socket clientSocket;
 
-  private Thread forwardingThread;
-  private boolean go = true;
-  private StringBuilder builder;
-  private boolean isNewLine = true;
+    private Thread forwardingThread;
+    private boolean go = true;
+    private StringBuilder builder;
+    private boolean isNewLine = true;
 
-  public RshClientReader(Socket clientSocket) throws IOException {
-    this.clientSocket = clientSocket;
-    this.pos = new PipedOutputStream();
-    this.pis = new InputStreamReader(new PipedInputStream(pos));
-    this.forwardingThread = new Thread(this);
-    try {
-      this.forwardingThread.start();
-    } catch (IllegalThreadStateException e) {
-    }
-  }
-
-  private void consumeOldLine(String s) throws IOException {
-    int n = s.indexOf('\n');
-    if (n >= 0) {
-      this.pos.write(s.substring(0, n + 1).getBytes());
-      this.pos.flush();
-      isNewLine = true;
-      this.consumeNewLine(s.substring(n + 1));
-    } else {
-      this.pos.write(s.getBytes());
-      this.pos.flush();
-    }
-  }
-
-  private void consumeNewLine(String s) throws IOException {
-    ResponseCode code = SocketComHelper.responseCode(s);
-
-    if (code == ResponseCode.PROCESS_END) {
-      this.go = false;
+    public RshClientReader(Socket clientSocket) throws IOException {
+        this.clientSocket = clientSocket;
+        this.pos = new PipedOutputStream();
+        this.pis = new InputStreamReader(new PipedInputStream(pos));
+        this.forwardingThread = new Thread(this);
+        try {
+            this.forwardingThread.start();
+        } catch (IllegalThreadStateException e) {
+        }
     }
 
-    else if (code == null) {
-      this.builder.append(s);
+    private void consumeOldLine(String s) throws IOException {
+        int n = s.indexOf('\n');
+        if (n >= 0) {
+            this.pos.write(s.substring(0, n + 1).getBytes());
+            this.pos.flush();
+            isNewLine = true;
+            this.consumeNewLine(s.substring(n + 1));
+        } else {
+            this.pos.write(s.getBytes());
+            this.pos.flush();
+        }
     }
 
-    else {
-      s = SocketComHelper.message(code, s);
+    private void consumeNewLine(String s) throws IOException {
+        ResponseCode code = SocketComHelper.responseCode(s);
 
-      this.isNewLine = false;
-      this.consumeOldLine(s);
-    }
-  }
+        if (code == ResponseCode.PROCESS_END) {
+            this.go = false;
+        }
 
-  @Override
-  public void run() {
-    this.builder = new StringBuilder();
-    try {
-      this.clientSocket.setSoTimeout(100);
-      InputStreamReader socketReader = new InputStreamReader(this.clientSocket.getInputStream());
-      try {
-        while (this.go) {
-          char[] cbuf = new char[50];
-          int n = 0;
-          try {
-            n = socketReader.read(cbuf);
-            if (n < 0)
-              break;
-          } catch (SocketTimeoutException e) {
-            if (n > 0)
-              this.builder.append(cbuf, 0, n);
-            continue;
-          }
+        else if (code == null) {
+            this.builder.append(s);
+        }
 
-          this.builder.append(cbuf, 0, n);
-          String s = this.builder.toString();
-          this.builder = new StringBuilder();
-          if (isNewLine) {
-            this.consumeNewLine(s);
-          } else {
+        else {
+            s = SocketComHelper.message(code, s);
+
+            this.isNewLine = false;
             this.consumeOldLine(s);
-          }
         }
-      } catch (IOException e) {
-      } finally {
+    }
+
+    @Override
+    public void run() {
+        this.builder = new StringBuilder();
         try {
-          socketReader.close();
+            this.clientSocket.setSoTimeout(100);
+            InputStreamReader socketReader = new InputStreamReader(this.clientSocket.getInputStream());
+            try {
+                while (this.go) {
+                    char[] cbuf = new char[50];
+                    int n = 0;
+                    try {
+                        n = socketReader.read(cbuf);
+                        if (n < 0)
+                            break;
+                    } catch (SocketTimeoutException e) {
+                        if (n > 0)
+                            this.builder.append(cbuf, 0, n);
+                        continue;
+                    }
+
+                    this.builder.append(cbuf, 0, n);
+                    String s = this.builder.toString();
+                    this.builder = new StringBuilder();
+                    if (isNewLine) {
+                        this.consumeNewLine(s);
+                    } else {
+                        this.consumeOldLine(s);
+                    }
+                }
+            } catch (IOException e) {
+            } finally {
+                try {
+                    socketReader.close();
+                } catch (IOException e) {
+                }
+                try {
+                    this.pos.close();
+                } catch (IOException e) {
+                }
+            }
+        } catch (IOException e) {
+        } finally {
+            try {
+                this.clientSocket.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        int n = this.pis.read(cbuf, off, len);
+        return n;
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.go = false;
+
+        try {
+            this.pis.close();
         } catch (IOException e) {
         }
-        try {
-          this.pos.close();
-        } catch (IOException e) {
-        }
-      }
-    } catch (IOException e) {
-    } finally {
-      try {
-        this.clientSocket.close();
-      } catch (IOException e) {
-      }
     }
-  }
-
-  @Override
-  public int read(char[] cbuf, int off, int len) throws IOException {
-    int n = this.pis.read(cbuf, off, len);
-    return n;
-  }
-
-  @Override
-  public void close() throws IOException {
-    this.go = false;
-
-    try {
-      this.pis.close();
-    } catch (IOException e) {
-    }
-  }
 }

@@ -45,10 +45,10 @@ package avatartranslator;
  * @author Florian LUGOU
  */
 public abstract class AvatarLeftHand extends AvatarTerm {
-  public AvatarLeftHand(String name, Object referenceObject) {
-    super(name, referenceObject);
-  }
+    public AvatarLeftHand(String name, Object referenceObject) {
+        super(name, referenceObject);
+    }
 
-  @Override
-  public abstract AvatarLeftHand clone();
+    @Override
+    public abstract AvatarLeftHand clone();
 }

@@ -67,157 +67,157 @@ import ui.util.IconManager;
  */
 public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText */ {
 
-  // Issue #31
-  // protected int lineLength = 5;
-  // protected int textX = 5;
-  // protected int textY = 15;
-  // protected int arc = 5;
-  // private TMLSDPanel refToSD;
-  // private TGConnectorTMLCP[] connectors = new TGConnectorTMLCP[2];
-  // private int index = 0;
-
-  public TMLCPRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-      TDiagramPanel _tdp) {
-    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
     // Issue #31
-    nbConnectingPoint = 2;
-    connectingPoint = new TGConnectingPoint[2];
-    connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
-    connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
+    // protected int lineLength = 5;
+    // protected int textX = 5;
+    // protected int textY = 15;
+    // protected int arc = 5;
+    // private TMLSDPanel refToSD;
+    // private TGConnectorTMLCP[] connectors = new TGConnectorTMLCP[2];
+    // private int index = 0;
 
-    textX = 5;
-    // width = 30;
-    // height = 35;
-    initScaling(30, 35);
-    minWidth = 70;
+    public TMLCPRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+            TDiagramPanel _tdp) {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    addTGConnectingPointsComment();
+        // Issue #31
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
 
-    moveable = true;
-    editable = true;
-    removable = true;
-    value = "Reference to a SD";
-    name = "SequenceDiagram";
-    // refToSD = null;
+        textX = 5;
+        // width = 30;
+        // height = 35;
+        initScaling(30, 35);
+        minWidth = 70;
 
-    myImageIcon = IconManager.imgic400;
-  }
+        addTGConnectingPointsComment();
 
-  @Override
-  protected void internalDrawing(Graphics g) {
+        moveable = true;
+        editable = true;
+        removable = true;
+        value = "Reference to a SD";
+        name = "SequenceDiagram";
+        // refToSD = null;
 
-    // Issue #31
-    final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value) /*+ w2*/;
-    // int w1 = Math.max(minWidth, w + 2 * textX);
-    // if ((w1 != width) & (!tdp.isScaled())) {
-    // setCd(x + width/2 - w1/2, y);
-    // width = w1;
-    // //updateConnectingPoints();
-    // }
-
-    Color c = g.getColor();
-    g.setColor(ColorManager.SD_REFERENCE);
-    g.drawRect(x + 1, y + 1, width, height);
-    g.setColor(c);
-
-    g.drawRect(x, y, width, height);
-    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-
-    final int offsetDefault = scale(15);
-    drawSingleString(g, name, x + (width - w) / 2, y + textY + offsetDefault /* 15 */);
-
-    final int sdOffsetX = scale(3);
-    final int sdOffsetY = scale(12);
-    drawSingleString(g, "sd", x + sdOffsetX /* 3 */, y + sdOffsetY /* 12 */);
-    g.drawLine(x, y + offsetDefault /* 15 */, x + offsetDefault /* 15 */, y + offsetDefault /* 15 */);
-
-    final int sdBoxOffsetX = scale(25);
-    final int sdBoxOffsetY = scale(8);
-    g.drawLine(x + sdBoxOffsetX /* 25 */, y, x + sdBoxOffsetX /* 25 */, y + sdBoxOffsetY /* 8 */);
-    g.drawLine(x + offsetDefault /* 15 */, y + offsetDefault /* 15 */, x + sdBoxOffsetX /* 25 */,
-        y + sdBoxOffsetY /* 8 */);
-  }
-
-  @Override
-  public TGComponent isOnMe(int _x, int _y) {
-    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-      return this;
+        myImageIcon = IconManager.imgic400;
     }
 
-    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
-        _y)) < distanceSelected) {
-      return this;
+    @Override
+    protected void internalDrawing(Graphics g) {
+
+        // Issue #31
+        final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value) /*+ w2*/;
+        // int w1 = Math.max(minWidth, w + 2 * textX);
+        // if ((w1 != width) & (!tdp.isScaled())) {
+        // setCd(x + width/2 - w1/2, y);
+        // width = w1;
+        // //updateConnectingPoints();
+        // }
+
+        Color c = g.getColor();
+        g.setColor(ColorManager.SD_REFERENCE);
+        g.drawRect(x + 1, y + 1, width, height);
+        g.setColor(c);
+
+        g.drawRect(x, y, width, height);
+        g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+        g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+        final int offsetDefault = scale(15);
+        drawSingleString(g, name, x + (width - w) / 2, y + textY + offsetDefault /* 15 */);
+
+        final int sdOffsetX = scale(3);
+        final int sdOffsetY = scale(12);
+        drawSingleString(g, "sd", x + sdOffsetX /* 3 */, y + sdOffsetY /* 12 */);
+        g.drawLine(x, y + offsetDefault /* 15 */, x + offsetDefault /* 15 */, y + offsetDefault /* 15 */);
+
+        final int sdBoxOffsetX = scale(25);
+        final int sdBoxOffsetY = scale(8);
+        g.drawLine(x + sdBoxOffsetX /* 25 */, y, x + sdBoxOffsetX /* 25 */, y + sdBoxOffsetY /* 8 */);
+        g.drawLine(x + offsetDefault /* 15 */, y + offsetDefault /* 15 */, x + sdBoxOffsetX /* 25 */,
+                y + sdBoxOffsetY /* 8 */);
     }
 
-    return null;
-  }
+    @Override
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
 
-  public String getAction() {
-    return value;
-  }
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
+                _y)) < distanceSelected) {
+            return this;
+        }
 
-  @Override
-  public int getType() {
-    return TGComponentManager.TMLCP_REF_SD;
-  }
-
-  @Override
-  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-    componentMenu.addSeparator();
-    boolean b = ((TMLCPPanel) tdp).isTMLCPSDCreated(name);
-    JMenuItem isSDCreated;
-
-    if (b) {
-      isSDCreated = new JMenuItem("Open diagram");
-    } else {
-      isSDCreated = new JMenuItem("Create Sequence Diagram");
+        return null;
     }
 
-    isSDCreated.addActionListener(menuAL);
-    componentMenu.add(isSDCreated);
-  }
-
-  @Override
-  public boolean eventOnPopup(ActionEvent e) {
-    boolean b = ((TMLCPPanel) tdp).isTMLCPSDCreated(name);
-    if (b) {
-      ((TMLCPPanel) tdp).openTMLCPSequenceDiagram(name);
-    } else {
-      ((TMLCPPanel) tdp).createTMLCPSequenceDiagram(name);
+    public String getAction() {
+        return value;
     }
-    tdp.getMouseManager().setSelection(-1, -1);
-    return true;
-  }
 
-  @Override
-  public int getDefaultConnector() {
-    return TGComponentManager.CONNECTOR_TMLCP;
-  }
-
-  /*
-   * public void setReferenceToSD( TMLSDPanel _panel ) { refToSD = _panel; }
-   */
-
-  @Override
-  public boolean editOnDoubleClick(JFrame frame) {
-    String text = "Reference to a SD: ";
-    if (hasFather()) {
-      text = getTopLevelName() + " / " + text;
+    @Override
+    public int getType() {
+        return TGComponentManager.TMLCP_REF_SD;
     }
-    String s = (String) JOptionPane.showInputDialog(frame, text, "Setting Name", JOptionPane.PLAIN_MESSAGE,
-        IconManager.imgic100, null, getName());
-    if ((s != null) && (s.length() > 0)) {
-      if (nameUsed(s)) {
-        JOptionPane.showMessageDialog(frame, "Error: the name is already in use", "Name modification",
-            JOptionPane.ERROR_MESSAGE);
+
+    @Override
+    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+        componentMenu.addSeparator();
+        boolean b = ((TMLCPPanel) tdp).isTMLCPSDCreated(name);
+        JMenuItem isSDCreated;
+
+        if (b) {
+            isSDCreated = new JMenuItem("Open diagram");
+        } else {
+            isSDCreated = new JMenuItem("Create Sequence Diagram");
+        }
+
+        isSDCreated.addActionListener(menuAL);
+        componentMenu.add(isSDCreated);
+    }
+
+    @Override
+    public boolean eventOnPopup(ActionEvent e) {
+        boolean b = ((TMLCPPanel) tdp).isTMLCPSDCreated(name);
+        if (b) {
+            ((TMLCPPanel) tdp).openTMLCPSequenceDiagram(name);
+        } else {
+            ((TMLCPPanel) tdp).createTMLCPSequenceDiagram(name);
+        }
+        tdp.getMouseManager().setSelection(-1, -1);
+        return true;
+    }
+
+    @Override
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TMLCP;
+    }
+
+    /*
+     * public void setReferenceToSD( TMLSDPanel _panel ) { refToSD = _panel; }
+     */
+
+    @Override
+    public boolean editOnDoubleClick(JFrame frame) {
+        String text = "Reference to a SD: ";
+        if (hasFather()) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String) JOptionPane.showInputDialog(frame, text, "Setting Name", JOptionPane.PLAIN_MESSAGE,
+                IconManager.imgic100, null, getName());
+        if ((s != null) && (s.length() > 0)) {
+            if (nameUsed(s)) {
+                JOptionPane.showMessageDialog(frame, "Error: the name is already in use", "Name modification",
+                        JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            renameTab(s);
+            setName(s);
+            return true;
+        }
         return false;
-      }
-      renameTab(s);
-      setName(s);
-      return true;
     }
-    return false;
-  }
 } // End of Class

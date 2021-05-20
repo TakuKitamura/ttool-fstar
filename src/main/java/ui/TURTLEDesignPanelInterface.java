@@ -48,9 +48,9 @@ package ui;
  */
 public interface TURTLEDesignPanelInterface {
 
-  ActivityDiagramPanelInterface getBehaviourPanel(String name);
+    ActivityDiagramPanelInterface getBehaviourPanel(String name);
 
-  ClassDiagramPanelInterface getStructurePanel();
+    ClassDiagramPanelInterface getStructurePanel();
 
-  TDiagramPanel panelAt(int index);
+    TDiagramPanel panelAt(int index);
 }

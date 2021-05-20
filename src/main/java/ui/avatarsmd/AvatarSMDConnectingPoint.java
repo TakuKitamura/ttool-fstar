@@ -52,13 +52,13 @@ import ui.TGConnectingPointWidthHeight;
  */
 public class AvatarSMDConnectingPoint extends TGConnectingPointWidthHeight {
 
-  public AvatarSMDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
-      double _h) {
-    super(_container, _x, _y, _in, _out, _w, _h);
-  }
+    public AvatarSMDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+            double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+    }
 
-  @Override
-  public boolean isCompatibleWith(int type) {
-    return type == TGComponentManager.AVATARSMD_CONNECTOR;
-  }
+    @Override
+    public boolean isCompatibleWith(int type) {
+        return type == TGComponentManager.AVATARSMD_CONNECTOR;
+    }
 }

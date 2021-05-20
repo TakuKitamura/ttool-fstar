@@ -51,19 +51,19 @@ import ui.TGConnectingPoint;
  */
 public class TGConnectingPointMessageSD extends TGConnectingPoint {
 
-  public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
-    super(_container, _x, _y, _in, _out);
-  }
-
-  @Override
-  public boolean isCompatibleWith(int type) {
-    //
-    if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)
-        || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
-      //
-      return true;
+    public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
+        super(_container, _x, _y, _in, _out);
     }
-    //
-    return false;
-  }
+
+    @Override
+    public boolean isCompatibleWith(int type) {
+        //
+        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)
+                || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
+            //
+            return true;
+        }
+        //
+        return false;
+    }
 }

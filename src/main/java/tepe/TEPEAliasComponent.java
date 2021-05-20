@@ -48,10 +48,10 @@ import java.util.Vector;
  */
 public class TEPEAliasComponent extends TEPEComponent {
 
-  public TEPEAliasComponent(String _name, Object _referenceObject) {
-    super(_name, _referenceObject);
-    inSignalComponents = new Vector<TEPEComponent>();
-    outSignalComponents = new Vector<TEPEComponent>();
-  }
+    public TEPEAliasComponent(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        inSignalComponents = new Vector<TEPEComponent>();
+        outSignalComponents = new Vector<TEPEComponent>();
+    }
 
 }

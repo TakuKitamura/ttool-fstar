@@ -48,36 +48,36 @@ import java.util.LinkedList;
  */
 
 public class ELNTConnector {
-  private ELNTConnectingPoint connectingPoint1;
-  private ELNTConnectingPoint connectingPoint2;
+    private ELNTConnectingPoint connectingPoint1;
+    private ELNTConnectingPoint connectingPoint2;
 
-  private String name;
-  private LinkedList<ELNTMidPortTerminal> term;
+    private String name;
+    private LinkedList<ELNTMidPortTerminal> term;
 
-  public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2, String _name) {
-    connectingPoint1 = _connectingPoint1;
-    connectingPoint2 = _connectingPoint2;
-    name = _name;
-    term = new LinkedList<ELNTMidPortTerminal>();
-  }
+    public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2, String _name) {
+        connectingPoint1 = _connectingPoint1;
+        connectingPoint2 = _connectingPoint2;
+        name = _name;
+        term = new LinkedList<ELNTMidPortTerminal>();
+    }
 
-  public ELNTConnectingPoint get_p1() {
-    return connectingPoint1;
-  }
+    public ELNTConnectingPoint get_p1() {
+        return connectingPoint1;
+    }
 
-  public ELNTConnectingPoint get_p2() {
-    return connectingPoint2;
-  }
+    public ELNTConnectingPoint get_p2() {
+        return connectingPoint2;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
-    return term;
-  }
+    public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
+        return term;
+    }
 
-  public void addMidPortTerminal(ELNTMidPortTerminal _term) {
-    term.add(_term);
-  }
+    public void addMidPortTerminal(ELNTMidPortTerminal _term) {
+        term.add(_term);
+    }
 }

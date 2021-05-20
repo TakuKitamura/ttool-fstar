@@ -45,21 +45,21 @@ package translator;
  * @author Ludovic APVRILLE
  */
 public abstract class ADActionState extends ADComponent {
-  protected String actionValue;
+    protected String actionValue;
 
-  public ADActionState() {
-    nbNext = 1;
-  }
+    public ADActionState() {
+        nbNext = 1;
+    }
 
-  public void setActionValue(String s) {
-    actionValue = s;
-  }
+    public void setActionValue(String s) {
+        actionValue = s;
+    }
 
-  public String getActionValue() {
-    return actionValue;
-  }
+    public String getActionValue() {
+        return actionValue;
+    }
 
-  public String toString() {
-    return "Action state (" + actionValue + ")";
-  }
+    public String toString() {
+        return "Action state (" + actionValue + ")";
+    }
 }

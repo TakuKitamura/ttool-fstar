@@ -48,89 +48,90 @@ import ddtranslatorSoclib.*;
 
 public class Platforminfo {
 
-  private final static String CR = "\n";
-  private final static String CR2 = "\n\n";
+    private final static String CR = "\n";
+    private final static String CR2 = "\n\n";
 
-  public static String getPlatformInfo() {
-    // determine if the platform is vgsb or vgmn based (mutually exclusive)
-    int with_vgsb = TopCellGenerator.avatardd.getAllBus().size();
-    int nb_hwa = TopCellGenerator.avatardd.getAllCoproMWMR().size();
+    public static String getPlatformInfo() {
+        // determine if the platform is vgsb or vgmn based (mutually exclusive)
+        int with_vgsb = TopCellGenerator.avatardd.getAllBus().size();
+        int nb_hwa = TopCellGenerator.avatardd.getAllCoproMWMR().size();
 
-    // Determine if AMS Cluster is present in Avatar DD
-    int with_amsCluster = TopCellGenerator.avatardd.getNbAmsCluster();
+        // Determine if AMS Cluster is present in Avatar DD
+        int with_amsCluster = TopCellGenerator.avatardd.getNbAmsCluster();
 
-    // bus can be other than VGSB (CAN...), for the moment restricted to VGSB
-    String platforminfo = CR;
-    platforminfo += "use =  [" + CR
-    // +"Uses('caba:vci_locks'),"+CR
-        + "Uses('caba:vci_ram')," + CR + "Uses('caba:vci_fdt_rom')," + CR + "Uses('caba:vci_heterogeneous_rom')," + CR
-        + "Uses('caba:vci_multi_tty')," + CR + "Uses('caba:vci_xicu')," + CR + "Uses('caba:vci_dma')," + CR
-        + "Uses('caba:vci_block_device')," + CR + "Uses('caba:vci_ethernet')," + CR + "Uses('caba:vci_rttimer')," + CR
-        + "Uses('caba:vci_fd_access')," + CR + "Uses('caba:vci_simhelper')," + CR;
+        // bus can be other than VGSB (CAN...), for the moment restricted to VGSB
+        String platforminfo = CR;
+        platforminfo += "use =  [" + CR
+        // +"Uses('caba:vci_locks'),"+CR
+                + "Uses('caba:vci_ram')," + CR + "Uses('caba:vci_fdt_rom')," + CR
+                + "Uses('caba:vci_heterogeneous_rom')," + CR + "Uses('caba:vci_multi_tty')," + CR
+                + "Uses('caba:vci_xicu')," + CR + "Uses('caba:vci_dma')," + CR + "Uses('caba:vci_block_device')," + CR
+                + "Uses('caba:vci_ethernet')," + CR + "Uses('caba:vci_rttimer')," + CR + "Uses('caba:vci_fd_access'),"
+                + CR + "Uses('caba:vci_simhelper')," + CR;
 
-    if (with_vgsb > 0) {
-      platforminfo += "Uses('caba:vci_vgsb')," + CR;
-    } else {
-      platforminfo += "Uses('caba:vci_vgmn')," + CR;
-    }
-
-    // DG 23.08. added virtual coprocessor
-    platforminfo += "Uses('caba:vci_mwmr_stats')," + CR + "Uses('caba:vci_logger')," + CR
-        + "Uses('caba:vci_local_crossbar')," + CR;
-    // + "Uses('caba:fifo_virtual_copro_wrapper')," + CR;
-
-    int hwa = 1; // at least one HWA present
-
-    for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
-      if (copro.getCoprocType() == 0) {
-        platforminfo += "Uses('caba:vci_input_engine')," + CR + "Uses('common:papr_slot')," + CR
-            + "Uses('caba:generic_fifo')," + CR + "Uses('common:network_io')," + CR;
-
-      }
-
-      else {
-        if (copro.getCoprocType() == 1) {
-          platforminfo += "Uses('caba:vci_output_engine')," + CR;
-
+        if (with_vgsb > 0) {
+            platforminfo += "Uses('caba:vci_vgsb')," + CR;
+        } else {
+            platforminfo += "Uses('caba:vci_vgmn')," + CR;
         }
 
-        else {
-          int i;
-          for (i = 0; i < nb_hwa; i++) {
-            if (hwa > 0) {
-              platforminfo += "Uses('caba:my_hwa')," + CR;
-              hwa = 0;
+        // DG 23.08. added virtual coprocessor
+        platforminfo += "Uses('caba:vci_mwmr_stats')," + CR + "Uses('caba:vci_logger')," + CR
+                + "Uses('caba:vci_local_crossbar')," + CR;
+        // + "Uses('caba:fifo_virtual_copro_wrapper')," + CR;
+
+        int hwa = 1; // at least one HWA present
+
+        for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
+            if (copro.getCoprocType() == 0) {
+                platforminfo += "Uses('caba:vci_input_engine')," + CR + "Uses('common:papr_slot')," + CR
+                        + "Uses('caba:generic_fifo')," + CR + "Uses('common:network_io')," + CR;
+
             }
-          }
+
+            else {
+                if (copro.getCoprocType() == 1) {
+                    platforminfo += "Uses('caba:vci_output_engine')," + CR;
+
+                }
+
+                else {
+                    int i;
+                    for (i = 0; i < nb_hwa; i++) {
+                        if (hwa > 0) {
+                            platforminfo += "Uses('caba:my_hwa')," + CR;
+                            hwa = 0;
+                        }
+                    }
+                }
+            }
         }
-      }
+
+        if (with_amsCluster > 0) {
+            platforminfo += "Uses('caba:gpio2vci')," + CR;
+        }
+
+        platforminfo += "Uses('common:elf_file_loader')," + CR + "Uses('common:plain_file_loader')," + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:ppc405'),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:arm'),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:mips32eb'),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:mips32el'),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:niosII'),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:lm32'),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:sparcv8', NWIN=8),"
+                + CR
+                + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:sparcv8', NWIN=2),"
+                + CR + "  ]" + CR2 + "todo = Platform('caba', 'top.cc'," + CR + "        uses=use," + CR
+                + "	cell_size = 4," + CR + "	plen_size = 9," + CR + "	addr_size = 32," + CR
+                + "	rerror_size = 1," + CR + "	clen_size = 1," + CR + "	rflag_size = 1," + CR + "	srcid_size = 8,"
+                + CR + "	pktid_size = 1," + CR + "	trdid_size = 1," + CR + "	wrplen_size = 1" + CR + ")" + CR2;
+
+        return platforminfo;
     }
-
-    if (with_amsCluster > 0) {
-      platforminfo += "Uses('caba:gpio2vci')," + CR;
-    }
-
-    platforminfo += "Uses('common:elf_file_loader')," + CR + "Uses('common:plain_file_loader')," + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:ppc405'),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:arm'),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:mips32eb'),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:mips32el'),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:niosII'),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:lm32'),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:sparcv8', NWIN=8),"
-        + CR
-        + "Uses('caba:vci_xcache_wrapper', iss_t = 'common:gdb_iss', gdb_iss_t = 'common:iss_memchecker', iss_memchecker_t = 'common:sparcv8', NWIN=2),"
-        + CR + "  ]" + CR2 + "todo = Platform('caba', 'top.cc'," + CR + "        uses=use," + CR + "	cell_size = 4,"
-        + CR + "	plen_size = 9," + CR + "	addr_size = 32," + CR + "	rerror_size = 1," + CR + "	clen_size = 1,"
-        + CR + "	rflag_size = 1," + CR + "	srcid_size = 8," + CR + "	pktid_size = 1," + CR + "	trdid_size = 1,"
-        + CR + "	wrplen_size = 1" + CR + ")" + CR2;
-
-    return platforminfo;
-  }
 }

@@ -58,95 +58,95 @@ import java.util.ArrayList;
  */
 public class MultiThreadServer {
 
-  /**
-   *
-   */
-  public static String ERR_SVDOWN = "ERR : Cannot run the server, shut down the previous one!";
+    /**
+     *
+     */
+    public static String ERR_SVDOWN = "ERR : Cannot run the server, shut down the previous one!";
 
-  /**
-   *
-   * @param cmd : command
-   * @param msg : message
-   * @return : answer message to send back to the client
-   */
-  public static Message createImageAnswer(String cmd, Message msg) {
-    byte[] byteImg = Message.convertImageToByte(msg);
-    Message answerMessage = new Message();
-    ArrayList<Object> content = new ArrayList<>();
-    content.add(byteImg);
+    /**
+     *
+     * @param cmd : command
+     * @param msg : message
+     * @return : answer message to send back to the client
+     */
+    public static Message createImageAnswer(String cmd, Message msg) {
+        byte[] byteImg = Message.convertImageToByte(msg);
+        Message answerMessage = new Message();
+        ArrayList<Object> content = new ArrayList<>();
+        content.add(byteImg);
 
-    answerMessage.createAnswerMessage(cmd, content);
-    System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
-    return answerMessage;
-  }
-
-  /**
-   *
-   * @param msg      : message
-   * @param database : DatabaseQuery
-   * @throws IOException          : I/O Exception
-   * @throws SQLException         : An exception that provides information on a
-   *                              database access error
-   * @throws AWTException         : Signals that an Abstract Window Toolkit
-   *                              exception has occurred
-   * @throws TransformerException : Specifies an exceptional condition that
-   *                              occurred during the transformation process.
-   * @return : answer message to send back to the client
-   */
-  public static Message analyseRequestMessage(Message msg, web.crawler.DatabaseQuery database)
-      throws IOException, SQLException, AWTException, TransformerException {
-
-    // System.out.println(msg.getCmd());
-
-    // We first create a virable "result" to get the result and push it to the
-    // content
-    File resultfile = null;
-
-    String cmd = msg.getCmd();
-    Message answerMessage = new Message();
-
-    // Depend on the command, we analyse the the message and call the right function
-    if (msg.getCmd().equals(Message.CMD_SEARCH)) {
-
-      // Set cmd for the answer message to sent back to the client
-      cmd = Message.RESULT_SEARCH;
-      // System.out.println(msg.getValues().get(0));
-      resultfile = database.GetCVEwithKeywords(msg.getValues());
-      String resultstring = FileUtils.readFileToString(resultfile, StandardCharsets.UTF_8);
-
-      ArrayList<Object> content = new ArrayList<>();
-      content.add(resultstring);
-
-      answerMessage.createAnswerMessage(cmd, content);
-
-      System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
+        answerMessage.createAnswerMessage(cmd, content);
+        System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
+        return answerMessage;
     }
 
-    if (msg.getCmd().equals(Message.CMD_DETAIL)) {
-      cmd = Message.RESULT_DETAIL;
-      resultfile = database.GetinfofromCVE(msg.getValues().get(0));
-      String resultstring = FileUtils.readFileToString(resultfile, StandardCharsets.UTF_8);
-      ArrayList<Object> res = new ArrayList<>();
-      res.add(resultstring);
-      answerMessage.createAnswerMessage(cmd, res);
-      System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
-    }
+    /**
+     *
+     * @param msg      : message
+     * @param database : DatabaseQuery
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a
+     *                              database access error
+     * @throws AWTException         : Signals that an Abstract Window Toolkit
+     *                              exception has occurred
+     * @throws TransformerException : Specifies an exceptional condition that
+     *                              occurred during the transformation process.
+     * @return : answer message to send back to the client
+     */
+    public static Message analyseRequestMessage(Message msg, web.crawler.DatabaseQuery database)
+            throws IOException, SQLException, AWTException, TransformerException {
 
-    if (msg.getCmd().equals(Message.CMD_STATISTIC)) {
-      DataVisualisation datavis = new DataVisualisation(database.getDatabase());
-      datavis.OpenCloud(msg.getValues().get(0));
-      // Set cmd for the answer message to sent back to the client
-      cmd = Message.RESULT_STATISTIC;
-      answerMessage = createImageAnswer(cmd, msg);
+        // System.out.println(msg.getCmd());
+
+        // We first create a virable "result" to get the result and push it to the
+        // content
+        File resultfile = null;
+
+        String cmd = msg.getCmd();
+        Message answerMessage = new Message();
+
+        // Depend on the command, we analyse the the message and call the right function
+        if (msg.getCmd().equals(Message.CMD_SEARCH)) {
+
+            // Set cmd for the answer message to sent back to the client
+            cmd = Message.RESULT_SEARCH;
+            // System.out.println(msg.getValues().get(0));
+            resultfile = database.GetCVEwithKeywords(msg.getValues());
+            String resultstring = FileUtils.readFileToString(resultfile, StandardCharsets.UTF_8);
+
+            ArrayList<Object> content = new ArrayList<>();
+            content.add(resultstring);
+
+            answerMessage.createAnswerMessage(cmd, content);
+
+            System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
+        }
+
+        if (msg.getCmd().equals(Message.CMD_DETAIL)) {
+            cmd = Message.RESULT_DETAIL;
+            resultfile = database.GetinfofromCVE(msg.getValues().get(0));
+            String resultstring = FileUtils.readFileToString(resultfile, StandardCharsets.UTF_8);
+            ArrayList<Object> res = new ArrayList<>();
+            res.add(resultstring);
+            answerMessage.createAnswerMessage(cmd, res);
+            System.out.println(Message.SUC_CREATE_ANS_MESSAGE);
+        }
+
+        if (msg.getCmd().equals(Message.CMD_STATISTIC)) {
+            DataVisualisation datavis = new DataVisualisation(database.getDatabase());
+            datavis.OpenCloud(msg.getValues().get(0));
+            // Set cmd for the answer message to sent back to the client
+            cmd = Message.RESULT_STATISTIC;
+            answerMessage = createImageAnswer(cmd, msg);
+        }
+        if (msg.getCmd().equals(Message.CMD_HISTOGRAM)) {
+            DataVisualisation datavis = new DataVisualisation(database.getDatabase());
+            datavis.Histogram(msg.getValues().get(0));
+            // Set cmd for the answer message to sent back to the client
+            cmd = Message.RESULT_HISTOGRAM;
+            answerMessage = createImageAnswer(cmd, msg);
+        }
+        return answerMessage;
     }
-    if (msg.getCmd().equals(Message.CMD_HISTOGRAM)) {
-      DataVisualisation datavis = new DataVisualisation(database.getDatabase());
-      datavis.Histogram(msg.getValues().get(0));
-      // Set cmd for the answer message to sent back to the client
-      cmd = Message.RESULT_HISTOGRAM;
-      answerMessage = createImageAnswer(cmd, msg);
-    }
-    return answerMessage;
-  }
 
 }

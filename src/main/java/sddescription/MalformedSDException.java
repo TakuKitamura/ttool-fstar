@@ -45,12 +45,12 @@ package sddescription;
  */
 public class MalformedSDException extends Exception {
 
-  public MalformedSDException() {
-    super("SD Exception");
-  }
+    public MalformedSDException() {
+        super("SD Exception");
+    }
 
-  public MalformedSDException(String msg) {
-    super("SD Exception: " + msg);
-  }
+    public MalformedSDException(String msg) {
+        super("SD Exception: " + msg);
+    }
 
 } // Class

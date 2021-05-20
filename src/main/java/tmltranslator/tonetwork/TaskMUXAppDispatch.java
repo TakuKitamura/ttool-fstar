@@ -50,97 +50,97 @@ import java.util.List;
  */
 public class TaskMUXAppDispatch extends TMLTask {
 
-  private TMLEvent outputEvent;
-  private List<TMLEvent> inputEvents;
+    private TMLEvent outputEvent;
+    private List<TMLEvent> inputEvents;
 
-  public TaskMUXAppDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
-    super(name, referenceToClass, referenceToActivityDiagram);
-    setDaemon(TMAP2Network.DAEMON);
-  }
-
-  public TMLEvent getOutputEvent() {
-    return outputEvent;
-  }
-
-  // Output Channels are given in the order of VCs
-  public void generate(List<TMLEvent> inputEvents, TMLEvent outputEvent) {
-    this.inputEvents = inputEvents;
-    this.outputEvent = outputEvent;
-
-    for (TMLEvent evt : inputEvents) {
-      evt.setDestinationTask(this);
-    }
-    outputEvent.setOriginTask(this);
-
-    // Attributes
-    TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(pktlen);
-    TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstX);
-    TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(dstY);
-    TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(vc);
-    TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(eop);
-    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
-    this.addAttribute(chid);
-
-    // Events and channels
-    for (TMLEvent evt : inputEvents) {
-      addTMLEvent(evt);
-    }
-    addTMLEvent(outputEvent);
-
-    // Activity Diagram
-    TMLStartState start = new TMLStartState("mainStart", referenceObject);
-    activity.setFirst(start);
-
-    if (inputEvents.size() == 0) {
-      TMLStopState stopNoEvent = new TMLStopState("StopNoEvent", referenceObject);
-      activity.addLinkElement(start, stopNoEvent);
-      return;
+    public TaskMUXAppDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
-    TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
-    loop.setInfinite(true);
-    activity.addElement(loop);
-    start.addNext(loop);
-
-    TMLSelectEvt selectEvt = new TMLSelectEvt("selectEvent", referenceObject);
-    activity.addElement(selectEvt);
-    loop.addNext(selectEvt);
-
-    // Branch for each app
-
-    for (int i = 0; i < inputEvents.size(); i++) {
-      TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent" + i, referenceObject);
-      waitEvt.setEvent(inputEvents.get(i));
-      waitEvt.addParam("pktlen");
-      waitEvt.addParam("dstX");
-      waitEvt.addParam("dstY");
-      waitEvt.addParam("vc");
-      waitEvt.addParam("eop");
-      waitEvt.addParam("chid");
-      activity.addElement(waitEvt);
-      selectEvt.addNext(waitEvt);
-
-      TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToNI" + i, referenceObject);
-      sendEvt.setEvent(outputEvent);
-      sendEvt.addParam("pktlen");
-      sendEvt.addParam("dstX");
-      sendEvt.addParam("dstY");
-      sendEvt.addParam("vc");
-      sendEvt.addParam("eop");
-      sendEvt.addParam("chid");
-      activity.addElement(sendEvt);
-      waitEvt.addNext(sendEvt);
-
-      TMLStopState stopL = new TMLStopState("EndOfSelectForApp" + i, referenceObject);
-      activity.addElement(stopL);
-      sendEvt.addNext(stopL);
+    public TMLEvent getOutputEvent() {
+        return outputEvent;
     }
 
-  }
+    // Output Channels are given in the order of VCs
+    public void generate(List<TMLEvent> inputEvents, TMLEvent outputEvent) {
+        this.inputEvents = inputEvents;
+        this.outputEvent = outputEvent;
+
+        for (TMLEvent evt : inputEvents) {
+            evt.setDestinationTask(this);
+        }
+        outputEvent.setOriginTask(this);
+
+        // Attributes
+        TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(pktlen);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
+        TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(vc);
+        TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
+
+        // Events and channels
+        for (TMLEvent evt : inputEvents) {
+            addTMLEvent(evt);
+        }
+        addTMLEvent(outputEvent);
+
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
+
+        if (inputEvents.size() == 0) {
+            TMLStopState stopNoEvent = new TMLStopState("StopNoEvent", referenceObject);
+            activity.addLinkElement(start, stopNoEvent);
+            return;
+        }
+
+        TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
+        loop.setInfinite(true);
+        activity.addElement(loop);
+        start.addNext(loop);
+
+        TMLSelectEvt selectEvt = new TMLSelectEvt("selectEvent", referenceObject);
+        activity.addElement(selectEvt);
+        loop.addNext(selectEvt);
+
+        // Branch for each app
+
+        for (int i = 0; i < inputEvents.size(); i++) {
+            TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent" + i, referenceObject);
+            waitEvt.setEvent(inputEvents.get(i));
+            waitEvt.addParam("pktlen");
+            waitEvt.addParam("dstX");
+            waitEvt.addParam("dstY");
+            waitEvt.addParam("vc");
+            waitEvt.addParam("eop");
+            waitEvt.addParam("chid");
+            activity.addElement(waitEvt);
+            selectEvt.addNext(waitEvt);
+
+            TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToNI" + i, referenceObject);
+            sendEvt.setEvent(outputEvent);
+            sendEvt.addParam("pktlen");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
+            sendEvt.addParam("vc");
+            sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
+            activity.addElement(sendEvt);
+            waitEvt.addNext(sendEvt);
+
+            TMLStopState stopL = new TMLStopState("EndOfSelectForApp" + i, referenceObject);
+            activity.addElement(stopL);
+            sendEvt.addNext(stopL);
+        }
+
+    }
 
 }

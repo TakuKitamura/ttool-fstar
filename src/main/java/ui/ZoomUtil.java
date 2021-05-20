@@ -45,98 +45,98 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public class ZoomUtil {
-  // private Graphics g;
-  // private double zoom;
+    // private Graphics g;
+    // private double zoom;
 
-  private ZoomUtil(/* Graphics _g, double _zoom */) {
-    // g = _g;
-    // zoom = _zoom;
-  }
-  //
-  // public Graphics getGraphics() {
-  // return g;
-  // }
-  //
-  // public void drawRoundRect(int x, int y, int w, int h, int arc1, int arc2) {
-  // g.drawRoundRect((int)(x*zoom), (int)(y*zoom), (int)(w*zoom), (int)(h*zoom),
-  // arc1, arc2);
-  // }
-  //
-  // public void drawLine(int x1, int y1, int x2, int y2) {
-  // g.drawLine((int)(x1*zoom), (int)(y1*zoom), (int)(x2*zoom), (int)(y2*zoom));
-  // }
-  //
-  // public void drawString(String value, int x, int y) {
-  // g.drawString(value, (int)(x*zoom) , (int)(y*zoom));
-  // }
+    private ZoomUtil(/* Graphics _g, double _zoom */) {
+        // g = _g;
+        // zoom = _zoom;
+    }
+    //
+    // public Graphics getGraphics() {
+    // return g;
+    // }
+    //
+    // public void drawRoundRect(int x, int y, int w, int h, int arc1, int arc2) {
+    // g.drawRoundRect((int)(x*zoom), (int)(y*zoom), (int)(w*zoom), (int)(h*zoom),
+    // arc1, arc2);
+    // }
+    //
+    // public void drawLine(int x1, int y1, int x2, int y2) {
+    // g.drawLine((int)(x1*zoom), (int)(y1*zoom), (int)(x2*zoom), (int)(y2*zoom));
+    // }
+    //
+    // public void drawString(String value, int x, int y) {
+    // g.drawString(value, (int)(x*zoom) , (int)(y*zoom));
+    // }
 
-  // public static void rescale( final TGComponent component,
-  // final double scaleFactor ) {
-  // //rescaled = true;
-  //
-  // //final double factor = scaleFactor / oldScaleFactor;
-  //
-  // component.dwidth = (component.getWidth() + component.dwidth) * scaleFactor;//
-  // oldScaleFactor * scaleFactor;
-  // component.dheight = (component.getHeight() + component.dheight) *
-  // scaleFactor;// oldScaleFactor * scaleFactor;
-  // component.dx = (component.dx + component.getX()) * scaleFactor;//
-  // oldScaleFactor * scaleFactor;
-  // component.dy = (component.dy + component.getY()) * scaleFactor;//
-  // oldScaleFactor * scaleFactor;
-  // component.dMinWidth = (component.getMinWidth() + component.dMinWidth) *
-  // scaleFactor;// oldScaleFactor * scaleFactor;
-  // component.dMinHeight = (component.getMinHeight() + component.dMinHeight) *
-  // scaleFactor;// oldScaleFactor * scaleFactor;
-  // component.dMaxWidth = (component.getMaxWidth() + component.dMaxWidth) *
-  // scaleFactor;// oldScaleFactor * scaleFactor;
-  // component.dMaxHeight = (component.getMaxHeight() + component.dMaxHeight) *
-  // scaleFactor;// oldScaleFactor * scaleFactor;
-  //
-  // component.width = (int)(component.dwidth);
-  // component.dwidth = component.dwidth - component.getWidth();
-  // component.height = (int)(component.dheight);
-  // component.dheight = component.dheight - component.getHeight();
-  // component.minWidth = (int)(component.dMinWidth);
-  // component.minHeight = (int)(component.dMinHeight);
-  // component.maxWidth = (int)(component.dMaxWidth);
-  // component.maxHeight = (int)(component.dMaxHeight);
-  //
-  // component.dMinWidth = component.dMinWidth - component.getMinWidth();
-  // component.dMinHeight = component.dMinHeight - component.getMinHeight();
-  // component.dMaxWidth = component.dMaxWidth - component.getMaxWidth();
-  // component.dMaxHeight = component.dMaxHeight - component.getMaxHeight();
-  // component.x = (int)(component.dx);
-  // component.dx = component.dx - component.getX();
-  // component.y = (int)(component.dy);
-  // component.dy = component.dy - component.getY();
-  //
-  //
-  // //oldScaleFactor = scaleFactor;
-  //
-  // if ( component.getFather() != null) {
-  //
-  // // Issue #81: We also need to update max coordinate values
-  // component.maxX *= scaleFactor;
-  // component.maxY *= scaleFactor;
-  //
-  // // Must rescale my zone...
-  // component.resizeWithFather();
-  // }
-  // else {
-  // component.minX = (int)(tdp.getMinX()/tdp.getZoom());
-  // component.maxX = (int)(tdp.getMaxX()/tdp.getZoom());
-  // component.minY = (int)(tdp.getMinY()/tdp.getZoom());
-  // component.maxY = (int)(tdp.getMaxY()/tdp.getZoom());
-  //
-  // }
-  //
-  // component.setMoveCd(component.x, component.y, true);
-  //
-  // for( final TGComponent subCompo : component.tgcomponent ) {
-  // if ( subCompo instanceof ScalableTGComponent ) {
-  // ( (ScalableTGComponent) subCompo ).rescale( scaleFactor );
-  // }
-  // }
-  // }
+    // public static void rescale( final TGComponent component,
+    // final double scaleFactor ) {
+    // //rescaled = true;
+    //
+    // //final double factor = scaleFactor / oldScaleFactor;
+    //
+    // component.dwidth = (component.getWidth() + component.dwidth) * scaleFactor;//
+    // oldScaleFactor * scaleFactor;
+    // component.dheight = (component.getHeight() + component.dheight) *
+    // scaleFactor;// oldScaleFactor * scaleFactor;
+    // component.dx = (component.dx + component.getX()) * scaleFactor;//
+    // oldScaleFactor * scaleFactor;
+    // component.dy = (component.dy + component.getY()) * scaleFactor;//
+    // oldScaleFactor * scaleFactor;
+    // component.dMinWidth = (component.getMinWidth() + component.dMinWidth) *
+    // scaleFactor;// oldScaleFactor * scaleFactor;
+    // component.dMinHeight = (component.getMinHeight() + component.dMinHeight) *
+    // scaleFactor;// oldScaleFactor * scaleFactor;
+    // component.dMaxWidth = (component.getMaxWidth() + component.dMaxWidth) *
+    // scaleFactor;// oldScaleFactor * scaleFactor;
+    // component.dMaxHeight = (component.getMaxHeight() + component.dMaxHeight) *
+    // scaleFactor;// oldScaleFactor * scaleFactor;
+    //
+    // component.width = (int)(component.dwidth);
+    // component.dwidth = component.dwidth - component.getWidth();
+    // component.height = (int)(component.dheight);
+    // component.dheight = component.dheight - component.getHeight();
+    // component.minWidth = (int)(component.dMinWidth);
+    // component.minHeight = (int)(component.dMinHeight);
+    // component.maxWidth = (int)(component.dMaxWidth);
+    // component.maxHeight = (int)(component.dMaxHeight);
+    //
+    // component.dMinWidth = component.dMinWidth - component.getMinWidth();
+    // component.dMinHeight = component.dMinHeight - component.getMinHeight();
+    // component.dMaxWidth = component.dMaxWidth - component.getMaxWidth();
+    // component.dMaxHeight = component.dMaxHeight - component.getMaxHeight();
+    // component.x = (int)(component.dx);
+    // component.dx = component.dx - component.getX();
+    // component.y = (int)(component.dy);
+    // component.dy = component.dy - component.getY();
+    //
+    //
+    // //oldScaleFactor = scaleFactor;
+    //
+    // if ( component.getFather() != null) {
+    //
+    // // Issue #81: We also need to update max coordinate values
+    // component.maxX *= scaleFactor;
+    // component.maxY *= scaleFactor;
+    //
+    // // Must rescale my zone...
+    // component.resizeWithFather();
+    // }
+    // else {
+    // component.minX = (int)(tdp.getMinX()/tdp.getZoom());
+    // component.maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+    // component.minY = (int)(tdp.getMinY()/tdp.getZoom());
+    // component.maxY = (int)(tdp.getMaxY()/tdp.getZoom());
+    //
+    // }
+    //
+    // component.setMoveCd(component.x, component.y, true);
+    //
+    // for( final TGComponent subCompo : component.tgcomponent ) {
+    // if ( subCompo instanceof ScalableTGComponent ) {
+    // ( (ScalableTGComponent) subCompo ).rescale( scaleFactor );
+    // }
+    // }
+    // }
 }

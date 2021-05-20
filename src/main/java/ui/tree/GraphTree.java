@@ -51,38 +51,38 @@ import java.util.List;
  */
 public class GraphTree implements GenericTree {
 
-  private MainGUI mgui;
-  private String name = "R. Graphs";
+    private MainGUI mgui;
+    private String name = "R. Graphs";
 
-  public GraphTree(MainGUI _mgui) {
-    mgui = _mgui;
-  }
-
-  // TREE MANAGEMENT
-  public String toString() {
-    return name;
-  }
-
-  public int getChildCount() {
-    int nb = mgui.getRGs().size();
-    if (nb == 0) {
-      return 1;
+    public GraphTree(MainGUI _mgui) {
+        mgui = _mgui;
     }
-    return nb;
-  }
 
-  public Object getChild(int index) {
-    List<RG> rgs = mgui.getRGs();
-    if (rgs.size() == 0) {
-      return "No graph";
+    // TREE MANAGEMENT
+    public String toString() {
+        return name;
     }
-    return mgui.getRGs().get(index);
-  }
 
-  public int getIndexOfChild(Object child) {
-    if (child instanceof String) {
-      return 0;
+    public int getChildCount() {
+        int nb = mgui.getRGs().size();
+        if (nb == 0) {
+            return 1;
+        }
+        return nb;
     }
-    return mgui.getRGs().indexOf(child);
-  }
+
+    public Object getChild(int index) {
+        List<RG> rgs = mgui.getRGs();
+        if (rgs.size() == 0) {
+            return "No graph";
+        }
+        return mgui.getRGs().get(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof String) {
+            return 0;
+        }
+        return mgui.getRGs().indexOf(child);
+    }
 }

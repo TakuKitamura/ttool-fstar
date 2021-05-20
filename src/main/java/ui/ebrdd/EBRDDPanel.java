@@ -58,145 +58,145 @@ import java.util.Vector;
  */
 public class EBRDDPanel extends TDiagramPanel {
 
-  public EBRDDPanel(MainGUI mgui, TToolBar _ttb) {
-    super(mgui, _ttb);
-    addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
-    /*
-     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
-     */
-  }
-
-  public boolean actionOnDoubleClick(TGComponent tgc) {
-    return false;
-  }
-
-  public boolean actionOnAdd(TGComponent tgc) {
-    return false;
-  }
-
-  public boolean actionOnValueChanged(TGComponent tgc) {
-    return false;
-  }
-
-  public boolean actionOnRemove(TGComponent tgc) {
-    return false;
-  }
-
-  public String getXMLHead() {
-    return "<EBRDDPanel name=\"" + name + "\"" + sizeParam() + " >";
-  }
-
-  public String getXMLTail() {
-    return "</EBRDDPanel>";
-  }
-
-  public String getXMLSelectedHead() {
-    return "<EBRDDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel
-        + "\" heightSel=\"" + heightSel + "\" >";
-  }
-
-  public String getXMLSelectedTail() {
-    return "</EBRDDPanelCopy>";
-  }
-
-  public String getXMLCloneHead() {
-    return "<EBRDDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
-        + "\" heightSel=\"" + 0 + "\" >";
-  }
-
-  public String getXMLCloneTail() {
-    return "</EBRDDPanelCopy>";
-  }
-
-  public void makeGraphicalOptimizations() {
-    // Segments of connector that mask components
-
-    // Components over others
-
-    // Position correctly guards of choice
-  }
-
-  public void enhance() {
-    //
-    Vector<TGComponent> v = new Vector<>();
-    Object o;
-    Iterator iterator = componentList.listIterator();
-
-    while (iterator.hasNext()) {
-      o = iterator.next();
-      if (o instanceof EBRDDStartState) {
-        this.enhance(v, (EBRDDStartState) o);
-      }
+    public EBRDDPanel(MainGUI mgui, TToolBar _ttb) {
+        super(mgui, _ttb);
+        addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
+        /*
+         * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+         * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+         */
     }
 
-    mgui.changeMade(this, MOVE_CONNECTOR);
-    repaint();
-  }
-
-  public void enhance(Vector<TGComponent> v, TGComponent tgc) {
-    TGComponent tgc1;
-    TGConnector tgcon;
-    int i;
-
-    //
-
-    if (tgc == null) {
-      return;
+    public boolean actionOnDoubleClick(TGComponent tgc) {
+        return false;
     }
 
-    if (v.contains(tgc)) {
-      return;
+    public boolean actionOnAdd(TGComponent tgc) {
+        return false;
     }
 
-    v.add(tgc);
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        return false;
+    }
 
-    //
-    if (!(tgc instanceof EBRDDStartState)) {
-      for (i = 0; i < tgc.getNbNext(); i++) {
-        tgc1 = getNextTGComponent(tgc, i);
-        tgcon = getNextTGConnector(tgc, i);
-        if (tgcon.getAutomaticDrawing()) {
-          if ((tgc1 != null) && (tgcon != null)) {
-            tgcon.alignOrMakeSquareTGComponents();
-          }
+    public boolean actionOnRemove(TGComponent tgc) {
+        return false;
+    }
+
+    public String getXMLHead() {
+        return "<EBRDDPanel name=\"" + name + "\"" + sizeParam() + " >";
+    }
+
+    public String getXMLTail() {
+        return "</EBRDDPanel>";
+    }
+
+    public String getXMLSelectedHead() {
+        return "<EBRDDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+                + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+    }
+
+    public String getXMLSelectedTail() {
+        return "</EBRDDPanelCopy>";
+    }
+
+    public String getXMLCloneHead() {
+        return "<EBRDDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+                + "\" heightSel=\"" + 0 + "\" >";
+    }
+
+    public String getXMLCloneTail() {
+        return "</EBRDDPanelCopy>";
+    }
+
+    public void makeGraphicalOptimizations() {
+        // Segments of connector that mask components
+
+        // Components over others
+
+        // Position correctly guards of choice
+    }
+
+    public void enhance() {
+        //
+        Vector<TGComponent> v = new Vector<>();
+        Object o;
+        Iterator iterator = componentList.listIterator();
+
+        while (iterator.hasNext()) {
+            o = iterator.next();
+            if (o instanceof EBRDDStartState) {
+                this.enhance(v, (EBRDDStartState) o);
+            }
         }
-      }
+
+        mgui.changeMade(this, MOVE_CONNECTOR);
+        repaint();
     }
 
-    // Explore next elements
-    for (i = 0; i < tgc.getNbNext(); i++) {
-      tgc1 = getNextTGComponent(tgc, i);
-      this.enhance(v, tgc1);
+    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
+        TGComponent tgc1;
+        TGConnector tgcon;
+        int i;
+
+        //
+
+        if (tgc == null) {
+            return;
+        }
+
+        if (v.contains(tgc)) {
+            return;
+        }
+
+        v.add(tgc);
+
+        //
+        if (!(tgc instanceof EBRDDStartState)) {
+            for (i = 0; i < tgc.getNbNext(); i++) {
+                tgc1 = getNextTGComponent(tgc, i);
+                tgcon = getNextTGConnector(tgc, i);
+                if (tgcon.getAutomaticDrawing()) {
+                    if ((tgc1 != null) && (tgcon != null)) {
+                        tgcon.alignOrMakeSquareTGComponents();
+                    }
+                }
+            }
+        }
+
+        // Explore next elements
+        for (i = 0; i < tgc.getNbNext(); i++) {
+            tgc1 = getNextTGComponent(tgc, i);
+            this.enhance(v, tgc1);
+        }
     }
-  }
 
-  public boolean hasAutoConnect() {
-    return true;
-  }
-
-  public void setConnectorsToFront() {
-    TGComponent tgc;
-
-    //
-
-    Iterator iterator = componentList.listIterator();
-
-    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-
-    while (iterator.hasNext()) {
-      tgc = (TGComponent) (iterator.next());
-      if (!(tgc instanceof TGConnector)) {
-        list.add(tgc);
-      }
+    public boolean hasAutoConnect() {
+        return true;
     }
 
-    //
-    for (TGComponent tgc1 : list) {
-      //
-      componentList.remove(tgc1);
-      componentList.add(tgc1);
+    public void setConnectorsToFront() {
+        TGComponent tgc;
+
+        //
+
+        Iterator iterator = componentList.listIterator();
+
+        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+        while (iterator.hasNext()) {
+            tgc = (TGComponent) (iterator.next());
+            if (!(tgc instanceof TGConnector)) {
+                list.add(tgc);
+            }
+        }
+
+        //
+        for (TGComponent tgc1 : list) {
+            //
+            componentList.remove(tgc1);
+            componentList.add(tgc1);
+        }
     }
-  }
 
 }
