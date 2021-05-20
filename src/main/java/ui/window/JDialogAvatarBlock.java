@@ -761,6 +761,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     String value = initialValue.getText();
     TAttribute a;
 
+    TraceManager.addDev(refinementText.getText());
     RefinementType refinementTypeValue = new RefinementType(refinementText.getText());
 
     TraceManager.addDev(refinementTypeValue.toString());

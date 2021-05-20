@@ -1,6 +1,8 @@
 
 package fstar;
 
+import rationals.converters.ToString;
+
 /**
  * Class Refinement
  * 
@@ -13,5 +15,9 @@ public class RefinementType {
 
   public RefinementType(String s) {
     refinementTypeString = s;
+  }
+
+  public String toString() {
+    return refinementTypeString;
   }
 }

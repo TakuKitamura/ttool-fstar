@@ -46,6 +46,7 @@ import translator.UPPAALKeyword;
 import java.util.List;
 
 import fstar.RefinementType;
+import myutil.TraceManager;
 
 /**
  * Class TAttribute Correspondance between data of a Turtle modeling and
@@ -102,6 +103,7 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = _type;
     typeOther = "";
+    refinmentType = new RefinementType("");
   }
 
   public TAttribute(int _access, String _id, String _initialValue, int _type, RefinementType _refinementType) {
@@ -119,6 +121,7 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = OTHER;
     typeOther = _typeOther;
+    refinmentType = new RefinementType("");
   }
 
   public TAttribute(int _access, String _id, String _initialValue, int _type, String _typeOther) {
@@ -127,6 +130,7 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = _type;
     typeOther = new String(_typeOther);
+    refinmentType = new RefinementType("");
   }
 
   public int getAccess() {
@@ -491,7 +495,9 @@ public class TAttribute {
       if (type == ARRAY_NAT) {
         return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
       } else {
-        return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
+        // TraceManager.addDev(refinmentType.toString());
+        return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + "{"
+            + refinmentType.toString() + "}";
       }
     }
   }
