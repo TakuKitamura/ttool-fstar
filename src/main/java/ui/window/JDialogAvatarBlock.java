@@ -280,7 +280,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     panel1.add(new JLabel(" "), c1);
     c1.gridwidth = GridBagConstraints.REMAINDER; // end row
     panel1.add(new JLabel("type"), c1);
-    panel1.add(new JLabel("typeRestriction"), c1);
+    panel1.add(new JLabel("refinementType"), c1);
 
     // second line panel1
     c1.gridwidth = 1;
@@ -1033,6 +1033,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
       TAttribute a = attributes.get(i);
       identifierText.setText(a.getId());
       initialValue.setText(a.getInitialValue());
+      refinementText.setText(a.getRefinementType().toString());
       select(accessBox, TAttribute.getStringAccess(a.getAccess()));
       if (a.getType() == TAttribute.OTHER) {
         select(typeBox, a.getTypeOther());
