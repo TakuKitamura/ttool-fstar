@@ -39,33 +39,27 @@
 package ui;
 
 /**
- * Class TGCWithoutInternalComponent
- * Graphical component which contains no internal component
- * Creation: 21/12/2003
+ * Class TGCWithoutInternalComponent Graphical component which contains no
+ * internal component Creation: 21/12/2003
+ * 
  * @version 1.0 21/12/2003
  * @author Ludovic APVRILLE
  */
-public abstract class TGCWithoutInternalComponent extends TGScalableComponent /* Issue #31 TGComponent*/{
-    
-    public TGCWithoutInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbInternalTGComponent = 0;
+public abstract class TGCWithoutInternalComponent extends TGScalableComponent /* Issue #31 TGComponent */ {
+
+  public TGCWithoutInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbInternalTGComponent = 0;
+  }
+
+  @Override
+  public void setState(int s) {
+    if ((s == TGState.POINTED) && (father == null)) {
+      state = TGState.POINTER_ON_ME;
+    } else {
+      state = s;
     }
-    
-    @Override
-    public void setState(int s) {
-        if ((s == TGState.POINTED) && (father == null)) {
-            state = TGState.POINTER_ON_ME;
-        } else {
-            state = s;
-        }
-    }
+  }
 }
-
-
-
-
-
-
-

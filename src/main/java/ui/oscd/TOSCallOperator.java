@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 import ui.*;
@@ -47,62 +44,58 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TOSCallOperator
- * Call composition operator
- * To be used in TURTLE-OS class diagrams
- * Creation: 05/10/2006
+ * Class TOSCallOperator Call composition operator To be used in TURTLE-OS class
+ * diagrams Creation: 05/10/2006
+ * 
  * @version 1.0 05/10/2006
  * @author Ludovic APVRILLE
  */
 public class TOSCallOperator extends TOSCompositionOperator {
 
-    public TOSCallOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        TOSCallInfo tgc = new TOSCallInfo(x, y+40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
-        //tgc.setValue("Call operator");
-        //tgc.setDefaultValue("Call operator");
-        //tgc.setName("OCL formula listing all call gates");
-        tgc.setMoveWithFather(false);
-        tgcomponent[0] = tgc;
-        
-        name = "call composition operator";
-        value = "Call";
-        
-        myImageIcon = IconManager.imgic110;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x, y, width, height);
-        g.setColor(ColorManager.COMPOSITION_OPERATOR);
-        g.fillRect(x+1, y+1, width-1, height-1);
-        g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
-        ColorManager.setColor(g, getState(), 0);
-        g.setFont((g.getFont()).deriveFont(Font.BOLD));
-        g.drawString(value, x + textX, y + textY);
-        g.setFont((g.getFont()).deriveFont(Font.PLAIN));
-    }
-    
-    public int getType() {
-        return TGComponentManager.TOSCD_CALL_OPERATOR;
-    }
-    
-    /*public void structureChanged() {
-        if (tdp instanceof TURTLEOSClassDiagramPanel) {
-            t1 = ((TURTLEOSClassDiagramPanel)tdp).getTClass1ToWhichIamConnected(this);
-            t2 = ((TURTLEOSClassDiagramPanel)tdp).getTClass2ToWhichIamConnected(this);
-            if ((t1 != oldt1) || (t2 != oldt2)) {
-                oldt1 = t1;
-                oldt2 = t2;
-                ((TOSSynchroGateList)tgcomponent[0]).setTClass(t1, t2);
-                if ((t1 != null) && (t2 != null)) {
-                    setName("call composition operator between " + t1.getValue() + " and " + t2.getValue());
-                }	 else {
-                    setName("call composition operator");
-                }
-            }
-        }
-    }*/
+  public TOSCallOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+    TOSCallInfo tgc = new TOSCallInfo(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false,
+        this, _tdp);
+    // tgc.setValue("Call operator");
+    // tgc.setDefaultValue("Call operator");
+    // tgc.setName("OCL formula listing all call gates");
+    tgc.setMoveWithFather(false);
+    tgcomponent[0] = tgc;
+
+    name = "call composition operator";
+    value = "Call";
+
+    myImageIcon = IconManager.imgic110;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.setColor(ColorManager.COMPOSITION_OPERATOR);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
+    ColorManager.setColor(g, getState(), 0);
+    g.setFont((g.getFont()).deriveFont(Font.BOLD));
+    g.drawString(value, x + textX, y + textY);
+    g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+  }
+
+  public int getType() {
+    return TGComponentManager.TOSCD_CALL_OPERATOR;
+  }
+
+  /*
+   * public void structureChanged() { if (tdp instanceof
+   * TURTLEOSClassDiagramPanel) { t1 =
+   * ((TURTLEOSClassDiagramPanel)tdp).getTClass1ToWhichIamConnected(this); t2 =
+   * ((TURTLEOSClassDiagramPanel)tdp).getTClass2ToWhichIamConnected(this); if ((t1
+   * != oldt1) || (t2 != oldt2)) { oldt1 = t1; oldt2 = t2;
+   * ((TOSSynchroGateList)tgcomponent[0]).setTClass(t1, t2); if ((t1 != null) &&
+   * (t2 != null)) { setName("call composition operator between " + t1.getValue()
+   * + " and " + t2.getValue()); } else { setName("call composition operator"); }
+   * } } }
+   */
 }

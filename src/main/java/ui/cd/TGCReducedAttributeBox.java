@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
 
 import myutil.GraphicLib;
@@ -53,285 +50,288 @@ import java.awt.*;
 import java.util.LinkedList;
 
 /**
- * Class TGCReducedAttributeBox
- * Generic Box for managing gates of Tobjects
+ * Class TGCReducedAttributeBox Generic Box for managing gates of Tobjects
  * Creation: 10/05/2004
+ * 
  * @version 1.0 10/05/2004
  * @author Ludovic APVRILLE
  */
 public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent {
-    public String oldValue;
-    protected String attributeText;
-    protected int textX = 5;
-    protected int textY = 20;
-    protected java.util.List<TAttribute> myAttributes;
-    protected Graphics myG;
-    protected Color myColor;
-    protected boolean attributes;
-    protected boolean lastVisible;
-    
-    public TGCReducedAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 150;
-        height = 30;
-        minWidth = 150;
-        minHeight = 30;
-        minDesiredWidth = 150;
-        minDesiredHeight = 30;
-        
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
-        
-        moveable = false;
-        editable = true;
-        removable = false;
-        
-        myAttributes = new LinkedList<TAttribute> ();
-    }
-    
-    public java.util.List<TAttribute> getAttributes() {
-        return myAttributes;
-    }
-    
-    public void setAttributes( java.util.List<TAttribute> v) {
-        myAttributes = v;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        Graphics tmp = myG;
-        if (!tdp.isScaled()) {
-            myG = g;
-        }
-        if ((tmp == null) || (lastVisible != areVisible())){
-            checkMySize();
-        }
+  public String oldValue;
+  protected String attributeText;
+  protected int textX = 5;
+  protected int textY = 20;
+  protected java.util.List<TAttribute> myAttributes;
+  protected Graphics myG;
+  protected Color myColor;
+  protected boolean attributes;
+  protected boolean lastVisible;
 
-        lastVisible = areVisible();
-        int h  = g.getFontMetrics().getHeight();
-        //h = h + 2;
-        //h = h + 1;
-        g.drawRect(x, y, width, height);
-        g.setColor(myColor);
-        g.fillRect(x+1, y+1, width-1, height-1);
-        ColorManager.setColor(g, getState(), 0);
-        if (areVisible()) {
-            TAttribute a;
-            for(int i=0; i<myAttributes.size(); i++) {
-                a = myAttributes.get (i);
-                g.drawString(a.toNameAndValue(), x + textX, y + textY + i* h);
-            }
-        } else if (myAttributes.size() >0) {
-            g.drawString("...", x + textX, y + textY);
-        }
+  public TGCReducedAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 150;
+    height = 30;
+    minWidth = 150;
+    minHeight = 30;
+    minDesiredWidth = 150;
+    minDesiredHeight = 30;
+
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[2];
+    connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, 0.5);
+    connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
+
+    moveable = false;
+    editable = true;
+    removable = false;
+
+    myAttributes = new LinkedList<TAttribute>();
+  }
+
+  public java.util.List<TAttribute> getAttributes() {
+    return myAttributes;
+  }
+
+  public void setAttributes(java.util.List<TAttribute> v) {
+    myAttributes = v;
+  }
+
+  public void internalDrawing(Graphics g) {
+    Graphics tmp = myG;
+    if (!tdp.isScaled()) {
+      myG = g;
     }
-    
-    public void makeValue() {
-        value = "";
-        TAttribute a;
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = myAttributes.get (i);
-            value = value + a + "\n";
-        }
-        //
+    if ((tmp == null) || (lastVisible != areVisible())) {
+      checkMySize();
     }
-    
-    public boolean areVisible() {
-        if (attributes) {
-            return tdp.areAttributesVisible();
-        } else {
-            return tdp.areGatesVisible();
-        }
-    }
-    
-    public void calculateMyDesiredSize() {
-        if (myG == null) {
-            myG = tdp.getGraphics();
-        }
-        
-        if (myG == null) {
-            return;
-        }
-        
-        if ((myAttributes.size() == 0) || (!areVisible()) || (attributes == false)) {
-            //
-            minDesiredWidth = minWidth;
-            minDesiredHeight = minHeight;
-            lastVisible = areVisible();
-            return;
-        }
-        
-        lastVisible = areVisible();
-        
-        //
-        int desiredWidth = minWidth;
-        int h = myG.getFontMetrics().getHeight();
-        int desiredHeight =  Math.max(minHeight, h * (myAttributes.size() -1) + minHeight);
-        
-        TAttribute a;
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = myAttributes.get (i);
-            desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(a.toNameAndValue()) + 2 * textX);
-        }
-        
-        minDesiredWidth = desiredWidth;
-        minDesiredHeight = desiredHeight;
-    }
-    
-    public void checkMySize() {
-        calculateMyDesiredSize();
-        //
-        //boolean b;
-        
-        TGComponent tgc = getTopFather();
-        
-        if (tgc != null) {
-            tgc.recalculateSize();
-        }
-        
-        if (myG == null) {
-            myG = tdp.getGraphics();
-        }
-    }
-    
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        TCDTObject to = (TCDTObject)(getFather());
-        TCDTClass tc = to.getMasterTClass();
-        if (tc == null) {
-            JOptionPane.showMessageDialog(frame,
-            "Attributes cannot be edited because the TClass of this instance is not defined",
-            "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        
-        JDialogReducedAttribute jda = new JDialogReducedAttribute(myAttributes, getCustomAttributes(), frame, "Setting initial values of " + attributeText + "s of " + father.getValue(),  attributeText, to.getObjectName(), tc.getClassName());
-        setJDialogOptions(jda);
-    //    jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda, 650, 375);
-        jda.setVisible( true ); // blocked until dialog has been closed
-     
-        return true;
-    }
-    
-    protected abstract void setJDialogOptions(JDialogReducedAttribute jda);
-    protected abstract java.util.List<TAttribute> getCustomAttributes();
-    
-    public TGComponent isOnMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    protected String translateExtraParam() {
-        //
-        TAttribute a;
-        value = "";
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        for(int i=0; i<myAttributes.size(); i++) {
-            a = myAttributes.get (i);
-            value = value + a + "\n";
-            sb.append("<Attribute access=\"");
-            sb.append(a.getAccess());
-            sb.append("\" id=\"");
-            sb.append(a.getId());
-            sb.append("\" value=\"");
-            sb.append(a.getInitialValue());
-            sb.append("\" type=\"");
-            sb.append(a.getType());
-            sb.append("\" typeOther=\"");
-            sb.append(a.getTypeOther());
-            sb.append("\" set=\"");
-            if (a.isSet()) {
-                sb.append("true");
-            } else {
-                sb.append("false");
-            }
-            sb.append("\" />\n");
-        }
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            int access, type;
-            String id, valueAtt;
-            String set;
-            String typeOther;
-            
-            //
-            //
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Attribute")) {
-                                //
-                                access = Integer.decode(elt.getAttribute("access")).intValue();
-                                type = Integer.decode(elt.getAttribute("type")).intValue();
-                                id = elt.getAttribute("id");
-                                valueAtt = elt.getAttribute("value");
-                                try {
-                                    typeOther = elt.getAttribute("typeOther");
-                                } catch (Exception e) {
-                                    typeOther = "";
-                                }
-                                set = elt.getAttribute("set");
-                                
-                                if (valueAtt.equals("null")) {
-                                    valueAtt = "";
-                                }
-                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //
-                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    if (set.equals("true")) {
-                                        ta.set(true);
-                                    }
-                                    myAttributes.add (ta);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-        makeValue();
-    }
-    
-    // Main Tree
-    
-    public int getChildCount() {
-        return myAttributes.size();
-    }
-    
-    public Object getChild(int index) {
-        return myAttributes.get (index);
-    }
-    
-    public int getIndexOfChild(Object child) {
-        return myAttributes.indexOf(child);
-    }
-    
-	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_ASSOCIATION;
+
+    lastVisible = areVisible();
+    int h = g.getFontMetrics().getHeight();
+    // h = h + 2;
+    // h = h + 1;
+    g.drawRect(x, y, width, height);
+    g.setColor(myColor);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    ColorManager.setColor(g, getState(), 0);
+    if (areVisible()) {
+      TAttribute a;
+      for (int i = 0; i < myAttributes.size(); i++) {
+        a = myAttributes.get(i);
+        g.drawString(a.toNameAndValue(), x + textX, y + textY + i * h);
       }
+    } else if (myAttributes.size() > 0) {
+      g.drawString("...", x + textX, y + textY);
+    }
+  }
+
+  public void makeValue() {
+    value = "";
+    TAttribute a;
+    for (int i = 0; i < myAttributes.size(); i++) {
+      a = myAttributes.get(i);
+      value = value + a + "\n";
+    }
+    //
+  }
+
+  public boolean areVisible() {
+    if (attributes) {
+      return tdp.areAttributesVisible();
+    } else {
+      return tdp.areGatesVisible();
+    }
+  }
+
+  public void calculateMyDesiredSize() {
+    if (myG == null) {
+      myG = tdp.getGraphics();
+    }
+
+    if (myG == null) {
+      return;
+    }
+
+    if ((myAttributes.size() == 0) || (!areVisible()) || (attributes == false)) {
+      //
+      minDesiredWidth = minWidth;
+      minDesiredHeight = minHeight;
+      lastVisible = areVisible();
+      return;
+    }
+
+    lastVisible = areVisible();
+
+    //
+    int desiredWidth = minWidth;
+    int h = myG.getFontMetrics().getHeight();
+    int desiredHeight = Math.max(minHeight, h * (myAttributes.size() - 1) + minHeight);
+
+    TAttribute a;
+    for (int i = 0; i < myAttributes.size(); i++) {
+      a = myAttributes.get(i);
+      desiredWidth = Math.max(desiredWidth, myG.getFontMetrics().stringWidth(a.toNameAndValue()) + 2 * textX);
+    }
+
+    minDesiredWidth = desiredWidth;
+    minDesiredHeight = desiredHeight;
+  }
+
+  public void checkMySize() {
+    calculateMyDesiredSize();
+    //
+    // boolean b;
+
+    TGComponent tgc = getTopFather();
+
+    if (tgc != null) {
+      tgc.recalculateSize();
+    }
+
+    if (myG == null) {
+      myG = tdp.getGraphics();
+    }
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    TCDTObject to = (TCDTObject) (getFather());
+    TCDTClass tc = to.getMasterTClass();
+    if (tc == null) {
+      JOptionPane.showMessageDialog(frame,
+          "Attributes cannot be edited because the TClass of this instance is not defined", "Error",
+          JOptionPane.INFORMATION_MESSAGE);
+      return false;
+    }
+
+    JDialogReducedAttribute jda = new JDialogReducedAttribute(myAttributes, getCustomAttributes(), frame,
+        "Setting initial values of " + attributeText + "s of " + father.getValue(), attributeText, to.getObjectName(),
+        tc.getClassName());
+    setJDialogOptions(jda);
+    // jda.setSize(650, 375);
+    GraphicLib.centerOnParent(jda, 650, 375);
+    jda.setVisible(true); // blocked until dialog has been closed
+
+    return true;
+  }
+
+  protected abstract void setJDialogOptions(JDialogReducedAttribute jda);
+
+  protected abstract java.util.List<TAttribute> getCustomAttributes();
+
+  public TGComponent isOnMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  protected String translateExtraParam() {
+    //
+    TAttribute a;
+    value = "";
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    for (int i = 0; i < myAttributes.size(); i++) {
+      a = myAttributes.get(i);
+      value = value + a + "\n";
+      sb.append("<Attribute access=\"");
+      sb.append(a.getAccess());
+      sb.append("\" id=\"");
+      sb.append(a.getId());
+      sb.append("\" value=\"");
+      sb.append(a.getInitialValue());
+      sb.append("\" type=\"");
+      sb.append(a.getType());
+      sb.append("\" typeOther=\"");
+      sb.append(a.getTypeOther());
+      sb.append("\" set=\"");
+      if (a.isSet()) {
+        sb.append("true");
+      } else {
+        sb.append("false");
+      }
+      sb.append("\" />\n");
+    }
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      int access, type;
+      String id, valueAtt;
+      String set;
+      String typeOther;
+
+      //
+      //
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
+        //
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Attribute")) {
+                //
+                access = Integer.decode(elt.getAttribute("access")).intValue();
+                type = Integer.decode(elt.getAttribute("type")).intValue();
+                id = elt.getAttribute("id");
+                valueAtt = elt.getAttribute("value");
+                try {
+                  typeOther = elt.getAttribute("typeOther");
+                } catch (Exception e) {
+                  typeOther = "";
+                }
+                set = elt.getAttribute("set");
+
+                if (valueAtt.equals("null")) {
+                  valueAtt = "";
+                }
+                if ((TAttribute.isAValidId(id, false, false, false))
+                    && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                  //
+                  TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                  if (set.equals("true")) {
+                    ta.set(true);
+                  }
+                  myAttributes.add(ta);
+                }
+              }
+            }
+          }
+        }
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
+    }
+    makeValue();
+  }
+
+  // Main Tree
+
+  public int getChildCount() {
+    return myAttributes.size();
+  }
+
+  public Object getChild(int index) {
+    return myAttributes.get(index);
+  }
+
+  public int getIndexOfChild(Object child) {
+    return myAttributes.indexOf(child);
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION;
+  }
 }

@@ -36,14 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui;
 
 import javax.swing.*;
 
 /**
- * Class TAction
- * Definition of an action to be used in Menu, toolbar, etc.
+ * Class TAction Definition of an action to be used in Menu, toolbar, etc.
  * Creation: 15/12/2003
  *
  * @author Ludovic APVRILLE
@@ -51,46 +49,48 @@ import javax.swing.*;
  */
 public class TAction {
 
-    // Action parameters
-    public String ACTION_COMMAND_KEY;
-    public String NAME;
-    public ImageIcon SMALL_ICON;
-    public ImageIcon LARGE_ICON;
-    public String SHORT_DESCRIPTION;
-    public String LONG_DESCRIPTION;
-    public int MNEMONIC_KEY;
-    public char KEY;
-    public boolean hasControl = false;
+  // Action parameters
+  public String ACTION_COMMAND_KEY;
+  public String NAME;
+  public ImageIcon SMALL_ICON;
+  public ImageIcon LARGE_ICON;
+  public String SHORT_DESCRIPTION;
+  public String LONG_DESCRIPTION;
+  public int MNEMONIC_KEY;
+  public char KEY;
+  public boolean hasControl = false;
 
-    /*
-     * Creates a new TAction
-     */
-    public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription, String longDescription, int mneKey) {
-        ACTION_COMMAND_KEY = ActionCommand;
-        NAME = name;
-        SMALL_ICON = smallIcon;
-        LARGE_ICON = largeIcon;
-        SHORT_DESCRIPTION = shortDescription;
-        LONG_DESCRIPTION = longDescription;
-        MNEMONIC_KEY = mneKey;
-        KEY = (char) mneKey;
-        hasControl = false;
-    }
+  /*
+   * Creates a new TAction
+   */
+  public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription,
+      String longDescription, int mneKey) {
+    ACTION_COMMAND_KEY = ActionCommand;
+    NAME = name;
+    SMALL_ICON = smallIcon;
+    LARGE_ICON = largeIcon;
+    SHORT_DESCRIPTION = shortDescription;
+    LONG_DESCRIPTION = longDescription;
+    MNEMONIC_KEY = mneKey;
+    KEY = (char) mneKey;
+    hasControl = false;
+  }
 
-    public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription, String longDescription, int mneKey, boolean _hasControl) {
-        ACTION_COMMAND_KEY = ActionCommand;
-        NAME = name;
-        SMALL_ICON = smallIcon;
-        LARGE_ICON = largeIcon;
-        SHORT_DESCRIPTION = shortDescription;
-        LONG_DESCRIPTION = longDescription;
-        MNEMONIC_KEY = mneKey;
-        KEY = (char) mneKey;
-        hasControl = _hasControl;
-    }
+  public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription,
+      String longDescription, int mneKey, boolean _hasControl) {
+    ACTION_COMMAND_KEY = ActionCommand;
+    NAME = name;
+    SMALL_ICON = smallIcon;
+    LARGE_ICON = largeIcon;
+    SHORT_DESCRIPTION = shortDescription;
+    LONG_DESCRIPTION = longDescription;
+    MNEMONIC_KEY = mneKey;
+    KEY = (char) mneKey;
+    hasControl = _hasControl;
+  }
 
-    public void setName(String name) {
-        NAME = name;
-    }
+  public void setName(String name) {
+    NAME = name;
+  }
 
 }

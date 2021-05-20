@@ -36,55 +36,54 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import java.util.Objects;
 
 /**
- * Class HwBus
- * Creation: 05/09/2007
+ * Class HwBus Creation: 05/09/2007
  *
  * @author Ludovic APVRILLE
  * @version 1.0 05/09/2007
  */
 public class HwBus extends HwCommunicationNode {
 
-    // Management policy
-    public static final int BASIC_ROUND_ROBIN = 0;
-    public static final int PRIORITY_BASED = 1;
-    public static final int CAN = 2;
-    public static final int CROSSBAR = 3;
+  // Management policy
+  public static final int BASIC_ROUND_ROBIN = 0;
+  public static final int PRIORITY_BASED = 1;
+  public static final int CAN = 2;
+  public static final int CROSSBAR = 3;
 
-    public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
-    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-    public static final int DEFAULT_PIPELINE_SIZE = 1;
-    public static final int DEFAULT_ARBITRATION = BASIC_ROUND_ROBIN;
+  public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
+  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+  public static final int DEFAULT_PIPELINE_SIZE = 1;
+  public static final int DEFAULT_ARBITRATION = BASIC_ROUND_ROBIN;
 
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
-    public int pipelineSize = DEFAULT_PIPELINE_SIZE;
-    public int arbitration = DEFAULT_ARBITRATION;
-    public int sliceTime = DEFAULT_SLICE_TIME;
+  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+  public int pipelineSize = DEFAULT_PIPELINE_SIZE;
+  public int arbitration = DEFAULT_ARBITRATION;
+  public int sliceTime = DEFAULT_SLICE_TIME;
 
-    public HwBus(String _name) {
-        super(_name);
-    }
-    
-    @Override
-    public String toXML() {
-        String s = "<BUS name=\"" + getName() + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  pipelineSize=\"" + pipelineSize + "\" arbitration=\"" + arbitration + "\" sliceTime=\"" + sliceTime + "\" />\n";
-        return s;
-    }
+  public HwBus(String _name) {
+    super(_name);
+  }
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof HwBus)) return false;
-        if (!super.equalSpec(o)) return false;
-        HwBus hwBus = (HwBus) o;
-        return byteDataSize == hwBus.byteDataSize &&
-                pipelineSize == hwBus.pipelineSize &&
-                arbitration == hwBus.arbitration &&
-                sliceTime == hwBus.sliceTime;
-    }
+  @Override
+  public String toXML() {
+    String s = "<BUS name=\"" + getName() + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+        + "\"  pipelineSize=\"" + pipelineSize + "\" arbitration=\"" + arbitration + "\" sliceTime=\"" + sliceTime
+        + "\" />\n";
+    return s;
+  }
 
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwBus))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwBus hwBus = (HwBus) o;
+    return byteDataSize == hwBus.byteDataSize && pipelineSize == hwBus.pipelineSize && arbitration == hwBus.arbitration
+        && sliceTime == hwBus.sliceTime;
+  }
 
 }

@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import java.util.List;
@@ -48,13 +44,17 @@ import java.util.List;
  * Class ClassDiagramPanelInterface
  *
  * Creation: 23/01/2007
+ * 
  * @version 1.0 23/01/2007
  * @author Ludovic APVRILLE
  */
 public interface ClassDiagramPanelInterface {
   List<TGComponent> getComponentList();
+
   TClassSynchroInterface getTClass1ToWhichIamConnected(CompositionOperatorInterface coi);
+
   TClassSynchroInterface getTClass2ToWhichIamConnected(CompositionOperatorInterface coi);
+
   TGConnector getTGConnectorAssociationOf(CompositionOperatorInterface coi);
 
 }

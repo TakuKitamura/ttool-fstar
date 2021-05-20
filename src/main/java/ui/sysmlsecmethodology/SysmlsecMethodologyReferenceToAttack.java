@@ -36,92 +36,88 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sysmlsecmethodology;
-
 
 import ui.*;
 
 /**
-   * Class SysmlsecMethodologyReferenceToAttack
-   * Diagram reference analysis: Used to reference diagrams from the
-   * Sysmlsec methodology
-   * Creation: 28/01/2016
-   * @version 1.1 14/06/2018
-   * @author Ludovic APVRILLE
+ * Class SysmlsecMethodologyReferenceToAttack Diagram reference analysis: Used
+ * to reference diagrams from the Sysmlsec methodology Creation: 28/01/2016
+ * 
+ * @version 1.1 14/06/2018
+ * @author Ludovic APVRILLE
  */
-public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDiagramReference  {
+public class SysmlsecMethodologyReferenceToAttack extends SysmlsecMethodologyDiagramReference {
 
+  public SysmlsecMethodologyReferenceToAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public SysmlsecMethodologyReferenceToAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    initScaling(200, 70);
 
-        initScaling(200, 70);
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0,
+        TGConnectingPoint.WEST);
+    connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0.0,
+        TGConnectingPoint.WEST);
 
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 0.0, TGConnectingPoint.WEST);
-        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, true, false, 0.6, 0.0, TGConnectingPoint.WEST);
+    typeOfReference = ATTACK;
 
-        typeOfReference = ATTACK;
+    addTGConnectingPointsCommentTop();
 
-        addTGConnectingPointsCommentTop();
+  }
 
-    }
+  public int getType() {
+    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ATTACK;
+  }
 
-    public  int getType() {
-        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ATTACK;
-    }
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    return panel instanceof AttackTreePanel;
 
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof AttackTreePanel;
+  }
 
-    }
+  public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
+    dn.setValidationsNumber(3);
+    dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM);
+    dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.INTERNAL_MODEL_CHECKER);
+    dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP);
+  }
 
-    public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-	dn.setValidationsNumber(3);
-        dn.setValidationsInfo(0, SysmlsecMethodologyDiagramName.SIM_ANIM);
-        dn.setValidationsInfo(1, SysmlsecMethodologyDiagramName.INTERNAL_MODEL_CHECKER);
-        dn.setValidationsInfo(2, SysmlsecMethodologyDiagramName.UPP);
-    }
+  public boolean makeCall(String diagramName, int index) {
 
-    public boolean makeCall(String diagramName, int index) {
-
-        switch (index) {
-            case 0:
-                if (!openDiagram(diagramName)) {
-                    return false;
-                }
-                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-                    tdp.getMGUI().avatarSimulation();
-                    return true;
-                }
-                return false;
-            case 1:
-                if (!openDiagram(diagramName)) {
-                    return false;
-                }
-                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-                    tdp.getMGUI().avatarModelChecker();
-                    return true;
-                }
-                return false;
-            case 2:
-                if (!openDiagram(diagramName)) {
-                    return false;
-                }
-                if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-                    tdp.getMGUI().avatarUPPAALVerification();
-                    return true;
-                }
-                return false;
-
-
-            default:
-                return false;
+    switch (index) {
+      case 0:
+        if (!openDiagram(diagramName)) {
+          return false;
         }
+        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+          tdp.getMGUI().avatarSimulation();
+          return true;
+        }
+        return false;
+      case 1:
+        if (!openDiagram(diagramName)) {
+          return false;
+        }
+        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+          tdp.getMGUI().avatarModelChecker();
+          return true;
+        }
+        return false;
+      case 2:
+        if (!openDiagram(diagramName)) {
+          return false;
+        }
+        if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+          tdp.getMGUI().avatarUPPAALVerification();
+          return true;
+        }
+        return false;
+
+      default:
+        return false;
     }
+  }
 
 }

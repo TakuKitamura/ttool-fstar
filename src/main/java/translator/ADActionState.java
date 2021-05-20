@@ -36,39 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
- 
-
 
 /**
- * Class ADActionState
- * Creation: 10/12/2003
+ * Class ADActionState Creation: 10/12/2003
+ * 
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
 public abstract class ADActionState extends ADComponent {
-	protected String actionValue;
-	
-    public ADActionState() {
-		nbNext = 1;
-    }
-    
-    public void setActionValue(String s) {
-	 	   actionValue = s;
-    }
-    
-    public String getActionValue() {
-	    return actionValue;
-    }
-    
-    public String toString() {
-	 	return "Action state (" + actionValue + ")";
-    }
+  protected String actionValue;
+
+  public ADActionState() {
+    nbNext = 1;
+  }
+
+  public void setActionValue(String s) {
+    actionValue = s;
+  }
+
+  public String getActionValue() {
+    return actionValue;
+  }
+
+  public String toString() {
+    return "Action state (" + actionValue + ")";
+  }
 }
-    

@@ -36,61 +36,55 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPEPropertyOperatorComponent
- * Creation: 16/02/2011
+ * Class TEPEPropertyOperatorComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPEPropertyOperatorComponent  extends TEPEComponent  {
-	
-	public static final int OR = 0;
-	public static final int AND = 1;
-	public static final int IMPLY = 2;
-	public static final int EQUIVALENT = 3;
-	
-	protected int type;
-	
-    public TEPEPropertyOperatorComponent(String _name, Object _referenceObject, int _type) {
-		super(_name, _referenceObject);
-		type = _type;
-		inPropertyComponents = new Vector<TEPEComponent>();
-		inNegatedProperty = new Vector<Boolean>();
-		outPropertyComponents = new Vector<TEPEComponent>();
+public class TEPEPropertyOperatorComponent extends TEPEComponent {
+
+  public static final int OR = 0;
+  public static final int AND = 1;
+  public static final int IMPLY = 2;
+  public static final int EQUIVALENT = 3;
+
+  protected int type;
+
+  public TEPEPropertyOperatorComponent(String _name, Object _referenceObject, int _type) {
+    super(_name, _referenceObject);
+    type = _type;
+    inPropertyComponents = new Vector<TEPEComponent>();
+    inNegatedProperty = new Vector<Boolean>();
+    outPropertyComponents = new Vector<TEPEComponent>();
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public String getExtraString() {
+    String ret = "\ntype:";
+    switch (type) {
+      case OR:
+        ret += "OR";
+        break;
+      case AND:
+        ret += "AND";
+        break;
+      case IMPLY:
+        ret += " =>";
+        break;
+      case 3:
+      default:
+        ret += "<=>";
     }
-	
-	public int getType() {
-		return type;
-	}
-	
-	public String getExtraString() {
-		String ret = "\ntype:";
-		switch(type) {
-		case OR:
-			ret += "OR";
-			break;
-		case AND:
-			ret += "AND";
-			break;
-		case IMPLY:
-			ret += " =>";
-			break;
-		case 3:
-		default:
-			ret += "<=>";
-		}
-		
-		return ret;
-	}
-	
-	
-    
-    
+
+    return ret;
+  }
+
 }

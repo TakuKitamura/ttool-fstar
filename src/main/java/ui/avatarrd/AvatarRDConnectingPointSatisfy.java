@@ -43,30 +43,31 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarRDConnectingPointSatisfy
- * Definition of connecting points on which connectors between blocks and requirements
- * may be connected
- * Creation: 23/02/2016
+ * Class AvatarRDConnectingPointSatisfy Definition of connecting points on which
+ * connectors between blocks and requirements may be connected Creation:
+ * 23/02/2016
+ * 
  * @version 1.0 23/02/2016
  * @author Ludovic APVRILLE
  */
-public class AvatarRDConnectingPointSatisfy extends  TGConnectingPointWidthHeight {
+public class AvatarRDConnectingPointSatisfy extends TGConnectingPointWidthHeight {
 
-    public AvatarRDConnectingPointSatisfy(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
+  public AvatarRDConnectingPointSatisfy(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if (type == TGComponentManager.AVATARRD_SATISFY_CONNECTOR) {
+      //
+      return true;
     }
 
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if (type == TGComponentManager.AVATARRD_SATISFY_CONNECTOR) {
-            //
-            return true;
-        }
-
-        //System.out.pr
-        //
-        return false;
-    }
+    // System.out.pr
+    //
+    return false;
+  }
 
 }

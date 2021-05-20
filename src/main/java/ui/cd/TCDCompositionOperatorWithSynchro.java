@@ -36,56 +36,52 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
-
 
 import ui.*;
 
 import java.util.LinkedList;
 
 /**
- * Class TCDCompositionOperatorWithSynchro
- *  composition operator having a list of synchronization gates
- * To be used in class diagrams
- * Creation: 12/12/2003
+ * Class TCDCompositionOperatorWithSynchro composition operator having a list of
+ * synchronization gates To be used in class diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public abstract class TCDCompositionOperatorWithSynchro extends TCDCompositionOperator {
-	protected TClassSynchroInterface t1;
-	protected TClassSynchroInterface t2;
+  protected TClassSynchroInterface t1;
+  protected TClassSynchroInterface t2;
 
-	public TCDCompositionOperatorWithSynchro(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-	}
-	
-	public LinkedList<TTwoAttributes> getGates() {
-		return ((TCDSynchroGateList)tgcomponent[0]).getGates();	
-	}
-        
-        public TClassInterface getT1() {
-            return t1;
-        }
+  public TCDCompositionOperatorWithSynchro(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
 
-        public TClassInterface getT2() {
-            return t2;
-        }
-        
-        public TCDSynchroGateList getSynchroGateList() {
-            return (TCDSynchroGateList)(tgcomponent[0]);
-        }
-        
-        public void setT1(TClassSynchroInterface t) {
-            t1 = t;   
-        }
-        
-        public void setT2(TClassSynchroInterface t) {
-            t2 = t;
-        }
-        
-        public abstract void structureChanged();
-	
+  public LinkedList<TTwoAttributes> getGates() {
+    return ((TCDSynchroGateList) tgcomponent[0]).getGates();
+  }
+
+  public TClassInterface getT1() {
+    return t1;
+  }
+
+  public TClassInterface getT2() {
+    return t2;
+  }
+
+  public TCDSynchroGateList getSynchroGateList() {
+    return (TCDSynchroGateList) (tgcomponent[0]);
+  }
+
+  public void setT1(TClassSynchroInterface t) {
+    t1 = t;
+  }
+
+  public void setT2(TClassSynchroInterface t) {
+    t2 = t;
+  }
+
+  public abstract void structureChanged();
+
 }

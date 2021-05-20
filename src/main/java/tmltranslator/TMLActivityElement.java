@@ -36,117 +36,115 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import java.util.Objects;
 import java.util.Vector;
 
-
 /**
-   * Class TMLActivityElement
-   * Creation: 23/11/2005
-   * @version 1.0 23/11/2005
-   * @author Ludovic APVRILLE
+ * Class TMLActivityElement Creation: 23/11/2005
+ * 
+ * @version 1.0 23/11/2005
+ * @author Ludovic APVRILLE
  */
 public abstract class TMLActivityElement extends TMLElement {
-    protected Vector<TMLActivityElement> nexts;
-    public SecurityPattern securityPattern;
-    private String value="";
-    
-    public TMLActivityElement(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        
-        nexts = new Vector<TMLActivityElement>();
-    }
+  protected Vector<TMLActivityElement> nexts;
+  public SecurityPattern securityPattern;
+  private String value = "";
 
-    public int getNbNext() {
-        return nexts.size();
-    }
-    
-    public void setValue(String val){
-    	value=val;
-    }
-    
-    public String getValue(){
-    	return value;
-    }
-    
-    public TMLActivityElement getNextElement(int _i) {
-        if (_i < getNbNext() ) {
-            return nexts.elementAt(_i);
-        } else {
-            return null;
-        }
-    }
+  public TMLActivityElement(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
 
-    public boolean hasNext(TMLActivityElement _tmlae) {
-        return nexts.contains(_tmlae);
-    }
+    nexts = new Vector<TMLActivityElement>();
+  }
 
-    public void addNext(TMLActivityElement _tmlae) {
-        nexts.add(_tmlae);
-    }
+  public int getNbNext() {
+    return nexts.size();
+  }
 
-    public void addNext(int _index, TMLActivityElement _tmlae) {
-        nexts.add(_index, _tmlae);
-    }
+  public void setValue(String val) {
+    value = val;
+  }
 
-    public void removeNext(int index) {
-        nexts.removeElementAt(index);
-    }
+  public String getValue() {
+    return value;
+  }
 
-    public Vector<TMLActivityElement> getNexts() {
-        return nexts;
+  public TMLActivityElement getNextElement(int _i) {
+    if (_i < getNbNext()) {
+      return nexts.elementAt(_i);
+    } else {
+      return null;
     }
+  }
 
-    public void setNexts(Vector<TMLActivityElement> _nexts) {
-        nexts = _nexts;
+  public boolean hasNext(TMLActivityElement _tmlae) {
+    return nexts.contains(_tmlae);
+  }
+
+  public void addNext(TMLActivityElement _tmlae) {
+    nexts.add(_tmlae);
+  }
+
+  public void addNext(int _index, TMLActivityElement _tmlae) {
+    nexts.add(_index, _tmlae);
+  }
+
+  public void removeNext(int index) {
+    nexts.removeElementAt(index);
+  }
+
+  public Vector<TMLActivityElement> getNexts() {
+    return nexts;
+  }
+
+  public void setNexts(Vector<TMLActivityElement> _nexts) {
+    nexts = _nexts;
+  }
+
+  public void clearNexts() {
+    nexts.clear();
+  }
+
+  public void setNewNext(TMLActivityElement oldE, TMLActivityElement newE) {
+    TMLActivityElement elt;
+    for (int i = 0; i < getNbNext(); i++) {
+      elt = getNextElement(i);
+      if (elt == oldE) {
+        nexts.setElementAt(newE, i);
+      }
     }
+  }
 
-    public void clearNexts() {
-        nexts.clear();
+  public String toXML(Vector<TMLActivityElement> elements) {
+    String s = "<ACTIVITYELEMENT type=\"" + getClass().getName() + "\" value=\"" + value + "\" id=\""
+        + elements.indexOf(this) + "\" name=\"" + name + "\">\n";
+    if (securityPattern != null) {
+      s += securityPattern.toXML();
     }
-
-    public void setNewNext(TMLActivityElement oldE, TMLActivityElement newE) {
-        TMLActivityElement elt;
-        for(int i=0; i<getNbNext(); i++) {
-            elt = getNextElement(i);
-            if (elt == oldE) {
-                nexts.setElementAt(newE, i);
-            }
-        }
+    s += extraToXML();
+    for (TMLActivityElement tmlae : nexts) {
+      s += "<NEXTACTIVITYELEMENT id=\"" + elements.indexOf(tmlae) + "\" />\n";
     }
+    s += "</ACTIVITYELEMENT>\n";
+    return s;
+  }
 
-    public String toXML(Vector<TMLActivityElement> elements) {
-	String s = "<ACTIVITYELEMENT type=\"" + getClass().getName() + "\" value=\"" + value + "\" id=\"" + elements.indexOf(this) + "\" name=\"" + name + "\">\n";
-	if (securityPattern != null) {
-	    s += securityPattern.toXML();
-	}
-	s += extraToXML();
-	for(TMLActivityElement tmlae: nexts) {
-	    s += "<NEXTACTIVITYELEMENT id=\"" + elements.indexOf(tmlae) + "\" />\n";
-	}
-	s += "</ACTIVITYELEMENT>\n";
-	return s;
-    }
+  public String extraToXML() {
+    String s = "<CUSTOM " + customExtraToXML() + " />\n";
+    return s;
+  }
 
+  public abstract String customExtraToXML();
 
-    public String extraToXML() {
-	String s = "<CUSTOM " + customExtraToXML() + " />\n";
-	return s;
-    }
-    
-    public abstract String customExtraToXML();
-
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLActivityElement)) return false;
-        if(!super.equalSpec(o)) return false;
-        TMLActivityElement tmlActEtls = (TMLActivityElement) o;
-        TMLComparingMethod comp = new TMLComparingMethod();
-        return Objects.equals(value,tmlActEtls.getValue()) &&
-                comp.isTMLActivityEltListEquals(nexts,tmlActEtls.getNexts());
-    }
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLActivityElement))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    TMLActivityElement tmlActEtls = (TMLActivityElement) o;
+    TMLComparingMethod comp = new TMLComparingMethod();
+    return Objects.equals(value, tmlActEtls.getValue())
+        && comp.isTMLActivityEltListEquals(nexts, tmlActEtls.getNexts());
+  }
 }

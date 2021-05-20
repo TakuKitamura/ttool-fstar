@@ -36,153 +36,164 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
-
 /**
- * Class BasicTimer
- * Creation: 07/09/2004
+ * Class BasicTimer Creation: 07/09/2004
+ * 
  * @version 1.0 07/09/2004
  * @author Ludovic APVRILLE
  */
-public  class BasicTimer extends TClass {
-    private Gate set, reset, exp;
-    private String instanceSet, instanceReset, instanceExp;
-    
-    public BasicTimer(String name, boolean isActive) {
-	super(name, isActive);
-        makeActivityDiagram();
-    }
-    
-    public void setInstanceSet(String ins) {
-        instanceSet = ins;
-    }
-    
-    public void setInstanceReset(String ins) {
-        instanceReset = ins;
-    }
-    
-    public void setInstanceExp(String ins) {
-        instanceExp = ins;
-    }
-    
-    public static String makeTimerSetGate(String s, TClass t) {
-        return t.getName() + "__" + s + "__set"; 
-    }
-    
-    public static String makeTimerResetGate(String s, TClass t) {
-        return t.getName() + "__" + s + "__reset"; 
-    }
-    
-    public static String makeTimerExpGate(String s, TClass t) {
-        return t.getName() + "__" + s + "__exp"; 
-    }
-    
-    public static String makeTimerTClassName(String s) {
-        return "Timer__" + s;
-    }
-    
-    public Gate getGateSet() { return set;}
-    public Gate getGateReset() { return reset;}
-    public Gate getGateExp() { return exp;}
-    public String getInstanceSet() {return instanceSet;}
-    public String getInstanceReset() {return instanceReset;}
-    public String getInstanceExp() {return instanceExp;}
-      
-    private void makeActivityDiagram() {
-        /* Parameter */
-        Param delay = new Param("d", Param.NAT, "0");
-        addParameter(delay);
-        
-        /* Gates*/
-        set = new Gate("set", Gate.GATE, false);
-        reset = new Gate("reset", Gate.GATE, false);
-        exp = new Gate("exp", Gate.GATE, false);
-        
-        addGate(set);
-        addGate(reset);
-        addGate(exp);
-        
-        
-        ADStart ads = new ADStart();
-        ActivityDiagram ad = new ActivityDiagram(ads);
-        
-        setActivityDiagram(ad);
-        
-        /* Building components */
-        
-        ADJunction adj = new ADJunction();
-        
-        ADActionStateWithGate adset = new ADActionStateWithGate(set);
-        adset.setActionValue("?d:nat");
-        
-        ADActionStateWithGate adreset = new ADActionStateWithGate(reset);
-        adreset.setActionValue("");
-        
-        ADActionStateWithGate adexp = new ADActionStateWithGate(exp);
-        adexp.setActionValue("");
-        
-        ADChoice adc = new ADChoice();
-        
-        ADDelay add = new ADDelay();
-        add.setValue("d");
-        
-        /* Connecting components */
-        ads.addNext(adj);
-        adj.addNext(adset);
-        adset.addNext(adc);
-        adc.addNext(adreset);
-        adc.addNext(add);
-        adc.addGuard("[]");
-        adc.addGuard("[]");
-        adreset.addNext(adj);
-        add.addNext(adexp);
-        adexp.addNext(adj); 
-        
-        /* adding components */
-        ad.add(adj);
-        ad.add(adset);
-        ad.add(adc);
-        ad.add(adreset);
-        ad.add(add);
-        ad.add(adexp);
-    }
-    
-    
-    public void removeReset() {
-        
-        ADStart ads = new ADStart();
-        ActivityDiagram ad = new ActivityDiagram(ads);
-        
-        setActivityDiagram(ad);
-        
-        /* Building components */
-        
-        ADJunction adj = new ADJunction();
-        
-        ADActionStateWithGate adset = new ADActionStateWithGate(set);
-        adset.setActionValue("?d:nat");
-        
-        ADActionStateWithGate adexp = new ADActionStateWithGate(exp);
-        adexp.setActionValue("");
-        
-        ADDelay add = new ADDelay();
-        add.setValue("d");
-        
-        /* Connecting components */
-        ads.addNext(adj);
-        adj.addNext(adset);
-        adset.addNext(add);
-        add.addNext(adexp);
-        adexp.addNext(adj); 
-        
-        /* adding components */
-        ad.add(adj);
-        ad.add(adset);
-        ad.add(add);
-        ad.add(adexp);
-    }
-}  
+public class BasicTimer extends TClass {
+  private Gate set, reset, exp;
+  private String instanceSet, instanceReset, instanceExp;
+
+  public BasicTimer(String name, boolean isActive) {
+    super(name, isActive);
+    makeActivityDiagram();
+  }
+
+  public void setInstanceSet(String ins) {
+    instanceSet = ins;
+  }
+
+  public void setInstanceReset(String ins) {
+    instanceReset = ins;
+  }
+
+  public void setInstanceExp(String ins) {
+    instanceExp = ins;
+  }
+
+  public static String makeTimerSetGate(String s, TClass t) {
+    return t.getName() + "__" + s + "__set";
+  }
+
+  public static String makeTimerResetGate(String s, TClass t) {
+    return t.getName() + "__" + s + "__reset";
+  }
+
+  public static String makeTimerExpGate(String s, TClass t) {
+    return t.getName() + "__" + s + "__exp";
+  }
+
+  public static String makeTimerTClassName(String s) {
+    return "Timer__" + s;
+  }
+
+  public Gate getGateSet() {
+    return set;
+  }
+
+  public Gate getGateReset() {
+    return reset;
+  }
+
+  public Gate getGateExp() {
+    return exp;
+  }
+
+  public String getInstanceSet() {
+    return instanceSet;
+  }
+
+  public String getInstanceReset() {
+    return instanceReset;
+  }
+
+  public String getInstanceExp() {
+    return instanceExp;
+  }
+
+  private void makeActivityDiagram() {
+    /* Parameter */
+    Param delay = new Param("d", Param.NAT, "0");
+    addParameter(delay);
+
+    /* Gates */
+    set = new Gate("set", Gate.GATE, false);
+    reset = new Gate("reset", Gate.GATE, false);
+    exp = new Gate("exp", Gate.GATE, false);
+
+    addGate(set);
+    addGate(reset);
+    addGate(exp);
+
+    ADStart ads = new ADStart();
+    ActivityDiagram ad = new ActivityDiagram(ads);
+
+    setActivityDiagram(ad);
+
+    /* Building components */
+
+    ADJunction adj = new ADJunction();
+
+    ADActionStateWithGate adset = new ADActionStateWithGate(set);
+    adset.setActionValue("?d:nat");
+
+    ADActionStateWithGate adreset = new ADActionStateWithGate(reset);
+    adreset.setActionValue("");
+
+    ADActionStateWithGate adexp = new ADActionStateWithGate(exp);
+    adexp.setActionValue("");
+
+    ADChoice adc = new ADChoice();
+
+    ADDelay add = new ADDelay();
+    add.setValue("d");
+
+    /* Connecting components */
+    ads.addNext(adj);
+    adj.addNext(adset);
+    adset.addNext(adc);
+    adc.addNext(adreset);
+    adc.addNext(add);
+    adc.addGuard("[]");
+    adc.addGuard("[]");
+    adreset.addNext(adj);
+    add.addNext(adexp);
+    adexp.addNext(adj);
+
+    /* adding components */
+    ad.add(adj);
+    ad.add(adset);
+    ad.add(adc);
+    ad.add(adreset);
+    ad.add(add);
+    ad.add(adexp);
+  }
+
+  public void removeReset() {
+
+    ADStart ads = new ADStart();
+    ActivityDiagram ad = new ActivityDiagram(ads);
+
+    setActivityDiagram(ad);
+
+    /* Building components */
+
+    ADJunction adj = new ADJunction();
+
+    ADActionStateWithGate adset = new ADActionStateWithGate(set);
+    adset.setActionValue("?d:nat");
+
+    ADActionStateWithGate adexp = new ADActionStateWithGate(exp);
+    adexp.setActionValue("");
+
+    ADDelay add = new ADDelay();
+    add.setValue("d");
+
+    /* Connecting components */
+    ads.addNext(adj);
+    adj.addNext(adset);
+    adset.addNext(add);
+    add.addNext(adexp);
+    adexp.addNext(adj);
+
+    /* adding components */
+    ad.add(adj);
+    ad.add(adset);
+    ad.add(add);
+    ad.add(adexp);
+  }
+}

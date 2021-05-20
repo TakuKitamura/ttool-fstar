@@ -46,121 +46,125 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class AvatarSMDChoice
- * Choice. To be used in Avatar State Machine diagrams
+ * Class AvatarSMDChoice Choice. To be used in Avatar State Machine diagrams
  * Creation: 29/06/2010
+ * 
  * @version 1.0 29/06/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDChoice extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight, PartOfInvariant {
-    private int lineLength = 10;
-    private int lineOutLength = 10;
-//    private int textX1, textY1, textX2, textY2, textX3, textY3;
-	
-	protected int stateOfError = 0; // Not yet checked
-	
-    public AvatarSMDChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 30;
-        height = 30;
-//        textX1 = -lineOutLength;
-//        textY1 = height/2 - 5;
-//        textX2 = width + 5;
-//        textY2 = height/2 - 5;
-//        textX3 = width /2 + 5;
-//        textY3 = height + 15;
-        
-        nbConnectingPoint = 7;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new AvatarSMDConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[2] = new AvatarSMDConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[3] = new AvatarSMDConnectingPoint(this, 0, lineOutLength,  false, true, 0.5, 1.0);
-		connectingPoint[4] = new AvatarSMDConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[5] = new AvatarSMDConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[6] = new AvatarSMDConnectingPoint(this, 0, lineOutLength,  false, true, 0.5, 1.0);
-        
-		addTGConnectingPointsComment();
-		
-        nbInternalTGComponent = 0;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "choice";
-        
-        myImageIcon = IconManager.imgic208;
+public class AvatarSMDChoice extends AvatarSMDBasicComponent
+    implements EmbeddedComment, BasicErrorHighlight, PartOfInvariant {
+  private int lineLength = 10;
+  private int lineOutLength = 10;
+  // private int textX1, textY1, textX2, textY2, textX3, textY3;
+
+  protected int stateOfError = 0; // Not yet checked
+
+  public AvatarSMDChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 30;
+    height = 30;
+    // textX1 = -lineOutLength;
+    // textY1 = height/2 - 5;
+    // textX2 = width + 5;
+    // textY2 = height/2 - 5;
+    // textX3 = width /2 + 5;
+    // textY3 = height + 15;
+
+    nbConnectingPoint = 7;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new AvatarSMDConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
+    connectingPoint[2] = new AvatarSMDConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
+    connectingPoint[3] = new AvatarSMDConnectingPoint(this, 0, lineOutLength, false, true, 0.5, 1.0);
+    connectingPoint[4] = new AvatarSMDConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
+    connectingPoint[5] = new AvatarSMDConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
+    connectingPoint[6] = new AvatarSMDConnectingPoint(this, 0, lineOutLength, false, true, 0.5, 1.0);
+
+    addTGConnectingPointsComment();
+
+    nbInternalTGComponent = 0;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "choice";
+
+    myImageIcon = IconManager.imgic208;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    if (stateOfError > 0) {
+      Color c = g.getColor();
+      switch (stateOfError) {
+        case ErrorHighlight.OK:
+          g.setColor(ColorManager.CHOICE);
+          break;
+        default:
+          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+      }
+      // Making the polygon
+      int[] px1 = { x + (width / 2), x + width + 2, x + (width / 2), x };
+      int[] py1 = { y, y + height / 2, y + height + 2, y + height / 2 };
+      g.fillPolygon(px1, py1, 4);
+      g.setColor(c);
     }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-		if (stateOfError > 0)  {
-			Color c = g.getColor();
-			switch(stateOfError) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.CHOICE);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
-			// Making the polygon
-			int [] px1 = {x+(width/2), x+width+2, x + (width/2), x};
-			int [] py1 = {y, y + height/2, y+height+2, y+height/2};
-			g.fillPolygon(px1, py1, 4);
-			g.setColor(c);
-		}
-		
-        g.drawLine(x+(width/2), y, x+width, y + height/2);
-        g.drawLine(x, y + height / 2, x+width/2, y + height);
-        g.drawLine(x + width/2, y, x, y + height/2);
-        g.drawLine(x + width, y + height/2, x + width/2, y + height);
-        
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x, y + height/2, x-lineOutLength, y + height/2);
-        g.drawLine(x + width, y + height/2, x+ width + lineOutLength, y + height/2);
-        g.drawLine(x+(width/2), y + height, x+(width/2), y + height + lineOutLength);
+
+    g.drawLine(x + (width / 2), y, x + width, y + height / 2);
+    g.drawLine(x, y + height / 2, x + width / 2, y + height);
+    g.drawLine(x + width / 2, y, x, y + height / 2);
+    g.drawLine(x + width, y + height / 2, x + width / 2, y + height);
+
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x, y + height / 2, x - lineOutLength, y + height / 2);
+    g.drawLine(x + width, y + height / 2, x + width + lineOutLength, y + height / 2);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + height + lineOutLength);
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-    
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y + height, x+(width/2), y + height + lineOutLength, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-		
-		if ((int)(Line2D.ptSegDistSq(x + width, y + height/2, x+ width + lineOutLength, y + height/2, _x, _y)) < distanceSelected) {
-			return this;
-		}
-		
-		if ((int)(Line2D.ptSegDistSq(x, y + height/2, x-lineOutLength, y + height/2, _x, _y)) < distanceSelected) {
-			return this;
-		}
-		
-		if ((int)(Line2D.ptSegDistSq(x+(width/2), y, x+(width/2), y - lineLength, _x, _y)) < distanceSelected) {
-			return this;
-		}
-        
-        return null;
+
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + height + lineOutLength, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.AVATARSMD_CHOICE;
+
+    if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + lineOutLength, y + height / 2, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
-    
-    @Override
-    public int getDefaultConnector() {
-    	return TGComponentManager.AVATARSMD_CONNECTOR;
+
+    if ((int) (Line2D.ptSegDistSq(x, y + height / 2, x - lineOutLength, y + height / 2, _x, _y)) < distanceSelected) {
+      return this;
     }
-	
-    @Override
-	public void setStateAction(int _stateAction) {
-		stateOfError = _stateAction;
-	}
+
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y, x + (width / 2), y - lineLength, _x, _y)) < distanceSelected) {
+      return this;
+    }
+
+    return null;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.AVATARSMD_CHOICE;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.AVATARSMD_CONNECTOR;
+  }
+
+  @Override
+  public void setStateAction(int _stateAction) {
+    stateOfError = _stateAction;
+  }
 }

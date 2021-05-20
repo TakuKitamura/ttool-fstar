@@ -49,114 +49,113 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class TMLArchiCommunicationNode
- * Node. To be used in TML architecture diagrams.
- * Creation: 23/11/2007
+ * Class TMLArchiCommunicationNode Node. To be used in TML architecture
+ * diagrams. Creation: 23/11/2007
+ * 
  * @version 1.1 30/05/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements SwallowTGComponent {
 
-    public TMLArchiCommunicationNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public TMLArchiCommunicationNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
+
+  @Override
+  public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+    return ((tgc instanceof TMLArchiCommunicationArtifact) || (tgc instanceof TMLArchiEventArtifact));
+  }
+
+  @Override
+  public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    if (tgc instanceof TMLArchiCommunicationArtifact) {
+      // Make it an internal component
+      // It's one of my son
+      // Set its coordinates
+      tgc.setFather(this);
+      tgc.setDrawingZone(true);
+      tgc.resizeWithFather();
+
+      // add it
+      addInternalComponent(tgc, 0);
+      return true;
+    } else {
+      TraceManager.addDev("Testing swallow " + tgc);
+
+      if (tgc instanceof TMLArchiEventArtifact) {
+        TraceManager.addDev("Testing swallow archievent ok " + tgc);
+        tgc.setFather(this);
+        tgc.setDrawingZone(true);
+        tgc.resizeWithFather();
+        addInternalComponent(tgc, 0);
+        return true;
+      }
+      return false;
+    }
+  }
+
+  @Override
+  public void removeSwallowedTGComponent(TGComponent tgc) {
+    removeInternalComponent(tgc);
+  }
+
+  public List<TMLArchiCommunicationArtifact> getChannelArtifactList() {
+    List<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
+
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof TMLArchiCommunicationArtifact) {
+        v.add((TMLArchiCommunicationArtifact) (tgcomponent[i]));
+      }
     }
 
-    @Override
-    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        return ( (tgc instanceof TMLArchiCommunicationArtifact) || (tgc instanceof TMLArchiEventArtifact) );
+    return v;
+  }
+
+  public List<TMLArchiKey> getKeyList() {
+    List<TMLArchiKey> v = new ArrayList<TMLArchiKey>();
+
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof TMLArchiKey) {
+        v.add((TMLArchiKey) (tgcomponent[i]));
+      }
     }
 
-    @Override
-    public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )     {
-        if( tgc instanceof TMLArchiCommunicationArtifact )      {
-            // Make it an internal component
-            // It's one of my son
-            //Set its coordinates
-            tgc.setFather(this);
-            tgc.setDrawingZone(true);
-            tgc.resizeWithFather();
- 
-            //add it
-            addInternalComponent( tgc, 0 );
-            return true;
+    return v;
+  }
+
+  public List<TMLArchiEventArtifact> getEventArtifactList() {
+    List<TMLArchiEventArtifact> v = new ArrayList<TMLArchiEventArtifact>();
+
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof TMLArchiEventArtifact) {
+        v.add((TMLArchiEventArtifact) (tgcomponent[i]));
+      }
+    }
+
+    return v;
+  }
+
+  @Override
+  public void hasBeenResized() {
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof TMLArchiCommunicationArtifact) {
+        tgcomponent[i].resizeWithFather();
+      } else {
+        if (tgcomponent[i] instanceof TMLArchiEventArtifact) {
+          tgcomponent[i].resizeWithFather();
         }
-        else    {
-        	TraceManager.addDev("Testing swallow " + tgc);
-            
-        	if( tgc instanceof TMLArchiEventArtifact )  {
-        		TraceManager.addDev("Testing swallow archievent ok " + tgc);
-                tgc.setFather( this );
-                tgc.setDrawingZone( true );
-                tgc.resizeWithFather();
-                addInternalComponent( tgc, 0 );
-                return true;
-            }
-            return false;
-        }
+      }
     }
+  }
 
-    @Override
-    public void removeSwallowedTGComponent(TGComponent tgc) {
-        removeInternalComponent(tgc);
-    }
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
+  }
 
-    public List<TMLArchiCommunicationArtifact> getChannelArtifactList() {
-        List<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
-
-        for( int i = 0; i < nbInternalTGComponent; i++ ) {
-            if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact )       {
-                v.add( (TMLArchiCommunicationArtifact)( tgcomponent[i]) );
-            }
-        }
-        
-        return v;
-    }
-
-    public List<TMLArchiKey> getKeyList(){
-        List<TMLArchiKey> v = new ArrayList<TMLArchiKey>();
-        
-        for( int i = 0; i < nbInternalTGComponent; i++ ) {
-            if( tgcomponent[i] instanceof TMLArchiKey )       {
-                v.add( (TMLArchiKey)( tgcomponent[i]) );
-            }
-        }
-        
-        return v;
-    }
-
-    public List<TMLArchiEventArtifact> getEventArtifactList() {
-        List<TMLArchiEventArtifact> v = new ArrayList<TMLArchiEventArtifact>();
-
-        for( int i = 0; i < nbInternalTGComponent; i++ )        {
-            if( tgcomponent[i] instanceof TMLArchiEventArtifact )       {
-                v.add( (TMLArchiEventArtifact)(tgcomponent[i]) );
-            }
-        }
-        
-        return v;
-    }
-
-    @Override
-    public void hasBeenResized() {
-        for( int i = 0; i < nbInternalTGComponent; i++ )        {
-            if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
-                tgcomponent[i].resizeWithFather();
-            }
-            else        {
-                if( tgcomponent[i] instanceof TMLArchiEventArtifact )   {
-                    tgcomponent[i].resizeWithFather();
-                }
-            }
-        }
-    }
-
-    @Override
-    public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
-    }
-
-    @Override
-    public int getComponentType() {
-        return OTHER;
-    }
+  @Override
+  public int getComponentType() {
+    return OTHER;
+  }
 }

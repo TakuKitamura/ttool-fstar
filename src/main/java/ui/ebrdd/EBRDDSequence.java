@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ebrdd;
 
 import myutil.GraphicLib;
@@ -48,72 +45,72 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
-* Class EBRDDSequence
-* Sequence. To be used in EBRDDs
-* Creation: 09/09/2009
-* @version 1.0 09/09/2009
-* @author Ludovic APVRILLE
+ * Class EBRDDSequence Sequence. To be used in EBRDDs Creation: 09/09/2009
+ * 
+ * @version 1.0 09/09/2009
+ * @author Ludovic APVRILLE
  */
 public class EBRDDSequence extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
-    private int lineLength = 0;
-	private int textX, textY;
-	
-	public EBRDDSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
-		
-		width = 150;
-		height = 5;
-		
-		textX = width - 6;
-		textY = height + 2;
-		
-		nbConnectingPoint = 6;
-		connectingPoint = new TGConnectingPoint[6];
-		connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, -lineLength, true, false, 0.5, 0.0);
-		connectingPoint[1] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.167, 1.0);
-		connectingPoint[2] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.333, 1.0);
-		connectingPoint[3] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0);
-		connectingPoint[4] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.667, 1.0);
-		connectingPoint[5] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.833, 1.0);
-		
-		nbInternalTGComponent = 1;
-		tgcomponent = new TGComponent[nbInternalTGComponent];
-		
-		TGCOneLineText tgc = new TGCOneLineText(x+textX + 10, y+textY, textX +10 , textX + 10 , textY, textY, true, this, _tdp);
-		tgc.setValue(">>");
-		tgc.setName("Sequence");
-		tgc.setEditable(false);
-		
-		tgcomponent[0] = tgc;
-		
-		moveable = true;
-		editable = false;
-		removable = true;
-		
-		name = "sequence";
-		
-		myImageIcon = IconManager.imgic226;
-	}
-    
-    public void internalDrawing(Graphics g) {
-		g.drawRect(x, y, width, height);
-		g.fillRect(x, y, width, height);
-	}
-	
-	public TGComponent isOnOnlyMe(int x1, int y1) {
-		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-			return this;
-		}
-		return null;
-	}
-	
-    public int getType() {
-        return TGComponentManager.EBRDD_SEQUENCE;
+  private int lineLength = 0;
+  private int textX, textY;
+
+  public EBRDDSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 150;
+    height = 5;
+
+    textX = width - 6;
+    textY = height + 2;
+
+    nbConnectingPoint = 6;
+    connectingPoint = new TGConnectingPoint[6];
+    connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.167, 1.0);
+    connectingPoint[2] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.333, 1.0);
+    connectingPoint[3] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0);
+    connectingPoint[4] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.667, 1.0);
+    connectingPoint[5] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.833, 1.0);
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+
+    TGCOneLineText tgc = new TGCOneLineText(x + textX + 10, y + textY, textX + 10, textX + 10, textY, textY, true, this,
+        _tdp);
+    tgc.setValue(">>");
+    tgc.setName("Sequence");
+    tgc.setEditable(false);
+
+    tgcomponent[0] = tgc;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "sequence";
+
+    myImageIcon = IconManager.imgic226;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.fillRect(x, y, width, height);
+  }
+
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
     }
-    
-    public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_EBRDD;
-    }  
-    
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.EBRDD_SEQUENCE;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_EBRDD;
+  }
+
 }

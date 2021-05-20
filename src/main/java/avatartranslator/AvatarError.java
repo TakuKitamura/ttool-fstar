@@ -39,61 +39,53 @@
 package avatartranslator;
 
 /**
- * Class AvatarError
- * Creation: 20/09/2020
+ * Class AvatarError Creation: 20/09/2020
  *
  * @author Ludovic APVRILLE
  * @version 1.0 20/08/2020
  */
 public class AvatarError {
 
+  public final static String[] errorStrings = { "Invalid number of signals in the two sides of the relation",
+      "Signals are connected but there are not compatible because they are both IN signals",
+      "Signals are connected but there are not compatible because they are both OUT signals",
+      "Signals are connected but there have non compatible parameters", "Missing block1 declaration in relation",
+      "Missing block2 declaration in relation", // 5
+      "No signal of that name in block", "State machine must terminate with a stop state" };
 
-    public final static String[] errorStrings = {
-                    "Invalid number of signals in the two sides of the relation",
-                    "Signals are connected but there are not compatible because they are both IN signals",
-                    "Signals are connected but there are not compatible because they are both OUT signals",
-                    "Signals are connected but there have non compatible parameters",
-                    "Missing block1 declaration in relation",
-                    "Missing block2 declaration in relation", //5
-                    "No signal of that name in block",
-                    "State machine must terminate with a stop state"
-            };
+  public int error;
+  public AvatarSpecification avspec;
+  public AvatarBlock block;
+  public AvatarRelation relation;
+  public AvatarElement firstAvatarElement;
+  public AvatarElement secondAvatarElement;
 
+  public AvatarError(AvatarSpecification _avspec) {
+    avspec = _avspec;
+  }
 
-    public int error;
-    public AvatarSpecification avspec;
-    public AvatarBlock block;
-    public AvatarRelation relation;
-    public AvatarElement firstAvatarElement;
-    public AvatarElement secondAvatarElement;
-
-    public AvatarError(AvatarSpecification _avspec) {
-        avspec = _avspec;
+  public String toString() {
+    String ret = "";
+    if (block != null) {
+      ret += block.getName() + " | ";
+    }
+    if (relation != null) {
+      ret += "relation " + relation.block1.getName() + " <> " + relation.block1.getName() + " | ";
     }
 
-    public String toString() {
-        String ret = "";
-        if (block != null) {
-            ret+= block.getName() + " | ";
-        }
-        if (relation != null) {
-            ret += "relation " + relation.block1.getName() + " <> " + relation.block1.getName() + " | ";
-        }
-
-        if (firstAvatarElement != null) {
-            ret += " for " + firstAvatarElement.getName() + " | ";
-        }
-
-        if (secondAvatarElement != null) {
-            ret += " and for " + secondAvatarElement.getName() + " | ";
-        }
-
-        if (error < errorStrings.length) {
-            ret += " : " + errorStrings[error];
-        }
-
-
-        return ret;
+    if (firstAvatarElement != null) {
+      ret += " for " + firstAvatarElement.getName() + " | ";
     }
+
+    if (secondAvatarElement != null) {
+      ret += " and for " + secondAvatarElement.getName() + " | ";
+    }
+
+    if (error < errorStrings.length) {
+      ret += " : " + errorStrings[error];
+    }
+
+    return ret;
+  }
 
 }

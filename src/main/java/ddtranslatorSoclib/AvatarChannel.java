@@ -38,43 +38,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
 
-public class AvatarChannel extends AvatarMappedObject{
+public class AvatarChannel extends AvatarMappedObject {
 
-    private AvatarRAM avatarRAMReference; 
-    private String referenceDiagram ;
-    private String channelName ;
-    private int cluster_index;
-    private int  monitored;
+  private AvatarRAM avatarRAMReference;
+  private String referenceDiagram;
+  private String channelName;
+  private int cluster_index;
+  private int monitored;
 
-    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _monitored){
-      referenceDiagram =  _referenceDiagram;
-      channelName = _channelName;
-      avatarRAMReference = _avatarRAMReference;
-      monitored = _monitored;
-    }
+  public AvatarChannel(String _referenceDiagram, String _channelName, AvatarRAM _avatarRAMReference, int _monitored) {
+    referenceDiagram = _referenceDiagram;
+    channelName = _channelName;
+    avatarRAMReference = _avatarRAMReference;
+    monitored = _monitored;
+  }
 
-    public AvatarRAM getAvatarRAMReference(){
-      return  avatarRAMReference;
-    } 
+  public AvatarRAM getAvatarRAMReference() {
+    return avatarRAMReference;
+  }
 
-    public String getReferenceDiagram(){
-      return referenceDiagram;
-    }
-       
-    public String  getChannelName(){      
-      return channelName;
-      } 
+  public String getReferenceDiagram() {
+    return referenceDiagram;
+  }
 
-    public int getMonitored(){
-      return monitored;
-    } 
+  public String getChannelName() {
+    return channelName;
+  }
+
+  public int getMonitored() {
+    return monitored;
+  }
 
 }

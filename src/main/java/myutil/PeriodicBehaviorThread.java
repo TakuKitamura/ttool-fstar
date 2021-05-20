@@ -36,47 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
-
 /**
- * Class PeriodicBehaviorThread
- * For execution periodically a given action
+ * Class PeriodicBehaviorThread For execution periodically a given action
  * Creation: 2014
+ * 
  * @version 1.1 07/01/2014
  * @author Ludovic APVRILLE
  */
 public class PeriodicBehaviorThread extends Thread {
-    
-	private PeriodicBehavior pb;
-	private long periodValue;
-	
-	public PeriodicBehaviorThread(PeriodicBehavior _pb, long _periodValue) {
-		pb = _pb;
-		periodValue = _periodValue;
-		this.setDaemon(true);
-		this.start();
-		
-	}
-	
-	
-	public void run() {
-		
-		if (pb == null) {
-			return;
-		}
-		
-		while(true) {
-		
-		  try {
-                Thread.sleep(periodValue); //sleep for about 1s
-            } catch (InterruptedException e) {
-          
-            }
-			pb.periodicAction();
-		}
-	}
+
+  private PeriodicBehavior pb;
+  private long periodValue;
+
+  public PeriodicBehaviorThread(PeriodicBehavior _pb, long _periodValue) {
+    pb = _pb;
+    periodValue = _periodValue;
+    this.setDaemon(true);
+    this.start();
+
+  }
+
+  public void run() {
+
+    if (pb == null) {
+      return;
+    }
+
+    while (true) {
+
+      try {
+        Thread.sleep(periodValue); // sleep for about 1s
+      } catch (InterruptedException e) {
+
+      }
+      pb.periodicAction();
+    }
+  }
 }

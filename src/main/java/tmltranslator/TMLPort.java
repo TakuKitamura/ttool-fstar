@@ -38,7 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 /**
    * Class TMLPort
    * Creation: 16/02/2015
@@ -46,74 +45,72 @@
    * @author Ludovic APVRILLE, Andrea ENRICI
  */
 
-
 package tmltranslator;
-
 
 import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.util.Objects;
 
-
 public class TMLPort extends TMLElement {
 
-    private boolean prex;
-    private boolean postex;
-    private String associatedEvent;
-    private String dataFlowType;
+  private boolean prex;
+  private boolean postex;
+  private String associatedEvent;
+  private String dataFlowType;
 
-    public TMLPort( String _name, Object _referenceObject ) {
-        super( _name, _referenceObject );
-        if (referenceObject instanceof TMLCPrimitivePort)
-            dataFlowType = ( (TMLCPrimitivePort)referenceObject ).getDataFlowType();
+  public TMLPort(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    if (referenceObject instanceof TMLCPrimitivePort)
+      dataFlowType = ((TMLCPrimitivePort) referenceObject).getDataFlowType();
 
-    }
+  }
 
-    public void setPrex( boolean _prex )        {
-        prex = _prex;
+  public void setPrex(boolean _prex) {
+    prex = _prex;
 
-    }
+  }
 
-    public boolean isPrex()     {
-        return prex;
-    }
+  public boolean isPrex() {
+    return prex;
+  }
 
-    public void setPostex( boolean _postex )    {
-        postex = _postex;
+  public void setPostex(boolean _postex) {
+    postex = _postex;
 
-    }
+  }
 
-    public boolean isPostex()   {
-        return postex;
+  public boolean isPostex() {
+    return postex;
 
-    }
+  }
 
-    public void setAssociatedEvent( String _eventName )	{
-        associatedEvent = _eventName;
+  public void setAssociatedEvent(String _eventName) {
+    associatedEvent = _eventName;
 
-    }
+  }
 
-    public String getAssociatedEvent()	{
-        return associatedEvent;
+  public String getAssociatedEvent() {
+    return associatedEvent;
 
-	}
+  }
 
-    public String getDataFlowType() {
-        return dataFlowType;
-    }
+  public String getDataFlowType() {
+    return dataFlowType;
+  }
 
-    public void setDataFlowType (String _dataFlowType) {
-        dataFlowType = _dataFlowType;
-    }
+  public void setDataFlowType(String _dataFlowType) {
+    dataFlowType = _dataFlowType;
+  }
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLPort)) return false;
-        if (!super.equalSpec(o)) return false;
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLPort))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
 
-        TMLPort tmlPort = (TMLPort) o;
-        return prex == tmlPort.isPrex() &&
-                postex == tmlPort.isPostex() &&
-                Objects.equals(associatedEvent, tmlPort.getAssociatedEvent()) &&
-                Objects.equals(dataFlowType, tmlPort.getDataFlowType());
-    }
+    TMLPort tmlPort = (TMLPort) o;
+    return prex == tmlPort.isPrex() && postex == tmlPort.isPostex()
+        && Objects.equals(associatedEvent, tmlPort.getAssociatedEvent())
+        && Objects.equals(dataFlowType, tmlPort.getDataFlowType());
+  }
 }

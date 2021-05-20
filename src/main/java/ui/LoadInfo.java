@@ -36,28 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class LoadInfo
- * Load information for HW elements. Used for simulation purpose
+ * Class LoadInfo Load information for HW elements. Used for simulation purpose
  * Creation: 11/05/2010
+ * 
  * @version 1.0 11/05/2010
  * @author Ludovic APVRILLE
  */
 public class LoadInfo {
-    
-    
-    public int id;
-	public double load;
-	public long energy;
-    
-    public LoadInfo() {
-    }
+
+  public int id;
+  public double load;
+  public long energy;
+
+  public LoadInfo() {
+  }
 }

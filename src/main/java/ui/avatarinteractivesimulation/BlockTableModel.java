@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarinteractivesimulation;
 
 import avatartranslator.directsimulation.AvatarSimulationBlock;
@@ -47,109 +44,108 @@ import avatartranslator.directsimulation.AvatarSpecificationSimulation;
 import javax.swing.table.AbstractTableModel;
 
 /**
-   * Class blockTableModel
-   * Information on blocks
-   * Creation: 21/01/2011
-   * @version 1.0 21/01/2011
-   * @author Ludovic APVRILLE
+ * Class blockTableModel Information on blocks Creation: 21/01/2011
+ * 
+ * @version 1.0 21/01/2011
+ * @author Ludovic APVRILLE
  */
 public class BlockTableModel extends AbstractTableModel {
-    private AvatarSpecificationSimulation ass;
+  private AvatarSpecificationSimulation ass;
 
-    private int nbOfRows;
+  private int nbOfRows;
 
-    //private String [] names;
-    public BlockTableModel(AvatarSpecificationSimulation _ass) {
-        ass = _ass;
-        computeData();
+  // private String [] names;
+  public BlockTableModel(AvatarSpecificationSimulation _ass) {
+    ass = _ass;
+    computeData();
+  }
+
+  // From AbstractTableModel
+  public int getRowCount() {
+
+    if (nbOfRows == -1) {
+      computeData();
+    }
+    return nbOfRows;
+  }
+
+  public int getColumnCount() {
+    return 4;
+  }
+
+  public Object getValueAt(int row, int column) {
+    if (ass == null) {
+      return "-";
     }
 
-    // From AbstractTableModel
-    public int getRowCount() {
+    if (column == 0) {
+      return getBlockName(row);
+    } else if (column == 1) {
+      return getBlockID(row);
+    } else if (column == 2) {
+      return getBlockStatus(row);
+    } else if (column == 3) {
+      return getBlockNbOfTransactions(row);
+    }
+    return "";
+  }
 
-        if (nbOfRows == -1) {
-            computeData();
-        }
-        return nbOfRows;
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Block Name";
+      case 1:
+        return "Block ID";
+      case 2:
+        return "State";
+      case 3:
+        return "Nb of transactions";
+    }
+    return "unknown";
+  }
+
+  // Assumes tmlm != null
+  private String getBlockName(int row) {
+    return ass.getSimulationBlocks().get(row).getName();
+  }
+
+  // Assumes tmlm != null
+  private String getBlockID(int row) {
+    return "" + ass.getSimulationBlocks().get(row).getID();
+  }
+
+  public String getBlockStatus(int row) {
+    int status = ass.getSimulationBlocks().get(row).getStatus();
+
+    switch (status) {
+      case AvatarSimulationBlock.NOT_STARTED:
+        return "not started";
+      case AvatarSimulationBlock.STARTED:
+        return "running";
+      case AvatarSimulationBlock.COMPLETED:
+        return "terminated";
+    }
+    return "unknown";
+
+  }
+
+  public String getBlockNbOfTransactions(int row) {
+    return "" + ass.getSimulationBlocks().get(row).getTransactions().size();
+  }
+
+  private void computeData() {
+    if (ass == null) {
+      nbOfRows = 0;
+      return;
     }
 
-    public int getColumnCount() {
-        return 4;
+    if (ass.getSimulationBlocks() != null) {
+      nbOfRows = ass.getSimulationBlocks().size();
+    } else {
+      nbOfRows = -1;
     }
 
-    public Object getValueAt(int row, int column) {
-        if (ass == null) {
-            return "-";
-        }
-
-        if (column == 0) {
-            return getBlockName(row);
-        } else if (column == 1) {
-            return getBlockID(row);
-        } else if (column == 2) {
-            return getBlockStatus(row);
-        } else if (column == 3) {
-            return getBlockNbOfTransactions(row);
-        }
-        return "";
-    }
-
-    public String getColumnName(int columnIndex) {
-        switch(columnIndex) {
-        case 0:
-            return "Block Name";
-        case 1:
-            return "Block ID";
-        case 2:
-            return "State";
-        case 3:
-            return "Nb of transactions";
-        }
-        return "unknown";
-    }
-
-    // Assumes tmlm != null
-    private String getBlockName(int row) {
-        return ass.getSimulationBlocks().get(row).getName();
-    }
-
-    // Assumes tmlm != null
-    private String getBlockID(int row) {
-        return ""+ass.getSimulationBlocks().get(row).getID();
-    }
-
-    public String getBlockStatus(int row) {
-        int status = ass.getSimulationBlocks().get(row).getStatus();
-
-        switch(status) {
-        case AvatarSimulationBlock.NOT_STARTED:
-            return "not started";
-        case AvatarSimulationBlock.STARTED:
-            return "running";
-        case AvatarSimulationBlock.COMPLETED:
-            return "terminated";
-        }
-        return "unknown";
-
-    }
-
-    public String getBlockNbOfTransactions(int row) {
-        return  ""+ ass.getSimulationBlocks().get(row).getTransactions().size();
-    }
-
-    private void computeData() {
-        if (ass == null) {
-            nbOfRows = 0;
-            return ;
-        }
-
-        if (ass.getSimulationBlocks() != null) {
-            nbOfRows = ass.getSimulationBlocks().size();
-        } else {
-            nbOfRows = -1;
-        }
-
-        return;
-    }
+    return;
+  }
 
 }

@@ -46,107 +46,107 @@ import tmltranslator.TMLTask;
 import java.util.List;
 
 /**
-   * Class Buffer
-   * Creation: 11/02/2014
-   * @version 1.0 11/02/2014
-   * @author Andrea ENRICI
+ * Class Buffer Creation: 11/02/2014
+ * 
+ * @version 1.0 11/02/2014
+ * @author Andrea ENRICI
  */
-public class Buffer	implements CCodeGenConstants {
+public class Buffer implements CCodeGenConstants {
 
-	protected static final int NUM_SAMPLES_INDEX = 1;
-	protected static final int BASE_ADDRESS_INDEX = 2;
+  protected static final int NUM_SAMPLES_INDEX = 1;
+  protected static final int BASE_ADDRESS_INDEX = 2;
 
-	public static final String[] MEMORY_TYPES = { "FEP memory", "MAPPER memory", "ADAIF memory", "INTERLEAVER memory", "MAIN MEMORY memory" };
-	public static final String[] ON_OFF_VALUES = { "ON", "OFF" };
-	public static final int ANOMALY = -1;
-	public static final int FEP_BUFFER = 0;
-	public static final int MAPPER_BUFFER = 1;
-	public static final int ADAIF_BUFFER = 2;
-	public static final int INTERLEAVER_BUFFER = 3;
-	public static final int MAIN_MEMORY_BUFFER = 4;
-	public static final int BASE_BUFFER = 5;
+  public static final String[] MEMORY_TYPES = { "FEP memory", "MAPPER memory", "ADAIF memory", "INTERLEAVER memory",
+      "MAIN MEMORY memory" };
+  public static final String[] ON_OFF_VALUES = { "ON", "OFF" };
+  public static final int ANOMALY = -1;
+  public static final int FEP_BUFFER = 0;
+  public static final int MAPPER_BUFFER = 1;
+  public static final int ADAIF_BUFFER = 2;
+  public static final int INTERLEAVER_BUFFER = 3;
+  public static final int MAIN_MEMORY_BUFFER = 4;
+  public static final int BASE_BUFFER = 5;
 
-	public static final int BUFFER_TYPE_INDEX = 0; // the index of the buffer type in bufferParameters. The latter is retrieved from the xml description of a design
+  public static final int BUFFER_TYPE_INDEX = 0; // the index of the buffer type in bufferParameters. The latter is
+                                                 // retrieved from the xml description of a design
 
-//	public static String CR = "\n";
-//	public static String CR2 = "\n\n";
-//	public static String TAB = "\t";
-//	public static String TAB2 = "\t\t";
-//	public static String SP = " ";
-//	public static String SC = ";";
+  // public static String CR = "\n";
+  // public static String CR2 = "\n\n";
+  // public static String TAB = "\t";
+  // public static String TAB2 = "\t\t";
+  // public static String SP = " ";
+  // public static String SC = ";";
 
-	//protected static String USER_TO_DO = " 0 /* USER TODO: VALUE */";
-	protected String code = "VOID";
-	protected String name = "";
-	protected String type = "";
-	protected TMLTask task;
-	protected TMLPort port;
-	protected TMLCPLibArtifact artifact;
-	protected String baseAddress = DEFAULT_NUM_VAL + USER_TO_DO;//" 0 /* USER TODO: VALUE */";
-	protected String endAddress = baseAddress;//" 0 /* USER TODO: VALUE */";
-	protected List<String> bufferParameters;
-	
-	//private String Context = "";
+  // protected static String USER_TO_DO = " 0 /* USER TODO: VALUE */";
+  protected String code = "VOID";
+  protected String name = "";
+  protected String type = "";
+  protected TMLTask task;
+  protected TMLPort port;
+  protected TMLCPLibArtifact artifact;
+  protected String baseAddress = DEFAULT_NUM_VAL + USER_TO_DO;// " 0 /* USER TODO: VALUE */";
+  protected String endAddress = baseAddress;// " 0 /* USER TODO: VALUE */";
+  protected List<String> bufferParameters;
 
-	public Buffer()	{
-		code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
-	}
+  // private String Context = "";
 
-	@Override
-	public String toString()	{
-		if( port != null )	{
-			if( artifact != null )	{
-				return "buff__" + port.getName() + " mapped onto " + artifact.getMemoryName();
-			}
-			else	{
-				return "buff__" + port.getName();
-			}
-		}
-		else	{
-			String s = type + SP + "BUFFER" + SP + name + CR;
-			return s;
-		}
-	}
+  public Buffer() {
+    code = "struct" + SP + name + TAB + "{" + CR + "}" + SC;
+  }
 
-	public String getName()	{
-		return name;
-	}
+  @Override
+  public String toString() {
+    if (port != null) {
+      if (artifact != null) {
+        return "buff__" + port.getName() + " mapped onto " + artifact.getMemoryName();
+      } else {
+        return "buff__" + port.getName();
+      }
+    } else {
+      String s = type + SP + "BUFFER" + SP + name + CR;
+      return s;
+    }
+  }
 
-	public String getType()	{
-		return type;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public TMLTask getTask()	{
-		return task;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public void addMappingArtifact( TMLCPLibArtifact _artifact )	{
-		artifact = _artifact;
-	}
+  public TMLTask getTask() {
+    return task;
+  }
 
-	public TMLCPLibArtifact getMappingArtifact()	{
-		return artifact;
-	}
+  public void addMappingArtifact(TMLCPLibArtifact _artifact) {
+    artifact = _artifact;
+  }
 
-	public void setStartAddress( String _baseAddress )	{
-		baseAddress = _baseAddress;
-	}
+  public TMLCPLibArtifact getMappingArtifact() {
+    return artifact;
+  }
 
-	public void setEndAddress( String _endAddress )	{
-		endAddress = _endAddress;
-	}
+  public void setStartAddress(String _baseAddress) {
+    baseAddress = _baseAddress;
+  }
 
-	public String getInitCode()	{
-		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".baseAddress = " + baseAddress + SC + CR );
-		return s.toString();
-	}
-//
-//	public String getContext()	{
-//		return Context;
-//	}
+  public void setEndAddress(String _endAddress) {
+    endAddress = _endAddress;
+  }
 
-	public void setMappingParameters( List<String> params )	{
-		bufferParameters = params;
-	}
-}	//End of class
+  public String getInitCode() {
+    StringBuffer s = new StringBuffer();
+    s.append(TAB + name + ".baseAddress = " + baseAddress + SC + CR);
+    return s.toString();
+  }
+  //
+  // public String getContext() {
+  // return Context;
+  // }
+
+  public void setMappingParameters(List<String> params) {
+    bufferParameters = params;
+  }
+} // End of class

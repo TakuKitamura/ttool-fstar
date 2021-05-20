@@ -36,21 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 /**
- * Class MasterProcessInterface
- * For managing execution processes
- * Creation: 2005
+ * Class MasterProcessInterface For managing execution processes Creation: 2005
+ * 
  * @version 1.1 08/03/2005
  * @author Ludovic APVRILLE
  */
-public interface MasterProcessInterface  {
-  
-    boolean hasToContinue();
-    void appendOut(String s);
-    void setError();
+public interface MasterProcessInterface {
+
+  boolean hasToContinue();
+
+  void appendOut(String s);
+
+  void setError();
 }

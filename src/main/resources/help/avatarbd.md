@@ -12,9 +12,7 @@ The following modeling elements can be used for this purpose:
 
 - **Library functions** are meant to factorize the bahavior of blocks
 
--  **Crypto Library functions** are library functions containing a set of cryptographic methods.
-
-
+- **Crypto Library functions** are library functions containing a set of cryptographic methods.
 
 Additionally, properties to be verified by this design are captured using pragmas:
 

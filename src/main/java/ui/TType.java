@@ -36,108 +36,105 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class TType
- * Correspondance between data of a Turtle modeling and graphical elements
- * Creation: 18/12/2003
+ * Class TType Correspondance between data of a Turtle modeling and graphical
+ * elements Creation: 18/12/2003
+ * 
  * @version 1.0 18/12/2003
  * @author Ludovic APVRILLE
  */
 public class TType {
 
-    // type
-    public final static int NONE = 0;
-    public final static int NATURAL = 1;
-    public final static int BOOLEAN = 2;
-    public final static int OTHER = 3;
+  // type
+  public final static int NONE = 0;
+  public final static int NATURAL = 1;
+  public final static int BOOLEAN = 2;
+  public final static int OTHER = 3;
 
-    private int type;
-    private String typeOther;
+  private int type;
+  private String typeOther;
 
-    public TType() {
-        type = NONE;
-        typeOther = "";
+  public TType() {
+    type = NONE;
+    typeOther = "";
+  }
+
+  public TType(int _type) {
+    type = _type;
+    typeOther = "";
+  }
+
+  public TType(String _typeOther) {
+    type = OTHER;
+    typeOther = _typeOther;
+  }
+
+  public TType(int _type, String _typeOther) {
+    type = _type;
+    typeOther = _typeOther;
+
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public String getTypeOther() {
+    return typeOther;
+  }
+
+  public void setType(int _type) {
+    type = _type;
+  }
+
+  public void setType(String _type) {
+    type = getType(_type);
+    if (type == OTHER) {
+      typeOther = _type;
+    } else {
+      typeOther = "";
     }
+  }
 
-    public TType(int _type) {
-        type = _type;
-        typeOther = "";
+  public boolean equals(TType _t) {
+    return getType() == _t.getType();
+  }
+
+  public static int getType(String s) {
+    if (s.equals("<unset>")) {
+      return NONE;
+    } else if (s.equals("Natural")) {
+      return NATURAL;
+    } else if (s.equals("Boolean")) {
+      return BOOLEAN;
+    } else if (!s.equals("")) {
+      return OTHER;
     }
+    return -1;
+  }
 
-    public TType(String _typeOther) {
-        type = OTHER;
-        typeOther = _typeOther;
+  public static String getStringType(int type) {
+    switch (type) {
+      case NONE:
+        return "<unset>";
+      case NATURAL:
+        return "Natural";
+      case BOOLEAN:
+        return "Boolean";
+      case OTHER:
+        return "Other";
+      default:
+        return "";
     }
+  }
 
-    public TType(int _type, String _typeOther) {
-        type = _type;
-        typeOther = _typeOther;
+  public String toString() {
+    return getStringType(type);
+  }
 
-    }
-
-
-    public int getType() { return type;}
-    public String getTypeOther() { return typeOther;}
-
-    public void setType(int _type) { type = _type;}
-
-    public void setType(String _type) {
-        type = getType(_type);
-        if (type == OTHER) {
-            typeOther = _type;
-        } else {
-            typeOther = "";
-        }
-    }
-
-    public boolean equals(TType _t) {
-	return getType() == _t.getType();
-    }
-
-    public static int getType(String s) {
-        if (s.equals("<unset>")) {
-            return NONE;
-        } else if (s.equals("Natural")) {
-            return      NATURAL;
-        } else if (s.equals("Boolean")) {
-            return      BOOLEAN;
-        } else if (!s.equals("")) {
-            return OTHER;
-        }
-        return -1;
-    }
-
-
-
-    public static String getStringType(int type) {
-        switch(type) {
-        case NONE:
-            return "<unset>";
-        case NATURAL:
-            return "Natural";
-        case BOOLEAN:
-            return "Boolean";
-        case OTHER:
-            return "Other";
-        default:
-            return "";
-        }
-    }
-
-    public String toString() {
-        return getStringType(type);
-    }
-
-
-    public TType makeClone() {
-        return new TType(type, typeOther);
-    }
+  public TType makeClone() {
+    return new TType(type, typeOther);
+  }
 }

@@ -36,39 +36,36 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import java.util.LinkedList;
 
-
 /**
- * Class AvatarPragma
- * Creation: 20/05/2010
+ * Class AvatarPragma Creation: 20/05/2010
+ * 
  * @version 1.1 01/07/2014
  * @author Ludovic APVRILLE, Raja GATGOUT
  */
 public class AvatarPragmaPublic extends AvatarPragma {
 
-    private LinkedList<AvatarAttribute> arguments;
+  private LinkedList<AvatarAttribute> arguments;
 
-    public AvatarPragmaPublic(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
-        super(_name, _referenceObject);
-        arguments = args;
-    }
-    public LinkedList<AvatarAttribute> getArgs(){
-	return arguments;
-    }
+  public AvatarPragmaPublic(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
+    super(_name, _referenceObject);
+    arguments = args;
+  }
 
-    @Override
-    public AvatarPragmaPublic advancedClone (AvatarSpecification avspec) {
-        LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
-        for (AvatarAttribute aa: this.arguments)
-            l.add (avspec.getMatchingAttribute(aa));
-        AvatarPragmaPublic result = new AvatarPragmaPublic (this.name, this.referenceObject, l);
-        this.cloneLinkToReferenceObjects (result);
-        return result;
-    }
+  public LinkedList<AvatarAttribute> getArgs() {
+    return arguments;
+  }
+
+  @Override
+  public AvatarPragmaPublic advancedClone(AvatarSpecification avspec) {
+    LinkedList<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
+    for (AvatarAttribute aa : this.arguments)
+      l.add(avspec.getMatchingAttribute(aa));
+    AvatarPragmaPublic result = new AvatarPragmaPublic(this.name, this.referenceObject, l);
+    this.cloneLinkToReferenceObjects(result);
+    return result;
+  }
 }

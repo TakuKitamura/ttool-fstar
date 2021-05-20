@@ -36,219 +36,209 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import myutil.Conversion;
 import myutil.TraceManager;
 
 /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 08/04/2010
-   * @version 1.0 08/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSignal Signals in Avatar ... Creation: 08/04/2010
+ * 
+ * @version 1.0 08/04/2010
+ * @author Ludovic APVRILLE
  */
 public class AvatarSignal extends AvatarMethod {
 
-    // Signa type
-    public final static int IN = 0;
-    public final static int OUT = 1;
+  // Signa type
+  public final static int IN = 0;
+  public final static int OUT = 1;
 
-    private int inout;
+  private int inout;
 
-    public boolean attachedToARelation;
+  public boolean attachedToARelation;
 
+  public AvatarSignal(int _inout, String _id, String _types[], String _typeIds[]) {
+    super(_id, _types, _typeIds);
+    inout = _inout;
+  }
 
-    public AvatarSignal(int _inout, String _id, String _types[], String _typeIds[]) {
-        super(_id, _types, _typeIds);
-        inout = _inout;
+  public static AvatarSignal isAValidSignal(String _content) {
+    String tmp = _content.trim();
+    if (!((_content.startsWith("in ")) || (_content.startsWith("out ")))) {
+      return null;
     }
 
-    public static AvatarSignal isAValidSignal(String _content) {
-        String tmp = _content.trim();
-        if (!((_content.startsWith("in ")) || (_content.startsWith("out ")))) {
-            return null;
-        }
-
-        int tmpinout;
-        if (_content.startsWith("in ")) {
-            tmpinout = IN;
-        } else {
-            tmpinout = OUT;
-        }
-
-        return isAValidSignal(tmpinout, tmp.substring(3, tmp.length()).trim());
+    int tmpinout;
+    if (_content.startsWith("in ")) {
+      tmpinout = IN;
+    } else {
+      tmpinout = OUT;
     }
 
-    public static AvatarSignal isAValidSignal(int _inout, String _content) {
-        if (!((_inout == IN) || (_inout == OUT))) {
-            return null;
-        }
+    return isAValidSignal(tmpinout, tmp.substring(3, tmp.length()).trim());
+  }
 
-        AvatarMethod am = isAValidMethod(_content);
-        if (am == null) {
-            TraceManager.addDev("invalid signal: " + _content);
-            return null;
-        }
-        AvatarSignal as = new AvatarSignal(_inout, am.getId(), am.getTypes(), am.getTypeIds());
-
-        return as;
+  public static AvatarSignal isAValidSignal(int _inout, String _content) {
+    if (!((_inout == IN) || (_inout == OUT))) {
+      return null;
     }
 
-    public static boolean isAValidUseSignal(String _content) {
-        if (_content.indexOf("()") == -1) {
-            _content = Conversion.replaceAllString(_content, "(", "#int ");
-            _content = Conversion.replaceAllString(_content, "#", "(");
-            _content = Conversion.replaceAllString(_content, ",", "#int ");
-            _content = Conversion.replaceAllString(_content, "#", ",");
-            _content = Conversion.replaceAllString(_content, ".", "");
-        }
-        TraceManager.addDev("content:" + _content);
-        return (isAValidMethod(_content) != null);
+    AvatarMethod am = isAValidMethod(_content);
+    if (am == null) {
+      TraceManager.addDev("invalid signal: " + _content);
+      return null;
+    }
+    AvatarSignal as = new AvatarSignal(_inout, am.getId(), am.getTypes(), am.getTypeIds());
+
+    return as;
+  }
+
+  public static boolean isAValidUseSignal(String _content) {
+    if (_content.indexOf("()") == -1) {
+      _content = Conversion.replaceAllString(_content, "(", "#int ");
+      _content = Conversion.replaceAllString(_content, "#", "(");
+      _content = Conversion.replaceAllString(_content, ",", "#int ");
+      _content = Conversion.replaceAllString(_content, "#", ",");
+      _content = Conversion.replaceAllString(_content, ".", "");
+    }
+    TraceManager.addDev("content:" + _content);
+    return (isAValidMethod(_content) != null);
+  }
+
+  public int getInOut() {
+    return inout;
+  }
+
+  public static String getStringInOut(int _inout) {
+    switch (_inout) {
+      case IN:
+        return "in";
+      case OUT:
+      default:
+        return "out";
+    }
+  }
+
+  public String toBasicString() {
+    return super.toString();
+  }
+
+  public String toString() {
+    int cpt = 0;
+
+    String signal = getStringInOut(inout) + " ";
+    signal += super.toString();
+    return signal;
+  }
+
+  // Comparison on id only
+  public boolean equals(Object o) {
+    if (!(o instanceof AvatarSignal)) {
+      return false;
     }
 
-    public int getInOut() {
-        return inout;
+    AvatarSignal as = (AvatarSignal) o;
+    return getId().equals(as.getId());
+
+  }
+
+  // Comparison on all fields
+  /*
+   * public int compareTo(Object o){ if (!(o instanceof AvatarMethod)) { return 1;
+   * }
+   * 
+   * AvatarMethod am = (AvatarMethod)o; if (!(getId().equals(am.getId()))) {
+   * return 1; }
+   * 
+   * 
+   * return 0;
+   * 
+   * }
+   */
+
+  public AvatarSignal makeClone() {
+    return isAValidSignal(inout, super.toString());
+  }
+
+  public boolean hasSamePrototype(AvatarSignal _as) {
+    String[] astypes = _as.getTypes();
+
+    if (astypes.length != types.length) {
+      return false;
     }
 
-    public static String getStringInOut(int _inout) {
-        switch(_inout) {
-        case IN:
-            return "in";
-        case OUT:
-        default:
-            return "out";
-        }
-    }
-
-    public String toBasicString() {
-        return super.toString();
-    }
-
-    public String toString() {
-        int cpt = 0;
-
-        String signal = getStringInOut(inout) + " ";
-        signal += super.toString();
-        return signal;
-    }
-
-
-
-    // Comparison on id only
-    public boolean equals(Object o) {
-        if (!(o instanceof AvatarSignal)) {
-            return false;
-        }
-
-        AvatarSignal as = (AvatarSignal)o;
-        return getId().equals(as.getId());
-
-    }
-
-    // Comparison on all fields
-    /*public int compareTo(Object o){
-      if (!(o instanceof AvatarMethod)) {
-      return 1;
+    for (int i = 0; i < types.length; i++) {
+      if (!(types[i].compareTo(astypes[i]) == 0)) {
+        return false;
       }
+    }
 
-      AvatarMethod am = (AvatarMethod)o;
-      if (!(getId().equals(am.getId()))) {
-      return 1;
-      }
+    return true;
+  }
 
+  public boolean isCompatibleWith(AvatarSignal _as) {
+    if (_as.getInOut() == getInOut()) {
+      return false;
+    }
 
+    return this.hasSamePrototype(_as);
+  }
+
+  public static String getSignalNameFromFullSignalString(String _signal) {
+    String signal = _signal.trim();
+    int index0 = signal.indexOf(" ");
+    if (index0 != -1) {
+      signal = signal.substring(index0 + 1, signal.length()).trim();
+    }
+
+    index0 = signal.indexOf("(");
+    if (index0 != -1) {
+      signal = signal.substring(0, index0).trim();
+    }
+
+    return signal;
+  }
+
+  public static int getNbOfValues(String _value) {
+    int index = _value.indexOf('(');
+    if (index == -1) {
+      return -1;
+    }
+
+    int index0 = _value.indexOf(')');
+    if (index0 == -1) {
+      return -1;
+    }
+
+    String val = _value.substring(index + 1, index0).trim();
+
+    if (val.length() == 0) {
       return 0;
-
-      }*/
-
-    public AvatarSignal makeClone() {
-        return isAValidSignal(inout, super.toString());
     }
 
-    public boolean hasSamePrototype (AvatarSignal _as) {
-        String[] astypes = _as.getTypes();
+    int nbChar = Conversion.nbChar(_value, ',');
+    return nbChar + 1;
+  }
 
-        if (astypes.length != types.length) {
-            return false;
-        }
+  public static String getValue(String _value, int _index) {
 
-        for(int i=0; i<types.length; i++) {
-            if (!(types[i].compareTo(astypes[i]) == 0)) {
-                return false;
-            }
-        }
+    int nbOfValues = getNbOfValues(_value);
 
-        return true;
+    if (nbOfValues < 1) {
+      return null;
     }
 
-    public boolean isCompatibleWith(AvatarSignal _as) {
-        if (_as.getInOut() == getInOut()) {
-            return false;
-        }
-
-        return this.hasSamePrototype (_as);
+    if (_index >= nbOfValues) {
+      return null;
     }
 
-    public static String getSignalNameFromFullSignalString(String _signal) {
-        String signal = _signal.trim();
-        int index0 = signal.indexOf(" ");
-        if (index0 != -1) {
-            signal = signal.substring(index0+1, signal.length()).trim();
-        }
+    int index0 = _value.indexOf('(');
+    int index1 = _value.indexOf(')');
 
-        index0 = signal.indexOf("(");
-        if (index0 != -1) {
-            signal = signal.substring(0, index0).trim();
-        }
+    String val = _value.substring(index0 + 1, index1).trim();
 
-        return signal;
-    }
+    String[] vals = val.split(",");
+    return vals[_index].trim();
 
-    public static int getNbOfValues(String _value) {
-        int index = _value.indexOf('(');
-        if (index == -1) {
-            return -1;
-        }
-
-        int index0 = _value.indexOf(')');
-        if (index0 == -1) {
-            return -1;
-        }
-
-        String val = _value.substring(index+1, index0).trim();
-
-        if (val.length() == 0) {
-            return 0;
-        }
-
-        int nbChar = Conversion.nbChar(_value, ',');
-        return nbChar+1;
-    }
-
-    public static String getValue(String _value, int _index) {
-
-        int nbOfValues = getNbOfValues(_value);
-
-        if (nbOfValues < 1) {
-            return null;
-        }
-
-        if (_index >= nbOfValues) {
-            return null;
-        }
-
-        int index0 = _value.indexOf('(');
-        int index1 = _value.indexOf(')');
-
-        String val = _value.substring(index0+1, index1).trim();
-
-        String [] vals = val.split(",");
-        return vals[_index].trim();
-
-    }
+  }
 }

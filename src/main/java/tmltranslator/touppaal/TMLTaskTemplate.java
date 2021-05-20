@@ -36,42 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.touppaal;
 
 import tmltranslator.TMLTask;
 import uppaaldesc.UPPAALTemplate;
 
 /**
-* Class TMLTaskTemplate
-* Creation: 21/05/2007
-* @version 1.1 21/05/2007
-* @author Ludovic APVRILLE
+ * Class TMLTaskTemplate Creation: 21/05/2007
+ * 
+ * @version 1.1 21/05/2007
+ * @author Ludovic APVRILLE
  */
 public class TMLTaskTemplate {
-	public TMLTask task;
-	public UPPAALTemplate template;
-	public int beginid; // Instanciation information
-	public int endid; // Instanciation information
-    
-	public TMLTaskTemplate() {}
+  public TMLTask task;
+  public UPPAALTemplate template;
+  public int beginid; // Instanciation information
+  public int endid; // Instanciation information
 
-    public TMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
-		task = _task;
-		template = _template;
-	}
-	
-	public String toString() {
-		String s = "";
-		if (task != null) {
-			s += "task: " + task.getName() + " " ;
-		}
-		if (template != null) {
-			s += "template:" + template.getName() + " "; 
-		}
-		s += "beginid=" + beginid + " endid=" + endid;
-		return s;
-	}
+  public TMLTaskTemplate() {
+  }
+
+  public TMLTaskTemplate(TMLTask _task, UPPAALTemplate _template) {
+    task = _task;
+    template = _template;
+  }
+
+  public String toString() {
+    String s = "";
+    if (task != null) {
+      s += "task: " + task.getName() + " ";
+    }
+    if (template != null) {
+      s += "template:" + template.getName() + " ";
+    }
+    s += "beginid=" + beginid + " endid=" + endid;
+    return s;
+  }
 }

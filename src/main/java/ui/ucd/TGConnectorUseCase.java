@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ucd;
 
 import ui.*;
@@ -48,36 +45,29 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class TGConnectorUseCase
- * Connector to be used in use case diagram. Connects an actor to a use case
- * Creation: 22/02/2005
+ * Class TGConnectorUseCase Connector to be used in use case diagram. Connects
+ * an actor to a use case Creation: 22/02/2005
+ * 
  * @version 1.0 22/02/2005
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorUseCase extends TGConnector {
-    
-    public TGConnectorUseCase(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        
-        myImageIcon = IconManager.imgic604;
-    }
-    
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        g.drawLine(x1, y1, x2, y2);
-    }
-      
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.CONNECTOR_ACTOR_UCD;
-    }
-    
+public class TGConnectorUseCase extends TGConnector {
+
+  public TGConnectorUseCase(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+
+    myImageIcon = IconManager.imgic604;
+  }
+
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    g.drawLine(x1, y1, x2, y2);
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.CONNECTOR_ACTOR_UCD;
+  }
+
 }
-
-
-
-
-
-
-

@@ -39,40 +39,40 @@
 package elntranslator;
 
 /**
- * Class ELNTModulePortTDF
- * Parameters of a ELN primitive component : module port TDF
- * Creation: 03/08/2018
+ * Class ELNTModulePortTDF Parameters of a ELN primitive component : module port
+ * TDF Creation: 03/08/2018
+ * 
  * @version 1.0 03/08/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTModulePortTDF extends ELNTComponent {
-	private String name;
-	private String type;
-	private String origin;
-	
-	private ELNTModule module;
-	
-	public ELNTModulePortTDF(String _name, String _type, String _origin, ELNTModule _module) {
-		name = _name;
-		type = _type;
-		origin = _origin;
-		module = _module;
-	}
+  private String name;
+  private String type;
+  private String origin;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTModule module;
 
-	public String getType() {
-		return type;
-	}
+  public ELNTModulePortTDF(String _name, String _type, String _origin, ELNTModule _module) {
+    name = _name;
+    type = _type;
+    origin = _origin;
+    module = _module;
+  }
 
-	public String getOrigin() {
-		return origin;
-	}
-	
-	public ELNTModule getModule() {
-		return module;
-	}
+  public String getName() {
+    return name;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getOrigin() {
+    return origin;
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

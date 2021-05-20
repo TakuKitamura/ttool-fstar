@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarinteractivesimulation;
 
 import ui.MainGUI;
@@ -49,132 +46,133 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
-   * Class AvatarMainCommandsToolBar
-   * Toolbar associated with interactive simulation (main commands)
-   * Creation: 21/01/2011
-   * @version 1.0 21/01/2011
-   * @author Ludovic APVRILLE
+ * Class AvatarMainCommandsToolBar Toolbar associated with interactive
+ * simulation (main commands) Creation: 21/01/2011
+ * 
+ * @version 1.0 21/01/2011
+ * @author Ludovic APVRILLE
  */
 public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
 
+  public AvatarMainCommandsToolBar(JFrameAvatarInteractiveSimulation _jfais) {
+    super(_jfais);
+  }
 
-    public AvatarMainCommandsToolBar(JFrameAvatarInteractiveSimulation _jfais) {
-        super(_jfais);
+  protected void setActive(boolean b) {
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].setEnabled(b);
+    // jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(b);
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE]
+        .setEnabled(b && JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE != null);
+    jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
+
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
+    button.addMouseListener(jfais.mouseHandler);
+
+    if (MainGUI.experimentalOn) {
+      this.addSeparator();
+
+      button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE]);
+      button.addMouseListener(jfais.mouseHandler);
     }
 
-    protected void setActive(boolean b) {
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].setEnabled(b);
-        //jfais.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(b);
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE].
-                setEnabled(b&&JFrameAvatarInteractiveSimulation.SELECTED_SIMULATION_TRACE != null);
-        jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
+    this.addSeparator();
+    this.addSeparator();
 
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT]);
+    button.addMouseListener(jfais.mouseHandler);
 
+    button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN]);
+    button.addMouseListener(jfais.mouseHandler);
 
-    }
+    /*
+     * this.addSeparator();
+     * 
+     * button =
+     * this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME]);
+     * button.addMouseListener(jfis.mouseHandler);
+     * 
+     * button =
+     * this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS]);
+     * button.addMouseListener(jfis.mouseHandler);
+     * 
+     * this.addSeparator();
+     * 
+     * button =
+     * this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS]);
+     * button.addMouseListener(jfis.mouseHandler);
+     * 
+     * button =
+     * this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
+     * button.addMouseListener(jfis.mouseHandler);
+     * 
+     * this.addSeparator();
+     * 
+     * button =
+     * this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION]);
+     * button.addMouseListener(jfis.mouseHandler);
+     * 
+     * this.addSeparator();
+     * 
+     * button =
+     * this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES
+     * ]); button.addMouseListener(jfis.mouseHandler);
+     * 
+     * button = this.add(jfis.actions[InteractiveSimulationActions.
+     * ACT_RUN_TO_NEXT_BUS_TRANSFER]); button.addMouseListener(jfis.mouseHandler);
+     * 
+     * button = this.add(jfis.actions[InteractiveSimulationActions.
+     * ACT_RUN_UNTIL_MEMORY_ACCESS]); button.addMouseListener(jfis.mouseHandler);
+     * 
+     * this.addSeparator();
+     * 
+     * button = this.add(jfis.actions[InteractiveSimulationActions.
+     * ACT_RUN_UNTIL_TASK_EXECUTES]); button.addMouseListener(jfis.mouseHandler);
+     * 
+     * button = this.add(jfis.actions[InteractiveSimulationActions.
+     * ACT_RUN_UNTIL_CHANNEL_ACCESS]); button.addMouseListener(jfis.mouseHandler);
+     */
 
-    protected void setButtons() {
-        JButton button;
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU_MAX_TRANS]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU]);
-        button.addMouseListener(jfais.mouseHandler);
-
-
-
-        this.addSeparator();
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        if (MainGUI.experimentalOn) {
-            this.addSeparator();
-
-            button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_TRACE]);
-            button.addMouseListener(jfais.mouseHandler);
-        }
-
-        this.addSeparator();
-        this.addSeparator();
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT]);
-        button.addMouseListener(jfais.mouseHandler);
-
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN]);
-        button.addMouseListener(jfais.mouseHandler);
-
-
-        /*this.addSeparator();
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          this.addSeparator();
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          this.addSeparator();
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          this.addSeparator();
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          this.addSeparator();
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES]);
-          button.addMouseListener(jfis.mouseHandler);
-
-          button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS]);
-          button.addMouseListener(jfis.mouseHandler);*/
-
-
-    }
+  }
 } // Class

@@ -36,18 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
-
 /**
-   * Class TMLArchiPortInterface
-   * Interface of port artifact 
-   * Creation: 13/09/2016
-   * @version 1.0 13/09/2016
-   * @author Ludovic APVRILLE
+ * Class TMLArchiPortInterface Interface of port artifact Creation: 13/09/2016
+ * 
+ * @version 1.0 13/09/2016
+ * @author Ludovic APVRILLE
  */
-public interface TMLArchiPortInterface  {
+public interface TMLArchiPortInterface {
 }

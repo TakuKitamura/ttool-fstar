@@ -37,36 +37,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-   * Class TMLCPRefAD
-   * Creation: 18/02/2014
-   * @version 1.1 04/06/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLCPRefAD Creation: 18/02/2014
+ * 
+ * @version 1.1 04/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPRefAD extends TMLCPElement  {
+public class TMLCPRefAD extends TMLCPElement {
 
-    private TMLCPActivityDiagram reference;
+  private TMLCPActivityDiagram reference;
 
-    public TMLCPRefAD( TMLCPActivityDiagram _ref, String _name, Object _referenceObject ) {
-        super( _name, _referenceObject );
-        reference = _ref;
-    }
+  public TMLCPRefAD(TMLCPActivityDiagram _ref, String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    reference = _ref;
+  }
 
-    public TMLCPRefAD( String _name, Object _referenceObject ) {
-        super( _name, _referenceObject );
-        reference = null;
-    }
+  public TMLCPRefAD(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    reference = null;
+  }
 
-    public TMLCPActivityDiagram getReference() {
-        return this.reference;
-    }
+  public TMLCPActivityDiagram getReference() {
+    return this.reference;
+  }
 
-    public void setReference( TMLCPActivityDiagram _ref ) {
-        this.reference = _ref;
-    }
+  public void setReference(TMLCPActivityDiagram _ref) {
+    this.reference = _ref;
+  }
 }

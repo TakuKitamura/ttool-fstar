@@ -36,45 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifFunc
- * Creation: 13/09/2015
+ * Class ProVerifFunc Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifFunc implements ProVerifDeclaration {
-    protected String name;
-    protected String[] types;
-    protected String returnType;
-    protected boolean priv;
-    protected ProVerifReduc reduc;
+  protected String name;
+  protected String[] types;
+  protected String returnType;
+  protected boolean priv;
+  protected ProVerifReduc reduc;
 
-    public ProVerifFunc (String _name, String[] _types, String _returnType, ProVerifReduc _reduc, boolean _priv) {
-        this.name = _name;
-        this.types = _types;
-        this.returnType = _returnType;
-        this.reduc = _reduc;
-        this.priv = _priv;
-    }
+  public ProVerifFunc(String _name, String[] _types, String _returnType, ProVerifReduc _reduc, boolean _priv) {
+    this.name = _name;
+    this.types = _types;
+    this.returnType = _returnType;
+    this.reduc = _reduc;
+    this.priv = _priv;
+  }
 
-    public ProVerifFunc (String _name, String[] _types, String _returnType, boolean _priv) {
-        this (_name, _types, _returnType, null, _priv);
-    }
+  public ProVerifFunc(String _name, String[] _types, String _returnType, boolean _priv) {
+    this(_name, _types, _returnType, null, _priv);
+  }
 
-    public ProVerifFunc (String _name, String[] _types, String _returnType, ProVerifReduc _reduc) {
-        this (_name, _types, _returnType, _reduc, false);
-    }
+  public ProVerifFunc(String _name, String[] _types, String _returnType, ProVerifReduc _reduc) {
+    this(_name, _types, _returnType, _reduc, false);
+  }
 
-    public ProVerifFunc (String _name, String[] _types, String _returnType) {
-        this (_name, _types, _returnType, null, false);
-    }
+  public ProVerifFunc(String _name, String[] _types, String _returnType) {
+    this(_name, _types, _returnType, null, false);
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateFunc (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateFunc(this, _alinea);
+  }
 }

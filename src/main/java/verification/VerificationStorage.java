@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package verification;
 
 import myutil.TraceManager;
@@ -47,16 +46,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Vector;
 
-
 /**
- * Class VerificationStorage
- * Creation: 10/04/2019
- * Version 1.0 10/04/2019
+ * Class VerificationStorage Creation: 10/04/2019 Version 1.0 10/04/2019
  *
  * @author Ludovic APVRILLE
  */
-public interface VerificationStorage  {
+public interface VerificationStorage {
 
-    public boolean addProperty(Property p);
+  public boolean addProperty(Property p);
 
 }

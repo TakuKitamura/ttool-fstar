@@ -38,76 +38,72 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
-
 
 package ddtranslatorSoclib;
 
 import java.util.LinkedList;
 
-public class AvatarRAM extends AvatarComponent{
-    
-    private String memoryName ;
-   
-    private int dataSize; 
+public class AvatarRAM extends AvatarComponent {
 
-    public int index;
-    public int cluster_index;
-    public int no_target;
-    public int no_target_local;
-    public int monitored;
+  private String memoryName;
 
-    LinkedList<AvatarChannel> channelMapped ;
-    
-    public AvatarRAM(String _memoryName, int _dataSize, int _index, int _monitored)  {
-      memoryName = _memoryName;
-      dataSize = _dataSize;
-      index = _index;   
-      monitored=_monitored;
-      channelMapped =  new LinkedList<AvatarChannel>();
-    }
+  private int dataSize;
 
-    public String getMemoryName(){
-	return memoryName;
-    }
+  public int index;
+  public int cluster_index;
+  public int no_target;
+  public int no_target_local;
+  public int monitored;
 
-    public int getNo_target(){
-      return no_target;
-    }
+  LinkedList<AvatarChannel> channelMapped;
 
-    public int getIndex(){
-	return index;
-	}
-   
-    public void setNo_target(int _no_target){
-      no_target = _no_target;
-    }
+  public AvatarRAM(String _memoryName, int _dataSize, int _index, int _monitored) {
+    memoryName = _memoryName;
+    dataSize = _dataSize;
+    index = _index;
+    monitored = _monitored;
+    channelMapped = new LinkedList<AvatarChannel>();
+  }
 
-    public int getDataSize(){
-	return dataSize;
-    }
+  public String getMemoryName() {
+    return memoryName;
+  }
 
-    public void setDataSize(int _dataSize){
-	dataSize = _dataSize;
-    }
+  public int getNo_target() {
+    return no_target;
+  }
 
-    public int getMonitored(){
-	return monitored;
-    }
-    public void setMonitored(int _monitored){
-	monitored = _monitored;
-    }
-    
-    public LinkedList<AvatarChannel> getChannels(){
-      return  channelMapped;
-    }
+  public int getIndex() {
+    return index;
+  }
 
-    public void addChannel(AvatarChannel avcl){
-      channelMapped.add(avcl);
-    }
+  public void setNo_target(int _no_target) {
+    no_target = _no_target;
+  }
+
+  public int getDataSize() {
+    return dataSize;
+  }
+
+  public void setDataSize(int _dataSize) {
+    dataSize = _dataSize;
+  }
+
+  public int getMonitored() {
+    return monitored;
+  }
+
+  public void setMonitored(int _monitored) {
+    monitored = _monitored;
+  }
+
+  public LinkedList<AvatarChannel> getChannels() {
+    return channelMapped;
+  }
+
+  public void addChannel(AvatarChannel avcl) {
+    channelMapped.add(avcl);
+  }
 }

@@ -36,35 +36,26 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
- 
 
 /**
- * Class ADEmpty
- * Creation: 02/12/2005
+ * Class ADEmpty Creation: 02/12/2005
+ * 
  * @version 1.0 02/12/2005
  * @author Ludovic APVRILLE
  */
 public class ADEmpty extends ADComponent {
-	public String id;
-	
-    public ADEmpty() {
-		nbNext = 1;
-    }
+  public String id;
 
-    public ADComponent makeSame() {
-      return new ADEmpty();
-    }
-   
-    
-    public String toString() {
-	 	return "Empty component";
-    }
+  public ADEmpty() {
+    nbNext = 1;
+  }
+
+  public ADComponent makeSame() {
+    return new ADEmpty();
+  }
+
+  public String toString() {
+    return "Empty component";
+  }
 }
-    

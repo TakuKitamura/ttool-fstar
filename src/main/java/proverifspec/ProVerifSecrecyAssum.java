@@ -36,25 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifSecrecyAssum
- * Creation: 13/09/2015
+ * Class ProVerifSecrecyAssum Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifSecrecyAssum implements ProVerifDeclaration {
-    protected String name;
+  protected String name;
 
-    public ProVerifSecrecyAssum (String _name) {
-        this.name = _name;
-    }
+  public ProVerifSecrecyAssum(String _name) {
+    this.name = _name;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateSecrecyAssum (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateSecrecyAssum(this, _alinea);
+  }
 }

@@ -48,86 +48,86 @@ import ui.*;
 import ui.util.IconManager;
 
 /**
- * Class TMLCPJoin
- * Join operator. All  incoming activities join in one remaining activity
- * To be used in communication patterns diagrams
- * Creation: 17/02/2014
+ * Class TMLCPJoin Join operator. All incoming activities join in one remaining
+ * activity To be used in communication patterns diagrams Creation: 17/02/2014
+ * 
  * @version 1.0 17/02/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPJoin extends TGCWithoutInternalComponent{
+public class TMLCPJoin extends TGCWithoutInternalComponent {
 
-	// Issue #31
-//	private int lineLength = 0;
-	private static int instanceCounter = 0;
-	private int counter = 0;
-	//private int textX, textY;
+  // Issue #31
+  // private int lineLength = 0;
+  private static int instanceCounter = 0;
+  private int counter = 0;
+  // private int textX, textY;
 
-	public TMLCPJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public TMLCPJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		// Issue #31
-		nbConnectingPoint = 6;
-		connectingPoint = new TGConnectingPoint[6];
-		connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.167, 0.0);
-		connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.333, 0.0);
-		connectingPoint[2] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
-		connectingPoint[3] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.667, 0.0);
-		connectingPoint[4] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.833, 0.0);
-		connectingPoint[5] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
-			
-		initScaling( 150, 5 );
-//		width = 150;
-//		height = 5;
+    // Issue #31
+    nbConnectingPoint = 6;
+    connectingPoint = new TGConnectingPoint[6];
+    connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.167, 0.0);
+    connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.333, 0.0);
+    connectingPoint[2] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[3] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.667, 0.0);
+    connectingPoint[4] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.833, 0.0);
+    connectingPoint[5] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
 
-		addTGConnectingPointsComment();
+    initScaling(150, 5);
+    // width = 150;
+    // height = 5;
 
-		nbInternalTGComponent = 0;
+    addTGConnectingPointsComment();
 
-		moveable = true;
-		editable = false;
-		removable = true;
+    nbInternalTGComponent = 0;
 
-		instanceCounter++;
-		counter = instanceCounter;
-		name = "join" + Integer.toString(counter);
-		
-		myImageIcon = IconManager.imgic206;
-	}
+    moveable = true;
+    editable = false;
+    removable = true;
 
-	@Override
-	protected void internalDrawing(Graphics g) {
-		g.drawRect(x, y, width, height);
-		g.fillRect(x, y, width, height);
-	}
+    instanceCounter++;
+    counter = instanceCounter;
+    name = "join" + Integer.toString(counter);
 
-	@Override
-	public TGComponent isOnMe(int x1, int y1) {
-		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-			return this;
-		}
-		return null;
-	}
-	
-	public String getValueGate() {
-		return tgcomponent[0].getValue();	
-	}
-	
-	@Override
-	public int getType() {
-		return TGComponentManager.TMLCP_JOIN;
-	}
-	
-	@Override
-	public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_TMLCP;
+    myImageIcon = IconManager.imgic206;
+  }
+
+  @Override
+  protected void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.fillRect(x, y, width, height);
+  }
+
+  @Override
+  public TGComponent isOnMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
     }
-	
-    public List<TGConnectingPoint> getEnterConnectingPoints() {
-    	return Arrays.asList( Arrays.copyOfRange( connectingPoint, 0, connectingPoint.length - 1 ) );
-    }
+    return null;
+  }
 
-    public TGConnectingPoint getExitConnectingPoint() {
-    	return connectingPoint[ 5 ];
-    }
+  public String getValueGate() {
+    return tgcomponent[0].getValue();
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TMLCP_JOIN;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_TMLCP;
+  }
+
+  public List<TGConnectingPoint> getEnterConnectingPoints() {
+    return Arrays.asList(Arrays.copyOfRange(connectingPoint, 0, connectingPoint.length - 1));
+  }
+
+  public TGConnectingPoint getExitConnectingPoint() {
+    return connectingPoint[5];
+  }
 }

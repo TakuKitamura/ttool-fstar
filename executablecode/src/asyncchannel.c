@@ -4,33 +4,38 @@
 #include "asyncchannel.h"
 #include "myerrors.h"
 
-
-asyncchannel *getNewAsyncchannel(char *outname, char *inname, int isBlocking, int maxNbOfMessages) {
-  asyncchannel * asyncch = (asyncchannel *)(malloc(sizeof(struct asyncchannel)));
-  if (asyncch == NULL) {
+asyncchannel *getNewAsyncchannel(char *outname, char *inname, int isBlocking, int maxNbOfMessages)
+{
+  asyncchannel *asyncch = (asyncchannel *)(malloc(sizeof(struct asyncchannel)));
+  if (asyncch == NULL)
+  {
     criticalError("Allocation of asyncchannel failed");
   }
   asyncch->inname = inname;
   asyncch->outname = outname;
   asyncch->isBlocking = isBlocking;
   asyncch->maxNbOfMessages = maxNbOfMessages;
-  
+
   return asyncch;
 }
 
-void destroyAsyncchannel(asyncchannel *asyncch) {
+void destroyAsyncchannel(asyncchannel *asyncch)
+{
   free(asyncch);
 }
 
-message* getAndRemoveOldestMessageFromAsyncChannel(asyncchannel *channel) {
+message *getAndRemoveOldestMessageFromAsyncChannel(asyncchannel *channel)
+{
   message *msg;
   message *previous;
 
-  if (channel->currentNbOfMessages == 0) {
+  if (channel->currentNbOfMessages == 0)
+  {
     return NULL;
   }
 
-  if (channel->currentNbOfMessages == 1) {
+  if (channel->currentNbOfMessages == 1)
+  {
     channel->currentNbOfMessages = 0;
     msg = channel->pendingMessages;
     channel->pendingMessages = NULL;
@@ -39,34 +44,37 @@ message* getAndRemoveOldestMessageFromAsyncChannel(asyncchannel *channel) {
 
   msg = channel->pendingMessages;
   previous = msg;
-  while(msg->next != NULL) {
+  while (msg->next != NULL)
+  {
     previous = msg;
     msg = msg->next;
   }
 
-  channel->currentNbOfMessages = channel->currentNbOfMessages -1;
+  channel->currentNbOfMessages = channel->currentNbOfMessages - 1;
   previous->next = NULL;
   return msg;
 }
 
-message* getAndRemoveMostRecentMessageFromAsyncChannel(asyncchannel *channel) {
+message *getAndRemoveMostRecentMessageFromAsyncChannel(asyncchannel *channel)
+{
   message *msg;
   message *previous;
 
-  if (channel->currentNbOfMessages == 0) {
+  if (channel->currentNbOfMessages == 0)
+  {
     return NULL;
   }
 
   msg = channel->pendingMessages;
   channel->pendingMessages = msg->next;
-  channel->currentNbOfMessages = channel->currentNbOfMessages -1;
+  channel->currentNbOfMessages = channel->currentNbOfMessages - 1;
 
   return msg;
 }
 
-
-void addMessageToAsyncChannel(asyncchannel *channel, message *msg) {
+void addMessageToAsyncChannel(asyncchannel *channel, message *msg)
+{
   msg->next = channel->pendingMessages;
   channel->pendingMessages = msg;
-  channel->currentNbOfMessages = channel->currentNbOfMessages+1;
+  channel->currentNbOfMessages = channel->currentNbOfMessages + 1;
 }

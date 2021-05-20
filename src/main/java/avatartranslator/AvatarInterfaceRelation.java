@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
 import java.util.LinkedList;
@@ -47,262 +43,240 @@ import java.util.List;
 import java.util.Map;
 
 /**
-   * Class AvatarInterfaceRelation
-   * synchronizatio in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarInterfaceRelation synchronizatio in Avatar ... Creation:
+ * 20/05/2010
+ * 
+ * @version 1.0 20/05/2010
+ * @author Ludovic APVRILLE
  */
 public class AvatarInterfaceRelation extends AvatarElement {
 
+  public AvatarBlock block1;
+  public AvatarAMSInterface block2;
+  private List<AvatarSignal> signals1, signals2;
+  private boolean blocking, asynchronous, ams, isPrivate, isBroadcast, isLossy;
+  private int sizeOfFIFO; // -1 means infinite
+  public int id;// DG
 
-    public AvatarBlock block1;
-    public AvatarAMSInterface block2;
-    private List<AvatarSignal> signals1, signals2;
-    private boolean blocking, asynchronous, ams, isPrivate, isBroadcast, isLossy;
-    private int sizeOfFIFO; // -1 means infinite
-    public int id;//DG
+  public AvatarInterfaceRelation(String _name, AvatarBlock _block1, AvatarAMSInterface _block2,
+      Object _referenceObject) {
+    super(_name, _referenceObject);
+    signals1 = new LinkedList<AvatarSignal>();
+    signals2 = new LinkedList<AvatarSignal>();
+    block1 = _block1;
+    block2 = _block2;
+    blocking = false;
+    sizeOfFIFO = 1024;
+    asynchronous = false;
+    isBroadcast = false;
+    ams = false;
+    id = 0;// DG
+  }
 
-    public AvatarInterfaceRelation(String _name, AvatarBlock _block1, AvatarAMSInterface _block2, Object _referenceObject) {
-        super(_name, _referenceObject);
-        signals1 = new LinkedList<AvatarSignal>();
-        signals2 = new LinkedList<AvatarSignal>();
-        block1 = _block1;
-        block2 = _block2;
-        blocking = false;
-        sizeOfFIFO = 1024;
-        asynchronous = false;
-        isBroadcast = false;
-	ams = false;
-	id = 0;//DG
-    }
-  
-    public void setId(int newid) {//DG
-        id=newid;
-    }
+  public void setId(int newid) {// DG
+    id = newid;
+  }
 
-    public int getId() {//DG
-        return id;
-    }
+  public int getId() {// DG
+    return id;
+  }
 
+  public boolean containsSignal(AvatarSignal _as) {
+    return (signals1.contains(_as) || signals2.contains(_as));
+  }
 
-    public boolean containsSignal(AvatarSignal _as) {
-        return (signals1.contains(_as) || signals2.contains(_as));
-    }
+  public void setAsynchronous(boolean _b) {
+    asynchronous = _b;
+  }
 
-    public void setAsynchronous(boolean _b) {
-        asynchronous = _b;
-    }
+  public void setAMS(boolean _b) {
+    ams = _b;
+  }
 
-    public void setAMS(boolean _b) {
-        ams = _b;
-    }
-    
-    public void setBlocking(boolean _b) {
-        blocking = _b;
-    }
+  public void setBlocking(boolean _b) {
+    blocking = _b;
+  }
 
-    public void setPrivate(boolean _b) {
-        isPrivate = _b;
-    }
+  public void setPrivate(boolean _b) {
+    isPrivate = _b;
+  }
 
-    public void setBroadcast(boolean _b) {
-        isBroadcast = _b;
-    }
+  public void setBroadcast(boolean _b) {
+    isBroadcast = _b;
+  }
 
-    public void setLossy(boolean _b) {
-        isLossy = _b;
-    }
+  public void setLossy(boolean _b) {
+    isLossy = _b;
+  }
 
-    public void setSizeOfFIFO(int _sizeOfFIFO) {
-        sizeOfFIFO = _sizeOfFIFO;
-    }
+  public void setSizeOfFIFO(int _sizeOfFIFO) {
+    sizeOfFIFO = _sizeOfFIFO;
+  }
 
-    public boolean isAsynchronous() {
-        return asynchronous;
-    }
+  public boolean isAsynchronous() {
+    return asynchronous;
+  }
 
-     public boolean isAMS() {
-        return ams;
-    }
+  public boolean isAMS() {
+    return ams;
+  }
 
-    public boolean isPrivate() {
-        return isPrivate;
-    }
+  public boolean isPrivate() {
+    return isPrivate;
+  }
 
-    public boolean isBroadcast() {
-        return isBroadcast;
-    }
+  public boolean isBroadcast() {
+    return isBroadcast;
+  }
 
-    public boolean isLossy() {
-        return isLossy;
-    }
+  public boolean isLossy() {
+    return isLossy;
+  }
 
-    public int getSizeOfFIFO() {
-        return sizeOfFIFO;
-    }
+  public int getSizeOfFIFO() {
+    return sizeOfFIFO;
+  }
 
-    public boolean isBlocking() {
-        return blocking;
-    }
+  public boolean isBlocking() {
+    return blocking;
+  }
 
+  public void addSignals(AvatarSignal _sig1, AvatarSignal _sig2) {
+    signals1.add(_sig1);
+    signals2.add(_sig2);
+  }
 
+  public int nbOfSignals() {
+    return signals1.size();
+  }
 
-    public void addSignals(AvatarSignal _sig1, AvatarSignal _sig2)   {
-        signals1.add(_sig1);
-        signals2.add(_sig2);
-    }
+  public AvatarSignal getSignal1(int _index) {
+    return signals1.get(_index);
+  }
 
-    public int nbOfSignals() {
-        return signals1.size();
-    }
+  public AvatarSignal getSignal2(int _index) {
+    return signals2.get(_index);
+  }
 
-    public AvatarSignal getSignal1(int _index) {
-        return signals1.get(_index);
-    }
+  public AvatarBlock getBlock1() {
+    return this.block1;
+  }
 
-    public AvatarSignal getSignal2(int _index) {
-        return signals2.get(_index);
-    }
+  public AvatarAMSInterface getBlock2() {
+    return this.block2;
+  }
 
-    public AvatarBlock getBlock1() {
-        return this.block1;
-    }
-
-    public AvatarAMSInterface getBlock2() {
-        return this.block2;
-    }
-
-    public AvatarSignal getInSignal(int _index) {
-        AvatarSignal sig1 = signals1.get(_index);
-        if (sig1.isIn()) {
-            return sig1;
-        }
-
-        return getSignal2(_index);
+  public AvatarSignal getInSignal(int _index) {
+    AvatarSignal sig1 = signals1.get(_index);
+    if (sig1.isIn()) {
+      return sig1;
     }
 
-    public AvatarAMSInterface getInBlock(int _index) {
-        AvatarSignal sig1 = signals1.get(_index);
-        if (sig1.isIn()) {
-            //return block1;
-        }
+    return getSignal2(_index);
+  }
 
-        return block2;
+  public AvatarAMSInterface getInBlock(int _index) {
+    AvatarSignal sig1 = signals1.get(_index);
+    if (sig1.isIn()) {
+      // return block1;
     }
 
-    public AvatarSignal getOutSignal(int _index) {
-        AvatarSignal sig1 = signals1.get(_index);
-        if (sig1.isOut()) {
-            return sig1;
-        }
+    return block2;
+  }
 
-        return getSignal2(_index);
+  public AvatarSignal getOutSignal(int _index) {
+    AvatarSignal sig1 = signals1.get(_index);
+    if (sig1.isOut()) {
+      return sig1;
     }
 
-    public AvatarAMSInterface getOutBlock(int _index) {
-        AvatarSignal sig1 = signals1.get(_index);
-        if (sig1.isOut()) {
-            //return block1;
-        }
+    return getSignal2(_index);
+  }
 
-        return block2;
+  public AvatarAMSInterface getOutBlock(int _index) {
+    AvatarSignal sig1 = signals1.get(_index);
+    if (sig1.isOut()) {
+      // return block1;
     }
 
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        for(int i=0; i<signals1.size(); i++) {
-            if (i>0) {
-                sb.append(" ; ");
-            }
-            if ((signals1.get(i) == null) || (signals2.get(i) == null)) {
-                sb.append(block1.getName() + "." + "NULL" + "=" + block2.getName() + "." + "NULL");
-            } else {
-                sb.append(block1.getName() + "." + signals1.get(i).getName() + "=" + block2.getName() + "." + signals2.get(i).getName());
-            }
-        }
-        return sb.toString();
-    }
+    return block2;
+  }
 
-    public String toStringIndex(int index) {
-        return block1.getName() + "." + signals1.get(index).getName() + " -> " + block2.getName() + "." + signals2.get(index).getName();
-    }
-
-    // Return index of signal. If not found, return -1
-    public int hasSignal(AvatarSignal sig) {
-        int index1 = signals1.indexOf(sig);
-        int index2 = signals2.indexOf(sig);
-        return Math.max(index1, index2);
-    }
-
-    public int getIndexOfSignal(AvatarSignal sig) {
-        int index1 = signals1.indexOf(sig);
-        if (index1 > -1) {
-            return index1;
-        }
-        return signals2.indexOf(sig);
-    }
-
-    /*public void makeRobustness() {
-      LinkedList<AvatarSignal> signals1_tmp = new LinkedList<AvatarSignal>();
-      LinkedList<AvatarSignal> signals2_tmp =  new LinkedList<AvatarSignal>();
-      AvatarSignal as1, as2, astmp;
-      for(int i=0; i<signals1.size(); i++) {
-      as1 = signals1.get(i);
-      as2 = signals2.get(i);
-
-      if (as1.isOut()) {
-      astmp = as2;
-      as2 = as1;
-      as1 = astmp;
+  public String toString() {
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < signals1.size(); i++) {
+      if (i > 0) {
+        sb.append(" ; ");
       }
-
-      signals1_tmp.add(as1);
-      astmp = new AvatarSignal(as1.getName() + "__in", AvatarSignal.IN, as1.getReferenceObject());
-      astmp.setInOut(AvatarSignal.IN);
-      signals2_tmp.add(astmp);
-
-
-      astmp = new AvatarSignal(as2.getName() + "__out", AvatarSignal.OUT, as2.getReferenceObject());
-      astmp.setInOut(AvatarSignal.OUT);
-      signals1_tmp.add(astmp);
-      signals2_tmp.add(as2);
+      if ((signals1.get(i) == null) || (signals2.get(i) == null)) {
+        sb.append(block1.getName() + "." + "NULL" + "=" + block2.getName() + "." + "NULL");
+      } else {
+        sb.append(block1.getName() + "." + signals1.get(i).getName() + "=" + block2.getName() + "."
+            + signals2.get(i).getName());
       }
+    }
+    return sb.toString();
+  }
 
-      signals1 = signals1_tmp;
-      signals2 = signals2_tmp;
-      }*/
+  public String toStringIndex(int index) {
+    return block1.getName() + "." + signals1.get(index).getName() + " -> " + block2.getName() + "."
+        + signals2.get(index).getName();
+  }
 
-    /*   public AvatarInterfaceRelation advancedClone( Map<AvatarBlock, AvatarBlock> correspondenceBlocks) {
-		AvatarBlock b1, b2;
-		b1 = correspondenceBlocks.get(block1);
-		b2 = correspondenceBlocks.get(block2);
-		if ((b1 == null) || (b2 == null)) {
-		    return null;
-		}
-		AvatarInterfaceRelation ar = new AvatarInterfaceRelation(getName(), b1, b2, getReferenceObject());
-		ar.setAsynchronous(isAsynchronous());
-		ar.setBlocking(isBlocking());
-		ar.setPrivate(isPrivate());
-		ar.setBroadcast(isBroadcast());
-		ar.setLossy(isLossy());
-		ar.setSizeOfFIFO(getSizeOfFIFO());
-	
-		// Signals
-		for(int i=0; i<signals1.size(); i++) {
-		    AvatarSignal s1 = getSignal1(i);
-		    AvatarSignal s2 = getSignal2(i);
-		    
-		    AvatarSignal ns1 = b1.getSignalByName(s1.getName());
-		    AvatarSignal ns2 = b2.getSignalByName(s2.getName());
-		    if ((ns1 == null) || (ns2 == null)) {
-			continue;
-		    }	   	
-		    ar.addSignals(ns1, ns2);
-		}
-	
-		cloneLinkToReferenceObjects(ar);	
-	
-		return ar;
-    }*/
+  // Return index of signal. If not found, return -1
+  public int hasSignal(AvatarSignal sig) {
+    int index1 = signals1.indexOf(sig);
+    int index2 = signals2.indexOf(sig);
+    return Math.max(index1, index2);
+  }
+
+  public int getIndexOfSignal(AvatarSignal sig) {
+    int index1 = signals1.indexOf(sig);
+    if (index1 > -1) {
+      return index1;
+    }
+    return signals2.indexOf(sig);
+  }
+
+  /*
+   * public void makeRobustness() { LinkedList<AvatarSignal> signals1_tmp = new
+   * LinkedList<AvatarSignal>(); LinkedList<AvatarSignal> signals2_tmp = new
+   * LinkedList<AvatarSignal>(); AvatarSignal as1, as2, astmp; for(int i=0;
+   * i<signals1.size(); i++) { as1 = signals1.get(i); as2 = signals2.get(i);
+   * 
+   * if (as1.isOut()) { astmp = as2; as2 = as1; as1 = astmp; }
+   * 
+   * signals1_tmp.add(as1); astmp = new AvatarSignal(as1.getName() + "__in",
+   * AvatarSignal.IN, as1.getReferenceObject()); astmp.setInOut(AvatarSignal.IN);
+   * signals2_tmp.add(astmp);
+   * 
+   * 
+   * astmp = new AvatarSignal(as2.getName() + "__out", AvatarSignal.OUT,
+   * as2.getReferenceObject()); astmp.setInOut(AvatarSignal.OUT);
+   * signals1_tmp.add(astmp); signals2_tmp.add(as2); }
+   * 
+   * signals1 = signals1_tmp; signals2 = signals2_tmp; }
+   */
+
+  /*
+   * public AvatarInterfaceRelation advancedClone( Map<AvatarBlock, AvatarBlock>
+   * correspondenceBlocks) { AvatarBlock b1, b2; b1 =
+   * correspondenceBlocks.get(block1); b2 = correspondenceBlocks.get(block2); if
+   * ((b1 == null) || (b2 == null)) { return null; } AvatarInterfaceRelation ar =
+   * new AvatarInterfaceRelation(getName(), b1, b2, getReferenceObject());
+   * ar.setAsynchronous(isAsynchronous()); ar.setBlocking(isBlocking());
+   * ar.setPrivate(isPrivate()); ar.setBroadcast(isBroadcast());
+   * ar.setLossy(isLossy()); ar.setSizeOfFIFO(getSizeOfFIFO());
+   * 
+   * // Signals for(int i=0; i<signals1.size(); i++) { AvatarSignal s1 =
+   * getSignal1(i); AvatarSignal s2 = getSignal2(i);
+   * 
+   * AvatarSignal ns1 = b1.getSignalByName(s1.getName()); AvatarSignal ns2 =
+   * b2.getSignalByName(s2.getName()); if ((ns1 == null) || (ns2 == null)) {
+   * continue; } ar.addSignals(ns1, ns2); }
+   * 
+   * cloneLinkToReferenceObjects(ar);
+   * 
+   * return ar; }
+   */
 }

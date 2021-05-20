@@ -36,54 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 import java.util.Vector;
 
-
 //import uppaaldesc.*;
 
 /**
-* Class DSESimulationResult
-* Object for storing a simulation result
-* Creation: 06/09/2011
-* @version 1.0 06/09/2011
-* @author Ludovic APVRILLE
+ * Class DSESimulationResult Object for storing a simulation result Creation:
+ * 06/09/2011
+ * 
+ * @version 1.0 06/09/2011
+ * @author Ludovic APVRILLE
  */
-public class CPUResult  {
-	public int id;
-	public String name;
-	
-	public double utilization;
-	
-	public Vector<BusContentionResult> contentions;
-	
-	public CPUResult() {
-	}
-	
-	public void addContentionOnBus(BusContentionResult ct) {
-		if (contentions == null) {
-			contentions = new Vector<BusContentionResult>();
-		}
-		
-		contentions.add(ct);
-	}
-	
-	public String toStringResult() {
-		StringBuffer sb = new StringBuffer("CPU " + id + " " + name + " " + utilization);
-		if (contentions != null) {
-			//sb.append("");
-			for(BusContentionResult bcr: contentions) {
-				sb.append("\n" + bcr.toStringResult(id, name));
-			}
-		}
-		return sb.toString();
-		
-	}
-		
-	
-} // Class BusResult
+public class CPUResult {
+  public int id;
+  public String name;
 
+  public double utilization;
+
+  public Vector<BusContentionResult> contentions;
+
+  public CPUResult() {
+  }
+
+  public void addContentionOnBus(BusContentionResult ct) {
+    if (contentions == null) {
+      contentions = new Vector<BusContentionResult>();
+    }
+
+    contentions.add(ct);
+  }
+
+  public String toStringResult() {
+    StringBuffer sb = new StringBuffer("CPU " + id + " " + name + " " + utilization);
+    if (contentions != null) {
+      // sb.append("");
+      for (BusContentionResult bcr : contentions) {
+        sb.append("\n" + bcr.toStringResult(id, name));
+      }
+    }
+    return sb.toString();
+
+  }
+
+} // Class BusResult

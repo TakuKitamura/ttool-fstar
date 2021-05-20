@@ -43,20 +43,20 @@ import ui.TGComponentManager;
 import ui.TGConnectingPoint;
 
 /**
- * Class TGConnectingPointTOSCompositionOperator
- * Definition of connecting points on which attribute connectors can be connected
- * Creation: 06/10/2006
+ * Class TGConnectingPointTOSCompositionOperator Definition of connecting points
+ * on which attribute connectors can be connected Creation: 06/10/2006
+ * 
  * @version 1.0 06/10/2006
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointTOSCompositionOperator extends TGConnectingPoint {
-    
-    public TGConnectingPointTOSCompositionOperator(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
-        super(_container1, _x, _y, _in, _out);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
-    }
+
+  public TGConnectingPointTOSCompositionOperator(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
+    super(_container1, _x, _y, _in, _out);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
+  }
 }

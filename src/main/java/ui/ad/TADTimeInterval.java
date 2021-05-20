@@ -46,103 +46,105 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class TADTimeinterval
- * Time interval operator. To be used in activity diagrams
+ * Class TADTimeinterval Time interval operator. To be used in activity diagrams
  * Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADTimeInterval extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent */{
-    private int lineLength = 5;
-    private int textX, textY;
-    private int incrementY = 3;
-    private int segment = 4;
-    
-    public TADTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 10;
-        height = 30;
-        textX = width + 5;
-        textY = height/2 + 5;
-        
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[ nbConnectingPoint ];
-        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointAD(this, 0, + lineLength, false, true, 0.5, 1.0);
-        addTGConnectingPointsComment();
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        TGCTimeInterval tgc = new TGCTimeInterval(x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
-        tgc.setValue("");
-        tgc.setName("value of the time interval");
-        tgcomponent[0] = tgc;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "time interval";
-        
-        myImageIcon = IconManager.imgic224;
-    }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        
-        int y1 = y + 4;
-        int x1 = x + 2;
-        int width1 = width - 4;
-        
-        for (int i=0; i<segment; i++) {
-            g.drawLine(x1, y1, x1+width1, y1+incrementY);
-            y1 += incrementY;
-            g.drawLine(x1+width1, y1, x1, y1+incrementY);
-            y1 += incrementY;
-        }
-    }
-    
-    @Override
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, x1, y1)) < distanceSelected) {
-			return this;	
-		}
+public class TADTimeInterval extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent */ {
+  private int lineLength = 5;
+  private int textX, textY;
+  private int incrementY = 3;
+  private int segment = 4;
 
-        return null;
+  public TADTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 10;
+    height = 30;
+    textX = width + 5;
+    textY = height / 2 + 5;
+
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointAD(this, 0, +lineLength, false, true, 0.5, 1.0);
+    addTGConnectingPointsComment();
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+
+    TGCTimeInterval tgc = new TGCTimeInterval(x + textX, y + textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
+    tgc.setValue("");
+    tgc.setName("value of the time interval");
+    tgcomponent[0] = tgc;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "time interval";
+
+    myImageIcon = IconManager.imgic224;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+    int y1 = y + 4;
+    int x1 = x + 2;
+    int width1 = width - 4;
+
+    for (int i = 0; i < segment; i++) {
+      g.drawLine(x1, y1, x1 + width1, y1 + incrementY);
+      y1 += incrementY;
+      g.drawLine(x1 + width1, y1, x1, y1 + incrementY);
+      y1 += incrementY;
     }
-    
-    public String getMinDelayValue() {
-        return ((TGCTimeInterval)(tgcomponent[0])).getMinDelay();
+  }
+
+  @Override
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
     }
-    
-    public String getMaxDelayValue() {
-        return ((TGCTimeInterval)(tgcomponent[0])).getMaxDelay();
+
+    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
+        y1)) < distanceSelected) {
+      return this;
     }
-    
-    public void setMinValue(String val) {
-        ((TGCTimeInterval)(tgcomponent[0])).setMinDelay(val);
-    }
-    
-    public void setMaxValue(String val) {
-        ((TGCTimeInterval)(tgcomponent[0])).setMaxDelay(val);
-    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.TAD_DELAY_NON_DETERMINISTIC_DELAY;
-    }
-    
-    @Override
-   	public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-    }
+
+    return null;
+  }
+
+  public String getMinDelayValue() {
+    return ((TGCTimeInterval) (tgcomponent[0])).getMinDelay();
+  }
+
+  public String getMaxDelayValue() {
+    return ((TGCTimeInterval) (tgcomponent[0])).getMaxDelay();
+  }
+
+  public void setMinValue(String val) {
+    ((TGCTimeInterval) (tgcomponent[0])).setMinDelay(val);
+  }
+
+  public void setMaxValue(String val) {
+    ((TGCTimeInterval) (tgcomponent[0])).setMaxDelay(val);
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TAD_DELAY_NON_DETERMINISTIC_DELAY;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+  }
 }

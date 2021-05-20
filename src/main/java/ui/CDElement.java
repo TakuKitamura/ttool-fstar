@@ -35,36 +35,41 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
- 
+
 package ui;
 
 /**
- * Interface CDElement
- * Creation : 22/12/2003
+ * Interface CDElement Creation : 22/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
 public interface CDElement {
-	int getX();
-	int getY();
-	void setCd(int x, int y);
-	int getWidth();
-	int getHeight();
-	String getName();
+  int getX();
 
-	// Issue #69
-	void acceptForward( ICDElementVisitor visitor );
-	
-	void acceptBackward( ICDElementVisitor visitor );
+  int getY();
 
-	boolean canBeDisabled();
+  void setCd(int x, int y);
 
-	void setEnabled( boolean _enabled );
+  int getWidth();
 
-	void doSetEnabled( boolean _enabled );
+  int getHeight();
 
-    boolean isEnabled();
+  String getName();
 
-    boolean isEnabled( boolean checkBranch );
+  // Issue #69
+  void acceptForward(ICDElementVisitor visitor);
 
-    boolean canLabelBeDisabled( TGCOneLineText label );
+  void acceptBackward(ICDElementVisitor visitor);
+
+  boolean canBeDisabled();
+
+  void setEnabled(boolean _enabled);
+
+  void doSetEnabled(boolean _enabled);
+
+  boolean isEnabled();
+
+  boolean isEnabled(boolean checkBranch);
+
+  boolean canLabelBeDisabled(TGCOneLineText label);
 }

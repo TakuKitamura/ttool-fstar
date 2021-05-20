@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
-
 
 import ui.util.IconManager;
 import ui.TDiagramPanel;
@@ -48,25 +44,25 @@ import ui.TGComponent;
 import ui.TGComponentManager;
 
 /**
- * Class TCDSequenceOperator
- * Sequence composition operator
- * To be used in class diagrams
- * Creation: 12/12/2003
+ * Class TCDSequenceOperator Sequence composition operator To be used in class
+ * diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class TCDSequenceOperator extends TCDCompositionOperator {
-    
-    public TCDSequenceOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        name = "Sequence composition operator";
-        value = "Sequence";
-        
-        myImageIcon = IconManager.imgic114;
-    }
-    
-    public int getType() {
-        return TGComponentManager.TCD_SEQUENCE_OPERATOR;
-    }
+
+  public TCDSequenceOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    name = "Sequence composition operator";
+    value = "Sequence";
+
+    myImageIcon = IconManager.imgic114;
+  }
+
+  public int getType() {
+    return TGComponentManager.TCD_SEQUENCE_OPERATOR;
+  }
 }

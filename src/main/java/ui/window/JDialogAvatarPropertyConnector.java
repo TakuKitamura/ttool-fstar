@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -49,112 +46,110 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class JDialogAvatarPropertyConnector
- * Dialog for managing properties on connectors
- * Creation: 26/04/2010
+ * Class JDialogAvatarPropertyConnector Dialog for managing properties on
+ * connectors Creation: 26/04/2010
+ * 
  * @version 1.0 26/04/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarPropertyConnector extends JDialogBase implements ActionListener  {
-    private JPanel panel1;
-    
-	private boolean negated;
-	private boolean hasBeenCancelled = true;
-    private JCheckBox isNegated;
-    
-    //private String id1, id2;
-    
-    /* Creates new form  */
-    public JDialogAvatarPropertyConnector(Frame f, boolean _negated) {
-        
-        super(f, "Setting negation on property", true);
-       
-        negated = _negated;
+public class JDialogAvatarPropertyConnector extends JDialogBase implements ActionListener {
+  private JPanel panel1;
 
-        initComponents();
-        myInitComponents();
-        pack();
+  private boolean negated;
+  private boolean hasBeenCancelled = true;
+  private JCheckBox isNegated;
+
+  // private String id1, id2;
+
+  /* Creates new form */
+  public JDialogAvatarPropertyConnector(Frame f, boolean _negated) {
+
+    super(f, "Setting negation on property", true);
+
+    negated = _negated;
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+
+    panel1.setBorder(new javax.swing.border.TitledBorder("Property"));
+
+    panel1.setPreferredSize(new Dimension(200, 100));
+
+    // first line panel1
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
+    panel1.add(new JLabel(" "), c1);
+
+    // second line panel1
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    isNegated = new JCheckBox("Not");
+    isNegated.setSelected(negated);
+    panel1.add(isNegated, c1);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+    c.add(panel1, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
-    
-    
-    private void myInitComponents() {
-    }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-           
-        panel1.setBorder(new javax.swing.border.TitledBorder("Property"));
-    
-        panel1.setPreferredSize(new Dimension(200, 100));
-        
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        panel1.add(new JLabel(" "), c1);
-        
-        // second line panel1
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        isNegated = new JCheckBox("Not");
-        isNegated.setSelected(negated);
-        panel1.add(isNegated, c1);
-        
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
-        c.add(panel1, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-	
-	public boolean hasBeenCancelled() {
-		return hasBeenCancelled;
-	}
-    
-    
-    public void closeDialog() {
-		hasBeenCancelled = false;
-        dispose();
-    }
-    
-    public boolean isNegated() {
-        return isNegated.isSelected();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
+  }
+
+  public boolean hasBeenCancelled() {
+    return hasBeenCancelled;
+  }
+
+  public void closeDialog() {
+    hasBeenCancelled = false;
+    dispose();
+  }
+
+  public boolean isNegated() {
+    return isNegated.isSelected();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
 }

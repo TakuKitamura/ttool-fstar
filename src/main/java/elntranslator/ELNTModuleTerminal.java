@@ -39,28 +39,28 @@
 package elntranslator;
 
 /**
- * Class ELNTModuleTerminal
- * Parameters of a ELN primitive component : module terminal
- * Creation: 23/07/2018
+ * Class ELNTModuleTerminal Parameters of a ELN primitive component : module
+ * terminal Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTModuleTerminal extends ELNTComponent {
-	private String name;
-	
-	private ELNTModule module;
-	
-	public ELNTModuleTerminal(String _name, ELNTModule _module) {
-		name = _name;
-		module = _module;
-	}
+  private String name;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTModule module;
 
-	public ELNTModule getModule() {
-		return module;
-	}
+  public ELNTModuleTerminal(String _name, ELNTModule _module) {
+    name = _name;
+    module = _module;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

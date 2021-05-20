@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.MainGUI;
@@ -54,150 +51,146 @@ import java.awt.event.ActionListener;
 //import javax.swing.event.*;
 //import java.util.*;
 
-
 /**
- * Class JDialogBridgeNode
- * Dialog for managing attributes of bridge nodes
+ * Class JDialogBridgeNode Dialog for managing attributes of bridge nodes
  * Creation: 23/11/2007
+ * 
  * @version 1.0 23/11/2007
  * @author Ludovic APVRILLE
  */
-public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
+public class JDialogBridgeNode extends JDialogBase implements ActionListener {
 
-    public static final String[] helpStrings = {"bridge.html"};
-    protected MainGUI mgui;
+  public static final String[] helpStrings = { "bridge.html" };
+  protected MainGUI mgui;
 
-    private boolean regularClose;
+  private boolean regularClose;
 
-    private JPanel panel2;
-    private Frame frame;
-    private TMLArchiBridgeNode node;
+  private JPanel panel2;
+  private Frame frame;
+  private TMLArchiBridgeNode node;
 
+  // Panel1
+  protected TGTextFieldWithHelp nodeName;
 
-    // Panel1
-    protected TGTextFieldWithHelp nodeName;
+  // Panel2
+  protected TGTextFieldWithHelp bufferByteDataSize, clockRatio;
 
-    // Panel2
-    protected TGTextFieldWithHelp bufferByteDataSize, clockRatio;
+  /* Creates new form */
+  public JDialogBridgeNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiBridgeNode _node) {
+    super(_frame, _title, true);
+    mgui = _mgui;
+    node = _node;
 
-    /* Creates new form  */
-    public JDialogBridgeNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiBridgeNode _node) {
-        super(_frame, _title, true);
-        mgui = _mgui;
-        node = _node;
+    initComponents();
+    myInitComponents();
+    pack();
+  }
 
-        initComponents();
-        myInitComponents();
-        pack();
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Bridge attributes"));
+    panel2.setPreferredSize(new Dimension(300, 200));
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("Bridge name:"), c2);
+    nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
+    nodeName.setEditable(true);
+    nodeName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(nodeName, c1);
+    nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c1);
+
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("Buffer size (in byte):"), c2);
+    bufferByteDataSize = new TGTextFieldWithHelp("" + node.getBufferByteDataSize(), 15);
+    panel2.add(bufferByteDataSize, c2);
+    bufferByteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Clock divider:"), c2);
+    clockRatio = new TGTextFieldWithHelp("" + node.getClockRatio(), 15);
+    panel2.add(clockRatio, c2);
+    clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
 
-    private void myInitComponents() {
-    }
+  public void closeDialog() {
+    regularClose = true;
+    dispose();
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
+  public void cancelDialog() {
+    dispose();
+  }
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+  public boolean isRegularClose() {
+    return regularClose;
+  }
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public String getNodeName() {
+    return nodeName.getText();
+  }
 
+  public String getBufferByteDataSize() {
+    return bufferByteDataSize.getText();
+  }
 
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Bridge attributes"));
-        panel2.setPreferredSize(new Dimension(300, 200));
-
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Bridge name:"), c2);
-        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
-        nodeName.setEditable(true);
-        nodeName.setFont(new Font("times", Font.PLAIN, 12));
-        panel2.add(nodeName, c1);
-        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c1);
-
-        c2.gridwidth = 1;
-        c2.gridheight = 1;
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Buffer size (in byte):"), c2);
-        bufferByteDataSize = new TGTextFieldWithHelp(""+node.getBufferByteDataSize(), 15);
-        panel2.add(bufferByteDataSize, c2);
-        bufferByteDataSize.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Clock divider:"), c2);
-        clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
-        panel2.add(clockRatio, c2);
-        clockRatio.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
-
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c0.fill = GridBagConstraints.BOTH;
-        c.add(panel2, c0);
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-
-    public void actionPerformed(ActionEvent evt)  {
-        /* if (evt.getSource() == typeBox) {
-           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-           initialValue.setEnabled(b);
-           return;
-           }*/
-
-
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-
-    public void closeDialog() {
-        regularClose = true;
-        dispose();
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
-
-    public boolean isRegularClose() {
-        return regularClose;
-    }
-
-    public String getNodeName() {
-        return nodeName.getText();
-    }
-
-    public String getBufferByteDataSize() {
-        return bufferByteDataSize.getText();
-    }
-
-    public String getClockRatio() {
-        return clockRatio.getText();
-    }
+  public String getClockRatio() {
+    return clockRatio.getText();
+  }
 
 }

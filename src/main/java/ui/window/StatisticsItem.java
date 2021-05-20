@@ -36,74 +36,68 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class StatisticsItem
- * Data of an action on a simulation trace
- * Creation: 13/08/2004
+ * Class StatisticsItem Data of an action on a simulation trace Creation:
+ * 13/08/2004
+ * 
  * @version 1.0 13/08/2004
  * @author Ludovic APVRILLE
  */
 public class StatisticsItem implements Comparable<StatisticsItem> {
-    private String name;
-    private Integer occurrence;
-    private Vector<Point> originDestination;
-    
-    public StatisticsItem(String _name) {
-        name = _name;
-        originDestination = new Vector<>();
-        occurrence = 0;
+  private String name;
+  private Integer occurrence;
+  private Vector<Point> originDestination;
+
+  public StatisticsItem(String _name) {
+    name = _name;
+    originDestination = new Vector<>();
+    occurrence = 0;
+  }
+
+  // observers
+  public String getName() {
+    return name;
+  }
+
+  public Integer getOccurrence() {
+    return occurrence;
+  }
+
+  public String getOriginDestination() {
+    Point p;
+    StringBuffer ret = new StringBuffer();
+
+    for (int i = 0; i < originDestination.size(); i++) {
+      p = originDestination.elementAt(i);
+      if (i != 0) {
+        ret.append(", ");
+      }
+      ret.append("(");
+      ret.append(p.x);
+      ret.append(", ");
+      ret.append(p.y);
+      ret.append(")");
     }
-    
-    //observers
-    public String getName() {
-        return name;
-    }
-    
-    public Integer getOccurrence() {
-        return occurrence;
-    }
-    
- 
-    public String getOriginDestination() {
-        Point p;
-        StringBuffer ret = new StringBuffer();
-        
-        for(int i=0; i<originDestination.size(); i++) {
-            p = originDestination.elementAt(i);
-            if (i != 0) {
-                ret.append(", ");
-            }
-            ret.append("(");
-            ret.append(p.x);
-            ret.append(", ");
-            ret.append(p.y);
-            ret.append(")");
-        }
-        
-        return new String(ret);
-    }
-    
-    
-    // modifiers
-    public void increaseOccurence() {
-        occurrence = occurrence + 1;
-    }
-    
-    public void addOriginDestination(int origin, int destination) {
-        originDestination.add(new Point(origin, destination));
-    }
-    
-    
-    // comparable interface
-    public int compareTo(StatisticsItem o) {
-        return getName().compareTo(o.getName());
-    }
+
+    return new String(ret);
+  }
+
+  // modifiers
+  public void increaseOccurence() {
+    occurrence = occurrence + 1;
+  }
+
+  public void addOriginDestination(int origin, int destination) {
+    originDestination.add(new Point(origin, destination));
+  }
+
+  // comparable interface
+  public int compareTo(StatisticsItem o) {
+    return getName().compareTo(o.getName());
+  }
 }

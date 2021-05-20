@@ -1,38 +1,61 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>TTool help</title>
-  <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-</head>
-<body>
-<h1 id="memory">Memory</h1>
-<p>Memory nodes are helpful to model storage capabilities of architectures</p>
-<h2 id="main-attributes">Main attributes</h2>
-<p>They have the following attributes.</p>
-<ul>
-<li>A name</li>
-<li>A data size in byte.</li>
-<li>They can be monitored (SoCLiB simulation only) using VCI probes.</li>
-<li>A clock divider expresses the relation between the clock of the memory and the main clock of the architecture</li>
-</ul>
-<p>Apart from the monitor attribute, all latter attributes are taken into account by the DIPLODOCUS simulator to determine communication paths.</p>
-<h2 id="other-attributes">Other attributes</h2>
-<h3 id="code-generation">Code generation</h3>
-<p>The following attributes are also defined in Memories:</p>
-<ul>
-<li><p>A memory extension construct: used for specific applications</p></li>
-<li><p>The size of the memory</p></li>
-</ul>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>TTool help</title>
+    <style>
+      code {
+        white-space: pre-wrap;
+      }
+      span.smallcaps {
+        font-variant: small-caps;
+      }
+      span.underline {
+        text-decoration: underline;
+      }
+      div.column {
+        display: inline-block;
+        vertical-align: top;
+        width: 50%;
+      }
+    </style>
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1 id="memory">Memory</h1>
+    <p>
+      Memory nodes are helpful to model storage capabilities of architectures
+    </p>
+    <h2 id="main-attributes">Main attributes</h2>
+    <p>They have the following attributes.</p>
+    <ul>
+      <li>A name</li>
+      <li>A data size in byte.</li>
+      <li>They can be monitored (SoCLiB simulation only) using VCI probes.</li>
+      <li>
+        A clock divider expresses the relation between the clock of the memory
+        and the main clock of the architecture
+      </li>
+    </ul>
+    <p>
+      Apart from the monitor attribute, all latter attributes are taken into
+      account by the DIPLODOCUS simulator to determine communication paths.
+    </p>
+    <h2 id="other-attributes">Other attributes</h2>
+    <h3 id="code-generation">Code generation</h3>
+    <p>The following attributes are also defined in Memories:</p>
+    <ul>
+      <li>
+        <p>A memory extension construct: used for specific applications</p>
+      </li>
+      <li><p>The size of the memory</p></li>
+    </ul>
+  </body>
 </html>

@@ -38,26 +38,24 @@
 
 package myutil;
 
-
 import javax.swing.*;
 
-
 /**
- * Class ScrolledJTextArea
- * For scrolling a textarea in which text is appended
+ * Class ScrolledJTextArea For scrolling a textarea in which text is appended
  * Creation: 2005
+ * 
  * @version 1.1 09/03/2005
  * @author Ludovic APVRILLE
  */
 public class ScrolledJTextArea extends JTextArea {
-   
-    public ScrolledJTextArea() {
-        super();
-    }
-    
-    public void append(String str) {
-        super.append(str);
-        setCaretPosition(getDocument().getLength());
-    }
-    
+
+  public ScrolledJTextArea() {
+    super();
+  }
+
+  public void append(String str) {
+    super.append(str);
+    setCaretPosition(getDocument().getLength());
+  }
+
 }

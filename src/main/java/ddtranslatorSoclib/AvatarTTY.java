@@ -38,42 +38,36 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
-
 
 package ddtranslatorSoclib;
 
 public class AvatarTTY extends AvatarComponent {
 
-    private int index;
-    private String ttyName;
+  private int index;
+  private String ttyName;
 
-    public int no_target;
-    
-    public AvatarTTY(String _ttyName, int _index){
-      index =  _index;
-      ttyName =  _ttyName;
-    }
+  public int no_target;
 
-    public String getTTYName(){
-      return ttyName;
-    }
-    
-    public int getIndex(){
-      return index;
-    }
+  public AvatarTTY(String _ttyName, int _index) {
+    index = _index;
+    ttyName = _ttyName;
+  }
 
-    public int getNo_target(){
-      return no_target;
-    }
-  
-    public void setNo_target(int _no_target){
-	no_target = _no_target;
-    }
+  public String getTTYName() {
+    return ttyName;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public int getNo_target() {
+    return no_target;
+  }
+
+  public void setNo_target(int _no_target) {
+    no_target = _no_target;
+  }
 }
-

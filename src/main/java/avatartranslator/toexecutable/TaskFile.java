@@ -36,75 +36,71 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator.toexecutable;
 
 /**
- * Class TaskFile
- * Creation: 29/03/2011
+ * Class TaskFile Creation: 29/03/2011
  *
  * @author Ludovic APVRILLE, Raja GATGOUT
  * @version 1.2 01/07/2014
  */
 public class TaskFile {
-    /////////////////////RG
-    //1) enlever pthread.h
-    //2) ajouter : srl.h et mwmr.h
-    private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n" +
-            "#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n" +
-            "#include \"main.h\"";
+  ///////////////////// RG
+  // 1) enlever pthread.h
+  // 2) ajouter : srl.h et mwmr.h
+  private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+  private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n"
+      + "#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n"
+      + "#include \"main.h\"";
 
-    private final static String INCLUDE_HEADER_SOCLIB = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-    private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n" +
-            "#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n" +
-            "#include \"main.h\"\n ";
+  private final static String INCLUDE_HEADER_SOCLIB = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+  private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n"
+      + "#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n"
+      + "#include \"main.h\"\n ";
 
-    private final static String CR = "\n";
+  private final static String CR = "\n";
 
-    private String name;
+  private String name;
 
-    private String headerCode;
-    private String mainCode;
+  private String headerCode;
+  private String mainCode;
 
+  public TaskFile(String _name) {
+    name = _name;
+    headerCode = "";
+    mainCode = "";
+  }
 
-    public TaskFile(String _name) {
-        name = _name;
-        headerCode = "";
-        mainCode = "";
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getFullHeaderCode() {
+    String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+    s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
+    s += headerCode;
+    s += "#endif\n";
+    return s;
+  }
 
-    public String getFullHeaderCode() {
-        String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-        s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
-        s += headerCode;
-        s += "#endif\n";
-        return s;
-    }
+  public String getFullHeaderCodeSoclib() {
+    String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+    s += INCLUDE_HEADER_SOCLIB + CR + LOCAL_INCLUDE_HEADER_SOCLIB + CR + CR;
+    s += headerCode;
+    s += "#endif\n";
+    return s;
+  }
 
-    public String getFullHeaderCodeSoclib() {
-        String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-        s += INCLUDE_HEADER_SOCLIB + CR + LOCAL_INCLUDE_HEADER_SOCLIB + CR + CR;
-        s += headerCode;
-        s += "#endif\n";
-        return s;
-    }
+  public String getMainCode() {
+    return "#include \"" + name + ".h\"" + CR + CR + mainCode;
+  }
 
-    public String getMainCode() {
-        return "#include \"" + name + ".h\"" + CR + CR + mainCode;
-    }
+  public void addToHeaderCode(String _code) {
+    headerCode += _code;
+  }
 
-    public void addToHeaderCode(String _code) {
-        headerCode += _code;
-    }
-
-    public void addToMainCode(String _code) {
-        mainCode += _code;
-    }
-
+  public void addToMainCode(String _code) {
+    mainCode += _code;
+  }
 
 }

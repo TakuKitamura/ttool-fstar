@@ -36,56 +36,47 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class ADTimeInterval
- * Creation: 10/02/2004
+ * Class ADTimeInterval Creation: 10/02/2004
+ * 
  * @version 1.0 10/02/2004
  * @author Ludovic APVRILLE
  */
-public class ADTimeInterval extends ADComponent  {
-    protected String minValue;
-    protected String maxValue;
-    
-    public ADTimeInterval() {
-        nbNext = 1;
-    }
-    
-    public void setValue(String s1, String s2) {
-        minValue = s1;
-        maxValue = s2;
-    }
-    
-    public String getValue() {
-        return "[" + minValue + ", " + maxValue + "]";
-    }
-    
-    public String getMinValue() {
-        return minValue;
-    }
-    
-    public String getMaxValue() {
-        return maxValue;
-    }
-    
-    public String toString() {
-        return "Delay (" + minValue + ", " + maxValue + ")";
-    }
-    
-    public ADComponent makeSame() {
-      ADTimeInterval adc = new ADTimeInterval();
-      adc.setValue(getMinValue(), getMaxValue());
-      return adc;
-    }
-    
-}
+public class ADTimeInterval extends ADComponent {
+  protected String minValue;
+  protected String maxValue;
 
+  public ADTimeInterval() {
+    nbNext = 1;
+  }
+
+  public void setValue(String s1, String s2) {
+    minValue = s1;
+    maxValue = s2;
+  }
+
+  public String getValue() {
+    return "[" + minValue + ", " + maxValue + "]";
+  }
+
+  public String getMinValue() {
+    return minValue;
+  }
+
+  public String getMaxValue() {
+    return maxValue;
+  }
+
+  public String toString() {
+    return "Delay (" + minValue + ", " + maxValue + ")";
+  }
+
+  public ADComponent makeSame() {
+    ADTimeInterval adc = new ADTimeInterval();
+    adc.setValue(getMinValue(), getMaxValue());
+    return adc;
+  }
+
+}

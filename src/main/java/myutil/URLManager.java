@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package myutil;
 
 import javax.imageio.ImageIO;
@@ -48,102 +47,100 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Class URLManager
- * Creation: 31/05/2017
+ * Class URLManager Creation: 31/05/2017
  *
  * @author Ludovic APVRILLE
  * @version 1.1 31/05/2017
  */
 public final class URLManager implements Runnable {
 
-    private String url;
-    private boolean busy;
-    private String path;
-    private CallbackLoaderInterface callback;
+  private String url;
+  private boolean busy;
+  private String path;
+  private CallbackLoaderInterface callback;
 
-    public URLManager() {
-        busy = false;
+  public URLManager() {
+    busy = false;
+  }
+
+  public synchronized boolean downloadFile(String _path, String _url, CallbackLoaderInterface _callback) {
+    if (busy) {
+      return false;
+    }
+    busy = true;
+
+    path = _path;
+    url = _url;
+    callback = _callback;
+
+    Thread t = new Thread(this);
+    t.start();
+    return true;
+
+  }
+
+  public void run() {
+    try {
+      String urlF = getRealURL(url);
+      File f = new File(path);
+      org.apache.commons.io.FileUtils.copyURLToFile(new URL(urlF), f);
+      if (callback != null) {
+        callback.loadDone();
+      }
+    } catch (Exception e) {
+      if (callback != null) {
+        callback.loadFailed(e);
+      }
+    }
+    busy = false;
+  }
+
+  public static String getRealURL(String url) {
+    try {
+      HttpURLConnection connection;
+      URL file = new URL(url);
+      connection = (HttpURLConnection) (file.openConnection());
+      String redirect = connection.getHeaderField("Location");
+      if (redirect != null) {
+        return redirect;
+      }
+    } catch (Exception e) {
+      TraceManager.addDev("Exception in getRealURL =" + e.getMessage());
+    }
+    return url;
+
+  }
+
+  public static String getBaseURL(String url) {
+    int index = url.lastIndexOf("/");
+    if (index == -1) {
+      return url;
+    }
+    return url.substring(0, index + 1);
+  }
+
+  public static BufferedReader getBufferedReader(String url) {
+    try {
+      String urlR = getRealURL(url);
+      HttpURLConnection connection;
+      URL file = new URL(urlR);
+      connection = (HttpURLConnection) (file.openConnection());
+      return new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    } catch (Exception e) {
+      TraceManager.addDev("Exception in getBufferedReader =" + e.getMessage());
+    }
+    return null;
+  }
+
+  public static BufferedImage getBufferedImageFromURL(String url) {
+    TraceManager.addDev("getBufferedImageFromURL with url=" + url);
+    try {
+      return ImageIO.read(new URL(getRealURL(url)));
+    } catch (Exception e) {
+      TraceManager.addDev("Exception in getBufferedImageFromURL =" + e.getMessage());
+      return null;
     }
 
-    public synchronized boolean downloadFile(String _path, String _url, CallbackLoaderInterface _callback) {
-        if (busy) {
-            return false;
-        }
-        busy = true;
-
-        path = _path;
-        url = _url;
-        callback = _callback;
-
-        Thread t = new Thread(this);
-        t.start();
-        return true;
-
-    }
-
-    public void run() {
-        try {
-            String urlF = getRealURL(url);
-            File f = new File(path);
-            org.apache.commons.io.FileUtils.copyURLToFile(new URL(urlF), f);
-            if (callback != null) {
-                callback.loadDone();
-            }
-        } catch (Exception e) {
-            if (callback != null) {
-                callback.loadFailed(e);
-            }
-        }
-        busy = false;
-    }
-
-    public static String getRealURL(String url) {
-        try {
-            HttpURLConnection connection;
-            URL file = new URL(url);
-            connection = (HttpURLConnection) (file.openConnection());
-            String redirect = connection.getHeaderField("Location");
-            if (redirect != null) {
-                return redirect;
-            }
-        } catch (Exception e) {
-            TraceManager.addDev("Exception in getRealURL =" + e.getMessage());
-        }
-        return url;
-
-    }
-
-    public static String getBaseURL(String url) {
-        int index = url.lastIndexOf("/");
-        if (index == -1) {
-            return url;
-        }
-        return url.substring(0, index + 1);
-    }
-
-    public static BufferedReader getBufferedReader(String url) {
-        try {
-            String urlR = getRealURL(url);
-            HttpURLConnection connection;
-            URL file = new URL(urlR);
-            connection = (HttpURLConnection) (file.openConnection());
-            return new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        } catch (Exception e) {
-            TraceManager.addDev("Exception in getBufferedReader =" + e.getMessage());
-        }
-        return null;
-    }
-
-    public static BufferedImage getBufferedImageFromURL(String url) {
-        TraceManager.addDev("getBufferedImageFromURL with url=" + url);
-        try {
-            return ImageIO.read(new URL(getRealURL(url)));
-        } catch (Exception e) {
-            TraceManager.addDev("Exception in getBufferedImageFromURL =" + e.getMessage());
-            return null;
-        }
-
-    }
-
+  }
 
 }

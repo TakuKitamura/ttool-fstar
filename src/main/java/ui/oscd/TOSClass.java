@@ -36,9 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.oscd;
-
 
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
@@ -56,416 +54,399 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 /**
- * Class TOSClass
- * TClass to be used in TURTLEOS class diagram
- * Creation: 03/10/2006
+ * Class TOSClass TClass to be used in TURTLEOS class diagram Creation:
+ * 03/10/2006
  *
  * @author Ludovic APVRILLE
  * @version 1.0 03/10/2006
  */
 public class TOSClass extends TGCWithInternalComponent implements TClassInterface {
-    public String oldValue;
-    protected int textX = 5;
-    protected int textY = 18;
-    protected int stereotypeFontSize = 10;
-    protected Graphics graphics;
-    protected int iconSize = 30;
+  public String oldValue;
+  protected int textX = 5;
+  protected int textY = 18;
+  protected int stereotypeFontSize = 10;
+  protected Graphics graphics;
+  protected int iconSize = 30;
 
-    protected int myStereotype = 0;
-    protected int period;
-    protected int deadline;
+  protected int myStereotype = 0;
+  protected int period;
+  protected int deadline;
 
-    public static final String[] stereotypes = {"unset", "periodic", "sporadic", "env", "sche. engine", "protected obj.", "protected obj. man.", "Evt manager"};
-    public final static int PERIODIC = 1;
-    public final static int SPORADIC = 2;
-    public final static int ENV = 3;
-    public final static int SCHEDULING_ENGINE = 4;
-    public final static int PROTECTED_OBJECT = 5;
-    public final static int PROTECTED_OBJECT_MANAGER = 6;
-    public final static int EVT_MANAGER = 7;
+  public static final String[] stereotypes = { "unset", "periodic", "sporadic", "env", "sche. engine", "protected obj.",
+      "protected obj. man.", "Evt manager" };
+  public final static int PERIODIC = 1;
+  public final static int SPORADIC = 2;
+  public final static int ENV = 3;
+  public final static int SCHEDULING_ENGINE = 4;
+  public final static int PROTECTED_OBJECT = 5;
+  public final static int PROTECTED_OBJECT_MANAGER = 6;
+  public final static int EVT_MANAGER = 7;
 
+  public TOSClass(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public TOSClass(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    width = 150;
+    height = 30;
+    minWidth = 150;
+    minDesiredWidth = 150;
+    minDesiredHeight = 30;
 
-        width = 150;
-        height = 30;
-        minWidth = 150;
-        minDesiredWidth = 150;
-        minDesiredHeight = 30;
+    nbConnectingPoint = 5;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.0, .5);
+    connectingPoint[1] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 1.0, 0.5);
+    connectingPoint[2] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.25, 0.0);
+    connectingPoint[3] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.5, 0.0);
+    connectingPoint[4] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.75, 0.0);
+    addTGConnectingPointsCommentTop();
 
-        nbConnectingPoint = 5;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.0, .5);
-        connectingPoint[1] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[2] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[3] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[4] = new TGConnectingPointTOSClasses(this, 0, 0, true, true, 0.75, 0.0);
-        addTGConnectingPointsCommentTop();
+    nbInternalTGComponent = 4;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
 
+    int h = 1;
+    TOSCDAttributeGateBox tgc1;
+    TOSCDAttributeBox tgc0;
+    tgc0 = new TOSCDAttributeBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
+    tgcomponent[0] = tgc0;
+    h += tgcomponent[0].getHeight() + 1;
+    tgc1 = new TOSCDAttributeGateBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
+    tgcomponent[1] = tgc1;
+    h += tgcomponent[1].getHeight() + 1;
+    TGComponent tgc = new TOSCDOperationBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
+    tgcomponent[2] = tgc;
+    h += tgcomponent[2].getHeight() + 1;
+    tgc = new TOSCDActivityDiagramBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
+    tgcomponent[3] = tgc;
 
-        nbInternalTGComponent = 4;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
+    /* setting attributes dependences */
+    tgc0.setForbiddenNames(tgc1.getAttributeList());
+    tgc1.setForbiddenNames(tgc0.getAttributeList());
 
-        int h = 1;
-        TOSCDAttributeGateBox tgc1;
-        TOSCDAttributeBox tgc0;
-        tgc0 = new TOSCDAttributeBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
-        tgcomponent[0] = tgc0;
-        h += tgcomponent[0].getHeight() + 1;
-        tgc1 = new TOSCDAttributeGateBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
-        tgcomponent[1] = tgc1;
-        h += tgcomponent[1].getHeight() + 1;
-        TGComponent tgc = new TOSCDOperationBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
-        tgcomponent[2] = tgc;
-        h += tgcomponent[2].getHeight() + 1;
-        tgc = new TOSCDActivityDiagramBox(x, y + height + h, 0, 0, height + h, height + h, true, this, _tdp);
-        tgcomponent[3] = tgc;
+    moveable = true;
+    editable = true;
+    removable = true;
 
-        /* setting attributes dependences */
-        tgc0.setForbiddenNames(tgc1.getAttributeList());
-        tgc1.setForbiddenNames(tgc0.getAttributeList());
+    // Name of the Tclass
+    name = "Tclass";
+    value = tdp.findTOSClassName("TClass_");
+    oldValue = value;
 
-        moveable = true;
-        editable = true;
-        removable = true;
+    myImageIcon = IconManager.imgic104;
 
-        // Name of the Tclass
-        name = "Tclass";
-        value = tdp.findTOSClassName("TClass_");
-        oldValue = value;
+    actionOnAdd();
+  }
 
-        myImageIcon = IconManager.imgic104;
+  public void recalculateSize() {
+    // TraceManager.addDev("Recalculate size of " + this);
+    int i;// , j;
 
-        actionOnAdd();
+    for (i = 0; i < nbInternalTGComponent; i++) {
+      tgcomponent[i].calculateMyDesiredSize();
     }
 
-    public void recalculateSize() {
-        //TraceManager.addDev("Recalculate size of " + this);
-        int i;//, j;
-
-        for (i = 0; i < nbInternalTGComponent; i++) {
-            tgcomponent[i].calculateMyDesiredSize();
-        }
-
-        int minW = getMyDesiredWidth();
-        for (i = 0; i < nbInternalTGComponent; i++) {
-            minW = Math.max(minW, tgcomponent[i].getMinDesiredWidth());
-        }
-
-        for (i = 0; i < nbInternalTGComponent; i++) {
-            tgcomponent[i].forceSize(minW, tgcomponent[i].getMinDesiredHeight());
-        }
-
-        forceSize(minW, getHeight());
-
-        // Reposition all internal components
-        int h = getHeight();
-        for (i = 0; i < nbInternalTGComponent; i++) {
-            tgcomponent[i].setCdRectangle(0, 0, h, h);
-            tgcomponent[i].setCd(tgcomponent[i].getX(), h);
-            h += tgcomponent[i].getHeight();
-        }
+    int minW = getMyDesiredWidth();
+    for (i = 0; i < nbInternalTGComponent; i++) {
+      minW = Math.max(minW, tgcomponent[i].getMinDesiredWidth());
     }
 
-    public int getMyDesiredWidth() {
-        if (graphics == null) {
-            graphics = tdp.getGraphics();
-        }
-        if (graphics == null) {
-            return minWidth;
-        }
-        int size = graphics.getFontMetrics().stringWidth(value) + iconSize + 5;
-        minDesiredWidth = Math.max(size, minWidth);
-        return minDesiredWidth;
+    for (i = 0; i < nbInternalTGComponent; i++) {
+      tgcomponent[i].forceSize(minW, tgcomponent[i].getMinDesiredHeight());
     }
 
-//
-//    private int calculateDesiredWidth() {
-//        int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
-//        w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
-//        return w;
-//    }
+    forceSize(minW, getHeight());
 
+    // Reposition all internal components
+    int h = getHeight();
+    for (i = 0; i < nbInternalTGComponent; i++) {
+      tgcomponent[i].setCdRectangle(0, 0, h, h);
+      tgcomponent[i].setCd(tgcomponent[i].getX(), h);
+      h += tgcomponent[i].getHeight();
+    }
+  }
 
-    public void internalDrawing(Graphics g) {
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
+  public int getMyDesiredWidth() {
+    if (graphics == null) {
+      graphics = tdp.getGraphics();
+    }
+    if (graphics == null) {
+      return minWidth;
+    }
+    int size = graphics.getFontMetrics().stringWidth(value) + iconSize + 5;
+    minDesiredWidth = Math.max(size, minWidth);
+    return minDesiredWidth;
+  }
 
-        //TraceManager.addDev("My width = " + width + " this=" + this);
-        Font f = g.getFont();
-        //    int size = f.getSize();
-        g.drawRect(x, y, width, height);
-        g.setColor(Color.yellow);
-        g.fillRect(x + 1, y + 1, width - 1, height - 1);
-        g.drawImage(IconManager.img8, x + width - 20, y + 6, Color.yellow, null);
-        ColorManager.setColor(g, getState(), 0);
-        g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(value, x + textX, y + textY);
-        g.setFont(f);
+  //
+  // private int calculateDesiredWidth() {
+  // int w = Math.max(minDesiredWidth, tgcomponent[0].getMinDesiredWidth());
+  // w = Math.max(w, tgcomponent[1].getMinDesiredWidth());
+  // return w;
+  // }
 
-        // Stereotype
-        String s = getStereotypeFullString();
-        int w = g.getFontMetrics().stringWidth(s);
-        g.drawString(s, x + width - w - 5, y + textY + stereotypeFontSize);
-        g.setFont(f);
+  public void internalDrawing(Graphics g) {
+    if (!tdp.isScaled()) {
+      graphics = g;
     }
 
-    public boolean editOnDoubleClick(JFrame frame) {
-        oldValue = value;
+    // TraceManager.addDev("My width = " + width + " this=" + this);
+    Font f = g.getFont();
+    // int size = f.getSize();
+    g.drawRect(x, y, width, height);
+    g.setColor(Color.yellow);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    g.drawImage(IconManager.img8, x + width - 20, y + 6, Color.yellow, null);
+    ColorManager.setColor(g, getState(), 0);
+    g.setFont(f.deriveFont(Font.BOLD));
+    g.drawString(value, x + textX, y + textY);
+    g.setFont(f);
 
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
+    // Stereotype
+    String s = getStereotypeFullString();
+    int w = g.getFontMetrics().stringWidth(s);
+    g.drawString(s, x + width - w - 5, y + textY + stereotypeFontSize);
+    g.setFont(f);
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    oldValue = value;
+
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
+    }
+
+    JDialogTOSClass jdtosc = new JDialogTOSClass(frame, text, this);
+    // jdtosc.setSize(350, 400);
+    GraphicLib.centerOnParent(jdtosc, 350, 400);
+    jdtosc.setVisible(true);
+    // TraceManager.addDev("toto");
+
+    if (jdtosc.changeMade()) {
+      // TraceManager.addDev("Change made");
+      boolean ret = true;
+      String s = jdtosc.getName();
+      if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+        // boolean b;
+        if (!TAttribute.isAValidId(s, false, false, false)) {
+          JOptionPane.showMessageDialog(frame,
+              "Could not change the name of the TClass: the new name is not a valid name", "Error",
+              JOptionPane.INFORMATION_MESSAGE);
+          ret = false;
         }
 
-        JDialogTOSClass jdtosc = new JDialogTOSClass(frame, text, this);
-        //   jdtosc.setSize(350, 400);
-        GraphicLib.centerOnParent(jdtosc, 350, 400);
-        jdtosc.setVisible(true);
-        //TraceManager.addDev("toto");
+        if (!tdp.isTOSClassNameUnique(s)) {
+          JOptionPane.showMessageDialog(frame,
+              "Could not change the name of the TClass: the new name is already in use", "Error",
+              JOptionPane.INFORMATION_MESSAGE);
+          ret = false;
+        }
 
-        if (jdtosc.changeMade()) {
-            //TraceManager.addDev("Change made");
-            boolean ret = true;
-            String s = jdtosc.getName();
-            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-                //boolean b;
-                if (!TAttribute.isAValidId(s, false, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the TClass: the new name is not a valid name",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    ret = false;
-                }
+        setValue(s);
+        recalculateSize();
 
-                if (!tdp.isTOSClassNameUnique(s)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the TClass: the new name is already in use",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    ret = false;
-                }
+        if (!tdp.actionOnDoubleClick(this)) {
+          JOptionPane.showMessageDialog(frame, "Could not change the name of the class: this name is already in use",
+              "Error", JOptionPane.INFORMATION_MESSAGE);
+          setValue(oldValue);
+          ret = false;
+        }
+      }
 
-                setValue(s);
-                recalculateSize();
+      myStereotype = jdtosc.getIndexStereotype();
 
-                if (!tdp.actionOnDoubleClick(this)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the name of the class: this name is already in use",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    setValue(oldValue);
-                    ret = false;
-                }
+      try {
+        period = Integer.decode(jdtosc.getPeriod()).intValue();
+      } catch (Exception e) {
+        ret = false;
+      }
+
+      try {
+        deadline = Integer.decode(jdtosc.getDeadline()).intValue();
+      } catch (Exception e) {
+        ret = false;
+      }
+
+      return ret;
+    }
+    // TraceManager.addDev("returning false");
+    return false;
+  }
+
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public String getClassName() {
+    return value;
+  }
+
+  public int getPeriod() {
+    return period;
+  }
+
+  public int getDeadline() {
+    return deadline;
+  }
+
+  public String getStereotypeFullString() {
+    return "<<" + stereotypes[myStereotype] + ">>";
+  }
+
+  public int setStereotype(String s) {
+    int i = 0;
+    while (i < stereotypes.length) {
+      // TraceManager.addDev("Comparing " + s + "with " + stereotypes[i]);
+      if (stereotypes[i].compareTo(s) == 0) {
+        return i;
+      }
+      i++;
+    }
+    return 0;
+  }
+
+  public int getType() {
+    return TGComponentManager.TOSCD_TCLASS;
+  }
+
+  public java.util.List<TAttribute> getAttributes() {
+    return ((TGCAttributeBox) (tgcomponent[0])).getAttributeList();
+  }
+
+  public java.util.List<TAttribute> getGates() {
+    return ((TGCAttributeBox) (tgcomponent[1])).getAttributeList();
+  }
+
+  public void checkSizeOfSons() {
+    ((TGCAttributeBox) (tgcomponent[0])).checkMySize();
+    ((TGCAttributeBox) (tgcomponent[1])).checkMySize();
+  }
+
+  public void setAttributes(LinkedList<TAttribute> attributes) {
+    ((TGCAttributeBox) (tgcomponent[0])).setAttributeList(attributes);
+  }
+
+  public void setGates(LinkedList<TAttribute> gates) {
+    ((TGCAttributeBox) (tgcomponent[1])).setAttributeList(gates);
+  }
+
+  // builds a new Vector
+  /*
+   * public Vector gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) { Vector v =
+   * (Vector)(getGates().clone()); tdp.removeSynchronizedGates(v, this, tcdsgl);
+   * return v; }
+   */
+
+  public TAttribute getGateById(String name) {
+    java.util.List<TAttribute> list = ((TGCAttributeBox) (tgcomponent[1])).getAttributeList();
+    for (TAttribute ta : list)
+      if (ta.getId().equals(name))
+        return ta;
+
+    return null;
+  }
+
+  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+    /*
+     * componentMenu.addSeparator(); JMenuItem isStart = null; if (start) { isStart
+     * = new JMenuItem("Remove <<start>>"); } else { isStart = new
+     * JMenuItem("Add <<start>>"); }
+     * 
+     * isStart.addActionListener(menuAL); componentMenu.add(isStart);
+     * 
+     * JMenuItem isObserver = null; if (observer) { isObserver = new
+     * JMenuItem("Remove <<tobserver>>"); } else { isObserver = new
+     * JMenuItem("Add <<tobserver>>"); }
+     * 
+     * isObserver.addActionListener(menuAL); componentMenu.add(isObserver);
+     */
+  }
+
+  public boolean eventOnPopup(ActionEvent e) {
+    /*
+     * String s = e.getActionCommand(); if (s.indexOf("observer") == -1) { start =
+     * !start; } else { observer = !observer; }
+     */
+    return true;
+  }
+
+  public String toString() {
+    return getValue() + " " + stereotypes[myStereotype];
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Stereotype data=\"");
+    sb.append(stereotypes[myStereotype]);
+    sb.append("\" />\n");
+    sb.append("<Periodic period=\"");
+    sb.append(period);
+    sb.append("\" deadline=\"");
+    sb.append(deadline);
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      String ste, ste1, ste2;
+
+      // TraceManager.addDev("Loading tclass " + getValue());
+      // TraceManager.addDev(nl.toString());
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              // TraceManager.addDev("Loading tag=" + elt.getTagName());
+
+              if (elt.getTagName().equals("Stereotype")) {
+                ste = elt.getAttribute("data");
+                myStereotype = setStereotype(ste);
+
+              }
+              if (elt.getTagName().equals("Periodic")) {
+                ste1 = elt.getAttribute("period");
+                ste2 = elt.getAttribute("deadline");
+                period = Integer.decode(ste1).intValue();
+                deadline = Integer.decode(ste2).intValue();
+              }
             }
-
-            myStereotype = jdtosc.getIndexStereotype();
-
-            try {
-                period = Integer.decode(jdtosc.getPeriod()).intValue();
-            } catch (Exception e) {
-                ret = false;
-            }
-
-            try {
-                deadline = Integer.decode(jdtosc.getDeadline()).intValue();
-            } catch (Exception e) {
-                ret = false;
-            }
-
-            return ret;
+          }
         }
-        //TraceManager.addDev("returning false");
-        return false;
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
+  }
 
+  public int getStereotype() {
+    return myStereotype;
+  }
 
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
+  public TURTLEOSActivityDiagramPanel getActivityDiagramPanel() {
+    return ((TURTLEOSDesignPanel) (tdp.tp)).getTURTLEOSActivityDiagramPanel(getClassName());
+  }
 
-    public String getClassName() {
-        return value;
-    }
+  public ActivityDiagramPanelInterface getBehaviourDiagramPanel() {
+    return getActivityDiagramPanel();
+  }
 
-    public int getPeriod() {
-        return period;
-    }
-
-    public int getDeadline() {
-        return deadline;
-    }
-
-    public String getStereotypeFullString() {
-        return "<<" + stereotypes[myStereotype] + ">>";
-    }
-
-    public int setStereotype(String s) {
-        int i = 0;
-        while (i < stereotypes.length) {
-            //TraceManager.addDev("Comparing " + s + "with " + stereotypes[i]);
-            if (stereotypes[i].compareTo(s) == 0) {
-                return i;
-            }
-            i++;
-        }
-        return 0;
-    }
-
-    public int getType() {
-        return TGComponentManager.TOSCD_TCLASS;
-    }
-
-    public java.util.List<TAttribute> getAttributes() {
-        return ((TGCAttributeBox) (tgcomponent[0])).getAttributeList();
-    }
-
-    public java.util.List<TAttribute> getGates() {
-        return ((TGCAttributeBox) (tgcomponent[1])).getAttributeList();
-    }
-
-    public void checkSizeOfSons() {
-        ((TGCAttributeBox) (tgcomponent[0])).checkMySize();
-        ((TGCAttributeBox) (tgcomponent[1])).checkMySize();
-    }
-
-    public void setAttributes(LinkedList<TAttribute> attributes) {
-        ((TGCAttributeBox) (tgcomponent[0])).setAttributeList(attributes);
-    }
-
-    public void setGates(LinkedList<TAttribute> gates) {
-        ((TGCAttributeBox) (tgcomponent[1])).setAttributeList(gates);
-    }
-
-    // builds a new Vector
-    /*public Vector gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl) {
-        Vector v = (Vector)(getGates().clone());
-        tdp.removeSynchronizedGates(v, this, tcdsgl);
-        return v;
-    } */
-
-    public TAttribute getGateById(String name) {
-        java.util.List<TAttribute> list = ((TGCAttributeBox) (tgcomponent[1])).getAttributeList();
-        for (TAttribute ta : list)
-            if (ta.getId().equals(name))
-                return ta;
-
-        return null;
-    }
-
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        /*componentMenu.addSeparator();
-        JMenuItem isStart = null;
-        if (start) {
-            isStart = new JMenuItem("Remove <<start>>");
-        } else {
-            isStart = new JMenuItem("Add <<start>>");
-        }
-
-        isStart.addActionListener(menuAL);
-        componentMenu.add(isStart);
-
-        JMenuItem isObserver = null;
-        if (observer) {
-            isObserver = new JMenuItem("Remove <<tobserver>>");
-        } else {
-            isObserver = new JMenuItem("Add <<tobserver>>");
-        }
-
-        isObserver.addActionListener(menuAL);
-        componentMenu.add(isObserver);   */
-    }
-
-    public boolean eventOnPopup(ActionEvent e) {
-        /*String s = e.getActionCommand();
-        if (s.indexOf("observer") == -1) {
-            start = !start;
-        } else {
-            observer = !observer;
-        } */
-        return true;
-    }
-
-    public String toString() {
-        return getValue() + " " + stereotypes[myStereotype];
-    }
-
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Stereotype data=\"");
-        sb.append(stereotypes[myStereotype]);
-        sb.append("\" />\n");
-        sb.append("<Periodic period=\"");
-        sb.append(period);
-        sb.append("\" deadline=\"");
-        sb.append(deadline);
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            String ste, ste1, ste2;
-
-            //TraceManager.addDev("Loading tclass " + getValue());
-            //TraceManager.addDev(nl.toString());
-
-            for (int i = 0; i < nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for (int j = 0; j < nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            //TraceManager.addDev("Loading tag=" + elt.getTagName());
-
-                            if (elt.getTagName().equals("Stereotype")) {
-                                ste = elt.getAttribute("data");
-                                myStereotype = setStereotype(ste);
-
-                            }
-                            if (elt.getTagName().equals("Periodic")) {
-                                ste1 = elt.getAttribute("period");
-                                ste2 = elt.getAttribute("deadline");
-                                period = Integer.decode(ste1).intValue();
-                                deadline = Integer.decode(ste2).intValue();
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
-
-    public int getStereotype() {
-        return myStereotype;
-    }
-
-    public TURTLEOSActivityDiagramPanel getActivityDiagramPanel() {
-        return ((TURTLEOSDesignPanel) (tdp.tp)).getTURTLEOSActivityDiagramPanel(getClassName());
-    }
-
-    public ActivityDiagramPanelInterface getBehaviourDiagramPanel() {
-        return getActivityDiagramPanel();
-    }
-
-    public boolean isStart() {
-        return true;
-    }
-
+  public boolean isStart() {
+    return true;
+  }
 
 }

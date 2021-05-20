@@ -39,48 +39,50 @@
 package ui;
 
 /**
-   * Class TGCWithInternalComponent
-   * Graphical component that contains one or more internal components
-   * Creation: 22/12/2003
-   * @version 1.0 22/12/2003
-   * @author Ludovic APVRILLE
+ * Class TGCWithInternalComponent Graphical component that contains one or more
+ * internal components Creation: 22/12/2003
+ * 
+ * @version 1.0 22/12/2003
+ * @author Ludovic APVRILLE
  */
-public abstract class TGCWithInternalComponent extends TGScalableComponent /* Issue #31 TGComponent*/{
+public abstract class TGCWithInternalComponent extends TGScalableComponent /* Issue #31 TGComponent */ {
 
-    public TGCWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
+  public TGCWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
 
-    @Override
-    public void setState(int s) {
-        state = s;
-        if (s != TGState.POINTER_ON_ME) {
-            setStateInternalTGComponent(s);
-            if (s == TGState.POINTED) {
-               if (selectedInternalComponent != null) {
-            	   if(!tdp.select || (tdp.select && tdp.componentPointed == selectedInternalComponent)) //Check if this is the selected component
-                    selectedInternalComponent.setState(TGState.POINTER_ON_ME);
-            	   else
-            		   selectedInternalComponent.setState(TGState.POINTED);
-                } else {
-                    if (father == null) {
-                        state = TGState.POINTER_ON_ME;
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public final TGComponent isOnMe(int x1, int y1) {
-        selectedInternalComponent = isOnAnInternalTGComponent(x1, y1);
-
+  @Override
+  public void setState(int s) {
+    state = s;
+    if (s != TGState.POINTER_ON_ME) {
+      setStateInternalTGComponent(s);
+      if (s == TGState.POINTED) {
         if (selectedInternalComponent != null) {
-            return selectedInternalComponent;
+          if (!tdp.select || (tdp.select && tdp.componentPointed == selectedInternalComponent)) // Check if this is the
+                                                                                                // selected component
+            selectedInternalComponent.setState(TGState.POINTER_ON_ME);
+          else
+            selectedInternalComponent.setState(TGState.POINTED);
+        } else {
+          if (father == null) {
+            state = TGState.POINTER_ON_ME;
+          }
         }
+      }
+    }
+  }
 
-        return isOnOnlyMe(x1, y1);
+  @Override
+  public final TGComponent isOnMe(int x1, int y1) {
+    selectedInternalComponent = isOnAnInternalTGComponent(x1, y1);
+
+    if (selectedInternalComponent != null) {
+      return selectedInternalComponent;
     }
 
-    public abstract TGComponent isOnOnlyMe(int x1, int y1);
+    return isOnOnlyMe(x1, y1);
+  }
+
+  public abstract TGComponent isOnOnlyMe(int x1, int y1);
 }

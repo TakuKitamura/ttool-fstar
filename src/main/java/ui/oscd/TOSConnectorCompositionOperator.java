@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 import myutil.GraphicLib;
@@ -51,30 +48,31 @@ import java.util.Vector;
 //import java.awt.geom.*;
 
 /**
- * Class TOSConnectorCompositionOperator
- * Connects an association to a TOS composition operator. To be used in TOS class diagram.
- * Creation: 05/10/2006
+ * Class TOSConnectorCompositionOperator Connects an association to a TOS
+ * composition operator. To be used in TOS class diagram. Creation: 05/10/2006
+ * 
  * @version 1.0 05/10/2006
  * @author Ludovic APVRILLE
  */
-public  class TOSConnectorCompositionOperator extends TGConnector {
-    
-    public TOSConnectorCompositionOperator(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic108;
-    }
-    
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-        
-    }
-    
-    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
+public class TOSConnectorCompositionOperator extends TGConnector {
 
-    public int getType() {
-        return TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
-    }
-    
+  public TOSConnectorCompositionOperator(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic108;
+  }
+
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+
+  }
+
+  protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
+
+  public int getType() {
+    return TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
+  }
+
 }

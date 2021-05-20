@@ -36,52 +36,46 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class LRArtifactTClassGate
- * Two Data struture with 3 strings : artifact, tclass, gate
- * Creation: 09/05/2004
+ * Class LRArtifactTClassGate Two Data struture with 3 strings : artifact,
+ * tclass, gate Creation: 09/05/2004
+ * 
  * @version 1.0 09/05/2004
  * @author Ludovic APVRILLE
  */
 public class LRArtifactTClassGate implements Comparable {
-    
-    public ArtifactTClassGate left;
-    public ArtifactTClassGate right;
-    
-    public LRArtifactTClassGate(ArtifactTClassGate _left, ArtifactTClassGate _right) {
-        left = _left;
-        right = _right;
+
+  public ArtifactTClassGate left;
+  public ArtifactTClassGate right;
+
+  public LRArtifactTClassGate(ArtifactTClassGate _left, ArtifactTClassGate _right) {
+    left = _left;
+    right = _right;
+  }
+
+  public int compareTo(Object o) {
+    if (!(o instanceof LRArtifactTClassGate)) {
+      return -1;
     }
-    
-    public int compareTo(Object o) {
-        if (!(o instanceof LRArtifactTClassGate)) {
-            return -1;
-        }
-        
-        LRArtifactTClassGate lratg = (LRArtifactTClassGate)o;
-        if ((lratg.left.compareTo(left) == 0) && (lratg.right.compareTo(right) == 0)) {
-            return 0;
-        }
-        if ((lratg.left.compareTo(right) == 0) && (lratg.right.compareTo(left) == 0)) {
-            return 0;
-        }
-        
-        return -1;
+
+    LRArtifactTClassGate lratg = (LRArtifactTClassGate) o;
+    if ((lratg.left.compareTo(left) == 0) && (lratg.right.compareTo(right) == 0)) {
+      return 0;
     }
-    
-    public boolean hasEquivalent(ArtifactTClassGate atg) {
-        return ((atg.compareTo(left) ==0) || (atg.compareTo(right) ==0));
+    if ((lratg.left.compareTo(right) == 0) && (lratg.right.compareTo(left) == 0)) {
+      return 0;
     }
-    
-    public String toString() {
-        return left.toString() + " = " + right.toString();
-    }
+
+    return -1;
+  }
+
+  public boolean hasEquivalent(ArtifactTClassGate atg) {
+    return ((atg.compareTo(left) == 0) || (atg.compareTo(right) == 0));
+  }
+
+  public String toString() {
+    return left.toString() + " = " + right.toString();
+  }
 }

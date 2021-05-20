@@ -36,42 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
-
 /**
- * Class TClassGate
- * Creation: 22/12/2003
+ * Class TClassGate Creation: 22/12/2003
+ * 
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
  */
 public class TClassGate implements Comparable<TClassGate> {
-    private TClass t;
-    private Gate g;
-    
-    public TClassGate(TClass _t, Gate _g) {
-        t = _t;
-        g = _g;
-    }
-    
-    public TClass getTClass() {
-        return t;
-    }
-    
-    public Gate getGate() {
-        return g;
-    }
-    
-    public String toString() {
-        return t.getName() + "." + g.getName();
-    }
-    
-    public int compareTo(TClassGate o) {
-        return toString().compareTo(o.toString());
-    }
-    
-}
+  private TClass t;
+  private Gate g;
 
+  public TClassGate(TClass _t, Gate _g) {
+    t = _t;
+    g = _g;
+  }
+
+  public TClass getTClass() {
+    return t;
+  }
+
+  public Gate getGate() {
+    return g;
+  }
+
+  public String toString() {
+    return t.getName() + "." + g.getName();
+  }
+
+  public int compareTo(TClassGate o) {
+    return toString().compareTo(o.toString());
+  }
+
+}

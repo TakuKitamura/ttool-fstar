@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import help.HelpEntry;
@@ -53,25 +50,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class TGTextFieldWithHelp
- * Generic Box for storing attributes
- * Creation: 20/05/2019
+ * Class TGTextFieldWithHelp Generic Box for storing attributes Creation:
+ * 20/05/2019
+ * 
  * @version 1.1 20/05/2019
  * @author Ludovic APVRILLE
  */
 public class TGTextFieldWithHelp extends JTextField {
-    public  TGHelpButton myButton;
+  public TGHelpButton myButton;
 
-    public TGTextFieldWithHelp(String value, int nbOfColums) {
-        super(value, nbOfColums);
-    }
+  public TGTextFieldWithHelp(String value, int nbOfColums) {
+    super(value, nbOfColums);
+  }
 
-    // helpword can reference a HTML file or a master keyword
-    public void makeEndHelpButton(String helpWord, MainGUI mgui, HelpManager hm, JPanel panel, GridBagConstraints c) {
-        Icon myIcon = IconManager.imgic32;
-        myButton = new TGHelpButton(myIcon, helpWord, mgui, hm);
-        myButton.addToPanel(panel, c);
-    }
-
+  // helpword can reference a HTML file or a master keyword
+  public void makeEndHelpButton(String helpWord, MainGUI mgui, HelpManager hm, JPanel panel, GridBagConstraints c) {
+    Icon myIcon = IconManager.imgic32;
+    myButton = new TGHelpButton(myIcon, helpWord, mgui, hm);
+    myButton.addToPanel(panel, c);
+  }
 
 }

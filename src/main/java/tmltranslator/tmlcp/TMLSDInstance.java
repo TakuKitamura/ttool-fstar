@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 import tmltranslator.TMLAttribute;
@@ -52,148 +49,154 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
-   * Class TMLSDInstance, the class for the TML Sequence Diagram Instance in the tmlcp data structure. An instance is composed of
-   * actions, messages, global variables and is associated to a mapped unit into the architecture.
-   * Creation: 18/02/2014
-   * @version 1.1 03/11/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLSDInstance, the class for the TML Sequence Diagram Instance in the
+ * tmlcp data structure. An instance is composed of actions, messages, global
+ * variables and is associated to a mapped unit into the architecture. Creation:
+ * 18/02/2014
+ * 
+ * @version 1.1 03/11/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLSDInstance extends TMLElement  {
+public class TMLSDInstance extends TMLElement {
 
-    private String type;
-    private TMLArchiNode mappedUnit;    //the unit of the architecture where the instance is mapped to
-    private ArrayList<TMLAttribute> globalVariables;
-    private ArrayList<TMLSDMessage> messages;
-    private ArrayList<TMLSDAction> actions;
-    private ArrayList<TMLSDEvent> events;       //used to sort messages and actions according to their order, to produce the TMLTxt code
+  private String type;
+  private TMLArchiNode mappedUnit; // the unit of the architecture where the instance is mapped to
+  private ArrayList<TMLAttribute> globalVariables;
+  private ArrayList<TMLSDMessage> messages;
+  private ArrayList<TMLSDAction> actions;
+  private ArrayList<TMLSDEvent> events; // used to sort messages and actions according to their order, to produce the
+                                        // TMLTxt code
 
-    public TMLSDInstance( String _name, Object _referenceObject, String _type ) {
-        super( _name, _referenceObject );
-        this.type = _type;
-        init();
+  public TMLSDInstance(String _name, Object _referenceObject, String _type) {
+    super(_name, _referenceObject);
+    this.type = _type;
+    init();
+  }
+
+  // The constructor to be used from the parser. No reference to object
+  public TMLSDInstance(String _name, String _type) {
+    super(_name, null);
+    this.type = _type;
+    init();
+  }
+
+  private void init() {
+
+    globalVariables = new ArrayList<TMLAttribute>();
+    messages = new ArrayList<TMLSDMessage>();
+    actions = new ArrayList<TMLSDAction>();
+    events = new ArrayList<TMLSDEvent>();
+  }
+
+  public void setType(String _type) {
+    if (_type != "") {
+      this.type = _type;
+    } else {
+      this.type = "NO_TYPE";
     }
+  }
 
-		//The constructor to be used from the parser. No reference to object
-    public TMLSDInstance( String _name, String _type ) {
-        super( _name, null );
-        this.type = _type;
-        init();
+  public String getType() {
+    return this.type;
+  }
+
+  public ArrayList<TMLSDEvent> getEvents() {
+    return events;
+  }
+
+  public void addAttribute(TMLAttribute _attribute) { // used by the graphical 2 TMLTxt compiler
+    globalVariables.add(_attribute);
+  }
+
+  public ArrayList<TMLAttribute> getAttributes() {
+    return globalVariables;
+  }
+
+  public ArrayList<TMLSDAction> getActions() {
+    return actions;
+  }
+
+  public void addAction(TMLSDAction _action) {
+    // TraceManager.addDev("SD: Adding action in " + getName() + " nb of events: " +
+    // events.size());
+    actions.add(_action);
+    events.add(new TMLSDEvent(_action, TMLSDEvent.ACTION_EVENT, _action.getYCoord()));
+    Collections.sort(events);
+  }
+
+  // Add an action from the parser where there is no notion of yCoord. Events are
+  // already ordered.
+  public void addActionFromParser(TMLSDAction _action) {
+    actions.add(_action);
+    events.add(new TMLSDEvent(_action, TMLSDEvent.ACTION_EVENT));
+  }
+
+  public void addMappedUnit(TMLArchiNode _mappedUnit) {
+    mappedUnit = _mappedUnit;
+  }
+
+  public TMLArchiNode getMappedUnit() {
+    return mappedUnit;
+  }
+
+  public void addMessage(TMLSDMessage _msg, int _type) {
+
+    // TraceManager.addDev("SD: Adding message in " + getName()+ " nb of events: " +
+    // events.size());
+    messages.add(_msg);
+    if (_type == TMLSDEvent.SEND_MESSAGE_EVENT) {
+      int yCoord = ((TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP1().getY();
+      events.add(new TMLSDEvent(_msg, TMLSDEvent.SEND_MESSAGE_EVENT, yCoord));
     }
-
-    private void init() {
-
-        globalVariables = new ArrayList<TMLAttribute>();
-        messages = new ArrayList<TMLSDMessage>();
-        actions = new ArrayList<TMLSDAction>();
-        events = new ArrayList<TMLSDEvent>();
+    if (_type == TMLSDEvent.RECEIVE_MESSAGE_EVENT) {
+      int yCoord = ((TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP2().getY();
+      events.add(new TMLSDEvent(_msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT, yCoord));
     }
+    Collections.sort(events);
+  }
 
-    public void setType( String _type ) {
-        if( _type != "" )       {
-            this.type = _type;
+  // Add a message from the parser where there is no notion of yCoord. Events are
+  // already ordered.
+  public void addMessageFromParser(TMLSDMessage _msg, int _type) {
+
+    messages.add(_msg);
+    if (_type == TMLSDEvent.SEND_MESSAGE_EVENT) {
+      events.add(new TMLSDEvent(_msg, TMLSDEvent.SEND_MESSAGE_EVENT));
+    }
+    if (_type == TMLSDEvent.RECEIVE_MESSAGE_EVENT) {
+      events.add(new TMLSDEvent(_msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT));
+    }
+  }
+
+  public void insertInitialValue(String _name, String value) {
+
+    int i = 0;
+    String str;
+    TMLAttribute tempAttr;
+    TMLType tempType, _attrType;
+    TMLAttribute _attr = new TMLAttribute(_name, new TMLType(1));
+
+    for (i = 0; i < globalVariables.size(); i++) {
+      tempAttr = globalVariables.get(i);
+      str = tempAttr.getName();
+      if (str.equals(_attr.getName())) {
+        tempType = tempAttr.getType();
+        _attrType = _attr.getType();
+        if (tempType.getType() == _attrType.getType()) {
+          _attr.initialValue = value;
+          globalVariables.set(i, _attr);
+          return;
         }
-        else    {
-            this.type = "NO_TYPE";
-        }
+      }
     }
+  }
 
-    public String getType()     {
-        return this.type;
-    }
+  public ArrayList<TMLSDMessage> getMessages() {
+    return messages;
+  }
 
-    public ArrayList<TMLSDEvent> getEvents()    {
-        return events;
-    }
-
-    public void addAttribute( TMLAttribute _attribute ) {       //used by the graphical 2 TMLTxt compiler
-        globalVariables.add( _attribute );
-    }
-
-    public ArrayList<TMLAttribute> getAttributes() {
-        return globalVariables;
-    }
-
-    public ArrayList<TMLSDAction> getActions() {
-        return actions;
-    }
-
-    public void addAction( TMLSDAction _action ) {
-	//TraceManager.addDev("SD: Adding action in " + getName() + " nb of events: " + events.size());
-        actions.add( _action );
-        events.add( new TMLSDEvent( _action, TMLSDEvent.ACTION_EVENT, _action.getYCoord() ) );
-        Collections.sort( events );
-    }
-
-		//Add an action from the parser where there is no notion of yCoord. Events are already ordered.
-    public void addActionFromParser( TMLSDAction _action ) {
-        actions.add( _action );
-        events.add( new TMLSDEvent( _action, TMLSDEvent.ACTION_EVENT ) );
-    }
-
-    public void addMappedUnit( TMLArchiNode _mappedUnit ) {
-        mappedUnit = _mappedUnit;
-    }
-
-    public TMLArchiNode getMappedUnit() {
-        return mappedUnit;
-    }
-
-    public void addMessage( TMLSDMessage _msg, int _type ) {
-
-			//TraceManager.addDev("SD: Adding message in " + getName()+ " nb of events: " + events.size());
-			messages.add( _msg );
-			if( _type == TMLSDEvent.SEND_MESSAGE_EVENT )	{
-				int yCoord = ( (TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP1().getY();
-  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.SEND_MESSAGE_EVENT, yCoord ) );
-			}
-			if( _type == TMLSDEvent.RECEIVE_MESSAGE_EVENT )	{
-	    	int yCoord = ( (TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP2().getY();
-  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT, yCoord ) );
-			}
-			Collections.sort( events );
-    }
-
-		//Add a message from the parser where there is no notion of yCoord. Events are already ordered.
-    public void addMessageFromParser( TMLSDMessage _msg, int _type ) {
-
-			messages.add( _msg );
-			if( _type == TMLSDEvent.SEND_MESSAGE_EVENT )	{
-  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.SEND_MESSAGE_EVENT ) );
-			}
-			if( _type == TMLSDEvent.RECEIVE_MESSAGE_EVENT )	{
-  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT ) );
-			}
-    }
-
-    public void insertInitialValue( String _name, String value ) {
-
-        int i = 0;
-        String str;
-        TMLAttribute tempAttr;
-        TMLType tempType, _attrType;
-        TMLAttribute _attr = new TMLAttribute( _name, new TMLType(1) );
-
-        for( i = 0; i < globalVariables.size(); i++ )   {
-            tempAttr = globalVariables.get(i);
-            str = tempAttr.getName();
-            if( str.equals( _attr.getName() ) ) {
-                tempType = tempAttr.getType();
-                _attrType = _attr.getType();
-                if( tempType.getType() == _attrType.getType() ) {
-                    _attr.initialValue = value;
-                    globalVariables.set( i, _attr );
-                    return;
-                }
-            }
-        }
-    }
-
-    public ArrayList<TMLSDMessage> getMessages()        {
-        return messages;
-    }
-
-    public String toString()    {
-        return this.name + " : " + this.type;
-    }
+  public String toString() {
+    return this.name + " : " + this.type;
+  }
 
 }

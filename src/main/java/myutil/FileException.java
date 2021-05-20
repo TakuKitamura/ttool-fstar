@@ -36,22 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
-
 /**
- * Class FileException
- * Creation: 17/08/2004
- * version 1.0 17/08/2004
+ * Class FileException Creation: 17/08/2004 version 1.0 17/08/2004
+ * 
  * @author Ludovic APVRILLE
  */
-public	class FileException extends Exception {
-	
-	public FileException(String msg) {
-		super("Operation on file could not be performed: " + msg);
-	}
-    
-} // Class 	
+public class FileException extends Exception {
+
+  public FileException(String msg) {
+    super("Operation on file could not be performed: " + msg);
+  }
+
+} // Class

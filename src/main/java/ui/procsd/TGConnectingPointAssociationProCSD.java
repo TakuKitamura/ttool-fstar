@@ -42,24 +42,25 @@ import ui.CDElement;
 import ui.TGConnectingPointTwoFathers;
 
 /**
- * Class TGConnectingPointAssociation
- * Definition of connecting points on which attrbiute connectors can be connected
- * Creation: 20/12/2003
+ * Class TGConnectingPointAssociation Definition of connecting points on which
+ * attrbiute connectors can be connected Creation: 20/12/2003
+ * 
  * @version 1.0 20/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointAssociationProCSD extends  TGConnectingPointTwoFathers{
-    
-    public TGConnectingPointAssociationProCSD(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in, boolean _out) {
-        super(_container1, _container2, _x, _y, _in, _out);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //A link is not compatible with an interface. By Solange
-    	//if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
-        //    return true;
-        //}
-        return false;
-    }
+public class TGConnectingPointAssociationProCSD extends TGConnectingPointTwoFathers {
+
+  public TGConnectingPointAssociationProCSD(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
+      boolean _out) {
+    super(_container1, _container2, _x, _y, _in, _out);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    // A link is not compatible with an interface. By Solange
+    // if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
+    // return true;
+    // }
+    return false;
+  }
 }

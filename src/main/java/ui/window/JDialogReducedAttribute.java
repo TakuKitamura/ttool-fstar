@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -53,317 +50,315 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 /**
- * Class JDialogReducedAttribute
- * Dialog for managing attributes that are partially editable
- * Creation: 11/05/2004
+ * Class JDialogReducedAttribute Dialog for managing attributes that are
+ * partially editable Creation: 11/05/2004
+ * 
  * @version 1.0 11/05/2004
  * @author Ludovic APVRILLE
  */
-public class JDialogReducedAttribute extends JDialogBase implements ActionListener, ListSelectionListener  {
-    private java.util.List<TAttribute> attributesPar, setList, unsetList, tclassAttributes;
-    
-    private JPanel panel1, panel2;
-    
-    private Frame frame;
-    
-    private boolean isEditable = true;
-    
-    private String attrib, nameTClass, nameTObject; // "Attributes", "Gates", etc.
-    
-    // Panel1
-    private JList<TAttribute> tclassAttributeList;
-    private JTextField identifierText;
-    private JTextField initialValue;
-    private JButton setButton;
-    
-    //Panel2
-    private JList<TAttribute> setAttributes;
-    private JButton unsetButton;
-    
-    /* Creates new form  */
-    public JDialogReducedAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
-        super(f, title, true);
-        frame = f;
-        attributesPar = _attributes;
-        attrib = _attrib;
-        nameTObject = _nameTObject;
-        nameTClass = _nameTClass;
-        
-        tclassAttributes = _tclassAttributes;
-        
-        unsetList = new LinkedList<TAttribute> ();
-        setList = new LinkedList<TAttribute> ();
-        
-        TAttribute ta;
-        for(int i=0; i<attributesPar.size(); i++) {
-            ta = attributesPar.get (i);
-            if (ta.isSet()) {
-                setList.add (ta.makeClone());
-            } else {
-                unsetList.add (ta.makeClone());
-            }
-        }
-        
-        initComponents();
-        myInitComponents();
-        pack();
+public class JDialogReducedAttribute extends JDialogBase implements ActionListener, ListSelectionListener {
+  private java.util.List<TAttribute> attributesPar, setList, unsetList, tclassAttributes;
+
+  private JPanel panel1, panel2;
+
+  private Frame frame;
+
+  private boolean isEditable = true;
+
+  private String attrib, nameTClass, nameTObject; // "Attributes", "Gates", etc.
+
+  // Panel1
+  private JList<TAttribute> tclassAttributeList;
+  private JTextField identifierText;
+  private JTextField initialValue;
+  private JButton setButton;
+
+  // Panel2
+  private JList<TAttribute> setAttributes;
+  private JButton unsetButton;
+
+  /* Creates new form */
+  public JDialogReducedAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _tclassAttributes,
+      Frame f, String title, String _attrib, String _nameTObject, String _nameTClass) {
+    super(f, title, true);
+    frame = f;
+    attributesPar = _attributes;
+    attrib = _attrib;
+    nameTObject = _nameTObject;
+    nameTClass = _nameTClass;
+
+    tclassAttributes = _tclassAttributes;
+
+    unsetList = new LinkedList<TAttribute>();
+    setList = new LinkedList<TAttribute>();
+
+    TAttribute ta;
+    for (int i = 0; i < attributesPar.size(); i++) {
+      ta = attributesPar.get(i);
+      if (ta.isSet()) {
+        setList.add(ta.makeClone());
+      } else {
+        unsetList.add(ta.makeClone());
+      }
     }
-    
-    private void myInitComponents() {
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+    setButton.setEnabled(false);
+    unsetButton.setEnabled(false);
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+    panel1.setBorder(new javax.swing.border.TitledBorder(attrib + "s of " + nameTClass));
+    panel1.setPreferredSize(new Dimension(300, 250));
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder(attrib + "s modified in " + nameTObject));
+    panel2.setPreferredSize(new Dimension(300, 250));
+
+    // first line panel1
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 3;
+    tclassAttributeList = new JList<TAttribute>(tclassAttributes.toArray(new TAttribute[0]));
+    tclassAttributeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    tclassAttributeList.addListSelectionListener(this);
+    JScrollPane scrollPane1 = new JScrollPane(tclassAttributeList);
+    scrollPane1.setSize(300, 250);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 5;
+    c1.weighty = 10.0;
+    c1.weightx = 10.0;
+    panel1.add(scrollPane1, c1);
+
+    panel1.add(new JLabel(" "), c1);
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.anchor = GridBagConstraints.CENTER;
+    identifierText = new JTextField();
+    identifierText.setColumns(15);
+    identifierText.setEditable(false);
+    panel1.add(identifierText, c1);
+
+    initialValue = new JTextField();
+    initialValue.setColumns(5);
+    initialValue.setEditable(true);
+
+    if (attrib.equals("Attribute")) {
+      panel1.add(new JLabel(" = "), c1);
+      panel1.add(initialValue, c1);
+    }
+
+    // third line panel1
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.CENTER;
+    c1.gridheight = 3;
+    panel1.add(new JLabel(" "), c1);
+
+    // fourth line panel2
+    c1.gridheight = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    setButton = new JButton("Set value");
+    setButton.addActionListener(this);
+    panel1.add(setButton, c1);
+
+    // 1st line panel2
+    setAttributes = new JList<TAttribute>(setList.toArray(new TAttribute[0]));
+    setAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    setAttributes.addListSelectionListener(this);
+    JScrollPane scrollPane2 = new JScrollPane(setAttributes);
+    scrollPane2.setSize(300, 250);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridheight = 5;
+    c2.weighty = 10.0;
+    c2.weightx = 10.0;
+    panel2.add(scrollPane2, c2);
+
+    // 2nd line panel2
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridheight = 1;
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    panel2.add(new JLabel(""), c2);
+
+    // third line panel2
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    unsetButton = new JButton("Unset value");
+    unsetButton.addActionListener(this);
+    panel2.add(unsetButton, c2);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+
+    c.add(panel1, c0);
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
+    } else if (command.equals("Unset value")) {
+      unsetValue();
+    } else if (command.equals("Set value")) {
+      setValue();
+    }
+  }
+
+  public void closeDialog() {
+    attributesPar.clear();
+
+    int i, j;
+    TAttribute ta1 = null, ta2 = null;
+    boolean found = false;
+
+    for (i = 0; i < tclassAttributes.size(); i++) {
+      ta1 = tclassAttributes.get(i);
+
+      for (j = 0; j < setList.size(); j++) {
+        ta2 = setList.get(j);
+        found = false;
+        if (ta2.getId().compareTo(ta1.getId()) == 0) {
+          found = true;
+          break;
+        }
+      }
+
+      if (found) {
+        ta2.set(true);
+        attributesPar.add(ta2);
+      } else {
+        attributesPar.add(ta1);
+      }
+
+    }
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public void unsetValue() {
+    int index = setAttributes.getSelectedIndex();
+    if ((index > -1) && (index < setList.size())) {
+      setList.remove(index);
+      setAttributes.setListData(setList.toArray(new TAttribute[0]));
+    }
+  }
+
+  public void setValue() {
+    String s = initialValue.getText();
+    if ((s == null) || (s.length() == 0)) {
+      return;
+    }
+
+    int index = tclassAttributeList.getSelectedIndex();
+
+    if (index == -1) {
+      return;
+    }
+
+    TAttribute ta = tclassAttributes.get(index);
+    if (!TAttribute.isAValidInitialValue(ta.getType(), s)) {
+      JOptionPane.showMessageDialog(frame, "The value is not valid", "Error", JOptionPane.INFORMATION_MESSAGE);
+      return;
+    }
+
+    // ta already in the set of set attributes?
+    int i;
+    TAttribute ta1;
+    // boolean found = false;
+
+    for (i = 0; i < setList.size(); i++) {
+      ta1 = setList.get(i);
+      if (ta1.getId().compareTo(ta.getId()) == 0) {
+        setList.remove(i);
+        break;
+      }
+    }
+
+    ta1 = ta.makeClone();
+    ta1.setInitialValue(s);
+    setList.add(ta1);
+    setAttributes.setListData(setList.toArray(new TAttribute[0]));
+
+  }
+
+  public void valueChanged(ListSelectionEvent e) {
+    int index;
+    if (e.getSource() == tclassAttributeList) {
+      index = tclassAttributeList.getSelectedIndex();
+      if (index == -1) {
         setButton.setEnabled(false);
+        identifierText.setText("");
+      } else {
+        TAttribute a = tclassAttributes.get(index);
+        identifierText.setText(a.getId());
+        initialValue.setText(a.getInitialValue());
+        if (isEditable) {
+          setButton.setEnabled(true);
+        }
+      }
+    } else {
+      index = setAttributes.getSelectedIndex();
+      if (index == -1) {
         unsetButton.setEnabled(false);
-    }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder(attrib + "s of " + nameTClass));
-        panel1.setPreferredSize(new Dimension(300, 250));
-        
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder(attrib + "s modified in " + nameTObject));
-        panel2.setPreferredSize(new Dimension(300, 250));
-        
-        // first line panel1
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 3;
-        tclassAttributeList = new JList<TAttribute> (tclassAttributes.toArray (new TAttribute[0]));
-        tclassAttributeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tclassAttributeList.addListSelectionListener(this);
-        JScrollPane scrollPane1 = new JScrollPane(tclassAttributeList);
-        scrollPane1.setSize(300, 250);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 5;
-        c1.weighty = 10.0;
-        c1.weightx = 10.0;
-        panel1.add(scrollPane1, c1);
-        
-        panel1.add(new JLabel(" "), c1);
-        
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.anchor = GridBagConstraints.CENTER;
-        identifierText = new JTextField();
-        identifierText.setColumns(15);
-        identifierText.setEditable(false);
-        panel1.add(identifierText, c1);
-        
-        initialValue = new JTextField();
-        initialValue.setColumns(5);
-        initialValue.setEditable(true);
-        
-        if (attrib.equals("Attribute")) {
-            panel1.add(new JLabel(" = "), c1);
-            panel1.add(initialValue, c1);
+      } else {
+        if (isEditable) {
+          unsetButton.setEnabled(true);
         }
-        
-        // third line panel1
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.CENTER;
-        c1.gridheight = 3;
-        panel1.add(new JLabel(" "), c1);
-        
-        // fourth line panel2
-        c1.gridheight = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        setButton = new JButton("Set value");
-        setButton.addActionListener(this);
-        panel1.add(setButton, c1);
-        
-        // 1st line panel2
-        setAttributes = new JList<TAttribute> (setList.toArray (new TAttribute[0]));
-        setAttributes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        setAttributes.addListSelectionListener(this);
-        JScrollPane scrollPane2 = new JScrollPane(setAttributes);
-        scrollPane2.setSize(300, 250);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 5;
-        c2.weighty = 10.0;
-        c2.weightx = 10.0;
-        panel2.add(scrollPane2, c2);
-        
-        // 2nd line panel2
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 1;
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        panel2.add(new JLabel(""), c2);
-        
-        // third line panel2
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        unsetButton = new JButton("Unset value");
-        unsetButton.addActionListener(this);
-        panel2.add(unsetButton, c2);
-        
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        
-        c.add(panel1, c0);
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(panel2, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+      }
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        } else if (command.equals("Unset value")) {
-            unsetValue();
-        } else if (command.equals("Set value")) {
-            setValue();
-        }
-    }
-    
-    public void closeDialog() {
-        attributesPar.clear ();
-        
-        int i, j;
-        TAttribute ta1 = null, ta2 = null;
-        boolean found = false;
-        
-        for(i=0; i<tclassAttributes.size(); i++) {
-            ta1 = tclassAttributes.get (i);
-            
-            for(j=0; j<setList.size(); j++) {
-                ta2 = setList.get (j);
-                found = false;
-                if (ta2.getId().compareTo(ta1.getId()) ==0) {
-                    found = true;
-                    break;
-                }
-            }
-            
-            if (found) {
-                ta2.set(true);
-                attributesPar.add (ta2);
-            } else {
-                attributesPar.add (ta1);
-            }
-            
-        }
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-    public void unsetValue() {
-        int index = setAttributes.getSelectedIndex();
-        if ((index > -1) && (index < setList.size())) {
-            setList.remove (index);
-            setAttributes.setListData(setList.toArray (new TAttribute[0]));
-        }
-    }
-    
-    public void setValue() {
-        String s = initialValue.getText();
-        if ((s == null) ||(s.length() == 0)) {
-            return;
-        }
-        
-        int index =  tclassAttributeList.getSelectedIndex();
-        
-        if (index == -1) {
-            return;
-        }
-        
-        TAttribute ta = tclassAttributes.get (index);
-        if (!TAttribute.isAValidInitialValue(ta.getType(), s)) {
-            JOptionPane.showMessageDialog(frame,
-            "The value is not valid",
-            "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        
-        // ta already in the set of set attributes?
-        int i;
-        TAttribute ta1;
-        //boolean found = false;
-        
-        for(i=0; i<setList.size(); i++) {
-            ta1 = setList.get (i);
-            if (ta1.getId().compareTo(ta.getId()) == 0) {
-                setList.remove (i);
-                break;
-            }
-        }
-        
-        ta1 = ta.makeClone();
-        ta1.setInitialValue(s);
-        setList.add (ta1);
-        setAttributes.setListData(setList.toArray (new TAttribute[0]));
-        
-    }
-    
-    public void valueChanged(ListSelectionEvent e) {
-        int index;
-        if (e.getSource() == tclassAttributeList) {
-            index = tclassAttributeList.getSelectedIndex();
-            if (index == -1) {
-                setButton.setEnabled(false);
-                identifierText.setText("");
-            } else {
-                TAttribute a = tclassAttributes.get (index);
-                identifierText.setText(a.getId());
-                initialValue.setText(a.getInitialValue());
-                if (isEditable) {
-                    setButton.setEnabled(true);
-                }
-            }
-        } else {
-            index = setAttributes.getSelectedIndex();
-            if (index == -1) {
-                unsetButton.setEnabled(false);
-            } else {
-                if (isEditable) {
-                    unsetButton.setEnabled(true);
-                }
-            }
-        }
-    }
-    
-    public void setEditable(boolean b) {
-        isEditable = b;
-    }
-    
+  }
+
+  public void setEditable(boolean b) {
+    isEditable = b;
+  }
+
 }

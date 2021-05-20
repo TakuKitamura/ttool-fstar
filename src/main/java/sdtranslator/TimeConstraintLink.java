@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sdtranslator;
 
 import sddescription.MSC;
@@ -49,58 +46,56 @@ import translator.RelativeTimeConstraintTClass;
 import translator.TimeConstraintTClass;
 
 /**
- * Class TimeConstraintLink
- * Creation: 18/09/2004
+ * Class TimeConstraintLink Creation: 18/09/2004
+ * 
  * @version 1.1 18/09/2004
  * @author Ludovic APVRILLE
  */
 public class TimeConstraintLink {
-    
-    public static int INDEX = 0;
-    
-    public TimeConstraintTClass t;
-    public Gate g1;
-    public Gate g2;
-    public Gate g3;
-    public Gate g4;
-    public TimeConstraint tc;
-    public MSC msc;
-    
-    public boolean basicTC = false;
 
+  public static int INDEX = 0;
 
-    
-    public TimeConstraintLink(TimeConstraint _tc, MSC _msc) {
-        tc = _tc;
-        msc = _msc;
+  public TimeConstraintTClass t;
+  public Gate g1;
+  public Gate g2;
+  public Gate g3;
+  public Gate g4;
+  public TimeConstraint tc;
+  public MSC msc;
+
+  public boolean basicTC = false;
+
+  public TimeConstraintLink(TimeConstraint _tc, MSC _msc) {
+    tc = _tc;
+    msc = _msc;
+  }
+
+  public void build() {
+    if (tc.type == TimeConstraint.RELATIVE) {
+      // g1 = new Gate("begin__tc__" + INDEX, Gate.GATE, false);
+      // g2 = new Gate("go__tc__" + INDEX, Gate.GATE, false);
+      // g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
+      // g4 = g3;
+      g1 = new Gate("go__tc__" + INDEX, Gate.GATE, false);
+      g2 = new Gate("check__tc__" + INDEX, Gate.GATE, false);
+      g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
+      g4 = new Gate("expire__tc__" + INDEX, Gate.GATE, false);
+      t = new RelativeTimeConstraintTClass("RTC__" + INDEX, tc.time1, tc.time2);
+      INDEX++;
     }
-    
-   public void build() {
-       if (tc.type == TimeConstraint.RELATIVE) {
-           //g1 = new Gate("begin__tc__" + INDEX, Gate.GATE, false);
-           //g2 = new Gate("go__tc__" + INDEX, Gate.GATE, false);
-           //g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
-           //g4 = g3;
-		   g1 = new Gate("go__tc__" + INDEX, Gate.GATE, false);
-           g2 = new Gate("check__tc__" + INDEX, Gate.GATE, false);
-           g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
-           g4 = new Gate("expire__tc__" + INDEX, Gate.GATE, false);
-           t = new RelativeTimeConstraintTClass("RTC__" + INDEX, tc.time1, tc.time2);
-           INDEX ++;
-       }
-       
-       if (tc.type == TimeConstraint.ABSOLUTE) {
-           g2 = new Gate("go__tc__" + INDEX, Gate.GATE, false);
-           g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
-           g4 = new Gate("expire__tc__" + INDEX, Gate.GATE, false);
-           g1 = g2;
-           t = new AbsoluteTimeConstraintTClass("ATC__" + INDEX, tc.time1, tc.time2);
-           INDEX ++;
-       }
-       
-   }
-   
-   public static void reinitIndex() {
-        INDEX = 0;
-   }
+
+    if (tc.type == TimeConstraint.ABSOLUTE) {
+      g2 = new Gate("go__tc__" + INDEX, Gate.GATE, false);
+      g3 = new Gate("end__tc__" + INDEX, Gate.GATE, false);
+      g4 = new Gate("expire__tc__" + INDEX, Gate.GATE, false);
+      g1 = g2;
+      t = new AbsoluteTimeConstraintTClass("ATC__" + INDEX, tc.time1, tc.time2);
+      INDEX++;
+    }
+
+  }
+
+  public static void reinitIndex() {
+    INDEX = 0;
+  }
 }

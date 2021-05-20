@@ -36,86 +36,86 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import avatartranslator.AvatarPragmaLatency;
 import java.util.List;
 import java.util.ArrayList;
+
 /**
-   * Class SimulationTransaction
-   * Transaction as defined by the simulation engine
-   * Creation: 20/05/2016
-   * @version 1.0 20/05/2016
-   * @author Ludovic APVRILLE
+ * Class SimulationTransaction Transaction as defined by the simulation engine
+ * Creation: 20/05/2016
+ * 
+ * @version 1.0 20/05/2016
+ * @author Ludovic APVRILLE
  */
-public class SimulationLatency  {
+public class SimulationLatency {
 
-    private String trans1;
-    private String trans2;
-    private String minTime="N/A"; 
-	private String maxTime="N/A";
-	private String avTime="N/A";
-	private String stDev="N/A";
-	private List<AvatarPragmaLatency> pragmas= new ArrayList<AvatarPragmaLatency>();
+  private String trans1;
+  private String trans2;
+  private String minTime = "N/A";
+  private String maxTime = "N/A";
+  private String avTime = "N/A";
+  private String stDev = "N/A";
+  private List<AvatarPragmaLatency> pragmas = new ArrayList<AvatarPragmaLatency>();
 
-    public SimulationLatency() {
-    }
+  public SimulationLatency() {
+  }
 
-	public void setTransaction1(String t){
-		trans1=t;
-	}
-	public void setTransaction2(String t){
-		trans2=t;
-	}
+  public void setTransaction1(String t) {
+    trans1 = t;
+  }
 
-	public void setMinTime(String time){
-		minTime=time;
-	}
+  public void setTransaction2(String t) {
+    trans2 = t;
+  }
 
-	public void setMaxTime(String time){
-		maxTime=time;
-	}
+  public void setMinTime(String time) {
+    minTime = time;
+  }
 
-	public void setAverageTime(String time){
-		avTime=time;
-	}
+  public void setMaxTime(String time) {
+    maxTime = time;
+  }
 
-	public void setStDev(String dev){
-		stDev=dev;
-	}
+  public void setAverageTime(String time) {
+    avTime = time;
+  }
 
-	public String getTransaction1(){
-		return trans1;
-	}
-	public String getTransaction2(){
-		return trans2;
-	}
+  public void setStDev(String dev) {
+    stDev = dev;
+  }
 
-	public String getMinTime(){
-		return minTime;
-	}
+  public String getTransaction1() {
+    return trans1;
+  }
 
-	public String getMaxTime(){
-		return maxTime;
-	}
+  public String getTransaction2() {
+    return trans2;
+  }
 
-	public String getAverageTime(){
-		return avTime;
-	}
+  public String getMinTime() {
+    return minTime;
+  }
 
-	public String getStDev(){
-		return stDev;
-	}
+  public String getMaxTime() {
+    return maxTime;
+  }
 
-	public List<AvatarPragmaLatency> getPragmas(){
-		return pragmas;
-	}
+  public String getAverageTime() {
+    return avTime;
+  }
 
-	public void addPragma(AvatarPragmaLatency ap){
-		pragmas.add(ap);
-	}
+  public String getStDev() {
+    return stDev;
+  }
+
+  public List<AvatarPragmaLatency> getPragmas() {
+    return pragmas;
+  }
+
+  public void addPragma(AvatarPragmaLatency ap) {
+    pragmas.add(ap);
+  }
 
 }

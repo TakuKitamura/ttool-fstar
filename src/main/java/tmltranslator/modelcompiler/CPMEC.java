@@ -45,127 +45,128 @@ import java.util.Map;
 import java.util.Vector;
 
 /**
-   * Class CPMEC, Model Extension Construct (MEC) class for Communication Patterns
-   * Creation: 06/02/2014
-   * @version 1.0 06/02/2014
-   * @author Andrea ENRICI
+ * Class CPMEC, Model Extension Construct (MEC) class for Communication Patterns
+ * Creation: 06/02/2014
+ * 
+ * @version 1.0 06/02/2014
+ * @author Andrea ENRICI
  */
-public abstract class CPMEC	implements CCodeGenConstants {
-	
-	//protected String CR = "\n";
-	//protected String TAB = "\t";
+public abstract class CPMEC implements CCodeGenConstants {
 
-	protected String init_code = new String();
-	protected String exec_code = new String();
-	protected String cleanup_code = new String();
+  // protected String CR = "\n";
+  // protected String TAB = "\t";
 
-	public static final String[] CP_TYPES = { "Memory Copy", "Single DMA", "Double DMA" };
-	public static final String[] TRANSFER_TYPES = { "memory to IP core", "IP core to IP core", "IP core to memory" };
+  protected String init_code = new String();
+  protected String exec_code = new String();
+  protected String cleanup_code = new String();
 
-	public static final String SINGLE_DMA = "Single DMA";
-	public static final String DOUBLE_DMA = "Double DMA";
-	public static final String MEMORY_COPY = "Memory Copy";
+  public static final String[] CP_TYPES = { "Memory Copy", "Single DMA", "Double DMA" };
+  public static final String[] TRANSFER_TYPES = { "memory to IP core", "IP core to IP core", "IP core to memory" };
 
-	//The number must be the same as the index in cpTypes
-	public static final int CPU_MEMORY_COPY_MEC = 0;
-	public static final int SINGLE_DMA_MEC = 1;
-	public static final int DOUBLE_DMA_MEC = 2;
+  public static final String SINGLE_DMA = "Single DMA";
+  public static final String DOUBLE_DMA = "Double DMA";
+  public static final String MEMORY_COPY = "Memory Copy";
 
-	public static final int MEM_2_IP = 0;
-	public static final int IP_2_IP = 1;
-	public static final int IP_2_MEM = 2;
+  // The number must be the same as the index in cpTypes
+  public static final int CPU_MEMORY_COPY_MEC = 0;
+  public static final int SINGLE_DMA_MEC = 1;
+  public static final int DOUBLE_DMA_MEC = 2;
 
-	public static final String DMA_CONTROLLER = "DMA_Controller";
-	public static final String SOURCE_STORAGE = "Src_Storage_Instance";
-	public static final String DESTINATION_STORAGE = "Dst_Storage_Instance";
+  public static final int MEM_2_IP = 0;
+  public static final int IP_2_IP = 1;
+  public static final int IP_2_MEM = 2;
 
-//	public static final String USER_TO_DO = "/* USER TO DO */";
+  public static final String DMA_CONTROLLER = "DMA_Controller";
+  public static final String SOURCE_STORAGE = "Src_Storage_Instance";
+  public static final String DESTINATION_STORAGE = "Dst_Storage_Instance";
 
-	protected static final String DEST_ADDRESS_ATTRIBUTE_NAME = "destinationAddress";
-	protected static final String SOURCE_ADDRESS_ATTRIBUTE_NAME = "sourceAddress";
-	protected static final String SAMPLES_LOAD_ATTRIBUTE_NAME = "samplesToLoad";
-	public static final String[] ORDERED_ATTRIBUTE_NAMES =  new String[]{ DEST_ADDRESS_ATTRIBUTE_NAME, SOURCE_ADDRESS_ATTRIBUTE_NAME, SAMPLES_LOAD_ATTRIBUTE_NAME };
-	
-	private final Map<String, String> attributes;
-	
-	protected CPMEC( final Collection<String> attributesStr ) {
-		attributes = initAttributes( attributesStr );
-	}
-	
-	protected static Map<String, String> initAttributes( final Collection<String> attributesStr ) {
-		final Map<String, String> attributes = new HashMap<String, String>();
-		
-		for ( final String assignment :attributesStr ) {
-			final String[] assignPair = assignment.split( " = " );
-			final String key = assignPair[ 0 ].trim();
-			final String value = assignPair[ 1 ].substring(0, assignPair[ 1 ].length()-1 );//remove trailing semi-colon
-			
-			attributes.put( key, value );
-		}
-		
-		return attributes;
-	}
+  // public static final String USER_TO_DO = "/* USER TO DO */";
 
-	public String getExecCode()	{
-		return exec_code;
-	}
+  protected static final String DEST_ADDRESS_ATTRIBUTE_NAME = "destinationAddress";
+  protected static final String SOURCE_ADDRESS_ATTRIBUTE_NAME = "sourceAddress";
+  protected static final String SAMPLES_LOAD_ATTRIBUTE_NAME = "samplesToLoad";
+  public static final String[] ORDERED_ATTRIBUTE_NAMES = new String[] { DEST_ADDRESS_ATTRIBUTE_NAME,
+      SOURCE_ADDRESS_ATTRIBUTE_NAME, SAMPLES_LOAD_ATTRIBUTE_NAME };
 
-	public String getInitCode()	{
-		return init_code;
-	}
+  private final Map<String, String> attributes;
 
-	public String getCleanupCode()	{
-		return cleanup_code;
-	}
-	
-	protected String getAttributeValue( final String key,
-										final String defaultValue ) {
-		if ( attributes.containsKey( key ) ) {
-			return attributes.get( key );
-		}
-		
-		return defaultValue + USER_TO_DO;
-	}
-	// Get the value of an attribute from the TMLCP artifact string
-//	protected static String getAttributeValue( String assignement )	{
-//		String s = assignement.split(" = ")[1];
-//		return s.substring(0, s.length()-1);	//remove trailing semi-colon
-//	}
-	
-	// Issue #38
-	public static Vector<String> getSortedAttributeValues( 	final Collection<String> assignedAttributes,
-															final String[] sortedKeys ) {
-		final Vector<String> values = new Vector<String>();
-		final Map<String, String> attributes = initAttributes( assignedAttributes );
-		
-		for ( final String key : sortedKeys ) {
-			final String value = attributes.get( key );
-			
-			if ( value != null ) {
-				values.add( value );
-			}
-		}
-		
-		return values;
-	}
-	
-	protected String getMemoryBaseAddress( final int srcMemoryType ) {
-		switch( srcMemoryType )	{
-			case Buffer.FEP_BUFFER:
-				return "fep_mss";
+  protected CPMEC(final Collection<String> attributesStr) {
+    attributes = initAttributes(attributesStr);
+  }
 
-			case Buffer.ADAIF_BUFFER:
-				return "adaif_mss";
+  protected static Map<String, String> initAttributes(final Collection<String> attributesStr) {
+    final Map<String, String> attributes = new HashMap<String, String>();
 
-			case Buffer.INTERLEAVER_BUFFER:
-				return "intl_mss";
-			
-			case Buffer.MAPPER_BUFFER:
-				return "mapper_mss";
-			
-			case Buffer.MAIN_MEMORY_BUFFER:
-			default:
-				return DEFAULT_NUM_VAL + USER_TO_DO;//"0";
-		}
-	}
-}	//End of class
+    for (final String assignment : attributesStr) {
+      final String[] assignPair = assignment.split(" = ");
+      final String key = assignPair[0].trim();
+      final String value = assignPair[1].substring(0, assignPair[1].length() - 1);// remove trailing semi-colon
+
+      attributes.put(key, value);
+    }
+
+    return attributes;
+  }
+
+  public String getExecCode() {
+    return exec_code;
+  }
+
+  public String getInitCode() {
+    return init_code;
+  }
+
+  public String getCleanupCode() {
+    return cleanup_code;
+  }
+
+  protected String getAttributeValue(final String key, final String defaultValue) {
+    if (attributes.containsKey(key)) {
+      return attributes.get(key);
+    }
+
+    return defaultValue + USER_TO_DO;
+  }
+  // Get the value of an attribute from the TMLCP artifact string
+  // protected static String getAttributeValue( String assignement ) {
+  // String s = assignement.split(" = ")[1];
+  // return s.substring(0, s.length()-1); //remove trailing semi-colon
+  // }
+
+  // Issue #38
+  public static Vector<String> getSortedAttributeValues(final Collection<String> assignedAttributes,
+      final String[] sortedKeys) {
+    final Vector<String> values = new Vector<String>();
+    final Map<String, String> attributes = initAttributes(assignedAttributes);
+
+    for (final String key : sortedKeys) {
+      final String value = attributes.get(key);
+
+      if (value != null) {
+        values.add(value);
+      }
+    }
+
+    return values;
+  }
+
+  protected String getMemoryBaseAddress(final int srcMemoryType) {
+    switch (srcMemoryType) {
+      case Buffer.FEP_BUFFER:
+        return "fep_mss";
+
+      case Buffer.ADAIF_BUFFER:
+        return "adaif_mss";
+
+      case Buffer.INTERLEAVER_BUFFER:
+        return "intl_mss";
+
+      case Buffer.MAPPER_BUFFER:
+        return "mapper_mss";
+
+      case Buffer.MAIN_MEMORY_BUFFER:
+      default:
+        return DEFAULT_NUM_VAL + USER_TO_DO;// "0";
+    }
+  }
+} // End of class

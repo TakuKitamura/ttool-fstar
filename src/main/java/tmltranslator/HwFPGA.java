@@ -36,73 +36,69 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import tmltranslator.modelcompiler.ArchUnitMEC;
 
-
 /**
- * Class HwFPGA
- * Creation: 07/02/2018
+ * Class HwFPGA Creation: 07/02/2018
  *
  * @author Ludovic APVRILLE
  * @version 1.0 07/02/2018
  */
 public class HwFPGA extends HwExecutionNode {
 
+  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+  public static final int DEFAULT_GO_IDLE_TIME = 10;
+  public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
+  public static final int DEFAULT_CAPACITY = 100;
+  public static final int DEFAULT_MAPPING_PENALTY = 0;
+  public static final int DEFAULT_RECONFIGURATION_TIME = 50;
 
-    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-    public static final int DEFAULT_GO_IDLE_TIME = 10;
-    public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
-    public static final int DEFAULT_CAPACITY = 100;
-    public static final int DEFAULT_MAPPING_PENALTY = 0;
-    public static final int DEFAULT_RECONFIGURATION_TIME = 50;
+  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
+  public int goIdleTime = DEFAULT_GO_IDLE_TIME; // Should be greater or equal to 0
+  public int maxConsecutiveIdleCycles = DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES; // Should be greater or equal to 0
+  public int capacity = HwFPGA.DEFAULT_CAPACITY;
+  public int mappingPenalty = HwFPGA.DEFAULT_MAPPING_PENALTY;
+  public int reconfigurationTime = HwFPGA.DEFAULT_RECONFIGURATION_TIME;
+  public String scheduling = "";
 
+  public HwFPGA(String _name) {
+    super(_name);
+  }
 
+  @Override
+  public String getType() {
+    return "FPGA";
+  }
 
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
-    public int goIdleTime = DEFAULT_GO_IDLE_TIME; // Should be greater or equal to 0
-    public int maxConsecutiveIdleCycles = DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES; // Should be greater or equal to 0
-    public int capacity = HwFPGA.DEFAULT_CAPACITY;
-    public int mappingPenalty = HwFPGA.DEFAULT_MAPPING_PENALTY;
-    public int reconfigurationTime = HwFPGA.DEFAULT_RECONFIGURATION_TIME;
-    public String scheduling = "";
+  public void setScheduling(String scheduling) {
+    this.scheduling = scheduling;
+  }
 
+  public String getScheduling() {
+    return scheduling;
+  }
 
-    public HwFPGA(String _name) {
-        super(_name);
-    }
-    
-    @Override
-    public String getType() {
-        return "FPGA";
-    }
+  @Override
+  public String toXML() {
+    String s = "<FPGA name=\"" + name + "\" customData=\"" + getCustomData() + "\" clockRatio=\"" + clockRatio
+        + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime
+        + "\" pipelineSize=\"";
+    s += "\" capacity=\"" + capacity + "\" scheduling=\"" + scheduling + "\" mappingPenalty=\"" + mappingPenalty
+        + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
+    return s;
+  }
 
-    public void setScheduling(String scheduling) { this.scheduling = scheduling;}
-
-    public String getScheduling() {return scheduling;}
-    
-	@Override
-    public String toXML() {
-        String s =
-                "<FPGA name=\"" + name + "\" customData=\"" + getCustomData() + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize +
-                "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
-        s +=  "\" capacity=\"" + capacity + "\" scheduling=\"" + scheduling + "\" mappingPenalty=\"" +
-                mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
-        return s;
-    }
-
-	 public boolean equalSpec(Object o) {
-	        if (!(o instanceof HwFPGA)) return false;
-	        if(!super.equalSpec(o)) return false;
-	        HwFPGA hwFPGA = (HwFPGA) o;
-	        return byteDataSize == hwFPGA.byteDataSize &&
-	                goIdleTime == hwFPGA.goIdleTime &&
-	                maxConsecutiveIdleCycles == hwFPGA.maxConsecutiveIdleCycles &&
-	                capacity == hwFPGA.capacity &&
-	                mappingPenalty == hwFPGA.mappingPenalty &&
-	                reconfigurationTime == hwFPGA.reconfigurationTime &&
-	                scheduling.equals(hwFPGA.scheduling);
-	    }
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwFPGA))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwFPGA hwFPGA = (HwFPGA) o;
+    return byteDataSize == hwFPGA.byteDataSize && goIdleTime == hwFPGA.goIdleTime
+        && maxConsecutiveIdleCycles == hwFPGA.maxConsecutiveIdleCycles && capacity == hwFPGA.capacity
+        && mappingPenalty == hwFPGA.mappingPenalty && reconfigurationTime == hwFPGA.reconfigurationTime
+        && scheduling.equals(hwFPGA.scheduling);
+  }
 }

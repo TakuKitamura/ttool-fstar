@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -50,41 +47,38 @@ import java.util.Vector;
 //import java.awt.geom.*;
 
 /**
- * Class TGConnectorAttribute
- * Connects an association to a composition operator. To be used in class diagram.
- * Creation: 22/12/2003
+ * Class TGConnectorAttribute Connects an association to a composition operator.
+ * To be used in class diagram. Creation: 22/12/2003
+ * 
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorAttribute extends TGConnector {
-    
-	//Added by Solange, true to show at the begining
-	public boolean show=true;
-    public TGConnectorAttribute(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic108;
-    }
-    
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        //Added by Solange the condition if show() 
-    	if(show) GraphicLib.dashedLine(g, x1, y1, x2, y2);
-        
-    }
-    
-    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-    	// Added by Solange the condition if show() 
-        if(show) GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
-    
-    public int getType() {
-        return TGComponentManager.CONNECTOR_ATTRIBUTE;
-    }
-    
+public class TGConnectorAttribute extends TGConnector {
+
+  // Added by Solange, true to show at the begining
+  public boolean show = true;
+
+  public TGConnectorAttribute(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic108;
+  }
+
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    // Added by Solange the condition if show()
+    if (show)
+      GraphicLib.dashedLine(g, x1, y1, x2, y2);
+
+  }
+
+  protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    // Added by Solange the condition if show()
+    if (show)
+      GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
+
+  public int getType() {
+    return TGComponentManager.CONNECTOR_ATTRIBUTE;
+  }
+
 }
-
-
-
-
-
-
-

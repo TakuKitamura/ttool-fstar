@@ -36,32 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 import java.util.LinkedList;
 
 /**
- * Class ProVerifProcParallel
- * Creation: 13/09/2015
+ * Class ProVerifProcParallel Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifProcParallel extends ProVerifProcInstr {
 
-    protected LinkedList<ProVerifProcInstr> instrs;
+  protected LinkedList<ProVerifProcInstr> instrs;
 
-    public ProVerifProcParallel () {
-        this.instrs = new LinkedList<ProVerifProcInstr> ();
-    }
+  public ProVerifProcParallel() {
+    this.instrs = new LinkedList<ProVerifProcInstr>();
+  }
 
-    public void addInstr (ProVerifProcInstr instr) {
-        this.instrs.add (instr);
-    }
+  public void addInstr(ProVerifProcInstr instr) {
+    this.instrs.add(instr);
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateProcParallel (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateProcParallel(this, _alinea);
+  }
 }

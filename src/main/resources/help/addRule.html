@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>TTool help</title>
-  <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-</head>
-<body>
-<h1 id="add-rule">rule</h1>
-<p>Rules are added as an extra option for the user. They permit the user to add an edge between two data channels. They are useful in tainting. For example, if channel 1 writes to a memory, channel 2 reads from the same memory and channel 1 is not the same as channel 2 then in tainting the taint of channel 1 will not result in training channel 2. The user can add a rule so channel 2 gets tainted after channel 1 writes the data.</p>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>TTool help</title>
+    <style>
+      code {
+        white-space: pre-wrap;
+      }
+      span.smallcaps {
+        font-variant: small-caps;
+      }
+      span.underline {
+        text-decoration: underline;
+      }
+      div.column {
+        display: inline-block;
+        vertical-align: top;
+        width: 50%;
+      }
+    </style>
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1 id="add-rule">rule</h1>
+    <p>
+      Rules are added as an extra option for the user. They permit the user to
+      add an edge between two data channels. They are useful in tainting. For
+      example, if channel 1 writes to a memory, channel 2 reads from the same
+      memory and channel 1 is not the same as channel 2 then in tainting the
+      taint of channel 1 will not result in training channel 2. The user can add
+      a rule so channel 2 gets tainted after channel 1 writes the data.
+    </p>
+  </body>
 </html>

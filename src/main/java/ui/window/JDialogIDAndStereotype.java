@@ -53,219 +53,208 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-
 /**
- * Class JDialogIDAndStereotype
- * Dialog for managing several names and stereotype
+ * Class JDialogIDAndStereotype Dialog for managing several names and stereotype
  * Creation: 04/07/2018
+ * 
  * @version 1.0 04/07/2018
  * @author Ludovic APVRILLE
  */
-public class JDialogIDAndStereotype extends JDialogBase implements ActionListener  {
+public class JDialogIDAndStereotype extends JDialogBase implements ActionListener {
 
-    private String[] availableStereotypes;
-    private Color[] colors;
-    private String currentName;
-    private int currentStereotype;
-    private Color defaultColor;
+  private String[] availableStereotypes;
+  private Color[] colors;
+  private String currentName;
+  private int currentStereotype;
+  private Color defaultColor;
 
+  private JPanel panel1, panel2;
 
-    private JPanel panel1, panel2;
+  // Panel1
+  private JComboBox<String> listStereotypes;
+  private JButton selectStereotype;
+  private JTextField stereotype, name;
+  private JButton colorButton;
+  private JButton useDefaultColor;
 
-    // Panel1
-    private JComboBox<String> listStereotypes;
-    private JButton selectStereotype;
-    private JTextField stereotype, name;
-    private JButton colorButton;
-    private JButton useDefaultColor;
+  private boolean cancelled;
 
+  /* Creates new form */
+  public JDialogIDAndStereotype(Frame _f, String _title, String[] _availableStereotypes, String _currentName,
+      int _currentStereotype, Color[] _colors, Color _defaultColor) {
 
-    private boolean cancelled;
+    super(_f, _title, true);
 
-    /* Creates new form  */
-    public JDialogIDAndStereotype(Frame _f, String _title,
-                                  String[] _availableStereotypes, String _currentName,
-                                  int _currentStereotype, Color[] _colors, Color _defaultColor) {
+    availableStereotypes = _availableStereotypes;
+    colors = _colors;
+    currentName = _currentName;
+    currentStereotype = _currentStereotype;
+    defaultColor = _defaultColor;
 
-        super(_f, _title, true);
+    initComponents();
+    myInitComponents();
 
-        availableStereotypes = _availableStereotypes;
-        colors = _colors;
-        currentName = _currentName;
-        currentStereotype = _currentStereotype;
-        defaultColor = _defaultColor;
+    pack();
+  }
 
-        initComponents();
-        myInitComponents();
+  private void myInitComponents() {
+  }
 
-        pack();
+  private void initComponents() {
+    Container c = getContentPane();
+    // GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    // GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+    panel1.setBorder(new javax.swing.border.TitledBorder("Stereotype"));
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Name"));
+
+    // panel1.setPreferredSize(new Dimension(500, 250));
+
+    // first line panel1
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.gridheight = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel(" "), c1);
+
+    // Combo box
+    listStereotypes = new JComboBox<String>(availableStereotypes);
+    listStereotypes.setSelectedIndex(currentStereotype);
+    panel1.add(listStereotypes, c1);
+
+    // List of stereotypes
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    selectStereotype = new JButton("Select stereotype");
+    panel1.add(selectStereotype, c1);
+    selectStereotype.setEnabled(availableStereotypes.length > 0);
+    selectStereotype.addActionListener(this);
+
+    // Text of stereotype
+    stereotype = new JTextField(availableStereotypes[currentStereotype], 30);
+    c1.gridwidth = 1;
+    panel1.add(stereotype, c1);
+    colorButton = new JButton();
+    colorButton.setBackground(colors[currentStereotype]);
+    colorButton.addActionListener(this);
+    c1.gridwidth = GridBagConstraints.REMAINDER;
+    c1.fill = GridBagConstraints.BOTH;
+    panel1.add(colorButton, c1);
+
+    useDefaultColor = new JButton("Use default color");
+    useDefaultColor.setBackground(defaultColor);
+    useDefaultColor.addActionListener(this);
+    panel1.add(useDefaultColor, c1);
+    // panel1.setEditable(true);
+
+    // ID
+
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.gridheight = 1;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    c2.anchor = GridBagConstraints.CENTER;
+    name = new JTextField(currentName, 30);
+    panel2.add(name, c2);
+    // panel1.setEditable(true);
+
+    JPanel mainPanel = new JPanel();
+    GridBagLayout gridbag = new GridBagLayout();
+    GridBagConstraints co = new GridBagConstraints();
+    mainPanel.setLayout(gridbag);
+    co.weighty = 1.0;
+    co.weightx = 1.0;
+    co.gridwidth = GridBagConstraints.REMAINDER; // end row
+    co.gridheight = 1;
+    co.fill = GridBagConstraints.HORIZONTAL;
+    co.anchor = GridBagConstraints.CENTER;
+    mainPanel.add(panel1, co);
+    mainPanel.add(panel2, co);
+
+    c.add(mainPanel, BorderLayout.CENTER);
+
+    // c.add(panel1, BorderLayout.NORTH);
+    // c.add(panel2, BorderLayout.CENTER);
+
+    JPanel buttons = initBasicButtons(this);
+    c.add(buttons, BorderLayout.SOUTH);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    // String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (evt.getSource() == closeButton) {
+      closeDialog();
+    } else if (evt.getSource() == cancelButton) {
+      cancelDialog();
+    } else if (evt.getSource() == selectStereotype) {
+      selectStereotype();
+    } else if (evt.getSource() == colorButton) {
+      selectColor();
+    } else if (evt.getSource() == useDefaultColor) {
+      selectDefaultColor();
     }
+  }
 
+  public void selectColor() {
+    Color newColor = JColorChooser.showDialog(null, "Background color of top box", colorButton.getBackground());
+    colorButton.setBackground(newColor);
+  }
 
+  public void selectDefaultColor() {
+    colorButton.setBackground(defaultColor);
+  }
 
-    private void myInitComponents() {
-    }
+  public void selectStereotype() {
+    int index = listStereotypes.getSelectedIndex();
+    stereotype.setText(availableStereotypes[index]);
+    colorButton.setBackground(colors[index]);
+  }
 
+  public void closeDialog() {
+    cancelled = false;
+    dispose();
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        //GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        //GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
+  public String getStereotype() {
+    return stereotype.getText();
+  }
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
+  public int getColor() {
+    return colorButton.getBackground().getRGB();
+  }
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public String getName() {
+    return name.getText();
+  }
 
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Stereotype"));
+  public boolean hasValidString() {
+    return stereotype.getText().length() > 0;
+  }
 
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Name"));
+  public boolean hasBeenCancelled() {
+    return cancelled;
+  }
 
-        //panel1.setPreferredSize(new Dimension(500, 250));
-
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.gridheight = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel(" "), c1);
-
-        // Combo box
-        listStereotypes = new JComboBox<String>(availableStereotypes);
-        listStereotypes.setSelectedIndex(currentStereotype);
-        panel1.add(listStereotypes, c1);
-
-
-        // List of stereotypes
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        selectStereotype = new JButton("Select stereotype");
-        panel1.add(selectStereotype, c1);
-        selectStereotype.setEnabled(availableStereotypes.length > 0);
-        selectStereotype.addActionListener(this);
-
-        // Text of stereotype
-        stereotype = new JTextField(availableStereotypes[currentStereotype], 30);
-        c1.gridwidth = 1;
-        panel1.add(stereotype, c1);
-        colorButton = new JButton();
-        colorButton.setBackground(colors[currentStereotype]);
-        colorButton.addActionListener(this);
-        c1.gridwidth = GridBagConstraints.REMAINDER;
-        c1.fill = GridBagConstraints.BOTH;
-        panel1.add(colorButton, c1);
-
-        useDefaultColor = new JButton("Use default color");
-        useDefaultColor.setBackground(defaultColor);
-        useDefaultColor.addActionListener(this);
-        panel1.add(useDefaultColor, c1);
-        //panel1.setEditable(true);
-
-        // ID
-
-
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.gridheight = 1;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        name = new JTextField(currentName, 30);
-        panel2.add(name, c2);
-        //panel1.setEditable(true);
-
-        JPanel mainPanel = new JPanel();
-        GridBagLayout gridbag = new GridBagLayout();
-        GridBagConstraints co = new GridBagConstraints();
-        mainPanel.setLayout(gridbag);
-        co.weighty = 1.0;
-        co.weightx = 1.0;
-        co.gridwidth = GridBagConstraints.REMAINDER; //end row
-        co.gridheight = 1;
-        co.fill = GridBagConstraints.HORIZONTAL;
-        co.anchor = GridBagConstraints.CENTER;
-        mainPanel.add(panel1, co);
-        mainPanel.add(panel2, co);
-
-        c.add(mainPanel, BorderLayout.CENTER);
-
-        //c.add(panel1, BorderLayout.NORTH);
-        //c.add(panel2, BorderLayout.CENTER);
-
-        JPanel buttons = initBasicButtons(this);
-        c.add(buttons, BorderLayout.SOUTH);
-    }
-
-    public void	actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
-            closeDialog();
-        } else if (evt.getSource() == cancelButton)  {
-            cancelDialog();
-        } else if (evt.getSource() == selectStereotype)  {
-            selectStereotype();
-        } else if (evt.getSource() == colorButton)  {
-            selectColor();
-        } else if (evt.getSource() == useDefaultColor)  {
-            selectDefaultColor();
-        }
-    }
-
-    public void selectColor() {
-        Color newColor = JColorChooser.showDialog
-                (null, "Background color of top box", colorButton.getBackground());
-        colorButton.setBackground(newColor);
-    }
-
-    public void selectDefaultColor() {
-        colorButton.setBackground(defaultColor);
-    }
-
-    public void selectStereotype() {
-        int index = listStereotypes.getSelectedIndex();
-        stereotype.setText(availableStereotypes[index]);
-        colorButton.setBackground(colors[index]);
-    }
-
-    public void closeDialog() {
-        cancelled = false;
-        dispose();
-    }
-
-    public String getStereotype() {
-        return stereotype.getText();
-    }
-
-    public int getColor() {
-        return colorButton.getBackground().getRGB();
-    }
-
-    public String getName() {
-        return name.getText();
-    }
-
-
-    public boolean hasValidString() {
-        return stereotype.getText().length() > 0;
-    }
-
-    public boolean hasBeenCancelled() {
-        return cancelled;
-    }
-
-    public void cancelDialog() {
-        cancelled = true;
-        dispose();
-    }
+  public void cancelDialog() {
+    cancelled = true;
+    dispose();
+  }
 }

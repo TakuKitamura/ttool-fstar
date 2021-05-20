@@ -36,29 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPEEquationComponent
- * Creation: 16/02/2011
+ * Class TEPEEquationComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPEEquationComponent  extends TEPEComponent   {
-	
-	
-    public TEPEEquationComponent(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-		inAttributeComponents = new Vector<TEPEComponent>();
-		outAttributeComponents = new Vector<TEPEComponent>();
-		outSignalComponents = new Vector<TEPEComponent>();
-		outPropertyComponents = new Vector<TEPEComponent>();
-    }
-    
-    
+public class TEPEEquationComponent extends TEPEComponent {
+
+  public TEPEEquationComponent(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    inAttributeComponents = new Vector<TEPEComponent>();
+    outAttributeComponents = new Vector<TEPEComponent>();
+    outSignalComponents = new Vector<TEPEComponent>();
+    outPropertyComponents = new Vector<TEPEComponent>();
+  }
+
 }

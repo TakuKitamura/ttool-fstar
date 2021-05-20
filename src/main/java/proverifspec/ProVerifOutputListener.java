@@ -36,17 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifOutputListener
- * Creation: 02/06/2017
+ * Class ProVerifOutputListener Creation: 02/06/2017
+ * 
  * @version 1.0 02/06/2017
  * @author Florian LUGOU
  */
 public interface ProVerifOutputListener {
-    void proVerifOutputChanged();
+  void proVerifOutputChanged();
 }

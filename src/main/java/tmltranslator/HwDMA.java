@@ -36,44 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import java.util.Objects;
 
 /**
- * Class HwDMA
- * Creation: 26/09/2011
+ * Class HwDMA Creation: 26/09/2011
+ * 
  * @version 1.0 26/09/2011
  * @author Ludovic APVRILLE
  */
-public class HwDMA extends HwCommunicationNode  {
+public class HwDMA extends HwCommunicationNode {
 
-    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-    public static final int DEFAULT_NB_OF_CHANNELS = 1;
+  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+  public static final int DEFAULT_NB_OF_CHANNELS = 1;
 
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
-    public int nbOfChannels = DEFAULT_NB_OF_CHANNELS; // Should more than 0
+  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+  public int nbOfChannels = DEFAULT_NB_OF_CHANNELS; // Should more than 0
 
-    public HwDMA(String _name) {
-        super(_name);
-    }
-    
-    @Override
-    public String toXML() {
-	String s = "<DMA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  nbOfChannels=\"" + nbOfChannels + "\" execiTime=\"" + "1" + "\" execcTime=\"" + "1"  +"\" />\n";
-	return s;
-    }
+  public HwDMA(String _name) {
+    super(_name);
+  }
 
+  @Override
+  public String toXML() {
+    String s = "<DMA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+        + "\"  nbOfChannels=\"" + nbOfChannels + "\" execiTime=\"" + "1" + "\" execcTime=\"" + "1" + "\" />\n";
+    return s;
+  }
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof HwDMA)) return false;
-        if (!super.equalSpec(o)) return false;
-        HwDMA hwDMA = (HwDMA) o;
-        return byteDataSize == hwDMA.byteDataSize &&
-                nbOfChannels == hwDMA.nbOfChannels;
-    }
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwDMA))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwDMA hwDMA = (HwDMA) o;
+    return byteDataSize == hwDMA.byteDataSize && nbOfChannels == hwDMA.nbOfChannels;
+  }
 
 }

@@ -43,26 +43,27 @@ import ui.TGComponentManager;
 import ui.TGConnectingPoint;
 
 /**
- * Class TGConnectingPointMessageSD
- * Definition of connecting points on which connectors of sequence diagrams can be connected
- * Creation: 06/10/2004
+ * Class TGConnectingPointMessageSD Definition of connecting points on which
+ * connectors of sequence diagrams can be connected Creation: 06/10/2004
+ * 
  * @version 1.0 06/10/2004
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointMessageSD extends TGConnectingPoint {
-    
-    public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
-        super(_container, _x, _y, _in, _out);
+
+  public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
+    super(_container, _x, _y, _in, _out);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)
+        || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
+      //
+      return true;
     }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
-            //
-            return true;
-        }
-        //
-        return false;
-    }
+    //
+    return false;
+  }
 }

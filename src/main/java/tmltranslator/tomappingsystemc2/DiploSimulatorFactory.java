@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator.tomappingsystemc2;
 
 import req.ebrdd.EBRDD;
@@ -48,28 +47,26 @@ import java.util.List;
 
 public class DiploSimulatorFactory {
 
-    public static final DiploSimulatorFactory INSTANCE = new DiploSimulatorFactory();
+  public static final DiploSimulatorFactory INSTANCE = new DiploSimulatorFactory();
 
-    private DiploSimulatorFactory() {
-    }
+  private DiploSimulatorFactory() {
+  }
 
-    public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLModeling tmlModeling) {
-        return new DiploSimulatorCodeGenerator(tmlModeling);
-    }
+  public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLModeling tmlModeling) {
+    return new DiploSimulatorCodeGenerator(tmlModeling);
+  }
 
-    public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLMapping tmlMapping) {
-        return new DiploSimulatorCodeGenerator(tmlMapping);
-    }
+  public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLMapping tmlMapping) {
+    return new DiploSimulatorCodeGenerator(tmlMapping);
+  }
 
-    public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLModeling tmlModeling,
-                                                            final List<EBRDD> ebrdds,
-                                                            final List<TEPE> tepes) {
-        return new DiploSimulatorCodeGenerator(tmlModeling, ebrdds, tepes);
-    }
+  public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLModeling tmlModeling, final List<EBRDD> ebrdds,
+      final List<TEPE> tepes) {
+    return new DiploSimulatorCodeGenerator(tmlModeling, ebrdds, tepes);
+  }
 
-    public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLMapping tmlMapping,
-                                                            final List<EBRDD> ebrdds,
-                                                            final List<TEPE> tepes) {
-        return new DiploSimulatorCodeGenerator(tmlMapping, ebrdds, tepes);
-    }
+  public IDiploSimulatorCodeGenerator createCodeGenerator(final TMLMapping tmlMapping, final List<EBRDD> ebrdds,
+      final List<TEPE> tepes) {
+    return new DiploSimulatorCodeGenerator(tmlMapping, ebrdds, tepes);
+  }
 }

@@ -41,53 +41,53 @@ package syscamstranslator;
 import java.util.LinkedList;
 
 /**
- * Class SysCAMSTCluster
- * Parameters of a SystemC-AMS cluster
- * Creation: 19/05/2018
+ * Class SysCAMSTCluster Parameters of a SystemC-AMS cluster Creation:
+ * 19/05/2018
+ * 
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class SysCAMSTCluster extends SysCAMSTComponent {
-	private String clusterName;
-	
-	private LinkedList<SysCAMSTBlockTDF> blockTDF;
-	private LinkedList<SysCAMSTBlockDE> blockDE;
-    	private LinkedList<SysCAMSTClock> clock;
-	
-	public SysCAMSTCluster(String _clusterName) {
-		clusterName = _clusterName;
-		blockTDF = new LinkedList<SysCAMSTBlockTDF>();
-		blockDE = new LinkedList<SysCAMSTBlockDE>();
-		clock = new LinkedList<SysCAMSTClock>();
-	}
+  private String clusterName;
 
-	public String getClusterName() {
-		return clusterName;
-	}
+  private LinkedList<SysCAMSTBlockTDF> blockTDF;
+  private LinkedList<SysCAMSTBlockDE> blockDE;
+  private LinkedList<SysCAMSTClock> clock;
 
-	public LinkedList<SysCAMSTBlockTDF> getBlockTDF(){
-		return blockTDF;
-	}
+  public SysCAMSTCluster(String _clusterName) {
+    clusterName = _clusterName;
+    blockTDF = new LinkedList<SysCAMSTBlockTDF>();
+    blockDE = new LinkedList<SysCAMSTBlockDE>();
+    clock = new LinkedList<SysCAMSTClock>();
+  }
 
-	public void addBlockTDF(SysCAMSTBlockTDF _blockTDF){
-		blockTDF.add(_blockTDF);
-	}
-	
-	public LinkedList<SysCAMSTBlockDE> getBlockDE(){
-		return blockDE;
-	}
+  public String getClusterName() {
+    return clusterName;
+  }
 
-	public void addBlockDE(SysCAMSTBlockDE _blockDE){
-		blockDE.add(_blockDE);
-	}
+  public LinkedList<SysCAMSTBlockTDF> getBlockTDF() {
+    return blockTDF;
+  }
 
-    	public void addClock(SysCAMSTClock _clock){
-		clock.add(_clock);
-	}
-    
-	public LinkedList<SysCAMSTClock> getClock(){
-		return clock;
-	}
+  public void addBlockTDF(SysCAMSTBlockTDF _blockTDF) {
+    blockTDF.add(_blockTDF);
+  }
+
+  public LinkedList<SysCAMSTBlockDE> getBlockDE() {
+    return blockDE;
+  }
+
+  public void addBlockDE(SysCAMSTBlockDE _blockDE) {
+    blockDE.add(_blockDE);
+  }
+
+  public void addClock(SysCAMSTClock _clock) {
+    clock.add(_clock);
+  }
+
+  public LinkedList<SysCAMSTClock> getClock() {
+    return clock;
+  }
 
 }

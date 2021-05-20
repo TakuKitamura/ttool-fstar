@@ -22,8 +22,9 @@ struct request;
 
 typedef struct timespec timespec;
 
-struct setOfRequests {
-  char* owner;
+struct setOfRequests
+{
+  char *owner;
   struct request *head;
   timespec startTime;
   timespec completionTime;
@@ -37,22 +38,23 @@ struct setOfRequests {
 
 typedef struct setOfRequests setOfRequests;
 
-struct request {
+struct request
+{
   struct request *next;
-  struct setOfRequests* listOfRequests;
-  struct request* nextRequestInList;
-  struct request* relatedRequest; // For synchro and broadcast
+  struct setOfRequests *listOfRequests;
+  struct request *nextRequestInList;
+  struct request *relatedRequest; // For synchro and broadcast
   struct syncchannel *syncChannel;
   struct asyncchannel *asyncChannel;
-  
+
   int type;
   int ID;
-  int hasDelay;;
+  int hasDelay;
+  ;
   timespec delay;
   int nbOfParams; // synchronous com. and query
-  int **params;  // synchronous com. and query
-  message *msg; // Asynchronous comm.
-
+  int **params;   // synchronous com. and query
+  message *msg;   // Asynchronous comm.
 
   // Filled by the request manager
   int executable;
@@ -72,19 +74,19 @@ extern int isRequestSelected(request *req);
 int nbOfRequests(setOfRequests *list);
 request *getRequestAtIndex(setOfRequests *list, int index);
 
-request * addToRequestQueue(request *list, request *requestToAdd);
-request * removeRequestFromList(request *list, request *requestToRemove);
+request *addToRequestQueue(request *list, request *requestToAdd);
+request *removeRequestFromList(request *list, request *requestToRemove);
 
 void copyParameters(request *src, request *dst);
 
 setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
-void addRequestToList(setOfRequests *list, request* req);
+void addRequestToList(setOfRequests *list, request *req);
 void clearListOfRequests(setOfRequests *list);
 void fillListOfRequests(setOfRequests *list, char *name, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
 
 void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne);
 request *hasIdenticalRequestInListOfSelectedRequests(request *req, request *list);
-request* replaceInListOfSelectedRequests(request *oldRequest, request *newRequest, request *list);
+request *replaceInListOfSelectedRequests(request *oldRequest, request *newRequest, request *list);
 int nbOfRelatedRequests(request *list);
 
 #endif

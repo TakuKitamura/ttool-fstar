@@ -46,126 +46,125 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Class SpecificationBlock
- * Coding of a block
- * Creation: 31/05/2016
+ * Class SpecificationBlock Coding of a block Creation: 31/05/2016
  *
  * @author Ludovic APVRILLE
  * @version 1.0 31/05/2016
  */
 public class SpecificationBlock {
 
-    public static final int HEADER_VALUES = 3;
+  public static final int HEADER_VALUES = 3;
 
-    public static final int STATE_INDEX = 0;
-    public static final int CLOCKMIN_INDEX = 1;
-    public static final int CLOCKMAX_INDEX = 2;
-    public static final int ATTR_INDEX = 3;
+  public static final int STATE_INDEX = 0;
+  public static final int CLOCKMIN_INDEX = 1;
+  public static final int CLOCKMAX_INDEX = 2;
+  public static final int ATTR_INDEX = 3;
 
-    public int[] values; // state in block, clockmin, clockmax, variables
-    public int maxClock;
+  public int[] values; // state in block, clockmin, clockmax, variables
+  public int maxClock;
 
-    public SpecificationBlock() {
+  public SpecificationBlock() {
+  }
+
+  public SpecificationBlock(Vector<String> _valuesOfVariables) {
+    values = new int[_valuesOfVariables.size() + 3];
+    for (int i = 0; i < _valuesOfVariables.size(); i++) {
+      try {
+        values[i + 3] = Integer.decode(_valuesOfVariables.get(i));
+      } catch (Exception e) {
+      }
+    }
+  }
+
+  public int getHash() {
+    return Arrays.hashCode(values);
+  }
+
+  public void init(AvatarBlock _block, boolean _ignoreEmptyTransitions, boolean compress) {
+    List<AvatarAttribute> attrs = _block.getAttributes();
+    // TraceManager.addDev("Nb of attributes:" + attrs.size());
+    // TraceManager.addDev("in block=" + _block.toString());
+    int booleanIndex = _block.getBooleanOffset();
+    int optRatio = _block.getAttributeOptRatio();
+    if (!compress || booleanIndex == -1) {
+      values = new int[HEADER_VALUES + attrs.size()];
+    } else {
+      if (optRatio > 1) {
+        values = new int[HEADER_VALUES + (booleanIndex + optRatio - 1) / optRatio
+            + ((attrs.size() - booleanIndex + 31) / 32)];
+      } else {
+        values = new int[HEADER_VALUES + booleanIndex + ((attrs.size() - booleanIndex + 31) / 32)];
+      }
     }
 
-    public SpecificationBlock(Vector<String> _valuesOfVariables) {
-        values = new int[_valuesOfVariables.size() + 3];
-        for (int i = 0; i < _valuesOfVariables.size(); i++) {
-            try {
-                values[i + 3] = Integer.decode(_valuesOfVariables.get(i));
-            } catch (Exception e) {
-            }
-        }
+    // Initial state
+    if (_ignoreEmptyTransitions) {
+      values[STATE_INDEX] = _block.getIndexOfRealStartState();
+    } else {
+      values[STATE_INDEX] = _block.getIndexOfStartState();
     }
 
-    public int getHash() {
-        return Arrays.hashCode(values);
-    }
+    // Clock
+    values[CLOCKMIN_INDEX] = 0;
+    values[CLOCKMAX_INDEX] = 0;
 
-    public void init(AvatarBlock _block, boolean _ignoreEmptyTransitions, boolean compress) {
-        List<AvatarAttribute> attrs = _block.getAttributes();
-        //TraceManager.addDev("Nb of attributes:" + attrs.size());
-        //TraceManager.addDev("in block=" + _block.toString());
-        int booleanIndex = _block.getBooleanOffset();
-        int optRatio = _block.getAttributeOptRatio();
-        if (!compress || booleanIndex == -1) {
-            values = new int[HEADER_VALUES + attrs.size()];
+    // Attributes
+    int cpt = HEADER_VALUES;
+    // String initial;
+    if (!compress) {
+      for (AvatarAttribute attr : attrs) {
+        values[cpt++] = attr.getInitialValueInInt();
+      }
+    } else {
+      int i = 0;
+      for (AvatarAttribute attr : attrs) {
+        if (i < booleanIndex) {
+          int val = attr.getInitialValueInInt();
+          if (optRatio == 2) {
+            val &= 0xFFFF;
+          } else if (optRatio == 4) {
+            val &= 0xFF;
+          }
+          if (i % optRatio == 0) {
+            values[cpt] = val;
+          } else {
+            values[cpt] |= val << ((i % optRatio) * (32 / optRatio));
+          }
+          if (i % optRatio + 1 == optRatio || i + 1 == booleanIndex) {
+            cpt++;
+          }
+        } else if (((i - booleanIndex) % 32) == 0) {
+          values[cpt] = attr.getInitialValueInInt() & 0x1;
         } else {
-            if (optRatio > 1) {
-                values = new int[HEADER_VALUES + (booleanIndex + optRatio - 1) / optRatio + ((attrs.size() - booleanIndex + 31) / 32)];
-            } else {
-                values = new int[HEADER_VALUES + booleanIndex + ((attrs.size() - booleanIndex + 31) / 32)];
-            }
+          values[cpt] |= (attr.getInitialValueInInt() & 0x1) << ((i - booleanIndex) % 32);
+          if (((i - booleanIndex) % 32) == 31) {
+            cpt++;
+          }
         }
-
-        // Initial state
-        if (_ignoreEmptyTransitions) {
-            values[STATE_INDEX] = _block.getIndexOfRealStartState();
-        } else {
-            values[STATE_INDEX] = _block.getIndexOfStartState();
-        }
-
-        // Clock
-        values[CLOCKMIN_INDEX] = 0;
-        values[CLOCKMAX_INDEX] = 0;
-
-        // Attributes
-        int cpt = HEADER_VALUES;
-        //String initial;
-        if (!compress) {
-            for (AvatarAttribute attr : attrs) {
-                values[cpt++] = attr.getInitialValueInInt();
-            }
-        } else {
-            int i = 0;
-            for (AvatarAttribute attr : attrs) {
-                if (i < booleanIndex) {
-                    int val = attr.getInitialValueInInt();
-                    if (optRatio == 2) {
-                        val &= 0xFFFF;
-                    } else if (optRatio == 4) {
-                        val &= 0xFF;
-                    }
-                    if (i % optRatio == 0) {
-                        values[cpt] = val;
-                    } else {
-                        values[cpt] |= val << ((i % optRatio) * (32 / optRatio));
-                    }
-                    if (i % optRatio + 1 == optRatio || i + 1 == booleanIndex) {
-                        cpt++;
-                    }
-                } else if (((i - booleanIndex) % 32) == 0) {
-                    values[cpt] = attr.getInitialValueInInt() & 0x1;
-                } else {
-                    values[cpt] |= (attr.getInitialValueInInt() & 0x1) << ((i - booleanIndex) % 32);
-                    if (((i - booleanIndex) % 32) == 31) {
-                        cpt++;
-                    }
-                }
-                i++;
-            }
-        }
+        i++;
+      }
     }
+  }
 
-    @Override
-    public String toString() {
-        StringBuffer sb = new StringBuffer("Hash=");
-        //sb.append(getHash());
-        for (int i = 0; i < values.length; i++) {
-            sb.append(" ");
-            sb.append(values[i]);
-        }
-        return sb.toString();
+  @Override
+  public String toString() {
+    StringBuffer sb = new StringBuffer("Hash=");
+    // sb.append(getHash());
+    for (int i = 0; i < values.length; i++) {
+      sb.append(" ");
+      sb.append(values[i]);
     }
+    return sb.toString();
+  }
 
-    public SpecificationBlock advancedClone() {
-        SpecificationBlock sb = new SpecificationBlock();
-        sb.values = values.clone();
-        sb.maxClock = maxClock;
-        return sb;
-    }
+  public SpecificationBlock advancedClone() {
+    SpecificationBlock sb = new SpecificationBlock();
+    sb.values = values.clone();
+    sb.maxClock = maxClock;
+    return sb;
+  }
 
-    public boolean hasTimedTransition() {
-        return true;
-    }
+  public boolean hasTimedTransition() {
+    return true;
+  }
 }

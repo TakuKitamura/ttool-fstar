@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.GenericTree;
@@ -46,38 +43,38 @@ import translator.GroupOfGates;
 import translator.MasterGateManager;
 
 /**
- * Class CorrespondanceValidationDataTree
- * Creation: 22/12/2003
- * Version 1.0 22/12/2003
+ * Class CorrespondanceValidationDataTree Creation: 22/12/2003 Version 1.0
+ * 22/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
 public class CorrespondanceValidationDataTree implements GenericTree {
-    	
-    private MasterGateManager mgm;
-    private String name = "Actions -> TURTLE gates";
-    
-	public CorrespondanceValidationDataTree() {
-		mgm = new MasterGateManager();
-	}
-	
-	public String toString() {
-		return name;	
-	}
-	
-	public int getChildCount() {
-		return mgm.getTotalGateNumber();
-	}
-	
-	public Object getChild(int index) {
-		return mgm.getMasterGroupOfGates(index);
-	}
-	
-	public int getIndexOfChild(Object child) {
-		if (child instanceof GroupOfGates) {
-			return mgm.getMasterIndexOf((GroupOfGates)child);
-		} else {
-			return -1;	
-		}
-	}
+
+  private MasterGateManager mgm;
+  private String name = "Actions -> TURTLE gates";
+
+  public CorrespondanceValidationDataTree() {
+    mgm = new MasterGateManager();
+  }
+
+  public String toString() {
+    return name;
+  }
+
+  public int getChildCount() {
+    return mgm.getTotalGateNumber();
+  }
+
+  public Object getChild(int index) {
+    return mgm.getMasterGroupOfGates(index);
+  }
+
+  public int getIndexOfChild(Object child) {
+    if (child instanceof GroupOfGates) {
+      return mgm.getMasterIndexOf((GroupOfGates) child);
+    } else {
+      return -1;
+    }
+  }
 
 }

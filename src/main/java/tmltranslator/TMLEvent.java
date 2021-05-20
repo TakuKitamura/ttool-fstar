@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import ui.tmlcompd.TMLCPrimitivePort;
@@ -47,349 +46,347 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Class TMLEvent
- * Creation: 22/11/2005
+ * Class TMLEvent Creation: 22/11/2005
  *
  * @author Ludovic APVRILLE
  * @version 1.0 22/11/2005
  */
 public class TMLEvent extends TMLCommunicationElement {
-    // Options
-    protected Vector<TMLType> params; // List of various types of parameters
-    protected int maxEvt = -1; // maxEvt = -1 -> infinite nb of evts: default behaviour
-    protected boolean isBlocking = false; // By default, latest events is removed when the FIFO is full
-    protected boolean canBeNotified = false;
-    public List<TMLCPrimitivePort> ports;
+  // Options
+  protected Vector<TMLType> params; // List of various types of parameters
+  protected int maxEvt = -1; // maxEvt = -1 -> infinite nb of evts: default behaviour
+  protected boolean isBlocking = false; // By default, latest events is removed when the FIFO is full
+  protected boolean canBeNotified = false;
+  public List<TMLCPrimitivePort> ports;
 
-    // Used for 1 -> 1
-    protected TMLTask origin, destination;
-    protected TMLPort originPort, destinationPort; // Not used by the simulator
-    public TMLCPrimitivePort port;
-    public TMLCPrimitivePort port2;
+  // Used for 1 -> 1
+  protected TMLTask origin, destination;
+  protected TMLPort originPort, destinationPort; // Not used by the simulator
+  public TMLCPrimitivePort port;
+  public TMLCPrimitivePort port2;
 
-    // Used for 1 -> many channel, or for many -> 1 channel
-    protected List<TMLTask> originTasks, destinationTasks;
-    protected List<TMLPort> originPorts, destinationPorts;
+  // Used for 1 -> many channel, or for many -> 1 channel
+  protected List<TMLTask> originTasks, destinationTasks;
+  protected List<TMLPort> originPorts, destinationPorts;
 
-    // For security
-    public int confStatus;
-    public boolean checkAuth;
-    public boolean checkConf;
+  // For security
+  public int confStatus;
+  public boolean checkAuth;
+  public boolean checkConf;
 
+  public TMLEvent(String name, Object reference, int _maxEvt, boolean _isBlocking) {
+    super(name, reference);
+    params = new Vector<TMLType>();
+    maxEvt = _maxEvt;
+    isBlocking = _isBlocking;
+    checkMaxEvt();
+    originTasks = new ArrayList<TMLTask>();
+    destinationTasks = new ArrayList<TMLTask>();
+    originPorts = new ArrayList<TMLPort>();
+    destinationPorts = new ArrayList<TMLPort>();
+    ports = new ArrayList<TMLCPrimitivePort>();
+    checkConf = false;
+    // TraceManager.addDev("New event: " + name + " max=" + _maxEvt + " blocking=" +
+    // isBlocking);
+  }
 
-    public TMLEvent(String name, Object reference, int _maxEvt, boolean _isBlocking) {
-        super(name, reference);
-        params = new Vector<TMLType>();
-        maxEvt = _maxEvt;
-        isBlocking = _isBlocking;
-        checkMaxEvt();
-        originTasks = new ArrayList<TMLTask>();
-        destinationTasks = new ArrayList<TMLTask>();
-        originPorts = new ArrayList<TMLPort>();
-        destinationPorts = new ArrayList<TMLPort>();
-        ports = new ArrayList<TMLCPrimitivePort>();
-        checkConf = false;
-        //TraceManager.addDev("New event: " + name + " max=" + _maxEvt + " blocking=" + isBlocking);
+  public int getNbOfParams() {
+    return params.size();
+  }
+
+  public Vector<TMLType> getParams() {
+    return params;
+  }
+
+  public void setSizeFIFO(int _max) {
+    maxEvt = _max;
+    checkMaxEvt();
+  }
+
+  public void setBlocking(boolean _isBlocking) {
+    isBlocking = _isBlocking;
+  }
+
+  public void setOriginTask(TMLTask t) {
+    origin = t;
+  }
+
+  public void setDestinationTask(TMLTask t) {
+    destination = t;
+  }
+
+  public void setTasks(TMLTask _origin, TMLTask _destination) {
+    origin = _origin;
+    destination = _destination;
+  }
+
+  public TMLTask getOriginTask() {
+    if (origin == null) {
+      if (destinationTasks.size() == 0) {
+        return null;
+      } else {
+        return destinationTasks.get(0);
+      }
+    }
+    return origin;
+  }
+
+  public boolean hasOriginTask(TMLTask t) {
+    if (origin == t) {
+      return true;
+    }
+    for (TMLTask task : originTasks) {
+      // TraceManager.addDev("Comparing " + t.getTaskName() + " with " +
+      // task.getTaskName());
+      if (task == t) {
+        return true;
+      }
     }
 
-    public int getNbOfParams() {
-        return params.size();
+    return false;
+  }
+
+  public boolean hasDestinationTask(TMLTask t) {
+    if (destination == t) {
+      return true;
+    }
+    for (TMLTask task : destinationTasks) {
+      // TraceManager.addDev("Comparing " + t.getTaskName() + " with " +
+      // task.getTaskName());
+      if (task == t) {
+        return true;
+      }
     }
 
-    public Vector <TMLType> getParams() {
-        return params;
+    return false;
+  }
+
+  public TMLTask getDestinationTask() {
+    if (destination == null) {
+      if (destinationTasks.size() == 0) {
+        return null;
+      } else {
+        return destinationTasks.get(0);
+      }
+    }
+    return destination;
+  }
+
+  public void checkMaxEvt() {
+    if (maxEvt < -1) {
+      maxEvt = -1;
     }
 
-    public void setSizeFIFO(int _max) {
-        maxEvt = _max;
-        checkMaxEvt();
+    if (maxEvt == 0) {
+      maxEvt = -1;
     }
 
-    public void setBlocking(boolean _isBlocking) {
-        isBlocking = _isBlocking;
+  }
+
+  public void setNotified(boolean b) {
+    canBeNotified = b;
+  }
+
+  public boolean canBeNotified() {
+    return canBeNotified;
+  }
+
+  public boolean isInfinite() {
+    return (maxEvt == -1);
+  }
+
+  public boolean isBlocking() {
+    return isBlocking;
+  }
+
+  public int getMaxSize() {
+    return maxEvt;
+  }
+
+  public void addParam(TMLType _type) {
+    params.add(_type);
+  }
+
+  public boolean isBlockingAtOrigin() {
+    if (isInfinite()) {
+      return false;
     }
 
-    public void setOriginTask(TMLTask t) {
-        origin = t;
+    return isBlocking();
+
+  }
+
+  public boolean isBlockingAtDestination() {
+    return true;
+  }
+
+  public TMLType getType(int i) {
+    if (i < getNbOfParams()) {
+      return params.elementAt(i);
+    } else {
+      return null;
     }
+  }
 
-    public void setDestinationTask(TMLTask t) {
-        destination = t;
+  public String getNameExtension() {
+    return "event__";
+  }
+
+  public String getTypeTextFormat() {
+    if (isInfinite()) {
+      return "INF";
+    } else {
+      if (isBlocking()) {
+        return "NIB";
+      } else {
+        return "NINB";
+      }
     }
+  }
 
-
-    public void setTasks(TMLTask _origin, TMLTask _destination) {
-        origin = _origin;
-        destination = _destination;
+  public static boolean isAValidListOfParams(String _list) {
+    if (_list.length() == 0) {
+      return true;
     }
-
-    public TMLTask getOriginTask() {
-        if (origin == null) {
-            if (destinationTasks.size() == 0) {
-                return null;
-            } else {
-                return destinationTasks.get(0);
-            }
-        }
-        return origin;
+    String[] split = _list.split(",");
+    for (int i = 0; i < split.length; i++) {
+      if (!TMLType.isAValidType(split[i])) {
+        return false;
+      }
     }
+    return true;
+  }
 
+  public void addParam(String _list) {
+    String[] split = _list.split(",");
+    TMLType type;
+    for (int i = 0; i < split.length; i++) {
+      if (TMLType.isAValidType(split[i])) {
+        type = new TMLType(TMLType.getType(split[i]));
+        addParam(type);
+      }
+    }
+  }
 
-    public boolean hasOriginTask(TMLTask t) {
-        if (origin == t) {
-            return true;
-        }
-        for (TMLTask task : originTasks) {
-            //TraceManager.addDev("Comparing " + t.getTaskName() + " with " + task.getTaskName());
-            if (task == t) {
-                return true;
-            }
-        }
+  public boolean isAForkEvent() {
+    return ((originTasks.size() == 1) && (destinationTasks.size() >= 1));
+  }
 
+  public boolean isAJoinEvent() {
+    return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
+  }
+
+  public List<TMLTask> getOriginTasks() {
+    return originTasks;
+  }
+
+  public List<TMLTask> getDestinationTasks() {
+    return destinationTasks;
+  }
+
+  public TMLPort getOriginPort() {
+    return originPort;
+  }
+
+  public TMLPort getDestinationPort() {
+    return destinationPort;
+  }
+
+  public List<TMLPort> getOriginPorts() {
+    return originPorts;
+  }
+
+  public List<TMLPort> getDestinationPorts() {
+    return destinationPorts;
+  }
+
+  public void setPorts(TMLPort _origin, TMLPort _destination) {
+    originPort = _origin;
+    destinationPort = _destination;
+  }
+
+  public void removeComplexInformations() {
+    originTasks = new ArrayList<TMLTask>();
+    destinationTasks = new ArrayList<TMLTask>();
+    originPorts = new ArrayList<TMLPort>();
+    destinationPorts = new ArrayList<TMLPort>();
+  }
+
+  public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
+    if (isOrigin) {
+      originTasks.add(_task);
+      originPorts.add(_port);
+    } else {
+      destinationTasks.add(_task);
+      destinationPorts.add(_port);
+    }
+  }
+
+  public boolean isBasicEvent() {
+    return (originTasks.size() == 0);
+  }
+
+  public String toXML() {
+    String s = "<TMLEVENT ";
+    s += "name=\"" + name + "\" ";
+    s += "origintask=\"" + origin.getName() + "\" ";
+    if (originPort != null) {
+      s += "originport=\"" + originPort.getName() + "\" ";
+    }
+    s += "destinationtask=\"" + destination.getName() + "\" ";
+    if (destinationPort != null) {
+      s += "destinationport=\"" + destinationPort.getName() + "\" ";
+    }
+    s += "maxEvt=\"" + maxEvt + "\" ";
+    s += "isBlocking=\"" + isBlocking + "\" ";
+    s += "canBeNotified=\"" + canBeNotified + "\" ";
+    s += "isLossy=\"" + isLossy + "\" ";
+    s += "lossPercentage=\"" + lossPercentage + "\" ";
+    s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
+    s += ">\n";
+    for (TMLType t : params) {
+      s += "<PARAM type=\"" + t.toString() + "\" />";
+    }
+    s += "</TMLEVENT>\n";
+    return s;
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLEvent))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    TMLEvent event = (TMLEvent) o;
+
+    TMLComparingMethod comp = new TMLComparingMethod();
+
+    if (originPort != null) {
+      if (!originPort.equalSpec(event.getOriginPort()))
         return false;
     }
 
-    public boolean hasDestinationTask(TMLTask t) {
-        if (destination == t) {
-            return true;
-        }
-        for (TMLTask task : destinationTasks) {
-            //TraceManager.addDev("Comparing " + t.getTaskName() + " with " + task.getTaskName());
-            if (task == t) {
-                return true;
-            }
-        }
-
+    if (destinationPort != null) {
+      if (!destinationPort.equalSpec(event.getDestinationPort()))
         return false;
     }
 
-    public TMLTask getDestinationTask() {
-        if (destination == null) {
-            if (destinationTasks.size() == 0) {
-                return null;
-            } else {
-                return destinationTasks.get(0);
-            }
-        }
-        return destination;
+    if (origin != null) {
+      if (!origin.equalSpec(event.getOriginTask()))
+        return false;
     }
 
-    public void checkMaxEvt() {
-        if (maxEvt < -1) {
-            maxEvt = -1;
-        }
-
-        if (maxEvt == 0) {
-            maxEvt = -1;
-        }
-
+    if (destination != null) {
+      if (!destination.equalSpec(event.getDestinationTask()))
+        return false;
     }
-
-    public void setNotified(boolean b) {
-        canBeNotified = b;
-    }
-
-    public boolean canBeNotified() {
-        return canBeNotified;
-    }
-
-    public boolean isInfinite() {
-        return (maxEvt == -1);
-    }
-
-    public boolean isBlocking() {
-        return isBlocking;
-    }
-
-    public int getMaxSize() {
-        return maxEvt;
-    }
-
-    public void addParam(TMLType _type) {
-        params.add(_type);
-    }
-
-    public boolean isBlockingAtOrigin() {
-        if (isInfinite()) {
-            return false;
-        }
-
-        return isBlocking();
-
-    }
-
-    public boolean isBlockingAtDestination() {
-        return true;
-    }
-
-    public TMLType getType(int i) {
-        if (i < getNbOfParams()) {
-            return params.elementAt(i);
-        } else {
-            return null;
-        }
-    }
-
-    public String getNameExtension() {
-        return "event__";
-    }
-
-    public String getTypeTextFormat() {
-        if (isInfinite()) {
-            return "INF";
-        } else {
-            if (isBlocking()) {
-                return "NIB";
-            } else {
-                return "NINB";
-            }
-        }
-    }
-
-    public static boolean isAValidListOfParams(String _list) {
-        if (_list.length() == 0) {
-            return true;
-        }
-        String[] split = _list.split(",");
-        for (int i = 0; i < split.length; i++) {
-            if (!TMLType.isAValidType(split[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    public void addParam(String _list) {
-        String[] split = _list.split(",");
-        TMLType type;
-        for (int i = 0; i < split.length; i++) {
-            if (TMLType.isAValidType(split[i])) {
-                type = new TMLType(TMLType.getType(split[i]));
-                addParam(type);
-            }
-        }
-    }
-
-    public boolean isAForkEvent() {
-        return ((originTasks.size() == 1) && (destinationTasks.size() >= 1));
-    }
-
-    public boolean isAJoinEvent() {
-        return ((destinationTasks.size() == 1) && (originTasks.size() >= 1));
-    }
-
-    public List<TMLTask> getOriginTasks() {
-        return originTasks;
-    }
-
-    public List<TMLTask> getDestinationTasks() {
-        return destinationTasks;
-    }
-
-    public TMLPort getOriginPort() {
-        return originPort;
-    }
-
-    public TMLPort getDestinationPort() {
-        return destinationPort;
-    }
-
-    public List<TMLPort> getOriginPorts() {
-        return originPorts;
-    }
-
-    public List<TMLPort> getDestinationPorts() {
-        return destinationPorts;
-    }
-
-    public void setPorts(TMLPort _origin, TMLPort _destination) {
-        originPort = _origin;
-        destinationPort = _destination;
-    }
-
-    public void removeComplexInformations() {
-        originTasks = new ArrayList<TMLTask>();
-        destinationTasks = new ArrayList<TMLTask>();
-        originPorts = new ArrayList<TMLPort>();
-        destinationPorts = new ArrayList<TMLPort>();
-    }
-
-    public void addTaskPort(TMLTask _task, TMLPort _port, boolean isOrigin) {
-        if (isOrigin) {
-            originTasks.add(_task);
-            originPorts.add(_port);
-        } else {
-            destinationTasks.add(_task);
-            destinationPorts.add(_port);
-        }
-    }
-
-    public boolean isBasicEvent() {
-        return (originTasks.size() == 0);
-    }
-
-
-    public String toXML() {
-        String s = "<TMLEVENT ";
-        s += "name=\"" + name + "\" ";
-        s += "origintask=\"" + origin.getName() + "\" ";
-        if (originPort != null) {
-            s += "originport=\"" + originPort.getName() + "\" ";
-        }
-        s += "destinationtask=\"" + destination.getName() + "\" ";
-        if (destinationPort != null) {
-            s += "destinationport=\"" + destinationPort.getName() + "\" ";
-        }
-        s += "maxEvt=\"" + maxEvt + "\" ";
-        s += "isBlocking=\"" + isBlocking + "\" ";
-        s += "canBeNotified=\"" + canBeNotified + "\" ";
-        s += "isLossy=\"" + isLossy + "\" ";
-        s += "lossPercentage=\"" + lossPercentage + "\" ";
-        s += "maxNbOfLoss=\"" + maxNbOfLoss + "\" ";
-        s += ">\n";
-        for (TMLType t : params) {
-            s += "<PARAM type=\"" + t.toString() + "\" />";
-        }
-        s += "</TMLEVENT>\n";
-        return s;
-    }
-
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLEvent)) return false;
-        if (!super.equalSpec(o)) return false;
-        TMLEvent event = (TMLEvent) o;
-
-        TMLComparingMethod comp = new TMLComparingMethod();
-
-        if (originPort != null) {
-            if (!originPort.equalSpec(event.getOriginPort()))
-                return false;
-        }
-
-        if (destinationPort != null) {
-            if (!destinationPort.equalSpec(event.getDestinationPort())) return false;
-        }
-
-        if (origin != null) {
-            if (!origin.equalSpec(event.getOriginTask()))
-                return false;
-        }
-
-        if (destination != null) {
-            if (!destination.equalSpec(event.getDestinationTask())) return false;
-        }
-        if (!(new HashSet<>(params).equals(new HashSet<>(event.params))))
-            return false;
-        return maxEvt == event.maxEvt &&
-                isBlocking == event.isBlocking &&
-                checkAuth == event.checkAuth &&
-                checkConf == event.checkConf &&
-                canBeNotified == event.canBeNotified() &&
-                comp.isTasksListEquals(originTasks, event.getOriginTasks()) &&
-                comp.isTasksListEquals(destinationTasks, event.getDestinationTasks()) &&
-                comp.isPortListEquals(originPorts, event.getOriginPorts()) &&
-                comp.isPortListEquals(destinationPorts, event.getDestinationPorts());
-    }
+    if (!(new HashSet<>(params).equals(new HashSet<>(event.params))))
+      return false;
+    return maxEvt == event.maxEvt && isBlocking == event.isBlocking && checkAuth == event.checkAuth
+        && checkConf == event.checkConf && canBeNotified == event.canBeNotified()
+        && comp.isTasksListEquals(originTasks, event.getOriginTasks())
+        && comp.isTasksListEquals(destinationTasks, event.getDestinationTasks())
+        && comp.isPortListEquals(originPorts, event.getOriginPorts())
+        && comp.isPortListEquals(destinationPorts, event.getDestinationPorts());
+  }
 
 }

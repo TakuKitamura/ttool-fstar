@@ -36,38 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 import java.util.BitSet;
 
 /**
- * Class IntLine
- * Creation: 25/02/2012
- * Version 2.0 25/02/2012
+ * Class IntLine Creation: 25/02/2012 Version 2.0 25/02/2012
+ * 
  * @author Ludovic APVRILLE
  */
-public class IntLine  {
-   public int [] line;
-   public String nameOfLine = null;
-   public BitSet bs = null;
-   
-   
-   public IntLine(int _sizeLine) {
-	   line = new int[_sizeLine];
-   }
-   
-   public IntLine(int []_line, String _name) {
-   	   line = _line;
-   	   nameOfLine = _name;
-   }
-   
-   public IntLine(int []_line, BitSet _bs) {
-   	   line = _line;
-   	   bs = _bs;
-   }
-   
-  
+public class IntLine {
+  public int[] line;
+  public String nameOfLine = null;
+  public BitSet bs = null;
+
+  public IntLine(int _sizeLine) {
+    line = new int[_sizeLine];
+  }
+
+  public IntLine(int[] _line, String _name) {
+    line = _line;
+    nameOfLine = _name;
+  }
+
+  public IntLine(int[] _line, BitSet _bs) {
+    line = _line;
+    bs = _bs;
+  }
+
 }

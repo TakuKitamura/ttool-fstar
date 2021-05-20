@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class RecursionException
- * Creation: 21/05/2014
+ * Class RecursionException Creation: 21/05/2014
+ * 
  * @version 1.0 21/05/2014
  * @author Andrea ENRICI
  */
-public class RecursionException extends Exception
-{
-	
-	public RecursionException()	{
-		super( "TMLCP COMPILER ERROR: detected recursion of diagram" );
-	}
+public class RecursionException extends Exception {
 
-	public RecursionException( String message )	{
-			super( message );	
-	}
+  public RecursionException() {
+    super("TMLCP COMPILER ERROR: detected recursion of diagram");
+  }
+
+  public RecursionException(String message) {
+    super(message);
+  }
 }

@@ -36,63 +36,65 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator.toexecutable;
 
 /**
-* Class TaskFile
-* Creation: 29/03/2011
-* @version 1.1 29/03/2011
-* @author Ludovic APVRILLE
+ * Class TaskFile Creation: 29/03/2011
+ * 
+ * @version 1.1 29/03/2011
+ * @author Ludovic APVRILLE
  */
 public class TaskFileSoclib {
-	/////////////////////RG
-	//1) enlever pthread.h
-	//2) ajouter : srl.h et mwmr.h
-	//private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-	//private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"  "; //--------#include \"request.h\"\n -----------
-	private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"srl.h\"\n#include \"mwmr.h\"\n "; 
-	
-	private final static String CR = "\n";
-	
-	private String name;
-	
-	private String headerCode;
-	private String mainCode;
-	
-	
-	public TaskFileSoclib(String _name) {
-		name = _name;
-		headerCode = "";
-		mainCode = "";
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public String getFullHeaderCode() {
-		String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-		s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
-		s += headerCode;
-		s += "#endif\n";
-		return s;
-	}
-	
-	public String getMainCode() {
-		return "#include \"" + name + ".h\"" + CR + CR + mainCode;
-	}
-	
-	public void addToHeaderCode(String _code) {
-		headerCode += _code;
-	}
-	
-	public void addToMainCode(String _code) {
-		mainCode += _code;
-	}
+  ///////////////////// RG
+  // 1) enlever pthread.h
+  // 2) ajouter : srl.h et mwmr.h
+  // private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include
+  ///////////////////// <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+  // private final static String LOCAL_INCLUDE_HEADER = "#include
+  ///////////////////// \"request.h\"\n#include \"syncchannel.h\"\n#include
+  ///////////////////// \"request_manager.h\"\n#include \"debug.h\"\n#include
+  ///////////////////// \"defs.h\"\n#include \"mytimelib.h\"\n#include
+  ///////////////////// \"random.h\"\n#include \"tracemanager.h\"\n#include
+  ///////////////////// \"main.h\" "; //--------#include \"request.h\"\n
+  ///////////////////// -----------
+  private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+  private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"srl.h\"\n#include \"mwmr.h\"\n ";
 
-	
+  private final static String CR = "\n";
+
+  private String name;
+
+  private String headerCode;
+  private String mainCode;
+
+  public TaskFileSoclib(String _name) {
+    name = _name;
+    headerCode = "";
+    mainCode = "";
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getFullHeaderCode() {
+    String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+    s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
+    s += headerCode;
+    s += "#endif\n";
+    return s;
+  }
+
+  public String getMainCode() {
+    return "#include \"" + name + ".h\"" + CR + CR + mainCode;
+  }
+
+  public void addToHeaderCode(String _code) {
+    headerCode += _code;
+  }
+
+  public void addToMainCode(String _code) {
+    mainCode += _code;
+  }
+
 }

@@ -39,116 +39,111 @@
 package avatartranslator;
 
 /**
-   * Class AvatarSignal
-   * Signals in Avatar ...
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSignal Signals in Avatar ... Creation: 20/05/2010
+ * 
+ * @version 1.0 20/05/2010
+ * @author Ludovic APVRILLE
  */
 public class AvatarSignal extends AvatarMethod {
 
-    // Signal type
-    public final static int IN = 0;
-    public final static int OUT = 1;
+  // Signal type
+  public final static int IN = 0;
+  public final static int OUT = 1;
 
-    private int inout;
+  private int inout;
 
-    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
-        super(_name, _referenceObject);
-        
-        inout = _inout;
-        name = _name;
+  public AvatarSignal(String _name, int _inout, Object _referenceObject) {
+    super(_name, _referenceObject);
+
+    inout = _inout;
+    name = _name;
+  }
+
+  public int getInOut() {
+    return inout;
+  }
+
+  public String getSignalName() {
+    return name;
+  }
+
+  public void setInOut(int _inout) {
+    inout = _inout;
+  }
+
+  public boolean isOut() {
+    return (inout == OUT);
+  }
+
+  public boolean isIn() {
+    return (inout == IN);
+  }
+
+  public static boolean isAValidSignal(String _signal) {
+    return AvatarTerm.isValidName(_signal);
+  }
+
+  @Override
+  public String toString() {
+    String ret = super.toString();
+    if (isOut()) {
+      return "out " + ret;
+    }
+    return "in " + ret;
+  }
+
+  @Override
+  public String toBasicString() {
+    String ret = super.toBasicString();
+    if (isOut()) {
+      return "out " + ret;
+    }
+    return "in " + ret;
+  }
+
+  public String minString() {
+    int cpt = 0;
+    String ret = getName() + "(";
+    for (AvatarAttribute attribute : parameters) {
+      if (cpt != 0) {
+        ret += ",";
+      }
+      cpt++;
+      ret += attribute.getName();
     }
 
-    public int getInOut() {
-        return inout;
+    ret += ")";
+    return ret;
+  }
+
+  public int getNbParams() {
+    int cpt = 0;
+
+    for (AvatarAttribute attribute : parameters) {
+      cpt++;
+    }
+    return cpt;
+  }
+
+  // DG 13.06.
+  /*
+   * public int getCumulSizeParams(){ int cumul = 0;
+   * 
+   * for(AvatarAttribute attribute: parameters) { AvatarType type =
+   * attribute.getType(); cumul += 4; //hack } return cumul; }
+   */
+  // fin DG
+  public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
+    AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
+    setAdvancedClone(as, _block);
+    return as;
+  }
+
+  public boolean isCompatibleWith(AvatarSignal _as) {
+    if (getInOut() == _as.getInOut()) {
+      return false;
     }
 
-    public String getSignalName() {
-        return name;
-    }
-
-    public void setInOut(int _inout) {
-        inout = _inout;
-    }
-
-    public boolean isOut() {
-        return (inout == OUT);
-    }
-
-    public boolean isIn() {
-        return (inout == IN);
-    }
-
-    public static boolean isAValidSignal(String _signal) {
-        return AvatarTerm.isValidName (_signal);
-    }
-
-    @Override
-    public String toString() {
-        String ret = super.toString();
-        if (isOut()) {
-            return "out " + ret;
-        }
-        return "in " + ret;
-    }
-
-    @Override
-    public String toBasicString() {
-        String ret = super.toBasicString();
-        if (isOut()) {
-            return "out " + ret;
-        }
-        return "in " + ret;
-    }
-
-	public String minString(){
-        int cpt = 0;
-		String ret = getName() + "(";
-        for(AvatarAttribute attribute: parameters) {
-            if (cpt != 0) {
-                ret += ",";
-            }
-            cpt ++;
-            ret += attribute.getName();
-        }
-
-        ret += ")";
-        return ret;
-	}
-
-	public int getNbParams(){
-        int cpt = 0;
-	
-        for(AvatarAttribute attribute: parameters) {           
-           cpt ++;            
-        }
-        return cpt;
-	}
-
-    //DG 13.06.
-    /* public int getCumulSizeParams(){
-        int cumul = 0;
-	
-        for(AvatarAttribute attribute: parameters) { 
-	    AvatarType type = attribute.getType();
-	    cumul += 4;  //hack          
-        }
-        return cumul;
-	}*/
-    //fin DG 
-	public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
-		AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
-		setAdvancedClone(as, _block);
-		return as;
-	}
-
-
-	public boolean isCompatibleWith(AvatarSignal _as) {
-		if (getInOut() == _as.getInOut()) {
-			return false;
-		}
-
-		return super.isCompatibleWith(_as);
-	}
+    return super.isCompatibleWith(_as);
+  }
 }

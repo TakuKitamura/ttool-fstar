@@ -36,21 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import java.awt.*;
 
 /**
- * Class PartOfInvariant
- * Components thatcan be part of invariants
- * Creation: 28/04/2012
+ * Class PartOfInvariant Components thatcan be part of invariants Creation:
+ * 28/04/2012
+ * 
  * @version 1.0 28/04/2012
  * @author Ludovic APVRILLE
  */
-public interface PartOfInvariant  {
-    void drawInvariantInformation(Graphics g);
+public interface PartOfInvariant {
+  void drawInvariantInformation(Graphics g);
 }

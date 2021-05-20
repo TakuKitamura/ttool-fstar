@@ -36,113 +36,110 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package ddtranslatorSoclib;
 
 import java.util.LinkedList;
 
-/** @version 1.0 07/07/2015
-  * @author  Julien Henon, Daniela Genius */
-public class AvatarCPU extends AvatarComponent{
+/**
+ * @version 1.0 07/07/2015
+ * @author Julien Henon, Daniela Genius
+ */
+public class AvatarCPU extends AvatarComponent {
 
-    private String cpuName;
+  private String cpuName;
 
-    private int nbOfIRQs;
+  private int nbOfIRQs;
 
-    private int iCacheWays;
-    private int iCacheSets;
-    private int iCacheWords;
+  private int iCacheWays;
+  private int iCacheSets;
+  private int iCacheWords;
 
-    private int dCacheWays;
-    private int dCacheSets;
-    private int dCacheWords;
-    private int nb_init;
-    private int no_proc;
-    private int clusterIndex;
-    public int monitored;
+  private int dCacheWays;
+  private int dCacheSets;
+  private int dCacheWords;
+  private int nb_init;
+  private int no_proc;
+  private int clusterIndex;
+  public int monitored;
 
-    private LinkedList<AvatarTask> tasksMapped;
+  private LinkedList<AvatarTask> tasksMapped;
 
-    public AvatarCPU(String _cpuName, int _nbOfIRQs,int _ICacheWays, int _ICacheSets, int _ICacheWords, int  _DCacheWays, int _DCacheSets, int _DCacheWords , int _nb_init , int _no_proc, int _clusterIndex, int _monitored){
-      
-      cpuName = _cpuName;
-      nbOfIRQs = _nbOfIRQs;
-      iCacheWays = _ICacheWays;
-      iCacheSets = _ICacheSets;
-      iCacheWords = _ICacheWords;
-      dCacheWays = _DCacheWays;
-      dCacheSets = _DCacheSets;
-      dCacheWords = _DCacheWords;
-      nb_init = _nb_init;
-      no_proc = _no_proc;
-      clusterIndex = _clusterIndex;//DG 2.7.
-      tasksMapped = new LinkedList<AvatarTask>(); 
-      monitored=_monitored;
-    }
+  public AvatarCPU(String _cpuName, int _nbOfIRQs, int _ICacheWays, int _ICacheSets, int _ICacheWords, int _DCacheWays,
+      int _DCacheSets, int _DCacheWords, int _nb_init, int _no_proc, int _clusterIndex, int _monitored) {
 
-    public int getNb_init(){
-      return  nb_init;
-    }
+    cpuName = _cpuName;
+    nbOfIRQs = _nbOfIRQs;
+    iCacheWays = _ICacheWays;
+    iCacheSets = _ICacheSets;
+    iCacheWords = _ICacheWords;
+    dCacheWays = _DCacheWays;
+    dCacheSets = _DCacheSets;
+    dCacheWords = _DCacheWords;
+    nb_init = _nb_init;
+    no_proc = _no_proc;
+    clusterIndex = _clusterIndex;// DG 2.7.
+    tasksMapped = new LinkedList<AvatarTask>();
+    monitored = _monitored;
+  }
 
-    public int getNo_proc(){
-      return  no_proc;
-      }
+  public int getNb_init() {
+    return nb_init;
+  }
 
-    public int getClusterIndex(){
-	
-      return clusterIndex;
-    }  
-    
-    public	String getCpuName(){
-	return cpuName;
-	}
+  public int getNo_proc() {
+    return no_proc;
+  }
 
-    public	int getNbOfIRQS(){
-      return  nbOfIRQs;
-	}
+  public int getClusterIndex() {
 
-	public int getICacheWays(){
-	return iCacheWays;
-	}
+    return clusterIndex;
+  }
 
-	public int getICacheSets(){
-	return  iCacheSets;
-	}	
+  public String getCpuName() {
+    return cpuName;
+  }
 
-	public int getICacheWords(){
-	return iCacheWords;
-	}
+  public int getNbOfIRQS() {
+    return nbOfIRQs;
+  }
 
-	public int getDCacheWays(){
-	return dCacheWays;
-	}
+  public int getICacheWays() {
+    return iCacheWays;
+  }
 
-	public int getDCacheSets(){
-	return dCacheSets;
-	}
+  public int getICacheSets() {
+    return iCacheSets;
+  }
 
-	public int getDCacheWords(){
-	return dCacheWords;
-	}
+  public int getICacheWords() {
+    return iCacheWords;
+  }
 
-    public LinkedList<AvatarTask> getAllTasks(){
-      return tasksMapped;
-    }
+  public int getDCacheWays() {
+    return dCacheWays;
+  }
 
-    public void addTask(AvatarTask task){
-      tasksMapped.add(task);
-    }
+  public int getDCacheSets() {
+    return dCacheSets;
+  }
 
-    public int getMonitored(){
-	return monitored;
-    }
-    public void setMonitored(int _monitored){
-	monitored = _monitored;
-    }
+  public int getDCacheWords() {
+    return dCacheWords;
+  }
+
+  public LinkedList<AvatarTask> getAllTasks() {
+    return tasksMapped;
+  }
+
+  public void addTask(AvatarTask task) {
+    tasksMapped.add(task);
+  }
+
+  public int getMonitored() {
+    return monitored;
+  }
+
+  public void setMonitored(int _monitored) {
+    monitored = _monitored;
+  }
 }
-

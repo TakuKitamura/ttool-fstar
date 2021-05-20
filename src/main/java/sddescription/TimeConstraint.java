@@ -36,68 +36,65 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sddescription;
 
 /**
- * Class TimeConstraint
- * Creation: 17/08/2004
+ * Class TimeConstraint Creation: 17/08/2004
+ * 
  * @version 1.1 17/08/2004
  * @author Ludovic APVRILLE
  */
 public class TimeConstraint {
-    
-    public static final int RELATIVE = 0;
-    public static final int ABSOLUTE = 1;
-    
-    public Evt evt1;
-    public Evt evt2;
-    public int time1;
-    public int time2;
-    public int type;
 
-    
-    public TimeConstraint(Evt _evt1, Evt _evt2, int _time1, int _time2) {
-        evt1 = _evt1;
-        evt2 = _evt2;
-        time1 = _time1;
-        time2 = _time2;
-        type = RELATIVE;
-    }
-    
-    public TimeConstraint(Evt _evt1, Evt _evt2, int _time1) {
-        evt1 = _evt1;
-        evt2 = _evt2;
-        time1 = _time1;
-        time2 = _time1;
-        type = RELATIVE;
-    }
-    
-    public TimeConstraint(Evt _evt1, int _time1, int _time2) {
-        evt1 = _evt1;
-        evt2 = evt1;
-        time1 = _time1;
-        time2 = _time2;
-        type = ABSOLUTE;
-    }
-    
-    public TimeConstraint(Evt _evt1, int _time1) {
-        evt1 = _evt1;
-        evt2 = evt1;
-        time1 = _time1;
-        time2 = _time1;
-        type = ABSOLUTE;
-    }
-    
-    public TimeConstraint() {}
-    
-    public Evt getEvt1() {
-        return evt1;
-    }
-    
-    public Evt getEvt2() {
-        return evt2;
-    }   
+  public static final int RELATIVE = 0;
+  public static final int ABSOLUTE = 1;
+
+  public Evt evt1;
+  public Evt evt2;
+  public int time1;
+  public int time2;
+  public int type;
+
+  public TimeConstraint(Evt _evt1, Evt _evt2, int _time1, int _time2) {
+    evt1 = _evt1;
+    evt2 = _evt2;
+    time1 = _time1;
+    time2 = _time2;
+    type = RELATIVE;
+  }
+
+  public TimeConstraint(Evt _evt1, Evt _evt2, int _time1) {
+    evt1 = _evt1;
+    evt2 = _evt2;
+    time1 = _time1;
+    time2 = _time1;
+    type = RELATIVE;
+  }
+
+  public TimeConstraint(Evt _evt1, int _time1, int _time2) {
+    evt1 = _evt1;
+    evt2 = evt1;
+    time1 = _time1;
+    time2 = _time2;
+    type = ABSOLUTE;
+  }
+
+  public TimeConstraint(Evt _evt1, int _time1) {
+    evt1 = _evt1;
+    evt2 = evt1;
+    time1 = _time1;
+    time2 = _time1;
+    type = ABSOLUTE;
+  }
+
+  public TimeConstraint() {
+  }
+
+  public Evt getEvt1() {
+    return evt1;
+  }
+
+  public Evt getEvt2() {
+    return evt2;
+  }
 }

@@ -36,28 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifProcIn
- * Creation: 13/09/2015
+ * Class ProVerifProcIn Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifProcIn extends ProVerifProcInstr {
 
-    protected String channel;
-    protected ProVerifVar[] vars;
+  protected String channel;
+  protected ProVerifVar[] vars;
 
-    public ProVerifProcIn (String _channel, ProVerifVar[] _vars) {
-        this.channel = _channel;
-        this.vars = _vars;
-    }
+  public ProVerifProcIn(String _channel, ProVerifVar[] _vars) {
+    this.channel = _channel;
+    this.vars = _vars;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateProcIn (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateProcIn(this, _alinea);
+  }
 }

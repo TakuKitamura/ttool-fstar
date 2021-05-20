@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.file;
 
 import myutil.FileUtils;
@@ -46,34 +43,33 @@ import myutil.FileUtils;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-
 /**
- * Class PNGFilter
- * Creation : 01/12/2016
+ * Class PNGFilter Creation : 01/12/2016
+ * 
  * @author Ludovic APVRILLE
  */
 public class PNGFilter extends FileFilter {
 
-//Accept all directories and  xml files
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
+  // Accept all directories and xml files
+  public boolean accept(File f) {
+    if (f.isDirectory()) {
+      return true;
+    }
 
-        String extension = FileUtils.getExtension(f);
-        if (extension != null) {
-            return extension.equals(FileUtils.png);
-        }
+    String extension = FileUtils.getExtension(f);
+    if (extension != null) {
+      return extension.equals(FileUtils.png);
+    }
 
-        return false;
-    }
-    
-    public String getDescription() {
-        return "PNG images";
-    }
-    
-    public static String getExtension() {
-	 return  FileUtils.png;  
-    }
+    return false;
+  }
+
+  public String getDescription() {
+    return "PNG images";
+  }
+
+  public static String getExtension() {
+    return FileUtils.png;
+  }
 
 }

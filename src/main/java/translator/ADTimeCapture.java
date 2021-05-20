@@ -36,60 +36,51 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
- 
-
 
 /**
- * Class ADTimeCapture
- * Creation: 23/07/2009
+ * Class ADTimeCapture Creation: 23/07/2009
+ * 
  * @version 1.0 23/07/2009
  * @author Ludovic APVRILLE
  */
 public class ADTimeCapture extends ADComponent {
-	protected Param p;
-	Process proc;
-    
-    public ADTimeCapture(Param _p) {
-	    p = _p;
-    }
-	
-	public ADTimeCapture() {
-    }
-	
-	public void setParam(Param _p) {
-		p = _p;
-	}
-    
-    public Param getParam() {
-	 	return p;   
-    }
-    
-    public void setProcess(Process _p) {
-	 	proc = _p;   
-    }
-    
-    public Process getProcess() {
-	 	return proc;   
-    }
-    
-    public String toString() {
-	 	return "Time capture (" + p.getName() + ")";
-    }
-    
-    public String brutToString() {
-        return p.getName();
-    }
+  protected Param p;
+  Process proc;
 
-    public ADComponent makeSame() {
-      ADTimeCapture adtc = new ADTimeCapture(getParam());
-      return adtc;
-    }
+  public ADTimeCapture(Param _p) {
+    p = _p;
+  }
+
+  public ADTimeCapture() {
+  }
+
+  public void setParam(Param _p) {
+    p = _p;
+  }
+
+  public Param getParam() {
+    return p;
+  }
+
+  public void setProcess(Process _p) {
+    proc = _p;
+  }
+
+  public Process getProcess() {
+    return proc;
+  }
+
+  public String toString() {
+    return "Time capture (" + p.getName() + ")";
+  }
+
+  public String brutToString() {
+    return p.getName();
+  }
+
+  public ADComponent makeSame() {
+    ADTimeCapture adtc = new ADTimeCapture(getParam());
+    return adtc;
+  }
 }
-    

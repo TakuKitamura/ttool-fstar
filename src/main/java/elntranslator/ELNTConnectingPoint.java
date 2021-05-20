@@ -39,41 +39,41 @@
 package elntranslator;
 
 /**
- * Class SysCAMSTConnectingPoint
- * Parameters of a SystemC-AMS connecting point
+ * Class SysCAMSTConnectingPoint Parameters of a SystemC-AMS connecting point
  * Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTConnectingPoint {
-	private String name;
-	
-	private ELNTConnector ownerConnector;
-	private ELNTComponent ownerComponent;
+  private String name;
 
-	public ELNTConnectingPoint(String _name, ELNTComponent _ownerComponent) {
-		name = _name;
-		ownerComponent = _ownerComponent;
-	}
-	
-	public String getName() {
-		return name;
-	}
+  private ELNTConnector ownerConnector;
+  private ELNTComponent ownerComponent;
 
-	public ELNTConnector getConnector() {
-		return ownerConnector;
-	}
-	
-	public void setOwnerConnector(ELNTConnector _ownerConnector) {
-		ownerConnector = _ownerConnector;
-	}
+  public ELNTConnectingPoint(String _name, ELNTComponent _ownerComponent) {
+    name = _name;
+    ownerComponent = _ownerComponent;
+  }
 
-	public ELNTComponent getComponent() {
-		return ownerComponent;
-	}
+  public String getName() {
+    return name;
+  }
 
-	boolean ConnectingPointIsFree(){
-		return ownerConnector == null;
-    }
+  public ELNTConnector getConnector() {
+    return ownerConnector;
+  }
+
+  public void setOwnerConnector(ELNTConnector _ownerConnector) {
+    ownerConnector = _ownerConnector;
+  }
+
+  public ELNTComponent getComponent() {
+    return ownerComponent;
+  }
+
+  boolean ConnectingPointIsFree() {
+    return ownerConnector == null;
+  }
 }

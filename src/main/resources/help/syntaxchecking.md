@@ -5,8 +5,3 @@ When clicking on the syntax checking icon ![syntax checking icon](file:../ui/uti
 If the syntax is correct, then you can go on for verification or code generation.
 
 On the contrary, errors are listed in the tree on the left of the main panel. Similarly, warnings are listed in this tree.
-
-
-
-
-

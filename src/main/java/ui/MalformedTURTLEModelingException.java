@@ -36,28 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
-
 /**
- * Class MalformedTURTLEModelingException
- * Creation: 26/01/2005
- * version 1.0 26/01/2005
+ * Class MalformedTURTLEModelingException Creation: 26/01/2005 version 1.0
+ * 26/01/2005
+ * 
  * @author Ludovic APVRILLE
  */
-public	class MalformedTURTLEModelingException extends Exception {
-	
-	public MalformedTURTLEModelingException() {
-		super("Modeling cannot be drawn with TTool");
-	}
-	
-	public MalformedTURTLEModelingException(String msg) {
-		super("Modeling cannot be drawn with TTool: " + msg);
-	}
-    
-} // Class 
+public class MalformedTURTLEModelingException extends Exception {
 
-	
+  public MalformedTURTLEModelingException() {
+    super("Modeling cannot be drawn with TTool");
+  }
+
+  public MalformedTURTLEModelingException(String msg) {
+    super("Modeling cannot be drawn with TTool: " + msg);
+  }
+
+} // Class

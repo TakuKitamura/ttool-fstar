@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -51,273 +48,264 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-
 /**
-   * Class JDialogManageListOfString
-   * Dialog for managing two lists of String
-   * Creation: 28/03/2014
-   * @version 1.0 28/03/2014
-   * @author Ludovic APVRILLE
+ * Class JDialogManageListOfString Dialog for managing two lists of String
+ * Creation: 28/03/2014
+ * 
+ * @version 1.0 28/03/2014
+ * @author Ludovic APVRILLE
  */
-public class JDialogManageListOfString extends JDialogBase implements ActionListener, ListSelectionListener  {
+public class JDialogManageListOfString extends JDialogBase implements ActionListener, ListSelectionListener {
 
+  // private static boolean overideSyntaxChecking = false;
 
+  private Vector<String> ignored, selected;
 
-   // private static boolean overideSyntaxChecking = false;
+  // subpanels
+  private JPanel panel1, panel2, panel3, panel6;
+  private JList<String> listIgnored;
+  private JList<String> listSelected;
+  private JButton allSelected;
+  private JButton addOneSelected;
+  private JButton addOneIgnored;
+  private JButton allIgnored;
 
-    private Vector<String> ignored, selected;
+  // Main Panel
 
-    //subpanels
-    private JPanel panel1, panel2, panel3, panel6;
-    private JList<String> listIgnored;
-    private JList<String> listSelected;
-    private JButton allSelected;
-    private JButton addOneSelected;
-    private JButton addOneIgnored;
-    private JButton allIgnored;
+  private boolean hasBeenCancelled = true;
 
-    // Main Panel
+  /* Creates new form */
+  public JDialogManageListOfString(Frame f, Vector<String> _ignored, Vector<String> _selected, String title) {
+    super(f, title, true);
 
-    private boolean hasBeenCancelled = true;
+    ignored = _ignored;
+    selected = _selected;
 
-    /* Creates new form  */
-    public JDialogManageListOfString(Frame f, Vector<String> _ignored, Vector<String> _selected, String title) {
-        super(f, title, true);
+    initComponents();
+    myInitComponents();
+    pack();
+  }
 
-        ignored = _ignored;
-        selected = _selected;
+  private void myInitComponents() {
+    setButtons();
+  }
 
-        initComponents();
-        myInitComponents();
-        pack();
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c1 = new GridBagConstraints();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    // ignored list
+    panel1 = new JPanel();
+    panel1.setLayout(new BorderLayout());
+    panel1.setBorder(new javax.swing.border.TitledBorder("Non selected diagrams"));
+    listIgnored = new JList<>(ignored);
+    // listIgnored.setPreferredSize(new Dimension(200, 250));
+    listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    listIgnored.addListSelectionListener(this);
+    JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+    panel1.add(scrollPane1, BorderLayout.CENTER);
+    panel1.setPreferredSize(new Dimension(200, 250));
+    c.add(panel1, BorderLayout.WEST);
+
+    // validated list
+    panel2 = new JPanel();
+    panel2.setLayout(new BorderLayout());
+    panel2.setBorder(new javax.swing.border.TitledBorder("Selected diagrams"));
+    listSelected = new JList<>(selected);
+    // listValidated.setPreferredSize(new Dimension(200, 250));
+    listSelected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    listSelected.addListSelectionListener(this);
+    JScrollPane scrollPane2 = new JScrollPane(listSelected);
+    panel2.add(scrollPane2, BorderLayout.CENTER);
+    panel2.setPreferredSize(new Dimension(200, 250));
+    c.add(panel2, BorderLayout.EAST);
+
+    // central buttons
+    panel3 = new JPanel();
+    panel3.setLayout(gridbag1);
+
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridheight = 1;
+
+    allSelected = new JButton(IconManager.imgic50);
+    allSelected.setPreferredSize(new Dimension(50, 25));
+    allSelected.addActionListener(this);
+    allSelected.setActionCommand("allSelected");
+    panel3.add(allSelected, c1);
+
+    addOneSelected = new JButton(IconManager.imgic48);
+    addOneSelected.setPreferredSize(new Dimension(50, 25));
+    addOneSelected.addActionListener(this);
+    addOneSelected.setActionCommand("addOneSelected");
+    panel3.add(addOneSelected, c1);
+
+    panel3.add(new JLabel(" "), c1);
+
+    addOneIgnored = new JButton(IconManager.imgic46);
+    addOneIgnored.addActionListener(this);
+    addOneIgnored.setPreferredSize(new Dimension(50, 25));
+    addOneIgnored.setActionCommand("addOneIgnored");
+    panel3.add(addOneIgnored, c1);
+
+    allIgnored = new JButton(IconManager.imgic44);
+    allIgnored.addActionListener(this);
+    allIgnored.setPreferredSize(new Dimension(50, 25));
+    allIgnored.setActionCommand("allIgnored");
+    panel3.add(allIgnored, c1);
+
+    c.add(panel3, BorderLayout.CENTER);
+
+    // main panel;
+    panel6 = new JPanel();
+    panel6.setLayout(new FlowLayout());
+
+    closeButton = new JButton("OK", IconManager.imgic37);
+    // closeButton.setPreferredSize(new Dimension(600, 50));
+    closeButton.addActionListener(this);
+    closeButton.setPreferredSize(new Dimension(200, 30));
+
+    cancelButton = new JButton("Cancel", IconManager.imgic27);
+    cancelButton.addActionListener(this);
+    cancelButton.setPreferredSize(new Dimension(200, 30));
+    panel6.add(cancelButton);
+    panel6.add(closeButton);
+
+    c.add(panel6, BorderLayout.SOUTH);
+
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (evt.getSource() == closeButton) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
+    } else if (evt.getSource() == addOneIgnored) {
+      addOneIgnored();
+    } else if (evt.getSource() == addOneSelected) {
+      addOneSelected();
+    } else if (evt.getSource() == allSelected) {
+      allSelected();
+    } else if (evt.getSource() == allIgnored) {
+      allIgnored();
+    }
+  }
+
+  private void addOneIgnored() {
+    int[] list = listSelected.getSelectedIndices();
+    Vector<String> v = new Vector<>();
+    String o;
+    for (int i = 0; i < list.length; i++) {
+      o = selected.elementAt(list[i]);
+      ignored.addElement(o);
+      v.addElement(o);
     }
 
-    private void myInitComponents() {
-        setButtons();
+    selected.removeAll(v);
+    listIgnored.setListData(ignored);
+    listSelected.setListData(selected);
+    setButtons();
+  }
+
+  private void addOneSelected() {
+    int[] list = listIgnored.getSelectedIndices();
+    Vector<String> v = new Vector<>();
+    String o;
+    for (int i = 0; i < list.length; i++) {
+      o = ignored.elementAt(list[i]);
+      selected.addElement(o);
+      v.addElement(o);
     }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c1 = new GridBagConstraints();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    ignored.removeAll(v);
+    listIgnored.setListData(ignored);
+    listSelected.setListData(selected);
+    setButtons();
+  }
 
-        // ignored list
-        panel1 = new JPanel();
-        panel1.setLayout(new BorderLayout());
-        panel1.setBorder(new javax.swing.border.TitledBorder("Non selected diagrams"));
-        listIgnored = new JList<>(ignored);
-        //listIgnored.setPreferredSize(new Dimension(200, 250));
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-        listIgnored.addListSelectionListener(this);
-        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
-        panel1.add(scrollPane1, BorderLayout.CENTER);
-        panel1.setPreferredSize(new Dimension(200, 250));
-        c.add(panel1, BorderLayout.WEST);
+  private void allSelected() {
+    selected.addAll(ignored);
+    ignored.removeAllElements();
+    listIgnored.setListData(ignored);
+    listSelected.setListData(selected);
+    setButtons();
+  }
 
-        // validated list
-        panel2 = new JPanel();
-        panel2.setLayout(new BorderLayout());
-        panel2.setBorder(new javax.swing.border.TitledBorder("Selected diagrams"));
-        listSelected = new JList<>(selected);
-        //listValidated.setPreferredSize(new Dimension(200, 250));
-        listSelected.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-        listSelected.addListSelectionListener(this);
-        JScrollPane scrollPane2 = new JScrollPane(listSelected);
-        panel2.add(scrollPane2, BorderLayout.CENTER);
-        panel2.setPreferredSize(new Dimension(200, 250));
-        c.add(panel2, BorderLayout.EAST);
+  private void allIgnored() {
+    ignored.addAll(selected);
+    selected.removeAllElements();
+    listIgnored.setListData(ignored);
+    listSelected.setListData(selected);
+    setButtons();
+  }
 
-        // central buttons
-        panel3 = new JPanel();
-        panel3.setLayout(gridbag1);
+  public void closeDialog() {
+    hasBeenCancelled = false;
+    dispose();
+  }
 
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridheight = 1;
+  public void cancelDialog() {
+    dispose();
+  }
 
-        allSelected = new JButton(IconManager.imgic50);
-        allSelected.setPreferredSize(new Dimension(50, 25));
-        allSelected.addActionListener(this);
-        allSelected.setActionCommand("allSelected");
-        panel3.add(allSelected, c1);
+  public boolean hasBeenCancelled() {
+    return hasBeenCancelled;
+  }
 
-        addOneSelected = new JButton(IconManager.imgic48);
-        addOneSelected.setPreferredSize(new Dimension(50, 25));
-        addOneSelected.addActionListener(this);
-        addOneSelected.setActionCommand("addOneSelected");
-        panel3.add(addOneSelected, c1);
+  private void setButtons() {
+    int i1 = listIgnored.getSelectedIndex();
+    int i2 = listSelected.getSelectedIndex();
 
-        panel3.add(new JLabel(" "), c1);
+    // closeButton.setEnabled(true);
 
-        addOneIgnored = new JButton(IconManager.imgic46);
-        addOneIgnored.addActionListener(this);
-        addOneIgnored.setPreferredSize(new Dimension(50, 25));
-        addOneIgnored.setActionCommand("addOneIgnored");
-        panel3.add(addOneIgnored, c1);
-
-        allIgnored = new JButton(IconManager.imgic44);
-        allIgnored.addActionListener(this);
-        allIgnored.setPreferredSize(new Dimension(50, 25));
-        allIgnored.setActionCommand("allIgnored");
-        panel3.add(allIgnored, c1);
-
-        c.add(panel3, BorderLayout.CENTER);
-
-        // main panel;
-        panel6 = new JPanel();
-        panel6.setLayout(new FlowLayout());
-
-
-        closeButton = new JButton("OK", IconManager.imgic37);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        closeButton.setPreferredSize(new Dimension(200, 30));
-
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        cancelButton.setPreferredSize(new Dimension(200, 30));
-        panel6.add(cancelButton);
-        panel6.add(closeButton);
-
-
-        c.add(panel6, BorderLayout.SOUTH);
-
+    if (i1 == -1) {
+      addOneSelected.setEnabled(false);
+    } else {
+      addOneSelected.setEnabled(true);
+      // listValidated.clearSelection();
     }
 
-    public void actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        } else if (evt.getSource() == addOneIgnored){
-            addOneIgnored();
-        } else if (evt.getSource() == addOneSelected) {
-            addOneSelected();
-        } else if (evt.getSource() == allSelected) {
-            allSelected();
-        } else if (evt.getSource() == allIgnored) {
-            allIgnored();
-        }
+    if (i2 == -1) {
+      addOneIgnored.setEnabled(false);
+    } else {
+      addOneIgnored.setEnabled(true);
+      // listIgnored.clearSelection();
     }
 
-
-    private void addOneIgnored() {
-        int [] list = listSelected.getSelectedIndices();
-        Vector<String> v = new Vector<>();
-        String o;
-        for (int i=0; i<list.length; i++){
-            o = selected.elementAt(list[i]);
-            ignored.addElement(o);
-            v.addElement(o);
-        }
-
-        selected.removeAll(v);
-        listIgnored.setListData(ignored);
-        listSelected.setListData(selected);
-        setButtons();
+    if (ignored.size() == 0) {
+      allSelected.setEnabled(false);
+    } else {
+      allSelected.setEnabled(true);
     }
 
-    private void addOneSelected() {
-        int [] list = listIgnored.getSelectedIndices();
-        Vector<String> v = new Vector<>();
-        String o;
-        for (int i=0; i<list.length; i++){
-            o = ignored
-                .elementAt(list[i]);
-            selected.addElement(o);
-            v.addElement(o);
-        }
+    if (selected.size() == 0) {
+      allIgnored.setEnabled(false);
 
-        ignored.removeAll(v);
-        listIgnored.setListData(ignored);
-        listSelected.setListData(selected);
-        setButtons();
+    } else {
+      allIgnored.setEnabled(true);
+
     }
+  }
 
-    private void allSelected() {
-        selected.addAll(ignored);
-        ignored.removeAllElements();
-        listIgnored.setListData(ignored);
-        listSelected.setListData(selected);
-        setButtons();
-    }
+  public void valueChanged(ListSelectionEvent e) {
+    setButtons();
+  }
 
-    private void allIgnored() {
-        ignored.addAll(selected);
-        selected.removeAllElements();
-        listIgnored.setListData(ignored);
-        listSelected.setListData(selected);
-        setButtons();
-    }
+  public Vector<String> getSelected() {
+    return selected;
+  }
 
-
-    public void closeDialog() {
-        hasBeenCancelled = false;
-        dispose();
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
-
-    public boolean hasBeenCancelled() {
-        return hasBeenCancelled;
-    }
-
-    private void setButtons() {
-        int i1 = listIgnored.getSelectedIndex();
-        int i2 = listSelected.getSelectedIndex();
-
-        //closeButton.setEnabled(true);
-
-        if (i1 == -1) {
-            addOneSelected.setEnabled(false);
-        } else {
-            addOneSelected.setEnabled(true);
-            //listValidated.clearSelection();
-        }
-
-        if (i2 == -1) {
-            addOneIgnored.setEnabled(false);
-        } else {
-            addOneIgnored.setEnabled(true);
-            //listIgnored.clearSelection();
-        }
-
-        if (ignored.size() ==0) {
-            allSelected.setEnabled(false);
-        } else {
-            allSelected.setEnabled(true);
-        }
-
-        if (selected.size() ==0) {
-            allIgnored.setEnabled(false);
-
-        } else {
-            allIgnored.setEnabled(true);
-
-        }
-    }
-
-
-    public void valueChanged(ListSelectionEvent e) {
-        setButtons();
-    }
-
-    public Vector<String> getSelected() {
-        return selected;
-    }
-
-    public Vector<String> getIgnored() {
-        return ignored;
-    }
+  public Vector<String> getIgnored() {
+    return ignored;
+  }
 
 }

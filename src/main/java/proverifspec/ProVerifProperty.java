@@ -36,25 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifProperty
- * Creation: 29/05/2017
+ * Class ProVerifProperty Creation: 29/05/2017
+ * 
  * @version 1.0 29/05/2017
  * @author Florian LUGOU
  */
 public class ProVerifProperty implements ProVerifDeclaration {
-    protected String prop;
+  protected String prop;
 
-    public ProVerifProperty (String _prop) {
-        this.prop = _prop;
-    }
+  public ProVerifProperty(String _prop) {
+    this.prop = _prop;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateProperty (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateProperty(this, _alinea);
+  }
 }

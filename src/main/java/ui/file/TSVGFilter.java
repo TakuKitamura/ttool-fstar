@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.file;
 
 import myutil.FileUtils;
@@ -46,34 +43,33 @@ import myutil.FileUtils;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-
 /**
- * Class TSVGFilter
- * Creation : 29/08/2012
+ * Class TSVGFilter Creation : 29/08/2012
+ * 
  * @author Ludovic APVRILLE
  */
 public class TSVGFilter extends FileFilter {
 
-//Accept all directories and  xml files
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
+  // Accept all directories and xml files
+  public boolean accept(File f) {
+    if (f.isDirectory()) {
+      return true;
+    }
 
-        String extension = FileUtils.getExtension(f);
-        if (extension != null) {
-            return extension.equals(FileUtils.svg);
-        }
+    String extension = FileUtils.getExtension(f);
+    if (extension != null) {
+      return extension.equals(FileUtils.svg);
+    }
 
-        return false;
-    }
-    
-    public String getDescription() {
-        return "SVG images";
-    }
-    
-    public static String getExtension() {
-	 return  FileUtils.svg;  
-    }
+    return false;
+  }
+
+  public String getDescription() {
+    return "SVG images";
+  }
+
+  public static String getExtension() {
+    return FileUtils.svg;
+  }
 
 }

@@ -36,22 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
- * Class TMLExecI
- * Creation: 23/11/2005
+ * Class TMLExecI Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
 public class TMLExecI extends TMLActivityElementWithAction {
 
-    public TMLExecI(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);
-    }
+  public TMLExecI(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
 }

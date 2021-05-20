@@ -36,67 +36,59 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class ADActionState
- * Creation: 10/12/2003
+ * Class ADActionState Creation: 10/12/2003
+ * 
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADActionStateWithGate extends ADActionState {
-    protected Gate g;
-    protected String limitOnGate = "";
-    
-    public ADActionStateWithGate(Gate _g) {
-        g = _g;
-        setActionValue("");
-    }
-	
-	public ADActionStateWithGate() {
-        setActionValue("");
-    }
-	
-	public void setGate(Gate _g) {
-		g = _g;
-	}
-    
-    public Gate getGate() {
-        return g;
-    }
-    
-    /*public String toString() {
-                return "Action state (" + g.getName() + actionValue + ")";
-    }*/
-    
-    public void setLimitOnGate(String limit) {
-        limitOnGate = limit;
-    }
-    
-    public String getLimitOnGate() {
-        return limitOnGate;
-    }
-    
-    public String toString() {
-        if (g.getLotosName() == null) {
-            return "Action state (" + g.getName() + limitOnGate + actionValue + ")";
-        }
-        return "Action state (" + g.getLotosName() + limitOnGate + actionValue + ")";
-    }
+  protected Gate g;
+  protected String limitOnGate = "";
 
-    public ADComponent makeSame() {
-      ADActionStateWithGate adag = new ADActionStateWithGate(g);
-      adag.setLimitOnGate(getLimitOnGate());
-      adag.setActionValue(getActionValue());
-      return adag;
+  public ADActionStateWithGate(Gate _g) {
+    g = _g;
+    setActionValue("");
+  }
+
+  public ADActionStateWithGate() {
+    setActionValue("");
+  }
+
+  public void setGate(Gate _g) {
+    g = _g;
+  }
+
+  public Gate getGate() {
+    return g;
+  }
+
+  /*
+   * public String toString() { return "Action state (" + g.getName() +
+   * actionValue + ")"; }
+   */
+
+  public void setLimitOnGate(String limit) {
+    limitOnGate = limit;
+  }
+
+  public String getLimitOnGate() {
+    return limitOnGate;
+  }
+
+  public String toString() {
+    if (g.getLotosName() == null) {
+      return "Action state (" + g.getName() + limitOnGate + actionValue + ")";
     }
+    return "Action state (" + g.getLotosName() + limitOnGate + actionValue + ")";
+  }
+
+  public ADComponent makeSame() {
+    ADActionStateWithGate adag = new ADActionStateWithGate(g);
+    adag.setLimitOnGate(getLimitOnGate());
+    adag.setActionValue(getActionValue());
+    return adag;
+  }
 }
-

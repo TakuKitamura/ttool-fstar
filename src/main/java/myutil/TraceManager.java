@@ -36,72 +36,67 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 /**
- * Class TraceManager
- * Creation: 07/04/2010
+ * Class TraceManager Creation: 07/04/2010
+ * 
  * @version 1.1 07/04/2010
  * @author Ludovic APVRILLE
  */
 public class TraceManager {
-	
-    public final static int TO_CONSOLE = 0;
-    public final static int TO_FILE = 1;
-    public final static int TO_BUFFER = 2;
-    public final static int TO_DEVNULL = 3;
 
-    public static int userPolicy = TO_CONSOLE;
-    public static int devPolicy = TO_CONSOLE;
-    public static int errPolicy = TO_CONSOLE;
+  public final static int TO_CONSOLE = 0;
+  public final static int TO_FILE = 1;
+  public final static int TO_BUFFER = 2;
+  public final static int TO_DEVNULL = 3;
 
-    public static void addDev(String res) {
-        switch(devPolicy) {
-            case TO_CONSOLE:
-                System.out.println(res);
-                break;
-            case TO_DEVNULL:
-                break;
-            default:
-        }
+  public static int userPolicy = TO_CONSOLE;
+  public static int devPolicy = TO_CONSOLE;
+  public static int errPolicy = TO_CONSOLE;
+
+  public static void addDev(String res) {
+    switch (devPolicy) {
+      case TO_CONSOLE:
+        System.out.println(res);
+        break;
+      case TO_DEVNULL:
+        break;
+      default:
+    }
+  }
+
+  public static void addUser(String _s) {
+    switch (userPolicy) {
+      case TO_CONSOLE:
+        System.out.println(_s);
+        break;
+      default:
+        System.out.println(_s);
+    }
+  }
+
+  public static void addError(final String message, final Throwable error) {
+    if (message != null) {
+      switch (errPolicy) {
+        case TO_CONSOLE:
+          System.err.println(message);
+          break;
+        default:
+          System.err.println(message);
+      }
     }
 
-    public static void addUser(String _s) {
-        switch(userPolicy) {
-            case TO_CONSOLE:
-                System.out.println(_s);
-                break;
-            default:
-                System.out.println(_s);
-        }
+    if (error != null) {
+      error.printStackTrace();
     }
+  }
 
-    public static void addError( 	final String message,
-    								final Throwable error ) {
-    	if ( message != null ) {
-	        switch( errPolicy ) {
-		        case TO_CONSOLE:
-		            System.err.println( message );
-		            break;
-		        default:
-		            System.err.println( message );
-		    }
-    	}
-    	
-    	if ( error != null ) {
-    		error.printStackTrace();
-    	}
-    }
+  public static void addError(final String message) {
+    addError(message, null);
+  }
 
-    public static void addError( final String message ) {
-    	addError( message, null );
-    }
-
-
-    public static void addError( final Throwable error ) {
-    	addError( null, error );
-    }
+  public static void addError(final Throwable error) {
+    addError(null, error);
+  }
 } // Class TraceManager

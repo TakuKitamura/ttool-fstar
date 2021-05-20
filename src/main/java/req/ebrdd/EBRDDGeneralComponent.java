@@ -36,35 +36,31 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
 import tmltranslator.DIPLOElement;
 
 /**
- * Class ERCGeneralComponent
- * Creation: 28/09/2009
+ * Class ERCGeneralComponent Creation: 28/09/2009
+ * 
  * @version 1.0 28/09/2009
  * @author Ludovic APVRILLE
  */
-public abstract class EBRDDGeneralComponent extends DIPLOElement  {
-	protected Object referenceObject;
-    protected String name;
-    
-    public EBRDDGeneralComponent(String _name, Object _referenceObject) {
-        name = _name;
-        referenceObject = _referenceObject;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public Object getReferenceObject() {
-        return referenceObject;
-    }
-    
+public abstract class EBRDDGeneralComponent extends DIPLOElement {
+  protected Object referenceObject;
+  protected String name;
+
+  public EBRDDGeneralComponent(String _name, Object _referenceObject) {
+    name = _name;
+    referenceObject = _referenceObject;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Object getReferenceObject() {
+    return referenceObject;
+  }
 
 }

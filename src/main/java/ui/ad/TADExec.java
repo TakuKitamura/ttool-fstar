@@ -60,114 +60,100 @@ import ui.util.IconManager;
  * @author dblouin
  *
  */
-public abstract class TADExec extends TADComponentWithSubcomponents implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public abstract class TADExec extends TADComponentWithSubcomponents
+    implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
 
-   // private int ilength;// = 10;
-  //  private int lineLength1;// = 2;
-	
-	protected int stateOfError = 0; // Not yet checked
-    
-    public TADExec(	int _x,
-    				int _y,
-    				int _minX,
-    				int _maxX,
-    				int _minY,
-    				int _maxY,
-    				boolean _pos,
-    				TGComponent _father,
-    				TDiagramPanel _tdp,
-    				final String value,
-    				final String name )  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-       
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = createConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = createConnectingPoint(this, 0, + lineLength, false, true, 0.5, 1.0);
+  // private int ilength;// = 10;
+  // private int lineLength1;// = 2;
 
-        initScaling( 10, 30 );
-//        ilength = 10;
-//        lineLength1 = 2;
-        textX = width + scale( 5 );
-        textY = height/2 + scale( 5 );
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        TGScalableComponent tgc = createInternalComponent();
-        tgc.setValue( value );
-        tgc.setName( name );
-        tgcomponent[0] = tgc;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        myImageIcon = IconManager.imgic214;
+  protected int stateOfError = 0; // Not yet checked
+
+  public TADExec(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp, final String value, final String name) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[2];
+    connectingPoint[0] = createConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = createConnectingPoint(this, 0, +lineLength, false, true, 0.5, 1.0);
+
+    initScaling(10, 30);
+    // ilength = 10;
+    // lineLength1 = 2;
+    textX = width + scale(5);
+    textY = height / 2 + scale(5);
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+
+    TGScalableComponent tgc = createInternalComponent();
+    tgc.setValue(value);
+    tgc.setName(name);
+    tgcomponent[0] = tgc;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    myImageIcon = IconManager.imgic214;
+  }
+
+  protected TGScalableComponent createInternalComponent() {
+    return new TGCOneLineText(x + textX, y + textY, -75, 30, textY - 10, textY + 10, true, this, tdp);
+  }
+
+  protected abstract TGConnectingPointAD createConnectingPoint(final CDElement _container, final int _x, final int _y,
+      final boolean _in, final boolean _out, final double _w, final double _h);
+
+  @Override
+  protected void internalDrawing(Graphics g) {
+    if (stateOfError > 0) {
+      Color c = g.getColor();
+      switch (stateOfError) {
+        case ErrorHighlight.OK:
+          g.setColor(ColorManager.EXEC);
+          break;
+        default:
+          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+      }
+
+      g.fillRect(x, y, width, height);
+      g.setColor(c);
     }
 
-    protected TGScalableComponent createInternalComponent() {
-    	return new TGCOneLineText( x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, tdp );
-    }
-    
-    protected abstract TGConnectingPointAD createConnectingPoint(	final CDElement _container,
-    																final int _x,
-    																final int _y,
-    																final boolean _in,
-    																final boolean _out,
-    																final double _w, 
-    																final double _h );
-    
-    @Override
-    protected void internalDrawing(Graphics g) {
-		if (stateOfError > 0)  {
-			Color c = g.getColor();
-			switch(stateOfError) {
-				case ErrorHighlight.OK:
-					g.setColor(ColorManager.EXEC);
-					break;
-				default:
-					g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
+    g.drawRect(x, y, width, height);
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
 
-			g.fillRect(x, y, width, height);
-			g.setColor(c);
-		}
-		
-		g.drawRect(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        
-        drawInternalSymbol( g, scale( 2 ), scale( 10 ) );
+    drawInternalSymbol(g, scale(2), scale(10));
+  }
+
+  protected abstract void drawInternalSymbol(Graphics g, int symbolWidth, int symbolHeight);
+
+  @Override
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
     }
-    
-    protected abstract void drawInternalSymbol( Graphics g,
-    											int symbolWidth,
-    											int symbolHeight );
-    
-    @Override
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, x1, y1)) < distanceSelected) {
-			return this;	
-		}
-        
-        return null;
+
+    if ((int) (Line2D.ptSegDistSq(x + width / 2, y - lineLength, x + width / 2, y + lineLength + height, x1,
+        y1)) < distanceSelected) {
+      return this;
     }
-    
-    public String getDelayValue() {
-        return tgcomponent[0].getValue();
-    }
-    
-    public void setDelayValue(String value) {
-        tgcomponent[0].setValue(value);
-    }
-	
-    @Override
-	public void setStateAction(int _stateAction) {
-		stateOfError = _stateAction;
-	}
+
+    return null;
+  }
+
+  public String getDelayValue() {
+    return tgcomponent[0].getValue();
+  }
+
+  public void setDelayValue(String value) {
+    tgcomponent[0].setValue(value);
+  }
+
+  @Override
+  public void setStateAction(int _stateAction) {
+    stateOfError = _stateAction;
+  }
 }

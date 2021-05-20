@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.atd;
 
 import attacktrees.AttackTree;
@@ -54,67 +53,61 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-
 /**
- * Testing the clone function on architecture
- * author : Ludovic Apvrille
- * update test : 08/02/2021
+ * Testing the clone function on architecture author : Ludovic Apvrille update
+ * test : 08/02/2021
  */
 public class AttackTreeAnalysisTest extends AbstractUITest {
 
-    private static final String PATH_TO_SOURCE_MODEL = "/ui/atd/input/testAttackTreeAnalysis.xml";
+  private static final String PATH_TO_SOURCE_MODEL = "/ui/atd/input/testAttackTreeAnalysis.xml";
 
-    private static final double RESULTS[] = {0.8, 0.6, 0.8, 0.2};
+  private static final double RESULTS[] = { 0.8, 0.6, 0.8, 0.2 };
 
+  public AttackTreeAnalysisTest() {
+    super();
 
-    public AttackTreeAnalysisTest() {
-        super();
+    // Open expected model
+    System.out.println("File: " + RESOURCES_DIR);
+    mainGUI.openProjectFromFile(new File(RESOURCES_DIR));
 
-        // Open expected model
-        System.out.println("File: " + RESOURCES_DIR);
-        mainGUI.openProjectFromFile(new File(RESOURCES_DIR));
+  }
 
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    RESOURCES_DIR = getBaseResourcesDir() + PATH_TO_SOURCE_MODEL;
+  }
 
-    }
+  @Test
+  public void testAttackTreeAnalysis() {
+    int cpt = 0;
 
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-        RESOURCES_DIR = getBaseResourcesDir() + PATH_TO_SOURCE_MODEL;
-    }
+    assertFalse(mainGUI == null);
+    assertFalse(mainGUI.getTabs() == null);
 
-
-
-    @Test
-    public void testAttackTreeAnalysis() {
-        int cpt = 0;
-
-        assertFalse(mainGUI == null);
-        assertFalse(mainGUI.getTabs() == null);
-
-        for (TURTLEPanel _tab : mainGUI.getTabs()) {
-            if (_tab instanceof AttackTreePanel) {
-                for (TDiagramPanel tdp : _tab.getPanels()) {
-                    if (tdp instanceof AttackTreeDiagramPanel) {
-                        mainGUI.selectTab(tdp);
-                        System.out.println("Tab:" + tdp.getName());
-                        analyse(cpt);
-                        cpt ++;
-                    }
-                }
-                break;
-            }
+    for (TURTLEPanel _tab : mainGUI.getTabs()) {
+      if (_tab instanceof AttackTreePanel) {
+        for (TDiagramPanel tdp : _tab.getPanels()) {
+          if (tdp instanceof AttackTreeDiagramPanel) {
+            mainGUI.selectTab(tdp);
+            System.out.println("Tab:" + tdp.getName());
+            analyse(cpt);
+            cpt++;
+          }
         }
+        break;
+      }
     }
+  }
 
-    public void analyse(int cpt) {
-        assertTrue(mainGUI.checkModelingSyntax(true));
-        AttackTree at  = mainGUI.runAttackTreeAnalysis();
-        assertFalse(at == null);
-        ArrayList<Double> res = at.analyse();
-        assertTrue(res.size() == 1);
-        Double d0 = res.get(0);
-        System.out.println("d0=" + d0 + " results:" + RESULTS[cpt]);
-        assertTrue(d0.doubleValue() == RESULTS[cpt]);
-    }
+  public void analyse(int cpt) {
+    assertTrue(mainGUI.checkModelingSyntax(true));
+    AttackTree at = mainGUI.runAttackTreeAnalysis();
+    assertFalse(at == null);
+    ArrayList<Double> res = at.analyse();
+    assertTrue(res.size() == 1);
+    Double d0 = res.get(0);
+    System.out.println("d0=" + d0 + " results:" + RESULTS[cpt]);
+    assertTrue(d0.doubleValue() == RESULTS[cpt]);
+  }
 
 }

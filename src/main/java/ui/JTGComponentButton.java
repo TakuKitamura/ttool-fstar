@@ -36,40 +36,31 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import javax.swing.*;
 
-
 /**
- * Class JTGComponentButton
- * Creation: 29/12/2003
+ * Class JTGComponentButton Creation: 29/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
 public class JTGComponentButton extends JToggleButton {
-	protected int componentType;
-	protected int componentId;
+  protected int componentType;
+  protected int componentId;
 
-	public JTGComponentButton (int _type, int _id, String _text, Icon _icon) {
-		super(_text, _icon);
-		componentType = _type;
-		componentId = _id;
-	}
+  public JTGComponentButton(int _type, int _id, String _text, Icon _icon) {
+    super(_text, _icon);
+    componentType = _type;
+    componentId = _id;
+  }
 
-	public int getType() {
-		return componentType;
-	}
+  public int getType() {
+    return componentType;
+  }
 
-	public int getId() {
-		return componentId;
-	}
+  public int getId() {
+    return componentId;
+  }
 
-} // Class 
-
-
-    
-
-
+} // Class

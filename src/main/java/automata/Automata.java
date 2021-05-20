@@ -36,101 +36,96 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package automata;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-
 /**
- * Class Automata
- * Creation: 23/03/2006
+ * Class Automata Creation: 23/03/2006
+ * 
  * @version 1.0 23/03/2006
  * @author Ludovic APVRILLE
  */
 public class Automata {
-    private State initState;
-    private LinkedList<State> states;
-    private String name;
- 
-    public Automata() {
-         states = new LinkedList<State>();
-         initState = new State("0");
-         states.add(initState);
+  private State initState;
+  private LinkedList<State> states;
+  private String name;
+
+  public Automata() {
+    states = new LinkedList<State>();
+    initState = new State("0");
+    states.add(initState);
+  }
+
+  public Automata(String init) {
+    states = new LinkedList<State>();
+    initState = new State(init);
+    states.add(initState);
+  }
+
+  public void setName(String _name) {
+    name = _name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public State getInitState() {
+    return initState;
+  }
+
+  public State getState(int index) {
+    return states.get(index);
+  }
+
+  public void addState(State s) {
+    states.add(s);
+  }
+
+  public State newState() {
+    State s = new State("" + nbOfStates());
+    addState(s);
+    return s;
+  }
+
+  public int nbOfStates() {
+    return states.size();
+  }
+
+  public LinkedList<State> getStates() {
+    return states;
+  }
+
+  public int nbOfTransitions() {
+    int nb = 0;
+    ListIterator<State> iterator = states.listIterator();
+    while (iterator.hasNext()) {
+      nb += iterator.next().nbOfTransitions();
     }
-    
-    public Automata(String init) {
-         states = new LinkedList<State>();
-         initState = new State(init);
-         states.add(initState);
+    return nb;
+  }
+
+  public String toAUT() {
+    StringBuffer sb = new StringBuffer();
+    sb.append("des(" + initState.getName() + "," + nbOfTransitions() + "," + nbOfStates() + ")\n");
+    ListIterator<State> iterator = states.listIterator();
+    while (iterator.hasNext()) {
+      sb.append(iterator.next().toAUT());
     }
-    
-    public void setName(String _name) {
-        name = _name;
+    return new String(sb);
+  }
+
+  public void renameStates() {
+    State s;
+    int cpt = 0;
+    ListIterator<State> iterator = states.listIterator();
+    while (iterator.hasNext()) {
+      s = iterator.next();
+      s.setName("" + cpt);
+      cpt++;
     }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public State getInitState() {
-        return initState;
-    }
-    
-    public State getState(int index) {
-        return states.get(index);
-    }
-    
-    public void addState(State s) {
-        states.add(s);
-    }
-    
-    public State newState() {
-        State s = new State("" + nbOfStates());
-        addState(s);
-        return s;
-    }
-    
-    public int nbOfStates() {
-        return states.size();
-    }
-    
-    public LinkedList<State> getStates() {
-        return states;
-    }
-    
-    public int nbOfTransitions() {
-        int nb = 0;
-        ListIterator<State> iterator = states.listIterator();
-        while(iterator.hasNext()) {
-            nb+= iterator.next().nbOfTransitions();
-        }
-        return nb;
-    }
-    
-    public String toAUT() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("des(" + initState.getName() + "," + nbOfTransitions() + "," + nbOfStates() + ")\n");
-        ListIterator<State> iterator = states.listIterator();
-        while(iterator.hasNext()) {
-            sb.append(iterator.next().toAUT());
-        }
-        return new String(sb);
-    }
-    
-    public void renameStates() {
-        State s;
-        int cpt = 0;
-        ListIterator<State> iterator = states.listIterator();
-        while(iterator.hasNext()) {
-            s = iterator.next();
-            s.setName(""+cpt);
-            cpt ++;
-        }
-    }
-    
- 
+  }
+
 }

@@ -36,24 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class UndeclaredDiagramException
- * Creation: 22/05/2014
+ * Class UndeclaredDiagramException Creation: 22/05/2014
+ * 
  * @version 1.0 22/05/2014
  * @author Andrea ENRICI
  */
 public class UndeclaredDiagramException extends Exception {
-	
-	public UndeclaredDiagramException()	{
-		super( "TMLCP COMPILER ERROR: undeclared diagram" );
-	}
 
-	public UndeclaredDiagramException( String message )	{
-		super( message );	
-	}
+  public UndeclaredDiagramException() {
+    super("TMLCP COMPILER ERROR: undeclared diagram");
+  }
+
+  public UndeclaredDiagramException(String message) {
+    super(message);
+  }
 }

@@ -36,34 +36,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.LinkedList;
 
 /**
- * Class FIFOTClass
- * Creation: 09/03/2006
+ * Class FIFOTClass Creation: 09/03/2006
+ * 
  * @version 1.0 09/03/2006
  * @author Ludovic APVRILLE
  */
-public interface FIFOTClass  {
-    int getNbPara();
+public interface FIFOTClass {
+  int getNbPara();
 
-    /**
-     * Returns the first write gate
-     * @return the first write gate
-     */
-    Gate getGateWrite();
+  /**
+   * Returns the first write gate
+   * 
+   * @return the first write gate
+   */
+  Gate getGateWrite();
 
-    /**
-     * Returns the first read gate
-     * @return the first read gate
-     */
-    Gate getGateRead();
-    LinkedList<Gate> getGatesWrite();
-    LinkedList<Gate> getGatesRead();
-    
+  /**
+   * Returns the first read gate
+   * 
+   * @return the first read gate
+   */
+  Gate getGateRead();
+
+  LinkedList<Gate> getGatesWrite();
+
+  LinkedList<Gate> getGatesRead();
+
 }

@@ -43,31 +43,25 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointTOSClasses
- * Connecting points of classes of TURTLE-OS designs
- * Creation: 03/10/2006
+ * Class TGConnectingPointTOSClasses Connecting points of classes of TURTLE-OS
+ * designs Creation: 03/10/2006
+ * 
  * @version 1.0 03/10/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTOSClasses extends  TGConnectingPointWidthHeight{
+public class TGConnectingPointTOSClasses extends TGConnectingPointWidthHeight {
 
-	public TGConnectingPointTOSClasses(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
+  public TGConnectingPointTOSClasses(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.TOS_CONNECTOR_ASSOCIATION) {
-			return true;	
-		} else if (type == TGComponentManager.TOS_CONNECTOR_ASSOCIATION_NAVIGATION) {
-			return true;
-		}
-		return false;
-	}  
+  public boolean isCompatibleWith(int type) {
+    if (type == TGComponentManager.TOS_CONNECTOR_ASSOCIATION) {
+      return true;
+    } else if (type == TGComponentManager.TOS_CONNECTOR_ASSOCIATION_NAVIGATION) {
+      return true;
+    }
+    return false;
+  }
 } // Class
-
-
-
-
-    
-
-

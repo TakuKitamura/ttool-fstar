@@ -49,50 +49,50 @@ import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 import ddtranslatorSoclib.AvatarAmsCluster;
 
 public class Gpio2VciAddress {
-    private final static String INCLUDE_HEADER = "#include \"gpio2vci_address.h\"\n";
+  private final static String INCLUDE_HEADER = "#include \"gpio2vci_address.h\"\n";
 
-    private final static String GET_ADDRESS_DEC = "int get_address(char name[]) {\n";
+  private final static String GET_ADDRESS_DEC = "int get_address(char name[]) {\n";
 
-    private final static String CR = "\n";
-    private final static String CR2 = "\n\n";
+  private final static String CR = "\n";
+  private final static String CR2 = "\n\n";
 
-    private String name;
-    private String code;
+  private String name;
+  private String code;
 
-    public Gpio2VciAddress(String _name) {
-        name = _name;
+  public Gpio2VciAddress(String _name) {
+    name = _name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void buildAddressCode() {
+    code = INCLUDE_HEADER + CR + GET_ADDRESS_DEC;
+    for (AvatarAmsCluster amsCluster : TopCellGenerator.avatardd.getAllAmsCluster()) {
+      if (amsCluster.getNo_amsCluster() == 0) {
+        code += "if(strcmp(name, \"" + amsCluster.getAmsClusterName() + "\") == 0) {\n";
+        code += "return 0xc" + Integer.toHexString(amsCluster.getNo_amsCluster()) + "200000;\n";
+        code += "} ";
+      } else {
+        code += "else if(strcmp(name, \"" + amsCluster.getAmsClusterName() + "\") == 0) {\n";
+        code += "return 0xc" + Integer.toHexString(amsCluster.getNo_amsCluster()) + "200000;\n";
+        code += "} ";
+      }
     }
+    if (TopCellGenerator.avatardd.getNbAmsCluster() > 0) {
+      code += "else {\n";
+      code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
+      code += "return -1;\n";
+      code += "}\n}";
+    } else {
+      code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
+      code += "return -1;\n";
+      code += "}";
+    }
+  }
 
-    public String getName() {
-        return name;
-    }
-    
-    public void buildAddressCode() {
-        code = INCLUDE_HEADER + CR + GET_ADDRESS_DEC;
-        for(AvatarAmsCluster amsCluster : TopCellGenerator.avatardd.getAllAmsCluster ()) {
-            if(amsCluster.getNo_amsCluster() == 0) {
-                code += "if(strcmp(name, \""+amsCluster.getAmsClusterName()+"\") == 0) {\n";
-                code += "return 0xc"+Integer.toHexString(amsCluster.getNo_amsCluster())+"200000;\n";
-                code += "} ";
-            } else {
-                code += "else if(strcmp(name, \""+amsCluster.getAmsClusterName()+"\") == 0) {\n";
-                code += "return 0xc"+Integer.toHexString(amsCluster.getNo_amsCluster())+"200000;\n";
-                code += "} ";
-            }
-        }
-        if (TopCellGenerator.avatardd.getNbAmsCluster() > 0 ) {
-            code += "else {\n";
-            code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
-            code += "return -1;\n";
-            code += "}\n}";
-        } else {
-            code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
-            code += "return -1;\n";
-            code += "}";
-        }
-    }
-
-    public String getAddressCode() {
-        return code;
-    }
+  public String getAddressCode() {
+    return code;
+  }
 }

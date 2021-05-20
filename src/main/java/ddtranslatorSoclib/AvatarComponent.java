@@ -38,22 +38,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
- /* * @version 1.0 07/07/2015
-   * @author  Julien Henon, Daniela Genius */
+/* * @version 1.0 07/07/2015
+  * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
 
 public abstract class AvatarComponent {
-    public String name;
+  public String name;
 
-    public String getName(){
-	return name;
-    }
-    public void setName(String _name){
-	name=_name;
-    }
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String _name) {
+    name = _name;
+  }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -49,180 +46,178 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
-   * Class JDialogAvatarProperty
-   * Dialog for managing property attributes
-   * Creation: 26/04/2010
-   * @version 1.0 26/04/2010
-   * @author Ludovic APVRILLE
+ * Class JDialogAvatarProperty Dialog for managing property attributes Creation:
+ * 26/04/2010
+ * 
+ * @version 1.0 26/04/2010
+ * @author Ludovic APVRILLE
  */
-public class JDialogAvatarProperty extends JDialogBase implements ActionListener  {
-    private JPanel panel1;
+public class JDialogAvatarProperty extends JDialogBase implements ActionListener {
+  private JPanel panel1;
 
-    private String name;
-    private int kind;
-    boolean notSelected;
-    private boolean hasBeenCancelled = true;
-    private JTextField myName;
-    private JRadioButton safety, notSafety, reachability, liveness, notReachability, notLiveness;
+  private String name;
+  private int kind;
+  boolean notSelected;
+  private boolean hasBeenCancelled = true;
+  private JTextField myName;
+  private JRadioButton safety, notSafety, reachability, liveness, notReachability, notLiveness;
 
-    //private String id1, id2;
+  // private String id1, id2;
 
-    /* Creates new form  */
-    public JDialogAvatarProperty(Frame f, String _name, int _kind, boolean _notSelected) {
+  /* Creates new form */
+  public JDialogAvatarProperty(Frame f, String _name, int _kind, boolean _notSelected) {
 
-        super(f, "Setting property attributes", true);
+    super(f, "Setting property attributes", true);
 
-        name = _name;
-        kind = _kind;
-        notSelected = _notSelected;
+    name = _name;
+    kind = _kind;
+    notSelected = _notSelected;
 
-        initComponents();
-        myInitComponents();
-        pack();
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+
+    panel1.setBorder(new javax.swing.border.TitledBorder("Property"));
+
+    // panel1.setPreferredSize(new Dimension(200, 150));
+
+    // first line panel1
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
+    panel1.add(new JLabel(" "), c1);
+
+    // second line panel1
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    myName = new JTextField(name, 30);
+    myName.setEditable(true);
+    panel1.add(myName, c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    reachability = new JRadioButton("Reachable");
+    reachability.setSelected((kind == 1) && !notSelected);
+    panel1.add(reachability, c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    notReachability = new JRadioButton("Not reachable");
+    notReachability.setSelected((kind == 1) && notSelected);
+    panel1.add(notReachability, c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    liveness = new JRadioButton("Liveness");
+    liveness.setSelected((kind == 0) && !notSelected);
+    panel1.add(liveness, c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    notLiveness = new JRadioButton("Not Liveness");
+    notLiveness.setSelected((kind == 0) && notSelected);
+    panel1.add(notLiveness, c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    safety = new JRadioButton("Safety");
+    safety.setSelected((kind == 2) && !notSelected);
+    panel1.add(safety, c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    notSafety = new JRadioButton("Not Safety");
+    notSafety.setSelected((kind == 2) && notSelected);
+    panel1.add(notSafety, c1);
+
+    ButtonGroup bg = new ButtonGroup();
+    bg.add(reachability);
+    bg.add(liveness);
+    bg.add(notReachability);
+    bg.add(notLiveness);
+    bg.add(safety);
+    bg.add(notSafety);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+
+    c.add(panel1, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
 
+  public boolean hasBeenCancelled() {
+    return hasBeenCancelled;
+  }
 
-    private void myInitComponents() {
-    }
+  public void closeDialog() {
+    hasBeenCancelled = false;
+    dispose();
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
+  public boolean isReachabilitySelected() {
+    return reachability.isSelected();
+  }
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+  public boolean isNotReachabilitySelected() {
+    return notReachability.isSelected();
+  }
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public boolean isLivenessSelected() {
+    return liveness.isSelected();
+  }
 
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
+  public boolean isNotLivenessSelected() {
+    return notLiveness.isSelected();
+  }
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Property"));
+  public boolean isSafetySelected() {
+    return safety.isSelected();
+  }
 
-        //panel1.setPreferredSize(new Dimension(200, 150));
+  public boolean isNotSafetySelected() {
+    return notSafety.isSelected();
+  }
 
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        panel1.add(new JLabel(" "), c1);
+  public String getName() {
+    return myName.getText();
+  }
 
-        // second line panel1
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        myName = new JTextField(name, 30);
-        myName.setEditable(true);
-        panel1.add(myName, c1);
-
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        reachability = new JRadioButton("Reachable");
-        reachability.setSelected((kind == 1) && !notSelected);
-        panel1.add(reachability, c1);
-
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        notReachability = new JRadioButton("Not reachable");
-        notReachability.setSelected((kind == 1) && notSelected);
-        panel1.add(notReachability, c1);
-
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        liveness = new JRadioButton("Liveness");
-        liveness.setSelected((kind == 0) && !notSelected);
-        panel1.add(liveness, c1);
-
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        notLiveness = new JRadioButton("Not Liveness");
-        notLiveness.setSelected((kind == 0) && notSelected);
-        panel1.add(notLiveness, c1);
-
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        safety = new JRadioButton("Safety");
-        safety.setSelected((kind == 2) && !notSelected);
-        panel1.add(safety, c1);
-
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        notSafety = new JRadioButton("Not Safety");
-        notSafety.setSelected((kind == 2) && notSelected);
-        panel1.add(notSafety, c1);
-
-        ButtonGroup bg = new ButtonGroup();
-        bg.add(reachability);
-        bg.add(liveness);
-        bg.add(notReachability);
-        bg.add(notLiveness);
-        bg.add(safety);
-        bg.add(notSafety);
-
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c0.fill = GridBagConstraints.BOTH;
-
-        c.add(panel1, c0);
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-
-    public void actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-
-    public boolean hasBeenCancelled() {
-        return hasBeenCancelled;
-    }
-
-
-    public void closeDialog() {
-    	hasBeenCancelled = false;
-        dispose();
-    }
-
-    public boolean isReachabilitySelected() {
-        return reachability.isSelected();
-    }
-
-    public boolean isNotReachabilitySelected() {
-        return notReachability.isSelected();
-    }
-
-    public boolean isLivenessSelected() {
-        return liveness.isSelected();
-    }
-
-    public boolean isNotLivenessSelected() {
-        return notLiveness.isSelected();
-    }
-
-    public boolean isSafetySelected() {
-        return safety.isSelected();
-    }
-
-    public boolean isNotSafetySelected() {
-        return notSafety.isSelected();
-    }
-
-    public String getName() {
-        return myName.getText();
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
+  public void cancelDialog() {
+    dispose();
+  }
 }

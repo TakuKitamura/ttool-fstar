@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 import java.util.ArrayList;
@@ -46,122 +43,115 @@ import java.util.BitSet;
 import java.util.UUID;
 
 /**
- * Class CSVObject
- * Creation: 16/04/2021
- * Version 2.0 16/04/2021
+ * Class CSVObject Creation: 16/04/2021 Version 2.0 16/04/2021
+ * 
  * @author Ludovic APVRILLE
  */
-public class CSVObject  {
+public class CSVObject {
   public ArrayList<String[]> lines;
 
-    public CSVObject () {
-    }
-   
-   public CSVObject (String _toParse) {
-	   parse(_toParse);
-   }
-   
-   public boolean parse(String _toParse) {
-       if (_toParse == null) {
-           return false;
-       }
+  public CSVObject() {
+  }
 
-       _toParse = _toParse.trim();
-       if (_toParse.length() == 0) {
-           return false;
-       }
+  public CSVObject(String _toParse) {
+    parse(_toParse);
+  }
 
-       String[] allLines = _toParse.split(System.getProperty("line.separator"));
-
-       if (lines == null) {
-           lines = new ArrayList<>(allLines.length);
-       } else {
-           lines.clear();
-       }
-
-
-
-       int lineLength = 0;
-       for(int i=0; i<allLines.length; i++) {
-           String [] elt = allLines[i].split(",");
-           if (i == 0) {
-               lineLength = elt.length;
-           } else {
-               if (elt.length != lineLength) {
-                   lines = null;
-                   return false;
-               }
-           }
-           lines.add(elt);
-       }
-
-       // Remove spaces
-       removeSpaces();
-
-       return true;
-
-   }
-
-   private void removeSpaces() {
-        for(String[] ss: lines) {
-            for(int i=0; i<ss.length; i++) {
-                ss[i] = ss[i].trim();
-            }
-        }
-   }
-
-
-   public int getNbOfLines() {
-        if (lines == null) {
-            return -1;
-        }
-        return lines.size();
-   }
-
-    public int getNbOfEltsPerLine() {
-        if (lines == null) {
-            return -1;
-        }
-
-        if (lines.size() == 0) {
-            return -1;
-        }
-
-        return lines.get(0).length;
+  public boolean parse(String _toParse) {
+    if (_toParse == null) {
+      return false;
     }
 
+    _toParse = _toParse.trim();
+    if (_toParse.length() == 0) {
+      return false;
+    }
 
+    String[] allLines = _toParse.split(System.getProperty("line.separator"));
 
-   public String get(int line, int col) {
-       if (lines == null) {
-           return null;
-       }
+    if (lines == null) {
+      lines = new ArrayList<>(allLines.length);
+    } else {
+      lines.clear();
+    }
 
-       if (line >= lines.size()) {
-           return null;
-       }
+    int lineLength = 0;
+    for (int i = 0; i < allLines.length; i++) {
+      String[] elt = allLines[i].split(",");
+      if (i == 0) {
+        lineLength = elt.length;
+      } else {
+        if (elt.length != lineLength) {
+          lines = null;
+          return false;
+        }
+      }
+      lines.add(elt);
+    }
 
-       String[] selectedLine = lines.get(line);
-       if (col >= selectedLine.length) {
-           return null;
-       }
+    // Remove spaces
+    removeSpaces();
 
-       return selectedLine[col];
-   }
+    return true;
 
-   public int getInt(int line, int col) throws NumberFormatException {
-        String val = get(line, col);
-        return Integer.decode(val);
-   }
+  }
 
-   public UUID getUUID(int line, int col) throws IllegalArgumentException {
-       String val = get(line, col);
-       if (val == null) {
-           return null;
-       }
-       UUID uuid = UUID.fromString(val);
-       return uuid;
-   }
-   
-  
+  private void removeSpaces() {
+    for (String[] ss : lines) {
+      for (int i = 0; i < ss.length; i++) {
+        ss[i] = ss[i].trim();
+      }
+    }
+  }
+
+  public int getNbOfLines() {
+    if (lines == null) {
+      return -1;
+    }
+    return lines.size();
+  }
+
+  public int getNbOfEltsPerLine() {
+    if (lines == null) {
+      return -1;
+    }
+
+    if (lines.size() == 0) {
+      return -1;
+    }
+
+    return lines.get(0).length;
+  }
+
+  public String get(int line, int col) {
+    if (lines == null) {
+      return null;
+    }
+
+    if (line >= lines.size()) {
+      return null;
+    }
+
+    String[] selectedLine = lines.get(line);
+    if (col >= selectedLine.length) {
+      return null;
+    }
+
+    return selectedLine[col];
+  }
+
+  public int getInt(int line, int col) throws NumberFormatException {
+    String val = get(line, col);
+    return Integer.decode(val);
+  }
+
+  public UUID getUUID(int line, int col) throws IllegalArgumentException {
+    String val = get(line, col);
+    if (val == null) {
+      return null;
+    }
+    UUID uuid = UUID.fromString(val);
+    return uuid;
+  }
+
 }

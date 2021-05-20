@@ -36,17 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifDeclaration
- * Creation: 13/09/2015
+ * Class ProVerifDeclaration Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public interface ProVerifDeclaration {
-    void translate(ProVerifSyntaxer _syntaxer, int _alinea);
+  void translate(ProVerifSyntaxer _syntaxer, int _alinea);
 }

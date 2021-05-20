@@ -36,17 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
- * Class ErrorAccumulator
- * Creation: 02/08/2016
+ * Class ErrorAccumulator Creation: 02/08/2016
+ * 
  * @author Florian LUGOU
  */
 public abstract class ErrorAccumulator {
-    public abstract void addWarning (String msg);
-    public abstract void addError (String msg);
+  public abstract void addWarning(String msg);
+
+  public abstract void addError(String msg);
 }

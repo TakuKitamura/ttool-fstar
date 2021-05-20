@@ -45,173 +45,178 @@ import java.util.Vector;
 
 //import java.awt.geom.*;
 
-
 /**
-   * Class TGConnectorWithCommentConnectingPoints
-   * Generic (abstract class) Connector With Comment
-   * Creation: 25/05/2011
-   * @version 1.0 25/05/2011
-   * @author Ludovic APVRILLE
+ * Class TGConnectorWithCommentConnectingPoints Generic (abstract class)
+ * Connector With Comment Creation: 25/05/2011
+ * 
+ * @version 1.0 25/05/2011
+ * @author Ludovic APVRILLE
  */
 public abstract class TGConnectorWithCommentConnectionPoints extends TGConnector {
-    protected TGConnectingPointGroup tg;
-    /**
-     * Fills the points array witht the current points, 
-     * P1 = initial point, P2 = destination point 
-     * */
-    public TGConnectorWithCommentConnectionPoints(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+  protected TGConnectingPointGroup tg;
 
-        // We create a connecting point per segment i.e :
+  /**
+   * Fills the points array witht the current points, P1 = initial point, P2 =
+   * destination point
+   */
+  public TGConnectorWithCommentConnectionPoints(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+      Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-        nbConnectingPoint = getNbInternalPoints() + 1;
-        TGCPointOfConnector [] points = new TGCPointOfConnector[nbConnectingPoint];
-        getTGCPointOfConnectors(points);
-        //Connecting points have cd relatives to 2 component
-        connectingPoint = new TGConnectingPointTwoFathers[nbConnectingPoint];
-        if (nbConnectingPoint == 1)
-            connectingPoint[0] = new TGConnectingPointCommentConnector(p1, p2, 0, 0, true, true);
-        else 
-        {
-            connectingPoint[0] = new TGConnectingPointCommentConnector(p1, points[0], 0, 0, true, true);
-            for (int i = 1; i < nbInternalTGComponent; i++)
-                connectingPoint[i] = new TGConnectingPointCommentConnector(points[i-1], points[i], 0, 0, true, true);
-            connectingPoint[nbInternalTGComponent] = new TGConnectingPointCommentConnector(points[nbInternalTGComponent-1], p2, 0, 0, true, true);
-        }
+    // We create a connecting point per segment i.e :
 
-        tg = new TGConnectingPointGroup(true);
-        addGroup(tg);
-
-        //myImageIcon = IconManager.imgic102;
-    }
-    /**
-     * setP1: initial point 
-     * @param p TGConnectingPoint
-     * */
-    @Override
-    public void setP1(TGConnectingPoint p) {
-        p1 = p;
-        if (nbConnectingPoint > 0) {
-            connectingPoint[0].setFather(p);
-        }
-    }
-    /**
-     * setP2: destination point
-     * @param TGConnectingPoint p
-     */
-    @Override
-    public void setP2(TGConnectingPoint p) {
-        p2 = p;
-        if (nbConnectingPoint > 0) {
-            ((TGConnectingPointCommentConnector)(connectingPoint[getNbInternalPoints()])).setFather2(p);
-        }
-    }
-    /**
-     *  @param tgc TGCPointOfConnector
-     */
-    @Override
-    public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
-        TraceManager.addDev("Internal Points:" + nbInternalTGComponent);
-
-        int i, index = 0;
-        TGConnectingPointTwoFathers cp1, cp2;
-
-        boolean found = false;
-
-        // We remove the one after tgc, and we keep the previous one
-        // I.e. we remove the point which father1 is tgc
-
-        // Looking for the connecting point that has been removed
-        for (i = 0; i < nbConnectingPoint; i++) {
-            if (connectingPoint[i].getFather() == tgc) {
-                index = i;
-                found = true;
-                break;
-            }
-        }
-
-        TraceManager.addDev("Index of points: " + index + " found=" + found);
-
-        // Remove potential connector connected to the cp to be removed
-        cp1 = (TGConnectingPointTwoFathers)(connectingPoint[index]);
-        TGConnector tgcon = tdp.getConnectorConnectedTo(cp1);
-
-        if (tgcon == null) {
-            TraceManager.addDev("No connector found");
-        } else {
-            TraceManager.addDev("Connector found");
-        }
-        //tdp.removeOneConnector(cp1);
-
-        // Changing father of points.
-        if (index > 0) {
-            cp2 = (TGConnectingPointTwoFathers)(connectingPoint[index-1]);
-            cp2.setFather2(cp1.getFather2());
-            if (tgcon != null) {
-                if (tgcon.getTGConnectingPointP1() == cp1) {
-                    tgcon.setP1(cp2);
-                } else {
-                    tgcon.setP2(cp2);
-                }
-            }
-        }
-
-        // Modifying array of connecting points
-        for (i = index; i<nbConnectingPoint-1; i++) {
-            connectingPoint[i] = connectingPoint[i+1];
-        }
-        nbConnectingPoint --;
-
-    }
-    @Override
-    public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
-        int ind = index + indexCon;
-        CDElement tg1, tg2;
-        nbConnectingPoint = getNbInternalPoints() + 1;
-        TGConnectingPoint[] tmpPt = new TGConnectingPointTwoFathers[nbConnectingPoint];
-        TGCPointOfConnector [] points = new TGCPointOfConnector[nbConnectingPoint];
-        getTGCPointOfConnectors(points);
-
-        for(int i=0; i<nbConnectingPoint; i++) {
-            if (i < ind) {
-                tmpPt[i] = connectingPoint[i];
-                if ((i == ind - 1) && (indexCon == 1)){
-                    ((TGConnectingPointTwoFathers)(tmpPt[i])).setFather2(points[i]);
-                }
-            } else if (i == ind) {
-                if (i ==0) {
-                    tg1 = p1;
-                } else {
-                    tg1 = points[i-1];
-                }
-                if (i <nbConnectingPoint - 1) {
-                    tg2 = points[i];
-                } else {
-                    tg2 = p2;
-                }
-                tmpPt[i] = new TGConnectingPointCommentConnector(tg1, tg2, 0, 0, true, true);
-                tmpPt[i].setGroup(tg);
-            } else {
-                tmpPt[i] = connectingPoint[i-1];
-                if ((i == ind + 1) && (indexCon == 0)){
-                    tmpPt[i].setFather(points[i-1]);
-                }
-            }
-        }
-
-        connectingPoint = tmpPt;
-
-        return;
+    nbConnectingPoint = getNbInternalPoints() + 1;
+    TGCPointOfConnector[] points = new TGCPointOfConnector[nbConnectingPoint];
+    getTGCPointOfConnectors(points);
+    // Connecting points have cd relatives to 2 component
+    connectingPoint = new TGConnectingPointTwoFathers[nbConnectingPoint];
+    if (nbConnectingPoint == 1)
+      connectingPoint[0] = new TGConnectingPointCommentConnector(p1, p2, 0, 0, true, true);
+    else {
+      connectingPoint[0] = new TGConnectingPointCommentConnector(p1, points[0], 0, 0, true, true);
+      for (int i = 1; i < nbInternalTGComponent; i++)
+        connectingPoint[i] = new TGConnectingPointCommentConnector(points[i - 1], points[i], 0, 0, true, true);
+      connectingPoint[nbInternalTGComponent] = new TGConnectingPointCommentConnector(points[nbInternalTGComponent - 1],
+          p2, 0, 0, true, true);
     }
 
-    /*public int getType() {
-      return TGComponentManager.CONNECTOR_ASSOCIATION;
+    tg = new TGConnectingPointGroup(true);
+    addGroup(tg);
+
+    // myImageIcon = IconManager.imgic102;
+  }
+
+  /**
+   * setP1: initial point
+   * 
+   * @param p TGConnectingPoint
+   */
+  @Override
+  public void setP1(TGConnectingPoint p) {
+    p1 = p;
+    if (nbConnectingPoint > 0) {
+      connectingPoint[0].setFather(p);
+    }
+  }
+
+  /**
+   * setP2: destination point
+   * 
+   * @param TGConnectingPoint p
+   */
+  @Override
+  public void setP2(TGConnectingPoint p) {
+    p2 = p;
+    if (nbConnectingPoint > 0) {
+      ((TGConnectingPointCommentConnector) (connectingPoint[getNbInternalPoints()])).setFather2(p);
+    }
+  }
+
+  /**
+   * @param tgc TGCPointOfConnector
+   */
+  @Override
+  public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
+    TraceManager.addDev("Internal Points:" + nbInternalTGComponent);
+
+    int i, index = 0;
+    TGConnectingPointTwoFathers cp1, cp2;
+
+    boolean found = false;
+
+    // We remove the one after tgc, and we keep the previous one
+    // I.e. we remove the point which father1 is tgc
+
+    // Looking for the connecting point that has been removed
+    for (i = 0; i < nbConnectingPoint; i++) {
+      if (connectingPoint[i].getFather() == tgc) {
+        index = i;
+        found = true;
+        break;
       }
+    }
 
-      public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_ATTRIBUTE;
-      }*/
+    TraceManager.addDev("Index of points: " + index + " found=" + found);
 
+    // Remove potential connector connected to the cp to be removed
+    cp1 = (TGConnectingPointTwoFathers) (connectingPoint[index]);
+    TGConnector tgcon = tdp.getConnectorConnectedTo(cp1);
 
+    if (tgcon == null) {
+      TraceManager.addDev("No connector found");
+    } else {
+      TraceManager.addDev("Connector found");
+    }
+    // tdp.removeOneConnector(cp1);
+
+    // Changing father of points.
+    if (index > 0) {
+      cp2 = (TGConnectingPointTwoFathers) (connectingPoint[index - 1]);
+      cp2.setFather2(cp1.getFather2());
+      if (tgcon != null) {
+        if (tgcon.getTGConnectingPointP1() == cp1) {
+          tgcon.setP1(cp2);
+        } else {
+          tgcon.setP2(cp2);
+        }
+      }
+    }
+
+    // Modifying array of connecting points
+    for (i = index; i < nbConnectingPoint - 1; i++) {
+      connectingPoint[i] = connectingPoint[i + 1];
+    }
+    nbConnectingPoint--;
+
+  }
+
+  @Override
+  public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
+    int ind = index + indexCon;
+    CDElement tg1, tg2;
+    nbConnectingPoint = getNbInternalPoints() + 1;
+    TGConnectingPoint[] tmpPt = new TGConnectingPointTwoFathers[nbConnectingPoint];
+    TGCPointOfConnector[] points = new TGCPointOfConnector[nbConnectingPoint];
+    getTGCPointOfConnectors(points);
+
+    for (int i = 0; i < nbConnectingPoint; i++) {
+      if (i < ind) {
+        tmpPt[i] = connectingPoint[i];
+        if ((i == ind - 1) && (indexCon == 1)) {
+          ((TGConnectingPointTwoFathers) (tmpPt[i])).setFather2(points[i]);
+        }
+      } else if (i == ind) {
+        if (i == 0) {
+          tg1 = p1;
+        } else {
+          tg1 = points[i - 1];
+        }
+        if (i < nbConnectingPoint - 1) {
+          tg2 = points[i];
+        } else {
+          tg2 = p2;
+        }
+        tmpPt[i] = new TGConnectingPointCommentConnector(tg1, tg2, 0, 0, true, true);
+        tmpPt[i].setGroup(tg);
+      } else {
+        tmpPt[i] = connectingPoint[i - 1];
+        if ((i == ind + 1) && (indexCon == 0)) {
+          tmpPt[i].setFather(points[i - 1]);
+        }
+      }
+    }
+
+    connectingPoint = tmpPt;
+
+    return;
+  }
+
+  /*
+   * public int getType() { return TGComponentManager.CONNECTOR_ASSOCIATION; }
+   * 
+   * public int getDefaultConnector() { return
+   * TGComponentManager.CONNECTOR_ATTRIBUTE; }
+   */
 
 }

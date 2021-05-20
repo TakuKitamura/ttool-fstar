@@ -36,25 +36,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
 package launcher;
 
 public enum RequestCode {
 
-	GET_SESSION_ID, // 00
-	FREE_SESSION_ID, // 0
-	PROCESS_CREATE_START, // 1
-	PROCESS_KILL, // 6
-	PROCESS_KILL_ALL, // 5
-	PROCESS_PIPE, // 2
-	PROCESS_CREATE, // 3
-	PROCESS_START, // 4
-	PROCESS_CHECK_RETURN_CODE, // new
-	PROCESS_GET_RETURN_CODE, // new
-	FILE_PUT, // 7
-	FILE_GET, // 8
-	FILE_APPEND, // new
-	FILE_SAVE, // new
-	FILE_DELETE,  // 9
+  GET_SESSION_ID, // 00
+  FREE_SESSION_ID, // 0
+  PROCESS_CREATE_START, // 1
+  PROCESS_KILL, // 6
+  PROCESS_KILL_ALL, // 5
+  PROCESS_PIPE, // 2
+  PROCESS_CREATE, // 3
+  PROCESS_START, // 4
+  PROCESS_CHECK_RETURN_CODE, // new
+  PROCESS_GET_RETURN_CODE, // new
+  FILE_PUT, // 7
+  FILE_GET, // 8
+  FILE_APPEND, // new
+  FILE_SAVE, // new
+  FILE_DELETE, // 9
 }

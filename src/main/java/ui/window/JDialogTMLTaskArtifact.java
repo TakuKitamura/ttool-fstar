@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import myutil.GraphicLib;
@@ -57,247 +54,241 @@ import java.util.Vector;
 //import javax.swing.event.*;
 
 /**
- * Class JDialogTMLTaskArtifact
- * Dialog for managing artifacts on hw nodes
+ * Class JDialogTMLTaskArtifact Dialog for managing artifacts on hw nodes
  * Creation: 19/09/2007
+ * 
  * @version 1.0 19/09/2007
  * @author Ludovic APVRILLE
  */
 public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListener {
 
-	private boolean regularClose;
-	private boolean emptyList = false;
-    
-	private JPanel panel2, panel3;
- // private Frame frame;
-	private TMLArchiArtifact artifact;
-	private String operation = "VOID";
-	private ArchUnitMEC MECType;
-    
-  //protected JTextField taskName;
+  private boolean regularClose;
+  private boolean emptyList = false;
+
+  private JPanel panel2, panel3;
+  // private Frame frame;
+  private TMLArchiArtifact artifact;
+  private String operation = "VOID";
+  private ArchUnitMEC MECType;
+
+  // protected JTextField taskName;
   private JComboBox<String> referenceTaskName, priority, operationsListCB;
-	
-	private JTabbedPane tabbedPane;
-    
-    /* Creates new form  */
-  public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, ArchUnitMEC _MECType) {
-        super(_frame, _title, true);
-        //frame = _frame;
-        artifact = _artifact;
-		operation = _operation;
-		MECType = _MECType;
-        
-        initComponents();
-        pack();
+
+  private JTabbedPane tabbedPane;
+
+  /* Creates new form */
+  public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation,
+      ArchUnitMEC _MECType) {
+    super(_frame, _title, true);
+    // frame = _frame;
+    artifact = _artifact;
+    operation = _operation;
+    MECType = _MECType;
+
+    initComponents();
+    pack();
+  }
+
+  private void initComponents() {
+
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    // GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagLayout gridbag3 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    // GridBagConstraints c2 = new GridBagConstraints();
+    GridBagConstraints c3 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+    panel2.setPreferredSize(new Dimension(350, 250));
+
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("Task:"), c1);
+    // c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames(
+        (TMLArchiDiagramPanel) (artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
+    int index = 0;
+    if (list.size() == 0) {
+      list.add("No more task to map");
+      emptyList = true;
+    } else {
+      index = indexOf(list, artifact.getValue());
     }
+    referenceTaskName = new JComboBox<String>(list);
+    referenceTaskName.setSelectedIndex(index);
+    // referenceTaskName.setEditable(true);
+    // referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(referenceTaskName, c1);
 
-    private void initComponents() {
-
-    	Container c = getContentPane();
-    	GridBagLayout gridbag0 = new GridBagLayout();
-    //	GridBagLayout gridbag1 = new GridBagLayout();
-    	GridBagLayout gridbag2 = new GridBagLayout();
-    	GridBagLayout gridbag3 = new GridBagLayout();
-    	GridBagConstraints c0 = new GridBagConstraints();
-    	GridBagConstraints c1 = new GridBagConstraints();
-    	//GridBagConstraints c2 = new GridBagConstraints();
-    	GridBagConstraints c3 = new GridBagConstraints();
-
-    	setFont(new Font("Helvetica", Font.PLAIN, 14));
-    	c.setLayout(gridbag0);
-
-    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-
-    	panel2 = new JPanel();
-    	panel2.setLayout(gridbag2);
-    	panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-    	panel2.setPreferredSize(new Dimension(350, 250));
-
-    	// Issue #41 Ordering of tabbed panes 
-    	tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-
-		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	c1.gridheight = 1;
-    	c1.weighty = 1.0;
-    	c1.weightx = 1.0;
-    	c1.fill = GridBagConstraints.HORIZONTAL;
-    	panel2.add(new JLabel("Task:"), c1);
-    	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	Vector<String> list = artifact.getTDiagramPanel().getMGUI().
-				getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(
-						artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
-    	int index = 0;
-    	if (list.size() == 0) {
-    		list.add("No more task to map");
-    		emptyList = true;
-    	} else {
-    		index = indexOf(list, artifact.getValue());
-    	}
-    	referenceTaskName = new JComboBox<String>(list);
-    	referenceTaskName.setSelectedIndex(index);
-    	//referenceTaskName.setEditable(true);
-    	//referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-    	panel2.add(referenceTaskName, c1);
-
-    	list = new Vector<String>();
-    	for(int i=0; i<11; i++) {
-    		list.add(""+i);
-    	}
-    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	panel2.add(new JLabel("Priority: (0: highest priority)"), c1);
-    	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	priority = new JComboBox<String>(list);
-    	priority.setSelectedIndex(artifact.getPriority());
-    	panel2.add(priority, c1);
-
-    	panel3 = new JPanel();
-    	panel3.setLayout(gridbag3);
-    	panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-    	panel3.setPreferredSize(new Dimension(350, 250));
-    	c3.gridwidth = 1;
-    	c3.gridheight = 1;
-    	c3.weighty = 1.0;
-    	c3.weightx = 1.0;
-    	c3.fill = GridBagConstraints.HORIZONTAL;
-    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	panel3.add(new JLabel("<html>Task Extension<br>Construct:</html>"), c3);
-    	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	Vector<String> operationsListS = new Vector<>();
-    	int indexOp = 0;
-    	//TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
-    	if( MECType instanceof FepMEC )	{
-    		operationsListS = FepMEC.OPERATIONS_LIST;
-    		indexOp = operationsListS.indexOf( operation );
-    	}
-    	else if( MECType instanceof MapperMEC )	{
-    		operationsListS.add( MapperMEC.OPERATION );
-    		indexOp = operationsListS.indexOf( operation );
-    	}
-    	else if( MECType instanceof InterleaverMEC )	{
-    		operationsListS.add( InterleaverMEC.OPERATION );
-    		indexOp = operationsListS.indexOf( operation );
-    	}
-    	else if( MECType instanceof AdaifMEC )	{
-    		operationsListS.add( AdaifMEC.OPERATION );
-    		indexOp = operationsListS.indexOf( operation );
-    	}
-    	else if( MECType instanceof CpuMEC )	{
-    		String tmp = (String)(referenceTaskName.getSelectedItem());
-    		String tmpS [] = tmp.split("::");
-    		//TraceManager.addDev("TMP=" + tmp);
-    		if (tmpS.length > 1) {
-                operationsListS.add(tmpS[1]);
-            } else {
-                operationsListS.add(tmpS[0]);
-            }
-    		indexOp = operationsListS.indexOf( operation );
-    	}
-    	else	{
-    		operationsListS.add("No MEC selected");
-    	}
-    	operationsListCB = new JComboBox<String>( operationsListS );
-    	if( operation.equals( "VOID" ) || operation.equals( "" ) )	{
-    		operationsListCB.setSelectedIndex( 0 );
-    	}
-    	else	{
-    		if( indexOp == -1 )	{ indexOp = 0; }
-    		operationsListCB.setSelectedIndex( indexOp  );
-    	}
-    	panel3.add( operationsListCB, c3 );
-
-
-    	// main panel;
-    	c0.gridheight = 10;
-    	c0.weighty = 1.0;
-    	c0.weightx = 1.0;
-    	c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	c0.fill = GridBagConstraints.BOTH;
-    	tabbedPane.addTab( "Simulation", panel2 );
-    	tabbedPane.addTab( "Code generation", panel3 );
-    	tabbedPane.setSelectedIndex(0);
-    	/*c.add(panel2, c0);
-	    c.add(panel3, c0);*/
-    	c.add( tabbedPane, c0 );
-
-    	c0.gridwidth = 1;
-    	c0.gridheight = 1;
-    	c0.fill = GridBagConstraints.HORIZONTAL;
-    	
-    	initButtons(c0, c, this);
+    list = new Vector<String>();
+    for (int i = 0; i < 11; i++) {
+      list.add("" + i);
     }
-    
-    @Override
-    public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-        
-        
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-    
-    public void closeDialog() {
-        regularClose = true;
-		operation = operationsListCB.getItemAt( operationsListCB.getSelectedIndex() );
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-    public boolean isRegularClose() {
-        return regularClose;
-    }
-	
-	public String getReferenceTaskName() {
-		if (emptyList) {
-			return null;
-		}
-		String tmp = (String)(referenceTaskName.getSelectedItem());
-		int index = tmp.indexOf("::");
-		if (index == -1) {
-			return tmp;
-		}
-        return tmp.substring(0, index);
-    }
-    
-    public String getTaskName() {
-        String tmp = (String)(referenceTaskName.getSelectedItem());
-		int index = tmp.indexOf("::");
-		if (index == -1) {
-			return tmp;
-		}
-        return tmp.substring(index+2, tmp.length());
-    }
-	
-	public int getPriority() {
-		return priority.getSelectedIndex();
-	}
-	
-	public String getOperation() {
-		return operation;
-	}
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    panel2.add(new JLabel("Priority: (0: highest priority)"), c1);
+    // c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+    priority = new JComboBox<String>(list);
+    priority.setSelectedIndex(artifact.getPriority());
+    panel2.add(priority, c1);
 
-	public int indexOf(Vector<String> _list, String name) {
-		int i = 0;
-		for(String s : _list) {
-			if (s.equals(name)) {
-				return i;
-			}
-			i++;
-		}
-		return 0;
-	}
-    
+    panel3 = new JPanel();
+    panel3.setLayout(gridbag3);
+    panel3.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+    panel3.setPreferredSize(new Dimension(350, 250));
+    c3.gridwidth = 1;
+    c3.gridheight = 1;
+    c3.weighty = 1.0;
+    c3.weightx = 1.0;
+    c3.fill = GridBagConstraints.HORIZONTAL;
+    c3.gridwidth = GridBagConstraints.REMAINDER; // end row
+    panel3.add(new JLabel("<html>Task Extension<br>Construct:</html>"), c3);
+    c3.gridwidth = GridBagConstraints.REMAINDER; // end row
+    Vector<String> operationsListS = new Vector<>();
+    int indexOp = 0;
+    // TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
+    if (MECType instanceof FepMEC) {
+      operationsListS = FepMEC.OPERATIONS_LIST;
+      indexOp = operationsListS.indexOf(operation);
+    } else if (MECType instanceof MapperMEC) {
+      operationsListS.add(MapperMEC.OPERATION);
+      indexOp = operationsListS.indexOf(operation);
+    } else if (MECType instanceof InterleaverMEC) {
+      operationsListS.add(InterleaverMEC.OPERATION);
+      indexOp = operationsListS.indexOf(operation);
+    } else if (MECType instanceof AdaifMEC) {
+      operationsListS.add(AdaifMEC.OPERATION);
+      indexOp = operationsListS.indexOf(operation);
+    } else if (MECType instanceof CpuMEC) {
+      String tmp = (String) (referenceTaskName.getSelectedItem());
+      String tmpS[] = tmp.split("::");
+      // TraceManager.addDev("TMP=" + tmp);
+      if (tmpS.length > 1) {
+        operationsListS.add(tmpS[1]);
+      } else {
+        operationsListS.add(tmpS[0]);
+      }
+      indexOp = operationsListS.indexOf(operation);
+    } else {
+      operationsListS.add("No MEC selected");
+    }
+    operationsListCB = new JComboBox<String>(operationsListS);
+    if (operation.equals("VOID") || operation.equals("")) {
+      operationsListCB.setSelectedIndex(0);
+    } else {
+      if (indexOp == -1) {
+        indexOp = 0;
+      }
+      operationsListCB.setSelectedIndex(indexOp);
+    }
+    panel3.add(operationsListCB, c3);
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+    tabbedPane.addTab("Simulation", panel2);
+    tabbedPane.addTab("Code generation", panel3);
+    tabbedPane.setSelectedIndex(0);
+    /*
+     * c.add(panel2, c0); c.add(panel3, c0);
+     */
+    c.add(tabbedPane, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
+    }
+  }
+
+  public void closeDialog() {
+    regularClose = true;
+    operation = operationsListCB.getItemAt(operationsListCB.getSelectedIndex());
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean isRegularClose() {
+    return regularClose;
+  }
+
+  public String getReferenceTaskName() {
+    if (emptyList) {
+      return null;
+    }
+    String tmp = (String) (referenceTaskName.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
+    }
+    return tmp.substring(0, index);
+  }
+
+  public String getTaskName() {
+    String tmp = (String) (referenceTaskName.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
+    }
+    return tmp.substring(index + 2, tmp.length());
+  }
+
+  public int getPriority() {
+    return priority.getSelectedIndex();
+  }
+
+  public String getOperation() {
+    return operation;
+  }
+
+  public int indexOf(Vector<String> _list, String name) {
+    int i = 0;
+    for (String s : _list) {
+      if (s.equals(name)) {
+        return i;
+      }
+      i++;
+    }
+    return 0;
+  }
+
 }

@@ -36,33 +36,26 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class RunningInfo
- * running information for actions. Used for simulation purpose
- * Creation: 30/03/2010
+ * Class RunningInfo running information for actions. Used for simulation
+ * purpose Creation: 30/03/2010
+ * 
  * @version 1.0 30/03/2010
  * @author Ludovic APVRILLE
  */
 public class RunningInfo {
-    
-    
-    public int id;
-	public int nextCommand;
-	public String progression;
-	public String startTime;
-	public String finishTime;
-	public String transStartTime;
-	public String transFinishTime;
-	public String state;
-    
-    public RunningInfo() {
-    }
+
+  public int id;
+  public int nextCommand;
+  public String progression;
+  public String startTime;
+  public String finishTime;
+  public String transStartTime;
+  public String transFinishTime;
+  public String state;
+
+  public RunningInfo() {
+  }
 }

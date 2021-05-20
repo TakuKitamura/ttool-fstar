@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 import myutil.GraphicLib;
@@ -56,212 +53,210 @@ import java.awt.*;
 //import java.util.*;
 
 /**
- * Class TMLChannelProperties
- * Internal component that represents a list of channel properties
- * Creation: 28/10/2005
+ * Class TMLChannelProperties Internal component that represents a list of
+ * channel properties Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
 public class TMLChannelProperties extends TGCWithoutInternalComponent {
-    
-    public static final int BRBW = 0;
-    public static final int BRNBW = 1;
-    public static final int NBRNBW = 2;
-    
-    protected String channelName;
-    protected int type;
-    protected int size;
-    protected int maxElt;
 
-    protected int minWidth = 10;
-    protected int minHeight = 15;
-    protected int h;
+  public static final int BRBW = 0;
+  public static final int BRNBW = 1;
+  public static final int NBRNBW = 2;
 
+  protected String channelName;
+  protected int type;
+  protected int size;
+  protected int maxElt;
 
-    public TMLChannelProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  protected int minWidth = 10;
+  protected int minHeight = 15;
+  protected int h;
 
-        moveable = true;
-        editable = true;
-        removable = false;
+  public TMLChannelProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        type = 0;
-        size = 4;
-        maxElt = 8;
-        channelName = "channel";
-        makeValue();
-        
-        myImageIcon = IconManager.imgic302;
-    }
-    
-    
-    public void internalDrawing(Graphics g) {
-        if (((TMLTaskDiagramPanel)(tdp)).areChannelsVisible()) {
-            ColorManager.setColor(g, getState(), 0);
-            //
-            h = g.getFontMetrics().getHeight();
-            drawSingleString(g,value, x, y + h);
-            
-            if (!tdp.isScaled()) {
-                width = g.getFontMetrics().stringWidth(value);
-                width = Math.max(minWidth, width);
-                height  = h;
-            }
-        }
-    }
- 
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getMycurrentMinY() {
-        return Math.min(y, y - h + 2);
-    }
-    
-    public int getMycurrentMaxY() {
-        return Math.min(y, y - h + 2 + height);
-    }
-    
-    
-    
-    public void makeValue() {
-      if (type == BRBW) {
-        value = "{" + getChannelName() + ", " + getChannelSize() + ", " + getChannelMax() + ", " + getStringChannelType() + "}";
-      } else {
-        value = "{" + getChannelName() + ", " + getChannelSize() + ", " + getStringChannelType() + "}";
+    moveable = true;
+    editable = true;
+    removable = false;
+
+    type = 0;
+    size = 4;
+    maxElt = 8;
+    channelName = "channel";
+    makeValue();
+
+    myImageIcon = IconManager.imgic302;
+  }
+
+  public void internalDrawing(Graphics g) {
+    if (((TMLTaskDiagramPanel) (tdp)).areChannelsVisible()) {
+      ColorManager.setColor(g, getState(), 0);
+      //
+      h = g.getFontMetrics().getHeight();
+      drawSingleString(g, value, x, y + h);
+
+      if (!tdp.isScaled()) {
+        width = g.getFontMetrics().stringWidth(value);
+        width = Math.max(minWidth, width);
+        height = h;
       }
     }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        
-        String oldValue = value;
-      //  String oldName = channelName;
-//        int oldType = type;
-        int oldSize = size;
-  //      int oldMax = maxElt;
-        JDialogChannel jda = new JDialogChannel(channelName, size, type, maxElt, frame, "Setting channel's properties");
-        jda.setSize(350, 300);
-        GraphicLib.centerOnParent(jda, 350, 300);
-        jda.setVisible( true ); // blocked until dialog has been closed
-        
-        if (jda.hasNewData()) {
-            try {
-                size = Integer.decode(jda.getSizeText()).intValue();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "Invalid size", "Value error", JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
-            try {
-                maxElt = Integer.decode(jda.getMaxText()).intValue();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "Invalid max size", "Value error", JOptionPane.INFORMATION_MESSAGE);
-                size = oldSize;
-                return false;
-            }
-            channelName = jda.getChannelName();
-            type = jda.getMyType();
-        }
-        
-        makeValue();
+  }
 
-        return !oldValue.equals(value);
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
 
+  public int getMycurrentMinY() {
+    return Math.min(y, y - h + 2);
+  }
+
+  public int getMycurrentMaxY() {
+    return Math.min(y, y - h + 2 + height);
+  }
+
+  public void makeValue() {
+    if (type == BRBW) {
+      value = "{" + getChannelName() + ", " + getChannelSize() + ", " + getChannelMax() + ", " + getStringChannelType()
+          + "}";
+    } else {
+      value = "{" + getChannelName() + ", " + getChannelSize() + ", " + getStringChannelType() + "}";
     }
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Prop type=\"");
-        sb.append(getChannelType());
-        sb.append("\" name=\"");
-        sb.append(getChannelName());
-        sb.append("\" size=\"");
-        sb.append(getChannelSize());
-        sb.append("\" maxElt=\"");
-        sb.append(getChannelMax());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+
+    String oldValue = value;
+    // String oldName = channelName;
+    // int oldType = type;
+    int oldSize = size;
+    // int oldMax = maxElt;
+    JDialogChannel jda = new JDialogChannel(channelName, size, type, maxElt, frame, "Setting channel's properties");
+    jda.setSize(350, 300);
+    GraphicLib.centerOnParent(jda, 350, 300);
+    jda.setVisible(true); // blocked until dialog has been closed
+
+    if (jda.hasNewData()) {
+      try {
+        size = Integer.decode(jda.getSizeText()).intValue();
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(frame, "Invalid size", "Value error", JOptionPane.INFORMATION_MESSAGE);
+        return false;
+      }
+      try {
+        maxElt = Integer.decode(jda.getMaxText()).intValue();
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(frame, "Invalid max size", "Value error", JOptionPane.INFORMATION_MESSAGE);
+        size = oldSize;
+        return false;
+      }
+      channelName = jda.getChannelName();
+      type = jda.getMyType();
     }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+
+    makeValue();
+
+    return !oldValue.equals(value);
+
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Prop type=\"");
+    sb.append(getChannelType());
+    sb.append("\" name=\"");
+    sb.append(getChannelName());
+    sb.append("\" size=\"");
+    sb.append(getChannelSize());
+    sb.append("\" maxElt=\"");
+    sb.append(getChannelMax());
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+
+      //
+      //
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        try {
-            
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
             //
-            //
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Prop")) {
+                type = Integer.decode(elt.getAttribute("type")).intValue();
+                size = Integer.decode(elt.getAttribute("size")).intValue();
                 //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Prop")) {
-                                type = Integer.decode(elt.getAttribute("type")).intValue();
-                                size = Integer.decode(elt.getAttribute("size")).intValue();
-                                //
-                                if (elt.getAttribute("maxElt").toString().compareTo("") != 0) { // test for compatibility with older versions
-                                   maxElt = Integer.decode(elt.getAttribute("maxElt")).intValue();
-                                }
-                                //
-                                channelName = elt.getAttribute("name");
-                            }
-                        }
-                    }
+                if (elt.getAttribute("maxElt").toString().compareTo("") != 0) { // test for compatibility with older
+                                                                                // versions
+                  maxElt = Integer.decode(elt.getAttribute("maxElt")).intValue();
                 }
+                //
+                channelName = elt.getAttribute("name");
+              }
             }
-            
-        } catch (Exception e) {
-          //
-            throw new MalformedModelingException();
+          }
         }
-        makeValue();
+      }
+
+    } catch (Exception e) {
+      //
+      throw new MalformedModelingException();
     }
-    
-    public int getChannelType() {
-        return type;
+    makeValue();
+  }
+
+  public int getChannelType() {
+    return type;
+  }
+
+  public String getStringChannelType() {
+    return getStringChannelType(getChannelType());
+  }
+
+  public static String getStringChannelType(int ty) {
+    switch (ty) {
+      case BRBW:
+        return "BR-BW";
+      case BRNBW:
+        return "BR-NBW";
+      case NBRNBW:
+        return "NBR-NBW";
+      default:
+        return "unknown type";
     }
-    
-    public String getStringChannelType() {
-        return getStringChannelType(getChannelType());
-    }
-    
-    public static String getStringChannelType(int ty) {
-        switch(ty) {
-            case BRBW:
-                return "BR-BW";
-            case BRNBW:
-                return "BR-NBW";
-            case NBRNBW:
-                return "NBR-NBW";
-            default:
-                return "unknown type";
-        }
-    }
-    
-    public int getChannelSize() {
-        return size;
-    }
-    
-    public int getChannelMax() {
-        return maxElt;
-    }
-    
-    public String getChannelName() {
-        return channelName;
-    }
-    
+  }
+
+  public int getChannelSize() {
+    return size;
+  }
+
+  public int getChannelMax() {
+    return maxElt;
+  }
+
+  public String getChannelName() {
+    return channelName;
+  }
+
 }

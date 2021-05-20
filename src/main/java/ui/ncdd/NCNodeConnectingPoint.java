@@ -43,20 +43,20 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class NCNodeConnectingPoint
- * Definition of connecting points on which connectors of TMLArchi diagrams can be connected
- * Creation: 18/11/2008
+ * Class NCNodeConnectingPoint Definition of connecting points on which
+ * connectors of TMLArchi diagrams can be connected Creation: 18/11/2008
+ * 
  * @version 1.0 18/11/2008
  * @author Ludovic APVRILLE
  */
-public class NCNodeConnectingPoint extends TGConnectingPointWidthHeight{
-    
-    public NCNodeConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_NODE_NC;
-    }
+public class NCNodeConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public NCNodeConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_NODE_NC;
+  }
 }

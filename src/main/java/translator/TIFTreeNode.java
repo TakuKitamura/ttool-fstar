@@ -36,71 +36,60 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class TIFTreeNode
- * Creation: 20/02/2008
+ * Class TIFTreeNode Creation: 20/02/2008
+ * 
  * @version 1.0 20/02/2008
  * @author Ludovic APVRILLE
  */
-public class TIFTreeNode  {
-    
-	public final static int Variable = 0;
-	public final static int NUMERAL = 1;
-	
-	public final static int PLUS = 12;
-	public final static int MINUS = 13;
-	public final static int EQUAL = 13;
-	
-	public final static int MIN = 20;
-	public final static int MAX = 21;
-	public final static int EQUALEQUAL = 22;
-	public final static int gt = 23;
-	public final static int lt = 24;
-	
-	
-	public final static int OPEN_P = 30;
-	public final static int CLOSE_P = 31;
-	public final static int OPEN_B = 32;   
-	public final static int CLOSE_B = 33;
-	
-	
-    private TIFTreeNode son1, son2;
-	private int type;
-	private String value;
-    
-    public TIFTreeNode(int _type) {
-		type = _type;
-    }
-	
-	public void setValue(String _value) {
-		value = _value;
-	}
-	
-	public String getValue() {
-		return value;
-	}
-	
-	public void setSon1(TIFTreeNode son) {
-		son1 = son;
-	}
-	
-	public void setSon2(TIFTreeNode son) {
-		son2 = son;
-	}
-	
-	public boolean isLeaf() {
-		return ((son1 == null) && (son2 == null));
-	}
-    
-   
+public class TIFTreeNode {
+
+  public final static int Variable = 0;
+  public final static int NUMERAL = 1;
+
+  public final static int PLUS = 12;
+  public final static int MINUS = 13;
+  public final static int EQUAL = 13;
+
+  public final static int MIN = 20;
+  public final static int MAX = 21;
+  public final static int EQUALEQUAL = 22;
+  public final static int gt = 23;
+  public final static int lt = 24;
+
+  public final static int OPEN_P = 30;
+  public final static int CLOSE_P = 31;
+  public final static int OPEN_B = 32;
+  public final static int CLOSE_B = 33;
+
+  private TIFTreeNode son1, son2;
+  private int type;
+  private String value;
+
+  public TIFTreeNode(int _type) {
+    type = _type;
+  }
+
+  public void setValue(String _value) {
+    value = _value;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setSon1(TIFTreeNode son) {
+    son1 = son;
+  }
+
+  public void setSon2(TIFTreeNode son) {
+    son2 = son;
+  }
+
+  public boolean isLeaf() {
+    return ((son1 == null) && (son2 == null));
+  }
+
 }

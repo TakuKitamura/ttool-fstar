@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd;
 
 import myutil.GraphicLib;
@@ -48,82 +45,81 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class SDTimeInterval
- * Time interval in a scenario
- * Creation: 23/08/2006
+ * Class SDTimeInterval Time interval in a scenario Creation: 23/08/2006
+ * 
  * @version 1.0 23/08/2006
  * @author Ludovic APVRILLE
  */
 public class SDTimeInterval extends TGCTimeInterval implements SwallowedTGComponent {
-    private int textX, textY;
-    private int incrementY = 3;
-    private int segment = 4;
-    private int wtext = 0;
-    private int htext = 0;
-    
-    public SDTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 10;
-        height = 30;
-        textX = width/2 + 5;
-        textY = height/2 + 5;
-        
-        nbConnectingPoint = 0;
-        addTGConnectingPointsCommentMiddle();
-        
-        nbInternalTGComponent = 0;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        name = "time interval";
-        makeValue();
-        
-        myImageIcon = IconManager.imgic512;
+  private int textX, textY;
+  private int incrementY = 3;
+  private int segment = 4;
+  private int wtext = 0;
+  private int htext = 0;
+
+  public SDTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 10;
+    height = 30;
+    textX = width / 2 + 5;
+    textY = height / 2 + 5;
+
+    nbConnectingPoint = 0;
+    addTGConnectingPointsCommentMiddle();
+
+    nbInternalTGComponent = 0;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    name = "time interval";
+    makeValue();
+
+    myImageIcon = IconManager.imgic512;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x - width / 2, y, width, height);
+    // g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+    // g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+    // w = g.getFontMetrics().stringWidth(value);
+
+    drawSingleString(g, value, x + textX, y + textY);
+
+    if (!tdp.isScaled()) {
+      wtext = g.getFontMetrics().stringWidth(value);
+      htext = g.getFontMetrics().getHeight();
+      //
     }
-    
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x-width/2, y, width, height);
-        //g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        //g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-         //w  = g.getFontMetrics().stringWidth(value);
-        
-        drawSingleString(g, value, x + textX, y + textY);
-        
-        if (!tdp.isScaled()) {
-            wtext = g.getFontMetrics().stringWidth(value);
-            htext = g.getFontMetrics().getHeight();
-            //
-        }
-        
-        int y1 = y + 4;
-        int x1 = x + 2 - width/2;
-        int width1 = width - 4;
-        
-        for (int i=0; i<segment; i++) {
-            g.drawLine(x1, y1, x1+width1, y1+incrementY);
-            y1 += incrementY;
-            g.drawLine(x1+width1, y1, x1, y1+incrementY);
-            y1 += incrementY;
-        }
+
+    int y1 = y + 4;
+    int x1 = x + 2 - width / 2;
+    int width1 = width - 4;
+
+    for (int i = 0; i < segment; i++) {
+      g.drawLine(x1, y1, x1 + width1, y1 + incrementY);
+      y1 += incrementY;
+      g.drawLine(x1 + width1, y1, x1, y1 + incrementY);
+      y1 += incrementY;
     }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
-            return this;
-        }
-        if (GraphicLib.isInRectangle(_x, _y, x +textX, y-htext+textY+2, wtext, htext)) {
-            return this;
-        }
-        return null;
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
+      return this;
     }
-    
-    public int getType() {
-        return TGComponentManager.SD_TIME_INTERVAL;
+    if (GraphicLib.isInRectangle(_x, _y, x + textX, y - htext + textY + 2, wtext, htext)) {
+      return this;
     }
-    
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.SD_TIME_INTERVAL;
+  }
+
 }

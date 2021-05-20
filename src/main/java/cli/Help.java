@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import common.ConfigurationTTool;
@@ -51,72 +50,65 @@ import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Set
- * Creation: 25/10/2018
- * Version 2.0 25/10/2018
+ * Class Set Creation: 25/10/2018 Version 2.0 25/10/2018
  *
  * @author Ludovic APVRILLE
  */
-public class Help extends Command  {
+public class Help extends Command {
 
+  public Help() {
 
-    public Help() {
+  }
 
+  public List<Command> getListOfSubCommands() {
+    return subcommands;
+  }
+
+  public String getCommand() {
+    return "help";
+  }
+
+  public String getShortCommand() {
+    return "h";
+  }
+
+  public String getUsage() {
+    return "help or help <command>";
+  }
+
+  public String getDescription() {
+    return "Displays the general help of the help of a given command";
+  }
+
+  public String getExample() {
+    return "help action";
+  }
+
+  public String executeCommand(String command, Interpreter interpreter) {
+    if (command.trim().length() == 0) {
+      String s = "";
+      for (Command c : Interpreter.commands) {
+        s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
+      }
+      interpreter.print(s);
+      TraceManager.addDev("Info on command");
+      return null;
     }
 
-    public List<Command> getListOfSubCommands() {
-        return subcommands;
+    Command c = interpreter.getSubCommandByName(command);
+
+    if (c == null) {
+      return Interpreter.BAD_COMMAND_NAME;
     }
 
-    public String getCommand() {
-        return "help";
-    }
+    interpreter.print(c.getHelp(1));
 
-    public String getShortCommand() {
-        return "h";
-    }
+    return null;
 
-    public String getUsage() {
-        return "help or help <command>";
-    }
+  }
 
-    public String getDescription() {
-        return "Displays the general help of the help of a given command";
-    }
+  public void fillSubCommands() {
 
-    public String getExample() {
-        return "help action";
-    }
-
-
-    public  String executeCommand(String command, Interpreter interpreter) {
-        if (command.trim().length() == 0) {
-            String s = "";
-            for(Command c: Interpreter.commands) {
-                s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
-            }
-            interpreter.print(s);
-            TraceManager.addDev("Info on command");
-            return null;
-        }
-
-
-        Command c = interpreter.getSubCommandByName(command);
-
-        if (c == null) {
-            return Interpreter.BAD_COMMAND_NAME;
-        }
-
-        interpreter.print(c.getHelp(1));
-
-
-        return null;
-
-    }
-
-    public void fillSubCommands() {
-
-    }
-
+  }
 
 }

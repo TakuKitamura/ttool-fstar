@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
 
 import myutil.GraphicLib;
@@ -49,88 +46,80 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class TCDOperationBox
- * Box for storing the operations of a Tclass
- * To be used in class diagrams
- * Creation: 12/12/2003
+ * Class TCDOperationBox Box for storing the operations of a Tclass To be used
+ * in class diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class TCDOperationBox extends TGCWithoutInternalComponent {
-	public String oldValue;
-	protected int textX = 5;
-	protected int textY = 20;
+  public String oldValue;
+  protected int textX = 5;
+  protected int textY = 20;
 
-	public TCDOperationBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public TCDOperationBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		width = 150; height = 30;
-		minWidth = 150; minHeight = 30; 
-		minDesiredWidth = 150;
-		minDesiredHeight = 30;
+    width = 150;
+    height = 30;
+    minWidth = 150;
+    minHeight = 30;
+    minDesiredWidth = 150;
+    minDesiredHeight = 30;
 
-		nbConnectingPoint = 2;
-		connectingPoint = new TGConnectingPoint[2];
-		connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, 0.5);
-		connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
-                
-                addTGConnectingPointsCommentCorner();
-		
-		moveable = false;
-		editable = true;
-		removable = false;
-	
-		name = "Tclass operations";
-		value = "";
-		
-		myImageIcon = IconManager.imgic122;
-	}
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[2];
+    connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, 0.5);
+    connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
 
-	@Override
-	public void internalDrawing(Graphics g) {
-		g.drawRect(x, y, width, height);
-		g.setColor(ColorManager.OPERATION_BOX);
-		g.fillRect(x+1, y+1, width-1, height-1);
-		ColorManager.setColor(g, getState(), 0);
-		
-        if (value.length() > 0) {
-        	g.drawString(value, x + textX, y + textY);
-        }
-	}
+    addTGConnectingPointsCommentCorner();
 
-	public boolean editOnDoubleClick(JFrame frame) {
-		oldValue = value;
-		String text = getName() + ": ";
-		if (hasFather()) {
-			text = getTopLevelName() + " / " + text;
-		} 
-		String s = (String)JOptionPane.showInputDialog(frame, text,
-					"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                    null,
-                    getValue());
-		if ((s != null) && (!s.equals(oldValue))) {
-				setValue(s);
-		}
-		return false;
-	}
-		
+    moveable = false;
+    editable = true;
+    removable = false;
 
-	public TGComponent isOnMe(int x1, int y1) {
-		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-			return this;
-		}
-		return null;
-	}
-	
- 	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_ASSOCIATION;
-      }
+    name = "Tclass operations";
+    value = "";
+
+    myImageIcon = IconManager.imgic122;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.setColor(ColorManager.OPERATION_BOX);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    ColorManager.setColor(g, getState(), 0);
+
+    if (value.length() > 0) {
+      g.drawString(value, x + textX, y + textY);
+    }
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    oldValue = value;
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
+    if ((s != null) && (!s.equals(oldValue))) {
+      setValue(s);
+    }
+    return false;
+  }
+
+  public TGComponent isOnMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION;
+  }
 
 }
-
-
-
-
-    
-
-

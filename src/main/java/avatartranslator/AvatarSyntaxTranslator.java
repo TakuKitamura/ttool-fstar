@@ -39,17 +39,17 @@
 package avatartranslator;
 
 /**
-   * Class AvatarSyntaxTranslator
-   * Creation: 24/03/2016
-   * @version 1.0 24/03/2016
-   * @author Florian LUGOU
+ * Class AvatarSyntaxTranslator Creation: 24/03/2016
+ * 
+ * @version 1.0 24/03/2016
+ * @author Florian LUGOU
  */
 public class AvatarSyntaxTranslator {
-    String translateUnaryOp (String op) {
-        return op;
-    }
+  String translateUnaryOp(String op) {
+    return op;
+  }
 
-    String translateBinaryOp (String op) {
-        return op;
-    }
+  String translateBinaryOp(String op) {
+    return op;
+  }
 }

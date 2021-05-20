@@ -58,351 +58,342 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * Class JDialogSelectAvatarBlock
- * Dialog for managing blocks to be validated
+ * Class JDialogSelectAvatarBlock Dialog for managing blocks to be validated
  * Creation: 18/05/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.0 18/05/2010
  */
 public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener {
-    
-	public List<AvatarBDStateMachineOwner> validated, ignored;
-    private boolean optimized = true;
-    private boolean considerTimingOperators = false;
 
-    private List<AvatarBDStateMachineOwner> val, ign, back;
+  public List<AvatarBDStateMachineOwner> validated, ignored;
+  private boolean optimized = true;
+  private boolean considerTimingOperators = false;
 
-    private JList<AvatarBDStateMachineOwner> listIgnored;
-    private JList<AvatarBDStateMachineOwner> listValidated;
-    private JButton allValidated;
-    private JButton addOneValidated;
-    private JButton addOneIgnored;
-    private JButton allIgnored;
-    protected JCheckBox optimize;
-    protected JCheckBox considerTimingOperatorsBox;
+  private List<AvatarBDStateMachineOwner> val, ign, back;
 
-    private boolean hasBeenCancelled = true;
+  private JList<AvatarBDStateMachineOwner> listIgnored;
+  private JList<AvatarBDStateMachineOwner> listValidated;
+  private JButton allValidated;
+  private JButton addOneValidated;
+  private JButton addOneIgnored;
+  private JButton allIgnored;
+  protected JCheckBox optimize;
+  protected JCheckBox considerTimingOperatorsBox;
+
+  private boolean hasBeenCancelled = true;
+
+  /*
+   * Creates new form
+   */
+  public JDialogSelectAvatarBlock(Frame f, List<AvatarBDStateMachineOwner> _back,
+      List<AvatarBDStateMachineOwner> componentList, String title, List<AvatarBDStateMachineOwner> _validated,
+      List<AvatarBDStateMachineOwner> _ignored, boolean _optimized, boolean _considerTimingOperators) {
+    super(f, title, true);
+
+    back = _back;
+    validated = _validated;
+    ignored = _ignored;
+    considerTimingOperators = _considerTimingOperators;
+    optimized = _optimized;
+
+    if ((validated == null) || (ignored == null)) {
+      val = new LinkedList<>(componentList);
+      ign = new LinkedList<>();
+    } else {
+      val = validated;
+      ign = ignored;
+      checkTask(val, componentList);
+      checkTask(ign, componentList);
+      addNewTask(val, componentList, ign);
+    }
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void checkTask(List<AvatarBDStateMachineOwner> tobeChecked, List<AvatarBDStateMachineOwner> source) {
+    Iterator<AvatarBDStateMachineOwner> iterator = tobeChecked.iterator();
+
+    while (iterator.hasNext()) {
+      AvatarBDStateMachineOwner t = iterator.next();
+      if (!source.contains(t))
+        iterator.remove();
+    }
+  }
+
+  private void addNewTask(List<AvatarBDStateMachineOwner> added, List<AvatarBDStateMachineOwner> source,
+      List<AvatarBDStateMachineOwner> notSource) {
+    for (AvatarBDStateMachineOwner tgc : source)
+      if (!added.contains(tgc) && !notSource.contains(tgc))
+        added.add(tgc);
+  }
+
+  private void myInitComponents() {
+    setButtons();
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c2 = new GridBagConstraints();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    // c.setLayout(new BorderLayout());
+    c.setLayout(gridbag2);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.gridwidth = 1;
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridheight = 1;
+
+    // ignored list
+    JPanel panel1 = new JPanel();
+    panel1.setLayout(new BorderLayout());
+    panel1.setBorder(new javax.swing.border.TitledBorder("Blocks ignored"));
+    listIgnored = new JList<>(ign.toArray(new AvatarBDStateMachineOwner[0]));
+    // listIgnored.setPreferredSize(new Dimension(200, 250));
+    listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    listIgnored.addListSelectionListener(this);
+    JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+    panel1.add(scrollPane1, BorderLayout.CENTER);
+    panel1.setPreferredSize(new Dimension(200, 250));
+    c.add(panel1, c2);
+
+    // central buttons
+    JPanel panel3 = new JPanel();
+    panel3.setLayout(gridbag1);
+
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridheight = 1;
+
+    allValidated = new JButton(IconManager.imgic50);
+    allValidated.setPreferredSize(new Dimension(50, 25));
+    allValidated.addActionListener(this);
+    allValidated.setActionCommand("allValidated");
+    panel3.add(allValidated, c1);
+
+    addOneValidated = new JButton(IconManager.imgic48);
+    addOneValidated.setPreferredSize(new Dimension(50, 25));
+    addOneValidated.addActionListener(this);
+    addOneValidated.setActionCommand("addOneValidated");
+    panel3.add(addOneValidated, c1);
+
+    panel3.add(new JLabel(" "), c1);
+
+    addOneIgnored = new JButton(IconManager.imgic46);
+    addOneIgnored.addActionListener(this);
+    addOneIgnored.setPreferredSize(new Dimension(50, 25));
+    addOneIgnored.setActionCommand("addOneIgnored");
+    panel3.add(addOneIgnored, c1);
+
+    allIgnored = new JButton(IconManager.imgic44);
+    allIgnored.addActionListener(this);
+    allIgnored.setPreferredSize(new Dimension(50, 25));
+    allIgnored.setActionCommand("allIgnored");
+    panel3.add(allIgnored, c1);
+
+    c.add(panel3, c2);
+
+    // validated list
+    JPanel panel2 = new JPanel();
+    panel2.setLayout(new BorderLayout());
+    panel2.setBorder(new javax.swing.border.TitledBorder("Blocks taken into account"));
+    listValidated = new JList<>(val.toArray(new AvatarBDStateMachineOwner[0]));
+    // listValidated.setPreferredSize(new Dimension(200, 250));
+    listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    listValidated.addListSelectionListener(this);
+    JScrollPane scrollPane2 = new JScrollPane(listValidated);
+    panel2.add(scrollPane2, BorderLayout.CENTER);
+    panel2.setPreferredSize(new Dimension(200, 250));
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c.add(panel2, c2);
+
+    optimize = new JCheckBox("Optimize specification");
+    optimize.setSelected(optimized);
+    c.add(optimize, c2);
+    considerTimingOperatorsBox = new JCheckBox("Take into account time operators");
+    considerTimingOperatorsBox.setSelected(considerTimingOperators);
+    c.add(considerTimingOperatorsBox, c2);
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    c2.gridwidth = 1; // end row
+    initMainButtons(c2, c, this, false, "Check syntax", "Cancel");
 
     /*
-     * Creates new form
+     * closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
+     * //closeButton.setPreferredSize(new Dimension(600, 50));
+     * closeButton.addActionListener(this); closeButton.setPreferredSize(new
+     * Dimension(200, 30));
+     * 
+     * JPanel panel4 = new JPanel(); panel4.setLayout(new FlowLayout()); JButton
+     * cancelButton = new JButton("Cancel", IconManager.imgic27);
+     * cancelButton.addActionListener(this); cancelButton.setPreferredSize(new
+     * Dimension(200, 30)); panel4.add(cancelButton); panel4.add(closeButton);
+     * c.add(panel4, c2);
      */
-    public JDialogSelectAvatarBlock(Frame f, List<AvatarBDStateMachineOwner> _back, List<AvatarBDStateMachineOwner> componentList, String title, List<AvatarBDStateMachineOwner> _validated, List<AvatarBDStateMachineOwner> _ignored,
-                                    boolean _optimized, boolean _considerTimingOperators) {
-        super(f, title, true);
 
-        back = _back;
-        validated = _validated;
-        ignored = _ignored;
-        considerTimingOperators = _considerTimingOperators;
-        optimized = _optimized;
+    // main panel;
+    /*
+     * JPanel panel6 = new JPanel(); panel6.setLayout(new BorderLayout());
+     * 
+     * JPanel panel5 = new JPanel(); panel5.setLayout(new FlowLayout());
+     * 
+     * optimize = new JCheckBox("Optimize specification");
+     * optimize.setSelected(optimized); panel5.add(optimize);
+     * 
+     * JPanel panel4 = new JPanel(); panel4.setLayout(new FlowLayout());
+     * 
+     * closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
+     * //closeButton.setPreferredSize(new Dimension(600, 50));
+     * closeButton.addActionListener(this); closeButton.setPreferredSize(new
+     * Dimension(200, 30));
+     * 
+     * JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
+     * cancelButton.addActionListener(this); cancelButton.setPreferredSize(new
+     * Dimension(200, 30)); panel4.add(cancelButton); panel4.add(closeButton);
+     * 
+     * panel6.add(panel5, BorderLayout.NORTH); panel6.add(panel4,
+     * BorderLayout.SOUTH);
+     * 
+     * c.add(panel6, c2);
+     */
 
-        if ((validated == null) || (ignored == null)) {
-            val = new LinkedList<>(componentList);
-            ign = new LinkedList<>();
-        } else {
-            val = validated;
-            ign = ignored;
-            checkTask(val, componentList);
-            checkTask(ign, componentList);
-            addNewTask(val, componentList, ign);
-        }
+  }
 
-        initComponents();
-        myInitComponents();
-        pack();
+  @Override
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    if (evt.getSource() == closeButton) {
+      closeDialog();
+      return;
+    } else if (evt.getSource() == cancelButton) {
+      cancelDialog();
+      return;
     }
 
-    private void checkTask( List<AvatarBDStateMachineOwner> tobeChecked, List<AvatarBDStateMachineOwner> source) {
-        Iterator<AvatarBDStateMachineOwner> iterator = tobeChecked.iterator();
+    // Compare the action command to the known actions.
+    switch (command) {
+      case "addOneIgnored":
+        addOneIgnored();
+        break;
+      case "addOneValidated":
+        addOneValidated();
+        break;
+      case "allValidated":
+        allValidated();
+        break;
+      case "allIgnored":
+        allIgnored();
+        break;
+    }
+  }
 
-        while (iterator.hasNext()) {
-            AvatarBDStateMachineOwner t = iterator.next();
-            if (!source.contains(t))
-                iterator.remove();
-        }
+  private void addOneIgnored() {
+    for (AvatarBDStateMachineOwner o : this.listValidated.getSelectedValuesList()) {
+      ign.add(o);
+      val.remove(o);
     }
 
-    private void addNewTask( List<AvatarBDStateMachineOwner> added, List<AvatarBDStateMachineOwner> source, List<AvatarBDStateMachineOwner> notSource) {
-        for (AvatarBDStateMachineOwner tgc : source)
-            if (!added.contains(tgc) && !notSource.contains(tgc))
-                added.add(tgc);
+    listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
+    listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+    setButtons();
+  }
+
+  private void addOneValidated() {
+    for (AvatarBDStateMachineOwner o : this.listIgnored.getSelectedValuesList()) {
+      val.add(o);
+      ign.remove(o);
     }
 
-    private void myInitComponents() {
-        setButtons();
+    listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
+    listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+    setButtons();
+  }
+
+  private void allValidated() {
+    val.addAll(ign);
+    ign.clear();
+    listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
+    listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+    setButtons();
+  }
+
+  private void allIgnored() {
+    ign.addAll(val);
+    val.clear();
+    listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
+    listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
+    setButtons();
+  }
+
+  public void closeDialog() {
+    back.clear();
+    back.addAll(val);
+
+    validated = val;
+    ignored = ign;
+    optimized = optimize.isSelected();
+    considerTimingOperators = considerTimingOperatorsBox.isSelected();
+
+    hasBeenCancelled = false;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  private void setButtons() {
+    int i1 = listIgnored.getSelectedIndex();
+    int i2 = listValidated.getSelectedIndex();
+
+    // listValidated.clearSelection();
+    addOneValidated.setEnabled(i1 != -1);
+
+    // listIgnored.clearSelection();
+    addOneIgnored.setEnabled(i2 != -1);
+
+    allValidated.setEnabled(ign.size() != 0);
+
+    if (val.size() == 0) {
+      allIgnored.setEnabled(false);
+      closeButton.setEnabled(false);
+    } else {
+      allIgnored.setEnabled(true);
+      closeButton.setEnabled(true);
     }
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c2 = new GridBagConstraints();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        //c.setLayout(new BorderLayout());
-        c.setLayout(gridbag2);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public void valueChanged(ListSelectionEvent e) {
+    setButtons();
+  }
 
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.gridwidth = 1;
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 1;
+  public boolean getOptimized() {
+    return optimized;
+  }
 
-        // ignored list
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(new BorderLayout());
-        panel1.setBorder(new javax.swing.border.TitledBorder("Blocks ignored"));
-        listIgnored = new JList<>(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        //listIgnored.setPreferredSize(new Dimension(200, 250));
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        listIgnored.addListSelectionListener(this);
-        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
-        panel1.add(scrollPane1, BorderLayout.CENTER);
-        panel1.setPreferredSize(new Dimension(200, 250));
-        c.add(panel1, c2);
+  public boolean getConsiderTimingOperators() {
+    return considerTimingOperators;
+  }
 
+  public boolean hasBeenCancelled() {
+    return hasBeenCancelled;
+  }
 
-        // central buttons
-        JPanel panel3 = new JPanel();
-        panel3.setLayout(gridbag1);
+  public List<AvatarBDStateMachineOwner> getValidated() {
+    return validated;
+  }
 
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridheight = 1;
-
-        allValidated = new JButton(IconManager.imgic50);
-        allValidated.setPreferredSize(new Dimension(50, 25));
-        allValidated.addActionListener(this);
-        allValidated.setActionCommand("allValidated");
-        panel3.add(allValidated, c1);
-
-        addOneValidated = new JButton(IconManager.imgic48);
-        addOneValidated.setPreferredSize(new Dimension(50, 25));
-        addOneValidated.addActionListener(this);
-        addOneValidated.setActionCommand("addOneValidated");
-        panel3.add(addOneValidated, c1);
-
-        panel3.add(new JLabel(" "), c1);
-
-        addOneIgnored = new JButton(IconManager.imgic46);
-        addOneIgnored.addActionListener(this);
-        addOneIgnored.setPreferredSize(new Dimension(50, 25));
-        addOneIgnored.setActionCommand("addOneIgnored");
-        panel3.add(addOneIgnored, c1);
-
-        allIgnored = new JButton(IconManager.imgic44);
-        allIgnored.addActionListener(this);
-        allIgnored.setPreferredSize(new Dimension(50, 25));
-        allIgnored.setActionCommand("allIgnored");
-        panel3.add(allIgnored, c1);
-
-        c.add(panel3, c2);
-
-
-        // validated list
-        JPanel panel2 = new JPanel();
-        panel2.setLayout(new BorderLayout());
-        panel2.setBorder(new javax.swing.border.TitledBorder("Blocks taken into account"));
-        listValidated = new JList<>(val.toArray(new AvatarBDStateMachineOwner[0]));
-        //listValidated.setPreferredSize(new Dimension(200, 250));
-        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        listValidated.addListSelectionListener(this);
-        JScrollPane scrollPane2 = new JScrollPane(listValidated);
-        panel2.add(scrollPane2, BorderLayout.CENTER);
-        panel2.setPreferredSize(new Dimension(200, 250));
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(panel2, c2);
-
-
-        optimize = new JCheckBox("Optimize specification");
-        optimize.setSelected(optimized);
-        c.add(optimize, c2);
-        considerTimingOperatorsBox = new JCheckBox("Take into account time operators");
-        considerTimingOperatorsBox.setSelected(considerTimingOperators);
-        c.add(considerTimingOperatorsBox, c2);
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.gridwidth = 1; //end row
-        initMainButtons(c2, c, this, false, "Check syntax", "Cancel");
-
-        /*closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        closeButton.setPreferredSize(new Dimension(200, 30));
-
-        JPanel panel4 = new JPanel();
-        panel4.setLayout(new FlowLayout());
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        cancelButton.setPreferredSize(new Dimension(200, 30));
-        panel4.add(cancelButton);
-        panel4.add(closeButton);
-        c.add(panel4, c2);*/
-
-
-        // main panel;
-        /*JPanel panel6 = new JPanel();
-        panel6.setLayout(new BorderLayout());
-
-        JPanel panel5 = new JPanel();
-        panel5.setLayout(new FlowLayout());
-
-        optimize = new JCheckBox("Optimize specification");
-        optimize.setSelected(optimized);
-        panel5.add(optimize);
-
-        JPanel panel4 = new JPanel();
-        panel4.setLayout(new FlowLayout());
-
-        closeButton = new JButton("Start Syntax Analysis", IconManager.imgic37);
-        //closeButton.setPreferredSize(new Dimension(600, 50));
-        closeButton.addActionListener(this);
-        closeButton.setPreferredSize(new Dimension(200, 30));
-
-        JButton cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-        cancelButton.setPreferredSize(new Dimension(200, 30));
-        panel4.add(cancelButton);
-        panel4.add(closeButton);
-
-        panel6.add(panel5, BorderLayout.NORTH);
-        panel6.add(panel4, BorderLayout.SOUTH);
-
-        c.add(panel6, c2);*/
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        String command = evt.getActionCommand();
-
-        if (evt.getSource() == closeButton) {
-            closeDialog();
-            return;
-        } else if (evt.getSource() == cancelButton) {
-            cancelDialog();
-            return;
-        }
-
-        // Compare the action command to the known actions.
-        switch (command) {
-            case "addOneIgnored":
-                addOneIgnored();
-                break;
-            case "addOneValidated":
-                addOneValidated();
-                break;
-            case "allValidated":
-                allValidated();
-                break;
-            case "allIgnored":
-                allIgnored();
-                break;
-        }
-    }
-
-    private void addOneIgnored() {
-        for (AvatarBDStateMachineOwner o : this.listValidated.getSelectedValuesList()) {
-            ign.add(o);
-            val.remove(o);
-        }
-
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
-        setButtons();
-    }
-
-    private void addOneValidated() {
-        for (AvatarBDStateMachineOwner o : this.listIgnored.getSelectedValuesList()) {
-            val.add(o);
-            ign.remove(o);
-        }
-
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
-        setButtons();
-    }
-
-    private void allValidated() {
-        val.addAll(ign);
-        ign.clear();
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
-        setButtons();
-    }
-
-    private void allIgnored() {
-        ign.addAll(val);
-        val.clear();
-        listIgnored.setListData(ign.toArray(new AvatarBDStateMachineOwner[0]));
-        listValidated.setListData(val.toArray(new AvatarBDStateMachineOwner[0]));
-        setButtons();
-    }
-
-    public void closeDialog() {
-        back.clear();
-        back.addAll(val);
-
-        validated = val;
-        ignored = ign;
-        optimized = optimize.isSelected();
-        considerTimingOperators = considerTimingOperatorsBox.isSelected();
-
-        hasBeenCancelled = false;
-        dispose();
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
-
-    private void setButtons() {
-        int i1 = listIgnored.getSelectedIndex();
-        int i2 = listValidated.getSelectedIndex();
-
-        //listValidated.clearSelection();
-        addOneValidated.setEnabled(i1 != -1);
-
-        //listIgnored.clearSelection();
-        addOneIgnored.setEnabled(i2 != -1);
-
-        allValidated.setEnabled(ign.size() != 0);
-
-        if (val.size() == 0) {
-            allIgnored.setEnabled(false);
-            closeButton.setEnabled(false);
-        } else {
-            allIgnored.setEnabled(true);
-            closeButton.setEnabled(true);
-        }
-    }
-
-    public void valueChanged(ListSelectionEvent e) {
-        setButtons();
-    }
-
-    public boolean getOptimized() {
-        return optimized;
-    }
-
-    public boolean getConsiderTimingOperators() {
-        return considerTimingOperators;
-    }
-
-    public boolean hasBeenCancelled() {
-        return hasBeenCancelled;
-    }
-
-    public List<AvatarBDStateMachineOwner> getValidated() {
-        return validated;
-    }
-
-    public List<AvatarBDStateMachineOwner> getIgnored() {
-        return ignored;
-    }
+  public List<AvatarBDStateMachineOwner> getIgnored() {
+    return ignored;
+  }
 }

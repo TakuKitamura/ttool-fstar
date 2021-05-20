@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd;
 
 import myutil.GraphicLib;
@@ -48,49 +45,48 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class SDCoregion
- * Action state of a sequence diagram
- * Creation: 07/10/2004
+ * Class SDCoregion Action state of a sequence diagram Creation: 07/10/2004
+ * 
  * @version 1.0 07/10/2004
  * @author Ludovic APVRILLE
  */
 public class SDCoregion extends TGCOneLineText implements SwallowedTGComponent {
-    
-    public SDCoregion(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 20;
-        height = 100;
-        minWidth = 20;
-        
-        nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        value = "action";
-        name = "action state";
-        
-        myImageIcon = IconManager.imgic520;
-        
+
+  public SDCoregion(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 20;
+    height = 100;
+    minWidth = 20;
+
+    nbConnectingPoint = 0;
+    addTGConnectingPointsComment();
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    value = "action";
+    name = "action state";
+
+    myImageIcon = IconManager.imgic520;
+
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x - width / 2, y, width, height);
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
+      return this;
     }
-    
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x - width/2, y, width, height);
-    }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    
-    public int getType() {
-        return TGComponentManager.SD_COREGION;
-    }
-    
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.SD_COREGION;
+  }
+
 }

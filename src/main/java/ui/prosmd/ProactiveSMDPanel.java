@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.prosmd;
 
 import fr.inria.oasis.vercors.cttool.model.Behaviour;
@@ -48,63 +45,68 @@ import ui.TGComponent;
 import ui.TToolBar;
 
 /**
- * Class ProactiveSMDPanel
- * Panel used for proactive state machine diagrams
+ * Class ProactiveSMDPanel Panel used for proactive state machine diagrams
  * Creation: 05/07/2006
+ * 
  * @version 1.0 05/07/2006
  * @author Ludovic APVRILLE
  */
 public class ProactiveSMDPanel extends TDiagramPanel implements Behaviour {
-    
-    public  ProactiveSMDPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        //Commented by Solange for copy cases
-        //addComponent(400, 50, TGComponentManager.PROSMD_START_STATE, false);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return false;
-    }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
-    }
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
-    }
-    
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
-    }
-    
-    public String getXMLHead() {
-        return "<ProactiveSMDPanel name=\"" + name + "\"" + sizeParam()  + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</ProactiveSMDPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<ProactiveSMDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</ProactiveSMDPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<ProactiveSMDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</ProactiveSMDPanelCopy>";
-    }
-    
-    /*public void loadExtraParameters(Element elt) {
-    }*/
-    
+
+  public ProactiveSMDPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    // Commented by Solange for copy cases
+    // addComponent(400, 50, TGComponentManager.PROSMD_START_STATE, false);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<ProactiveSMDPanel name=\"" + name + "\"" + sizeParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</ProactiveSMDPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<ProactiveSMDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</ProactiveSMDPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<ProactiveSMDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</ProactiveSMDPanelCopy>";
+  }
+
+  /*
+   * public void loadExtraParameters(Element elt) { }
+   */
+
 }

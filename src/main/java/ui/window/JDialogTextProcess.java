@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.window;
 
 import launcher.LauncherException;
@@ -53,211 +50,209 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
- * Class JDialogTextProcess
- * Dialog for managing remote processes call
- * Creation: 16/12/2003
+ * Class JDialogTextProcess Dialog for managing remote processes call Creation:
+ * 16/12/2003
+ * 
  * @version 1.0 16/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogTextProcess extends JDialogBase implements ActionListener, Runnable  {
-	
-	protected String cmd;
-	protected String fileName;
-	protected String spec;
-	protected String host;
-	protected int mode;
-	protected RshClient rshc;
-	protected Thread t;
-	
-	protected final static int NOT_STARTED = 0;
-	protected final static int STARTED = 1;
-	protected final static int STOPPED = 2;
-	
-	//components
-	protected JTextArea jta; 
-    private JTextAreaWriter textAreaWriter;
-	protected JButton start;
-	protected JButton stop;
-	protected JButton close;
-	
-	
-    /* Creates new form  */
-    public JDialogTextProcess(Frame f, String title, String _cmd, String _fileName, String _spec, String _host) {
-	    super(f, title, true);
-	    
-	    cmd = _cmd;
-	    fileName = _fileName;
-	    spec = _spec;
-	    host = _host;
-	    
-        initComponents ();
-        myInitComponents();
-        pack();
+public class JDialogTextProcess extends JDialogBase implements ActionListener, Runnable {
+
+  protected String cmd;
+  protected String fileName;
+  protected String spec;
+  protected String host;
+  protected int mode;
+  protected RshClient rshc;
+  protected Thread t;
+
+  protected final static int NOT_STARTED = 0;
+  protected final static int STARTED = 1;
+  protected final static int STOPPED = 2;
+
+  // components
+  protected JTextArea jta;
+  private JTextAreaWriter textAreaWriter;
+  protected JButton start;
+  protected JButton stop;
+  protected JButton close;
+
+  /* Creates new form */
+  public JDialogTextProcess(Frame f, String title, String _cmd, String _fileName, String _spec, String _host) {
+    super(f, title, true);
+
+    cmd = _cmd;
+    fileName = _fileName;
+    spec = _spec;
+    host = _host;
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  protected void myInitComponents() {
+    mode = NOT_STARTED;
+    setButtons();
+  }
+
+  protected void initComponents() {
+
+    Container c = getContentPane();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    jta = new JTextArea();
+    jta.setEditable(false);
+    jta.setMargin(new Insets(10, 10, 10, 10));
+    jta.setTabSize(3);
+    jta.append("Click on 'start' to launch process\n");
+    Font f = new Font("Courrier", Font.BOLD, 12);
+    jta.setFont(f);
+    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    textAreaWriter = new JTextAreaWriter(jta);
+
+    c.add(jsp, BorderLayout.CENTER);
+
+    start = new JButton("Start", IconManager.imgic53);
+    stop = new JButton("Stop", IconManager.imgic55);
+    close = new JButton("Close", IconManager.imgic27);
+
+    start.setPreferredSize(new Dimension(100, 30));
+    stop.setPreferredSize(new Dimension(100, 30));
+    close.setPreferredSize(new Dimension(100, 30));
+
+    start.addActionListener(this);
+    stop.addActionListener(this);
+    close.addActionListener(this);
+
+    JPanel jp = new JPanel();
+    jp.add(start);
+    jp.add(stop);
+    jp.add(close);
+
+    c.add(jp, BorderLayout.SOUTH);
+
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Start")) {
+      startProcess();
+    } else if (command.equals("Stop")) {
+      stopProcess();
+    } else if (command.equals("Close")) {
+      closeDialog();
     }
-    
-    
-    protected void myInitComponents() {
-	    mode = NOT_STARTED;
-	    setButtons();
-    }  
-   
-    protected void initComponents () {
-	    
-	    Container c = getContentPane();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	    
-	    jta = new JTextArea();
-		jta.setEditable(false);
-		jta.setMargin(new Insets(10, 10, 10, 10));
-		jta.setTabSize(3);
-		jta.append("Click on 'start' to launch process\n");
-		Font f = new Font("Courrier", Font.BOLD, 12); 
-		jta.setFont(f);
-		JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        textAreaWriter = new JTextAreaWriter( jta );
-	
-		c.add(jsp, BorderLayout.CENTER);
-		
-		start = new JButton("Start", IconManager.imgic53);
-		stop = new JButton("Stop", IconManager.imgic55);
-		close = new JButton("Close", IconManager.imgic27);
-		
-		start.setPreferredSize(new Dimension(100, 30));
-		stop.setPreferredSize(new Dimension(100, 30));
-		close.setPreferredSize(new Dimension(100, 30));
-		
-		start.addActionListener(this);
-		stop.addActionListener(this);
-		close.addActionListener(this);
-		
-		JPanel jp = new JPanel();
-		jp.add(start);
-		jp.add(stop);
-		jp.add(close);
-		
-		c.add(jp, BorderLayout.SOUTH);
-	    
+  }
+
+  public void closeDialog() {
+    dispose();
+  }
+
+  public void stopProcess() {
+    try {
+      rshc.stopCommand();
+    } catch (LauncherException le) {
+
     }
- 
-    public void	actionPerformed(ActionEvent evt)  {
-		String command = evt.getActionCommand();
-	
-		// Compare the action command to the known actions.
-		if (command.equals("Start"))  {
-	  		startProcess();
- 		} else if (command.equals("Stop")) {
-	 		stopProcess();	
- 		} else if (command.equals("Close")) {
-	 		closeDialog();	
- 		} 
-	}
-	
-	
-	
-	public void closeDialog() {
-		dispose();
-	}
-	
-	public void stopProcess() {
-                try {
-                    rshc.stopCommand();
-                } catch (LauncherException le) {
-                    
-                }
-		rshc = null;
-		mode = 	STOPPED;
-		setButtons();
-	}
-	
-	public void startProcess() {
-		t = new Thread(this);
-		mode = STARTED;
-		setButtons();
-		t.start();
-	}
-	
-	public void run() {
-		
-		rshc = new RshClient(cmd, host);
-		RshClient rshctmp = rshc;
-		int id = 0;
+    rshc = null;
+    mode = STOPPED;
+    setButtons();
+  }
 
-		try {
-          id = rshc.getId();
-          fileName = FileUtils.addBeforeFileExtension(fileName, "_" + id);
-          jta.append("Sending file data\n");
-			rshc.sendFileData(fileName, spec);
-			jta.append("Sending process request\n");
-			rshc.setCmd(Conversion.replaceAllString(cmd, "__FILENAME", fileName));
-			rshc.sendExecuteCommandRequest();
+  public void startProcess() {
+    t = new Thread(this);
+    mode = STARTED;
+    setButtons();
+    t.start();
+  }
 
-		} catch (LauncherException le) {
-			jta.append(le.getMessage() + "\n");
-			mode = 	STOPPED;
-			setButtons();
-			return;
-		} catch (Exception e) {
-			mode = 	STOPPED;
-			setButtons();
-			return;
-		}
-			
-		try {
-			jta.append("\nRTL Process:\n------------------\n");
-	        rshc.writeCommandMessages( textAreaWriter );
+  public void run() {
 
-			rshc.deleteFile(fileName);
-			rshc.deleteFile(fileName+".sim");
-			rshc.freeId(id);
+    rshc = new RshClient(cmd, host);
+    RshClient rshctmp = rshc;
+    int id = 0;
 
-		} catch (LauncherException le) {
-			jta.append(le.getMessage()+ "\n");
-			mode = 	STOPPED;
-			setButtons();
-			try{
-				if (rshctmp != null) {
-					rshctmp.freeId(id);
-				}
-			} catch (LauncherException leb) {}
-			return;
-		} catch (Exception e) {
-			mode = 	STOPPED;
-			setButtons();
-			try{
-				if (rshctmp != null) {
-					rshctmp.freeId(id);
-				}
-			} catch (LauncherException leb) {}
-			return;
-		}
-		
-		mode = STOPPED;
-		setButtons();
-		jta.append("\n------------------\nRTL process stopped\n");
-	}
-	
-	protected void setButtons() {
-		switch(mode) {
-			case NOT_STARTED:
-				start.setEnabled(true);
-				stop.setEnabled(false);
-				close.setEnabled(true);
-				break;
-			case STARTED:
-				start.setEnabled(false);
-				stop.setEnabled(true);
-				close.setEnabled(true);
-				break;
-			case STOPPED:
-			default:
-				start.setEnabled(false);
-				stop.setEnabled(false);
-				close.setEnabled(true);
-				break;
-		}	
-	}	
+    try {
+      id = rshc.getId();
+      fileName = FileUtils.addBeforeFileExtension(fileName, "_" + id);
+      jta.append("Sending file data\n");
+      rshc.sendFileData(fileName, spec);
+      jta.append("Sending process request\n");
+      rshc.setCmd(Conversion.replaceAllString(cmd, "__FILENAME", fileName));
+      rshc.sendExecuteCommandRequest();
+
+    } catch (LauncherException le) {
+      jta.append(le.getMessage() + "\n");
+      mode = STOPPED;
+      setButtons();
+      return;
+    } catch (Exception e) {
+      mode = STOPPED;
+      setButtons();
+      return;
+    }
+
+    try {
+      jta.append("\nRTL Process:\n------------------\n");
+      rshc.writeCommandMessages(textAreaWriter);
+
+      rshc.deleteFile(fileName);
+      rshc.deleteFile(fileName + ".sim");
+      rshc.freeId(id);
+
+    } catch (LauncherException le) {
+      jta.append(le.getMessage() + "\n");
+      mode = STOPPED;
+      setButtons();
+      try {
+        if (rshctmp != null) {
+          rshctmp.freeId(id);
+        }
+      } catch (LauncherException leb) {
+      }
+      return;
+    } catch (Exception e) {
+      mode = STOPPED;
+      setButtons();
+      try {
+        if (rshctmp != null) {
+          rshctmp.freeId(id);
+        }
+      } catch (LauncherException leb) {
+      }
+      return;
+    }
+
+    mode = STOPPED;
+    setButtons();
+    jta.append("\n------------------\nRTL process stopped\n");
+  }
+
+  protected void setButtons() {
+    switch (mode) {
+      case NOT_STARTED:
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        break;
+      case STARTED:
+        start.setEnabled(false);
+        stop.setEnabled(true);
+        close.setEnabled(true);
+        break;
+      case STOPPED:
+      default:
+        start.setEnabled(false);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        break;
+    }
+  }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -48,100 +45,95 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TMLCRemotePortCompositeComponent
- * Port referencing the port of a composite component
- * Creation: 21/12/2003
+ * Class TMLCRemotePortCompositeComponent Port referencing the port of a
+ * composite component Creation: 21/12/2003
+ * 
  * @version 1.0 21/12/2003
  * @author Ludovic APVRILLE
  */
-public class TMLCRemotePortCompositeComponent extends TGCWithInternalComponent implements SwallowedTGComponent, WithAttributes {
-    private TMLCCompositePort port;
-	TMLCReferencePortConnectingPoint point;
-	private int defaultDiag = 10;
-	private Color myColor = new Color(251, 252, 200);
-	
-    public TMLCRemotePortCompositeComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-		nbConnectingPoint = 0;
-        nbInternalTGComponent = 0;
-		
-		moveable = false;
-        editable = false;
-        removable = false;
-		userResizable = false;
-		multieditable = false;
-		
-		value = "Reference Port";
-		name = "Reference Port";
-		
-		myImageIcon = IconManager.imgic1200;
+public class TMLCRemotePortCompositeComponent extends TGCWithInternalComponent
+    implements SwallowedTGComponent, WithAttributes {
+  private TMLCCompositePort port;
+  TMLCReferencePortConnectingPoint point;
+  private int defaultDiag = 10;
+  private Color myColor = new Color(251, 252, 200);
+
+  public TMLCRemotePortCompositeComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbConnectingPoint = 0;
+    nbInternalTGComponent = 0;
+
+    moveable = false;
+    editable = false;
+    removable = false;
+    userResizable = false;
+    multieditable = false;
+
+    value = "Reference Port";
+    name = "Reference Port";
+
+    myImageIcon = IconManager.imgic1200;
+  }
+
+  public void internalDrawing(Graphics g) {
+    int xp, yp;
+    Color pc = myColor;
+    Color col = g.getColor();
+    if (port != null) {
+      pc = port.getPortColor();
+      if (pc == null) {
+        pc = myColor;
+      }
     }
-	
-	public void internalDrawing(Graphics g) {
-		int xp, yp;
-		Color pc = myColor;
-		Color col = g.getColor();
-		if (port != null) {
-			pc = port.getPortColor();
-			if (pc == null) {
-				pc = myColor;
-			}
-		}
-		if (point != null) {
-			xp = point.getX() - (defaultDiag / 2);
-			yp = point.getY() - (defaultDiag / 2);
-			x = point.getX();
-			y = point.getY() ;
-			forceSize(0, 0);
-			//myColor = new Color(251, 252, 155- (port.getMyDepth() * 10));
-			g.setColor(pc);
-			g.fillOval(xp, yp, defaultDiag+1, defaultDiag+1);
-			g.setColor(col);
-			g.drawOval(xp, yp, defaultDiag, defaultDiag);
-		}
-		
-	 }
-	
-	public void setElements(TMLCCompositePort _port, TMLCReferencePortConnectingPoint _point) {
-		port = _port;
-		point = _point;
-	}
-	
-	public TMLCCompositePort getPort() {
-		return port;
-	}
-	
-	public String getAttributes() {
-		if (port != null) {
-			return port.getAttributes();
-		}
-		return "";
-	}
-	
-	public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (point == null) {
-			return null;
-		}
-		
-		int xp, yp;
-		xp = point.getX() - (defaultDiag / 2);
-		yp = point.getY() - (defaultDiag / 2);
-        if (GraphicLib.isInRectangle(x1, y1, xp, yp, defaultDiag, defaultDiag)) {
-            return this;
-        }
-        return null;
+    if (point != null) {
+      xp = point.getX() - (defaultDiag / 2);
+      yp = point.getY() - (defaultDiag / 2);
+      x = point.getX();
+      y = point.getY();
+      forceSize(0, 0);
+      // myColor = new Color(251, 252, 155- (port.getMyDepth() * 10));
+      g.setColor(pc);
+      g.fillOval(xp, yp, defaultDiag + 1, defaultDiag + 1);
+      g.setColor(col);
+      g.drawOval(xp, yp, defaultDiag, defaultDiag);
     }
-	
-	 public int getType() {
-        return TGComponentManager.TMLCTD_CREMOTEPORTCOMPONENT;
+
+  }
+
+  public void setElements(TMLCCompositePort _port, TMLCReferencePortConnectingPoint _point) {
+    port = _port;
+    point = _point;
+  }
+
+  public TMLCCompositePort getPort() {
+    return port;
+  }
+
+  public String getAttributes() {
+    if (port != null) {
+      return port.getAttributes();
     }
-	 
+    return "";
+  }
+
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (point == null) {
+      return null;
+    }
+
+    int xp, yp;
+    xp = point.getX() - (defaultDiag / 2);
+    yp = point.getY() - (defaultDiag / 2);
+    if (GraphicLib.isInRectangle(x1, y1, xp, yp, defaultDiag, defaultDiag)) {
+      return this;
+    }
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.TMLCTD_CREMOTEPORTCOMPONENT;
+  }
+
 }
-
-
-
-
-
-
-

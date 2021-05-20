@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 //import java.awt.*;
@@ -48,26 +45,20 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointTMLTask
- * Connecting points of TML Tasks
- * Creation: 28/10/2005
+ * Class TGConnectingPointTMLTask Connecting points of TML Tasks Creation:
+ * 28/10/2005
+ * 
  * @version 1.0 28/10/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTMLTask extends  TGConnectingPointWidthHeight{
-    
-    public TGConnectingPointTMLTask(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
-    }
+public class TGConnectingPointTMLTask extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointTMLTask(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
+  }
 } // Class
-
-
-
-
-
-
-

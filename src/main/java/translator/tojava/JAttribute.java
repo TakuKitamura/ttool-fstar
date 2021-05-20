@@ -36,113 +36,110 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.tojava;
 
 import translator.*;
 
 /**
- * Class JAttribute
- * Creation: 03/03/2005
+ * Class JAttribute Creation: 03/03/2005
+ * 
  * @version 1.1 03/03/2005
  * @author Ludovic APVRILLE
  */
 public class JAttribute {
-    private String access;
-    private String name;
-    private String javaName;
-    private String type;
-    private String value;
-    
-    public JAttribute(String _name, String _type, String _value) {
-        name = _name;
-        javaName = name;
-        if (!(_type.equals("nat"))) {
-            type = translator.JKeyword.BOOLEAN;
-        } else {
-            type = translator.JKeyword.INTEGER;
-        }
-        value = _value;
-        access = "private";
+  private String access;
+  private String name;
+  private String javaName;
+  private String type;
+  private String value;
+
+  public JAttribute(String _name, String _type, String _value) {
+    name = _name;
+    javaName = name;
+    if (!(_type.equals("nat"))) {
+      type = translator.JKeyword.BOOLEAN;
+    } else {
+      type = translator.JKeyword.INTEGER;
     }
-    
-    public JAttribute(Param p) {
-       access = p.getAccess();
-        
-        name = p.getName();
-        javaName = name;
-        
-        if (p.getType().equals(Param.BOOL)) {
-            type = translator.JKeyword.BOOLEAN;
-        } else {
-            type = translator.JKeyword.INTEGER;
-        }
-        
-        value = p.getValue();
+    value = _value;
+    access = "private";
+  }
+
+  public JAttribute(Param p) {
+    access = p.getAccess();
+
+    name = p.getName();
+    javaName = name;
+
+    if (p.getType().equals(Param.BOOL)) {
+      type = translator.JKeyword.BOOLEAN;
+    } else {
+      type = translator.JKeyword.INTEGER;
     }
-    
-    public JAttribute(Param p, boolean longforint) {
-        access = p.getAccess();
-        
-        name = p.getName();
-        javaName = name;
-        
-        if (p.getType().equals(Param.BOOL)) {
-            type = translator.JKeyword.BOOLEAN;
-        } else {
-            if (longforint) {
-                type = translator.JKeyword.LONG;
-            } else {
-                type = translator.JKeyword.INTEGER;
-            }
-        }
-        
-        value = p.getValue();
+
+    value = p.getValue();
+  }
+
+  public JAttribute(Param p, boolean longforint) {
+    access = p.getAccess();
+
+    name = p.getName();
+    javaName = name;
+
+    if (p.getType().equals(Param.BOOL)) {
+      type = translator.JKeyword.BOOLEAN;
+    } else {
+      if (longforint) {
+        type = translator.JKeyword.LONG;
+      } else {
+        type = translator.JKeyword.INTEGER;
+      }
     }
-    
-    public String getName() {
-        return name;
+
+    value = p.getValue();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getValue() {
+    if ((value == null) || (value.equals(""))) {
+      return getDefaultValue();
+    } else {
+      return value;
     }
-    
-    public String getType() {
-        return type;
+  }
+
+  public String getDefaultValue() {
+    if (type.equals(translator.JKeyword.INTEGER)) {
+      return "0";
+    } else if (type.equals(translator.JKeyword.BOOLEAN)) {
+      return "false";
     }
-    
-    public String getValue() {
-        if ((value == null) || (value.equals("")))   {
-            return getDefaultValue();
-        } else {
-            return value;
-        }
+    return "";
+  }
+
+  public String getJavaDeclaration() {
+    if (access == null) {
+      access = "private";
     }
-    
-    public String getDefaultValue() {
-        if (type.equals(translator.JKeyword.INTEGER)) {
-            return "0";
-        } else if (type.equals(translator.JKeyword.BOOLEAN)) {
-            return "false";
-        }
-        return ""  ;
-    }
-    
-    public String getJavaDeclaration() {
-        if (access == null) {
-            access = "private";
-        }
-        return access + " " + type + " " + javaName + " = " + getValue() + translator.JKeyword.END_OP;
-    }
-    
-    public String getJavaName() {
-        return javaName;
-    }
-    
-    public void setJavaName(String _javaName) {
-        javaName = _javaName;
-    }
-    
-    public void setAccess(String _access) {
-        access = _access;
-    }
+    return access + " " + type + " " + javaName + " = " + getValue() + translator.JKeyword.END_OP;
+  }
+
+  public String getJavaName() {
+    return javaName;
+  }
+
+  public void setJavaName(String _javaName) {
+    javaName = _javaName;
+  }
+
+  public void setAccess(String _access) {
+    access = _access;
+  }
 }

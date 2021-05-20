@@ -41,44 +41,44 @@ package elntranslator;
 import java.util.LinkedList;
 
 /**
- * Class ELNTComponentVoltageSourceTDF
- * Parameters of a ELN primitive component : TDF voltage source
- * Creation: 23/07/2018
+ * Class ELNTComponentVoltageSourceTDF Parameters of a ELN primitive component :
+ * TDF voltage source Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTComponentVoltageSourceTDF extends ELNTComponent implements ELNTPrimitiveComponent {
-	private String name;
-	private double scale;
-	private LinkedList<ELNTConnectingPoint> cp;
-	
-	private ELNTModule module;
-	
-	public ELNTComponentVoltageSourceTDF(String _name, double _scale, ELNTModule _module) {
-		name = _name;
-		scale = _scale;
-		cp = new LinkedList<ELNTConnectingPoint>();
-		module = _module;
-	}
+  private String name;
+  private double scale;
+  private LinkedList<ELNTConnectingPoint> cp;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTModule module;
 
-	public double getScale() {
-		return scale;
-	}
-	
-	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-		return cp;
-	}
-	
-	public void addConnectingPoint(ELNTConnectingPoint _cp) {
-		cp.add(_cp);
-	}
+  public ELNTComponentVoltageSourceTDF(String _name, double _scale, ELNTModule _module) {
+    name = _name;
+    scale = _scale;
+    cp = new LinkedList<ELNTConnectingPoint>();
+    module = _module;
+  }
 
-	public ELNTModule getModule() {
-		return module;
-	}
+  public String getName() {
+    return name;
+  }
+
+  public double getScale() {
+    return scale;
+  }
+
+  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+    return cp;
+  }
+
+  public void addConnectingPoint(ELNTConnectingPoint _cp) {
+    cp.add(_cp);
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

@@ -36,72 +36,64 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class ADActionStateWithMultipleParam
- * Creation: 11/08/2004
+ * Class ADActionStateWithMultipleParam Creation: 11/08/2004
+ * 
  * @version 1.0 11/08/2004
  * @author Ludovic APVRILLE
  */
 public class ADActionStateWithMultipleParam extends ADActionState {
-    
-    public ADActionStateWithMultipleParam() {
-    }
-    
-    public String toString() {
-        return "Action state (" + actionValue +  ")";
-    }
-	
-	public int nbOfActions() {
-		int cpt = 0;
-		//int index;
-		
-		for(int i=0; i<actionValue.length(); i++) {
-			if (actionValue.charAt(i) == ';') {
-				cpt ++;
-			}
-		}
-		
-		return cpt;
-	}
-    
-    public String getAction(int cpt) {
-        if (cpt <0) {
-            return actionValue;
-        }
-        
-        String ret;
-        
-        try {
-            ret = actionValue;
-            while(cpt >0) {
-                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-                cpt --;
-            }
-            
-            int index = ret.indexOf(';');
-            
-            if (index > 0) {
-                ret = ret.substring(0, index);
-            }
-        } catch (Exception e) {
-            return actionValue;
-        }
-        return ret;
+
+  public ADActionStateWithMultipleParam() {
+  }
+
+  public String toString() {
+    return "Action state (" + actionValue + ")";
+  }
+
+  public int nbOfActions() {
+    int cpt = 0;
+    // int index;
+
+    for (int i = 0; i < actionValue.length(); i++) {
+      if (actionValue.charAt(i) == ';') {
+        cpt++;
+      }
     }
 
-    public ADComponent makeSame() {
-      ADActionStateWithMultipleParam adap = new ADActionStateWithMultipleParam();
-      adap.setActionValue(getActionValue());
-      return adap;
+    return cpt;
+  }
+
+  public String getAction(int cpt) {
+    if (cpt < 0) {
+      return actionValue;
     }
+
+    String ret;
+
+    try {
+      ret = actionValue;
+      while (cpt > 0) {
+        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+        cpt--;
+      }
+
+      int index = ret.indexOf(';');
+
+      if (index > 0) {
+        ret = ret.substring(0, index);
+      }
+    } catch (Exception e) {
+      return actionValue;
+    }
+    return ret;
+  }
+
+  public ADComponent makeSame() {
+    ADActionStateWithMultipleParam adap = new ADActionStateWithMultipleParam();
+    adap.setActionValue(getActionValue());
+    return adap;
+  }
 }

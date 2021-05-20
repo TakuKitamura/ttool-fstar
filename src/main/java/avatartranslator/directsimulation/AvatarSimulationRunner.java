@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator.directsimulation;
 
 import avatartranslator.AvatarAttribute;
@@ -51,9 +50,8 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Class AvatarSimulationRunner
- * Executor for multiple simulations
- * Creation: 08/01/2021
+ * Class AvatarSimulationRunner Executor for multiple simulations Creation:
+ * 08/01/2021
  *
  * @author Ludovic APVRILLE
  * @version 1.0 08/01/2021
@@ -61,140 +59,141 @@ import java.util.List;
 
 public class AvatarSimulationRunner {
 
-   private static int MAX_NB_OF_TRANSACTIONS = 10000;
+  private static int MAX_NB_OF_TRANSACTIONS = 10000;
 
-   private AvatarSpecification as;
-   private boolean stop;
-   private AvatarSpecificationSimulation ass;
+  private AvatarSpecification as;
+  private boolean stop;
+  private AvatarSpecificationSimulation ass;
 
-   public ArrayList<AvatarSpecificationSimulation> listOfSimulations;
+  public ArrayList<AvatarSpecificationSimulation> listOfSimulations;
 
-    public AvatarSimulationRunner(AvatarSpecification _as) {
-       as = _as;
+  public AvatarSimulationRunner(AvatarSpecification _as) {
+    as = _as;
+  }
+
+  public void setAvatarSpecificationSimulation(AvatarSpecificationSimulation _ass) {
+    listOfSimulations = new ArrayList<>(1);
+    ass = _ass;
+    listOfSimulations.add(ass);
+  }
+
+  public synchronized void runXSimulation(int nbOfSimulations, AvatarSimulationRunnerListener listener) {
+    stop = false;
+
+    if (nbOfSimulations < 1) {
+      return;
     }
 
-    public void setAvatarSpecificationSimulation(AvatarSpecificationSimulation _ass) {
-        listOfSimulations = new ArrayList<>(1);
-        ass = _ass;
-        listOfSimulations.add(ass);
+    listOfSimulations = new ArrayList<>(nbOfSimulations);
+
+    for (int simulationIndex = 0; simulationIndex < nbOfSimulations; simulationIndex++) {
+      // TraceManager.addDev("Simulation #" + simulationIndex);
+      listener.setSimulationDone(simulationIndex);
+      ass = new AvatarSpecificationSimulation(as, null);
+      listOfSimulations.add(ass);
+      ass.runSimulationToCompletion(MAX_NB_OF_TRANSACTIONS);
+      if (stop) {
+        break;
+      }
+    }
+  }
+
+  public synchronized long getMinSimulationTime() {
+    if (listOfSimulations == null) {
+      return -1;
+    }
+    long minSimTime = Long.MAX_VALUE;
+    for (AvatarSpecificationSimulation ass : listOfSimulations) {
+      minSimTime = Math.min(ass.getClockValue(), minSimTime);
+    }
+    return minSimTime;
+  }
+
+  public synchronized long getMaxSimulationTime() {
+    if (listOfSimulations == null) {
+      return -1;
+    }
+    long maxSimTime = -1;
+    for (AvatarSpecificationSimulation ass : listOfSimulations) {
+      maxSimTime = Math.max(ass.getClockValue(), maxSimTime);
+    }
+    return maxSimTime;
+  }
+
+  public synchronized double getAverageSimulationTime() {
+    if (listOfSimulations == null) {
+      return -1;
+    }
+    double averageSimTime = 0;
+    for (AvatarSpecificationSimulation ass : listOfSimulations) {
+      averageSimTime += ass.getClockValue() / listOfSimulations.size();
+    }
+    return averageSimTime;
+  }
+
+  public synchronized double[] getSimulationTimes() {
+    double[] values = new double[listOfSimulations.size()];
+    for (int i = 0; i < listOfSimulations.size(); i++) {
+      values[i] = listOfSimulations.get(i).getClockValue();
+    }
+    return values;
+  }
+
+  public void stopSimulation() {
+    stop = true;
+    if (ass != null) {
+      Thread t = new Thread(() -> ass.killSimulation());
+      t.start();
+    }
+  }
+
+  public List<AvatarBlock> getBlocksOfTransactions() {
+    return as.getListOfBlocks();
+  }
+
+  public double[] getTimesOfLastTransactionOfBlock(AvatarBlock ab) {
+    double[] timeLastTransaction = new double[listOfSimulations.size()];
+
+    int i = 0;
+    for (AvatarSpecificationSimulation ass : listOfSimulations) {
+      timeLastTransaction[i] = (double) (ass.getTimeOfLastTransactionOfBlock(ab));
+      i++;
     }
 
-    public synchronized void runXSimulation(int nbOfSimulations, AvatarSimulationRunnerListener listener) {
-        stop = false;
+    return timeLastTransaction;
+  }
 
-        if (nbOfSimulations < 1) {
-            return;
-        }
+  public ArrayList<Double> getDataTimesOfAttributesOfBlock(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute) {
+    ArrayList<Double> listOfDoubles = new ArrayList<>();
 
-        listOfSimulations = new ArrayList<>(nbOfSimulations);
-
-        for (int simulationIndex=0; simulationIndex<nbOfSimulations; simulationIndex++) {
-            //TraceManager.addDev("Simulation #" + simulationIndex);
-            listener.setSimulationDone(simulationIndex);
-            ass = new AvatarSpecificationSimulation(as, null);
-            listOfSimulations.add(ass);
-            ass.runSimulationToCompletion(MAX_NB_OF_TRANSACTIONS);
-            if (stop) {
-                break;
-            }
-        }
+    for (AvatarSpecificationSimulation ass : listOfSimulations) {
+      ass.fillValuesOfTimesOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
     }
 
-    public synchronized long getMinSimulationTime() {
-        if (listOfSimulations == null) {
-            return -1;
-        }
-        long minSimTime = Long.MAX_VALUE;
-        for(AvatarSpecificationSimulation ass: listOfSimulations) {
-            minSimTime = Math.min(ass.getClockValue(), minSimTime);
-        }
-        return minSimTime;
+    return listOfDoubles;
+  }
+
+  public ArrayList<Double> getLastValueAndTimeOfAttributesOfBlock(AvatarBlock ab, AvatarAttribute aa,
+      int indexOfAttribute) {
+    ArrayList<Double> listOfDoubles = new ArrayList<>();
+
+    for (AvatarSpecificationSimulation ass : listOfSimulations) {
+      ass.fillLastValueAndTimeOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
     }
 
-    public synchronized long getMaxSimulationTime() {
-        if (listOfSimulations == null) {
-            return -1;
-        }
-        long maxSimTime = -1;
-        for(AvatarSpecificationSimulation ass: listOfSimulations) {
-            maxSimTime = Math.max(ass.getClockValue(), maxSimTime);
-        }
-        return maxSimTime;
+    return listOfDoubles;
+  }
+
+  public ArrayList<Double> getValueAndTimeOfAttributesOfBlockBySimNumber(AvatarBlock ab, AvatarAttribute aa,
+      int indexOfAttribute, int simuIndex) {
+    ArrayList<Double> listOfDoubles = new ArrayList<>();
+
+    if (simuIndex < listOfSimulations.size()) {
+      AvatarSpecificationSimulation ass = listOfSimulations.get(simuIndex);
+      ass.fillValuesOfTimesOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
     }
 
-    public synchronized double getAverageSimulationTime() {
-        if (listOfSimulations == null) {
-            return -1;
-        }
-        double averageSimTime = 0;
-        for(AvatarSpecificationSimulation ass: listOfSimulations) {
-            averageSimTime += ass.getClockValue() / listOfSimulations.size();
-        }
-        return averageSimTime;
-    }
-
-    public synchronized double[] getSimulationTimes() {
-        double[] values = new double[listOfSimulations.size()];
-        for(int i=0; i< listOfSimulations.size(); i++) {
-            values[i] = listOfSimulations.get(i).getClockValue();
-        }
-        return values;
-    }
-
-    public void stopSimulation() {
-        stop = true;
-        if (ass != null) {
-            Thread t = new Thread(() -> ass.killSimulation());
-            t.start();
-        }
-    }
-
-    public List<AvatarBlock> getBlocksOfTransactions() {
-        return as.getListOfBlocks();
-    }
-
-    public double[] getTimesOfLastTransactionOfBlock(AvatarBlock ab) {
-        double [] timeLastTransaction = new double[listOfSimulations.size()];
-
-        int i = 0;
-        for(AvatarSpecificationSimulation ass: listOfSimulations) {
-            timeLastTransaction[i] = (double)( ass.getTimeOfLastTransactionOfBlock(ab) );
-            i++;
-        }
-
-        return timeLastTransaction;
-    }
-
-    public ArrayList<Double> getDataTimesOfAttributesOfBlock(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute) {
-        ArrayList<Double> listOfDoubles = new ArrayList<>();
-
-        for(AvatarSpecificationSimulation ass: listOfSimulations) {
-            ass.fillValuesOfTimesOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
-        }
-
-        return listOfDoubles;
-    }
-
-    public ArrayList<Double> getLastValueAndTimeOfAttributesOfBlock(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute) {
-        ArrayList<Double> listOfDoubles = new ArrayList<>();
-
-        for(AvatarSpecificationSimulation ass: listOfSimulations) {
-            ass.fillLastValueAndTimeOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
-        }
-
-        return listOfDoubles;
-    }
-
-    public ArrayList<Double> getValueAndTimeOfAttributesOfBlockBySimNumber(AvatarBlock ab, AvatarAttribute aa, int indexOfAttribute, int simuIndex) {
-        ArrayList<Double> listOfDoubles = new ArrayList<>();
-
-        if (simuIndex < listOfSimulations.size()) {
-            AvatarSpecificationSimulation ass = listOfSimulations.get(simuIndex);
-            ass.fillValuesOfTimesOfBlockAttribute(ab, aa, indexOfAttribute, listOfDoubles);
-        }
-
-        return listOfDoubles;
-    }
-
+    return listOfDoubles;
+  }
 
 }

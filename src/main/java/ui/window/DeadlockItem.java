@@ -36,76 +36,71 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
-
 
 import java.util.Vector;
 
 /**
- * Class DeadlockItem
- * Data of an action on a simulation trace
- * Creation: 15/08/2004
+ * Class DeadlockItem Data of an action on a simulation trace Creation:
+ * 15/08/2004
+ * 
  * @version 1.0 15/08/2004
  * @author Ludovic APVRILLE
  */
 public class DeadlockItem implements Comparable<DeadlockItem> {
-    private String name;
-    private Vector<String> origin;
-    private Vector<String> action;
-    private String path;
-    
-    public DeadlockItem(String _name) {
-        name = _name;
-        origin = new Vector<>();
-        action = new Vector<>();
-    }
-    
-    //observers
-    public String getName() {
-        return name;
-    }
- 
-    public String getOriginAction() {
-        String s1, s2;
-        StringBuffer ret = new StringBuffer();
-        
-        for(int i=0; i<origin.size(); i++) {
-            s1 = origin.elementAt(i);
-            s2 = action.elementAt(i);
-            if (i != 0) {
-                ret.append(", ");
-            }
-            ret.append("(");
-            ret.append(s1);
-            ret.append(", ");
-            ret.append(s2);
-            ret.append(")");
-        }
-        
-        return new String(ret);
-    }
-    
-    public String getPath() {
-        return path;
-    }
-    
-    
-    // modifiers
+  private String name;
+  private Vector<String> origin;
+  private Vector<String> action;
+  private String path;
 
-    public void addOriginAction(String _origin, String _action) {
-        origin.add(_origin);
-        action.add(_action);
+  public DeadlockItem(String _name) {
+    name = _name;
+    origin = new Vector<>();
+    action = new Vector<>();
+  }
+
+  // observers
+  public String getName() {
+    return name;
+  }
+
+  public String getOriginAction() {
+    String s1, s2;
+    StringBuffer ret = new StringBuffer();
+
+    for (int i = 0; i < origin.size(); i++) {
+      s1 = origin.elementAt(i);
+      s2 = action.elementAt(i);
+      if (i != 0) {
+        ret.append(", ");
+      }
+      ret.append("(");
+      ret.append(s1);
+      ret.append(", ");
+      ret.append(s2);
+      ret.append(")");
     }
-    
-    public void setPath(String _path) {
-        path = _path;
-    }
-    
-    // comparable interface
-    public int compareTo(DeadlockItem o) {
-        return getName().compareTo(o.getName());
-    }
+
+    return new String(ret);
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  // modifiers
+
+  public void addOriginAction(String _origin, String _action) {
+    origin.add(_origin);
+    action.add(_action);
+  }
+
+  public void setPath(String _path) {
+    path = _path;
+  }
+
+  // comparable interface
+  public int compareTo(DeadlockItem o) {
+    return getName().compareTo(o.getName());
+  }
 }

@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd;
-
 
 import myutil.GraphicLib;
 import ui.*;
@@ -52,51 +48,50 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-
 /**
-   * Class TGConnectorMessageAsyncSD
-   * Connector used in SD for exchanging messages between instances
-   * Creation: 04/10/2004
-   * @version 1.0 04/10/2004
-   * @author Ludovic APVRILLE
+ * Class TGConnectorMessageAsyncSD Connector used in SD for exchanging messages
+ * between instances Creation: 04/10/2004
+ * 
+ * @version 1.0 04/10/2004
+ * @author Ludovic APVRILLE
  */
-public  class TGConnectorMessageAsyncSD extends TGConnectorMessageSD {
+public class TGConnectorMessageAsyncSD extends TGConnectorMessageSD {
 
-    protected int arrowLength = 10;
+  protected int arrowLength = 10;
 
-    public TGConnectorMessageAsyncSD( int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-                                      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
-                                      Vector<Point> _listPoint ) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic504;
+  public TGConnectorMessageAsyncSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic504;
+  }
+
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+      g.drawLine(x1, y1, x2, y2);
+    } else {
+      GraphicLib.arrowWithLine(g, 1, 1, 10, x1, y1, x2, y2, false);
     }
 
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-            g.drawLine(x1, y1, x2, y2);
-        } else {
-            GraphicLib.arrowWithLine(g, 1, 1, 10, x1, y1, x2, y2, false);
-        }
-
-        if (!tdp.isScaled()) {
-            widthValue  = g.getFontMetrics().stringWidth(value);
-            heightValue = g.getFontMetrics().getHeight();
-        }
-
-        drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
+    if (!tdp.isScaled()) {
+      widthValue = g.getFontMetrics().stringWidth(value);
+      heightValue = g.getFontMetrics().getHeight();
     }
 
-    public int getType() {
-        return TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD;
-    }
+    drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2) - widthValue / 2, ((p1.getY() + p2.getY()) / 2) - 5);
+  }
 
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        componentMenu.addSeparator();
-        JMenuItem generate = null;
-        // Should verify first whether it is connected to a formal requirement with a verify relation, or not
-        generate = new JMenuItem(TO_SYNC);
+  public int getType() {
+    return TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD;
+  }
 
-        generate.addActionListener(menuAL);
-        componentMenu.add(generate);
-    }
+  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+    componentMenu.addSeparator();
+    JMenuItem generate = null;
+    // Should verify first whether it is connected to a formal requirement with a
+    // verify relation, or not
+    generate = new JMenuItem(TO_SYNC);
+
+    generate.addActionListener(menuAL);
+    componentMenu.add(generate);
+  }
 }

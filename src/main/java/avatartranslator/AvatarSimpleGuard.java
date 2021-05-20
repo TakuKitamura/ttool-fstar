@@ -40,8 +40,9 @@ package avatartranslator;
 
 /**
  * An AvatarSimpleGuard is an {@link AvatarGuard} that is of the form:
- * {@link AvatarTerm} binaryOp {@link AvatarTerm} or simply {@link AvatarTerm}, or else
- * Creation: 25/09/2015
+ * {@link AvatarTerm} binaryOp {@link AvatarTerm} or simply {@link AvatarTerm},
+ * or else Creation: 25/09/2015
+ * 
  * @version 1.0 25/09/2015
  * @author Florian LUGOU
  */

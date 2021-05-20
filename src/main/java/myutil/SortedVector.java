@@ -36,47 +36,44 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 import java.util.Vector;
-
 
 /**
  * Class SortedVector
  *
  * Creation: 13/08/2004
+ * 
  * @version 1.0 13/08/2004
  * @author Ludovic APVRILLE
  */
-public class SortedVector<T extends Comparable<T>> extends Vector<T>{
-    
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7882498373642597896L;
+public class SortedVector<T extends Comparable<T>> extends Vector<T> {
 
-	public SortedVector(int cpt) {
-        super(cpt);
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -7882498373642597896L;
+
+  public SortedVector(int cpt) {
+    super(cpt);
+  }
+
+  public SortedVector() {
+    super();
+  }
+
+  public boolean add(T o) {
+    if (o != null) {
+      int i = 0;
+      while ((i < size()) && (o.compareTo(elementAt(i)) >= 0)) {
+        i++;
+      }
+      add(i, o);
+    } else {
+      super.add(o);
     }
-    
-    public SortedVector() {
-        super();
-    }
-    
-    public boolean add(T o) {
-        if (o != null) {
-            int i = 0;
-            while((i<size()) && (o.compareTo(elementAt(i)) >= 0)) {
-                i++;
-            }
-            add(i, o);
-        } else {
-            super.add(o);
-        }
-        return true;
-    }
-    
+    return true;
+  }
+
 } // Class SortedVector

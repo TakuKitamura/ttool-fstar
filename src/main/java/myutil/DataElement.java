@@ -36,120 +36,114 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package myutil;
 
 import java.util.ArrayList;
 
 /**
- * Class DataElement
- * To be used with JFrameStatistics
- * Creation: 11/01/2021
+ * Class DataElement To be used with JFrameStatistics Creation: 11/01/2021
  * version 1.0 11/01/2021
  *
  * @author Ludovic APVRILLE
  */
 
 public class DataElement implements GenericTree {
-    public ArrayList<DataElement> childs;
+  public ArrayList<DataElement> childs;
 
-    public String title;
-    public double data[];
-    public long times[];
-    
-    public ArrayList<DataElement> setOfValues;
+  public String title;
+  public double data[];
+  public long times[];
 
+  public ArrayList<DataElement> setOfValues;
 
-    public DataElement(String _title) {
-        title = _title;
-        childs = new ArrayList<>();
+  public DataElement(String _title) {
+    title = _title;
+    childs = new ArrayList<>();
+  }
+
+  public void addSetOfValue(DataElement de) {
+    if (setOfValues == null) {
+      setOfValues = new ArrayList<>();
     }
-    
-    public void addSetOfValue(DataElement de) {
-        if (setOfValues == null) {
-            setOfValues = new ArrayList<>();
+    setOfValues.add(de);
+  }
+
+  public void addChild(DataElement de) {
+    childs.add(de);
+  }
+
+  public int getChildCount() {
+    return childs.size();
+  }
+
+  public Object getChild(int index) {
+    if (index < getChildCount()) {
+      return childs.get(index);
+    }
+    return null;
+  }
+
+  public int getIndexOfChild(Object child) {
+    if (child == null) {
+      return -1;
+    }
+    return childs.indexOf(child);
+  }
+
+  public boolean isLeaf() {
+    return (getChildCount() == 0);
+  }
+
+  public String toString() {
+    return title;
+  }
+
+  public boolean hasCSVData() {
+    return (data != null);
+  }
+
+  public String getCSVData() {
+
+    if (data == null) {
+      return "";
+    }
+
+    String ret = "";
+    int i;
+
+    if ((times == null) || (times.length == 0)) {
+      for (i = 0; i < data.length; i++) {
+        if (i > 0) {
+          ret += ",";
         }
-        setOfValues.add(de);
+        ret += data[i];
+      }
+    } else {
+      for (i = 0; i < data.length; i++) {
+        ret += times[i] + "," + data[i] + "\n";
+      }
     }
 
-    public void addChild(DataElement de) {
-        childs.add(de);
+    return ret;
+  }
+
+  public boolean hasCSVSonData() {
+    return (childs != null);
+  }
+
+  public String getCSVDataSons() {
+    if (childs == null) {
+      return "";
     }
 
-    public int getChildCount() {
-        return childs.size();
+    StringBuffer sb = new StringBuffer("");
+
+    for (DataElement de : childs) {
+      sb.append(de.getCSVData() + "\n");
+      sb.append(de.getCSVDataSons());
     }
 
-
-    public Object getChild(int index) {
-        if (index < getChildCount()) {
-            return childs.get(index);
-        }
-        return null;
-    }
-
-    public int getIndexOfChild(Object child) {
-        if (child == null) {
-            return -1;
-        }
-        return childs.indexOf(child);
-    }
-
-    public boolean isLeaf() {
-        return (getChildCount() == 0);
-    }
-
-    public String toString() {
-        return title;
-    }
-
-    public boolean hasCSVData() {
-        return (data != null);
-    }
-
-    public String getCSVData() {
-
-        if (data == null) {
-            return "";
-        }
-
-        String ret = "";
-        int i;
-
-        if ((times== null) || (times.length == 0)) {
-            for (i=0; i< data.length; i++) {
-                if (i>0) {
-                    ret += ",";
-                }
-                ret+= data[i];
-            }
-        } else {
-            for (i=0; i< data.length; i++) {
-                ret += times[i] + "," + data[i] + "\n";
-            }
-        }
-
-        return ret;
-    }
-
-    public boolean hasCSVSonData() {
-        return (childs != null);
-    }
-
-    public String getCSVDataSons () {
-        if (childs == null) {
-            return "";
-        }
-
-        StringBuffer sb = new StringBuffer("");
-
-        for(DataElement de: childs) {
-            sb.append(de.getCSVData() + "\n");
-            sb.append(de.getCSVDataSons());
-        }
-
-        return sb.toString();
-    }
-
+    return sb.toString();
+  }
 
 } // Class

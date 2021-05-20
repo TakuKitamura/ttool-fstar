@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.iod;
 
 import ui.MainGUI;
@@ -51,107 +48,103 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class InteractionOverviewDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of an interaction overview diagram
- * Creation: 29/09/2004
+ * Class InteractionOverviewDiagramToolBar Implements the toolbar to be used in
+ * conjunction with the panel of an interaction overview diagram Creation:
+ * 29/09/2004
+ * 
  * @version 1.0 29/09/2004
  * @author Ludovic APVRILLE
  * @see ui.cd.TClassDiagramPanel
  */
 public class InteractionOverviewDiagramToolBar extends TToolBar {
-    
-    public InteractionOverviewDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-        
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_REF_SD].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_REF_IOD].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_PARALLEL].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_PREEMPTION].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_SEQUENCE].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_CHOICE].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_START].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_STOP].setEnabled(b);
-        mgui.actions[TGUIAction.IOD_JUNCTION].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		mgui.updateZoomInfo();
-        
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_START]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_STOP]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_REF_SD]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-         button = this.add(mgui.actions[TGUIAction.IOD_REF_IOD]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_PARALLEL]);
-        button.addMouseListener(mgui.mouseHandler);
-                
-        button = this.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_CHOICE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.IOD_JUNCTION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-         
-        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-    }
-    
+
+  public InteractionOverviewDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_REF_SD].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_REF_IOD].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_PARALLEL].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_PREEMPTION].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_SEQUENCE].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_CHOICE].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_START].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_STOP].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_JUNCTION].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.IOD_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.IOD_START]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_STOP]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.IOD_REF_SD]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_REF_IOD]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_PARALLEL]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_CHOICE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.IOD_JUNCTION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
+
 } // Class
-
-
-
-
-

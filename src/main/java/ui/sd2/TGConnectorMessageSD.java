@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd2;
-
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
@@ -55,132 +51,128 @@ import java.util.Vector;
 //import java.awt.geom.*;
 
 /**
-   * Class TGConnectorMessageSD
-   * Connector used in SD for exchanging messages between instances
-   * Creation: 04/10/2004
-   * @version 1.0 04/10/2004
-   * @author Ludovic APVRILLE
+ * Class TGConnectorMessageSD Connector used in SD for exchanging messages
+ * between instances Creation: 04/10/2004
+ * 
+ * @version 1.0 04/10/2004
+ * @author Ludovic APVRILLE
  */
 public abstract class TGConnectorMessageSD extends TGConnector {
-    public final String TO_SYNC = "To synchronous message";
-    public final String TO_ASYNC = "To asynchronous message";
+  public final String TO_SYNC = "To synchronous message";
+  public final String TO_ASYNC = "To asynchronous message";
 
-    protected int arrowLength = 10;
-    protected int widthValue, heightValue;
+  protected int arrowLength = 10;
+  protected int widthValue, heightValue;
 
-   
+  public TGConnectorMessageSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic202;
+    value = "msg?";
+    editable = true;
+  }
 
-    public TGConnectorMessageSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic202;
-        value = "msg?";
-        editable = true;
+  public String getMessage() {
+    return value;
+  }
+
+  // Part before '()' section
+  public String getFirstPartMessage() {
+    int index0 = value.indexOf('(');
+    if (index0 == -1) {
+      return value;
+    } else {
+      return value.substring(0, index0);
+    }
+  }
+
+  public String getSecondPartMessage() {
+    String tmp = value.trim();
+    int index0 = tmp.indexOf('(');
+    if (index0 == -1) {
+      return "";
+    } else {
+      return tmp.substring(index0, tmp.length());
+    }
+  }
+
+  public boolean isMessageWellFormed() {
+    //
+
+    int index0 = value.indexOf('(');
+    String name;
+
+    if (index0 == -1) {
+      name = value;
+    } else {
+      name = value.substring(0, index0);
     }
 
-    public String getMessage() {
-        return value;
+    if (!TAttribute.isAValidId(name, false, false, false)) {
+      return false;
     }
 
-    // Part before '()' section
-    public String getFirstPartMessage() {
-        int index0 = value.indexOf('(');
-        if (index0 == -1) {
-            return value;
-        } else {
-            return value.substring(0, index0);
-        }
+    if (index0 == -1) {
+      return true;
     }
 
-    public String getSecondPartMessage() {
-        String tmp = value.trim();
-        int index0 = tmp.indexOf('(');
-        if (index0 == -1) {
-            return "";
-        } else {
-            return tmp.substring(index0, tmp.length());
-        }
+    String tmp = value.trim();
+    if (!tmp.endsWith(")")) {
+      return false;
     }
 
-    public boolean isMessageWellFormed() {
-        //
+    // Check for individual parameters
+    index0 = tmp.indexOf('(');
+    tmp = tmp.substring(index0 + 1, tmp.length() - 1);
 
-        int index0 = value.indexOf('(');
-        String name;
-
-        if (index0 == -1) {
-            name = value;
-        } else {
-            name = value.substring(0, index0);
-        }
-
-        if (!TAttribute.isAValidId(name, false, false, false)) {
-            return false;
-        }
-
-        if (index0 == -1) {
-            return true;
-        }
-
-        String tmp = value.trim();
-        if (!tmp.endsWith(")")) {
-            return false;
-        }
-
-        // Check for individual parameters
-        index0 = tmp.indexOf('(');
-        tmp = tmp.substring(index0+1, tmp.length()-1);
-
-        String[] params = tmp.split(",");
-        for(int i=0; i<params.length; i++) {
-            tmp = params[i].trim();
-            //
-            if (!TAttribute.isAValidId(tmp, false, false, false)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-
-    public boolean editOnDoubleClick(JFrame frame) {
-        //
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-                                                       "setting message name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-                                                       null,
-                                                       getValue());
-        if ((s != null) && (s.length() > 0)) {
-            setValue(s);
-            return true;
-        }
+    String[] params = tmp.split(",");
+    for (int i = 0; i < params.length; i++) {
+      tmp = params[i].trim();
+      //
+      if (!TAttribute.isAValidId(tmp, false, false, false)) {
         return false;
+      }
     }
 
-    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-        //
-        if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5 - heightValue, widthValue, heightValue)) {
-            return this;
-        }
-        return null;
+    return true;
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    //
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting message name", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic100, null, getValue());
+    if ((s != null) && (s.length() > 0)) {
+      setValue(s);
+      return true;
+    }
+    return false;
+  }
+
+  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+    //
+    if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2) - widthValue / 2,
+        ((p1.getY() + p2.getY()) / 2) - 5 - heightValue, widthValue, heightValue)) {
+      return this;
+    }
+    return null;
+  }
+
+  public boolean eventOnPopup(ActionEvent e) {
+    String s = e.getActionCommand();
+    TraceManager.addDev("action: " + s);
+    if (s.indexOf(TO_SYNC) > -1) {
+      ((SequenceDiagramPanel) tdp).switchToSynchronousMessage((TGConnectorMessageAsyncSD) this);
+      TraceManager.addDev("To Sync message");
+    }
+    if (s.indexOf(TO_ASYNC) > -1) {
+      ((SequenceDiagramPanel) tdp).switchToAsynchronousMessage((TGConnectorMessageSyncSD) this);
+      TraceManager.addDev("To async message");
     }
 
-    public boolean eventOnPopup(ActionEvent e) {
-        String s = e.getActionCommand();
-	TraceManager.addDev("action: " + s);
-        if (s.indexOf(TO_SYNC) > -1) {
-	    ((SequenceDiagramPanel)tdp).switchToSynchronousMessage((TGConnectorMessageAsyncSD)this); 
-            TraceManager.addDev("To Sync message");
-        }
-	if (s.indexOf(TO_ASYNC) > -1) {
-	    ((SequenceDiagramPanel)tdp).switchToAsynchronousMessage((TGConnectorMessageSyncSD)this); 
-            TraceManager.addDev("To async message");
-        } 
-            
-        return true;
-    }
+    return true;
+  }
 }

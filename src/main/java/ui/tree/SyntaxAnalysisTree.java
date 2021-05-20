@@ -36,69 +36,62 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.GenericTree;
 import ui.MainGUI;
 
 /**
- * Class SyntaxAnalysisTree
- * Creation: 12/12/2003
- * Version 2.0 13/03/2006
+ * Class SyntaxAnalysisTree Creation: 12/12/2003 Version 2.0 13/03/2006
+ * 
  * @author Ludovic APVRILLE
  */
 public class SyntaxAnalysisTree implements GenericTree {
-    
-    private MainGUI mgui;
-    private String name = "Syntax analysis";
-    private SyntaxAnalysisErrorTree errort;
-    private SyntaxAnalysisWarningTree warningt;
- 
-    
-    public SyntaxAnalysisTree(MainGUI _mgui) {
-        mgui = _mgui;
-        errort = new SyntaxAnalysisErrorTree(mgui);
-        warningt = new SyntaxAnalysisWarningTree(mgui);
-    }
-    
-    // TREE MANAGEMENT
-    public String toString() {
-        return name;
-    }
 
-    public SyntaxAnalysisErrorTree getSyntaxAnalysisErrorTree() {
-	return errort;
-    }
+  private MainGUI mgui;
+  private String name = "Syntax analysis";
+  private SyntaxAnalysisErrorTree errort;
+  private SyntaxAnalysisWarningTree warningt;
 
-    public SyntaxAnalysisWarningTree getSyntaxAnalysisWarningTree() {
-	return warningt;
-    }
+  public SyntaxAnalysisTree(MainGUI _mgui) {
+    mgui = _mgui;
+    errort = new SyntaxAnalysisErrorTree(mgui);
+    warningt = new SyntaxAnalysisWarningTree(mgui);
+  }
 
-    
-    
-    public int getChildCount() {
-        return 2;
+  // TREE MANAGEMENT
+  public String toString() {
+    return name;
+  }
+
+  public SyntaxAnalysisErrorTree getSyntaxAnalysisErrorTree() {
+    return errort;
+  }
+
+  public SyntaxAnalysisWarningTree getSyntaxAnalysisWarningTree() {
+    return warningt;
+  }
+
+  public int getChildCount() {
+    return 2;
+  }
+
+  public Object getChild(int index) {
+    switch (index) {
+      case 0:
+        return warningt;
+      case 1:
+        return errort;
     }
-    
-    public Object getChild(int index) {
-        switch (index) {
-            case 0:
-                return warningt;
-            case 1:
-                return errort;
-        }
-        return null;
+    return null;
+  }
+
+  public int getIndexOfChild(Object child) {
+    if (child instanceof SyntaxAnalysisWarningTree) {
+      return 0;
+    } else if (child instanceof SyntaxAnalysisErrorTree) {
+      return 1;
     }
-    
-    public int getIndexOfChild(Object child) {
-        if (child instanceof SyntaxAnalysisWarningTree) {
-            return 0;
-        }	else if (child instanceof SyntaxAnalysisErrorTree) {
-            return 1;
-        } 
-        return -1;
-    }
+    return -1;
+  }
 }

@@ -36,38 +36,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-package launcher; 
-
+package launcher;
 
 import launcher.RshServer;
 import myutil.TraceManager;
 
 /**
-   * Class launcher.RTLLauncher
-   * For remote use of RTL
-   * Creation: 16/12/2003
-   * @version 1.1 14/06/2004
-   * @author Ludovic APVRILLE
+ * Class launcher.RTLLauncher For remote use of RTL Creation: 16/12/2003
+ * 
+ * @version 1.1 14/06/2004
+ * @author Ludovic APVRILLE
  */
 public class RTLLauncher implements Runnable {
 
-    protected String sk;
+  protected String sk;
 
-    public String getKey() {
-        sk = "";
-        for(int i=0; i<16; i++) {
-            int cpt = (int)(Math.random()*60) + 50;
-            sk += (char)cpt;
-        }
-        TraceManager.addDev("Key=" + sk);
-        return sk;
+  public String getKey() {
+    sk = "";
+    for (int i = 0; i < 16; i++) {
+      int cpt = (int) (Math.random() * 60) + 50;
+      sk += (char) cpt;
     }
+    TraceManager.addDev("Key=" + sk);
+    return sk;
+  }
 
-    public void run() {
-        TraceManager.addDev("Server side of the launcher\nVersion: " + RshServer.VERSION);
-        (new RshServer(sk)).startServer();
-    }
-
+  public void run() {
+    TraceManager.addDev("Server side of the launcher\nVersion: " + RshServer.VERSION);
+    (new RshServer(sk)).startServer();
+  }
 
 }

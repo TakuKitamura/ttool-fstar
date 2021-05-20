@@ -36,51 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package nc;
 
 import java.util.ArrayList;
 
 /**
-* Class NCPath
-* Creation: 14/11/2008
-* @version 1.0 14/11/2008
-* @author Ludovic APVRILLE
+ * Class NCPath Creation: 14/11/2008
+ * 
+ * @version 1.0 14/11/2008
+ * @author Ludovic APVRILLE
  */
 public class NCPath extends NCElement {
-	public NCTraffic traffic;
-	public NCEquipment origin;
-	public NCEquipment destination;
-	public ArrayList<NCSwitch> switches;
-	public ArrayList<NCLink> links;
+  public NCTraffic traffic;
+  public NCEquipment origin;
+  public NCEquipment destination;
+  public ArrayList<NCSwitch> switches;
+  public ArrayList<NCLink> links;
 
-	public NCPath() {
-		switches = new ArrayList<NCSwitch>();
-		links = new ArrayList<NCLink>();
-	}
-	
-	public Object clone() {
-		NCPath path = new NCPath();
-		path.origin = origin;
-		path.destination = destination;
-		path.traffic = traffic;
-		for(NCSwitch sw: switches) {
-			path.switches.add(sw);
-		}
-		for(NCLink link: links) {
-			path.links.add(link);
-		}
-		return path;
-	}
-	
-	public String getLinksString() {
-		String tmp = "";
-		//
-		for(NCLink link: links) {
-			tmp += link.getName() + " ";
-		}
-		return tmp;
-	}
+  public NCPath() {
+    switches = new ArrayList<NCSwitch>();
+    links = new ArrayList<NCLink>();
+  }
+
+  public Object clone() {
+    NCPath path = new NCPath();
+    path.origin = origin;
+    path.destination = destination;
+    path.traffic = traffic;
+    for (NCSwitch sw : switches) {
+      path.switches.add(sw);
+    }
+    for (NCLink link : links) {
+      path.links.add(link);
+    }
+    return path;
+  }
+
+  public String getLinksString() {
+    String tmp = "";
+    //
+    for (NCLink link : links) {
+      tmp += link.getName() + " ";
+    }
+    return tmp;
+  }
 }

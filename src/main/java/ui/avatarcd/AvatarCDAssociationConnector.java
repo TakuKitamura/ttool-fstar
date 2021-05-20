@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarcd;
 
 import myutil.GraphicLib;
@@ -48,52 +45,48 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class AvatarCDAssociationConnector
- * Connector to be used in context diagrams. Connects two use cases, or one use case to a block
- * Creation: 31/08/2011
+ * Class AvatarCDAssociationConnector Connector to be used in context diagrams.
+ * Connects two use cases, or one use case to a block Creation: 31/08/2011
+ * 
  * @version 1.0 31/08/2011
  * @author Ludovic APVRILLE
  */
-public  class AvatarCDAssociationConnector extends TGConnectorWithMultiplicity {
-    int w, h;
-    
-    public AvatarCDAssociationConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+public class AvatarCDAssociationConnector extends TGConnectorWithMultiplicity {
+  int w, h;
+
+  public AvatarCDAssociationConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+  }
+
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    g.drawLine(x1, y1, x2, y2);
+    // GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+
+    // Indicate semantics
+    // w = g.getFontMetrics().stringWidth(value);
+    // h = g.getFontMetrics().getHeight();
+    // drawSingleString(g, value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() +
+    // p2.getY())/2);
+  }
+
+  /*
+   * protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2)
+   * { GraphicLib.dashedLine(g, x1, y1, x2, y2); }
+   */
+
+  @Override
+  public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY()) / 2 - h, w, h)) {
+      return this;
     }
-    
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        g.drawLine(x1, y1, x2, y2);
-        //GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-        
-        // Indicate semantics 
-        //w  = g.getFontMetrics().stringWidth(value);
-        //h = g.getFontMetrics().getHeight();
-        //drawSingleString(g, value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
-    }
-    
-    /*protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }*/
-    
-    @Override
-    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
-            return this;
-        }
-        return null;
-    }
-    
-    @Override
-	 public int getType() {
-        return TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
-    }
+    return null;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
+  }
 
 }
-
-
-
-
-
-
-

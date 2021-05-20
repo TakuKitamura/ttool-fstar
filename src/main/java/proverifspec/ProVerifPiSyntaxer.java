@@ -36,157 +36,154 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifPiSyntaxer
- * Creation: 13/09/2015
+ * Class ProVerifPiSyntaxer Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifPiSyntaxer extends ProVerifSyntaxer {
 
-    protected void translateConst (ProVerifConst _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "data " + _node.name + "/0.";
-    }
+  protected void translateConst(ProVerifConst _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "data " + _node.name + "/0.";
+  }
 
-    protected void translateFunc (ProVerifFunc _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        if (_node.priv)
-            this.fullSpec += "private ";
-        if (_node.reduc == null)
-            this.fullSpec += "fun " + _node.name + "/" + _node.types.length;
-        else
-            this.translateReducAux (_node.reduc, _alinea);
-        this.fullSpec += ".";
-    }
+  protected void translateFunc(ProVerifFunc _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    if (_node.priv)
+      this.fullSpec += "private ";
+    if (_node.reduc == null)
+      this.fullSpec += "fun " + _node.name + "/" + _node.types.length;
+    else
+      this.translateReducAux(_node.reduc, _alinea);
+    this.fullSpec += ".";
+  }
 
-    private void translateReducAux (ProVerifReduc _node, int _alinea) {
-        this.fullSpec += "reduc " + _node.formula;
-        ProVerifReduc otherwise = _node.otherwise;
-        while (otherwise != null) {
-            this.fullSpec += "\n" + printAlinea (_alinea);
-            if (_node.priv)
-                this.fullSpec += "        ";
-            this.fullSpec += "      otherwise " + otherwise.formula;
-            otherwise = otherwise.otherwise;
-        }
+  private void translateReducAux(ProVerifReduc _node, int _alinea) {
+    this.fullSpec += "reduc " + _node.formula;
+    ProVerifReduc otherwise = _node.otherwise;
+    while (otherwise != null) {
+      this.fullSpec += "\n" + printAlinea(_alinea);
+      if (_node.priv)
+        this.fullSpec += "        ";
+      this.fullSpec += "      otherwise " + otherwise.formula;
+      otherwise = otherwise.otherwise;
     }
+  }
 
-    protected void translateReduc (ProVerifReduc _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        if (_node.priv)
-            this.fullSpec += "private ";
-        this.translateReducAux (_node, _alinea);
-        this.fullSpec += ".";
+  protected void translateReduc(ProVerifReduc _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    if (_node.priv)
+      this.fullSpec += "private ";
+    this.translateReducAux(_node, _alinea);
+    this.fullSpec += ".";
+  }
+
+  protected void translateEquation(ProVerifEquation _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "equation " + _node.formula + ".";
+  }
+
+  protected void translateVar(ProVerifVar _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    if (_node.priv)
+      this.fullSpec += "private ";
+    this.fullSpec += "free " + _node.name + ".";
+  }
+
+  protected void translateQueryAtt(ProVerifQueryAtt _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "query attacker:" + _node.name + ".";
+  }
+
+  protected void translateQueryEv(ProVerifQueryEv _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "query ev:" + _node.name + "().";
+  }
+
+  protected void translateQueryEvinj(ProVerifQueryEvinj _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "query evinj:" + _node.ev1 + " ==> evinj:" + _node.ev2 + ".";
+  }
+
+  protected void translateEvDecl(ProVerifEvDecl _node, int _alinea) {
+  }
+
+  protected void translateProcess(ProVerifProcess _node, int _alinea) {
+    this.fullSpec += "\n\n" + printAlinea(_alinea);
+    this.fullSpec += "let " + _node.name + " =";
+    if (_node.next != null)
+      this.translate(_node.next, _alinea + 1);
+    else
+      this.fullSpec += "0";
+    this.fullSpec += ".";
+  }
+
+  protected void translateProcNew(ProVerifProcNew _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "new " + _node.name + ";";
+    if (_node.next == null) {
+      this.fullSpec += "\n" + printAlinea(_alinea);
+      this.fullSpec += "0";
+    } else
+      this.translate(_node.next, _alinea);
+  }
+
+  protected void translateProcIn(ProVerifProcIn _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "in (" + _node.channel + ", ";
+    boolean first = true;
+    for (ProVerifVar var : _node.vars) {
+      if (first)
+        first = false;
+      else
+        this.fullSpec += ", ";
+      this.fullSpec += var.name;
     }
-
-    protected void translateEquation (ProVerifEquation _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "equation " + _node.formula + ".";
+    this.fullSpec += ")";
+    if (_node.next != null) {
+      this.fullSpec += ";";
+      this.translate(_node.next, _alinea);
     }
+  }
 
-    protected void translateVar (ProVerifVar _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        if (_node.priv)
-            this.fullSpec += "private ";
-        this.fullSpec += "free " + _node.name + ".";
+  protected void translateProcCall(ProVerifProcCall _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += _node.name;
+    if (_node.next != null) {
+      this.fullSpec += ";";
+      this.translate(_node.next, _alinea);
     }
+  }
 
-    protected void translateQueryAtt (ProVerifQueryAtt _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "query attacker:" + _node.name + ".";
+  protected void translateProcLet(ProVerifProcLet _node, int _alinea) {
+    this.fullSpec += "\n" + printAlinea(_alinea);
+    this.fullSpec += "let ";
+    boolean first = true;
+    if (_node.vars.length > 1)
+      this.fullSpec += "(";
+    for (ProVerifVar var : _node.vars) {
+      if (first)
+        first = false;
+      else
+        this.fullSpec += ", ";
+
+      if (var.patternEqual)
+        this.fullSpec += "=" + var.name;
+      else
+        this.fullSpec += var.name;
     }
-
-    protected void translateQueryEv (ProVerifQueryEv _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "query ev:" + _node.name + "().";
+    if (_node.vars.length > 1)
+      this.fullSpec += ")";
+    this.fullSpec += " = " + _node.value + " in";
+    if (_node.next != null)
+      this.translate(_node.next, _alinea);
+    else {
+      this.fullSpec += "\n" + printAlinea(_alinea);
+      this.fullSpec += "0";
     }
-
-    protected void translateQueryEvinj (ProVerifQueryEvinj _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "query evinj:" + _node.ev1 + " ==> evinj:" + _node.ev2 + ".";
-    }
-
-    protected void translateEvDecl (ProVerifEvDecl _node, int _alinea) {
-    }
-
-    protected void translateProcess (ProVerifProcess _node, int _alinea) {
-        this.fullSpec += "\n\n" + printAlinea (_alinea);
-        this.fullSpec += "let " + _node.name + " =";
-        if (_node.next != null)
-            this.translate (_node.next, _alinea+1);
-        else
-            this.fullSpec += "0";
-        this.fullSpec += ".";
-    }
-
-    protected void translateProcNew (ProVerifProcNew _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "new " + _node.name + ";";
-        if (_node.next == null) {
-            this.fullSpec += "\n" + printAlinea (_alinea);
-            this.fullSpec += "0";
-        } else
-            this.translate (_node.next, _alinea);
-    }
-
-    protected void translateProcIn (ProVerifProcIn _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "in (" + _node.channel + ", ";
-        boolean first = true;
-        for (ProVerifVar var: _node.vars) {
-            if (first)
-                first = false;
-            else
-                this.fullSpec += ", ";
-            this.fullSpec += var.name;
-        }
-        this.fullSpec += ")";
-        if (_node.next != null) {
-            this.fullSpec += ";";
-            this.translate (_node.next, _alinea);
-        }
-    }
-
-    protected void translateProcCall (ProVerifProcCall _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += _node.name;
-        if (_node.next != null) {
-            this.fullSpec += ";";
-            this.translate (_node.next, _alinea);
-        }
-    }
-
-    protected void translateProcLet (ProVerifProcLet _node, int _alinea) {
-        this.fullSpec += "\n" + printAlinea (_alinea);
-        this.fullSpec += "let ";
-        boolean first = true;
-        if (_node.vars.length > 1)
-            this.fullSpec += "(";
-        for (ProVerifVar var: _node.vars) {
-            if (first)
-                first = false;
-            else
-                this.fullSpec += ", ";
-
-            if (var.patternEqual)
-                this.fullSpec += "=" + var.name;
-            else
-                this.fullSpec += var.name;
-        }
-        if (_node.vars.length > 1)
-            this.fullSpec += ")";
-        this.fullSpec += " = " + _node.value + " in";
-        if (_node.next != null)
-            this.translate (_node.next, _alinea);
-        else {
-            this.fullSpec += "\n" + printAlinea (_alinea);
-            this.fullSpec += "0";
-        }
-    }
+  }
 }

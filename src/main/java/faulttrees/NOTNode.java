@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package faulttrees;
 
 /**
- * Class NOTNode
- * Creation: 31/01/2018
+ * Class NOTNode Creation: 31/01/2018
+ * 
  * @version 1.0 31/01/2018
  * @author Ludovic APVRILLE
  */
 public class NOTNode extends BooleanNode {
-    
-    public NOTNode(String _name, Object _referenceObject) {
-	    super(_name, _referenceObject);
-	    type = "NOT";
-    }
+
+  public NOTNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "NOT";
+  }
 
 }

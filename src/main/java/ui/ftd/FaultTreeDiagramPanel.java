@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ftd;
 
 //import java.awt.*;
@@ -55,120 +52,122 @@ import java.util.ListIterator;
 //import javax.xml.parsers.*;
 
 /**
- * Class FaultTreeDiagramPanel
- * Panel used for drawing fault trees
- * Creation: 14/12/2017
+ * Class FaultTreeDiagramPanel Panel used for drawing fault trees Creation:
+ * 14/12/2017
+ * 
  * @version 1.0 14/12/2017
  * @author Ludovic APVRILLE
  */
-public class FaultTreeDiagramPanel extends TDiagramPanel implements TDPWithAttributes{
+public class FaultTreeDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 
-    public  FaultTreeDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-    }
-    
-    @Override
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
-    }
+  public FaultTreeDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+  }
 
-    @Override
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public String getXMLHead() {
-        return "<FaultTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    @Override
-    public String getXMLTail() {
-        return "</FaultTreeDiagramPanel>";
-    }
-    
-    @Override
-    public String getXMLSelectedHead() {
-        return "<FaultTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    @Override
-    public String getXMLSelectedTail() {
-        return "</FaultTreeDiagramPanelCopy>";
-    }
-    
-    @Override
-    public String getXMLCloneHead() {
-        return "<FaultTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    @Override
-    public String getXMLCloneTail() {
-        return "</FaultTreeDiagramPanelCopy>";
-    }
+  @Override
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
 
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
+  @Override
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
 
-        // Components over others
+  @Override
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
 
-        // Position correctly guards of choice
-    }
+  @Override
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
 
-    public LinkedList<TGComponent> getAllFaults() {
-        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
-        TGComponent tgc;
+  @Override
+  public String getXMLHead() {
+    return "<FaultTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
 
-        ListIterator iterator = getComponentList().listIterator();
+  @Override
+  public String getXMLTail() {
+    return "</FaultTreeDiagramPanel>";
+  }
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof FTDFault) {
-                list.add(tgc);
-            }
-        }
+  @Override
+  public String getXMLSelectedHead() {
+    return "<FaultTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
 
-        return list;
+  @Override
+  public String getXMLSelectedTail() {
+    return "</FaultTreeDiagramPanelCopy>";
+  }
 
-    }
-    
-    @Override
-    public boolean hasAutoConnect() {
-        return false;
+  @Override
+  public String getXMLCloneHead() {
+    return "<FaultTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  @Override
+  public String getXMLCloneTail() {
+    return "</FaultTreeDiagramPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
+  public LinkedList<TGComponent> getAllFaults() {
+    LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+    TGComponent tgc;
+
+    ListIterator iterator = getComponentList().listIterator();
+
+    while (iterator.hasNext()) {
+      tgc = (TGComponent) (iterator.next());
+      if (tgc instanceof FTDFault) {
+        list.add(tgc);
+      }
     }
 
-    public void setConnectorsToFront() {
-        TGComponent tgc;
+    return list;
 
-        //
+  }
 
-        Iterator iterator = componentList.listIterator();
+  @Override
+  public boolean hasAutoConnect() {
+    return false;
+  }
 
-        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+  public void setConnectorsToFront() {
+    TGComponent tgc;
 
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (!(tgc instanceof TGConnector)) {
-                list.add(tgc);
-            }
-        }
+    //
 
-        //
-        for(TGComponent tgc1: list) {
-            //
-            componentList.remove(tgc1);
-            componentList.add(tgc1);
-        }
+    Iterator iterator = componentList.listIterator();
+
+    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+    while (iterator.hasNext()) {
+      tgc = (TGComponent) (iterator.next());
+      if (!(tgc instanceof TGConnector)) {
+        list.add(tgc);
+      }
     }
+
+    //
+    for (TGComponent tgc1 : list) {
+      //
+      componentList.remove(tgc1);
+      componentList.add(tgc1);
+    }
+  }
 
 }

@@ -1,15 +1,15 @@
 #include <stdlib.h>
 
-
 #include "syncchannel.h"
 #include "request.h"
 #include "myerrors.h"
 #include "debug.h"
 
-
-syncchannel *getNewSyncchannel(char *outname, char *inname) {
-  syncchannel * syncch = (syncchannel *)(malloc(sizeof(struct syncchannel)));
-  if (syncch == NULL) {
+syncchannel *getNewSyncchannel(char *outname, char *inname)
+{
+  syncchannel *syncch = (syncchannel *)(malloc(sizeof(struct syncchannel)));
+  if (syncch == NULL)
+  {
     criticalError("Allocation of request failed");
   }
   syncch->inname = inname;
@@ -20,11 +20,10 @@ syncchannel *getNewSyncchannel(char *outname, char *inname) {
   return syncch;
 }
 
-void setBroadcast(syncchannel *syncch, bool b) {
+void setBroadcast(syncchannel *syncch, bool b)
+{
   syncch->isBroadcast = b;
 }
-
-
 
 /*request *makeNewSendSync(int hasDelay, long delay, int nbOfParams, int *params[]) {
   request *req = getNewRequest(SEND_SYNC_REQUEST, hasDelay, delay, nbOfParams, params);
@@ -36,6 +35,7 @@ request *makeNewReceiveSync(int hasDelay, long delay, int nbOfParams, int *param
   return req;
   }*/
 
-void destroySyncchannel(syncchannel *syncch) {
+void destroySyncchannel(syncchannel *syncch)
+{
   free(syncch);
 }

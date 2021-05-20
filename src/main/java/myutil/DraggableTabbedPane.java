@@ -1,6 +1,5 @@
 // From stackOverflow
-package myutil;    
-
+package myutil;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -15,7 +14,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-
 
 public class DraggableTabbedPane extends JTabbedPane {
 
@@ -32,16 +30,15 @@ public class DraggableTabbedPane extends JTabbedPane {
     addMouseMotionListener(new MouseMotionAdapter() {
       public void mouseDragged(MouseEvent e) {
 
-        if(!dragging) {
+        if (!dragging) {
           // Gets the tab index based on the mouse position
           int tabNumber = getUI().tabForCoordinate(DraggableTabbedPane.this, e.getX(), e.getY());
 
-          if(tabNumber >= 0) {
+          if (tabNumber >= 0) {
             draggedTabIndex = tabNumber;
             Rectangle bounds = getUI().getTabBounds(DraggableTabbedPane.this, tabNumber);
             bounds.height = bounds.height + 100;
             TraceManager.addDev("bounds width:" + bounds.width + " height:" + bounds.height);
-
 
             // Paint the tabbed pane to a buffer
             Image totalImage = new BufferedImage(getWidth(), getHeight() + 100, BufferedImage.TYPE_INT_ARGB);
@@ -55,10 +52,11 @@ public class DraggableTabbedPane extends JTabbedPane {
             tabImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = tabImage.getGraphics();
             myY = bounds.y;
-            graphics.drawImage(totalImage, 0, 0, bounds.width, bounds.height, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y+bounds.height, DraggableTabbedPane.this);
+            graphics.drawImage(totalImage, 0, 0, bounds.width, bounds.height, bounds.x, bounds.y,
+                bounds.x + bounds.width, bounds.y + bounds.height, DraggableTabbedPane.this);
 
             dragging = true;
-            //repaint();
+            // repaint();
           }
         } else {
           currentMouseLocation = e.getPoint();
@@ -74,19 +72,19 @@ public class DraggableTabbedPane extends JTabbedPane {
     addMouseListener(new MouseAdapter() {
       public void mouseReleased(MouseEvent e) {
 
-        if(dragging) {
+        if (dragging) {
           int tabNumber = getUI().tabForCoordinate(DraggableTabbedPane.this, e.getX(), 10);
 
-          if(tabNumber >= 0) {
-              if (draggedTabIndex != tabNumber) {
-                  Component comp = getComponentAt(draggedTabIndex);
-                  String title = getTitleAt(draggedTabIndex);
-                  removeTabAt(draggedTabIndex);
-                  insertTab(title, null, comp, null, tabNumber);
-                  if (callback != null) {
-                      callback.hasBeenDragged(draggedTabIndex, tabNumber);
-                  }
+          if (tabNumber >= 0) {
+            if (draggedTabIndex != tabNumber) {
+              Component comp = getComponentAt(draggedTabIndex);
+              String title = getTitleAt(draggedTabIndex);
+              removeTabAt(draggedTabIndex);
+              insertTab(title, null, comp, null, tabNumber);
+              if (callback != null) {
+                callback.hasBeenDragged(draggedTabIndex, tabNumber);
               }
+            }
 
           }
         }
@@ -101,12 +99,11 @@ public class DraggableTabbedPane extends JTabbedPane {
     super.paintComponent(g);
 
     // Are we dragging?
-    if(dragging && currentMouseLocation != null && tabImage != null) {
+    if (dragging && currentMouseLocation != null && tabImage != null) {
       // Draw the dragged tab
       g.drawImage(tabImage, currentMouseLocation.x, currentMouseLocation.y, this);
-      //g.drawImage(tabImage, currentMouseLocation.x, myY, this);
+      // g.drawImage(tabImage, currentMouseLocation.x, myY, this);
     }
   }
 
 }
-

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarpd;
 
 import org.w3c.dom.Element;
@@ -51,149 +48,141 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-* Class AvatarPDToggle
-* component with a toggle part
-* Creation: 30/04/2010
-* @version 1.0 30/04/2010
-* @author Ludovic APVRILLE
+ * Class AvatarPDToggle component with a toggle part Creation: 30/04/2010
+ * 
+ * @version 1.0 30/04/2010
+ * @author Ludovic APVRILLE
  */
-public abstract class  AvatarPDToggle extends TGCScalableWithInternalComponent {
-	
-    protected String oldValue = "";
-	protected String oldToggle = "";
-	protected String toggle;
-	protected final String TOGGLE = "toggle";
-	protected int toggleHeight = 35;
-	protected int toggleDecY = 3;
-	protected int textX = 2;
-	protected float decXToggle = 0;
-	protected boolean valueChanged = false;
-	
-	
-    
-    public AvatarPDToggle(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-		multieditable = true;
-		toggle = "";
-		valueChanged = true;
+public abstract class AvatarPDToggle extends TGCScalableWithInternalComponent {
+
+  protected String oldValue = "";
+  protected String oldToggle = "";
+  protected String toggle;
+  protected final String TOGGLE = "toggle";
+  protected int toggleHeight = 35;
+  protected int toggleDecY = 3;
+  protected int textX = 2;
+  protected float decXToggle = 0;
+  protected boolean valueChanged = false;
+
+  public AvatarPDToggle(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    multieditable = true;
+    toggle = "";
+    valueChanged = true;
+  }
+
+  public String getFullToggle() {
+    String s = TOGGLE;
+    if ((toggle != null) && (toggle.length() > 0)) {
+      s += " to: " + toggle;
     }
-    
-	
-	
-	public String getFullToggle() {
-		String s = TOGGLE;
-		if ((toggle != null) && (toggle.length() > 0)) {
-			s += " to: " + toggle;
-		}
-		return s;
-	}
-    
-	public void setValueWidth(Graphics g) {
-		
-		valueChanged = false;
-		
-        int w  = g.getFontMetrics().stringWidth(value);
-		int w2 = g.getFontMetrics().stringWidth(getFullToggle());
-		w2 = Math.max(w, (int)((w2 + 4)/(1-decXToggle)));
-		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w2 + 2 * textX );
+    return s;
+  }
+
+  public void setValueWidth(Graphics g) {
+
+    valueChanged = false;
+
+    int w = g.getFontMetrics().stringWidth(value);
+    int w2 = g.getFontMetrics().stringWidth(getFullToggle());
+    w2 = Math.max(w, (int) ((w2 + 4) / (1 - decXToggle)));
+    int w1 = Math.max((int) (minWidth * tdp.getZoom()), w2 + 2 * textX);
+    //
+    if (w1 != width) {
+      width = w1;
+      resizeWithFather();
+    }
+    //
+  }
+
+  @Override
+  public void resizeWithFather() {
+    if ((father != null) && (father instanceof AvatarPDBlock)) {
+      //
+      setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+      // setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y,
+      // father.getHeight() - getHeight()));
+      setMoveCd(x, y);
+    }
+  }
+
+  public boolean editToggle(JFrame _frame) {
+    oldToggle = toggle;
+    String s = (String) JOptionPane.showInputDialog(_frame, "Toggle to:", "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getToggle());
+    if (s == null) {
+      s = oldToggle;
+    }
+    setToggle(s);
+    if (toggle.compareTo(oldToggle) != 0) {
+      valueChanged = true;
+      return true;
+    }
+    return false;
+  }
+
+  public String getToggle() {
+    return toggle;
+  }
+
+  public void setToggle(String _toggle) {
+    toggle = _toggle;
+  }
+
+  @Override
+  protected String translateExtraParam() {
+
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Toggle value=\"");
+    sb.append(getToggle());
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      String s;
+      toggle = "";
+
+      valueChanged = true;
+
+      //
+      //
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        if (w1 != width) { 
-            width = w1;
-            resizeWithFather();
-        }
-        //
-    }
-    
-	@Override
-    public void resizeWithFather() {
-        if ((father != null) && (father instanceof AvatarPDBlock)) {
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
             //
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
-            setMoveCd(x, y);
-        }
-    }
-	
-	public boolean editToggle(JFrame _frame) {
-		oldToggle = toggle;
-		String s = (String)JOptionPane.showInputDialog(_frame, "Toggle to:",
-			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-			null,
-			getToggle());
-		if (s == null) {
-			s = oldToggle;
-		}
-		setToggle(s);
-		if (toggle.compareTo(oldToggle) !=0) {
-			valueChanged = true;
-			return true;
-		}
-		return false;
-	}
-    
-	
-	
-	public String getToggle() {
-		return toggle;
-	}
-	
-	public void setToggle(String _toggle) {
-		toggle = _toggle;
-	}
-    
-	@Override
-	protected String translateExtraParam() {
-		
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-		sb.append("<Toggle value=\"");
-		sb.append(getToggle());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            String s;
-			toggle = "";
-			
-			valueChanged = true;
-            
-            //
-            //
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Toggle")) {
                 //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Toggle")) {
-                                //
-								
-                                s = elt.getAttribute("value");
-								if (s!=null) {
-									toggle = s;
-								}
-							}
-                        }
-                    }
+
+                s = elt.getAttribute("value");
+                if (s != null) {
+                  toggle = s;
                 }
+              }
             }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
+          }
         }
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
-	
-	
+  }
+
 }

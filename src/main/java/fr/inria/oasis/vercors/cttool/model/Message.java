@@ -36,15 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
 package fr.inria.oasis.vercors.cttool.model;
 
 public interface Message {
 
-	String getName();
-	void setName(String name);
-	
-	
-	boolean equals(Message m);
+  String getName();
+
+  void setName(String name);
+
+  boolean equals(Message m);
 }

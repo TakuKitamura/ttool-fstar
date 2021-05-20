@@ -36,27 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sddescription;
 
-
 /**
- * Class HMSCElement
- * Creation: 11/10/2004
+ * Class HMSCElement Creation: 11/10/2004
+ * 
  * @version 1.1 11/10/2004
  * @author Ludovic APVRILLE
  */
 public class HMSCElement {
-    
-    protected String name;
-    
-    public HMSCElement(String _name) {
-        name = _name;
-    
-    }
 
-    public String getName() { return name; }
+  protected String name;
+
+  public HMSCElement(String _name) {
+    name = _name;
+
+  }
+
+  public String getName() {
+    return name;
+  }
 
 }

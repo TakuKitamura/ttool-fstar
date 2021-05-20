@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd;
 
 import ui.MainGUI;
@@ -51,120 +48,120 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class SequenceDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a sequence diagram
- * Creation: 30/09/2004
+ * Class SequenceDiagramToolBar Implements the toolbar to be used in conjunction
+ * with the panel of a sequence diagram Creation: 30/09/2004
+ * 
  * @version 1.0 30/09/2004
  * @author Ludovic APVRILLE
  * @see SequenceDiagramPanel
  */
 public class SequenceDiagramToolBar extends TToolBar {
-    
-    public SequenceDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-        
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.SD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_SYNC].setEnabled(b);
-        mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_ASYNC].setEnabled(b);
-        mgui.actions[TGUIAction.SD_INSTANCE].setEnabled(b);
-        mgui.actions[TGUIAction.SD_ACTION_STATE].setEnabled(b);  
-		mgui.actions[TGUIAction.SD_GUARD].setEnabled(b);
-        mgui.actions[TGUIAction.SD_COREGION].setEnabled(b);
-        mgui.actions[TGUIAction.SD_TIME_INTERVAL].setEnabled(b);
-        mgui.actions[TGUIAction.SD_TIMER_SETTING].setEnabled(b);
-        mgui.actions[TGUIAction.SD_TIMER_EXPIRATION].setEnabled(b);
-        mgui.actions[TGUIAction.SD_TIMER_CANCELLATION].setEnabled(b);
-        mgui.actions[TGUIAction.SD_ABSOLUTE_TIME_CONSTRAINT].setEnabled(b);
-        mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT].setEnabled(b);
-        mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		mgui.updateZoomInfo();
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.SD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_SYNC]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_ASYNC]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_INSTANCE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_ACTION_STATE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.SD_GUARD]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.SD_COREGION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_TIMER_SETTING]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.SD_TIMER_CANCELLATION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.SD_TIMER_EXPIRATION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_TIME_INTERVAL]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_ABSOLUTE_TIME_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-         this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-    }
-    
+
+  public SequenceDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.SD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_SYNC].setEnabled(b);
+    mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_ASYNC].setEnabled(b);
+    mgui.actions[TGUIAction.SD_INSTANCE].setEnabled(b);
+    mgui.actions[TGUIAction.SD_ACTION_STATE].setEnabled(b);
+    mgui.actions[TGUIAction.SD_GUARD].setEnabled(b);
+    mgui.actions[TGUIAction.SD_COREGION].setEnabled(b);
+    mgui.actions[TGUIAction.SD_TIME_INTERVAL].setEnabled(b);
+    mgui.actions[TGUIAction.SD_TIMER_SETTING].setEnabled(b);
+    mgui.actions[TGUIAction.SD_TIMER_EXPIRATION].setEnabled(b);
+    mgui.actions[TGUIAction.SD_TIMER_CANCELLATION].setEnabled(b);
+    mgui.actions[TGUIAction.SD_ABSOLUTE_TIME_CONSTRAINT].setEnabled(b);
+    mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT].setEnabled(b);
+    mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.SD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_SYNC]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_ASYNC]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_INSTANCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_ACTION_STATE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_GUARD]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_COREGION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_TIMER_SETTING]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_TIMER_CANCELLATION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_TIMER_EXPIRATION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_TIME_INTERVAL]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_ABSOLUTE_TIME_CONSTRAINT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
+
 } // Class

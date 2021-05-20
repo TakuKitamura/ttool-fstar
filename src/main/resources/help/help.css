@@ -1,4 +1,17 @@
-body {color:#000; font-family:times; margin: 4px; }
-h1 {color: green; margin-top: 20px;}
-h2 {color: #ff0000; margin-top: 20px;}
-h3 {color: green; margin-top: 15px;}
+body {
+  color: #000;
+  font-family: times;
+  margin: 4px;
+}
+h1 {
+  color: green;
+  margin-top: 20px;
+}
+h2 {
+  color: #ff0000;
+  margin-top: 20px;
+}
+h3 {
+  color: green;
+  margin-top: 15px;
+}

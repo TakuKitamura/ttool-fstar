@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package web.crawler;
 
 import myutil.externalSearch.Message;
@@ -53,74 +50,71 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 /**
-   * Class ThreadSocket
-   * Socket in a thread ;-)
-   * Creation: 2015
-   * @version 2.0 25/03/2016
-   * @author  Dan Huynh VO, Ludovic APVRILLE
+ * Class ThreadSocket Socket in a thread ;-) Creation: 2015
+ * 
+ * @version 2.0 25/03/2016
+ * @author Dan Huynh VO, Ludovic APVRILLE
  */
 public class ThreadSocket extends Thread {
 
-    SSLSocket socket = null;
-    DatabaseQuery database = null;
+  SSLSocket socket = null;
+  DatabaseQuery database = null;
 
-    /**
-     * Constructor
-     * @param socket    : SSL socket
-     * @param database  : DatabaseQuery
-     */
-    public ThreadSocket(SSLSocket socket, web.crawler.DatabaseQuery database){
+  /**
+   * Constructor
+   * 
+   * @param socket   : SSL socket
+   * @param database : DatabaseQuery
+   */
+  public ThreadSocket(SSLSocket socket, web.crawler.DatabaseQuery database) {
 
-        this.socket = socket;
-        this.database=database;
+    this.socket = socket;
+    this.database = database;
+  }
+
+  @Override
+  public void run() {
+    try {
+      ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
+      // Receive from clients
+      ObjectOutputStream toClient = new ObjectOutputStream(socket.getOutputStream());
+      // Send to clients
+
+      // Create a new message to prepare getting the message from client
+      Message requestMsg = new Message();
+
+      try {
+        requestMsg = (Message) fromClient.readObject();
+      } catch (ClassNotFoundException ex) {
+        Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      // Print the result
+      // System.out.println(requestMsg.getCmd());
+      // System.out.println(requestMsg.getOptions());
+      // System.out.println(requestMsg.getValues());
+
+      // Read the message and then modify the content
+
+      Message answerMsg = new Message();
+      answerMsg = MultiThreadServer.analyseRequestMessage(requestMsg, database);
+
+      // Send it back to the client
+      toClient.writeObject(answerMsg);
+
+      toClient.close();
+      fromClient.close();
+      socket.close();
+
+    } catch (IOException ex) {
+      Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (SQLException ex) {
+      Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (AWTException ex) {
+      Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (TransformerException ex) {
+      Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
     }
-
-    @Override
-    public void run() {
-        try {
-            ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
-            //Receive from clients
-            ObjectOutputStream toClient = new ObjectOutputStream(socket.getOutputStream());
-            //Send to clients
-
-
-            //Create a new message to prepare getting the message from client
-            Message requestMsg = new Message();
-
-            try {
-                requestMsg = (Message) fromClient.readObject();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            //Print the result
-            //System.out.println(requestMsg.getCmd());
-            //System.out.println(requestMsg.getOptions());
-            //System.out.println(requestMsg.getValues());
-
-            //Read the message and then modify the content
-
-            Message answerMsg = new Message();
-            answerMsg = MultiThreadServer.analyseRequestMessage(requestMsg, database);
-
-            //Send it back to the client
-            toClient.writeObject(answerMsg);
-
-            toClient.close();
-            fromClient.close();
-            socket.close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (AWTException ex) {
-            Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(ThreadSocket.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+  }
 }

@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package help;
 
 import myutil.TraceManager;
@@ -46,111 +45,106 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 /**
- * Class SearchResultHelpEntry
- * Creation: 07/03/2019
- * Version 1.0 07/03/2019
+ * Class SearchResultHelpEntry Creation: 07/03/2019 Version 1.0 07/03/2019
  *
  * @author Ludovic APVRILLE
  */
 public class SearchResultHelpEntry extends HelpEntry {
-    public static String SEARCH_HEADER = "<h1>Search result</h1>\n<br>\n";
+  public static String SEARCH_HEADER = "<h1>Search result</h1>\n<br>\n";
 
-    public Vector<ScoredHelpEntry> scores;
+  public Vector<ScoredHelpEntry> scores;
 
-    public SearchResultHelpEntry() {
+  public SearchResultHelpEntry() {
 
+  }
+
+  public void setScores(Vector<ScoredHelpEntry> _scores) {
+    scores = _scores;
+  }
+
+  @Override
+  public String getHTMLContent() {
+
+    String ret = super.getHTMLContent();
+    String kids = getKidsInHTML();
+    int index1 = ret.indexOf("<body>");
+    if (index1 > -1) {
+      index1 += 6;
+      ret = ret.substring(0, index1) + "\n" + SEARCH_HEADER + scores.size() + " result(s) found:<br>\n" + kids
+          + ret.substring(index1 + 1, ret.length());
     }
 
-    public void setScores(Vector<ScoredHelpEntry> _scores) {
-        scores = _scores;
+    // TraceManager.addDev("Resulting HTML of search:" + ret);
+
+    return ret;
+  }
+
+  @Override
+  public String getKidsInHTML() {
+    String s = "";
+    int maxScore = getMaxScore();
+
+    if (scores != null) {
+      for (ScoredHelpEntry entry : scores) {
+        s += "<li> ";
+        int score = (int) (entry.score * 100.0 / maxScore);
+        s += "<a href=\"file://" + entry.he.getPathToHTMLFile() + "\"/>" + entry.he.getMasterKeyword() + "</a>  " + "("
+            + score + "%)  " + entry.he.getKeywords();
+        s += " </li>\n<br>\n";
+      }
     }
 
-    @Override
-    public String getHTMLContent() {
+    return s;
+  }
 
-        String ret = super.getHTMLContent();
-        String kids = getKidsInHTML();
-        int index1 = ret.indexOf("<body>");
-        if (index1 > -1) {
-            index1 += 6;
-            ret = ret.substring(0, index1) + "\n" + SEARCH_HEADER + scores.size() + " result(s) found:<br>\n" +
-                    kids + ret.substring(index1 + 1, ret.length());
+  private int getMaxScore() {
+    int maxScore = -1;
+    if (scores == null) {
+      return maxScore;
+    }
+    for (ScoredHelpEntry score : scores) {
+      if (score.score > maxScore) {
+        maxScore = score.score;
+      }
+    }
+    return maxScore;
+  }
+
+  public void mergeResults() {
+    // Find duplicate sons, and compute final scores for sons
+    // Vector<HelpEntry> tmp = new Vector<>();
+    HashMap<HelpEntry, ScoredHelpEntry> mergeMap = new HashMap<>();
+    Vector<ScoredHelpEntry> tmpScores = new Vector<>();
+    int cpt = 0;
+
+    if (scores != null) {
+      for (ScoredHelpEntry score : scores) {
+        ScoredHelpEntry sc = mergeMap.get(score.he);
+        if (sc == null) {
+          mergeMap.put(score.he, score);
+        } else {
+          // An entry already exists: accumulate score
+          sc.score += score.score;
         }
 
-        //TraceManager.addDev("Resulting HTML of search:" + ret);
-
-        return ret;
+      }
     }
 
-    @Override
-    public String getKidsInHTML() {
-        String s = "";
-        int maxScore = getMaxScore();
+    // Compute a mergedList
+    scores = new Vector<>(mergeMap.values());
+  }
 
-        if (scores != null) {
-            for (ScoredHelpEntry entry: scores) {
-                s += "<li> ";
-                int score = (int) (entry.score * 100.0 / maxScore);
-                s += "<a href=\"file://" + entry.he.getPathToHTMLFile() + "\"/>" + entry.he.getMasterKeyword
-                        () + "</a>  " + "(" + score + "%)  " +
-                        entry.he.getKeywords();
-                s += " </li>\n<br>\n";
-            }
-        }
+  public void sortResults() {
+    Collections.sort(scores, Collections.reverseOrder());
+  }
 
-        return s;
+  public String toString() {
+    StringBuffer sb = new StringBuffer("");
+    for (ScoredHelpEntry he : scores) {
+      sb.append(he.score + ": " + he.he.getPathToHTMLFile() + "\n");
     }
-
-    private int getMaxScore() {
-        int maxScore = -1;
-        if (scores == null) {
-            return maxScore;
-        }
-        for (ScoredHelpEntry score: scores) {
-            if (score.score > maxScore) {
-                maxScore = score.score;
-            }
-        }
-        return maxScore;
-    }
-
-    public void mergeResults() {
-        // Find duplicate sons, and compute final scores for sons
-        //Vector<HelpEntry> tmp = new Vector<>();
-        HashMap<HelpEntry, ScoredHelpEntry> mergeMap = new HashMap<>();
-        Vector<ScoredHelpEntry> tmpScores = new Vector<>();
-        int cpt = 0;
-
-        if (scores != null) {
-            for (ScoredHelpEntry score: scores) {
-                ScoredHelpEntry sc = mergeMap.get(score.he);
-                if (sc == null) {
-                    mergeMap.put(score.he, score);
-                } else {
-                    // An entry already exists: accumulate score
-                    sc.score += score.score;
-                }
-
-            }
-        }
-
-        // Compute a mergedList
-        scores = new Vector<>(mergeMap.values());
-    }
-
-    public void sortResults() {
-        Collections.sort(scores, Collections.reverseOrder());
-    }
-
-    public String toString() {
-        StringBuffer sb = new StringBuffer("");
-        for(ScoredHelpEntry he: scores) {
-            sb.append(he.score + ": " + he.he.getPathToHTMLFile() + "\n");
-        }
-        return sb.toString();
-    }
-
+    return sb.toString();
+  }
 
 }

@@ -36,46 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package nc;
 
-
 /**
-* Class NCTimeUnit
-* Creation: 28/11/2008
-* @version 1.0 28/11/2008
-* @author Ludovic APVRILLE
+ * Class NCTimeUnit Creation: 28/11/2008
+ * 
+ * @version 1.0 28/11/2008
+ * @author Ludovic APVRILLE
  */
 public class NCTimeUnit {
-    
-	public static final String US = "us";
-	public static final String MS = "ms";
-	public static final String S = "s";
-	
-	private String unit;
-	
-	public NCTimeUnit() {
-		unit = MS;
-	}
-	
-	public void setUnit(String s) {
-		if (s.equals(US)) {
-			unit = US;
-		}
-		
-		if (s.equals(MS)) {
-			unit = MS;
-		}
-		
-		if (s.equals(S)) {
-			unit = S;
-		}
-	}
-	
-	public String getStringUnit() {
-		return unit;
-	}
-	
+
+  public static final String US = "us";
+  public static final String MS = "ms";
+  public static final String S = "s";
+
+  private String unit;
+
+  public NCTimeUnit() {
+    unit = MS;
+  }
+
+  public void setUnit(String s) {
+    if (s.equals(US)) {
+      unit = US;
+    }
+
+    if (s.equals(MS)) {
+      unit = MS;
+    }
+
+    if (s.equals(S)) {
+      unit = S;
+    }
+  }
+
+  public String getStringUnit() {
+    return unit;
+  }
+
 }

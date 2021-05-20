@@ -14,5 +14,3 @@ They have the following attributes.
 - A clock divider expresses the relation between the clock of the memory and the main clock of the architecture
 - A bus privacy. A public bus can be spied at, while a private bus cannot. On a public bus, an attacker can reive messages and inject messages.
 - A reference attack specifies which attack of attakc trees this bus relates to.
-
-

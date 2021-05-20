@@ -36,21 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package attacktrees;
 
 /**
- * Class SequenceNode
- * Creation: 13/04/2015
+ * Class SequenceNode Creation: 13/04/2015
  *
  * @author Ludovic APVRILLE
  * @version 1.0 13/04/2015
  */
 public class SequenceNode extends AttackNode {
 
-    public SequenceNode(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        type = "SEQUENCE";
-    }
+  public SequenceNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "SEQUENCE";
+  }
 
 }

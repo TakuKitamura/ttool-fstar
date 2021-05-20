@@ -36,19 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator.modelchecker;
 
 /**
-   * Class SpecificationReachabilityType
-   * Reachability types
-   * Creation: 07/06/2016
-   * @version 1.0 07/06/2016
-   * @author Ludovic APVRILLE
+ * Class SpecificationReachabilityType Reachability types Creation: 07/06/2016
+ * 
+ * @version 1.0 07/06/2016
+ * @author Ludovic APVRILLE
  */
-public enum SpecificationReachabilityType  {
-    NOTCOMPUTED, REACHABLE, NONREACHABLE
+public enum SpecificationReachabilityType {
+  NOTCOMPUTED, REACHABLE, NONREACHABLE
 }

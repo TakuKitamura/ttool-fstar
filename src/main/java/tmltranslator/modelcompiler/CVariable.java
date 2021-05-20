@@ -39,134 +39,129 @@
 package tmltranslator.modelcompiler;
 
 /**
- * Class CVariable
- * Abstract Data Type that implements a C variable composed of type and identifier
- * Creation: 11/10/2016
+ * Class CVariable Abstract Data Type that implements a C variable composed of
+ * type and identifier Creation: 11/10/2016
+ * 
  * @version 1.0 11/10/2016
  * @author Andrea ENRICI
  */
 public class CVariable implements CCodeGenConstants {
-    
-    // type
-    //private final static String SPACE = " ";
 
-    public final static int NATURAL = 1;
-    public final static int BOOLEAN = 2;
-    public final static int ADDRESS = 3;
-    public final static int OTHER = 4;
+  // type
+  // private final static String SPACE = " ";
 
-    public final static String ADDRESS_STRING = "addr";
+  public final static int NATURAL = 1;
+  public final static int BOOLEAN = 2;
+  public final static int ADDRESS = 3;
+  public final static int OTHER = 4;
 
-    //public final static HashSet<String> typesDataBase = new HashSet<String>();
-        /*typesDataBase.add( "void" );
-        typesDataBase.add( "float" );
-        typesDataBase.add( "double" );
-        typesDataBase.add( "char" );
-        typesDataBase.add( "unsigned char" );
-        typesDataBase.add( "int" );
-        typesDataBase.add( "unsigned int" );
-        typesDataBase.add( "short" );
-        typesDataBase.add( "unsigned short" );
-        typesDataBase.add( "long" );
-        typesDataBase.add( "unsigned long" );
-        typesDataBase.add( "uint32_t" );
-        typesDataBase.add( "int32_t" );
-        typesDataBase.add( "uint64_t" );
-        typesDataBase.add( "int64_t" );
-        typesDataBase.add( "uintptr_t" );
-        typesDataBase.add( "intprt_t" );*/
-    
-    private String type;
-    private String name;
-    
-    public CVariable( String _type, String _name )    {
-        type = _type;
-        name = _name;
-    }
-    
-    public String getType()	{
-        return type;
-    }
+  public final static String ADDRESS_STRING = "addr";
 
-    public String getName()    {
-        return name;
-    }
-    
-    public void setType( String _type )    {
-        type = _type;
-    }
-    
-    public void setName( String _name )    {
-        name = _name;
-    }
+  // public final static HashSet<String> typesDataBase = new HashSet<String>();
+  /*
+   * typesDataBase.add( "void" ); typesDataBase.add( "float" ); typesDataBase.add(
+   * "double" ); typesDataBase.add( "char" ); typesDataBase.add( "unsigned char"
+   * ); typesDataBase.add( "int" ); typesDataBase.add( "unsigned int" );
+   * typesDataBase.add( "short" ); typesDataBase.add( "unsigned short" );
+   * typesDataBase.add( "long" ); typesDataBase.add( "unsigned long" );
+   * typesDataBase.add( "uint32_t" ); typesDataBase.add( "int32_t" );
+   * typesDataBase.add( "uint64_t" ); typesDataBase.add( "int64_t" );
+   * typesDataBase.add( "uintptr_t" ); typesDataBase.add( "intprt_t" );
+   */
 
-    public static int getIntegerType( String s ) {
-		s = s.toUpperCase();
-        if (s.equals("NATURAL")) {
-            return 	NATURAL;
-        } else if (s.equals("BOOLEAN")) {
-            return 	BOOLEAN;
-        } else if (s.equals("ADDRESS")) {
-            return ADDRESS;
-        } else if (s.equals("NAT")) {
-            return 	NATURAL;
-        } else if (s.equals("INT")) {
-            return 	NATURAL;
-        } else if (s.equals("BOOL")) {
-            return 	BOOLEAN;
-        } else if (!s.equals("")) {
-            return OTHER;
-        }
-		
-        return -1;
-    }
-    
-    public static String getStringType( String type )  {
-        switch(type) {
-            case NATURAL_TYPE:
-                return "nat";
-            case BOOLEAN_TYPE:
-                return BOOLEAN_TYPE;
-            case ADDRESS_STRING:
-                return "addr";
-            default:
-                return "" + type;
-        }
-    }
-	
-	public static boolean isAValidType( String type )   {
-		type = type.toUpperCase();
-		
-		if (type.compareTo("NAT") == 0) {
-			return true;
-		}  
-		
-		if (type.compareTo("INT") == 0) {
-			return true;
-		}
+  private String type;
+  private String name;
 
-        return type.compareTo("BOOL") == 0;
+  public CVariable(String _type, String _name) {
+    type = _type;
+    name = _name;
+  }
 
-    }
-    
-    @Override public String toString() {
-        return type + SP + name;
+  public String getType() {
+    return type;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setType(String _type) {
+    type = _type;
+  }
+
+  public void setName(String _name) {
+    name = _name;
+  }
+
+  public static int getIntegerType(String s) {
+    s = s.toUpperCase();
+    if (s.equals("NATURAL")) {
+      return NATURAL;
+    } else if (s.equals("BOOLEAN")) {
+      return BOOLEAN;
+    } else if (s.equals("ADDRESS")) {
+      return ADDRESS;
+    } else if (s.equals("NAT")) {
+      return NATURAL;
+    } else if (s.equals("INT")) {
+      return NATURAL;
+    } else if (s.equals("BOOL")) {
+      return BOOLEAN;
+    } else if (!s.equals("")) {
+      return OTHER;
     }
 
-	@Override public boolean equals( Object o )	{
-		if( !( o instanceof CVariable ) )	{
-			return false;
-		}
-		else    {
-			CVariable var = (CVariable)o;
-			return ( (getType().equals(var.getType())) && (getName().equals(var.getName())) );
-		}
-	}
+    return -1;
+  }
 
-	@Override public int hashCode()	{
-		int result = 17;
-		result = 31 * result + type.hashCode();
-		return result;
-	}
-    
-}	//End of class
+  public static String getStringType(String type) {
+    switch (type) {
+      case NATURAL_TYPE:
+        return "nat";
+      case BOOLEAN_TYPE:
+        return BOOLEAN_TYPE;
+      case ADDRESS_STRING:
+        return "addr";
+      default:
+        return "" + type;
+    }
+  }
+
+  public static boolean isAValidType(String type) {
+    type = type.toUpperCase();
+
+    if (type.compareTo("NAT") == 0) {
+      return true;
+    }
+
+    if (type.compareTo("INT") == 0) {
+      return true;
+    }
+
+    return type.compareTo("BOOL") == 0;
+
+  }
+
+  @Override
+  public String toString() {
+    return type + SP + name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof CVariable)) {
+      return false;
+    } else {
+      CVariable var = (CVariable) o;
+      return ((getType().equals(var.getType())) && (getName().equals(var.getName())));
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + type.hashCode();
+    return result;
+  }
+
+} // End of class

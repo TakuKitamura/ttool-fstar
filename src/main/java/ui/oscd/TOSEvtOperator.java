@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 import ui.*;
@@ -47,43 +44,44 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TOSEvtOperator
- * Evt composition operator
- * To be used in TURTLE-OS class diagrams
- * Creation: 09/01/2007
+ * Class TOSEvtOperator Evt composition operator To be used in TURTLE-OS class
+ * diagrams Creation: 09/01/2007
+ * 
  * @version 1.0 09/01/2007
  * @author Ludovic APVRILLE
  */
 public class TOSEvtOperator extends TOSCompositionOperator {
 
-    public TOSEvtOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        TOSEvtInfo tgc = new TOSEvtInfo(x, y+40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
-        tgc.setMoveWithFather(false);
-        tgcomponent[0] = tgc;
-        
-        name = "evt composition operator";
-        value = "Evt";
-        
-        myImageIcon = IconManager.imgic110;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x, y, width, height);
-        g.setColor(ColorManager.COMPOSITION_OPERATOR);
-        g.fillRect(x+1, y+1, width-1, height-1);
-        g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
-        ColorManager.setColor(g, getState(), 0);
-        g.setFont((g.getFont()).deriveFont(Font.BOLD));
-        g.drawString(value, x + textX, y + textY);
-        g.setFont((g.getFont()).deriveFont(Font.PLAIN));
-    }
-    
-    public int getType() {
-        return TGComponentManager.TOSCD_EVT_OPERATOR;
-    }
+  public TOSEvtOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+    TOSEvtInfo tgc = new TOSEvtInfo(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this,
+        _tdp);
+    tgc.setMoveWithFather(false);
+    tgcomponent[0] = tgc;
+
+    name = "evt composition operator";
+    value = "Evt";
+
+    myImageIcon = IconManager.imgic110;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.setColor(ColorManager.COMPOSITION_OPERATOR);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
+    ColorManager.setColor(g, getState(), 0);
+    g.setFont((g.getFont()).deriveFont(Font.BOLD));
+    g.drawString(value, x + textX, y + textY);
+    g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+  }
+
+  public int getType() {
+    return TGComponentManager.TOSCD_EVT_OPERATOR;
+  }
 
 }

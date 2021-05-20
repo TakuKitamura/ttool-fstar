@@ -36,25 +36,20 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
 package fr.inria.oasis.vercors.cttool.model;
 
-public class InPort extends PortImpl{
+public class InPort extends PortImpl {
 
-	public InPort(String name)
-	{
-		super(name);
-	}
-	
-	public InPort(String name, Component father)
-	{
-		super(name,father);
-	}
+  public InPort(String name) {
+    super(name);
+  }
 
-  public String toString()
-  {
-	  return "InPort "+super.toString();
+  public InPort(String name, Component father) {
+    super(name, father);
+  }
+
+  public String toString() {
+    return "InPort " + super.toString();
   }
 
 }

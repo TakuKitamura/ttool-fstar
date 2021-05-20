@@ -39,40 +39,40 @@
 package elntranslator;
 
 /**
- * Class ELNTModulePortDE
- * Parameters of a ELN primitive component : module port DE
- * Creation: 03/08/2018
+ * Class ELNTModulePortDE Parameters of a ELN primitive component : module port
+ * DE Creation: 03/08/2018
+ * 
  * @version 1.0 03/08/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTModulePortDE extends ELNTComponent {
-	private String name;
-	private String type;
-	private String origin;
-	
-	private ELNTModule module;
-	
-	public ELNTModulePortDE(String _name, String _type, String _origin, ELNTModule _module) {
-		name = _name;
-		type = _type;
-		origin = _origin;
-		module = _module;
-	}
+  private String name;
+  private String type;
+  private String origin;
 
-	public String getName() {
-		return name;
-	}
-	
-	public String getType() {
-		return type;
-	}
+  private ELNTModule module;
 
-	public String getOrigin() {
-		return origin;
-	}
+  public ELNTModulePortDE(String _name, String _type, String _origin, ELNTModule _module) {
+    name = _name;
+    type = _type;
+    origin = _origin;
+    module = _module;
+  }
 
-	public ELNTModule getModule() {
-		return module;
-	}
+  public String getName() {
+    return name;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getOrigin() {
+    return origin;
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

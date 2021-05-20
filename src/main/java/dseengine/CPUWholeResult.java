@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 import myutil.TraceManager;
@@ -46,138 +43,137 @@ import myutil.TraceManager;
 import java.util.Hashtable;
 import java.util.Vector;
 
-
 //import uppaaldesc.*;
 
 /**
-* Class CPUWholeResult
-* Object for storing all CPU simulation results
-* Creation: 07/09/2011
-* @version 1.0 07/09/2011
-* @author Ludovic APVRILLE
+ * Class CPUWholeResult Object for storing all CPU simulation results Creation:
+ * 07/09/2011
+ * 
+ * @version 1.0 07/09/2011
+ * @author Ludovic APVRILLE
  */
-public class CPUWholeResult  {
-	public int id;
-	public String name;
-	
-	double minUtilization;
-	double maxUtilization;
-	double averageUtilization;
-	private int nbOfResults;
-	
-	private Vector<BusContentionWholeResult> contentions;
-	private Hashtable<Integer, BusContentionWholeResult> contentionTable = new Hashtable<>();
-	
-	CPUWholeResult(CPUResult rescpu) {
-		contentionTable = new Hashtable<>();
-		
-		id = rescpu.id;
-		name = rescpu.name;
-		minUtilization = rescpu.utilization;
-		maxUtilization = rescpu.utilization;
-		averageUtilization = rescpu.utilization;
-		nbOfResults = 1;
-		
-		workOnContentions(rescpu);
-	}
-	
-	void updateResults(CPUResult rescpu) {
-		minUtilization = Math.min(minUtilization, rescpu.utilization);
-		maxUtilization = Math.max(maxUtilization, rescpu.utilization);
-		averageUtilization = ((averageUtilization *  nbOfResults)+rescpu.utilization)/(nbOfResults + 1);
-		nbOfResults ++;
-		workOnContentions(rescpu);
-	}
-	
-	private void workOnContentions(CPUResult rescpu) {
-		Object o;
-		BusContentionWholeResult bcwr;
-		
-		if (rescpu.contentions != null) {
-			//TraceManager.addDev("Working on contentions");
-			for(BusContentionResult ct: rescpu.contentions) {
-				//TraceManager.addDev("One contention");
-				o = contentionTable.get(ct.id);
-				if (o == null) {
-					bcwr = new BusContentionWholeResult(ct);
-					contentionTable.put(ct.id, bcwr);
-					addContentionOnBus(bcwr);
-					//TraceManager.addDev("adding contention");
-				} else {
-					bcwr = (BusContentionWholeResult)o;
-					bcwr.updateResults(ct);
-					//TraceManager.addDev("updating contention");
-				}
-			}
-		} else {
-			//TraceManager.addDev("null contention");
-		}
-	}
-	
-	public void addContentionOnBus(BusContentionWholeResult ct) {
-		if (contentions == null) {
-			contentions = new Vector<BusContentionWholeResult>();
-		}
-		
-		contentions.add(ct);
-	}
-	
-	public String toStringResult() {
-		StringBuffer sb = new StringBuffer("");
-		sb.append("CPU " + id + " " + name + " " + nbOfResults + " " + minUtilization + " " + averageUtilization + " " + maxUtilization);
-		if (contentions != null) {
-			for(BusContentionWholeResult bcwr: contentions) {
-				sb.append("\n" + bcwr.toStringResult(id, name));
-			}
-		}
-		
-		return sb.toString();
-	}
-	
-	public double getAverageBusContention() {
-		double average = 0;
-		
-		if (contentions == null) {
-			//TraceManager.addDev("No contention");
-			return 0;
-		}
-		
-		for(BusContentionWholeResult wbc: contentions) {
-			average += wbc.averageContention;
-		}
-		
-		return average / contentions.size();
-	}    
-	
-	public long getMaxBusContention() {
-		long max = 0;
-		
-		if (contentions == null) {
-			//TraceManager.addDev("No contention");
-			return 0;
-		}
-		
-		for(BusContentionWholeResult wbc: contentions) {
-			max = Math.max(max, wbc.maxContention);
-		}
-		
-		return max;
-	}
-	
-	public long getMinBusContention() {
-		long min = 10000000;
-		
-		if (contentions == null) {
-			//TraceManager.addDev("No contention");
-			return 0;
-		}
-		
-		for(BusContentionWholeResult wbc: contentions) {
-			min = Math.min(min, wbc.minContention);
-		}
-		
-		return min;
-	}
-	
-} // Class CPUWholeResult
+public class CPUWholeResult {
+  public int id;
+  public String name;
 
+  double minUtilization;
+  double maxUtilization;
+  double averageUtilization;
+  private int nbOfResults;
+
+  private Vector<BusContentionWholeResult> contentions;
+  private Hashtable<Integer, BusContentionWholeResult> contentionTable = new Hashtable<>();
+
+  CPUWholeResult(CPUResult rescpu) {
+    contentionTable = new Hashtable<>();
+
+    id = rescpu.id;
+    name = rescpu.name;
+    minUtilization = rescpu.utilization;
+    maxUtilization = rescpu.utilization;
+    averageUtilization = rescpu.utilization;
+    nbOfResults = 1;
+
+    workOnContentions(rescpu);
+  }
+
+  void updateResults(CPUResult rescpu) {
+    minUtilization = Math.min(minUtilization, rescpu.utilization);
+    maxUtilization = Math.max(maxUtilization, rescpu.utilization);
+    averageUtilization = ((averageUtilization * nbOfResults) + rescpu.utilization) / (nbOfResults + 1);
+    nbOfResults++;
+    workOnContentions(rescpu);
+  }
+
+  private void workOnContentions(CPUResult rescpu) {
+    Object o;
+    BusContentionWholeResult bcwr;
+
+    if (rescpu.contentions != null) {
+      // TraceManager.addDev("Working on contentions");
+      for (BusContentionResult ct : rescpu.contentions) {
+        // TraceManager.addDev("One contention");
+        o = contentionTable.get(ct.id);
+        if (o == null) {
+          bcwr = new BusContentionWholeResult(ct);
+          contentionTable.put(ct.id, bcwr);
+          addContentionOnBus(bcwr);
+          // TraceManager.addDev("adding contention");
+        } else {
+          bcwr = (BusContentionWholeResult) o;
+          bcwr.updateResults(ct);
+          // TraceManager.addDev("updating contention");
+        }
+      }
+    } else {
+      // TraceManager.addDev("null contention");
+    }
+  }
+
+  public void addContentionOnBus(BusContentionWholeResult ct) {
+    if (contentions == null) {
+      contentions = new Vector<BusContentionWholeResult>();
+    }
+
+    contentions.add(ct);
+  }
+
+  public String toStringResult() {
+    StringBuffer sb = new StringBuffer("");
+    sb.append("CPU " + id + " " + name + " " + nbOfResults + " " + minUtilization + " " + averageUtilization + " "
+        + maxUtilization);
+    if (contentions != null) {
+      for (BusContentionWholeResult bcwr : contentions) {
+        sb.append("\n" + bcwr.toStringResult(id, name));
+      }
+    }
+
+    return sb.toString();
+  }
+
+  public double getAverageBusContention() {
+    double average = 0;
+
+    if (contentions == null) {
+      // TraceManager.addDev("No contention");
+      return 0;
+    }
+
+    for (BusContentionWholeResult wbc : contentions) {
+      average += wbc.averageContention;
+    }
+
+    return average / contentions.size();
+  }
+
+  public long getMaxBusContention() {
+    long max = 0;
+
+    if (contentions == null) {
+      // TraceManager.addDev("No contention");
+      return 0;
+    }
+
+    for (BusContentionWholeResult wbc : contentions) {
+      max = Math.max(max, wbc.maxContention);
+    }
+
+    return max;
+  }
+
+  public long getMinBusContention() {
+    long min = 10000000;
+
+    if (contentions == null) {
+      // TraceManager.addDev("No contention");
+      return 0;
+    }
+
+    for (BusContentionWholeResult wbc : contentions) {
+      min = Math.min(min, wbc.minContention);
+    }
+
+    return min;
+  }
+
+} // Class CPUWholeResult

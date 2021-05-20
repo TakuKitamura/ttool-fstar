@@ -48,101 +48,98 @@ import java.util.List;
 import java.util.Map;
 
 /**
-   * Class BusTableModel
-   * Information on busses
-   * Creation: 02/06/2009
-   * @version 1.0 02/06/2009
-   * @author Ludovic APVRILLE
+ * Class BusTableModel Information on busses Creation: 02/06/2009
+ * 
+ * @version 1.0 02/06/2009
+ * @author Ludovic APVRILLE
  */
 public class BusTableModel extends AbstractTableModel {
-    
-	private TMLMapping<?> tmap;
-    private List<HwBus> bus;
-    private Map<Integer, String> valueTable;
-    private Map<Integer, Integer> rowTable;
 
-    private int nbOfRows;
+  private TMLMapping<?> tmap;
+  private List<HwBus> bus;
+  private Map<Integer, String> valueTable;
+  private Map<Integer, Integer> rowTable;
 
-    //private String [] names;
-    public BusTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
-        tmap = _tmap;
-        valueTable = _valueTable;
-        rowTable = _rowTable;
-        computeData();
+  private int nbOfRows;
+
+  // private String [] names;
+  public BusTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
+    tmap = _tmap;
+    valueTable = _valueTable;
+    rowTable = _rowTable;
+    computeData();
+  }
+
+  // From AbstractTableModel
+  public int getRowCount() {
+    return nbOfRows;
+  }
+
+  public int getColumnCount() {
+    return 3;
+  }
+
+  public Object getValueAt(int row, int column) {
+    if (tmap == null) {
+      return "-";
     }
 
-    // From AbstractTableModel
-    public int getRowCount() {
-        return nbOfRows;
+    if (column == 0) {
+      return bus.get(row).getName();
+    } else if (column == 1) {
+      return bus.get(row).getID();
+    } else if (column == 2) {
+      return getBusStatus(row);
+    }
+    return "";
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Bus Name";
+      case 1:
+        return "Bus ID";
+      case 2:
+        return "State";
+    }
+    return "unknown";
+  }
+
+  // Assumes tmlm != null
+  private String getBusStatus(int row) {
+    int ID = bus.get(row).getID();
+    String s = valueTable.get(ID);
+
+    if (s != null) {
+      return s;
     }
 
-    public int getColumnCount() {
-        return 3;
+    valueTable.put(ID, "-");
+    rowTable.put(ID, row);
+    return "-";
+
+  }
+
+  private void computeData() {
+    if (tmap == null) {
+      nbOfRows = 0;
+      return;
     }
 
-    public Object getValueAt(int row, int column) {
-        if (tmap == null) {
-            return "-";
-        }
+    bus = new ArrayList<HwBus>();
 
-        if (column == 0) {
-            return bus.get(row).getName();
-        } else if (column == 1) {
-            return bus.get(row).getID();
-        } else if (column == 2) {
-            return getBusStatus(row);
-        }
-        return "";
+    for (HwNode node : tmap.getTMLArchitecture().getHwNodes()) {
+      if (node instanceof HwBus) {
+        bus.add((HwBus) node);
+      }
     }
 
-    public String getColumnName(int columnIndex) {
-        switch(columnIndex) {
-        case 0:
-            return "Bus Name";
-        case 1:
-            return "Bus ID";
-        case 2:
-            return "State";
-        }
-        return "unknown";
+    nbOfRows = bus.size();
+
+    for (int i = 0; i < nbOfRows; i++) {
+      getBusStatus(i);
     }
-
-    // Assumes tmlm != null
-    private String getBusStatus(int row) {
-        int ID = bus.get(row).getID();
-        String s = valueTable.get(ID);
-
-        if (s != null) {
-            return s;
-        }
-
-
-        valueTable.put(ID, "-");
-        rowTable.put(ID, row);
-        return "-";
-
-    }
-
-
-    private void computeData() {
-        if (tmap == null) {
-            nbOfRows = 0;
-            return ;
-        }
-
-        bus = new ArrayList<HwBus>();
-
-        for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-            if (node instanceof HwBus) {
-                bus.add((HwBus)node);
-            }
-        }
-
-        nbOfRows = bus.size();
-
-        for(int i=0; i<nbOfRows; i++) {
-            getBusStatus(i);
-        }
-    }
+  }
 
 }

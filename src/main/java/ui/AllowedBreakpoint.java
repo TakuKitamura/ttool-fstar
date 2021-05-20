@@ -36,20 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class AllowedBreakpoint
- * Components for which breakpoint may be added / removed
- * Creation: 29/05/2009
+ * Class AllowedBreakpoint Components for which breakpoint may be added /
+ * removed Creation: 29/05/2009
+ * 
  * @version 1.0 29/05/2009
  * @author Ludovic APVRILLE
  */
-public interface AllowedBreakpoint  {
-    void setBreakpoint(boolean b);
-	boolean getBreakpoint();
+public interface AllowedBreakpoint {
+  void setBreakpoint(boolean b);
+
+  boolean getBreakpoint();
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.touppaal;
 
 import translator.ADComponent;
@@ -49,106 +46,104 @@ import uppaaldesc.UPPAALTemplate;
 import java.util.ArrayList;
 
 /**
-* Class RelationTIFUPPAAL
-* Creation: 16/05/2007
-* @version 1.1 16/05/2007
-* @author Ludovic APVRILLE
+ * Class RelationTIFUPPAAL Creation: 16/05/2007
+ * 
+ * @version 1.1 16/05/2007
+ * @author Ludovic APVRILLE
  */
 public class RelationTIFUPPAAL {
-    
-	private ArrayList<TClassTemplate> tts;
-	private ArrayList<ADComponentLocation> adcls;
-    
-    public RelationTIFUPPAAL() {
-        tts = new ArrayList<TClassTemplate>();
-		adcls = new ArrayList<ADComponentLocation>();
+
+  private ArrayList<TClassTemplate> tts;
+  private ArrayList<ADComponentLocation> adcls;
+
+  public RelationTIFUPPAAL() {
+    tts = new ArrayList<TClassTemplate>();
+    adcls = new ArrayList<ADComponentLocation>();
+  }
+
+  public void addTClassTemplate(TClassTemplate tt) {
+    tts.add(tt);
+  }
+
+  public void addTClassTemplate(TClass _t, UPPAALTemplate _template, int _id) {
+    tts.add(new TClassTemplate(_t, _template, _id));
+  }
+
+  public void addADComponentLocation(ADComponentLocation adcl) {
+    adcls.add(adcl);
+  }
+
+  public void addADComponentLocation(ADComponent adc, UPPAALLocation _loc1, UPPAALLocation _loc2) {
+    adcls.add(new ADComponentLocation(adc, _loc1, _loc2));
+  }
+
+  public TClassTemplate getFirstTClassTemplate(TClass _t) {
+    for (TClassTemplate tt : tts) {
+      if (tt.tclass == _t) {
+        return tt;
+      }
     }
-	
-	public void addTClassTemplate(TClassTemplate tt) {
-		tts.add(tt);
-	}
-	
-	public void addTClassTemplate(TClass _t, UPPAALTemplate _template, int _id) {
-		tts.add(new TClassTemplate(_t, _template, _id));
-	}
-	
-	public void addADComponentLocation(ADComponentLocation adcl) {
-		adcls.add(adcl);
-	}
-	
-	public void addADComponentLocation(ADComponent adc, UPPAALLocation _loc1, UPPAALLocation _loc2) {
-		adcls.add(new ADComponentLocation(adc, _loc1, _loc2));
-	}
-	
-	public TClassTemplate getFirstTClassTemplate(TClass _t) {
-		for(TClassTemplate tt:tts) {
-			if (tt.tclass == _t) {
-				return tt;
-			}
-		}
-		return null;
-	}
-	
-	public ADComponentLocation getFirstADComponentLocation(ADComponent _adc) {
-		for(ADComponentLocation adcl:adcls) {
-			if (adcl.adc == _adc) {
-				return adcl;
-			}
-		}
-		return null;
-	}
-	
-	
-	
-	public void setIds(UPPAALTemplate _template, int _beginid, int _endid) {
-		for(TClassTemplate tt:tts) {
-			if (tt.template == _template) {
-				tt.beginid = _beginid;
-				tt.endid = _endid;
-				return;
-			}
-		}
-	}
-	
-	public String getRQuery(TClass _t, ADComponent _adc) {
-		//
-		
-		ADComponentLocation adcl = getFirstADComponentLocation(_adc);
-		TClassTemplate tt = getFirstTClassTemplate(_t);
-		
-		if (tt == null) {
-			
-		}
-		
-		if (adcl == null) {
-			
-		}
-		
-		if ((tt == null) || (adcl == null)) {
-			return null;
-		}
-		
-		String q="";
-		for(int i=tt.beginid; i<tt.endid+1; i++) {
-			q += tt.template.getName() + "__" + i;
-			q += "." + adcl.endloc.name;
-			if (i != tt.endid) {
-				q += " || ";
-			}
-		}
-		return q;
-	}
-	
-	public String toString() {
-		String s="TClass / Templates\n";
-		for(TClassTemplate tt:tts) {
-			s+=tt.toString() + "\n";
-		}
-		s+="\nADComponents vc locations:\n";
-		for(ADComponentLocation adcl:adcls) {
-			s+=adcl.toString() + "\n";
-		}
-		return s;
-	}
-    
+    return null;
+  }
+
+  public ADComponentLocation getFirstADComponentLocation(ADComponent _adc) {
+    for (ADComponentLocation adcl : adcls) {
+      if (adcl.adc == _adc) {
+        return adcl;
+      }
+    }
+    return null;
+  }
+
+  public void setIds(UPPAALTemplate _template, int _beginid, int _endid) {
+    for (TClassTemplate tt : tts) {
+      if (tt.template == _template) {
+        tt.beginid = _beginid;
+        tt.endid = _endid;
+        return;
+      }
+    }
+  }
+
+  public String getRQuery(TClass _t, ADComponent _adc) {
+    //
+
+    ADComponentLocation adcl = getFirstADComponentLocation(_adc);
+    TClassTemplate tt = getFirstTClassTemplate(_t);
+
+    if (tt == null) {
+
+    }
+
+    if (adcl == null) {
+
+    }
+
+    if ((tt == null) || (adcl == null)) {
+      return null;
+    }
+
+    String q = "";
+    for (int i = tt.beginid; i < tt.endid + 1; i++) {
+      q += tt.template.getName() + "__" + i;
+      q += "." + adcl.endloc.name;
+      if (i != tt.endid) {
+        q += " || ";
+      }
+    }
+    return q;
+  }
+
+  public String toString() {
+    String s = "TClass / Templates\n";
+    for (TClassTemplate tt : tts) {
+      s += tt.toString() + "\n";
+    }
+    s += "\nADComponents vc locations:\n";
+    for (ADComponentLocation adcl : adcls) {
+      s += adcl.toString() + "\n";
+    }
+    return s;
+  }
+
 }

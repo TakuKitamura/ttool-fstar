@@ -37,23 +37,20 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.*;
 import java.awt.*;
 
 /**
- * Class ComponentPluginInteface
- * Component having a plugin interface
- * Creation: 28/06/2017
+ * Class ComponentPluginInteface Component having a plugin interface Creation:
+ * 28/06/2017
+ * 
  * @version 1.0 28/06/2017
  * @author Ludovic APVRILLE
  */
 public interface ComponentPluginInterface {
 
-    public void setPlugin(Plugin _plugin);
+  public void setPlugin(Plugin _plugin);
 
 }

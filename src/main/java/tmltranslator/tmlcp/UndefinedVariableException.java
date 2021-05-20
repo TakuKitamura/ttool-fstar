@@ -36,24 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class UndefinedVariableException
- * Creation: 22/05/2014
+ * Class UndefinedVariableException Creation: 22/05/2014
+ * 
  * @version 1.0 22/05/2014
  * @author Andrea ENRICI
  */
 public class UndefinedVariableException extends Exception {
-	
-	public UndefinedVariableException()	{
-		super( "TMLCP COMPILER ERROR: undefined variable" );
-	}
 
-	public UndefinedVariableException( String message )	{
-		super( message );	
-	}
+  public UndefinedVariableException() {
+    super("TMLCP COMPILER ERROR: undefined variable");
+  }
+
+  public UndefinedVariableException(String message) {
+    super(message);
+  }
 }

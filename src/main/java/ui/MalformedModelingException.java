@@ -39,29 +39,26 @@
 package ui;
 
 /**
- * Class MalformedModelingException
- * Creation: 15/12/2003
- * version 1.0 15/12/2003
+ * Class MalformedModelingException Creation: 15/12/2003 version 1.0 15/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
-public	class MalformedModelingException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7411903139644480309L;
-	
-	public MalformedModelingException() {
-		this( (Throwable) null );
-	}
+public class MalformedModelingException extends Exception {
 
-	public MalformedModelingException( final String message ) {
-		super( message );
-	}
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 7411903139644480309L;
 
-	public MalformedModelingException( final Throwable th ) {
-		super( "Modeling does not follow the TTool format", th );
-	}
-} // Class 
+  public MalformedModelingException() {
+    this((Throwable) null);
+  }
 
-	
+  public MalformedModelingException(final String message) {
+    super(message);
+  }
+
+  public MalformedModelingException(final Throwable th) {
+    super("Modeling does not follow the TTool format", th);
+  }
+} // Class

@@ -36,42 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointTClasses
- * Connecting points of TClasses
- * Creation: 12/12/2003
+ * Class TGConnectingPointTClasses Connecting points of TClasses Creation:
+ * 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTClasses extends  TGConnectingPointWidthHeight{
+public class TGConnectingPointTClasses extends TGConnectingPointWidthHeight {
 
-	public TGConnectingPointTClasses(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
+  public TGConnectingPointTClasses(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-	public boolean isCompatibleWith(int type) {
-		if (type == TGComponentManager.CONNECTOR_ASSOCIATION) {
-			return true;	
-		} else if (type == TGComponentManager.CONNECTOR_ASSOCIATION_NAVIGATION) {
-			return true;
-		}
-		return false;
-	}  
+  public boolean isCompatibleWith(int type) {
+    if (type == TGComponentManager.CONNECTOR_ASSOCIATION) {
+      return true;
+    } else if (type == TGComponentManager.CONNECTOR_ASSOCIATION_NAVIGATION) {
+      return true;
+    }
+    return false;
+  }
 } // Class
-
-
-
-
-    
-
-

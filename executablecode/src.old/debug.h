@@ -12,5 +12,3 @@ void debugInt(char *msg, int value);
 void debugMsg(char *msg);
 
 #endif
-
-

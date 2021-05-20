@@ -36,56 +36,53 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.tojava;
 
 import myutil.Conversion;
 import translator.*;
 
 /**
- * Class JOperation
- * Creation: 07/03/2005
+ * Class JOperation Creation: 07/03/2005
+ * 
  * @version 1.1 07/03/2005
  * @author Ludovic APVRILLE
  */
-public class JOperation  {
-    public String name;
-    public String code = "";
-    public ADComponent adcomponent;
-    public int nb;
-    
-    public JOperation(String _name) {
-        name = _name;
+public class JOperation {
+  public String name;
+  public String code = "";
+  public ADComponent adcomponent;
+  public int nb;
+
+  public JOperation(String _name) {
+    name = _name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void addCode(String _code) {
+    code += _code;
+  }
+
+  public void addStandardCode() {
+  }
+
+  public void addNonFormattedCode(int dec, String code) {
+    //
+    String deca = "";
+    for (int i = 0; i < dec; i++) {
+      deca += translator.JKeyword.INDENT;
     }
-    
-    public String getName() {
-        return name;
-    }  
-    
-    public void addCode(String _code) {
-        code += _code;
-    }
-    
-    public void addStandardCode() {
-    }
-    
-    public void addNonFormattedCode(int dec, String code) {
-        //
-        String deca = "";
-        for(int i=0; i<dec; i++) {
-            deca += translator.JKeyword.INDENT;
-        }
-        code = deca + code;
-        code = Conversion.insertAfterAll(code, '\n', deca);
-        //code = Conversion.insertAfterAll(code, '\n', "<toto>");
-        addCode(code);
-        //
-    }
-    
-    public void addRegularIndent() {
-        addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT);
-    }
+    code = deca + code;
+    code = Conversion.insertAfterAll(code, '\n', deca);
+    // code = Conversion.insertAfterAll(code, '\n', "<toto>");
+    addCode(code);
+    //
+  }
+
+  public void addRegularIndent() {
+    addCode(translator.JKeyword.INDENT + translator.JKeyword.INDENT);
+  }
 
 }

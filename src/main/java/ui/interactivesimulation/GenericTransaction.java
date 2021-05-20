@@ -36,44 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 /**
-   * Class GenericTransaction
-   * Transaction as used
-   * Creation: 26/05/2011
-   * @version 1.0 26/05/2011
-   * @author Ludovic APVRILLE
+ * Class GenericTransaction Transaction as used Creation: 26/05/2011
+ * 
+ * @version 1.0 26/05/2011
+ * @author Ludovic APVRILLE
  */
-public class GenericTransaction  {
+public class GenericTransaction {
 
-    final static int FUNCTION_CALL = 1;
-    final static int STATE_ENTERING = 2;
-    final static int SEND_SYNCHRO = 4;
-    final static int SYNCHRO = 5;
-    final static int SEND_ASYNCHRO = 6;
-    final static int RECEIVE_ASYNCHRO = 7;
+  final static int FUNCTION_CALL = 1;
+  final static int STATE_ENTERING = 2;
+  final static int SEND_SYNCHRO = 4;
+  final static int SYNCHRO = 5;
+  final static int SEND_ASYNCHRO = 6;
+  final static int RECEIVE_ASYNCHRO = 7;
 
-    public int ID;
-    public int type;
-    public String entityName;
-    public String otherEntityName; /*  name of destination in synchro, etc. */
-    public String name; /* Used for channel names */
-    public String params; /* values separated with commas */
-    public String messageID; /* Used for identifiying asynchronous messages */
-    public String action;
-    public long startingTime;
-    public long finishTime;
+  public int ID;
+  public int type;
+  public String entityName;
+  public String otherEntityName; /* name of destination in synchro, etc. */
+  public String name; /* Used for channel names */
+  public String params; /* values separated with commas */
+  public String messageID; /* Used for identifiying asynchronous messages */
+  public String action;
+  public long startingTime;
+  public long finishTime;
 
-    public long stamp;
+  public long stamp;
 
-
-
-    public GenericTransaction() {
-    }
-
+  public GenericTransaction() {
+  }
 
 }

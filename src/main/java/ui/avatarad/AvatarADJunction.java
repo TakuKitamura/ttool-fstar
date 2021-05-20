@@ -48,93 +48,93 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class AvatarADJunction
- * Junction between several activities, without any synchronization. To be used in avatar activity diagrams
- * Creation: 02/09/2011
+ * Class AvatarADJunction Junction between several activities, without any
+ * synchronization. To be used in avatar activity diagrams Creation: 02/09/2011
  *
  * @author Ludovic APVRILLE
  * @version 1.1 09/02/2017
  */
 public class AvatarADJunction extends AvatarADBasicComponent {
 
-    protected int range = 5;
+  protected int range = 5;
 
-    public AvatarADJunction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public AvatarADJunction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(30, 30);
-        oldScaleFactor = tdp.getZoom();
+    initScaling(30, 30);
+    oldScaleFactor = tdp.getZoom();
 
-        nbConnectingPoint = 22;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[1] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[2] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[3] = new AvatarADConnectingPoint(this, 0, 0, false, true, 0.5, 1);
-        connectingPoint[4] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[5] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[6] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[7] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[8] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[9] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[10] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[11] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[12] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[13] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[14] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[15] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[16] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[17] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[18] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[19] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[20] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[21] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    nbConnectingPoint = 22;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[1] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[2] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[3] = new AvatarADConnectingPoint(this, 0, 0, false, true, 0.5, 1);
+    connectingPoint[4] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[5] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[6] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[7] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[8] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[9] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[10] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[11] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[12] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[13] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[14] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[15] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[16] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[17] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[18] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[19] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[20] = new AvatarADConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[21] = new AvatarADConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
 
-        moveable = true;
-        editable = false;
-        removable = true;
+    moveable = true;
+    editable = false;
+    removable = true;
 
-        value = "";
-        name = "junction";
+    value = "";
+    name = "junction";
 
-        myImageIcon = IconManager.imgic212;
+    myImageIcon = IconManager.imgic212;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    // g.drawLine(x +width/2, y, x+width/2, y + height);
+    // g.drawLine(x, y + (height/2), x+width, y + (height/2));
+
+    g.drawLine(x + width / 2, y, x + width / 2, y + height / 2 - range);
+    g.drawLine(x + width / 2, y + height / 2 + range, x + width / 2, y + height);
+    g.drawLine(x, y + (height / 2), x + width / 2 - range, y + (height / 2));
+    g.drawLine(x + width / 2 + range, y + (height / 2), x + width, y + (height / 2));
+
+    g.drawLine(x + width / 2, y + height / 2 - range, x + width / 2 - range, y + height / 2);
+    g.drawLine(x + width / 2, y + height / 2 - range, x + width / 2 + range, y + height / 2);
+    g.drawLine(x + width / 2 - range, y + height / 2, x + width / 2, y + height / 2 + range);
+    g.drawLine(x + width / 2 + range, y + height / 2, x + width / 2, y + height / 2 + range);
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    // vertical line
+    if ((int) (Line2D.ptSegDistSq(x + width / 2, y, x + width / 2, y + height, _x, _y)) < distanceSelected) {
+      return this;
     }
-
-    @Override
-    public void internalDrawing(Graphics g) {
-        //g.drawLine(x +width/2, y,  x+width/2, y + height);
-        //g.drawLine(x, y + (height/2), x+width, y + (height/2));
-
-        g.drawLine(x + width / 2, y, x + width / 2, y + height / 2 - range);
-        g.drawLine(x + width / 2, y + height / 2 + range, x + width / 2, y + height);
-        g.drawLine(x, y + (height / 2), x + width / 2 - range, y + (height / 2));
-        g.drawLine(x + width / 2 + range, y + (height / 2), x + width, y + (height / 2));
-
-        g.drawLine(x + width / 2, y + height / 2 - range, x + width / 2 - range, y + height / 2);
-        g.drawLine(x + width / 2, y + height / 2 - range, x + width / 2 + range, y + height / 2);
-        g.drawLine(x + width / 2 - range, y + height / 2, x + width / 2, y + height / 2 + range);
-        g.drawLine(x + width / 2 + range, y + height / 2, x + width / 2, y + height / 2 + range);
+    // horizontal line
+    if ((int) (Line2D.ptSegDistSq(x, y + (height / 2), x + width, y + (height / 2), _x, _y)) < distanceSelected) {
+      return this;
     }
+    return null;
+  }
 
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        // vertical line
-        if ((int) (Line2D.ptSegDistSq(x + width / 2, y, x + width / 2, y + height, _x, _y)) < distanceSelected) {
-            return this;
-        }
-        // horizontal line
-        if ((int) (Line2D.ptSegDistSq(x, y + (height / 2), x + width, y + (height / 2), _x, _y)) < distanceSelected) {
-            return this;
-        }
-        return null;
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.AAD_JUNCTION;
+  }
 
-    @Override
-    public int getType() {
-        return TGComponentManager.AAD_JUNCTION;
-    }
-
-//    public int getDefaultConnector() {
-//        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-//    }
+  // public int getDefaultConnector() {
+  // return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+  // }
 }

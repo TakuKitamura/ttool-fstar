@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
-
 
 import ui.util.IconManager;
 import ui.TDiagramPanel;
@@ -48,33 +44,26 @@ import ui.TGComponent;
 import ui.TGComponentManager;
 
 /**
- * Class TCDPreemptionOperator
- * Preemption composition operator
- * To be used in class diagrams
- * Creation: 12/12/2003
+ * Class TCDPreemptionOperator Preemption composition operator To be used in
+ * class diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class TCDPreemptionOperator extends TCDCompositionOperator {
 
-	public TCDPreemptionOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
-		name = "Preemption composition operator";
-		value = "Preemption";
-		
-		myImageIcon = IconManager.imgic116;
-	}
-	
-	public int getType() {
-		return TGComponentManager.TCD_PREEMPTION_OPERATOR;	
-	}
+  public TCDPreemptionOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    name = "Preemption composition operator";
+    value = "Preemption";
+
+    myImageIcon = IconManager.imgic116;
+  }
+
+  public int getType() {
+    return TGComponentManager.TCD_PREEMPTION_OPERATOR;
+  }
 
 }
-
-
-
-
-    
-
-

@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package uppaaldesc;
 
 import myutil.Conversion;
@@ -45,104 +44,101 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * Class UPPAALSpec
- * Creation: 03/11/2006
+ * Class UPPAALSpec Creation: 03/11/2006
  *
  * @author Ludovic APVRILLE
  * @version 1.0 03/11/2006
  */
 public class UPPAALSpec {
-    private String header = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
-    private String globalDeclaration = "";
-    private List<UPPAALTemplate> templates;
-    private String instanciations = "";
-    private String fullSpec;
+  private String header = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n";
+  private String globalDeclaration = "";
+  private List<UPPAALTemplate> templates;
+  private String instanciations = "";
+  private String fullSpec;
 
+  public UPPAALSpec() {
+    templates = new LinkedList<UPPAALTemplate>();
+  }
 
-    public UPPAALSpec() {
-        templates = new LinkedList<UPPAALTemplate>();
+  public String getStringSpec() {
+    return fullSpec;
+  }
+
+  public String makeSpec() {
+    Iterator<UPPAALTemplate> iterator = templates.listIterator();
+    UPPAALTemplate template;
+
+    globalDeclaration = "<declaration>\n//Global declarations\n" + Conversion.transformToXMLString(globalDeclaration)
+        + "</declaration>\n";
+    StringBuffer templatesString = new StringBuffer("");
+
+    while (iterator.hasNext()) {
+      template = iterator.next();
+      templatesString.append(template.makeTemplate());
     }
 
-    public String getStringSpec() {
-        return fullSpec;
+    instanciations = "<system>\n//Instanciation \n" + Conversion.transformToXMLString(instanciations) + "</system>\n";
+
+    fullSpec = header + "<nta>\n" + globalDeclaration + templatesString + instanciations + "</nta>\n";
+    return fullSpec;
+  }
+
+  public List<UPPAALTemplate> getTemplates() {
+    return templates;
+  }
+
+  public int getIndexOfTemplate(UPPAALTemplate _template) {
+    return templates.indexOf(_template);
+  }
+
+  public UPPAALTemplate getTemplateByName(String name) {
+    UPPAALTemplate template;
+    Iterator<UPPAALTemplate> ite = templates.listIterator();
+
+    while (ite.hasNext()) {
+      template = ite.next();
+      if (template.getName().compareTo(name) == 0) {
+        return template;
+      }
+    }
+    return null;
+  }
+
+  public void addGlobalDeclaration(String s) {
+    globalDeclaration += s;
+  }
+
+  public void addInstanciation(String s) {
+    instanciations += s;
+  }
+
+  public String getFullSpec() {
+    return fullSpec;
+  }
+
+  public void addTemplate(UPPAALTemplate template) {
+    templates.add(template);
+  }
+
+  public void enhanceGraphics() {
+    Iterator<UPPAALTemplate> iterator = templates.listIterator();
+    UPPAALTemplate template;
+
+    while (iterator.hasNext()) {
+      template = iterator.next();
+      template.enhanceGraphics();
+    }
+  }
+
+  public void optimize() {
+    Iterator<UPPAALTemplate> iterator = templates.listIterator();
+    UPPAALTemplate template;
+
+    while (iterator.hasNext()) {
+      template = iterator.next();
+      template.optimize();
     }
 
-    public String makeSpec() {
-        Iterator<UPPAALTemplate> iterator = templates.listIterator();
-        UPPAALTemplate template;
-
-        globalDeclaration = "<declaration>\n//Global declarations\n" + Conversion.transformToXMLString(globalDeclaration) + "</declaration>\n";
-        StringBuffer templatesString = new StringBuffer("");
-
-        while (iterator.hasNext()) {
-            template = iterator.next();
-            templatesString.append(template.makeTemplate());
-        }
-
-        instanciations = "<system>\n//Instanciation \n" + Conversion.transformToXMLString(instanciations) + "</system>\n";
-
-        fullSpec = header + "<nta>\n" + globalDeclaration + templatesString + instanciations + "</nta>\n";
-        return fullSpec;
-    }
-
-    public List<UPPAALTemplate> getTemplates() {
-        return templates;
-    }
-
-
-    public int getIndexOfTemplate(UPPAALTemplate _template) {
-        return templates.indexOf(_template);
-    }
-
-    public UPPAALTemplate getTemplateByName(String name) {
-        UPPAALTemplate template;
-        Iterator<UPPAALTemplate> ite = templates.listIterator();
-
-        while (ite.hasNext()) {
-            template = ite.next();
-            if (template.getName().compareTo(name) == 0) {
-                return template;
-            }
-        }
-        return null;
-    }
-
-    public void addGlobalDeclaration(String s) {
-        globalDeclaration += s;
-    }
-
-    public void addInstanciation(String s) {
-        instanciations += s;
-    }
-
-    public String getFullSpec() {
-        return fullSpec;
-    }
-
-    public void addTemplate(UPPAALTemplate template) {
-        templates.add(template);
-    }
-
-    public void enhanceGraphics() {
-        Iterator<UPPAALTemplate> iterator = templates.listIterator();
-        UPPAALTemplate template;
-
-        while (iterator.hasNext()) {
-            template = iterator.next();
-            template.enhanceGraphics();
-        }
-    }
-
-    public void optimize() {
-        Iterator<UPPAALTemplate> iterator = templates.listIterator();
-        UPPAALTemplate template;
-
-        while (iterator.hasNext()) {
-            template = iterator.next();
-            template.optimize();
-        }
-
-    }
+  }
 }

@@ -36,18 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
-
 /**
-   * Class TMLArchiChannelInterface
-   * Interface of  a mapping channel element
-   * Creation: 13/09/2016
-   * @version 1.0 13/09/2016
-   * @author Ludovic APVRILLE
+ * Class TMLArchiChannelInterface Interface of a mapping channel element
+ * Creation: 13/09/2016
+ * 
+ * @version 1.0 13/09/2016
+ * @author Ludovic APVRILLE
  */
 public interface TMLArchiChannelInterface {
 }

@@ -43,31 +43,34 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarRDConnectingPointVerify
- * Definition of connecting points on which connectors connecting requirements and observer blocks may be connected
+ * Class AvatarRDConnectingPointVerify Definition of connecting points on which
+ * connectors connecting requirements and observer blocks may be connected
  * Creation: 20/04/2010
+ * 
  * @version 1.0 20/04/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarRDConnectingPointVerify extends TGConnectingPointWidthHeight {
-    
-    public AvatarRDConnectingPointVerify(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
+
+  public AvatarRDConnectingPointVerify(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h, int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  public AvatarRDConnectingPointVerify(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if (type == TGComponentManager.AVATARRD_VERIFY_CONNECTOR) {
+      //
+      return true;
     }
-	
-	public AvatarRDConnectingPointVerify(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-	@Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if (type == TGComponentManager.AVATARRD_VERIFY_CONNECTOR) {
-            //
-            return true;
-        }
-        //
-        return false;
-    }
+    //
+    return false;
+  }
 }

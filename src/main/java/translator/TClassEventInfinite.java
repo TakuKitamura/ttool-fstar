@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import myutil.TraceManager;
@@ -47,8 +44,8 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 /**
- * Class TClassEventInfinite
- * Creation: 27/10/2006
+ * Class TClassEventInfinite Creation: 27/10/2006
+ * 
  * @version 1.0 27/10/2006
  * @author Ludovic APVRILLE
  */
@@ -60,372 +57,368 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
   private int counterW, counterR, counterS;
   private String eventName;
 
-    public TClassEventInfinite(String name, String _eventName, int _nbPara) {
-      super(name, true);
-      nbPara = _nbPara;
-      sendReqGates = new LinkedList<>();
-      waitGates = new LinkedList<>();
-      sizeGates = new LinkedList<>();
-      eventName = _eventName;
+  public TClassEventInfinite(String name, String _eventName, int _nbPara) {
+    super(name, true);
+    nbPara = _nbPara;
+    sendReqGates = new LinkedList<>();
+    waitGates = new LinkedList<>();
+    sizeGates = new LinkedList<>();
+    eventName = _eventName;
+  }
+
+  public int getNbPara() {
+    return nbPara;
+  }
+
+  public Gate getGateWrite() {
+    return sendReqGates.get(0);
+  }
+
+  public Gate getGateRead() {
+    return waitGates.get(0);
+  }
+
+  public Gate getGateSize() {
+    return sizeGates.get(0);
+  }
+
+  public LinkedList<Gate> getGatesWrite() {
+    return sendReqGates;
+  }
+
+  public LinkedList<Gate> getGatesRead() {
+    return waitGates;
+  }
+
+  public LinkedList<Gate> getGatesSize() {
+    return sizeGates;
+  }
+
+  public Gate addWriteGate() {
+    Gate g;
+    if (counterW == 0) {
+      g = addNewGateIfApplicable("notify__" + eventName);
+    } else {
+      g = addNewGateIfApplicable("notify__" + eventName + counterW);
     }
-    
-    public int getNbPara() {
-        return nbPara;
+    sendReqGates.add(g);
+    counterW++;
+    return g;
+  }
+
+  public Gate addReadGate() {
+    Gate g;
+    if (counterR == 0) {
+      g = addNewGateIfApplicable("wait__" + eventName);
+
+    } else {
+      g = addNewGateIfApplicable("wait__" + eventName + counterR);
+
+    }
+    waitGates.add(g);
+    counterR++;
+    return g;
+  }
+
+  public Gate addSizeGate() {
+    Gate g;
+    if (counterS == 0) {
+      g = addNewGateIfApplicable("notified__" + eventName);
+
+    } else {
+      g = addNewGateIfApplicable("notified__" + eventName + counterS);
+    }
+    sizeGates.add(g);
+    counterS++;
+    return g;
+  }
+
+  public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
+    Gate forward_0, forward_1, g;
+    ADActionStateWithGate adag;
+    Gate loss = null, notloss = null;
+    ADActionStateWithGate aclost, acnotlost;
+    // ADActionStateWithGate adagsize1, adagsize2, adagsize3;
+    ADActionStateWithParam adac1, adac2, adac3;
+    Param pmax, currentLoss;
+    ADParallel adpar0, adpar1;
+    ADStop adstop;
+    ADJunction adj1, adj2, adj3, adj4, adj5, adj6, adj7;
+    ADChoice adch1, adch2, adch3, adch6, adch7;
+    Param p1, p2, p3, p10, p20, p30, index, index_r, nb;
+    // String value;
+    int i;
+    ListIterator iterator;
+    String action;
+
+    ADComponent comp;
+
+    ActivityDiagram ad = new ActivityDiagram();
+    setActivityDiagram(ad);
+
+    // Case where not input or output requests...
+    if ((sendReqGates.size() == 0) || (waitGates.size() == 0)) {
+      adstop = new ADStop();
+      ad.add(adstop);
+      ad.getStartState().addNext(adstop);
+      return;
     }
 
-    public Gate getGateWrite() {
-        return sendReqGates.get(0);
-    }
-    
-    public Gate getGateRead() {
-        return waitGates.get(0);
-    }
-    
-    public Gate getGateSize() {
-        return sizeGates.get(0);
-    }
-    
-    public LinkedList<Gate> getGatesWrite() {
-        return sendReqGates;
-    }
-    
-    public LinkedList<Gate> getGatesRead() {
-        return waitGates;
-    }
-    
-    public LinkedList<Gate> getGatesSize() {
-        return sizeGates;
-    }
-    
+    Param[] params_a = new Param[nbPara];
+    Param[] params_b = new Param[nbPara];
 
-    
-    public Gate addWriteGate() {
-      Gate g;
-           if (counterW == 0) {
-           g = addNewGateIfApplicable("notify__" + eventName);
-           } else {
-             g = addNewGateIfApplicable("notify__" + eventName + counterW);
-           }
-           sendReqGates.add(g);
-           counterW ++;
-           return g;
+    for (i = 0; i < nbPara; i++) {
+      params_a[i] = new Param("pa" + i, Param.NAT, "0");
+      params_b[i] = new Param("pb" + i, Param.NAT, "0");
+      addParameter(params_a[i]);
+      addParameter(params_b[i]);
     }
 
-    public Gate addReadGate() {
-      Gate g;
-      if (counterR == 0) {
-           g = addNewGateIfApplicable("wait__" + eventName);
+    nb = new Param("nb", Param.NAT, "0");
+    addParameter(nb);
 
-      } else {
-             g = addNewGateIfApplicable("wait__" + eventName + counterR);
-
-      }
-      waitGates.add(g);
-           counterR ++;
-           return g;
-    }
-    
-    public Gate addSizeGate() {
-      Gate g;
-      if (counterS == 0) {
-           g = addNewGateIfApplicable("notified__" + eventName);
-
-      } else {
-        g = addNewGateIfApplicable("notified__" + eventName + counterS);
-      }
-      sizeGates.add(g);
-           counterS ++;
-           return g;
+    if ((_lossy) && (_maxNbOfLoss > -1)) {
+      pmax = new Param("maxLoss", Param.NAT, "" + _maxNbOfLoss);
+      addParameter(pmax);
+      currentLoss = new Param("currentLoss", Param.NAT, "0");
+      addParameter(currentLoss);
     }
 
-    public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
-      Gate forward_0, forward_1, g;
-        ADActionStateWithGate adag;
-		Gate loss = null, notloss = null;
-		ADActionStateWithGate aclost, acnotlost;
-        //ADActionStateWithGate adagsize1, adagsize2, adagsize3;
-        ADActionStateWithParam adac1, adac2, adac3;
-		Param pmax, currentLoss;
-        ADParallel adpar0, adpar1;
-        ADStop adstop;
-        ADJunction adj1, adj2, adj3, adj4, adj5, adj6, adj7;
-        ADChoice adch1, adch2, adch3,adch6, adch7;
-        Param p1, p2, p3, p10, p20, p30, index, index_r, nb;
-        //String value;
-        int i;
-        ListIterator iterator;
-        String action;
-		
-		ADComponent comp;
+    /*
+     * maxs = new Param("maxs", Param.NAT, ""+maxSamples); addParameter(maxs);
+     */
 
-        ActivityDiagram ad = new ActivityDiagram();
-        setActivityDiagram(ad);
-        
-        // Case where not input or output requests...
-        if ((sendReqGates.size() == 0) || (waitGates.size() == 0)) {
-           adstop = new ADStop();
-           ad.add(adstop);
-           ad.getStartState().addNext(adstop);
-           return;
-        }
+    index = new Param("index", Param.NAT, "0");
+    addParameter(index);
 
-        Param [] params_a = new Param[nbPara];
-		Param [] params_b = new Param[nbPara];
-		
-		for(i=0; i<nbPara; i++) {
-			params_a[i] = new Param("pa" + i, Param.NAT, "0");
-			params_b[i] = new Param("pb" + i, Param.NAT, "0");
-			addParameter(params_a[i]);
-			addParameter(params_b[i]);
-		}
-        
-        nb = new Param("nb", Param.NAT, "0");
-        addParameter(nb);
-		
-		if ((_lossy) && (_maxNbOfLoss > -1)) {
-			pmax = new Param("maxLoss", Param.NAT, ""+_maxNbOfLoss);
-			addParameter(pmax);
-			currentLoss = new Param("currentLoss", Param.NAT, "0");
-			addParameter(currentLoss);
-		}
-        
-        /*maxs = new Param("maxs", Param.NAT, ""+maxSamples);
-        addParameter(maxs);*/
-        
-        index = new Param("index", Param.NAT, "0");
-        addParameter(index);
-        
-        index_r = new Param("index_r", Param.NAT, "0");
-        addParameter(index_r);
-        
-        forward_0 = addNewGateIfApplicable("forward_0");
-        forward_1 = addNewGateIfApplicable("forward_1");
-		
-		if (_lossy) {
-			loss = addNewGateIfApplicable("msglost__" + eventName);
-			notloss = addNewGateIfApplicable("msgNotLost__" + eventName);
-		}
+    index_r = new Param("index_r", Param.NAT, "0");
+    addParameter(index_r);
 
-        adpar0 = new ADParallel();
-        adpar0.setValueGate("[forward_0, forward_1]");
-        ad.add(adpar0);
-        ad.getStartState().addNext(adpar0);
+    forward_0 = addNewGateIfApplicable("forward_0");
+    forward_1 = addNewGateIfApplicable("forward_1");
 
-        // Left branch of the main parallel -> storing data in order
-        adj1 = new ADJunction();
-        ad.add(adj1);
-        adpar0.addNext(adj1);
-        
-        adag = new ADActionStateWithGate(forward_0);
+    if (_lossy) {
+      loss = addNewGateIfApplicable("msglost__" + eventName);
+      notloss = addNewGateIfApplicable("msgNotLost__" + eventName);
+    }
+
+    adpar0 = new ADParallel();
+    adpar0.setValueGate("[forward_0, forward_1]");
+    ad.add(adpar0);
+    ad.getStartState().addNext(adpar0);
+
+    // Left branch of the main parallel -> storing data in order
+    adj1 = new ADJunction();
+    ad.add(adj1);
+    adpar0.addNext(adj1);
+
+    adag = new ADActionStateWithGate(forward_0);
+    ad.add(adag);
+    action = "";
+    for (i = 0; i < nbPara; i++) {
+      action += "?pb" + i + ":nat";
+    }
+    action += "?index:nat";
+    adag.setActionValue(action);
+    adj1.addNext(adag);
+
+    adpar1 = new ADParallel();
+    adpar1.setValueGate("[]");
+    ad.add(adpar1);
+    adag.addNext(adpar1);
+
+    adag = new ADActionStateWithGate(forward_1);
+    ad.add(adag);
+    action = "";
+    for (i = 0; i < nbPara; i++) {
+      action += "!pb" + i + "";
+    }
+    action += "!index";
+    adag.setActionValue(action);
+    adpar1.addNext(adag);
+
+    adstop = new ADStop();
+    ad.add(adstop);
+    adag.addNext(adstop);
+
+    adpar1.addNext(adj1);
+
+    // Second branch -> interaction with external classes
+
+    adj2 = new ADJunction();
+    ad.add(adj2);
+    adpar0.addNext(adj2);
+
+    adch1 = new ADChoice();
+    ad.add(adch1);
+    adj2.addNext(adch1);
+
+    // Notified -> to know whether an event is available, or not
+    if (sizeGates.size() > 0) {
+      adch2 = new ADChoice();
+      ad.add(adch2);
+      adch1.addNext(adch2);
+      adch1.addGuard("[]");
+
+      adj3 = new ADJunction();
+      ad.add(adj3);
+      adj3.addNext(adj2);
+
+      iterator = sizeGates.listIterator();
+      while (iterator.hasNext()) {
+        g = (Gate) (iterator.next());
+        adag = new ADActionStateWithGate(g);
         ad.add(adag);
-        action = "";
-        for(i=0; i<nbPara; i++) {
-          action += "?pb" + i + ":nat";
-        }
-        action += "?index:nat";
-        adag.setActionValue(action);
-        adj1.addNext(adag);
-
-        adpar1 = new ADParallel();
-        adpar1.setValueGate("[]");
-        ad.add(adpar1);
-        adag.addNext(adpar1);
-        
-        adag = new ADActionStateWithGate(forward_1);
+        adag.setActionValue("!1");
+        adch2.addNext(adag);
+        adch2.addGuard("[nb>0]");
+        adag.addNext(adj3);
+        adag = new ADActionStateWithGate(g);
         ad.add(adag);
-        action = "";
-        for(i=0; i<nbPara; i++) {
-          action += "!pb" + i + "";
-        }
-        action += "!index";
-        adag.setActionValue(action);
-        adpar1.addNext(adag);
-
-        adstop = new ADStop();
-        ad.add(adstop);
-        adag.addNext(adstop);
-        
-        adpar1.addNext(adj1);
-        
-        // Second branch -> interaction with external classes
-        
-        adj2 = new ADJunction();
-        ad.add(adj2);
-        adpar0.addNext(adj2);
-        
-        adch1 = new ADChoice();
-        ad.add(adch1);
-        adj2.addNext(adch1);
-
-        // Notified -> to know whether an event is available, or not
-        if (sizeGates.size() >0) {
-          adch2 = new ADChoice();
-          ad.add(adch2);
-          adch1.addNext(adch2);
-          adch1.addGuard("[]");
-          
-          adj3 = new ADJunction();
-          ad.add(adj3);
-          adj3.addNext(adj2);
-  
-          iterator = sizeGates.listIterator();
-          while(iterator.hasNext()) {
-            g = (Gate)(iterator.next());
-            adag = new ADActionStateWithGate(g);
-            ad.add(adag);
-            adag.setActionValue("!1");
-            adch2.addNext(adag);
-            adch2.addGuard("[nb>0]");
-            adag.addNext(adj3);
-            adag = new ADActionStateWithGate(g);
-            ad.add(adag);
-            adag.setActionValue("!0");
-            adch2.addNext(adag);
-            adch2.addGuard("[nb==0]");
-            adag.addNext(adj3);
-          }
-        }
-        // Sent event
-        adch3 = new ADChoice();
-        ad.add(adch3);
-        adch1.addNext(adch3);
-        adch1.addGuard("[]");
-
-        adj4 = new ADJunction();
-        ad.add(adj4);
-
-        iterator = sendReqGates.listIterator();
-        while(iterator.hasNext()) {
-          g = (Gate)(iterator.next());
-          adag = new ADActionStateWithGate(g);
-          ad.add(adag);
-          action = "";
-          for(i=0; i<nbPara; i++) {
-            action += "?pb" + i + ":nat";
-          }
-          adag.setActionValue(action);
-          adch3.addNext(adag);
-          adch3.addGuard("[]");
-          adag.addNext(adj4);
-        }
-        
-		
-		// If there is a loss -> no forward
-		if (_lossy) {
-			TraceManager.addDev("Lossy");
-			ADChoice adchloss = new ADChoice();
-			ad.add(adchloss);
-			adj4.addNext(adchloss);
-			
-			
-			
-			adchloss.addGuard("[]");
-			adchloss.addGuard("[]");
-			
-			// loss ...
-			adag = new ADActionStateWithGate(loss);
-			ad.add(adag);
-			 adag.setActionValue("");
-			 adag.addNext(adj2);
-			 adchloss.addNext(adag);
-			
-			 // no loss
-			 adag = new ADActionStateWithGate(notloss);
-			ad.add(adag);
-			 adag.setActionValue("");
-			 adchloss.addNext(adag);
-			 comp = adag;
-			
-		} else {
-			TraceManager.addDev("Not lossy");
-			comp = adj4;
-		}
-		adag = new ADActionStateWithGate(forward_0);
-		ad.add(adag);
-		action = "";
-		for(i=0; i<nbPara; i++) {
-			action += "!pb" + i + "";
-		}
-		action+="!index";
-		adag.setActionValue(action);
-		comp.addNext(adag);
-		
-		adac1 = new ADActionStateWithParam(index);
-		ad.add(adac1);
-		adac1.setActionValue("index+1");
-		adag.addNext(adac1);
-		
-		adj5 = new ADJunction();
-		ad.add(adj5);
-		adj5.addNext(adj2);
-		
-		adj6 = new ADJunction();
-		ad.add(adj6);
-		//adch4.addNext(adj6);
-		//adch4.addGuard("[nb==maxs]");
-		
-		adag = new ADActionStateWithGate(forward_1);
-		ad.add(adag);
-		action = "";
-		for(i=0; i<nbPara; i++) {
-			action += "?pa" + i + ":nat";
-		}
-		action += "!index_r";
-		adag.setActionValue(action);
-		adj6.addNext(adag);
-		
-		adac3 = new ADActionStateWithParam(index_r);
-		ad.add(adac3);
-		adac3.setActionValue("index_r+1");
-		adag.addNext(adac3);
-		adac3.addNext(adj5);
-		
-		adac2 = new ADActionStateWithParam(nb);
-		ad.add(adac2);
-		adac2.setActionValue("nb+1");
-		adac1.addNext(adac2);
-		
-		adch6 = new ADChoice();
-		ad.add(adch6);
-		adac2.addNext(adch6);
-		
-		adch6.addNext(adj5);
-		adch6.addGuard("[not(nb==1)]");
-		adch6.addNext(adj6);
-		adch6.addGuard("[nb==1]");
-
-        // Wait event branch
-        adj7 = new ADJunction();
-        ad.add(adj7);
-        
-        iterator = waitGates.listIterator();
-        while(iterator.hasNext()) {
-          g = (Gate)(iterator.next());
-          adag = new ADActionStateWithGate(g);
-          ad.add(adag);
-          action = "";
-          for(i=0; i<nbPara; i++) {
-            action += "!pa" + i + "";
-          }
-          adag.setActionValue(action);
-          adch3.addNext(adag);
-          adch3.addGuard("[nb>0]");
-          adag.addNext(adj7);
-        }
-        
-        adac1 = new ADActionStateWithParam(nb);
-        ad.add(adac1);
-        adac1.setActionValue("nb-1");
-        adj7.addNext(adac1);
-
-        adch7 = new ADChoice();
-        ad.add(adch7);
-        adac1.addNext(adch7);
-
-        adch7.addNext(adj6);
-        adch7.addGuard("[not(nb==0)]");
-        adch7.addNext(adj5);
-        adch7.addGuard("[nb==0]");
-        
+        adag.setActionValue("!0");
+        adch2.addNext(adag);
+        adch2.addGuard("[nb==0]");
+        adag.addNext(adj3);
+      }
     }
+    // Sent event
+    adch3 = new ADChoice();
+    ad.add(adch3);
+    adch1.addNext(adch3);
+    adch1.addGuard("[]");
+
+    adj4 = new ADJunction();
+    ad.add(adj4);
+
+    iterator = sendReqGates.listIterator();
+    while (iterator.hasNext()) {
+      g = (Gate) (iterator.next());
+      adag = new ADActionStateWithGate(g);
+      ad.add(adag);
+      action = "";
+      for (i = 0; i < nbPara; i++) {
+        action += "?pb" + i + ":nat";
+      }
+      adag.setActionValue(action);
+      adch3.addNext(adag);
+      adch3.addGuard("[]");
+      adag.addNext(adj4);
+    }
+
+    // If there is a loss -> no forward
+    if (_lossy) {
+      TraceManager.addDev("Lossy");
+      ADChoice adchloss = new ADChoice();
+      ad.add(adchloss);
+      adj4.addNext(adchloss);
+
+      adchloss.addGuard("[]");
+      adchloss.addGuard("[]");
+
+      // loss ...
+      adag = new ADActionStateWithGate(loss);
+      ad.add(adag);
+      adag.setActionValue("");
+      adag.addNext(adj2);
+      adchloss.addNext(adag);
+
+      // no loss
+      adag = new ADActionStateWithGate(notloss);
+      ad.add(adag);
+      adag.setActionValue("");
+      adchloss.addNext(adag);
+      comp = adag;
+
+    } else {
+      TraceManager.addDev("Not lossy");
+      comp = adj4;
+    }
+    adag = new ADActionStateWithGate(forward_0);
+    ad.add(adag);
+    action = "";
+    for (i = 0; i < nbPara; i++) {
+      action += "!pb" + i + "";
+    }
+    action += "!index";
+    adag.setActionValue(action);
+    comp.addNext(adag);
+
+    adac1 = new ADActionStateWithParam(index);
+    ad.add(adac1);
+    adac1.setActionValue("index+1");
+    adag.addNext(adac1);
+
+    adj5 = new ADJunction();
+    ad.add(adj5);
+    adj5.addNext(adj2);
+
+    adj6 = new ADJunction();
+    ad.add(adj6);
+    // adch4.addNext(adj6);
+    // adch4.addGuard("[nb==maxs]");
+
+    adag = new ADActionStateWithGate(forward_1);
+    ad.add(adag);
+    action = "";
+    for (i = 0; i < nbPara; i++) {
+      action += "?pa" + i + ":nat";
+    }
+    action += "!index_r";
+    adag.setActionValue(action);
+    adj6.addNext(adag);
+
+    adac3 = new ADActionStateWithParam(index_r);
+    ad.add(adac3);
+    adac3.setActionValue("index_r+1");
+    adag.addNext(adac3);
+    adac3.addNext(adj5);
+
+    adac2 = new ADActionStateWithParam(nb);
+    ad.add(adac2);
+    adac2.setActionValue("nb+1");
+    adac1.addNext(adac2);
+
+    adch6 = new ADChoice();
+    ad.add(adch6);
+    adac2.addNext(adch6);
+
+    adch6.addNext(adj5);
+    adch6.addGuard("[not(nb==1)]");
+    adch6.addNext(adj6);
+    adch6.addGuard("[nb==1]");
+
+    // Wait event branch
+    adj7 = new ADJunction();
+    ad.add(adj7);
+
+    iterator = waitGates.listIterator();
+    while (iterator.hasNext()) {
+      g = (Gate) (iterator.next());
+      adag = new ADActionStateWithGate(g);
+      ad.add(adag);
+      action = "";
+      for (i = 0; i < nbPara; i++) {
+        action += "!pa" + i + "";
+      }
+      adag.setActionValue(action);
+      adch3.addNext(adag);
+      adch3.addGuard("[nb>0]");
+      adag.addNext(adj7);
+    }
+
+    adac1 = new ADActionStateWithParam(nb);
+    ad.add(adac1);
+    adac1.setActionValue("nb-1");
+    adj7.addNext(adac1);
+
+    adch7 = new ADChoice();
+    ad.add(adch7);
+    adac1.addNext(adch7);
+
+    adch7.addNext(adj6);
+    adch7.addGuard("[not(nb==0)]");
+    adch7.addNext(adj5);
+    adch7.addGuard("[nb==0]");
+
+  }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.osad;
 
 import myutil.GraphicLib;
@@ -48,52 +45,51 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TOSADStartState
- * used to start a new activity. To be used in TURTLE-OS activity diagrams
- * Creation: 06/10/2006
+ * Class TOSADStartState used to start a new activity. To be used in TURTLE-OS
+ * activity diagrams Creation: 06/10/2006
+ * 
  * @version 1.0 06/10/2006
  * @author Ludovic APVRILLE
  */
-public class TOSADStartState extends TGCWithoutInternalComponent{
-	private int lineLength = 5;
+public class TOSADStartState extends TGCWithoutInternalComponent {
+  private int lineLength = 5;
 
-	public TOSADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
-		width = 15;
-		height = 15;
+  public TOSADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		nbConnectingPoint = 1;
-		connectingPoint = new TGConnectingPoint[1];
-		connectingPoint[0] = new TOSADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+    width = 15;
+    height = 15;
 
-		nbInternalTGComponent = 0;
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[1];
+    connectingPoint[0] = new TOSADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
 
-		moveable = true;
-		editable = false;
-		removable = true;
-	
-		name = "start state";
-		
-		myImageIcon = IconManager.imgic222;
-	}
+    nbInternalTGComponent = 0;
 
-	public void internalDrawing(Graphics g) {
-		g.fillOval(x, y, width, height);
-		g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-	}
+    moveable = true;
+    editable = false;
+    removable = true;
 
-	public TGComponent isOnMe(int _x, int _y) {
-		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-			return this;
-		}
-		return null;
-	}
-	
-	public int getType() {
-		return TGComponentManager.TOSAD_START_STATE;
-	}
-	
+    name = "start state";
+
+    myImageIcon = IconManager.imgic222;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.fillOval(x, y, width, height);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.TOSAD_START_STATE;
+  }
+
 }
-
-

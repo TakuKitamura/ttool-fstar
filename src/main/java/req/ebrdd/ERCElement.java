@@ -36,33 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
 /**
- * Class ERCElement
- * Creation: 22/09/2009
+ * Class ERCElement Creation: 22/09/2009
+ * 
  * @version 1.0 22/09/2009
  * @author Ludovic APVRILLE
  */
 public abstract class ERCElement extends EBRDDGeneralComponent implements Cloneable {
-    protected boolean negated;
-	
-    public ERCElement(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-    }
-    
-	public void setNegated(boolean _negated) {
-		negated = _negated;
-	}
-	
-	public boolean isNegated() {
-		return negated;
-	}
-	
-	public String superString() {
-		return super.toString();
-	}
+  protected boolean negated;
+
+  public ERCElement(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public void setNegated(boolean _negated) {
+    negated = _negated;
+  }
+
+  public boolean isNegated() {
+    return negated;
+  }
+
+  public String superString() {
+    return super.toString();
+  }
 }

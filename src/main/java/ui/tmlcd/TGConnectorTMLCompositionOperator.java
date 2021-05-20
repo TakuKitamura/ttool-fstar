@@ -46,42 +46,43 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class TGConnectorTMLCompositionOperator
- * Connects an association to a TML composition operator. To be used in TML task diagram.
- * Creation: 28/10/2005
+ * Class TGConnectorTMLCompositionOperator Connects an association to a TML
+ * composition operator. To be used in TML task diagram. Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorTMLCompositionOperator extends TGConnector {
-    
-    public TGConnectorTMLCompositionOperator(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic108;
+public class TGConnectorTMLCompositionOperator extends TGConnector {
+
+  public TGConnectorTMLCompositionOperator(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic108;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    TMLTaskDiagramPanel tmltdp = (TMLTaskDiagramPanel) tdp;
+    if (!tmltdp.areAllVisible()) {
+      if (!tmltdp.connectedToVisible(this))
+        return;
     }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-        TMLTaskDiagramPanel tmltdp = (TMLTaskDiagramPanel)tdp;
-        if (!tmltdp.areAllVisible()) {
-            if (!tmltdp.connectedToVisible(this))
-                return;
-        }
-        
-        super.internalDrawing(g);
-    }
-    
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
-    
-    @Override
-    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.CONNECTOR_TML_COMPOSITION_OPERATOR;
-    }
+
+    super.internalDrawing(g);
+  }
+
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
+
+  @Override
+  protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.CONNECTOR_TML_COMPOSITION_OPERATOR;
+  }
 }

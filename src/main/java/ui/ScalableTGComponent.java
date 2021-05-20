@@ -39,13 +39,13 @@
 package ui;
 
 /**
- * Class ScalableTGComponent
- * Component that can be scaled for zooming a diagram
+ * Class ScalableTGComponent Component that can be scaled for zooming a diagram
  * Creation: 10/13/2008
+ * 
  * @version 1.0 10/03/2008
  * @author Ludovic APVRILLE
  */
 public interface ScalableTGComponent {
-    
-	void rescale(double scaleFactor);
+
+  void rescale(double scaleFactor);
 }

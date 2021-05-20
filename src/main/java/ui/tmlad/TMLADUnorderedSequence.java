@@ -47,85 +47,94 @@ import ui.TGConnectingPoint;
 import ui.ad.TADSequence;
 
 /**
- * Class TMLADUnorderedSequence
- * Sequence. To be used in activity diagrams of TMLDesigns
- * Creation: 07/07/2010
+ * Class TMLADUnorderedSequence Sequence. To be used in activity diagrams of
+ * TMLDesigns Creation: 07/07/2010
+ * 
  * @version 1.0 07/07/2010
  * @author Ludovic APVRILLE
  */
-public class TMLADUnorderedSequence extends TADSequence/* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint {
-	
-//    private int lineLength = 0;
-//  private int textX, textY;
+public class TMLADUnorderedSequence extends TADSequence
+    /* Issue #69 TGCWithInternalComponent */ implements EmbeddedComment, AllowedBreakpoint {
 
-	public TMLADUnorderedSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  // private int lineLength = 0;
+  // private int textX, textY;
 
-		tgcomponent[0].setValue("<>");
-//		width = 150;
-//		height = 5;
-//                
-//    textX = width - 6;
-//		textY = height + 2;
-//		
-//		nbConnectingPoint = 6;
-//		connectingPoint = new TGConnectingPoint[6];
-//		connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-//    connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.167, 1.0);
-//		connectingPoint[2] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.333, 1.0);
-//		connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-//		connectingPoint[4] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.667, 1.0);
-//		connectingPoint[5] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.833, 1.0);
-//
-//		nbInternalTGComponent = 1;
-//		tgcomponent = new TGComponent[nbInternalTGComponent];
-//
-//		TGCOneLineText tgc = new TGCOneLineText(x+textX + 10, y+textY, textX +10 , textX + 10 , textY, textY, true, this, _tdp);
-//		tgc.setValue("<>");
-//		tgc.setName("Random sequence");
-//		tgc.setEditable(false);
-//                
-//		tgcomponent[0] = tgc;
-//
-//		moveable = true;
-//		editable = false;
-//		removable = true;
-//
-//		name = "random sequence";
-//		
-//		myImageIcon = IconManager.imgic206;
-	}
-    
-	@Override
-    protected void createConnectingPoints() {
-		nbConnectingPoint = 6;
-		connectingPoint = new TGConnectingPoint[6];
-		connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-		connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.167, 1.0);
-		connectingPoint[2] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.333, 1.0);
-		connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-		connectingPoint[4] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.667, 1.0);
-		connectingPoint[5] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.833, 1.0);
-	}
-//    public void internalDrawing(Graphics g) {
-//		g.drawRect(x, y, width, height);
-//		g.fillRect(x, y, width, height);
-//	}
+  public TMLADUnorderedSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-//	public TGComponent isOnOnlyMe(int x1, int y1) {
-//		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-//			return this;
-//		}
-//		return null;
-//	}
-	
-	@Override
-    public int getType() {
-        return TGComponentManager.TMLAD_UNORDERED_SEQUENCE;
-    }
-    
-	@Override
-    public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_TMLAD;
-    }  
+    tgcomponent[0].setValue("<>");
+    // width = 150;
+    // height = 5;
+    //
+    // textX = width - 6;
+    // textY = height + 2;
+    //
+    // nbConnectingPoint = 6;
+    // connectingPoint = new TGConnectingPoint[6];
+    // connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true,
+    // false, 0.5, 0.0);
+    // connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
+    // true, 0.167, 1.0);
+    // connectingPoint[2] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
+    // true, 0.333, 1.0);
+    // connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
+    // true, 0.5, 1.0);
+    // connectingPoint[4] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
+    // true, 0.667, 1.0);
+    // connectingPoint[5] = new TGConnectingPointTMLAD(this, 0, lineLength, false,
+    // true, 0.833, 1.0);
+    //
+    // nbInternalTGComponent = 1;
+    // tgcomponent = new TGComponent[nbInternalTGComponent];
+    //
+    // TGCOneLineText tgc = new TGCOneLineText(x+textX + 10, y+textY, textX +10 ,
+    // textX + 10 , textY, textY, true, this, _tdp);
+    // tgc.setValue("<>");
+    // tgc.setName("Random sequence");
+    // tgc.setEditable(false);
+    //
+    // tgcomponent[0] = tgc;
+    //
+    // moveable = true;
+    // editable = false;
+    // removable = true;
+    //
+    // name = "random sequence";
+    //
+    // myImageIcon = IconManager.imgic206;
+  }
+
+  @Override
+  protected void createConnectingPoints() {
+    nbConnectingPoint = 6;
+    connectingPoint = new TGConnectingPoint[6];
+    connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.167, 1.0);
+    connectingPoint[2] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.333, 1.0);
+    connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+    connectingPoint[4] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.667, 1.0);
+    connectingPoint[5] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.833, 1.0);
+  }
+  // public void internalDrawing(Graphics g) {
+  // g.drawRect(x, y, width, height);
+  // g.fillRect(x, y, width, height);
+  // }
+
+  // public TGComponent isOnOnlyMe(int x1, int y1) {
+  // if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+  // return this;
+  // }
+  // return null;
+  // }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TMLAD_UNORDERED_SEQUENCE;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_TMLAD;
+  }
 }

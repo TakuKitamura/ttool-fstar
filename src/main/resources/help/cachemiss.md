@@ -1,2 +1,3 @@
 ## Cache miss (in %)
+
 This represents the percentage of cache miss with regards to the number of accesses to memory. Said differently, for x accesses to memory, in y % of the cases a real access to meemory will be performed.

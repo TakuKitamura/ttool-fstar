@@ -37,36 +37,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-* Class TMLCPRefSD
-* Creation: 18/02/2014
-* @version 1.1 04/06/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLCPRefSD Creation: 18/02/2014
+ * 
+ * @version 1.1 04/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPRefSD extends TMLCPElement  {
+public class TMLCPRefSD extends TMLCPElement {
 
-	private TMLCPSequenceDiagram reference;
-	
-	public TMLCPRefSD( TMLCPSequenceDiagram _ref, String _name, Object _referenceObject ) {
-  	super( _name, _referenceObject );
-		reference = _ref;
-	}
+  private TMLCPSequenceDiagram reference;
 
-	public TMLCPRefSD( String _name, Object _referenceObject ) {
-  	super( _name, _referenceObject );
-		reference = null;
-	}
-    
-	public TMLCPSequenceDiagram getReference() {
-  	return this.reference;
-	}
+  public TMLCPRefSD(TMLCPSequenceDiagram _ref, String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    reference = _ref;
+  }
 
-	public void setReference( TMLCPSequenceDiagram _ref ) {
-  	this.reference = _ref;
-	}
+  public TMLCPRefSD(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    reference = null;
+  }
+
+  public TMLCPSequenceDiagram getReference() {
+    return this.reference;
+  }
+
+  public void setReference(TMLCPSequenceDiagram _ref) {
+    this.reference = _ref;
+  }
 }

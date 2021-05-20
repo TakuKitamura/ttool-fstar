@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.totpn;
 
 import tpndescription.Place;
@@ -49,215 +46,209 @@ import translator.CheckingError;
 
 import java.util.LinkedList;
 
-
 /**
- * Class TURTLE2TPN
- * Creation: 04/07/2006
+ * Class TURTLE2TPN Creation: 04/07/2006
+ * 
  * @version 1.0 04/07/2006
  * @author Ludovic APVRILLE
  */
 public class TURTLE2TPN {
-    
-    private TPN tpn;
-    private TURTLEModeling tm;
-    private LinkedList<CheckingError> warnings;
-    private LinkedList<Object> tmpComponents;
-    private LinkedList<Place> entryPlaces;
-    private LinkedList<Place> exitPlaces;
-    
-    public TURTLE2TPN(TURTLEModeling _tm) {
-        tm = _tm;
+
+  private TPN tpn;
+  private TURTLEModeling tm;
+  private LinkedList<CheckingError> warnings;
+  private LinkedList<Object> tmpComponents;
+  private LinkedList<Place> entryPlaces;
+  private LinkedList<Place> exitPlaces;
+
+  public TURTLE2TPN(TURTLEModeling _tm) {
+    tm = _tm;
+  }
+
+  public String toString() {
+    return tpn.toString();
+  }
+
+  public LinkedList<CheckingError> getWarnings() {
+    return warnings;
+  }
+
+  public TPN generateTPN() {
+    warnings = new LinkedList<>();
+    tpn = new TPN();
+    tmpComponents = new LinkedList<>();
+    entryPlaces = new LinkedList<>();
+    exitPlaces = new LinkedList<>();
+
+    // Name initialization -> we reuse the names used by LOTOS specification
+    MasterGateManager.reinitNameRestriction();
+    tm.makeRTLOTOSName();
+    tm.makeLOTOSName();
+
+    // Work with tm modeling
+    // For example, compact latencies together, etc.
+
+    // Deal with tclasses
+    translateTClasses();
+
+    // Deal with relations
+
+    // Deal with initial instances
+    setMarking();
+
+    // optimize PN
+    tpn.optimize();
+
+    return tpn;
+  }
+
+  private void translateTClasses() {
+    for (int i = 0; i < tm.classNb(); i++) {
+      translateTClass(tm.getTClassAtIndex(i));
+    }
+  }
+
+  private void translateTClass(TClass t) {
+    addPlaces(t);
+    ADStart adstart = t.getActivityDiagram().getStartState();
+    translateADComponents(t, adstart, getEntryPlace(t));
+  }
+
+  private void translateADComponents(TClass t, ADComponent adc, Place p) {
+    Place p1;
+    Transition t1;
+
+    if (adc instanceof ADStart) {
+      addComponentRef(adc, p, p);
+      translateADComponents(t, adc.getNext(0), p);
+    } else if (adc instanceof ADStop) {
+      // Managed regularly -> join with an epsilon transition to the end place of the
+      // tclass
+      t1 = newEpsilonTransition();
+      t1.addOriginPlace(p);
+      t1.addDestinationPlace(getExitPlace(t));
+      addComponentRef(adc, p, p);
+    } else if (adc instanceof ADDelay) {
+      // Is delay value valid?
+      ADDelay delay = (ADDelay) adc;
+      int delayValue = getDelayValue(t, delay.getValue());
+      if (delayValue == -1) {
+        p1 = p;
+      } else {
+        p1 = newPlace();
+        t1 = newEpsilonTransition();
+        t1.addOriginPlace(p);
+        t1.addDestinationPlace(p1);
+        t1.setDelay(delayValue);
+      }
+      addComponentRef(adc, p, p1);
+      translateADComponents(t, adc.getNext(0), p1);
+    } else if (adc instanceof ADActionStateWithGate) {
+      // Get action value -> should also be managed
+      ADActionStateWithGate adswg = (ADActionStateWithGate) adc;
+      p1 = newPlace();
+      t1 = newTransition(t.getName() + "__" + adswg.getGate().getName());
+      t1.addOriginPlace(p);
+      t1.addDestinationPlace(p1);
+      addComponentRef(adc, p, p1);
+      translateADComponents(t, adc.getNext(0), p1);
+    } else {
+      // Operator is ignored
+      warnings.add(new CheckingError(CheckingError.BEHAVIOR_ERROR,
+          "Operator " + adc + " is not a recognized operator -> ignored"));
+      addComponentRef(adc, p, p);
+      translateADComponents(t, adc.getNext(0), p);
+    }
+  }
+
+  private Place newPlace() {
+    Place p = new Place();
+    tpn.addPlace(p);
+    return p;
+  }
+
+  private Transition newEpsilonTransition() {
+    Transition t = new Transition("epsilon");
+    tpn.addTransition(t);
+    return t;
+  }
+
+  private Transition newTransition(String label) {
+    Transition t = new Transition(label);
+    tpn.addTransition(t);
+    return t;
+  }
+
+  private int getDelayValue(TClass t, String delay) {
+    delay = delay.trim();
+
+    // Is the delay a number value?
+    try {
+      return Integer.parseInt(delay);
+    } catch (NumberFormatException ignored) {
     }
 
-    public String toString() {
-        return tpn.toString();
-    }
-    
-    public LinkedList<CheckingError> getWarnings() {
-        return warnings;
-    }
-    
-    public TPN generateTPN() {
-        warnings = new LinkedList<> ();
-        tpn = new TPN();
-        tmpComponents = new LinkedList<>();
-        entryPlaces = new LinkedList<>();
-        exitPlaces = new LinkedList<>();
-        
-        // Name initialization -> we reuse the names used by LOTOS specification
-        MasterGateManager.reinitNameRestriction();
-        tm.makeRTLOTOSName();
-        tm.makeLOTOSName();
-        
-        // Work with tm modeling
-        // For example, compact latencies together, etc.
-        
-        // Deal with tclasses
-        translateTClasses();
-        
-        
-        // Deal with relations
-        
-        
-        // Deal with initial instances
-        setMarking();
-        
-        
-        // optimize PN
-        tpn.optimize();
-        
-        
-        
-        return tpn;
-    }  
-    
-    private void translateTClasses() {
-        for(int i=0; i<tm.classNb(); i++) {
-            translateTClass(tm.getTClassAtIndex(i));
-        }
-    }
-    
-    private void translateTClass(TClass t) {
-        addPlaces(t);
-        ADStart adstart = t.getActivityDiagram().getStartState();
-        translateADComponents(t, adstart,  getEntryPlace(t));    
-    }
-    
-    private void translateADComponents(TClass t, ADComponent adc, Place p) {
-        Place p1;
-        Transition t1;
-        
-        if (adc instanceof ADStart) {
-            addComponentRef(adc, p, p);
-            translateADComponents(t, adc.getNext(0), p);
-        } else if (adc instanceof ADStop) {
-            // Managed regularly -> join with an epsilon transition to the end place of the tclass
-            t1 = newEpsilonTransition();
-            t1.addOriginPlace(p);
-            t1.addDestinationPlace(getExitPlace(t));
-            addComponentRef(adc, p, p);
-        } else if (adc instanceof ADDelay) {
-            // Is delay value valid?
-            ADDelay delay = (ADDelay)adc;
-            int delayValue = getDelayValue(t, delay.getValue());
-            if (delayValue == -1) {
-                p1 = p;
-            } else {
-                p1 = newPlace();
-                t1 = newEpsilonTransition();
-                t1.addOriginPlace(p);
-                t1.addDestinationPlace(p1);
-                t1.setDelay(delayValue);
-            }
-            addComponentRef(adc, p, p1);
-            translateADComponents(t, adc.getNext(0), p1);
-        } else if (adc instanceof ADActionStateWithGate) {
-            // Get action value -> should also be managed
-            ADActionStateWithGate adswg = (ADActionStateWithGate)adc;
-            p1 = newPlace();
-            t1 = newTransition(t.getName() + "__" + adswg.getGate().getName());
-            t1.addOriginPlace(p);
-            t1.addDestinationPlace(p1);
-            addComponentRef(adc, p, p1);
-            translateADComponents(t, adc.getNext(0), p1);
-        } else {
-            // Operator is ignored
-            warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Operator " + adc + " is not a recognized operator -> ignored"));
-            addComponentRef(adc, p, p);
-            translateADComponents(t, adc.getNext(0), p);
-        }
-    }
-    
-    
-    private Place newPlace() {
-        Place p = new Place();
-        tpn.addPlace(p);
-        return p;
-    }
-    
-    private Transition newEpsilonTransition() {
-        Transition t = new Transition("epsilon");
-        tpn.addTransition(t);
-        return t;
-    }
-    
-    private Transition newTransition(String label) {
-        Transition t = new Transition(label);
-        tpn.addTransition(t);
-        return t;
-    }
-    
-    private int getDelayValue(TClass t, String delay) {
-        delay = delay.trim();
+    // is it a variable? -> if so, return the initial value of this variable
+    Param p = t.getParamByName(delay);
 
-        // Is the delay a number value?
-        try {
-            return Integer.parseInt(delay);
-        } catch (NumberFormatException ignored) {
+    if (p != null) {
+      try {
+        return Integer.parseInt(p.getValue());
+      } catch (NumberFormatException ignored) {
+      }
+    }
+
+    warnings.add(new CheckingError(CheckingError.BEHAVIOR_ERROR,
+        "Delay (" + delay + ") is not a valid delay -> ignoring delay"));
+    return -1;
+  }
+
+  private void setMarking() {
+    // For all tclasses -> search for its initial place -> if tclass is start, then,
+    // add a token
+    TClass t;
+    Place p;
+
+    for (int i = 0; i < tm.classNb(); i++) {
+      t = tm.getTClassAtIndex(i);
+      if (t.isActive()) {
+        p = getEntryPlace(t);
+        if (p != null) {
+          p.nbOfTokens = 1;
         }
-        
-        // is it a variable? -> if so, return the initial value of this variable
-        Param p = t.getParamByName(delay);
-        
-        if (p!= null) {
-             try {
-                return Integer.parseInt(p.getValue());
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        
-        warnings.add(new CheckingError (CheckingError.BEHAVIOR_ERROR, "Delay (" + delay + ") is not a valid delay -> ignoring delay"));
-        return -1;
+      }
     }
-    
-    private void setMarking() {
-        // For all tclasses -> search for its initial place -> if tclass is start, then, add a token
-        TClass t;
-        Place p;
-        
-        for(int i=0; i<tm.classNb(); i++) {
-            t = tm.getTClassAtIndex(i);
-            if (t.isActive()) {
-                p = getEntryPlace(t);
-                if (p != null) {
-                    p.nbOfTokens = 1;
-                }
-            }
-        }
+  }
+
+  // Management of references between components and places
+
+  private void addPlaces(Object o) {
+    Place p1 = new Place();
+    Place p2 = new Place();
+    tpn.addPlace(p1);
+    tpn.addPlace(p2);
+    addComponentRef(o, p1, p2);
+  }
+
+  private void addComponentRef(Object o, Place p1, Place p2) {
+    tmpComponents.add(o);
+    entryPlaces.add(p1);
+    exitPlaces.add(p2);
+  }
+
+  private Place getEntryPlace(Object o) {
+    int index = tmpComponents.indexOf(o);
+    if (index == -1) {
+      return null;
     }
-    
-    
-    
-    
-    // Management of references between components and places
-    
-    private void addPlaces(Object o) {
-        Place p1 = new Place();
-        Place p2 = new Place();
-        tpn.addPlace(p1);
-        tpn.addPlace(p2);
-        addComponentRef(o, p1, p2);
+    return entryPlaces.get(index);
+  }
+
+  private Place getExitPlace(Object o) {
+    int index = tmpComponents.indexOf(o);
+    if (index == -1) {
+      return null;
     }
-    
-    private void addComponentRef(Object o, Place p1, Place p2) {
-        tmpComponents.add(o);
-        entryPlaces.add(p1);
-        exitPlaces.add(p2);
-    }
-    
-    private Place getEntryPlace(Object o) {
-        int index = tmpComponents.indexOf(o);
-        if (index == -1) {
-            return null;
-        }
-        return entryPlaces.get(index);
-    }
-    
-    private Place getExitPlace(Object o) {
-        int index = tmpComponents.indexOf(o);
-        if (index == -1) {
-            return null;
-        }
-        return exitPlaces.get(index);
-    }
+    return exitPlaces.get(index);
+  }
 }

@@ -36,29 +36,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
-
 /**
- * Class MalformedConfigurationException
- * Creation: 21/12/2003
- * version 1.0 21/12/2003
+ * Class MalformedConfigurationException Creation: 21/12/2003 version 1.0
+ * 21/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
-public	class MalformedConfigurationException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3702606106817772428L;
+public class MalformedConfigurationException extends Exception {
 
-	public MalformedConfigurationException(String s) {
-		super(s);
-	}
-    
-} // Class 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 3702606106817772428L;
 
-	
+  public MalformedConfigurationException(String s) {
+    super(s);
+  }
+
+} // Class

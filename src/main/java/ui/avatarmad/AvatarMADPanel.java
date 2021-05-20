@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarmad;
 
 //import java.awt.*;
@@ -46,101 +43,93 @@ package ui.avatarmad;
 import ui.*;
 
 /**
- * Class AvatarMADPanel
- * Panel for drawing Avatar Model Assumption Panels
-* Creation: 20/04/2010
-* @version 1.0 20/04/2010
+ * Class AvatarMADPanel Panel for drawing Avatar Model Assumption Panels
+ * Creation: 20/04/2010
+ * 
+ * @version 1.0 20/04/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
-  
-    
-    public  AvatarMADPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    @Override
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public boolean actionOnAdd(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.addTClass(tgcc.getClassName());
-            return true;
-        }*/
-        return false;
-    }
-    
-    @Override
-    public boolean actionOnRemove(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.removeTClass(tgcc.getClassName());
-            resetAllInstancesOf(tgcc);
-            return true;
-        }*/
-        return false;
-    }
-    
-    @Override
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            return actionOnDoubleClick(tgc);
-        }*/
-        return false;
-    }
-    
-    @Override
-    public String getXMLHead() {
-        return "<AvatarMADPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    @Override
-    public String getXMLTail() {
-        return "</AvatarMADPanel>";
-    }
-    
-    @Override
-    public String getXMLSelectedHead() {
-        return "<AvatarMADPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    @Override
-    public String getXMLSelectedTail() {
-        return "</AvatarMADPanelCopy>";
-    }
-    
-    @Override
-    public String getXMLCloneHead() {
-        return "<AvatarMADPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    @Override
-    public String getXMLCloneTail() {
-        return "</AvatarMADPanelCopy>";
-    }
-    
-    
-    public void makePostLoadingProcessing() throws MalformedModelingException {
-        
-    }
-    
-    @Override
-	public void enhance() {
-		autoAdjust();
-    }
-    
+
+  public AvatarMADPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  @Override
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public boolean actionOnAdd(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.addTClass(tgcc.getClassName()); return true; }
+     */
+    return false;
+  }
+
+  @Override
+  public boolean actionOnRemove(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+     * true; }
+     */
+    return false;
+  }
+
+  @Override
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+     */
+    return false;
+  }
+
+  @Override
+  public String getXMLHead() {
+    return "<AvatarMADPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
+
+  @Override
+  public String getXMLTail() {
+    return "</AvatarMADPanel>";
+  }
+
+  @Override
+  public String getXMLSelectedHead() {
+    return "<AvatarMADPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  @Override
+  public String getXMLSelectedTail() {
+    return "</AvatarMADPanelCopy>";
+  }
+
+  @Override
+  public String getXMLCloneHead() {
+    return "<AvatarMADPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  @Override
+  public String getXMLCloneTail() {
+    return "</AvatarMADPanelCopy>";
+  }
+
+  public void makePostLoadingProcessing() throws MalformedModelingException {
+
+  }
+
+  @Override
+  public void enhance() {
+    autoAdjust();
+  }
+
 }
-
-
-
-
-
-
-

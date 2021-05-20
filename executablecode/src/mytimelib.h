@@ -4,8 +4,6 @@
 #include <time.h>
 #include <sys/time.h>
 
-
-
 // in usec
 
 int my_clock_gettime(struct timespec *tp);

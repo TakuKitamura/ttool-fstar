@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sddescription;
 
 import myutil.TraceManager;
@@ -48,158 +45,159 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class HMSC
- * Creation: 16/08/2004
+ * Class HMSC Creation: 16/08/2004
+ * 
  * @version 1.1 16/08/2004
  * @author Ludovic APVRILLE
  */
 public class HMSC {
-    private String name;
-    private HMSCNode startNode;
-    private List<Instance> instances;
-    
-    public HMSC(String _name, HMSCNode _startNode) {
-        startNode = _startNode;
-        name = _name;
-        instances = new LinkedList<Instance>();
-    }
-    
-    public void addInstance(Instance instance) {
-        instances.add(instance);
-    }
-    
-    public Instance getCreateInstanceIfNecessary(String name) {
-        Instance ins = getInstance(name);
-        if (ins == null) {
-            ins = new Instance(name);
-            addInstance(ins);
-        }
-        return ins;
-    }
-    
-    public Instance getInstance(String name) {
-        Iterator<Instance> iterator = instances.listIterator();
-        Instance ins;
-         while(iterator.hasNext()) {
-            ins = iterator.next();
-            if (ins.getName().compareTo(name) == 0) {
-                return ins;
-            }
-        }
-        return null;
-    }
-    
-    public List<Instance> getInstances() {
-        return instances;
-    }
-    
+  private String name;
+  private HMSCNode startNode;
+  private List<Instance> instances;
 
-    public String getName() { return name; }
-    
-    public List<HMSCNode> getListOfNodesExceptStartStop() {
-        List<HMSCNode> nodes = new LinkedList<HMSCNode>();
-        addNodesExceptStartStop(startNode, nodes);
-        return nodes;
+  public HMSC(String _name, HMSCNode _startNode) {
+    startNode = _startNode;
+    name = _name;
+    instances = new LinkedList<Instance>();
+  }
+
+  public void addInstance(Instance instance) {
+    instances.add(instance);
+  }
+
+  public Instance getCreateInstanceIfNecessary(String name) {
+    Instance ins = getInstance(name);
+    if (ins == null) {
+      ins = new Instance(name);
+      addInstance(ins);
     }
-    
-    public List<HMSCNode> getListOfNodes() {
-        List<HMSCNode> nodes = new LinkedList<HMSCNode>();
-        addNodes(startNode, nodes);
-        return nodes;
+    return ins;
+  }
+
+  public Instance getInstance(String name) {
+    Iterator<Instance> iterator = instances.listIterator();
+    Instance ins;
+    while (iterator.hasNext()) {
+      ins = iterator.next();
+      if (ins.getName().compareTo(name) == 0) {
+        return ins;
+      }
     }
-    
-    public void addNodesExceptStartStop(HMSCNode n, List<HMSCNode> list) {
-        if (n == null) {
-            return;
-        }
-        if (n.getType() == HMSCNode.STOP) {
-            return;
-        }
-        
-        if (n.getType() == HMSCNode.CHOICE) {
-            if (list.contains(n)) {
-                return;
-            }
-            list.add(n);
-        }
-        
-        // recursive call;
-        MSC msc;
-        HMSCNode n1;
-        List<HMSCNode> nodes = n.getNextNodes();
-        Iterator<HMSCNode> nodesIterator = nodes.listIterator();
-        
-        // direct nodes
-        while( nodesIterator.hasNext() ) {
-            n1 = nodesIterator.next();
-            addNodesExceptStartStop(n1, list);
-        }
-        
-        // nodes after MSCs
-        List<MSC> mscs = n.getNextMSCs();
-        Iterator<MSC> mscIerator = mscs.listIterator();
-        while( mscIerator.hasNext() ) {
-            msc = mscIerator.next();
-            addNodesExceptStartStop(msc.getNextNode(), list);
-        }
+    return null;
+  }
+
+  public List<Instance> getInstances() {
+    return instances;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public List<HMSCNode> getListOfNodesExceptStartStop() {
+    List<HMSCNode> nodes = new LinkedList<HMSCNode>();
+    addNodesExceptStartStop(startNode, nodes);
+    return nodes;
+  }
+
+  public List<HMSCNode> getListOfNodes() {
+    List<HMSCNode> nodes = new LinkedList<HMSCNode>();
+    addNodes(startNode, nodes);
+    return nodes;
+  }
+
+  public void addNodesExceptStartStop(HMSCNode n, List<HMSCNode> list) {
+    if (n == null) {
+      return;
     }
-    
-    public void addNodes(HMSCNode n, List<HMSCNode> list) {
-        if (n == null) {
-            return;
-        }
-        
-        if (list.contains(n)) {
-            return;
-        }
-        
-        list.add(n);
-        
-        // recursive call;
-        MSC msc;
-        HMSCNode n1;
-        List<HMSCNode> ll = n.getNextNodes();
-        Iterator<HMSCNode> iterator1 = ll.listIterator();
-        
-        // direct nodes
-        while(iterator1.hasNext()) {
-            n1 = iterator1.next();
-            addNodes(n1, list);
-        }
-        
-        // nodes after MSCs
-        Iterator<MSC> mscsIt = n.getNextMSCs().iterator();
-        //iterator1 = ll.listIterator();
-        while( mscsIt.hasNext()) {
-            msc = mscsIt.next();
-            addNodes(msc.getNextNode(), list);
-        }
+    if (n.getType() == HMSCNode.STOP) {
+      return;
     }
-    
-    public List<MSC> getMSCs() {
-        List<HMSCNode> ll = getListOfNodes();
-        HMSCNode n;
-        List<MSC> mscs = new LinkedList<MSC>();
-        Iterator<HMSCNode> iterator = ll.listIterator();
-        
-        while(iterator.hasNext()) {
-            n = iterator.next();
-            mscs.addAll(n.getNextMSCs());
-        }
-        
-        return mscs;
+
+    if (n.getType() == HMSCNode.CHOICE) {
+      if (list.contains(n)) {
+        return;
+      }
+      list.add(n);
     }
-    
-    public void print() {
-       // LinkedList ll = getListOfNodes();
-        Iterator<HMSCNode> iterator = getListOfNodes().listIterator();
-        HMSCNode n;
-        
-        while(iterator.hasNext()) {
-            n = iterator.next();
-            TraceManager.addDev(n.toString());
-        }
-        
+
+    // recursive call;
+    MSC msc;
+    HMSCNode n1;
+    List<HMSCNode> nodes = n.getNextNodes();
+    Iterator<HMSCNode> nodesIterator = nodes.listIterator();
+
+    // direct nodes
+    while (nodesIterator.hasNext()) {
+      n1 = nodesIterator.next();
+      addNodesExceptStartStop(n1, list);
     }
-    
+
+    // nodes after MSCs
+    List<MSC> mscs = n.getNextMSCs();
+    Iterator<MSC> mscIerator = mscs.listIterator();
+    while (mscIerator.hasNext()) {
+      msc = mscIerator.next();
+      addNodesExceptStartStop(msc.getNextNode(), list);
+    }
+  }
+
+  public void addNodes(HMSCNode n, List<HMSCNode> list) {
+    if (n == null) {
+      return;
+    }
+
+    if (list.contains(n)) {
+      return;
+    }
+
+    list.add(n);
+
+    // recursive call;
+    MSC msc;
+    HMSCNode n1;
+    List<HMSCNode> ll = n.getNextNodes();
+    Iterator<HMSCNode> iterator1 = ll.listIterator();
+
+    // direct nodes
+    while (iterator1.hasNext()) {
+      n1 = iterator1.next();
+      addNodes(n1, list);
+    }
+
+    // nodes after MSCs
+    Iterator<MSC> mscsIt = n.getNextMSCs().iterator();
+    // iterator1 = ll.listIterator();
+    while (mscsIt.hasNext()) {
+      msc = mscsIt.next();
+      addNodes(msc.getNextNode(), list);
+    }
+  }
+
+  public List<MSC> getMSCs() {
+    List<HMSCNode> ll = getListOfNodes();
+    HMSCNode n;
+    List<MSC> mscs = new LinkedList<MSC>();
+    Iterator<HMSCNode> iterator = ll.listIterator();
+
+    while (iterator.hasNext()) {
+      n = iterator.next();
+      mscs.addAll(n.getNextMSCs());
+    }
+
+    return mscs;
+  }
+
+  public void print() {
+    // LinkedList ll = getListOfNodes();
+    Iterator<HMSCNode> iterator = getListOfNodes().listIterator();
+    HMSCNode n;
+
+    while (iterator.hasNext()) {
+      n = iterator.next();
+      TraceManager.addDev(n.toString());
+    }
+
+  }
+
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -53,180 +50,182 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
-   * Class AvatarMethodologyPanel
-   * Managenemt of the avatar methodology panels
-   * Creation: 27/08/2014
-   * @version 1.1 27/08/2014
-   * @author Ludovic APVRILLE
-   * @see MainGUI
+ * Class AvatarMethodologyPanel Managenemt of the avatar methodology panels
+ * Creation: 27/08/2014
+ * 
+ * @version 1.1 27/08/2014
+ * @author Ludovic APVRILLE
+ * @see MainGUI
  */
 public class AvatarMethodologyPanel extends TURTLEPanel {
-    
-	public AvatarMethodologyDiagramPanel dmd;
 
-    public AvatarMethodologyPanel(MainGUI _mgui) {
-        super(_mgui);
+  public AvatarMethodologyDiagramPanel dmd;
 
-    	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
-        SwingUtilities.updateComponentTreeUI(tabbedPane);
-        //tabbedPane.setOpaque(true);
+  public AvatarMethodologyPanel(MainGUI _mgui) {
+    super(_mgui);
 
-        cl = new ChangeListener() {
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+    UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+    UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
+    SwingUtilities.updateComponentTreeUI(tabbedPane);
+    // tabbedPane.setOpaque(true);
 
-        	@Override
-        	public void stateChanged(ChangeEvent e){
-        		mgui.paneDiplodocusMethodologyAction(e);
-        	}
-        };
-        
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+    cl = new ChangeListener() {
 
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneDiplodocusMethodologyAction(e);
+      }
+    };
+
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+
+  }
+
+  // Put the methodology
+  public void initElements() {
+    TGComponent tgc1 = dmd.addComponent(150, 100, TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS, false);
+    TGComponent tgc2 = dmd.addComponent(250, 200, TGComponentManager.AVATARMETHODOLOGY_REF_REQUIREMENT, false);
+    TGComponent tgc3 = dmd.addComponent(350, 300, TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS, false);
+    TGComponent tgc4 = dmd.addComponent(450, 400, TGComponentManager.AVATARMETHODOLOGY_REF_DESIGN, false);
+    TGComponent tgc5 = dmd.addComponent(550, 500, TGComponentManager.AVATARMETHODOLOGY_REF_PROTOTYPE, false);
+    TGComponent tgc6 = dmd.addComponent(200, 400, TGComponentManager.AVATARMETHODOLOGY_REF_PROPERTIES, false);
+
+    // Connectors
+
+    // Assumptions -> reqs
+    TGConnectingPoint p1, p2;
+    p1 = tgc1.getTGConnectingPointAtIndex(0);
+    p2 = tgc2.getTGConnectingPointAtIndex(0);
+    Vector<Point> listPoint = new Vector<Point>();
+    Point p = new Point(210, 235);
+    listPoint.add(p);
+    TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(),
+        TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    p1.setFree(false);
+    p2.setFree(false);
+    dmd.getComponentList().add(0, tgco);
+
+    // Reqs -> Analysis
+    p1 = tgc2.getTGConnectingPointAtIndex(1);
+    p2 = tgc3.getTGConnectingPointAtIndex(0);
+    listPoint = new Vector<Point>();
+    p = new Point(310, 335);
+    listPoint.add(p);
+    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd,
+        p1, p2, listPoint);
+    p1.setFree(false);
+    p2.setFree(false);
+    dmd.getComponentList().add(0, tgco);
+
+    // Analysis -> Design
+    p1 = tgc3.getTGConnectingPointAtIndex(1);
+    p2 = tgc4.getTGConnectingPointAtIndex(0);
+    listPoint = new Vector<Point>();
+    p = new Point(410, 435);
+    listPoint.add(p);
+    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd,
+        p1, p2, listPoint);
+    p1.setFree(false);
+    p2.setFree(false);
+    dmd.getComponentList().add(0, tgco);
+
+    // Design -> Prototyping
+    p1 = tgc4.getTGConnectingPointAtIndex(1);
+    p2 = tgc5.getTGConnectingPointAtIndex(0);
+    listPoint = new Vector<Point>();
+    p = new Point(510, 535);
+    listPoint.add(p);
+    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd,
+        p1, p2, listPoint);
+    p1.setFree(false);
+    p2.setFree(false);
+    dmd.getComponentList().add(0, tgco);
+
+    // Reqs -> Prop
+    p1 = tgc2.getTGConnectingPointAtIndex(2);
+    p2 = tgc6.getTGConnectingPointAtIndex(0);
+    listPoint = new Vector<Point>();
+    tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd,
+        p1, p2, listPoint);
+    p1.setFree(false);
+    p2.setFree(false);
+    dmd.getComponentList().add(0, tgco);
+  }
+
+  public void init() {
+    init("Avatar methodology");
+  }
+
+  public void init(String name) {
+    addAvatarMethodologyDiagram(name);
+
+    // Requirement Diagram toolbar
+    // addRequirementDiagram("Requirement Diagram");
+
+    // jsp.setVisible(true);
+  }
+
+  public boolean addAvatarMethodologyDiagram(String s) {
+    AvatarMethodologyDiagramToolbar dmdt = new AvatarMethodologyDiagramToolbar(mgui);
+    toolbars.add(dmdt);
+
+    toolBarPanel = new JPanel();
+    // toolBarPanel.setBackground(Color.red);
+    toolBarPanel.setLayout(new BorderLayout());
+    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+
+    // Class diagram
+    dmd = new AvatarMethodologyDiagramPanel(mgui, dmdt);
+    dmd.setName(s);
+    dmd.tp = this;
+    tdp = dmd;
+    panels.add(dmd);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
+    dmd.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(dmdt, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens avatar methodology");
+    tabbedPane.setSelectedIndex(0);
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    // TGComponent tgc = TGComponentManager.addComponent(100, 100,
+    // TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, dmd);
+    mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
+
+    return true;
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"Avatar Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
+    return "<Modeling type=\"Avatar Methodology\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+  }
 
-    // Put the methodology
-    public void initElements() {
-        TGComponent tgc1 = dmd.addComponent(150, 100, TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS, false);
-        TGComponent tgc2 = dmd.addComponent(250, 200, TGComponentManager.AVATARMETHODOLOGY_REF_REQUIREMENT, false);
-        TGComponent tgc3 = dmd.addComponent(350, 300, TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS, false);
-        TGComponent tgc4 = dmd.addComponent(450, 400, TGComponentManager.AVATARMETHODOLOGY_REF_DESIGN, false);
-        TGComponent tgc5 = dmd.addComponent(550, 500, TGComponentManager.AVATARMETHODOLOGY_REF_PROTOTYPE, false);
-        TGComponent tgc6 = dmd.addComponent(200, 400, TGComponentManager.AVATARMETHODOLOGY_REF_PROPERTIES, false);
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
 
+  public String toString() {
+    return mgui.getTitleAt(this) + " (Avatar Methodology)";
+  }
 
-        //Connectors
+  public boolean removeEnabled(int index) {
+    return panels.size() > 1;
+  }
 
-        // Assumptions -> reqs
-        TGConnectingPoint p1, p2;
-        p1 = tgc1.getTGConnectingPointAtIndex(0);
-        p2 = tgc2.getTGConnectingPointAtIndex(0);
-        Vector<Point> listPoint = new Vector<Point>();
-        Point p = new Point(210, 235);
-        listPoint.add(p);
-        TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
-        p1.setFree(false);
-        p2.setFree(false);
-        dmd.getComponentList().add(0, tgco);
+  public boolean renameEnabled(int index) {
+    return panels.size() != 0;
+  }
 
-        // Reqs -> Analysis
-        p1 = tgc2.getTGConnectingPointAtIndex(1);
-        p2 = tgc3.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector<Point>();
-        p = new Point(310, 335);
-        listPoint.add(p);
-        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
-        p1.setFree(false);
-        p2.setFree(false);
-        dmd.getComponentList().add(0, tgco);
-
-        // Analysis -> Design
-        p1 = tgc3.getTGConnectingPointAtIndex(1);
-        p2 = tgc4.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector<Point>();
-        p = new Point(410, 435);
-        listPoint.add(p);
-        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
-        p1.setFree(false);
-        p2.setFree(false);
-        dmd.getComponentList().add(0, tgco);
-
-        // Design -> Prototyping
-        p1 = tgc4.getTGConnectingPointAtIndex(1);
-        p2 = tgc5.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector<Point>();
-        p = new Point(510, 535);
-        listPoint.add(p);
-        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
-        p1.setFree(false);
-        p2.setFree(false);
-        dmd.getComponentList().add(0, tgco);
-
-        // Reqs -> Prop
-        p1 = tgc2.getTGConnectingPointAtIndex(2);
-        p2 = tgc6.getTGConnectingPointAtIndex(0);
-        listPoint = new Vector<Point>();
-        tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
-        p1.setFree(false);
-        p2.setFree(false);
-        dmd.getComponentList().add(0, tgco);
-    }
-
-    public void init() {
-        init("Avatar methodology");
-    }
-
-    public void init(String name) {
-        addAvatarMethodologyDiagram(name);
-
-        // Requirement Diagram toolbar
-        //addRequirementDiagram("Requirement Diagram");
-
-        //jsp.setVisible(true);
-    }
-
-    public boolean addAvatarMethodologyDiagram(String s) {
-        AvatarMethodologyDiagramToolbar dmdt = new AvatarMethodologyDiagramToolbar( mgui );
-        toolbars.add(dmdt);
-
-        toolBarPanel = new JPanel();
-        //toolBarPanel.setBackground(Color.red);
-        toolBarPanel.setLayout(new BorderLayout());
-        //toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
-
-        //Class diagram
-        dmd = new AvatarMethodologyDiagramPanel(mgui, dmdt);
-        dmd.setName(s);
-        dmd.tp = this;
-        tdp = dmd;
-        panels.add(dmd);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(dmd);
-        dmd.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(dmdt, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens avatar methodology");
-        tabbedPane.setSelectedIndex(0);
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-
-        //TGComponent tgc = TGComponentManager.addComponent(100, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, dmd);
-        mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
-
-        return true;
-    }
-
-
-
-    public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"Avatar Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"Avatar Methodology\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-    }
-
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
-    }
-
-    public String toString() {
-        return mgui.getTitleAt(this) + " (Avatar Methodology)";
-    }
-
-    public boolean removeEnabled(int index) {
-        return panels.size() > 1;
-    }
-
-    public boolean renameEnabled(int index) {
-        return panels.size() != 0;
-    }
-
-    public boolean isAvatarMethodologyEnabled() {
-        return true;
-    }
-
+  public boolean isAvatarMethodologyEnabled() {
+    return true;
+  }
 
 }

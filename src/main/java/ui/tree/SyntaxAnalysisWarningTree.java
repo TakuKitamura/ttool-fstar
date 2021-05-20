@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.GenericTree;
@@ -48,52 +45,51 @@ import ui.MainGUI;
 import java.util.List;
 
 /**
- * Class SyntaxAnalysisWarningTree
- * Creation: 13/03/2006
- * Version 1.0 13/03/2006
+ * Class SyntaxAnalysisWarningTree Creation: 13/03/2006 Version 1.0 13/03/2006
+ * 
  * @author Ludovic APVRILLE
  */
 public class SyntaxAnalysisWarningTree implements GenericTree {
-    
-    private String name = "Warning(s)";
-    private MainGUI mgui;
-    
-    public SyntaxAnalysisWarningTree(MainGUI _mgui) {
-        mgui = _mgui;
+
+  private String name = "Warning(s)";
+  private MainGUI mgui;
+
+  public SyntaxAnalysisWarningTree(MainGUI _mgui) {
+    mgui = _mgui;
+  }
+
+  public String toString() {
+    return name;
+  }
+
+  public int getChildCount() {
+    List<CheckingError> warnings = mgui.getCheckingWarnings();
+    if (warnings == null) {
+      return 1;
+    } else {
+      if (warnings.size() > 0) {
+        return warnings.size();
+      } else {
+        return 1;
+      }
     }
-    
-    public String toString() {
-        return name;
+  }
+
+  public Object getChild(int index) {
+    List<CheckingError> warnings = mgui.getCheckingWarnings();
+    if (warnings == null) {
+      return "Not yet performed";
+    } else {
+      if ((warnings.size() > 0) && (warnings.size() > index)) {
+        return warnings.get(index);
+      } else {
+        return "No warning encountered";
+      }
     }
-    
-    public int getChildCount() {
-        List<CheckingError> warnings = mgui.getCheckingWarnings();
-        if (warnings == null) {
-            return 1;
-        } else {
-            if (warnings.size() > 0) {
-                return 	warnings.size();
-            } else {
-                return 1;
-            }
-        }
-    }
-    
-    public Object getChild(int index) {
-        List<CheckingError> warnings = mgui.getCheckingWarnings();
-        if (warnings == null) {
-            return "Not yet performed";
-        } else {
-            if ((warnings.size() > 0) && (warnings.size() > index)){
-                return 	warnings.get (index);
-            } else {
-                return "No warning encountered";
-            }
-        }
-    }
-    
-    public int getIndexOfChild(Object child) {
-        return 	mgui.getCheckingWarnings().indexOf(child);
-    }
-    
+  }
+
+  public int getIndexOfChild(Object child) {
+    return mgui.getCheckingWarnings().indexOf(child);
+  }
+
 }

@@ -36,88 +36,84 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator.modelchecker;
 
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarStateMachineElement;
 
 /**
- * Class SpecificationReachability
- * Reachability of an element
- * Creation: 07/06/2016
+ * Class SpecificationReachability Reachability of an element Creation:
+ * 07/06/2016
  *
  * @author Ludovic APVRILLE
  * @version 1.0 07/06/2016
  */
 public class SpecificationReachability {
-    public Object ref1, ref2; // ref1 must be provided, ref2 might be null
-    public SpecificationPropertyPhase result;
-    public SpecificationState state;
+  public Object ref1, ref2; // ref1 must be provided, ref2 might be null
+  public SpecificationPropertyPhase result;
+  public SpecificationState state;
 
-    public SpecificationReachability(Object _ref1, Object _ref2) {
-        ref1 = _ref1;
-        ref2 = _ref2;
-        result = SpecificationPropertyPhase.NOTCOMPUTED;
-        state = null;
+  public SpecificationReachability(Object _ref1, Object _ref2) {
+    ref1 = _ref1;
+    ref2 = _ref2;
+    result = SpecificationPropertyPhase.NOTCOMPUTED;
+    state = null;
+  }
+
+  public String toString() {
+    String name;
+    if (ref1 instanceof AvatarStateMachineElement) {
+      name = "Element " + ((AvatarStateMachineElement) ref1).getExtendedName();
+    } else {
+      name = ref1.toString();
     }
 
-    public String toString() {
-        String name;
-        if (ref1 instanceof AvatarStateMachineElement) {
-            name = "Element " + ((AvatarStateMachineElement) ref1).getExtendedName();
-        } else {
-            name = ref1.toString();
-        }
-
-        if (ref2 != null) {
-            if (ref2 instanceof AvatarBlock) {
-                name += " of block " + ((AvatarBlock) ref2).getName();
-            } else {
-                name += ref2.toString();
-            }
-        }
-
-
-        if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
-            return name + " -> not computed";
-        }
-
-        if (result == SpecificationPropertyPhase.SATISFIED) {
-            return name + " -> reachable in RG state " + state.id;
-        }
-
-        return name + " -> NOT reachable";
-
+    if (ref2 != null) {
+      if (ref2 instanceof AvatarBlock) {
+        name += " of block " + ((AvatarBlock) ref2).getName();
+      } else {
+        name += ref2.toString();
+      }
     }
 
-    public String toStringGeneric() {
-        String name;
-        if (ref1 instanceof AvatarStateMachineElement) {
-            name = "Element " + ((AvatarStateMachineElement) ref1).getExtendedName();
-        } else {
-            name = ref1.toString();
-        }
-
-        if (ref2 != null) {
-            if (ref2 instanceof AvatarBlock) {
-                name += " of block " + ((AvatarBlock) ref2).getName();
-            } else {
-                name += ref2.toString();
-            }
-        }
-
-
-        if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
-            return name + " -> not computed";
-        }
-
-        if (result == SpecificationPropertyPhase.SATISFIED) {
-            return name + " -> reachable";
-        }
-
-        return name + " -> NOT reachable";
-
+    if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
+      return name + " -> not computed";
     }
+
+    if (result == SpecificationPropertyPhase.SATISFIED) {
+      return name + " -> reachable in RG state " + state.id;
+    }
+
+    return name + " -> NOT reachable";
+
+  }
+
+  public String toStringGeneric() {
+    String name;
+    if (ref1 instanceof AvatarStateMachineElement) {
+      name = "Element " + ((AvatarStateMachineElement) ref1).getExtendedName();
+    } else {
+      name = ref1.toString();
+    }
+
+    if (ref2 != null) {
+      if (ref2 instanceof AvatarBlock) {
+        name += " of block " + ((AvatarBlock) ref2).getName();
+      } else {
+        name += ref2.toString();
+      }
+    }
+
+    if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
+      return name + " -> not computed";
+    }
+
+    if (result == SpecificationPropertyPhase.SATISFIED) {
+      return name + " -> reachable";
+    }
+
+    return name + " -> NOT reachable";
+
+  }
 
 }

@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
-
 
 import tmatrix.RequirementModeling;
 import tmatrix.Requirements;
@@ -48,61 +44,61 @@ import tmatrix.Requirements;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Class TMatrixTableModel
- * Data of an action on a simulation trace
- * Creation: 16/08/2006
+ * Class TMatrixTableModel Data of an action on a simulation trace Creation:
+ * 16/08/2006
+ * 
  * @version 1.0 16/08/2006
  * @author Ludovic APVRILLE
  */
 public class TMatrixTableModel extends AbstractTableModel {
-    RequirementModeling rm;
-    
-    public TMatrixTableModel(RequirementModeling _rm) {
-       rm = _rm;
-    }
-    
-    // From AbstractTableModel
-    public int getRowCount() {
-        return rm.nbOfElements();
-    }
-    
-    public int getColumnCount() {
-        return 4;
-    }
-    
-    public Object getValueAt(int row, int column) {
-        Requirements reqs;
-        reqs = rm.getRequirements(row);
-        if (column == 0) {
-            return reqs.req.getValue();
-        } else if (column == 1) {
-            return reqs.ro.getValue();
-        } else if (column == 2) {
-            return reqs.diagramName;
+  RequirementModeling rm;
+
+  public TMatrixTableModel(RequirementModeling _rm) {
+    rm = _rm;
+  }
+
+  // From AbstractTableModel
+  public int getRowCount() {
+    return rm.nbOfElements();
+  }
+
+  public int getColumnCount() {
+    return 4;
+  }
+
+  public Object getValueAt(int row, int column) {
+    Requirements reqs;
+    reqs = rm.getRequirements(row);
+    if (column == 0) {
+      return reqs.req.getValue();
+    } else if (column == 1) {
+      return reqs.ro.getValue();
+    } else if (column == 2) {
+      return reqs.diagramName;
+    } else {
+      if (reqs.satisfiedStudied == false) {
+        return "-";
+      } else {
+        if (reqs.satisfied) {
+          return "OK";
         } else {
-            if (reqs.satisfiedStudied == false) {
-                return "-";
-            } else {
-                if (reqs.satisfied) {
-                    return "OK";
-                } else {
-                    return "KO";
-                }
-            }
+          return "KO";
         }
+      }
     }
-    
-    public String getColumnName(int columnIndex) {
-        switch(columnIndex) {
-            case 0:
-                return "Requirement";
-            case 1:
-                return "observer";
-            case 2:
-                return "Diagram";
-            default:
-                return "Satisfiability";
-        }
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Requirement";
+      case 1:
+        return "observer";
+      case 2:
+        return "Diagram";
+      default:
+        return "Satisfiability";
     }
-    
+  }
+
 }

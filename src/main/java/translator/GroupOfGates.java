@@ -36,105 +36,99 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
-
 
 import myutil.GenericTree;
 import myutil.SortedVector;
 
 /**
- * Class GroupOfGates
- * Creation: 15/12/2003
+ * Class GroupOfGates Creation: 15/12/2003
+ * 
  * @version 1.1 15/12/2003
  * @author Ludovic APVRILLE
  */
 public class GroupOfGates extends SortedVector<TClassGate> implements Comparable<GroupOfGates>, GenericTree {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -2577784112172937239L;
-	
-	private Gate masterGate;
-    
-    public GroupOfGates() {
-    }
-    
-    public void setMasterGate(Gate g) {
-        masterGate = g;
-    }
-    
-    public Gate getMasterGateName() {
-        return masterGate;
-    }
-    
-    public boolean add(TClassGate o) {
-        return super.add(o);
-    }
-    
-    public Gate getGateAt(int i) {
-        return (elementAt(i)).getGate();
-    }
-    
-    public TClass getTClassAt(int i) {
-        return (elementAt(i)).getTClass();
-    }
-    
-    
-    public void addTClassGate(TClass t, Gate g) {
-        add(new TClassGate(t, g));
-    }
-    
-    public TClass getTClassOf(Gate g) {
-        TClassGate tg;
-        for (int i=0; i<size(); i++) {
-            tg = elementAt(i);
-            if (tg.getGate() == g) {
-                return tg.getTClass();
-            }
-        }
-        return null;
-    }
-    
-    public String toString() {
-        return masterGate.getLotosName();
-    }
-    
-    public int getChildCount() {
-        return size();
-    }
-    
-    public Object getChild(int index) {
-        return elementAt(index);
-    }
-    
-    public int getIndexOfChild(Object child) {
-        return indexOf(child);
-    }
-    
-    public String printAll() {
-        String s = "";
-        for(int i=0; i<size(); i++) {
-            if (i != 0) {
-                s += "  |  " + elementAt(i).toString();
-            } else {
-                s = elementAt(i).toString();
-            }
-        }
-        return s;
-    }
-    
-    @Override
-    public int compareTo( GroupOfGates o) {
-//        if (!(o instanceof GroupOfGates)) {
-//            return 0;
-//        } else {
-            return toString().compareTo(o.toString());
-//        }
-        
-    }
-    
-}
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -2577784112172937239L;
 
+  private Gate masterGate;
+
+  public GroupOfGates() {
+  }
+
+  public void setMasterGate(Gate g) {
+    masterGate = g;
+  }
+
+  public Gate getMasterGateName() {
+    return masterGate;
+  }
+
+  public boolean add(TClassGate o) {
+    return super.add(o);
+  }
+
+  public Gate getGateAt(int i) {
+    return (elementAt(i)).getGate();
+  }
+
+  public TClass getTClassAt(int i) {
+    return (elementAt(i)).getTClass();
+  }
+
+  public void addTClassGate(TClass t, Gate g) {
+    add(new TClassGate(t, g));
+  }
+
+  public TClass getTClassOf(Gate g) {
+    TClassGate tg;
+    for (int i = 0; i < size(); i++) {
+      tg = elementAt(i);
+      if (tg.getGate() == g) {
+        return tg.getTClass();
+      }
+    }
+    return null;
+  }
+
+  public String toString() {
+    return masterGate.getLotosName();
+  }
+
+  public int getChildCount() {
+    return size();
+  }
+
+  public Object getChild(int index) {
+    return elementAt(index);
+  }
+
+  public int getIndexOfChild(Object child) {
+    return indexOf(child);
+  }
+
+  public String printAll() {
+    String s = "";
+    for (int i = 0; i < size(); i++) {
+      if (i != 0) {
+        s += "  |  " + elementAt(i).toString();
+      } else {
+        s = elementAt(i).toString();
+      }
+    }
+    return s;
+  }
+
+  @Override
+  public int compareTo(GroupOfGates o) {
+    // if (!(o instanceof GroupOfGates)) {
+    // return 0;
+    // } else {
+    return toString().compareTo(o.toString());
+    // }
+
+  }
+
+}

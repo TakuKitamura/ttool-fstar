@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sysmlsecmethodology;
 
 import myutil.TraceManager;
@@ -46,87 +43,87 @@ import org.w3c.dom.Element;
 import ui.*;
 
 /**
- * Class SysmlsecMethodologyDiagramPanel
- * Panel for displaying the sysmlsec methodology
- * Creation: 26/01/2016
+ * Class SysmlsecMethodologyDiagramPanel Panel for displaying the sysmlsec
+ * methodology Creation: 26/01/2016
+ * 
  * @version 1.0 26/01/2016
  * @author Ludovic APVRILLE
  */
 public class SysmlsecMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-    //public Vector validated, ignored;
+  // public Vector validated, ignored;
 
-    public  SysmlsecMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        
-        TraceManager.addDev("Sysmlsec metho diagram created");
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-          addMouseListener(tdmm);
-          addMouseMotionListener(tdmm);*/
-    }
+  public SysmlsecMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
 
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
-    }
+    TraceManager.addDev("Sysmlsec metho diagram created");
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
 
-    public boolean actionOnAdd(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-          TCDTClass tgcc = (TCDTClass)(tgc);
-          mgui.addTClass(tgcc.getClassName());
-          return true;
-          }*/
-        return false;
-    }
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
 
-    public boolean actionOnRemove(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-          TCDTClass tgcc = (TCDTClass)(tgc);
-          mgui.removeTClass(tgcc.getClassName());
-          resetAllInstancesOf(tgcc);
-          return true;
-          }*/
-        return false;
-    }
+  public boolean actionOnAdd(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.addTClass(tgcc.getClassName()); return true; }
+     */
+    return false;
+  }
 
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-          return actionOnDoubleClick(tgc);
-          }*/
-        return false;
-    }
+  public boolean actionOnRemove(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+     * true; }
+     */
+    return false;
+  }
 
-    public String getXMLHead() {
-        return "<SysmlsecMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+     */
+    return false;
+  }
 
-    public String getXMLTail() {
-        return "</SysmlsecMethodologyDiagramPanel>";
-    }
+  public String getXMLHead() {
+    return "<SysmlsecMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
 
-    public String getXMLSelectedHead() {
-        return "<SysmlsecMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
+  public String getXMLTail() {
+    return "</SysmlsecMethodologyDiagramPanel>";
+  }
 
-    public String getXMLSelectedTail() {
-        return "</SysmlsecMethodologyDiagramPanelCopy>";
-    }
+  public String getXMLSelectedHead() {
+    return "<SysmlsecMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
 
-    public String getXMLCloneHead() {
-        return "<SysmlsecMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
+  public String getXMLSelectedTail() {
+    return "</SysmlsecMethodologyDiagramPanelCopy>";
+  }
 
-    public String getXMLCloneTail() {
-        return "</SysmlsecMethodologyDiagramPanelCopy>";
-    }
+  public String getXMLCloneHead() {
+    return "<SysmlsecMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+        + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+  }
 
+  public String getXMLCloneTail() {
+    return "</SysmlsecMethodologyDiagramPanelCopy>";
+  }
 
-    public void makePostLoadingProcessing() throws MalformedModelingException {
+  public void makePostLoadingProcessing() throws MalformedModelingException {
 
-    }
+  }
 
-    public void enhance() {
-        autoAdjust();
-    }
+  public void enhance() {
+    autoAdjust();
+  }
 
-    public void loadExtraParameters(Element elt) {
-    }
+  public void loadExtraParameters(Element elt) {
+  }
 }

@@ -36,26 +36,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
  * Class TGcomponentAndUPPAALQuery
  *
  * Creation: 19/09/2016
+ * 
  * @version 1.0 19/09/2016
  * @author Ludovic APVRILLE
  */
 public class TGComponentAndUPPAALQuery {
-    public TGComponent tgc;
-    public String uppaalQuery;
+  public TGComponent tgc;
+  public String uppaalQuery;
 
-    public TGComponentAndUPPAALQuery(TGComponent _tgc, String _uppaalQuery) {
-	tgc = _tgc;
-	uppaalQuery = _uppaalQuery;
-    }
+  public TGComponentAndUPPAALQuery(TGComponent _tgc, String _uppaalQuery) {
+    tgc = _tgc;
+    uppaalQuery = _uppaalQuery;
+  }
 
 }

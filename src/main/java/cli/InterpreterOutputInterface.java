@@ -36,22 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class InterpreterOutputInterface
- * Creation: 05/10/2018
- * Version 2.0 05/10/2018
+ * Class InterpreterOutputInterface Creation: 05/10/2018 Version 2.0 05/10/2018
  *
  * @author Ludovic APVRILLE
  */
-public interface InterpreterOutputInterface  {
+public interface InterpreterOutputInterface {
 
-    public void print(String s);
-    public void printError(String s);
-    public void exit(int status);
+  public void print(String s);
+
+  public void printError(String s);
+
+  public void exit(int status);
 }

@@ -39,21 +39,21 @@
 package elntranslator;
 
 /**
- * Class ELNTMidPortTerminal
- * Parameters of a ELN primitive component : mid port terminal
- * Creation: 23/07/2018
+ * Class ELNTMidPortTerminal Parameters of a ELN primitive component : mid port
+ * terminal Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTMidPortTerminal extends ELNTComponent {
-	private ELNTConnector connector;
-	
-	public ELNTMidPortTerminal(ELNTConnector _connector) {
-		connector = _connector;
-	}
+  private ELNTConnector connector;
 
-	public ELNTConnector getConnector() {
-		return connector;
-	}
+  public ELNTMidPortTerminal(ELNTConnector _connector) {
+    connector = _connector;
+  }
+
+  public ELNTConnector getConnector() {
+    return connector;
+  }
 }

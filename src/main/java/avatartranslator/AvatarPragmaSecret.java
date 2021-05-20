@@ -36,38 +36,36 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
- * Class AvatarPragma
- * Creation: 20/05/2010
+ * Class AvatarPragma Creation: 20/05/2010
+ * 
  * @version 1.1 01/07/2014
  * @author Ludovic APVRILLE, Letitia LI
  */
 public class AvatarPragmaSecret extends AvatarPragma {
 
-    private AvatarAttribute argument;
+  private AvatarAttribute argument;
 
-    public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
-        super(_name, _referenceObject);
-        this.argument = arg;
-    }
-    public AvatarAttribute getArg(){
-	return this.argument;
-    }
+  public AvatarPragmaSecret(String _name, Object _referenceObject, AvatarAttribute arg) {
+    super(_name, _referenceObject);
+    this.argument = arg;
+  }
 
-    public String toString()
-    {
-        return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
-    }
+  public AvatarAttribute getArg() {
+    return this.argument;
+  }
 
-    @Override
-    public AvatarPragmaSecret advancedClone (AvatarSpecification avspec) {
-        AvatarPragmaSecret result = new AvatarPragmaSecret (this.name, this.referenceObject, avspec.getMatchingAttribute(this.argument));
-        this.cloneLinkToReferenceObjects (result);
-        return result;
-    }
+  public String toString() {
+    return this.argument.getBlock().getName().replaceAll("__", ".") + "." + this.argument.getName();
+  }
+
+  @Override
+  public AvatarPragmaSecret advancedClone(AvatarSpecification avspec) {
+    AvatarPragmaSecret result = new AvatarPragmaSecret(this.name, this.referenceObject,
+        avspec.getMatchingAttribute(this.argument));
+    this.cloneLinkToReferenceObjects(result);
+    return result;
+  }
 }

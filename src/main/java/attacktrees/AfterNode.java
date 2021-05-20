@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package attacktrees;
 
 /**
- * Class AfterNode
- * Creation: 13/04/2015
+ * Class AfterNode Creation: 13/04/2015
+ * 
  * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
  */
-public class AfterNode extends TimeNode { 
+public class AfterNode extends TimeNode {
 
-    public AfterNode(String _name, Object _referenceObject, int _time) {
-	super(_name, _referenceObject, _time);
-	type = "AFTER";
-    }
-    
+  public AfterNode(String _name, Object _referenceObject, int _time) {
+    super(_name, _referenceObject, _time);
+    type = "AFTER";
+  }
+
 }

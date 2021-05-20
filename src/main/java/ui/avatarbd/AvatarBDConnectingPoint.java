@@ -43,23 +43,25 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarBDConnectingPoint
- * Definition of connecting points on which connectors can be connected on AVATAR State Machine Diagrams
- * Creation: 06/04/2010
+ * Class AvatarBDConnectingPoint Definition of connecting points on which
+ * connectors can be connected on AVATAR State Machine Diagrams Creation:
+ * 06/04/2010
+ * 
  * @version 1.0 06/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarBDConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-    public AvatarBDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
+public class AvatarBDConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public AvatarBDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    if (type == TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR) {
+      return true;
     }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR) {
-            return true;
-        }
-        return type == TGComponentManager.AVATARBD_PORT_CONNECTOR;
-    }
+    return type == TGComponentManager.AVATARBD_PORT_CONNECTOR;
+  }
 }

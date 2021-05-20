@@ -37,88 +37,88 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-   * Class TMLSDEvent. An event is either a message or an action. This class is used to produce the TML code corresponding to messages
-   * and actions that are sorted according to the graphical version of a SD diagram.
-   * Creation: 18/02/2014
-   * @version 1.0 26/06/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLSDEvent. An event is either a message or an action. This class is
+ * used to produce the TML code corresponding to messages and actions that are
+ * sorted according to the graphical version of a SD diagram. Creation:
+ * 18/02/2014
+ * 
+ * @version 1.0 26/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLSDEvent implements Comparable<TMLSDEvent>  {
+public class TMLSDEvent implements Comparable<TMLSDEvent> {
 
-    public final static int SEND_MESSAGE_EVENT = 0;
-    public final static int RECEIVE_MESSAGE_EVENT = 1;
-    public final static int ACTION_EVENT = 2;
+  public final static int SEND_MESSAGE_EVENT = 0;
+  public final static int RECEIVE_MESSAGE_EVENT = 1;
+  public final static int ACTION_EVENT = 2;
 
-    private final static String SEND_MESSAGE_LABEL = "SND:";
-    private final static String RECEIVE_MESSAGE_LABEL = "RCV:";
-    private final static String ACTION_LABEL = "ACT:";
-    private final static String ERROR = "ERROR_IN_EVENT";
-    private int type;
-    private int yCoord;
-    private Object referenceObject;
+  private final static String SEND_MESSAGE_LABEL = "SND:";
+  private final static String RECEIVE_MESSAGE_LABEL = "RCV:";
+  private final static String ACTION_LABEL = "ACT:";
+  private final static String ERROR = "ERROR_IN_EVENT";
+  private int type;
+  private int yCoord;
+  private Object referenceObject;
 
-    public TMLSDEvent( Object _referenceObject, int _type, int _yCoord ) {
-        this.referenceObject = _referenceObject;
-        this.yCoord = _yCoord;
-        this.type = _type;
+  public TMLSDEvent(Object _referenceObject, int _type, int _yCoord) {
+    this.referenceObject = _referenceObject;
+    this.yCoord = _yCoord;
+    this.type = _type;
+  }
+
+  public TMLSDEvent(Object _referenceObject, int _type) {
+    this.referenceObject = _referenceObject;
+    this.yCoord = -1;
+    this.type = _type;
+  }
+
+  public int getYCoord() {
+    return yCoord;
+  }
+
+  public int getType() {
+    return this.type;
+  }
+
+  public Object getReferenceObject() {
+    return this.referenceObject;
+  }
+
+  @Override
+  public int compareTo(TMLSDEvent _event) {
+    // TraceManager.addDev("Comparing events");
+    int compareValue = _event.getYCoord();
+    return this.yCoord - compareValue; // sort in ascending order
+  }
+
+  /*
+   * public static Comparator<TMLSDEvent> yCoordComparator = new
+   * Comparator<TMLSDEvent>() { public int compare( TMLSDEvent _item1, TMLSDEvent
+   * _item2 ) { int yCoord1 = _item1.getYCoord(); int yCoord2 =
+   * _item2.getYCoord();
+   * 
+   * //ascending order return yCoord1.compareTo( yCoord2 ); } };
+   */
+
+  @Override
+  public String toString() {
+
+    TMLSDMessage msg;
+
+    switch (type) {
+      case 0: // send message
+        msg = ((TMLSDMessage) referenceObject);
+        return SEND_MESSAGE_LABEL + msg.getReceiverName() + ":" + msg.toString();
+      case 1: // receive message
+        msg = ((TMLSDMessage) referenceObject);
+        return RECEIVE_MESSAGE_LABEL + msg.getSenderName() + ":" + msg.toString();
+      case 2: // action
+        TMLSDAction action = ((TMLSDAction) referenceObject);
+        return ACTION_LABEL + action.toString();
+      default:
+        return ERROR;
     }
-
-    public TMLSDEvent( Object _referenceObject, int _type ) {
-        this.referenceObject = _referenceObject;
-        this.yCoord = -1;
-        this.type = _type;
-    }
-
-    public int getYCoord()      {
-        return yCoord;
-    }
-
-		public int getType()	{
-			return this.type;
-		}
-
-		public Object getReferenceObject()	{
-			return this.referenceObject;
-		}
-
-    @Override public int compareTo( TMLSDEvent _event ) {
-	//TraceManager.addDev("Comparing events");
-        int compareValue = _event.getYCoord();
-        return this.yCoord - compareValue;      //sort in ascending order
-    }
-
-    /*public static Comparator<TMLSDEvent> yCoordComparator = new Comparator<TMLSDEvent>()      {
-      public int compare( TMLSDEvent _item1, TMLSDEvent _item2 )        {
-      int yCoord1 = _item1.getYCoord();
-      int yCoord2 = _item2.getYCoord();
-
-      //ascending order
-      return yCoord1.compareTo( yCoord2 );
-      }
-      };*/
-
-    @Override public String toString()  {
-
-			TMLSDMessage msg;
-
-			switch( type )	{
-				case 0:	//send message
-            msg = ( (TMLSDMessage) referenceObject );
-        		return SEND_MESSAGE_LABEL + msg.getReceiverName() + ":" + msg.toString();
-				case 1:	//receive message
-            msg = ( (TMLSDMessage) referenceObject );
-        		return RECEIVE_MESSAGE_LABEL + msg.getSenderName() + ":" + msg.toString();
-				case 2:	//action
-     	      TMLSDAction action = ( (TMLSDAction) referenceObject );
-            return ACTION_LABEL + action.toString();
-				default:
-						return ERROR;
-			}
-    }
-}       //End of class
+  }
+} // End of class

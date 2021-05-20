@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import common.ConfigurationTTool;
@@ -60,39 +59,40 @@ import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Generic
- * Creation: 12/04/2019
- * Version 2.0 12/04/2019
+ * Class Generic Creation: 12/04/2019 Version 2.0 12/04/2019
  *
  * @author Ludovic APVRILLE
  */
-public class Generic extends Command  {
-    private final static String GENERIC = "generic";
+public class Generic extends Command {
+  private final static String GENERIC = "generic";
 
-    public Generic() {
+  public Generic() {
 
+  }
+
+  public String getCommand() {
+    return GENERIC;
+  }
+
+  public String getShortCommand() {
+    return "g";
+  }
+
+  public String getDescription() {
+    return "Apply a generic function of TTool";
+  }
+
+  public String executeCommand(String command, Interpreter interpreter) {
+    if (!interpreter.isTToolStarted()) {
+      return Interpreter.TTOOL_NOT_STARTED;
     }
 
-    public String getCommand() { return GENERIC; }
-    public String getShortCommand() { return "g"; }
-    public String getDescription() { return "Apply a generic function of TTool"; }
-    
+    ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
 
-    public  String executeCommand(String command, Interpreter interpreter) {
-        if (!interpreter.isTToolStarted()) {
-            return Interpreter.TTOOL_NOT_STARTED;
-        }
+    return null;
+  }
 
-        ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
-
-        return null;
-    }
-
-
-
-
-    public void fillSubCommands() {
-    }
-
+  public void fillSubCommands() {
+  }
 
 }

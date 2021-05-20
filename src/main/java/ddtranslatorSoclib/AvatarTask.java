@@ -38,53 +38,47 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
-
 package ddtranslatorSoclib;
 
-public class AvatarTask extends AvatarMappedObject{
-    private AvatarCoproMWMR avatarCoprocReference;
-    private AvatarCPU avatarCPUReference;
-    private String taskName ;
-    private String referenceTaskName;
+public class AvatarTask extends AvatarMappedObject {
+  private AvatarCoproMWMR avatarCoprocReference;
+  private AvatarCPU avatarCPUReference;
+  private String taskName;
+  private String referenceTaskName;
 
-    public AvatarTask(String _taskName , String _referenceTaskName, AvatarCPU _avatarCPUReference, AvatarCoproMWMR _avatarCoprocReference ){
+  public AvatarTask(String _taskName, String _referenceTaskName, AvatarCPU _avatarCPUReference,
+      AvatarCoproMWMR _avatarCoprocReference) {
 
-      taskName = _taskName;
-      referenceTaskName = _referenceTaskName;
-      avatarCPUReference = _avatarCPUReference; 
-      avatarCoprocReference = _avatarCoprocReference;
-    }
+    taskName = _taskName;
+    referenceTaskName = _referenceTaskName;
+    avatarCPUReference = _avatarCPUReference;
+    avatarCoprocReference = _avatarCoprocReference;
+  }
 
-    public String getTaskName(){
-      return taskName;
-    }
+  public String getTaskName() {
+    return taskName;
+  }
 
-    public String getReferenceTaskName(){
-      return referenceTaskName;
-    }
+  public String getReferenceTaskName() {
+    return referenceTaskName;
+  }
 
-    public AvatarCPU getAvatarCPUReference(){
-      return avatarCPUReference;
-    } 
+  public AvatarCPU getAvatarCPUReference() {
+    return avatarCPUReference;
+  }
 
-    public AvatarCoproMWMR getAvatarCoprocReference(){
-      return avatarCoprocReference;
-    }
+  public AvatarCoproMWMR getAvatarCoprocReference() {
+    return avatarCoprocReference;
+  }
 
-    public void setAvatarCoprocReference(AvatarCoproMWMR _avatarCoprocReference){
-      return;
-    } 
+  public void setAvatarCoprocReference(AvatarCoproMWMR _avatarCoprocReference) {
+    return;
+  }
 
-
-    public int getCPUNo(){
-      return avatarCPUReference.getNo_proc();
-    }
+  public int getCPUNo() {
+    return avatarCPUReference.getNo_proc();
+  }
 }

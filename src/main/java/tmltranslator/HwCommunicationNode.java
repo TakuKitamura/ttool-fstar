@@ -36,37 +36,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
-
 
 import java.util.Objects;
 
 /**
- * Class HwCommunicationNode
- * Creation: 23/11/2007
+ * Class HwCommunicationNode Creation: 23/11/2007
+ * 
  * @version 1.0 23/11/2007
  * @author Ludovic APVRILLE
  */
-public abstract class HwCommunicationNode extends HwNode  {
-    
-    // Security
-    public static final int BUS_PUBLIC = 0;
-    public static final int BUS_PRIVATE = 1;
-   
-    public int privacy = BUS_PUBLIC;
-	
-    public HwCommunicationNode(String _name) {
-		super(_name);
-    }
+public abstract class HwCommunicationNode extends HwNode {
 
-    public boolean equalSpec(Object o) {
-        if(!(o instanceof HwCommunicationNode)) return false;
-        if (!super.equalSpec(o)) return false;
-        HwCommunicationNode that = (HwCommunicationNode) o;
-        return privacy == that.privacy;
-    }
+  // Security
+  public static final int BUS_PUBLIC = 0;
+  public static final int BUS_PRIVATE = 1;
+
+  public int privacy = BUS_PUBLIC;
+
+  public HwCommunicationNode(String _name) {
+    super(_name);
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwCommunicationNode))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwCommunicationNode that = (HwCommunicationNode) o;
+    return privacy == that.privacy;
+  }
 
 }

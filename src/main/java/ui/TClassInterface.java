@@ -36,32 +36,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import java.util.List;
 
-
 /**
- * Class TClassInterface
- * Used for TClass and TObjects translations
- * Creation: 12/05/2004
+ * Class TClassInterface Used for TClass and TObjects translations Creation:
+ * 12/05/2004
+ * 
  * @version 1.0 12/05/2004
  * @author Ludovic APVRILLE
  */
-public interface TClassInterface  {
-    String getClassName();
-    String getValue();
-    int getId();
-    boolean isStart();
-    List<TAttribute> getAttributes();
-    List<TAttribute> getGates();
-    //public TActivityDiagramPanel getActivityDiagramPanel();
-    ActivityDiagramPanelInterface getBehaviourDiagramPanel();
-    
-    TAttribute getGateById(String name);
+public interface TClassInterface {
+  String getClassName();
+
+  String getValue();
+
+  int getId();
+
+  boolean isStart();
+
+  List<TAttribute> getAttributes();
+
+  List<TAttribute> getGates();
+
+  // public TActivityDiagramPanel getActivityDiagramPanel();
+  ActivityDiagramPanelInterface getBehaviourDiagramPanel();
+
+  TAttribute getGateById(String name);
 
 }

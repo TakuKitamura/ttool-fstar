@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import nc.NCStructure;
@@ -47,65 +44,65 @@ import nc.NCTraffic;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Class TrafficsNCTableModel
- * Main data of traffics in NC structures
- * Creation: 27/11/2008
+ * Class TrafficsNCTableModel Main data of traffics in NC structures Creation:
+ * 27/11/2008
+ * 
  * @version 1.0 27/11/2008
  * @author Ludovic APVRILLE
  */
 public class TrafficsNCTableModel extends AbstractTableModel {
-	private NCStructure ncs;
-	
-	//private String [] names;
-	public TrafficsNCTableModel(NCStructure _ncs) {
-		ncs = _ncs;
-		//computeData(_ncs);
-	}
+  private NCStructure ncs;
 
-	// From AbstractTableModel
-	public int getRowCount() {
-		return ncs.traffics.size();
-	}
+  // private String [] names;
+  public TrafficsNCTableModel(NCStructure _ncs) {
+    ncs = _ncs;
+    // computeData(_ncs);
+  }
 
-	public int getColumnCount() {
-		return 7;
-	}
+  // From AbstractTableModel
+  public int getRowCount() {
+    return ncs.traffics.size();
+  }
 
-	public Object getValueAt(int row, int column) {
-		if (column == 0) {
-			return ncs.traffics.get(row).getName();
-		} else if (column == 1) {
-			return NCTraffic.getStringPeriodicType(ncs.traffics.get(row).getPeriodicType());
-		} else if (column == 2) {
-			return ncs.traffics.get(row).getPeriod() +  " " + ncs.traffics.get(row).getPeriodUnit().getStringUnit();
-		} else if (column == 3) {
-			return ncs.traffics.get(row).getDeadline() +  " " + ncs.traffics.get(row).getDeadlineUnit().getStringUnit();
-		} else if (column == 4) {
-			return ncs.traffics.get(row).getMinPacketSize();
-		} else if (column == 5) {
-			return ncs.traffics.get(row).getMaxPacketSize();
-		}
-		return ncs.traffics.get(row).getPriority();
-	}
+  public int getColumnCount() {
+    return 7;
+  }
 
-	public String getColumnName(int columnIndex) {
-		switch(columnIndex) {
-		case 0:
-			return "Traffic";
-		case 1:
-			return "Type";
-		case 2:
-			return "Period";
-		case 3:
-			return "Deadline";
-		case 4:
-			return "Min packet size";
-		case 5:
-			return "Max packet size";
-		case 6:
-			return "Priority";
-		}
-		return "none";
-	}
+  public Object getValueAt(int row, int column) {
+    if (column == 0) {
+      return ncs.traffics.get(row).getName();
+    } else if (column == 1) {
+      return NCTraffic.getStringPeriodicType(ncs.traffics.get(row).getPeriodicType());
+    } else if (column == 2) {
+      return ncs.traffics.get(row).getPeriod() + " " + ncs.traffics.get(row).getPeriodUnit().getStringUnit();
+    } else if (column == 3) {
+      return ncs.traffics.get(row).getDeadline() + " " + ncs.traffics.get(row).getDeadlineUnit().getStringUnit();
+    } else if (column == 4) {
+      return ncs.traffics.get(row).getMinPacketSize();
+    } else if (column == 5) {
+      return ncs.traffics.get(row).getMaxPacketSize();
+    }
+    return ncs.traffics.get(row).getPriority();
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Traffic";
+      case 1:
+        return "Type";
+      case 2:
+        return "Period";
+      case 3:
+        return "Deadline";
+      case 4:
+        return "Min packet size";
+      case 5:
+        return "Max packet size";
+      case 6:
+        return "Priority";
+    }
+    return "none";
+  }
 
 }

@@ -37,53 +37,49 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 import java.util.ArrayList;
 
 //The method is not very suited for the language, I should come back later...
 /**
-* Class TMLCPChoice
-* Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLCPChoice Creation: 18/02/2014
+ * 
+ * @version 1.0 18/02/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPChoice extends TMLCPElement  {
-    private ArrayList<String> guards;
-	
-    public TMLCPChoice(String _name, ArrayList<String> _guards, Object _referenceObject) {
-        super(_name, _referenceObject);
-        this.guards = _guards;
-    }
-    
-/*    public void addGuard( String _guard ) {
-        nexts.add( new TMLCPElement( _guard, null ) );
-    }*/
+public class TMLCPChoice extends TMLCPElement {
+  private ArrayList<String> guards;
 
-    public void addGuard(String _guard) {
-	if (guards == null) {
-	    guards = new ArrayList<String>();
-	}
-	guards.add(_guard);
-    }
-    
-    public ArrayList<String> getGuards() {
-    	return this.guards;
-    }
+  public TMLCPChoice(String _name, ArrayList<String> _guards, Object _referenceObject) {
+    super(_name, _referenceObject);
+    this.guards = _guards;
+  }
 
-    
+  /*
+   * public void addGuard( String _guard ) { nexts.add( new TMLCPElement( _guard,
+   * null ) ); }
+   */
 
-    public String toString() {
-	String s = "\t+ " + toShortString();
-	int i = 0;
-	for(TMLCPElement elt: nexts) {
-	    s += "\t\t->" + guards.get(i) + " " + elt.toShortString();
-	    i ++;
-	}
-	return s;
+  public void addGuard(String _guard) {
+    if (guards == null) {
+      guards = new ArrayList<String>();
     }
+    guards.add(_guard);
+  }
+
+  public ArrayList<String> getGuards() {
+    return this.guards;
+  }
+
+  public String toString() {
+    String s = "\t+ " + toShortString();
+    int i = 0;
+    for (TMLCPElement elt : nexts) {
+      s += "\t\t->" + guards.get(i) + " " + elt.toShortString();
+      i++;
+    }
+    return s;
+  }
 
 }

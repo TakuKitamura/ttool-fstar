@@ -43,21 +43,22 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class DiplodocusMethodologyConnectingPoint
- * Definition of connecting points on which connectors between requirements may be connected
- * Creation: 28/03/2014
+ * Class DiplodocusMethodologyConnectingPoint Definition of connecting points on
+ * which connectors between requirements may be connected Creation: 28/03/2014
+ * 
  * @version 1.0 28/03/2014
  * @author Ludovic APVRILLE
  */
-public class DiplodocusMethodologyConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-    public DiplodocusMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
-    }
+public class DiplodocusMethodologyConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public DiplodocusMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+      double _w, double _h, int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
+  }
 }

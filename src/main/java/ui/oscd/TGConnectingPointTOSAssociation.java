@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 //import java.awt.*;
@@ -48,20 +45,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointTwoFathers;
 
 /**
- * Class TGConnectingPointTOSAssociation
- * Definition of connecting points on which attrbiute connectors can be connected
- * Creation: 03/10/2006
+ * Class TGConnectingPointTOSAssociation Definition of connecting points on
+ * which attrbiute connectors can be connected Creation: 03/10/2006
+ * 
  * @version 1.0 03/10/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTOSAssociation extends  TGConnectingPointTwoFathers{
-    
-    public TGConnectingPointTOSAssociation(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in, boolean _out) {
-        super(_container1, _container2, _x, _y, _in, _out);
-    }
-    
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
-    }
-    
+public class TGConnectingPointTOSAssociation extends TGConnectingPointTwoFathers {
+
+  public TGConnectingPointTOSAssociation(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
+      boolean _out) {
+    super(_container1, _container2, _x, _y, _in, _out);
+  }
+
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.TOS_CONNECTOR_ATTRIBUTE;
+  }
+
 }

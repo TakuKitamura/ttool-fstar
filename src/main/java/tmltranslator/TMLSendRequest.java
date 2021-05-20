@@ -36,93 +36,89 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import java.util.HashSet;
 import java.util.Vector;
 
-
 /**
- * Class TMLSendRequest
- * Creation: 23/11/2005
+ * Class TMLSendRequest Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLSendRequest extends TMLActivityElement  {
-    protected TMLRequest request;
-    protected Vector<String> datas;
+public class TMLSendRequest extends TMLActivityElement {
+  protected TMLRequest request;
+  protected Vector<String> datas;
 
+  public TMLSendRequest(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    datas = new Vector<String>();
+  }
 
-    public TMLSendRequest(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        datas = new Vector<String>();
+  public void setRequest(TMLRequest _request) {
+    request = _request;
+  }
+
+  public TMLRequest getRequest() {
+    return request;
+  }
+
+  public void addParam(String _param) {
+    datas.add(_param);
+  }
+
+  public int getNbOfParams() {
+    return datas.size();
+  }
+
+  public String getParam(int _index) {
+    if (_index < getNbOfParams()) {
+      return datas.elementAt(_index);
+    } else {
+      return null;
     }
+  }
 
-    public void setRequest(TMLRequest _request) {
-        request = _request;
+  public void setParam(String _param, int _index) {
+    datas.setElementAt(_param, _index);
+  }
+
+  public String getAllParams() {
+    return getAllParams(",");
+  }
+
+  public String getAllParams(String separator) {
+    String s = "";
+    for (int i = 0; i < getNbOfParams(); i++) {
+      if (i != 0) {
+        s += separator;
+      }
+      s += TMLTextSpecification.modifyString(getParam(i));
     }
+    return s;
+  }
 
+  public String toString() {
+    return "Send request:" + request.getName() + "(" + getAllParams() + ")";
+  }
 
-    public TMLRequest getRequest() {
-        return request;
-    }
+  public String customExtraToXML() {
+    return " request=\"" + request.getName() + "\" params=\"" + getAllParams() + "\" ";
+  }
 
-    public void addParam(String _param) {
-        datas.add(_param);
-    }
+  public Vector<String> getDatas() {
+    return datas;
+  }
 
-    public int getNbOfParams() {
-        return datas.size();
-    }
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLSendRequest))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
 
-    public String getParam(int _index) {
-        if (_index < getNbOfParams()) {
-            return datas.elementAt(_index);
-        } else {
-            return null;
-        }
-    }
-
-    public void setParam(String _param, int _index) {
-        datas.setElementAt(_param, _index);
-    }
-
-    public String getAllParams() {
-        return getAllParams(",");
-    }
-
-    public String getAllParams(String separator) {
-        String s = "";
-        for(int i=0; i<getNbOfParams(); i++) {
-            if (i != 0) {
-                s+= separator;
-            }
-            s += TMLTextSpecification.modifyString(getParam(i));
-        }
-        return s;
-    }
-
-    public String toString() {
-        return "Send request:" + request.getName() + "(" + getAllParams() + ")";
-    }
-
-    public String customExtraToXML() {
-	return " request=\"" + request.getName() +  "\" params=\"" + getAllParams() + "\" ";
-    }
-
-    public Vector<String> getDatas() {
-        return datas;
-    }
-
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLSendRequest)) return false;
-        if (!super.equalSpec(o)) return false;
-
-        TMLSendRequest tmlSendRequest = (TMLSendRequest) o;
-        return (new HashSet<>(datas)).equals(new HashSet<>(tmlSendRequest.getDatas()));
-    }
+    TMLSendRequest tmlSendRequest = (TMLSendRequest) o;
+    return (new HashSet<>(datas)).equals(new HashSet<>(tmlSendRequest.getDatas()));
+  }
 
 }

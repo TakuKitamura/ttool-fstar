@@ -36,37 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui;
 
-
 /**
- * Class TGState
- * Possible states of TGComponent
- * Creation: 21/12/2003
+ * Class TGState Possible states of TGComponent Creation: 21/12/2003
+ * 
  * @version 1.0 21/12/2003
  * @author Ludovic APVRILLE
  * @see TGComponent
  */
 public class TGState {
 
-	public static final int NORMAL = 0;
-	public static final int POINTER_ON_ME = 1;
-	public static final int SELECTED = 2;
-	public static final int MOVING = 3;
-	public static final int ADDING = 4;
-	public static final int POINTED = 5;
-    public static final int RESIZE_INDICATIONS = 6;
-    public static final int RESIZING = 7;
+  public static final int NORMAL = 0;
+  public static final int POINTER_ON_ME = 1;
+  public static final int SELECTED = 2;
+  public static final int MOVING = 3;
+  public static final int ADDING = 4;
+  public static final int POINTED = 5;
+  public static final int RESIZE_INDICATIONS = 6;
+  public static final int RESIZING = 7;
 
-     
 }
-
-
-
-
-    
-
-

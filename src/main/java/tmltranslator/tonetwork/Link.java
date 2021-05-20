@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator.tonetwork;
 
 import myutil.TraceManager;
@@ -47,139 +46,133 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-
 /**
- * Class Link
- * Creation: 10/05/2019
+ * Class Link Creation: 10/05/2019
  *
  * @author Ludovic Apvrille
  * @version 1.0 10/05/2019
  */
 public class Link {
-    private int nbOfVCs;
-    private TMLModeling tmlm;
-    private TMLArchitecture tarch;
+  private int nbOfVCs;
+  private TMLModeling tmlm;
+  private TMLArchitecture tarch;
 
-    // Routers
-    private TranslatedRouter previousRouter;
-    private TranslatedRouter nextRouter;
+  // Routers
+  private TranslatedRouter previousRouter;
+  private TranslatedRouter nextRouter;
 
+  // Between OUT and IN
+  TMLEvent packetOut;
+  TMLChannel chOutToIN;
+  TMLEvent feedbackPerVC[];
 
-    // Between OUT and IN
-    TMLEvent packetOut;
-    TMLChannel chOutToIN;
-    TMLEvent feedbackPerVC[];
+  private String add = "";
 
-    private String add = "";
+  HwBus busBetweenRouters;
 
-    HwBus busBetweenRouters;
+  public Link(TMLArchitecture tarch, TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs) {
+    previousRouter = previous;
+    nextRouter = next;
+    this.nbOfVCs = nbOfVCs;
+    this.tmlm = tmlm;
+    this.tarch = tarch;
 
+    // TraceManager.addDev("Adding link between previous (" +
+    // previousRouter.getXPos() + "," + previousRouter.getYPos() +
+    // ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")");
 
-    public Link(TMLArchitecture tarch, TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs) {
-        previousRouter = previous;
-        nextRouter = next;
-        this.nbOfVCs = nbOfVCs;
-        this.tmlm = tmlm;
-        this.tarch = tarch;
-
-        //TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
-        //") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")");
-
-        if (tmlm ==null) {
-            TraceManager.addDev("null modeling");
-        }
-
-        generateLinks();
-        generateHwComponents();
+    if (tmlm == null) {
+      TraceManager.addDev("null modeling");
     }
 
-    public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add) {
-        previousRouter = previous;
-        nextRouter = next;
-        this.nbOfVCs = nbOfVCs;
-        this.tmlm = tmlm;
-        this.add = "_" + add;
+    generateLinks();
+    generateHwComponents();
+  }
 
-        //TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
-         //       ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + " with add=" + add);
+  public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add) {
+    previousRouter = previous;
+    nextRouter = next;
+    this.nbOfVCs = nbOfVCs;
+    this.tmlm = tmlm;
+    this.add = "_" + add;
 
-        if (tmlm ==null) {
-            TraceManager.addDev("null modeling");
-        }
+    // TraceManager.addDev("Adding link between previous (" +
+    // previousRouter.getXPos() + "," + previousRouter.getYPos() +
+    // ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + "
+    // with add=" + add);
 
-
-        generateLinks();
-
+    if (tmlm == null) {
+      TraceManager.addDev("null modeling");
     }
 
-    public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add, boolean isInfinite) {
-        previousRouter = previous;
-        nextRouter = next;
-        this.nbOfVCs = nbOfVCs;
-        this.tmlm = tmlm;
-        this.add = "_" + add;
+    generateLinks();
 
-        //TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
-        //       ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + " with add=" + add);
+  }
 
-        if (tmlm ==null) {
-            TraceManager.addDev("null modeling");
-        }
+  public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add,
+      boolean isInfinite) {
+    previousRouter = previous;
+    nextRouter = next;
+    this.nbOfVCs = nbOfVCs;
+    this.tmlm = tmlm;
+    this.add = "_" + add;
 
+    // TraceManager.addDev("Adding link between previous (" +
+    // previousRouter.getXPos() + "," + previousRouter.getYPos() +
+    // ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + "
+    // with add=" + add);
 
-        generateLinks(isInfinite);
-
+    if (tmlm == null) {
+      TraceManager.addDev("null modeling");
     }
 
-    private void generateLinks() {
-        generateLinks(false);
+    generateLinks(isInfinite);
+
+  }
+
+  private void generateLinks() {
+    generateLinks(false);
+  }
+
+  private void generateLinks(boolean isInfinite) {
+
+    packetOut = new TMLEvent("evtPktOut__" + getNaming(), null, 8, true);
+    packetOut.addParam(new TMLType(TMLType.NATURAL));
+    packetOut.addParam(new TMLType(TMLType.NATURAL));
+    packetOut.addParam(new TMLType(TMLType.NATURAL));
+    packetOut.addParam(new TMLType(TMLType.NATURAL));
+    packetOut.addParam(new TMLType(TMLType.NATURAL));
+    packetOut.addParam(new TMLType(TMLType.NATURAL));
+    tmlm.addEvent(packetOut);
+
+    chOutToIN = new TMLChannel("channelBetweenOUTToIN__" + getNaming(), null);
+    chOutToIN.setSize(4);
+    if (isInfinite) {
+      chOutToIN.setMax(Integer.MAX_VALUE);
+      chOutToIN.setType(TMLChannel.BRNBW);
+    } else {
+      chOutToIN.setMax(8);
+      chOutToIN.setType(TMLChannel.BRBW);
     }
 
+    tmlm.addChannel(chOutToIN);
 
-    private void generateLinks(boolean isInfinite) {
-
-        packetOut = new TMLEvent("evtPktOut__" + getNaming(),
-                null, 8, true);
-        packetOut.addParam(new TMLType(TMLType.NATURAL));
-        packetOut.addParam(new TMLType(TMLType.NATURAL));
-        packetOut.addParam(new TMLType(TMLType.NATURAL));
-        packetOut.addParam(new TMLType(TMLType.NATURAL));
-        packetOut.addParam(new TMLType(TMLType.NATURAL));
-        packetOut.addParam(new TMLType(TMLType.NATURAL));
-        tmlm.addEvent(packetOut);
-
-        chOutToIN = new TMLChannel("channelBetweenOUTToIN__" + getNaming(),
-                null);
-        chOutToIN.setSize(4);
-        if (isInfinite) {
-            chOutToIN.setMax(Integer.MAX_VALUE);
-            chOutToIN.setType(TMLChannel.BRNBW);
-        } else {
-            chOutToIN.setMax(8);
-            chOutToIN.setType(TMLChannel.BRBW);
-        }
-
-        tmlm.addChannel(chOutToIN);
-
-        feedbackPerVC = new TMLEvent[nbOfVCs];
-        for(int i=0; i<nbOfVCs; i++) {
-            feedbackPerVC[i] = new TMLEvent("Feedback__" + getNaming() + "_vc" + i,
-                    null, 8, true);
-            tmlm.addEvent(feedbackPerVC[i]);
-        }
+    feedbackPerVC = new TMLEvent[nbOfVCs];
+    for (int i = 0; i < nbOfVCs; i++) {
+      feedbackPerVC[i] = new TMLEvent("Feedback__" + getNaming() + "_vc" + i, null, 8, true);
+      tmlm.addEvent(feedbackPerVC[i]);
     }
+  }
 
-    private void generateHwComponents() {
-            busBetweenRouters = new HwBus("Bus_From_" + previousRouter.getYPos() + "_" + previousRouter.getXPos() + "_to_" + nextRouter.getYPos() + "_" +
-                    nextRouter.getXPos());
-            tarch.addHwNode(busBetweenRouters);
-    }
+  private void generateHwComponents() {
+    busBetweenRouters = new HwBus("Bus_From_" + previousRouter.getYPos() + "_" + previousRouter.getXPos() + "_to_"
+        + nextRouter.getYPos() + "_" + nextRouter.getXPos());
+    tarch.addHwNode(busBetweenRouters);
+  }
 
-    public String getNaming() {
-        return "P_x" + previousRouter.getXPos() + "_y" + previousRouter.getYPos() +
-                "_N_x" + nextRouter.getXPos() + "_y" + nextRouter.getYPos() + add;
-    }
-
-
+  public String getNaming() {
+    return "P_x" + previousRouter.getXPos() + "_y" + previousRouter.getYPos() + "_N_x" + nextRouter.getXPos() + "_y"
+        + nextRouter.getYPos() + add;
+  }
 
 }

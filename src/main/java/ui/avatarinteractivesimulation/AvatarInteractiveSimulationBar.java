@@ -36,41 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarinteractivesimulation;
 
 import javax.swing.*;
 
-
 /**
- * Class AvatarInteractiveSimulationBar
- * Abstract toolbar to be used by simulation window
- * Creation: 21/01/2011
+ * Class AvatarInteractiveSimulationBar Abstract toolbar to be used by
+ * simulation window Creation: 21/01/2011
+ * 
  * @version 1.0 21/01/2011
  * @author Ludovic APVRILLE
  * @see ui.TGComponent
  */
 public abstract class AvatarInteractiveSimulationBar extends JToolBar {
-    protected JFrameAvatarInteractiveSimulation jfais;
-    
-    public AvatarInteractiveSimulationBar(JFrameAvatarInteractiveSimulation _jfais) {
-        super();
-        jfais = _jfais;
-        setOrientation(SwingConstants.HORIZONTAL);
-        setFloatable(true) ;
-        setButtons();
-    }
-    
-    // asbtract operations
-    protected abstract void setButtons();
-    
-    protected abstract void setActive(boolean b);
-    
+  protected JFrameAvatarInteractiveSimulation jfais;
+
+  public AvatarInteractiveSimulationBar(JFrameAvatarInteractiveSimulation _jfais) {
+    super();
+    jfais = _jfais;
+    setOrientation(SwingConstants.HORIZONTAL);
+    setFloatable(true);
+    setButtons();
+  }
+
+  // asbtract operations
+  protected abstract void setButtons();
+
+  protected abstract void setActive(boolean b);
+
 } // Class
-
-
-
-
-

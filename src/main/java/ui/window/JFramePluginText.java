@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import myutil.Plugin;
@@ -51,129 +48,122 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-
 /**
- * Class JFramePluginText
- * Creation: 10/09/2020
- * version 1.0 10/09/2020
+ * Class JFramePluginText Creation: 10/09/2020 version 1.0 10/09/2020
+ * 
  * @author Ludovic APVRILLE
  */
 public class JFramePluginText extends JFrame implements ActionListener, Runnable {
 
-	protected JTextArea jta;
-	protected PluginManager pm;
+  protected JTextArea jta;
+  protected PluginManager pm;
 
-        
-    public JFramePluginText(String title, ImageIcon imgic) {
-		super(title);
+  public JFramePluginText(String title, ImageIcon imgic) {
+    super(title);
 
-		
-		setDefaultCloseOperation( DISPOSE_ON_CLOSE );
-		Container framePanel = getContentPane();
-		framePanel.setLayout(new BorderLayout());
-		
-		jta = new JTextArea("List of detected plugins:\n");
-		jta.setEditable( false );
-		jta.setMargin(new Insets(10, 10, 10, 10));
-		jta.setTabSize(3);
-		Font f = new Font("Courrier", Font.BOLD, 12); 
-		jta.setFont(f);
-		JScrollPane jsp = new JScrollPane(jta);
-		
-		framePanel.add(jsp, BorderLayout.CENTER);
-		
-		JButton button1 = new JButton("Close", IconManager.imgic27);
-		
-		button1.addActionListener(this);
-		
-		JPanel jp = new JPanel();
-		jp.add(button1);
-		
-		framePanel.add(jp, BorderLayout.SOUTH);
-        
-		if ( imgic != null ) {
-	        JButton button2 = new JButton(imgic);
-	        jp = new JPanel();
-			jp.add(button2);
-	        framePanel.add(jp, BorderLayout.NORTH);
-		}
-		
-		pack();
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    Container framePanel = getContentPane();
+    framePanel.setLayout(new BorderLayout());
 
-		Thread t = new Thread(this);
-		t.start();
+    jta = new JTextArea("List of detected plugins:\n");
+    jta.setEditable(false);
+    jta.setMargin(new Insets(10, 10, 10, 10));
+    jta.setTabSize(3);
+    Font f = new Font("Courrier", Font.BOLD, 12);
+    jta.setFont(f);
+    JScrollPane jsp = new JScrollPane(jta);
 
-		button1.setName("Close Configuration");
-		jsp.setName("Jsp Configuration");
-	}
-	
- 	public void actionPerformed(ActionEvent evt)  {
-		String command = evt.getActionCommand();
-		
-		if (command.equals("Close")) {
-			dispose();
-			return;
-		}
-	}
+    framePanel.add(jsp, BorderLayout.CENTER);
 
-	public void run() {
-		// List all plugins
-		if (PluginManager.pluginManager == null) {
-			jta.append("No plugin detected");
-			return;
-		}
+    JButton button1 = new JButton("Close", IconManager.imgic27);
 
-		ArrayList<Plugin> plugins = PluginManager.pluginManager.getPlugins();
-		for(Plugin p: plugins) {
-			if (p.getPackageName().length() > 0) {
-				jta.append("\n\n- Plugin " + p.getPath() + " " + p.getPackageName() + "." + p.getName());
-			} else {
-				jta.append("\n\n- Plugin " + p.getPath() + " " + p.getName());
-			}
-			jta.append("\n    code generator for AVATAR? ");
-			if (p.hasAvatarCodeGenerator()) {
-				yes();
-			} else {
-				no();
-			}
-			jta.append("\n    code generator for DIPLODOCUS? ");
-			if (p.hasDiplodocusCodeGenerator()) {
-				yes();
-			} else {
-				no();
-			}
-			jta.append("\n    FPGA scheduling? ");
-			if (p.hasFPGAScheduling()) {
-				yes();
-			} else {
-				no();
-			}
-			jta.append("\n    Has a command line interface? ");
-			if (p.hasCommandLineInterface()) {
-				yes();
-			} else {
-				no();
-			}
-			jta.append("\n    Adds graphical components? ");
-			if (p.hasGraphicalComponent()) {
-				yes();
-			} else {
-				no();
-			}
+    button1.addActionListener(this);
 
-		}
+    JPanel jp = new JPanel();
+    jp.add(button1);
 
-	}
+    framePanel.add(jp, BorderLayout.SOUTH);
 
-	private void yes() {
-    	jta.append("yes");
-	}
+    if (imgic != null) {
+      JButton button2 = new JButton(imgic);
+      jp = new JPanel();
+      jp.add(button2);
+      framePanel.add(jp, BorderLayout.NORTH);
+    }
 
-	private void no() {
-		jta.append("no");
-	}
-	
-    
-} // Class 
+    pack();
 
-	
+    Thread t = new Thread(this);
+    t.start();
+
+    button1.setName("Close Configuration");
+    jsp.setName("Jsp Configuration");
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    if (command.equals("Close")) {
+      dispose();
+      return;
+    }
+  }
+
+  public void run() {
+    // List all plugins
+    if (PluginManager.pluginManager == null) {
+      jta.append("No plugin detected");
+      return;
+    }
+
+    ArrayList<Plugin> plugins = PluginManager.pluginManager.getPlugins();
+    for (Plugin p : plugins) {
+      if (p.getPackageName().length() > 0) {
+        jta.append("\n\n- Plugin " + p.getPath() + " " + p.getPackageName() + "." + p.getName());
+      } else {
+        jta.append("\n\n- Plugin " + p.getPath() + " " + p.getName());
+      }
+      jta.append("\n    code generator for AVATAR? ");
+      if (p.hasAvatarCodeGenerator()) {
+        yes();
+      } else {
+        no();
+      }
+      jta.append("\n    code generator for DIPLODOCUS? ");
+      if (p.hasDiplodocusCodeGenerator()) {
+        yes();
+      } else {
+        no();
+      }
+      jta.append("\n    FPGA scheduling? ");
+      if (p.hasFPGAScheduling()) {
+        yes();
+      } else {
+        no();
+      }
+      jta.append("\n    Has a command line interface? ");
+      if (p.hasCommandLineInterface()) {
+        yes();
+      } else {
+        no();
+      }
+      jta.append("\n    Adds graphical components? ");
+      if (p.hasGraphicalComponent()) {
+        yes();
+      } else {
+        no();
+      }
+
+    }
+
+  }
+
+  private void yes() {
+    jta.append("yes");
+  }
+
+  private void no() {
+    jta.append("no");
+  }
+
+} // Class

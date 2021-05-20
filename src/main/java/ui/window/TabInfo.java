@@ -41,28 +41,26 @@ package ui.window;
 import java.util.List;
 
 /**
- * Class TabInfo
- * Specification of a tab for dialog windows
- * Creation: 22/06/2018
+ * Class TabInfo Specification of a tab for dialog windows Creation: 22/06/2018
  *
  * @author Ludovic APVRILLE
  * @version 1.0 22/06/2018
  */
-public class TabInfo  {
+public class TabInfo {
 
-    public String identifier;
-    public String[] labels;
-    public String[] values;
-    public List<String[]> help;
+  public String identifier;
+  public String[] labels;
+  public String[] values;
+  public List<String[]> help;
 
-    public TabInfo(String _identifier) {
-        identifier = _identifier;
+  public TabInfo(String _identifier) {
+    identifier = _identifier;
+  }
+
+  public int getSize() {
+    if (labels == null) {
+      return 0;
     }
-
-    public int getSize() {
-        if (labels == null) {
-            return 0;
-        }
-        return labels.length;
-    }
+    return labels.length;
+  }
 }

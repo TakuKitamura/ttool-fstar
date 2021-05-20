@@ -48,51 +48,54 @@ import ui.TGConnectingPoint;
 import ui.util.IconManager;
 
 /**
- * Class AvatarMADImpactConnector
- * Connector to be used in Avatar RD. Connects an assumption with another element
- * Creation: 27/08/2013
+ * Class AvatarMADImpactConnector Connector to be used in Avatar RD. Connects an
+ * assumption with another element Creation: 27/08/2013
+ * 
  * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  */
-public  class AvatarMADImpactConnector extends AvatarMADConnector /* Issue #69 TGConnectorWithCommentConnectionPoints*/ {
-   // int w, h;
+public class AvatarMADImpactConnector
+    extends AvatarMADConnector /* Issue #69 TGConnectorWithCommentConnectionPoints */ {
+  // int w, h;
 
-    public AvatarMADImpactConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        value = "<<impact>>";
+  public AvatarMADImpactConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    value = "<<impact>>";
 
-        myImageIcon = IconManager.imgic1008;
-    }
+    myImageIcon = IconManager.imgic1008;
+  }
 
-//    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-//
-//        //g.drawLine(x1, y1, x2, y2);
-//        GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-//
-//        // Indicate semantics
-//
-//        Font f = g.getFont();
-//        Font old = f;
-//        if (f.getSize() != tdp.getFontSize()) {
-//            f = f.deriveFont((float)tdp.getFontSize());
-//            g.setFont(f);
-//        }
-//
-//        w  = g.getFontMetrics().stringWidth(value);
-//        h = g.getFontMetrics().getHeight();
-//        g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2)/2);
-//        g.setFont(old);
-//    }
-//
-//    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-//        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
-//            return this;
-//        }
-//        return null;
-//    }
+  // protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+  //
+  // //g.drawLine(x1, y1, x2, y2);
+  // GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+  //
+  // // Indicate semantics
+  //
+  // Font f = g.getFont();
+  // Font old = f;
+  // if (f.getSize() != tdp.getFontSize()) {
+  // f = f.deriveFont((float)tdp.getFontSize());
+  // g.setFont(f);
+  // }
+  //
+  // w = g.getFontMetrics().stringWidth(value);
+  // h = g.getFontMetrics().getHeight();
+  // g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2)/2);
+  // g.setFont(old);
+  // }
+  //
+  // public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+  // if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2,
+  // (p1.getY() + p2.getY())/2 - h, w, h)) {
+  // return this;
+  // }
+  // return null;
+  // }
 
-    @Override
-    public int getType() {
-        return TGComponentManager.AVATARMAD_IMPACT_CONNECTOR;
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.AVATARMAD_IMPACT_CONNECTOR;
+  }
 }

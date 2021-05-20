@@ -43,20 +43,20 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointDD
- * Definition of connecting points on which connectors of activity diagram can be connected
- * Creation: 02/05/2005
+ * Class TGConnectingPointDD Definition of connecting points on which connectors
+ * of activity diagram can be connected Creation: 02/05/2005
+ * 
  * @version 1.0 02/05/2005
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointDD extends TGConnectingPointWidthHeight{
-    
-    public TGConnectingPointDD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_NODE_DD;
-    }
+public class TGConnectingPointDD extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointDD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_NODE_DD;
+  }
 }

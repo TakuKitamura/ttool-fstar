@@ -38,15 +38,14 @@
 
 package avatartranslator;
 
-
 import java.util.UUID;
 
 /**
-   * Class ElementWithUUID
-   * Creation: 01/04/2021
-   * @version 1.0 01/04/2021
-   * @author Ludovic Apvrille
+ * Class ElementWithUUID Creation: 01/04/2021
+ * 
+ * @version 1.0 01/04/2021
+ * @author Ludovic Apvrille
  */
 public interface ElementWithUUID {
-    public UUID getUUID();
+  public UUID getUUID();
 }

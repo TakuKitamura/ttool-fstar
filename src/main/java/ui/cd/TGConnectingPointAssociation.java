@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointTwoFathers;
 
 /**
- * Class TGConnectingPointAssociation
- * Definition of connecting points on which attribute connectors can be connected
- * Creation: 20/12/2003
+ * Class TGConnectingPointAssociation Definition of connecting points on which
+ * attribute connectors can be connected Creation: 20/12/2003
+ * 
  * @version 1.0 20/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointAssociation extends TGConnectingPointTwoFathers{
-    
-    public TGConnectingPointAssociation(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in, boolean _out) {
-        super(_container1, _container2, _x, _y, _in, _out);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_ATTRIBUTE;
-    }
+public class TGConnectingPointAssociation extends TGConnectingPointTwoFathers {
+
+  public TGConnectingPointAssociation(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in,
+      boolean _out) {
+    super(_container1, _container2, _x, _y, _in, _out);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_ATTRIBUTE;
+  }
 }

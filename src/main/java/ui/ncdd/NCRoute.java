@@ -36,46 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ncdd;
 
 /**
- * Class NCRoute
- * Route data structure.
- * Creation: 19/11/2008
+ * Class NCRoute Route data structure. Creation: 19/11/2008
+ * 
  * @version 1.1 19/11/2008
  * @author Ludovic APVRILLE
  */
 public class NCRoute {
-    public String inputInterface = "";
-	public String traffic = "";
-	public String outputInterface = "";
-    
-    public NCRoute() {
-    }
-	
-	public NCRoute(String _inputInterface, String _traffic, String _outputInterface) {
-		inputInterface = _inputInterface;
-		traffic = _traffic;
-		outputInterface = _outputInterface;
-    }
-	
-	public String toString() {
-		return inputInterface + "/" + traffic + " -> " + outputInterface; 
-	}
-	
-	public boolean equals(NCRoute route) {
-		if (!(route.inputInterface.equals(inputInterface))) {
-			return false;
-		}
-		
-		if (!(route.traffic.equals(traffic))) {
-			return false;
-		}
+  public String inputInterface = "";
+  public String traffic = "";
+  public String outputInterface = "";
 
-        return route.outputInterface.equals(outputInterface);
+  public NCRoute() {
+  }
+
+  public NCRoute(String _inputInterface, String _traffic, String _outputInterface) {
+    inputInterface = _inputInterface;
+    traffic = _traffic;
+    outputInterface = _outputInterface;
+  }
+
+  public String toString() {
+    return inputInterface + "/" + traffic + " -> " + outputInterface;
+  }
+
+  public boolean equals(NCRoute route) {
+    if (!(route.inputInterface.equals(inputInterface))) {
+      return false;
     }
-    
+
+    if (!(route.traffic.equals(traffic))) {
+      return false;
+    }
+
+    return route.outputInterface.equals(outputInterface);
+  }
+
 }

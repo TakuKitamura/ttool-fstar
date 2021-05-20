@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
-
 package ui.ad;
 
 import org.w3c.dom.Element;
@@ -49,159 +45,162 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
- * Class TActivityDiagramPanel
- * Panel used for drawing activity diagrams
+ * Class TActivityDiagramPanel Panel used for drawing activity diagrams
  * Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiagramPanelInterface {
-    
-    public  TActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        
-        addComponent(400, 50, TGComponentManager.TAD_START_STATE, false);
+
+  public TActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+
+    addComponent(400, 50, TGComponentManager.TAD_START_STATE, false);
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<TActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</TActivityDiagramPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<TActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</TActivityDiagramPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<TActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</TActivityDiagramPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
+  public boolean isJavaVisible() {
+    return javaVisible;
+  }
+
+  public void setJavaVisible(boolean b) {
+    javaVisible = b;
+  }
+
+  public String displayParam() {
+    String s = "";
+    if (javaVisible) {
+      s += " java=\"true\"";
+    } else {
+      s += " java=\"false\"";
     }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return false;
+    return s;
+  }
+
+  public void loadExtraParameters(Element elt) {
+    String s;
+    //
+    try {
+      s = elt.getAttribute("java");
+      //
+      if (s.compareTo("true") == 0) {
+        setJavaVisible(true);
+      } else {
+        setJavaVisible(false);
+      }
+    } catch (Exception e) {
+      // Model was saved in an older version of TTool
+      //
+      setJavaVisible(false);
     }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-		
-        return false;
+  }
+
+  public void enhance() {
+    //
+    Vector<TGComponent> v = new Vector<TGComponent>();
+    TGComponent o;
+    Iterator<TGComponent> iterator = componentList.listIterator();
+
+    while (iterator.hasNext()) {
+      o = iterator.next();
+      if (o instanceof TADStartState) {
+        enhance(v, o);
+      }
     }
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
+
+    mgui.changeMade(this, MOVE_CONNECTOR);
+    repaint();
+  }
+
+  public void enhance(Vector<TGComponent> v, TGComponent tgc) {
+    TGComponent tgc1;
+    TGConnector tgcon;
+    int i;
+
+    //
+
+    if (tgc == null) {
+      return;
     }
-    
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
+
+    if (v.contains(tgc)) {
+      return;
     }
-    
-    public String getXMLHead() {
-        return "<TActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</TActivityDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<TActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</TActivityDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<TActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</TActivityDiagramPanelCopy>";
-    }
-    
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
-        
-        // Components over others
-        
-        // Position correctly guards of choice
-    }
-    
-    public boolean isJavaVisible() {
-        return javaVisible;
-    }
-    
-    public void setJavaVisible(boolean b) {
-        javaVisible = b;
-    }
-    
-    public String displayParam() {
-        String s = "";
-        if (javaVisible) {
-            s += " java=\"true\"";
-        } else {
-            s += " java=\"false\"";
+
+    v.add(tgc);
+
+    //
+    if (!(tgc instanceof TADStartState)) {
+      for (i = 0; i < tgc.getNbNext(); i++) {
+        tgc1 = getNextTGComponent(tgc, i);
+        tgcon = getNextTGConnector(tgc, i);
+        if (tgcon.getAutomaticDrawing()) {
+          if ((tgc1 != null) && (tgcon != null)) {
+            tgcon.alignOrMakeSquareTGComponents();
+          }
         }
-        return s;
+      }
     }
-    
-    public void loadExtraParameters(Element elt) {
-        String s;
-        //
-        try {
-            s = elt.getAttribute("java");
-            //
-            if (s.compareTo("true") ==0) {
-                setJavaVisible(true);
-            } else {
-                setJavaVisible(false);
-            }
-        } catch (Exception e) {
-            // Model was saved in an older version of TTool
-            //
-            setJavaVisible(false);
-        }
+
+    // Explore next elements
+    for (i = 0; i < tgc.getNbNext(); i++) {
+      tgc1 = getNextTGComponent(tgc, i);
+      enhance(v, tgc1);
     }
-    
-    public void enhance() {
-        //
-        Vector<TGComponent> v = new Vector<TGComponent>();
-        TGComponent o;
-        Iterator<TGComponent> iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            o = iterator.next();
-            if (o instanceof TADStartState){
-                enhance(v, o);
-            }
-        }
-        
-        mgui.changeMade(this, MOVE_CONNECTOR);
-        repaint();
-    }
-    
-    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
-        TGComponent tgc1;
-        TGConnector tgcon;
-        int i;
-        
-        //
-        
-        if (tgc == null) {
-            return;
-        }
-        
-        if (v.contains(tgc)) {
-            return;
-        }
-        
-        v.add(tgc);
-        
-        //
-        if (!(tgc instanceof TADStartState)) {
-            for(i=0; i<tgc.getNbNext(); i++) {
-                tgc1 = getNextTGComponent(tgc, i);
-                tgcon = getNextTGConnector(tgc, i);
-                if (tgcon.getAutomaticDrawing()) {
-                    if ((tgc1 != null) && (tgcon != null)) {
-                        tgcon.alignOrMakeSquareTGComponents();
-                    }
-                }
-            }
-        }
-        
-        // Explore next elements
-        for(i=0; i<tgc.getNbNext(); i++) {
-            tgc1 = getNextTGComponent(tgc, i);
-            enhance(v, tgc1);
-        }
-    }
-	
-	public boolean hasAutoConnect() {
-		return true;
-	}
+  }
+
+  public boolean hasAutoConnect() {
+    return true;
+  }
 }

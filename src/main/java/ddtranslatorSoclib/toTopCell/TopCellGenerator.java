@@ -64,335 +64,322 @@ import java.util.LinkedList;
 
 import syscamstranslator.*;
 
-public class TopCellGenerator
-{
-	private static final String MAPPING_TXT = "mapping.txt"; //$NON-NLS-1$	
-	//--------------- accessing Avatardd -----------------
-	public static AvatarddSpecification avatardd;
-	// ---------------------------------------------------
+public class TopCellGenerator {
+  private static final String MAPPING_TXT = "mapping.txt"; //$NON-NLS-1$
+  // --------------- accessing Avatardd -----------------
+  public static AvatarddSpecification avatardd;
+  // ---------------------------------------------------
 
-        public static AvatarSpecification avspec;
+  public static AvatarSpecification avspec;
 
-	public String VCIparameters;
-	public String config;
-	public String mainFile;
-	public String src;
-	public String top;
-        public String deployinfo;
-        public String deployinfo_map; 
-        public String deployinfo_ram;
-        public String platform_desc;
-        public String procinfo; 
-        public String nbproc;
-	public final String DOTH = ".h";
-	public final String DOTCPP = ".cpp";
-	public final String SYSTEM_INCLUDE = "#include \"systemc.h\"";
-	public final String CR = "\n";
-	public final String CR2 = "\n\n";
-	public final String SCCR = ";\n";
-	public final String EFCR = "}\n";
-	public final String EFCR2 = "}\n\n";
-	public final String EF = "}";
-	public final String COTE = "";
-	public final String NAME_RST = "signal_resetn";
-	public final String TYPEDEF = "typedef";
+  public String VCIparameters;
+  public String config;
+  public String mainFile;
+  public String src;
+  public String top;
+  public String deployinfo;
+  public String deployinfo_map;
+  public String deployinfo_ram;
+  public String platform_desc;
+  public String procinfo;
+  public String nbproc;
+  public final String DOTH = ".h";
+  public final String DOTCPP = ".cpp";
+  public final String SYSTEM_INCLUDE = "#include \"systemc.h\"";
+  public final String CR = "\n";
+  public final String CR2 = "\n\n";
+  public final String SCCR = ";\n";
+  public final String EFCR = "}\n";
+  public final String EFCR2 = "}\n\n";
+  public final String EF = "}";
+  public final String COTE = "";
+  public final String NAME_RST = "signal_resetn";
+  public final String TYPEDEF = "typedef";
 
-        private final static String GENERATED_PATH = "generated_topcell" + File.separator;      
-	 private boolean tracing;
-    public TopCellGenerator(AvatarddSpecification dd, boolean _tracing, AvatarSpecification _avspec){
-		avatardd = dd;
-		tracing =_tracing;
-		avspec =_avspec;
-	}
+  private final static String GENERATED_PATH = "generated_topcell" + File.separator;
+  private boolean tracing;
 
-     public static int getCrossbarIndex(AvatarComponent comp){
-	int  cluster_index=-1;
-	for  (AvatarConnector connector : avatardd.getConnectors()){
-	
-		AvatarConnectingPoint my_p1= connector.get_p1(); 
-		AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-		AvatarComponent comp1 = my_p1.getComponent();
-		AvatarComponent comp2 = my_p2.getComponent(); 
-	
-			if (comp1==comp){
-		
-		  AvatarCrossbar comp3=  (AvatarCrossbar)comp2;
-		     cluster_index=comp3.getClusterIndex();
-		    
-		     	return cluster_index;
-		}	
-	}
-	return -1; //should not happen
-     }
+  public TopCellGenerator(AvatarddSpecification dd, boolean _tracing, AvatarSpecification _avspec) {
+    avatardd = dd;
+    tracing = _tracing;
+    avspec = _avspec;
+  }
 
- public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
-	avatardd = dd;
-	int cpus=0;
-	for  (AvatarConnector connector : avatardd.getConnectors()){		
-	    AvatarConnectingPoint my_p1= connector.get_p1(); 
-	    AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-	    AvatarComponent comp1 = my_p1.getComponent();
-	    AvatarComponent comp2 = my_p2.getComponent(); 
-	    if (comp1 instanceof AvatarCPU){ 
-		AvatarCPU comp1cpu = (AvatarCPU)comp1;	
-		if(getCrossbarIndex(comp2)==cluster_no)
-		    cpus++;			
-	    }		    			    
-	}
-	return cpus; 
+  public static int getCrossbarIndex(AvatarComponent comp) {
+    int cluster_index = -1;
+    for (AvatarConnector connector : avatardd.getConnectors()) {
+
+      AvatarConnectingPoint my_p1 = connector.get_p1();
+      AvatarConnectingPoint my_p2 = connector.get_p2();
+
+      AvatarComponent comp1 = my_p1.getComponent();
+      AvatarComponent comp2 = my_p2.getComponent();
+
+      if (comp1 == comp) {
+
+        AvatarCrossbar comp3 = (AvatarCrossbar) comp2;
+        cluster_index = comp3.getClusterIndex();
+
+        return cluster_index;
+      }
+    }
+    return -1; // should not happen
+  }
+
+  public static int cpus_in_cluster(AvatarddSpecification dd, int cluster_no) {
+    avatardd = dd;
+    int cpus = 0;
+    for (AvatarConnector connector : avatardd.getConnectors()) {
+      AvatarConnectingPoint my_p1 = connector.get_p1();
+      AvatarConnectingPoint my_p2 = connector.get_p2();
+
+      AvatarComponent comp1 = my_p1.getComponent();
+      AvatarComponent comp2 = my_p2.getComponent();
+      if (comp1 instanceof AvatarCPU) {
+        AvatarCPU comp1cpu = (AvatarCPU) comp1;
+        if (getCrossbarIndex(comp2) == cluster_no)
+          cpus++;
+      }
+    }
+    return cpus;
+  }
+
+  public static int rams_in_cluster(AvatarddSpecification dd, int cluster_no) {
+    avatardd = dd;
+    int rams = 0;
+    for (AvatarConnector connector : avatardd.getConnectors()) {
+      AvatarConnectingPoint my_p1 = connector.get_p1();
+      AvatarConnectingPoint my_p2 = connector.get_p2();
+
+      AvatarComponent comp1 = my_p1.getComponent();
+      AvatarComponent comp2 = my_p2.getComponent();
+      if (comp1 instanceof AvatarRAM) {
+        AvatarRAM comp1ram = (AvatarRAM) comp1;
+        if (getCrossbarIndex(comp2) == cluster_no)
+          rams++;
+      }
+
+    }
+    TraceManager.addDev(cluster_no + " RAMs in cluster " + cluster_no + ":" + rams);
+    return rams;
+  }
+
+  public static int ttys_in_cluster(AvatarddSpecification dd, int cluster_no) {
+    avatardd = dd;
+    int ttys = 0;
+    for (AvatarConnector connector : avatardd.getConnectors()) {
+      AvatarConnectingPoint my_p1 = connector.get_p1();
+      AvatarConnectingPoint my_p2 = connector.get_p2();
+
+      AvatarComponent comp1 = my_p1.getComponent();
+      AvatarComponent comp2 = my_p2.getComponent();
+      if (comp1 instanceof AvatarTTY) {
+        AvatarTTY comp1ram = (AvatarTTY) comp1;
+        if (getCrossbarIndex(comp2) == cluster_no)
+          ttys++;
+      }
+
+    }
+    TraceManager.addDev(cluster_no + " Ttys in cluster " + cluster_no + ":" + ttys);
+    return ttys;
+  }
+
+  public String generateTopCell(Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
+    String icn;
+
+    /* first test validity of the hardware platform */
+    if (TopCellGenerator.avatardd.getNbCPU() == 0) {
+
+    }
+    if (TopCellGenerator.avatardd.getNbRAM() == 0) {
+
+    }
+    if (TopCellGenerator.avatardd.getNbTTY() == 0) {
+
+    }
+    /* if there is one VGMN, this is the central interconnect */
+    if (TopCellGenerator.avatardd.getNbVgmn() > 1) {
+
+    }
+    if (TopCellGenerator.avatardd.getNbVgmn() == 1) {
+
+      icn = "vgmn";
+    } else {
+
+      icn = "vgsb";
     }
 
-	
-	public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
-	avatardd = dd;
-	int rams=0;
-	for  (AvatarConnector connector : avatardd.getConnectors()){		
-	    AvatarConnectingPoint my_p1= connector.get_p1(); 
-	    AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-	    AvatarComponent comp1 = my_p1.getComponent();
-	    AvatarComponent comp2 = my_p2.getComponent(); 
-	    if (comp1 instanceof AvatarRAM){ 
-		AvatarRAM comp1ram = (AvatarRAM)comp1;	
-		if(getCrossbarIndex(comp2)==cluster_no)
-		    rams++;			
-	    }		    		
-	    
-	}
-	TraceManager.addDev (cluster_no+" RAMs in cluster "+cluster_no+":"+rams);
-	return rams; 
+    // If there is a spy, add spy component to vci interface;
+    // both adjacent componants are spied.
+    // Currently for CPU and RAM only.
+    // RAM monitoring is required for determining the buffer size and
+    // various infos on MWMR channels
+    // RAM and CPU monitoring are for required for determining latency
+    // of memory accesses other than channel
+
+    for (AvatarConnector connector : avatardd.getConnectors()) {
+
+      AvatarConnectingPoint my_p1 = connector.get_p1();
+      AvatarConnectingPoint my_p2 = connector.get_p2();
+
+      // If a spy glass symbol is found, and component itself not yet marked
+
+      AvatarComponent comp1 = my_p1.getComponent();
+      AvatarComponent comp2 = my_p2.getComponent();
+
+      if (connector.getMonitored() == 1) {
+        // comp2 devrait toujours etre un interconnect
+        if (comp1 instanceof AvatarRAM) {
+          AvatarRAM comp1ram = (AvatarRAM) comp1;
+
+        }
+
+        if (comp1 instanceof AvatarCPU) {
+          AvatarCPU comp1cpu = (AvatarCPU) comp1;
+
+        }
+      }
     }
 
-    	public static int ttys_in_cluster(AvatarddSpecification dd, int cluster_no){
-	avatardd = dd;
-	int ttys=0;
-	for  (AvatarConnector connector : avatardd.getConnectors()){		
-	    AvatarConnectingPoint my_p1= connector.get_p1(); 
-	    AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-	    AvatarComponent comp1 = my_p1.getComponent();
-	    AvatarComponent comp2 = my_p2.getComponent(); 
-	    if (comp1 instanceof AvatarTTY){ 
-		AvatarTTY comp1ram = (AvatarTTY)comp1;
-		if(getCrossbarIndex(comp2)==cluster_no)
-		    ttys++;			
-	    }		    		
-	    
-	}
-	TraceManager.addDev (cluster_no+" Ttys in cluster "+cluster_no+":"+ttys);
-	return ttys; 
+    makeVCIparameters();
+    makeConfig();
+    String top = Header.getHeader() + VCIparameters + config + Code.getCode() + MappingTable.getMappingTable(avatardd)
+        + Loader.getLoader(avspec) + Declaration.getDeclarations(avatardd, avspec) + Signal.getSignal(avatardd)
+        + NetList.getNetlist(avatardd, icn, tracing) + Simulation.getSimulation(listsyscamspanel);
+    return (top);
+  }
+
+  public List<String> readInMapping() {
+    List<String> mappingLines = new ArrayList<String>();
+    try {
+      BufferedReader in = new BufferedReader(new FileReader(MAPPING_TXT));
+      String line = null;
+      while ((line = in.readLine()) != null) {
+
+        mappingLines.add(line);// read one line of the file;
+      }
+      in.close();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    	
-    
-    public String generateTopCell(Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
-	String icn;
-	
-	/* first test validity of the hardware platform*/
-	if(TopCellGenerator.avatardd.getNbCPU()==0){
-	    
-	}
-	    if(TopCellGenerator.avatardd.getNbRAM()==0){
-		
-	    }
-	    if(TopCellGenerator.avatardd.getNbTTY()==0){
-		
-	    }
-	    /* if there is one VGMN, this is the central interconnect */
-	    if(TopCellGenerator.avatardd.getNbVgmn()>1){
-		 
-	    }
-            if(TopCellGenerator.avatardd.getNbVgmn()==1){
-                
-		icn="vgmn";
-	    }
-	    else{
-		
-		icn="vgsb";
-	    }
-	    
-	    // If there is a spy, add spy component to vci interface;
-	    // both adjacent componants are spied.
-	    // Currently for CPU and RAM only.
-	    // RAM monitoring is required for determining the buffer size and
-	    // various infos on MWMR channels 
-	    // RAM and CPU  monitoring are for  required for determining latency
-	    // of memory accesses other than channel    
-	    
-	    for  (AvatarConnector connector : avatardd.getConnectors()){
-	
-		AvatarConnectingPoint my_p1= connector.get_p1(); 
-		AvatarConnectingPoint my_p2= connector.get_p2(); 
-		
-		//If a spy glass symbol is found, and component itself not yet marked 
-		
-		AvatarComponent comp1 = my_p1.getComponent();
-		AvatarComponent comp2 = my_p2.getComponent(); 
-		
-		if (connector.getMonitored()==1){
-		    //comp2 devrait toujours etre un interconnect
-		    if (comp1 instanceof AvatarRAM){
-			AvatarRAM comp1ram = (AvatarRAM)comp1;
-			
-			
-		    }
-		    
-		    if (comp1 instanceof AvatarCPU){ 
-			AvatarCPU comp1cpu = (AvatarCPU)comp1;
-			
-			
-		    }		    		 
-		}
-	    }
-	    
-	    makeVCIparameters();
-	    makeConfig();
-	    String top = Header.getHeader() + 
-		VCIparameters +
-		config +				
-		Code.getCode() +
-		MappingTable.getMappingTable(avatardd) +
-		Loader.getLoader(avspec) +
-		Declaration.getDeclarations(avatardd,avspec) + 
-		Signal.getSignal(avatardd) +
-		NetList.getNetlist(avatardd,icn,tracing) +
-		Simulation.getSimulation(listsyscamspanel);
-	    return (top);
-    }	
-    
-	public List<String> readInMapping() {
-	    List<String> mappingLines = new ArrayList<String>();		
-	    try {
-		    BufferedReader in = new BufferedReader(new FileReader(MAPPING_TXT));
-		    String line = null;
-			while ((line = in.readLine()) != null) {
-			    
-			    mappingLines.add(line);// read one line of the file;
-			}
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	
-		return mappingLines;
-	}
 
+    return mappingLines;
+  }
 
-      public void saveFile(String path) {
-	  //System.out.println("save file 1 **********");
-		try {
-          System.err.println(path + GENERATED_PATH + "top.cc");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
-			top = generateTopCell(null);
-			fw.write(top);
-			fw.close();
-		} catch (IOException ex) {
-		}
-		saveFileDeploy(path);
-		saveFilePlatform(path);
-		saveFileProcinfo(path);
-		saveFileNBproc(path);
-	}
+  public void saveFile(String path) {
+    // System.out.println("save file 1 **********");
+    try {
+      System.err.println(path + GENERATED_PATH + "top.cc");
+      FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
+      top = generateTopCell(null);
+      fw.write(top);
+      fw.close();
+    } catch (IOException ex) {
+    }
+    saveFileDeploy(path);
+    saveFilePlatform(path);
+    saveFileProcinfo(path);
+    saveFileNBproc(path);
+  }
 
-    public void saveFile(String path, Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
-	//System.out.println("save file 2 **********");
-		try {
-          System.err.println(path + GENERATED_PATH + "top.cc");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
-			top = generateTopCell(listsyscamspanel);
-			fw.write(top);
-			fw.close();
-		} catch (IOException ex) {
-		}
-		saveFileDeploy(path);
-		saveFilePlatform(path);
-		saveFileProcinfo(path);
-		saveFileNBproc(path);
-	}
+  public void saveFile(String path, Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
+    // System.out.println("save file 2 **********");
+    try {
+      System.err.println(path + GENERATED_PATH + "top.cc");
+      FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
+      top = generateTopCell(listsyscamspanel);
+      fw.write(top);
+      fw.close();
+    } catch (IOException ex) {
+    }
+    saveFileDeploy(path);
+    saveFilePlatform(path);
+    saveFileProcinfo(path);
+    saveFileNBproc(path);
+  }
 
-    public void saveFileDeploy(String path) {
+  public void saveFileDeploy(String path) {
 
-		try {
-		    System.err.println(path + GENERATED_PATH + "deployinfo.h");
-		    FileWriter fw = new FileWriter(path + GENERATED_PATH + "/deployinfo.h");
-		    deployinfo = Deployinfo.getDeployInfo();
-		    fw.write(deployinfo);
-		    fw.close();
-		    
-		    System.err.println(path + GENERATED_PATH + "deployinfo_map.h");
-		    FileWriter fw_map = new FileWriter(path + GENERATED_PATH + "/deployinfo_map.h");
-		    deployinfo_map = Deployinfo.getDeployInfoMap(avspec);
-		    fw_map.write(deployinfo_map);
-		    fw_map.close();
-		    
-		    //ajout CD 9.6
-		    System.err.println(path + GENERATED_PATH + "deployinfo_ram.h");
-		    FileWriter fw_ram = new FileWriter(path + GENERATED_PATH + "/deployinfo_ram.h");
-		    deployinfo_ram = Deployinfo.getDeployInfoRam(avspec);
-		    fw_ram.write(deployinfo_ram);
-		    fw_ram.close();
-		} catch (Exception ex) {
-		    ex.printStackTrace();
-		}
-	}
+    try {
+      System.err.println(path + GENERATED_PATH + "deployinfo.h");
+      FileWriter fw = new FileWriter(path + GENERATED_PATH + "/deployinfo.h");
+      deployinfo = Deployinfo.getDeployInfo();
+      fw.write(deployinfo);
+      fw.close();
 
-    public void saveFileProcinfo(String path) {
+      System.err.println(path + GENERATED_PATH + "deployinfo_map.h");
+      FileWriter fw_map = new FileWriter(path + GENERATED_PATH + "/deployinfo_map.h");
+      deployinfo_map = Deployinfo.getDeployInfoMap(avspec);
+      fw_map.write(deployinfo_map);
+      fw_map.close();
 
-		try {
-          System.err.println(path + GENERATED_PATH + "procinfo.mk");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/procinfo.mk");
-			procinfo = Deployinfo.getProcInfo();
-			fw.write(procinfo);
-			fw.close();
-		} catch (IOException ex) {
-		}
-	}
+      // ajout CD 9.6
+      System.err.println(path + GENERATED_PATH + "deployinfo_ram.h");
+      FileWriter fw_ram = new FileWriter(path + GENERATED_PATH + "/deployinfo_ram.h");
+      deployinfo_ram = Deployinfo.getDeployInfoRam(avspec);
+      fw_ram.write(deployinfo_ram);
+      fw_ram.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
 
-    public void saveFileNBproc(String path) {
+  public void saveFileProcinfo(String path) {
 
-		try {
-          System.err.println(path + GENERATED_PATH + "nbproc");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/nbproc");
-			nbproc = Deployinfo.getNbProc();
-			fw.write(nbproc);
-			fw.close();
-		} catch (IOException ex) {
-		}
-	}
+    try {
+      System.err.println(path + GENERATED_PATH + "procinfo.mk");
+      FileWriter fw = new FileWriter(path + GENERATED_PATH + "/procinfo.mk");
+      procinfo = Deployinfo.getProcInfo();
+      fw.write(procinfo);
+      fw.close();
+    } catch (IOException ex) {
+    }
+  }
 
- public void saveFilePlatform(String path) {
+  public void saveFileNBproc(String path) {
 
-		try {
-          System.err.println(path + GENERATED_PATH + "platform_desc");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/platform_desc");
-			platform_desc = Platforminfo.getPlatformInfo();
-			fw.write(platform_desc);
-			fw.close();
-		} catch (IOException ex) {
-		}
-	}
+    try {
+      System.err.println(path + GENERATED_PATH + "nbproc");
+      FileWriter fw = new FileWriter(path + GENERATED_PATH + "/nbproc");
+      nbproc = Deployinfo.getNbProc();
+      fw.write(nbproc);
+      fw.close();
+    } catch (IOException ex) {
+    }
+  }
 
-	public void makeVCIparameters() {
-		VCIparameters = CR2 + "typedef caba::VciParams<4,9,32,1,1,1,8,1,1,1> vci_param;";
-		VCIparameters = VCIparameters + "// Define our VCI parameters" + CR2 + "struct CpuEntry;" + CR2;
-	}
+  public void saveFilePlatform(String path) {
 
-	public void makeConfig() {
-		config = CR2 + "#if defined(CONFIG_GDB_SERVER)" + CR;
-		config = config + "#  if defined(CONFIG_SOCLIB_MEMCHECK)" + CR;
-		config = config + "#    warning Using GDB and memchecker" + CR;
-		config = config + "#    define ISS_NEST(T) common::GdbServer<common::IssMemchecker<T> >" + CR;
-		config = config + "#  else" + CR;
-		config = config + "#    warning Using GDB" + CR;
-		config = config + "#    define ISS_NEST(T) common::GdbServer<T>" + CR;
-		config = config + "#  endif" + CR;
-		config = config + "#elif defined(CONFIG_SOCLIB_MEMCHECK)" + CR;
-		config = config + "#  warning Using Memchecker" + CR;
-		config = config + "#  define ISS_NEST(T) common::GdbServer<common::IssMemchecker<T> " + CR;
-		config = config + "#else" + CR;
-		config = config + "#  warning Using raw processor" + CR;
-		config = config + "#  define ISS_NEST(T) T" + CR;
-		config = config + "#endif" + CR;
-	}
+    try {
+      System.err.println(path + GENERATED_PATH + "platform_desc");
+      FileWriter fw = new FileWriter(path + GENERATED_PATH + "/platform_desc");
+      platform_desc = Platforminfo.getPlatformInfo();
+      fw.write(platform_desc);
+      fw.close();
+    } catch (IOException ex) {
+    }
+  }
+
+  public void makeVCIparameters() {
+    VCIparameters = CR2 + "typedef caba::VciParams<4,9,32,1,1,1,8,1,1,1> vci_param;";
+    VCIparameters = VCIparameters + "// Define our VCI parameters" + CR2 + "struct CpuEntry;" + CR2;
+  }
+
+  public void makeConfig() {
+    config = CR2 + "#if defined(CONFIG_GDB_SERVER)" + CR;
+    config = config + "#  if defined(CONFIG_SOCLIB_MEMCHECK)" + CR;
+    config = config + "#    warning Using GDB and memchecker" + CR;
+    config = config + "#    define ISS_NEST(T) common::GdbServer<common::IssMemchecker<T> >" + CR;
+    config = config + "#  else" + CR;
+    config = config + "#    warning Using GDB" + CR;
+    config = config + "#    define ISS_NEST(T) common::GdbServer<T>" + CR;
+    config = config + "#  endif" + CR;
+    config = config + "#elif defined(CONFIG_SOCLIB_MEMCHECK)" + CR;
+    config = config + "#  warning Using Memchecker" + CR;
+    config = config + "#  define ISS_NEST(T) common::GdbServer<common::IssMemchecker<T> " + CR;
+    config = config + "#else" + CR;
+    config = config + "#  warning Using raw processor" + CR;
+    config = config + "#  define ISS_NEST(T) T" + CR;
+    config = config + "#endif" + CR;
+  }
 }

@@ -36,41 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package nc;
 
-
 /**
-* Class NCCapacityUnit
-* Creation: 28/11/2008
-* @version 1.0 28/11/2008
-* @author Ludovic APVRILLE
+ * Class NCCapacityUnit Creation: 28/11/2008
+ * 
+ * @version 1.0 28/11/2008
+ * @author Ludovic APVRILLE
  */
 public class NCCapacityUnit {
-    
-	public static final String MBS = "Mbs";
-	public static final String KBS = "Kbs";
-	
-	private String unit;
-	
-	public NCCapacityUnit() {
-		unit = MBS;
-	}
-	
-	public void setUnit(String s) {
-		if (s.equals(MBS)) {
-			unit = MBS;
-		}
-		
-		if (s.equals(KBS)) {
-			unit = KBS;
-		}
-	}
-	
-	public String getStringUnit() {
-		return unit;
-	}
-	
+
+  public static final String MBS = "Mbs";
+  public static final String KBS = "Kbs";
+
+  private String unit;
+
+  public NCCapacityUnit() {
+    unit = MBS;
+  }
+
+  public void setUnit(String s) {
+    if (s.equals(MBS)) {
+      unit = MBS;
+    }
+
+    if (s.equals(KBS)) {
+      unit = KBS;
+    }
+  }
+
+  public String getStringUnit() {
+    return unit;
+  }
+
 }

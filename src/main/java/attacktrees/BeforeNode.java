@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package attacktrees;
 
 /**
- * Class BeforeNode
- * Creation: 13/04/2015
+ * Class BeforeNode Creation: 13/04/2015
+ * 
  * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
  */
 public class BeforeNode extends TimeNode {
 
-    public BeforeNode(String _name, Object _referenceObject, int _time) {
-	super(_name, _referenceObject, _time);
-	type = "BEFORE";
-    }
-    
+  public BeforeNode(String _name, Object _referenceObject, int _time) {
+    super(_name, _referenceObject, _time);
+    type = "BEFORE";
+  }
+
 }

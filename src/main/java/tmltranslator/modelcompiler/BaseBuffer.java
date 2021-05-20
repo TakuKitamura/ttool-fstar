@@ -42,49 +42,48 @@ package tmltranslator.modelcompiler;
 import tmltranslator.TMLTask;
 
 /**
-   * Class BaseBuffer
-   * Creation: 11/02/2014
-   * @version 1.0 11/02/2014
-   * @author Andrea ENRICI
+ * Class BaseBuffer Creation: 11/02/2014
+ * 
+ * @version 1.0 11/02/2014
+ * @author Andrea ENRICI
  */
 public class BaseBuffer extends Buffer {
 
-	public static final int BASE_ADDRESS_INDEX = 1;
-	protected static final String BASE_ADDRESS_TYPE = "uint32_t*";
+  public static final int BASE_ADDRESS_INDEX = 1;
+  protected static final String BASE_ADDRESS_TYPE = "uint32_t*";
 
-	public static final String DECLARATION = "extern struct BASE_BUFFER_TYPE {" + CR + TAB +
-																				BASE_ADDRESS_TYPE + SP + "base_address" + SC + CR + "};";
+  public static final String DECLARATION = "extern struct BASE_BUFFER_TYPE {" + CR + TAB + BASE_ADDRESS_TYPE + SP
+      + "base_address" + SC + CR + "};";
 
-	protected String baseAddressValue = DEFAULT_NUM_VAL + USER_TO_DO;
-	
-	//private String context = "BASE_BUFFER_CONTEXT";
+  protected String baseAddressValue = DEFAULT_NUM_VAL + USER_TO_DO;
 
-	public BaseBuffer( String _name, TMLTask _task )	{
-		type = "BASE_BUFFER_TYPE";
-		name = _name;
-		task = _task;
-	}
+  // private String context = "BASE_BUFFER_CONTEXT";
 
-	@Override
-	public String getInitCode()	{
-		StringBuffer s = new StringBuffer();
-		s.append( TAB + name + ".base_address = " + "(" + BASE_ADDRESS_TYPE + ")" + baseAddressValue + ";" + CR );
-		return s.toString();
-	}
-	
-	@Override
-	public String toString() {
-		StringBuffer s = new StringBuffer( super.toString() );
-		if( bufferParameters != null )	{
-			s.append( TAB2 + "base_address = " + bufferParameters.get( BASE_ADDRESS_INDEX ) + SC + CR );
-		}
-		else	{
-			s.append( TAB2 + "base_address = " + DEFAULT_NUM_VAL + USER_TO_DO + ";" + CR );
-		}
-		return s.toString();
-	}
-//
-//	public String getContext()	{
-//		return context;
-//	}
-}	//End of class
+  public BaseBuffer(String _name, TMLTask _task) {
+    type = "BASE_BUFFER_TYPE";
+    name = _name;
+    task = _task;
+  }
+
+  @Override
+  public String getInitCode() {
+    StringBuffer s = new StringBuffer();
+    s.append(TAB + name + ".base_address = " + "(" + BASE_ADDRESS_TYPE + ")" + baseAddressValue + ";" + CR);
+    return s.toString();
+  }
+
+  @Override
+  public String toString() {
+    StringBuffer s = new StringBuffer(super.toString());
+    if (bufferParameters != null) {
+      s.append(TAB2 + "base_address = " + bufferParameters.get(BASE_ADDRESS_INDEX) + SC + CR);
+    } else {
+      s.append(TAB2 + "base_address = " + DEFAULT_NUM_VAL + USER_TO_DO + ";" + CR);
+    }
+    return s.toString();
+  }
+  //
+  // public String getContext() {
+  // return context;
+  // }
+} // End of class

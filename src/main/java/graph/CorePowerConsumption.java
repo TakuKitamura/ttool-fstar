@@ -36,42 +36,39 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package graph;
 
 /**
-* Class CorePowerConsumption
-* Creation : 15/07/2009
-** @version 1.0 15/07/2009
-* @author Ludovic APVRILLE
+ * Class CorePowerConsumption Creation : 15/07/2009
+ ** 
+ * @version 1.0 15/07/2009
+ * @author Ludovic APVRILLE
  */
-public class CorePowerConsumption  {
-    
-	private int nbOfModes;
-    private long ticks[];
-	private long powerConsumptionPerTick[];
-    
-    public CorePowerConsumption(int _nbOfModes) {
-		nbOfModes = _nbOfModes;
-		ticks = new long[nbOfModes];
-		powerConsumptionPerTick = new long[nbOfModes];
+public class CorePowerConsumption {
+
+  private int nbOfModes;
+  private long ticks[];
+  private long powerConsumptionPerTick[];
+
+  public CorePowerConsumption(int _nbOfModes) {
+    nbOfModes = _nbOfModes;
+    ticks = new long[nbOfModes];
+    powerConsumptionPerTick = new long[nbOfModes];
+  }
+
+  public void addPowerConsumption(int _mode, long _ticks) {
+    ticks[_mode] = ticks[_mode] + _ticks;
+  }
+
+  public void setPowerConsumptionInMode(long _value, int _index) {
+    powerConsumptionPerTick[_index] = _value;
+  }
+
+  public long computePowerConsumption() {
+    long pc = 0;
+    for (int i = 0; i < nbOfModes; i++) {
+      pc += ticks[i] * powerConsumptionPerTick[i];
     }
-	
-	public void addPowerConsumption(int _mode, long _ticks) {
-		ticks[_mode] = ticks[_mode] + _ticks;
-	}
-	
-	public void setPowerConsumptionInMode(long _value, int _index) {
-		powerConsumptionPerTick[_index] = _value;
-	}
-    
-	public long computePowerConsumption() {
-		long pc = 0;
-		for (int i=0; i<nbOfModes; i++) {
-			pc += ticks[i]*powerConsumptionPerTick[i];
-		}
-		return pc;
-	}
+    return pc;
+  }
 }

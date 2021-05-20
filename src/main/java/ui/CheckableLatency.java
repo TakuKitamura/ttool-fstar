@@ -36,20 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
+
 import java.util.HashMap;
+
 /**
- * Class CheckableLatency
- * Components which can be set as a latency checkpoint
+ * Class CheckableLatency Components which can be set as a latency checkpoint
  * Creation: 4/04/2017
+ * 
  * @version 1.0 4/04/2017
  * @author Ludovic APVRILLE
  */
-public interface CheckableLatency  {
-
+public interface CheckableLatency {
 
 }

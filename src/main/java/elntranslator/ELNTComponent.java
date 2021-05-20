@@ -40,14 +40,15 @@ package elntranslator;
 
 /**
  * Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTComponent {
-	public String name;
+  public String name;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 }

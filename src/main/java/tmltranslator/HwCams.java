@@ -36,44 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 /**
- * Class HwCams
- * Creation: 20.06.2019
+ * Class HwCams Creation: 20.06.2019
+ * 
  * @version 1.0
  * @author Daniela Genius
  */
-public class HwCams extends HwExecutionNode  {
+public class HwCams extends HwExecutionNode {
 
-    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-    public static final int DEFAULT_EXECI_TIME = 0;
+  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+  public static final int DEFAULT_EXECI_TIME = 0;
 
-    public static final int DEFAULT_PIPELINE_SIZE = 1;
-    public static final int DEFAULT_TASK_SWITCHING_TIME = 1;
-    public static final int DEFAULT_BRANCHING_PREDICTION_PENALTY = 0;
-    public static final int DEFAULT_GO_IDLE_TIME = 10;
-    public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
-    public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
+  public static final int DEFAULT_PIPELINE_SIZE = 1;
+  public static final int DEFAULT_TASK_SWITCHING_TIME = 1;
+  public static final int DEFAULT_BRANCHING_PREDICTION_PENALTY = 0;
+  public static final int DEFAULT_GO_IDLE_TIME = 10;
+  public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
+  public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
 
+  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
 
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+  public HwCams(String _name) {
+    super(_name);
+  }
 
-    public HwCams(String _name) {
-        super(_name);
-    }
+  public String getType() {
+    return "CAMS";
+  }
 
-    public String getType() {
-        return "CAMS";
-    }
-
-    public String toXML() {
-	String s = "<CAMS name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" />\n";
-	return s;
-    }
-
+  public String toXML() {
+    String s = "<CAMS name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+        + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" />\n";
+    return s;
+  }
 
 }

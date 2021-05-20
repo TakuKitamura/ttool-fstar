@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
-
 
 import myutil.TraceManager;
 import org.w3c.dom.Element;
@@ -56,161 +52,158 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 /**
- * Class ADDConnectorNode
- * Connector used in TML Architecture diagrams
- * Creation: 30/06/2014
+ * Class ADDConnectorNode Connector used in TML Architecture diagrams Creation:
+ * 30/06/2014
+ * 
  * @version 1.0 30/06/2014
  * @author Ludovic APVRILLE
  */
-public  class ADDConnector extends TGConnector  {
-    public static final String NO_SPY = "Remove spy";
-    public static final String ADD_SPY = "Add spy";
-    
-    protected int arrowLength = 10;
-    protected int widthValue, heightValue, maxWidthValue, h;
+public class ADDConnector extends TGConnector {
+  public static final String NO_SPY = "Remove spy";
+  public static final String ADD_SPY = "Add spy";
 
-    protected boolean hasASpy;
-	
-    
-    public ADDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic202;
-        value = "{info}";
-        editable = true;
-        p1 = _p1;	
-        p2 = _p2;
-    }
-    
+  protected int arrowLength = 10;
+  protected int widthValue, heightValue, maxWidthValue, h;
 
-    public TGConnectingPoint get_p1(){
-    	return p1;
-	}
+  protected boolean hasASpy;
 
-    public TGConnectingPoint get_p2(){
-    	return p2;
-	}
+  public ADDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic202;
+    value = "{info}";
+    editable = true;
+    p1 = _p1;
+    p2 = _p2;
+  }
 
-    @Override
-    public boolean editOnDoubleClick(JFrame frame) {
-        /*JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
-		dialog.setSize(350, 300);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
-        
-		if (!dialog.isRegularClose()) {
-			return false;
-		}
-		
-		priority = dialog.getPriority();*/
-			
-		return true;
-    }
+  public TGConnectingPoint get_p1() {
+    return p1;
+  }
 
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-    	  g.drawLine(x1, y1, x2, y2);
+  public TGConnectingPoint get_p2() {
+    return p2;
+  }
 
-	  if (hasASpy) {
-	      g.drawImage(IconManager.img5200, (x1 + x2)/2, (y1 + y2)/2, null);
-	  }
-	  
-        /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-            g.drawLine(x1, y1, x2, y2);
-        } else {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-        }*/
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    /*
+     * JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame,
+     * "Setting connector attributes", this); dialog.setSize(350, 300);
+     * GraphicLib.centerOnParent(dialog); dialog.show(); // blocked until dialog has
+     * been closed
+     * 
+     * if (!dialog.isRegularClose()) { return false; }
+     * 
+     * priority = dialog.getPriority();
+     */
+
+    return true;
+  }
+
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    g.drawLine(x1, y1, x2, y2);
+
+    if (hasASpy) {
+      g.drawImage(IconManager.img5200, (x1 + x2) / 2, (y1 + y2) / 2, null);
     }
 
-    public boolean hasASpy() {
-	return hasASpy;
+    /*
+     * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+     * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
+     * x1, y1, x2, y2, true); }
+     */
+  }
+
+  public boolean hasASpy() {
+    return hasASpy;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.ADD_CONNECTOR;
+  }
+
+  @Override
+  public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+    componentMenu.addSeparator();
+    JMenuItem generate = null;
+    // Should verify first whether it is connected to a formal requirement with a
+    // verify relation, or not
+    if (hasASpy) {
+      generate = new JMenuItem(NO_SPY);
+    } else {
+      generate = new JMenuItem(ADD_SPY);
     }
 
-    @Override
-    public int getType() {
-        return TGComponentManager.ADD_CONNECTOR;
+    generate.addActionListener(menuAL);
+    componentMenu.add(generate);
+  }
+
+  @Override
+  public boolean eventOnPopup(ActionEvent e) {
+    String s = e.getActionCommand();
+    TraceManager.addDev("action: " + s);
+    if (s.indexOf(NO_SPY) > -1) {
+      hasASpy = false;
+      tdp.repaint();
+    }
+    if (s.indexOf(ADD_SPY) > -1) {
+      hasASpy = true;
+      tdp.repaint();
     }
 
+    return true;
+  }
 
-    @Override
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        componentMenu.addSeparator();
-        JMenuItem generate = null;
-        // Should verify first whether it is connected to a formal requirement with a verify relation, or not
-	if (hasASpy) {
-	    generate = new JMenuItem(NO_SPY);
-	} else {
-	    generate = new JMenuItem(ADD_SPY);
-	}
-	
+  @Override
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<spy value=\"" + hasASpy + "\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
 
-        generate.addActionListener(menuAL);
-        componentMenu.add(generate);
-    }
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
 
-    @Override
-    public boolean eventOnPopup(ActionEvent e) {
-        String s = e.getActionCommand();
-	TraceManager.addDev("action: " + s);
-        if (s.indexOf(NO_SPY) > -1) {
-	    hasASpy = false;
-	    tdp.repaint();
-        }
-	if (s.indexOf(ADD_SPY) > -1) {
-	    hasASpy = true;
-	    tdp.repaint();
-        } 
-            
-        return true;
-    }
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      // int t1id;
+      hasASpy = false;
+      String tmp = null;
 
-    @Override
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<spy value=\"" + hasASpy + "\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        try {
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
 
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            //int t1id;
-            hasASpy = false;
-            String tmp = null;
-
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-
-                    // Issue #17 copy-paste error on j index
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("spy")) {
-                                tmp = elt.getAttribute("value").trim();
-								//TraceManager.addDev("[DD] value=" + tmp);
-								if (tmp.compareTo("true") == 0) {
-								    hasASpy = true;
-								}
-                            }
-                        }
-                    }
+          // Issue #17 copy-paste error on j index
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("spy")) {
+                tmp = elt.getAttribute("value").trim();
+                // TraceManager.addDev("[DD] value=" + tmp);
+                if (tmp.compareTo("true") == 0) {
+                  hasASpy = true;
                 }
+              }
             }
-
-        } catch (Exception e) {
-            throw new MalformedModelingException();
+          }
         }
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
-   
-    
+  }
+
 }

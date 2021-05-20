@@ -36,173 +36,168 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tpndescription;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 /**
- * Class Transition
- * Creation: 04/07/2006
+ * Class Transition Creation: 04/07/2006
+ * 
  * @version 1.1 04/07/2006
  * @author Ludovic APVRILLE
  */
 public class Transition {
-    public static int INDEX  = 0;
-    
-    public String name;
-    public int x, y;
-    public String label; /* name of the synchro gate, name of the delay, etc.) */
-    public String predicat; /* action to be executed before the transition is fired */
-    public int intervalMin = 0;
-    // Default interval: "[0, w[
-    public boolean minIncluded = true; // "["
-    public int intervalMax = -1; // -1 assumes that it is infinite
-    public boolean maxIncluded = false; // "["
-    public String action; /* action on a variable for example */
-    public String infoSynchro; /* action coming along with synchro; for example !x?y */
-    
-    private LinkedList<Place> originPlaces;
-    private LinkedList<Place> destinationPlaces;
-    
-    public Transition(String _label) {
-        label = _label;
-        name = generateName();
-        originPlaces = new LinkedList<>();
-        destinationPlaces = new LinkedList<>();
-    }
-    
-    
-    public LinkedList<Place> getOriginPlaces() {
-    	return originPlaces;
-    }
-    
-     public LinkedList<Place> getDestinationPlaces() {
-    	return destinationPlaces;
-    }
-    
-    public void addOriginPlace(Place p) {
-        originPlaces.add(p);
-    }
-    
-    public void addDestinationPlace(Place p) {
-        destinationPlaces.add(p);
-    }
-    
-    public void setDelay(int delay) {
-        intervalMin = delay;
-        intervalMax = delay;
-        minIncluded = true;
-        maxIncluded = true;
-    }
-    
-    public String generateName() {
-        int index = INDEX;
-        INDEX ++;
-        return "t" + index;
-    }
-    
-    public String toString() {
-        return  label;
-    }
-    
-    public String toTINAString() {
-        String s = "tr " + name + " ";
-        if (label != null) {
-            s += ": " + label + " ";
-        }
-        s += getStringInterval() + " " + getStringOriginPlaces() + "-> " + getStringDestinationPlaces();
-        return s;
-    }
-    
-    public String getStringInterval() {
-        String s = "";
-        if (minIncluded) {
-            s+="[";
-        } else {
-            s+="]";
-        }
-        s+=intervalMin;
-        s+= ", ";
-        if (intervalMax == -1) {
-            s+="w";
-        } else {
-            s+=intervalMax;
-        }
-        if (maxIncluded) {
-            s+="]";
-        } else {
-            s+="[";
-        }
-        return s;
-    }
-    
-    public String getStringOriginPlaces() {
-        return getStringPlaces(originPlaces);
-    }
-    
-    public String getStringDestinationPlaces() {
-        return getStringPlaces(destinationPlaces);
-    }
-    
-    // Put a white space at the end
-    public String getStringPlaces(LinkedList list) {
-        String s = "";
-        ListIterator iterator = list.listIterator();
-        
-        while(iterator.hasNext()) {
-            s += (iterator.next()).toString() + " ";
-        }
-        return s;
-    }
-    
-    public String toNDRFormat() {
-    	String tr = "";
-    	tr += "t " + x + " " + y + " " + name + " 0 w n\n";
-    	for(int i=0; i<originPlaces.size(); i++) {
-    		tr += "e " +  originPlaces.get(i).name + " " + name + " 1 n\n";
-    	}
-    	for(int j=0; j<destinationPlaces.size(); j++) {
-    		tr += "e " + name + " " + destinationPlaces.get(j).name + " 1 n\n";
-    	}
-    	return tr;
+  public static int INDEX = 0;
 
+  public String name;
+  public int x, y;
+  public String label; /* name of the synchro gate, name of the delay, etc.) */
+  public String predicat; /* action to be executed before the transition is fired */
+  public int intervalMin = 0;
+  // Default interval: "[0, w[
+  public boolean minIncluded = true; // "["
+  public int intervalMax = -1; // -1 assumes that it is infinite
+  public boolean maxIncluded = false; // "["
+  public String action; /* action on a variable for example */
+  public String infoSynchro; /* action coming along with synchro; for example !x?y */
+
+  private LinkedList<Place> originPlaces;
+  private LinkedList<Place> destinationPlaces;
+
+  public Transition(String _label) {
+    label = _label;
+    name = generateName();
+    originPlaces = new LinkedList<>();
+    destinationPlaces = new LinkedList<>();
+  }
+
+  public LinkedList<Place> getOriginPlaces() {
+    return originPlaces;
+  }
+
+  public LinkedList<Place> getDestinationPlaces() {
+    return destinationPlaces;
+  }
+
+  public void addOriginPlace(Place p) {
+    originPlaces.add(p);
+  }
+
+  public void addDestinationPlace(Place p) {
+    destinationPlaces.add(p);
+  }
+
+  public void setDelay(int delay) {
+    intervalMin = delay;
+    intervalMax = delay;
+    minIncluded = true;
+    maxIncluded = true;
+  }
+
+  public String generateName() {
+    int index = INDEX;
+    INDEX++;
+    return "t" + index;
+  }
+
+  public String toString() {
+    return label;
+  }
+
+  public String toTINAString() {
+    String s = "tr " + name + " ";
+    if (label != null) {
+      s += ": " + label + " ";
     }
-    
-    public int getXBarycenterOfPlaces() {
-    	int totalX = 0;
-    	int nbMet = 0;
-    	for(Place p1: originPlaces) {
-    		totalX += p1.x;
-    		nbMet ++;
-    	}
-    	for(Place p2: destinationPlaces) {
-    		totalX += p2.x;
-    		nbMet ++;
-    	}
-    	
-    	return totalX/nbMet;
-    	
+    s += getStringInterval() + " " + getStringOriginPlaces() + "-> " + getStringDestinationPlaces();
+    return s;
+  }
+
+  public String getStringInterval() {
+    String s = "";
+    if (minIncluded) {
+      s += "[";
+    } else {
+      s += "]";
     }
-    
-    public int getYBarycenterOfPlaces() {
-    	int totalY = 0;
-    	int nbMet = 0;
-    	for(Place p1: originPlaces) {
-    		totalY += p1.y;
-    		nbMet ++;
-    	}
-    	for(Place p2: destinationPlaces) {
-    		totalY += p2.y;
-    		nbMet ++;
-    	}
-    	
-    	return totalY/nbMet;
-    	
+    s += intervalMin;
+    s += ", ";
+    if (intervalMax == -1) {
+      s += "w";
+    } else {
+      s += intervalMax;
     }
-    
-    
+    if (maxIncluded) {
+      s += "]";
+    } else {
+      s += "[";
+    }
+    return s;
+  }
+
+  public String getStringOriginPlaces() {
+    return getStringPlaces(originPlaces);
+  }
+
+  public String getStringDestinationPlaces() {
+    return getStringPlaces(destinationPlaces);
+  }
+
+  // Put a white space at the end
+  public String getStringPlaces(LinkedList list) {
+    String s = "";
+    ListIterator iterator = list.listIterator();
+
+    while (iterator.hasNext()) {
+      s += (iterator.next()).toString() + " ";
+    }
+    return s;
+  }
+
+  public String toNDRFormat() {
+    String tr = "";
+    tr += "t " + x + " " + y + " " + name + " 0 w n\n";
+    for (int i = 0; i < originPlaces.size(); i++) {
+      tr += "e " + originPlaces.get(i).name + " " + name + " 1 n\n";
+    }
+    for (int j = 0; j < destinationPlaces.size(); j++) {
+      tr += "e " + name + " " + destinationPlaces.get(j).name + " 1 n\n";
+    }
+    return tr;
+
+  }
+
+  public int getXBarycenterOfPlaces() {
+    int totalX = 0;
+    int nbMet = 0;
+    for (Place p1 : originPlaces) {
+      totalX += p1.x;
+      nbMet++;
+    }
+    for (Place p2 : destinationPlaces) {
+      totalX += p2.x;
+      nbMet++;
+    }
+
+    return totalX / nbMet;
+
+  }
+
+  public int getYBarycenterOfPlaces() {
+    int totalY = 0;
+    int nbMet = 0;
+    for (Place p1 : originPlaces) {
+      totalY += p1.y;
+      nbMet++;
+    }
+    for (Place p2 : destinationPlaces) {
+      totalY += p2.y;
+      nbMet++;
+    }
+
+    return totalY / nbMet;
+
+  }
+
 }

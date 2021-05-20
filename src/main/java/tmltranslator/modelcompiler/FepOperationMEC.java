@@ -37,22 +37,20 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
-   * Class FepOperationMEC, Model Extension Construct (MEC) class for Fep operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class FepOperationMEC, Model Extension Construct (MEC) class for Fep
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public abstract class FepOperationMEC extends OperationMEC	{
+public abstract class FepOperationMEC extends OperationMEC {
 
-	public FepOperationMEC()	{
-		name = "FepOperationMEC";
-		context = "FEP_CONTEXT";
-	}
+  public FepOperationMEC() {
+    name = "FepOperationMEC";
+    context = "FEP_CONTEXT";
+  }
 
-}	//End of class
+} // End of class

@@ -41,44 +41,44 @@ package elntranslator;
 import java.util.LinkedList;
 
 /**
- * Class ELNTComponentIdealTransformer
- * Parameters of a ELN primitive component : ideal transformer
- * Creation: 23/07/2018
+ * Class ELNTComponentIdealTransformer Parameters of a ELN primitive component :
+ * ideal transformer Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTComponentIdealTransformer extends ELNTComponent implements ELNTPrimitiveComponent {
-	private String name;
-	private double ratio;
-	private LinkedList<ELNTConnectingPoint> cp;
-	
-	private ELNTModule module;
-	
-	public ELNTComponentIdealTransformer(String _name, double _ratio, ELNTModule _module) {
-		name = _name;
-		ratio = _ratio;
-		cp = new LinkedList<ELNTConnectingPoint>();
-		module = _module;
-	}
+  private String name;
+  private double ratio;
+  private LinkedList<ELNTConnectingPoint> cp;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTModule module;
 
-	public double getRatio() {
-		return ratio;
-	}
-	
-	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-		return cp;
-	}
-	
-	public void addConnectingPoint(ELNTConnectingPoint _cp) {
-		cp.add(_cp);
-	}
-	
-	public ELNTModule getModule() {
-		return module;
-	}
+  public ELNTComponentIdealTransformer(String _name, double _ratio, ELNTModule _module) {
+    name = _name;
+    ratio = _ratio;
+    cp = new LinkedList<ELNTConnectingPoint>();
+    module = _module;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public double getRatio() {
+    return ratio;
+  }
+
+  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+    return cp;
+  }
+
+  public void addConnectingPoint(ELNTConnectingPoint _cp) {
+    cp.add(_cp);
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

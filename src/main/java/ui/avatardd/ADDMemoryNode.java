@@ -51,285 +51,274 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class ADDMemoryNode
-   * Node. To be used in avatar deployment diagrams.
-   * Creation: 21/08/2014
-   * @version 1.0 21/08/2014
-   * @author Ludovic APVRILLE
+ * Class ADDMemoryNode Node. To be used in avatar deployment diagrams. Creation:
+ * 21/08/2014
+ * 
+ * @version 1.0 21/08/2014
+ * @author Ludovic APVRILLE
  */
 
 public abstract class ADDMemoryNode extends ADDCommunicationNode implements WithAttributes {
-    protected int textY1 = 15;
-    protected int textY2 = 30;
-    protected int derivationx = 2;
-    protected int derivationy = 3;
-    protected String stereotype = "RAM";
+  protected int textY1 = 15;
+  protected int textY2 = 30;
+  protected int derivationx = 2;
+  protected int derivationy = 3;
+  protected String stereotype = "RAM";
 
-    protected int index = 0;
-    //protected int cluster_index = 0;
-    protected int monitored = 0;
-    protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
+  protected int index = 0;
+  // protected int cluster_index = 0;
+  protected int monitored = 0;
+  protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
 
-    private String processCode;
-    
-    public ADDMemoryNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        setProcessCode("");
+  private String processCode;
+
+  public ADDMemoryNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    setProcessCode("");
+  }
+
+  public void internalDrawing(Graphics g) {
+    Color c = g.getColor();
+    g.draw3DRect(x, y, width, height, true);
+
+    // Top lines
+    g.drawLine(x, y, x + derivationx, y - derivationy);
+    g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
+    g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+
+    // Right lines
+    g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
+    g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+
+    // Filling color
+    g.setColor(ColorManager.MEMORY_BOX);
+    g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+    g.setColor(c);
+
+    // Strings
+    String ster = "<<" + stereotype + ">>";
+    int w = g.getFontMetrics().stringWidth(ster);
+    Font f = g.getFont();
+    g.setFont(f.deriveFont(Font.BOLD));
+    drawSingleString(g, ster, x + (width - w) / 2, y + textY1);
+    w = g.getFontMetrics().stringWidth(name);
+    g.setFont(f);
+    drawSingleString(g, name, x + (width - w) / 2, y + textY2);
+
+    // Icon
+    // g.drawImage(IconManager.imgic1108.getImage(), x + width - 20, y + 4, null);
+    g.drawImage(IconManager.imgic1108.getImage(), x + 4, y + 4, null);
+    // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+  }
+
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    Polygon pol = new Polygon();
+    pol.addPoint(x, y);
+    pol.addPoint(x + derivationx, y - derivationy);
+    pol.addPoint(x + derivationx + width, y - derivationy);
+    pol.addPoint(x + derivationx + width, y + height - derivationy);
+    pol.addPoint(x + width, y + height);
+    pol.addPoint(x, y + height);
+    if (pol.contains(x1, y1)) {
+      return this;
+    }
+    return null;
+  }
+
+  public String getStereotype() {
+    return stereotype;
+  }
+
+  public String getNodeName() {
+    return name;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  /*
+   * public int getClusterIndex() { return cluster_index; }
+   */
+
+  public int getDataSize() {
+    return byteDataSize;
+  }
+
+  public int getMonitored() {
+    return monitored;
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    boolean error = false;
+    String errors = "";
+    int tmp;
+    String tmpName;
+
+    JDialogADDMemoryNode dialog = new JDialogADDMemoryNode(frame, "Setting " + stereotype + " attributes", this);
+    // dialog.setSize(500, 450);
+    GraphicLib.centerOnParent(dialog, 500, 450);
+    dialog.setVisible(true); // blocked until dialog has been closed
+
+    if (!dialog.isRegularClose()) {
+      return false;
     }
 
-    public void internalDrawing(Graphics g) {
-        Color c = g.getColor();
-        g.draw3DRect(x, y, width, height, true);
-
-        // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
-
-        // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
-
-        // Filling color
-        g.setColor(ColorManager.MEMORY_BOX);
-        g.fill3DRect(x+1, y+1, width-1, height-1, true);
-        g.setColor(c);
-
-        // Strings
-        String ster = "<<" + stereotype + ">>";
-        int w  = g.getFontMetrics().stringWidth(ster);
-        Font f = g.getFont();
-        g.setFont(f.deriveFont(Font.BOLD));
-        drawSingleString(g, ster, x + (width - w)/2, y + textY1);
-        w  = g.getFontMetrics().stringWidth(name);
-        g.setFont(f);
-        drawSingleString(g, name, x + (width - w)/2, y + textY2);
-
-        // Icon
-        //g.drawImage(IconManager.imgic1108.getImage(), x + width - 20, y + 4, null);
-        g.drawImage(IconManager.imgic1108.getImage(), x + 4, y + 4, null);
-        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+    if (dialog.getNodeName().length() != 0) {
+      tmpName = dialog.getNodeName();
+      tmpName = tmpName.trim();
+      if (!TAttribute.isAValidId(tmpName, false, false, false)) {
+        error = true;
+        errors += "Name of the node  ";
+      } else {
+        name = tmpName;
+      }
     }
 
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        Polygon pol = new Polygon();
-        pol.addPoint(x, y);
-        pol.addPoint(x + derivationx, y - derivationy);
-        pol.addPoint(x + derivationx + width, y - derivationy);
-        pol.addPoint(x + derivationx + width, y + height - derivationy);
-        pol.addPoint(x + width, y + height);
-        pol.addPoint(x, y + height);
-        if (pol.contains(x1, y1)) {
-            return this;
+    if (dialog.getIndex().length() != 0) {
+      try {
+        tmp = index;
+        index = Integer.decode(dialog.getIndex()).intValue();
+        if (index < 0) {
+          index = tmp;
+          error = true;
+          errors += "index ";
         }
-        return null;
+      } catch (Exception e) {
+        error = true;
+        errors += "index  ";
+      }
     }
 
-    public String getStereotype() {
-        return stereotype;
-    }
+    /*
+     * if (dialog.getClusterIndex().length() != 0) { try { tmp = cluster_index;
+     * index = Integer.decode(dialog.getClusterIndex()).intValue(); if (index < 0) {
+     * index = tmp; error = true; errors += "cluster index "; } } catch (Exception
+     * e) { error = true; errors += "cluster index  "; } }
+     */
 
-    public String getNodeName() {
-        return name;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    /* public int getClusterIndex() {
-        return cluster_index;
-	}*/
-    
-    public int getDataSize() {
-        return byteDataSize;
-    }
-
-    public int getMonitored() {
-        return monitored;
-    }
-
-    public boolean editOnDoubleClick(JFrame frame) {
-        boolean error = false;
-        String errors = "";
-        int tmp;
-        String tmpName;
-
-        JDialogADDMemoryNode dialog = new JDialogADDMemoryNode(frame, "Setting " + stereotype + " attributes", this);
-       // dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog, 500, 450);
-        dialog.setVisible( true ); // blocked until dialog has been closed
-
-        if (!dialog.isRegularClose()) {
-            return false;
+    if (dialog.getDataSize().length() != 0) {
+      try {
+        tmp = byteDataSize;
+        byteDataSize = Integer.decode(dialog.getDataSize()).intValue();
+        if (index < 0) {
+          byteDataSize = tmp;
+          error = true;
+          errors += "byteDataSize ";
         }
-
-        if (dialog.getNodeName().length() != 0) {
-            tmpName = dialog.getNodeName();
-            tmpName = tmpName.trim();
-            if (!TAttribute.isAValidId(tmpName, false, false, false)) {
-                error = true;
-                errors += "Name of the node  ";
-            } else {
-                name = tmpName;
-            }
-        }
-
-        if (dialog.getIndex().length() != 0) {
-            try {
-                tmp = index;
-                index = Integer.decode(dialog.getIndex()).intValue();
-                if (index < 0) {
-                    index = tmp;
-                    error = true;
-                    errors += "index ";
-                }
-            } catch (Exception e) {
-                error = true;
-                errors += "index  ";
-            }
-        }
-
-	/*	if (dialog.getClusterIndex().length() != 0) {
-            try {
-                tmp = cluster_index;
-                index = Integer.decode(dialog.getClusterIndex()).intValue();
-                if (index < 0) {
-                    index = tmp;
-                    error = true;
-                    errors += "cluster index ";
-                }
-            } catch (Exception e) {
-                error = true;
-                errors += "cluster index  ";
-            }
-	    }*/
-
-	
-
-        if (dialog.getDataSize().length() != 0) {
-            try {
-                tmp = byteDataSize;
-                byteDataSize = Integer.decode(dialog.getDataSize()).intValue();
-                if (index < 0) {
-                    byteDataSize = tmp;
-                    error = true;
-                    errors += "byteDataSize ";
-                }
-            } catch (Exception e) {
-                error = true;
-                errors += "byteDataSize  ";
-            }
-        }
-
-        //if (dialog.getMonitored().length() != 0) {
-	if (dialog.getMonitored() != 0) {
-            try {
-                tmp = monitored;
-                monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
-                if (index < 0) {
-                    monitored = tmp;
-                    error = true;
-                    errors += "monitored ";
-                }
-            } catch (Exception e) {
-                error = true;
-                errors += "monitored  ";
-            }
-        }
-
-        if (error) {
-            JOptionPane.showMessageDialog(frame,
-                                          "Invalid value for the following attributes: " + errors,
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-        return true;
+      } catch (Exception e) {
+        error = true;
+        errors += "byteDataSize  ";
+      }
     }
 
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
-        sb.append("\" />\n");
-        sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
-        sb.append(" index=\"" + index + "\" ");
-	// sb.append(" cluster_index=\"" + cluster_index + "\" ");
-        if (stereotype.equals("RAM")) {
-        	sb.append(" processCode=\"" + getProcessCode() + "\" ");
+    // if (dialog.getMonitored().length() != 0) {
+    if (dialog.getMonitored() != 0) {
+      try {
+        tmp = monitored;
+        monitored = dialog.getMonitored();// Integer.decode(dialog.getMonitored()).intValue();
+        if (index < 0) {
+          monitored = tmp;
+          error = true;
+          errors += "monitored ";
         }
-    	sb.append("/>\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
+      } catch (Exception e) {
+        error = true;
+        errors += "monitored  ";
+      }
     }
 
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    if (error) {
+      JOptionPane.showMessageDialog(frame, "Invalid value for the following attributes: " + errors, "Error",
+          JOptionPane.INFORMATION_MESSAGE);
+      return false;
+    }
+    return true;
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
+    sb.append("\" />\n");
+    sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
+    sb.append(" index=\"" + index + "\" ");
+    // sb.append(" cluster_index=\"" + cluster_index + "\" ");
+    if (stereotype.equals("RAM")) {
+      sb.append(" processCode=\"" + getProcessCode() + "\" ");
+    }
+    sb.append("/>\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      // int t1id;
+      String sstereotype = null, snodeName = null;
+      monitored = 0;
+      String processCode;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            //int t1id;
-            String sstereotype = null, snodeName = null;
-            monitored = 0;
-            String processCode;
-
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("info")) {
-                                sstereotype = elt.getAttribute("stereotype");
-                                snodeName = elt.getAttribute("nodeName");
-                            }
-                            if (sstereotype != null) {
-                                stereotype = sstereotype;
-                            }
-                            if (snodeName != null){
-                                name = snodeName;
-                            }
-                            if (elt.getTagName().equals("attributes")) {
-                                byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
-                                //monitored = Integer.decode(elt.getAttribute("monitored")).intValue();
-                                index = Integer.decode(elt.getAttribute("index")).intValue();
-				//cluster_index = Integer.decode(elt.getAttribute("cluster_index")).intValue();
-                                if (sstereotype.equals("RAM")) {
-                                	processCode = elt.getAttribute("processCode");
-                            		setProcessCode(processCode);
-                            	}
-                            }
-                        }
-                    }
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("info")) {
+                sstereotype = elt.getAttribute("stereotype");
+                snodeName = elt.getAttribute("nodeName");
+              }
+              if (sstereotype != null) {
+                stereotype = sstereotype;
+              }
+              if (snodeName != null) {
+                name = snodeName;
+              }
+              if (elt.getTagName().equals("attributes")) {
+                byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+                // monitored = Integer.decode(elt.getAttribute("monitored")).intValue();
+                index = Integer.decode(elt.getAttribute("index")).intValue();
+                // cluster_index = Integer.decode(elt.getAttribute("cluster_index")).intValue();
+                if (sstereotype.equals("RAM")) {
+                  processCode = elt.getAttribute("processCode");
+                  setProcessCode(processCode);
                 }
+              }
             }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
+          }
         }
+      }
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
+  }
 
-    public int getByteDataSize(){
-        return byteDataSize;
-    }
+  public int getByteDataSize() {
+    return byteDataSize;
+  }
 
-    public String getAttributes() {
-        String attr = "";
-        attr += "Data size (in byte) = " + byteDataSize + "\n";
-        attr += "Index  = " + index + "\n";
-        return attr;
-    }
+  public String getAttributes() {
+    String attr = "";
+    attr += "Data size (in byte) = " + byteDataSize + "\n";
+    attr += "Index  = " + index + "\n";
+    return attr;
+  }
 
-	public String getProcessCode() {
-		return processCode;
-	}
+  public String getProcessCode() {
+    return processCode;
+  }
 
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
-	}
+  public void setProcessCode(String _processCode) {
+    processCode = _processCode;
+  }
 }

@@ -36,22 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
-
-
 /**
- * Class JSimulationPanelInterface
- * Panel for displaying simulation traces
+ * Class JSimulationPanelInterface Panel for displaying simulation traces
  * Creation: 02/02/2005
+ * 
  * @version 1.0 02/02/2005
  * @author Ludovic APVRILLE
  */
 public interface JSimulationPanelInterface {
-  
-    void zoomIn();
-    void zoomOut();
+
+  void zoomIn();
+
+  void zoomOut();
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -56,187 +53,186 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
-   * Class AvatarRequirementPanel
-   * Managenemt of avatar requirement panels
-   * Creation: 15/05/2006
-   * @version 1.1 08/09/2009
-   * @author Ludovic APVRILLE
-   * @see MainGUI
+ * Class AvatarRequirementPanel Managenemt of avatar requirement panels
+ * Creation: 15/05/2006
+ * 
+ * @version 1.1 08/09/2009
+ * @author Ludovic APVRILLE
+ * @see MainGUI
  */
 public class AvatarRequirementPanel extends TURTLEPanel {
-    public AvatarRDPanel ardp;
-    public AvatarPDPanel apdp;
+  public AvatarRDPanel ardp;
+  public AvatarPDPanel apdp;
 
-    public AvatarRequirementPanel(MainGUI _mgui) {
-        super(_mgui);
+  public AvatarRequirementPanel(MainGUI _mgui) {
+    super(_mgui);
 
-    	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);//new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
-        SwingUtilities.updateComponentTreeUI(tabbedPane);
-        //tabbedPane.setOpaque(true);
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);// new JTabbedPane();
+    UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+    UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
+    SwingUtilities.updateComponentTreeUI(tabbedPane);
+    // tabbedPane.setOpaque(true);
 
-        cl = new ChangeListener() {
-        	
-        	@Override
-            public void stateChanged(ChangeEvent e){
-                mgui.paneRequirementAction(e);
-            }
-        };
+    cl = new ChangeListener() {
 
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneRequirementAction(e);
+      }
+    };
 
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+
+  }
+
+  public void init() {
+
+    mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
+    // Requirement Diagram toolbar
+    // addRequirementDiagram("Requirement Diagram");
+
+    // jsp.setVisible(true);
+  }
+
+  public boolean addAvatarRD(String s) {
+    AvatarRDToolBar ardtb = new AvatarRDToolBar(mgui);
+    toolbars.add(ardtb);
+
+    toolBarPanel = new JPanel();
+    // toolBarPanel.setBackground(Color.red);
+    toolBarPanel.setLayout(new BorderLayout());
+    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+
+    // Class diagram
+    ardp = new AvatarRDPanel(mgui, ardtb);
+    ardp.setName(s);
+    ardp.tp = this;
+    tdp = ardp;
+    panels.add(ardp);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(ardp);
+    ardp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(ardtb, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens requirement diagram");
+    tabbedPane.setSelectedIndex(0);
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+    tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+    return true;
+  }
+
+  public boolean addAvatarPD(String s) {
+    AvatarPDToolBar apdtb = new AvatarPDToolBar(mgui);
+    toolbars.add(apdtb);
+
+    toolBarPanel = new JPanel();
+    // toolBarPanel.setBackground(Color.red);
+    toolBarPanel.setLayout(new BorderLayout());
+    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+
+    // Class diagram
+    apdp = new AvatarPDPanel(mgui, apdtb);
+    apdp.setName(s);
+    apdp.tp = this;
+    tdp = apdp;
+    panels.add(apdp);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(apdp);
+    apdp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(apdtb, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab(s, IconManager.imgic82, toolBarPanel, "Opens Parametric Diagram");
+    tabbedPane.setSelectedIndex(0);
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+    tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+    return true;
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
+    return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+  }
 
-    public void init() {
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
 
-        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-        // Requirement Diagram toolbar
-        //addRequirementDiagram("Requirement Diagram");
+  public String toString() {
+    return mgui.getTitleAt(this) + " (SysML Requirement and Parametric Diagrams)";
+  }
 
-        //jsp.setVisible(true);
-    }
-
-    public boolean addAvatarRD(String s) {
-        AvatarRDToolBar ardtb = new AvatarRDToolBar(mgui);
-        toolbars.add(ardtb);
-
-        toolBarPanel = new JPanel();
-        //toolBarPanel.setBackground(Color.red);
-        toolBarPanel.setLayout(new BorderLayout());
-        //toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
-
-        //Class diagram
-        ardp = new AvatarRDPanel(mgui, ardtb);
-        ardp.setName(s);
-        ardp.tp = this;
-        tdp = ardp;
-        panels.add(ardp);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(ardp);
-        ardp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
-        toolBarPanel.add(ardtb, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens requirement diagram");
-        tabbedPane.setSelectedIndex(0);
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
-
-        return true;
-    }
-
-    public boolean addAvatarPD(String s) {
-        AvatarPDToolBar apdtb = new AvatarPDToolBar(mgui);
-        toolbars.add(apdtb);
-
-        toolBarPanel = new JPanel();
-        //toolBarPanel.setBackground(Color.red);
-        toolBarPanel.setLayout(new BorderLayout());
-        //toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
-
-        //Class diagram
-        apdp = new AvatarPDPanel(mgui, apdtb);
-        apdp.setName(s);
-        apdp.tp = this;
-        tdp = apdp;
-        panels.add(apdp);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(apdp);
-        apdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
-        toolBarPanel.add(apdtb, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic82, toolBarPanel, "Opens Parametric Diagram");
-        tabbedPane.setSelectedIndex(0);
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
-
-        return true;
-    }
-
-    public String saveHeaderInXml(String extensionToName) {
-        if (extensionToName == null) {
-            return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+  public ArrayList<TGComponent> getAllRequirements() {
+    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+    TDiagramPanel tp;
+    for (int i = 0; i < panels.size(); i++) {
+      tp = panels.get(i);
+      if (tp instanceof AvatarRDPanel) {
+        for (TGComponent s : ((AvatarRDPanel) tp).getAllRequirements()) {
+          list.add(s);
         }
-        return "<Modeling type=\"Avatar Requirement\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+      }
     }
+    return list;
 
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
+  }
+
+  public boolean canFirstDiagramBeMoved() {
+    return true;
+  }
+
+  public boolean removeEnabled(int index) {
+    return panels.size() > 1;
+  }
+
+  public boolean renameEnabled(int index) {
+    if (panels.size() == 0) {
+      return false;
     }
-
-    public String toString() {
-        return mgui.getTitleAt(this) + " (SysML Requirement and Parametric Diagrams)";
-    }
-
-
-	public ArrayList<TGComponent> getAllRequirements(){
-        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-		TDiagramPanel tp;
-        for(int i=0; i<panels.size(); i++) {
-			tp = panels.get(i);
-            if (tp instanceof AvatarRDPanel) {
-                for (TGComponent s:((AvatarRDPanel)tp).getAllRequirements()){
-                    list.add(s);
-                }
-            }
-        }
-        return list;
-
-	}
-    public boolean canFirstDiagramBeMoved() {
-        return true;
-    }
-
-    public boolean removeEnabled(int index) {
-        return panels.size() > 1;
-    }
-
-    public boolean renameEnabled(int index) {
-        if (panels.size() == 0) {
-            return false;
-        }
-        if ((panels.elementAt(index) instanceof AvatarRDPanel)){
-            return true;
-        }
-
-        return (panels.elementAt(index) instanceof AvatarPDPanel);
-
-    }
-
-    public boolean isAvatarRDEnabled() {
-        return true;
-    }
-
-    public boolean isAvatarPDEnabled() {
-        return true;
-    }
-
-    /*public boolean isReqEnabled() {
+    if ((panels.elementAt(index) instanceof AvatarRDPanel)) {
       return true;
-      }*/
-
-    public void addAllAvatarPDPanels(ArrayList<AvatarPDPanel> _al) {
-        for(int i=0; i<panels.size(); i++) {
-            if (panelAt(i) instanceof AvatarPDPanel) {
-                _al.add(((AvatarPDPanel)panelAt(i)));
-            }
-        }
     }
 
-    public void updateReferences() {
-        for (int i = 0; i < panels.size(); i++) {
-            TDiagramPanel tdp = panelAt(i);
-            if (tdp instanceof AvatarRDPanel) {
-                ((AvatarRDPanel)(tdp)).updateReferences();
-            }
-        }
-    }
+    return (panels.elementAt(index) instanceof AvatarPDPanel);
 
+  }
+
+  public boolean isAvatarRDEnabled() {
+    return true;
+  }
+
+  public boolean isAvatarPDEnabled() {
+    return true;
+  }
+
+  /*
+   * public boolean isReqEnabled() { return true; }
+   */
+
+  public void addAllAvatarPDPanels(ArrayList<AvatarPDPanel> _al) {
+    for (int i = 0; i < panels.size(); i++) {
+      if (panelAt(i) instanceof AvatarPDPanel) {
+        _al.add(((AvatarPDPanel) panelAt(i)));
+      }
+    }
+  }
+
+  public void updateReferences() {
+    for (int i = 0; i < panels.size(); i++) {
+      TDiagramPanel tdp = panelAt(i);
+      if (tdp instanceof AvatarRDPanel) {
+        ((AvatarRDPanel) (tdp)).updateReferences();
+      }
+    }
+  }
 
 }

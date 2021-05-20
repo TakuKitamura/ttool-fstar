@@ -36,50 +36,49 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import java.util.Objects;
 
 /**
- * Class TMLActivityElementWithAction
- * Creation: 23/11/2005
+ * Class TMLActivityElementWithAction Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
 public class TMLActivityElementWithAction extends TMLActivityElement {
-    protected String action;
+  protected String action;
 
-    public TMLActivityElementWithAction(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public TMLActivityElementWithAction(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    public void setAction(String _action) {
-        action = _action;
-    }
+  public void setAction(String _action) {
+    action = _action;
+  }
 
-    public String getAction() {
-        return action;
-    }
-    
-    @Override
-    public String toString() {
-        return "Action: " + getAction();
-    }
-    
-    @Override
-    public String customExtraToXML() {
-	    String s = " action=\"" + getAction() + "\"";
-	    return s;
-    }
+  public String getAction() {
+    return action;
+  }
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLActivityElementWithAction)) return false;
-        if (!super.equalSpec(o)) return false;
-        TMLActivityElementWithAction tmlActivityElementWithAction = (TMLActivityElementWithAction) o;
-        return Objects.equals(action, tmlActivityElementWithAction.getAction());
-    }
+  @Override
+  public String toString() {
+    return "Action: " + getAction();
+  }
+
+  @Override
+  public String customExtraToXML() {
+    String s = " action=\"" + getAction() + "\"";
+    return s;
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLActivityElementWithAction))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    TMLActivityElementWithAction tmlActivityElementWithAction = (TMLActivityElementWithAction) o;
+    return Objects.equals(action, tmlActivityElementWithAction.getAction());
+  }
 
 }

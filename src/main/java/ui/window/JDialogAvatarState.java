@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import myutil.Conversion;
@@ -51,208 +48,191 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class JDialogAvatarState
- * Dialog for managing AVATAR states information
+ * Class JDialogAvatarState Dialog for managing AVATAR states information
  * Creation: 08/03/2013
+ * 
  * @version 1.0 08/03/2013
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarState extends JDialogBase implements ActionListener  {
-    
-	
-	//protected String [] globalCode;
-	protected String [] entryCode;
-    
-    private boolean cancelled = true;
-    
-    
-    private JPanel panel1;
-	private JPanel panel2;
-    
-    // Panel1
-    private String stateName;
-	private JTextField stateNameText;
-	
-	// Panel of code and files
-	protected JTextArea jtaEntryCode; 
-	//jtaGlobalCode;
-    
-    
-    /* Creates new form  */
-    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogAvatarState(Frame _f, String _title, String _name, String[] _entryCode) {
-        
-        super(_f, _title, true);
-       
-        stateName = _name;
-		
-	
-		
-		//globalCode = _globalCode;
-		entryCode = _entryCode;
-		
-		
-        initComponents();
-        myInitComponents();
-        pack();
+public class JDialogAvatarState extends JDialogBase implements ActionListener {
+
+  // protected String [] globalCode;
+  protected String[] entryCode;
+
+  private boolean cancelled = true;
+
+  private JPanel panel1;
+  private JPanel panel2;
+
+  // Panel1
+  private String stateName;
+  private JTextField stateNameText;
+
+  // Panel of code and files
+  protected JTextArea jtaEntryCode;
+  // jtaGlobalCode;
+
+  /* Creates new form */
+  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+  public JDialogAvatarState(Frame _f, String _title, String _name, String[] _entryCode) {
+
+    super(_f, _title, true);
+
+    stateName = _name;
+
+    // globalCode = _globalCode;
+    entryCode = _entryCode;
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    int i;
+
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+
+    panel1.setBorder(new javax.swing.border.TitledBorder("State parameters"));
+
+    JPanel panel11 = new JPanel(new BorderLayout());
+    // Name of state
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridheight = 1;
+    panel1.add(new JLabel("ID of state = "), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    stateNameText = new JTextField(stateName);
+    panel1.add(stateNameText, c1);
+    panel11.add(panel1, BorderLayout.CENTER);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+
+    panel2.setBorder(new javax.swing.border.TitledBorder("Entry code"));
+    // guard
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridwidth = GridBagConstraints.REMAINDER;
+    c2.gridheight = 1;
+
+    /*
+     * panel2.add(new JLabel("Global code:"), c2); jtaGlobalCode = new JTextArea();
+     * jtaGlobalCode.setEditable(true); jtaGlobalCode.setMargin(new Insets(10, 10,
+     * 10, 10)); jtaGlobalCode.setTabSize(3); String files = ""; if (globalCode !=
+     * null) { for(i=0; i<globalCode.length; i++) { files += globalCode[i] + "\n"; }
+     * } jtaGlobalCode.append(files); jtaGlobalCode.setFont(new Font("times",
+     * Font.PLAIN, 12)); JScrollPane jsp = new JScrollPane(jtaGlobalCode,
+     * JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+     * JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); jsp.setPreferredSize(new
+     * Dimension(300, 200)); panel2.add(jsp, c2);
+     */
+
+    // panel2.add(new JLabel("Entry code"), c2);
+    jtaEntryCode = new JTextArea();
+    jtaEntryCode.setEditable(true);
+    jtaEntryCode.setMargin(new Insets(10, 10, 10, 10));
+    jtaEntryCode.setTabSize(3);
+    String code = "";
+    if (entryCode != null) {
+      for (i = 0; i < entryCode.length; i++) {
+        code += entryCode[i] + "\n";
+      }
     }
-	
-    
-    
-    private void myInitComponents() {
+    jtaEntryCode.append(code);
+    jtaEntryCode.setFont(new Font("times", Font.PLAIN, 12));
+    JScrollPane jsp = new JScrollPane(jtaEntryCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    jsp.setPreferredSize(new Dimension(300, 200));
+    // jsp.setPreferredSize(new Dimension(300, 300));
+    panel2.add(jsp, c2);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+    // Issue #41 Ordering of tabbed panes
+    JTabbedPane jtp = GraphicLib.createTabbedPane();// new JTabbedPane();
+    jtp.setPreferredSize(new Dimension(400, 450));
+    jtp.add("General", panel11);
+    jtp.add("Prototyping", panel2);
+    c0.fill = GridBagConstraints.BOTH;
+    c.add(jtp, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    // String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (evt.getSource() == closeButton) {
+      closeDialog();
+    } else if (evt.getSource() == cancelButton) {
+      cancelDialog();
     }
-    
-    private void initComponents() {
-		int i;
-		
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-		GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-		GridBagConstraints c2 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-           
-        
-        panel1.setBorder(new javax.swing.border.TitledBorder("State parameters"));
-    
-        JPanel panel11 = new JPanel(new BorderLayout());
-        // Name of state
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = 1;
-		c1.gridheight = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridheight = 1;
-		panel1.add(new JLabel("ID of state = "), c1);
-		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		stateNameText = new JTextField(stateName);
-        panel1.add(stateNameText, c1);
-        panel11.add(panel1, BorderLayout.CENTER);
-        
-        
-       
-		panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-           
-        panel2.setBorder(new javax.swing.border.TitledBorder("Entry code"));
-		// guard
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.gridwidth = 1;
-		c2.gridheight = 1;
-        c2.fill = GridBagConstraints.BOTH;
-		c2.gridwidth = GridBagConstraints.REMAINDER;
-        c2.gridheight = 1;
-       
-		/*panel2.add(new JLabel("Global code:"), c2);
-		jtaGlobalCode = new JTextArea();
-        jtaGlobalCode.setEditable(true);
-        jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));
-        jtaGlobalCode.setTabSize(3);
-		String files = "";
-		if (globalCode != null) {
-			for(i=0; i<globalCode.length; i++) {
-				files += globalCode[i] + "\n";
-			}
-		}
-        jtaGlobalCode.append(files);
-        jtaGlobalCode.setFont(new Font("times", Font.PLAIN, 12));
-        JScrollPane jsp = new JScrollPane(jtaGlobalCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setPreferredSize(new Dimension(300, 200));
-        panel2.add(jsp, c2);*/
-        
-		//panel2.add(new JLabel("Entry code"), c2);
-		jtaEntryCode = new JTextArea();
-        jtaEntryCode.setEditable(true);
-        jtaEntryCode.setMargin(new Insets(10, 10, 10, 10));
-        jtaEntryCode.setTabSize(3);
-		String code = "";
-		if (entryCode != null) {
-			for(i=0; i<entryCode.length; i++) {
-				code += entryCode[i] + "\n";
-			}
-		}
-        jtaEntryCode.append(code);
-        jtaEntryCode.setFont(new Font("times", Font.PLAIN, 12));
-        JScrollPane jsp = new JScrollPane(jtaEntryCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-         jsp.setPreferredSize(new Dimension(300, 200));
-        //jsp.setPreferredSize(new Dimension(300, 300));
-        panel2.add(jsp, c2);
-    
-        
-		 // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
-        // Issue #41 Ordering of tabbed panes 
-		JTabbedPane jtp = GraphicLib.createTabbedPane();//new JTabbedPane();
-		jtp.setPreferredSize( new Dimension( 400, 450 ) );
-		jtp.add("General", panel11);
-		jtp.add("Prototyping", panel2);
-        c0.fill = GridBagConstraints.BOTH;
-        c.add(jtp, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
-            closeDialog();
-        } else if (evt.getSource() == cancelButton)  {
-            cancelDialog();
-        } 
-    }
-	
-    
-    public void closeDialog() {
-		
-		//globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
-		entryCode =  Conversion.wrapText(jtaEntryCode.getText());
-		cancelled = false;
-        dispose();
-    }
-    
-    /*public String getActions() {
-        return signal.getText();
-    }*/
-    
-    public String getStateName() {
-        return stateNameText.getText();
-    }
-	
-	public boolean hasBeenCancelled() {
-		return cancelled;
-	}
-    
-    public void cancelDialog() {
-        dispose();
-    }
-	
-	/*public String[] getGlobalCode() {
-		return globalCode;
-	}*/
-	
-	public String[] getEntryCode() {
-		return entryCode;
-	}
-	
+  }
+
+  public void closeDialog() {
+
+    // globalCode = Conversion.wrapText(jtaGlobalCode.getText());
+    entryCode = Conversion.wrapText(jtaEntryCode.getText());
+    cancelled = false;
+    dispose();
+  }
+
+  /*
+   * public String getActions() { return signal.getText(); }
+   */
+
+  public String getStateName() {
+    return stateNameText.getText();
+  }
+
+  public boolean hasBeenCancelled() {
+    return cancelled;
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  /*
+   * public String[] getGlobalCode() { return globalCode; }
+   */
+
+  public String[] getEntryCode() {
+    return entryCode;
+  }
+
 }

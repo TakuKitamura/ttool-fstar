@@ -36,50 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import java.util.HashSet; 
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
- * Class HwBridge
- * Creation: 23/11/2007
+ * Class HwBridge Creation: 23/11/2007
+ * 
  * @version 1.0 23/11/2007
  * @author Ludovic APVRILLE
  */
-public class HwBridge extends HwCommunicationNode  {
+public class HwBridge extends HwCommunicationNode {
 
-    public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
-    
-    public boolean isFirewall;
-    public List<String> firewallRules = new ArrayList<String>();
-    public int latency = 0;
-    public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
-    
-    public HwBridge(String _name) {
-        super(_name);
-    }
-    
-    @Override
-    public String toXML() {
-	String s = "<BRIDGE name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\" />\n";
-	return s;
-    }
+  public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof HwBridge)) return false;
-        if (!super.equalSpec(o)) return false;
-        HwBridge hwBridge = (HwBridge) o;
-        return latency == hwBridge.latency &&
-                bufferByteSize == hwBridge.bufferByteSize &&
-                isFirewall == hwBridge.isFirewall &&
-                (new HashSet<>(firewallRules).equals(new HashSet<>(hwBridge.firewallRules)));
-    }
+  public boolean isFirewall;
+  public List<String> firewallRules = new ArrayList<String>();
+  public int latency = 0;
+  public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
+
+  public HwBridge(String _name) {
+    super(_name);
+  }
+
+  @Override
+  public String toXML() {
+    String s = "<BRIDGE name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize
+        + "\" />\n";
+    return s;
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwBridge))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwBridge hwBridge = (HwBridge) o;
+    return latency == hwBridge.latency && bufferByteSize == hwBridge.bufferByteSize && isFirewall == hwBridge.isFirewall
+        && (new HashSet<>(firewallRules).equals(new HashSet<>(hwBridge.firewallRules)));
+  }
 
 }

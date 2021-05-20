@@ -37,124 +37,121 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package tmltranslator;
 
 /**
- * Class TMLSDType
- * Correspondance between data of a TML Scenario Diagram modeling and graphical elements
- * Creation: 15/05/2014
+ * Class TMLSDType Correspondance between data of a TML Scenario Diagram
+ * modeling and graphical elements Creation: 15/05/2014
+ * 
  * @version 1.0 23/11/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public class TMLSDType {
-    
-    // type
-    public final static int NATURAL = 1;
-    public final static int ARCHITECTURE = 2;
-    public final static int OTHER = 3;
-    
-    private int type;
-    private String typeOther;
-    
-    public TMLSDType( int _type ) {
-		//TraceManager.addDev("New TYPE:" + _type);
-        type = _type;
-        typeOther = "";
-    }
-    
-    public TMLSDType( String _typeOther ) {
-        type = OTHER;
-        typeOther = _typeOther;
-    }
-    
-    public TMLSDType( int _type, String _typeOther ) {
-        type = _type;
-        typeOther = _typeOther;
-        
-    }
-    
-    public int getSDType() {
-			return type;
-		}
 
-    public String getSDTypeOther() {
-			return typeOther;
-		}
-    
-    public void setType( int _type ) {
-			type = _type;
-		}
+  // type
+  public final static int NATURAL = 1;
+  public final static int ARCHITECTURE = 2;
+  public final static int OTHER = 3;
 
-    public static int getType( String s ) {
-			s = s.toUpperCase();
-  	      if ( s.equals("NATURAL") ) {
-    	        return 	NATURAL;
-      	  } else if ( s.equals("ARCHITECTURE") ) {
-        	    return 	ARCHITECTURE;
-	        } else if ( !s.equals("") ) {
-  	          return OTHER;
-    	    }
-		
-      return -1;
-    }
-    
-    public static String getLOTOSStringType( int type ) {
-        switch( type ) {
-            case NATURAL:
-                return "nat";
-            case ARCHITECTURE:
-                return "arch";
-            case OTHER:
-                return "Other";
-            default:
-                return "" + type;
-        }
-    }
-	
-		public static boolean isAValidType( String type ) {
-			type = type.toUpperCase();
-			
-			if (type.compareTo("NAT") == 0) {
-				return true;
-			}  
-			if (type.compareTo("INT") == 0) {
-				return true;
-			}
-            return type.compareTo("ARCH") == 0;
-        }
-    
-    public static String getStringType( int type ) {
-        switch(type) {
-            case NATURAL:
-                return "int";
-            case ARCHITECTURE:
-                return "arch";
-            case OTHER:
-                return "Other";
-            default:
-                return "" + type;
-        }
-    }
-    
-    public String toString() {
-        return getStringType( type );
+  private int type;
+  private String typeOther;
+
+  public TMLSDType(int _type) {
+    // TraceManager.addDev("New TYPE:" + _type);
+    type = _type;
+    typeOther = "";
+  }
+
+  public TMLSDType(String _typeOther) {
+    type = OTHER;
+    typeOther = _typeOther;
+  }
+
+  public TMLSDType(int _type, String _typeOther) {
+    type = _type;
+    typeOther = _typeOther;
+
+  }
+
+  public int getSDType() {
+    return type;
+  }
+
+  public String getSDTypeOther() {
+    return typeOther;
+  }
+
+  public void setType(int _type) {
+    type = _type;
+  }
+
+  public static int getType(String s) {
+    s = s.toUpperCase();
+    if (s.equals("NATURAL")) {
+      return NATURAL;
+    } else if (s.equals("ARCHITECTURE")) {
+      return ARCHITECTURE;
+    } else if (!s.equals("")) {
+      return OTHER;
     }
 
-		@Override public boolean equals( Object o )	{
-			if( o == null ) {
-				return false;
-			}
-			if( !(o instanceof TMLSDType ) ) {
-				return false;
-			}
-			TMLSDType mt = (TMLSDType) o;
-		 	if( this.type != mt.type )  {
-				return false;
-			}
-            return this.typeOther.equals(mt.typeOther);
-        }
-}	//End of class
+    return -1;
+  }
+
+  public static String getLOTOSStringType(int type) {
+    switch (type) {
+      case NATURAL:
+        return "nat";
+      case ARCHITECTURE:
+        return "arch";
+      case OTHER:
+        return "Other";
+      default:
+        return "" + type;
+    }
+  }
+
+  public static boolean isAValidType(String type) {
+    type = type.toUpperCase();
+
+    if (type.compareTo("NAT") == 0) {
+      return true;
+    }
+    if (type.compareTo("INT") == 0) {
+      return true;
+    }
+    return type.compareTo("ARCH") == 0;
+  }
+
+  public static String getStringType(int type) {
+    switch (type) {
+      case NATURAL:
+        return "int";
+      case ARCHITECTURE:
+        return "arch";
+      case OTHER:
+        return "Other";
+      default:
+        return "" + type;
+    }
+  }
+
+  public String toString() {
+    return getStringType(type);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
+    }
+    if (!(o instanceof TMLSDType)) {
+      return false;
+    }
+    TMLSDType mt = (TMLSDType) o;
+    if (this.type != mt.type) {
+      return false;
+    }
+    return this.typeOther.equals(mt.typeOther);
+  }
+} // End of class

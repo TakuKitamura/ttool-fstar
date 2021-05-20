@@ -50,66 +50,65 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class Header
- * Header of files .h and .cpp
- * Creation: 14/05/2018
+ * Class Header Header of files .h and .cpp Creation: 14/05/2018
+ * 
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class Header {
-	static private String headerPrimitiveTDF;
-	static private String headerPrimitiveDE;
-	static private String headerCluster;
-	
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
+  static private String headerPrimitiveTDF;
+  static private String headerPrimitiveDE;
+  static private String headerCluster;
 
-	Header() {}
+  private final static String CR = "\n";
+  private final static String CR2 = "\n\n";
 
-	public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
-		if (tdf != null) {
-			headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_H"+ CR 
-					+ "#define " + tdf.getName().toUpperCase() + "_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
-		} else {
-			headerPrimitiveTDF = "";
-		}
-		return headerPrimitiveTDF;
-	}
-	
-	public static String getPrimitiveHeaderDE(SysCAMSTBlockDE de) {
-		if (de != null) {
-			headerPrimitiveDE = "#ifndef " + de.getName().toUpperCase() + "_H"+ CR 
-					+ "#define " + de.getName().toUpperCase() + "_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc>" + CR2;
-		} else {
-			headerPrimitiveDE = "";
-		}
-		return headerPrimitiveDE;
-	}
-	
-	public static String getClusterHeader(SysCAMSTCluster cluster) {
-		 if (cluster != null) {
-		      headerCluster = "#include <systemc-ams>" + CR;
-		      LinkedList<SysCAMSTBlockTDF> blocks = cluster.getBlockTDF();			 			
-			 
-			 for (SysCAMSTBlockTDF b : blocks) {
-			     headerCluster = headerCluster + "#include \"generated_H/" + b.getName() + ".h\"" + CR;//modification DG
-			 }
+  Header() {
+  }
 
-			 //ajoute DG
-	 LinkedList<SysCAMSTBlockDE> blocksDE = cluster.getBlockDE();
-			 					 
-			 for (SysCAMSTBlockDE b : blocksDE) {
-			     headerCluster = headerCluster + "#include \"generated_H/" + b.getName() + ".h\"" + CR;//DG
-			 }
-			 
-			 headerCluster = headerCluster + CR;
-		 } else {
-			 headerCluster = "";
-		 }
-		
-		 return headerCluster;
-	}
+  public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
+    if (tdf != null) {
+      headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_H" + CR + "#define "
+          + tdf.getName().toUpperCase() + "_H" + CR2 + "#include <cmath>" + CR + "#include <iostream>" + CR
+          + "#include <systemc-ams>" + CR2;
+    } else {
+      headerPrimitiveTDF = "";
+    }
+    return headerPrimitiveTDF;
+  }
+
+  public static String getPrimitiveHeaderDE(SysCAMSTBlockDE de) {
+    if (de != null) {
+      headerPrimitiveDE = "#ifndef " + de.getName().toUpperCase() + "_H" + CR + "#define " + de.getName().toUpperCase()
+          + "_H" + CR2 + "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc>" + CR2;
+    } else {
+      headerPrimitiveDE = "";
+    }
+    return headerPrimitiveDE;
+  }
+
+  public static String getClusterHeader(SysCAMSTCluster cluster) {
+    if (cluster != null) {
+      headerCluster = "#include <systemc-ams>" + CR;
+      LinkedList<SysCAMSTBlockTDF> blocks = cluster.getBlockTDF();
+
+      for (SysCAMSTBlockTDF b : blocks) {
+        headerCluster = headerCluster + "#include \"generated_H/" + b.getName() + ".h\"" + CR;// modification DG
+      }
+
+      // ajoute DG
+      LinkedList<SysCAMSTBlockDE> blocksDE = cluster.getBlockDE();
+
+      for (SysCAMSTBlockDE b : blocksDE) {
+        headerCluster = headerCluster + "#include \"generated_H/" + b.getName() + ".h\"" + CR;// DG
+      }
+
+      headerCluster = headerCluster + CR;
+    } else {
+      headerCluster = "";
+    }
+
+    return headerCluster;
+  }
 }

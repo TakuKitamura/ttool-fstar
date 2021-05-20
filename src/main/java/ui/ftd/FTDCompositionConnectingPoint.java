@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class FTDCompositionConnectingPoint
- * Definition of connecting points on which composition connectors can be connected
- * Creation: 14/12/2017
+ * Class FTDCompositionConnectingPoint Definition of connecting points on which
+ * composition connectors can be connected Creation: 14/12/2017
+ * 
  * @version 1.0 14/12/2017
  * @author Ludovic APVRILLE
  */
 public class FTDCompositionConnectingPoint extends TGConnectingPointWidthHeight {
-    
-    public FTDCompositionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.FTD_COMPOSITION_CONNECTOR;
-    }
+
+  public FTDCompositionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.FTD_COMPOSITION_CONNECTOR;
+  }
 }

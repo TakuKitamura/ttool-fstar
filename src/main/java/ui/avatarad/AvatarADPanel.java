@@ -45,137 +45,140 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Class AvatarADPanel
- * Panel used for drawing Avatar Activity Diagrams
- * Creation: 01/09/2011
+ * Class AvatarADPanel Panel used for drawing Avatar Activity Diagrams Creation:
+ * 01/09/2011
+ * 
  * @version 1.0 01/09/2011
  * @author Ludovic APVRILLE
  */
-public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
-    
-	public static int ARC = 20;
-	
-    public  AvatarADPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        //addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    @Override
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
-    }
-    
-    @Override
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
+public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes {
+
+  public static int ARC = 20;
+
+  public AvatarADPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    // addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  @Override
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
+
+  @Override
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public String getXMLHead() {
+    return "<AvatarADPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
+
+  @Override
+  public String getXMLTail() {
+    return "</AvatarADPanel>";
+  }
+
+  @Override
+  public String getXMLSelectedHead() {
+    return "<AvatarADPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel
+        + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  @Override
+  public String getXMLSelectedTail() {
+    return "</AvatarADPanelCopy>";
+  }
+
+  @Override
+  public String getXMLCloneHead() {
+    return "<AvatarADPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  @Override
+  public String getXMLCloneTail() {
+    return "</AvatarADPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
+  @Override
+  public boolean hasAutoConnect() {
+    return false;
+  }
+
+  public void setConnectorsToFront() {
+    TGComponent tgc;
+    Iterator<TGComponent> iterator = componentList.listIterator();
+
+    List<TGComponent> list = new ArrayList<TGComponent>();
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+      if (!(tgc instanceof TGConnector)) {
+        list.add(tgc);
+      }
     }
 
-    @Override
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
+    for (TGComponent tgc1 : list) {
+      componentList.remove(tgc1);
+      componentList.add(tgc1);
     }
-    
-    @Override
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public String getXMLHead() {
-        return "<AvatarADPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    @Override
-    public String getXMLTail() {
-        return "</AvatarADPanel>";
-    }
-    
-    @Override
-    public String getXMLSelectedHead() {
-        return "<AvatarADPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    @Override
-    public String getXMLSelectedTail() {
-        return "</AvatarADPanelCopy>";
-    }
-    
-    @Override
-    public String getXMLCloneHead() {
-        return "<AvatarADPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    @Override
-    public String getXMLCloneTail() {
-        return "</AvatarADPanelCopy>";
-    }
-    
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
-        
-        // Components over others
-        
-        // Position correctly guards of choice
-    }
-    
-    @Override
-	public boolean hasAutoConnect() {
-		return false;
-	}
-	
-	public void setConnectorsToFront() {
-		TGComponent tgc;
-        Iterator<TGComponent> iterator = componentList.listIterator();
-        
-		List<TGComponent> list = new ArrayList<TGComponent>();
-		
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-			if (!(tgc instanceof TGConnector)) {
-				list.add(tgc);
-			}
-		}
-		
-		for(TGComponent tgc1: list) {
-			componentList.remove(tgc1);
-			componentList.add(tgc1);
-		}
-	}
-	
-	public void alignPartitions() {
-        AvatarADPartition ontheLeft = null;//, sdi;
-        int x = getMaxX(),xtmp;
-        int y;
-//        int i;
-        TGComponent tgc;
-        Iterator<TGComponent> iterator = componentList.listIterator();
-        
-        // search for the instances which is the most on the left
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            if (tgc instanceof AvatarADPartition) {
-                xtmp = tgc.getX();
-                if (xtmp < x) {
-                    x = xtmp;
-                    ontheLeft = (AvatarADPartition)tgc;
-                }
-            }
+  }
+
+  public void alignPartitions() {
+    AvatarADPartition ontheLeft = null;// , sdi;
+    int x = getMaxX(), xtmp;
+    int y;
+    // int i;
+    TGComponent tgc;
+    Iterator<TGComponent> iterator = componentList.listIterator();
+
+    // search for the instances which is the most on the left
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+      if (tgc instanceof AvatarADPartition) {
+        xtmp = tgc.getX();
+        if (xtmp < x) {
+          x = xtmp;
+          ontheLeft = (AvatarADPartition) tgc;
         }
-        
-        if (ontheLeft == null)
-            return;
-        
-        // move accordingly other instances
-        y = ontheLeft.getY();
-        iterator = componentList.listIterator();
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            if ((tgc instanceof AvatarADPartition) && (tgc !=  ontheLeft)){
-                tgc.setCd(tgc.getX(), y);
-            }
-        }
+      }
     }
+
+    if (ontheLeft == null)
+      return;
+
+    // move accordingly other instances
+    y = ontheLeft.getY();
+    iterator = componentList.listIterator();
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+      if ((tgc instanceof AvatarADPartition) && (tgc != ontheLeft)) {
+        tgc.setCd(tgc.getX(), y);
+      }
+    }
+  }
 }

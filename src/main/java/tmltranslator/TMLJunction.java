@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
- * Class TMLJunction
- * Creation: 21/03/2006
+ * Class TMLJunction Creation: 21/03/2006
+ * 
  * @version 1.0 21/03/2006
  * @author Ludovic APVRILLE
  */
-public class TMLJunction extends TMLActivityElement{
-    
-    public TMLJunction(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);
-    }
+public class TMLJunction extends TMLActivityElement {
 
-    public String customExtraToXML() {
-	return "";
-    }
+  public TMLJunction(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public String customExtraToXML() {
+    return "";
+  }
 }

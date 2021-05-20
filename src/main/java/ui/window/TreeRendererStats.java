@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import myutil.DataElement;
@@ -45,42 +44,31 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 
-
 /**
- * Class TreeRendererStats
- * Icons and tooltiptext for the main tree
- * Creation: 11/01/2021
+ * Class TreeRendererStats Icons and tooltiptext for the main tree Creation:
+ * 11/01/2021
  *
  * @author Ludovic APVRILLE
  * @version 1.0 11/01/2021
  */
 public class TreeRendererStats extends DefaultTreeCellRenderer {
 
-    public TreeRendererStats() {
+  public TreeRendererStats() {
 
+  }
+
+  public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+      int row, boolean hasFocus) {
+
+    super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+    if (value instanceof DataElement) {
+      // setIcon(IconManager.imgic80);
+      setToolTipText(value.toString());
+    } else {
+      setToolTipText(null);
     }
 
-    public Component getTreeCellRendererComponent(
-            JTree tree,
-            Object value,
-            boolean sel,
-            boolean expanded,
-            boolean leaf,
-            int row,
-            boolean hasFocus) {
-
-        super.getTreeCellRendererComponent(
-                tree, value, sel,
-                expanded, leaf, row,
-                hasFocus);
-
-        if (value instanceof DataElement) {
-            //setIcon(IconManager.imgic80);
-            setToolTipText(value.toString());
-        } else {
-            setToolTipText(null);
-        }
-
-        return this;
-    }
+    return this;
+  }
 }

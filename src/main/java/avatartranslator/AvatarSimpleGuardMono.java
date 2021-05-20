@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 /*
    * Class AvatarSimpleGuardMono
  */
@@ -45,44 +44,43 @@ package avatartranslator;
 
 import java.util.Map;
 
-
 /**
  * An AvatarSimpleGuardMono is an {@link AvatarSimpleGuard} that is of the form:
- * {@link AvatarTerm}
- * Creation: 25/09/2015
+ * {@link AvatarTerm} Creation: 25/09/2015
+ * 
  * @version 1.0 25/09/2015
  * @author Florian LUGOU
  */
 public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
-    AvatarTerm term;
+  AvatarTerm term;
 
-    public AvatarSimpleGuardMono (AvatarTerm _term) {
-        this.term = _term;
-    }
+  public AvatarSimpleGuardMono(AvatarTerm _term) {
+    this.term = _term;
+  }
 
-    public AvatarTerm getTerm () {
-        return this.term;
-    }
+  public AvatarTerm getTerm() {
+    return this.term;
+  }
 
-    public String getAsString (AvatarSyntaxTranslator translator) {
-        return this.term.getName ();
-    }
+  public String getAsString(AvatarSyntaxTranslator translator) {
+    return this.term.getName();
+  }
 
-    @Override
-    public AvatarSimpleGuardMono clone () {
-        return new AvatarSimpleGuardMono (this.term.clone ());
-    }
+  @Override
+  public AvatarSimpleGuardMono clone() {
+    return new AvatarSimpleGuardMono(this.term.clone());
+  }
 
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-//        for (AvatarAttribute attr: attributesMapping.keySet())
-//        {
-//        }
-        
-        if (this.term instanceof AvatarAttribute) {
-            this.term = attributesMapping.get(this.term);
-        } else {
-            this.term.replaceAttributes (attributesMapping);
-        }
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    // for (AvatarAttribute attr: attributesMapping.keySet())
+    // {
+    // }
+
+    if (this.term instanceof AvatarAttribute) {
+      this.term = attributesMapping.get(this.term);
+    } else {
+      this.term.replaceAttributes(attributesMapping);
     }
+  }
 }

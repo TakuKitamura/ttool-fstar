@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import javax.swing.*;
@@ -47,39 +44,33 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class BenchmarkCommandsToolBar
- * Toolbar associated with interactive simulation (benchmark commands)
- * Creation: 12/06/2009
+ * Class BenchmarkCommandsToolBar Toolbar associated with interactive simulation
+ * (benchmark commands) Creation: 12/06/2009
+ * 
  * @version 1.0 12/06/2009
  * @author Ludovic APVRILLE
  */
 public class BenchmarkCommandsToolBar extends InteractiveSimulationBar {
-    
-    
-    public BenchmarkCommandsToolBar(JFrameInteractiveSimulation _jfis) {
-        super(_jfis);
-    }
-    
-    protected void setActive(boolean b) {
-		jfis.actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
-	}
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK]);
-        button.addMouseListener(jfis.mouseHandler);
-        
-		this.addSeparator();
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK]);
-        button.addMouseListener(jfis.mouseHandler);
-       
-    }
+
+  public BenchmarkCommandsToolBar(JFrameInteractiveSimulation _jfis) {
+    super(_jfis);
+  }
+
+  protected void setActive(boolean b) {
+    jfis.actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
+    jfis.actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK]);
+    button.addMouseListener(jfis.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK]);
+    button.addMouseListener(jfis.mouseHandler);
+
+  }
 } // Class
-
-
-
-
-

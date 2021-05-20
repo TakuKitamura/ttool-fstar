@@ -38,10 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 

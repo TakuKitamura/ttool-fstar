@@ -46,95 +46,97 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* Class TMLSDMessage
-* Creation: 18/02/2014
-* @version 1.1 15/05/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLSDMessage Creation: 18/02/2014
+ * 
+ * @version 1.1 15/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLSDMessage extends TMLElement  {
+public class TMLSDMessage extends TMLElement {
 
-	//mind the difference between TMLAttribute and TMLAttribute!
-	private List<TMLAttribute> attributeList;	
-	private String senderName = "";
-	private String receiverName = "";
-	private int yCoord;
+  // mind the difference between TMLAttribute and TMLAttribute!
+  private List<TMLAttribute> attributeList;
+  private String senderName = "";
+  private String receiverName = "";
+  private int yCoord;
 
-  //public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ Object _referenceObject ) {
-  	/*super( _name, _referenceObject );
-		this.yCoord = -1;
-		this.senderName = "";//_senderName;
-		this.receiverName = "";//_receiverName;
-		attributeList = new ArrayList<TMLAttribute>();
-	}*/
-	
-  //public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ int _yCoord, Object _referenceObject ) {
-  	/*super( _name, _referenceObject );
-		this.senderName = "";//_senderName;
-		this.receiverName = "";//_receiverName;
-		this.yCoord = _yCoord;
-		attributeList = new ArrayList<TMLAttribute>();
-	}*/
+  // public TMLSDMessage( String _name, /*String _senderName, String
+  // _receiverName,*/ Object _referenceObject ) {
+  /*
+   * super( _name, _referenceObject ); this.yCoord = -1; this.senderName =
+   * "";//_senderName; this.receiverName = "";//_receiverName; attributeList = new
+   * ArrayList<TMLAttribute>(); }
+   */
 
-	public TMLSDMessage( String _name, String _senderName, String _receiverName, int _yCoord,
-												Object _referenceObject, List<String> _params )	{
-		super( _name, _referenceObject );
-		this.yCoord = _yCoord;
-		this.senderName = _senderName;
-		this.receiverName = _receiverName;
-		attributeList = new ArrayList<TMLAttribute>();
-		for( String p: _params )	{
-			attributeList.add( new TMLAttribute(p) );
-		}
-	}
-	
-	// Constructor used for the TMLCPparser where in the TMLCP code there is no notion of yCoord and of referenceObject
-	public TMLSDMessage( String _name, String _senderName, String _receiverName, List<String> _params )	{
-		super( _name, null );
-		this.yCoord = -1;
-		this.senderName = _senderName;
-		this.receiverName = _receiverName;
-		attributeList = new ArrayList<TMLAttribute>();
-		for( String p: _params )	{
-			attributeList.add( new TMLAttribute(p) );
-		}
-	}
+  // public TMLSDMessage( String _name, /*String _senderName, String
+  // _receiverName,*/ int _yCoord, Object _referenceObject ) {
+  /*
+   * super( _name, _referenceObject ); this.senderName = "";//_senderName;
+   * this.receiverName = "";//_receiverName; this.yCoord = _yCoord; attributeList
+   * = new ArrayList<TMLAttribute>(); }
+   */
 
-	public String getSenderName()	{
-		return senderName;
-	}
+  public TMLSDMessage(String _name, String _senderName, String _receiverName, int _yCoord, Object _referenceObject,
+      List<String> _params) {
+    super(_name, _referenceObject);
+    this.yCoord = _yCoord;
+    this.senderName = _senderName;
+    this.receiverName = _receiverName;
+    attributeList = new ArrayList<TMLAttribute>();
+    for (String p : _params) {
+      attributeList.add(new TMLAttribute(p));
+    }
+  }
 
-	public String getReceiverName()	{
-		return receiverName;
-	}
-    
-	public void addAttribute( TMLAttribute _attribute )	{
-		if( _attribute != null )
-			attributeList.add( _attribute );
-	}
+  // Constructor used for the TMLCPparser where in the TMLCP code there is no
+  // notion of yCoord and of referenceObject
+  public TMLSDMessage(String _name, String _senderName, String _receiverName, List<String> _params) {
+    super(_name, null);
+    this.yCoord = -1;
+    this.senderName = _senderName;
+    this.receiverName = _receiverName;
+    attributeList = new ArrayList<TMLAttribute>();
+    for (String p : _params) {
+      attributeList.add(new TMLAttribute(p));
+    }
+  }
 
-	public List<TMLAttribute> getAttributes()	{
-		return attributeList;
-	}
+  public String getSenderName() {
+    return senderName;
+  }
 
-	public int getYCoord()	{
-		return this.yCoord;
-	}
+  public String getReceiverName() {
+    return receiverName;
+  }
 
-	public void setYCoord( int _coord )	{
-		this.yCoord = _coord;
-	}
-	
-	@Override public String toString()	{
+  public void addAttribute(TMLAttribute _attribute) {
+    if (_attribute != null)
+      attributeList.add(_attribute);
+  }
 
-		String s = this.name + "(";
-		if( attributeList.size() > 0 )	{
-			for( TMLAttribute attribute: attributeList )	{
-				s += attribute.getName() + ",";
-			}
-			String newS = s.substring( 0, s.length() - 1 );
-			s = newS;
-		}
-		s += ")";
-		return s;
-	}
-}	//End of class
+  public List<TMLAttribute> getAttributes() {
+    return attributeList;
+  }
+
+  public int getYCoord() {
+    return this.yCoord;
+  }
+
+  public void setYCoord(int _coord) {
+    this.yCoord = _coord;
+  }
+
+  @Override
+  public String toString() {
+
+    String s = this.name + "(";
+    if (attributeList.size() > 0) {
+      for (TMLAttribute attribute : attributeList) {
+        s += attribute.getName() + ",";
+      }
+      String newS = s.substring(0, s.length() - 1);
+      s = newS;
+    }
+    s += ")";
+    return s;
+  }
+} // End of class

@@ -62,175 +62,175 @@ import ui.AvatarSignal;
 import ui.TGComponent;
 
 /**
- * Class JDialogAvatarSignal
- * Dialog for managing several string components
+ * Class JDialogAvatarSignal Dialog for managing several string components
  * Creation: 12/04/2010
+ * 
  * @version 1.0 12/04/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarSignal extends JDialogBase implements ActionListener  {
+public class JDialogAvatarSignal extends JDialogBase implements ActionListener {
 
-    private List<AvatarSignal> signals, realSignals;
-    private List<String> showSignals;
-    private String currentSignal;
-    private boolean isOut;
-	
-	private TGComponent reference;
-    private Vector<TGComponent> refs;
+  private List<AvatarSignal> signals, realSignals;
+  private List<String> showSignals;
+  private String currentSignal;
+  private boolean isOut;
 
-    private boolean cancelled = true;
+  private TGComponent reference;
+  private Vector<TGComponent> refs;
 
-	private JComboBox<TGComponent> refChecks;
+  private boolean cancelled = true;
 
-    private JPanel panel1;
+  private JComboBox<TGComponent> refChecks;
 
-    // Panel1
-    private JComboBox<String> listSignals;
-    private JButton selectSignal;
-    private JTextField signal;
+  private JPanel panel1;
 
-    /* Creates new form  */
-    public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, List<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
-        super(_f, _title, true);
+  // Panel1
+  private JComboBox<String> listSignals;
+  private JButton selectSignal;
+  private JTextField signal;
 
-        signals = _signals;
-        currentSignal = _currentSignal;
-        isOut = _isOut;
-		reference=_reference;
-		refs=_refs;
+  /* Creates new form */
+  public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, List<AvatarSignal> _signals,
+      boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
+    super(_f, _title, true);
 
-        makeSignals();
+    signals = _signals;
+    currentSignal = _currentSignal;
+    isOut = _isOut;
+    reference = _reference;
+    refs = _refs;
 
-        initComponents();
-//        myInitComponents();
+    makeSignals();
 
-        pack();
+    initComponents();
+    // myInitComponents();
+
+    pack();
+  }
+
+  private void makeSignals() {
+    showSignals = new LinkedList<String>();
+    realSignals = new LinkedList<AvatarSignal>();
+
+    for (AvatarSignal as : signals)
+      if (((as.getInOut() == AvatarSignal.OUT) && (isOut)) || ((as.getInOut() == AvatarSignal.IN) && (!isOut))) {
+        showSignals.add(as.toString());
+        realSignals.add(as);
+      }
+  }
+
+  // private void myInitComponents() {
+  // }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    // GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    // GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+
+    panel1.setBorder(new javax.swing.border.TitledBorder("Signals"));
+
+    // panel1.setPreferredSize(new Dimension(500, 250));
+
+    // first line panel1
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel(" "), c1);
+
+    // Combo box
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    listSignals = new JComboBox<String>(showSignals.toArray(new String[showSignals.size()]));
+    panel1.add(listSignals, c1);
+
+    // Signal
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    selectSignal = new JButton("Select signal");
+    panel1.add(selectSignal, c1);
+    selectSignal.setEnabled(showSignals.size() > 0);
+    selectSignal.addActionListener(this);
+
+    // Text
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    signal = new JTextField(currentSignal, 30);
+    panel1.add(signal, c1);
+    // panel1.setEditable(true);
+
+    // Reference to DIPLODOCUS signal or Requirement
+    c1.gridwidth = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("Reference Requirement"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    refChecks = new JComboBox<TGComponent>(refs);
+    refChecks.insertItemAt(null, 0);
+    TraceManager.addDev("Reference=" + reference);
+    if (reference != null) {
+      refChecks.setSelectedItem(reference);
+    } else {
+      refChecks.setSelectedIndex(0);
     }
+    panel1.add(refChecks, c1);
 
-    private void makeSignals() {
-        showSignals = new LinkedList<String> ();
-        realSignals = new LinkedList<AvatarSignal> ();
+    c.add(panel1, BorderLayout.CENTER);
 
-        for (AvatarSignal as: signals)
-            if (((as.getInOut() == AvatarSignal.OUT) && (isOut)) ||  ((as.getInOut() == AvatarSignal.IN) && (!isOut))){
-                showSignals.add(as.toString());
-                realSignals.add(as);
-            }
+    JPanel buttons = initBasicButtons(this);
+    c.add(buttons, BorderLayout.SOUTH);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent evt) {
+    // String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (evt.getSource() == closeButton) {
+      closeDialog();
+    } else if (evt.getSource() == cancelButton) {
+      cancelDialog();
+    } else if (evt.getSource() == selectSignal) {
+      selectSignal();
     }
+  }
 
-//    private void myInitComponents() {
-//    }
+  public void selectSignal() {
+    int index = listSignals.getSelectedIndex();
+    signal.setText(realSignals.get(index).getUseDescription());
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        //GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        //GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
+  public void closeDialog() {
+    cancelled = false;
+    dispose();
+  }
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
+  public String getSignal() {
+    return signal.getText();
+  }
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public TGComponent getReference() {
+    return (TGComponent) refChecks.getSelectedItem();
+  }
 
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
+  public boolean hasValidString() {
+    return signal.getText().length() > 0;
+  }
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Signals"));
+  public boolean hasBeenCancelled() {
+    return cancelled;
+  }
 
-        //panel1.setPreferredSize(new Dimension(500, 250));
-
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel(" "), c1);
-
-        // Combo box
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        listSignals = new JComboBox<String> (showSignals.toArray (new String[showSignals.size()]));
-        panel1.add(listSignals, c1);
-
-
-        // Signal
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        selectSignal = new JButton("Select signal");
-        panel1.add(selectSignal, c1);
-        selectSignal.setEnabled(showSignals.size() > 0);
-        selectSignal.addActionListener(this);
-
-        // Text
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        signal = new JTextField(currentSignal, 30);
-        panel1.add(signal, c1);
-        //panel1.setEditable(true);
-
-		//Reference to DIPLODOCUS signal or Requirement
-		c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-		panel1.add(new JLabel("Reference Requirement"),c1);
-		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		refChecks = new JComboBox<TGComponent>(refs);
-		refChecks.insertItemAt(null, 0);
-		TraceManager.addDev("Reference=" + reference);
-		if (reference != null){
-			refChecks.setSelectedItem(reference);
-		} else {
-		    refChecks.setSelectedIndex(0);
-        }
-		panel1.add(refChecks,c1);
-
-        c.add(panel1, BorderLayout.CENTER);
-
-        JPanel buttons = initBasicButtons(this);
-        c.add(buttons, BorderLayout.SOUTH);
-    }
-
-    @Override
-    public void	actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
-            closeDialog();
-        } else if (evt.getSource() == cancelButton)  {
-            cancelDialog();
-        } else if (evt.getSource() == selectSignal)  {
-            selectSignal();
-        }
-    }
-
-    public void selectSignal() {
-        int index = listSignals.getSelectedIndex();
-        signal.setText(realSignals.get(index).getUseDescription());
-    }
-
-    public void closeDialog() {
-        cancelled = false;
-        dispose();
-    }
-
-    public String getSignal() {
-        return signal.getText();
-    }
-	
-	public TGComponent getReference(){
-		return (TGComponent) refChecks.getSelectedItem();
-	}
-
-    public boolean hasValidString() {
-        return signal.getText().length() > 0;
-    }
-
-    public boolean hasBeenCancelled() {
-        return cancelled;
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
+  public void cancelDialog() {
+    dispose();
+  }
 }

@@ -36,21 +36,20 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 /**
-   * Class CallbackLoaderInterface
-   * Creation: 31/05/2017
-   * @version 1.1 31/05/2017
-   * @author Ludovic APVRILLE
+ * Class CallbackLoaderInterface Creation: 31/05/2017
+ * 
+ * @version 1.1 31/05/2017
+ * @author Ludovic APVRILLE
  */
 public interface CallbackLoaderInterface {
 
-    void loadDone();
-    void loadFailed();
-    void loadFailed(Exception e);
+  void loadDone();
+
+  void loadFailed();
+
+  void loadFailed(Exception e);
 
 }

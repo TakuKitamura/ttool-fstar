@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import common.ConfigurationTTool;
@@ -51,49 +50,44 @@ import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Set
- * Creation: 22/02/2019
- * Version 2.0 22/02/2019
+ * Class Set Creation: 22/02/2019 Version 2.0 22/02/2019
  *
  * @author Ludovic APVRILLE
  */
-public class Quit extends Command  {
+public class Quit extends Command {
 
+  public Quit() {
 
-    public Quit() {
+  }
 
-    }
+  public String getCommand() {
+    return "quit";
+  }
 
+  public String getShortCommand() {
+    return "q";
+  }
 
-    public String getCommand() {
-        return "quit";
-    }
+  public String getUsage() {
+    return "quit";
+  }
 
-    public String getShortCommand() {
-        return "q";
-    }
+  public String getDescription() {
+    return "Quits the interaction and closes all opened windows";
+  }
 
-    public String getUsage() {
-        return "quit";
-    }
+  public String getExample() {
+    return "quit";
+  }
 
-    public String getDescription() {
-        return "Quits the interaction and closes all opened windows";
-    }
+  public String executeCommand(String command, Interpreter interpreter) {
+    System.exit(-1);
 
-    public String getExample() {
-        return "quit";
-    }
+    return null;
 
+  }
 
-    public  String executeCommand(String command, Interpreter interpreter) {
-        System.exit(-1);
+  public void fillSubCommands() {
 
-        return null;
-
-    }
-
-    public void fillSubCommands() {
-
-    }
+  }
 }

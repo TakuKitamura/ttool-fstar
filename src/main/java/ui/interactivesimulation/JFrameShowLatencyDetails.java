@@ -68,307 +68,307 @@ import tmltranslator.simulation.SimulationTransaction;
  */
 
 public class JFrameShowLatencyDetails extends JFrame {
-    private String[] columnNames = new String[3];
-    private Object[][] dataTrans1Run1;
-    private Object[][] dataTrans1Run2;
-    private Object[][] dataTrans2Run1;
-    private Object[][] dataTrans2Run2;
-    private Vector<SimulationTransaction> trans1Run1 = new Vector<SimulationTransaction>();
-    private Vector<SimulationTransaction> trans1Run2 = new Vector<SimulationTransaction>();
-    private Vector<SimulationTransaction> trans2Run1 = new Vector<SimulationTransaction>();
-    private Vector<SimulationTransaction> trans2Run2 = new Vector<SimulationTransaction>();
-    private JLabel labStart, labEnd, labTotal;
+  private String[] columnNames = new String[3];
+  private Object[][] dataTrans1Run1;
+  private Object[][] dataTrans1Run2;
+  private Object[][] dataTrans2Run1;
+  private Object[][] dataTrans2Run2;
+  private Vector<SimulationTransaction> trans1Run1 = new Vector<SimulationTransaction>();
+  private Vector<SimulationTransaction> trans1Run2 = new Vector<SimulationTransaction>();
+  private Vector<SimulationTransaction> trans2Run1 = new Vector<SimulationTransaction>();
+  private Vector<SimulationTransaction> trans2Run2 = new Vector<SimulationTransaction>();
+  private JLabel labStart, labEnd, labTotal;
 
-    public static JTable table11, table12, table21, table22;
+  public static JTable table11, table12, table21, table22;
 
-    public static JTable getTable11() {
-        return table11;
+  public static JTable getTable11() {
+    return table11;
+  }
+
+  public static JTable getTable12() {
+    return table12;
+  }
+
+  public static JTable getTable21() {
+    return table21;
+  }
+
+  public static JTable getTable22() {
+    return table22;
+  }
+
+  public JFrameShowLatencyDetails(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2,
+      Object selectedDevice1, Object selectedTrans1, Object selectedDevice2, Object selectedTrans2, Boolean Visible) {
+
+    super("Simulation Latency ");
+
+    GridLayout myLayout = new GridLayout(4, 1);
+
+    // this.setBackground(Color.RED);
+    this.setLayout(myLayout);
+
+    columnNames[0] = "Transaction ";
+    columnNames[1] = "Start Time ";
+    columnNames[2] = "End Time ";
+
+    for (SimulationTransaction st : transFile1) {
+      if (st.command.equals(selectedTrans1) && st.deviceName.equals(selectedDevice1)) {
+
+        trans1Run1.add(st);
+
+      } else if (st.command.equals(selectedTrans2) && st.deviceName.equals(selectedDevice2)) {
+        trans2Run1.add(st);
+      }
+
     }
 
-    public static JTable getTable12() {
-        return table12;
+    for (SimulationTransaction st : transFile2) {
+      if (st.command.equals(selectedTrans1) && st.deviceName.equals(selectedDevice1)) {
+        trans1Run2.add(st);
+      } else if (st.command.equals(selectedTrans2) && st.deviceName.equals(selectedDevice2)) {
+        trans2Run2.add(st);
+
+      }
+
     }
 
-    public static JTable getTable21() {
-        return table21;
-    }
-
-    public static JTable getTable22() {
-        return table22;
-    }
-
-    public JFrameShowLatencyDetails(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2, Object selectedDevice1,
-            Object selectedTrans1, Object selectedDevice2, Object selectedTrans2, Boolean Visible) {
-
-        super("Simulation Latency ");
-
-        GridLayout myLayout = new GridLayout(4, 1);
-
-        // this.setBackground(Color.RED);
-        this.setLayout(myLayout);
-
-        columnNames[0] = "Transaction ";
-        columnNames[1] = "Start Time ";
-        columnNames[2] = "End Time ";
-
-        for (SimulationTransaction st : transFile1) {
-            if (st.command.equals(selectedTrans1) && st.deviceName.equals(selectedDevice1)) {
-
-                trans1Run1.add(st);
-
-            } else if (st.command.equals(selectedTrans2) && st.deviceName.equals(selectedDevice2)) {
-                trans2Run1.add(st);
-            }
-
-        }
-
-        for (SimulationTransaction st : transFile2) {
-            if (st.command.equals(selectedTrans1) && st.deviceName.equals(selectedDevice1)) {
-                trans1Run2.add(st);
-            } else if (st.command.equals(selectedTrans2) && st.deviceName.equals(selectedDevice2)) {
-                trans2Run2.add(st);
-
-            }
-
-        }
-
-        dataTrans1Run1 = new Object[trans1Run1.size()][3];
-        dataTrans1Run2 = new Object[trans1Run2.size()][3];
-        dataTrans2Run1 = new Object[trans2Run1.size()][3];
-        dataTrans2Run2 = new Object[trans2Run2.size()][3];
-
-        int num11 = 0;
-        int num12 = 0;
-        int num21 = 0;
-        int num22 = 0;
-
-        for (SimulationTransaction st : trans1Run1) {
-
-            dataTrans1Run1[num11][0] = selectedTrans1;
-            dataTrans1Run1[num11][1] = st.startTime;
-            dataTrans1Run1[num11][2] = st.endTime;
-            num11++;
-
-        }
-        for (SimulationTransaction st : trans2Run1) {
-
-            {
-                dataTrans2Run1[num21][0] = selectedTrans2;
-                dataTrans2Run1[num21][1] = st.startTime;
-                dataTrans2Run1[num21][2] = st.endTime;
-                num21++;
-
-            }
-
-        }
-
-        for (SimulationTransaction st : trans1Run2) {
-            dataTrans1Run2[num12][0] = selectedTrans1;
-            dataTrans1Run2[num12][1] = st.startTime;
-            dataTrans1Run2[num12][2] = st.endTime;
-            num12++;
-
-        }
-        for (SimulationTransaction st : trans2Run2) {
-            dataTrans2Run2[num22][0] = selectedTrans2;
-            dataTrans2Run2[num22][1] = st.startTime;
-            dataTrans2Run2[num22][2] = st.endTime;
-            num22++;
-
-        }
-
-        table11 = new JTable(dataTrans1Run1, columnNames);
-
-        table12 = new JTable(dataTrans1Run2, columnNames);
-        table21 = new JTable(dataTrans2Run1, columnNames);
-
-        table22 = new JTable(dataTrans2Run2, columnNames);
-        table11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table21.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table22.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        table11.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                int column = table11.getSelectedColumn();
-                int row = table11.getSelectedRow();
-                String value = table11.getModel().getValueAt(row, column).toString();
-
-                if (column == 1) {
-
-                    labStart.setText(value);
-                } else if (column == 2) {
-                    labEnd.setText(value);
-                }
-
-                if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
-                        && !labStart.getText().isEmpty()) {
-                    int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
-                    labTotal.setText(Integer.toString(difference));
-                }
-
-            }
-
-        });
-
-        table12.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                int column = table12.getSelectedColumn();
-                int row = table12.getSelectedRow();
-                String value = table12.getModel().getValueAt(row, column).toString();
-
-                if (column == 1) {
-
-                    labStart.setText(value);
-                } else if (column == 2) {
-                    labEnd.setText(value);
-                }
-
-                if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
-                        && !labStart.getText().isEmpty()) {
-                    int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
-                    labTotal.setText(Integer.toString(difference));
-                }
-
-            }
-
-        });
-        table21.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-
-                int column = table21.getSelectedColumn();
-                int row = table21.getSelectedRow();
-                String value = table21.getModel().getValueAt(row, column).toString();
-
-                if (column == 1) {
-
-                    labStart.setText(value);
-                } else if (column == 2) {
-                    labEnd.setText(value);
-                }
-
-                if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
-                        && !labStart.getText().isEmpty()) {
-                    int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
-                    labTotal.setText(Integer.toString(difference));
-                }
-
-            }
-
-        });
-        table22.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-
-                int column = table22.getSelectedColumn();
-                int row = table22.getSelectedRow();
-                String value = table22.getModel().getValueAt(row, column).toString();
-
-                if (column == 1) {
-
-                    labStart.setText(value);
-                } else if (column == 2) {
-                    labEnd.setText(value);
-                }
-
-                if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
-                        && !labStart.getText().isEmpty()) {
-                    int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
-                    labTotal.setText(Integer.toString(difference));
-                }
-
-            }
-
-        });
-
-        JScrollPane scrollPane11 = new JScrollPane();
-        scrollPane11.setViewportView(table11);
-        scrollPane11.setVisible(true);
-        scrollPane11.setBorder(new javax.swing.border.TitledBorder("First Model: " + selectedTrans1.toString()));
-        add(scrollPane11);
-
-        JScrollPane scrollPane12 = new JScrollPane();
-        scrollPane12.setViewportView(table12);
-        scrollPane12.setVisible(true);
-        scrollPane12.setBorder(new javax.swing.border.TitledBorder("Second Model: " + selectedTrans1.toString()));
-        add(scrollPane12);
-
-        JScrollPane scrollPane21 = new JScrollPane();
-        scrollPane21.setViewportView(table21);
-        scrollPane21.setVisible(true);
-        scrollPane21.setBorder(new javax.swing.border.TitledBorder("First Model: " + selectedTrans2.toString()));
-        add(scrollPane21);
-
-        JScrollPane scrollPane22 = new JScrollPane();
-        scrollPane22.setViewportView(table22);
-        scrollPane22.setVisible(true);
-        scrollPane22.setBorder(new javax.swing.border.TitledBorder("Second Model: " + selectedTrans2.toString()));
-        add(scrollPane22);
-
-        JPanel timePanel = new JPanel(new GridBagLayout()); // use FlowLayout
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.NORTHWEST;
-
-        JLabel startTime = new JLabel("Start Time", JLabel.LEFT);
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        timePanel.add(startTime, c);
-
-        labStart = new JLabel("", JLabel.LEFT);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        timePanel.add(labStart, c);
-
-        JLabel endTime = new JLabel("End Time", JLabel.LEFT);
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        timePanel.add(endTime, c);
-
-        labEnd = new JLabel("", JLabel.LEFT);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        timePanel.add(labEnd, c);
-
-        JLabel diffTime = new JLabel("Time Difference", JLabel.LEFT);
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        timePanel.add(diffTime, c);
-
-        labTotal = new JLabel("", JLabel.LEFT);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 2;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        timePanel.add(labTotal, c);
-
-        this.add(timePanel);
-        this.pack();
-        this.setVisible(Visible);
+    dataTrans1Run1 = new Object[trans1Run1.size()][3];
+    dataTrans1Run2 = new Object[trans1Run2.size()][3];
+    dataTrans2Run1 = new Object[trans2Run1.size()][3];
+    dataTrans2Run2 = new Object[trans2Run2.size()][3];
+
+    int num11 = 0;
+    int num12 = 0;
+    int num21 = 0;
+    int num22 = 0;
+
+    for (SimulationTransaction st : trans1Run1) {
+
+      dataTrans1Run1[num11][0] = selectedTrans1;
+      dataTrans1Run1[num11][1] = st.startTime;
+      dataTrans1Run1[num11][2] = st.endTime;
+      num11++;
 
     }
+    for (SimulationTransaction st : trans2Run1) {
+
+      {
+        dataTrans2Run1[num21][0] = selectedTrans2;
+        dataTrans2Run1[num21][1] = st.startTime;
+        dataTrans2Run1[num21][2] = st.endTime;
+        num21++;
+
+      }
+
+    }
+
+    for (SimulationTransaction st : trans1Run2) {
+      dataTrans1Run2[num12][0] = selectedTrans1;
+      dataTrans1Run2[num12][1] = st.startTime;
+      dataTrans1Run2[num12][2] = st.endTime;
+      num12++;
+
+    }
+    for (SimulationTransaction st : trans2Run2) {
+      dataTrans2Run2[num22][0] = selectedTrans2;
+      dataTrans2Run2[num22][1] = st.startTime;
+      dataTrans2Run2[num22][2] = st.endTime;
+      num22++;
+
+    }
+
+    table11 = new JTable(dataTrans1Run1, columnNames);
+
+    table12 = new JTable(dataTrans1Run2, columnNames);
+    table21 = new JTable(dataTrans2Run1, columnNames);
+
+    table22 = new JTable(dataTrans2Run2, columnNames);
+    table11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table21.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table22.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    table11.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent e) {
+        int column = table11.getSelectedColumn();
+        int row = table11.getSelectedRow();
+        String value = table11.getModel().getValueAt(row, column).toString();
+
+        if (column == 1) {
+
+          labStart.setText(value);
+        } else if (column == 2) {
+          labEnd.setText(value);
+        }
+
+        if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+            && !labStart.getText().isEmpty()) {
+          int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
+          labTotal.setText(Integer.toString(difference));
+        }
+
+      }
+
+    });
+
+    table12.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent e) {
+        int column = table12.getSelectedColumn();
+        int row = table12.getSelectedRow();
+        String value = table12.getModel().getValueAt(row, column).toString();
+
+        if (column == 1) {
+
+          labStart.setText(value);
+        } else if (column == 2) {
+          labEnd.setText(value);
+        }
+
+        if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+            && !labStart.getText().isEmpty()) {
+          int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
+          labTotal.setText(Integer.toString(difference));
+        }
+
+      }
+
+    });
+    table21.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent e) {
+
+        int column = table21.getSelectedColumn();
+        int row = table21.getSelectedRow();
+        String value = table21.getModel().getValueAt(row, column).toString();
+
+        if (column == 1) {
+
+          labStart.setText(value);
+        } else if (column == 2) {
+          labEnd.setText(value);
+        }
+
+        if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+            && !labStart.getText().isEmpty()) {
+          int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
+          labTotal.setText(Integer.toString(difference));
+        }
+
+      }
+
+    });
+    table22.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      public void valueChanged(ListSelectionEvent e) {
+
+        int column = table22.getSelectedColumn();
+        int row = table22.getSelectedRow();
+        String value = table22.getModel().getValueAt(row, column).toString();
+
+        if (column == 1) {
+
+          labStart.setText(value);
+        } else if (column == 2) {
+          labEnd.setText(value);
+        }
+
+        if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+            && !labStart.getText().isEmpty()) {
+          int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
+          labTotal.setText(Integer.toString(difference));
+        }
+
+      }
+
+    });
+
+    JScrollPane scrollPane11 = new JScrollPane();
+    scrollPane11.setViewportView(table11);
+    scrollPane11.setVisible(true);
+    scrollPane11.setBorder(new javax.swing.border.TitledBorder("First Model: " + selectedTrans1.toString()));
+    add(scrollPane11);
+
+    JScrollPane scrollPane12 = new JScrollPane();
+    scrollPane12.setViewportView(table12);
+    scrollPane12.setVisible(true);
+    scrollPane12.setBorder(new javax.swing.border.TitledBorder("Second Model: " + selectedTrans1.toString()));
+    add(scrollPane12);
+
+    JScrollPane scrollPane21 = new JScrollPane();
+    scrollPane21.setViewportView(table21);
+    scrollPane21.setVisible(true);
+    scrollPane21.setBorder(new javax.swing.border.TitledBorder("First Model: " + selectedTrans2.toString()));
+    add(scrollPane21);
+
+    JScrollPane scrollPane22 = new JScrollPane();
+    scrollPane22.setViewportView(table22);
+    scrollPane22.setVisible(true);
+    scrollPane22.setBorder(new javax.swing.border.TitledBorder("Second Model: " + selectedTrans2.toString()));
+    add(scrollPane22);
+
+    JPanel timePanel = new JPanel(new GridBagLayout()); // use FlowLayout
+    GridBagConstraints c = new GridBagConstraints();
+    c.fill = GridBagConstraints.NORTHWEST;
+
+    JLabel startTime = new JLabel("Start Time", JLabel.LEFT);
+
+    c.fill = GridBagConstraints.NORTHWEST;
+    c.gridx = 0;
+    c.gridy = 0;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.anchor = GridBagConstraints.WEST;
+    timePanel.add(startTime, c);
+
+    labStart = new JLabel("", JLabel.LEFT);
+    c.fill = GridBagConstraints.NORTHWEST;
+    c.gridx = 1;
+    c.gridy = 0;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.anchor = GridBagConstraints.WEST;
+    timePanel.add(labStart, c);
+
+    JLabel endTime = new JLabel("End Time", JLabel.LEFT);
+
+    c.fill = GridBagConstraints.NORTHWEST;
+    c.gridx = 0;
+    c.gridy = 1;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.anchor = GridBagConstraints.WEST;
+    timePanel.add(endTime, c);
+
+    labEnd = new JLabel("", JLabel.LEFT);
+    c.fill = GridBagConstraints.NORTHWEST;
+    c.gridx = 1;
+    c.gridy = 1;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.anchor = GridBagConstraints.WEST;
+    timePanel.add(labEnd, c);
+
+    JLabel diffTime = new JLabel("Time Difference", JLabel.LEFT);
+
+    c.fill = GridBagConstraints.NORTHWEST;
+    c.gridx = 0;
+    c.gridy = 2;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.anchor = GridBagConstraints.WEST;
+    timePanel.add(diffTime, c);
+
+    labTotal = new JLabel("", JLabel.LEFT);
+    c.fill = GridBagConstraints.NORTHWEST;
+    c.gridx = 1;
+    c.gridy = 2;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.anchor = GridBagConstraints.WEST;
+    timePanel.add(labTotal, c);
+
+    this.add(timePanel);
+    this.pack();
+    this.setVisible(Visible);
+
+  }
 
 }

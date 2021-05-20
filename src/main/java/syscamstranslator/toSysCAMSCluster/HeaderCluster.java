@@ -45,66 +45,66 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class HeaderCluster
- * HeaderCluster of files .h and .cpp
- * Creation: 14/05/2018
+ * Class HeaderCluster HeaderCluster of files .h and .cpp Creation: 14/05/2018
+ * 
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
  * @version 1.1 30/07/2018
  * @author Rodrigo CORTES PORTO
-*/
+ */
 
 public class HeaderCluster {
-	static private String headerPrimitiveTDF;
-	static private String headerPrimitiveDE;
-	static private String headerCluster;
-	
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
+  static private String headerPrimitiveTDF;
+  static private String headerPrimitiveDE;
+  static private String headerCluster;
 
-	HeaderCluster() {}
+  private final static String CR = "\n";
+  private final static String CR2 = "\n\n";
 
-	public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
-		if (tdf != null) {
-			headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_TDF_H"+ CR 
-					+ "#define " + tdf.getName().toUpperCase() + "_TDF_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
-		} else {
-			headerPrimitiveTDF = "";
-		}
-		return headerPrimitiveTDF;
-	}
-	
-	public static String getPrimitiveHeaderDE(SysCAMSTBlockDE de) {
-		if (de != null) {
-			headerPrimitiveDE = "#ifndef " + de.getName().toUpperCase() + "_TDF_H"+ CR 
-					+ "#define " + de.getName().toUpperCase() + "_TDF_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc>" + CR2;
-		} else {
-			headerPrimitiveDE = "";
-		}
-		return headerPrimitiveDE;
-	}
-	
-	public static String getClusterHeader(SysCAMSTCluster cluster) {
-		 if (cluster != null) {
-			 LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
-             LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+  HeaderCluster() {
+  }
 
-             headerCluster = "#ifndef " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR 
-                    + "#define " + cluster.getClusterName().toUpperCase() + "_TDF_H" + CR2;
-             headerCluster += "#include <systemc-ams>" + CR;
-             
-             for (SysCAMSTBlockTDF b : tdf) {
-                 headerCluster = headerCluster + "#include \"" + b.getName() + "_tdf.h\"" + CR;
-             }
-             for (SysCAMSTBlockDE b : de) {
-                 headerCluster = headerCluster + "#include \"" + b.getName() + "_tdf.h\"" + CR;
-             }
-             headerCluster = headerCluster + CR;
-         } else {
-             headerCluster = "";
-         }
-         return headerCluster;
-	} 
+  public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
+    if (tdf != null) {
+      headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_TDF_H" + CR + "#define "
+          + tdf.getName().toUpperCase() + "_TDF_H" + CR2 + "#include <cmath>" + CR + "#include <iostream>" + CR
+          + "#include <systemc-ams>" + CR2;
+    } else {
+      headerPrimitiveTDF = "";
+    }
+    return headerPrimitiveTDF;
+  }
+
+  public static String getPrimitiveHeaderDE(SysCAMSTBlockDE de) {
+    if (de != null) {
+      headerPrimitiveDE = "#ifndef " + de.getName().toUpperCase() + "_TDF_H" + CR + "#define "
+          + de.getName().toUpperCase() + "_TDF_H" + CR2 + "#include <cmath>" + CR + "#include <iostream>" + CR
+          + "#include <systemc>" + CR2;
+    } else {
+      headerPrimitiveDE = "";
+    }
+    return headerPrimitiveDE;
+  }
+
+  public static String getClusterHeader(SysCAMSTCluster cluster) {
+    if (cluster != null) {
+      LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
+      LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+
+      headerCluster = "#ifndef " + cluster.getClusterName().toUpperCase() + "_TDF_H" + CR + "#define "
+          + cluster.getClusterName().toUpperCase() + "_TDF_H" + CR2;
+      headerCluster += "#include <systemc-ams>" + CR;
+
+      for (SysCAMSTBlockTDF b : tdf) {
+        headerCluster = headerCluster + "#include \"" + b.getName() + "_tdf.h\"" + CR;
+      }
+      for (SysCAMSTBlockDE b : de) {
+        headerCluster = headerCluster + "#include \"" + b.getName() + "_tdf.h\"" + CR;
+      }
+      headerCluster = headerCluster + CR;
+    } else {
+      headerCluster = "";
+    }
+    return headerCluster;
+  }
 }

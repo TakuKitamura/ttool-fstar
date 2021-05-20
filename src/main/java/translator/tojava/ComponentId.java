@@ -36,28 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.tojava;
 
 import translator.ADComponent;
 
 /**
- * Class ComponentId
- * Used for storing components during translation phases
+ * Class ComponentId Used for storing components during translation phases
  * Creation: 11/03/2005
+ * 
  * @version 1.1 11/03/2005
  * @author Ludovic APVRILLE
  */
-public class ComponentId  {
-    public ADComponent adc;
-    public int id;
-    public int count = 0;
-    
-    public ComponentId(ADComponent _adc, int _id) {
-        adc = _adc;
-        id = _id;
-    }
-    
+public class ComponentId {
+  public ADComponent adc;
+  public int id;
+  public int count = 0;
+
+  public ComponentId(ADComponent _adc, int _id) {
+    adc = _adc;
+    id = _id;
+  }
+
 }

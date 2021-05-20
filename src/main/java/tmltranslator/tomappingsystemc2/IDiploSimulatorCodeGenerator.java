@@ -36,21 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator.tomappingsystemc2;
 
 import myutil.FileException;
 
 public interface IDiploSimulatorCodeGenerator {
 
-    MappedSystemCTask getMappedTaskByName(String iName);
+  MappedSystemCTask getMappedTaskByName(String iName);
 
-    String generateSystemC(boolean _debug,
-                         boolean _optimize);
+  String generateSystemC(boolean _debug, boolean _optimize);
 
-    void saveFile(String path,
-                  String filename)
-            throws FileException;
+  void saveFile(String path, String filename) throws FileException;
 
-    public void setModelName(String _name);
+  public void setModelName(String _name);
 }

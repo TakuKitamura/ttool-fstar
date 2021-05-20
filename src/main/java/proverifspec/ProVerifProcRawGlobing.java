@@ -36,36 +36,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifProcRawGlobing
- * Creation: 13/09/2015
+ * Class ProVerifProcRawGlobing Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifProcRawGlobing extends ProVerifProcInstr {
 
-    protected String before;
-    protected String after;
-    protected ProVerifProcInstr intraInstr;
+  protected String before;
+  protected String after;
+  protected ProVerifProcInstr intraInstr;
 
-    public ProVerifProcRawGlobing (String _before, String _after) {
-        this.before = _before;
-        this.after = _after;
-        this.intraInstr = new ProVerifProcInstr () {
-            public void translate (ProVerifSyntaxer _syntaxer, int _alinea) { }
-        };
-    }
+  public ProVerifProcRawGlobing(String _before, String _after) {
+    this.before = _before;
+    this.after = _after;
+    this.intraInstr = new ProVerifProcInstr() {
+      public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+      }
+    };
+  }
 
-    public ProVerifProcInstr getIntra () {
-        return this.intraInstr;
-    }
+  public ProVerifProcInstr getIntra() {
+    return this.intraInstr;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateProcRawGlobing (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateProcRawGlobing(this, _alinea);
+  }
 }

@@ -29,13 +29,10 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import javax.swing.*;
 
-
-
 public class DraggableEnhancedTabbedPane extends JTabbedPane {
   private static final int LINEWIDTH = 3;
   private static final int RWH = 20;
   private static final int BUTTON_SIZE = 30; // XXX 30 is magic number of scroll button size
-
 
   private final GhostGlassPane glassPane = new GhostGlassPane(this);
   protected int dragTabIndex = -1;
@@ -54,7 +51,7 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
   private void clickArrowButton(String actionKey) {
     JButton scrollForwardButton = null;
     JButton scrollBackwardButton = null;
-    for (Component c: getComponents()) {
+    for (Component c : getComponents()) {
       if (c instanceof JButton) {
         if (Objects.isNull(scrollForwardButton) && Objects.isNull(scrollBackwardButton)) {
           scrollForwardButton = (JButton) c;
@@ -64,26 +61,26 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
       }
     }
     JButton button = "scrollTabsForwardAction".equals(actionKey) ? scrollForwardButton : scrollBackwardButton;
-    Optional.ofNullable(button)
-      .filter(JButton::isEnabled)
-      .ifPresent(JButton::doClick);
+    Optional.ofNullable(button).filter(JButton::isEnabled).ifPresent(JButton::doClick);
 
     // // ArrayIndexOutOfBoundsException
     // Optional.ofNullable(getActionMap())
-    //   .map(am -> am.get(actionKey))
-    //   .filter(Action::isEnabled)
-    //   .ifPresent(a -> a.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null, 0, 0)));
+    // .map(am -> am.get(actionKey))
+    // .filter(Action::isEnabled)
+    // .ifPresent(a -> a.actionPerformed(new ActionEvent(this,
+    // ActionEvent.ACTION_PERFORMED, null, 0, 0)));
     // // ActionMap map = getActionMap();
     // // if (Objects.nonNull(map)) {
-    // //   Action action = map.get(actionKey);
-    // //   if (Objects.nonNull(action) && action.isEnabled()) {
-    // //     action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null, 0, 0));
-    // //   }
+    // // Action action = map.get(actionKey);
+    // // if (Objects.nonNull(action) && action.isEnabled()) {
+    // // action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED,
+    // null, 0, 0));
+    // // }
     // // }
   }
 
   public void setForbiddenDrag(int index) {
-      forbiddenDrag = index;
+    forbiddenDrag = index;
   }
 
   public void autoScrollTest(Point glassPt) {
@@ -109,37 +106,37 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
     this.callback = callback;
     glassPane.setName("GlassPane");
     new DropTarget(glassPane, DnDConstants.ACTION_COPY_OR_MOVE, new TabDropTargetListener(), true);
-    DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
-        this, DnDConstants.ACTION_COPY_OR_MOVE, new TabDragGestureListener());
+    DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY_OR_MOVE,
+        new TabDragGestureListener());
   }
 
   protected int getTargetTabIndex(Point glassPt) {
-      try {
-    Point tabPt = SwingUtilities.convertPoint(glassPane, glassPt, this);
-    Point d = isTopBottomTabPlacement(getTabPlacement()) ? new Point(1, 0) : new Point(0, 1);
-    return IntStream.range(0, getTabCount()).filter(i -> {
-      Rectangle r = getBoundsAt(i);
-      r.translate(-r.width * d.x / 2, -r.height * d.y / 2);
-      return r.contains(tabPt);
-    }).findFirst().orElseGet(() -> {
-      int count = getTabCount();
-      Rectangle r = getBoundsAt(count - 1);
-      r.translate(r.width * d.x / 2, r.height * d.y / 2);
-      return r.contains(tabPt) ? count : -1;
-    });
-//     for (int i = 0; i < getTabCount(); i++) {
-//       Rectangle r = getBoundsAt(i);
-//       r.translate(-r.width * d.x / 2, -r.height * d.y / 2);
-//       if (r.contains(tabPt)) {
-//         return i;
-//       }
-//     }
-//     Rectangle r = getBoundsAt(getTabCount() - 1);
-//     r.translate(r.width * d.x / 2, r.height * d.y / 2);
-//     return r.contains(tabPt) ? getTabCount() : -1;
-      } catch (Exception e) {
-	  return 0;
-      }
+    try {
+      Point tabPt = SwingUtilities.convertPoint(glassPane, glassPt, this);
+      Point d = isTopBottomTabPlacement(getTabPlacement()) ? new Point(1, 0) : new Point(0, 1);
+      return IntStream.range(0, getTabCount()).filter(i -> {
+        Rectangle r = getBoundsAt(i);
+        r.translate(-r.width * d.x / 2, -r.height * d.y / 2);
+        return r.contains(tabPt);
+      }).findFirst().orElseGet(() -> {
+        int count = getTabCount();
+        Rectangle r = getBoundsAt(count - 1);
+        r.translate(r.width * d.x / 2, r.height * d.y / 2);
+        return r.contains(tabPt) ? count : -1;
+      });
+      // for (int i = 0; i < getTabCount(); i++) {
+      // Rectangle r = getBoundsAt(i);
+      // r.translate(-r.width * d.x / 2, -r.height * d.y / 2);
+      // if (r.contains(tabPt)) {
+      // return i;
+      // }
+      // }
+      // Rectangle r = getBoundsAt(getTabCount() - 1);
+      // r.translate(r.width * d.x / 2, r.height * d.y / 2);
+      // return r.contains(tabPt) ? getTabCount() : -1;
+    } catch (Exception e) {
+      return 0;
+    }
   }
 
   protected void convertTab(int prev, int next) {
@@ -147,7 +144,6 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
       // This check is needed if tab content is null.
       return;
     }
-
 
     final Component cmp = getComponentAt(prev);
     final Component tab = getTabComponentAt(prev);
@@ -159,21 +155,22 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
 
     // Forbidden drag on this tab?
     if ((tgtindex == forbiddenDrag) || (prev == forbiddenDrag)) {
-        return;
+      return;
     }
 
     remove(prev);
     insertTab(title, icon, cmp, tip, tgtindex);
-      if (callback != null) {
-          callback.hasBeenDragged(prev, tgtindex);
-      }
+    if (callback != null) {
+      callback.hasBeenDragged(prev, tgtindex);
+    }
     setEnabledAt(tgtindex, isEnabled);
     // When you drag'n'drop a disabled tab, it finishes enabled and selected.
     // pointed out by dlorde
     if (isEnabled) {
       setSelectedIndex(tgtindex);
     }
-    // I have a component in all tabs (jlabel with an X to close the tab) and when i move a tab the component disappear.
+    // I have a component in all tabs (jlabel with an X to close the tab) and when i
+    // move a tab the component disappear.
     // pointed out by Daniel Dario Morales Salas
     setTabComponentAt(tgtindex, tab);
   }
@@ -207,23 +204,25 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
       g2.dispose();
       glassPane.setImage(image);
       // Rectangle rect = getBoundsAt(dragTabIndex);
-      // BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+      // BufferedImage image = new BufferedImage(getWidth(), getHeight(),
+      // BufferedImage.TYPE_INT_ARGB);
       // Graphics2D g2 = image.createGraphics();
       // paint(g2);
       // g2.dispose();
       // if (rect.x < 0) {
-      //   rect.translate(-rect.x, 0);
+      // rect.translate(-rect.x, 0);
       // }
       // if (rect.y < 0) {
-      //   rect.translate(0, -rect.y);
+      // rect.translate(0, -rect.y);
       // }
       // if (rect.x + rect.width > image.getWidth()) {
-      //   rect.width = image.getWidth() - rect.x;
+      // rect.width = image.getWidth() - rect.x;
       // }
       // if (rect.y + rect.height > image.getHeight()) {
-      //   rect.height = image.getHeight() - rect.y;
+      // rect.height = image.getHeight() - rect.y;
       // }
-      // glassPane.setImage(image.getSubimage(rect.x, rect.y, rect.width, rect.height));
+      // glassPane.setImage(image.getSubimage(rect.x, rect.y, rect.width,
+      // rect.height));
       // // rect.x = Math.max(0, rect.x); // rect.x < 0 ? 0 : rect.x;
       // // rect.y = Math.max(0, rect.y); // rect.y < 0 ? 0 : rect.y;
       // // image = image.getSubimage(rect.x, rect.y, rect.width, rect.height);
@@ -241,20 +240,19 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
     // Component comp = getSelectedComponent();
     // int idx = 0;
     // while (Objects.isNull(comp) && idx < getTabCount()) {
-    //   comp = getComponentAt(idx++);
+    // comp = getComponentAt(idx++);
     // }
 
-    Rectangle compRect = Optional.ofNullable(getSelectedComponent())
-        .map(Component::getBounds)
+    Rectangle compRect = Optional.ofNullable(getSelectedComponent()).map(Component::getBounds)
         .orElseGet(Rectangle::new);
     // // TEST:
     // Rectangle compRect = Optional.ofNullable(getSelectedComponent())
-    //   .map(Component::getBounds)
-    //   .orElseGet(() -> IntStream.range(0, getTabCount())
-    //     .mapToObj(this::getComponentAt)
-    //     .map(Component::getBounds)
-    //     .findFirst()
-    //     .orElseGet(Rectangle::new));
+    // .map(Component::getBounds)
+    // .orElseGet(() -> IntStream.range(0, getTabCount())
+    // .mapToObj(this::getComponentAt)
+    // .map(Component::getBounds)
+    // .findFirst()
+    // .orElseGet(Rectangle::new));
     int tabPlacement = getTabPlacement();
     if (isTopBottomTabPlacement(tabPlacement)) {
       tabbedRect.height = tabbedRect.height - compRect.height;
@@ -268,15 +266,15 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
       }
     }
     // if (tabPlacement == TOP) {
-    //   tabbedRect.height = tabbedRect.height - compRect.height;
+    // tabbedRect.height = tabbedRect.height - compRect.height;
     // } else if (tabPlacement == BOTTOM) {
-    //   tabbedRect.y = tabbedRect.y + compRect.y + compRect.height;
-    //   tabbedRect.height = tabbedRect.height - compRect.height;
+    // tabbedRect.y = tabbedRect.y + compRect.y + compRect.height;
+    // tabbedRect.height = tabbedRect.height - compRect.height;
     // } else if (tabPlacement == LEFT) {
-    //   tabbedRect.width = tabbedRect.width - compRect.width;
+    // tabbedRect.width = tabbedRect.width - compRect.width;
     // } else if (tabPlacement == RIGHT) {
-    //   tabbedRect.x = tabbedRect.x + compRect.x + compRect.width;
-    //   tabbedRect.width = tabbedRect.width - compRect.width;
+    // tabbedRect.x = tabbedRect.x + compRect.x + compRect.width;
+    // tabbedRect.width = tabbedRect.width - compRect.width;
     // }
     tabbedRect.grow(2, 2);
     return tabbedRect;
@@ -296,59 +294,68 @@ class TabTransferable implements Transferable {
     this.tabbedPane = tabbedPane;
   }
 
-  @Override public Object getTransferData(DataFlavor flavor) {
+  @Override
+  public Object getTransferData(DataFlavor flavor) {
     return tabbedPane;
   }
 
-  @Override public DataFlavor[] getTransferDataFlavors() {
-    return new DataFlavor[] {FLAVOR};
+  @Override
+  public DataFlavor[] getTransferDataFlavors() {
+    return new DataFlavor[] { FLAVOR };
   }
 
-  @Override public boolean isDataFlavorSupported(DataFlavor flavor) {
+  @Override
+  public boolean isDataFlavorSupported(DataFlavor flavor) {
     return flavor.getHumanPresentableName().equals(NAME);
   }
 }
 
 class TabDragSourceListener implements DragSourceListener {
-  @Override public void dragEnter(DragSourceDragEvent e) {
+  @Override
+  public void dragEnter(DragSourceDragEvent e) {
     e.getDragSourceContext().setCursor(DragSource.DefaultMoveDrop);
   }
 
-  @Override public void dragExit(DragSourceEvent e) {
+  @Override
+  public void dragExit(DragSourceEvent e) {
     e.getDragSourceContext().setCursor(DragSource.DefaultMoveNoDrop);
     // glassPane.setTargetRect(0, 0, 0, 0);
     // glassPane.setPoint(new Point(-1000, -1000));
     // glassPane.repaint();
   }
 
-  @Override public void dragOver(DragSourceDragEvent e) {
+  @Override
+  public void dragOver(DragSourceDragEvent e) {
     // Point glassPt = e.getLocation();
     // JComponent glassPane = (JComponent) e.getDragSourceContext();
     // SwingUtilities.convertPointFromScreen(glassPt, glassPane);
     // int targetIdx = getTargetTabIndex(glassPt);
     // if (getTabAreaBounds().contains(glassPt) && targetIdx >= 0 &&
-    //     targetIdx != dragTabIndex && targetIdx != dragTabIndex + 1) {
-    //   e.getDragSourceContext().setCursor(DragSource.DefaultMoveDrop);
-    //   glassPane.setCursor(DragSource.DefaultMoveDrop);
+    // targetIdx != dragTabIndex && targetIdx != dragTabIndex + 1) {
+    // e.getDragSourceContext().setCursor(DragSource.DefaultMoveDrop);
+    // glassPane.setCursor(DragSource.DefaultMoveDrop);
     // } else {
-    //   e.getDragSourceContext().setCursor(DragSource.DefaultMoveNoDrop);
-    //   glassPane.setCursor(DragSource.DefaultMoveNoDrop);
+    // e.getDragSourceContext().setCursor(DragSource.DefaultMoveNoDrop);
+    // glassPane.setCursor(DragSource.DefaultMoveNoDrop);
     // }
   }
 
-  @Override public void dragDropEnd(DragSourceDropEvent e) {
+  @Override
+  public void dragDropEnd(DragSourceDropEvent e) {
     // dragTabIndex = -1;
     // glassPane.setVisible(false);
   }
 
-  @Override public void dropActionChanged(DragSourceDragEvent e) { /* not needed */ }
+  @Override
+  public void dropActionChanged(DragSourceDragEvent e) {
+    /* not needed */ }
 }
 
 class TabDragGestureListener implements DragGestureListener {
-  @Override public void dragGestureRecognized(DragGestureEvent e) {
-    Optional.ofNullable(e.getComponent())
-        .filter(c -> c instanceof DraggableEnhancedTabbedPane).map(c -> (DraggableEnhancedTabbedPane) c)
-        .filter(tabbedPane -> tabbedPane.getTabCount() > 1)
+  @Override
+  public void dragGestureRecognized(DragGestureEvent e) {
+    Optional.ofNullable(e.getComponent()).filter(c -> c instanceof DraggableEnhancedTabbedPane)
+        .map(c -> (DraggableEnhancedTabbedPane) c).filter(tabbedPane -> tabbedPane.getTabCount() > 1)
         .ifPresent(tabbedPane -> {
           Point tabPt = e.getDragOrigin();
           tabbedPane.dragTabIndex = tabbedPane.indexAtLocation(tabPt.x, tabPt.y);
@@ -371,7 +378,8 @@ class TabDropTargetListener implements DropTargetListener {
     return Optional.ofNullable(c).filter(GhostGlassPane.class::isInstance).map(GhostGlassPane.class::cast);
   }
 
-  @Override public void dragEnter(DropTargetDragEvent e) {
+  @Override
+  public void dragEnter(DropTargetDragEvent e) {
     getGhostGlassPane(e.getDropTargetContext().getComponent()).ifPresent(glassPane -> {
       // DnDTabbedPane tabbedPane = glassPane.tabbedPane;
       Transferable t = e.getTransferable();
@@ -384,7 +392,8 @@ class TabDropTargetListener implements DropTargetListener {
     });
   }
 
-  @Override public void dragExit(DropTargetEvent e) {
+  @Override
+  public void dragExit(DropTargetEvent e) {
     // Component c = e.getDropTargetContext().getComponent();
     // System.out.println("DropTargetListener#dragExit: " + c.getName());
     getGhostGlassPane(e.getDropTargetContext().getComponent()).ifPresent(glassPane -> {
@@ -395,14 +404,17 @@ class TabDropTargetListener implements DropTargetListener {
     });
   }
 
-  @Override public void dropActionChanged(DropTargetDragEvent e) { /* not needed */ }
+  @Override
+  public void dropActionChanged(DropTargetDragEvent e) {
+    /* not needed */ }
 
-  @Override public void dragOver(DropTargetDragEvent e) {
+  @Override
+  public void dragOver(DropTargetDragEvent e) {
     Component c = e.getDropTargetContext().getComponent();
     getGhostGlassPane(c).ifPresent(glassPane -> {
       Point glassPt = e.getLocation();
 
-        DraggableEnhancedTabbedPane tabbedPane = glassPane.tabbedPane;
+      DraggableEnhancedTabbedPane tabbedPane = glassPane.tabbedPane;
       tabbedPane.initTargetLine(tabbedPane.getTargetTabIndex(glassPt));
       tabbedPane.autoScrollTest(glassPt);
 
@@ -411,10 +423,11 @@ class TabDropTargetListener implements DropTargetListener {
     });
   }
 
-  @Override public void drop(DropTargetDropEvent e) {
+  @Override
+  public void drop(DropTargetDropEvent e) {
     Component c = e.getDropTargetContext().getComponent();
     getGhostGlassPane(c).ifPresent(glassPane -> {
-        DraggableEnhancedTabbedPane tabbedPane = glassPane.tabbedPane;
+      DraggableEnhancedTabbedPane tabbedPane = glassPane.tabbedPane;
       Transferable t = e.getTransferable();
       DataFlavor[] f = t.getTransferDataFlavors();
       int prev = tabbedPane.dragTabIndex;
@@ -443,7 +456,8 @@ class GhostGlassPane extends JComponent {
     super();
     this.tabbedPane = tabbedPane;
     setOpaque(false);
-    // [JDK-6700748] Cursor flickering during D&D when using CellRendererPane with validation - Java Bug System
+    // [JDK-6700748] Cursor flickering during D&D when using CellRendererPane with
+    // validation - Java Bug System
     // https://bugs.openjdk.java.net/browse/JDK-6700748
     // setCursor(null);
   }
@@ -460,7 +474,8 @@ class GhostGlassPane extends JComponent {
     this.location.setLocation(pt);
   }
 
-  @Override public void setVisible(boolean v) {
+  @Override
+  public void setVisible(boolean v) {
     super.setVisible(v);
     if (!v) {
       setTargetRect(0, 0, 0, 0);
@@ -468,7 +483,8 @@ class GhostGlassPane extends JComponent {
     }
   }
 
-  @Override protected void paintComponent(Graphics g) {
+  @Override
+  protected void paintComponent(Graphics g) {
     Graphics2D g2 = (Graphics2D) g.create();
     g2.setComposite(ALPHA);
     if (tabbedPane.isPaintScrollArea && tabbedPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT) {

@@ -12,15 +12,26 @@
 #ifndef CAESAR_ADT_GARBAGE_COLLECTION
 #define GC_malloc(CAESAR_ADT_0) malloc(CAESAR_ADT_0)
 #else
-extern char *GC_malloc ();
+extern char *GC_malloc();
 #endif
 
-#define CAESAR_ADT_ALLOC(CAESAR_ADT_0,CAESAR_ADT_BODY,CAESAR_ADT_TYPE,CAESAR_ADT_LOTOS_OPERATION,CAESAR_ADT_C_FUNCTION) if (((CAESAR_ADT_0) = (CAESAR_ADT_TYPE) GC_malloc (sizeof (CAESAR_ADT_BODY))) == NULL) {printf ("#249 erreur dans le fichier ``.h'' :\n     penurie de memoire pour les types abstraits\n     dans l'operation %s\n     implementee par la fonction %s [%s:%d]\n", CAESAR_ADT_LOTOS_OPERATION, CAESAR_ADT_C_FUNCTION, __FILE__, __LINE__); raise (15); }
+#define CAESAR_ADT_ALLOC(CAESAR_ADT_0, CAESAR_ADT_BODY, CAESAR_ADT_TYPE, CAESAR_ADT_LOTOS_OPERATION, CAESAR_ADT_C_FUNCTION)                                                                                                                           \
+  if (((CAESAR_ADT_0) = (CAESAR_ADT_TYPE)GC_malloc(sizeof(CAESAR_ADT_BODY))) == NULL)                                                                                                                                                                 \
+  {                                                                                                                                                                                                                                                   \
+    printf("#249 erreur dans le fichier ``.h'' :\n     penurie de memoire pour les types abstraits\n     dans l'operation %s\n     implementee par la fonction %s [%s:%d]\n", CAESAR_ADT_LOTOS_OPERATION, CAESAR_ADT_C_FUNCTION, __FILE__, __LINE__); \
+    raise(15);                                                                                                                                                                                                                                        \
+  }
 
 #endif
 
 #ifndef CAESAR_ADT_ERROR
-#define CAESAR_ADT_ERROR(CAESAR_ADT_LOTOS_OPERATION,CAESAR_ADT_C_FUNCTION) if (1) {printf ("#250 erreur dans le fichier ``.h'' :\n     cas imprevu (non defini par les equations)\n     dans l'operation %s\n     implementee par la fonction %s [%s:%d]\n", CAESAR_ADT_LOTOS_OPERATION, CAESAR_ADT_C_FUNCTION, __FILE__, __LINE__); raise (15); } else
+#define CAESAR_ADT_ERROR(CAESAR_ADT_LOTOS_OPERATION, CAESAR_ADT_C_FUNCTION)                                                                                                                                                                          \
+  if (1)                                                                                                                                                                                                                                             \
+  {                                                                                                                                                                                                                                                  \
+    printf("#250 erreur dans le fichier ``.h'' :\n     cas imprevu (non defini par les equations)\n     dans l'operation %s\n     implementee par la fonction %s [%s:%d]\n", CAESAR_ADT_LOTOS_OPERATION, CAESAR_ADT_C_FUNCTION, __FILE__, __LINE__); \
+    raise(15);                                                                                                                                                                                                                                       \
+  }                                                                                                                                                                                                                                                  \
+  else
 #endif
 
 /* LINTLIBRARY */
@@ -33,9 +44,9 @@ extern char *GC_malloc ();
 
 #define CAESAR_ADT_SCALAR_CAESAR_ADT_TYPE_QUEUE_NAT
 
- /* forward */ typedef struct CAESAR_ADT_STRUCT_CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_TYPE_QUEUE_NAT);
- /* forward */ int CAESAR_ADT_CMP_QUEUE_NAT ();
- /* forward */ void CAESAR_ADT_PRT_QUEUE_NAT ();
+/* forward */ typedef struct CAESAR_ADT_STRUCT_CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_TYPE_QUEUE_NAT);
+/* forward */ int CAESAR_ADT_CMP_QUEUE_NAT();
+/* forward */ void CAESAR_ADT_PRT_QUEUE_NAT();
 
 /* ========================================================================= */
 
@@ -47,12 +58,12 @@ typedef unsigned char ADT_BOOL;
 
 /* ------------------------------------------------------------------------- */
 
-#define ADT_FALSE() ((ADT_BOOL) 0)
-#define ADT_TRUE() ((ADT_BOOL) 1)
+#define ADT_FALSE() ((ADT_BOOL)0)
+#define ADT_TRUE() ((ADT_BOOL)1)
 
 /* ------------------------------------------------------------------------- */
 
-#define ADT_CMP_BOOL(CAESAR_ADT_1,CAESAR_ADT_2) ((CAESAR_ADT_1) == (CAESAR_ADT_2))
+#define ADT_CMP_BOOL(CAESAR_ADT_1, CAESAR_ADT_2) ((CAESAR_ADT_1) == (CAESAR_ADT_2))
 
 /* ------------------------------------------------------------------------- */
 
@@ -63,13 +74,12 @@ extern char *CAESAR_ADT_ASCII_ADT_BOOL[];
 #else
 
 char *CAESAR_ADT_ASCII_ADT_BOOL[] = {
-     "FALSE",
-     "TRUE"
-};
+    "FALSE",
+    "TRUE"};
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
-#define ADT_PRINT_BOOL(CAESAR_ADT_FILE,CAESAR_ADT_0) fprintf (CAESAR_ADT_FILE, CAESAR_ADT_ASCII_ADT_BOOL [CAESAR_ADT_0])
+#define ADT_PRINT_BOOL(CAESAR_ADT_FILE, CAESAR_ADT_0) fprintf(CAESAR_ADT_FILE, CAESAR_ADT_ASCII_ADT_BOOL[CAESAR_ADT_0])
 
 /* ------------------------------------------------------------------------- */
 
@@ -107,126 +117,133 @@ char *CAESAR_ADT_ASCII_ADT_BOOL[] = {
 
 /* ========================================================================= */
 
-#define CAESAR_ADT_CASE_NIL ((unsigned char) 0)
-#define CAESAR_ADT_CASE_ENQUEUE ((unsigned char) 1)
+#define CAESAR_ADT_CASE_NIL ((unsigned char)0)
+#define CAESAR_ADT_CASE_ENQUEUE ((unsigned char)1)
 
-typedef struct CAESAR_ADT_STRUCT_CAESAR_ADT_TYPE_QUEUE_NAT {
-     unsigned char CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT:1;
-     union {
-	  struct {
-	       ADT_NAT CAESAR_ADT_1_ENQUEUE
+typedef struct CAESAR_ADT_STRUCT_CAESAR_ADT_TYPE_QUEUE_NAT
+{
+  unsigned char CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT : 1;
+  union
+  {
+    struct
+    {
+      ADT_NAT CAESAR_ADT_1_ENQUEUE
 #ifdef CAESAR_ADT_BITS_ADT_NAT
-	            CAESAR_ADT_BITS_ADT_NAT
+          CAESAR_ADT_BITS_ADT_NAT
 #endif
-	           ;
-	       CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2_ENQUEUE
+          ;
+      CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2_ENQUEUE
 #ifdef CAESAR_ADT_BITS_CAESAR_ADT_TYPE_QUEUE_NAT
-	            CAESAR_ADT_BITS_CAESAR_ADT_TYPE_QUEUE_NAT
+          CAESAR_ADT_BITS_CAESAR_ADT_TYPE_QUEUE_NAT
 #endif
-	           ;
-	  } CAESAR_ADT_FIELD_ENQUEUE;
-     } CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT;
+          ;
+    } CAESAR_ADT_FIELD_ENQUEUE;
+  } CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT;
 } CAESAR_ADT_BODY_CAESAR_ADT_TYPE_QUEUE_NAT;
 
 /* ========================================================================= */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-int CAESAR_ADT_CMP_QUEUE_NAT (CAESAR_ADT_1, CAESAR_ADT_2)
-CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
+int CAESAR_ADT_CMP_QUEUE_NAT(CAESAR_ADT_1, CAESAR_ADT_2)
+    CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
 CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2;
 {
-     if ((CAESAR_ADT_1 == NULL) || (CAESAR_ADT_2 == NULL))
-	  return (CAESAR_ADT_1 == CAESAR_ADT_2);
-     if (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_1).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT != CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_2).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT)
-	  return 0;
-     switch (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_1).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT) {
-     case CAESAR_ADT_CASE_NIL:
-	  return 1;
-     case CAESAR_ADT_CASE_ENQUEUE:
-	  return ADT_CMP_NAT (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_1).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_2).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE) && CAESAR_ADT_CMP_QUEUE_NAT (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_1).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_2).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE);
-     }
-     /* NOTREACHED */
+  if ((CAESAR_ADT_1 == NULL) || (CAESAR_ADT_2 == NULL))
+    return (CAESAR_ADT_1 == CAESAR_ADT_2);
+  if (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_1).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT != CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_2).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT)
+    return 0;
+  switch (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_1).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT)
+  {
+  case CAESAR_ADT_CASE_NIL:
+    return 1;
+  case CAESAR_ADT_CASE_ENQUEUE:
+    return ADT_CMP_NAT(CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_1).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_2).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE) && CAESAR_ADT_CMP_QUEUE_NAT(CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_1).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_2).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE);
+  }
+  /* NOTREACHED */
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-void CAESAR_ADT_PRT_QUEUE_NAT (CAESAR_ADT_FILE, CAESAR_ADT_0)
-FILE *CAESAR_ADT_FILE;
+void CAESAR_ADT_PRT_QUEUE_NAT(CAESAR_ADT_FILE, CAESAR_ADT_0)
+    FILE *CAESAR_ADT_FILE;
 CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_0;
 {
-     if (CAESAR_ADT_0 == NULL)
-	  fprintf (CAESAR_ADT_FILE, "?");
-     else {
-	  switch (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT) {
-	  case CAESAR_ADT_CASE_NIL:
-	       fprintf (CAESAR_ADT_FILE, "NIL");
-	       break;
-	  case CAESAR_ADT_CASE_ENQUEUE:
-	       fprintf (CAESAR_ADT_FILE, "ENQUEUE (");
-	       ADT_PRINT_NAT (CAESAR_ADT_FILE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE);
-	       fprintf (CAESAR_ADT_FILE, ", ");
-	       CAESAR_ADT_PRT_QUEUE_NAT (CAESAR_ADT_FILE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE);
-	       fprintf (CAESAR_ADT_FILE, ")");
-	       break;
-	  }
-     }
+  if (CAESAR_ADT_0 == NULL)
+    fprintf(CAESAR_ADT_FILE, "?");
+  else
+  {
+    switch (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT)
+    {
+    case CAESAR_ADT_CASE_NIL:
+      fprintf(CAESAR_ADT_FILE, "NIL");
+      break;
+    case CAESAR_ADT_CASE_ENQUEUE:
+      fprintf(CAESAR_ADT_FILE, "ENQUEUE (");
+      ADT_PRINT_NAT(CAESAR_ADT_FILE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE);
+      fprintf(CAESAR_ADT_FILE, ", ");
+      CAESAR_ADT_PRT_QUEUE_NAT(CAESAR_ADT_FILE, CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE);
+      fprintf(CAESAR_ADT_FILE, ")");
+      break;
+    }
+  }
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ========================================================================= */
 
 #ifdef CAESAR_ADT_INTERFACE
 
-extern CAESAR_ADT_TYPE_QUEUE_NAT NIL ();
+extern CAESAR_ADT_TYPE_QUEUE_NAT NIL();
 
 #else
 
-CAESAR_ADT_TYPE_QUEUE_NAT NIL ()
+CAESAR_ADT_TYPE_QUEUE_NAT NIL()
 {
-     static CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_0 = NULL;
-     if (CAESAR_ADT_0 == NULL) {
-	  CAESAR_ADT_ALLOC (CAESAR_ADT_0, CAESAR_ADT_BODY_CAESAR_ADT_TYPE_QUEUE_NAT, CAESAR_ADT_TYPE_QUEUE_NAT, "NIL [8]", "NIL");
-	  CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT = CAESAR_ADT_CASE_NIL;
-     }
-     return CAESAR_ADT_0;
+  static CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_0 = NULL;
+  if (CAESAR_ADT_0 == NULL)
+  {
+    CAESAR_ADT_ALLOC(CAESAR_ADT_0, CAESAR_ADT_BODY_CAESAR_ADT_TYPE_QUEUE_NAT, CAESAR_ADT_TYPE_QUEUE_NAT, "NIL [8]", "NIL");
+    CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT = CAESAR_ADT_CASE_NIL;
+  }
+  return CAESAR_ADT_0;
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifdef CAESAR_ADT_INTERFACE
 
-extern CAESAR_ADT_TYPE_QUEUE_NAT ENQUEUE ();
+extern CAESAR_ADT_TYPE_QUEUE_NAT ENQUEUE();
 
 #else
 
-CAESAR_ADT_TYPE_QUEUE_NAT ENQUEUE (CAESAR_ADT_1, CAESAR_ADT_2)
-ADT_NAT CAESAR_ADT_1;
+CAESAR_ADT_TYPE_QUEUE_NAT ENQUEUE(CAESAR_ADT_1, CAESAR_ADT_2)
+    ADT_NAT CAESAR_ADT_1;
 CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2;
 {
-     CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_0;
-     CAESAR_ADT_ALLOC (CAESAR_ADT_0, CAESAR_ADT_BODY_CAESAR_ADT_TYPE_QUEUE_NAT, CAESAR_ADT_TYPE_QUEUE_NAT, "ENQUEUE [9]", "ENQUEUE");
-     CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT = CAESAR_ADT_CASE_ENQUEUE;
-     CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE = CAESAR_ADT_1;
-     CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE = CAESAR_ADT_2;
-     return CAESAR_ADT_0;
+  CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_0;
+  CAESAR_ADT_ALLOC(CAESAR_ADT_0, CAESAR_ADT_BODY_CAESAR_ADT_TYPE_QUEUE_NAT, CAESAR_ADT_TYPE_QUEUE_NAT, "ENQUEUE [9]", "ENQUEUE");
+  CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT = CAESAR_ADT_CASE_ENQUEUE;
+  CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE = CAESAR_ADT_1;
+  CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE = CAESAR_ADT_2;
+  return CAESAR_ADT_0;
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
-#define CAESAR_ADT_is_NIL(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT == CAESAR_ADT_CASE_NIL)
-#define CAESAR_ADT_is_ENQUEUE(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT == CAESAR_ADT_CASE_ENQUEUE)
-#define CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE)
-#define CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT (CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE)
+#define CAESAR_ADT_is_NIL(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT == CAESAR_ADT_CASE_NIL)
+#define CAESAR_ADT_is_ENQUEUE(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_ENUM_CAESAR_ADT_TYPE_QUEUE_NAT == CAESAR_ADT_CASE_ENQUEUE)
+#define CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_1_ENQUEUE)
+#define CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_0) (CAESAR_ADT_STAR_CAESAR_ADT_TYPE_QUEUE_NAT(CAESAR_ADT_0).CAESAR_ADT_UNION_CAESAR_ADT_TYPE_QUEUE_NAT.CAESAR_ADT_FIELD_ENQUEUE.CAESAR_ADT_2_ENQUEUE)
 
 /* ------------------------------------------------------------------------- */
 
@@ -234,37 +251,37 @@ CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2;
 
 /* ========================================================================= */
 
- /* forward */ ADT_BOOL ADT_AND ();
- /* forward */ ADT_BOOL ADT_OR ();
- /* forward */ ADT_BOOL ADT_XOR ();
- /* forward */ ADT_BOOL ADT_IFF ();
+/* forward */ ADT_BOOL ADT_AND();
+/* forward */ ADT_BOOL ADT_OR();
+/* forward */ ADT_BOOL ADT_XOR();
+/* forward */ ADT_BOOL ADT_IFF();
 
 /* ------------------------------------------------------------------------- */
 
- /* forward */ CAESAR_ADT_TYPE_QUEUE_NAT DEQUEUE ();
- /* forward */ ADT_NAT FIRST ();
- /* forward */ ADT_NAT LAST ();
- /* forward */ CAESAR_ADT_TYPE_QUEUE_NAT DESTROY ();
+/* forward */ CAESAR_ADT_TYPE_QUEUE_NAT DEQUEUE();
+/* forward */ ADT_NAT FIRST();
+/* forward */ ADT_NAT LAST();
+/* forward */ CAESAR_ADT_TYPE_QUEUE_NAT DESTROY();
 
 /* ========================================================================= */
 
-#define ADT_NOT(CAESAR_ADT_1) (CAESAR_ADT_is_ADT_TRUE (CAESAR_ADT_1) ? ADT_FALSE () : ADT_TRUE ())
+#define ADT_NOT(CAESAR_ADT_1) (CAESAR_ADT_is_ADT_TRUE(CAESAR_ADT_1) ? ADT_FALSE() : ADT_TRUE())
 
 /* ------------------------------------------------------------------------- */
 
-#define ADT_IMPLIES(CAESAR_ADT_1, CAESAR_ADT_2) ADT_OR (CAESAR_ADT_2, ADT_NOT (CAESAR_ADT_1))
+#define ADT_IMPLIES(CAESAR_ADT_1, CAESAR_ADT_2) ADT_OR(CAESAR_ADT_2, ADT_NOT(CAESAR_ADT_1))
 
 /* ------------------------------------------------------------------------- */
 
-#define ADT_EQ_BOOL(CAESAR_ADT_1, CAESAR_ADT_2) ADT_IFF (CAESAR_ADT_1, CAESAR_ADT_2)
+#define ADT_EQ_BOOL(CAESAR_ADT_1, CAESAR_ADT_2) ADT_IFF(CAESAR_ADT_1, CAESAR_ADT_2)
 
 /* ------------------------------------------------------------------------- */
 
-#define ADT_NE_BOOL(CAESAR_ADT_1, CAESAR_ADT_2) ADT_XOR (CAESAR_ADT_1, CAESAR_ADT_2)
+#define ADT_NE_BOOL(CAESAR_ADT_1, CAESAR_ADT_2) ADT_XOR(CAESAR_ADT_1, CAESAR_ADT_2)
 
 /* ========================================================================= */
 
-#define EMPTY(CAESAR_ADT_1) (CAESAR_ADT_is_NIL (CAESAR_ADT_1) ? ADT_TRUE () : ADT_FALSE ())
+#define EMPTY(CAESAR_ADT_1) (CAESAR_ADT_is_NIL(CAESAR_ADT_1) ? ADT_TRUE() : ADT_FALSE())
 
 /* ========================================================================= */
 
@@ -274,7 +291,7 @@ CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2;
 
 #define CAESAR_ADT_INCLUDE_F
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* CAUTION: there exists C functions that can not be generated automatically by CAESAR.ADT, since the corresponding LOTOS (non-constructor) operations are not defined by equations. These C functions will be considered as extern and it is assumed that their definition is contained in file "spec_1.f" provided by the user. The list of these functions is given below: */
 
@@ -314,147 +331,147 @@ CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2;
 
 #ifndef CAESAR_ADT_INTERFACE
 
-ADT_BOOL ADT_AND (CAESAR_ADT_1, CAESAR_ADT_2)
-ADT_BOOL CAESAR_ADT_1;
+ADT_BOOL ADT_AND(CAESAR_ADT_1, CAESAR_ADT_2)
+    ADT_BOOL CAESAR_ADT_1;
 ADT_BOOL CAESAR_ADT_2;
 {
-     if (CAESAR_ADT_is_ADT_TRUE (CAESAR_ADT_2))
-	  return CAESAR_ADT_1;
-     else
-	  return CAESAR_ADT_2;
+  if (CAESAR_ADT_is_ADT_TRUE(CAESAR_ADT_2))
+    return CAESAR_ADT_1;
+  else
+    return CAESAR_ADT_2;
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-ADT_BOOL ADT_OR (CAESAR_ADT_1, CAESAR_ADT_2)
-ADT_BOOL CAESAR_ADT_1;
+ADT_BOOL ADT_OR(CAESAR_ADT_1, CAESAR_ADT_2)
+    ADT_BOOL CAESAR_ADT_1;
 ADT_BOOL CAESAR_ADT_2;
 {
-     if (CAESAR_ADT_is_ADT_TRUE (CAESAR_ADT_2))
-	  return CAESAR_ADT_2;
-     else
-	  return CAESAR_ADT_1;
+  if (CAESAR_ADT_is_ADT_TRUE(CAESAR_ADT_2))
+    return CAESAR_ADT_2;
+  else
+    return CAESAR_ADT_1;
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-ADT_BOOL ADT_XOR (CAESAR_ADT_1, CAESAR_ADT_2)
-ADT_BOOL CAESAR_ADT_1;
+ADT_BOOL ADT_XOR(CAESAR_ADT_1, CAESAR_ADT_2)
+    ADT_BOOL CAESAR_ADT_1;
 ADT_BOOL CAESAR_ADT_2;
 {
-     return ADT_OR (ADT_AND (CAESAR_ADT_1, ADT_NOT (CAESAR_ADT_2)), ADT_AND (CAESAR_ADT_2, ADT_NOT (CAESAR_ADT_1)));
+  return ADT_OR(ADT_AND(CAESAR_ADT_1, ADT_NOT(CAESAR_ADT_2)), ADT_AND(CAESAR_ADT_2, ADT_NOT(CAESAR_ADT_1)));
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-ADT_BOOL ADT_IFF (CAESAR_ADT_1, CAESAR_ADT_2)
-ADT_BOOL CAESAR_ADT_1;
+ADT_BOOL ADT_IFF(CAESAR_ADT_1, CAESAR_ADT_2)
+    ADT_BOOL CAESAR_ADT_1;
 ADT_BOOL CAESAR_ADT_2;
 {
-     return ADT_AND (ADT_IMPLIES (CAESAR_ADT_1, CAESAR_ADT_2), ADT_IMPLIES (CAESAR_ADT_2, CAESAR_ADT_1));
+  return ADT_AND(ADT_IMPLIES(CAESAR_ADT_1, CAESAR_ADT_2), ADT_IMPLIES(CAESAR_ADT_2, CAESAR_ADT_1));
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ========================================================================= */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-CAESAR_ADT_TYPE_QUEUE_NAT DEQUEUE (CAESAR_ADT_1)
-CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
+CAESAR_ADT_TYPE_QUEUE_NAT DEQUEUE(CAESAR_ADT_1)
+    CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
 {
-     if (CAESAR_ADT_is_ENQUEUE (CAESAR_ADT_1))
-	  if (CAESAR_ADT_is_NIL (CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_1)))
-	       return NIL ();
-	  else if (ADT_NOT (EMPTY (CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_1))))
-	       return ENQUEUE (CAESAR_ADT_Get_1_ENQUEUE (CAESAR_ADT_1), DEQUEUE (CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_1)));
-	  else
-	       CAESAR_ADT_ERROR ("DEQUEUE [10]", "DEQUEUE");
-     else
-	  CAESAR_ADT_ERROR ("DEQUEUE [10]", "DEQUEUE");
-     /* NOTREACHED */
+  if (CAESAR_ADT_is_ENQUEUE(CAESAR_ADT_1))
+    if (CAESAR_ADT_is_NIL(CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_1)))
+      return NIL();
+    else if (ADT_NOT(EMPTY(CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_1))))
+      return ENQUEUE(CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_1), DEQUEUE(CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_1)));
+    else
+      CAESAR_ADT_ERROR("DEQUEUE [10]", "DEQUEUE");
+  else
+    CAESAR_ADT_ERROR("DEQUEUE [10]", "DEQUEUE");
+  /* NOTREACHED */
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-ADT_NAT FIRST (CAESAR_ADT_1)
-CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
+ADT_NAT FIRST(CAESAR_ADT_1)
+    CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
 {
-     if (CAESAR_ADT_is_ENQUEUE (CAESAR_ADT_1))
-	  if (CAESAR_ADT_is_NIL (CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_1)))
-	       return CAESAR_ADT_Get_1_ENQUEUE (CAESAR_ADT_1);
-	  else if (ADT_NOT (EMPTY (CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_1))))
-	       return FIRST (CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_1));
-	  else
-	       CAESAR_ADT_ERROR ("FIRST [12]", "FIRST");
-     else
-	  CAESAR_ADT_ERROR ("FIRST [12]", "FIRST");
-     /* NOTREACHED */
+  if (CAESAR_ADT_is_ENQUEUE(CAESAR_ADT_1))
+    if (CAESAR_ADT_is_NIL(CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_1)))
+      return CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_1);
+    else if (ADT_NOT(EMPTY(CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_1))))
+      return FIRST(CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_1));
+    else
+      CAESAR_ADT_ERROR("FIRST [12]", "FIRST");
+  else
+    CAESAR_ADT_ERROR("FIRST [12]", "FIRST");
+  /* NOTREACHED */
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-ADT_NAT LAST (CAESAR_ADT_1)
-CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
+ADT_NAT LAST(CAESAR_ADT_1)
+    CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_1;
 {
-     if (CAESAR_ADT_is_ENQUEUE (CAESAR_ADT_1))
-	  return CAESAR_ADT_Get_1_ENQUEUE (CAESAR_ADT_1);
-     else
-	  CAESAR_ADT_ERROR ("LAST [13]", "LAST");
-     /* NOTREACHED */
+  if (CAESAR_ADT_is_ENQUEUE(CAESAR_ADT_1))
+    return CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_1);
+  else
+    CAESAR_ADT_ERROR("LAST [13]", "LAST");
+  /* NOTREACHED */
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ------------------------------------------------------------------------- */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-CAESAR_ADT_TYPE_QUEUE_NAT DESTROY (CAESAR_ADT_1, CAESAR_ADT_2)
-ADT_NAT CAESAR_ADT_1;
+CAESAR_ADT_TYPE_QUEUE_NAT DESTROY(CAESAR_ADT_1, CAESAR_ADT_2)
+    ADT_NAT CAESAR_ADT_1;
 CAESAR_ADT_TYPE_QUEUE_NAT CAESAR_ADT_2;
 {
-     if (CAESAR_ADT_is_NIL (CAESAR_ADT_2))
-	  return CAESAR_ADT_2;
-     else if (ADT_EQ_NAT (CAESAR_ADT_1, CAESAR_ADT_Get_1_ENQUEUE (CAESAR_ADT_2)))
-	  return DESTROY (CAESAR_ADT_1, CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_2));
-     else if (ADT_NE_NAT (CAESAR_ADT_1, CAESAR_ADT_Get_1_ENQUEUE (CAESAR_ADT_2)))
-	  return ENQUEUE (CAESAR_ADT_Get_1_ENQUEUE (CAESAR_ADT_2), DESTROY (CAESAR_ADT_1, CAESAR_ADT_Get_2_ENQUEUE (CAESAR_ADT_2)));
-     else
-	  CAESAR_ADT_ERROR ("DESTROY [14]", "DESTROY");
-     /* NOTREACHED */
+  if (CAESAR_ADT_is_NIL(CAESAR_ADT_2))
+    return CAESAR_ADT_2;
+  else if (ADT_EQ_NAT(CAESAR_ADT_1, CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_2)))
+    return DESTROY(CAESAR_ADT_1, CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_2));
+  else if (ADT_NE_NAT(CAESAR_ADT_1, CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_2)))
+    return ENQUEUE(CAESAR_ADT_Get_1_ENQUEUE(CAESAR_ADT_2), DESTROY(CAESAR_ADT_1, CAESAR_ADT_Get_2_ENQUEUE(CAESAR_ADT_2)));
+  else
+    CAESAR_ADT_ERROR("DESTROY [14]", "DESTROY");
+  /* NOTREACHED */
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ========================================================================= */
 
 #ifndef CAESAR_ADT_INTERFACE
 
-void CAESAR_ADT_INIT ()
+void CAESAR_ADT_INIT()
 {
 }
 
-#endif				/* CAESAR_ADT_INTERFACE */
+#endif /* CAESAR_ADT_INTERFACE */
 
 /* ========================================================================= */

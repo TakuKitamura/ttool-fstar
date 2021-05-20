@@ -45,89 +45,90 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TADParallel
- * Parallel operator. all activities start together and may synchronize on a list of gates
- * To be used in activity diagrams
- * Creation: 12/12/2003
+ * Class TADParallel Parallel operator. all activities start together and may
+ * synchronize on a list of gates To be used in activity diagrams Creation:
+ * 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADParallel extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ {
-    
-	private int lineLength = 0;
-    
-	private int textX, textY;
-    
-    public TADParallel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        
-        width = 150;
-        height = 5;
-        
-        textX = width - 10;
-        textY = height - 8;
-        
-        nbConnectingPoint = 10;
-        connectingPoint = new TGConnectingPoint[10];
-        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.167, 0.0);
-        connectingPoint[1] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.333, 0.0);
-        connectingPoint[2] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[3] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.667, 0.0);
-        connectingPoint[4] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.833, 0.0);
-        connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
-        connectingPoint[6] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
-        connectingPoint[7] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-        connectingPoint[8] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
-        connectingPoint[9] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
-        addTGConnectingPointsCommentCorner();
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        TGCOneLineText tgc = new TGCOneLineText(x+textX + 10, y+textY, textX - 25 , textX + 10 , textY, textY, true, this, _tdp);
-        tgc.setValue("[ ]");
-        tgc.setName("list of synchronization gates");
-        tgcomponent[0] = tgc;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "parallel / synchro";
-        
-        myImageIcon = IconManager.imgic206;
+public class TADParallel extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent */ {
+
+  private int lineLength = 0;
+
+  private int textX, textY;
+
+  public TADParallel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 150;
+    height = 5;
+
+    textX = width - 10;
+    textY = height - 8;
+
+    nbConnectingPoint = 10;
+    connectingPoint = new TGConnectingPoint[10];
+    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.167, 0.0);
+    connectingPoint[1] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.333, 0.0);
+    connectingPoint[2] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[3] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.667, 0.0);
+    connectingPoint[4] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.833, 0.0);
+    connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
+    connectingPoint[6] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
+    connectingPoint[7] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+    connectingPoint[8] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
+    connectingPoint[9] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
+    addTGConnectingPointsCommentCorner();
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+
+    TGCOneLineText tgc = new TGCOneLineText(x + textX + 10, y + textY, textX - 25, textX + 10, textY, textY, true, this,
+        _tdp);
+    tgc.setValue("[ ]");
+    tgc.setName("list of synchronization gates");
+    tgcomponent[0] = tgc;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "parallel / synchro";
+
+    myImageIcon = IconManager.imgic206;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.fillRect(x, y, width, height);
+  }
+
+  @Override
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
     }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x, y, width, height);
-        g.fillRect(x, y, width, height);
-    }
-    
-    @Override
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public String getValueGate() {
-        return tgcomponent[0].getValue();
-    }
-    
-    public void setValueGate(String val) {
-        tgcomponent[0].setValue(val);
-    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.TAD_PARALLEL;
-    }
-    
-    @Override
-   	public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-    }
+    return null;
+  }
+
+  public String getValueGate() {
+    return tgcomponent[0].getValue();
+  }
+
+  public void setValueGate(String val) {
+    tgcomponent[0].setValue(val);
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TAD_PARALLEL;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+  }
 }

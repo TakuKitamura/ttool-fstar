@@ -36,20 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
+
 import java.util.HashMap;
+
 /**
- * Class LinkedReference
- * Components which link a reference requirement or other component from another type of diagram (i.e: Public Buses link to Attacks from an Attack Tree)
- * Creation: 14/12/2017
+ * Class LinkedReference Components which link a reference requirement or other
+ * component from another type of diagram (i.e: Public Buses link to Attacks
+ * from an Attack Tree) Creation: 14/12/2017
+ * 
  * @version 1.0 14/12/2017
  * @author Letitia LI
  */
-public interface LinkedReference  {
-
+public interface LinkedReference {
 
 }

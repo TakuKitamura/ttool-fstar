@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import ui.util.IconManager;
@@ -47,48 +43,46 @@ import ui.util.IconManager;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
- * Class TGCWithOneLineText
- * Graphical component with a line of text and which  contains one or more internal components
- * Creation: 22/12/2003
+ * Class TGCWithOneLineText Graphical component with a line of text and which
+ * contains one or more internal components Creation: 22/12/2003
+ * 
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
  */
-public abstract class TGCWithOneLineText extends TGCWithInternalComponent{
-    protected int textx, texty;
-    //private int widthText;
-    //private int heightText;
-    
-    public TGCWithOneLineText(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp);
+public abstract class TGCWithOneLineText extends TGCWithInternalComponent {
+  protected int textx, texty;
+  // private int widthText;
+  // private int heightText;
+
+  public TGCWithOneLineText(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp);
+  }
+
+  protected void textDrawing(Graphics g) {
+    // widthText = g.getFontMetrics().stringWidth(value);
+    // heightText = g.getFontMetrics().getHeight();
+    ColorManager.setColor(g, getState(), 0);
+    g.drawString(value, x + textx, y + texty);
+    if (value.equals("")) {
+      g.drawString("value?", x + textx, y + texty);
     }
-    
-    protected void textDrawing(Graphics g) {
-        //widthText = g.getFontMetrics().stringWidth(value);
-        //heightText = g.getFontMetrics().getHeight();
-        ColorManager.setColor(g, getState(), 0);
-        g.drawString(value, x + textx, y + texty);
-        if (value.equals("")) {
-            g.drawString("value?", x+textx, y+texty);
-        }
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    //
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
     }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        //
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-        null,
-        getValue());
-        if ((s != null) && (s.length() > 0)) {
-            setValue(s);
-            return true;
-        }
-        return false;
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic100, null, getValue());
+    if ((s != null) && (s.length() > 0)) {
+      setValue(s);
+      return true;
     }
-    
+    return false;
+  }
+
 }

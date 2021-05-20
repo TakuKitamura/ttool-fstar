@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class PreJavaCode
- * Components that can be preceeded with some Java code
+ * Class PreJavaCode Components that can be preceeded with some Java code
  * Creation: 20/04/2005
+ * 
  * @version 1.0 20/04/2005
  * @author Ludovic APVRILLE
  */
-public interface PreJavaCode  {
-    void setPreJavaCode(String code);
+public interface PreJavaCode {
+  void setPreJavaCode(String code);
 }

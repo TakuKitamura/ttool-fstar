@@ -36,61 +36,52 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
- 
-
 
 /**
- * Class ADActionStateWithParam
- * Creation: 29/12/2003
+ * Class ADActionStateWithParam Creation: 29/12/2003
+ * 
  * @version 1.0 29/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADActionStateWithParam extends ADActionState {
-	protected Param p;
-	Process proc;
-    
-    public ADActionStateWithParam(Param _p) {
-	    p = _p;
-    }
-	
-	public ADActionStateWithParam() {
-    }
-	
-	public void setParam(Param _p) {
-		p = _p;
-	}
-    
-    public Param getParam() {
-	 	return p;   
-    }
-    
-    public void setProcess(Process _p) {
-	 	proc = _p;   
-    }
-    
-    public Process getProcess() {
-	 	return proc;   
-    }
-    
-    public String toString() {
-	 	return "Action state (" + p.getName() + " = " + actionValue + ")";
-    }
-    
-    public String brutToString() {
-        return p.getName() + " = " + actionValue;
-    }
+  protected Param p;
+  Process proc;
 
-    public ADComponent makeSame() {
-      ADActionStateWithParam adap = new ADActionStateWithParam(getParam());
-      adap.setActionValue(getActionValue());
-      return adap;
-    }
+  public ADActionStateWithParam(Param _p) {
+    p = _p;
+  }
+
+  public ADActionStateWithParam() {
+  }
+
+  public void setParam(Param _p) {
+    p = _p;
+  }
+
+  public Param getParam() {
+    return p;
+  }
+
+  public void setProcess(Process _p) {
+    proc = _p;
+  }
+
+  public Process getProcess() {
+    return proc;
+  }
+
+  public String toString() {
+    return "Action state (" + p.getName() + " = " + actionValue + ")";
+  }
+
+  public String brutToString() {
+    return p.getName() + " = " + actionValue;
+  }
+
+  public ADComponent makeSame() {
+    ADActionStateWithParam adap = new ADActionStateWithParam(getParam());
+    adap.setActionValue(getActionValue());
+    return adap;
+  }
 }
-    

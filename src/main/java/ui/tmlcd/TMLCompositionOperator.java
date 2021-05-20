@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 import myutil.GraphicLib;
@@ -47,61 +44,63 @@ import ui.*;
 import java.awt.*;
 
 /**
- * Class TMLCompositionOperator
- * Composition operator between TML tasks
- * To be used in class diagrams
- * Creation: 28/10/2005
+ * Class TMLCompositionOperator Composition operator between TML tasks To be
+ * used in class diagrams Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
 public abstract class TMLCompositionOperator extends TGCWithInternalComponent {
-    public String oldValue;
-    protected int textX = 5;
-    protected int textY = 16;
-    
-    public TMLCompositionOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 100; height = 25;
-        
-        nbConnectingPoint = 4;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new TGConnectingPointTMLCompositionOperator(this, 0, height/2, true, false);
-        connectingPoint[1] = new TGConnectingPointTMLCompositionOperator(this, width, height/2, true, false);
-        connectingPoint[2] = new TGConnectingPointTMLCompositionOperator(this, width/2, height, true, false);
-        connectingPoint[3] = new TGConnectingPointTMLCompositionOperator(this, width/2, 0, true, false);
-        
-        addGroup(new TGConnectingPointGroup(true));
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        actionOnAdd();
+  public String oldValue;
+  protected int textX = 5;
+  protected int textY = 16;
+
+  public TMLCompositionOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 100;
+    height = 25;
+
+    nbConnectingPoint = 4;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new TGConnectingPointTMLCompositionOperator(this, 0, height / 2, true, false);
+    connectingPoint[1] = new TGConnectingPointTMLCompositionOperator(this, width, height / 2, true, false);
+    connectingPoint[2] = new TGConnectingPointTMLCompositionOperator(this, width / 2, height, true, false);
+    connectingPoint[3] = new TGConnectingPointTMLCompositionOperator(this, width / 2, 0, true, false);
+
+    addGroup(new TGConnectingPointGroup(true));
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    actionOnAdd();
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    // g.setColor(ColorManager.COMPOSITION_OPERATOR);
+    g.setColor(getMyColor());
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    // g.drawImage(IconManager.img8, x + width - 20, y + 3,
+    // ColorManager.COMPOSITION_OPERATOR, null);
+    ColorManager.setColor(g, getState(), 0);
+    g.setFont((g.getFont()).deriveFont(Font.BOLD));
+    g.drawString(value, x + textX, y + textY);
+    g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+  }
+
+  @Override
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
     }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x, y, width, height);
-        //g.setColor(ColorManager.COMPOSITION_OPERATOR);
-		g.setColor(getMyColor());
-        g.fillRect(x+1, y+1, width-1, height-1);
-        //g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
-        ColorManager.setColor(g, getState(), 0);
-        g.setFont((g.getFont()).deriveFont(Font.BOLD));
-        g.drawString(value, x + textX, y + textY);
-        g.setFont((g.getFont()).deriveFont(Font.PLAIN));
-    }
-    
-    @Override
-   public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public abstract boolean isToggledVisible();
-	
-    public abstract Color getMyColor();
+    return null;
+  }
+
+  public abstract boolean isToggledVisible();
+
+  public abstract Color getMyColor();
 }

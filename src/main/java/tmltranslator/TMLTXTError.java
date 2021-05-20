@@ -36,34 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package tmltranslator;
 
-
-
 /**
- * Class TMLTXTError
- * Used for storing a TMLTXT error generated while loading a TML text specification
- * Creation: 12/09/2007
+ * Class TMLTXTError Used for storing a TMLTXT error generated while loading a
+ * TML text specification Creation: 12/09/2007
+ * 
  * @version 1.0 12/09/2007
  * @author Ludovic APVRILLE
  */
 public class TMLTXTError {
-    
-    // type
-    public final static int ERROR = 0;
-    public final static int WARNING = 1;   
-    
-    public int type; // ERROR, WARNING
-    public String message;
-	public int lineNb;
-	public int charNb;
-	public String lineString;
-    
-    public TMLTXTError(int _type) {
-        type = _type;
-    }
+
+  // type
+  public final static int ERROR = 0;
+  public final static int WARNING = 1;
+
+  public int type; // ERROR, WARNING
+  public String message;
+  public int lineNb;
+  public int charNb;
+  public String lineString;
+
+  public TMLTXTError(int _type) {
+    type = _type;
+  }
 }

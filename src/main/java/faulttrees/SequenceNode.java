@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package faulttrees;
 
 /**
- * Class SequenceNode
- * Creation: 13/04/2015
+ * Class SequenceNode Creation: 13/04/2015
+ * 
  * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
  */
 public class SequenceNode extends FaultNode {
-    
-    public SequenceNode(String _name, Object _referenceObject) {
-	super(_name, _referenceObject);
-	type = "SEQUENCE";
-    }
-    
+
+  public SequenceNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "SEQUENCE";
+  }
+
 }

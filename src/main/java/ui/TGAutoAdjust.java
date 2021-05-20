@@ -36,20 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class TGAutoAdjust
- * Components that have the capability to auto adjust their size
- * Creation: 11/12/2008
+ * Class TGAutoAdjust Components that have the capability to auto adjust their
+ * size Creation: 11/12/2008
+ * 
  * @version 1.0 11/12/2008
  * @author Ludovic APVRILLE
  */
-public interface TGAutoAdjust  {
-	// Auto adjust mode: 2 modes: 0: regular, 1: small
-    void autoAdjust(int mode);
+public interface TGAutoAdjust {
+  // Auto adjust mode: 2 modes: 0: regular, 1: small
+  void autoAdjust(int mode);
 }

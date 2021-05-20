@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator;
 
 import myutil.TraceManager;
@@ -45,73 +44,68 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * Class AvatarQueryOnSignal
- * Creation: 08/04/2021
+ * Class AvatarQueryOnSignal Creation: 08/04/2021
+ * 
  * @version 1.0 08/04/2021
  * @author Ludovic APVRILLE
  */
 public class AvatarQueryOnSignal extends AvatarStateMachineElement {
-    private AvatarSignal signal;
-    private AvatarAttribute attribute;
+  private AvatarSignal signal;
+  private AvatarAttribute attribute;
 
-	public AvatarQueryOnSignal(String _name, AvatarSignal _signal, AvatarAttribute _attribute, Object _referenceObject ) {
-	   super(_name, _referenceObject);
-	   signal = _signal;
-	   attribute = _attribute;
+  public AvatarQueryOnSignal(String _name, AvatarSignal _signal, AvatarAttribute _attribute, Object _referenceObject) {
+    super(_name, _referenceObject);
+    signal = _signal;
+    attribute = _attribute;
 
-	}
+  }
 
-    public AvatarSignal getSignal() {
-        return signal;
+  public AvatarSignal getSignal() {
+    return signal;
+  }
+
+  public AvatarAttribute getAttribute() {
+    return attribute;
+  }
+
+  public AvatarQueryOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
+    // TraceManager.addDev("I HAVE BEEN CLONED: " + this);
+    AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
+    AvatarAttribute att = _block.getAvatarAttributeWithName(getAttribute().getName());
+    if ((sig != null) && (att != null)) {
+      AvatarQueryOnSignal aqos = new AvatarQueryOnSignal(getName() + "__clone", sig, att, getReferenceObject());
+      return aqos;
+    } else {
+      TraceManager.addDev("Basic clone failed for AvatarQueryOnSignal");
     }
 
-    public AvatarAttribute getAttribute() {
-        return attribute;
+    return null;
+  }
+
+  public String getExtendedName() {
+    if ((getSignal() == null) || (getAttribute() == null)) {
+      String s = getName() + " refobjt=" + referenceObject.toString();
+      TraceManager.addDev("Null signal" + " res=" + s);
+      return s;
     }
 
-
-    
-
-
-    public AvatarQueryOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
-    	//TraceManager.addDev("I HAVE BEEN CLONED: " + this);
-    	AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
-    	AvatarAttribute att = _block.getAvatarAttributeWithName(getAttribute().getName());
-    	if ((sig != null) && (att != null)) {
-            AvatarQueryOnSignal aqos = new AvatarQueryOnSignal(getName() + "__clone", sig, att, getReferenceObject());
-    		return aqos;
-    	} else {
-    	    TraceManager.addDev("Basic clone failed for AvatarQueryOnSignal");
-    	}
-
-    	return null;
+    if (getName() == null) {
+      TraceManager.addDev("Null name");
     }
 
-    public String getExtendedName() {
-    	if ((getSignal() == null) || (getAttribute() == null)) {
-    		String s = getName() + " refobjt=" + referenceObject.toString();
-    		TraceManager.addDev("Null signal" + " res=" + s);
-    		return s;
-    	}
+    return getName() + ":" + getSignal().getName() + "/" + attribute.getName();
+  }
 
-    	if (getName() == null) {
-    		TraceManager.addDev("Null name");
-    	}
-
-    	return getName() + ":" + getSignal().getName() + "/" + attribute.getName();
+  public String getNiceName() {
+    if ((getSignal() == null) || (getAttribute() == null)) {
+      return getName();
     }
 
-    public String getNiceName() {
-        if ((getSignal() == null) || (getAttribute() == null)) {
-            return getName();
-        }
+    return "Query " + attribute.getName() + " =? " + signal.getName();
+  }
 
-        return "Query " + attribute.getName() + " =? " + signal.getName();
-    }
-
-    public void translate (AvatarTranslator translator, Object arg) {
-        //translator.translateActionOnSignal (this, arg);
-    }
+  public void translate(AvatarTranslator translator, Object arg) {
+    // translator.translateActionOnSignal (this, arg);
+  }
 }

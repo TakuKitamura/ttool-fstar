@@ -36,98 +36,94 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;
 
 /**
-   * Class TransactionTableModel
-   * Recent transactions
-   * Creation: 20/05/2016
-   * @version 1.0 20/05/2016
-   * @author Ludovic APVRILLE
+ * Class TransactionTableModel Recent transactions Creation: 20/05/2016
+ * 
+ * @version 1.0 20/05/2016
+ * @author Ludovic APVRILLE
  */
 public class LatencyTableModel extends AbstractTableModel {
-   // private JFrameInteractiveSimulation jfis;
-    private int nbOfRows;
-    private SimulationLatency data[];
-	
-    //private String [] names;
-    public LatencyTableModel() {
-//	jfis = jfis;
-	SimulationLatency sl = new SimulationLatency();
-	data = new SimulationLatency[]{sl};
-	
+  // private JFrameInteractiveSimulation jfis;
+  private int nbOfRows;
+  private SimulationLatency data[];
+
+  // private String [] names;
+  public LatencyTableModel() {
+    // jfis = jfis;
+    SimulationLatency sl = new SimulationLatency();
+    data = new SimulationLatency[] { sl };
+
+  }
+
+  // From AbstractTableModel
+  public synchronized int getRowCount() {
+    if (data == null) {
+      return 0;
+    }
+    return data.length;
+  }
+
+  public int getColumnCount() {
+    return 6;
+  }
+
+  public synchronized Object getValueAt(int row, int column) {
+    if (data == null) {
+      return "";
     }
 
-    // From AbstractTableModel
-    public synchronized int getRowCount() {
-	if (data == null) {
-	    return 0;
-	}
-        return data.length;
+    if (row >= data.length) {
+      return "";
+    }
+    SimulationLatency st = data[row];
+
+    switch (column) {
+      case 0:
+        return st.getTransaction1();
+      case 1:
+        return st.getTransaction2();
+      case 2:
+        return st.getMinTime();
+      case 3:
+        return st.getMaxTime();
+      case 4:
+        return st.getAverageTime();
+      case 5:
+        return st.getStDev();
+    }
+    return "unknown";
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Transaction 1";
+      case 1:
+        return "Transaction 2";
+      case 2:
+        return "Min";
+      case 3:
+        return "Max";
+      case 4:
+        return "Average";
+      case 5:
+        return "St Dev";
     }
 
-    public int getColumnCount() {
-        return 6;
+    return "unknown";
+  }
+
+  public synchronized void setData(Vector<SimulationLatency> _trans) {
+    data = new SimulationLatency[_trans.size()];
+    for (int i = 0; i < _trans.size(); i++) {
+      data[i] = _trans.get(i);
     }
-
-    public synchronized Object getValueAt(int row, int column) {
-	if (data == null) {
-	    return "";
-	}
-
-	if (row >= data.length) {
-	    return "";
-	}
-	SimulationLatency st = data[row];
-
-	switch(column) {
-        case 0:
-            return st.getTransaction1();
-        case 1:
-            return st.getTransaction2();
-        case 2:
-            return st.getMinTime();
-		case 3:
-			return st.getMaxTime();
-		case 4:	
-			return st.getAverageTime();
-		case 5:
-			return st.getStDev();
-        }
-        return "unknown";		
-    }
-
-    public String getColumnName(int columnIndex) {
-        switch(columnIndex) {
-        case 0:
-            return "Transaction 1";
-        case 1:
-            return "Transaction 2";
-        case 2:
-            return "Min";
-		case 3:
-			return "Max";
-		case 4:
-			return "Average";
-		case 5:
-			return "St Dev";
-        }
-		
-        return "unknown";
-    }
-
-    public synchronized void setData(Vector<SimulationLatency> _trans) {
-		data = new SimulationLatency[_trans.size()];
-		for(int i=0; i<_trans.size(); i++) {
-		    data[i] = _trans.get(i);
-		}
-		fireTableStructureChanged();
-    	}
+    fireTableStructureChanged();
+  }
 
 }

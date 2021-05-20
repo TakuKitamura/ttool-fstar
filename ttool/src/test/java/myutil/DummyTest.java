@@ -44,8 +44,8 @@ import static org.junit.Assert.assertTrue;
 
 public class DummyTest {
 
-    @Test
-    public void testVeryDummy() {
-        assertFalse(false);
-    }
+  @Test
+  public void testVeryDummy() {
+    assertFalse(false);
+  }
 }

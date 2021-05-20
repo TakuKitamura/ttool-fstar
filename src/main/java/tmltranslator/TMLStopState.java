@@ -36,27 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
-
 /**
- * Class TMLStopState
- * Creation: 23/11/2005
+ * Class TMLStopState Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLStopState extends TMLActivityElement{
-    
-    public TMLStopState(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);
-    }
+public class TMLStopState extends TMLActivityElement {
 
-    public String customExtraToXML() {
-	return "";
-    }
- 
+  public TMLStopState(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public String customExtraToXML() {
+    return "";
+  }
+
 }

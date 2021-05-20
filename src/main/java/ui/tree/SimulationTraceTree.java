@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.*;
@@ -48,49 +45,48 @@ import graph.RG;
 import java.util.List;
 
 /**
- * Class SimulationTraceTree
- * Creation: 25/09/2018
- * Version 2.0 25/09/2018
+ * Class SimulationTraceTree Creation: 25/09/2018 Version 2.0 25/09/2018
+ * 
  * @author Ludovic APVRILLE
  */
 public class SimulationTraceTree implements GenericTree {
-    
-    private MainGUI mgui;
-    private String name = "Simulation Traces";
- 
-    
-    public SimulationTraceTree(MainGUI _mgui) {
-        mgui = _mgui;
+
+  private MainGUI mgui;
+  private String name = "Simulation Traces";
+
+  public SimulationTraceTree(MainGUI _mgui) {
+    mgui = _mgui;
+  }
+
+  // TREE MANAGEMENT
+  public String toString() {
+    return name;
+  }
+
+  public int getChildCount() {
+    // TraceManager.addDev("Getting nb of child in SimulationTraceTree");
+    int nb = mgui.getSimulationTraces().size();
+    // TraceManager.addDev("size of simulation tree:" + nb);
+    if (nb == 0) {
+      return 1;
     }
-    
-    // TREE MANAGEMENT
-    public String toString() {
-        return name;
+    return nb;
+  }
+
+  public Object getChild(int index) {
+    // TraceManager.addDev("Getting child of SimulationTraceTree at index:" +
+    // index);
+    List<SimulationTrace> sts = mgui.getSimulationTraces();
+    if (sts.size() == 0) {
+      return "No simulation trace";
     }
-    
-    public int getChildCount() {
-        //TraceManager.addDev("Getting nb of child in SimulationTraceTree");
-        int nb =  mgui.getSimulationTraces().size();
-        //TraceManager.addDev("size of simulation tree:" + nb);
-        if (nb == 0) {
-        	return 1;
-        }
-        return nb;
+    return mgui.getSimulationTraces().get(index);
+  }
+
+  public int getIndexOfChild(Object child) {
+    if (child instanceof String) {
+      return 0;
     }
-    
-    public Object getChild(int index) {
-        //TraceManager.addDev("Getting child of SimulationTraceTree at index:" + index);
-    	List<SimulationTrace> sts = mgui.getSimulationTraces();
-    	if (sts.size() == 0) {
-    		return "No simulation trace";
-    	}
-    	return mgui.getSimulationTraces().get(index);
-    }
-    
-    public int getIndexOfChild(Object child) {
-    	if (child instanceof String) {
-    		return 0;
-    	}
-       return  mgui.getSimulationTraces().indexOf(child);
-    }
+    return mgui.getSimulationTraces().indexOf(child);
+  }
 }

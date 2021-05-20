@@ -42,31 +42,32 @@ import java.util.Map;
 
 /**
  * An AvatarConstantGuard is an {@link AvatarSimpleGuard} that is of the form:
- * {@link AvatarConstant}
- * Creation: 22/03/2016
+ * {@link AvatarConstant} Creation: 22/03/2016
+ * 
  * @version 1.0 22/03/2016
  * @author Florian LUGOU
  */
 public class AvatarConstantGuard extends AvatarSimpleGuard {
-    AvatarConstant constant;
+  AvatarConstant constant;
 
-    public AvatarConstantGuard (AvatarConstant _constant) {
-        this.constant = _constant;
-    }
+  public AvatarConstantGuard(AvatarConstant _constant) {
+    this.constant = _constant;
+  }
 
-    public AvatarConstant getConstant () {
-        return this.constant;
-    }
+  public AvatarConstant getConstant() {
+    return this.constant;
+  }
 
-    public String getAsString (AvatarSyntaxTranslator translator) {
-        return this.constant.getName ();
-    }
+  public String getAsString(AvatarSyntaxTranslator translator) {
+    return this.constant.getName();
+  }
 
-    @Override
-    public AvatarConstantGuard clone () {
-        return new AvatarConstantGuard (this.constant);
-    }
+  @Override
+  public AvatarConstantGuard clone() {
+    return new AvatarConstantGuard(this.constant);
+  }
 
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+  }
 }

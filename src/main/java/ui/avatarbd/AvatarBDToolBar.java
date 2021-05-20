@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatarbd;
 
 import ui.MainGUI;
@@ -49,9 +48,8 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class AvatarBDToolBar
- * Implements the toolbar to be used in conjunction with the panel of an AVATAR block diagram
- * Creation: 06/04/2010
+ * Class AvatarBDToolBar Implements the toolbar to be used in conjunction with
+ * the panel of an AVATAR block diagram Creation: 06/04/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.0 06/04/2010
@@ -59,141 +57,140 @@ import javax.swing.*;
  */
 public class AvatarBDToolBar extends TToolBar {
 
-    public AvatarBDToolBar(MainGUI _mgui) {
-        super(_mgui);
+  public AvatarBDToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
+
+  @Override
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
+
+    mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.PRAGMA].setEnabled(b);
+    mgui.actions[TGUIAction.SAFETY_PRAGMA].setEnabled(b);
+    mgui.actions[TGUIAction.PERFORMANCE_PRAGMA].setEnabled(b);
+    mgui.actions[TGUIAction.AVATAR_FIREWALL].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+
+    mgui.actions[TGUIAction.ABD_BLOCK].setEnabled(b);
+    if (mgui.isExperimentalOn()) {
+      mgui.actions[TGUIAction.AMS_INTERFACE].setEnabled(b);
     }
-    @Override
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ABD_CRYPTOBLOCK].setEnabled(b);
+    mgui.actions[TGUIAction.ABD_DATATYPE].setEnabled(b);
+    mgui.actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ABD_PORT_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ABD_LIBRARYFUNCTION].setEnabled(b);
+    mgui.actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-        mgui.updateZoomInfo();
+    // mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
 
-        mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.PRAGMA].setEnabled(b);
-        mgui.actions[TGUIAction.SAFETY_PRAGMA].setEnabled(b);
-        mgui.actions[TGUIAction.PERFORMANCE_PRAGMA].setEnabled(b);
-        mgui.actions[TGUIAction.AVATAR_FIREWALL].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    // mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ABD_BLOCK].setEnabled(b);
-        if (mgui.isExperimentalOn()) {
-            mgui.actions[TGUIAction.AMS_INTERFACE].setEnabled(b);
-        }
-        mgui.actions[TGUIAction.ABD_CRYPTOBLOCK].setEnabled(b);
-        mgui.actions[TGUIAction.ABD_DATATYPE].setEnabled(b);
-        mgui.actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.ABD_PORT_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.ABD_LIBRARYFUNCTION].setEnabled(b);
-        mgui.actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION].setEnabled(b);
+    // mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
 
-        //mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
-        //mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
-        //mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
+  }
 
-        mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+  @Override
+  protected void setButtons() {
+    JButton button;
 
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
 
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.SAFETY_PRAGMA]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.PRAGMA]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.PERFORMANCE_PRAGMA]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ABD_BLOCK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.AMS_INTERFACE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ABD_CRYPTOBLOCK]);
+    button.addMouseListener(mgui.mouseHandler);
+    if (MainGUI.experimentalOn) {
+      button = this.add(mgui.actions[TGUIAction.AVATAR_FIREWALL]);
+      button.addMouseListener(mgui.mouseHandler);
     }
-    
-    @Override
-    protected void setButtons() {
-        JButton button;
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ABD_DATATYPE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ABD_LIBRARYFUNCTION]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.SAFETY_PRAGMA]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.PRAGMA]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ABD_COMPOSITION_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.PERFORMANCE_PRAGMA]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
+    button = this.add(mgui.actions[TGUIAction.ABD_PORT_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    /*
+     * button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
+     * button.addMouseListener(mgui.mouseHandler);
+     * 
+     * this.addSeparator();
+     * 
+     * button = this.add(mgui.actions[TGUIAction.ATD_CONSTRAINT]);
+     * button.addMouseListener(mgui.mouseHandler);
+     * 
+     * this.addSeparator();
+     * 
+     * button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
+     * button.addMouseListener(mgui.mouseHandler);
+     * 
+     * this.addSeparator(); this.addSeparator();
+     */
 
-        button = this.add(mgui.actions[TGUIAction.ABD_BLOCK]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-	this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.AMS_INTERFACE]);
-        button.addMouseListener(mgui.mouseHandler);
-	
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ABD_CRYPTOBLOCK]);
-        button.addMouseListener(mgui.mouseHandler);
-        if (MainGUI.experimentalOn) {
-            button = this.add(mgui.actions[TGUIAction.AVATAR_FIREWALL]);
-            button.addMouseListener(mgui.mouseHandler);
-        }
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ABD_DATATYPE]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ABD_LIBRARYFUNCTION]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ABD_CRYPTOLIBRARYFUNCTION]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ABD_COMPOSITION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ABD_PORT_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        /*button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
-          button.addMouseListener(mgui.mouseHandler);
-
-          this.addSeparator();
-
-          button = this.add(mgui.actions[TGUIAction.ATD_CONSTRAINT]);
-          button.addMouseListener(mgui.mouseHandler);
-
-          this.addSeparator();
-
-          button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
-          button.addMouseListener(mgui.mouseHandler);
-
-          this.addSeparator();
-          this.addSeparator();*/
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-
-    }
+  }
 
 } // Class

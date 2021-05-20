@@ -36,33 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
-   * Class TMLWriteChannel
-   * Creation: 23/11/2005
-   * @version 1.0 23/11/2005
-   * @author Ludovic APVRILLE
+ * Class TMLWriteChannel Creation: 23/11/2005
+ * 
+ * @version 1.0 23/11/2005
+ * @author Ludovic APVRILLE
  */
 public class TMLWriteChannel extends TMLActivityElementChannel {
 
-    public TMLWriteChannel(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public TMLWriteChannel(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    public String toString() {
-        String tmp = "Write " + nbOfSamples + " sample(s) in channel(s): ";
-        for(int k=0; k<getNbOfChannels(); k++) {
-            if (k!=0) {
-                tmp += " ,";
-            }
-            tmp += getChannel(k).getName();
-        }
-        return  tmp;
+  public String toString() {
+    String tmp = "Write " + nbOfSamples + " sample(s) in channel(s): ";
+    for (int k = 0; k < getNbOfChannels(); k++) {
+      if (k != 0) {
+        tmp += " ,";
+      }
+      tmp += getChannel(k).getName();
     }
+    return tmp;
+  }
 
 }

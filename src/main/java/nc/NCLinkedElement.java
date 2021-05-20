@@ -36,23 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package nc;
 
-
-
 /**
-* Class NCLinkedElement
-* Creation: 14/11/2008
-* @version 1.0 14/11/2008
-* @author Ludovic APVRILLE
+ * Class NCLinkedElement Creation: 14/11/2008
+ * 
+ * @version 1.0 14/11/2008
+ * @author Ludovic APVRILLE
  */
-public class NCLinkedElement extends NCElement  {
-	
-	public NCLinkedElement() {
-		
-	}
-	
+public class NCLinkedElement extends NCElement {
+
+  public NCLinkedElement() {
+
+  }
+
 }

@@ -48,126 +48,137 @@ import ui.ad.TADExec;
 import ui.ad.TGConnectingPointAD;
 
 /**
- * Class TMLADExecI
- * Fixed duration operator. To be used in TML activity diagrams
+ * Class TMLADExecI Fixed duration operator. To be used in TML activity diagrams
  * Creation: 21/11/2005
+ * 
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADExecI extends TADExec /* Issue #69 TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, CheckableLatency, BasicErrorHighlight*/ {
+public class TMLADExecI extends TADExec /*
+                                         * Issue #69 TGCWithInternalComponent implements EmbeddedComment,
+                                         * AllowedBreakpoint, CheckableLatency, BasicErrorHighlight
+                                         */ {
 
-	// Issue #31
-//    private int lineLength = 5;
- //   private int textX, textY;
-//    private int ilength;// = 10;
-//    private int lineLength1;// = 2;
-	
-//	protected int stateOfError = 0; // Not yet checked
-    
-    public TMLADExecI(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp, "execi value", "value of the delay" );
-        
-        // Issue #31
-//        width = 10;
-//        height = 30;
-//        initSize( 10, 30 );
-//        textX = width + scale( 5 );
-//        textY = height/2 + scale( 5 );
-//        ilength = scale( 10 );
-//        lineLength1 = scale( )
-//        
-//        nbConnectingPoint = 2;
-//        connectingPoint = new TGConnectingPoint[2];
-//        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-//        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
-//        
-//        nbInternalTGComponent = 1;
-//        tgcomponent = new TGComponent[nbInternalTGComponent];
-//        
-//        TGCOneLineText tgc = new TGCOneLineText(x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
-//        tgc.setValue("execi value");
-//        tgc.setName("value of the delay");
-//        tgcomponent[0] = tgc;
-//        
-//        moveable = true;
-//        editable = false;
-//        removable = true;
-        
-        name = "execI";
-        
-     //   myImageIcon = IconManager.imgic214;
-    }
-//    
-//    @Override
-//    public void internalDrawing(Graphics g) {
-//		if (stateOfError > 0)  {
-//			Color c = g.getColor();
-//			switch(stateOfError) {
-//			case ErrorHighlight.OK:
-//				g.setColor(ColorManager.EXEC);
-//				break;
-//			default:
-//				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-//			}
-//			g.fillRect(x, y, width, height);
-//			g.setColor(c);
-//		}
-//        g.drawRect(x, y, width, height);
-//        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-//        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-//        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
-//        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
-//        g.drawLine(x + (width/2), y+(height-ilength)/2, x + (width/2), y+(height+ilength)/2);
-//    }
-    
-//    @Override
-//    public TGComponent isOnOnlyMe(int x1, int y1) {
-//        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-//            return this;
-//        }
-//        
-//        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, x1, y1)) < distanceSelected) {
-//			return this;	
-//		}
-//        
-//        return null;
-//    }
-//    
-//    public String getDelayValue() {
-//        return tgcomponent[0].getValue();
-//    }
-//    
-//    public void setDelayValue(String value) {
-//        tgcomponent[0].setValue(value);
-//    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.TMLAD_EXECI;
-    }
-    
-    @Override
-    public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_TMLAD;
-    }
-//    
-//    @Override
-//	public void setStateAction(int _stateAction) {
-//		stateOfError = _stateAction;
-//	}
+  // Issue #31
+  // private int lineLength = 5;
+  // private int textX, textY;
+  // private int ilength;// = 10;
+  // private int lineLength1;// = 2;
 
-	@Override
-	protected TGConnectingPointAD createConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
-			double _w, double _h) {
-		return new TGConnectingPointTMLAD( _container, _x, _y, _in, _out, _w, _h );
-	}
+  // protected int stateOfError = 0; // Not yet checked
 
-	@Override
-	protected void drawInternalSymbol(	Graphics g,
-										int symbolWidth,
-										int symbolHeight ) {
-      g.drawLine(x + (width/2) - symbolWidth, y+(height-symbolHeight)/2,  x + (width/2) + symbolWidth, y+(height-symbolHeight)/2);
-      g.drawLine(x + (width/2) - symbolWidth, y+(height-symbolHeight)/2 + symbolHeight,  x + (width/2) + symbolWidth, y+(height-symbolHeight)/2 + symbolHeight);
-      g.drawLine(x + (width/2), y+(height-symbolHeight)/2, x + (width/2), y+(height+symbolHeight)/2);
-	}
+  public TMLADExecI(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp, "execi value", "value of the delay");
+
+    // Issue #31
+    // width = 10;
+    // height = 30;
+    // initSize( 10, 30 );
+    // textX = width + scale( 5 );
+    // textY = height/2 + scale( 5 );
+    // ilength = scale( 10 );
+    // lineLength1 = scale( )
+    //
+    // nbConnectingPoint = 2;
+    // connectingPoint = new TGConnectingPoint[2];
+    // connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true,
+    // false, 0.5, 0.0);
+    // connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false,
+    // true, 0.5, 1.0);
+    //
+    // nbInternalTGComponent = 1;
+    // tgcomponent = new TGComponent[nbInternalTGComponent];
+    //
+    // TGCOneLineText tgc = new TGCOneLineText(x+textX, y+textY, -75, 30, textY -
+    // 10, textY + 10, true, this, _tdp);
+    // tgc.setValue("execi value");
+    // tgc.setName("value of the delay");
+    // tgcomponent[0] = tgc;
+    //
+    // moveable = true;
+    // editable = false;
+    // removable = true;
+
+    name = "execI";
+
+    // myImageIcon = IconManager.imgic214;
+  }
+  //
+  // @Override
+  // public void internalDrawing(Graphics g) {
+  // if (stateOfError > 0) {
+  // Color c = g.getColor();
+  // switch(stateOfError) {
+  // case ErrorHighlight.OK:
+  // g.setColor(ColorManager.EXEC);
+  // break;
+  // default:
+  // g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+  // }
+  // g.fillRect(x, y, width, height);
+  // g.setColor(c);
+  // }
+  // g.drawRect(x, y, width, height);
+  // g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+  // g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+  // g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2, x + (width/2) +
+  // lineLength1, y+(height-ilength)/2);
+  // g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength, x +
+  // (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
+  // g.drawLine(x + (width/2), y+(height-ilength)/2, x + (width/2),
+  // y+(height+ilength)/2);
+  // }
+
+  // @Override
+  // public TGComponent isOnOnlyMe(int x1, int y1) {
+  // if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+  // return this;
+  // }
+  //
+  // if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength, x+width/2, y +
+  // lineLength + height, x1, y1)) < distanceSelected) {
+  // return this;
+  // }
+  //
+  // return null;
+  // }
+  //
+  // public String getDelayValue() {
+  // return tgcomponent[0].getValue();
+  // }
+  //
+  // public void setDelayValue(String value) {
+  // tgcomponent[0].setValue(value);
+  // }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TMLAD_EXECI;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_TMLAD;
+  }
+  //
+  // @Override
+  // public void setStateAction(int _stateAction) {
+  // stateOfError = _stateAction;
+  // }
+
+  @Override
+  protected TGConnectingPointAD createConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+      double _w, double _h) {
+    return new TGConnectingPointTMLAD(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  protected void drawInternalSymbol(Graphics g, int symbolWidth, int symbolHeight) {
+    g.drawLine(x + (width / 2) - symbolWidth, y + (height - symbolHeight) / 2, x + (width / 2) + symbolWidth,
+        y + (height - symbolHeight) / 2);
+    g.drawLine(x + (width / 2) - symbolWidth, y + (height - symbolHeight) / 2 + symbolHeight,
+        x + (width / 2) + symbolWidth, y + (height - symbolHeight) / 2 + symbolHeight);
+    g.drawLine(x + (width / 2), y + (height - symbolHeight) / 2, x + (width / 2), y + (height + symbolHeight) / 2);
+  }
 }

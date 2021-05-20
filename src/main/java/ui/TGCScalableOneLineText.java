@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.Conversion;
@@ -51,78 +48,75 @@ import java.awt.*;
 //import java.awt.geom.*;
 
 /**
-   * Class TGCScalableOneLineText
-   * Internal scalable component with one line of text
-   * Creation: 08/03/2017
-   * @version 1.0 08/03/2017
-   * @author Ludovic APVRILLE
+ * Class TGCScalableOneLineText Internal scalable component with one line of
+ * text Creation: 08/03/2017
+ * 
+ * @version 1.0 08/03/2017
+ * @author Ludovic APVRILLE
  */
 public class TGCScalableOneLineText extends TGCScalableWithoutInternalComponent {
-    protected boolean emptyText;
+  protected boolean emptyText;
 
+  public TGCScalableOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public TGCScalableOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    oldScaleFactor = tdp.getZoom();
 
-	oldScaleFactor = tdp.getZoom();
-	
-        nbConnectingPoint = 0;
-        minWidth = 10;
-        nbInternalTGComponent = 0;
+    nbConnectingPoint = 0;
+    minWidth = 10;
+    nbInternalTGComponent = 0;
 
-        moveable = true;
-        editable = true;
-        removable = false;
+    moveable = true;
+    editable = true;
+    removable = false;
 
-        emptyText = false;
+    emptyText = false;
 
-        name = "value ";
+    name = "value ";
 
-        myImageIcon = IconManager.imgic302;
+    myImageIcon = IconManager.imgic302;
+  }
+
+  public void internalDrawing(Graphics g) {
+    if (!tdp.isScaled()) {
+      width = g.getFontMetrics().stringWidth(value);
+      height = g.getFontMetrics().getHeight();
+    }
+    g.drawString(value, x, y);
+    if (value.equals("")) {
+      g.drawString("value?", x, y);
+    }
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = value;
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
+
+    if (s != null) {
+      s = Conversion.removeFirstSpaces(s);
     }
 
-    public void internalDrawing(Graphics g) {
-        if (!tdp.isScaled()) {
-            width = g.getFontMetrics().stringWidth(value);
-            height = g.getFontMetrics().getHeight();
-        }
-        g.drawString(value, x, y);
-        if (value.equals("")) {
-            g.drawString("value?", x, y);
-        }
+    //
+
+    if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
+      setValue(s);
+      //
+      return true;
     }
 
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
-            return this;
-        }
-        return null;
-    }
-
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldValue = value;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-                                                       "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                       null,
-                                                       getValue());
-
-        if (s != null) {
-            s = Conversion.removeFirstSpaces(s);
-        }
-
-        //
-
-        if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
-            setValue(s);
-            //
-            return true;
-        }
-
-
-        return false;
-    }
+    return false;
+  }
 }

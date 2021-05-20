@@ -36,37 +36,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.iod;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointIOD
- * Definition of connecting points on which connectors of interaction overview diagram can be connected
- * Creation: 30/09/2004
+ * Class TGConnectingPointIOD Definition of connecting points on which
+ * connectors of interaction overview diagram can be connected Creation:
+ * 30/09/2004
+ * 
  * @version 1.0 30/09/2004
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointIOD extends  TGConnectingPointWidthHeight{
-    
-    public TGConnectingPointIOD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
+public class TGConnectingPointIOD extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointIOD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  public boolean isCompatibleWith(int type) {
+    //
+    if (type == TGComponentManager.CONNECTOR_INTERACTION) {
+      //
+      return true;
     }
-    
-    public boolean isCompatibleWith(int type) {
-        //
-        if (type == TGComponentManager.CONNECTOR_INTERACTION) {
-            //
-            return true;
-        }
-        //
-        return false;
-    }
-    
+    //
+    return false;
+  }
+
 }

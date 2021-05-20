@@ -36,28 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
-
 
 /**
  * Class StoppableGUIElement
  *
  * Creation: 27/04/2007
+ * 
  * @version 1.0 27/04/2007
  * @author Ludovic APVRILLE
  */
 public interface StoppableGUIElement {
 
-	   void goElement();
-       void stopElement();
-       boolean hasFinished();
-       void setFinished();
-       boolean hasBeenStopped();
-       int getPercentage();
-       String getCurrentActivity();
-       
+  void goElement();
+
+  void stopElement();
+
+  boolean hasFinished();
+
+  void setFinished();
+
+  boolean hasBeenStopped();
+
+  int getPercentage();
+
+  String getCurrentActivity();
+
 }

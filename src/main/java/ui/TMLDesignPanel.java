@@ -59,152 +59,152 @@ import java.util.Iterator;
 import java.util.Vector;
 
 /**
-   * Class TMLDesignPanel
-   * Managenemt of TML design panels
-   * Creation: 27/10/2006
-   * @version 1.0 28/05/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
-   * @see MainGUI
+ * Class TMLDesignPanel Managenemt of TML design panels Creation: 27/10/2006
+ * 
+ * @version 1.0 28/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
+ * @see MainGUI
  */
 public class TMLDesignPanel extends TURTLEPanel {
-    public TMLTaskDiagramPanel tmltdp;
-    public Vector<TGComponent> validated, ignored;
+  public TMLTaskDiagramPanel tmltdp;
+  public Vector<TGComponent> validated, ignored;
 
-    public TMLDesignPanel(MainGUI _mgui) {
-        super(_mgui);
-        
-    	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        
-        cl = new ChangeListener() {
-        	
-        	@Override
-            public void stateChanged(ChangeEvent e){
-                mgui.paneDesignAction(e);
-            }
-        };
+  public TMLDesignPanel(MainGUI _mgui) {
+    super(_mgui);
 
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+
+    cl = new ChangeListener() {
+
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneDesignAction(e);
+      }
+    };
+
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+  }
+
+  public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String name) {
+    TMLActivityDiagramPanel tmladp;
+    for (int i = 1; i < panels.size(); i++) {
+      tmladp = (TMLActivityDiagramPanel) (panels.elementAt(i));
+      if (tmladp.getName().compareTo(name) == 0) {
+        // TraceManager.addDev("Ok!");
+        return tmladp;
+      }
     }
+    return null;
+  }
 
-    public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String name) {
-        TMLActivityDiagramPanel tmladp;
-        for(int i=1; i<panels.size(); i++) {
-            tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
-            if (tmladp.getName().compareTo(name) == 0) {
-                //TraceManager.addDev("Ok!");
-                return tmladp;
-            }
+  public void addTMLActivityDiagram(String s) {
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    TMLActivityDiagramToolBar toolBarActivity = new TMLActivityDiagramToolBar(mgui);
+    toolbars.add(toolBarActivity);
+
+    TMLActivityDiagramPanel tmladp = new TMLActivityDiagramPanel(mgui, toolBarActivity);
+    tmladp.tp = this;
+    tmladp.setName(s);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmladp);
+    tmladp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    panels.add(tmladp);
+    tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the activity diagram of " + s);
+
+    return;
+  }
+
+  public void init() {
+
+    // Class Diagram toolbar
+    TMLTaskDiagramToolBar toolBarTML = new TMLTaskDiagramToolBar(mgui);
+    toolbars.add(toolBarTML);
+
+    toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    // Class diagram
+    tmltdp = new TMLTaskDiagramPanel(mgui, toolBarTML);
+    tmltdp.setName("TML Task Diagram");
+    tmltdp.tp = this;
+    tdp = tmltdp;
+    panels.add(tmltdp); // Always first in list
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmltdp);
+    tmltdp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab("TML Task Diagram", IconManager.imgic62, toolBarPanel, "Opens TML task diagram");
+    tabbedPane.setSelectedIndex(0);
+
+    mgui.changeMade(tmltdp, TDiagramPanel.NEW_COMPONENT);
+
+    // jsp.setVisible(true);
+  }
+
+  @Override
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+    }
+    return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+  }
+
+  @Override
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
+
+  @Override
+  public String toString() {
+    return mgui.getTitleAt(this) + " (TML Functional View)";
+  }
+
+  public List<String> getAllTMLTaskNames(String _name) {
+    return tmltdp.getAllTMLTaskNames(_name);
+  }
+
+  public List<String> getAllTMLCommunicationNames(String _name) {
+    return tmltdp.getAllTMLCommunicationNames(_name);
+  }
+
+  public List<String> getAllTMLEventNames(String _name) {
+    return tmltdp.getAllTMLEventNames(_name);
+  }
+
+  public List<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
+    return tmltdp.getAllNonMappedTMLTaskNames(_name, _tadp, ref, name);
+  }
+
+  public TMLTaskOperator getTaskByName(String _name) {
+    return tmltdp.getTaskByName(_name);
+  }
+
+  public void getListOfBreakPoints(ArrayList<Point> points) {
+    TGComponent tgc;
+    Iterator<TGComponent> iterator = tmltdp.getComponentList().listIterator();
+    TMLTaskOperator tmlto;
+    TMLActivityDiagramPanel tmladp;
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+
+      if (tgc instanceof TMLTaskOperator) {
+        tmlto = (TMLTaskOperator) tgc;
+
+        if (tmlto.getDIPLOID() != -1) {
+          tmladp = getTMLActivityDiagramPanel(tmlto.getValue());
+          tmladp.getListOfBreakPoints(points, tmlto.getDIPLOID());
         }
-        return null;
+      }
     }
-    public void addTMLActivityDiagram(String s) {
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-
-        TMLActivityDiagramToolBar toolBarActivity       = new TMLActivityDiagramToolBar(mgui);
-        toolbars.add(toolBarActivity);
-
-        TMLActivityDiagramPanel tmladp = new TMLActivityDiagramPanel(mgui, toolBarActivity);
-        tmladp.tp = this;
-        tmladp.setName(s);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmladp);
-        tmladp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        panels.add(tmladp);
-        tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the activity diagram of " + s);
-
-        return;
-    }
-
-    public void init() {
-
-        //  Class Diagram toolbar
-        TMLTaskDiagramToolBar toolBarTML = new TMLTaskDiagramToolBar(mgui);
-        toolbars.add(toolBarTML);
-
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-
-        //Class diagram
-        tmltdp = new TMLTaskDiagramPanel(mgui, toolBarTML);
-        tmltdp.setName("TML Task Diagram");
-        tmltdp.tp = this;
-        tdp = tmltdp;
-        panels.add(tmltdp); // Always first in list
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmltdp);
-        tmltdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("TML Task Diagram", IconManager.imgic62, toolBarPanel, "Opens TML task diagram");
-        tabbedPane.setSelectedIndex(0);
-
-        mgui.changeMade(tmltdp, TDiagramPanel.NEW_COMPONENT);
-
-        //jsp.setVisible(true);
-    }
-
-    @Override
-    public String saveHeaderInXml(String extensionToName) {
-		if (extensionToName == null) {
-		    return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-		}
-		return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-    }
-
-    @Override
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
-    }
-
-    @Override
-    public String toString() {
-        return mgui.getTitleAt(this) + " (TML Functional View)";
-    }
-
-    public List<String> getAllTMLTaskNames(String _name) {
-        return tmltdp.getAllTMLTaskNames(_name);
-    }
-
-    public List<String> getAllTMLCommunicationNames(String _name) {
-        return tmltdp.getAllTMLCommunicationNames(_name);
-    }
-
-    public List<String> getAllTMLEventNames( String _name ) {
-        return tmltdp.getAllTMLEventNames( _name );
-    }
-
-    public List<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
-        return tmltdp.getAllNonMappedTMLTaskNames(_name, _tadp, ref, name);
-    }
-
-    public TMLTaskOperator getTaskByName(String _name) {
-        return tmltdp.getTaskByName(_name);
-    }
-
-    public void getListOfBreakPoints(ArrayList<Point> points) {
-        TGComponent tgc;
-        Iterator<TGComponent> iterator = tmltdp.getComponentList().listIterator();
-        TMLTaskOperator tmlto;
-        TMLActivityDiagramPanel tmladp;
-
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-
-            if (tgc instanceof TMLTaskOperator) {
-                tmlto = (TMLTaskOperator)tgc;
-
-                if (tmlto.getDIPLOID() != -1) {
-                    tmladp = getTMLActivityDiagramPanel(tmlto.getValue());
-                    tmladp.getListOfBreakPoints(points, tmlto.getDIPLOID());
-                }
-            }
-        }
-    }
+  }
 }

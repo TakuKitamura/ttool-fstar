@@ -39,30 +39,30 @@
 package avatartranslator;
 
 /**
- * Class AvatarStopState
- * Creation: 20/05/2010
+ * Class AvatarStopState Creation: 20/05/2010
+ * 
  * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarStopState extends AvatarStateElement {
 
-    public AvatarStopState(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public AvatarStopState(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-        AvatarStopState astop = new AvatarStopState(getName(), getReferenceObject());
-        astop.setAsVerifiable(canBeVerified());
-	
-        return astop;
-	//return null;
-    }
+  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+    AvatarStopState astop = new AvatarStopState(getName(), getReferenceObject());
+    astop.setAsVerifiable(canBeVerified());
 
-    public String getNiceName() {
-        return "Stop state";
-    }
+    return astop;
+    // return null;
+  }
 
-    public void translate(AvatarTranslator translator, Object arg) {
-        translator.translateStopState (this, arg);
-    }
+  public String getNiceName() {
+    return "Stop state";
+  }
+
+  public void translate(AvatarTranslator translator, Object arg) {
+    translator.translateStopState(this, arg);
+  }
 }

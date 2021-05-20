@@ -36,26 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package faulttrees;
 
 /**
- * Class TimeNode
- * Creation: 13/04/2015
+ * Class TimeNode Creation: 13/04/2015
  *
  * @author Ludovic APVRILLE
  * @version 1.0 13/04/2015
  */
 public abstract class TimeNode extends FaultNode {
-    protected int time;
+  protected int time;
 
-    public TimeNode(String _name, Object _objectReference, int _time) {
-        super(_name, _objectReference);
-        time = _time;
-    }
+  public TimeNode(String _name, Object _objectReference, int _time) {
+    super(_name, _objectReference);
+    time = _time;
+  }
 
-    public int getTime() {
-        return time;
-    }
+  public int getTime() {
+    return time;
+  }
 
 }

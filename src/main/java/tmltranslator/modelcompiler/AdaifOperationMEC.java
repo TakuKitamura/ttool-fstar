@@ -37,65 +37,58 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
-   * Class AdaifOperationMEC, Model Extension Construct (MEC) class for Adaif operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class AdaifOperationMEC, Model Extension Construct (MEC) class for Adaif
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class AdaifOperationMEC extends OperationMEC	{
+public class AdaifOperationMEC extends OperationMEC {
 
+  public AdaifOperationMEC(final String ctxName) {
+    name = "AdaifOperationMEC";
 
-	public AdaifOperationMEC( final String ctxName )	{
-		name = "AdaifOperationMEC";
-		
-		// Issue #98: Status already declared
-		exec_code = TAB + // "int status;" + CR + TAB +
-					"adaif_wait(&" + ctxName + ");" + CR + TAB +
-					"status = adaif_wait(&" + ctxName + ");" + CR;
-	
-		// Issue #98: Provide default value for compilation
-		init_code =
-			"void init_" + ctxName.split("_ctx")[0] + "( void )\t{" + CR + TAB +
-			"adaif_ctx_init(&" + ctxName + ", (uintptr_t) adaif_mss );" + CR + TAB +
-			"adaif_set_tdd(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_st(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldt0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldr0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldt1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldr1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldt2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldr2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldt3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_ldr3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startt0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopt0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startr0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopr0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startt1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopt1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startr1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopr1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startt2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopt2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startr2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopr2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startt3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopt3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_startr3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_stopr3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_op(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_src(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_dst(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"adaif_set_data(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"}" + CR;
-		cleanup_code = TAB + "adaif_ctx_cleanup( " + DEFAULT_NUM_VAL + USER_TO_DO + " );";
-		context = "ADAIF_CONTEXT";
-	}
+    // Issue #98: Status already declared
+    exec_code = TAB + // "int status;" + CR + TAB +
+        "adaif_wait(&" + ctxName + ");" + CR + TAB + "status = adaif_wait(&" + ctxName + ");" + CR;
 
-}	//End of class
+    // Issue #98: Provide default value for compilation
+    init_code = "void init_" + ctxName.split("_ctx")[0] + "( void )\t{" + CR + TAB + "adaif_ctx_init(&" + ctxName
+        + ", (uintptr_t) adaif_mss );" + CR + TAB + "adaif_set_tdd(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL
+        + USER_TO_DO + " );" + CR + TAB + "adaif_set_st(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO
+        + " );" + CR + TAB + "adaif_set_ldt0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR
+        + TAB + "adaif_set_ldr0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_ldt1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_ldr1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_ldt2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_ldr2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_ldt3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_ldr3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startt0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopt0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startr0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopr0(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startt1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopt1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startr1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopr1(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startt2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopt2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startr2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopr2(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startt3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopt3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_startr3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_stopr3(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_op(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_src(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_dst(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "adaif_set_data(&" + ctxName + ", (uint64_t) " + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "}" + CR;
+    cleanup_code = TAB + "adaif_ctx_cleanup( " + DEFAULT_NUM_VAL + USER_TO_DO + " );";
+    context = "ADAIF_CONTEXT";
+  }
+
+} // End of class

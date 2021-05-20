@@ -41,36 +41,40 @@ package avatartranslator;
 import java.util.Map;
 
 /**
-   * Class AvatarAction
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
-   * @author Florian LUGOU
+ * Class AvatarAction Creation: 16/09/2015
+ * 
+ * @version 1.0 16/09/2015
+ * @author Florian LUGOU
  */
 public interface AvatarAction {
-    boolean isAMethodCall();
-    boolean isAVariableSetting();
-    boolean isABasicVariableSetting();
-    String getName();
+  boolean isAMethodCall();
 
-    /**
-     * Returns True if the whole action contains a method call.
-     *
-     * @return True if the whole action contains a method call. False otherwise.
-     */
-    boolean containsAMethodCall();
+  boolean isAVariableSetting();
 
-    /**
-     * Returns a full clone of the action.
-     *
-     * @return A clone of the action.
-     */
-    AvatarAction clone();
+  boolean isABasicVariableSetting();
 
-    /**
-     * Replaces attributes in this action according to the provided mapping.
-     *
-     * @param attributesMapping
-     *      The mapping used to replace the attributes of the action. All the attributes of the block should be present as keys.
-     */
-    void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
+  String getName();
+
+  /**
+   * Returns True if the whole action contains a method call.
+   *
+   * @return True if the whole action contains a method call. False otherwise.
+   */
+  boolean containsAMethodCall();
+
+  /**
+   * Returns a full clone of the action.
+   *
+   * @return A clone of the action.
+   */
+  AvatarAction clone();
+
+  /**
+   * Replaces attributes in this action according to the provided mapping.
+   *
+   * @param attributesMapping The mapping used to replace the attributes of the
+   *                          action. All the attributes of the block should be
+   *                          present as keys.
+   */
+  void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

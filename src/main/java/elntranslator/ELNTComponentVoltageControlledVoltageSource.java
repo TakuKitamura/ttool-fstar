@@ -41,44 +41,44 @@ package elntranslator;
 import java.util.LinkedList;
 
 /**
- * Class ELNTComponentVoltageControlledVoltageSource
- * Parameters of a ELN primitive component : voltage controlled voltage source
- * Creation: 23/07/2018
+ * Class ELNTComponentVoltageControlledVoltageSource Parameters of a ELN
+ * primitive component : voltage controlled voltage source Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTComponentVoltageControlledVoltageSource extends ELNTComponent implements ELNTPrimitiveComponent {
-	private String name;
-	private double val;
-	private LinkedList<ELNTConnectingPoint> cp;
-	
-	private ELNTModule module;
-	
-	public ELNTComponentVoltageControlledVoltageSource(String _name, double _val, ELNTModule _module) {
-		name = _name;
-		val = _val;
-		cp = new LinkedList<ELNTConnectingPoint>();
-		module = _module;
-	}
+  private String name;
+  private double val;
+  private LinkedList<ELNTConnectingPoint> cp;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTModule module;
 
-	public double getVal() {
-		return val;
-	}
-	
-	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-		return cp;
-	}
-	
-	public void addConnectingPoint(ELNTConnectingPoint _cp) {
-		cp.add(_cp);
-	}
-	
-	public ELNTModule getModule() {
-		return module;
-	}
+  public ELNTComponentVoltageControlledVoltageSource(String _name, double _val, ELNTModule _module) {
+    name = _name;
+    val = _val;
+    cp = new LinkedList<ELNTConnectingPoint>();
+    module = _module;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public double getVal() {
+    return val;
+  }
+
+  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+    return cp;
+  }
+
+  public void addConnectingPoint(ELNTConnectingPoint _cp) {
+    cp.add(_cp);
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

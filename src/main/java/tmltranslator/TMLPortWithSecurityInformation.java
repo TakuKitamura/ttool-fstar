@@ -38,7 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 /**
    * Class TMLPort
    * Creation: 16/02/2015
@@ -46,35 +45,39 @@
    * @author Ludovic APVRILLE, Andrea ENRICI
  */
 
-
 package tmltranslator;
-
 
 import proverifspec.ProVerifResultTrace;
 import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.util.Objects;
 
-
 public interface TMLPortWithSecurityInformation {
 
-    public int getConfStatus();
-    public boolean getCheckConf();
-    public boolean getCheckAuth();
-    public int getCheckStrongAuthStatus();
-    public int getCheckWeakAuthStatus();
-    public boolean isOrigin();
+  public int getConfStatus();
 
-    public void setConfStatus(int _status);
-    public void setMappingName(String _mappingName);
-    public void setSecName(String _secName);
+  public boolean getCheckConf();
 
-    public void setResultTrace(ProVerifResultTrace _trace);
-    public void setPragmaString(String _info);
-    public void setStrongAuthStatus(int _status);
-    public void setWeakAuthStatus(int _status);
+  public boolean getCheckAuth();
 
+  public int getCheckStrongAuthStatus();
 
+  public int getCheckWeakAuthStatus();
 
+  public boolean isOrigin();
+
+  public void setConfStatus(int _status);
+
+  public void setMappingName(String _mappingName);
+
+  public void setSecName(String _secName);
+
+  public void setResultTrace(ProVerifResultTrace _trace);
+
+  public void setPragmaString(String _info);
+
+  public void setStrongAuthStatus(int _status);
+
+  public void setWeakAuthStatus(int _status);
 
 }

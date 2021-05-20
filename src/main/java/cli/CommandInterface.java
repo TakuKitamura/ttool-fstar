@@ -36,30 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Command
- * Creation: 05/10/2018
- * Version 2.0 05/10/2018
+ * Class Command Creation: 05/10/2018 Version 2.0 05/10/2018
  *
  * @author Ludovic APVRILLE
  */
-public interface CommandInterface  {
+public interface CommandInterface {
 
-    List<Command> getListOfSubCommands();
-    String getCommand();
-    String getShortCommand();
-    String getExample();
+  List<Command> getListOfSubCommands();
 
-    // return null in case of success, or a error string in case of failure.
-    String executeCommand(String command, Interpreter interpreter);
-    void fillSubCommands();
+  String getCommand();
 
-    String getUsage();
-    String getDescription();
+  String getShortCommand();
+
+  String getExample();
+
+  // return null in case of success, or a error string in case of failure.
+  String executeCommand(String command, Interpreter interpreter);
+
+  void fillSubCommands();
+
+  String getUsage();
+
+  String getDescription();
 }

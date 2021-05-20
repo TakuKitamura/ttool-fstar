@@ -39,40 +39,40 @@
 package elntranslator;
 
 /**
- * Class ELNTClusterPortDE
- * Parameters of a ELN composite component : cluster port DE
- * Creation: 03/08/2018
+ * Class ELNTClusterPortDE Parameters of a ELN composite component : cluster
+ * port DE Creation: 03/08/2018
+ * 
  * @version 1.0 03/08/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTClusterPortDE extends ELNTComponent {
-	private String name;
-	private String type;
-	private String origin;
-	
-	private ELNTCluster cluster;
-	
-	public ELNTClusterPortDE(String _name, String _type, String _origin, ELNTCluster _cluster) {
-		name = _name;
-		type = _type;
-		origin = _origin;
-		cluster = _cluster;
-	}
+  private String name;
+  private String type;
+  private String origin;
 
-	public String getName() {
-		return name;
-	}
-	
-	public String getType() {
-		return type;
-	}
+  private ELNTCluster cluster;
 
-	public String getOrigin() {
-		return origin;
-	}
+  public ELNTClusterPortDE(String _name, String _type, String _origin, ELNTCluster _cluster) {
+    name = _name;
+    type = _type;
+    origin = _origin;
+    cluster = _cluster;
+  }
 
-	public ELNTCluster getCluster() {
-		return cluster;
-	}
+  public String getName() {
+    return name;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getOrigin() {
+    return origin;
+  }
+
+  public ELNTCluster getCluster() {
+    return cluster;
+  }
 }

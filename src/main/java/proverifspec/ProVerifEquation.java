@@ -36,27 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifFunc
- * Creation: 06/04/2017
+ * Class ProVerifFunc Creation: 06/04/2017
+ * 
  * @version 1.0 06/04/2017
  * @author Florian LUGOU
  */
 public class ProVerifEquation implements ProVerifDeclaration {
-    protected ProVerifVar[] vars;
-    protected String formula;
+  protected ProVerifVar[] vars;
+  protected String formula;
 
-    public ProVerifEquation (ProVerifVar[] _vars, String _formula) {
-        this.vars = _vars;
-        this.formula = _formula;
-    }
+  public ProVerifEquation(ProVerifVar[] _vars, String _formula) {
+    this.vars = _vars;
+    this.formula = _formula;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateEquation (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateEquation(this, _alinea);
+  }
 }

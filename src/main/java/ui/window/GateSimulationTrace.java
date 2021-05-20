@@ -36,100 +36,95 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
-
 
 import translator.Gate;
 import translator.GroupOfGates;
 
 import java.util.Vector;
 
-
 /**
- * Class GateSimulationTrace
- * Simulation times of a RT-LOTOS action
- * Creation: 12/12/2003
+ * Class GateSimulationTrace Simulation times of a RT-LOTOS action Creation:
+ * 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class GateSimulationTrace extends Vector<TraceData> {
-    private Gate g;
-    private GroupOfGates gog;
-    
-    public GateSimulationTrace(Gate _g, GroupOfGates _gog) {
-        g = _g;
-        gog = _gog;
+  private Gate g;
+  private GroupOfGates gog;
+
+  public GateSimulationTrace(Gate _g, GroupOfGates _gog) {
+    g = _g;
+    gog = _gog;
+  }
+
+  public Gate getGate() {
+    return g;
+  }
+
+  public GroupOfGates getGroupOfGates() {
+    return gog;
+  }
+
+  public void addTimeAction(int t, int action, String values) {
+    add(new TraceData(t, action, values));
+  }
+
+  public int getTime(int i) {
+    if (i < size()) {
+      TraceData td = this.elementAt(i);
+      return td.time;
     }
-    
-    public Gate getGate() {
-        return g;
+    return -1;
+  }
+
+  public int getAction(int i) {
+    if (i < size()) {
+      TraceData td = this.elementAt(i);
+      return td.action;
     }
-    
-    public GroupOfGates getGroupOfGates() {
-        return gog;
+    return -1;
+  }
+
+  public String getValues(int i) {
+    if (i < size()) {
+      TraceData td = this.elementAt(i);
+      return td.values;
     }
-    
-    public void addTimeAction(int t, int action, String values) {
-        add(new TraceData(t, action, values));
+    return "";
+  }
+
+  public int getMaxTime() {
+    int cpt = 0;
+    TraceData td;
+    for (int i = 0; i < size(); i++) {
+      td = elementAt(i);
+      cpt = Math.max(td.time, cpt);
     }
-    
-    public int getTime(int i) {
-        if (i < size()) {
-            TraceData td = this.elementAt(i);
-            return td.time;
-        }
-        return -1;
+    return cpt;
+  }
+
+  public int getMaxAction() {
+    int cpt = 0;
+    TraceData td;
+    for (int i = 0; i < size(); i++) {
+      td = elementAt(i);
+      cpt = Math.max(td.action, cpt);
     }
-    
-    public int getAction(int i) {
-        if (i < size()) {
-            TraceData td = this.elementAt(i);
-            return td.action;
-        }
-        return -1;
+    return cpt;
+  }
+
+  // max time for actions <= actionNb
+  public int calculateMaxTimeOf(int actionNb) {
+    int maxTime = 0;
+    TraceData td;
+    for (int i = 0; i < size(); i++) {
+      td = elementAt(i);
+      if (td.action <= actionNb) {
+        maxTime = Math.max(maxTime, td.time);
+      }
     }
-    
-    public String getValues(int i) {
-        if (i < size()) {
-            TraceData td = this.elementAt(i);
-            return td.values;
-        }
-        return "";
-    }
-    
-    public int getMaxTime() {
-        int cpt = 0;
-        TraceData td;
-        for(int i=0; i<size(); i++) {
-            td = elementAt(i);
-            cpt = Math.max(td.time, cpt);
-        }
-        return cpt;
-    }  
-    
-    public int getMaxAction() {
-        int cpt = 0;
-        TraceData td;
-        for(int i=0; i<size(); i++) {
-            td = elementAt(i);
-            cpt = Math.max(td.action, cpt);
-        }
-        return cpt;
-    }
-    
-    // max time for actions <= actionNb
-    public int calculateMaxTimeOf(int actionNb) {
-        int maxTime = 0;
-        TraceData td;
-        for(int i=0; i<size(); i++) {
-            td = elementAt(i);
-            if (td.action <= actionNb) {
-                maxTime = Math.max(maxTime, td.time);
-            }
-        }
-        return maxTime;
-    }
+    return maxTime;
+  }
 }

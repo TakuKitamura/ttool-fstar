@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
 
 import ui.TDiagramPanel;
@@ -48,30 +45,30 @@ import ui.TGComponentManager;
 import java.awt.*;
 
 /**
- * Class TMLCChannelOutPort
- * Channel out port. To be used in TML component task diagrams
- * Creation: 12/03/2008
+ * Class TMLCChannelOutPort Channel out port. To be used in TML component task
+ * diagrams Creation: 12/03/2008
+ * 
  * @version 1.0 12/03/2008
  * @author Ludovic APVRILLE
  */
 public class TMLCChannelOutPort extends TMLCPrimitivePort {
-	
-    
-    public TMLCChannelOutPort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-		initConnectingPoint(true, true, 1);
-        //myImageIcon = IconManager.imgic700;
-    }
-	
-    @Override
-	public void drawParticularity(Graphics g) {
-		
-	}
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.TMLCTD_COPORT;
-    }
-	 
+
+  public TMLCChannelOutPort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    initConnectingPoint(true, true, 1);
+    // myImageIcon = IconManager.imgic700;
+  }
+
+  @Override
+  public void drawParticularity(Graphics g) {
+
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TMLCTD_COPORT;
+  }
+
 }

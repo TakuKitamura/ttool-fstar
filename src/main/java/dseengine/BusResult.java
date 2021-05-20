@@ -36,35 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class BusResult
-* Object for storing a bus result after a simulation
-* Creation: 06/09/2011
-* @version 1.0 06/09/2011
-* @author Ludovic APVRILLE
+ * Class BusResult Object for storing a bus result after a simulation Creation:
+ * 06/09/2011
+ * 
+ * @version 1.0 06/09/2011
+ * @author Ludovic APVRILLE
  */
-public class BusResult  {
-	public int id;
-	public String name;
-	
-	public double utilization;
-	
-	public BusResult() {
-	}
-	
-	public String toStringResult() {
-		return "BUS " + id + " " + name + " " + utilization;
-	}
-	
-	
-	
-	
-} // Class BusResult
+public class BusResult {
+  public int id;
+  public String name;
 
+  public double utilization;
+
+  public BusResult() {
+  }
+
+  public String toStringResult() {
+    return "BUS " + id + " " + name + " " + utilization;
+  }
+
+} // Class BusResult

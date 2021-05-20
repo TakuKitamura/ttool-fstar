@@ -39,78 +39,79 @@
 package ui;
 
 public class SimulationTrace {
-	private String name;
-	private String fullPathToFile = null;
-	private int type;
+  private String name;
+  private String fullPathToFile = null;
+  private int type;
 
-	private String content;
+  private String content;
 
-	public static final int VCD_DIPLO = 0;
-    public static final int TXT_DIPLO = 1;
-    public static final int HTML_DIPLO = 2;
-    public static final int XML_DIPLO = 6;
+  public static final int VCD_DIPLO = 0;
+  public static final int TXT_DIPLO = 1;
+  public static final int HTML_DIPLO = 2;
+  public static final int XML_DIPLO = 6;
 
-    public static final int PNG_AVATAR = 3;
-    public static final int TXT_AVATAR = 4;
-    public static final int SVG_AVATAR = 5;
+  public static final int PNG_AVATAR = 3;
+  public static final int TXT_AVATAR = 4;
+  public static final int SVG_AVATAR = 5;
 
-    public static final int CSV_AVATAR = 7;
+  public static final int CSV_AVATAR = 7;
 
-	private static String[] TYPES = {"VCD DIPLO", "TXT DIPLO", "HTML DIPLO", "PNG AVATAR", "TXT AVATAR", "SVG AVATAR","XML DIPLO", "CSV AVATAR"};
+  private static String[] TYPES = { "VCD DIPLO", "TXT DIPLO", "HTML DIPLO", "PNG AVATAR", "TXT AVATAR", "SVG AVATAR",
+      "XML DIPLO", "CSV AVATAR" };
 
-    public SimulationTrace(String name, int type) {
-        this(name, type, null);
+  public SimulationTrace(String name, int type) {
+    this(name, type, null);
+  }
+
+  public SimulationTrace(String name, int type, String fullPathToFile) {
+    this.name = name;
+    this.type = type;
+    this.fullPathToFile = fullPathToFile;
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public String getTypeString() {
+    return TYPES[type];
+  }
+
+  public String getFullPath() {
+    return fullPathToFile;
+  }
+
+  public String getToolTip() {
+    return "Simulation trace. Name:" + name;
+  }
+
+  public boolean hasFile() {
+    return fullPathToFile != null;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public boolean hasContent() {
+    return content != null;
+  }
+
+  public void setContent(String _content) {
+    content = _content;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public String toString() {
+    String ret = "";
+    ret += name + " of type " + TYPES[type];
+    if (fullPathToFile != null) {
+      ret += " " + fullPathToFile;
     }
+    return ret;
 
-	public SimulationTrace(String name, int type, String fullPathToFile) {
-	    this.name = name;
-	    this.type = type;
-	    this.fullPathToFile = fullPathToFile;
-    }
-
-    public int getType() {
-	    return type;
-    }
-
-    public String getTypeString() {
-	    return TYPES[type];
-    }
-
-    public String getFullPath() {
-        return fullPathToFile;
-    }
-
-    public String getToolTip() {
-	    return "Simulation trace. Name:" + name;
-    }
-
-    public boolean hasFile() {
-	    return fullPathToFile != null;
-    }
-
-    public String getName() {
-	    return name;
-    }
-
-    public boolean hasContent() {
-        return content != null;
-    }
-
-    public void setContent(String _content) {
-        content = _content;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String toString() {
-        String ret="";
-        ret += name + " of type " +  TYPES[type];
-        if (fullPathToFile != null) {
-            ret += " " + fullPathToFile;
-        }
-        return ret;
-
-    }
+  }
 }

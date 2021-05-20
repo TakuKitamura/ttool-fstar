@@ -36,112 +36,102 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.diplodocusmethodology;
 
 import org.w3c.dom.Element;
 import ui.*;
 
 /**
- * Class DiplodocusMethodologyDiagramPanel
- * Panel for displaying the diplodocus methodology
-* Creation: 28/03/2014
-* @version 1.0 28/03/2014
+ * Class DiplodocusMethodologyDiagramPanel Panel for displaying the diplodocus
+ * methodology Creation: 28/03/2014
+ * 
+ * @version 1.0 28/03/2014
  * @author Ludovic APVRILLE
  */
 public class DiplodocusMethodologyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-    //public Vector validated, ignored;
-    
-    public  DiplodocusMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    @Override
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
-    }
+  // public Vector validated, ignored;
 
-    @Override
-    public boolean actionOnAdd(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.addTClass(tgcc.getClassName());
-            return true;
-        }*/
-        return false;
-    }
+  public DiplodocusMethodologyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
 
-    @Override
-    public boolean actionOnRemove(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.removeTClass(tgcc.getClassName());
-            resetAllInstancesOf(tgcc);
-            return true;
-        }*/
-        return false;
-    }
+  @Override
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
 
-    @Override
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            return actionOnDoubleClick(tgc);
-        }*/
-        return false;
-    }
+  @Override
+  public boolean actionOnAdd(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.addTClass(tgcc.getClassName()); return true; }
+     */
+    return false;
+  }
 
-    @Override
-    public String getXMLHead() {
-        return "<DiplodocusMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
+  @Override
+  public boolean actionOnRemove(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+     * true; }
+     */
+    return false;
+  }
 
-    @Override
-    public String getXMLTail() {
-        return "</DiplodocusMethodologyDiagramPanel>";
-    }
+  @Override
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+     */
+    return false;
+  }
 
-    @Override
-    public String getXMLSelectedHead() {
-        return "<DiplodocusMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
+  @Override
+  public String getXMLHead() {
+    return "<DiplodocusMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
 
-    @Override
-    public String getXMLSelectedTail() {
-        return "</DiplodocusMethodologyDiagramPanelCopy>";
-    }
+  @Override
+  public String getXMLTail() {
+    return "</DiplodocusMethodologyDiagramPanel>";
+  }
 
-    @Override
-    public String getXMLCloneHead() {
-        return "<DiplodocusMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
+  @Override
+  public String getXMLSelectedHead() {
+    return "<DiplodocusMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
 
-    @Override
-    public String getXMLCloneTail() {
-        return "</DiplodocusMethodologyDiagramPanelCopy>";
-    }
-    
-    
-    public void makePostLoadingProcessing() throws MalformedModelingException {
-        
-    }
+  @Override
+  public String getXMLSelectedTail() {
+    return "</DiplodocusMethodologyDiagramPanelCopy>";
+  }
 
-    @Override
-	public void enhance() {
-		autoAdjust();
-    }
-    
-    public void loadExtraParameters(Element elt) {
-    }
+  @Override
+  public String getXMLCloneHead() {
+    return "<DiplodocusMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+        + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  @Override
+  public String getXMLCloneTail() {
+    return "</DiplodocusMethodologyDiagramPanelCopy>";
+  }
+
+  public void makePostLoadingProcessing() throws MalformedModelingException {
+
+  }
+
+  @Override
+  public void enhance() {
+    autoAdjust();
+  }
+
+  public void loadExtraParameters(Element elt) {
+  }
 }
-
-
-
-
-
-
-

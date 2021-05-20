@@ -1,48 +1,80 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>TTool help</title>
-  <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-</head>
-<body>
-<h1 id="cpu">CPU</h1>
-<p>CPU nodes abstract multi-core processors.</p>
-<h2 id="main-attributes">Main attributes</h2>
-<p>They have the following attributes.</p>
-<ul>
-<li><a href="file://cpuname.html">CPU name</a></li>
-<li><a href="file://schedulingpolicy.html">Scheduling policy</a></li>
-<li><a href="file://slicetime.html">Slice time</a> (given in milliseconds)</li>
-<li><a href="file://numbercores.html">Nb of cores</a></li>
-<li><a href="file://datasize.html">Data size</a></li>
-<li><a href="file://pipelinesize.html">Pipeline size</a></li>
-<li><a href="file://taskswitchingtime.html">Task switching time</a></li>
-<li><a href="file://misbranchingprediction.html">Percentage of mis branching prediction</a></li>
-<li><a href="file://cachemiss.html">Percentage of cache miss</a></li>
-<li><a href="file://goidletime.html">Go idle time</a></li>
-<li><a href="file://maxconsecutivecycles.html">Max consecutive cycles before going idle</a></li>
-<li><a href="file://execi.html">ExecI execution cycles</a></li>
-<li><a href="file://execc.html">ExecC execution cycles</a></li>
-<li><a href="file://clockdivider.html">Clock divider</a></li>
-</ul>
-<p>The latter attributes are taken into account by the DIPLODOCUS simulator to determine how software tasks executed on a processor behave.</p>
-<h2 id="other-attributes">Other attributes</h2>
-<p>The following attributes are also defined in CPUs:</p>
-<ul>
-<li><p><a href="file://encryption.html">Encryption</a></p></li>
-<li><p><a href="file://operation.html">Operation</a></p></li>
-<li><p><a href="file://cpuextension.html">Extension construct</a></p></li>
-</ul>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>TTool help</title>
+    <style>
+      code {
+        white-space: pre-wrap;
+      }
+      span.smallcaps {
+        font-variant: small-caps;
+      }
+      span.underline {
+        text-decoration: underline;
+      }
+      div.column {
+        display: inline-block;
+        vertical-align: top;
+        width: 50%;
+      }
+    </style>
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1 id="cpu">CPU</h1>
+    <p>CPU nodes abstract multi-core processors.</p>
+    <h2 id="main-attributes">Main attributes</h2>
+    <p>They have the following attributes.</p>
+    <ul>
+      <li><a href="file://cpuname.html">CPU name</a></li>
+      <li><a href="file://schedulingpolicy.html">Scheduling policy</a></li>
+      <li>
+        <a href="file://slicetime.html">Slice time</a> (given in milliseconds)
+      </li>
+      <li><a href="file://numbercores.html">Nb of cores</a></li>
+      <li><a href="file://datasize.html">Data size</a></li>
+      <li><a href="file://pipelinesize.html">Pipeline size</a></li>
+      <li><a href="file://taskswitchingtime.html">Task switching time</a></li>
+      <li>
+        <a href="file://misbranchingprediction.html"
+          >Percentage of mis branching prediction</a
+        >
+      </li>
+      <li><a href="file://cachemiss.html">Percentage of cache miss</a></li>
+      <li><a href="file://goidletime.html">Go idle time</a></li>
+      <li>
+        <a href="file://maxconsecutivecycles.html"
+          >Max consecutive cycles before going idle</a
+        >
+      </li>
+      <li><a href="file://execi.html">ExecI execution cycles</a></li>
+      <li><a href="file://execc.html">ExecC execution cycles</a></li>
+      <li><a href="file://clockdivider.html">Clock divider</a></li>
+    </ul>
+    <p>
+      The latter attributes are taken into account by the DIPLODOCUS simulator
+      to determine how software tasks executed on a processor behave.
+    </p>
+    <h2 id="other-attributes">Other attributes</h2>
+    <p>The following attributes are also defined in CPUs:</p>
+    <ul>
+      <li>
+        <p><a href="file://encryption.html">Encryption</a></p>
+      </li>
+      <li>
+        <p><a href="file://operation.html">Operation</a></p>
+      </li>
+      <li>
+        <p><a href="file://cpuextension.html">Extension construct</a></p>
+      </li>
+    </ul>
+  </body>
 </html>

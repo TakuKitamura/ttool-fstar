@@ -55,100 +55,91 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Vector;
-
 
 import ui.TAttribute;
 import avatartranslator.*;
 
 public class AvatarIntegerExprParsingAndEvaluationTests {
 
-    AvatarGuard res;
-    AvatarBlock block;
-    AvatarSpecification as;
+  AvatarGuard res;
+  AvatarBlock block;
+  AvatarSpecification as;
 
-    public AvatarIntegerExprParsingAndEvaluationTests () {
-        //  super ("AvatarGuards", false);
-    }
-    @Before
-    public void test () {
-        as = new AvatarSpecification("avatarspecification", null);
+  public AvatarIntegerExprParsingAndEvaluationTests() {
+    // super ("AvatarGuards", false);
+  }
 
-        block = new AvatarBlock("myblock", as, null);
-        as.addBlock(block);
-        AvatarAttribute x = new AvatarAttribute("x", AvatarType.INTEGER, block, null);
-        block.addAttribute(x);
-        AvatarAttribute y = new AvatarAttribute("y", AvatarType.INTEGER, block, null);
-        block.addAttribute(y);
-        AvatarAttribute z = new AvatarAttribute("z", AvatarType.INTEGER, block, null);
-        block.addAttribute(z);
+  @Before
+  public void test() {
+    as = new AvatarSpecification("avatarspecification", null);
 
-        x.setInitialValue("10");
-        y.setInitialValue("5");
-        z.setInitialValue("2");
+    block = new AvatarBlock("myblock", as, null);
+    as.addBlock(block);
+    AvatarAttribute x = new AvatarAttribute("x", AvatarType.INTEGER, block, null);
+    block.addAttribute(x);
+    AvatarAttribute y = new AvatarAttribute("y", AvatarType.INTEGER, block, null);
+    block.addAttribute(y);
+    AvatarAttribute z = new AvatarAttribute("z", AvatarType.INTEGER, block, null);
+    block.addAttribute(z);
 
-    }
+    x.setInitialValue("10");
+    y.setInitialValue("5");
+    z.setInitialValue("2");
 
+  }
 
-    private void testExpr(String command, double expectedResult, boolean expectedBool) {
+  private void testExpr(String command, double expectedResult, boolean expectedBool) {
 
+    AvatarTransition at = new AvatarTransition(block, "at", null);
+    at.addAction(command);
 
-        AvatarTransition at = new AvatarTransition(block, "at", null);
-        at.addAction(command);
+    IntExpressionEvaluator iee = new IntExpressionEvaluator();
 
-        IntExpressionEvaluator iee = new IntExpressionEvaluator();
+    String expr = at.getAction(0).toString();
+    int index = expr.indexOf('=');
 
-        String expr = at.getAction(0).toString();
-        int index = expr.indexOf('=');
+    assertTrue(index > -1);
 
-        assertTrue(index > -1);
+    expr = expr.substring(index + 1, expr.length()).trim();
 
-        expr = expr.substring(index+1, expr.length()).trim();
-
-        for(AvatarAttribute aa: block.getAttributes()) {
-            expr = Conversion.putVariableValueInString(AvatarSpecification.ops, expr, aa.getName(), aa.getInitialValue());
-        }
-
-        double result = iee.getResultOf(expr);
-
-        assertTrue((result == expectedResult) == expectedBool);
+    for (AvatarAttribute aa : block.getAttributes()) {
+      expr = Conversion.putVariableValueInString(AvatarSpecification.ops, expr, aa.getName(), aa.getInitialValue());
     }
 
+    double result = iee.getResultOf(expr);
 
+    assertTrue((result == expectedResult) == expectedBool);
+  }
 
+  @Test
+  public void testIntExpr() {
+    testExpr("x = x + y", 15.0, true);
 
-    @Test
-    public void testIntExpr(){
-        testExpr("x = x + y", 15.0, true);
+    testExpr("x = x + y", 16.0, false);
 
-        testExpr("x = x + y", 16.0, false);
+    testExpr("x = x + x*(y+z)", 80.0, true);
 
-        testExpr("x = x + x*(y+z)", 80.0, true);
+    testExpr("x = x + x*(y+z)/z", 45, true);
 
-        testExpr("x = x + x*(y+z)/z", 45, true);
+    testExpr("x = x + x*(y+z)/(x + z - x)", 45, true);
 
-        testExpr("x = x + x*(y+z)/(x + z - x)", 45, true);
+    testExpr("x = x + x*(y+z)*(x - z)", 570, true);
 
-        testExpr("x = x + x*(y+z)*(x - z)", 570, true);
+    testExpr("x = (x + y)*z", 30, true);
 
-        testExpr("x = (x + y)*z", 30, true);
+    testExpr("x = (x + y)*z + (x+z)/z", 36, true);
 
-        testExpr("x = (x + y)*z + (x+z)/z", 36, true);
+    testExpr("x  = x*((x + y)*z + (x+z)/z)", 360, true);
 
-        testExpr("x  = x*((x + y)*z + (x+z)/z)", 360, true);
+    testExpr("x  = x*((x + y)*z + (x+z)/z)/x", 36, true);
 
-        testExpr("x  = x*((x + y)*z + (x+z)/z)/x", 36, true);
+  }
 
-    }
-
-
-
-
-    public static void main(String[] args){
-        AvatarIntegerExprParsingAndEvaluationTests apt = new AvatarIntegerExprParsingAndEvaluationTests ();
-        //apt.runTest ();
-    }
+  public static void main(String[] args) {
+    AvatarIntegerExprParsingAndEvaluationTests apt = new AvatarIntegerExprParsingAndEvaluationTests();
+    // apt.runTest ();
+  }
 }

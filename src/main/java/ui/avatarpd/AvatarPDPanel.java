@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarpd;
 
 //import java.awt.*;
@@ -53,111 +50,112 @@ import java.util.Iterator;
 //import javax.xml.parsers.*;
 
 /**
- * Class AvatarPDPanel
- * Panel used for drawing Avatar Parametric Diagrals
+ * Class AvatarPDPanel Panel used for drawing Avatar Parametric Diagrals
  * Creation: 22/04/2010
+ * 
  * @version 1.0 22/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarPDPanel extends TDiagramPanel implements TDPWithAttributes{
-    
-	public static int ARC = 20;
-	
-    public  AvatarPDPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        //addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
+public class AvatarPDPanel extends TDiagramPanel implements TDPWithAttributes {
+
+  public static int ARC = 20;
+
+  public AvatarPDPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    // addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  @Override
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
+
+  @Override
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  @Override
+  public String getXMLHead() {
+    return "<AvatarPDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
+
+  @Override
+  public String getXMLTail() {
+    return "</AvatarPDPanel>";
+  }
+
+  @Override
+  public String getXMLSelectedHead() {
+    return "<AvatarPDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel
+        + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  @Override
+  public String getXMLSelectedTail() {
+    return "</AvatarPDPanelCopy>";
+  }
+
+  @Override
+  public String getXMLCloneHead() {
+    return "<AvatarPDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  @Override
+  public String getXMLCloneTail() {
+    return "</AvatarPDPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
+  @Override
+  public boolean hasAutoConnect() {
+    return false;
+  }
+
+  public void setConnectorsToFront() {
+    TGComponent tgc;
+
+    //
+
+    Iterator iterator = componentList.listIterator();
+
+    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+    while (iterator.hasNext()) {
+      tgc = (TGComponent) (iterator.next());
+      if (!(tgc instanceof TGConnector)) {
+        list.add(tgc);
+      }
     }
-    
-    @Override
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
+
+    //
+    for (TGComponent tgc1 : list) {
+      //
+      componentList.remove(tgc1);
+      componentList.add(tgc1);
     }
-    
-    @Override
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
-    }   
-    
-    @Override
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
-    }
-    
-    @Override
-    public String getXMLHead() {
-        return "<AvatarPDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    @Override
-    public String getXMLTail() {
-        return "</AvatarPDPanel>";
-    }
-    
-    @Override
-    public String getXMLSelectedHead() {
-        return "<AvatarPDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    @Override
-    public String getXMLSelectedTail() {
-        return "</AvatarPDPanelCopy>";
-    }
-    
-    @Override
-    public String getXMLCloneHead() {
-        return "<AvatarPDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    @Override
-    public String getXMLCloneTail() {
-        return "</AvatarPDPanelCopy>";
-    }
-    
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
-        
-        // Components over others
-        
-        // Position correctly guards of choice
-    }
-    
-    
-    
-    @Override
-	public boolean hasAutoConnect() {
-		return false;
-	}
-	
-	public void setConnectorsToFront() {
-		TGComponent tgc;
-		
-		//
-		
-        Iterator iterator = componentList.listIterator();
-        
-		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-		
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-			if (!(tgc instanceof TGConnector)) {
-				list.add(tgc);
-			}
-		}
-		
-		//
-		for(TGComponent tgc1: list) {
-			//
-			componentList.remove(tgc1);
-			componentList.add(tgc1);
-		}
-	}
-    
+  }
+
 }

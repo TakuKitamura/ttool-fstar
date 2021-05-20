@@ -36,18 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
-
 /**
-   * Class TMLArchiCPInterface
-   * Interface of  an architecture element
-   * Creation: 13/09/2016
-   * @version 1.0 1"/09/2016
-   * @author Ludovic APVRILLE
+ * Class TMLArchiCPInterface Interface of an architecture element Creation:
+ * 13/09/2016
+ * 
+ * @version 1.0 1"/09/2016
+ * @author Ludovic APVRILLE
  */
-public interface TMLArchiCPInterface  {
+public interface TMLArchiCPInterface {
 }

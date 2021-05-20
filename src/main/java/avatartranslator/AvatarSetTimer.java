@@ -36,41 +36,38 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
- * Class AvatarSetTimer
- * Creation: 15/07/2010
+ * Class AvatarSetTimer Creation: 15/07/2010
+ * 
  * @version 1.0 15/07/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarSetTimer extends AvatarTimerOperator {
-	protected String setValue;
-	
-    public AvatarSetTimer(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
-	public void setTimerValue(String _setValue) {
-		setValue = _setValue;
-	}
-	
-	public String  getTimerValue() {
-		return setValue;
-	}
-	
-	public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-		AvatarSetTimer ast = new AvatarSetTimer(getName(), getReferenceObject());
-		ast.setTimer(getTimer());
-		ast.setTimerValue(getTimerValue());
-		return ast;
-	}
-	
-	public String getNiceName() {
-		return "Setting of timer " + getName();
-	}
-	
+  protected String setValue;
+
+  public AvatarSetTimer(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public void setTimerValue(String _setValue) {
+    setValue = _setValue;
+  }
+
+  public String getTimerValue() {
+    return setValue;
+  }
+
+  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+    AvatarSetTimer ast = new AvatarSetTimer(getName(), getReferenceObject());
+    ast.setTimer(getTimer());
+    ast.setTimerValue(getTimerValue());
+    return ast;
+  }
+
+  public String getNiceName() {
+    return "Setting of timer " + getName();
+  }
+
 }

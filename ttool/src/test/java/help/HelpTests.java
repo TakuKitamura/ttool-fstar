@@ -52,29 +52,28 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Vector;
-
 
 import ui.TAttribute;
 import avatartranslator.*;
 
 public class HelpTests {
 
-    AvatarGuard res;
-    AvatarBlock A,B;
-    public HelpTests () {
-        //  super ("AvatarGuards", false);
-    }
+  AvatarGuard res;
+  AvatarBlock A, B;
 
-    @Test
-    public void testLoadHelp(){
-        HelpManager helpManager;
-        helpManager = new HelpManager();
-        boolean ok = helpManager.loadEntries();
-        assertTrue(ok);
-    }
+  public HelpTests() {
+    // super ("AvatarGuards", false);
+  }
+
+  @Test
+  public void testLoadHelp() {
+    HelpManager helpManager;
+    helpManager = new HelpManager();
+    boolean ok = helpManager.loadEntries();
+    assertTrue(ok);
+  }
 
 }

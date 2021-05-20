@@ -36,82 +36,72 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package req.ebrdd;
 
 import tmltranslator.DIPLOElement;
 import tmltranslator.TMLType;
 
-
 /**
- * Class EBRDDAttribute
- * Attributes for EBRDDs
- * Creation: 14/10/2009
+ * Class EBRDDAttribute Attributes for EBRDDs Creation: 14/10/2009
+ * 
  * @version 1.0 14/10/2009
  * @author Ludovic APVRILLE
  */
 public class EBRDDAttribute extends DIPLOElement {
-    
-    public TMLType type;
-    public String name;
-    public String initialValue;
-    
-    public EBRDDAttribute() {
-    }
-    
-    public EBRDDAttribute(String _name, String _initialValue, TMLType _type) {
-        name = _name;
-        type = _type;
-		initialValue = _initialValue;
-    }
-    
-    public String getName() {
-      return name;
-    }
-    
-    public TMLType getType() {
-           return type;
-    }
-	
-	public boolean isNat() {
-		return (type.getType() == TMLType.NATURAL);
-	}
-	
-	public boolean isBool() {
-		return (type.getType() ==  TMLType.BOOLEAN);
-	}
-    
-    public String getInitialValue() {
-        return initialValue;
-    }
-    
 
-    
-    public String toString() {
-		if (hasInitialValue()) {
-			 return name + " = " + getInitialValue() + ":" + type.toString();
-		}
-        return name + ":" + type.toString();
+  public TMLType type;
+  public String name;
+  public String initialValue;
+
+  public EBRDDAttribute() {
+  }
+
+  public EBRDDAttribute(String _name, String _initialValue, TMLType _type) {
+    name = _name;
+    type = _type;
+    initialValue = _initialValue;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public TMLType getType() {
+    return type;
+  }
+
+  public boolean isNat() {
+    return (type.getType() == TMLType.NATURAL);
+  }
+
+  public boolean isBool() {
+    return (type.getType() == TMLType.BOOLEAN);
+  }
+
+  public String getInitialValue() {
+    return initialValue;
+  }
+
+  public String toString() {
+    if (hasInitialValue()) {
+      return name + " = " + getInitialValue() + ":" + type.toString();
     }
-    
-    public boolean hasInitialValue() {
-        return ((initialValue != null) && (initialValue.length() > 0));
+    return name + ":" + type.toString();
+  }
+
+  public boolean hasInitialValue() {
+    return ((initialValue != null) && (initialValue.length() > 0));
+  }
+
+  public String getDefaultInitialValue() {
+    if (isNat()) {
+      return "0";
+    } else {
+      if (isBool()) {
+        return "false";
+      }
     }
-	
-	public String getDefaultInitialValue() {
-		if (isNat()) {
-			return "0";
-		} else {
-			if (isBool()) {
-				return "false";
-			}
-		}
-		return "unknown";
-	}
-	
-	
-    
+    return "unknown";
+  }
+
 }

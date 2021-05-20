@@ -36,24 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
- * Class AvatarTranslator
- * Creation: 16/09/2015
+ * Class AvatarTranslator Creation: 16/09/2015
+ * 
  * @version 1.0 16/09/2015
  * @author Florian LUGOU
  */
 public interface AvatarTranslator {
-    void translateTimerOperator(AvatarTimerOperator _asme, Object _arg);
-    void translateActionOnSignal(AvatarActionOnSignal _asme, Object _arg);
-    void translateTransition(AvatarTransition _asme, Object _arg);
-    void translateStartState(AvatarStartState _asme, Object _arg);
-    void translateState(AvatarState _asme, Object _arg);
-    void translateRandom(AvatarRandom _asme, Object _arg);
-    void translateStopState(AvatarStopState _asme, Object _arg);
-    void translateLibraryFunctionCall(AvatarLibraryFunctionCall _asme, Object _arg);
+  void translateTimerOperator(AvatarTimerOperator _asme, Object _arg);
+
+  void translateActionOnSignal(AvatarActionOnSignal _asme, Object _arg);
+
+  void translateTransition(AvatarTransition _asme, Object _arg);
+
+  void translateStartState(AvatarStartState _asme, Object _arg);
+
+  void translateState(AvatarState _asme, Object _arg);
+
+  void translateRandom(AvatarRandom _asme, Object _arg);
+
+  void translateStopState(AvatarStopState _asme, Object _arg);
+
+  void translateLibraryFunctionCall(AvatarLibraryFunctionCall _asme, Object _arg);
 }

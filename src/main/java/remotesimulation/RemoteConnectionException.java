@@ -36,31 +36,27 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package remotesimulation;
 
 /**
- * Class RemoteConnectionException
- * For remote control of the simulator
- * Creation: 16/04/2009
+ * Class RemoteConnectionException For remote control of the simulator Creation:
+ * 16/04/2009
+ * 
  * @version 1.1 16/04/2009
  * @author Ludovic APVRILLE
  */
 public class RemoteConnectionException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -447120015571366123L;
 
-	public RemoteConnectionException(String s) {
-		super(s);
-	}
-    
-	public RemoteConnectionException(	final String message,
-										final Throwable th ) {
-		super(message, th );
-	}
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -447120015571366123L;
+
+  public RemoteConnectionException(String s) {
+    super(s);
+  }
+
+  public RemoteConnectionException(final String message, final Throwable th) {
+    super(message, th);
+  }
 }

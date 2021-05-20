@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import common.ConfigurationTTool;
@@ -67,7 +66,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.*;
 
-
 import com.microsoft.z3.*;
 import tmltranslator.*;
 
@@ -76,358 +74,322 @@ import java.util.HashMap;
 import java.util.List;
 import myutil.TraceManager;
 
-
 /**
- * Class JDialogDSE
- * Dialog for managing DSE with Z3
- * Creation: 26/02/2019
+ * Class JDialogDSE Dialog for managing DSE with Z3 Creation: 26/02/2019
  *
  * @author Ludovic APVRILLE
  * @version 1.0 26/02/2019
  */
 public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelectionListener, Runnable {
 
-    protected MainGUI mgui;
+  protected MainGUI mgui;
 
+  protected final static int NOT_SELECTED = 0;
+  protected final static int NOT_STARTED = 1;
+  protected final static int STARTED = 2;
+  protected final static int STOPPED = 3;
+  int mode;
 
-    protected final static int NOT_SELECTED = 0;
-    protected final static int NOT_STARTED = 1;
-    protected final static int STARTED = 2;
-    protected final static int STOPPED = 3;
-    int mode;
+  protected static boolean generateGraphicalMappingSelected;
+  protected JCheckBox generateGraphicalMapping;
+  protected JButton start;
+  protected JButton stop;
+  protected JButton close;
 
+  protected JTextArea outputText;
+  protected String output = "";
 
-    protected  static boolean generateGraphicalMappingSelected;
-    protected JCheckBox generateGraphicalMapping;
-    protected JButton start;
-    protected JButton stop;
-    protected JButton close;
+  protected String TMLDirectory;
 
-    protected JTextArea outputText;
-    protected String output = "";
+  private Thread t;
+  private boolean go = false;
 
-    protected String TMLDirectory;
+  protected RshClient rshc;
 
+  private TMLMapping<TGComponent> map;
+  private InputInstance inputInstance;
+  private OptimizationModel optimizationModel;
 
-    private Thread t;
-    private boolean go = false;
+  /*
+   * Creates new form
+   */
+  public JDialogDSEZ3(Frame f, MainGUI _mgui, String title, TMLMapping<TGComponent> map, String dir) {
+    super(f, title, true);
 
+    mgui = _mgui;
+    TMLDirectory = dir + "/";
 
-    protected RshClient rshc;
+    this.map = map;
 
-    private TMLMapping<TGComponent> map;
-    private InputInstance inputInstance;
-    private OptimizationModel optimizationModel;
+    initComponents();
+    myInitComponents();
 
+    pack();
+
+    // getGlassPane().addMouseListener( new MouseAdapter() {});
+    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+  }
+
+  protected void myInitComponents() {
+    mode = NOT_STARTED;
+    setButtons();
+    handleStartButton();
+  }
+
+  protected void initComponents() {
+
+    Container c = getContentPane();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+
+    JPanel jp03 = new JPanel();
+    GridBagLayout gridbag03 = new GridBagLayout();
+    GridBagConstraints c03 = new GridBagConstraints();
+    jp03.setLayout(gridbag03);
+    jp03.setBorder(new javax.swing.border.TitledBorder("DSE Options"));
+    c03.weighty = 1.0;
+    c03.weightx = 1.0;
+    c03.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c03.fill = GridBagConstraints.BOTH;
+    c03.gridheight = 1;
+
+    generateGraphicalMapping = new JCheckBox("Generate a graphical mapping if a solution is found");
+    generateGraphicalMapping.setSelected(generateGraphicalMappingSelected);
+    generateGraphicalMapping.addActionListener(this);
+    jp03.add(generateGraphicalMapping, c03);
+
+    JPanel jp04 = new JPanel();
+
+    GridBagLayout gridbag04 = new GridBagLayout();
+    GridBagConstraints c04 = new GridBagConstraints();
+    jp04.setLayout(gridbag04);
+
+    c04.weighty = 1.0;
+    c04.weightx = 1.0;
+    c04.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c04.fill = GridBagConstraints.BOTH;
+    c04.gridheight = 1;
+
+    // jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
+    // jp04.add(new JLabel("Design Space Exploration Output"), c04);
+
+    outputText = new ScrolledJTextArea();
+    outputText.setEditable(false);
+    outputText.setMargin(new Insets(10, 10, 10, 10));
+    outputText.setTabSize(3);
+    outputText.append("How to start?" + "\n - Simply click on start ^^\n");
+    JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    jsp.setPreferredSize(new Dimension(300, 300));
+    Font f = new Font("Courrier", Font.BOLD, 12);
+    outputText.setFont(f);
+    jp04.add(jsp, c04);
+    // jp1.add("Results", jp04);
+
+    c.add(jp03, BorderLayout.NORTH);
+    c.add(jp04, BorderLayout.CENTER);
+
+    start = new JButton("Start", IconManager.imgic53);
+    stop = new JButton("Stop", IconManager.imgic55);
+    close = new JButton("Close", IconManager.imgic27);
+
+    start.setPreferredSize(new Dimension(100, 30));
+    stop.setPreferredSize(new Dimension(100, 30));
+    close.setPreferredSize(new Dimension(120, 30));
+
+    start.addActionListener(this);
+    stop.addActionListener(this);
+    close.addActionListener(this);
+
+    JPanel jp2 = new JPanel();
+
+    jp2.add(start);
+    jp2.add(stop);
+    jp2.add(close);
+
+    c.add(jp2, BorderLayout.SOUTH);
+
+  }
+
+  private void handleStartButton() {
+    // TraceManager.addDev("Handle start button");
 
     /*
-     * Creates new form
+     * boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
+     * nbOfMappings.setEnabled(b); infoNbOfMappings.setEnabled(b);
+     * randomMappingBox.setEnabled(b); randomMappingNb.setEnabled(b);
+     * outputTML.setEnabled(b); outputGUI.setEnabled(b);
      */
-    public JDialogDSEZ3(Frame f, MainGUI _mgui, String title, TMLMapping<TGComponent> map, String dir) {
-        super(f, title, true);
+    // dseOptions.repaint();
 
-        mgui = _mgui;
-        TMLDirectory = dir + "/";
-
-        this.map = map;
-
-        initComponents();
-        myInitComponents();
-
-        pack();
-
-
-        //getGlassPane().addMouseListener( new MouseAdapter() {});
-        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    if (mode != NOT_STARTED && mode != NOT_SELECTED) {
+      return;
     }
 
-    protected void myInitComponents() {
-        mode = NOT_STARTED;
-        setButtons();
-        handleStartButton();
+    setButtons();
+
+  }
+
+  public void valueChanged(ListSelectionEvent e) {
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+
+    if (evt.getSource() == start) {
+      startProcess();
+    } else if (evt.getSource() == stop) {
+      stopProcess();
+    } else if (evt.getSource() == close) {
+      closeDialog();
+    } else if (evt.getSource() == generateGraphicalMapping) {
+      generateGraphicalMappingSelected = generateGraphicalMapping.isSelected();
+    }
+  }
+
+  public void closeDialog() {
+    if (mode == STARTED) {
+      stopProcess();
+    }
+    dispose();
+  }
+
+  public void stopProcess() {
+    mode = STOPPED;
+    setButtons();
+    go = false;
+
+  }
+
+  public void startProcess() {
+    t = new Thread(this);
+    mode = STARTED;
+    setButtons();
+    go = true;
+    t.start();
+  }
+  //
+  // private void testGo() throws InterruptedException {
+  // if (go == false) {
+  // throw new InterruptedException("Stopped by user");
+  // }
+  // }
+
+  public void run() {
+    // String cmd;
+    // String list, data;
+    // int cycle = 0;
+    output = "";
+
+    // hasError = false;
+    // try {
+
+    TraceManager.addDev("Thread started");
+    outputText.append("\nPreparing input model for Z3\n");
+    // File testFile;
+    TMLArchitecture tmla = map.getTMLArchitecture();
+    TMLModeling<TGComponent> tmlm = map.getTMLModeling();
+
+    /*
+     * for(Object task : tmlm.getTasks()){ TMLTask tmlTask = (TMLTask) task;
+     * TraceManager.addDev(tmlTask.getName() + "\ngetReadChannels : " + tmlTask
+     * .getReadChannels() + "\ngetWriteChannels : " + tmlTask .getWriteChannels()
+     * +"\n"); }
+     */
+
+    inputInstance = new InputInstance(tmla, tmlm);
+    optimizationModel = new OptimizationModel(inputInstance);
+
+    outputText.append("Loading Z3 libs\n");
+    String error = null;
+    error = ConfigurationTTool.loadZ3Libs();
+
+    if (error != null) {
+      outputText.append(error);
+      stopProcess();
+      return;
     }
 
-    protected void initComponents() {
+    outputText.append("Z3 libs loaded.\n\n");
 
-        Container c = getContentPane();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-
-
-
-        JPanel jp03 = new JPanel();
-        GridBagLayout gridbag03 = new GridBagLayout();
-        GridBagConstraints c03 = new GridBagConstraints();
-        jp03.setLayout(gridbag03);
-        jp03.setBorder(new javax.swing.border.TitledBorder("DSE Options"));
-        c03.weighty = 1.0;
-        c03.weightx = 1.0;
-        c03.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c03.fill = GridBagConstraints.BOTH;
-        c03.gridheight = 1;
-
-        generateGraphicalMapping = new JCheckBox("Generate a graphical mapping if a solution is found");
-        generateGraphicalMapping.setSelected(generateGraphicalMappingSelected);
-        generateGraphicalMapping.addActionListener(this);
-        jp03.add(generateGraphicalMapping, c03);
-
-
-        JPanel jp04 = new JPanel();
-
-        GridBagLayout gridbag04 = new GridBagLayout();
-        GridBagConstraints c04 = new GridBagConstraints();
-        jp04.setLayout(gridbag04);
-
-        c04.weighty = 1.0;
-        c04.weightx = 1.0;
-        c04.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c04.fill = GridBagConstraints.BOTH;
-        c04.gridheight = 1;
-
-        //jp04.setBorder(new javax.swing.border.TitledBorder("DSE Output"));
-        //jp04.add(new JLabel("Design Space Exploration Output"), c04);
-
-
-        outputText = new ScrolledJTextArea();
-        outputText.setEditable(false);
-        outputText.setMargin(new Insets(10, 10, 10, 10));
-        outputText.setTabSize(3);
-        outputText.append("How to start?" +
-                "\n - Simply click on start ^^\n");
-        JScrollPane jsp = new JScrollPane(outputText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setPreferredSize(new Dimension(300, 300));
-        Font f = new Font("Courrier", Font.BOLD, 12);
-        outputText.setFont(f);
-        jp04.add(jsp, c04);
-        //jp1.add("Results", jp04);
-
-        c.add(jp03, BorderLayout.NORTH);
-        c.add(jp04, BorderLayout.CENTER);
-
-        start = new JButton("Start", IconManager.imgic53);
-        stop = new JButton("Stop", IconManager.imgic55);
-        close = new JButton("Close", IconManager.imgic27);
-
-
-        start.setPreferredSize(new Dimension(100, 30));
-        stop.setPreferredSize(new Dimension(100, 30));
-        close.setPreferredSize(new Dimension(120, 30));
-
-
-        start.addActionListener(this);
-        stop.addActionListener(this);
-        close.addActionListener(this);
-
-        JPanel jp2 = new JPanel();
-
-        jp2.add(start);
-        jp2.add(stop);
-        jp2.add(close);
-
-        c.add(jp2, BorderLayout.SOUTH);
-
-
+    outputText.append("Looking for optimized mapping, please wait\n");
+    OptimizationResult result = null;
+    try {
+      result = optimizationModel.findOptimizedMapping();
+      // result = optimizationModel.findFeasibleMapping();
+    } catch (Exception e) {
+      outputText.append("Exception during Z3 execution\nBadly installed?\n");
     }
 
-
-
-    private void handleStartButton() {
-        //TraceManager.addDev("Handle start button");
-
-        /*boolean b = dseButton.isSelected() || dseButtonFromFile.isSelected();
-        nbOfMappings.setEnabled(b);
-        infoNbOfMappings.setEnabled(b);
-        randomMappingBox.setEnabled(b);
-        randomMappingNb.setEnabled(b);
-        outputTML.setEnabled(b);
-        outputGUI.setEnabled(b);*/
-        //dseOptions.repaint();
-
-        if (mode != NOT_STARTED && mode != NOT_SELECTED) {
-            return;
-        }
-
-
-        setButtons();
-
-    }
-
-    public void valueChanged(ListSelectionEvent e) {
-    }
-
-
-    public void actionPerformed(ActionEvent evt) {
-
-        if (evt.getSource() == start) {
-            startProcess();
-        } else if (evt.getSource() == stop) {
-            stopProcess();
-        } else if (evt.getSource() == close) {
-            closeDialog();
-        } else if (evt.getSource() == generateGraphicalMapping) {
-            generateGraphicalMappingSelected = generateGraphicalMapping.isSelected();
-        }
-    }
-
-
-
-
-    public void closeDialog() {
-        if (mode == STARTED) {
-            stopProcess();
-        }
-        dispose();
-    }
-
-    public void stopProcess() {
-        mode = STOPPED;
-        setButtons();
-        go = false;
-
-    }
-
-
-    public void startProcess() {
-        t = new Thread(this);
-        mode = STARTED;
-        setButtons();
-        go = true;
-        t.start();
-    }
-    //
-    //    private void testGo() throws InterruptedException {
-    //        if (go == false) {
-    //            throw new InterruptedException("Stopped by user");
-    //        }
-    //    }
-
-    public void run() {
-        //      String cmd;
-        //    String list, data;
-        //  int cycle = 0;
-        output = "";
-
-        //  hasError = false;
-        //try {
-
-
-        TraceManager.addDev("Thread started");
-         outputText.append("\nPreparing input model for Z3\n");
-        //   File testFile;
-        TMLArchitecture tmla = map.getTMLArchitecture();
-        TMLModeling<TGComponent> tmlm = map.getTMLModeling();
-
-        /*
-        for(Object task : tmlm.getTasks()){
-            TMLTask tmlTask = (TMLTask) task;
-            TraceManager.addDev(tmlTask.getName() +  "\ngetReadChannels : " + tmlTask
-                    .getReadChannels() +   "\ngetWriteChannels : " + tmlTask
-                    .getWriteChannels() +"\n");
-        }*/
-
-
-        inputInstance = new InputInstance(tmla, tmlm);
-        optimizationModel = new OptimizationModel(inputInstance);
-
-
-        outputText.append("Loading Z3 libs\n");
-        String error = null;
-        error = ConfigurationTTool.loadZ3Libs();
-
-        if (error != null) {
-            outputText.append(error);
-           stopProcess();
-           return;
-        }
-
-        outputText.append("Z3 libs loaded.\n\n");
-
-        outputText.append("Looking for optimized mapping, please wait\n");
-        OptimizationResult result = null;
-        try {
-            result = optimizationModel.findOptimizedMapping();
-            //result = optimizationModel.findFeasibleMapping();
-        } catch (Exception e) {
-            outputText.append("Exception during Z3 execution\nBadly installed?\n");
-        }
-
-        if (result == null) {
-            outputText.append("ERROR: an unknown error occurred");
-        } else {
-            if (result.hasError()) {
-                outputText.append("ERROR: " + result.error);
+    if (result == null) {
+      outputText.append("ERROR: an unknown error occurred");
+    } else {
+      if (result.hasError()) {
+        outputText.append("ERROR: " + result.error);
+      } else {
+        if (result.mappingFound) {
+          outputText.append("Optimized mapping found\n");
+          outputText.append(result.result);
+          if (generateGraphicalMappingSelected) {
+            outputText.append("\nGenerating graphical mapping\n");
+            boolean b = mgui.gtm.generateGraphicalMapping(result.resultingMapping);
+            if (!b) {
+              outputText.append("*Error* when creating graphical model\n");
             } else {
-                if (result.mappingFound) {
-                    outputText.append("Optimized mapping found\n");
-                    outputText.append(result.result);
-                    if (generateGraphicalMappingSelected) {
-                        outputText.append("\nGenerating graphical mapping\n");
-                        boolean b = mgui.gtm.generateGraphicalMapping(result.resultingMapping);
-                        if (!b) {
-                            outputText.append("*Error* when creating graphical model\n");
-                        } else {
-                            outputText.append("Graphical model created\n");
-                        }
-                    }
-                } else {
-                    outputText.append("No suitable mapping could be found");
-                }
+              outputText.append("Graphical model created\n");
             }
+          }
+        } else {
+          outputText.append("No suitable mapping could be found");
         }
-        stopProcess();
-
+      }
     }
+    stopProcess();
 
+  }
 
+  protected void checkMode() {
+    mode = NOT_SELECTED;
+  }
 
-
-
-    protected void checkMode() {
-        mode = NOT_SELECTED;
+  protected void setButtons() {
+    switch (mode) {
+      case NOT_SELECTED:
+        start.setEnabled(false);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        // setCursor(CursoretPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        getGlassPane().setVisible(false);
+        break;
+      case NOT_STARTED:
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        // setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        getGlassPane().setVisible(false);
+        break;
+      case STARTED:
+        start.setEnabled(false);
+        stop.setEnabled(true);
+        close.setEnabled(false);
+        getGlassPane().setVisible(true);
+        // setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        break;
+      case STOPPED:
+      default:
+        start.setEnabled(false);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
     }
+  }
 
-    protected void setButtons() {
-        switch (mode) {
-            case NOT_SELECTED:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                //setCursor(CursoretPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                getGlassPane().setVisible(false);
-                break;
-            case NOT_STARTED:
-                start.setEnabled(true);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
-                start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                break;
-            case STOPPED:
-            default:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
-        }
-    }
-
-
-
-    public boolean hasToContinue() {
-        return (go == true);
-    }
-    //
-    //    public void setError() {
-    //        hasError = true;
-    //    }
-    //
+  public boolean hasToContinue() {
+    return (go == true);
+  }
+  //
+  // public void setError() {
+  // hasError = true;
+  // }
+  //
 }

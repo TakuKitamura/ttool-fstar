@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.toautomata;
 
 import automata.Automata;
@@ -54,395 +51,388 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-
 /**
- * Class TML2AUT
- * Creation: 23/03/2006
+ * Class TML2AUT Creation: 23/03/2006
+ * 
  * @version 1.0 23/03/2006
  * @author Ludovic APVRILLE
  */
 public class TML2AUT {
-    
-    //private static int gateId;
-    
-    private TMLModeling<?> tmlmodeling;
-    private LinkedList<Automata> automatas;
-    
-    //private boolean debug;
-    
-    
-    public static String AUT_EXTENSION = "aut";
-    public static String IMM = "imm__";
-    
-    
-    public TML2AUT(TMLModeling<?> _tmlmodeling) {
-        tmlmodeling = _tmlmodeling;
+
+  // private static int gateId;
+
+  private TMLModeling<?> tmlmodeling;
+  private LinkedList<Automata> automatas;
+
+  // private boolean debug;
+
+  public static String AUT_EXTENSION = "aut";
+  public static String IMM = "imm__";
+
+  public TML2AUT(TMLModeling<?> _tmlmodeling) {
+    tmlmodeling = _tmlmodeling;
+  }
+
+  // Returns a list of all file names ..
+  public List<String> saveInFiles(String path) throws FileException {
+    // print();
+
+    ListIterator<Automata> iterator = automatas.listIterator();
+    Automata aut;
+    String name;
+    LinkedList<String> ll = new LinkedList<String>();
+
+    while (iterator.hasNext()) {
+      aut = iterator.next();
+      name = aut.getName() + "." + AUT_EXTENSION;
+      ll.add(name);
+      TraceManager.addDev("File: " + path + aut.getName() + "." + AUT_EXTENSION);
+      FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
     }
-    
-    // Returns a list of all file names ..
-    public List<String> saveInFiles(String path) throws FileException {
-        //print();
-        
-        ListIterator<Automata> iterator = automatas.listIterator();
-        Automata aut;
-        String name;
-        LinkedList<String> ll = new LinkedList<String>();
-        
-        while(iterator.hasNext()) {
-            aut = iterator.next();
-            name = aut.getName() + "." + AUT_EXTENSION;
-            ll.add(name);
-            TraceManager.addDev("File: " + path + aut.getName() + "." + AUT_EXTENSION);
-            FileUtils.saveFile(path + aut.getName() + "." + AUT_EXTENSION, aut.toAUT());
+    return ll;
+
+  }
+
+  public void print() {
+    // Print each automatas
+    ListIterator<Automata> iterator = automatas.listIterator();
+    Automata aut;
+
+    while (iterator.hasNext()) {
+      aut = iterator.next();
+      TraceManager.addDev("Automata: " + aut.getName());
+      TraceManager.addDev(aut.toAUT());
+    }
+  }
+
+  public void generateAutomatas(boolean _debug) {
+    // debug = _debug;
+    tmlmodeling.removeAllRandomSequences();
+
+    automatas = new LinkedList<Automata>();
+
+    // Generate one automata per TMLTask
+    generateAUTTMLTasks();
+
+    // Generate one automata per Channel
+
+    // Generate one automata per Request
+
+    // Generate one automata per Event
+
+    // All done!
+
+  }
+
+  public void generateAUTTMLTasks() {
+    ListIterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
+    while (iterator.hasNext()) {
+      automatas.add(generateAUTTMLTask(iterator.next()));
+    }
+  }
+
+  public Automata generateAUTTMLTask(TMLTask task) {
+    Automata aut = new Automata();
+    aut.setName(task.getName());
+    // TMLRequest request;
+    State s, init;
+    Transition t;
+    String action;
+
+    init = aut.getInitState();
+
+    if (task.isRequested()) {
+      // request = task.getRequest();
+      s = aut.newState();
+      action = "waitInit " + task.getName() + "(";
+      for (int i = 0; i < task.getRequest().getNbOfParams(); i++) {
+        if (i != 0) {
+          action += ",";
         }
-        return ll;
-        
+        action += "arg" + (i + 1) + "_req";
+      }
+      action += ")";
+      t = new Transition(action, s);
+      init.addTransition(t);
+      generateAUTTMLTask(aut, task, task.getActivityDiagram().getFirst(), s, init);
+    } else {
+      generateAUTTMLTask(aut, task, task.getActivityDiagram().getFirst(), init, null);
     }
-    
-    public void print() {
-        // Print each automatas
-        ListIterator<Automata> iterator = automatas.listIterator();
-        Automata aut;
-        
-        while(iterator.hasNext()) {
-            aut = iterator.next();
-            TraceManager.addDev("Automata: " + aut.getName());
-            TraceManager.addDev(aut.toAUT());
+    removeImmTransitions(aut);
+    return aut;
+
+  }
+
+  public void generateAUTTMLTask(Automata aut, TMLTask task, TMLActivityElement elt, State currentState,
+      State endState) {
+    State s, s0, s1, s2, s3;
+    Transition t;
+    TMLForLoop loop;
+    TMLActivityElementChannel ch;
+    TMLActivityElementEvent evt;
+    TMLSendRequest req;
+    String action;
+    TMLChoice choice;
+    TMLSequence tmlseq;
+
+    // Action State
+    if (elt instanceof TMLActionState) {
+      action = ((TMLActionState) (elt)).getAction();
+      if (printAnalyzer(action)) {
+        generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
+      } else {
+        action = modifyString(action);
+        action = removeLastSemicolon(action);
+        s = aut.newState();
+        t = new Transition(action, s);
+        currentState.addTransition(t);
+        generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
+      }
+      // EXECI
+    } else if (elt instanceof TMLExecI) {
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
+
+      // EXECI Interval
+    } else if (elt instanceof TMLExecIInterval) {
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
+
+      // LOOP
+    } else if (elt instanceof TMLForLoop) {
+      loop = (TMLForLoop) elt;
+
+      s0 = aut.newState();
+      t = new Transition(loop.getInit(), s0);
+      currentState.addTransition(t);
+
+      s1 = aut.newState();
+      t = new Transition(loop.getIncrement(), s0);
+      s1.addTransition(t);
+
+      s2 = aut.newState();
+      t = new Transition("~(" + loop.getCondition() + ")", s2);
+      s0.addTransition(t);
+
+      s3 = aut.newState();
+      t = new Transition(loop.getCondition(), s3);
+      s0.addTransition(t);
+
+      // In loop
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), s3, s1);
+
+      // Aftr loop ...
+      generateAUTTMLTask(aut, task, elt.getNextElement(1), s2, endState);
+
+      // Junction
+    } else if (elt instanceof TMLJunction) {
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
+
+      // Read Channel
+    } else if (elt instanceof TMLReadChannel) {
+      ch = (TMLActivityElementChannel) elt;
+      s = aut.newState();
+      t = new Transition(ch.getChannel(0).getName() + ".get(" + ch.getNbOfSamples() + ")", s);
+      currentState.addTransition(t);
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
+
+      // Write Channel
+    } else if (elt instanceof TMLWriteChannel) {
+      ch = (TMLActivityElementChannel) elt;
+      s = aut.newState();
+      t = new Transition(ch.getChannel(0).getName() + ".put(" + ch.getNbOfSamples() + ")", s);
+      currentState.addTransition(t);
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
+
+      // Wait for an event
+    } else if (elt instanceof TMLWaitEvent) {
+      evt = (TMLActivityElementEvent) elt;
+      s = aut.newState();
+      action = "?" + evt.getEvent().getName() + "(";
+      for (int i = 0; i < evt.getEvent().getNbOfParams(); i++) {
+        if (i != 0) {
+          action += ",";
         }
-    }
-    
-    public void generateAutomatas(boolean _debug) {
-  //      debug = _debug;
-		tmlmodeling.removeAllRandomSequences();
-		
-        automatas = new LinkedList<Automata>();
-        
-        // Generate one automata per TMLTask
-        generateAUTTMLTasks();
-        
-        // Generate one automata per Channel
-        
-        // Generate one automata per Request
-        
-        // Generate one automata per Event
-        
-        
-        // All done!
-        
-    }
-    
-    public void generateAUTTMLTasks() {
-        ListIterator<TMLTask> iterator = tmlmodeling.getTasks().listIterator();
-        while(iterator.hasNext()) {
-            automatas.add( generateAUTTMLTask( iterator.next() ) );
+        action += evt.getParam(i);
+      }
+      action += ")";
+      t = new Transition(action, s);
+      currentState.addTransition(t);
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
+
+      // Notify an event
+    } else if (elt instanceof TMLSendEvent) {
+      evt = (TMLActivityElementEvent) elt;
+      s = aut.newState();
+      action = "!" + evt.getEvent().getName() + "(";
+      for (int i = 0; i < evt.getEvent().getNbOfParams(); i++) {
+        if (i != 0) {
+          action += ",";
         }
-    }
-    
-    public Automata generateAUTTMLTask(TMLTask task) {
-        Automata aut = new Automata();
-        aut.setName(task.getName());
-    //    TMLRequest request;
-        State s, init;
-        Transition t;
-        String action;
-        
-        init = aut.getInitState();
-        
-        if (task.isRequested()) {
-       //     request = task.getRequest();
-            s = aut.newState();
-            action = "waitInit " + task.getName() + "(";
-            for (int i=0; i<task.getRequest().getNbOfParams(); i++) {
-                if (i != 0) {
-                    action += ",";
-                }
-                action += "arg" + (i+1) + "_req";
-            }
-            action += ")";
-            t = new Transition(action, s);
-            init.addTransition(t);
-            generateAUTTMLTask(aut, task, task.getActivityDiagram().getFirst(), s, init);
+        action += evt.getParam(i);
+      }
+      action += ")";
+      t = new Transition(action, s);
+      currentState.addTransition(t);
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
+
+      // Send a request
+    } else if (elt instanceof TMLSendRequest) {
+      req = (TMLSendRequest) elt;
+      s = aut.newState();
+      action = "init " + req.getRequest().getDestinationTask().getName() + "(";
+      for (int i = 0; i < req.getRequest().getNbOfParams(); i++) {
+        if (i != 0) {
+          action += ",";
+        }
+        action += req.getParam(i);
+      }
+      action += ")";
+      t = new Transition(action, s);
+      currentState.addTransition(t);
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
+
+      // Choice
+    } else if (elt instanceof TMLChoice) {
+      choice = (TMLChoice) elt;
+      // String guard = "";
+      State newEndState = endState;
+      int i;
+
+      if (choice.getNbGuard() != 0) {
+        int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
+        if (index2 != -1) {
+          // TraceManager.addDev("Managing after");
+          s = aut.newState();
+          newEndState = s;
+          generateAUTTMLTask(aut, task, elt.getNextElement(index2), s, endState);
+        }
+
+        for (i = 0; i < choice.getNbGuard(); i++) {
+          // TraceManager.addDev("Get guards i=" + i);
+          s = aut.newState();
+          if (i == index1) {
+            /* else guard */
+            action = modifyString(choice.getValueOfElse());
+          } else {
+            action = modifyString(choice.getGuard(i));
+          }
+          t = new Transition(action, s);
+          currentState.addTransition(t);
+          generateAUTTMLTask(aut, task, elt.getNextElement(i), s, newEndState);
+        }
+      } else {
+        endOfActivity(aut, currentState, endState);
+      }
+
+      // Start State
+    } else if (elt instanceof TMLStartState) {
+      generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
+
+      // Stop State
+    } else if (elt instanceof TMLStopState) {
+      endOfActivity(aut, currentState, endState);
+
+      // Sequence
+    } else if (elt instanceof TMLSequence) {
+      // TraceManager.addDev("TML sequence !");
+      tmlseq = (TMLSequence) elt;
+
+      if (tmlseq.getNbNext() == 0) {
+        endOfActivity(aut, currentState, endState);
+      } else {
+
+        if (tmlseq.getNbNext() == 1) {
+          generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
         } else {
-            generateAUTTMLTask(aut, task, task.getActivityDiagram().getFirst(), init, null);
-        }
-        removeImmTransitions(aut);
-        return aut;
-        
-    }
-    
-    public void generateAUTTMLTask(Automata aut, TMLTask task, TMLActivityElement elt, State currentState, State endState) {
-        State s, s0, s1, s2, s3;
-        Transition t;
-        TMLForLoop loop;
-        TMLActivityElementChannel ch;
-        TMLActivityElementEvent evt;
-        TMLSendRequest req;
-        String action;
-        TMLChoice choice;
-        TMLSequence tmlseq;
-        
-        // Action State
-        if (elt instanceof TMLActionState) {
-            action = ((TMLActionState)(elt)).getAction();
-            if (printAnalyzer(action)) {
-                generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
-            } else {
-                action = modifyString(action);
-                action = removeLastSemicolon(action);
-                s = aut.newState();
-                t = new Transition(action, s);
-                currentState.addTransition(t);
-                generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
-            }
-            // EXECI
-        } else if (elt instanceof TMLExecI) {
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
-            
-            // EXECI Interval
-        } else if (elt instanceof TMLExecIInterval) {
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
-            
-            // LOOP
-        } else if (elt instanceof TMLForLoop) {
-            loop = (TMLForLoop)elt;
-            
-            s0 = aut.newState();
-            t = new Transition(loop.getInit(), s0);
-            currentState.addTransition(t);
-            
+
+          tmlseq.sortNexts();
+          // At least 2 next elements
+          for (int i = 1; i < tmlseq.getNbNext() - 1; i++) {
             s1 = aut.newState();
-            t = new Transition(loop.getIncrement(), s0);
-            s1.addTransition(t);
-            
-            s2 = aut.newState();
-            t = new Transition("~(" + loop.getCondition() + ")", s2);
-            s0.addTransition(t);
-            
-            s3 = aut.newState();
-            t = new Transition(loop.getCondition(), s3);
-            s0.addTransition(t);
-            
-            // In loop
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), s3, s1);
-            
-            // Aftr loop ...
-            generateAUTTMLTask(aut, task, elt.getNextElement(1), s2, endState);
-            
-            // Junction
-        } else if (elt instanceof TMLJunction) {
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
-            
-            // Read Channel
-        } else if (elt instanceof TMLReadChannel) {
-            ch = (TMLActivityElementChannel)elt;
-            s = aut.newState();
-            t = new Transition(ch.getChannel(0).getName() + ".get(" + ch.getNbOfSamples() + ")", s);
-            currentState.addTransition(t);
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
-            
-            // Write Channel
-        } else if (elt instanceof TMLWriteChannel) {
-            ch = (TMLActivityElementChannel)elt;
-            s = aut.newState();
-            t = new Transition(ch.getChannel(0).getName() + ".put(" + ch.getNbOfSamples() + ")", s);
-            currentState.addTransition(t);
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
-            
-            // Wait for an event
-        } else if (elt instanceof TMLWaitEvent) {
-            evt = (TMLActivityElementEvent)elt;
-            s = aut.newState();
-            action = "?" + evt.getEvent().getName() + "(";
-            for (int i=0; i<evt.getEvent().getNbOfParams(); i++) {
-                if (i != 0) {
-                    action += ",";
-                }
-                action += evt.getParam(i);
-            }
-            action += ")";
-            t = new Transition(action, s);
-            currentState.addTransition(t);
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
-            
-            // Notify an event
-        } else if (elt instanceof TMLSendEvent) {
-            evt = (TMLActivityElementEvent)elt;
-            s = aut.newState();
-            action = "!" + evt.getEvent().getName() + "(";
-            for (int i=0; i<evt.getEvent().getNbOfParams(); i++) {
-                if (i != 0) {
-                    action += ",";
-                }
-                action += evt.getParam(i);
-            }
-            action += ")";
-            t = new Transition(action, s);
-            currentState.addTransition(t);
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
-            
-            // Send a request
-        } else if (elt instanceof TMLSendRequest) {
-            req = (TMLSendRequest)elt;
-            s = aut.newState();
-            action = "init " + req.getRequest().getDestinationTask().getName() + "(";
-            for (int i=0; i<req.getRequest().getNbOfParams(); i++) {
-                if (i != 0) {
-                    action += ",";
-                }
-                action += req.getParam(i);
-            }
-            action += ")";
-            t = new Transition(action, s);
-            currentState.addTransition(t);
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
-            
-            // Choice
-        } else if (elt instanceof TMLChoice) {
-            choice = (TMLChoice)elt;
-            //String guard = "";
-            State newEndState = endState;
-            int i;
-            
-            if (choice.getNbGuard() !=0 ) {
-                int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
-                if (index2 != -1) {
-                    //TraceManager.addDev("Managing after");
-                    s = aut.newState();
-                    newEndState = s;
-                    generateAUTTMLTask(aut, task, elt.getNextElement(index2), s, endState);
-                }
-                
-                for(i=0; i<choice.getNbGuard(); i++) {
-                    //TraceManager.addDev("Get guards i=" + i);
-                    s = aut.newState();
-                    if (i==index1) {
-                        /* else guard */
-                        action = modifyString(choice.getValueOfElse());
-                    } else {
-                        action = modifyString(choice.getGuard(i));
-                    }
-                    t = new Transition(action, s);
-                    currentState.addTransition(t);
-                    generateAUTTMLTask(aut, task, elt.getNextElement(i), s, newEndState);
-                }
-            } else {
-                endOfActivity(aut, currentState, endState);
-            }
-            
-            // Start State
-        } else if (elt instanceof TMLStartState) {
-            generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
-            
-            // Stop State
-        } else if (elt instanceof TMLStopState) {
-            endOfActivity(aut, currentState, endState);
-            
-            // Sequence
-        } else if (elt instanceof TMLSequence) {
-            //TraceManager.addDev("TML sequence !");
-            tmlseq = (TMLSequence)elt;
-            
-            if (tmlseq.getNbNext() == 0) {
-                endOfActivity(aut, currentState, endState);
-            } else {
-                
-                
-                if (tmlseq.getNbNext() == 1) {
-                    generateAUTTMLTask(aut, task, elt.getNextElement(0), currentState, endState);
-                } else {
-                    
-                    tmlseq.sortNexts();
-                    // At least 2 next elements
-                    for(int i=1; i<tmlseq.getNbNext()-1; i++) {
-                        s1 = aut.newState();
-                        generateAUTTMLTask(aut, task, elt.getNextElement(i), currentState, s1);
-                        currentState = s1;
-                    }
-                    generateAUTTMLTask(aut, task, elt.getNextElement(tmlseq.getNbNext()-1), currentState, endState);
-                }
-            }
-        } else {
-            TraceManager.addDev("Element " + elt + " is not managed by AUT format");
+            generateAUTTMLTask(aut, task, elt.getNextElement(i), currentState, s1);
+            currentState = s1;
+          }
+          generateAUTTMLTask(aut, task, elt.getNextElement(tmlseq.getNbNext() - 1), currentState, endState);
         }
+      }
+    } else {
+      TraceManager.addDev("Element " + elt + " is not managed by AUT format");
     }
-    
-    private void removeImmTransitions(Automata aut) {
-        Transition t1, t2;
-        LinkedList<State> states;
-        State s1, s2;
-        ListIterator<State> st;
-        ListIterator<Transition> tr;
-        
-        states = aut.getStates();
-        st = states.listIterator();
-        
-        while(st.hasNext()) {
-            s1 = st.next();
-            tr = s1.getTransitions().listIterator();
-            while(tr.hasNext()) {
-                t1 = tr.next();
-                s2 = t1.getNextState();
-                if (onlyImmFromState(s2)) {
-                    t2 = s2.getTransition(0);
-                    t1.setNextState(t2.getNextState());
-                }
-            }
-        }
-        
-        // Remove states from which an imm starts ...
-        for(int i=0; i<states.size(); i++) {
-            s1 = states.get(i);
-            if (onlyImmFromState(s1)) {
-                states.remove(i);
-                i --;
-            }
-        }
-        
-        // Rename states
-        aut.renameStates();
-        
-        
-    }
-    
-    private boolean onlyImmFromState(State s) {
-        if (s.nbOfTransitions() != 1) {
-            return false;
-        }
+  }
 
-        return s.getTransition(0).getValue().compareTo(IMM) == 0;
+  private void removeImmTransitions(Automata aut) {
+    Transition t1, t2;
+    LinkedList<State> states;
+    State s1, s2;
+    ListIterator<State> st;
+    ListIterator<Transition> tr;
 
-    }
-    
-    private void endOfActivity(Automata aut, State currentState, State endState) {
-        if (endState != null) {
-            Transition t = new Transition(IMM, endState);
-            currentState.addTransition(t);
-        }
-    }
-    
-    private String modifyString(String _input) {
-        // Replaces &&, || and !
-        _input = Conversion.replaceAllString(_input,"&&", "and");
-        _input = Conversion.replaceAllString(_input, "||", "or");
-        _input = Conversion.replaceAllString(_input, "!", "not");
-        
-        return _input;
-    }
-    
-    private String removeLastSemicolon(String action) {
-        action = action.trim();
-        if (action.charAt(action.length()-1) == ';') {
-            return action.substring(0, action.length()-1);
-        }
-        return action;
-    }
-    
-    private boolean printAnalyzer(String action) {
-        action = action.trim();
-        return action.startsWith("cout") || action.startsWith("std::cout");
+    states = aut.getStates();
+    st = states.listIterator();
 
+    while (st.hasNext()) {
+      s1 = st.next();
+      tr = s1.getTransitions().listIterator();
+      while (tr.hasNext()) {
+        t1 = tr.next();
+        s2 = t1.getNextState();
+        if (onlyImmFromState(s2)) {
+          t2 = s2.getTransition(0);
+          t1.setNextState(t2.getNextState());
+        }
+      }
     }
-    
-    
-    
+
+    // Remove states from which an imm starts ...
+    for (int i = 0; i < states.size(); i++) {
+      s1 = states.get(i);
+      if (onlyImmFromState(s1)) {
+        states.remove(i);
+        i--;
+      }
+    }
+
+    // Rename states
+    aut.renameStates();
+
+  }
+
+  private boolean onlyImmFromState(State s) {
+    if (s.nbOfTransitions() != 1) {
+      return false;
+    }
+
+    return s.getTransition(0).getValue().compareTo(IMM) == 0;
+
+  }
+
+  private void endOfActivity(Automata aut, State currentState, State endState) {
+    if (endState != null) {
+      Transition t = new Transition(IMM, endState);
+      currentState.addTransition(t);
+    }
+  }
+
+  private String modifyString(String _input) {
+    // Replaces &&, || and !
+    _input = Conversion.replaceAllString(_input, "&&", "and");
+    _input = Conversion.replaceAllString(_input, "||", "or");
+    _input = Conversion.replaceAllString(_input, "!", "not");
+
+    return _input;
+  }
+
+  private String removeLastSemicolon(String action) {
+    action = action.trim();
+    if (action.charAt(action.length() - 1) == ';') {
+      return action.substring(0, action.length() - 1);
+    }
+    return action;
+  }
+
+  private boolean printAnalyzer(String action) {
+    action = action.trim();
+    return action.startsWith("cout") || action.startsWith("std::cout");
+
+  }
+
 }

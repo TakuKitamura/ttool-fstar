@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package myutil;
 
 import java.awt.*;
@@ -45,139 +44,130 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * Class PluginManager
- * Creation: 24/05/2017
- * Version 1.0 24/05/2017
+ * Class PluginManager Creation: 24/05/2017 Version 1.0 24/05/2017
  *
  * @author Ludovic APVRILLE
  */
 public class PluginManager {
-    public static PluginManager pluginManager;
-    public static String PLUGIN_PATH = "";
+  public static PluginManager pluginManager;
+  public static String PLUGIN_PATH = "";
 
-    public ArrayList<Plugin> plugins;
+  public ArrayList<Plugin> plugins;
 
-    public PluginManager() {
-        plugins = new ArrayList<Plugin>();
+  public PluginManager() {
+    plugins = new ArrayList<Plugin>();
+  }
+
+  public void preparePlugins(String path, String[] plugins, String[] packages) {
+    PLUGIN_PATH = path;
+    int cpt = 0;
+    for (String s : plugins) {
+      createPlugin(s, packages[cpt]);
+      cpt++;
     }
+  }
 
+  public ArrayList<Plugin> getPlugins() {
+    return plugins;
+  }
 
-    public void preparePlugins(String path, String[] plugins, String[] packages) {
-        PLUGIN_PATH = path;
-        int cpt = 0;
-        for (String s : plugins) {
-            createPlugin(s, packages[cpt]);
-            cpt++;
-        }
-    }
-
-    public  ArrayList<Plugin> getPlugins() {
-        return plugins;
-    }
-
-    public Plugin getPluginAvatarCodeGenerator() {
-        for (Plugin plugin : plugins) {
-            if (plugin.hasAvatarCodeGenerator()) {
-                //TraceManager.addDev("     Found avatar code generation plugin");
-                return plugin;
-            }
-        }
-        //TraceManager.addDev("     NOT Found avatar code generation plugin");
-        return null;
-    }
-
-    public LinkedList<Plugin> getPluginDiplodocusCodeGenerator() {
-        LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
-        for (Plugin plugin : plugins) {
-            if (plugin.hasDiplodocusCodeGenerator()) {
-                lplugins.add(plugin);
-                //TraceManager.addDev("     Found diplodocus code generator plugin");
-            }
-        }
-        return lplugins;
-    }
-
-    public LinkedList<Plugin> getPluginFPGAScheduling() {
-        LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
-        for (Plugin plugin : plugins) {
-            if (plugin.hasFPGAScheduling()) {
-                lplugins.add(plugin);
-                //TraceManager.addDev("     Found diplodocus code generator plugin");
-            }
-        }
-        return lplugins;
-    }
-
-    public LinkedList<Plugin> getPluginGraphicalComponent(String diag) {
-        LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
-        for (Plugin plugin: plugins) {
-            if (plugin.hasGraphicalComponent(diag)) {
-                lplugins.add(plugin);
-                TraceManager.addDev("     Found graphical plugin: " + plugin.getName());
-            }
-        }
-        return lplugins;
-    }
-
-    public void addPlugin(Plugin _plugin) {
-        plugins.add(_plugin);
-    }
-
-    /*public Plugin getPluginOrCreate(String _name) {
-	Plugin plug = getPlugin(_name);
-	if (plug != null) {
-	    return plug;
-	}
-
-	return createPlugin(_name);
-	}*/
-
-    public Plugin getPlugin(String _name) {
-        for (Plugin plugin : plugins) {
-            if (plugin.getName().compareTo(_name) == 0) {
-                return plugin;
-            }
-        }
-        return null;
-    }
-
-    public Plugin createPlugin(String _name, String packageName) {
-        Plugin plugin = new Plugin(PLUGIN_PATH, _name, packageName);
-        addPlugin(plugin);
+  public Plugin getPluginAvatarCodeGenerator() {
+    for (Plugin plugin : plugins) {
+      if (plugin.hasAvatarCodeGenerator()) {
+        // TraceManager.addDev(" Found avatar code generation plugin");
         return plugin;
+      }
+    }
+    // TraceManager.addDev(" NOT Found avatar code generation plugin");
+    return null;
+  }
+
+  public LinkedList<Plugin> getPluginDiplodocusCodeGenerator() {
+    LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+    for (Plugin plugin : plugins) {
+      if (plugin.hasDiplodocusCodeGenerator()) {
+        lplugins.add(plugin);
+        // TraceManager.addDev(" Found diplodocus code generator plugin");
+      }
+    }
+    return lplugins;
+  }
+
+  public LinkedList<Plugin> getPluginFPGAScheduling() {
+    LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+    for (Plugin plugin : plugins) {
+      if (plugin.hasFPGAScheduling()) {
+        lplugins.add(plugin);
+        // TraceManager.addDev(" Found diplodocus code generator plugin");
+      }
+    }
+    return lplugins;
+  }
+
+  public LinkedList<Plugin> getPluginGraphicalComponent(String diag) {
+    LinkedList<Plugin> lplugins = new LinkedList<Plugin>();
+    for (Plugin plugin : plugins) {
+      if (plugin.hasGraphicalComponent(diag)) {
+        lplugins.add(plugin);
+        TraceManager.addDev("     Found graphical plugin: " + plugin.getName());
+      }
+    }
+    return lplugins;
+  }
+
+  public void addPlugin(Plugin _plugin) {
+    plugins.add(_plugin);
+  }
+
+  /*
+   * public Plugin getPluginOrCreate(String _name) { Plugin plug =
+   * getPlugin(_name); if (plug != null) { return plug; }
+   * 
+   * return createPlugin(_name); }
+   */
+
+  public Plugin getPlugin(String _name) {
+    for (Plugin plugin : plugins) {
+      if (plugin.getName().compareTo(_name) == 0) {
+        return plugin;
+      }
+    }
+    return null;
+  }
+
+  public Plugin createPlugin(String _name, String packageName) {
+    Plugin plugin = new Plugin(PLUGIN_PATH, _name, packageName);
+    addPlugin(plugin);
+    return plugin;
+  }
+
+  public void executeGraphics(Plugin _plugin, String _className, String _methodName, Graphics g) {
+    if (_plugin == null) {
+      return;
     }
 
-    public void executeGraphics(Plugin _plugin, String _className, String _methodName, Graphics g) {
-        if (_plugin == null) {
-            return;
-        }
-
-        Method m = _plugin.getMethod(_className, _methodName);
-        if (m == null) {
-            return;
-        }
-
-        try {
-            m.invoke(g);
-        } catch (Exception e) {
-            TraceManager.addDev("Exception occured when executing method " + _methodName);
-        }
+    Method m = _plugin.getMethod(_className, _methodName);
+    if (m == null) {
+      return;
     }
-    
-    /*public String executeString(String _pluginName, String _className, String _methodName) {
-	Plugin plugin = getPlugin(_pluginName);
-	if (plugin == null) {
-	    // We must find the package of this plugin
-	    plugin = createPlugin(_pluginName);
-	    if (plugin == null) {
-		return null;
-	    }
-	}
 
-	return plugin.executeRetStringMethod(_className, _methodName);
+    try {
+      m.invoke(g);
+    } catch (Exception e) {
+      TraceManager.addDev("Exception occured when executing method " + _methodName);
+    }
+  }
 
-	
-	}*/
-
+  /*
+   * public String executeString(String _pluginName, String _className, String
+   * _methodName) { Plugin plugin = getPlugin(_pluginName); if (plugin == null) {
+   * // We must find the package of this plugin plugin =
+   * createPlugin(_pluginName); if (plugin == null) { return null; } }
+   * 
+   * return plugin.executeRetStringMethod(_className, _methodName);
+   * 
+   * 
+   * }
+   */
 
 }

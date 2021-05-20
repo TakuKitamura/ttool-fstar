@@ -44,94 +44,94 @@ import ui.TDiagramPanel;
 import ui.TGComponent;
 
 /**
- * Class SysCAMSPortDE
- * Primitive port. To be used in SystemC-AMS diagrams
+ * Class SysCAMSPortDE Primitive port. To be used in SystemC-AMS diagrams
  * Creation: 14/05/2018
+ * 
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
  * @version 1.1 10/06/2019
  * @author Irina Kit Yan LEE, Daniela GENIUS
-*/
+ */
 
 public class SysCAMSPortDE extends SysCAMSPrimitivePort {
-//	private int period;
-//	private String time;
-//	private int rate;
-//	private int delay;
-        private int nbits;//DG
-	private String DEType;
-	private boolean sensitive;
-	private String sensitiveMethod;
-	
-	public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-	}
+  // private int period;
+  // private String time;
+  // private int rate;
+  // private int delay;
+  private int nbits;// DG
+  private String DEType;
+  private boolean sensitive;
+  private String sensitiveMethod;
 
-//	public int getPeriod() {
-//		return period;
-//	}
-//
-//	public void setPeriod(int period) {
-//		this.period = period;
-//	}
-//
-//	public String getTime() {
-//		return time;
-//	}
-//
-//	public void setTime(String time) {
-//		this.time = time;
-//	}
-//
-//	public int getRate() {
-//		return rate;
-//	}
-//
-//	public void setRate(int rate) {
-//		this.rate = rate;
-//	}
-//
-//	public int getDelay() {
-//		return delay;
-//	}
-//
-//	public void setDelay(int delay) {
-//		this.delay = delay;
-//	}
+  public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
 
-	public void drawParticularity(Graphics g) {
-	}
+  // public int getPeriod() {
+  // return period;
+  // }
+  //
+  // public void setPeriod(int period) {
+  // this.period = period;
+  // }
+  //
+  // public String getTime() {
+  // return time;
+  // }
+  //
+  // public void setTime(String time) {
+  // this.time = time;
+  // }
+  //
+  // public int getRate() {
+  // return rate;
+  // }
+  //
+  // public void setRate(int rate) {
+  // this.rate = rate;
+  // }
+  //
+  // public int getDelay() {
+  // return delay;
+  // }
+  //
+  // public void setDelay(int delay) {
+  // this.delay = delay;
+  // }
 
-	public String getDEType() {
-		return DEType;
-	}
+  public void drawParticularity(Graphics g) {
+  }
 
-	public void setDEType(String _DEType) {
-		DEType = _DEType;
-	}
-	
-	public boolean getSensitive() {
-		return sensitive;
-	}
-    
-	public int getNbits() {
-		return nbits;
-	}
+  public String getDEType() {
+    return DEType;
+  }
 
-        public void setNbits(int _nbits) {
-		nbits = _nbits;
-	}
+  public void setDEType(String _DEType) {
+    DEType = _DEType;
+  }
 
-    
-	public void setSensitive(boolean _sensitive) {
-		sensitive = _sensitive;
-	}
+  public boolean getSensitive() {
+    return sensitive;
+  }
 
-	public String getSensitiveMethod() {
-		return sensitiveMethod;
-	}
+  public int getNbits() {
+    return nbits;
+  }
 
-	public void setSensitiveMethod(String _sensitiveMethod) {
-		sensitiveMethod = _sensitiveMethod;
-	}	
+  public void setNbits(int _nbits) {
+    nbits = _nbits;
+  }
+
+  public void setSensitive(boolean _sensitive) {
+    sensitive = _sensitive;
+  }
+
+  public String getSensitiveMethod() {
+    return sensitiveMethod;
+  }
+
+  public void setSensitiveMethod(String _sensitiveMethod) {
+    sensitiveMethod = _sensitiveMethod;
+  }
 }

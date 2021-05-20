@@ -36,66 +36,62 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPEPropertyComponent
- * Creation: 16/02/2011
+ * Class TEPEPropertyComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPEPropertyComponent  extends TEPEComponent  {
-	
-	public static final int LIVENESS = 0;
-	public static final int NON_LIVENESS = 1;
-	public static final int REACHABILITY = 2;
-	public static final int NON_REACHABILITY = 3;
-	public static final int SAFETY = 4;
-	public static final int NON_SAFETY = 5;
-	
-	protected int type;
-	
-    public TEPEPropertyComponent(String _name, Object _referenceObject, int _type) {
-		super(_name, _referenceObject);
-		type = _type;
-		inPropertyComponents = new Vector<TEPEComponent>();
-		inNegatedProperty = new Vector<Boolean>();
-		outPropertyComponents = new Vector<TEPEComponent>();
+public class TEPEPropertyComponent extends TEPEComponent {
+
+  public static final int LIVENESS = 0;
+  public static final int NON_LIVENESS = 1;
+  public static final int REACHABILITY = 2;
+  public static final int NON_REACHABILITY = 3;
+  public static final int SAFETY = 4;
+  public static final int NON_SAFETY = 5;
+
+  protected int type;
+
+  public TEPEPropertyComponent(String _name, Object _referenceObject, int _type) {
+    super(_name, _referenceObject);
+    type = _type;
+    inPropertyComponents = new Vector<TEPEComponent>();
+    inNegatedProperty = new Vector<Boolean>();
+    outPropertyComponents = new Vector<TEPEComponent>();
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public String getExtraString() {
+    String ret = "\ntype:";
+    switch (type) {
+      case 0:
+        ret += "liveness";
+        break;
+      case 1:
+        ret += "non liveness";
+        break;
+      case 2:
+        ret += "reachability";
+        break;
+      case 3:
+        ret += "non reachability";
+        break;
+      case 4:
+        ret += "safety";
+        break;
+      default:
+        ret += "non safety";
     }
-	
-	public int getType() {
-		return type;
-	}
-	
-	public String getExtraString() {
-		String ret = "\ntype:";
-		switch(type) {
-		case 0:
-			ret += "liveness";
-			break;
-		case 1:
-			ret += "non liveness";
-			break;
-		case 2:
-			ret += "reachability";
-			break;
-		case 3:
-			ret += "non reachability";
-			break;
-		case 4:	
-			ret += "safety";
-			break;
-		default:
-			ret += "non safety";
-		}
-		
-		return ret;
-	}
-    
-    
+
+    return ret;
+  }
+
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.iod;
 
 import myutil.GraphicLib;
@@ -50,37 +47,31 @@ import java.awt.geom.Point2D;
 import java.util.Vector;
 
 /**
- * Class TGConnectorInteraction
- * Basic connector with a full arrow at the end. Used in activity diagram.
- * Creation: 30/09/2004
+ * Class TGConnectorInteraction Basic connector with a full arrow at the end.
+ * Used in activity diagram. Creation: 30/09/2004
+ * 
  * @version 1.0 30/09/2004
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorInteraction extends TGConnector {
-    protected int arrowLength = 10;
-    
-    public TGConnectorInteraction(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic202;
+public class TGConnectorInteraction extends TGConnector {
+  protected int arrowLength = 10;
+
+  public TGConnectorInteraction(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic202;
+  }
+
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+      g.drawLine(x1, y1, x2, y2);
+    } else {
+      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
     }
-    
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-            g.drawLine(x1, y1, x2, y2);
-        } else {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-        }
-    }
-    
-    public int getType() {
-        //
-        return TGComponentManager.CONNECTOR_INTERACTION;
-    }
+  }
+
+  public int getType() {
+    //
+    return TGComponentManager.CONNECTOR_INTERACTION;
+  }
 }
-
-
-
-
-
-
-

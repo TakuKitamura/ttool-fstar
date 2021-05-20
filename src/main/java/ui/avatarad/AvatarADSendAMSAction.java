@@ -47,147 +47,147 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
-   * Class AvatarADSendAMSAction
-   * Action of sending an event
-   * Creation: 02/09/2011
-   * @version 1.0 02/09/2011
-   * @author Ludovic APVRILLE
+ * Class AvatarADSendAMSAction Action of sending an event Creation: 02/09/2011
+ * 
+ * @version 1.0 02/09/2011
+ * @author Ludovic APVRILLE
  */
-public class AvatarADSendAMSAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
-    protected int lineLength = 5;
-//    protected int textX =  5;
-//    protected int textY =  15;
-    protected int arc = 5;
-    protected int linebreak = 10;
+public class AvatarADSendAMSAction extends AvatarADBasicCanBeDisabledComponent
+    /* Issue #69 AvatarADBasicComponent */ implements EmbeddedComment, BasicErrorHighlight {
+  protected int lineLength = 5;
+  // protected int textX = 5;
+  // protected int textY = 15;
+  protected int arc = 5;
+  protected int linebreak = 10;
 
-    protected int stateOfError = 0; // Not yet checked
+  protected int stateOfError = 0; // Not yet checked
 
-    public AvatarADSendAMSAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        textX =  5;
-        textY =  15;
-        initScaling(30, 20);
-        minWidth = (int)(30* tdp.getZoom());
-        oldScaleFactor = tdp.getZoom();
-	
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+  public AvatarADSendAMSAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    textX = 5;
+    textY = 15;
+    initScaling(30, 20);
+    minWidth = (int) (30 * tdp.getZoom());
+    oldScaleFactor = tdp.getZoom();
 
-        moveable = true;
-        editable = true;
-        removable = true;
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[2];
+    connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
 
-        name = "Send signal";
-        value = "signal";
+    moveable = true;
+    editable = true;
+    removable = true;
 
-        myImageIcon = IconManager.imgic904;
+    name = "Send signal";
+    value = "signal";
+
+    myImageIcon = IconManager.imgic904;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 2 * textX);
+    if ((w1 != width) & (!tdp.isScaled())) {
+      setCd(x + width / 2 - w1 / 2, y);
+      width = w1; // updateConnectingPoints();
     }
 
-    @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;            //updateConnectingPoints();
-        }
-
-
-        if (stateOfError > 0)  {
-            Color c = g.getColor();
-            switch(stateOfError) {
-            case ErrorHighlight.OK:
-                g.setColor(ColorManager.TML_PORT_EVENT);
-                break;
-            default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-            }
-            // Making the polygon
-            int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
-            int [] py1 = {y, y, y+(height/2), y+height, y+height};
-            g.fillPolygon(px1, py1, 5);
-            g.setColor(c);
-        }
-
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        Color c = g.getColor();
-        //
-
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-
-        /*if (g.getColor().equals(ColorManager.NORMAL_0)) {
+    if (stateOfError > 0) {
+      Color c = g.getColor();
+      switch (stateOfError) {
+        case ErrorHighlight.OK:
           g.setColor(ColorManager.TML_PORT_EVENT);
-          }*/
-
-        int x1 = x + 1;
-        int y1 = y + 1;
-        int height1 = height;
-        int width1 = width;
-        g.setColor(ColorManager.TML_PORT_EVENT);
-        g.drawLine(x1, y1, x1+width1-linebreak, y1);
-        g.drawLine(x1, y1+height1, x1+width1-linebreak, y1+height1);
-        g.drawLine(x1, y1, x1, y1+height1);
-        g.drawLine(x1+width1-linebreak, y1, x1+width1, y1+height1/2);
-        g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
-        g.setColor(c);
-
-        g.drawLine(x, y, x+width-linebreak, y);
-        g.drawLine(x, y+height, x+width-linebreak, y+height);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
-        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
-
-        //drawSingleString(g, "sig", x+(width-w) / 2, y);
-        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
+          break;
+        default:
+          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+      }
+      // Making the polygon
+      int[] px1 = { x, x + width - linebreak, x + width, x + width - linebreak, x };
+      int[] py1 = { y, y, y + (height / 2), y + height, y + height };
+      g.fillPolygon(px1, py1, 5);
+      g.setColor(c);
     }
 
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
+    // g.drawRoundRect(x, y, width, height, arc, arc);
+    Color c = g.getColor();
+    //
 
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y-lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-            return this;
-        }
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
 
-        return null;
+    /*
+     * if (g.getColor().equals(ColorManager.NORMAL_0)) {
+     * g.setColor(ColorManager.TML_PORT_EVENT); }
+     */
+
+    int x1 = x + 1;
+    int y1 = y + 1;
+    int height1 = height;
+    int width1 = width;
+    g.setColor(ColorManager.TML_PORT_EVENT);
+    g.drawLine(x1, y1, x1 + width1 - linebreak, y1);
+    g.drawLine(x1, y1 + height1, x1 + width1 - linebreak, y1 + height1);
+    g.drawLine(x1, y1, x1, y1 + height1);
+    g.drawLine(x1 + width1 - linebreak, y1, x1 + width1, y1 + height1 / 2);
+    g.drawLine(x1 + width1 - linebreak, y1 + height1, x1 + width1, y1 + height1 / 2);
+    g.setColor(c);
+
+    g.drawLine(x, y, x + width - linebreak, y);
+    g.drawLine(x, y + height, x + width - linebreak, y + height);
+    g.drawLine(x, y, x, y + height);
+    g.drawLine(x + width - linebreak, y, x + width, y + height / 2);
+    g.drawLine(x + width - linebreak, y + height, x + width, y + height / 2);
+
+    // drawSingleString(g, "sig", x+(width-w) / 2, y);
+    drawSingleString(g, value, x + (width - w) / 2, y + textY);
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
 
-    public String getEventName() {
-        return value;
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
 
-    @Override
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldValue = value;
+    return null;
+  }
 
-        //String text = getName() + ": ";
-        String s = (String)JOptionPane.showInputDialog(frame, "AMS signal name",
-                                                       "Setting name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                       null,
-                                                       getValue());
+  public String getEventName() {
+    return value;
+  }
 
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            //boolean b;
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = value;
 
-            setValue(s);
-            recalculateSize();
-        }
-        return true;
+    // String text = getName() + ": ";
+    String s = (String) JOptionPane.showInputDialog(frame, "AMS signal name", "Setting name", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
 
+    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+      // boolean b;
+
+      setValue(s);
+      recalculateSize();
     }
+    return true;
 
-    @Override
-    public int getType() {
-        return TGComponentManager.AAD_SEND_SIGNAL_ACTION;
-    }
+  }
 
-    @Override
-    public void setStateAction(int _stateAction) {
-        stateOfError = _stateAction;
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.AAD_SEND_SIGNAL_ACTION;
+  }
+
+  @Override
+  public void setStateAction(int _stateAction) {
+    stateOfError = _stateAction;
+  }
 }

@@ -43,25 +43,26 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarMADAssumptionConnectingPoint
- * Definition of connecting points on which connectors between assumptions may be connected
- * Creation: 27/08/2013
+ * Class AvatarMADAssumptionConnectingPoint Definition of connecting points on
+ * which connectors between assumptions may be connected Creation: 27/08/2013
+ * 
  * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  */
 public class AvatarMADAssumptionConnectingPoint extends TGConnectingPointWidthHeight {
-    
-    public AvatarMADAssumptionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR) {
-            return true;
-        }
 
-        return type == TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
+  public AvatarMADAssumptionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h, int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    if (type == TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR) {
+      return true;
     }
+
+    return type == TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
+  }
 }

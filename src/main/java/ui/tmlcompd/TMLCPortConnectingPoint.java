@@ -36,34 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TMLCPortConnectingPoint
- * Definition of connecting points on which connectors of TML Component Task diagrams can be connected
- * Creation: 12/03/2008
+ * Class TMLCPortConnectingPoint Definition of connecting points on which
+ * connectors of TML Component Task diagrams can be connected Creation:
+ * 12/03/2008
+ * 
  * @version 1.0 12/03/2008
  * @author Ludovic APVRILLE
  */
-public class TMLCPortConnectingPoint extends TGConnectingPointWidthHeight{
-    public TMLCPrimitivePort port;
-	public boolean positionned;
-	
-    public TMLCPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_PORT_TMLC;
-    }
-    
+public class TMLCPortConnectingPoint extends TGConnectingPointWidthHeight {
+  public TMLCPrimitivePort port;
+  public boolean positionned;
+
+  public TMLCPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_PORT_TMLC;
+  }
+
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -50,181 +47,165 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class TMLCFork
-   * Fork operator. To be used in TML component task diagrams
-   * Creation: 4/03/2014
-   * @version 1.0 4/03/2014
-   * @author Ludovic APVRILLE
+ * Class TMLCFork Fork operator. To be used in TML component task diagrams
+ * Creation: 4/03/2014
+ * 
+ * @version 1.0 4/03/2014
+ * @author Ludovic APVRILLE
  */
 public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
-    protected int radius = 11;
+  protected int radius = 11;
 
-    protected boolean isChannel = false;
+  protected boolean isChannel = false;
 
-     // value Indicates the number of samples being read before they
-    // are written to destination. The default is 1.
+  // value Indicates the number of samples being read before they
+  // are written to destination. The default is 1.
 
+  public TMLCFork(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+    initScaling(2 * radius, 2 * radius);
 
-    public TMLCFork(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    nbConnectingPoint = 7;
+    connectingPoint = new TGConnectingPoint[7];
 
-        initScaling(2*radius, 2*radius);
+    connectingPoint[0] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[1] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+    connectingPoint[2] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+    connectingPoint[3] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.134);
+    connectingPoint[4] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.134);
+    connectingPoint[5] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
+    connectingPoint[6] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
 
-        nbConnectingPoint = 7;
-        connectingPoint = new TGConnectingPoint[7];
+    addTGConnectingPointsComment();
 
-        connectingPoint[0] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[1] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-        connectingPoint[2] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-        connectingPoint[3] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.134);
-        connectingPoint[4] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.134);
-        connectingPoint[5] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
-        connectingPoint[6] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
+    nbInternalTGComponent = 0;
 
-        addTGConnectingPointsComment();
+    value = "1";
+    name = "Fork";
+    editable = true;
 
-        nbInternalTGComponent = 0;
+    // insides = new ArrayList<TMLCPrimitivePort>();
+    // outsides = new ArrayList<TMLCPrimitivePort>();
 
-        value = "1";
-        name = "Fork";
-        editable = true;
+    myImageIcon = IconManager.imgic1204;
+  }
 
-        //insides = new ArrayList<TMLCPrimitivePort>();
-        //outsides = new ArrayList<TMLCPrimitivePort>();
+  @Override
+  public void internalDrawing(Graphics g) {
+    radius = width / 2;
 
-        myImageIcon = IconManager.imgic1204;
+    if (rescaled) {
+      rescaled = false;
     }
 
-    @Override
-    public void internalDrawing(Graphics g) {
-    	radius = width / 2;
+    calculatePortColor();
 
-        if (rescaled) {
-            rescaled = false;
-        }
-
-        calculatePortColor();
-
-
-        // Zoom is assumed to be computed
-        Color c = g.getColor();
-        //g.drawRect(x, y, width, height);
-        if ((width > 2) && (height > 2)) {
-            g.setColor(myColor);
-            g.fillOval(x, y, radius*2, radius*2);
-            g.setColor(c);
-        }
-        g.drawOval(x, y, radius*2, radius*2);
-        //GraphicLib.arrowWithLine(g, 1, 1, 5, x, y+radius, x+radius, y+radius, false);
-        g.drawLine(x, y+radius, x+radius, y+radius);
-        //g.drawLine(x+radius, y+radius, x+2*radius, y+radius);
-        //g.drawLine(x+radius, y+radius, x+3*radius/2, (int)(y+(0.134*radius)));
-        //g.drawLine(x+radius, y+radius, x+3*radius/2, (int)(y+2*radius-(0.134*radius)));
-
-        GraphicLib.arrowWithLine(g, 1, 1, 5, x+radius, y+radius, x+2*radius, y+radius, false);
-        GraphicLib.arrowWithLine(g, 1, 1, 5, x+radius, y+radius, x+3*radius/2, (int)(y+(0.134*radius)), false);
-        GraphicLib.arrowWithLine(g, 1, 1, 5, x+radius, y+radius, x+3*radius/2, (int)(y+2*radius-(0.134*radius)), false);
-
-        /*int w = g.getFontMetrics().stringWidth(value);
-          int currentFontSize = g.getFont().getSize();
-          g.drawString(value, x+radius-(w/2), y+radius+(currentFontSize/2));*/
-
+    // Zoom is assumed to be computed
+    Color c = g.getColor();
+    // g.drawRect(x, y, width, height);
+    if ((width > 2) && (height > 2)) {
+      g.setColor(myColor);
+      g.fillOval(x, y, radius * 2, radius * 2);
+      g.setColor(c);
     }
+    g.drawOval(x, y, radius * 2, radius * 2);
+    // GraphicLib.arrowWithLine(g, 1, 1, 5, x, y+radius, x+radius, y+radius, false);
+    g.drawLine(x, y + radius, x + radius, y + radius);
+    // g.drawLine(x+radius, y+radius, x+2*radius, y+radius);
+    // g.drawLine(x+radius, y+radius, x+3*radius/2, (int)(y+(0.134*radius)));
+    // g.drawLine(x+radius, y+radius, x+3*radius/2,
+    // (int)(y+2*radius-(0.134*radius)));
 
-    public boolean editOnDoubleClick(JFrame frame) {
-        if (isChannel) {
-            String oldValue = value;
-            String[] labels = new String[1];
-            labels[0] = "Nb of samples (positive int): ";
-            String[] values = new String[1];
-            values[0] = "" + value;
-            String[] keywords = new String[1];
-            keywords[0] = "fork" ;
+    GraphicLib.arrowWithLine(g, 1, 1, 5, x + radius, y + radius, x + 2 * radius, y + radius, false);
+    GraphicLib.arrowWithLine(g, 1, 1, 5, x + radius, y + radius, x + 3 * radius / 2, (int) (y + (0.134 * radius)),
+        false);
+    GraphicLib.arrowWithLine(g, 1, 1, 5, x + radius, y + radius, x + 3 * radius / 2,
+        (int) (y + 2 * radius - (0.134 * radius)), false);
 
+    /*
+     * int w = g.getFontMetrics().stringWidth(value); int currentFontSize =
+     * g.getFont().getSize(); g.drawString(value, x+radius-(w/2),
+     * y+radius+(currentFontSize/2));
+     */
 
-            JDialogMultiString jdms = new JDialogMultiString(getTDiagramPanel().getMainGUI().getFrame(), "Fork attribute", 1,
-                    labels, values, keywords, getTDiagramPanel().getMainGUI().getHelpManager(), getTDiagramPanel().getMainGUI());
-            GraphicLib.centerOnParent(jdms, 400, 250);
-            jdms.setVisible(true);
+  }
 
-            if (jdms.hasBeenSet()) {
-                String tmp = jdms.getString(0).trim();
-                try {
-                    int val = Integer.decode(tmp);
-                    if (val > 0) {
-                        value = tmp;
-                    } else {
-                        JOptionPane.showMessageDialog(frame,
-                                "Could not change the number of samples: the number must be >0",
-                                "Error",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        return false;
-                    }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the number of samples: " + tmp + " is not a number",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-                return true;
-            }
+  public boolean editOnDoubleClick(JFrame frame) {
+    if (isChannel) {
+      String oldValue = value;
+      String[] labels = new String[1];
+      labels[0] = "Nb of samples (positive int): ";
+      String[] values = new String[1];
+      values[0] = "" + value;
+      String[] keywords = new String[1];
+      keywords[0] = "fork";
 
-            /*String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
-                    "Nb of samples per round", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
-                    getValue());
-            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-                try {
-                    int testI = Integer.decode(s).intValue();
-                    if (testI > 0) {
-                        value = s;
-                    } else {
-                        JOptionPane.showMessageDialog(frame,
-                                "Could not change the number of samples: the number must be >0",
-                                "Error",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        return false;
-                    }
+      JDialogMultiString jdms = new JDialogMultiString(getTDiagramPanel().getMainGUI().getFrame(), "Fork attribute", 1,
+          labels, values, keywords, getTDiagramPanel().getMainGUI().getHelpManager(), getTDiagramPanel().getMainGUI());
+      GraphicLib.centerOnParent(jdms, 400, 250);
+      jdms.setVisible(true);
 
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not change the number of samples: " + s + " is not a number",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-
-            }
-            return true;*/
-        } else {
-            JOptionPane.showMessageDialog(frame,
-                    "Only correctly connected fork can be configured",
-                    "Error",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return true;
+      if (jdms.hasBeenSet()) {
+        String tmp = jdms.getString(0).trim();
+        try {
+          int val = Integer.decode(tmp);
+          if (val > 0) {
+            value = tmp;
+          } else {
+            JOptionPane.showMessageDialog(frame, "Could not change the number of samples: the number must be >0",
+                "Error", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+          }
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(frame, "Could not change the number of samples: " + tmp + " is not a number",
+              "Error", JOptionPane.INFORMATION_MESSAGE);
+          return false;
         }
         return true;
+      }
 
+      /*
+       * String s = (String) JOptionPane.showInputDialog(frame,
+       * "Nb of samples (positive int): ", "Nb of samples per round",
+       * JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, getValue()); if ((s !=
+       * null) && (s.length() > 0) && (!s.equals(oldValue))) { try { int testI =
+       * Integer.decode(s).intValue(); if (testI > 0) { value = s; } else {
+       * JOptionPane.showMessageDialog(frame,
+       * "Could not change the number of samples: the number must be >0", "Error",
+       * JOptionPane.INFORMATION_MESSAGE); return false; }
+       * 
+       * } catch (Exception e) { JOptionPane.showMessageDialog(frame,
+       * "Could not change the number of samples: " + s + " is not a number", "Error",
+       * JOptionPane.INFORMATION_MESSAGE); return false; }
+       * 
+       * } return true;
+       */
+    } else {
+      JOptionPane.showMessageDialog(frame, "Only correctly connected fork can be configured", "Error",
+          JOptionPane.INFORMATION_MESSAGE);
+      return true;
     }
+    return true;
 
+  }
 
-    public int getType() {
-        return TGComponentManager.TMLCTD_FORK;
+  public int getType() {
+    return TGComponentManager.TMLCTD_FORK;
+  }
+
+  public int getNumberOfSamples() {
+    try {
+      return Integer.decode(value).intValue();
+    } catch (Exception e) {
+      value = "1";
+      return 1;
     }
+  }
 
-    public int getNumberOfSamples() {
-        try {
-            return Integer.decode(value).intValue();
-        } catch (Exception e) {
-            value = "1";
-            return 1;
-        }
-    }
-
-    public void setAsChannel(boolean b) {
-        isChannel = b;
-    }
-
+  public void setAsChannel(boolean b) {
+    isChannel = b;
+  }
 
 }

@@ -36,46 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class ADDelay
- * Creation: 10/12/2003
+ * Class ADDelay Creation: 10/12/2003
+ * 
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADDelay extends ADComponent {
-    protected String value;
-    
-    public ADDelay() {
-        nbNext = 1;
-    }
-    
-    public void setValue(String s) {
-        value = s;
-    }
-    
-    public String getValue() {
-        return value;
-    }
-    
-    public String toString() {
-        return "Delay (" + value + ")";
-    }
-    
-    public ADComponent makeSame() {
-      ADDelay adc = new ADDelay();
-      adc.setValue(getValue());
-      return adc;
-    }
+  protected String value;
+
+  public ADDelay() {
+    nbNext = 1;
+  }
+
+  public void setValue(String s) {
+    value = s;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public String toString() {
+    return "Delay (" + value + ")";
+  }
+
+  public ADComponent makeSame() {
+    ADDelay adc = new ADDelay();
+    adc.setValue(getValue());
+    return adc;
+  }
 
 }
-

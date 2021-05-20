@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarcd;
 
 import myutil.GraphicLib;
@@ -48,96 +45,95 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class AvatarCDActorStickman
- * Stickman actor in a context diagram
- * Creation: 31/08/2011
+ * Class AvatarCDActorStickman Stickman actor in a context diagram Creation:
+ * 31/08/2011
+ * 
  * @version 1.0 131/08/2011
  * @author Ludovic APVRILLE
  */
 public class AvatarCDActorStickman extends TGCScalableOneLineText {
-    /*protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;*/
-    protected int w, h; //w1;
-    
-    public AvatarCDActorStickman(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  /*
+   * protected int lineLength = 5; protected int textX = 5; protected int textY =
+   * 15; protected int arc = 5;
+   */
+  protected int w, h; // w1;
 
-        width = 30;// (int)(30 * tdp.getZoom());
-        height = 70; //(int)(70 * tdp.getZoom());
-        oldScaleFactor = tdp.getZoom();
-	
-               
-        nbConnectingPoint = 24;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        int i;
-        for(int j=0; j<24; j = j + 12) {
-            for(i=0; i<5; i++) {
-                connectingPoint[i + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.0, ((double)(i))/4);
-            }
-            connectingPoint[5+j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-            connectingPoint[6+j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-            for(i=0; i<5; i++) {
-                connectingPoint[i+7+j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 1.0, ((double)i)/4);
-            }
-        }
-        addTGConnectingPointsComment();
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        value = "Actor";
-        name = "actor";
-        
-        myImageIcon = IconManager.imgic600;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        w  = g.getFontMetrics().stringWidth(value);
-        h = g.getFontMetrics().getHeight();
-        height = height - h;
-        //g.drawRoundRect(x - width/2, y, width, height, arc, arc);
-        g.drawOval(x + width/4, y, width/2, width/2);
-        //Body
-        g.drawLine(x+width/2, y+width/2, x+width/2, y+height-width/2);
-        //Arms
-        g.drawLine(x, y+width/2 + 8, x+width, y+width/2 + 8);
-        //Left leg
-        g.drawLine(x+width/2, y+height-width/2, x, y+height);
-        //right leg
-        g.drawLine(x+width/2, y+height-width/2, x+width, y+height);
-        //name of actor
-        drawSingleString(g, value, x + width / 2 - w / 2 , y + height + h);
-        height = height + h;
-    }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - w / 2, y +height - h, w, h)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getMyCurrentMinX() {
-        return Math.min(x + width / 2 - w / 2, x);
+  public AvatarCDActorStickman(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+    width = 30;// (int)(30 * tdp.getZoom());
+    height = 70; // (int)(70 * tdp.getZoom());
+    oldScaleFactor = tdp.getZoom();
+
+    nbConnectingPoint = 24;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    int i;
+    for (int j = 0; j < 24; j = j + 12) {
+      for (i = 0; i < 5; i++) {
+        connectingPoint[i + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.0, ((double) (i)) / 4);
+      }
+      connectingPoint[5 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+      connectingPoint[6 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+      for (i = 0; i < 5; i++) {
+        connectingPoint[i + 7 + j] = new AvatarCDConnectingPoint(this, 0, 0, true, true, 1.0, ((double) i) / 4);
+      }
     }
-    
-    public int getMyCurrentMaxX() {
-        return Math.max(x + width / 2 + w / 2, x + width);
+    addTGConnectingPointsComment();
+
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    value = "Actor";
+    name = "actor";
+
+    myImageIcon = IconManager.imgic600;
+  }
+
+  public void internalDrawing(Graphics g) {
+    w = g.getFontMetrics().stringWidth(value);
+    h = g.getFontMetrics().getHeight();
+    height = height - h;
+    // g.drawRoundRect(x - width/2, y, width, height, arc, arc);
+    g.drawOval(x + width / 4, y, width / 2, width / 2);
+    // Body
+    g.drawLine(x + width / 2, y + width / 2, x + width / 2, y + height - width / 2);
+    // Arms
+    g.drawLine(x, y + width / 2 + 8, x + width, y + width / 2 + 8);
+    // Left leg
+    g.drawLine(x + width / 2, y + height - width / 2, x, y + height);
+    // right leg
+    g.drawLine(x + width / 2, y + height - width / 2, x + width, y + height);
+    // name of actor
+    drawSingleString(g, value, x + width / 2 - w / 2, y + height + h);
+    height = height + h;
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-  
-    public String getActorName() {
-        return value;
+    if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - w / 2, y + height - h, w, h)) {
+      return this;
     }
-    
-    
-    public int getType() {
-        return TGComponentManager.ACD_ACTOR_STICKMAN;
-    }
+    return null;
+  }
+
+  public int getMyCurrentMinX() {
+    return Math.min(x + width / 2 - w / 2, x);
+
+  }
+
+  public int getMyCurrentMaxX() {
+    return Math.max(x + width / 2 + w / 2, x + width);
+  }
+
+  public String getActorName() {
+    return value;
+  }
+
+  public int getType() {
+    return TGComponentManager.ACD_ACTOR_STICKMAN;
+  }
 }

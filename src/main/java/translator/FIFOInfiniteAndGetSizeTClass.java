@@ -36,42 +36,44 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.LinkedList;
 
 /**
- * Class FIFOInfiniteAndGetSizeTClass
- * Creation: 27/10/2006
+ * Class FIFOInfiniteAndGetSizeTClass Creation: 27/10/2006
+ * 
  * @version 1.0 27/10/2006
  * @author Ludovic APVRILLE
  */
-public interface FIFOInfiniteAndGetSizeTClass  {
-    int getNbPara();
+public interface FIFOInfiniteAndGetSizeTClass {
+  int getNbPara();
 
-    /**
-     * Returns the first write gate
-     * @return the first write gate
-     */
-    Gate getGateWrite();
+  /**
+   * Returns the first write gate
+   * 
+   * @return the first write gate
+   */
+  Gate getGateWrite();
 
-    /**
-     * Returns the first read gate
-     * @return the first read gate
-     */
-    Gate getGateRead();
+  /**
+   * Returns the first read gate
+   * 
+   * @return the first read gate
+   */
+  Gate getGateRead();
 
-    /**
-     * Returns the first size gate
-     * @return the first size gate
-     */
-    Gate getGateSize();
+  /**
+   * Returns the first size gate
+   * 
+   * @return the first size gate
+   */
+  Gate getGateSize();
 
-    LinkedList<Gate> getGatesWrite();
-    LinkedList<Gate> getGatesRead();
-    LinkedList<Gate> getGatesSize();
+  LinkedList<Gate> getGatesWrite();
+
+  LinkedList<Gate> getGatesRead();
+
+  LinkedList<Gate> getGatesSize();
 
 }

@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui.req;
 
 import ui.*;
@@ -51,180 +47,169 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 /**
- * Class RequirementDiagramPanel
- * Panel for drawing requirement diagrams
+ * Class RequirementDiagramPanel Panel for drawing requirement diagrams
  * Creation: 15/05/2006
+ * 
  * @version 1.0 15/05/2006
  * @author Ludovic APVRILLE
  */
 
 public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-    
-	public Vector<Requirement> validated, ignored;
-    
-    public  RequirementDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
-    }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.addTClass(tgcc.getClassName());
-            return true;
-        }*/
-        return false;
+
+  public Vector<Requirement> validated, ignored;
+
+  public RequirementDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.addTClass(tgcc.getClassName()); return true; }
+     */
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+     * true; }
+     */
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+     */
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<TRequirementDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</TRequirementDiagramPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<TRequirementDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</TRequirementDiagramPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<TRequirementDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</TRequirementDiagramPanelCopy>";
+  }
+
+  public void makePostLoadingProcessing() throws MalformedModelingException {
+
+  }
+
+  /*
+   * public boolean isSDCreated(String name) { return mgui.isSDCreated(tp, name);
+   * }
+   * 
+   * public boolean isIODCreated(String name) { return mgui.isIODCreated(tp,
+   * name); }
+   * 
+   * public boolean openSequenceDiagram(String name) { return
+   * mgui.openSequenceDiagram(name); }
+   * 
+   * public boolean openIODiagram(String name) { return mgui.openIODiagram(name);
+   * }
+   * 
+   * public boolean createSequenceDiagram(String name) { boolean b =
+   * mgui.createSequenceDiagram(tp, name);
+   * //mgui.changeMade(mgui.getSequenceDiagramPanel(name),
+   * TDiagramPanel.NEW_COMPONENT); return b; }
+   */
+
+  /*
+   * public boolean createIODiagram(String name) { boolean b =
+   * mgui.createIODiagram(tp, name);
+   * //mgui.changeMade(mgui.getSequenceDiagramPanel(name),
+   * TDiagramPanel.NEW_COMPONENT); return b; }
+   */
+
+  public int nbOfVerifyStartingAt(TGComponent tgc) {
+    Iterator<TGComponent> iterator = getComponentList().listIterator();
+    TGComponent tgc1;// , tgc2;
+    TGConnectingPoint p;
+
+    int cpt = 0;
+
+    while (iterator.hasNext()) {
+      tgc1 = iterator.next();
+      if (tgc1 instanceof TGConnectorVerify) {
+        p = ((TGConnectorVerify) (tgc1)).getTGConnectingPointP1();
+        if (tgc.belongsToMeOrSon(p) != null) {
+          cpt++;
+        }
+      }
     }
 
-    
-    public boolean actionOnRemove(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.removeTClass(tgcc.getClassName());
-            resetAllInstancesOf(tgcc);
-            return true;
-        }*/
-        return false;
+    return cpt;
+  }
+
+  public LinkedList<TGComponent> getAllRequirements() {
+    LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+    TGComponent tgc;
+
+    Iterator<TGComponent> iterator = getComponentList().listIterator();
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+
+      if (tgc instanceof Requirement) {
+        list.add(tgc);
+      }
     }
-    
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            return actionOnDoubleClick(tgc);
-        }*/
-        return false;
-    }
-    
-    public String getXMLHead() {
-        return "<TRequirementDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</TRequirementDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<TRequirementDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</TRequirementDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<TRequirementDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</TRequirementDiagramPanelCopy>";
-    }
-    
-    
-    public void makePostLoadingProcessing() throws MalformedModelingException {
-        
-    }
-    
-    /*public boolean isSDCreated(String name) {
-        return mgui.isSDCreated(tp, name);
-    }
-     
-    public boolean isIODCreated(String name) {
-        return mgui.isIODCreated(tp, name);
-    }
-     
-   public boolean openSequenceDiagram(String name) {
-       return mgui.openSequenceDiagram(name);
-   }
-     
-   public boolean openIODiagram(String name) {
-       return mgui.openIODiagram(name);
-   }
-     
-   public boolean createSequenceDiagram(String name) {
-       boolean b = mgui.createSequenceDiagram(tp, name);
-       //mgui.changeMade(mgui.getSequenceDiagramPanel(name), TDiagramPanel.NEW_COMPONENT);
-       return b;
-   }*/
-    
-   /* public boolean createIODiagram(String name) {
-       boolean b = mgui.createIODiagram(tp, name);
-       //mgui.changeMade(mgui.getSequenceDiagramPanel(name), TDiagramPanel.NEW_COMPONENT);
-       return b;
-   }*/
-    
-    public int nbOfVerifyStartingAt(TGComponent tgc) {
-        Iterator<TGComponent> iterator = getComponentList().listIterator();
-        TGComponent tgc1;//, tgc2;
-        TGConnectingPoint p;
-        
-        int cpt = 0;
-        
-        while(iterator.hasNext()) {
-            tgc1 = iterator.next();
-            if (tgc1 instanceof TGConnectorVerify) {
-                p = ((TGConnectorVerify)(tgc1)).getTGConnectingPointP1();
-                if (tgc.belongsToMeOrSon(p) != null) {
-                    cpt ++;
-                }
-            }
+
+    return list;
+
+  }
+
+  public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
+    Iterator<TGComponent> iterator = getComponentList().listIterator();
+    TGComponent tgc;
+    TGConnectingPoint p1, p2;
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+
+      if (tgc instanceof TGConnectorVerify) {
+        p1 = ((TGConnectorVerify) (tgc)).getTGConnectingPointP1();
+        p2 = ((TGConnectorVerify) (tgc)).getTGConnectingPointP2();
+        if ((tgc1.belongsToMeOrSon(p1) != null) && (tgc2.belongsToMeOrSon(p2) != null)) {
+          return true;
         }
-        
-        return cpt;
+      }
     }
-	
-	public LinkedList<TGComponent> getAllRequirements() {
-		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
-		TGComponent tgc;
-		
-		Iterator<TGComponent> iterator = getComponentList().listIterator();
-		
-		while(iterator.hasNext()) {
-            tgc = iterator.next();
-            
-            if (tgc instanceof Requirement) {
-				list.add(tgc);
-			}
-		}
-		
-		return list;
-		
-	}
-    
-    public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
-        Iterator<TGComponent> iterator = getComponentList().listIterator();
-        TGComponent tgc;
-        TGConnectingPoint p1, p2;
-        
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            
-            if (tgc instanceof TGConnectorVerify) {
-                p1 = ((TGConnectorVerify)(tgc)).getTGConnectingPointP1();
-                p2 = ((TGConnectorVerify)(tgc)).getTGConnectingPointP2();
-                if ((tgc1.belongsToMeOrSon(p1) != null) && (tgc2.belongsToMeOrSon(p2)!=null)) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
-    }
-	
-	public void enhance() {
-		autoAdjust();
-    }
-    
+
+    return false;
+  }
+
+  public void enhance() {
+    autoAdjust();
+  }
+
 }
-
-
-
-
-
-
-
-

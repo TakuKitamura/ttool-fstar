@@ -36,21 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class SwallowedTGComponent
- * Component that can be swallowed by another component into its internal components
- * Creation: 05/10/2004
+ * Class SwallowedTGComponent Component that can be swallowed by another
+ * component into its internal components Creation: 05/10/2004
+ * 
  * @version 1.0 05/10/2004
  * @author Ludovic APVRILLE
  */
-public interface SwallowedTGComponent  {
-    
+public interface SwallowedTGComponent {
+
 }

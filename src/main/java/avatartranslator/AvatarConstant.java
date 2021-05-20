@@ -44,63 +44,63 @@ import java.util.Map;
 import java.util.Set;
 
 /**
-   * Class AvatarTerm
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
-   * @author Florian LUGOU
+ * Class AvatarTerm Creation: 16/09/2015
+ * 
+ * @version 1.0 16/09/2015
+ * @author Florian LUGOU
  */
 public class AvatarConstant extends AvatarTerm {
 
-    public static final AvatarConstant TRUE = new AvatarConstant ("true", null);
-    public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
+  public static final AvatarConstant TRUE = new AvatarConstant("true", null);
+  public static final AvatarConstant FALSE = new AvatarConstant("false", null);
 
-    public boolean isLeftHand (){
-    	return false;
-    }
+  public boolean isLeftHand() {
+    return false;
+  }
 
-    public AvatarConstant (String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public AvatarConstant(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    @Override
-    public AvatarConstant clone () {
-        return this;
-    }
+  @Override
+  public AvatarConstant clone() {
+    return this;
+  }
 
-    @Override
-    public boolean containsAMethodCall () {
-        return false;
-    }
+  @Override
+  public boolean containsAMethodCall() {
+    return false;
+  }
 
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        name = name.trim();
-        Set<AvatarAttribute> setAt = attributesMapping.keySet();
-        for (AvatarAttribute aa: setAt) {
-            if (name.equals(aa.getName())) {
-                AvatarAttribute bb = attributesMapping.get(aa);
-                if (bb != null) {
-                   name = bb.getName();
-                   return;
-                }
-            }
-
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    name = name.trim();
+    Set<AvatarAttribute> setAt = attributesMapping.keySet();
+    for (AvatarAttribute aa : setAt) {
+      if (name.equals(aa.getName())) {
+        AvatarAttribute bb = attributesMapping.get(aa);
+        if (bb != null) {
+          name = bb.getName();
+          return;
         }
+      }
 
     }
 
-    @Override
-    public String toString() {
-    	return getName();
-    }
+  }
 
-    public AvatarConstant advancedClone() {
-        if (this == AvatarConstant.TRUE || this == AvatarConstant.FALSE)
-            return this;
+  @Override
+  public String toString() {
+    return getName();
+  }
 
-        AvatarConstant ac = new AvatarConstant(getName(), getReferenceObject());
-        cloneLinkToReferenceObjects(ac);
-	
-        return ac;
-    }
+  public AvatarConstant advancedClone() {
+    if (this == AvatarConstant.TRUE || this == AvatarConstant.FALSE)
+      return this;
+
+    AvatarConstant ac = new AvatarConstant(getName(), getReferenceObject());
+    cloneLinkToReferenceObjects(ac);
+
+    return ac;
+  }
 }

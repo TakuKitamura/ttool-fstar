@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ebrdd;
 
 import ui.MainGUI;
@@ -51,114 +48,107 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class EBRDDToolBar
- * Toolbar associated with EBRDD
- * Creation: 08/09/2009
+ * Class EBRDDToolBar Toolbar associated with EBRDD Creation: 08/09/2009
+ * 
  * @version 1.0 08/09/2009
  * @author Ludovic APVRILLE
  */
 public class EBRDDToolBar extends TToolBar {
-    
-    
-    public EBRDDToolBar(MainGUI _mgui) {
-        super(_mgui);
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.EBRDD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.EBRDD_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.EBRDD_START].setEnabled(b);
-        mgui.actions[TGUIAction.EBRDD_STOP].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_ACTION].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_CHOICE].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_FOR_LOOP].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_SEQUENCE].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_ERC].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_CONNECTOR_ERC].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_ESO].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_ERB].setEnabled(b);
-		mgui.actions[TGUIAction.EBRDD_VARIABLE_DECLARATION].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		mgui.updateZoomInfo();
 
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.EBRDD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_VARIABLE_DECLARATION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.EBRDD_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.EBRDD_START]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.EBRDD_STOP]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_ACTION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.EBRDD_CHOICE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_FOR_LOOP]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_SEQUENCE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_ERC]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_CONNECTOR_ERC]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_ESO]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.EBRDD_ERB]);
-        button.addMouseListener(mgui.mouseHandler);
-       
-    }
+  public EBRDDToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.EBRDD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_START].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_STOP].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_ACTION].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_CHOICE].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_FOR_LOOP].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_SEQUENCE].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_ERC].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_CONNECTOR_ERC].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_ESO].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_ERB].setEnabled(b);
+    mgui.actions[TGUIAction.EBRDD_VARIABLE_DECLARATION].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_VARIABLE_DECLARATION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_START]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_STOP]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_ACTION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_CHOICE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_FOR_LOOP]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_SEQUENCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_ERC]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_CONNECTOR_ERC]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_ESO]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.EBRDD_ERB]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
 } // Class
-
-
-
-
-

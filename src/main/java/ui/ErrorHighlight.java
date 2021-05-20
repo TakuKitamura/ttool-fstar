@@ -36,26 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui;
 
-
 /**
- * Class ErrorHighlight
- * Creation: 23/06/2009
- * version 1.0 23/06/2009
+ * Class ErrorHighlight Creation: 23/06/2009 version 1.0 23/06/2009
+ * 
  * @author Ludovic APVRILLE
  */
-public	class ErrorHighlight extends Exception {
-	//public static final int UNCHECKED = 0;
-	
-	public static final int OK = 1;
-	public static final int UNKNOWN = 2;
-	
-	public static final int ATTRIBUTE = 1;
-	public static final int GATE = 2;   
-	public static final int UNKNOWN_AS = 3;
-	
-} // Class 
+public class ErrorHighlight extends Exception {
+  // public static final int UNCHECKED = 0;
 
-	
+  public static final int OK = 1;
+  public static final int UNKNOWN = 2;
+
+  public static final int ATTRIBUTE = 1;
+  public static final int GATE = 2;
+  public static final int UNKNOWN_AS = 3;
+
+} // Class

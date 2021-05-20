@@ -50,65 +50,66 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
-   * Class TMLArchiNode
-   * Node. To be used in TML architecture diagrams.
-   * Creation: 02/05/2005
-   * @version 1.0 02/05/2005
-   * @author Ludovic APVRILLE
+ * Class TMLArchiNode Node. To be used in TML architecture diagrams. Creation:
+ * 02/05/2005
+ * 
+ * @version 1.0 02/05/2005
+ * @author Ludovic APVRILLE
  */
 public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
-    
-	protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+
+  protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+
+  // Issue #31
+  protected static final int DERIVATION_X = 2;
+  protected static final int DERIVATION_Y = 3;
+
+  // the return type of method getComponentType
+  public final static int STORAGE = 0;
+  public final static int TRANSFER = 1;
+  public final static int CONTROLLER = 2;
+  public final static int OTHER = 3; // for CPNodes
+  protected ArchUnitMEC MECType = new CpuMEC();
+
+  public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
     // Issue #31
-	protected static final int DERIVATION_X = 2;
-	protected static final int DERIVATION_Y = 3;
+    textY = 15;
+  }
 
-    //the return type of method getComponentType
-    public final static int STORAGE = 0;
-    public final static int TRANSFER = 1;
-    public final static int CONTROLLER = 2;
-    public final static int OTHER = 3;  //for CPNodes
-    protected ArchUnitMEC MECType = new CpuMEC();
+  @Override
+  public boolean isHidden() {
+    // TraceManager.addDev("Am I hidden?" + getValue());
+    if (tdp != null) {
+      if (tdp instanceof TMLArchiDiagramPanel) {
 
-    public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        return !(((TMLArchiDiagramPanel) (tdp)).inCurrentView(this));
+      }
+    }
+    return true;
+  }
 
-        // Issue #31
-        textY = 15;
+  public List<TMLArchiArtifact> getAllTMLArchiArtifacts() {
+    List<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
+
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof TMLArchiArtifact) {
+        artifacts.add((TMLArchiArtifact) (tgcomponent[i]));
+      }
     }
 
-    @Override
-    public boolean isHidden() {
-        //TraceManager.addDev("Am I hidden?" + getValue());
-        if (tdp != null) {
-            if (tdp instanceof TMLArchiDiagramPanel) {
+    return artifacts;
+  }
 
-                return !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
-            }
-        }
-        return true;
-    }
+  public abstract int getComponentType();
 
-    public List<TMLArchiArtifact> getAllTMLArchiArtifacts() {
-        List<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
+  public int getClockRatio() {
+    return clockRatio;
+  }
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                artifacts.add((TMLArchiArtifact)(tgcomponent[i]));
-            }
-        }
-
-        return artifacts;
-    }
-
-    public abstract int getComponentType();
-
-    public int getClockRatio(){
-        return clockRatio;
-    }
-
-    public ArchUnitMEC getMECType()     {
-        return MECType;
-    }
+  public ArchUnitMEC getMECType() {
+    return MECType;
+  }
 }

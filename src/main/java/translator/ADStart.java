@@ -36,33 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class ADStart
- * Creation: 10/12/2003
+ * Class ADStart Creation: 10/12/2003
+ * 
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADStart extends ADComponent {
-    
-    public ADStart() {
-        nbNext = 1;
-    }
-    
-    public ADComponent makeSame() {
-      return new ADStart();
-    }
-    
-    public String toString() {
-        return "Start state";
-    }
+
+  public ADStart() {
+    nbNext = 1;
+  }
+
+  public ADComponent makeSame() {
+    return new ADStart();
+  }
+
+  public String toString() {
+    return "Start state";
+  }
 }

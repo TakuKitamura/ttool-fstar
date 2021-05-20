@@ -36,79 +36,69 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import ui.*;
 import ui.util.IconManager;
 
 /**
- * Class ADDROMNode
- * Node. To be used in avatar deployment diagrams.
- * Creation: 01/07/2014
+ * Class ADDROMNode Node. To be used in avatar deployment diagrams. Creation:
+ * 01/07/2014
+ * 
  * @version 1.0 01/07/2014
  * @author Ludovic APVRILLE
  */
-public class ADDROMNode extends ADDMemoryNode implements  WithAttributes {
-    
-    public ADDROMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 200;
-        height = 200;
-        minWidth = 100;
-        minHeight = 35;
-        
-        nbConnectingPoint = 16;
-        connectingPoint = new TGConnectingPoint[16];
-        
-        connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
-        connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
-        connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
-        connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
-        connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-        connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
-        connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
-        connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
-        
-        connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
-        connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
-        connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
-        connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
-        connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
-        connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
-        connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
-        connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
-        
-        addTGConnectingPointsComment();
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        userResizable = true;
-        
-        stereotype = "ROM";
-        
-		name = tdp.findNodeName("Memory");
-		value = "name";
-        
-        myImageIcon = IconManager.imgic700;
-    }
-    
+public class ADDROMNode extends ADDMemoryNode implements WithAttributes {
 
-    
-   
-    
-    
-    public int getType() {
-        return TGComponentManager.ADD_ROMNODE;
-    }
-    
-   
-	  
-    
+  public ADDROMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 200;
+    height = 200;
+    minWidth = 100;
+    minHeight = 35;
+
+    nbConnectingPoint = 16;
+    connectingPoint = new TGConnectingPoint[16];
+
+    connectingPoint[0] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
+    connectingPoint[1] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+    connectingPoint[2] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.0);
+    connectingPoint[3] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+    connectingPoint[4] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+    connectingPoint[5] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 1.0);
+    connectingPoint[6] = new ADDConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+    connectingPoint[7] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 1.0);
+
+    connectingPoint[8] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+    connectingPoint[9] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+    connectingPoint[10] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+    connectingPoint[11] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+    connectingPoint[12] = new ADDConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+    connectingPoint[13] = new ADDConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+    connectingPoint[14] = new ADDConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+    connectingPoint[15] = new ADDConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
+
+    addTGConnectingPointsComment();
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = true;
+    removable = true;
+    userResizable = true;
+
+    stereotype = "ROM";
+
+    name = tdp.findNodeName("Memory");
+    value = "name";
+
+    myImageIcon = IconManager.imgic700;
+  }
+
+  public int getType() {
+    return TGComponentManager.ADD_ROMNODE;
+  }
+
 }

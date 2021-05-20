@@ -37,50 +37,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-* Class TMLSDAction
-* Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLSDAction Creation: 18/02/2014
+ * 
+ * @version 1.0 18/02/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLSDAction extends TMLSDElement  {
+public class TMLSDAction extends TMLSDElement {
 
-	private String action;
-	private String instanceName;
-	private int yCoord;
+  private String action;
+  private String instanceName;
+  private int yCoord;
 
-	public TMLSDAction( String _action, String _instanceName, Object _referenceObject, int _yCoord ) {
-		super( "action", _referenceObject);
+  public TMLSDAction(String _action, String _instanceName, Object _referenceObject, int _yCoord) {
+    super("action", _referenceObject);
 
-		action = _action;
-		instanceName = _instanceName;
-		this.yCoord = _yCoord;
-	}
+    action = _action;
+    instanceName = _instanceName;
+    this.yCoord = _yCoord;
+  }
 
-	// Constructor used for the TMLCPparser where in the TMLCP code there is no notion of yCoord and no notion of referenceObject
-	public TMLSDAction( String _action, String _instanceName ) {
-		super( "action", null );
+  // Constructor used for the TMLCPparser where in the TMLCP code there is no
+  // notion of yCoord and no notion of referenceObject
+  public TMLSDAction(String _action, String _instanceName) {
+    super("action", null);
 
-		action = _action;
-		instanceName = _instanceName;
-		this.yCoord = -1;
-	}
+    action = _action;
+    instanceName = _instanceName;
+    this.yCoord = -1;
+  }
 
-	public int getYCoord() {
-		return this.yCoord;
-	}
+  public int getYCoord() {
+    return this.yCoord;
+  }
 
-	public String getInstanceName()	{
-		return instanceName;
-	}
+  public String getInstanceName() {
+    return instanceName;
+  }
 
-	public String toString()	{
-		return action;
-	}
+  public String toString() {
+    return action;
+  }
 
 }

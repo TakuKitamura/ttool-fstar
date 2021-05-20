@@ -36,22 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-* Class TMLCPStart
-* Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+ * Class TMLCPStart Creation: 18/02/2014
+ * 
+ * @version 1.0 18/02/2014
+ * @author Ludovic APVRILLE
  */
-public class TMLCPSequence extends TMLCPElement  {
+public class TMLCPSequence extends TMLCPElement {
 
-	
-    public TMLCPSequence(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
+  public TMLCPSequence(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
 }

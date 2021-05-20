@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -52,171 +49,165 @@ import java.awt.event.ActionListener;
 //import javax.swing.event.*;
 //import java.util.*;
 
-
 /**
- * Class JDialogCamsNode
- * Dialog for managing attributes of cams nodes
- * Creation: 20/06/2019
+ * Class JDialogCamsNode Dialog for managing attributes of cams nodes Creation:
+ * 20/06/2019
+ * 
  * @version 1.0 20/06/2019
  * @author Daniela Genius
  */
-public class JDialogCamsNode extends JDialogBase implements ActionListener  {
+public class JDialogCamsNode extends JDialogBase implements ActionListener {
 
-    private boolean regularClose;
+  private boolean regularClose;
 
-    private JPanel panel2;
-    private Frame frame;
-    private TMLArchiCAMSNode node;
+  private JPanel panel2;
+  private Frame frame;
+  private TMLArchiCAMSNode node;
 
+  // Panel1
+  protected JTextField nodeName;
 
-    // Panel1
-    protected JTextField nodeName;
+  // Panel2
+  protected JTextField byteDataSize, execiTime, clockRatio, operationTypes;
 
-    // Panel2
-    protected JTextField byteDataSize, execiTime, clockRatio, operationTypes;
+  /* Creates new form */
+  public JDialogCamsNode(Frame _frame, String _title, TMLArchiCAMSNode _node) {
+    super(_frame, _title, true);
+    frame = _frame;
+    node = _node;
 
-    /* Creates new form  */
-    public JDialogCamsNode(Frame _frame, String _title, TMLArchiCAMSNode _node) {
-        super(_frame, _title, true);
-        frame = _frame;
-        node = _node;
+    initComponents();
+    myInitComponents();
+    pack();
+  }
 
-        initComponents();
-        myInitComponents();
-        pack();
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Cams attributes"));
+    panel2.setPreferredSize(new Dimension(400, 300));
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("CAMS name:"), c2);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nodeName = new JTextField(node.getNodeName(), 30);
+    nodeName.setEditable(true);
+    nodeName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(nodeName, c1);
+
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Data size (in byte):"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    byteDataSize = new JTextField("" + node.getByteDataSize(), 15);
+    panel2.add(byteDataSize, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Rate:"), c2);// DG problem : in sec, msec, nsec
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    execiTime = new JTextField("" + node.getExeciTime(), 15);
+    panel2.add(execiTime, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Timestep:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    clockRatio = new JTextField("" + node.getClockRatio(), 15);
+    panel2.add(clockRatio, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Operation:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    operationTypes = new JTextField("" + node.getOperation(), 15);
+    panel2.add(operationTypes, c2);
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
 
-    private void myInitComponents() {
-    }
+  public void closeDialog() {
+    regularClose = true;
+    dispose();
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
+  public void cancelDialog() {
+    dispose();
+  }
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+  public boolean isRegularClose() {
+    return regularClose;
+  }
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public String getNodeName() {
+    return nodeName.getText();
+  }
 
+  public String getByteDataSize() {
+    return byteDataSize.getText();
+  }
 
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Cams attributes"));
-        panel2.setPreferredSize(new Dimension(400, 300));
+  public String getExeciTime() {
+    return execiTime.getText();
+  }
 
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("CAMS name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
-        nodeName.setEditable(true);
-        nodeName.setFont(new Font("times", Font.PLAIN, 12));
-        panel2.add(nodeName, c1);
+  public String getClockRatio() {
+    return clockRatio.getText();
+  }
 
-        c2.gridwidth = 1;
-        c2.gridheight = 1;
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Data size (in byte):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
-        panel2.add(byteDataSize, c2);
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Rate:"), c2);//DG problem : in sec, msec, nsec
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execiTime = new JTextField(""+node.getExeciTime(), 15);
-        panel2.add(execiTime, c2);
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Timestep:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new JTextField(""+node.getClockRatio(), 15);
-        panel2.add(clockRatio, c2);
-
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Operation:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        operationTypes = new JTextField(""+node.getOperation(), 15);
-        panel2.add(operationTypes, c2);
-
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c0.fill = GridBagConstraints.BOTH;
-        c.add(panel2, c0);
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-
-    public void actionPerformed(ActionEvent evt)  {
-        /* if (evt.getSource() == typeBox) {
-           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-           initialValue.setEnabled(b);
-           return;
-           }*/
-
-
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-
-    public void closeDialog() {
-        regularClose = true;
-        dispose();
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
-
-    public boolean isRegularClose() {
-        return regularClose;
-    }
-
-    public String getNodeName() {
-        return nodeName.getText();
-    }
-
-    public String getByteDataSize() {
-        return byteDataSize.getText();
-    }
-
-    public String getExeciTime(){
-        return execiTime.getText();
-    }
-
-    public String getClockRatio(){
-        return clockRatio.getText();
-    }
-
-    public String getOperation(){
-        return operationTypes.getText();
-    }
-
-
+  public String getOperation() {
+    return operationTypes.getText();
+  }
 
 }

@@ -36,50 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package launcher;
 
 /**
- * Class RemoteExecutionThread
- * Execution of a remote process in a separate Thread
- * Creation: 01/12/2003
+ * Class RemoteExecutionThread Execution of a remote process in a separate
+ * Thread Creation: 01/12/2003
+ * 
  * @version 1.0 01/12/2003
  * @author Ludovic APVRILLE
  */
 public class RemoteExecutionThread extends Thread {
-    
-    private String host;
-    private String fileName;
-    private String data;
-    private String cmd;
-    
-    public RemoteExecutionThread(String _host, String _fileName, String _data, String _cmd) {
-        host = _host;
-        fileName = _fileName;
-        data = _data;
-        cmd = _cmd;
+
+  private String host;
+  private String fileName;
+  private String data;
+  private String cmd;
+
+  public RemoteExecutionThread(String _host, String _fileName, String _data, String _cmd) {
+    host = _host;
+    fileName = _fileName;
+    data = _data;
+    cmd = _cmd;
+  }
+
+  public void run() {
+    try {
+      RshClient rshc = new RshClient(host);
+      if ((fileName != null) && (data != null)) {
+        rshc.sendFileData(fileName, data);
+      }
+      rshc.setCmd(cmd);
+      rshc.sendExecuteCommandRequest();
+      rshc.getDataFromProcess();
+    } catch (Exception e) {
     }
-    
-    public void run() {
-        try {
-            RshClient rshc = new RshClient(host);
-            if ((fileName != null) && (data != null)) {
-                rshc.sendFileData(fileName, data);
-            }
-            rshc.setCmd(cmd);
-            rshc.sendExecuteCommandRequest();
-            rshc.getDataFromProcess();
-        } catch (Exception e) {
-        }
-    }
-    
+  }
+
 }
-
-
-
-
-
-
-

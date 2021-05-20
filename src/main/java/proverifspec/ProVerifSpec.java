@@ -36,57 +36,53 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 import java.util.LinkedList;
 
-
 /**
- * Class ProVerifSpec
- * Creation: 13/09/2015
+ * Class ProVerifSpec Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifSpec implements ProVerifDeclaration {
 
-    protected ProVerifProcess mainProcess;
-    protected LinkedList<ProVerifDeclaration> declarations;
-    protected boolean modified;
+  protected ProVerifProcess mainProcess;
+  protected LinkedList<ProVerifDeclaration> declarations;
+  protected boolean modified;
 
-    private ProVerifSyntaxer syntaxer;
+  private ProVerifSyntaxer syntaxer;
 
-    public ProVerifSpec(ProVerifSyntaxer _syntaxer) {
-        this.declarations = new LinkedList<ProVerifDeclaration>();
-        this.declarations.add (new ProVerifComment ("Generated ProVerif specification"));
-        this.syntaxer = _syntaxer;
-        this.modified = true;
-    }
+  public ProVerifSpec(ProVerifSyntaxer _syntaxer) {
+    this.declarations = new LinkedList<ProVerifDeclaration>();
+    this.declarations.add(new ProVerifComment("Generated ProVerif specification"));
+    this.syntaxer = _syntaxer;
+    this.modified = true;
+  }
 
-    public String getStringSpec() {
-        if (this.syntaxer != null)
-            return this.syntaxer.getStringSpec (this);
-        return "";
-    }
+  public String getStringSpec() {
+    if (this.syntaxer != null)
+      return this.syntaxer.getStringSpec(this);
+    return "";
+  }
 
-    public void setMainProcess (ProVerifProcess _mainProcess) {
-        this.mainProcess = _mainProcess;
-        this.modified = true;
-    }
+  public void setMainProcess(ProVerifProcess _mainProcess) {
+    this.mainProcess = _mainProcess;
+    this.modified = true;
+  }
 
-    public void addDeclaration (ProVerifDeclaration _d) {
-        this.declarations.add(_d);
-        this.modified = true;
-    }
+  public void addDeclaration(ProVerifDeclaration _d) {
+    this.declarations.add(_d);
+    this.modified = true;
+  }
 
-    public void setSyntaxer (ProVerifSyntaxer _syntaxer) {
-        this.syntaxer = _syntaxer;
-        this.modified = true;
-    }
+  public void setSyntaxer(ProVerifSyntaxer _syntaxer) {
+    this.syntaxer = _syntaxer;
+    this.modified = true;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateSpec (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateSpec(this, _alinea);
+  }
 }

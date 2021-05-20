@@ -40,16 +40,17 @@ package syscamstranslator;
 
 /**
  * Creation: 07/05/2018
+ * 
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class SysCAMSTComponent {
 
-	public String name;
+  public String name;
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
 }

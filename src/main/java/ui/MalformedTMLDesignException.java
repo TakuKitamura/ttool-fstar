@@ -44,50 +44,47 @@ import java.util.List;
 import translator.CheckingError;
 
 /**
- * Class MalformedTMLDesigngException
- * Creation: 23/11/2005
- * version 1.0 23/12/2005
+ * Class MalformedTMLDesigngException Creation: 23/11/2005 version 1.0
+ * 23/12/2005
+ * 
  * @author Ludovic APVRILLE
  */
-public	class MalformedTMLDesignException extends Exception {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -379782523139636075L;
-	
-	private final List<CheckingError> errors;
+public class MalformedTMLDesignException extends Exception {
 
-	public MalformedTMLDesignException(String msg) {
-		this( msg, new ArrayList<CheckingError>() );
-	}
-    
-	public MalformedTMLDesignException( final String msg,
-										final List<CheckingError> errors ) {
-		super( msg );
-		
-		this.errors = errors;
-	}
-	
-	public List<CheckingError> getErrors() {
-		return errors;
-	}
-	
-	@Override
-	public String toString() {
-		final StringBuilder message = new StringBuilder( super.toString() );
-		
-		if ( !getErrors().isEmpty() ) {
-			message.append( "Errors are:" );
-		}
-		
-		for ( final CheckingError  error : getErrors() ) {
-			message.append( System.lineSeparator() + error );
-		}
-		
-		return message.toString();
-	}
-   
-} // Class 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -379782523139636075L;
 
-	
+  private final List<CheckingError> errors;
+
+  public MalformedTMLDesignException(String msg) {
+    this(msg, new ArrayList<CheckingError>());
+  }
+
+  public MalformedTMLDesignException(final String msg, final List<CheckingError> errors) {
+    super(msg);
+
+    this.errors = errors;
+  }
+
+  public List<CheckingError> getErrors() {
+    return errors;
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder message = new StringBuilder(super.toString());
+
+    if (!getErrors().isEmpty()) {
+      message.append("Errors are:");
+    }
+
+    for (final CheckingError error : getErrors()) {
+      message.append(System.lineSeparator() + error);
+    }
+
+    return message.toString();
+  }
+
+} // Class

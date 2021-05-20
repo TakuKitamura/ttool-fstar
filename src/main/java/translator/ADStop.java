@@ -36,35 +36,26 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
- 
-
 
 /**
- * Class ADStop
- * Creation: 10/12/2003
+ * Class ADStop Creation: 10/12/2003
+ * 
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADStop extends ADComponent {
-    
-    public ADStop() {
-		nbNext = 0;
-		minNbNext = 0;
-    }
-    
-    public ADComponent makeSame() {
-      return new ADStop();
-    }
-    
-     public String toString() {
-	 	return "Stop state";
-    }
+
+  public ADStop() {
+    nbNext = 0;
+    minNbNext = 0;
+  }
+
+  public ADComponent makeSame() {
+    return new ADStop();
+  }
+
+  public String toString() {
+    return "Stop state";
+  }
 }
-    

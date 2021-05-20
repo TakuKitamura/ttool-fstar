@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.ftd;
 
 import ui.MainGUI;
@@ -49,9 +48,8 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class FaultTreeDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a fault tree diagram
- * Creation: 03/11/2009
+ * Class FaultTreeDiagramToolBar Implements the toolbar to be used in
+ * conjunction with the panel of a fault tree diagram Creation: 03/11/2009
  *
  * @author Ludovic APVRILLE
  * @version 1.0 03/11/2009
@@ -59,92 +57,91 @@ import javax.swing.*;
  */
 public class FaultTreeDiagramToolbar extends TToolBar {
 
-    public FaultTreeDiagramToolbar(MainGUI _mgui) {
-        super(_mgui);
+  public FaultTreeDiagramToolbar(MainGUI _mgui) {
+    super(_mgui);
 
-    }
-    
-    @Override
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+  }
 
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-        mgui.updateZoomInfo();
+  @Override
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-        mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
 
-        mgui.actions[TGUIAction.FTD_BLOCK].setEnabled(b);
-        mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
-        mgui.actions[TGUIAction.FTD_FAULT].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_BLOCK].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_FAULT].setEnabled(b);
 
-        mgui.actions[TGUIAction.FTD_CONSTRAINT].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.FTD_COUNTERMEASURE].setEnabled(b);
-        mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_CONSTRAINT].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_COUNTERMEASURE].setEnabled(b);
+    mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
 
-    }
-    
-    @Override
-    protected void setButtons() {
-        JButton button;
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
-        button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
+  }
 
-        this.addSeparator();
+  @Override
+  protected void setButtons() {
+    JButton button;
 
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.FTD_BLOCK]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.FTD_BLOCK]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.FTD_FAULT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.FTD_COMPOSITION_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.FTD_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.FTD_FAULT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.FTD_CONSTRAINT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
-        button = this.add(mgui.actions[TGUIAction.FTD_COUNTERMEASURE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
-        this.addSeparator();
+    this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.FTD_COUNTERMEASURE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
+    this.addSeparator();
+    this.addSeparator();
 
-    }
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
 
 } // Class

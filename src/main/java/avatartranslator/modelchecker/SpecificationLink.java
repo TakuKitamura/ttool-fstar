@@ -36,27 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator.modelchecker;
 
 /**
- * Class SpecificationBlock
- * Coding of a block
- * Creation: 31/05/2016
+ * Class SpecificationBlock Coding of a block Creation: 31/05/2016
  *
  * @author Ludovic APVRILLE
  * @version 1.0 31/05/2016
  */
 public class SpecificationLink {
 
-    public SpecificationState originState;
-    public SpecificationState destinationState;
-    public String action;
+  public SpecificationState originState;
+  public SpecificationState destinationState;
+  public String action;
 
-    public SpecificationLink() {
-    }
+  public SpecificationLink() {
+  }
 
-    public String toString() {
-        return "" + originState.id + " -- " + action + " --> " + destinationState.id;
-    }
+  public String toString() {
+    return "" + originState.id + " -- " + action + " --> " + destinationState.id;
+  }
 }

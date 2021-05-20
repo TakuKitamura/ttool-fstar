@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarPDForbiddenSignalConnectingPoint
- * Definition of connecting points on which signal connectors can be connected
- * Creation: 23/04/2010
+ * Class AvatarPDForbiddenSignalConnectingPoint Definition of connecting points
+ * on which signal connectors can be connected Creation: 23/04/2010
+ * 
  * @version 1.0 23/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarPDForbiddenSignalConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-    public AvatarPDForbiddenSignalConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.APD_SIGNAL_CONNECTOR;
-    }
+public class AvatarPDForbiddenSignalConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public AvatarPDForbiddenSignalConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+      double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.APD_SIGNAL_CONNECTOR;
+  }
 }

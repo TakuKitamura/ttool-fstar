@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.tosimujava;
 
 import myutil.FileException;
@@ -52,396 +49,374 @@ import translator.tojava.TURTLE2Java;
 import java.util.Vector;
 
 /**
- * Class TJavaProcess
- * Creation: 20/06/2006
+ * Class TJavaProcess Creation: 20/06/2006
+ * 
  * @version 1.0 20/06/2006
  * @author Ludovic APVRILLE
  */
 public class TJavaProcess {
-    
-    private String TURTLEName;
-    private String javaName;
-    private String header = "";
-    private String importCode = "";
-    private String classDeclationCode = "";
-    private String attributesCode = "";
-    private String operationCode = "";
-    private String classEndCode = "}";
-    private String path = "";
-    //private String packageName;
-    
-    private Vector<JAttribute> attributes;
-    private Vector<JSimuGate> gates;
-    private Vector<JOperation> operations;
-    
-    //private int operationId;
-    
-    private boolean active;
-    
-    public final static String JAVA_EXTENSION = "java";
-    
-    public TJavaProcess(String _TURTLEName, boolean _active) {
-        attributes = new Vector<>();
-        gates = new Vector<>();
-        operations = new Vector<>();
-        TURTLEName = _TURTLEName;
-        active = _active;
-        generateJavaName();
-        //addStateAndGoAttribute();
+
+  private String TURTLEName;
+  private String javaName;
+  private String header = "";
+  private String importCode = "";
+  private String classDeclationCode = "";
+  private String attributesCode = "";
+  private String operationCode = "";
+  private String classEndCode = "}";
+  private String path = "";
+  // private String packageName;
+
+  private Vector<JAttribute> attributes;
+  private Vector<JSimuGate> gates;
+  private Vector<JOperation> operations;
+
+  // private int operationId;
+
+  private boolean active;
+
+  public final static String JAVA_EXTENSION = "java";
+
+  public TJavaProcess(String _TURTLEName, boolean _active) {
+    attributes = new Vector<>();
+    gates = new Vector<>();
+    operations = new Vector<>();
+    TURTLEName = _TURTLEName;
+    active = _active;
+    generateJavaName();
+    // addStateAndGoAttribute();
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void generateJavaName() {
+    if ((TURTLEName != null) && (TURTLEName.length() > 1))
+      javaName = TURTLEName.substring(0, 1).toUpperCase() + TURTLEName.substring(1, TURTLEName.length());
+    else
+      javaName = TURTLEName;
+  }
+
+  public String getJavaName() {
+    return javaName;
+  }
+
+  public String getTURTLEName() {
+    return TURTLEName;
+  }
+
+  /*
+   * private int getUniqueOperationId() { operationId ++; return operationId-1; }
+   */
+
+  public void setDeclarationCode(String _code) {
+    classDeclationCode = _code;
+  }
+
+  public void addImportCode(String _code) {
+    importCode += _code;
+  }
+
+  public void addAttributeCode(String _code) {
+    attributesCode += _code;
+  }
+
+  public void addOperationCode(String _code) {
+    operationCode += _code;
+  }
+
+  public void addStartingSequenceCode(String _code) {
+    operationCode += _code;
+  }
+
+  public void addStartingPreemptionCode(String _code) {
+    operationCode += _code;
+  }
+
+  public void setHeader(String _header) {
+    header = _header;
+  }
+
+  public String getfullCode() {
+    return header + "\n\n" + importCode + "\n\n" + classDeclationCode + "\n\n" + attributesCode + "\n\n" + operationCode
+        + "\n\n" + classEndCode;
+  }
+
+  public String toString() {
+    return getfullCode();
+  }
+
+  public void saveAsFileIn(String _path) throws FileException {
+    path = _path;
+    FileUtils.saveFile(path + javaName + "." + JAVA_EXTENSION, getfullCode());
+  }
+
+  public void addAttribute(JAttribute ja) {
+    attributes.add(ja);
+  }
+
+  public int getAttributeNb() {
+    return attributes.size();
+  }
+
+  public JAttribute getAttributeAt(int index) {
+    return attributes.elementAt(index);
+  }
+
+  public void addGate(JSimuGate jg) {
+    gates.add(jg);
+  }
+
+  public int getGateNb() {
+    return gates.size();
+  }
+
+  public JSimuGate getGateAt(int index) {
+    return gates.elementAt(index);
+  }
+
+  public JSimuGate foundJGate(String name) {
+
+    for (int i = 0; i < getGateNb(); i++) {
+      if (getGateAt(i).getName().equals(name)) {
+        return getGateAt(i);
+      }
     }
-    
-    public boolean isActive() {
-        return active;
+
+    return null;
+  }
+
+  public void addOperation(JOperation jo) {
+    operations.add(jo);
+  }
+
+  public int getOperationNb() {
+    return operations.size();
+  }
+
+  public JOperation getOperationAt(int index) {
+    return operations.elementAt(index);
+  }
+
+  public void generateAttributeDeclaration() {
+    JAttribute ja;
+
+    for (int i = 0; i < attributes.size(); i++) {
+      ja = getAttributeAt(i);
+      addAttributeCode(JKeyword.INDENT + ja.getJavaDeclaration() + "\n");
     }
-    
-    public void generateJavaName() {
-        if ((TURTLEName != null) && (TURTLEName.length() > 1))
-            javaName = TURTLEName.substring(0, 1).toUpperCase() + TURTLEName.substring(1, TURTLEName.length());
-        else
-            javaName = TURTLEName;
+    addAttributeCode("\n");
+  }
+
+  public void generateGateDeclaration() {
+    JSimuGate jg;
+
+    addImportCode("import jsimuttool.*;\n");
+
+    addAttributeCode(JKeyword.INDENT + "/* Internal and external Gates */\n");
+    for (int i = 0; i < gates.size(); i++) {
+      jg = getGateAt(i);
+      addAttributeCode(JKeyword.INDENT + jg.getJavaDeclaration() + "\n");
     }
-    
-    public String getJavaName() {
-        return javaName;
-    }
-    
-    public String getTURTLEName() {
-        return TURTLEName;
-    }
-    
-    /*private int getUniqueOperationId() {
-        operationId ++;
-        return operationId-1;
-    }*/
-    
-    public void setDeclarationCode(String _code) {
-        classDeclationCode = _code;
-    }
-    
-    public void addImportCode(String _code) {
-        importCode += _code;
-    }
-    
-    public void addAttributeCode(String _code) {
-        attributesCode += _code;
-    }
-    
-    public void addOperationCode(String _code) {
-        operationCode += _code;
-    }
-    
-    public void addStartingSequenceCode(String _code) {
-        operationCode += _code;
-    }
-    
-    public void addStartingPreemptionCode(String _code) {
-        operationCode += _code;
-    }
-    
-    public void setHeader(String _header) {
-        header = _header;
-    }
-    
-    public String getfullCode() {
-        return header + "\n\n" + importCode + "\n\n" + classDeclationCode + "\n\n" + attributesCode + "\n\n" + operationCode + "\n\n"  + classEndCode;
-    }
-    
-    public String toString() {
-        return getfullCode();
-    }
-    
-    public void saveAsFileIn(String _path) throws FileException {
-        path = _path;
-        FileUtils.saveFile(path + javaName + "." + JAVA_EXTENSION, getfullCode());
-    }
-    
-    public void addAttribute(JAttribute ja) {
-        attributes.add(ja);
-    }
-    
-    public int getAttributeNb() {
-        return attributes.size();
-    }
-    
-    public JAttribute getAttributeAt(int index) {
-        return attributes.elementAt(index);
-    }
-    
-    public void addGate(JSimuGate jg) {
-        gates.add(jg);
-    }
-    
-    public int getGateNb() {
-        return gates.size();
-    }
-    
-    public JSimuGate getGateAt(int index) {
-        return gates.elementAt(index);
-    }
-    
-    public JSimuGate foundJGate(String name) {
-        
-        for(int i=0; i<getGateNb(); i++) {
-            if (getGateAt(i).getName().equals(name)) {
-                return getGateAt(i);
-            }
+    addAttributeCode("\n");
+  }
+
+  public void generateJTToolAttributes() {
+  }
+
+  public void generateConstructor() {
+    int i;
+    JAttribute ja;
+    JSimuGate jg;
+    String intermediateCode = "";
+
+    addOperationCode("\n" + JKeyword.INDENT + "/* Constructor */\n");
+    addOperationCode(JKeyword.INDENT + JKeyword.PUBLIC + " " + javaName + "(JSimuEnvironment __jse, String __name, ");
+
+    for (i = 0; i < getAttributeNb(); i++) {
+      ja = getAttributeAt(i);
+      addOperationCode(ja.getType() + " " + TURTLE2SimuJava.ATTR_DEC + ja.getJavaName());
+      if (i == (getAttributeNb() - 1)) {
+        if (getGateNb() > 0) {
+          addOperationCode(JKeyword.ATTRIBUTE_SEP + " ");
         }
-        
-        return null;
+      } else {
+        addOperationCode(JKeyword.ATTRIBUTE_SEP + " ");
+      }
+      intermediateCode += JKeyword.INDENT + JKeyword.INDENT + ja.getJavaName() + " " + JKeyword.ATTRIBUTE_AFFECT + " "
+          + TURTLE2Java.ATTR_DEC + ja.getJavaName() + JKeyword.END_OP + "\n";
     }
-    
-    public void addOperation(JOperation jo) {
-        operations.add(jo);
+
+    for (i = 0; i < getGateNb(); i++) {
+      jg = getGateAt(i);
+      addOperationCode(TURTLE2SimuJava.JGATE + " " + TURTLE2SimuJava.ATTR_DEC + jg.getJName());
+      if (i != (getGateNb() - 1)) {
+        addOperationCode(JKeyword.ATTRIBUTE_SEP + " ");
+      }
+      intermediateCode += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + " " + JKeyword.ATTRIBUTE_AFFECT + " "
+          + TURTLE2Java.ATTR_DEC + jg.getJName() + JKeyword.END_OP + "\n";
     }
-    
-    public int getOperationNb() {
-        return operations.size();
+
+    addOperationCode(") " + JKeyword.START_CODE + "\n");
+    addOperationCode("super(__name, __jse);\n");
+    addOperationCode(intermediateCode);
+    addOperationCode("\n" + JKeyword.INDENT + JKeyword.STOP_CODE);
+  }
+
+  public String getCallToOp(int index) {
+    String s = "";
+    int i;
+    // JAttribute ja;
+    // JSimuGate jg;
+
+    JOperation jo = getOperationAt(index);
+    s += jo.getName() + "()" + JKeyword.END_OP_N;
+    return s;
+  }
+
+  public String getDeclarationOfOp(int index) {
+    String s = "";
+    // JAttribute ja;
+    // JGate jg;
+
+    JOperation jo = getOperationAt(index - 1);
+    s += JKeyword.INDENT + JKeyword.PUBLIC + " " + JKeyword.VOID + " " + jo.getName() + "(";
+    s += ") " + JKeyword.START_CODE_N;
+
+    return s;
+  }
+
+  public void generateAllOperations() {
+    JOperation jo;
+
+    addOperationCode("\n");
+
+    for (int i = 0; i < getOperationNb(); i++) {
+      jo = getOperationAt(i);
+      addOperationCode("\n" + jo.code + "\n");
     }
-    
-    public JOperation getOperationAt(int index) {
-        return operations.elementAt(index);
+  }
+
+  public String getCreationCode(String nameInstance) {
+    return getCreationCodeWithSpecialState(nameInstance, 0, 2);
+  }
+
+  public String getCreationCodeWithSpecialState(String nameInstance, int valueState, int dec) {
+    String s = "";
+    JAttribute ja;
+    JSimuGate jg;
+    int i;
+    int decc = dec;
+
+    while (decc > 0) {
+      s += JKeyword.INDENT;
+      decc--;
     }
-    
-    public void generateAttributeDeclaration() {
-        JAttribute ja;
-        
-        for(int i=0; i<attributes.size(); i++) {
-            ja = getAttributeAt(i);
-            addAttributeCode(JKeyword.INDENT + ja.getJavaDeclaration() + "\n");
+    s += getJavaName() + " " + nameInstance + " = new " + getJavaName() + "(jse,\"" + getJavaName() + "\",";
+    for (i = 0; i < getAttributeNb(); i++) {
+      ja = getAttributeAt(i);
+      s += ja.getValue();
+      if (i == (getAttributeNb() - 1)) {
+        if (getGateNb() > 0) {
+          s += JKeyword.ATTRIBUTE_SEP + " ";
         }
-        addAttributeCode("\n");
+      } else {
+        s += JKeyword.ATTRIBUTE_SEP + " ";
+      }
     }
-    
-    public void generateGateDeclaration() {
-        JSimuGate jg;
-        
-        addImportCode("import jsimuttool.*;\n");
-        
-        addAttributeCode(JKeyword.INDENT + "/* Internal and external Gates */\n");
-        for(int i=0; i<gates.size(); i++) {
-            jg = getGateAt(i);
-            addAttributeCode(JKeyword.INDENT + jg.getJavaDeclaration() + "\n");
-        }
-        addAttributeCode("\n");
+
+    for (i = 0; i < getGateNb(); i++) {
+      jg = getGateAt(i);
+      s += jg.getJName();
+      if (i != (getGateNb() - 1)) {
+        s += JKeyword.ATTRIBUTE_SEP + " ";
+      } else {
+        s += " ";
+      }
     }
-    
-    public void generateJTToolAttributes() {
+
+    s += ")" + JKeyword.END_OP + "\n";
+
+    // Adding process to Simulation environment
+    while (dec > 0) {
+      s += JKeyword.INDENT;
+      dec--;
     }
-    
-    public void generateConstructor() {
-        int i;
-        JAttribute ja;
-        JSimuGate jg;
-        String intermediateCode = "";
-        
-        addOperationCode("\n" + JKeyword.INDENT + "/* Constructor */\n");
-        addOperationCode(JKeyword.INDENT + JKeyword.PUBLIC + " " + javaName + "(JSimuEnvironment __jse, String __name, ");
-        
-        for(i=0; i<getAttributeNb(); i++) {
-            ja = getAttributeAt(i);
-            addOperationCode(ja.getType() + " " + TURTLE2SimuJava.ATTR_DEC + ja.getJavaName());
-            if ( i == (getAttributeNb() -1)){
-                if (getGateNb() > 0) {
-                    addOperationCode(JKeyword.ATTRIBUTE_SEP + " ");
-                }
-            } else {
-                addOperationCode(JKeyword.ATTRIBUTE_SEP + " ");
-            }
-            intermediateCode += JKeyword.INDENT + JKeyword.INDENT + ja.getJavaName() + " " + JKeyword.ATTRIBUTE_AFFECT + " " + TURTLE2Java.ATTR_DEC + ja.getJavaName() + JKeyword.END_OP + "\n";
-        }
-        
-        for(i=0; i<getGateNb(); i++) {
-            jg = getGateAt(i);
-            addOperationCode(TURTLE2SimuJava.JGATE + " " + TURTLE2SimuJava.ATTR_DEC + jg.getJName());
-            if (i != (getGateNb() -1)) {
-                addOperationCode(JKeyword.ATTRIBUTE_SEP + " ");
-            }
-            intermediateCode += JKeyword.INDENT + JKeyword.INDENT + jg.getJName() + " " + JKeyword.ATTRIBUTE_AFFECT + " " + TURTLE2Java.ATTR_DEC + jg.getJName() + JKeyword.END_OP + "\n";
-        }
-        
-        addOperationCode(") " + JKeyword.START_CODE + "\n");
-        addOperationCode("super(__name, __jse);\n");
-        addOperationCode(intermediateCode);
-        addOperationCode("\n" + JKeyword.INDENT + JKeyword.STOP_CODE);
+    s += "jse.addProcess(" + nameInstance + ")" + JKeyword.END_OP + "\n";
+
+    return s;
+  }
+
+  public String getCloneCodeWithSpecialState(String nameInstance, String name, int dec) {
+    String s = "";
+    JAttribute ja;
+    JSimuGate jg;
+    int i;
+    int decc = dec;
+
+    while (decc > 0) {
+      s += JKeyword.INDENT;
+      decc--;
     }
-    
-    public String getCallToOp(int index) {
-        String s = "";
-        int i;
-        //JAttribute ja;
-        //JSimuGate jg;
-        
-        JOperation jo = getOperationAt(index);
-        s += jo.getName() + "()" + JKeyword.END_OP_N;
-        return s;
+    s += "TProcess " + nameInstance + " = new " + getJavaName() + "(jse,\"" + name + "\",";
+    for (i = 0; i < getAttributeNb(); i++) {
+      ja = getAttributeAt(i);
+      s += ja.getName();
+      if (i == (getAttributeNb() - 1)) {
+        if (getGateNb() > 0) {
+          s += JKeyword.ATTRIBUTE_SEP + " ";
+        }
+      } else {
+        s += JKeyword.ATTRIBUTE_SEP + " ";
+      }
     }
-    
-    public String getDeclarationOfOp(int index) {
-        String s = "";
-        //JAttribute ja;
-        //JGate jg;
-        
-        JOperation jo = getOperationAt(index-1);
-        s += JKeyword.INDENT + JKeyword.PUBLIC + " " + JKeyword.VOID + " " + jo.getName() + "(";
-        s += ") " + JKeyword.START_CODE_N;
-        
-        return s;
+
+    for (i = 0; i < getGateNb(); i++) {
+      jg = getGateAt(i);
+      s += jg.getJName();
+      if (i != (getGateNb() - 1)) {
+        s += JKeyword.ATTRIBUTE_SEP + " ";
+      } else {
+        s += " ";
+      }
     }
-    
-    public void generateAllOperations() {
-        JOperation jo;
-        
-        addOperationCode("\n");
-        
-        for(int i=0; i<getOperationNb(); i++) {
-            jo = getOperationAt(i);
-            addOperationCode("\n" + jo.code + "\n");
-        }
-    }
-    
-    public String getCreationCode(String nameInstance) {
-        return getCreationCodeWithSpecialState(nameInstance, 0, 2);
-    }
-    
-    public String getCreationCodeWithSpecialState(String nameInstance, int valueState, int dec) {
-        String s = "";
-        JAttribute ja;
-        JSimuGate jg;
-        int i;
-        int decc = dec;
-        
-        while (decc > 0) {
-            s += JKeyword.INDENT;
-            decc --;
-        }
-        s +=  getJavaName() + " " + nameInstance + " = new " + getJavaName() + "(jse,\"" + getJavaName() +"\",";
-        for(i=0; i<getAttributeNb(); i++) {
-            ja = getAttributeAt(i);
-            s += ja.getValue();
-            if ( i == (getAttributeNb() -1)){
-                if (getGateNb() > 0) {
-                    s += JKeyword.ATTRIBUTE_SEP + " ";
-                }
-            } else {
-                s += JKeyword.ATTRIBUTE_SEP + " ";
-            }
-        }
-        
-        for(i=0; i<getGateNb(); i++) {
-            jg = getGateAt(i);
-            s += jg.getJName();
-            if (i != (getGateNb() -1)) {
-                s += JKeyword.ATTRIBUTE_SEP + " ";
-            } else {
-                s += " ";
-            }
-        }
-        
-        s += ")" + JKeyword.END_OP + "\n";
-        
-        // Adding process to Simulation environment
-        while (dec > 0) {
-            s += JKeyword.INDENT;
-            dec --;
-        }
-        s+= "jse.addProcess(" + nameInstance + ")" + JKeyword.END_OP + "\n";
-        
-        return s;
-    }
-    
-    public String getCloneCodeWithSpecialState(String nameInstance, String name, int dec) {
-        String s = "";
-        JAttribute ja;
-        JSimuGate jg;
-        int i;
-        int decc = dec;
-        
-        while (decc > 0) {
-            s += JKeyword.INDENT;
-            decc --;
-        }
-        s +=  "TProcess " + nameInstance + " = new " + getJavaName() + "(jse,\"" + name +"\",";
-        for(i=0; i<getAttributeNb(); i++) {
-            ja = getAttributeAt(i);
-            s += ja.getName();
-            if ( i == (getAttributeNb() -1)){
-                if (getGateNb() > 0) {
-                    s += JKeyword.ATTRIBUTE_SEP + " ";
-                }
-            } else {
-                s += JKeyword.ATTRIBUTE_SEP + " ";
-            }
-        }
-        
-        for(i=0; i<getGateNb(); i++) {
-            jg = getGateAt(i);
-            s += jg.getJName();
-            if (i != (getGateNb() -1)) {
-                s += JKeyword.ATTRIBUTE_SEP + " ";
-            } else {
-                s += " ";
-            }
-        }
-        
-        s += ")" + JKeyword.END_OP + "\n";
-        
-        // Adding process to Simulation environment
-        /*while (dec > 0) {
-            s += JKeyword.INDENT;
-            dec --;
-        }
-        s+= "jse.addProcess(" + nameInstance + ")" + JKeyword.END_OP + "\n";*/
-        
-        return s;
-    }
-    
-    /*public String getCreationCodeWithSpecialStateCurrentValues(String nameInstance, int valueState, int dec) {
-        String s = "";
-        JAttribute ja;
-        JGate jg;
-        int i;
-        
-        while (dec > 0) {
-            s += JKeyword.INDENT;
-            dec --;
-        }
-        s +=  getJavaName() + " " + nameInstance + " = new " + getJavaName() + "(";
-        for(i=0; i<getAttributeNb(); i++) {
-            ja = getAttributeAt(i);
-            if (ja.getName().equals(TURTLE2Java.T__STATE)) {
-                s += valueState;
-            } else {
-                s += ja.getName();
-            }
-            if ( i == (getAttributeNb() -1)){
-                if (getGateNb() > 0) {
-                    s += JKeyword.ATTRIBUTE_SEP + " ";
-                }
-            } else {
-                s += JKeyword.ATTRIBUTE_SEP + " ";
-            }
-        }
-        
-        for(i=0; i<getGateNb(); i++) {
-            jg = getGateAt(i);
-            s += jg.getJName();
-            if (i != (getGateNb() -1)) {
-                s += JKeyword.ATTRIBUTE_SEP + " ";
-            } else {
-                s += " ";
-            }
-        }
-        
-        s += ")" + JKeyword.END_OP;
-        
-        return s;
-    }*/
-    
-    /*public void setPackageName(String _name) {
-        packageName = _name;
-    }
-    
-    public String getPackageName() {
-        return packageName;
-    }*/
+
+    s += ")" + JKeyword.END_OP + "\n";
+
+    // Adding process to Simulation environment
+    /*
+     * while (dec > 0) { s += JKeyword.INDENT; dec --; } s+= "jse.addProcess(" +
+     * nameInstance + ")" + JKeyword.END_OP + "\n";
+     */
+
+    return s;
+  }
+
+  /*
+   * public String getCreationCodeWithSpecialStateCurrentValues(String
+   * nameInstance, int valueState, int dec) { String s = ""; JAttribute ja; JGate
+   * jg; int i;
+   * 
+   * while (dec > 0) { s += JKeyword.INDENT; dec --; } s += getJavaName() + " " +
+   * nameInstance + " = new " + getJavaName() + "("; for(i=0; i<getAttributeNb();
+   * i++) { ja = getAttributeAt(i); if (ja.getName().equals(TURTLE2Java.T__STATE))
+   * { s += valueState; } else { s += ja.getName(); } if ( i == (getAttributeNb()
+   * -1)){ if (getGateNb() > 0) { s += JKeyword.ATTRIBUTE_SEP + " "; } } else { s
+   * += JKeyword.ATTRIBUTE_SEP + " "; } }
+   * 
+   * for(i=0; i<getGateNb(); i++) { jg = getGateAt(i); s += jg.getJName(); if (i
+   * != (getGateNb() -1)) { s += JKeyword.ATTRIBUTE_SEP + " "; } else { s += " ";
+   * } }
+   * 
+   * s += ")" + JKeyword.END_OP;
+   * 
+   * return s; }
+   */
+
+  /*
+   * public void setPackageName(String _name) { packageName = _name; }
+   * 
+   * public String getPackageName() { return packageName; }
+   */
 }

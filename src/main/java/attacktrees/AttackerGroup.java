@@ -36,77 +36,74 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package attacktrees;
-
 
 import myutil.Conversion;
 import myutil.TraceManager;
 
 /**
- * Class Attacker
- * Creation: 04/02/2021
+ * Class Attacker Creation: 04/02/2021
  *
  * @author Ludovic APVRILLE
  * @version 1.0 04/02/2021
  */
 public class AttackerGroup extends AttackElement {
-    public static String SEP = "; ";
+  public static String SEP = "; ";
 
-    public Attacker attacker;
-    public int occurrence;
+  public Attacker attacker;
+  public int occurrence;
 
-    public AttackerGroup(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        attacker = new Attacker(_name, _referenceObject);
+  public AttackerGroup(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    attacker = new Attacker(_name, _referenceObject);
+  }
+
+  public String toString() {
+    String ret = name + SEP + " Money: " + attacker.money + SEP;
+    if ((attacker.expertise >= 0) && (attacker.expertise < Attack.EXPERIENCES.length)) {
+      ret += " Expertise: " + Attack.EXPERIENCES[attacker.expertise] + SEP;
+    } else {
+      ret += " Expertise: " + attacker.expertise + SEP;
     }
 
-    public String toString() {
-        String ret = name + SEP + " Money: " + attacker.money + SEP;
-        if ((attacker.expertise >= 0) && (attacker.expertise < Attack.EXPERIENCES.length)) {
-            ret += " Expertise: " + Attack.EXPERIENCES[attacker.expertise] + SEP;
-        } else {
-            ret += " Expertise: " + attacker.expertise + SEP;
-        }
+    ret += " number: " + occurrence;
+    return ret;
+  }
 
-        ret += " number: " + occurrence;
-        return ret;
+  public int getMoney() {
+    return attacker.money;
+  }
+
+  public int getExpertise() {
+    return attacker.expertise;
+  }
+
+  public int getOccurrence() {
+    return occurrence;
+  }
+
+  public void setAttributes(int _money, int _expertise, int _occurrence) {
+    TraceManager.addDev("Setting money = " + _money);
+    attacker.money = _money;
+    attacker.expertise = _expertise;
+    occurrence = _occurrence;
+  }
+
+  public static boolean isValidOccurrence(String _occurence) {
+    if ((_occurence == null) || (_occurence.length() == 0)) {
+      return false;
     }
 
-    public int getMoney() {
-        return attacker.money;
+    if (!Conversion.isInteger(_occurence)) {
+      return false;
     }
 
-    public int getExpertise() {
-        return attacker.expertise;
+    int myOccurence = Integer.decode(_occurence);
+    if (myOccurence <= 0) {
+      return false;
     }
 
-    public int getOccurrence() {
-        return occurrence;
-    }
-
-    public void setAttributes(int _money, int _expertise, int _occurrence) {
-        TraceManager.addDev("Setting money = " + _money);
-        attacker.money = _money;
-        attacker.expertise = _expertise;
-        occurrence = _occurrence;
-    }
-
-    public static boolean isValidOccurrence(String _occurence) {
-        if ((_occurence == null) || (_occurence.length() == 0)) {
-            return false;
-        }
-
-        if (!Conversion.isInteger(_occurence)) {
-            return false;
-        }
-
-        int myOccurence = Integer.decode(_occurence);
-        if (myOccurence <= 0) {
-            return false;
-        }
-
-        return true;
-    }
+    return true;
+  }
 
 }

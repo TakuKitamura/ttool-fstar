@@ -36,28 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
-
 /**
- * Class MalformedTIFException
- * Creation: 28/06/2007
- * version 1.0 28/06/2007
+ * Class MalformedTIFException Creation: 28/06/2007 version 1.0 28/06/2007
+ * 
  * @author Ludovic APVRILLE
  */
-public	class MalformedTIFException extends Exception {
-	
-	public MalformedTIFException() {
-		super("TIF Exception");
-	}
-	
-	public MalformedTIFException(String msg) {
-		super("TIF Exception: " + msg);
-	}
-    
-} // Class 
+public class MalformedTIFException extends Exception {
 
-	
+  public MalformedTIFException() {
+    super("TIF Exception");
+  }
+
+  public MalformedTIFException(String msg) {
+    super("TIF Exception: " + msg);
+  }
+
+} // Class

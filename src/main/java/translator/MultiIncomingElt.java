@@ -36,18 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
-
 /**
- * Class ADComponent
- * Creation: 10/01/2005
+ * Class ADComponent Creation: 10/01/2005
+ * 
  * @version 1.0 10/01/2005
  * @author Ludovic APVRILLE
  */
-public interface MultiIncomingElt  {
-  
+public interface MultiIncomingElt {
+
 }

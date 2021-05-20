@@ -36,31 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
- * Class AvatarExpireTimer
- * Creation: 15/07/2010
+ * Class AvatarExpireTimer Creation: 15/07/2010
+ * 
  * @version 1.0 15/07/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarExpireTimer extends AvatarTimerOperator {
-	
-    public AvatarExpireTimer(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
-	public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-		AvatarExpireTimer aet = new AvatarExpireTimer(getName(), getReferenceObject());
-		aet.setTimer(getTimer());
-		return aet;
-	}
-	
-	public String getNiceName() {
-		return "Expiration of timer " + getName();
-	}
-	
+
+  public AvatarExpireTimer(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+    AvatarExpireTimer aet = new AvatarExpireTimer(getName(), getReferenceObject());
+    aet.setTimer(getTimer());
+    return aet;
+  }
+
+  public String getNiceName() {
+    return "Expiration of timer " + getName();
+  }
+
 }

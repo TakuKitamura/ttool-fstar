@@ -37,23 +37,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
-   * Class CpuMEC, Model Extension Construct (MEC) class for Embb non-cachable CPU operation
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class CpuMEC, Model Extension Construct (MEC) class for Embb non-cachable CPU
+ * operation Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class CpuMEC extends ArchUnitMEC	{
+public class CpuMEC extends ArchUnitMEC {
 
-	//protected String addr = "";
+  // protected String addr = "";
 
-	public CpuMEC()	{
-		index = 0;
-	}
+  public CpuMEC() {
+    index = 0;
+  }
 
-}	//End of class
+} // End of class

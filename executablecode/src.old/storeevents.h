@@ -9,11 +9,7 @@
 
 #include "transactions.h"
 
-
 void initStoreEvents();
 void addEvent(synccell *cell);
 
-
 #endif
-
-

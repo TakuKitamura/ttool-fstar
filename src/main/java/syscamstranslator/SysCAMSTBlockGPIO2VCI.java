@@ -41,26 +41,26 @@ package syscamstranslator;
 import java.util.LinkedList;
 
 /**
- * Class SysCAMSTBlockGPIO2VCI
- * Parameters of a SystemC-AMS block GPIO2VCI
+ * Class SysCAMSTBlockGPIO2VCI Parameters of a SystemC-AMS block GPIO2VCI
  * Creation: 13/07/2018
+ * 
  * @version 1.0 13/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class SysCAMSTBlockGPIO2VCI extends SysCAMSTComponent {
-	
-	private LinkedList<SysCAMSTPortDE> portDE;
-	
-	public SysCAMSTBlockGPIO2VCI() {
-		portDE = new LinkedList<SysCAMSTPortDE>();
-	}
 
-	public LinkedList<SysCAMSTPortDE> getPortDE(){
-		return portDE;
-	}
+  private LinkedList<SysCAMSTPortDE> portDE;
 
-	public void addPortDE(SysCAMSTPortDE de){
-		portDE.add(de);
-	}
+  public SysCAMSTBlockGPIO2VCI() {
+    portDE = new LinkedList<SysCAMSTPortDE>();
+  }
+
+  public LinkedList<SysCAMSTPortDE> getPortDE() {
+    return portDE;
+  }
+
+  public void addPortDE(SysCAMSTPortDE de) {
+    portDE.add(de);
+  }
 }

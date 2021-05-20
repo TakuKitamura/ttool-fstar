@@ -36,44 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.touppaal;
 
 import tmltranslator.TMLActivityElement;
 import uppaaldesc.UPPAALLocation;
 
 /**
-* Class TMLActivityElementLocation 
-* Creation: 21/05/2007
-* @version 1.1 21/05/2007
-* @author Ludovic APVRILLE
+ * Class TMLActivityElementLocation Creation: 21/05/2007
+ * 
+ * @version 1.1 21/05/2007
+ * @author Ludovic APVRILLE
  */
 public class TMLActivityElementLocation {
-	public TMLActivityElement elt;
-	public UPPAALLocation beginloc;
-	public UPPAALLocation endloc;
-	
-	public TMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
-		elt = _elt;
-		beginloc = _beginloc;
-		endloc = _endloc;
-	}
-	
-	
-	public String toString() {
-		String s = "";
-		if (elt != null) {
-			s += "component: " + elt.toString() + " " ;
-		}
-		if (beginloc != null) {
-			s += "beginloc=" + beginloc.id + " ";
-		}
-		if (endloc != null) {
-			s += "endloc=" + endloc.id + " ";
-		}
-		return s;
-	}
-    
+  public TMLActivityElement elt;
+  public UPPAALLocation beginloc;
+  public UPPAALLocation endloc;
+
+  public TMLActivityElementLocation(TMLActivityElement _elt, UPPAALLocation _beginloc, UPPAALLocation _endloc) {
+    elt = _elt;
+    beginloc = _beginloc;
+    endloc = _endloc;
+  }
+
+  public String toString() {
+    String s = "";
+    if (elt != null) {
+      s += "component: " + elt.toString() + " ";
+    }
+    if (beginloc != null) {
+      s += "beginloc=" + beginloc.id + " ";
+    }
+    if (endloc != null) {
+      s += "endloc=" + endloc.id + " ";
+    }
+    return s;
+  }
+
 }

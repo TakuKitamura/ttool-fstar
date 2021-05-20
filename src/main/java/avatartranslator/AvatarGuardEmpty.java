@@ -40,31 +40,31 @@ package avatartranslator;
 
 import java.util.Map;
 
-
 /**
- * An AvatarGuardEmpty is an empty {@link AvatarGuard}
- * Creation: 25/09/2015
+ * An AvatarGuardEmpty is an empty {@link AvatarGuard} Creation: 25/09/2015
+ * 
  * @version 1.0 25/09/2015
  * @author Florian LUGOU
  */
 public class AvatarGuardEmpty extends AvatarGuard {
-    
-	public AvatarGuardEmpty () {
-    }
 
-    public boolean isGuarded () {
-        return false;
-    }
+  public AvatarGuardEmpty() {
+  }
 
-    public String getAsString (AvatarSyntaxTranslator translator) {
-        return "";
-    }
+  public boolean isGuarded() {
+    return false;
+  }
 
-    @Override
-    public AvatarGuardEmpty clone () {
-        return new AvatarGuardEmpty ();
-    }
+  public String getAsString(AvatarSyntaxTranslator translator) {
+    return "";
+  }
 
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+  @Override
+  public AvatarGuardEmpty clone() {
+    return new AvatarGuardEmpty();
+  }
+
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+  }
 }

@@ -36,19 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.util;
 
-
 /**
- * Interface CorrespondanceElement
- * Creation: 13/06/2017
+ * Interface CorrespondanceElement Creation: 13/06/2017
+ * 
  * @version 1.0 13/06/2017
  * @author Florian LUGOU
  */
 public interface CorrespondanceElement<E> {
-    void addCor(Object o, E tgc);
-    void useDIPLOIDs();
+  void addCor(Object o, E tgc);
+
+  void useDIPLOIDs();
 }

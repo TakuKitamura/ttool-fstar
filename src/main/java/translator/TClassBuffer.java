@@ -36,96 +36,93 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.ArrayList;
 
 /**
-* Class TClassBuffer
-* Creation: 18/08/2004
-* @version 1.0 18/08/2004
-* @author Ludovic APVRILLE
+ * Class TClassBuffer Creation: 18/08/2004
+ * 
+ * @version 1.0 18/08/2004
+ * @author Ludovic APVRILLE
  */
 public abstract class TClassBuffer extends TClass {
-	
-	public final static String OUT = "__out";
-	public final static String IN = "__in";
-	
-	// Array storing gate names
-	protected ArrayList<String> paramInForExchange;
-	protected ArrayList<String> paramOutForExchange;
-	protected ArrayList<String> paramSizeForExchange;
-	
-	protected int nbParam; // Params must be of Natural type
-    
-    public TClassBuffer(String name, boolean isActive) {
-		super(name, isActive);
-        paramInForExchange = new ArrayList<String>();
-		paramOutForExchange = new ArrayList<String>();
-		paramSizeForExchange = new ArrayList<String>();
+
+  public final static String OUT = "__out";
+  public final static String IN = "__in";
+
+  // Array storing gate names
+  protected ArrayList<String> paramInForExchange;
+  protected ArrayList<String> paramOutForExchange;
+  protected ArrayList<String> paramSizeForExchange;
+
+  protected int nbParam; // Params must be of Natural type
+
+  public TClassBuffer(String name, boolean isActive) {
+    super(name, isActive);
+    paramInForExchange = new ArrayList<String>();
+    paramOutForExchange = new ArrayList<String>();
+    paramSizeForExchange = new ArrayList<String>();
+  }
+
+  public abstract void makeTClass();
+
+  public void addParamInForExchange(String m) {
+    for (String tmp : paramInForExchange) {
+      if (tmp.compareTo(m) == 0) {
+        return;
+      }
     }
-	
-    public abstract void makeTClass();
-    
-    public void addParamInForExchange(String m) {
-		for(String tmp:paramInForExchange) {
-			if (tmp.compareTo(m) == 0) {
-                return;
-            }
-		}
-        paramInForExchange.add(m);
+    paramInForExchange.add(m);
+  }
+
+  public void addParamOutForExchange(String m) {
+    for (String tmp : paramOutForExchange) {
+      if (tmp.compareTo(m) == 0) {
+        return;
+      }
     }
-	
-	public void addParamOutForExchange(String m) {
-		for(String tmp:paramOutForExchange) {
-			if (tmp.compareTo(m) == 0) {
-                return;
-            }
-		}
-        paramOutForExchange.add(m);
+    paramOutForExchange.add(m);
+  }
+
+  public void addParamSizeForExchange(String m) {
+    for (String tmp : paramSizeForExchange) {
+      if (tmp.compareTo(m) == 0) {
+        return;
+      }
     }
-	
-	public void addParamSizeForExchange(String m) {
-		for(String tmp:paramSizeForExchange) {
-			if (tmp.compareTo(m) == 0) {
-                return;
-            }
-		}
-        paramOutForExchange.add(m);
-    }
-    
-    public String getParamInAt(int index) {
-        return paramInForExchange.get(index);
-    }
-	
-	public String getParamOutAt(int index) {
-        return paramOutForExchange.get(index);
-    }
-	
-	public String getParamSizeAt(int index) {
-        return paramSizeForExchange.get(index);
-    }
-    
-    public int getParamInNb() {
-        return paramInForExchange.size();
-    }
-	
-	public int getParamOutNb() {
-        return paramOutForExchange.size();
-    }
-	
-	public int getParamSizeNb() {
-        return paramSizeForExchange.size();
-    }
-	
-	public int getNbParam() {
-		return nbParam;
-	}
-	
-	public void setNbParam(int _nbParam) {
-		nbParam = _nbParam;
-	}
-}  
+    paramOutForExchange.add(m);
+  }
+
+  public String getParamInAt(int index) {
+    return paramInForExchange.get(index);
+  }
+
+  public String getParamOutAt(int index) {
+    return paramOutForExchange.get(index);
+  }
+
+  public String getParamSizeAt(int index) {
+    return paramSizeForExchange.get(index);
+  }
+
+  public int getParamInNb() {
+    return paramInForExchange.size();
+  }
+
+  public int getParamOutNb() {
+    return paramOutForExchange.size();
+  }
+
+  public int getParamSizeNb() {
+    return paramSizeForExchange.size();
+  }
+
+  public int getNbParam() {
+    return nbParam;
+  }
+
+  public void setNbParam(int _nbParam) {
+    nbParam = _nbParam;
+  }
+}

@@ -36,26 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.LinkedList;
 
 /**
- * Class FIFOSizeTClass
- * Creation: 27/10/2006
+ * Class FIFOSizeTClass Creation: 27/10/2006
+ * 
  * @version 1.0 27/10/2006
  * @author Ludovic APVRILLE
  */
-public interface FIFOSizeTClass  {
-    int getNbPara();
-    Gate getGateWrite(); // Returns the first write gate
-    Gate getGateRead();  // Returns the first read gate
-    LinkedList getGatesWrite();
-    LinkedList getGatesRead();
-    LinkedList getGatesSize();
-    Gate getGateSize(); // Returns the first size gate
+public interface FIFOSizeTClass {
+  int getNbPara();
+
+  Gate getGateWrite(); // Returns the first write gate
+
+  Gate getGateRead(); // Returns the first read gate
+
+  LinkedList getGatesWrite();
+
+  LinkedList getGatesRead();
+
+  LinkedList getGatesSize();
+
+  Gate getGateSize(); // Returns the first size gate
 
 }

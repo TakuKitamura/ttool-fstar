@@ -43,20 +43,20 @@ import ui.TGComponentManager;
 import ui.ad.TGConnectingPointAD;
 
 /**
- * Class TGConnectingPointTMLAD
- * Definition of connecting points on which connectors of TML activity diagram can be connected
- * Creation: 28/10/2005
+ * Class TGConnectingPointTMLAD Definition of connecting points on which
+ * connectors of TML activity diagram can be connected Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTMLAD extends TGConnectingPointAD /* Issue #69TGConnectingPoint*/ {
+public class TGConnectingPointTMLAD extends TGConnectingPointAD /* Issue #69TGConnectingPoint */ {
 
-	public TGConnectingPointTMLAD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
+  public TGConnectingPointTMLAD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-	@Override
-	public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_TMLAD;
-    }
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_TMLAD;
+  }
 }

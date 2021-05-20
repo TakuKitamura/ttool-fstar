@@ -36,21 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class SpecificActionAfterMove
- * Component that executes actions after it has been moved in a diagram
- * Creation: 22/04/2008
+ * Class SpecificActionAfterMove Component that executes actions after it has
+ * been moved in a diagram Creation: 22/04/2008
+ * 
  * @version 1.0 22/04/2008
  * @author Ludovic APVRILLE
  */
-public interface SpecificActionAfterMove  {
-    void specificActionAfterMove();
+public interface SpecificActionAfterMove {
+  void specificActionAfterMove();
 }

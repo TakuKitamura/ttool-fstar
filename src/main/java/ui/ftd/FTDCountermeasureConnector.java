@@ -51,41 +51,42 @@ import ui.TGConnectorWithCommentConnectionPoints;
 import ui.util.IconManager;
 
 /**
-   * Class FTDCountermeasureConnector
-   * Connector used in Fault Tree Diagrams
-   * Creation: 14/12/2017
-   * @version 1.0 14/12/2017
-   * @author Ludovic APVRILLE
+ * Class FTDCountermeasureConnector Connector used in Fault Tree Diagrams
+ * Creation: 14/12/2017
+ * 
+ * @version 1.0 14/12/2017
+ * @author Ludovic APVRILLE
  */
-public  class FTDCountermeasureConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
-    //protected int arrowLength = 10;
-    //protected int widthValue, heightValue, maxWidthValue, h;
-    protected int c = 5; //square length
-    //protected double oldScaleFactor;
-    protected int fontSize = 12;
+public class FTDCountermeasureConnector
+    extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
+  // protected int arrowLength = 10;
+  // protected int widthValue, heightValue, maxWidthValue, h;
+  protected int c = 5; // square length
+  // protected double oldScaleFactor;
+  protected int fontSize = 12;
 
+  public FTDCountermeasureConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic202;
+    value = "";
+    editable = true;
+    // oldScaleFactor = tdp.getZoom();
+  }
 
-    public FTDCountermeasureConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic202;
-        value = "";
-        editable = true;
-        //oldScaleFactor = tdp.getZoom();
-    }
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
 
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
+  @Override
+  protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
 
-    @Override
-    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
-
-    @Override
-    public int getType() {
-        return TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR;
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR;
+  }
 
 }

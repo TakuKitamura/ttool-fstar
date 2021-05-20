@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import help.HelpEntry;
@@ -51,78 +48,74 @@ import graph.RG;
 import java.util.List;
 
 /**
- * Class HelpTree
- * Creation: 19/03/2019
- * Version 2.0 19/03/2019
+ * Class HelpTree Creation: 19/03/2019 Version 2.0 19/03/2019
+ * 
  * @author Ludovic APVRILLE
  */
 public class HelpTree implements GenericTree {
-    
-    private MainGUI mgui;
-    private String name = "Help";
- 
-    
-    public HelpTree(MainGUI _mgui) {
-        mgui = _mgui;
-    }
-    
-    // TREE MANAGEMENT
-    public String toString() {
-        //TraceManager.addDev("To String HelpTree");
 
-        if (mgui == null) {
-            return "Not loaded";
-        }
+  private MainGUI mgui;
+  private String name = "Help";
 
-        if (mgui.getHelpManager() == null) {
-            return "Not loaded";
-        }
-        return mgui.getHelpManager().getMasterKeyword();
-    }
-    
-    public int getChildCount() {
-        //TraceManager.addDev("GetChild count of HelpTree");
+  public HelpTree(MainGUI _mgui) {
+    mgui = _mgui;
+  }
 
+  // TREE MANAGEMENT
+  public String toString() {
+    // TraceManager.addDev("To String HelpTree");
 
-        int nb =  mgui.getHelpManager().getNbOfKids();
-        if (nb == 0) {
-            //TraceManager.addDev("GetChild count of HelpTree: returning" + 1);
-        	return 1;
-        }
-
-
-        //TraceManager.addDev("GetChild count of HelpTree:" + nb);
-        return nb;
-    }
-    
-    public Object getChild(int index) {
-        //TraceManager.addDev("GetChild HelpTree with index=" + index);
-
-        int nb =  mgui.getHelpManager().getNbOfKids();
-
-        if (nb == 0) {
-            return "help not loaded yet";
-        }
-
-        HelpEntry he = mgui.getHelpManager().getKid(index);
-    	if (he == null) {
-    		return "Help not loaded";
-    	}
-    	return he;
-    }
-    
-    public int getIndexOfChild(Object child) {
-        if (child instanceof String) {
-            return 0;
-        }
-        if (child instanceof HelpEntry) {
-            return mgui.getHelpManager().getIndexOfKid((HelpEntry)child);
-        }
-
-        return 0;
+    if (mgui == null) {
+      return "Not loaded";
     }
 
-    public HelpManager getHelpManager() {
-        return mgui.getHelpManager();
+    if (mgui.getHelpManager() == null) {
+      return "Not loaded";
     }
+    return mgui.getHelpManager().getMasterKeyword();
+  }
+
+  public int getChildCount() {
+    // TraceManager.addDev("GetChild count of HelpTree");
+
+    int nb = mgui.getHelpManager().getNbOfKids();
+    if (nb == 0) {
+      // TraceManager.addDev("GetChild count of HelpTree: returning" + 1);
+      return 1;
+    }
+
+    // TraceManager.addDev("GetChild count of HelpTree:" + nb);
+    return nb;
+  }
+
+  public Object getChild(int index) {
+    // TraceManager.addDev("GetChild HelpTree with index=" + index);
+
+    int nb = mgui.getHelpManager().getNbOfKids();
+
+    if (nb == 0) {
+      return "help not loaded yet";
+    }
+
+    HelpEntry he = mgui.getHelpManager().getKid(index);
+    if (he == null) {
+      return "Help not loaded";
+    }
+    return he;
+  }
+
+  public int getIndexOfChild(Object child) {
+    if (child instanceof String) {
+      return 0;
+    }
+    if (child instanceof HelpEntry) {
+      return mgui.getHelpManager().getIndexOfKid((HelpEntry) child);
+    }
+
+    return 0;
+  }
+
+  public HelpManager getHelpManager() {
+    return mgui.getHelpManager();
+  }
 }

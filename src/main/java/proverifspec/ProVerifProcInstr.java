@@ -36,26 +36,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifProcInstr
- * Creation: 13/09/2015
+ * Class ProVerifProcInstr Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public abstract class ProVerifProcInstr implements ProVerifDeclaration {
 
-    protected ProVerifProcInstr next;
+  protected ProVerifProcInstr next;
 
-    public ProVerifProcInstr setNextInstr (ProVerifProcInstr _next) {
-        if (_next == null)
-            return this;
+  public ProVerifProcInstr setNextInstr(ProVerifProcInstr _next) {
+    if (_next == null)
+      return this;
 
-        this.next = _next;
-        return _next;
-    }
+    this.next = _next;
+    return _next;
+  }
 }

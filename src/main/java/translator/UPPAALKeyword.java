@@ -36,31 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 /**
- * Class UPPAALKeyword
- * Creation: 22/10/2018
+ * Class UPPAALKeyword Creation: 22/10/2018
+ * 
  * @version 1.1 22/10/2018
  * @author Ludovic APVRILLE
  */
 public class UPPAALKeyword {
-    private final static String [] words = {"branch", "clock", "double", "bool", "int", "commit", "const", "urgent",
-            "broadcast", "init", "process", "state", "invariant", "location", "guard", "sync", "assign", "system",
-            "trans", "deadlock", "and", "or", "not", "imply", "true", "false", "for", "forall", "exists", "while",
-            "do", "if", "else", "return", "typedef", "struct", "rate", "before_update", "after_update", "meta",
-            "priority", "progress", "scalar", "select", "void", "default"};
-    
-    public static boolean isAKeyword(String s) {
-        for(int i=0; i<words.length; i++) {
-            if (words[i].equals(s)) {
-                return true;
-            }
-        }
-        return false;
+  private final static String[] words = { "branch", "clock", "double", "bool", "int", "commit", "const", "urgent",
+      "broadcast", "init", "process", "state", "invariant", "location", "guard", "sync", "assign", "system", "trans",
+      "deadlock", "and", "or", "not", "imply", "true", "false", "for", "forall", "exists", "while", "do", "if", "else",
+      "return", "typedef", "struct", "rate", "before_update", "after_update", "meta", "priority", "progress", "scalar",
+      "select", "void", "default" };
+
+  public static boolean isAKeyword(String s) {
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].equals(s)) {
+        return true;
+      }
     }
- 
+    return false;
+  }
+
 }

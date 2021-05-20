@@ -49,9 +49,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class TMLArchiDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a TML Architecture diagram
- * Creation: 18/09/2007
+ * Class TMLArchiDiagramToolBar Implements the toolbar to be used in conjunction
+ * with the panel of a TML Architecture diagram Creation: 18/09/2007
  *
  * @author Ludovic APVRILLE
  * @version 1.1 18/09/2017
@@ -59,208 +58,209 @@ import java.awt.event.ActionListener;
  */
 public class TMLArchiDiagramToolBar extends TToolBar implements ActionListener {
 
-    protected JMenuBar box;
-    protected JMenu menu;
-    protected JCheckBoxMenuItem m1, m2, m3, m4, m5;
-    protected static String[] viewInfos = {"View task mapping", "View channel mapping", "View Comm. Pattern mapping", "View Port Interface", "View security mapping"};
-    protected TMLArchiDiagramPanel panel;
+  protected JMenuBar box;
+  protected JMenu menu;
+  protected JCheckBoxMenuItem m1, m2, m3, m4, m5;
+  protected static String[] viewInfos = { "View task mapping", "View channel mapping", "View Comm. Pattern mapping",
+      "View Port Interface", "View security mapping" };
+  protected TMLArchiDiagramPanel panel;
 
-    public TMLArchiDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
+  public TMLArchiDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
+
+  @Override
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.TMLARCHI_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_LINK].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_CPUNODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_FPGANODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_HWANODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_CAMSNODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_BUSNODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_CPNODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_KEY].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_FIREWALL].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLARCHI_DMANODE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
+
+    mgui.updateZoomInfo();
+  }
+
+  @Override
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_LINK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPUNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_HWANODE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    if (mgui.isExperimentalOn()) {
+      button = this.add(mgui.actions[TGUIAction.TMLARCHI_CAMSNODE]);
+      button.addMouseListener(mgui.mouseHandler);
     }
 
-    @Override
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.TMLARCHI_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_LINK].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_CPUNODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_FPGANODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_HWANODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_CAMSNODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_BUSNODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_CPNODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_KEY].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_FIREWALL].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLARCHI_DMANODE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
-
-        // Issue #31
-        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-//        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
-
-        mgui.updateZoomInfo();
+    if (mgui.isExperimentalOn()) {
+      button = this.add(mgui.actions[TGUIAction.TMLARCHI_FPGANODE]);
+      button.addMouseListener(mgui.mouseHandler);
     }
 
-    @Override
-    protected void setButtons() {
-        JButton button;
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_ARTIFACT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_DMANODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_BUSNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    if (mgui.isExperimentalOn()) {
+      button = this.add(mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE]);
+      button.addMouseListener(mgui.mouseHandler);
+    }
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_LINK]);
-        button.addMouseListener(mgui.mouseHandler);
+    /*
+     * button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
+     * button.addMouseListener(mgui.mouseHandler);
+     */
 
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPUNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_HWANODE]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        if (mgui.isExperimentalOn()) {
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_CAMSNODE]);
-            button.addMouseListener(mgui.mouseHandler);
-        }
-
-        if (mgui.isExperimentalOn()) {
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_FPGANODE]);
-            button.addMouseListener(mgui.mouseHandler);
-        }
-
-
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_DMANODE]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_BUSNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        if (mgui.isExperimentalOn()) {
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE]);
-            button.addMouseListener(mgui.mouseHandler);
-        }
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-	
-	/*button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
-	  button.addMouseListener(mgui.mouseHandler);*/
-
-        if (MainGUI.experimentalOn) {
-            this.addSeparator();
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
-            button.addMouseListener(mgui.mouseHandler);
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
-            button.addMouseListener(mgui.mouseHandler);
-            button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
-            button.addMouseListener(mgui.mouseHandler);
-        }
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
-        button.addMouseListener(mgui.mouseHandler);
-
-
-        this.addSeparator();
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        this.addSeparator();
-
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
-        button.addMouseListener(mgui.mouseHandler);
-
-        setPluginButtons("TMLArchiDiagramPanel");
-
-        this.addSeparator();
-        if (viewInfos == null) {
-            TraceManager.addDev("null viewInfos");
-        }
-
-        //Issue #68: Review Filters of Diagram Elements
-        box = new JMenuBar();
-        menu = new JMenu("View (options)");
-
-        m1 = new JCheckBoxMenuItem(viewInfos[0], true);
-        m1.addActionListener(this);
-        m2 = new JCheckBoxMenuItem(viewInfos[1], true);
-        m2.addActionListener(this);
-        m3 = new JCheckBoxMenuItem(viewInfos[2], true);
-        m3.addActionListener(this);
-        m4 = new JCheckBoxMenuItem(viewInfos[3], true);
-        m4.addActionListener(this);
-        m5 = new JCheckBoxMenuItem(viewInfos[4], true);
-        m5.addActionListener(this);
-
-
-        menu.add(m1);
-        menu.add(m2);
-        menu.add(m3);
-        menu.add(m4);
-        menu.add(m5);
-
-        box.add(menu);
-
-        this.add(box);
+    if (MainGUI.experimentalOn) {
+      this.addSeparator();
+      button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
+      button.addMouseListener(mgui.mouseHandler);
+      button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
+      button.addMouseListener(mgui.mouseHandler);
+      button = this.add(mgui.actions[TGUIAction.TMLARCHI_FIREWALL]);
+      button.addMouseListener(mgui.mouseHandler);
     }
 
-    public void setPanel(TMLArchiDiagramPanel _panel) {
-        panel = _panel;
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLARCHI_KEY]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    setPluginButtons("TMLArchiDiagramPanel");
+
+    this.addSeparator();
+    if (viewInfos == null) {
+      TraceManager.addDev("null viewInfos");
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+    // Issue #68: Review Filters of Diagram Elements
+    box = new JMenuBar();
+    menu = new JMenu("View (options)");
 
-        //if (e.getSource() == box) {
-        if (panel != null) {
-            int res = 0;
+    m1 = new JCheckBoxMenuItem(viewInfos[0], true);
+    m1.addActionListener(this);
+    m2 = new JCheckBoxMenuItem(viewInfos[1], true);
+    m2.addActionListener(this);
+    m3 = new JCheckBoxMenuItem(viewInfos[2], true);
+    m3.addActionListener(this);
+    m4 = new JCheckBoxMenuItem(viewInfos[3], true);
+    m4.addActionListener(this);
+    m5 = new JCheckBoxMenuItem(viewInfos[4], true);
+    m5.addActionListener(this);
 
-            //Check if "View Comm. Pattern mapping" is check to enable "Port Interface" option
-            if (!((JCheckBoxMenuItem) box.getMenu(0).getItem(2)).getState())
-                ((JCheckBoxMenuItem) box.getMenu(0).getItem(3)).setEnabled(false);
-            else
-                ((JCheckBoxMenuItem) box.getMenu(0).getItem(3)).setEnabled(true);
+    menu.add(m1);
+    menu.add(m2);
+    menu.add(m3);
+    menu.add(m4);
+    menu.add(m5);
 
-            //Verify checked options
-            for (int i = 0; i < box.getMenu(0).getItemCount(); i++) {
-                JMenuItem j = box.getMenu(0).getItem(i);
-                JCheckBoxMenuItem ci = (JCheckBoxMenuItem) j;
-                res *= 2;
-                if (ci.isEnabled() && ci.getState())
-                    res++;
-            }
+    box.add(menu);
 
-            panel.setCurrentView(res);
-        }
-        //}
+    this.add(box);
+  }
+
+  public void setPanel(TMLArchiDiagramPanel _panel) {
+    panel = _panel;
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    super.actionPerformed(e);
+
+    // if (e.getSource() == box) {
+    if (panel != null) {
+      int res = 0;
+
+      // Check if "View Comm. Pattern mapping" is check to enable "Port Interface"
+      // option
+      if (!((JCheckBoxMenuItem) box.getMenu(0).getItem(2)).getState())
+        ((JCheckBoxMenuItem) box.getMenu(0).getItem(3)).setEnabled(false);
+      else
+        ((JCheckBoxMenuItem) box.getMenu(0).getItem(3)).setEnabled(true);
+
+      // Verify checked options
+      for (int i = 0; i < box.getMenu(0).getItemCount(); i++) {
+        JMenuItem j = box.getMenu(0).getItem(i);
+        JCheckBoxMenuItem ci = (JCheckBoxMenuItem) j;
+        res *= 2;
+        if (ci.isEnabled() && ci.getState())
+          res++;
+      }
+
+      panel.setCurrentView(res);
     }
+    // }
+  }
 } // Class

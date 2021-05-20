@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package faulttrees;
 
 /**
- * Class ANDNode
- * Creation: 13/04/2015
+ * Class ANDNode Creation: 13/04/2015
+ * 
  * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
  */
 public class ANDNode extends BooleanNode {
-    
-    public ANDNode(String _name, Object _referenceObject) {
-	    super(_name, _referenceObject);
-	    type = "AND";
-    }
+
+  public ANDNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "AND";
+  }
 
 }

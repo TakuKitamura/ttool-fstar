@@ -46,92 +46,92 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
-   * Class UseCaseDiagramToolBar
-   * Implements the toolbar to be used in conjunction with the panel of a use case diagram
-   * Creation: 18/02/2005
-   * @version 1.0 18/02/2005
-   * @author Ludovic APVRILLE
-   * @see UseCaseDiagramPanel
+ * Class UseCaseDiagramToolBar Implements the toolbar to be used in conjunction
+ * with the panel of a use case diagram Creation: 18/02/2005
+ * 
+ * @version 1.0 18/02/2005
+ * @author Ludovic APVRILLE
+ * @see UseCaseDiagramPanel
  */
 public class UseCaseDiagramToolBar extends TToolBar {
 
-    public UseCaseDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-    }
+  public UseCaseDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
 
-    protected void setActive(boolean b) {
-    	TraceManager.addDev("Setting to " + b + " Zoom");
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+  protected void setActive(boolean b) {
+    TraceManager.addDev("Setting to " + b + " Zoom");
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-        mgui.updateZoomInfo();
-	
-        mgui.actions[TGUIAction.UCD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_ACTOR].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_ACTORBOX].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_USECASE].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_BORDER].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_CONNECTOR_ACTOR_UC].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_CONNECTOR_INCLUDE].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_CONNECTOR_EXTEND].setEnabled(b);
-        mgui.actions[TGUIAction.UCD_CONNECTOR_SPECIA].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
 
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+    mgui.actions[TGUIAction.UCD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_ACTOR].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_ACTORBOX].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_USECASE].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_BORDER].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_CONNECTOR_ACTOR_UC].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_CONNECTOR_INCLUDE].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_CONNECTOR_EXTEND].setEnabled(b);
+    mgui.actions[TGUIAction.UCD_CONNECTOR_SPECIA].setEnabled(b);
 
-        //mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-        //mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-        //mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-        mgui.updateZoomInfo();
-    }
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
 
-    protected void setButtons() {
-        JButton button;
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+  }
 
-        button = this.add(mgui.actions[TGUIAction.UCD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
+  protected void setButtons() {
+    JButton button;
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.UCD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UCD_BORDER]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.UCD_BORDER]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UCD_ACTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.UCD_ACTORBOX]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.UCD_ACTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.UCD_ACTORBOX]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UCD_USECASE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.UCD_USECASE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_ACTOR_UC]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_INCLUDE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_ACTOR_UC]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_EXTEND]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_INCLUDE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_SPECIA]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_EXTEND]);
+    button.addMouseListener(mgui.mouseHandler);
 
-    }
+    button = this.add(mgui.actions[TGUIAction.UCD_CONNECTOR_SPECIA]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
 
 } // Class

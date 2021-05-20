@@ -46,77 +46,77 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class TGCScalableWithoutInternalComponent
-   * Graphical component that contains no internal components, and which is scalable
-   * Creation: 08/03/2017
-   * @version 1.0 08/03/2017
-   * @author Ludovic APVRILLE
+ * Class TGCScalableWithoutInternalComponent Graphical component that contains
+ * no internal components, and which is scalable Creation: 08/03/2017
+ * 
+ * @version 1.0 08/03/2017
+ * @author Ludovic APVRILLE
  */
-public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGCScalableWithoutInternalComponent /*implements ScalableTGComponent*/ {
- 
-    protected boolean emptyText;
+public abstract class TGCScalableWithoutInternalComponentOneLineText
+    extends TGCScalableWithoutInternalComponent /* implements ScalableTGComponent */ {
 
-    public TGCScalableWithoutInternalComponentOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  protected boolean emptyText;
 
-        nbConnectingPoint = 0;
-        minWidth = 10;
-        nbInternalTGComponent = 0;
+  public TGCScalableWithoutInternalComponentOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        moveable = true;
-        editable = true;
-        removable = false;
+    nbConnectingPoint = 0;
+    minWidth = 10;
+    nbInternalTGComponent = 0;
 
-        emptyText = false;
+    moveable = true;
+    editable = true;
+    removable = false;
 
-        name = "value ";
+    emptyText = false;
 
-        myImageIcon = IconManager.imgic302;
+    name = "value ";
+
+    myImageIcon = IconManager.imgic302;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    if (!tdp.isScaled()) {
+      width = g.getFontMetrics().stringWidth(value);
+      height = g.getFontMetrics().getHeight();
+    }
+    g.drawString(value, x, y);
+    if (value.equals("")) {
+      g.drawString("value?", x, y);
+    }
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
+      return this;
+    }
+    return null;
+  }
+
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = value;
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
     }
 
-    @Override
-    public void internalDrawing(Graphics g) {
-        if (!tdp.isScaled()) {
-            width = g.getFontMetrics().stringWidth(value);
-            height = g.getFontMetrics().getHeight();
-        }
-        g.drawString(value, x, y);
-        if (value.equals("")) {
-            g.drawString("value?", x, y);
-        }
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
+
+    if (s != null) {
+      s = Conversion.removeFirstSpaces(s);
     }
 
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
-            return this;
-        }
-        return null;
+    if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
+      setValue(s);
+      //
+      return true;
     }
 
-    @Override
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldValue = value;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-                                                       "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                       null,
-                                                       getValue());
-
-        if (s != null) {
-            s = Conversion.removeFirstSpaces(s);
-        }
-
-        if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
-            setValue(s);
-            //
-            return true;
-        }
-
-        return false;
-    }
+    return false;
+  }
 }

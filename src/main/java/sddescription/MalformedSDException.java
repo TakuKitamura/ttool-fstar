@@ -36,28 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sddescription;
 
-
 /**
- * Class MalformedSDException
- * Creation: 17/07/2009
- * version 1.0 17/07/2009
+ * Class MalformedSDException Creation: 17/07/2009 version 1.0 17/07/2009
+ * 
  * @author Ludovic APVRILLE
  */
-public	class MalformedSDException extends Exception {
-	
-	public MalformedSDException() {
-		super("SD Exception");
-	}
-	
-	public MalformedSDException(String msg) {
-		super("SD Exception: " + msg);
-	}
-    
-} // Class 
+public class MalformedSDException extends Exception {
 
-	
+  public MalformedSDException() {
+    super("SD Exception");
+  }
+
+  public MalformedSDException(String msg) {
+    super("SD Exception: " + msg);
+  }
+
+} // Class

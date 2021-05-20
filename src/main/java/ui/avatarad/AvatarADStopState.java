@@ -46,65 +46,68 @@ import ui.ad.TADStopState;
 //import java.awt.*;
 
 /**
- * Class AvatarADStopState
- * Used to terminate an activity of a TML Task.
+ * Class AvatarADStopState Used to terminate an activity of a TML Task.
  * Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public class  AvatarADStopState extends TADStopState  implements EmbeddedComment, AllowedBreakpoint {
-	//    private int internalCircleSize = 16;
-//    private int lineLength = 5;
+public class AvatarADStopState extends TADStopState implements EmbeddedComment, AllowedBreakpoint {
+  // private int internalCircleSize = 16;
+  // private int lineLength = 5;
 
-    public AvatarADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public AvatarADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-//        initScaling(20, 20);
-//        oldScaleFactor = tdp.getZoom();
-//
-//        nbConnectingPoint = 1;
-//        connectingPoint = new TGConnectingPoint[1];
-//        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, - lineLength, true, false, 0.5, 0.0);
-//
-//        nbInternalTGComponent = 0;
-//
-//        moveable = true;
-//        editable = false;
-//        removable = true;
-//
-//        name = "stop state";
-//
-//        myImageIcon = IconManager.imgic210;
-    }
-    
-    @Override
-	protected void createConnectingPoints() {
-      nbConnectingPoint = 1;
-      connectingPoint = new TGConnectingPoint[1];
-      connectingPoint[0] = new  AvatarADConnectingPoint(this, 0, - lineLength, true, false, 0.5, 0.0);
-    }
-//    @Override
-//    public void internalDrawing(Graphics g) {
-//        ColorManager.setColor(g, state, 0);
-//        g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
-//        g.drawOval(x, y, width, height);
-//        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-//    }
+    // initScaling(20, 20);
+    // oldScaleFactor = tdp.getZoom();
+    //
+    // nbConnectingPoint = 1;
+    // connectingPoint = new TGConnectingPoint[1];
+    // connectingPoint[0] = new AvatarADConnectingPoint(this, 0, - lineLength, true,
+    // false, 0.5, 0.0);
+    //
+    // nbInternalTGComponent = 0;
+    //
+    // moveable = true;
+    // editable = false;
+    // removable = true;
+    //
+    // name = "stop state";
+    //
+    // myImageIcon = IconManager.imgic210;
+  }
 
-//    @OVERRIDE
-//    PUBLIC TGCOMPONENT ISONME(INT _X, INT _Y) {
-//        IF (GRAPHICLIB.ISINRECTANGLE(_X, _Y, X, Y, WIDTH, HEIGHT)) {
-//            RETURN THIS;
-//        }
-//        RETURN NULL;
-//    }
+  @Override
+  protected void createConnectingPoints() {
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[1];
+    connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+  }
+  // @Override
+  // public void internalDrawing(Graphics g) {
+  // ColorManager.setColor(g, state, 0);
+  // g.fillOval(x + (width - internalCircleSize)/2, y + (height -
+  // internalCircleSize)/2, internalCircleSize, internalCircleSize);
+  // g.drawOval(x, y, width, height);
+  // g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+  // }
 
-    @Override
-    public int getType() {
-        return TGComponentManager.AAD_STOP_STATE;
-    }
+  // @OVERRIDE
+  // PUBLIC TGCOMPONENT ISONME(INT _X, INT _Y) {
+  // IF (GRAPHICLIB.ISINRECTANGLE(_X, _Y, X, Y, WIDTH, HEIGHT)) {
+  // RETURN THIS;
+  // }
+  // RETURN NULL;
+  // }
 
-    public int getDefaultConnector() {
-        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.AAD_STOP_STATE;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+  }
 }

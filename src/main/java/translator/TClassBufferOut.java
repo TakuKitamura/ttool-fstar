@@ -36,73 +36,70 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 /**
-* Class TClassBufferOut
-* Creation: 19/08/2004
-* @version 1.0 19/08/2004
-* @author Ludovic APVRILLE
+ * Class TClassBufferOut Creation: 19/08/2004
+ * 
+ * @version 1.0 19/08/2004
+ * @author Ludovic APVRILLE
  */
 public class TClassBufferOut extends TClassBuffer {
-    
-    public TClassBufferOut(String name) {
-		super(name, true);
+
+  public TClassBufferOut(String name) {
+    super(name, true);
+  }
+
+  public void makeTClass() {
+    if (paramOutForExchange.size() == 0) {
+      return;
     }
-	
-    public void makeTClass() {
-        if (paramOutForExchange.size() == 0) {
-            return;
-        }
-        
-        Param cpt = new Param("cpt", Param.NAT, "0");
-        addParameter(cpt);
-        
-        ActivityDiagram ad = new ActivityDiagram();
-        
-        ADJunction adj1 = new ADJunction();
-        ad.getStartState().addNext(adj1);
-        ad.add(adj1);
-        
-        ADChoice adc = new ADChoice();
-        ad.add(adc);
-        adj1.addNext(adc);
-        
-        Gate g1, g2;
-        ADActionStateWithGate adag1, adag2;
-        //ADParallel adp;
-        ADActionStateWithParam adap;   
-        //ADStop adstop;
-        
-        for(String m:paramOutForExchange) {
-			
-            g1 = addNewGateIfApplicable(m);
-            g2 = addNewGateIfApplicable(m + TClassBuffer.OUT);
-            
-            // new components
-            adag1 = new ADActionStateWithGate(g1);
-            adag1.setActionValue("!cpt");
-            
-            adag2 = new ADActionStateWithGate(g2);
-            adag2.setActionValue("");
-			
-            adap = new ADActionStateWithParam(cpt);
-            adap.setActionValue("cpt+1");
-            
-            // links between components
-            adc.addNext(adag1);
-            adag1.addNext(adag2);
-            adag2.addNext(adap);
-            adap.addNext(adj1);
-            
-            // adding components to AD
-            ad.add(adag1);
-            ad.add(adag2);
-            ad.add(adap);      
-        }   
-        setActivityDiagram(ad);
+
+    Param cpt = new Param("cpt", Param.NAT, "0");
+    addParameter(cpt);
+
+    ActivityDiagram ad = new ActivityDiagram();
+
+    ADJunction adj1 = new ADJunction();
+    ad.getStartState().addNext(adj1);
+    ad.add(adj1);
+
+    ADChoice adc = new ADChoice();
+    ad.add(adc);
+    adj1.addNext(adc);
+
+    Gate g1, g2;
+    ADActionStateWithGate adag1, adag2;
+    // ADParallel adp;
+    ADActionStateWithParam adap;
+    // ADStop adstop;
+
+    for (String m : paramOutForExchange) {
+
+      g1 = addNewGateIfApplicable(m);
+      g2 = addNewGateIfApplicable(m + TClassBuffer.OUT);
+
+      // new components
+      adag1 = new ADActionStateWithGate(g1);
+      adag1.setActionValue("!cpt");
+
+      adag2 = new ADActionStateWithGate(g2);
+      adag2.setActionValue("");
+
+      adap = new ADActionStateWithParam(cpt);
+      adap.setActionValue("cpt+1");
+
+      // links between components
+      adc.addNext(adag1);
+      adag1.addNext(adag2);
+      adag2.addNext(adap);
+      adap.addNext(adj1);
+
+      // adding components to AD
+      ad.add(adag1);
+      ad.add(adag2);
+      ad.add(adap);
     }
-}  
+    setActivityDiagram(ad);
+  }
+}

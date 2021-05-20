@@ -36,24 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
-
 /**
- * Class NoComponentException
- * Creation: 16/12/2003
- * version 1.0 16/12/2003
+ * Class NoComponentException Creation: 16/12/2003 version 1.0 16/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
-public	class NoComponentException extends Exception {
-	
-	public NoComponentException() {
-		super("Component could not be found");
-	}
-    
-} // Class 
+public class NoComponentException extends Exception {
 
-	
+  public NoComponentException() {
+    super("Component could not be found");
+  }
+
+} // Class

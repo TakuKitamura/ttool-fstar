@@ -6,13 +6,11 @@
 #include "debug.h"
 #include "mytimelib.h"
 
-
 #define TRACE_OFF 0
 #define TRACE_IN_FILE 1
 #define TRACE_IN_CONSOLE 2
 
 #define TRACE_FILE_NAME "Trace.txt"
-
 
 pthread_mutex_t __traceMutex;
 
@@ -23,21 +21,22 @@ FILE *file;
 
 struct timespec begints;
 
-
-void addInfo(char *dest, char *info) {
+void addInfo(char *dest, char *info)
+{
   //char s1[10];
   long tmp;
   //long tmp1;
   //int i;
   struct timespec ts, ts1;
   my_clock_gettime(&ts);
-  
+
   debugMsg("DIFF TIME");
   diffTime(&begints, &ts, &ts1);
 
   tmp = ts1.tv_nsec;
 
-  if (tmp < 0) {
+  if (tmp < 0)
+  {
     tmp = -tmp;
   }
 
@@ -49,21 +48,23 @@ void addInfo(char *dest, char *info) {
     tmp1 = tmp1 / 10;
     }
     s1[9] = '\0';*/
-  
+
   /* s1 -> tmp */
   sprintf(dest, "#%d time=%ld.%09ld %s", id, ts1.tv_sec, tmp, info);
-  id ++;
+  id++;
 }
 
-
-void writeInTrace(char *info) {
+void writeInTrace(char *info)
+{
   pthread_mutex_lock(&__traceMutex);
   char s[CHAR_ALLOC_SIZE];
   addInfo(s, info);
-		 //printf("Write in file\n");
-  switch(trace){
+  //printf("Write in file\n");
+  switch (trace)
+  {
   case TRACE_IN_FILE:
-    if (file != NULL) {
+    if (file != NULL)
+    {
       debug2Msg("Saving in file", s);
       fprintf(file, s);
       fflush(file);
@@ -73,45 +74,57 @@ void writeInTrace(char *info) {
     printf("%s\n", s);
     break;
   }
-  
+
   pthread_mutex_unlock(&__traceMutex);
 }
 
-
-void activeTracingInFile(char *fileName) {
+void activeTracingInFile(char *fileName)
+{
   char *name;
   trace = TRACE_IN_FILE;
-  my_clock_gettime(&begints); 
-  if (fileName == NULL) {
+  my_clock_gettime(&begints);
+  if (fileName == NULL)
+  {
     name = TRACE_FILE_NAME;
-  } else {
-    name  = fileName;
   }
-  file = fopen(name,"w");
+  else
+  {
+    name = fileName;
+  }
+  file = fopen(name, "w");
 
   /* Initializing mutex */
-  if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
+  if (pthread_mutex_init(&__traceMutex, NULL) < 0)
+  {
+    exit(-1);
+  }
 }
 
-void activeTracingInConsole() {
+void activeTracingInConsole()
+{
   trace = TRACE_IN_CONSOLE;
-  my_clock_gettime(&begints); 
-  
+  my_clock_gettime(&begints);
+
   /* Initializing mutex */
-  if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
+  if (pthread_mutex_init(&__traceMutex, NULL) < 0)
+  {
+    exit(-1);
+  }
 }
 
-void unactiveTracing() {
+void unactiveTracing()
+{
   trace = TRACE_OFF;
 }
 
-
-void traceStateEntering(char *myname, char *statename) {
+void traceStateEntering(char *myname, char *statename)
+{
   char s[CHAR_ALLOC_SIZE];
 
   debugMsg("Trace function");
 
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
@@ -121,12 +134,14 @@ void traceStateEntering(char *myname, char *statename) {
   writeInTrace(s);
 }
 
-void traceFunctionCall(char *block, char *func, char *params) {
+void traceFunctionCall(char *block, char *func, char *params)
+{
   char s[CHAR_ALLOC_SIZE];
 
   debugMsg("Trace function");
 
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
@@ -136,45 +151,53 @@ void traceFunctionCall(char *block, char *func, char *params) {
   writeInTrace(s);
 }
 
-
 // type=0: int type = 1:bool
-void traceVariableModification(char *block, char *var, int value, int type) {
+void traceVariableModification(char *block, char *var, int value, int type)
+{
   char s[CHAR_ALLOC_SIZE];
   debugMsg("Trace variable modification");
 
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
-  
-  if (type == 0) {
+  if (type == 0)
+  {
     sprintf(s, "block=%s type=variable_modification variable=%s setTo=%d\n", block, var, value);
   }
 
-  if (type == 1) {
-    if (value == 0) {
+  if (type == 1)
+  {
+    if (value == 0)
+    {
       sprintf(s, "block=%s type=variable_modification variable=%s setTo=false\n", block, var);
-    } else {
+    }
+    else
+    {
       sprintf(s, "block=%s type=variable_modification variable=%s setTo=true\n", block, var);
     }
   }
 
   // Saving trace
   writeInTrace(s);
-
 }
 
-void traceSynchroRequest(request *from, request *to) {
+void traceSynchroRequest(request *from, request *to)
+{
   char s[1024];
   int i;
 
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
   sprintf(s, "block=%s blockdestination=%s type=synchro channel=%s params=", from->listOfRequests->owner, to->listOfRequests->owner, from->syncChannel->outname);
-  for(i=0; i<from->nbOfParams; i++) {
-    if (i>0) {
+  for (i = 0; i < from->nbOfParams; i++)
+  {
+    if (i > 0)
+    {
       sprintf(s, "%s,", s);
     }
     sprintf(s, "%s%d", s, *(from->params[i]));
@@ -182,122 +205,125 @@ void traceSynchroRequest(request *from, request *to) {
   sprintf(s, "%s\n", s);
 
   debugMsg("Trace request synchro");
-  
 
   // Saving trace
   writeInTrace(s);
 }
 
-
-void traceAsynchronousSendRequest(request *req) {
+void traceAsynchronousSendRequest(request *req)
+{
   char s[1024];
   int i;
 
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
   sprintf(s, "block=%s type=send_async channel=%s msgid=%ld params=", req->listOfRequests->owner, req->asyncChannel->outname, req->msg->id);
-  if (req->msg != NULL) {
+  if (req->msg != NULL)
+  {
     debugMsg("Computing params");
-    for(i=0; i<req->msg->nbOfParams; i++) {
-      if (i>0) {
-	sprintf(s, "%s,", s);
+    for (i = 0; i < req->msg->nbOfParams; i++)
+    {
+      if (i > 0)
+      {
+        sprintf(s, "%s,", s);
       }
       sprintf(s, "%s%d", s, req->msg->params[i]);
     }
   }
   sprintf(s, "%s\n", s);
 
-  
-
   // Saving trace
   writeInTrace(s);
 }
 
-
-void traceAsynchronousReceiveRequest(request *req) {
+void traceAsynchronousReceiveRequest(request *req)
+{
   char s[1024];
   int i;
 
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
   sprintf(s, "block=%s type=receive_async channel=%s msgid=%ld params=", req->listOfRequests->owner, req->asyncChannel->outname, req->msg->id);
-  if (req->msg != NULL) {
+  if (req->msg != NULL)
+  {
     debugMsg("Computing params");
-    for(i=0; i<req->msg->nbOfParams; i++) {
-      if (i>0) {
-	sprintf(s, "%s,", s);
+    for (i = 0; i < req->msg->nbOfParams; i++)
+    {
+      if (i > 0)
+      {
+        sprintf(s, "%s,", s);
       }
       sprintf(s, "%s%d", s, req->msg->params[i]);
     }
   }
   sprintf(s, "%s\n", s);
 
-  
-
   // Saving trace
   writeInTrace(s);
 }
 
-
-
-void traceRequest(char *myname, request *req) {
+void traceRequest(char *myname, request *req)
+{
   char s[1024];
   int i;
- 
 
   debugMsg("Trace request");
 
-
-  if (trace == TRACE_OFF) {
+  if (trace == TRACE_OFF)
+  {
     return;
   }
 
   // Build corresponding char*;
 
-  switch(req->type) {
-    case SEND_SYNC_REQUEST:
+  switch (req->type)
+  {
+  case SEND_SYNC_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
     sprintf(s, "block=%s type=send_synchro channel=%s params=", myname, req->syncChannel->outname);
-    for(i=0; i<req->nbOfParams; i++) {
-      if (i>0) {
-	sprintf(s, "%s,", s);
+    for (i = 0; i < req->nbOfParams; i++)
+    {
+      if (i > 0)
+      {
+        sprintf(s, "%s,", s);
       }
       sprintf(s, "%s%d", s, *(req->params[i]));
     }
     sprintf(s, "%s\n", s);
- 
+
     break;
   case RECEIVE_SYNC_REQUEST:
     sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
     break;
-    case SEND_ASYNC_REQUEST:
+  case SEND_ASYNC_REQUEST:
     debug2Msg("Async channel", req->asyncChannel->outname);
     sprintf(s, "block=%s type=send_async_2 channel=%s\n", myname, req->asyncChannel->outname);
     break;
   case RECEIVE_ASYNC_REQUEST:
     sprintf(s, "block=%s type=receive_async_2 channel=%s\n", myname, req->asyncChannel->inname);
     break;
-   case SEND_BROADCAST_REQUEST:
+  case SEND_BROADCAST_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
     sprintf(s, "block=%s type=send_broadcast channel=%s\n", myname, req->syncChannel->outname);
-    break; 
-   case RECEIVE_BROADCAST_REQUEST:
+    break;
+  case RECEIVE_BROADCAST_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
     sprintf(s, "block=%s type=receive_broadcast channel=%s\n", myname, req->syncChannel->outname);
-    break; 
-   case IMMEDIATE:
-     sprintf(s, "block=%s type=action\n", myname);
+    break;
+  case IMMEDIATE:
+    sprintf(s, "block=%s type=action\n", myname);
     break;
   default:
     sprintf(s, "block=%s type=unknown\n", myname);
   }
 
   debugMsg("Trace request 2");
-  
 
   // Saving trace
   writeInTrace(s);

@@ -54,811 +54,806 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Class AvatarBDPortConnector
- * Connector used in AVATAR Block Diagrams
- * Creation: 06/04/2010
+ * Class AvatarBDPortConnector Connector used in AVATAR Block Diagrams Creation:
+ * 06/04/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.0 06/04/2010
  */
-public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
-    //protected int arrowLength = 10;
-    //protected int widthValue, heightValue, maxWidthValue, h;
-    protected int c = 10; //square length
-    //protected double oldScaleFactor;
-    protected int fontSize = 10;
-    protected int decY = 12;
-    protected int decX = 6;
+public class AvatarBDPortConnector
+    extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent */ {
+  // protected int arrowLength = 10;
+  // protected int widthValue, heightValue, maxWidthValue, h;
+  protected int c = 10; // square length
+  // protected double oldScaleFactor;
+  protected int fontSize = 10;
+  protected int decY = 12;
+  protected int decX = 6;
 
-    protected List<String> inSignalsAtOrigin;
-    protected List<String> outSignalsAtDestination;
+  protected List<String> inSignalsAtOrigin;
+  protected List<String> outSignalsAtDestination;
 
-    protected List<String> inSignalsAtDestination;
-    protected List<String> outSignalsAtOrigin;
+  protected List<String> inSignalsAtDestination;
+  protected List<String> outSignalsAtOrigin;
 
-    protected boolean asynchronous;
-    protected boolean synchronous;
-    protected boolean AMS;
+  protected boolean asynchronous;
+  protected boolean synchronous;
+  protected boolean AMS;
 
-    protected int sizeOfFIFO;
-    protected boolean blockingFIFO;
-    protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
-    protected boolean isBroadcast = false;
-    protected boolean isLossy = false;
+  protected int sizeOfFIFO;
+  protected boolean blockingFIFO;
+  protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
+  protected boolean isBroadcast = false;
+  protected boolean isLossy = false;
 
-    public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+  public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-        myImageIcon = IconManager.imgic202;
-        value = "";
-        editable = true;
+    myImageIcon = IconManager.imgic202;
+    value = "";
+    editable = true;
 
-        // oldScaleFactor = tdp.getZoom();
-        inSignalsAtOrigin = new LinkedList<String>();
-        inSignalsAtDestination = new LinkedList<String>();
-        outSignalsAtOrigin = new LinkedList<String>();
-        outSignalsAtDestination = new LinkedList<String>();
+    // oldScaleFactor = tdp.getZoom();
+    inSignalsAtOrigin = new LinkedList<String>();
+    inSignalsAtDestination = new LinkedList<String>();
+    outSignalsAtOrigin = new LinkedList<String>();
+    outSignalsAtDestination = new LinkedList<String>();
+  }
+
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    /*
+     * if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+     * g.drawLine(x1, y1, x2, y2); } else { GraphicLib.arrowWithLine(g, 1, 0, 10,
+     * x1, y1, x2, y2, true); }
+     */
+
+    Point p_one;
+    boolean isp1;
+    if (getIndexOfLastTGCPointOfConnector() == -1) {
+      p_one = new Point(p1.getX(), p1.getY());
+      isp1 = true;
+    } else {
+      TGComponent tmpc = tgcomponent[getIndexOfLastTGCPointOfConnector()];
+      p_one = new Point(tmpc.getX(), tmpc.getY());
+      isp1 = false;
     }
 
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-          g.drawLine(x1, y1, x2, y2);
-          } else {
-          GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-          }*/
+    // g.drawLine(x1, y1, x2, y2);
+    Color col = g.getColor();
+    int cz = (int) (tdp.getZoom() * c);
 
-        Point p_one;
-        boolean isp1;
-        if (getIndexOfLastTGCPointOfConnector() == -1) {
-            p_one = new Point(p1.getX(), p1.getY());
-            isp1 = true;
-        } else {
-            TGComponent tmpc = tgcomponent[getIndexOfLastTGCPointOfConnector()];
-            p_one = new Point(tmpc.getX(), tmpc.getY());
-            isp1 = false;
-        }
-
-        //g.drawLine(x1, y1, x2, y2);
-        Color col = g.getColor();
-        int cz = (int) (tdp.getZoom() * c);
-
-        if (isAMS()) {
-            g.setColor(Color.GRAY);
-        }
-
-        if (isAsynchronous()) {
-            g.setColor(Color.WHITE);
-        }
-
-        g.fillRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
-        g.fillRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
-        g.setColor(col);
-
-        if (isAsynchronous()) {
-            g.drawRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
-            g.drawRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
-            if (isBlocking()) {
-                g.drawLine(x2 - (cz / 2), y2 - (cz / 2), x2 - (cz / 2) + cz, y2 - (cz / 2) + cz);
-                g.drawLine(x2 - (cz / 2), y2 - (cz / 2) + cz, x2 - (cz / 2) + cz, y2 - (cz / 2));
-                g.drawLine(p1.getX() - (cz / 2), p1.getY() + (cz / 2), p1.getX() + (cz / 2), p1.getY() - (cz / 2));
-                g.drawLine(p1.getX() - (cz / 2), p1.getY() - (cz / 2), p1.getX() + (cz / 2), p1.getY() + (cz / 2));
-            }
-        }
-
-        if (isLossy) {
-            //   int czz = (int) (cz * 1.4);
-            int x3 = p1.getX();
-            int y3 = p1.getY();
-            g.drawImage(IconManager.img5072, x3 - cz, y3 + cz / 2, null);
-            g.drawImage(IconManager.img5072, x2 - cz, y2 + cz / 2, null);
-        }
-
-
-        if (!isPrivate() /*&& !isAsynchronous()*/) {
-            int czz = (int) (cz * 1.4);
-            int x3 = p1.getX();
-            int y3 = p1.getY();
-
-            Polygon p1 = new Polygon();
-            p1.addPoint(x2 - (czz / 2) + czz, y2 - cz);
-            p1.addPoint(x2 + (czz / 2) + czz, y2 - cz);
-            p1.addPoint(x2 + czz, y2 - (2 * czz));
-
-            Polygon p2 = new Polygon();
-            p2.addPoint(x3 - (czz / 2) + czz, y3 - cz);
-            p2.addPoint(x3 + (czz / 2) + czz, y3 - cz);
-            p2.addPoint(x3 + czz, y3 - (2 * czz));
-
-            // Adding illuminatis sign at the end
-            g.setColor(Color.WHITE);
-            g.fillPolygon(p1);
-            g.fillPolygon(p2);
-
-            g.setColor(col);
-            g.drawPolygon(p1);
-            g.drawPolygon(p2);
-            g.drawOval(x2 + czz - 4, y2 - cz - 7, 8, 6);
-            g.drawOval(x3 + czz - 4, y3 - cz - 7, 8, 6);
-            g.fillOval(x2 + czz - 2, y2 - cz - 6, 5, 4);
-            g.fillOval(x3 + czz - 2, y3 - cz - 6, 5, 4);
-        }
-
-        Point p11;
-        if (isp1) {
-            p11 = GraphicLib.intersectionRectangleSegment(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz, x1, y1, x2, y2);
-        } else {
-            p11 = new Point(p_one.x, p_one.y);
-        }
-        if (p11 == null) {
-            p11 = new Point(p1.getX(), p1.getY());
-            //
-        }
-        Point p22 = GraphicLib.intersectionRectangleSegment(x2 - (cz / 2), y2 - (cz / 2), cz, cz, x1, y1, x2, y2);
-        if (p22 == null) {
-            p22 = new Point(p2.getX(), p2.getY());
-            //
-        }
-
-        g.drawLine(p11.x, p11.y, p22.x, p22.y);
-
-        Font f = g.getFont();
-        Font fold = f;
-        f = f.deriveFont((float) fontSize);
-        g.setFont(f);
-        int h = -decY;
-        int step = fontSize + 1;
-        int w;
-        String s;
-
-
-        if (((g.getColor() == ColorManager.POINTER_ON_ME_0) && (tdp.getAttributeState() == tdp.PARTIAL)) || (tdp.getAttributeState() == tdp.FULL)) {
-            // Signals at origin
-            if (inSignalsAtOrigin.size() > 0) {
-                //drawSingleString(g, "in:", p1.getX() + decX, p1.getY() + h);
-                for (String iso : inSignalsAtOrigin) {
-                    h += step;
-                    s = getShortName(iso);
-                    if (p1.getX() <= p2.getX()) {
-                        drawSingleString(g, s, p1.getX() + decX, p1.getY() + h);
-                    } else {
-                        w = g.getFontMetrics().stringWidth(s);
-                        drawSingleString(g, s, p1.getX() - decX - w, p1.getY() + h);
-                    }
-                }
-            }
-            if (outSignalsAtOrigin.size() > 0) {
-                //h += step;
-                //drawSingleString(g, "out:", p1.getX() + decX, p1.getY() + h);
-                for (String oso : outSignalsAtOrigin) {
-                    h += step;
-                    s = getShortName(oso);
-                    if (p1.getX() <= p2.getX()) {
-                        drawSingleString(g, s, p1.getX() + decX, p1.getY() + h);
-                    } else {
-                        w = g.getFontMetrics().stringWidth(s);
-                        drawSingleString(g, s, p1.getX() - decX - w, p1.getY() + h);
-                    }
-                }
-            }
-            // Signals at destination
-            h = -decY;
-            if (outSignalsAtDestination.size() > 0) {
-                //h += step;
-                //drawSingleString(g, "out:", p2.getX() + decX, p2.getY() + h);
-                for (String osd : outSignalsAtDestination) {
-                    h += step;
-                    s = getShortName(osd);
-                    if (p1.getX() > p2.getX()) {
-                        drawSingleString(g, s, p2.getX() + decX, p2.getY() + h);
-                    } else {
-                        w = g.getFontMetrics().stringWidth(s);
-                        drawSingleString(g, s, p2.getX() - decX - w, p2.getY() + h);
-                    }
-                }
-            }
-            if (inSignalsAtDestination.size() > 0) {
-                //drawSingleString(g, "in:", p2.getX() + decX, p2.getY() + h);
-                for (String isd : inSignalsAtDestination) {
-                    h += step;
-                    s = getShortName(isd);
-                    if (p1.getX() > p2.getX()) {
-                        drawSingleString(g, s, p2.getX() + decX, p2.getY() + h);
-                    } else {
-                        w = g.getFontMetrics().stringWidth(s);
-                        drawSingleString(g, s, p2.getX() - decX - w, p2.getY() + h);
-                    }
-                }
-            }
-        }
-
-        g.setFont(fold);
-
-        /*if (value.length() > 0) {
-          Font f = g.getFont();
-          if (tdp.getZoom() < 1) {
-          Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
-          g.setFont(f0);
-          }
-          drawSingleString(g, value, x2-(cz/2), y2-(cz/2)-1);
-          g.setFont(f);
-          }*/
-
-        // Animation?
-        if ((TDiagramPanel.AVATAR_ANIMATE_ON) && (isAsynchronous())) {
-            //TraceManager.addDev("anim port connector: " + this);
-            String messageInformation[] = tdp.getMGUI().hasMessageInformationForAvatarConnector(this);
-            if (messageInformation != null) {
-                if (messageInformation[0] != null) {
-                    g.setColor(Color.BLUE);
-                    drawSingleString(g, messageInformation[0], p1.getX() + decX, p1.getY());
-                }
-                if (messageInformation[1] != null) {
-                    g.setColor(Color.BLUE);
-                    drawSingleString(g, messageInformation[1], p2.getX() + decX, p2.getY());
-                }
-                g.setColor(Color.BLACK);
-            }
-        }
+    if (isAMS()) {
+      g.setColor(Color.GRAY);
     }
 
-    public AvatarBDBlock getAvatarBDBlock1() {
-        return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p1));
+    if (isAsynchronous()) {
+      g.setColor(Color.WHITE);
     }
 
-    public AvatarBDBlock getAvatarBDBlock2() {
-        return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p2));
+    g.fillRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+    g.fillRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
+    g.setColor(col);
+
+    if (isAsynchronous()) {
+      g.drawRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
+      g.drawRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
+      if (isBlocking()) {
+        g.drawLine(x2 - (cz / 2), y2 - (cz / 2), x2 - (cz / 2) + cz, y2 - (cz / 2) + cz);
+        g.drawLine(x2 - (cz / 2), y2 - (cz / 2) + cz, x2 - (cz / 2) + cz, y2 - (cz / 2));
+        g.drawLine(p1.getX() - (cz / 2), p1.getY() + (cz / 2), p1.getX() + (cz / 2), p1.getY() - (cz / 2));
+        g.drawLine(p1.getX() - (cz / 2), p1.getY() - (cz / 2), p1.getX() + (cz / 2), p1.getY() + (cz / 2));
+      }
     }
 
-
-    public AvatarBDInterface getAvatarBDInterface1() {
-        return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p1));
+    if (isLossy) {
+      // int czz = (int) (cz * 1.4);
+      int x3 = p1.getX();
+      int y3 = p1.getY();
+      g.drawImage(IconManager.img5072, x3 - cz, y3 + cz / 2, null);
+      g.drawImage(IconManager.img5072, x2 - cz, y2 + cz / 2, null);
     }
 
+    if (!isPrivate() /* && !isAsynchronous() */) {
+      int czz = (int) (cz * 1.4);
+      int x3 = p1.getX();
+      int y3 = p1.getY();
 
-    public AvatarBDInterface getAvatarBDInterface2() {
-        return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p2));
+      Polygon p1 = new Polygon();
+      p1.addPoint(x2 - (czz / 2) + czz, y2 - cz);
+      p1.addPoint(x2 + (czz / 2) + czz, y2 - cz);
+      p1.addPoint(x2 + czz, y2 - (2 * czz));
+
+      Polygon p2 = new Polygon();
+      p2.addPoint(x3 - (czz / 2) + czz, y3 - cz);
+      p2.addPoint(x3 + (czz / 2) + czz, y3 - cz);
+      p2.addPoint(x3 + czz, y3 - (2 * czz));
+
+      // Adding illuminatis sign at the end
+      g.setColor(Color.WHITE);
+      g.fillPolygon(p1);
+      g.fillPolygon(p2);
+
+      g.setColor(col);
+      g.drawPolygon(p1);
+      g.drawPolygon(p2);
+      g.drawOval(x2 + czz - 4, y2 - cz - 7, 8, 6);
+      g.drawOval(x3 + czz - 4, y3 - cz - 7, 8, 6);
+      g.fillOval(x2 + czz - 2, y2 - cz - 6, 5, 4);
+      g.fillOval(x3 + czz - 2, y3 - cz - 6, 5, 4);
     }
 
-
-    @Override
-    public boolean editOnDoubleClick(JFrame frame) {
-        // Gets the two concerned blocks
-
-        AvatarBDBlock block1 = getAvatarBDBlock1();
-        AvatarBDBlock block2 = getAvatarBDBlock2();
-
-        Vector<String> v = getAssociationSignals();
-
-
-        JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
-        //jdas.setSize(800, 550);
-        GraphicLib.centerOnParent(jdas, 800, 550);
-        jdas.setVisible(true); // blocked until dialog has been closed
-
-        if (jdas.hasBeenCancelled()) {
-            return false;
-        }
-
-        inSignalsAtOrigin.clear();
-        inSignalsAtDestination.clear();
-        outSignalsAtOrigin.clear();
-        outSignalsAtDestination.clear();
-
-        String assoc;
-        AvatarSignal as1, as2;
-        int index;
-        for (int i = 0; i < v.size(); i++) {
-            assoc = v.get(i);
-            as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
-            as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-
-            if ((as1 != null) && (as2 != null)) {
-                index = assoc.indexOf("->");
-                if (index > -1) {
-                    outSignalsAtOrigin.add(as1.toString());
-                    inSignalsAtDestination.add(as2.toString());
-                } else {
-                    inSignalsAtOrigin.add(as1.toString());
-                    outSignalsAtDestination.add(as2.toString());
-                }
-            }
-        }
-
-        ((AvatarBDPanel) tdp).updateSignalAttachement(block2, this);
-        ((AvatarBDPanel) tdp).updateSignalAttachement(block1, this);
-
-        asynchronous = jdas.isAsynchronous();
-        synchronous = jdas.isSynchronous();
-        blockingFIFO = jdas.isBlocking();
-        isPrivate = jdas.isPrivate();
-        isBroadcast = jdas.isBroadcast();
-        isLossy = jdas.isLossy();
-        AMS = jdas.isAMS();
-
-        try {
-            sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
-            sizeOfFIFO = Math.max(1, sizeOfFIFO);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame,
-                    "Unvalid FIFO size: " + jdas.getSizeOfFIFO(),
-                    "Error",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }
-
-        return true;
+    Point p11;
+    if (isp1) {
+      p11 = GraphicLib.intersectionRectangleSegment(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz, x1, y1, x2, y2);
+    } else {
+      p11 = new Point(p_one.x, p_one.y);
+    }
+    if (p11 == null) {
+      p11 = new Point(p1.getX(), p1.getY());
+      //
+    }
+    Point p22 = GraphicLib.intersectionRectangleSegment(x2 - (cz / 2), y2 - (cz / 2), cz, cz, x1, y1, x2, y2);
+    if (p22 == null) {
+      p22 = new Point(p2.getX(), p2.getY());
+      //
     }
 
-    @Override
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
+    g.drawLine(p11.x, p11.y, p22.x, p22.y);
+
+    Font f = g.getFont();
+    Font fold = f;
+    f = f.deriveFont((float) fontSize);
+    g.setFont(f);
+    int h = -decY;
+    int step = fontSize + 1;
+    int w;
+    String s;
+
+    if (((g.getColor() == ColorManager.POINTER_ON_ME_0) && (tdp.getAttributeState() == tdp.PARTIAL))
+        || (tdp.getAttributeState() == tdp.FULL)) {
+      // Signals at origin
+      if (inSignalsAtOrigin.size() > 0) {
+        // drawSingleString(g, "in:", p1.getX() + decX, p1.getY() + h);
         for (String iso : inSignalsAtOrigin) {
-            sb.append("<iso value=\"");
-            sb.append(iso);
-            sb.append("\" />\n");
+          h += step;
+          s = getShortName(iso);
+          if (p1.getX() <= p2.getX()) {
+            drawSingleString(g, s, p1.getX() + decX, p1.getY() + h);
+          } else {
+            w = g.getFontMetrics().stringWidth(s);
+            drawSingleString(g, s, p1.getX() - decX - w, p1.getY() + h);
+          }
         }
-        for (String osd : outSignalsAtDestination) {
-            sb.append("<osd value=\"");
-            sb.append(osd);
-            sb.append("\" />\n");
-        }
-        for (String isd : inSignalsAtDestination) {
-            sb.append("<isd value=\"");
-            sb.append(isd);
-            sb.append("\" />\n");
-        }
+      }
+      if (outSignalsAtOrigin.size() > 0) {
+        // h += step;
+        // drawSingleString(g, "out:", p1.getX() + decX, p1.getY() + h);
         for (String oso : outSignalsAtOrigin) {
-            sb.append("<oso value=\"");
-            sb.append(oso);
-            sb.append("\" />\n");
+          h += step;
+          s = getShortName(oso);
+          if (p1.getX() <= p2.getX()) {
+            drawSingleString(g, s, p1.getX() + decX, p1.getY() + h);
+          } else {
+            w = g.getFontMetrics().stringWidth(s);
+            drawSingleString(g, s, p1.getX() - decX - w, p1.getY() + h);
+          }
         }
-        sb.append("<FIFOType asynchronous=\"");
-        sb.append(asynchronous);
-        sb.append("\" synchronousCH=\"" + synchronous);
-        sb.append("\" size=\"" + sizeOfFIFO);
-        sb.append("\" blocking=\"" + blockingFIFO);
-        sb.append("\" private=\"" + isPrivate);
-        sb.append("\" broadcast=\"" + isBroadcast);
-        sb.append("\" lossy=\"" + isLossy);
-        sb.append("\" ams=\"" + AMS);
-        sb.append("\" />\n");
-
-        sb.append("</extraparam>\n");
-        return new String(sb);
+      }
+      // Signals at destination
+      h = -decY;
+      if (outSignalsAtDestination.size() > 0) {
+        // h += step;
+        // drawSingleString(g, "out:", p2.getX() + decX, p2.getY() + h);
+        for (String osd : outSignalsAtDestination) {
+          h += step;
+          s = getShortName(osd);
+          if (p1.getX() > p2.getX()) {
+            drawSingleString(g, s, p2.getX() + decX, p2.getY() + h);
+          } else {
+            w = g.getFontMetrics().stringWidth(s);
+            drawSingleString(g, s, p2.getX() - decX - w, p2.getY() + h);
+          }
+        }
+      }
+      if (inSignalsAtDestination.size() > 0) {
+        // drawSingleString(g, "in:", p2.getX() + decX, p2.getY() + h);
+        for (String isd : inSignalsAtDestination) {
+          h += step;
+          s = getShortName(isd);
+          if (p1.getX() > p2.getX()) {
+            drawSingleString(g, s, p2.getX() + decX, p2.getY() + h);
+          } else {
+            w = g.getFontMetrics().stringWidth(s);
+            drawSingleString(g, s, p2.getX() - decX - w, p2.getY() + h);
+          }
+        }
+      }
     }
 
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            String val, val1, val2, val3, val4, val5, val6, val7;
-            sizeOfFIFO = 4;
-            blockingFIFO = false;
-            asynchronous = false;
+    g.setFont(fold);
 
+    /*
+     * if (value.length() > 0) { Font f = g.getFont(); if (tdp.getZoom() < 1) { Font
+     * f0 = f.deriveFont((float)(fontSize*tdp.getZoom())); g.setFont(f0); }
+     * drawSingleString(g, value, x2-(cz/2), y2-(cz/2)-1); g.setFont(f); }
+     */
+
+    // Animation?
+    if ((TDiagramPanel.AVATAR_ANIMATE_ON) && (isAsynchronous())) {
+      // TraceManager.addDev("anim port connector: " + this);
+      String messageInformation[] = tdp.getMGUI().hasMessageInformationForAvatarConnector(this);
+      if (messageInformation != null) {
+        if (messageInformation[0] != null) {
+          g.setColor(Color.BLUE);
+          drawSingleString(g, messageInformation[0], p1.getX() + decX, p1.getY());
+        }
+        if (messageInformation[1] != null) {
+          g.setColor(Color.BLUE);
+          drawSingleString(g, messageInformation[1], p2.getX() + decX, p2.getY());
+        }
+        g.setColor(Color.BLACK);
+      }
+    }
+  }
+
+  public AvatarBDBlock getAvatarBDBlock1() {
+    return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p1));
+  }
+
+  public AvatarBDBlock getAvatarBDBlock2() {
+    return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p2));
+  }
+
+  public AvatarBDInterface getAvatarBDInterface1() {
+    return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p1));
+  }
+
+  public AvatarBDInterface getAvatarBDInterface2() {
+    return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p2));
+  }
+
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    // Gets the two concerned blocks
+
+    AvatarBDBlock block1 = getAvatarBDBlock1();
+    AvatarBDBlock block2 = getAvatarBDBlock2();
+
+    Vector<String> v = getAssociationSignals();
+
+    JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this,
+        "Setting signal association");
+    // jdas.setSize(800, 550);
+    GraphicLib.centerOnParent(jdas, 800, 550);
+    jdas.setVisible(true); // blocked until dialog has been closed
+
+    if (jdas.hasBeenCancelled()) {
+      return false;
+    }
+
+    inSignalsAtOrigin.clear();
+    inSignalsAtDestination.clear();
+    outSignalsAtOrigin.clear();
+    outSignalsAtDestination.clear();
+
+    String assoc;
+    AvatarSignal as1, as2;
+    int index;
+    for (int i = 0; i < v.size(); i++) {
+      assoc = v.get(i);
+      as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
+      as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
+
+      if ((as1 != null) && (as2 != null)) {
+        index = assoc.indexOf("->");
+        if (index > -1) {
+          outSignalsAtOrigin.add(as1.toString());
+          inSignalsAtDestination.add(as2.toString());
+        } else {
+          inSignalsAtOrigin.add(as1.toString());
+          outSignalsAtDestination.add(as2.toString());
+        }
+      }
+    }
+
+    ((AvatarBDPanel) tdp).updateSignalAttachement(block2, this);
+    ((AvatarBDPanel) tdp).updateSignalAttachement(block1, this);
+
+    asynchronous = jdas.isAsynchronous();
+    synchronous = jdas.isSynchronous();
+    blockingFIFO = jdas.isBlocking();
+    isPrivate = jdas.isPrivate();
+    isBroadcast = jdas.isBroadcast();
+    isLossy = jdas.isLossy();
+    AMS = jdas.isAMS();
+
+    try {
+      sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
+      sizeOfFIFO = Math.max(1, sizeOfFIFO);
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(frame, "Unvalid FIFO size: " + jdas.getSizeOfFIFO(), "Error",
+          JOptionPane.INFORMATION_MESSAGE);
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    for (String iso : inSignalsAtOrigin) {
+      sb.append("<iso value=\"");
+      sb.append(iso);
+      sb.append("\" />\n");
+    }
+    for (String osd : outSignalsAtDestination) {
+      sb.append("<osd value=\"");
+      sb.append(osd);
+      sb.append("\" />\n");
+    }
+    for (String isd : inSignalsAtDestination) {
+      sb.append("<isd value=\"");
+      sb.append(isd);
+      sb.append("\" />\n");
+    }
+    for (String oso : outSignalsAtOrigin) {
+      sb.append("<oso value=\"");
+      sb.append(oso);
+      sb.append("\" />\n");
+    }
+    sb.append("<FIFOType asynchronous=\"");
+    sb.append(asynchronous);
+    sb.append("\" synchronousCH=\"" + synchronous);
+    sb.append("\" size=\"" + sizeOfFIFO);
+    sb.append("\" blocking=\"" + blockingFIFO);
+    sb.append("\" private=\"" + isPrivate);
+    sb.append("\" broadcast=\"" + isBroadcast);
+    sb.append("\" lossy=\"" + isLossy);
+    sb.append("\" ams=\"" + AMS);
+    sb.append("\" />\n");
+
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      String val, val1, val2, val3, val4, val5, val6, val7;
+      sizeOfFIFO = 4;
+      blockingFIFO = false;
+      asynchronous = false;
+
+      //
+      //
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
+        //
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
             //
-            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("iso")) {
+                val = elt.getAttribute("value");
 
-            for (int i = 0; i < nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for (int j = 0; j < nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("iso")) {
-                                val = elt.getAttribute("value");
-
-                                if ((val != null) && (!(val.equals("null")))) {
-                                    inSignalsAtOrigin.add(val);
-                                }
-                            }
-                            if (elt.getTagName().equals("osd")) {
-                                val = elt.getAttribute("value");
-
-                                if ((val != null) && (!(val.equals("null")))) {
-                                    outSignalsAtDestination.add(val);
-                                }
-                            }
-                            if (elt.getTagName().equals("isd")) {
-                                val = elt.getAttribute("value");
-
-                                if ((val != null) && (!(val.equals("null")))) {
-                                    inSignalsAtDestination.add(val);
-                                }
-                            }
-                            if (elt.getTagName().equals("oso")) {
-                                val = elt.getAttribute("value");
-
-                                if ((val != null) && (!(val.equals("null")))) {
-                                    outSignalsAtOrigin.add(val);
-                                }
-                            }
-                            if (elt.getTagName().equals("FIFOType")) {
-                                val = elt.getAttribute("asynchronous");
-                                val7 = elt.getAttribute("synchronousCH");
-                                val1 = elt.getAttribute("size");
-                                val2 = elt.getAttribute("blocking");
-                                val3 = elt.getAttribute("private");
-                                val4 = elt.getAttribute("broadcast");
-                                val5 = elt.getAttribute("lossy");
-                                val6 = elt.getAttribute("ams");
-
-                                //     if ((val != null) && (!(val.equals("null")))) {
-                                if ((val != null) && (!(val.equals("null")))) {
-                                    asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
-                                    //TraceManager.addDev("Found asynchronous=" + val);
-                                    //synchronous = !asynchronous;
-                                }
-
-                                if ((val1 != null) && (!(val1.equals("null")))) {
-                                    try {
-                                        sizeOfFIFO = Integer.decode(val1).intValue();
-                                    } catch (Exception e) {
-                                        sizeOfFIFO = 1024;
-                                    }
-                                }
-
-                                if ((val2 != null) && (!(val2.equals("null")))) {
-                                    blockingFIFO = val2.trim().toLowerCase().compareTo("true") == 0;
-
-                                }
-
-                                if ((val3 != null) && (!(val3.equals("null")))) {
-                                    isPrivate = val3.trim().toLowerCase().compareTo("false") != 0;
-
-                                } else {
-                                    isPrivate = true;
-                                }
-
-                                if ((val4 != null) && (!(val4.equals("null")))) {
-                                    isBroadcast = val4.trim().toLowerCase().compareTo("true") == 0;
-
-                                } else {
-                                    isBroadcast = false;
-
-                                }
-
-                                if ((val5 != null) && (!(val5.equals("null")))) {
-                                    isLossy = val5.trim().toLowerCase().compareTo("true") == 0;
-
-                                } else {
-                                    isLossy = false;
-                                }
-
-                                if ((val7 != null) && (!(val7.equals("null")))) {
-                                    //TraceManager.addDev("Found synchronous=" + val7);
-                                    synchronous = val7.trim().toLowerCase().compareTo("true") == 0;
-                                } else {
-                                    //TraceManager.addDev("Synchronous not found");
-                                    //synchronous = !asynchronous;
-                                }
-
-
-                                if ((val6 != null) && (!(val6.equals("null")))) {
-                                    AMS = val6.trim().toLowerCase().compareTo("true") == 0;
-                                    if (AMS) {
-                                        synchronous = false;
-                                        asynchronous = false;
-                                    }
-                                } else {
-                                    AMS = false;
-                                }
-                            }
-                        }
-                    }
+                if ((val != null) && (!(val.equals("null")))) {
+                  inSignalsAtOrigin.add(val);
                 }
-            }
+              }
+              if (elt.getTagName().equals("osd")) {
+                val = elt.getAttribute("value");
 
-        } catch (Exception e) {
-            throw new MalformedModelingException(e);
-        }
-        if ((asynchronous == false) && (synchronous == false) && (AMS == false)) {
-            synchronous = true;
-        }
-        //TraceManager.addDev("synchronous=" + synchronous);
-        //TraceManager.addDev("asynchronous=" + asynchronous);
-        //TraceManager.addDev("AMS=" + AMS);
-    }
+                if ((val != null) && (!(val.equals("null")))) {
+                  outSignalsAtDestination.add(val);
+                }
+              }
+              if (elt.getTagName().equals("isd")) {
+                val = elt.getAttribute("value");
 
-    @Override
-    public int getType() {
-        return TGComponentManager.AVATARBD_PORT_CONNECTOR;
-    }
-//
-//    @Override Issue #31 Now managed in upper class 
-//    public void rescale(double scaleFactor) {
-//        //
-//        int xx, yy;
-//
-//        for (int i = 0; i < nbInternalTGComponent; i++) {
-//            xx = tgcomponent[i].getX();
-//            yy = tgcomponent[i].getY();
-//            //
-//            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-//            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-//            xx = (int) (tgcomponent[i].dx);
-//            tgcomponent[i].dx = tgcomponent[i].dx - xx;
-//            yy = (int) (tgcomponent[i].dy);
-//            tgcomponent[i].dy = tgcomponent[i].dy - yy;
-//
-//            tgcomponent[i].setCd(xx, yy);
-//
-//            //
-//        }
-//
-//        oldScaleFactor = scaleFactor;
-//    }
+                if ((val != null) && (!(val.equals("null")))) {
+                  inSignalsAtDestination.add(val);
+                }
+              }
+              if (elt.getTagName().equals("oso")) {
+                val = elt.getAttribute("value");
 
-    public List<String> getListOfSignalsOrigin() {
-        List<String> list = new LinkedList<String>();
-        list.addAll(inSignalsAtOrigin);
-        list.addAll(outSignalsAtOrigin);
-        return list;
-    }
+                if ((val != null) && (!(val.equals("null")))) {
+                  outSignalsAtOrigin.add(val);
+                }
+              }
+              if (elt.getTagName().equals("FIFOType")) {
+                val = elt.getAttribute("asynchronous");
+                val7 = elt.getAttribute("synchronousCH");
+                val1 = elt.getAttribute("size");
+                val2 = elt.getAttribute("blocking");
+                val3 = elt.getAttribute("private");
+                val4 = elt.getAttribute("broadcast");
+                val5 = elt.getAttribute("lossy");
+                val6 = elt.getAttribute("ams");
 
-    public List<String> getListOfSignalsDestination() {
-        List<String> list = new LinkedList<String>();
-        list.addAll(outSignalsAtDestination);
-        list.addAll(inSignalsAtDestination);
-        return list;
-    }
+                // if ((val != null) && (!(val.equals("null")))) {
+                if ((val != null) && (!(val.equals("null")))) {
+                  asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
+                  // TraceManager.addDev("Found asynchronous=" + val);
+                  // synchronous = !asynchronous;
+                }
 
-    public Vector<String> getAssociationSignals() {
-        AvatarBDBlock block1 = getAvatarBDBlock1();
-        AvatarBDBlock block2 = getAvatarBDBlock2();
+                if ((val1 != null) && (!(val1.equals("null")))) {
+                  try {
+                    sizeOfFIFO = Integer.decode(val1).intValue();
+                  } catch (Exception e) {
+                    sizeOfFIFO = 1024;
+                  }
+                }
 
-        int i;
-        Vector<String> v = new Vector<String>();
-        String s;
+                if ((val2 != null) && (!(val2.equals("null")))) {
+                  blockingFIFO = val2.trim().toLowerCase().compareTo("true") == 0;
 
-        for (i = 0; i < outSignalsAtOrigin.size(); i++) {
-            //TraceManager.addDev("out sig origin");
-            try {
-                //TraceManager.addDev("sig block1: " + block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)).toString());
-                //TraceManager.addDev("Found");
-                //TraceManager.addDev("Size of in at dest:" + inSignalsAtDestination.size() + " signal name:" + inSignalsAtDestination.get(i)
-                //.toString());
-                //TraceManager.addDev("Sig block2: " + block2.getAvatarSignalFromFullName(inSignalsAtDestination.get(i)).toString());
+                }
 
-                //TraceManager.addDev("Found");
-                s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)), block2, block2.getAvatarSignalFromFullName(inSignalsAtDestination.get(i)));
-                v.add(s);
-            } catch (Exception e) {
-                TraceManager.addDev("Exception: signal removed? out origin");
-                // Probably a signal has been removed
-            }
-        }
+                if ((val3 != null) && (!(val3.equals("null")))) {
+                  isPrivate = val3.trim().toLowerCase().compareTo("false") != 0;
 
-        for (i = 0; i < inSignalsAtOrigin.size(); i++) {
-            //TraceManager.addDev("in sig origin");
-            try {
-                s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(inSignalsAtOrigin.get(i)), block2, block2.getAvatarSignalFromFullName(outSignalsAtDestination.get(i)));
-                v.add(s);
-            } catch (Exception e) {
-                TraceManager.addDev("Exception: signal removed? in origin");
-                // Probably a signal has been removed
-            }
-        }
-
-        return v;
-    }
-
-    public static String makeSignalAssociation(AvatarBDBlock _block1, AvatarSignal _as1, AvatarBDBlock _block2, AvatarSignal _as2) {
-        String s = _block1.getBlockName() + "." + _as1.toBasicString();
-        if (_as1.getInOut() == AvatarSignal.OUT) {
-            s += " -> ";
-        } else {
-            s += " <- ";
-        }
-        s += _block2.getBlockName() + "." + _as2.toBasicString();
-        return s;
-    }
-
-    public String getFirstSignalOfSignalAssociation(String _assoc) {
-        int index0 = _assoc.indexOf(".");
-
-
-        if (index0 == -1) {
-            return null;
-        }
-
-        int index1 = _assoc.indexOf("->");
-        int index2 = _assoc.indexOf("<-");
-
-        index1 = Math.max(index1, index2);
-        if (index1 == -1) {
-            return null;
-        }
-
-        return _assoc.substring(index0 + 1, index1).trim();
-    }
-
-    public String getSecondSignalOfSignalAssociation(String _assoc) {
-        int index0 = _assoc.indexOf("->");
-        int index1 = _assoc.indexOf("<-");
-
-        if ((index0 == -1) && (index1 == -1)) {
-            return null;
-        }
-
-        index0 = Math.max(index0, index1);
-        _assoc = _assoc.substring(index0 + 2, _assoc.length());
-
-        index0 = _assoc.indexOf(".");
-
-        if (index0 == -1) {
-            return null;
-        }
-
-        return _assoc.substring(index0 + 1, _assoc.length()).trim();
-    }
-
-    public void addSignal(String signal, boolean in, boolean origin) {
-        //TraceManager.addDev("Adding signal " + signal + " isIn:" + in + " origin:" + origin);
-        if (in) {
-            if (origin) {
-                inSignalsAtOrigin.add(signal);
-            } else {
-                inSignalsAtDestination.add(signal);
-            }
-        } else {
-            if (origin) {
-                outSignalsAtOrigin.add(signal);
-            } else {
-                outSignalsAtDestination.add(signal);
-            }
-        }
-
-    }
-
-    public void updateAllSignals() {
-        //TraceManager.addDev("Updating signals");
-        try {
-            Vector<String> v = getAssociationSignals();
-
-
-            /*for (String s: v) {
-                TraceManager.addDev("Assoc: " + s);
-            }*/
-
-            //	
-            inSignalsAtOrigin.clear();
-            inSignalsAtDestination.clear();
-            outSignalsAtOrigin.clear();
-            outSignalsAtDestination.clear();
-            if (v.size() == 0) {
-                return;
-            }
-
-            AvatarBDBlock block1 = getAvatarBDBlock1();
-            AvatarBDBlock block2 = getAvatarBDBlock2();
-
-            String assoc;
-            AvatarSignal as1, as2;
-            int index;
-            for (int i = 0; i < v.size(); i++) {
-
-                assoc = v.get(i);
-                //TraceManager.addDev("assoc=" + assoc);
-                as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
-                as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
-                if ((as1 != null) && (as2 != null)) {
-                    index = assoc.indexOf("->");
-                    if (index > -1) {
-                        outSignalsAtOrigin.add(as1.toString());
-                        inSignalsAtDestination.add(as2.toString());
-                    } else {
-                        inSignalsAtOrigin.add(as1.toString());
-                        outSignalsAtDestination.add(as2.toString());
-                    }
                 } else {
-                    //TraceManager.addDev("null signals: removing assoc");
+                  isPrivate = true;
                 }
+
+                if ((val4 != null) && (!(val4.equals("null")))) {
+                  isBroadcast = val4.trim().toLowerCase().compareTo("true") == 0;
+
+                } else {
+                  isBroadcast = false;
+
+                }
+
+                if ((val5 != null) && (!(val5.equals("null")))) {
+                  isLossy = val5.trim().toLowerCase().compareTo("true") == 0;
+
+                } else {
+                  isLossy = false;
+                }
+
+                if ((val7 != null) && (!(val7.equals("null")))) {
+                  // TraceManager.addDev("Found synchronous=" + val7);
+                  synchronous = val7.trim().toLowerCase().compareTo("true") == 0;
+                } else {
+                  // TraceManager.addDev("Synchronous not found");
+                  // synchronous = !asynchronous;
+                }
+
+                if ((val6 != null) && (!(val6.equals("null")))) {
+                  AMS = val6.trim().toLowerCase().compareTo("true") == 0;
+                  if (AMS) {
+                    synchronous = false;
+                    asynchronous = false;
+                  }
+                } else {
+                  AMS = false;
+                }
+              }
             }
-        } catch (Exception e) {
-            TraceManager.addDev("Exception on connector");
-            // Probably the model is not yet fully loaded...
+          }
         }
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException(e);
+    }
+    if ((asynchronous == false) && (synchronous == false) && (AMS == false)) {
+      synchronous = true;
+    }
+    // TraceManager.addDev("synchronous=" + synchronous);
+    // TraceManager.addDev("asynchronous=" + asynchronous);
+    // TraceManager.addDev("AMS=" + AMS);
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.AVATARBD_PORT_CONNECTOR;
+  }
+  //
+  // @Override Issue #31 Now managed in upper class
+  // public void rescale(double scaleFactor) {
+  // //
+  // int xx, yy;
+  //
+  // for (int i = 0; i < nbInternalTGComponent; i++) {
+  // xx = tgcomponent[i].getX();
+  // yy = tgcomponent[i].getY();
+  // //
+  // tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+  // tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+  // xx = (int) (tgcomponent[i].dx);
+  // tgcomponent[i].dx = tgcomponent[i].dx - xx;
+  // yy = (int) (tgcomponent[i].dy);
+  // tgcomponent[i].dy = tgcomponent[i].dy - yy;
+  //
+  // tgcomponent[i].setCd(xx, yy);
+  //
+  // //
+  // }
+  //
+  // oldScaleFactor = scaleFactor;
+  // }
+
+  public List<String> getListOfSignalsOrigin() {
+    List<String> list = new LinkedList<String>();
+    list.addAll(inSignalsAtOrigin);
+    list.addAll(outSignalsAtOrigin);
+    return list;
+  }
+
+  public List<String> getListOfSignalsDestination() {
+    List<String> list = new LinkedList<String>();
+    list.addAll(outSignalsAtDestination);
+    list.addAll(inSignalsAtDestination);
+    return list;
+  }
+
+  public Vector<String> getAssociationSignals() {
+    AvatarBDBlock block1 = getAvatarBDBlock1();
+    AvatarBDBlock block2 = getAvatarBDBlock2();
+
+    int i;
+    Vector<String> v = new Vector<String>();
+    String s;
+
+    for (i = 0; i < outSignalsAtOrigin.size(); i++) {
+      // TraceManager.addDev("out sig origin");
+      try {
+        // TraceManager.addDev("sig block1: " +
+        // block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)).toString());
+        // TraceManager.addDev("Found");
+        // TraceManager.addDev("Size of in at dest:" + inSignalsAtDestination.size() + "
+        // signal name:" + inSignalsAtDestination.get(i)
+        // .toString());
+        // TraceManager.addDev("Sig block2: " +
+        // block2.getAvatarSignalFromFullName(inSignalsAtDestination.get(i)).toString());
+
+        // TraceManager.addDev("Found");
+        s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(outSignalsAtOrigin.get(i)), block2,
+            block2.getAvatarSignalFromFullName(inSignalsAtDestination.get(i)));
+        v.add(s);
+      } catch (Exception e) {
+        TraceManager.addDev("Exception: signal removed? out origin");
+        // Probably a signal has been removed
+      }
     }
 
-    // remove the parameters in the name of a signal
-    public String getShortName(String _s) {
-        int index = _s.indexOf('(');
-        if (index == -1) {
-            return _s;
+    for (i = 0; i < inSignalsAtOrigin.size(); i++) {
+      // TraceManager.addDev("in sig origin");
+      try {
+        s = makeSignalAssociation(block1, block1.getAvatarSignalFromFullName(inSignalsAtOrigin.get(i)), block2,
+            block2.getAvatarSignalFromFullName(outSignalsAtDestination.get(i)));
+        v.add(s);
+      } catch (Exception e) {
+        TraceManager.addDev("Exception: signal removed? in origin");
+        // Probably a signal has been removed
+      }
+    }
+
+    return v;
+  }
+
+  public static String makeSignalAssociation(AvatarBDBlock _block1, AvatarSignal _as1, AvatarBDBlock _block2,
+      AvatarSignal _as2) {
+    String s = _block1.getBlockName() + "." + _as1.toBasicString();
+    if (_as1.getInOut() == AvatarSignal.OUT) {
+      s += " -> ";
+    } else {
+      s += " <- ";
+    }
+    s += _block2.getBlockName() + "." + _as2.toBasicString();
+    return s;
+  }
+
+  public String getFirstSignalOfSignalAssociation(String _assoc) {
+    int index0 = _assoc.indexOf(".");
+
+    if (index0 == -1) {
+      return null;
+    }
+
+    int index1 = _assoc.indexOf("->");
+    int index2 = _assoc.indexOf("<-");
+
+    index1 = Math.max(index1, index2);
+    if (index1 == -1) {
+      return null;
+    }
+
+    return _assoc.substring(index0 + 1, index1).trim();
+  }
+
+  public String getSecondSignalOfSignalAssociation(String _assoc) {
+    int index0 = _assoc.indexOf("->");
+    int index1 = _assoc.indexOf("<-");
+
+    if ((index0 == -1) && (index1 == -1)) {
+      return null;
+    }
+
+    index0 = Math.max(index0, index1);
+    _assoc = _assoc.substring(index0 + 2, _assoc.length());
+
+    index0 = _assoc.indexOf(".");
+
+    if (index0 == -1) {
+      return null;
+    }
+
+    return _assoc.substring(index0 + 1, _assoc.length()).trim();
+  }
+
+  public void addSignal(String signal, boolean in, boolean origin) {
+    // TraceManager.addDev("Adding signal " + signal + " isIn:" + in + " origin:" +
+    // origin);
+    if (in) {
+      if (origin) {
+        inSignalsAtOrigin.add(signal);
+      } else {
+        inSignalsAtDestination.add(signal);
+      }
+    } else {
+      if (origin) {
+        outSignalsAtOrigin.add(signal);
+      } else {
+        outSignalsAtDestination.add(signal);
+      }
+    }
+
+  }
+
+  public void updateAllSignals() {
+    // TraceManager.addDev("Updating signals");
+    try {
+      Vector<String> v = getAssociationSignals();
+
+      /*
+       * for (String s: v) { TraceManager.addDev("Assoc: " + s); }
+       */
+
+      //
+      inSignalsAtOrigin.clear();
+      inSignalsAtDestination.clear();
+      outSignalsAtOrigin.clear();
+      outSignalsAtDestination.clear();
+      if (v.size() == 0) {
+        return;
+      }
+
+      AvatarBDBlock block1 = getAvatarBDBlock1();
+      AvatarBDBlock block2 = getAvatarBDBlock2();
+
+      String assoc;
+      AvatarSignal as1, as2;
+      int index;
+      for (int i = 0; i < v.size(); i++) {
+
+        assoc = v.get(i);
+        // TraceManager.addDev("assoc=" + assoc);
+        as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
+        as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
+        if ((as1 != null) && (as2 != null)) {
+          index = assoc.indexOf("->");
+          if (index > -1) {
+            outSignalsAtOrigin.add(as1.toString());
+            inSignalsAtDestination.add(as2.toString());
+          } else {
+            inSignalsAtOrigin.add(as1.toString());
+            outSignalsAtDestination.add(as2.toString());
+          }
+        } else {
+          // TraceManager.addDev("null signals: removing assoc");
         }
+      }
+    } catch (Exception e) {
+      TraceManager.addDev("Exception on connector");
+      // Probably the model is not yet fully loaded...
+    }
+  }
 
-        return _s.substring(0, index).trim();
+  // remove the parameters in the name of a signal
+  public String getShortName(String _s) {
+    int index = _s.indexOf('(');
+    if (index == -1) {
+      return _s;
     }
 
-    public boolean isAsynchronous() {
-        return asynchronous;
+    return _s.substring(0, index).trim();
+  }
+
+  public boolean isAsynchronous() {
+    return asynchronous;
+  }
+
+  public boolean isSynchronous() {
+    return synchronous;
+  }
+
+  public boolean isAMS() {
+    return AMS;
+  }
+
+  public void setAsynchronous(boolean asy) {
+    asynchronous = asy;
+  }
+
+  public void setSynchronous(boolean sy) {
+    synchronous = sy;
+  }
+
+  public void setAMS(boolean ams) {
+    AMS = ams;
+  }
+
+  public int getSizeOfFIFO() {
+    return sizeOfFIFO;
+  }
+
+  public void setSizeOfFIFO(int size) {
+    sizeOfFIFO = size;
+  }
+
+  public boolean isBlocking() {
+    return blockingFIFO;
+  }
+
+  public void setBlocking(boolean b) {
+    blockingFIFO = b;
+  }
+
+  public boolean isPrivate() {
+    return isPrivate;
+  }
+
+  public void setPrivate(boolean pr) {
+    isPrivate = pr;
+  }
+
+  public boolean isBroadcast() {
+    return isBroadcast;
+  }
+
+  public boolean isLossy() {
+    return isLossy;
+  }
+
+  public String getChannelName() {
+    String sig1 = "";
+    String sig2 = "";
+    if (inSignalsAtOrigin.size() > 0) {
+      sig1 = inSignalsAtOrigin.get(0);
+    } else if (outSignalsAtOrigin.size() > 0) {
+      sig1 = outSignalsAtOrigin.get(0);
+    }
+    if (outSignalsAtDestination.size() > 0) {
+      sig2 = outSignalsAtDestination.get(0);
+    } else if (inSignalsAtDestination.size() > 0) {
+      sig2 = inSignalsAtDestination.get(0);
     }
 
-    public boolean isSynchronous() {
-        return synchronous;
+    String b1 = "";
+    String b2 = "";
+    AvatarBDBlock b = getAvatarBDBlock1();
+    if (b != null) {
+      b1 = b.getBlockName();
+    }
+    b = getAvatarBDBlock2();
+    if (b != null) {
+      b2 = b.getBlockName();
     }
 
-    public boolean isAMS() {
-        return AMS;
-    }
-
-    public void setAsynchronous(boolean asy) {
-        asynchronous = asy;
-    }
-
-    public void setSynchronous(boolean sy) {
-        synchronous = sy;
-    }
-
-    public void setAMS(boolean ams) {
-        AMS = ams;
-    }
-
-    public int getSizeOfFIFO() {
-        return sizeOfFIFO;
-    }
-
-    public void setSizeOfFIFO(int size) {
-        sizeOfFIFO = size;
-    }
-
-    public boolean isBlocking() {
-        return blockingFIFO;
-    }
-
-    public void setBlocking(boolean b) {
-        blockingFIFO = b;
-    }
-
-    public boolean isPrivate() {
-        return isPrivate;
-    }
-
-    public void setPrivate(boolean pr) {
-        isPrivate = pr;
-    }
-
-    public boolean isBroadcast() {
-        return isBroadcast;
-    }
-
-    public boolean isLossy() {
-        return isLossy;
-    }
-
-    public String getChannelName() {
-        String sig1 = "";
-        String sig2 = "";
-        if (inSignalsAtOrigin.size() > 0) {
-            sig1 = inSignalsAtOrigin.get(0);
-        } else if (outSignalsAtOrigin.size() > 0) {
-            sig1 = outSignalsAtOrigin.get(0);
-        }
-        if (outSignalsAtDestination.size() > 0) {
-            sig2 = outSignalsAtDestination.get(0);
-        } else if (inSignalsAtDestination.size() > 0) {
-            sig2 = inSignalsAtDestination.get(0);
-        }
-
-        String b1 = "";
-        String b2 = "";
-        AvatarBDBlock b = getAvatarBDBlock1();
-        if (b != null) {
-            b1 = b.getBlockName();
-        }
-        b = getAvatarBDBlock2();
-        if (b != null) {
-            b2 = b.getBlockName();
-        }
-
-        return b1 + "/" + sig1 + " #--# " + b2 + "/" + sig2;
-    }
+    return b1 + "/" + sig1 + " #--# " + b2 + "/" + sig2;
+  }
 }

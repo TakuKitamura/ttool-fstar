@@ -38,7 +38,6 @@
 
 package ui.ucd;
 
-
 import myutil.TraceManager;
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -46,73 +45,73 @@ import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointUCD
- * Definition of connecting points on which connectors of use case diagrams can be connected
- * Creation: 18/02/2005
+ * Class TGConnectingPointUCD Definition of connecting points on which
+ * connectors of use case diagrams can be connected Creation: 18/02/2005
+ * 
  * @version 1.0 18/02/2005
  * @version 2.0 14/01/2021
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
+public class TGConnectingPointUCD extends TGConnectingPointWidthHeight {
 
-	public TGConnectingPointUCD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
-	
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) ||(type == TGComponentManager.CONNECTOR_INCLUDE_UCD) ||
-                (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
-            //
-            return true;
-        }
-        //
+  public TGConnectingPointUCD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) || (type == TGComponentManager.CONNECTOR_INCLUDE_UCD)
+        || (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
+      //
+      return true;
+    }
+    //
+    return false;
+  }
+
+  public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+
+    // TraceManager.addDev("NEW is compatible with " + outPoint);
+
+    if (outPoint != null) {
+      if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase)
+          && (type == TGComponentManager.CONNECTOR_ACTOR_UCD)) {
         return false;
-    }
+      }
+      if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {
+        return false;
+      }
 
-    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+      if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActorBox)) {
+        return false;
+      }
 
-	    //TraceManager.addDev("NEW is compatible with "  + outPoint);
+      if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActorBox)) {
+        return false;
+      }
 
-	    if (outPoint != null) {
-	        if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase) && (type == TGComponentManager.CONNECTOR_ACTOR_UCD)) {
-	            return false;
-            }
-            if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {
-                return false;
-            }
+      if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActor)) {
+        return false;
+      }
 
-            if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActorBox)) {
-                return false;
-            }
+      if ((outPoint.getFather() == getFather()) && (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
+        return false;
+      }
 
-            if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActorBox)) {
-                return false;
-            }
+      if ((outPoint.getFather() == getFather()) && (type == TGComponentManager.CONNECTOR_SPECIA_UCD)) {
+        return false;
+      }
 
-            if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActor)) {
-                return false;
-            }
-
-            if ((outPoint.getFather() == getFather()) && (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
-                return false;
-            }
-
-            if ((outPoint.getFather() == getFather()) && (type == TGComponentManager.CONNECTOR_SPECIA_UCD)) {
-                return false;
-            }
-
-            if ((outPoint.getFather() instanceof UCDActor)  && (type == TGComponentManager.CONNECTOR_SPECIA_UCD) && !((getFather() instanceof UCDActor))) {
-                return false;
-            }
-
-        }
-
-	    return isCompatibleWith(type);
-
+      if ((outPoint.getFather() instanceof UCDActor) && (type == TGComponentManager.CONNECTOR_SPECIA_UCD)
+          && !((getFather() instanceof UCDActor))) {
+        return false;
+      }
 
     }
 
+    return isCompatibleWith(type);
+
+  }
 
 }

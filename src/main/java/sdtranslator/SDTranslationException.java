@@ -36,26 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sdtranslator;
 
-
 /**
- * Class SDTranslationException
- * Creation: 17/08/2004
- * version 1.0 17/08/2004
+ * Class SDTranslationException Creation: 17/08/2004 version 1.0 17/08/2004
+ * 
  * @author Ludovic APVRILLE
  */
-public	class SDTranslationException extends Exception {
-    
-    public SDTranslationException() {
-        super("SD does not follows the restricted format");
-    }
-    
-    public SDTranslationException(String msg) {
-        super("SD does not follows the restricted format: " + msg);
-    }
-    
+public class SDTranslationException extends Exception {
+
+  public SDTranslationException() {
+    super("SD does not follows the restricted format");
+  }
+
+  public SDTranslationException(String msg) {
+    super("SD does not follows the restricted format: " + msg);
+  }
+
 } // Class

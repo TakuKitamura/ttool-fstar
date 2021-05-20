@@ -36,197 +36,163 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
- 
-
 
 /**
- * Class RelativeTimeConstraintTClass
- * Creation: 07/09/2004
+ * Class RelativeTimeConstraintTClass Creation: 07/09/2004
+ * 
  * @version 1.0 07/09/2004
  * @version 1.1 25/05/2007
  * @author Ludovic APVRILLE
  */
-public  class RelativeTimeConstraintTClass extends TimeConstraintTClass {
-    
-    public RelativeTimeConstraintTClass(String name, int time1, int time2) {
-	super(name, time1, time2);
-    }
-      
-    protected void makeActivityDiagram(int time1, int time2) {
-		
-		// External gates
-		g1 = new Gate("go_tc", Gate.GATE, false);
-        g2 = new Gate("check_tc", Gate.GATE, false);
-        g3 = new Gate("end_tc", Gate.GATE, false);
-        g4 = new Gate("expire_tc", Gate.GATE, false);
-        
-        addGate(g1);
-        addGate(g2);
-        addGate(g3);
-		addGate(g4);
-		
-		// Internal gates
-        
-		Gate go = new Gate("go", Gate.GATE, false);
-		Gate end = new Gate("end", Gate.GATE, false);
-		addGate(go);
-		addGate(end);
-        
-        ADStart ads = new ADStart();
-        ActivityDiagram ad = new ActivityDiagram(ads);
-        setActivityDiagram(ad);
-        
-        // Building components
-		
-		ADParallel adp = new ADParallel();
-		adp.setValueGate("[go, end]");
-		
-		// left branch
-        ADJunction adj1 = new ADJunction();
-        ADActionStateWithGate adg1 = new ADActionStateWithGate(g1);
-		ADActionStateWithGate adg2 = new ADActionStateWithGate(go);
-        ADDelay add1 = new ADDelay();
-        add1.setValue(""+time1);
-		ADTLO adtlo1 = new ADTLO(g2);
-		adtlo1.setLatency("0");
-		adtlo1.setDelay(""+(time2-time1));
-		ADStop adstop1 = new ADStop();
-		ADActionStateWithGate adg3 = new ADActionStateWithGate(g3);
-		ADActionStateWithGate adg4 = new ADActionStateWithGate(end);
-        
-        // right branch
-		ADJunction adj2 = new ADJunction();
-		ADActionStateWithGate adg5 = new ADActionStateWithGate(go);
-		ADChoice adch = new ADChoice();
-		ADActionStateWithGate adg6 = new ADActionStateWithGate(end);
-		ADDelay add2 = new ADDelay();
-        add2.setValue(""+time2);
-		ADActionStateWithGate adg7 = new ADActionStateWithGate(g4);
-		adg7.setActionValue("{0}");
-		ADStop adstop2 = new ADStop();
-        
-        // Connecting components
-        ads.addNext(adp);
-		adp.addNext(adj1);
-		adp.addNext(adj2);
-		
-		adj1.addNext(adg1);  
-		adg1.addNext(adg2);
-		adg2.addNext(add1);
-		add1.addNext(adtlo1);
-		adtlo1.addNext(adg3);
-		adtlo1.addNext(adstop1);
-		adg3.addNext(adg4);
-		adg4.addNext(adj1);
-		
-		adj2.addNext(adg5);  
-		adg5.addNext(adch);
-		adch.addNext(adg6);
-		adg6.addNext(adj2);
-		adch.addNext(add2);
-		add2.addNext(adg7);
-		adg7.addNext(adstop2);
-		
-        // adding components
-        ad.add(adp);
-		ad.add(adj1);
-		ad.add(adj2);
-		ad.add(adg1);
-		ad.add(adg2);
-		ad.add(adg3);
-		ad.add(adg4);
-		ad.add(adg5);
-		ad.add(adg6);
-		ad.add(adg7);
-		ad.add(adtlo1);
-		ad.add(add1);
-		ad.add(add2);
-		ad.add(adstop1);
-		ad.add(adstop2);
-		ad.add(adch);
+public class RelativeTimeConstraintTClass extends TimeConstraintTClass {
 
-		
-        
-        //
-        
-        /*// Gates
-        g1 = new Gate("begin_tc", Gate.GATE, false);
-        g2 = new Gate("go_tc", Gate.GATE, false);
-        g3 = new Gate("end_tc", Gate.GATE, false);
-        g4 = g3;
-        
-        addGate(g1);
-        addGate(g2);
-        addGate(g3);
-        
-        // Counter
-        cpt = addParameterGenerateName("cpt", Param.NAT, "0");
-        
-        ADStart ads = new ADStart();
-        ActivityDiagram ad = new ActivityDiagram(ads);
-        
-        setActivityDiagram(ad);
-        
-        // Building components
-        
-        ADJunction adj = new ADJunction();
-        
-        ADActionStateWithGate adbegin = new ADActionStateWithGate(g1);
-        adbegin.setActionValue("!cpt");
-        
-        ADDelay add1 = new ADDelay();
-        add1.setValue(""+time1);
-        
-        ADLatency adlat = new ADLatency();
-        adlat.setValue(""+(time2-time1));
-        
-        ADDelay add2 = new ADDelay();
-        add2.setValue(""+time1); 
-        
-        ADParallel adp = new ADParallel();
-        adp.setValueGate("[]");
-        
-        ADActionStateWithGate adgo = new ADActionStateWithGate(g2);
-        adgo.setActionValue("{" + (time2-time1) + "}!cpt");
-        
-        ADActionStateWithGate adend = new ADActionStateWithGate(g3);
-        adend.setActionValue("{" + (time2-time1) + "}!cpt");
-        
-        ADStop ads1 = new ADStop();
-        ADStop ads2 = new ADStop();
-        
-        ADActionStateWithParam adincrement = new ADActionStateWithParam(cpt);
-        adincrement.setActionValue(cpt.getName() + "+1");
-        
-        // Connecting components
-        ads.addNext(adj);
-        adj.addNext(adbegin);
-        adbegin.addNext(adp);
-        adp.addNext(add1);
-        adp.addNext(add2);
-        adp.addNext(adincrement);
-        add1.addNext(adlat);
-        adlat.addNext(adgo);
-        add2.addNext(adend);
-        adgo.addNext(ads1);
-        adend.addNext(ads2);
-        adincrement.addNext(adj);
- 
-        // adding components
-        ad.add(adj);
-        ad.add(adbegin);
-        ad.add(add1);
-        ad.add(adlat);
-        ad.add(add2);
-        ad.add(adincrement);
-        ad.add(adp);
-        ad.add(adgo);
-        ad.add(adend);
-        ad.add(ads1);
-        ad.add(ads2);*/
-    }
-}  
+  public RelativeTimeConstraintTClass(String name, int time1, int time2) {
+    super(name, time1, time2);
+  }
+
+  protected void makeActivityDiagram(int time1, int time2) {
+
+    // External gates
+    g1 = new Gate("go_tc", Gate.GATE, false);
+    g2 = new Gate("check_tc", Gate.GATE, false);
+    g3 = new Gate("end_tc", Gate.GATE, false);
+    g4 = new Gate("expire_tc", Gate.GATE, false);
+
+    addGate(g1);
+    addGate(g2);
+    addGate(g3);
+    addGate(g4);
+
+    // Internal gates
+
+    Gate go = new Gate("go", Gate.GATE, false);
+    Gate end = new Gate("end", Gate.GATE, false);
+    addGate(go);
+    addGate(end);
+
+    ADStart ads = new ADStart();
+    ActivityDiagram ad = new ActivityDiagram(ads);
+    setActivityDiagram(ad);
+
+    // Building components
+
+    ADParallel adp = new ADParallel();
+    adp.setValueGate("[go, end]");
+
+    // left branch
+    ADJunction adj1 = new ADJunction();
+    ADActionStateWithGate adg1 = new ADActionStateWithGate(g1);
+    ADActionStateWithGate adg2 = new ADActionStateWithGate(go);
+    ADDelay add1 = new ADDelay();
+    add1.setValue("" + time1);
+    ADTLO adtlo1 = new ADTLO(g2);
+    adtlo1.setLatency("0");
+    adtlo1.setDelay("" + (time2 - time1));
+    ADStop adstop1 = new ADStop();
+    ADActionStateWithGate adg3 = new ADActionStateWithGate(g3);
+    ADActionStateWithGate adg4 = new ADActionStateWithGate(end);
+
+    // right branch
+    ADJunction adj2 = new ADJunction();
+    ADActionStateWithGate adg5 = new ADActionStateWithGate(go);
+    ADChoice adch = new ADChoice();
+    ADActionStateWithGate adg6 = new ADActionStateWithGate(end);
+    ADDelay add2 = new ADDelay();
+    add2.setValue("" + time2);
+    ADActionStateWithGate adg7 = new ADActionStateWithGate(g4);
+    adg7.setActionValue("{0}");
+    ADStop adstop2 = new ADStop();
+
+    // Connecting components
+    ads.addNext(adp);
+    adp.addNext(adj1);
+    adp.addNext(adj2);
+
+    adj1.addNext(adg1);
+    adg1.addNext(adg2);
+    adg2.addNext(add1);
+    add1.addNext(adtlo1);
+    adtlo1.addNext(adg3);
+    adtlo1.addNext(adstop1);
+    adg3.addNext(adg4);
+    adg4.addNext(adj1);
+
+    adj2.addNext(adg5);
+    adg5.addNext(adch);
+    adch.addNext(adg6);
+    adg6.addNext(adj2);
+    adch.addNext(add2);
+    add2.addNext(adg7);
+    adg7.addNext(adstop2);
+
+    // adding components
+    ad.add(adp);
+    ad.add(adj1);
+    ad.add(adj2);
+    ad.add(adg1);
+    ad.add(adg2);
+    ad.add(adg3);
+    ad.add(adg4);
+    ad.add(adg5);
+    ad.add(adg6);
+    ad.add(adg7);
+    ad.add(adtlo1);
+    ad.add(add1);
+    ad.add(add2);
+    ad.add(adstop1);
+    ad.add(adstop2);
+    ad.add(adch);
+
+    //
+
+    /*
+     * // Gates g1 = new Gate("begin_tc", Gate.GATE, false); g2 = new Gate("go_tc",
+     * Gate.GATE, false); g3 = new Gate("end_tc", Gate.GATE, false); g4 = g3;
+     * 
+     * addGate(g1); addGate(g2); addGate(g3);
+     * 
+     * // Counter cpt = addParameterGenerateName("cpt", Param.NAT, "0");
+     * 
+     * ADStart ads = new ADStart(); ActivityDiagram ad = new ActivityDiagram(ads);
+     * 
+     * setActivityDiagram(ad);
+     * 
+     * // Building components
+     * 
+     * ADJunction adj = new ADJunction();
+     * 
+     * ADActionStateWithGate adbegin = new ADActionStateWithGate(g1);
+     * adbegin.setActionValue("!cpt");
+     * 
+     * ADDelay add1 = new ADDelay(); add1.setValue(""+time1);
+     * 
+     * ADLatency adlat = new ADLatency(); adlat.setValue(""+(time2-time1));
+     * 
+     * ADDelay add2 = new ADDelay(); add2.setValue(""+time1);
+     * 
+     * ADParallel adp = new ADParallel(); adp.setValueGate("[]");
+     * 
+     * ADActionStateWithGate adgo = new ADActionStateWithGate(g2);
+     * adgo.setActionValue("{" + (time2-time1) + "}!cpt");
+     * 
+     * ADActionStateWithGate adend = new ADActionStateWithGate(g3);
+     * adend.setActionValue("{" + (time2-time1) + "}!cpt");
+     * 
+     * ADStop ads1 = new ADStop(); ADStop ads2 = new ADStop();
+     * 
+     * ADActionStateWithParam adincrement = new ADActionStateWithParam(cpt);
+     * adincrement.setActionValue(cpt.getName() + "+1");
+     * 
+     * // Connecting components ads.addNext(adj); adj.addNext(adbegin);
+     * adbegin.addNext(adp); adp.addNext(add1); adp.addNext(add2);
+     * adp.addNext(adincrement); add1.addNext(adlat); adlat.addNext(adgo);
+     * add2.addNext(adend); adgo.addNext(ads1); adend.addNext(ads2);
+     * adincrement.addNext(adj);
+     * 
+     * // adding components ad.add(adj); ad.add(adbegin); ad.add(add1);
+     * ad.add(adlat); ad.add(add2); ad.add(adincrement); ad.add(adp); ad.add(adgo);
+     * ad.add(adend); ad.add(ads1); ad.add(ads2);
+     */
+  }
+}

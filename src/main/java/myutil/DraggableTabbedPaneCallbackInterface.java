@@ -36,16 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package myutil;
 
 /**
- * interface DraggableTabbedPaneCallbackInterface
- * Creation: 21/02/2019
- * Version 2.0 21/02/2019
+ * interface DraggableTabbedPaneCallbackInterface Creation: 21/02/2019 Version
+ * 2.0 21/02/2019
+ * 
  * @author Ludovic APVRILLE
  */
 public interface DraggableTabbedPaneCallbackInterface {
-	public void hasBeenDragged(int initialPosition, int destinationPosition);
+  public void hasBeenDragged(int initialPosition, int destinationPosition);
 
 }

@@ -36,44 +36,39 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
 /**
- * Class ArtifactTClassGate
- * Data struture with 3 strings : artifact, tclass, gate
- * Creation: 18/12/2003
+ * Class ArtifactTClassGate Data struture with 3 strings : artifact, tclass,
+ * gate Creation: 18/12/2003
+ * 
  * @version 1.0 18/12/2003
  * @author Ludovic APVRILLE
  */
 public class ArtifactTClassGate implements Comparable {
-    
-    public String art, tcl, gat; 
-    
-    public ArtifactTClassGate(String _art, String _tcl, String _gat) {
-        art = _art;
-        tcl = _tcl;
-        gat = _gat;
+
+  public String art, tcl, gat;
+
+  public ArtifactTClassGate(String _art, String _tcl, String _gat) {
+    art = _art;
+    tcl = _tcl;
+    gat = _gat;
+  }
+
+  public int compareTo(Object o) {
+    if (!(o instanceof ArtifactTClassGate)) {
+      return -1;
     }
-    
-    public int compareTo(Object o) {
-        if (!(o instanceof ArtifactTClassGate)) {
-            return -1;
-        }
-        
-        ArtifactTClassGate atg = (ArtifactTClassGate)o;
-        if ((atg.art.compareTo(art) == 0) && (atg.tcl.compareTo(tcl) == 0) && (atg.gat.compareTo(gat) == 0)) {
-            return 0;
-        }
-        
-        return -1;
+
+    ArtifactTClassGate atg = (ArtifactTClassGate) o;
+    if ((atg.art.compareTo(art) == 0) && (atg.tcl.compareTo(tcl) == 0) && (atg.gat.compareTo(gat) == 0)) {
+      return 0;
     }
-    
-    public String toString() {
-        return art + "." + tcl + "." + gat;
-    }
+
+    return -1;
+  }
+
+  public String toString() {
+    return art + "." + tcl + "." + gat;
+  }
 }

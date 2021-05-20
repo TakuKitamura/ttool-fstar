@@ -36,45 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
- 
 
 /**
- * Class ADLatency
- * Creation: 11/12/2003
+ * Class ADLatency Creation: 11/12/2003
+ * 
  * @version 1.0 11/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADLatency extends ADComponent {
-    protected String value;
-	
-    public ADLatency() {
-		nbNext = 1;
-    }
-    
-    public void setValue(String s) {
-	 	value = s;   
-    }
-    
-    public String getValue() {
-	 	return value;
-    }
-    
-    public ADComponent makeSame() {
-      ADLatency adl = new ADLatency();
-      adl.setValue(getValue());
-      return adl;
-    }
-    
-     public String toString() {
-	 	return "Latency (" + value + ")";
-    }
-    
+  protected String value;
+
+  public ADLatency() {
+    nbNext = 1;
+  }
+
+  public void setValue(String s) {
+    value = s;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public ADComponent makeSame() {
+    ADLatency adl = new ADLatency();
+    adl.setValue(getValue());
+    return adl;
+  }
+
+  public String toString() {
+    return "Latency (" + value + ")";
+  }
+
 }
-    

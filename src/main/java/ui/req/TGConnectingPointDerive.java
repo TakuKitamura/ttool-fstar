@@ -43,37 +43,38 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointDerive
- * Definition of connecting points on which connectors between requirements may be connected
- * Creation: 30/05/2006
+ * Class TGConnectingPointDerive Definition of connecting points on which
+ * connectors between requirements may be connected Creation: 30/05/2006
+ * 
  * @version 1.0 30/05/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointDerive extends  TGConnectingPointWidthHeight {
-    
-    public TGConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
+public class TGConnectingPointDerive extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h,
+      int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {
+      //
+      return true;
     }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {
-            //
-            return true;
-        }
-		
-		if (type == TGComponentManager.CONNECTOR_COMPOSITION_REQ) {
-            //
-            return true;
-        }
-		
-		if (type == TGComponentManager.CONNECTOR_COPY_REQ) {
-            //
-            return true;
-        }
-        //
-        return false;
+
+    if (type == TGComponentManager.CONNECTOR_COMPOSITION_REQ) {
+      //
+      return true;
     }
+
+    if (type == TGComponentManager.CONNECTOR_COPY_REQ) {
+      //
+      return true;
+    }
+    //
+    return false;
+  }
 }

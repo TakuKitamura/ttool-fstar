@@ -38,40 +38,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
-
 package ddtranslatorSoclib;
 
-public class AvatarICU extends AvatarComponent{
- 
-    private String ICUName ; 
-    private  int index ;
-    private int nbIRQ;
-    
-    public AvatarICU(String _ICUName,int _index, int _nbIRQ){
+public class AvatarICU extends AvatarComponent {
 
-      ICUName = _ICUName;
-      index = _index;
-      nbIRQ = _nbIRQ;
+  private String ICUName;
+  private int index;
+  private int nbIRQ;
 
-    }
-	String	getICUName(){
-	return ICUName;
-	}
+  public AvatarICU(String _ICUName, int _index, int _nbIRQ) {
 
-	int getIndex(){
-	return index;
-	}
+    ICUName = _ICUName;
+    index = _index;
+    nbIRQ = _nbIRQ;
 
-	int getNbIRQ(){
-	return nbIRQ;
-	}
+  }
+
+  String getICUName() {
+    return ICUName;
+  }
+
+  int getIndex() {
+    return index;
+  }
+
+  int getNbIRQ() {
+    return nbIRQ;
+  }
 
 }
- 

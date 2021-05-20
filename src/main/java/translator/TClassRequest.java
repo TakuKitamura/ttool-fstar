@@ -36,288 +36,263 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
 
 /**
- * Class TClassRequest
- * Creation: 01/12/2005
+ * Class TClassRequest Creation: 01/12/2005
+ * 
  * @version 1.0 01/12/2005
  * @author Ludovic APVRILLE
  */
-public class TClassRequest extends TClass implements FIFOTClass{
-    
-    private int nbPara;
-    private LinkedList<Gate> sendReqGates;
-    private LinkedList<Gate> waitGates;
-    private int counterW, counterR;
-    private String requestName;
-    
-    public TClassRequest(String name, String _requestName, int _nbPara) {
-      super(name, true);
-      nbPara = _nbPara;
-      sendReqGates = new LinkedList<>();
-      waitGates = new LinkedList<>();
-      requestName = _requestName;
-    }
-    
-    public int getNbPara() {
-        return nbPara;
-    }
+public class TClassRequest extends TClass implements FIFOTClass {
 
-    public Gate getGateWrite() {
-        return sendReqGates.get(0);
-    }
-    
-    public Gate getGateRead() {
-        return waitGates.get(0);
-    }
-    
-    public LinkedList<Gate> getGatesWrite() {
-        return sendReqGates;
-    }
-	
-	public Gate getGateWrite(String endingName) {
-		Gate g;
-		endingName = "__" + endingName;
-		
-		for(int i=0; i<sendReqGates.size(); i++) {
-			g = sendReqGates.get(i);
-			if (g.getName().endsWith(endingName)) {
-				return g;
-			}
-		}
-		
-		return null;
-	}
-    
-    public LinkedList<Gate> getGatesRead() {
-        return waitGates;
-    }
-    
-    public Gate addWriteGate() {
-           Gate g;
-           if (counterW == 0) {
-              g = addNewGateIfApplicable("sendReq__" + requestName + counterW);
-           } else {
-             g = addNewGateIfApplicable("sendReq__" + requestName + counterW);
-           }
-           sendReqGates.add(g);
-           counterW ++;
-           return g;
-    }
-	
-	public Gate addWriteGate(String name) {
-           Gate g;
-           g = addNewGateIfApplicable("sendReq__" + requestName + "__" + name);
-           sendReqGates.add(g);
-           return g;
+  private int nbPara;
+  private LinkedList<Gate> sendReqGates;
+  private LinkedList<Gate> waitGates;
+  private int counterW, counterR;
+  private String requestName;
+
+  public TClassRequest(String name, String _requestName, int _nbPara) {
+    super(name, true);
+    nbPara = _nbPara;
+    sendReqGates = new LinkedList<>();
+    waitGates = new LinkedList<>();
+    requestName = _requestName;
+  }
+
+  public int getNbPara() {
+    return nbPara;
+  }
+
+  public Gate getGateWrite() {
+    return sendReqGates.get(0);
+  }
+
+  public Gate getGateRead() {
+    return waitGates.get(0);
+  }
+
+  public LinkedList<Gate> getGatesWrite() {
+    return sendReqGates;
+  }
+
+  public Gate getGateWrite(String endingName) {
+    Gate g;
+    endingName = "__" + endingName;
+
+    for (int i = 0; i < sendReqGates.size(); i++) {
+      g = sendReqGates.get(i);
+      if (g.getName().endsWith(endingName)) {
+        return g;
+      }
     }
 
-    public Gate addReadGate() {
-           Gate g ;
-           if (counterR == 0) {
-           g = addNewGateIfApplicable("waitReq__" + requestName);
-           } else {
-             g = addNewGateIfApplicable("waitReq__" + requestName + counterR);
-           }
-           waitGates.add(g);
-           counterR ++;
-           return g;
+    return null;
+  }
+
+  public LinkedList<Gate> getGatesRead() {
+    return waitGates;
+  }
+
+  public Gate addWriteGate() {
+    Gate g;
+    if (counterW == 0) {
+      g = addNewGateIfApplicable("sendReq__" + requestName + counterW);
+    } else {
+      g = addNewGateIfApplicable("sendReq__" + requestName + counterW);
+    }
+    sendReqGates.add(g);
+    counterW++;
+    return g;
+  }
+
+  public Gate addWriteGate(String name) {
+    Gate g;
+    g = addNewGateIfApplicable("sendReq__" + requestName + "__" + name);
+    sendReqGates.add(g);
+    return g;
+  }
+
+  public Gate addReadGate() {
+    Gate g;
+    if (counterR == 0) {
+      g = addNewGateIfApplicable("waitReq__" + requestName);
+    } else {
+      g = addNewGateIfApplicable("waitReq__" + requestName + counterR);
+    }
+    waitGates.add(g);
+    counterR++;
+    return g;
+  }
+
+  public void makeTClass() {
+    //
+
+    Gate forward, g;
+    ADActionStateWithGate adag, adag1, adag2;
+    ADActionStateWithParam adac1, adac2;
+    ADParallel adpar1, adpar2;
+    ADStop adstop;
+    ADJunction adj1, adj2, adj3, adj4;
+    ADChoice adch1, adch2;
+    Param p1, p2, p3, n;
+    String value;
+    int i;
+    ListIterator iterator;
+    String action;
+
+    ActivityDiagram ad = new ActivityDiagram();
+    setActivityDiagram(ad);
+
+    // Case where not input or output requests...
+    if ((sendReqGates.size() == 0) || (waitGates.size() == 0)) {
+      adstop = new ADStop();
+      ad.add(adstop);
+      ad.getStartState().addNext(adstop);
+      return;
     }
 
-    public void makeTClass() {
-        //
-        
+    Param[] params_a = new Param[nbPara];
 
-        Gate forward, g;
-        ADActionStateWithGate adag, adag1, adag2;
-        ADActionStateWithParam adac1, adac2;
-        ADParallel adpar1, adpar2;
-        ADStop adstop;
-        ADJunction adj1, adj2, adj3, adj4;
-        ADChoice adch1, adch2;
-        Param p1, p2, p3, n;
-        String value;
-        int i;
-        ListIterator iterator;
-        String action;
-
-        ActivityDiagram ad = new ActivityDiagram();
-        setActivityDiagram(ad);
-        
-        // Case where not input or output requests...
-        if ((sendReqGates.size() == 0) || (waitGates.size() == 0)) {
-           adstop = new ADStop();
-           ad.add(adstop);
-           ad.getStartState().addNext(adstop);
-           return;
-        }
-
-        Param [] params_a = new Param[nbPara];
-		
-		for(i=0; i<nbPara; i++) {
-			params_a[i] = new Param("pa" + i, Param.NAT, "0");
-			addParameter(params_a[i]);
-		}
-        
-        n = new Param("n", Param.NAT, "0");
-        addParameter(n);
-        
-        forward = addNewGateIfApplicable("forward");
-        
-        adpar1 = new ADParallel();
-        adpar1.setValueGate("[forward]");
-        ad.add(adpar1);
-        ad.getStartState().addNext(adpar1);
-
-        // Left branch of the main parallel
-        adj1 = new ADJunction();
-        ad.add(adj1);
-        adpar1.addNext(adj1);
-
-        adch1 = new ADChoice();
-        ad.add(adch1);
-        adj1.addNext(adch1);
-
-        // Requests "in"
-        adj2 = new ADJunction();
-        ad.add(adj2);
-        iterator = sendReqGates.listIterator();
-        while(iterator.hasNext()) {
-          g = (Gate)(iterator.next());
-          adag = new ADActionStateWithGate(g);
-          ad.add(adag);
-          action = "";
-          for(i=0; i<nbPara; i++) {
-            action += "?pa" + i + ":nat";
-          }
-          adag.setActionValue(action);
-          adch1.addNext(adag);
-          adch1.addGuard("[]");
-          adag.addNext(adj2);
-        }
-
-        adpar2 = new ADParallel();
-        ad.add(adpar2);
-        adj2.addNext(adpar2);
-
-        adac1 = new ADActionStateWithParam(n);
-        ad.add(adac1);
-        adac1.setActionValue("n+1");
-        adpar2.addNext(adac1);
-        adac1.addNext(adj1);
-
-        adag1 = new ADActionStateWithGate(forward);
-        ad.add(adag1);
-        action = "";
-        for(i=0; i<nbPara; i++) {
-          action += "!pa" + i;
-        }
-        action += "!n";
-        adag1.setActionValue(action);
-        adpar2.addNext(adag1);
-        
-        adstop = new ADStop();
-        ad.add(adstop);
-        adag1.addNext(adstop);
-        
-        // Right branch of the main parallel
-        adj3 = new ADJunction();
-        ad.add(adj3);
-        adpar1.addNext(adj3);
-
-        adag2 = new ADActionStateWithGate(forward);
-        ad.add(adag2);
-        action = "";
-        for(i=0; i<nbPara; i++) {
-          action += "?pa" + i + ":nat";
-        }
-        action += "!n";
-        adag2.setActionValue(action);
-        adj3.addNext(adag2);
-        
-        adch2 = new ADChoice();
-        ad.add(adch2);
-        adag2.addNext(adch2);
-        
-        adj4 = new ADJunction();
-        ad.add(adj4);
-
-        // Requests "out"
-        
-        iterator = waitGates.listIterator();
-        while(iterator.hasNext()) {
-          g = (Gate)(iterator.next());
-          adag = new ADActionStateWithGate(g);
-          ad.add(adag);
-          action = "";
-          for(i=0; i<nbPara; i++) {
-            action += "!pa" + i;
-          }
-          adag.setActionValue(action);
-          adch2.addNext(adag);
-          adch2.addGuard("[]");
-          adag.addNext(adj4);
-        }
-        
-        adac2 = new ADActionStateWithParam(n);
-        ad.add(adac2);
-        adac2.setActionValue("n+1");
-        adj4.addNext(adac2);
-        adac2.addNext(adj3);
-
-
-
-
-
-
-
-        //wait = addNewGateIfApplicable("wait");
-        //sendReq = addNewGateIfApplicable("sendReq");
-
-        //sendReqGates.add(sendReq);
-        //waitGates.add(wait);
-
-        /*adj = new ADJunction();
-        ad.getStartState().addNext(adj);
-        ad.add(adj);
-
-        acsend = new ADActionStateWithGate(sendReq);
-        adj.addNext(acsend);
-        ad.add(acsend);
-        value = "";
-        for(i=0; i<nbPara; i++) {
-            value = value + "?p" + (i+1) + ":nat";
-        }
-        acsend.setActionValue(value);
-
-        adpar = new ADParallel();
-        adpar.setValueGate("[]");
-        acsend.addNext(adpar);
-        ad.add(adpar);
-        adpar.addNext(adj);
-
-
-
-        acwait = new ADActionStateWithGate(wait);
-        value = "";
-        for(i=0; i<nbPara; i++) {
-            value = value + "!p" + (i+1);
-        }
-        acwait.setActionValue(value);
-        ad.add(acwait);
-        adpar.addNext(acwait);
-
-        adstop = new ADStop();
-        acwait.addNext(adstop);
-        ad.add(adstop);
-
-        setActivityDiagram(ad);*/
+    for (i = 0; i < nbPara; i++) {
+      params_a[i] = new Param("pa" + i, Param.NAT, "0");
+      addParameter(params_a[i]);
     }
+
+    n = new Param("n", Param.NAT, "0");
+    addParameter(n);
+
+    forward = addNewGateIfApplicable("forward");
+
+    adpar1 = new ADParallel();
+    adpar1.setValueGate("[forward]");
+    ad.add(adpar1);
+    ad.getStartState().addNext(adpar1);
+
+    // Left branch of the main parallel
+    adj1 = new ADJunction();
+    ad.add(adj1);
+    adpar1.addNext(adj1);
+
+    adch1 = new ADChoice();
+    ad.add(adch1);
+    adj1.addNext(adch1);
+
+    // Requests "in"
+    adj2 = new ADJunction();
+    ad.add(adj2);
+    iterator = sendReqGates.listIterator();
+    while (iterator.hasNext()) {
+      g = (Gate) (iterator.next());
+      adag = new ADActionStateWithGate(g);
+      ad.add(adag);
+      action = "";
+      for (i = 0; i < nbPara; i++) {
+        action += "?pa" + i + ":nat";
+      }
+      adag.setActionValue(action);
+      adch1.addNext(adag);
+      adch1.addGuard("[]");
+      adag.addNext(adj2);
+    }
+
+    adpar2 = new ADParallel();
+    ad.add(adpar2);
+    adj2.addNext(adpar2);
+
+    adac1 = new ADActionStateWithParam(n);
+    ad.add(adac1);
+    adac1.setActionValue("n+1");
+    adpar2.addNext(adac1);
+    adac1.addNext(adj1);
+
+    adag1 = new ADActionStateWithGate(forward);
+    ad.add(adag1);
+    action = "";
+    for (i = 0; i < nbPara; i++) {
+      action += "!pa" + i;
+    }
+    action += "!n";
+    adag1.setActionValue(action);
+    adpar2.addNext(adag1);
+
+    adstop = new ADStop();
+    ad.add(adstop);
+    adag1.addNext(adstop);
+
+    // Right branch of the main parallel
+    adj3 = new ADJunction();
+    ad.add(adj3);
+    adpar1.addNext(adj3);
+
+    adag2 = new ADActionStateWithGate(forward);
+    ad.add(adag2);
+    action = "";
+    for (i = 0; i < nbPara; i++) {
+      action += "?pa" + i + ":nat";
+    }
+    action += "!n";
+    adag2.setActionValue(action);
+    adj3.addNext(adag2);
+
+    adch2 = new ADChoice();
+    ad.add(adch2);
+    adag2.addNext(adch2);
+
+    adj4 = new ADJunction();
+    ad.add(adj4);
+
+    // Requests "out"
+
+    iterator = waitGates.listIterator();
+    while (iterator.hasNext()) {
+      g = (Gate) (iterator.next());
+      adag = new ADActionStateWithGate(g);
+      ad.add(adag);
+      action = "";
+      for (i = 0; i < nbPara; i++) {
+        action += "!pa" + i;
+      }
+      adag.setActionValue(action);
+      adch2.addNext(adag);
+      adch2.addGuard("[]");
+      adag.addNext(adj4);
+    }
+
+    adac2 = new ADActionStateWithParam(n);
+    ad.add(adac2);
+    adac2.setActionValue("n+1");
+    adj4.addNext(adac2);
+    adac2.addNext(adj3);
+
+    // wait = addNewGateIfApplicable("wait");
+    // sendReq = addNewGateIfApplicable("sendReq");
+
+    // sendReqGates.add(sendReq);
+    // waitGates.add(wait);
+
+    /*
+     * adj = new ADJunction(); ad.getStartState().addNext(adj); ad.add(adj);
+     * 
+     * acsend = new ADActionStateWithGate(sendReq); adj.addNext(acsend);
+     * ad.add(acsend); value = ""; for(i=0; i<nbPara; i++) { value = value + "?p" +
+     * (i+1) + ":nat"; } acsend.setActionValue(value);
+     * 
+     * adpar = new ADParallel(); adpar.setValueGate("[]"); acsend.addNext(adpar);
+     * ad.add(adpar); adpar.addNext(adj);
+     * 
+     * 
+     * 
+     * acwait = new ADActionStateWithGate(wait); value = ""; for(i=0; i<nbPara; i++)
+     * { value = value + "!p" + (i+1); } acwait.setActionValue(value);
+     * ad.add(acwait); adpar.addNext(acwait);
+     * 
+     * adstop = new ADStop(); acwait.addNext(adstop); ad.add(adstop);
+     * 
+     * setActivityDiagram(ad);
+     */
+  }
 }

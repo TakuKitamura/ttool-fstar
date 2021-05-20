@@ -36,28 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifQueryEvinj
- * Creation: 13/09/2015
+ * Class ProVerifQueryEvinj Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifQueryEvinj implements ProVerifDeclaration {
-    protected String ev1, ev2;
-    protected ProVerifVar[] vars;
+  protected String ev1, ev2;
+  protected ProVerifVar[] vars;
 
-    public ProVerifQueryEvinj (ProVerifVar[] _vars, String _ev1, String _ev2) {
-        this.vars = _vars;
-        this.ev1 = _ev1;
-        this.ev2 = _ev2;
-    }
+  public ProVerifQueryEvinj(ProVerifVar[] _vars, String _ev1, String _ev2) {
+    this.vars = _vars;
+    this.ev1 = _ev1;
+    this.ev2 = _ev2;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateQueryEvinj (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateQueryEvinj(this, _alinea);
+  }
 }

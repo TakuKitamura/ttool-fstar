@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.dd;
-
 
 import ui.*;
 
@@ -49,140 +45,133 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class TDeploymentDiagramPanel
- * Panel for drawing a deployment diagram
+ * Class TDeploymentDiagramPanel Panel for drawing a deployment diagram
  * Creation: 29/04/2005
+ * 
  * @version 1.0 29/04/2005
  * @author Ludovic APVRILLE
  */
 public class TDeploymentDiagramPanel extends TDiagramPanel {
-    
-    public  TDeploymentDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        //
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass t = (TCDTClass)tgc;
-            return mgui.newTClassName(tp, t.oldValue, t.getValue());
-        } else if (tgc instanceof TCDActivityDiagramBox) {
-            if (tgc.getFather() instanceof TCDTClass) {
-                mgui.selectTab(tp, tgc.getFather().getValue());
-            } else if (tgc.getFather() instanceof TCDTObject) {
-                TCDTObject to = (TCDTObject)(tgc.getFather());
-                TCDTClass t = to.getMasterTClass();
-                if (t != null) {
-                    mgui.selectTab(tp, t.getValue());
-                }
-            }
-            return false; // because no change made on any diagram
-        }*/
-        return false;
-    }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            //
-            mgui.addTClass(tp, tgcc.getClassName());
-            return true;
-        }*/
-        return false;
-    }
-    
-    public boolean actionOnRemove(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            TCDTClass tgcc = (TCDTClass)(tgc);
-            mgui.removeTClass(tp, tgcc.getClassName());
-            resetAllInstancesOf(tgcc);
-            return true;
-        }*/
-        return false;
-    }
-    
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-            return actionOnDoubleClick(tgc);
-        }*/
-        return false;
-    }
-    
-    public String getXMLHead() {
-        return "<TDeploymentDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</TDeploymentDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<TDeploymentDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</TDeploymentDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<TDeploymentDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</TDeploymentDiagramPanelCopy>";
-    }
-    
-    public boolean isFree(ArtifactTClassGate atg) {
-        TGConnectorLinkNode tgco;
-        TGComponent tgc;
-        Iterator<TGComponent> iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            
-            if (tgc instanceof TGConnectorLinkNode) {
-                tgco = (TGConnectorLinkNode)tgc;
-                if (tgco.hasArtifactTClassGate(atg)) {
-                    return false;
-                }   
-            }
+
+  public TDeploymentDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    //
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass t = (TCDTClass)tgc; return
+     * mgui.newTClassName(tp, t.oldValue, t.getValue()); } else if (tgc instanceof
+     * TCDActivityDiagramBox) { if (tgc.getFather() instanceof TCDTClass) {
+     * mgui.selectTab(tp, tgc.getFather().getValue()); } else if (tgc.getFather()
+     * instanceof TCDTObject) { TCDTObject to = (TCDTObject)(tgc.getFather());
+     * TCDTClass t = to.getMasterTClass(); if (t != null) { mgui.selectTab(tp,
+     * t.getValue()); } } return false; // because no change made on any diagram }
+     */
+    return false;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc); //
+     * mgui.addTClass(tp, tgcc.getClassName()); return true; }
+     */
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.removeTClass(tp, tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+     * true; }
+     */
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+     */
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<TDeploymentDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</TDeploymentDiagramPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<TDeploymentDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</TDeploymentDiagramPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<TDeploymentDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</TDeploymentDiagramPanelCopy>";
+  }
+
+  public boolean isFree(ArtifactTClassGate atg) {
+    TGConnectorLinkNode tgco;
+    TGComponent tgc;
+    Iterator<TGComponent> iterator = componentList.listIterator();
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+
+      if (tgc instanceof TGConnectorLinkNode) {
+        tgco = (TGConnectorLinkNode) tgc;
+        if (tgco.hasArtifactTClassGate(atg)) {
+          return false;
         }
-        
-        return true;
+      }
     }
-    
-    public List<TDDNode> getListOfNodes() {
-        List<TDDNode> ll = new LinkedList<TDDNode>();
-        TGComponent tgc;
-        Iterator<TGComponent> iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            if (tgc instanceof TDDNode) {
-                ll.add( (TDDNode) tgc );
-            }
-        }
-        
-        return ll;
+
+    return true;
+  }
+
+  public List<TDDNode> getListOfNodes() {
+    List<TDDNode> ll = new LinkedList<TDDNode>();
+    TGComponent tgc;
+    Iterator<TGComponent> iterator = componentList.listIterator();
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+      if (tgc instanceof TDDNode) {
+        ll.add((TDDNode) tgc);
+      }
     }
-    
-     public List<TGConnectorLinkNode> getListOfLinks() {
-        List<TGConnectorLinkNode> ll = new LinkedList<TGConnectorLinkNode>();
-        TGComponent tgc;
-        Iterator<TGComponent> iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            if (tgc instanceof TGConnectorLinkNode) {
-                ll.add( (TGConnectorLinkNode) tgc);
-            }
-        }
-        
-        return ll;
+
+    return ll;
+  }
+
+  public List<TGConnectorLinkNode> getListOfLinks() {
+    List<TGConnectorLinkNode> ll = new LinkedList<TGConnectorLinkNode>();
+    TGComponent tgc;
+    Iterator<TGComponent> iterator = componentList.listIterator();
+
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+      if (tgc instanceof TGConnectorLinkNode) {
+        ll.add((TGConnectorLinkNode) tgc);
+      }
     }
-    
+
+    return ll;
+  }
 
 }

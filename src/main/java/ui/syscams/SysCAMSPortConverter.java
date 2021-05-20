@@ -44,73 +44,74 @@ import ui.TDiagramPanel;
 import ui.TGComponent;
 
 /**
- * Class SysCAMSPortConverter
- * Primitive port. To be used in SystemC-AMS diagrams
+ * Class SysCAMSPortConverter Primitive port. To be used in SystemC-AMS diagrams
  * Creation: 14/05/2018
+ * 
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
-	private double period;
-	private String time;
-	private int rate;
-        private int nbits;
-	private int delay;
-	private String convType;
-	
-	public SysCAMSPortConverter(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-	}
+  private double period;
+  private String time;
+  private int rate;
+  private int nbits;
+  private int delay;
+  private String convType;
 
-	public String getTime() {
-		return time;
-	}
+  public SysCAMSPortConverter(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
 
-	public void setTime(String time) {
-		this.time = time;
-	}
+  public String getTime() {
+    return time;
+  }
 
-	public double getPeriod() {
-		return period;
-	}
+  public void setTime(String time) {
+    this.time = time;
+  }
 
-	public void setPeriod(double period) {
-		this.period = period;
-	}
+  public double getPeriod() {
+    return period;
+  }
 
-	public int getRate() {
-		return rate;
-	}
-    
-        public int getNbits() {
-		return nbits;
-	}
+  public void setPeriod(double period) {
+    this.period = period;
+  }
 
-        public void setNbits(int nbits) {
-		this.nbits = nbits;
-	}
-    
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
+  public int getRate() {
+    return rate;
+  }
 
-	public int getDelay() {
-		return delay;
-	}
+  public int getNbits() {
+    return nbits;
+  }
 
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
+  public void setNbits(int nbits) {
+    this.nbits = nbits;
+  }
 
-	public String getConvType() {
-		return convType;
-	}
+  public void setRate(int rate) {
+    this.rate = rate;
+  }
 
-	public void setConvType(String convType) {
-		this.convType = convType;
-	}
+  public int getDelay() {
+    return delay;
+  }
 
-	public void drawParticularity(Graphics g) {
-	}
+  public void setDelay(int delay) {
+    this.delay = delay;
+  }
+
+  public String getConvType() {
+    return convType;
+  }
+
+  public void setConvType(String convType) {
+    this.convType = convType;
+  }
+
+  public void drawParticularity(Graphics g) {
+  }
 }

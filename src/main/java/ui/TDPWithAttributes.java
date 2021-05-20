@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class TDPWithAttributes
- * TDiagramPanel on which components may have attributes
+ * Class TDPWithAttributes TDiagramPanel on which components may have attributes
  * Creation: 01/04/2008
+ * 
  * @version 1.0 01/04/2008
  * @author Ludovic APVRILLE
  */
-public interface TDPWithAttributes  {
-    
+public interface TDPWithAttributes {
+
 }

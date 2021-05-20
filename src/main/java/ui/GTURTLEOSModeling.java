@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import translator.CheckingError;
@@ -51,72 +47,72 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 /**
- * Class GTURTLEOSModeling
- * Use to translate graphical TURTLEOS modeling to TIF
+ * Class GTURTLEOSModeling Use to translate graphical TURTLEOS modeling to TIF
  * Creation: 19/01/2007
+ * 
  * @version 1.0 19/01/2007
  * @author Ludovic APVRILLE
  */
-public class GTURTLEOSModeling  {
-    private TURTLEOSDesignPanel tosdp;
-    private LinkedList<CheckingError> checkingErrors, warnings;
-    CorrespondanceTGElement listE;
+public class GTURTLEOSModeling {
+  private TURTLEOSDesignPanel tosdp;
+  private LinkedList<CheckingError> checkingErrors, warnings;
+  CorrespondanceTGElement listE;
 
-    public GTURTLEOSModeling(TURTLEOSDesignPanel _tosdp) {
-        tosdp = _tosdp;
-    }
-    
-    public TURTLEModeling generateTURTLEModeling() {
-        TURTLEModeling tm = new TURTLEModeling();
-        DesignPanelTranslator dpt = new DesignPanelTranslator(tosdp);
-        LinkedList<TClassInterface> tclasses = tosdp.toscdp.getAllClasses();
-        tm = dpt.generateTURTLEModeling(tclasses, "");
-        listE = dpt.getCorrespondanceTGElement();
-        makePeriodicTasks();
-        checkingErrors = new LinkedList<CheckingError> ();
-        warnings = new LinkedList<CheckingError> ();
-        return tm;
-    }
-    
-    public LinkedList<CheckingError> getCheckingErrors() {
-      return checkingErrors;
-    }
+  public GTURTLEOSModeling(TURTLEOSDesignPanel _tosdp) {
+    tosdp = _tosdp;
+  }
 
-    public LinkedList<CheckingError> getCheckingWarnings() {
-      return warnings;
-    }
-    
-    public boolean isPeriodicTClass(TGComponent tgc) {
-           if (tgc instanceof TOSClass) {
-              if (((TOSClass)tgc).getStereotype() == TOSClass.PERIODIC) {
-                return true;
-              }
-           }
-           return false;
-    }
-    
-    private void makePeriodicTasks() {
-      ListIterator iterator = tosdp.toscdp.getComponentList().listIterator();
-      TGComponent tgc;
-      TOSClass tclass;
-      TClass tc;
-      int period;
+  public TURTLEModeling generateTURTLEModeling() {
+    TURTLEModeling tm = new TURTLEModeling();
+    DesignPanelTranslator dpt = new DesignPanelTranslator(tosdp);
+    LinkedList<TClassInterface> tclasses = tosdp.toscdp.getAllClasses();
+    tm = dpt.generateTURTLEModeling(tclasses, "");
+    listE = dpt.getCorrespondanceTGElement();
+    makePeriodicTasks();
+    checkingErrors = new LinkedList<CheckingError>();
+    warnings = new LinkedList<CheckingError>();
+    return tm;
+  }
 
-      while(iterator.hasNext()) {
-        tgc = (TGComponent)(iterator.next());
-        if (isPeriodicTClass(tgc)) {
-           tclass = (TOSClass)tgc;
-           tc = listE.getTClass(tclass);
-           if (tc != null) {
-             // Found a periodic class -> must modify its activity diagram
-             makePeriodicTask(tclass, tc);
-           }
+  public LinkedList<CheckingError> getCheckingErrors() {
+    return checkingErrors;
+  }
+
+  public LinkedList<CheckingError> getCheckingWarnings() {
+    return warnings;
+  }
+
+  public boolean isPeriodicTClass(TGComponent tgc) {
+    if (tgc instanceof TOSClass) {
+      if (((TOSClass) tgc).getStereotype() == TOSClass.PERIODIC) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private void makePeriodicTasks() {
+    ListIterator iterator = tosdp.toscdp.getComponentList().listIterator();
+    TGComponent tgc;
+    TOSClass tclass;
+    TClass tc;
+    int period;
+
+    while (iterator.hasNext()) {
+      tgc = (TGComponent) (iterator.next());
+      if (isPeriodicTClass(tgc)) {
+        tclass = (TOSClass) tgc;
+        tc = listE.getTClass(tclass);
+        if (tc != null) {
+          // Found a periodic class -> must modify its activity diagram
+          makePeriodicTask(tclass, tc);
         }
       }
     }
-    
-    private void makePeriodicTask(TOSClass tclass, TClass tc) {
+  }
 
-    }
+  private void makePeriodicTask(TOSClass tclass, TClass tc) {
+
+  }
 
 }

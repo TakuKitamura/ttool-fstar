@@ -45,33 +45,34 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class TGConnectorComment
- * Connects a UML note to a component
- * Creation: 10/05/2006
+ * Class TGConnectorComment Connects a UML note to a component Creation:
+ * 10/05/2006
+ * 
  * @version 1.0 10/05/2006
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorComment extends TGConnector {
+public class TGConnectorComment extends TGConnector {
 
-    public TGConnectorComment(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+  public TGConnectorComment(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-        myImageIcon = IconManager.imgic108;
-        automaticDrawing = false;
-    }
+    myImageIcon = IconManager.imgic108;
+    automaticDrawing = false;
+  }
 
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
 
-    @Override
-    protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
-    }
+  @Override
+  protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
+  }
 
-    @Override
-    public int getType() {
-        return TGComponentManager.CONNECTOR_COMMENT;
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.CONNECTOR_COMMENT;
+  }
 }

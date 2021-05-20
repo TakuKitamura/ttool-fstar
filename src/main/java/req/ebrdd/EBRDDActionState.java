@@ -36,35 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
-
-
 /**
- * Class EBRDDActionState
- * Creation: 18/09/2009
+ * Class EBRDDActionState Creation: 18/09/2009
+ * 
  * @version 1.0 18/09/2009
  * @author Ludovic APVRILLE
  */
 public class EBRDDActionState extends EBRDDComponent {
-    protected String action;
-	
-    public EBRDDActionState(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-    }
-    
-    public String toString() {
-        return "Action: " + action;
-    }
-	
-	public String getAction() {
-		return action;
-	}
-	
-	public void setAction(String _action) {
-		action = _action;
-	}
+  protected String action;
+
+  public EBRDDActionState(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public String toString() {
+    return "Action: " + action;
+  }
+
+  public String getAction() {
+    return action;
+  }
+
+  public void setAction(String _action) {
+    action = _action;
+  }
 }

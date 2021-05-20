@@ -47,100 +47,101 @@ import java.io.*;
 import java.util.LinkedList;
 
 /**
- * Class TopCellGeneratorCluster
- * Save the components and connectors in files
+ * Class TopCellGeneratorCluster Save the components and connectors in files
  * Creation: 14/05/2018
+ * 
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
  * @version 1.1 30/07/2018
  * @author Irina Kit Yan LEE, Rodrigo CORTES PORTO
  * @version 1.2 12/07/2019
  * @author Irina Kit Yan LEE, Rodrigo CORTES PORTO, Daniela GENIUS
-*/
+ */
 
 public class TopCellGeneratorCluster {
-	public static SysCAMSSpecification syscams;
+  public static SysCAMSSpecification syscams;
 
-	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
-	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
+  private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
+  private final static String GENERATED_PATH2 = "generated_H" + File.separator;
 
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
-    
-	public TopCellGeneratorCluster(SysCAMSSpecification sys) {
-		syscams = sys;
-	}
+  private final static String CR = "\n";
+  private final static String CR2 = "\n\n";
 
-	public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
-		if (c == null) {
-			System.out.println("***Warning: require at least one cluster***");
-		}       	
-		String top = HeaderCluster.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
-		return (top);
-	}
+  public TopCellGeneratorCluster(SysCAMSSpecification sys) {
+    syscams = sys;
+  }
 
-    public void saveFile(String path, Boolean standalone) {
-		SysCAMSTCluster cluster = TopCellGeneratorCluster.syscams.getCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorCluster.syscams.getAllConnectors();
-		FileWriter fw;
-		String top;
+  public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
+    if (c == null) {
+      System.out.println("***Warning: require at least one cluster***");
+    }
+    String top = HeaderCluster.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
+    return (top);
+  }
 
-		try {
-			// Save file .cpp
-			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
-			System.err.println(path + cluster.getClusterName() + "_tdf.h");		
-			fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
-		
-			top = generateTopCell(cluster, connectors);
-			fw.write(top);
-			fw.close();
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		// Save files .h
-		saveFileBlock(path, cluster, standalone);
-	}
+  public void saveFile(String path, Boolean standalone) {
+    SysCAMSTCluster cluster = TopCellGeneratorCluster.syscams.getCluster();
+    LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorCluster.syscams.getAllConnectors();
+    FileWriter fw;
+    String top;
 
-    public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
-		String headerTDF, headerDE, codeTDF, codeDE;
-		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
-		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
+    try {
+      // Save file .cpp
+      System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
+      System.err.println(path + cluster.getClusterName() + "_tdf.h");
+      fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
 
-		FileWriter fw;
-		
-		for (SysCAMSTBlockTDF t : tdf) {
-			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				System.err.println(path + t.getName() + "_tdf.h");			
-				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
-				headerTDF = HeaderCluster.getPrimitiveHeaderTDF(t);
-				fw.write(headerTDF);
-				codeTDF = PrimitiveCodeCluster.getPrimitiveCodeTDF(t);			
-				codeTDF = codeTDF + "#endif"+ CR;
-				fw.write(codeTDF);
-				fw.close();
-			
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		for (SysCAMSTBlockDE t : de) {
-			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");	System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");		       	
-			
-				fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
-				
-				headerDE = HeaderCluster.getPrimitiveHeaderDE(t);
-				fw.write(headerDE);
-				codeDE = PrimitiveCodeCluster.getPrimitiveCodeDE(t);			
-				codeDE = codeDE + "#endif "+ CR;
-				fw.write(codeDE);
-				fw.close();
-				
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
+      top = generateTopCell(cluster, connectors);
+      fw.write(top);
+      fw.close();
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    // Save files .h
+    saveFileBlock(path, cluster, standalone);
+  }
+
+  public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
+    String headerTDF, headerDE, codeTDF, codeDE;
+    LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
+    LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
+
+    FileWriter fw;
+
+    for (SysCAMSTBlockTDF t : tdf) {
+      try {
+        System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+        System.err.println(path + t.getName() + "_tdf.h");
+        fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+        headerTDF = HeaderCluster.getPrimitiveHeaderTDF(t);
+        fw.write(headerTDF);
+        codeTDF = PrimitiveCodeCluster.getPrimitiveCodeTDF(t);
+        codeTDF = codeTDF + "#endif" + CR;
+        fw.write(codeTDF);
+        fw.close();
+
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    for (SysCAMSTBlockDE t : de) {
+      try {
+        System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+        System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+
+        fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+
+        headerDE = HeaderCluster.getPrimitiveHeaderDE(t);
+        fw.write(headerDE);
+        codeDE = PrimitiveCodeCluster.getPrimitiveCodeDE(t);
+        codeDE = codeDE + "#endif " + CR;
+        fw.write(codeDE);
+        fw.close();
+
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
 }

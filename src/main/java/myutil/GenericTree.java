@@ -36,23 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
-
-
 /**
- * Class GenericTree
- * Creation: 13/03/2003
- * Version 2.0 25/10/2007
+ * Class GenericTree Creation: 13/03/2003 Version 2.0 25/10/2007
+ * 
  * @author Ludovic APVRILLE
  */
 public interface GenericTree {
-    
-    int getChildCount();
-    Object getChild(int index);
-    int getIndexOfChild(Object child);
-}
 
+  int getChildCount();
+
+  Object getChild(int index);
+
+  int getIndexOfChild(Object child);
+}

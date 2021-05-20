@@ -36,20 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
-
 /**
- * Interface PeriodicBehavior
- * For execution periodically processes
- * Creation: 2014
+ * Interface PeriodicBehavior For execution periodically processes Creation:
+ * 2014
+ * 
  * @version 1.1 07/01/2014
  * @author Ludovic APVRILLE
  */
 public interface PeriodicBehavior {
-    
-	void periodicAction();
+
+  void periodicAction();
 }

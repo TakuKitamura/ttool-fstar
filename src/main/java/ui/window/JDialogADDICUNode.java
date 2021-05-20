@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -52,153 +49,145 @@ import java.awt.event.ActionListener;
 //import javax.swing.event.*;
 //import java.util.*;
 
-
 /**
- * Class JDialogADDICUNode
- * Dialog for managing attributes of Memory nodes
+ * Class JDialogADDICUNode Dialog for managing attributes of Memory nodes
  * Creation: 22/08/2014
+ * 
  * @version 1.0 22/08/2014
  * @author Ludovic APVRILLE
  */
-public class JDialogADDICUNode extends JDialogBase implements ActionListener  {
-    
-    private boolean regularClose;
-    
-    private JPanel panel2;
-    private Frame frame;
-    private ADDICUNode node;
-    
-	
-    // Panel1
-    protected JTextField nodeName;
-	
-	// Panel2
-    protected JTextField index;
-    protected JTextField nIrq;
-    
-    /* Creates new form  */
-    public JDialogADDICUNode(Frame _frame, String _title, ADDICUNode _node) {
-        super(_frame, _title, true);
-        frame = _frame;
-        node = _node;
-        
-        initComponents();
-        myInitComponents();
-        pack();
+public class JDialogADDICUNode extends JDialogBase implements ActionListener {
+
+  private boolean regularClose;
+
+  private JPanel panel2;
+  private Frame frame;
+  private ADDICUNode node;
+
+  // Panel1
+  protected JTextField nodeName;
+
+  // Panel2
+  protected JTextField index;
+  protected JTextField nIrq;
+
+  /* Creates new form */
+  public JDialogADDICUNode(Frame _frame, String _title, ADDICUNode _node) {
+    super(_frame, _title, true);
+    frame = _frame;
+    node = _node;
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("ICU attributes"));
+    panel2.setPreferredSize(new Dimension(400, 200));
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("ICU name:"), c2);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nodeName = new JTextField(node.getNodeName(), 30);
+    nodeName.setEditable(true);
+    nodeName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(nodeName, c1);
+
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Index:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    index = new JTextField("" + node.getIndex(), 15);
+    panel2.add(index, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("n_irq:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nIrq = new JTextField("" + node.getNIrq(), 15);
+    panel2.add(nIrq, c2);
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
-    
-    private void myInitComponents() {
-    }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("ICU attributes"));
-        panel2.setPreferredSize(new Dimension(400, 200));
-        
-		c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("ICU name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
-        nodeName.setEditable(true);
-        nodeName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(nodeName, c1);
- 
-        
-        c2.gridwidth = 1;
-        c2.gridheight = 1;
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.fill = GridBagConstraints.HORIZONTAL;
-      
-        
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Index:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        index = new JTextField(""+node.getIndex(), 15);
-        panel2.add(index, c2);
-        
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("n_irq:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nIrq = new JTextField(""+node.getNIrq(), 15);
-        panel2.add(nIrq, c2);
-        
-        
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(panel2, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-        
-        
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-    
-    public void closeDialog() {
-        regularClose = true;
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-    public boolean isRegularClose() {
-        return regularClose;
-    }
-	
-	public String getNodeName() {
-        return nodeName.getText();
-    }
-    
-    public String getIndex() {
-        return index.getText();
-    }
-    
-    public String getNIrq() {
-        return nIrq.getText();
-    }
-    
-    
+  }
+
+  public void closeDialog() {
+    regularClose = true;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean isRegularClose() {
+    return regularClose;
+  }
+
+  public String getNodeName() {
+    return nodeName.getText();
+  }
+
+  public String getIndex() {
+    return index.getText();
+  }
+
+  public String getNIrq() {
+    return nIrq.getText();
+  }
+
 }

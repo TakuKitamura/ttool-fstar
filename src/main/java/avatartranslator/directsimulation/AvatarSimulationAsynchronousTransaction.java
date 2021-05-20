@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator.directsimulation;
 
 import avatartranslator.AvatarRelation;
@@ -48,86 +44,85 @@ import avatartranslator.AvatarSignal;
 import java.util.Vector;
 
 /**
-   * Class AvatarSimulationAsynchronousTransaction
-   * Avatar: notion of asynchronous transaction in simulation
-   * Creation: 24/01/2011
-   * @version 1.0 24/01/2011
-   * @author Ludovic APVRILLE
+ * Class AvatarSimulationAsynchronousTransaction Avatar: notion of asynchronous
+ * transaction in simulation Creation: 24/01/2011
+ * 
+ * @version 1.0 24/01/2011
+ * @author Ludovic APVRILLE
  */
-public class AvatarSimulationAsynchronousTransaction  {
+public class AvatarSimulationAsynchronousTransaction {
 
-    private Vector<String> parameters;
-    private AvatarRelation relation;
-    private int index;
-    public AvatarSimulationTransaction firstTransaction;
-    //public AvatarSimulationTransaction receivedTransaction;
+  private Vector<String> parameters;
+  private AvatarRelation relation;
+  private int index;
+  public AvatarSimulationTransaction firstTransaction;
+  // public AvatarSimulationTransaction receivedTransaction;
 
-    public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar, int _index) {
-        relation = _ar;
-        index = _index;
-        parameters = new Vector<String>();
+  public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar, int _index) {
+    relation = _ar;
+    index = _index;
+    parameters = new Vector<String>();
+  }
+
+  public AvatarRelation getRelation() {
+    return relation;
+  }
+
+  public void addParameter(String _s) {
+    parameters.add(_s);
+  }
+
+  public int getNbOfParameters() {
+    return parameters.size();
+  }
+
+  public Vector<String> getParameters() {
+    return parameters;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public String toString() {
+    String blockName;
+    if (firstTransaction != null) {
+      blockName = firstTransaction.block.getName();
+    } else {
+      blockName = relation.block1.getName();
     }
 
-    public AvatarRelation getRelation() {
-        return relation;
+    AvatarSignal sig1 = relation.getSignal1(index);
+    AvatarSignal sig2 = relation.getSignal2(index);
+
+    if ((sig1 == null) || (sig2 == null)) {
+      return "?";
     }
 
-    public void addParameter(String _s) {
-        parameters.add(_s);
+    String ret = blockName + "." + sig1.getName() + "(";
+    for (int i = 0; i < parameters.size(); i++) {
+      if (i != 0) {
+        ret += ",";
+      }
+      ret += parameters.get(i);
     }
+    ret += ") -> ";
 
-    public int getNbOfParameters() {
-        return parameters.size();
+    ret += relation.block2.getName() + "." + sig2.getName();
+
+    return ret;
+  }
+
+  public String parametersToString() {
+    String ret = "(";
+    for (int i = 0; i < parameters.size(); i++) {
+      if (i != 0) {
+        ret += ",";
+      }
+      ret += parameters.get(i);
     }
+    ret += ")";
 
-    public Vector<String> getParameters() {
-        return parameters;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public String toString() {
-        String blockName;
-        if (firstTransaction != null) {
-            blockName = firstTransaction.block.getName();
-        } else {
-            blockName = relation.block1.getName();
-        }
-
-        AvatarSignal sig1 = relation.getSignal1(index);
-        AvatarSignal sig2 = relation.getSignal2(index);
-
-        if ((sig1 == null) || (sig2 == null)) {
-            return "?";
-        }
-
-        String ret = blockName + "." + sig1.getName()+"(";
-        for(int i=0; i<parameters.size(); i++) {
-            if (i !=0) {
-                ret += ",";
-            }
-            ret += parameters.get(i);
-        }
-        ret += ") -> ";
-
-        ret += relation.block2.getName() + "." + sig2.getName();
-
-
-        return ret;
-    }
-
-    public String parametersToString() {
-        String ret="(";
-        for(int i=0; i<parameters.size(); i++) {
-            if (i !=0) {
-                ret += ",";
-            }
-            ret += parameters.get(i);
-        }
-        ret += ")";
-
-        return ret;
-    }
+    return ret;
+  }
 }

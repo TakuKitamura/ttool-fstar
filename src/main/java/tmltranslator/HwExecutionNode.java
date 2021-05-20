@@ -36,77 +36,72 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
 package tmltranslator;
-
 
 import java.util.Objects;
 
 /**
- * Class HwExecutionNode
- * Creation: 23/11/2007
+ * Class HwExecutionNode Creation: 23/11/2007
+ * 
  * @version 1.0 05/03/2019
  * @author Ludovic APVRILLE
  */
-public abstract class HwExecutionNode extends HwNode  {
-    protected int maximumNbOfTasks;
+public abstract class HwExecutionNode extends HwNode {
+  protected int maximumNbOfTasks;
 
-    public static final int DEFAULT_EXECI_TIME = 1;
-    public int execiTime = DEFAULT_EXECI_TIME;
+  public static final int DEFAULT_EXECI_TIME = 1;
+  public int execiTime = DEFAULT_EXECI_TIME;
 
-    public static final int DEFAULT_EXECC_TIME = 1;
-    public int execcTime = DEFAULT_EXECC_TIME;
+  public static final int DEFAULT_EXECC_TIME = 1;
+  public int execcTime = DEFAULT_EXECC_TIME;
 
-    protected String operation = ""; // empty means all
+  protected String operation = ""; // empty means all
 
+  public HwExecutionNode(String _name) {
+    super(_name);
+  }
 
-    public HwExecutionNode(String _name) {
-        super(_name);
+  public abstract String getType();
+
+  public int getExeciTime() {
+    return execiTime;
+  }
+
+  public int getExeccTime() {
+    return execcTime;
+  }
+
+  public void setOperation(String operation) {
+    this.operation = operation;
+  }
+
+  public String getOperation() {
+    return operation;
+  }
+
+  public boolean supportOperation(String opType) {
+    if (operation.length() == 0) {
+      return true;
     }
 
-    public abstract String getType();
-
-    public int getExeciTime() {
-        return execiTime;
+    String[] ops = operation.split(" ");
+    for (int i = 0; i < ops.length; i++) {
+      if (ops[i].compareTo(opType) == 0) {
+        return true;
+      }
     }
 
-    public int getExeccTime() {
-        return execcTime;
-    }
+    return false;
+  }
 
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
-
-    public String getOperation() {
-        return operation;
-    }
-
-
-    public boolean supportOperation(String opType) {
-        if (operation.length() == 0) {
-            return true;
-        }
-
-        String[]ops = operation.split( " ");
-        for(int i=0; i<ops.length; i++) {
-            if (ops[i].compareTo(opType) == 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof HwExecutionNode)) return false;
-        if(!super.equalSpec(o)) return false;
-        HwExecutionNode that = (HwExecutionNode) o;
-        return maximumNbOfTasks == that.maximumNbOfTasks &&
-                execiTime == that.execiTime &&
-                execcTime == that.execcTime &&
-                operation.equals(that.operation);
-    }
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwExecutionNode))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwExecutionNode that = (HwExecutionNode) o;
+    return maximumNbOfTasks == that.maximumNbOfTasks && execiTime == that.execiTime && execcTime == that.execcTime
+        && operation.equals(that.operation);
+  }
 
 }

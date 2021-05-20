@@ -36,29 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
- * Class TMLNotifiedEvent
- * Creation: 31/10/2006
+ * Class TMLNotifiedEvent Creation: 31/10/2006
+ * 
  * @version 1.0 31/10/2006
  * @author Ludovic APVRILLE
  */
 public class TMLNotifiedEvent extends TMLActivityElementEvent {
 
-    public TMLNotifiedEvent(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public TMLNotifiedEvent(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    public String toString() {
-        return "Notified event: " + event.getName() + "(" + getAllParams() +")";
-    }
+  public String toString() {
+    return "Notified event: " + event.getName() + "(" + getAllParams() + ")";
+  }
 
-    public String customExtraToXML() {
-	    return " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" variable=\"" + variable + "\" ";
-    }
+  public String customExtraToXML() {
+    return " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" variable=\"" + variable + "\" ";
+  }
 }

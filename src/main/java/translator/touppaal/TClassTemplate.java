@@ -36,49 +36,47 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator.touppaal;
 
 import translator.TClass;
 import uppaaldesc.UPPAALTemplate;
 
 /**
-* Class TClassTemplate
-* Creation: 16/05/2007
-* @version 1.1 16/05/2007
-* @author Ludovic APVRILLE
+ * Class TClassTemplate Creation: 16/05/2007
+ * 
+ * @version 1.1 16/05/2007
+ * @author Ludovic APVRILLE
  */
 public class TClassTemplate {
-	public TClass tclass;
-	public int idTClass = 0;
-	public UPPAALTemplate template;
-	public int beginid; // Instanciation information
-	public int endid; // Instanciation information
-    
-	public TClassTemplate() {}
+  public TClass tclass;
+  public int idTClass = 0;
+  public UPPAALTemplate template;
+  public int beginid; // Instanciation information
+  public int endid; // Instanciation information
 
-    public TClassTemplate(TClass _t, UPPAALTemplate _template) {
-		tclass = _t;
-		template = _template;
-	}
-	
-	public TClassTemplate(TClass _t, UPPAALTemplate _template, int _id) {
-		tclass = _t;
-		template = _template;
-		idTClass = _id;
-	}
-	
-	public String toString() {
-		String s = "";
-		if (tclass != null) {
-			s += "tclass: " + tclass.getName() + " " ;
-		}
-		if (template != null) {
-			s += "template:" + template.getName() + " "; 
-		}
-		s += "beginid=" + beginid + " endid=" + endid;
-		return s;
-	}
+  public TClassTemplate() {
+  }
+
+  public TClassTemplate(TClass _t, UPPAALTemplate _template) {
+    tclass = _t;
+    template = _template;
+  }
+
+  public TClassTemplate(TClass _t, UPPAALTemplate _template, int _id) {
+    tclass = _t;
+    template = _template;
+    idTClass = _id;
+  }
+
+  public String toString() {
+    String s = "";
+    if (tclass != null) {
+      s += "tclass: " + tclass.getName() + " ";
+    }
+    if (template != null) {
+      s += "template:" + template.getName() + " ";
+    }
+    s += "beginid=" + beginid + " endid=" + endid;
+    return s;
+  }
 }

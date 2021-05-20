@@ -46,24 +46,33 @@ import ui.TAttribute;
 import ui.avatarsmd.AvatarSMDPanel;
 
 /**
- * This interface represent block diagram elements that are associated to a state machine.
- * It defines the functions so that a state machine can deal transparently no matter if
- * its owner block is a LibraryFunction or a Block for instance.
+ * This interface represent block diagram elements that are associated to a
+ * state machine. It defines the functions so that a state machine can deal
+ * transparently no matter if its owner block is a LibraryFunction or a Block
+ * for instance.
  *
  * @version 1.0 04.14.2016
  * @author Florian LUGOU
  */
 public interface AvatarBDStateMachineOwner {
 
-    List<TAttribute> getAttributeList();
-    List<String> getAllTimerList();
-    TAttribute getAttributeByName(String _name);
-    List<AvatarSignal> getSignalList();
-    List<AvatarSignal> getAllSignalList();
-    AvatarSignal getSignalNameBySignalDef(String _id);
-    List<AvatarMethod> getMethodList();
-    List<AvatarMethod> getAllMethodList();
+  List<TAttribute> getAttributeList();
 
-    String getOwnerName();
-    AvatarSMDPanel getAvatarSMDPanel();
+  List<String> getAllTimerList();
+
+  TAttribute getAttributeByName(String _name);
+
+  List<AvatarSignal> getSignalList();
+
+  List<AvatarSignal> getAllSignalList();
+
+  AvatarSignal getSignalNameBySignalDef(String _id);
+
+  List<AvatarMethod> getMethodList();
+
+  List<AvatarMethod> getAllMethodList();
+
+  String getOwnerName();
+
+  AvatarSMDPanel getAvatarSMDPanel();
 }

@@ -36,33 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
-
 /**
- * Class TMLWaitEvent
- * Creation: 23/11/2005
+ * Class TMLWaitEvent Creation: 23/11/2005
+ * 
  * @version 1.1 13/06/2019
  * @author Ludovic APVRILLE
  */
 public class TMLWaitEvent extends TMLActivityElementEvent {
- 
-    public TMLWaitEvent(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-    
-    public String toString() {
-	return "Wait event: " + event.getName() + "(" + getAllParams() +")";
-    }
 
-    public String customExtraToXML() {
-	    String ret = " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
-        ret += " blocking=\"" + event.isBlocking() + "\" ";
-        return ret;
-    }
+  public TMLWaitEvent(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public String toString() {
+    return "Wait event: " + event.getName() + "(" + getAllParams() + ")";
+  }
+
+  public String customExtraToXML() {
+    String ret = " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" ";
+    ret += " blocking=\"" + event.isBlocking() + "\" ";
+    return ret;
+  }
 
 }

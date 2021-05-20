@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlad;
 
 //import java.awt.*;
@@ -55,180 +52,183 @@ import java.util.Vector;
 //import javax.xml.parsers.*;
 
 /**
- * Class TMLActivityDiagramPanel
- * Panel used for drawing activity diagrams of TML Tasks
- * Creation: 28/10/2005
+ * Class TMLActivityDiagramPanel Panel used for drawing activity diagrams of TML
+ * Tasks Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
 public class TMLActivityDiagramPanel extends TDiagramPanel {
-    
-    public  TMLActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return false;
-    }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
-    }
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
-    }
-    
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
+
+  public TMLActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<TMLActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</TMLActivityDiagramPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<TMLActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</TMLActivityDiagramPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<TMLActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</TMLActivityDiagramPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
+  public void enhance() {
+    //
+    Vector<TGComponent> v = new Vector<TGComponent>();
+    TGComponent o;
+    Iterator<TGComponent> iterator = componentList.iterator();
+
+    while (iterator.hasNext()) {
+      o = iterator.next();
+      if (o instanceof TMLADStartState) {
+        enhance(v, o);
+      }
     }
 
-    public String getXMLHead() {
-        return "<TMLActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</TMLActivityDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<TMLActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</TMLActivityDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<TMLActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</TMLActivityDiagramPanelCopy>";
-    }
-    
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
-        
-        // Components over others
-        
-        // Position correctly guards of choice
-    }
-    
-    public void enhance() {
-        //
-        Vector<TGComponent> v = new Vector<TGComponent>();
-        TGComponent o;
-        Iterator<TGComponent> iterator = componentList.iterator();
-        
-        while(iterator.hasNext()) {
-            o = iterator.next();
-            if (o instanceof TMLADStartState){
-                enhance(v, o);
-            }
-        }
-        
-        mgui.changeMade(this, MOVE_CONNECTOR);
-        repaint();
-    }
-    
-    public void enhance(Vector<TGComponent> v, TGComponent tgc) {
-        TGComponent tgc1;
-        TGConnector tgcon;
-        int i;
-        
-        //
-        
-        if (tgc == null) {
-            return;
-        }
-        
-        if (v.contains(tgc)) {
-            return;
-        }
-        
-        v.add(tgc);
-        
-        //
-        if (!(tgc instanceof TMLADStartState)) {
-            for(i=0; i<tgc.getNbNext(); i++) {
-                tgc1 = getNextTGComponent(tgc, i);
-                tgcon = getNextTGConnector(tgc, i);
-                if (tgcon.getAutomaticDrawing()) {
-                    if ((tgc1 != null) && (tgcon != null)) {
-                        tgcon.alignOrMakeSquareTGComponents();
-                    }
-                }
-            }
-        }
-        
-        // Explore next elements
-        for(i=0; i<tgc.getNbNext(); i++) {
-            tgc1 = getNextTGComponent(tgc, i);
-            enhance(v, tgc1);
-        }
-    }
-	
-	public boolean hasAutoConnect() {
-		return true;
-	}
-	
-    public List<String> getAllCryptoConfig(){
-		List<String> cc = new ArrayList<String>();
-		List<TGComponent> comps = getAllComponentList();
-		
-		for (TGComponent c: comps){
-		    if (c instanceof TMLADEncrypt){
-		    	TMLADEncrypt en= (TMLADEncrypt) c;
-		    	
-		    	if (!en.securityContext.isEmpty()){
-		    		cc.add(en.securityContext);
-		    	}
-		    }
-		}
-		
-		return cc;
+    mgui.changeMade(this, MOVE_CONNECTOR);
+    repaint();
+  }
+
+  public void enhance(Vector<TGComponent> v, TGComponent tgc) {
+    TGComponent tgc1;
+    TGConnector tgcon;
+    int i;
+
+    //
+
+    if (tgc == null) {
+      return;
     }
 
-    public List<String> getAllNonce(){
-    	List<String> ns=new ArrayList<String>();
-    	List<TGComponent> comps= getAllComponentList();
-    	
-    	for (TGComponent c: comps){
-    		if (c instanceof TMLADEncrypt){
-    			TMLADEncrypt en= (TMLADEncrypt) c;
-    			if (!en.securityContext.isEmpty() && en.type.equals("Nonce")){
-    				ns.add(en.securityContext);
-    			}
-    		}
-    	}
-    	
-    	return ns;
+    if (v.contains(tgc)) {
+      return;
     }
 
-    public List<String> getAllKeys(){
-    	List<String> ns=new ArrayList<String>();
-    	List<TGComponent> comps= getAllComponentList();
-    	
-    	for (TGComponent c: comps){
-    		if (c instanceof TMLADEncrypt){
-    			TMLADEncrypt en= (TMLADEncrypt) c;
-    			if (!en.securityContext.isEmpty()){
-    				if ((en.type.equals("Symmetric Encryption") || en.type.equals("MAC"))){
-	    				ns.add(en.securityContext);
-	    			}
-	    			else if (en.type.equals("Asymmetric Encryption")) {
-	    				ns.add(en.securityContext);
-	    				//ns.add("pubKey" + en.securityContext);
-	    			}
-    			}
-    		}
-    	}
-    	
-    	return ns;
+    v.add(tgc);
+
+    //
+    if (!(tgc instanceof TMLADStartState)) {
+      for (i = 0; i < tgc.getNbNext(); i++) {
+        tgc1 = getNextTGComponent(tgc, i);
+        tgcon = getNextTGConnector(tgc, i);
+        if (tgcon.getAutomaticDrawing()) {
+          if ((tgc1 != null) && (tgcon != null)) {
+            tgcon.alignOrMakeSquareTGComponents();
+          }
+        }
+      }
     }
+
+    // Explore next elements
+    for (i = 0; i < tgc.getNbNext(); i++) {
+      tgc1 = getNextTGComponent(tgc, i);
+      enhance(v, tgc1);
+    }
+  }
+
+  public boolean hasAutoConnect() {
+    return true;
+  }
+
+  public List<String> getAllCryptoConfig() {
+    List<String> cc = new ArrayList<String>();
+    List<TGComponent> comps = getAllComponentList();
+
+    for (TGComponent c : comps) {
+      if (c instanceof TMLADEncrypt) {
+        TMLADEncrypt en = (TMLADEncrypt) c;
+
+        if (!en.securityContext.isEmpty()) {
+          cc.add(en.securityContext);
+        }
+      }
+    }
+
+    return cc;
+  }
+
+  public List<String> getAllNonce() {
+    List<String> ns = new ArrayList<String>();
+    List<TGComponent> comps = getAllComponentList();
+
+    for (TGComponent c : comps) {
+      if (c instanceof TMLADEncrypt) {
+        TMLADEncrypt en = (TMLADEncrypt) c;
+        if (!en.securityContext.isEmpty() && en.type.equals("Nonce")) {
+          ns.add(en.securityContext);
+        }
+      }
+    }
+
+    return ns;
+  }
+
+  public List<String> getAllKeys() {
+    List<String> ns = new ArrayList<String>();
+    List<TGComponent> comps = getAllComponentList();
+
+    for (TGComponent c : comps) {
+      if (c instanceof TMLADEncrypt) {
+        TMLADEncrypt en = (TMLADEncrypt) c;
+        if (!en.securityContext.isEmpty()) {
+          if ((en.type.equals("Symmetric Encryption") || en.type.equals("MAC"))) {
+            ns.add(en.securityContext);
+          } else if (en.type.equals("Asymmetric Encryption")) {
+            ns.add(en.securityContext);
+            // ns.add("pubKey" + en.securityContext);
+          }
+        }
+      }
+    }
+
+    return ns;
+  }
 
 }

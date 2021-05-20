@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
 
 import ui.MainGUI;
@@ -48,118 +45,113 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
- * Class TClassDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a class diagram
- * Creation: 21/12/2003
+ * Class TClassDiagramToolBar Implements the toolbar to be used in conjunction
+ * with the panel of a class diagram Creation: 21/12/2003
+ * 
  * @version 1.0 21/12/2003
  * @author Ludovic APVRILLE
  * @see TClassDiagramPanel
  */
 public class TClassDiagramToolBar extends TToolBar {
-    
-    public TClassDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-        
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.TCD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_ASSOCIATION].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_ASSOCIATION_NAVIGATION].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_NEW_TCLASS].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_NEW_TOBJECT].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_NEW_TDATA].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_PARALLEL_OPERATOR].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_SYNCHRO_OPERATOR].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_INVOCATION_OPERATOR].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_SEQUENCE_OPERATOR].setEnabled(b);
-        mgui.actions[TGUIAction.TCD_PREEMPTION_OPERATOR].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_GATES].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_SYNCHRO].setEnabled(b);
-        
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		mgui.updateZoomInfo();
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_ASSOCIATION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_ASSOCIATION_NAVIGATION]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_NEW_TCLASS]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TCD_NEW_TOBJECT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TCD_NEW_TDATA]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_PARALLEL_OPERATOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_SYNCHRO_OPERATOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_INVOCATION_OPERATOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_SEQUENCE_OPERATOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TCD_PREEMPTION_OPERATOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-         this.addSeparator();
-         
-         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES]);
-         button.addMouseListener(mgui.mouseHandler);
-         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_GATES]);
-         button.addMouseListener(mgui.mouseHandler);
-         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_SYNCHRO]);
-         button.addMouseListener(mgui.mouseHandler);
-        
-    }
-    
+
+  public TClassDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.TCD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_ASSOCIATION].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_ASSOCIATION_NAVIGATION].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_NEW_TCLASS].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_NEW_TOBJECT].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_NEW_TDATA].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_PARALLEL_OPERATOR].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_SYNCHRO_OPERATOR].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_INVOCATION_OPERATOR].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_SEQUENCE_OPERATOR].setEnabled(b);
+    mgui.actions[TGUIAction.TCD_PREEMPTION_OPERATOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_GATES].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_SYNCHRO].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.TCD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TCD_ASSOCIATION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TCD_ASSOCIATION_NAVIGATION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TCD_NEW_TCLASS]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TCD_NEW_TOBJECT]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TCD_NEW_TDATA]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TCD_PARALLEL_OPERATOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TCD_SYNCHRO_OPERATOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TCD_INVOCATION_OPERATOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TCD_SEQUENCE_OPERATOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TCD_PREEMPTION_OPERATOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_GATES]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_SYNCHRO]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
+
 } // Class
-
-
-
-
-

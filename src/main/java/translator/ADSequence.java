@@ -36,55 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
 import java.util.Vector;
 
-
 /**
- * Class ADSequence
- * Creation: 25/06/2004
+ * Class ADSequence Creation: 25/06/2004
+ * 
  * @version 1.0 25/06/2004
  * @author Ludovic APVRILLE
  */
 public class ADSequence extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
-    private Vector<Integer> sort;
-    
-    public ADSequence() {
-        nbNext = 100;
-        minNbNext = 1;
-        sort = new Vector<>();
+  private Vector<Integer> sort;
+
+  public ADSequence() {
+    nbNext = 100;
+    minNbNext = 1;
+    sort = new Vector<>();
+  }
+
+  public void addNextAtIndex(ADComponent adc, int index) {
+    //
+    // perform sorting when adding the component
+    if (sort.size() == 0) {
+      next.addElement(adc);
+      sort.addElement(index);
+      return;
     }
-    
-    public void addNextAtIndex(ADComponent adc, int index) {
-        //
-        // perform sorting when adding the component
-        if (sort.size()  == 0) {
-            next.addElement(adc);
-            sort.addElement(index);
-            return;
-        }
-        
-        int i=0;
-        while (i < sort.size() && index > sort.elementAt(i)) {
-            i++;
-        }
-       
-        next.insertElementAt(adc, i);
-        sort.insertElementAt(index, i);
+
+    int i = 0;
+    while (i < sort.size() && index > sort.elementAt(i)) {
+      i++;
     }
-    
-    public ADComponent makeSame() {
-      return new ADSequence();
-    }
-    
-    public String toString() {
-        return "Sequence";
-    }
+
+    next.insertElementAt(adc, i);
+    sort.insertElementAt(index, i);
+  }
+
+  public ADComponent makeSame() {
+    return new ADSequence();
+  }
+
+  public String toString() {
+    return "Sequence";
+  }
 }

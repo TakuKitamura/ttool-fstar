@@ -36,42 +36,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
 /**
- * Class ADJunction
- * Creation: 10/12/2003
+ * Class ADJunction Creation: 10/12/2003
+ * 
  * @version 1.0 11/12/2003
  * @author Ludovic APVRILLE
  */
 public class ADJunction extends ADComponent implements NonBlockingADComponent, MultiIncomingElt {
-    Process p; // for RT-LOTOS code generation
-    
-    public ADJunction() {
-        nbNext = 1;
-    }
-    
-    public void setProcess(Process _p) {
-        p = _p;
-    }
-    
-    public Process getProcess() {
-        return p;
-    }
+  Process p; // for RT-LOTOS code generation
 
-    public ADComponent makeSame() {
-      return new ADJunction();
-    }
+  public ADJunction() {
+    nbNext = 1;
+  }
 
-    public String toString() {
-        return "Junction";
-    }
+  public void setProcess(Process _p) {
+    p = _p;
+  }
+
+  public Process getProcess() {
+    return p;
+  }
+
+  public ADComponent makeSame() {
+    return new ADJunction();
+  }
+
+  public String toString() {
+    return "Junction";
+  }
 }
-

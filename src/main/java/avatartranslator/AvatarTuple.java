@@ -45,118 +45,119 @@ import java.util.List;
 import java.util.Map;
 
 /**
-   * Class AvatarTuple
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
-   * @author Florian LUGOU
+ * Class AvatarTuple Creation: 16/09/2015
+ * 
+ * @version 1.0 16/09/2015
+ * @author Florian LUGOU
  */
 public class AvatarTuple extends AvatarLeftHand {
-    List<AvatarTerm> components;
+  List<AvatarTerm> components;
 
-    public AvatarTuple (Object _referenceObject) {
-        super (null, _referenceObject);
-        this.components = new LinkedList<AvatarTerm> ();
-    }
+  public AvatarTuple(Object _referenceObject) {
+    super(null, _referenceObject);
+    this.components = new LinkedList<AvatarTerm>();
+  }
 
-    public static AvatarTuple createFromString (AvatarStateMachineOwner block, String toParse) {
-        AvatarTuple result = null;
-        toParse = toParse.trim();
+  public static AvatarTuple createFromString(AvatarStateMachineOwner block, String toParse) {
+    AvatarTuple result = null;
+    toParse = toParse.trim();
 
-        if (toParse.startsWith("(")) {
-            int indexLParen = toParse.indexOf ("(");
-            int indexRParen = AvatarGuard.getMatchingRParen (toParse, indexLParen);
-            if (indexRParen != toParse.length () - 1)
-                return null;
-            String[] components = toParse.substring (indexLParen+1, indexRParen).trim().split (",");
-            boolean illFormed = false;
-            AvatarTuple argsTuple = new AvatarTuple (block);
-            for (String arg: components) {
-                if (!arg.isEmpty()) {
-                    //TraceManager.addDev("In for with arg=" + arg+"|");
-                    AvatarTerm t = AvatarTerm.createFromString (block, arg);
-                    if (t == null) {
-                        // Term couldn't be parsed
-                        illFormed = true;
-                        break;
-                    }
+    if (toParse.startsWith("(")) {
+      int indexLParen = toParse.indexOf("(");
+      int indexRParen = AvatarGuard.getMatchingRParen(toParse, indexLParen);
+      if (indexRParen != toParse.length() - 1)
+        return null;
+      String[] components = toParse.substring(indexLParen + 1, indexRParen).trim().split(",");
+      boolean illFormed = false;
+      AvatarTuple argsTuple = new AvatarTuple(block);
+      for (String arg : components) {
+        if (!arg.isEmpty()) {
+          // TraceManager.addDev("In for with arg=" + arg+"|");
+          AvatarTerm t = AvatarTerm.createFromString(block, arg);
+          if (t == null) {
+            // Term couldn't be parsed
+            illFormed = true;
+            break;
+          }
 
-                    argsTuple.addComponent (t);
-                }
-            }
-
-            if (!illFormed) {
-                // Every argument was correctly parsed
-                result = argsTuple;
-               //TraceManager.addDev("Successfully parsed tuple \"" + toParse.substring (indexLParen+1, indexRParen) + "\"");
-            } else {
-                TraceManager.addDev("Illformed expression ...");
-            }
-
+          argsTuple.addComponent(t);
         }
+      }
 
-        return result;
+      if (!illFormed) {
+        // Every argument was correctly parsed
+        result = argsTuple;
+        // TraceManager.addDev("Successfully parsed tuple \"" + toParse.substring
+        // (indexLParen+1, indexRParen) + "\"");
+      } else {
+        TraceManager.addDev("Illformed expression ...");
+      }
+
     }
 
-    public void addComponent (AvatarTerm term) {
-        this.components.add (term);
+    return result;
+  }
+
+  public void addComponent(AvatarTerm term) {
+    this.components.add(term);
+  }
+
+  public List<AvatarTerm> getComponents() {
+    return this.components;
+  }
+
+  public String getName() {
+    return this.toString();
+  }
+
+  @Override
+  public String toString() {
+    String result = "(";
+    boolean first = true;
+    for (AvatarTerm term : components) {
+      if (first)
+        first = false;
+      else
+        result += ", ";
+      result += term.getName();
     }
 
-    public List<AvatarTerm> getComponents () {
-        return this.components;
-    }
+    return result + ")";
+  }
 
-    public String getName () {
-        return this.toString ();
-    }
-
-    @Override
-    public String toString () {
-        String result = "(";
-        boolean first = true;
-        for (AvatarTerm term: components) {
-            if (first)
-                first = false;
-            else
-                result += ", ";
-            result += term.getName ();
-        }
-
-        return result + ")";
-    }
-
-    public boolean isLeftHand () {
-        for (AvatarTerm term: this.components)
-            if (!(term instanceof AvatarAttribute))
-                return false;
-        return true;
-    }
-
-    @Override
-    public boolean containsAMethodCall () {
-        for (AvatarTerm term: this.components)
-            if (term.containsAMethodCall ())
-                return true;
+  public boolean isLeftHand() {
+    for (AvatarTerm term : this.components)
+      if (!(term instanceof AvatarAttribute))
         return false;
-    }
+    return true;
+  }
 
-    @Override
-    public AvatarTuple clone () {
-        AvatarTuple clone = new AvatarTuple (this.referenceObject);
-        for (AvatarTerm term: this.components)
-            clone.addComponent (term.clone ());
-        return clone;
-    }
+  @Override
+  public boolean containsAMethodCall() {
+    for (AvatarTerm term : this.components)
+      if (term.containsAMethodCall())
+        return true;
+    return false;
+  }
 
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        List<AvatarTerm> components = new LinkedList<AvatarTerm> ();
-        for (AvatarTerm term: this.components)
-            if (term instanceof AvatarAttribute)
-                components.add (attributesMapping.get (term));
-            else {
-                components.add (term);
-                term.replaceAttributes (attributesMapping);
-            }
-        this.components = components;
-    }
+  @Override
+  public AvatarTuple clone() {
+    AvatarTuple clone = new AvatarTuple(this.referenceObject);
+    for (AvatarTerm term : this.components)
+      clone.addComponent(term.clone());
+    return clone;
+  }
+
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    List<AvatarTerm> components = new LinkedList<AvatarTerm>();
+    for (AvatarTerm term : this.components)
+      if (term instanceof AvatarAttribute)
+        components.add(attributesMapping.get(term));
+      else {
+        components.add(term);
+        term.replaceAttributes(attributesMapping);
+      }
+    this.components = components;
+  }
 }

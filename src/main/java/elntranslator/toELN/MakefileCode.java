@@ -49,61 +49,59 @@ import java.util.LinkedList;
 import elntranslator.*;
 
 /**
- * Class MakefileCode 
- * Principal code of a makefile 
- * Creation: 31/07/2018
+ * Class MakefileCode Principal code of a makefile Creation: 31/07/2018
+ * 
  * @version 1.0 31/07/2018
  * @author Irina Kit Yan LEE
  */
 
 public class MakefileCode {
-	static private String corpsMakefile;
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
+  static private String corpsMakefile;
+  private final static String CR = "\n";
+  private final static String CR2 = "\n\n";
 
-	MakefileCode() {
-	}
+  MakefileCode() {
+  }
 
-	public static String getMakefileCode(LinkedList<ELNTCluster> clusters) {
-		if (clusters != null) {
-			corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR
-					+ "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
-					+ "EXECUTABLES = ";
+  public static String getMakefileCode(LinkedList<ELNTCluster> clusters) {
+    if (clusters != null) {
+      corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR
+          + "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
+          + "EXECUTABLES = ";
 
-			for (int i = 0; i < clusters.size(); i++) {
-				if (i == 0) {
-					corpsMakefile = corpsMakefile + clusters.get(i).getName() + "_tb";
-				}
-				if (i > 0) {
-					corpsMakefile = corpsMakefile + " " + clusters.get(i).getName() + "_tb";
-				}
-				if (i == clusters.size() - 1) {
-					corpsMakefile = corpsMakefile + CR2;
-				}
-			}
+      for (int i = 0; i < clusters.size(); i++) {
+        if (i == 0) {
+          corpsMakefile = corpsMakefile + clusters.get(i).getName() + "_tb";
+        }
+        if (i > 0) {
+          corpsMakefile = corpsMakefile + " " + clusters.get(i).getName() + "_tb";
+        }
+        if (i == clusters.size() - 1) {
+          corpsMakefile = corpsMakefile + CR2;
+        }
+      }
 
-			corpsMakefile = corpsMakefile + "# .PHONY targets don't generate files" + CR + ".PHONY:	all clean" + CR2
-					+ "# Default targets" + CR + "all:	$(EXECUTABLES)" + CR2;
+      corpsMakefile = corpsMakefile + "# .PHONY targets don't generate files" + CR + ".PHONY:	all clean" + CR2
+          + "# Default targets" + CR + "all:	$(EXECUTABLES)" + CR2;
 
-			for (int i = 0; i < clusters.size(); i++) {
-				LinkedList<ELNTModule> modules = clusters.get(i).getModule();
+      for (int i = 0; i < clusters.size(); i++) {
+        LinkedList<ELNTModule> modules = clusters.get(i).getModule();
 
-				corpsMakefile = corpsMakefile + clusters.get(i).getName() + "_tb: "
-						+ clusters.get(i).getName() + "_tb.cpp";
+        corpsMakefile = corpsMakefile + clusters.get(i).getName() + "_tb: " + clusters.get(i).getName() + "_tb.cpp";
 
-				for (ELNTModule t : modules) {
-					corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
-				}
+        for (ELNTModule t : modules) {
+          corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+        }
 
-				corpsMakefile = corpsMakefile + CR
-						+ "\t$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< -lsystemc-ams -lsystemc | c++filt" + CR2;
-			}
+        corpsMakefile = corpsMakefile + CR
+            + "\t$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< -lsystemc-ams -lsystemc | c++filt" + CR2;
+      }
 
-			corpsMakefile = corpsMakefile + "# Clean rule to delete temporary and generated files" + CR + "clean:" + CR
-					+ "\trm -rf *~ *.o *.dat *.vcd *.dSYM $(EXECUTABLES)" + CR;
-		} else {
-			corpsMakefile = "";
-		}
-		return corpsMakefile;
-	}
+      corpsMakefile = corpsMakefile + "# Clean rule to delete temporary and generated files" + CR + "clean:" + CR
+          + "\trm -rf *~ *.o *.dat *.vcd *.dSYM $(EXECUTABLES)" + CR;
+    } else {
+      corpsMakefile = "";
+    }
+    return corpsMakefile;
+  }
 }

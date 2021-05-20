@@ -36,33 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package nc;
 
-
 /**
-* Class NCElement
-* Creation: 14/11/2008
-* @version 1.0 14/11/2008
-* @author Ludovic APVRILLE
+ * Class NCElement Creation: 14/11/2008
+ * 
+ * @version 1.0 14/11/2008
+ * @author Ludovic APVRILLE
  */
-public class NCElement extends Object  {
-    
-	protected String name;
-	
-	public NCElement() {
-		
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String _name) {
-		name = _name;
-	}
-	
-	
+public class NCElement extends Object {
+
+  protected String name;
+
+  public NCElement() {
+
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String _name) {
+    name = _name;
+  }
+
 }

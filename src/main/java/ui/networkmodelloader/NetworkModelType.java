@@ -36,20 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.networkmodelloader;
 
-
 /**
- * Class NetworkModel
- * Dialog for managing the loading of network models
+ * Class NetworkModel Dialog for managing the loading of network models
  * Creation: 29/05/2017
+ * 
  * @version 1.1 29/05/2017
  * @author Ludovic APVRILLE
  * @author Ludovic APVRILLE
  */
-public enum NetworkModelType  {
-    SOFTWARE_DESIGN, PARTITIONING, ATTACK_TREE, SECURITY_PROTOCOL
+public enum NetworkModelType {
+  SOFTWARE_DESIGN, PARTITIONING, ATTACK_TREE, SECURITY_PROTOCOL
 }

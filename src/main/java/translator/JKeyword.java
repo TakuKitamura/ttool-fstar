@@ -36,47 +36,47 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package translator;
 
 /**
- * Class JKeyword
- * Creation: 03/03/2005
+ * Class JKeyword Creation: 03/03/2005
  *
  * @author Ludovic APVRILLE
  * @version 1.1 03/03/2005
  */
 public class JKeyword {
-    private final static String[] words = {"abstract", "default", "goto", "package", "synchronized", "boolean", "do", "if", "private", "this", "break", "double", "implements",
-            "protected", "throw", "byte", "else", "import", "public", "throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char", "final",
-            "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float", "native", "super", "while", "continue", "for", "new", "switch", "select"};
+  private final static String[] words = { "abstract", "default", "goto", "package", "synchronized", "boolean", "do",
+      "if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import",
+      "public", "throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short",
+      "try", "char", "final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile",
+      "const", "float", "native", "super", "while", "continue", "for", "new", "switch", "select" };
 
-    public final static String INDENT = "    ";
-    public final static String END_OP = ";";
-    public final static String END_OP_N = ";\n";
-    public final static String ATTRIBUTE_SEP = ",";
-    public final static String ATTRIBUTE_AFFECT = "=";
+  public final static String INDENT = "    ";
+  public final static String END_OP = ";";
+  public final static String END_OP_N = ";\n";
+  public final static String ATTRIBUTE_SEP = ",";
+  public final static String ATTRIBUTE_AFFECT = "=";
 
-    public final static String START_CODE = "{";
-    public final static String START_CODE_N = "{\n";
-    public final static String STOP_CODE = "}";
-    public final static String STOP_CODE_N = "}\n";
+  public final static String START_CODE = "{";
+  public final static String START_CODE_N = "{\n";
+  public final static String STOP_CODE = "}";
+  public final static String STOP_CODE_N = "}\n";
 
-    public static final String PRIVATE = "private";
-    public static final String PUBLIC = "public";
-    public static final String PROTECTED = "protected";
-    public static final String INTEGER = "int";
-    public static final String LONG = "long";
-    public static final String BOOLEAN = "boolean";
-    public static final String STATIC = "static";
-    public static final String VOID = "void";
+  public static final String PRIVATE = "private";
+  public static final String PUBLIC = "public";
+  public static final String PROTECTED = "protected";
+  public static final String INTEGER = "int";
+  public static final String LONG = "long";
+  public static final String BOOLEAN = "boolean";
+  public static final String STATIC = "static";
+  public static final String VOID = "void";
 
-    public static boolean isAKeyword(String s) {
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].equals(s)) {
-                return true;
-            }
-        }
-        return false;
+  public static boolean isAKeyword(String s) {
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].equals(s)) {
+        return true;
+      }
     }
+    return false;
+  }
 }

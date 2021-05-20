@@ -36,17 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 /**
-   * Class TMLArchiSecurityInterface
-   * Interface of a mapped security element
-   * Creation: 13/09/2016
-   * @version 1.0 13/09/2016
-   * @author Ludovic APVRILLE
+ * Class TMLArchiSecurityInterface Interface of a mapped security element
+ * Creation: 13/09/2016
+ * 
+ * @version 1.0 13/09/2016
+ * @author Ludovic APVRILLE
  */
 public interface TMLArchiSecurityInterface {
 }

@@ -36,67 +36,60 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
 /**
-   * Class AvatarType
-   * Avatar type
-   * Creation: 20/05/2010
-   * @version 1.0 20/05/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarType Avatar type Creation: 20/05/2010
+ * 
+ * @version 1.0 20/05/2010
+ * @author Ludovic APVRILLE
  */
 public enum AvatarType {
-    // Types of parameters
-    BOOLEAN ("bool", "false", "f", 0),
-    INTEGER ("int", "0", "0", 0),
-    TIMER ("timer", "0", "0", 0),
-    
-    UNDEFINED ("undefined", "", "", -1);
+  // Types of parameters
+  BOOLEAN("bool", "false", "f", 0), INTEGER("int", "0", "0", 0), TIMER("timer", "0", "0", 0),
 
-    private String name = "";
-    private String defaultValue = "";
-    private String defaultValueTF = "";
-    private int defaultValueInInt = -1;
+  UNDEFINED("undefined", "", "", -1);
 
-    AvatarType (String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.defaultValueTF = defaultValueTF;
-	this.defaultValueInInt = defaultValueInInt;
-    }
+  private String name = "";
+  private String defaultValue = "";
+  private String defaultValueTF = "";
+  private int defaultValueInInt = -1;
 
-    public static AvatarType getType (String s) {
-        if (s.equals("bool") || s.equals ("Boolean"))
-            return      AvatarType.BOOLEAN;
-        else if (s.equals("int") || s.equals("Integer"))
-            return      AvatarType.INTEGER;
-        else if (s.equals("Timer"))
-            return      AvatarType.TIMER;
-        return AvatarType.UNDEFINED;
-    }
+  AvatarType(String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
+    this.name = name;
+    this.defaultValue = defaultValue;
+    this.defaultValueTF = defaultValueTF;
+    this.defaultValueInInt = defaultValueInInt;
+  }
 
-    public String getStringType () {
-        return this.name;
-    }
+  public static AvatarType getType(String s) {
+    if (s.equals("bool") || s.equals("Boolean"))
+      return AvatarType.BOOLEAN;
+    else if (s.equals("int") || s.equals("Integer"))
+      return AvatarType.INTEGER;
+    else if (s.equals("Timer"))
+      return AvatarType.TIMER;
+    return AvatarType.UNDEFINED;
+  }
 
-    public String getDefaultInitialValue () {
-        return this.defaultValue;
-    }
+  public String getStringType() {
+    return this.name;
+  }
 
-    public String getDefaultInitialValueTF() {
-        return this.defaultValueTF;
-    }
+  public String getDefaultInitialValue() {
+    return this.defaultValue;
+  }
 
-    public int getDefaultInitialValueInInt() {
-        return this.defaultValueInInt;
-    }
+  public String getDefaultInitialValueTF() {
+    return this.defaultValueTF;
+  }
 
-    /*public AvatarType advancedClone() {
-	AvatarType at = new AvatarType(name, defaultValue, defaultValueTF, defaultValueInt);
-	return at;
-	}*/
+  public int getDefaultInitialValueInInt() {
+    return this.defaultValueInInt;
+  }
+
+  /*
+   * public AvatarType advancedClone() { AvatarType at = new AvatarType(name,
+   * defaultValue, defaultValueTF, defaultValueInt); return at; }
+   */
 }

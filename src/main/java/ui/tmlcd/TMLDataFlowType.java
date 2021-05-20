@@ -36,22 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 /**
- * Class TMLDataFlowType
- * To be used in class diagrams
- * Creation: 06/02/2015
+ * Class TMLDataFlowType To be used in class diagrams Creation: 06/02/2015
+ * 
  * @version 1.0 06/02/2015
  * @author Andrea ENRICI
  */
-public abstract class TMLDataFlowType	{
+public abstract class TMLDataFlowType {
 
-    public static final String INT_16 = "int16_t";
-    public static final String INT_32 = "int32_t";
-    public static final String INT_64 = "int64_t";
+  public static final String INT_16 = "int16_t";
+  public static final String INT_32 = "int32_t";
+  public static final String INT_64 = "int64_t";
 
 }

@@ -41,60 +41,61 @@ package elntranslator;
 import java.util.LinkedList;
 
 /**
- * Class ELNTComponentInductor
- * Parameters of a ELN primitive component : inductor
- * Creation: 23/07/2018
+ * Class ELNTComponentInductor Parameters of a ELN primitive component :
+ * inductor Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTComponentInductor extends ELNTComponent implements ELNTPrimitiveComponent {
-	private String name;
-	private double val, phi0;
-	private String unit0, unit1;
-	private LinkedList<ELNTConnectingPoint> cp;
-	
-	private ELNTModule module;
-	
-	public ELNTComponentInductor(String _name, double _val, double _phi0, String _unit0, String _unit1, ELNTModule _module) {
-		name = _name;
-		val = _val;
-		phi0 = _phi0;
-		unit0 = _unit0;
-		unit1 = _unit1;
-		cp = new LinkedList<ELNTConnectingPoint>();
-		module = _module;
-	}
+  private String name;
+  private double val, phi0;
+  private String unit0, unit1;
+  private LinkedList<ELNTConnectingPoint> cp;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTModule module;
 
-	public double getVal() {
-		return val;
-	}
+  public ELNTComponentInductor(String _name, double _val, double _phi0, String _unit0, String _unit1,
+      ELNTModule _module) {
+    name = _name;
+    val = _val;
+    phi0 = _phi0;
+    unit0 = _unit0;
+    unit1 = _unit1;
+    cp = new LinkedList<ELNTConnectingPoint>();
+    module = _module;
+  }
 
-	public double getPhi0() {
-		return phi0;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getUnit0() {
-		return unit0;
-	}
+  public double getVal() {
+    return val;
+  }
 
-	public String getUnit1() {
-		return unit1;
-	}
+  public double getPhi0() {
+    return phi0;
+  }
 
-	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
-		return cp;
-	}
-	
-	public void addConnectingPoint(ELNTConnectingPoint _cp) {
-		cp.add(_cp);
-	}
-	
-	public ELNTModule getModule() {
-		return module;
-	}
+  public String getUnit0() {
+    return unit0;
+  }
+
+  public String getUnit1() {
+    return unit1;
+  }
+
+  public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
+    return cp;
+  }
+
+  public void addConnectingPoint(ELNTConnectingPoint _cp) {
+    cp.add(_cp);
+  }
+
+  public ELNTModule getModule() {
+    return module;
+  }
 }

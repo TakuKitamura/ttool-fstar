@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package help;
 
 import myutil.TraceManager;
@@ -47,238 +46,228 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Vector;
 
-
 /**
- * Class HelpManager
- * Creation: 28/02/2019
- * Version 2.0 28/02/2019
+ * Class HelpManager Creation: 28/02/2019 Version 2.0 28/02/2019
  *
  * @author Ludovic APVRILLE
  */
 public class HelpManager extends HelpEntry {
 
-    private static String PATH_TO_INDEX = "helpTable.txt";
-    private static String INIT_CHAR = "-";
+  private static String PATH_TO_INDEX = "helpTable.txt";
+  private static String INIT_CHAR = "-";
 
-    private boolean helpLoaded = false;
+  private boolean helpLoaded = false;
 
-    private Vector<HelpEntry> allEntries;
+  private Vector<HelpEntry> allEntries;
 
+  public HelpManager() {
+    linkToParent = null;
+  }
 
-    public HelpManager() {
-        linkToParent = null;
+  // Returns false in case of failure
+  public boolean loadEntries() {
+    if (helpLoaded) {
+      return true;
     }
 
+    // Setup the root entry
+    fillInfos("none Help TTool help");
 
-    // Returns false in case of failure
-    public boolean loadEntries() {
-        if (helpLoaded) {
-            return true;
-        }
+    // File file = getContent(PATH_TO_INDEX);
+    URL url = getURL(PATH_TO_INDEX);
 
+    int lineNb = 0;
 
-        // Setup the root entry
-        fillInfos("none Help TTool help");
+    try {
+      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
-        //File file = getContent(PATH_TO_INDEX);
-        URL url = getURL(PATH_TO_INDEX);
+      // TraceManager.addDev("File=" + file);
 
-        int lineNb = 0;
+      HelpEntry currentHelpEntry = this;
 
-        try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(url.openStream()));
-
-            //TraceManager.addDev("File=" + file);
-
-            HelpEntry currentHelpEntry = this;
-
-
-            //try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            //try {
-            String line;
-            lineNb++;
-            while ((line = in.readLine()) != null) {
-                // while ((line = br.readLine()) != null) {
-                //TraceManager.addDev("Reading index line: " + line);
-                line = line.trim();
-                if (line.length() > 0) {
-                    //TraceManager.addDev("Getting number of inits");
-                    int nb = getNumberOfInit(line);
-                    //TraceManager.addDev("Testing number of inits=" + nb);
-                    if (nb > 0) {
-                        //TraceManager.addDev("Before adding Entry");
-                        currentHelpEntry = addEntry(currentHelpEntry, nb, removeInitChars(line));
-                        //TraceManager.addDev("After adding Entry");
-                        if (currentHelpEntry == null) {
-                            TraceManager.addDev("\nHelp: error when loading help index file at line: " + lineNb + "\n");
-                            //System.exit(-1);
-                            return false;
-                        }
-                    }
-
-                }
-                lineNb ++;
+      // try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+      // try {
+      String line;
+      lineNb++;
+      while ((line = in.readLine()) != null) {
+        // while ((line = br.readLine()) != null) {
+        // TraceManager.addDev("Reading index line: " + line);
+        line = line.trim();
+        if (line.length() > 0) {
+          // TraceManager.addDev("Getting number of inits");
+          int nb = getNumberOfInit(line);
+          // TraceManager.addDev("Testing number of inits=" + nb);
+          if (nb > 0) {
+            // TraceManager.addDev("Before adding Entry");
+            currentHelpEntry = addEntry(currentHelpEntry, nb, removeInitChars(line));
+            // TraceManager.addDev("After adding Entry");
+            if (currentHelpEntry == null) {
+              TraceManager.addDev("\nHelp: error when loading help index file at line: " + lineNb + "\n");
+              // System.exit(-1);
+              return false;
             }
-        } catch (Exception e) {
-            TraceManager.addDev("Help: exception when loading help index file at line: " + lineNb + "\n");
-            //System.exit(-1);
-            return false;
+          }
+
         }
-
-        computeAllEntries();
-        helpLoaded = true;
-
-        return true;
+        lineNb++;
+      }
+    } catch (Exception e) {
+      TraceManager.addDev("Help: exception when loading help index file at line: " + lineNb + "\n");
+      // System.exit(-1);
+      return false;
     }
 
-    public HelpEntry addEntry(HelpEntry entry, int inHierarchy, String infos) {
-        if (entry == null) {
-            return null;
-        }
+    computeAllEntries();
+    helpLoaded = true;
 
-        if (inHierarchy < 1) {
-            return null;
-        }
+    return true;
+  }
 
-        // We must locate the corresponding father
-        int currentN = entry.getNbInHierarchy();
-        HelpEntry father = null;
-
-        // Missing an intermediate section?
-        if (inHierarchy > (currentN + 1)) {
-            return null;
-        }
-
-        //TraceManager.addDev("New node");
-
-        HelpEntry newNode = new HelpEntry();
-        boolean ok = newNode.fillInfos(infos);
-        if (!ok) {
-            TraceManager.addDev("HELP: Not ok");
-            return null;
-        }
-
-        //TraceManager.addDev("Before child");
-
-        // Child?
-        if (inHierarchy == (currentN + 1)) {
-            entry.addKid(newNode);
-            newNode.linkToParent = entry;
-            return newNode;
-        }
-
-        //TraceManager.addDev("Before brother");
-
-        // Brother?
-        if (inHierarchy == (currentN)) {
-            if (entry.getFather() == null) {
-                return null;
-            }
-            entry.getFather().addKid(newNode);
-            newNode.linkToParent = entry.getFather();
-            return newNode;
-        }
-
-        // Next section!
-        // We must locate the correct father
-        //TraceManager.addDev("Next section");
-        father = entry;
-        int nbOfAncestors = currentN - inHierarchy + 1;
-        //TraceManager.addDev("Next section ancestors:" + nbOfAncestors);
-        while (nbOfAncestors > 0) {
-            father = father.getFather();
-            if (father == null) {
-                return null;
-            }
-            nbOfAncestors--;
-        }
-        father.addKid(newNode);
-        newNode.linkToParent = father;
-        return newNode;
+  public HelpEntry addEntry(HelpEntry entry, int inHierarchy, String infos) {
+    if (entry == null) {
+      return null;
     }
 
-
-    private String removeInitChars(String s) {
-        while (s.startsWith(INIT_CHAR)) {
-            s = s.substring(1, s.length());
-        }
-        return s;
+    if (inHierarchy < 1) {
+      return null;
     }
 
-    private int getNumberOfInit(String s) {
-        int cpt = 0;
-        while (s.startsWith(INIT_CHAR)) {
-            cpt++;
-            s = s.substring(1, s.length());
-        }
-        return cpt;
+    // We must locate the corresponding father
+    int currentN = entry.getNbInHierarchy();
+    HelpEntry father = null;
+
+    // Missing an intermediate section?
+    if (inHierarchy > (currentN + 1)) {
+      return null;
     }
 
-    public static URL getURL(String resource) {
-        return HelpManager.class.getResource(resource);
+    // TraceManager.addDev("New node");
+
+    HelpEntry newNode = new HelpEntry();
+    boolean ok = newNode.fillInfos(infos);
+    if (!ok) {
+      TraceManager.addDev("HELP: Not ok");
+      return null;
     }
 
-    public static File getContent(String resource) {
-        try {
-            TraceManager.addDev("Getting help resource:" + resource);
-            URL url = HelpManager.class.getResource(resource);
+    // TraceManager.addDev("Before child");
 
+    // Child?
+    if (inHierarchy == (currentN + 1)) {
+      entry.addKid(newNode);
+      newNode.linkToParent = entry;
+      return newNode;
+    }
 
-            if (url != null) {
-                TraceManager.addDev("help url = " + url);
-                File myFile = new File(url.toURI());
-                return myFile;
-            }
+    // TraceManager.addDev("Before brother");
 
-            //TraceManager.addDev("NULL URL");
-        } catch (Exception e) {
-        }
+    // Brother?
+    if (inHierarchy == (currentN)) {
+      if (entry.getFather() == null) {
         return null;
+      }
+      entry.getFather().addKid(newNode);
+      newNode.linkToParent = entry.getFather();
+      return newNode;
     }
 
-    public String printHierarchy() {
-        String top = "Help tree\n root has " + getNbOfKids() + " nodes.\n";
-
-        for (HelpEntry he : entries) {
-            top += he.printHierarchy(1);
-        }
-        return top;
-    }
-
-    private void computeAllEntries() {
-        allEntries = new Vector<>();
-        addEntries(allEntries);
-
-    }
-
-    public Vector<HelpEntry> getEntriesWithKeyword(String[] words) {
-        Vector<HelpEntry> result = new Vector<>();
-        for(HelpEntry he: allEntries) {
-            int nb = he.hasSimilarWords(words);
-            if (nb > 0) {
-                result.add(he);
-            }
-        }
-        return result;
-    }
-
-    public HelpEntry getEntryWithMasterKeyword(String word) {
-
-        for(HelpEntry he: allEntries) {
-            boolean b = he.hasMasterKeyword(word);
-            if (b)
-                return he;
-        }
+    // Next section!
+    // We must locate the correct father
+    // TraceManager.addDev("Next section");
+    father = entry;
+    int nbOfAncestors = currentN - inHierarchy + 1;
+    // TraceManager.addDev("Next section ancestors:" + nbOfAncestors);
+    while (nbOfAncestors > 0) {
+      father = father.getFather();
+      if (father == null) {
         return null;
+      }
+      nbOfAncestors--;
     }
+    father.addKid(newNode);
+    newNode.linkToParent = father;
+    return newNode;
+  }
 
-    public HelpEntry getHelpEntryWithHTMLFile(String pathToHTMLFile) {
-        for(HelpEntry he: allEntries) {
-            if (he.pathToHTMLFile.compareTo(pathToHTMLFile) == 0) {
-                return he;
-            }
-        }
-        return null;
+  private String removeInitChars(String s) {
+    while (s.startsWith(INIT_CHAR)) {
+      s = s.substring(1, s.length());
     }
+    return s;
+  }
+
+  private int getNumberOfInit(String s) {
+    int cpt = 0;
+    while (s.startsWith(INIT_CHAR)) {
+      cpt++;
+      s = s.substring(1, s.length());
+    }
+    return cpt;
+  }
+
+  public static URL getURL(String resource) {
+    return HelpManager.class.getResource(resource);
+  }
+
+  public static File getContent(String resource) {
+    try {
+      TraceManager.addDev("Getting help resource:" + resource);
+      URL url = HelpManager.class.getResource(resource);
+
+      if (url != null) {
+        TraceManager.addDev("help url = " + url);
+        File myFile = new File(url.toURI());
+        return myFile;
+      }
+
+      // TraceManager.addDev("NULL URL");
+    } catch (Exception e) {
+    }
+    return null;
+  }
+
+  public String printHierarchy() {
+    String top = "Help tree\n root has " + getNbOfKids() + " nodes.\n";
+
+    for (HelpEntry he : entries) {
+      top += he.printHierarchy(1);
+    }
+    return top;
+  }
+
+  private void computeAllEntries() {
+    allEntries = new Vector<>();
+    addEntries(allEntries);
+
+  }
+
+  public Vector<HelpEntry> getEntriesWithKeyword(String[] words) {
+    Vector<HelpEntry> result = new Vector<>();
+    for (HelpEntry he : allEntries) {
+      int nb = he.hasSimilarWords(words);
+      if (nb > 0) {
+        result.add(he);
+      }
+    }
+    return result;
+  }
+
+  public HelpEntry getEntryWithMasterKeyword(String word) {
+
+    for (HelpEntry he : allEntries) {
+      boolean b = he.hasMasterKeyword(word);
+      if (b)
+        return he;
+    }
+    return null;
+  }
+
+  public HelpEntry getHelpEntryWithHTMLFile(String pathToHTMLFile) {
+    for (HelpEntry he : allEntries) {
+      if (he.pathToHTMLFile.compareTo(pathToHTMLFile) == 0) {
+        return he;
+      }
+    }
+    return null;
+  }
 }

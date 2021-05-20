@@ -36,25 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import java.awt.*;
 
 /**
- * Class ColorCustomizable
- * Components for which the main color can be changed
+ * Class ColorCustomizable Components for which the main color can be changed
  * Creation: 24/03/2021
+ * 
  * @version 1.0 24/03/2021
  * @author Ludovic APVRILLE
  */
-public interface ColorCustomizable  {
+public interface ColorCustomizable {
 
-    public Color getMainColor();
-    public Color getCurrentColor();
-    public void setCurrentColor(int _rgb);
-    public void setCurrentColor(Color _c);
+  public Color getMainColor();
+
+  public Color getCurrentColor();
+
+  public void setCurrentColor(int _rgb);
+
+  public void setCurrentColor(Color _c);
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -51,166 +48,158 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class JDialogTOSClass
- * Dialog for managing remote processes call for simulation
- * Creation: 04/10/2006
+ * Class JDialogTOSClass Dialog for managing remote processes call for
+ * simulation Creation: 04/10/2006
+ * 
  * @version 1.0 04/10/2006
  * @author Ludovic APVRILLE
  */
 public class JDialogTOSClass extends JDialog implements ActionListener {
 
-    protected MainGUI mgui;
+  protected MainGUI mgui;
 
-    
-    //components
-    protected JTextField name, period, deadline;
-    protected JComboBox<String> stereotypes;
+  // components
+  protected JTextField name, period, deadline;
+  protected JComboBox<String> stereotypes;
 
-    protected JButton ok;
-    protected JButton cancel;
-    
-    protected TOSClass tos;
-    
-    protected boolean changeMade = false;
+  protected JButton ok;
+  protected JButton cancel;
 
+  protected TOSClass tos;
 
-    /* Creates new form  */
-    public JDialogTOSClass(Frame f, String title, TOSClass _tos) {
-        super(f, title, true);
+  protected boolean changeMade = false;
 
-        tos = _tos;
+  /* Creates new form */
+  public JDialogTOSClass(Frame f, String title, TOSClass _tos) {
+    super(f, title, true);
 
-        initComponents();
-        myInitComponents();
-        pack();
+    tos = _tos;
 
-    }
-    
-    
-    protected void myInitComponents() {
-        setProperties();
-    }
-    
-    protected void initComponents() {
-        
-        Container c = getContentPane();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        JPanel jp1 = new JPanel();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c1 = new GridBagConstraints();
-        
-        
-        
-        jp1.setLayout(gridbag1);
-        jp1.setBorder(new javax.swing.border.TitledBorder("Simulation options"));
-        //jp1.setPreferredSize(new Dimension(300, 150));
-        
-        // first line panel1
-        //c1.gridwidth = 3;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridheight = 1;
-        
-        name = new JTextField(tos.getClassName());
-        period = new JTextField(""+tos.getPeriod());
-        deadline = new JTextField(""+tos.getDeadline());
-        stereotypes = new JComboBox<>(TOSClass.stereotypes);
-        stereotypes.addActionListener(this);
-        stereotypes.setSelectedIndex(tos.getStereotype());
+    initComponents();
+    myInitComponents();
+    pack();
 
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("name="));
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jp1.add(name, c1);
-        
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("type="));
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jp1.add(stereotypes, c1);
-        
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("period="));
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jp1.add(period, c1);
+  }
 
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("deadline="));
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jp1.add(deadline, c1);
+  protected void myInitComponents() {
+    setProperties();
+  }
 
+  protected void initComponents() {
 
-        c.add(jp1, BorderLayout.CENTER);
+    Container c = getContentPane();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        ok = new JButton("Save and close", IconManager.imgic25);
-        cancel = new JButton("Cancel", IconManager.imgic27);
+    JPanel jp1 = new JPanel();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c1 = new GridBagConstraints();
 
-        ok.setPreferredSize(new Dimension(100, 30));
-        cancel.setPreferredSize(new Dimension(100, 30));
+    jp1.setLayout(gridbag1);
+    jp1.setBorder(new javax.swing.border.TitledBorder("Simulation options"));
+    // jp1.setPreferredSize(new Dimension(300, 150));
 
-        ok.addActionListener(this);
-        cancel.addActionListener(this);
+    // first line panel1
+    // c1.gridwidth = 3;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridheight = 1;
 
-        JPanel jp2 = new JPanel();
-        jp2.add(ok);
-        jp2.add(cancel);
+    name = new JTextField(tos.getClassName());
+    period = new JTextField("" + tos.getPeriod());
+    deadline = new JTextField("" + tos.getDeadline());
+    stereotypes = new JComboBox<>(TOSClass.stereotypes);
+    stereotypes.addActionListener(this);
+    stereotypes.setSelectedIndex(tos.getStereotype());
 
-        c.add(jp2, BorderLayout.SOUTH);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
-        
-        
-        if (evt.getSource() == stereotypes) {
-           setProperties();
-           return;
-        }
+    c1.gridwidth = 1;
+    jp1.add(new JLabel("name="));
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    jp1.add(name, c1);
 
-        // Compare the action command to the known actions.
-        if (evt.getSource() == ok) {
-            changeMade = true;
-            dispose();
-            return;
-        } else if (evt.getSource() == cancel) {
-          changeMade = false;
-          dispose();
-        }
-    }
-    
-    public boolean changeMade() {
-           return changeMade;
-    }
-    
-    public String getName() {
-           return name.getText();
+    c1.gridwidth = 1;
+    jp1.add(new JLabel("type="));
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    jp1.add(stereotypes, c1);
+
+    c1.gridwidth = 1;
+    jp1.add(new JLabel("period="));
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    jp1.add(period, c1);
+
+    c1.gridwidth = 1;
+    jp1.add(new JLabel("deadline="));
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    jp1.add(deadline, c1);
+
+    c.add(jp1, BorderLayout.CENTER);
+
+    ok = new JButton("Save and close", IconManager.imgic25);
+    cancel = new JButton("Cancel", IconManager.imgic27);
+
+    ok.setPreferredSize(new Dimension(100, 30));
+    cancel.setPreferredSize(new Dimension(100, 30));
+
+    ok.addActionListener(this);
+    cancel.addActionListener(this);
+
+    JPanel jp2 = new JPanel();
+    jp2.add(ok);
+    jp2.add(cancel);
+
+    c.add(jp2, BorderLayout.SOUTH);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    // String command = evt.getActionCommand();
+
+    if (evt.getSource() == stereotypes) {
+      setProperties();
+      return;
     }
 
-    public String getPeriod() {
-           return period.getText();
+    // Compare the action command to the known actions.
+    if (evt.getSource() == ok) {
+      changeMade = true;
+      dispose();
+      return;
+    } else if (evt.getSource() == cancel) {
+      changeMade = false;
+      dispose();
     }
-    
-    public String getDeadline() {
-           return deadline.getText();
+  }
+
+  public boolean changeMade() {
+    return changeMade;
+  }
+
+  public String getName() {
+    return name.getText();
+  }
+
+  public String getPeriod() {
+    return period.getText();
+  }
+
+  public String getDeadline() {
+    return deadline.getText();
+  }
+
+  public int getIndexStereotype() {
+    return stereotypes.getSelectedIndex();
+  }
+
+  protected void setProperties() {
+    if (stereotypes.getSelectedIndex() == TOSClass.PERIODIC) {
+      period.setEnabled(true);
+      deadline.setEnabled(true);
+    } else {
+      period.setEnabled(false);
+      deadline.setEnabled(false);
     }
-    
-    public int getIndexStereotype() {
-           return stereotypes.getSelectedIndex();
-    }
-    
-    
-    protected void setProperties() {
-              if (stereotypes.getSelectedIndex() == TOSClass.PERIODIC) {
-                 period.setEnabled(true);
-                 deadline.setEnabled(true);
-              } else {
-                 period.setEnabled(false);
-                 deadline.setEnabled(false);
-              }
-    }
+  }
 }

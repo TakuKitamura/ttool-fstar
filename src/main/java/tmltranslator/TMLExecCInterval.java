@@ -36,19 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 /**
- * Class TMLExecCInterval
- * Creation: 21/05/2008
+ * Class TMLExecCInterval Creation: 21/05/2008
+ * 
  * @version 1.0 21/05/2008
  * @author Ludovic APVRILLE
  */
 public class TMLExecCInterval extends TMLActivityElementWithIntervalAction {
-    
-    public TMLExecCInterval(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+
+  public TMLExecCInterval(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
 }

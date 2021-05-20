@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package faulttrees;
 
 /**
- * Class VoteNode
- * Creation: 31/01/2018
+ * Class VoteNode Creation: 31/01/2018
+ * 
  * @version 1.0 31/01/2018
  * @author Ludovic APVRILLE
  */
 public class VoteNode extends FaultNode {
-    
-    public VoteNode(String _name, Object _referenceObject) {
-	    super(_name, _referenceObject);
-	    type = "VOTE";
-    }
+
+  public VoteNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "VOTE";
+  }
 
 }

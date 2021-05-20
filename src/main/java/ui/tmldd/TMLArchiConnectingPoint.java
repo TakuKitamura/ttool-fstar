@@ -36,31 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TMLArchiConnectingPoint
- * Definition of connecting points on which connectors of TMLArchi diagrams can be connected
- * Creation: 19/09/2007
+ * Class TMLArchiConnectingPoint Definition of connecting points on which
+ * connectors of TMLArchi diagrams can be connected Creation: 19/09/2007
+ * 
  * @version 1.0 19/09/2007
  * @author Ludovic APVRILLE
  */
-public class TMLArchiConnectingPoint extends  TGConnectingPointWidthHeight{
-    
-    public TMLArchiConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_NODE_TMLARCHI;
-    }
-    
+public class TMLArchiConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public TMLArchiConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_NODE_TMLARCHI;
+  }
+
 }

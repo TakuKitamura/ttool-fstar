@@ -36,39 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import javax.swing.*;
 
 /**
- * Class JScrollDiagramPanel
- * Creation: 29/12/2003
+ * Class JScrollDiagramPanel Creation: 29/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
 public class JScrollDiagramPanel extends JScrollPane {
-	
-	private TDiagramPanel tdp;
-	
-	// Constructor
-	public JScrollDiagramPanel(TDiagramPanel _tdp) {
-		//super(_tdp, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		super(_tdp);
-		tdp = _tdp;
-		setVisible(true);
-	}
 
-	public TDiagramPanel getTDiagramPanel() {
-		return tdp;
-	}
-  
+  private TDiagramPanel tdp;
+
+  // Constructor
+  public JScrollDiagramPanel(TDiagramPanel _tdp) {
+    // super(_tdp, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+    // ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    super(_tdp);
+    tdp = _tdp;
+    setVisible(true);
+  }
+
+  public TDiagramPanel getTDiagramPanel() {
+    return tdp;
+  }
+
 }
-
-
-
-
-    
-
-

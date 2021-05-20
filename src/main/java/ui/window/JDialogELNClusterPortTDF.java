@@ -46,9 +46,9 @@ import java.util.*;
 import javax.swing.*;
 
 /**
- * Class JDialogELNClusterPortTDF 
- * Dialog for managing of ELN cluster port TDF
+ * Class JDialogELNClusterPortTDF Dialog for managing of ELN cluster port TDF
  * Creation: 03/08/2018
+ * 
  * @version 1.0 03/08/2018
  * @author Irina Kit Yan LEE
  */
@@ -57,151 +57,149 @@ import javax.swing.*;
 
 public class JDialogELNClusterPortTDF extends JDialog implements ActionListener {
 
-	private JTextField nameTextField;
-	private ArrayList<String> listArrayTypeString;
-	private JComboBox<String> typeComboBoxString;
-	private ArrayList<String> listOriginString;
-	private JComboBox<String> originComboBoxString;
+  private JTextField nameTextField;
+  private ArrayList<String> listArrayTypeString;
+  private JComboBox<String> typeComboBoxString;
+  private ArrayList<String> listOriginString;
+  private JComboBox<String> originComboBoxString;
 
-	private ELNClusterPortTDF term;
+  private ELNClusterPortTDF term;
 
-	public JDialogELNClusterPortTDF(ELNClusterPortTDF term) {
-		this.setTitle("Setting Cluster Port TDF Attributes");
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
-		this.setAlwaysOnTop(true);
-		this.setResizable(false);
+  public JDialogELNClusterPortTDF(ELNClusterPortTDF term) {
+    this.setTitle("Setting Cluster Port TDF Attributes");
+    this.setLocationRelativeTo(null);
+    this.setVisible(true);
+    this.setAlwaysOnTop(true);
+    this.setResizable(false);
 
-		this.term = term;
+    this.term = term;
 
-		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-		getRootPane().getActionMap().put("close", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+    getRootPane().getActionMap().put("close", new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        dispose();
+      }
+    });
 
-		dialog();
-	}
+    dialog();
+  }
 
-	public void dialog() {
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		this.add(mainPanel);
+  public void dialog() {
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    this.add(mainPanel);
 
-		JPanel attributesMainPanel = new JPanel();
-		mainPanel.add(attributesMainPanel, BorderLayout.NORTH); 
+    JPanel attributesMainPanel = new JPanel();
+    mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
 
-		attributesMainPanel.setLayout(new BorderLayout());
+    attributesMainPanel.setLayout(new BorderLayout());
 
-		Box attributesBox = Box.createVerticalBox();
-		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting cluster port TDF attributes"));
+    Box attributesBox = Box.createVerticalBox();
+    attributesBox.setBorder(BorderFactory.createTitledBorder("Setting cluster port TDF attributes"));
 
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints constraints = new GridBagConstraints();
-		JPanel attributesBoxPanel = new JPanel();
-		attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		attributesBoxPanel.setLayout(gridBag);
+    GridBagLayout gridBag = new GridBagLayout();
+    GridBagConstraints constraints = new GridBagConstraints();
+    JPanel attributesBoxPanel = new JPanel();
+    attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+    attributesBoxPanel.setLayout(gridBag);
 
-		JLabel labelName = new JLabel("Name : ");
-		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(labelName, constraints);
-		attributesBoxPanel.add(labelName);
+    JLabel labelName = new JLabel("Name : ");
+    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(15, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(labelName, constraints);
+    attributesBoxPanel.add(labelName);
 
-		nameTextField = new JTextField(term.getValue().toString(), 10); 
-		nameTextField.setEditable(false);
-		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(nameTextField, constraints);
-		attributesBoxPanel.add(nameTextField);
+    nameTextField = new JTextField(term.getValue().toString(), 10);
+    nameTextField.setEditable(false);
+    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(15, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(nameTextField, constraints);
+    attributesBoxPanel.add(nameTextField);
 
-		JLabel typeLabel = new JLabel("Type : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(typeLabel, constraints);
-		attributesBoxPanel.add(typeLabel);
+    JLabel typeLabel = new JLabel("Type : ");
+    constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(typeLabel, constraints);
+    attributesBoxPanel.add(typeLabel);
 
-		listArrayTypeString = new ArrayList<String>();
-		listArrayTypeString.add("bool");
-		listArrayTypeString.add("double");
-		listArrayTypeString.add("int");
-		typeComboBoxString = new JComboBox<String>();
-		for (int i = 0; i < listArrayTypeString.size(); i++) {
-			typeComboBoxString.addItem(listArrayTypeString.get(i));
-		}
-		for (int i = 0; i < listArrayTypeString.size(); i++) {
-			if (term.getPortType().equals(listArrayTypeString.get(i))) {
-				typeComboBoxString.setSelectedIndex(i);
-			}
-		}
-		typeComboBoxString.addActionListener(this);
-		typeComboBoxString.setEnabled(false);
-		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
-				GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(typeComboBoxString, constraints);
-		attributesBoxPanel.add(typeComboBoxString); 
+    listArrayTypeString = new ArrayList<String>();
+    listArrayTypeString.add("bool");
+    listArrayTypeString.add("double");
+    listArrayTypeString.add("int");
+    typeComboBoxString = new JComboBox<String>();
+    for (int i = 0; i < listArrayTypeString.size(); i++) {
+      typeComboBoxString.addItem(listArrayTypeString.get(i));
+    }
+    for (int i = 0; i < listArrayTypeString.size(); i++) {
+      if (term.getPortType().equals(listArrayTypeString.get(i))) {
+        typeComboBoxString.setSelectedIndex(i);
+      }
+    }
+    typeComboBoxString.addActionListener(this);
+    typeComboBoxString.setEnabled(false);
+    constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(typeComboBoxString, constraints);
+    attributesBoxPanel.add(typeComboBoxString);
 
-		JLabel orginLabel = new JLabel("In / Out : ");
-		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 15, 10), 0, 0);
-		gridBag.setConstraints(orginLabel, constraints);
-		attributesBoxPanel.add(orginLabel);
+    JLabel orginLabel = new JLabel("In / Out : ");
+    constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 15, 10), 0, 0);
+    gridBag.setConstraints(orginLabel, constraints);
+    attributesBoxPanel.add(orginLabel);
 
-		listOriginString = new ArrayList<String>();
-		listOriginString.add("in");
-		listOriginString.add("out");
-		originComboBoxString = new JComboBox<String>();
-		for (int i = 0; i < listOriginString.size(); i++) {
-			originComboBoxString.addItem(listOriginString.get(i));
-		}
-		for (int i = 0; i < listOriginString.size(); i++) {
-			if (term.getOrigin().equals(listOriginString.get(i))) {
-				originComboBoxString.setSelectedIndex(i);
-			}
-		}
-		originComboBoxString.addActionListener(this);
-		originComboBoxString.setEnabled(false);
-		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(5, 10, 15, 10), 0, 0);
-		gridBag.setConstraints(originComboBoxString, constraints);
-		attributesBoxPanel.add(originComboBoxString);
-		
-		attributesBox.add(attributesBoxPanel);
+    listOriginString = new ArrayList<String>();
+    listOriginString.add("in");
+    listOriginString.add("out");
+    originComboBoxString = new JComboBox<String>();
+    for (int i = 0; i < listOriginString.size(); i++) {
+      originComboBoxString.addItem(listOriginString.get(i));
+    }
+    for (int i = 0; i < listOriginString.size(); i++) {
+      if (term.getOrigin().equals(listOriginString.get(i))) {
+        originComboBoxString.setSelectedIndex(i);
+      }
+    }
+    originComboBoxString.addActionListener(this);
+    originComboBoxString.setEnabled(false);
+    constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 15, 10), 0, 0);
+    gridBag.setConstraints(originComboBoxString, constraints);
+    attributesBoxPanel.add(originComboBoxString);
 
-		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
+    attributesBox.add(attributesBoxPanel);
 
-		JPanel downPanel = new JPanel(new FlowLayout());
+    attributesMainPanel.add(attributesBox, BorderLayout.NORTH);
 
-		JButton saveCloseButton = new JButton("Save and close");
-		saveCloseButton.setIcon(IconManager.imgic25);
-		saveCloseButton.setActionCommand("Save_Close");
-		saveCloseButton.addActionListener(this);
-		saveCloseButton.setPreferredSize(new Dimension(200, 30));
-		downPanel.add(saveCloseButton);
+    JPanel downPanel = new JPanel(new FlowLayout());
 
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setIcon(IconManager.imgic27);
-		cancelButton.setActionCommand("Cancel");
-		cancelButton.addActionListener(this);
-		cancelButton.setPreferredSize(new Dimension(200, 30));
-		downPanel.add(cancelButton);
+    JButton saveCloseButton = new JButton("Save and close");
+    saveCloseButton.setIcon(IconManager.imgic25);
+    saveCloseButton.setActionCommand("Save_Close");
+    saveCloseButton.addActionListener(this);
+    saveCloseButton.setPreferredSize(new Dimension(200, 30));
+    downPanel.add(saveCloseButton);
 
-		mainPanel.add(downPanel, BorderLayout.CENTER);
-		pack();
-		this.getRootPane().setDefaultButton(saveCloseButton);
-	}
+    JButton cancelButton = new JButton("Cancel");
+    cancelButton.setIcon(IconManager.imgic27);
+    cancelButton.setActionCommand("Cancel");
+    cancelButton.addActionListener(this);
+    cancelButton.setPreferredSize(new Dimension(200, 30));
+    downPanel.add(cancelButton);
 
-	public void actionPerformed(ActionEvent e) {
-		if ("Save_Close".equals(e.getActionCommand())) {
-			term.setValue(new String(nameTextField.getText()));
-			
-			this.dispose();
-		}
+    mainPanel.add(downPanel, BorderLayout.CENTER);
+    pack();
+    this.getRootPane().setDefaultButton(saveCloseButton);
+  }
 
-		if ("Cancel".equals(e.getActionCommand())) {
-			this.dispose();
-		}
-	}
+  public void actionPerformed(ActionEvent e) {
+    if ("Save_Close".equals(e.getActionCommand())) {
+      term.setValue(new String(nameTextField.getText()));
+
+      this.dispose();
+    }
+
+    if ("Cancel".equals(e.getActionCommand())) {
+      this.dispose();
+    }
+  }
 }

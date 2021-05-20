@@ -36,52 +36,45 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class SimulationDurationWholeResult
-* Object for storing all simulation durations
-* Creation: 22/09/2011
-* @version 1.0 22/09/2011
-* @author Ludovic APVRILLE
+ * Class SimulationDurationWholeResult Object for storing all simulation
+ * durations Creation: 22/09/2011
+ * 
+ * @version 1.0 22/09/2011
+ * @author Ludovic APVRILLE
  */
-public class SimulationDurationWholeResult  {
-	
-	public long minDuration;
-	public long maxDuration;
-	public double averageDuration;
-	public int nbOfResults;
-	
-	
-	public SimulationDurationWholeResult(long duration) {
-		
-		minDuration = duration;
-		maxDuration = duration;
-		averageDuration = (double)duration;
-		nbOfResults = 1;
-		
-	}
-	
-	public void updateResults(long duration) {
-		minDuration = Math.min(minDuration, duration);
-		maxDuration = Math.max(maxDuration, duration);
-		averageDuration = ((averageDuration *  nbOfResults)+duration)/(nbOfResults + 1);
-		nbOfResults ++;
-	}
-	
-	public String toStringResult() {
-		StringBuffer sb = new StringBuffer("");
-		sb.append("DURATION " + nbOfResults + " " + minDuration + " " + averageDuration + " " + maxDuration);
-		
-		return sb.toString();
-	}
-	
-	
-	
-} // Class SimulationDurationWholeResult
+public class SimulationDurationWholeResult {
 
+  public long minDuration;
+  public long maxDuration;
+  public double averageDuration;
+  public int nbOfResults;
+
+  public SimulationDurationWholeResult(long duration) {
+
+    minDuration = duration;
+    maxDuration = duration;
+    averageDuration = (double) duration;
+    nbOfResults = 1;
+
+  }
+
+  public void updateResults(long duration) {
+    minDuration = Math.min(minDuration, duration);
+    maxDuration = Math.max(maxDuration, duration);
+    averageDuration = ((averageDuration * nbOfResults) + duration) / (nbOfResults + 1);
+    nbOfResults++;
+  }
+
+  public String toStringResult() {
+    StringBuffer sb = new StringBuffer("");
+    sb.append("DURATION " + nbOfResults + " " + minDuration + " " + averageDuration + " " + maxDuration);
+
+    return sb.toString();
+  }
+
+} // Class SimulationDurationWholeResult

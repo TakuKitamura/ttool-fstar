@@ -1,6 +1,5 @@
 # CPU
 
-
 CPU nodes abstract multi-core processors.
 
 ## Main attributes
@@ -22,10 +21,8 @@ They have the following attributes.
 - [ExecC execution cycles](file://execc.md)
 - [Clock divider](file://clockdivider.md)
 
-
 The latter attributes are taken into account by the DIPLODOCUS simulator to determine
 how software tasks executed on a processor behave.
-
 
 ## Other attributes
 

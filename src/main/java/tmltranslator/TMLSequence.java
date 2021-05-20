@@ -36,76 +36,75 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import java.util.HashSet;
 import java.util.Vector;
 
-
 /**
- * Class TMLSequence
- * Creation: 14/03/2006
+ * Class TMLSequence Creation: 14/03/2006
  *
  * @author Ludovic APVRILLE
  * @version 1.0 14/03/2006
  */
 public class TMLSequence extends TMLActivityElement {
-    private Vector<Integer> indexes;
+  private Vector<Integer> indexes;
 
-    public TMLSequence(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        indexes = new Vector<Integer>();
+  public TMLSequence(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    indexes = new Vector<Integer>();
+  }
+
+  public void addIndex(int index) {
+    indexes.add(index);
+  }
+
+  public void sortNexts() {
+    if (indexes.size() == 0) {
+      return;
     }
 
-    public void addIndex(int index) {
-        indexes.add(index);
-    }
+    Vector<TMLActivityElement> nextsbis = new Vector<TMLActivityElement>();
 
-    public void sortNexts() {
-        if (indexes.size() == 0) {
-            return;
+    // Sort according to index stored in indexes
+    // The smaller is removed at each step
+    Integer i0;
+    int index;
+    int i;
+
+    while (indexes.size() > 0) {
+      i0 = 1000;
+      index = -1;
+      for (i = 0; i < indexes.size(); i++) {
+        if (indexes.elementAt(i).compareTo(i0) < 0) {
+          index = i;
+          i0 = indexes.elementAt(i);
         }
-
-        Vector<TMLActivityElement> nextsbis = new Vector<TMLActivityElement>();
-
-        // Sort according to index stored in indexes
-        // The smaller is removed at each step
-        Integer i0;
-        int index;
-        int i;
-
-        while (indexes.size() > 0) {
-            i0 = 1000;
-            index = -1;
-            for (i = 0; i < indexes.size(); i++) {
-                if (indexes.elementAt(i).compareTo(i0) < 0) {
-                    index = i;
-                    i0 = indexes.elementAt(i);
-                }
-            }
-            nextsbis.addElement(nexts.elementAt(index));
-            nexts.removeElementAt(index);
-            indexes.removeElementAt(index);
-        }
-
-        nexts = nextsbis;
-
+      }
+      nextsbis.addElement(nexts.elementAt(index));
+      nexts.removeElementAt(index);
+      indexes.removeElementAt(index);
     }
 
-    public String customExtraToXML() {
-        return "";
-    }
+    nexts = nextsbis;
 
-    public Vector<Integer> getIndexes () {
-        return indexes;
-    }
+  }
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLSequence)) return false;
-        if (!super.equalSpec(o)) return false;
+  public String customExtraToXML() {
+    return "";
+  }
 
-        TMLSequence tmlSequence = (TMLSequence) o;
-        return (new HashSet<>(indexes)).equals(new HashSet<>(tmlSequence.getIndexes()));
-    }
+  public Vector<Integer> getIndexes() {
+    return indexes;
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLSequence))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+
+    TMLSequence tmlSequence = (TMLSequence) o;
+    return (new HashSet<>(indexes)).equals(new HashSet<>(tmlSequence.getIndexes()));
+  }
 }

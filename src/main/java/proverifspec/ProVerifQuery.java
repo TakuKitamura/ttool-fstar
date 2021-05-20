@@ -36,21 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
-* Class ProVerifQuery
-* Creation: 03/09/2010
-* @version 1.0 03/09/2010
-* @author Ludovic APVRILLE
+ * Class ProVerifQuery Creation: 03/09/2010
+ * 
+ * @version 1.0 03/09/2010
+ * @author Ludovic APVRILLE
  */
 public class ProVerifQuery {
-	public String query;
+  public String query;
 
-    public ProVerifQuery() {
-    }
-	
+  public ProVerifQuery() {
+  }
+
 }

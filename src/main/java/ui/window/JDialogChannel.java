@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -50,179 +47,176 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-
 /**
- * Class JDialogChannel
- * Dialog for managing channel properties
- * Creation: 28/10/2005
+ * Class JDialogChannel Dialog for managing channel properties Creation:
+ * 28/10/2005
+ * 
  * @version 1.0 28/20/2005
  * @author Ludovic APVRILLE
  */
 public class JDialogChannel extends JDialogBase implements ActionListener {
 
-    private String name;
-    private int type, size, max;
-    
-    public boolean data;   
-    
-    // Panel1
-    private JTextField nameText, sizeText, maxText;
-    private JComboBox<String> typeList;
-    private Vector<String> types;
+  private String name;
+  private int type, size, max;
 
-    /* Creates new form  */
-    public JDialogChannel(String _name, int _size, int _type, int _max, Frame f, String title) {
-        super(f, title, true);
+  public boolean data;
 
-        name = _name;
-        type = _type;
-        size = _size;
-        max = _max;
-        
-        data = false;
-        
-        myInitComponents();
-        initComponents();
-        setComponents();
-        pack();
-    }
-    
-    private void myInitComponents() {
-        types = new Vector<>();
-        types.add(TMLChannelProperties.getStringChannelType(0));
-        types.add(TMLChannelProperties.getStringChannelType(1));
-        types.add(TMLChannelProperties.getStringChannelType(2));
-    }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  // Panel1
+  private JTextField nameText, sizeText, maxText;
+  private JComboBox<String> typeList;
+  private Vector<String> types;
 
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and tclass "));
-        panel1.setPreferredSize(new Dimension(300, 150));
-        
-        // first line panel1
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 3;
-        panel1.add(new JLabel(" "), c1);
-        
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("name:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nameText = new JTextField(name);
-        panel1.add(nameText, c1);
-        
-        c1.gridwidth = 1;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("size:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        sizeText = new JTextField(""+size);
-        panel1.add(sizeText, c1);
-        
-        // second line panel1
-        c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("type:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList = new JComboBox<>(types);
-        typeList.setSelectedIndex(type);
-        typeList.addActionListener(this);
-        panel1.add(typeList, c1);
-        
-        c1.gridwidth = 1;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("max samples:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxText = new JTextField(""+max);
-        panel1.add(maxText, c1);
-        
-        
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
-        c.add(panel1, c0);
-        
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+  /* Creates new form */
+  public JDialogChannel(String _name, int _size, int _type, int _max, Frame f, String title) {
+    super(f, title, true);
+
+    name = _name;
+    type = _type;
+    size = _size;
+    max = _max;
+
+    data = false;
+
+    myInitComponents();
+    initComponents();
+    setComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+    types = new Vector<>();
+    types.add(TMLChannelProperties.getStringChannelType(0));
+    types.add(TMLChannelProperties.getStringChannelType(1));
+    types.add(TMLChannelProperties.getStringChannelType(2));
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+    panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and tclass "));
+    panel1.setPreferredSize(new Dimension(300, 150));
+
+    // first line panel1
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 3;
+    panel1.add(new JLabel(" "), c1);
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("name:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nameText = new JTextField(name);
+    panel1.add(nameText, c1);
+
+    c1.gridwidth = 1;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("size:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    sizeText = new JTextField("" + size);
+    panel1.add(sizeText, c1);
+
+    // second line panel1
+    c1.gridwidth = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("type:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    typeList = new JComboBox<>(types);
+    typeList.setSelectedIndex(type);
+    typeList.addActionListener(this);
+    panel1.add(typeList, c1);
+
+    c1.gridwidth = 1;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("max samples:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    maxText = new JTextField("" + max);
+    panel1.add(maxText, c1);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+    c.add(panel1, c0);
+
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    if (evt.getSource() == typeList) {
+      setComponents();
+    } else {
+      // Compare the action command to the known actions.
+      if (command.equals("Save and Close")) {
+        closeDialog();
+      } else if (command.equals("Cancel")) {
+        cancelDialog();
+      }
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-        if (evt.getSource() == typeList) {
-          setComponents();
-        } else {
-          // Compare the action command to the known actions.
-          if (command.equals("Save and Close"))  {
-            closeDialog();
-            } else if (command.equals("Cancel")) {
-            cancelDialog();
-            }
-        }
+  }
+
+  public void setComponents() {
+    if (typeList.getSelectedIndex() == 0) {
+      maxText.setEnabled(true);
+    } else {
+      maxText.setEnabled(false);
     }
-    
-    public void setComponents() {
-           if (typeList.getSelectedIndex() == 0) {
-              maxText.setEnabled(true);
-           } else {
-             maxText.setEnabled(false);
-           }
-    }
-    
-    
-    public void closeDialog() {
-        data = true;
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-    public boolean hasNewData() {
-        return data;
-    }
-    
-    public String getChannelName() {
-        return nameText.getText();
-    }
-    
-    public String getSizeText() {
-        return sizeText.getText();
-    }
-    
-    public int getMyType() {
-        return typeList.getSelectedIndex();
-    }
-    
-    public String getMaxText() {
-        return maxText.getText();
-    }
-    
+  }
+
+  public void closeDialog() {
+    data = true;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean hasNewData() {
+    return data;
+  }
+
+  public String getChannelName() {
+    return nameText.getText();
+  }
+
+  public String getSizeText() {
+    return sizeText.getText();
+  }
+
+  public int getMyType() {
+    return typeList.getSelectedIndex();
+  }
+
+  public String getMaxText() {
+    return maxText.getText();
+  }
+
 }

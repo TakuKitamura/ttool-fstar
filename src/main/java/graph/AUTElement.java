@@ -36,33 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package graph;
 
 /**
-   * Class AUTElement
-   * Creation : 06/01/2017
-   ** @version 1.0 06/01/2017
-   * @author Ludovic APVRILLE
+ * Class AUTElement Creation : 06/01/2017
+ ** 
+ * @version 1.0 06/01/2017
+ * @author Ludovic APVRILLE
  */
 public class AUTElement implements Comparable<AUTElement> {
 
-    public String value;
+  public String value;
 
-    public AUTElement(String _value) {
-	value = _value;
-    }
+  public AUTElement(String _value) {
+    value = _value;
+  }
 
-    @Override
-    public int compareTo(AUTElement o1) {
-	return this.value.compareTo(o1.value);
-    }
+  @Override
+  public int compareTo(AUTElement o1) {
+    return this.value.compareTo(o1.value);
+  }
 
-    public String toString() {
-	return value;
-    }
-    
+  public String toString() {
+    return value;
+  }
 
 }

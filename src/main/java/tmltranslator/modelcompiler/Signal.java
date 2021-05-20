@@ -43,98 +43,93 @@ import tmltranslator.TMLChannel;
 import tmltranslator.TMLEvent;
 
 /**
-   * Class Signal
-   * Creation: 11/02/2014
-   * @version 1.0 11/02/2014
-   * @author Andrea ENRICI
+ * Class Signal Creation: 11/02/2014
+ * 
+ * @version 1.0 11/02/2014
+ * @author Andrea ENRICI
  */
-public class Signal	implements CCodeGenConstants {
+public class Signal implements CCodeGenConstants {
 
-	public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;\nextern SIG_TYPE sig[];\n\n";
-	public static final String USERTODO = "/* USER TODO: signal */";
+  public static final String DECLARATION = "struct SIG_TYPE	{\n\tbool f;\n\tvoid *pBuff;\n};\n\ntypedef struct SIG_TYPE SIG_TYPE;\nextern SIG_TYPE sig[];\n\n";
+  public static final String USERTODO = "/* USER TODO: signal */";
 
-//	public String CR = "\n";
-//	public String SC = ";";
-	
-	//private boolean status = false;
-	//private Buffer buffPointer = null;
-	private String name;
-	private TMLChannel channel;
-	private TMLEvent event;
-	
-	public Signal( TMLChannel _ch )	{
-		channel = _ch;
-		if( _ch.isBasicChannel() )	{
-			name = _ch.getOriginPort().getName();		//return the name of the source port of the channel
-		}
-		else if( _ch.isAForkChannel() )	{
-			name = _ch.getOriginPorts().get(0).getName();		//return the name of the source port of the channel
-		}
-		else if( _ch.isAJoinChannel() )	{
-			name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
-		}
-	}
+  // public String CR = "\n";
+  // public String SC = ";";
 
-	/*public Signal( TMLChannel _ch, TMLEvent _evt )	{
-		channel = _ch;
-		event = _evt;
-		if( _ch.isBasicChannel() )	{
-			name = _ch.getOriginPort().getName();		//return the name of the source port of the channel
-			//"SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[3];
-		}
-		else if( _ch.isAForkChannel() )	{
-			name = _ch.getOriginPorts().get(0).getName();		//return the name of the source port of the channel
-			//"SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
-		}
-		else if( _ch.isAJoinChannel() )	{
-			name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3];
-		}
-	}*/
+  // private boolean status = false;
+  // private Buffer buffPointer = null;
+  private String name;
+  private TMLChannel channel;
+  private TMLEvent event;
 
-	@Override
-	public String toString()	{
-		String s = "";
-		s += "SIGNAL " + name + CR + channel.toString();
-	
-		return s;
-	}
+  public Signal(TMLChannel _ch) {
+    channel = _ch;
+    if (_ch.isBasicChannel()) {
+      name = _ch.getOriginPort().getName(); // return the name of the source port of the channel
+    } else if (_ch.isAForkChannel()) {
+      name = _ch.getOriginPorts().get(0).getName(); // return the name of the source port of the channel
+    } else if (_ch.isAJoinChannel()) {
+      name = "SIGNAL__" + _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__"
+          + _ch.getName().split("__")[3];
+    }
+  }
 
-	public String getName()	{
-		return name;
-	}
+  /*
+   * public Signal( TMLChannel _ch, TMLEvent _evt ) { channel = _ch; event = _evt;
+   * if( _ch.isBasicChannel() ) { name = _ch.getOriginPort().getName(); //return
+   * the name of the source port of the channel //"SIGNAL__" +
+   * _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[3]; } else
+   * if( _ch.isAForkChannel() ) { name = _ch.getOriginPorts().get(0).getName();
+   * //return the name of the source port of the channel //"SIGNAL__" +
+   * _ch.getName().split("__")[1] + "__" + _ch.getName().split("__")[2] + "__" +
+   * _ch.getName().split("__")[3]; } else if( _ch.isAJoinChannel() ) { name =
+   * "SIGNAL__" + _ch.getName().split("__")[1] + "__" +
+   * _ch.getName().split("__")[2] + "__" + _ch.getName().split("__")[3]; } }
+   */
 
-	public void setName( String _name )	{
-		name = _name;
-	}
+  @Override
+  public String toString() {
+    String s = "";
+    s += "SIGNAL " + name + CR + channel.toString();
 
-	public TMLChannel getTMLChannel()	{
-		return channel;
-	}
+    return s;
+  }
 
-	public TMLEvent getTMLEvent()	{
-		return event;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public boolean isBasicSignal()	{
-		return channel.isBasicChannel();
-	}
+  public void setName(String _name) {
+    name = _name;
+  }
 
-	public boolean isAForkSignal()	{
-		return channel.isAForkChannel();
-	}
+  public TMLChannel getTMLChannel() {
+    return channel;
+  }
 
-	public boolean isAJoinSignal()	{
-		return channel.isAJoinChannel();
-	}
+  public TMLEvent getTMLEvent() {
+    return event;
+  }
 
-	@Override
-	public boolean equals( Object o )	{
-		if( !( o instanceof Signal ) )	{
-			return false;
-		}
-		else	{
-			Signal sig = (Signal)o;
-			return sig.getName().equals( this.getName() );
-		}
-	}
-}	//End of class
+  public boolean isBasicSignal() {
+    return channel.isBasicChannel();
+  }
+
+  public boolean isAForkSignal() {
+    return channel.isAForkChannel();
+  }
+
+  public boolean isAJoinSignal() {
+    return channel.isAJoinChannel();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Signal)) {
+      return false;
+    } else {
+      Signal sig = (Signal) o;
+      return sig.getName().equals(this.getName());
+    }
+  }
+} // End of class

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -54,214 +51,221 @@ import java.awt.*;
 //import java.awt.geom.*;
 
 /**
-* Class TGCTimeDelay
-* Internal component that is a time interval / or a single time with a unit
-* Creation: 10/11/2008
-* @version 1.0 10/11/2008
-* @author Ludovic APVRILLE
+ * Class TGCTimeDelay Internal component that is a time interval / or a single
+ * time with a unit Creation: 10/11/2008
+ * 
+ * @version 1.0 10/11/2008
+ * @author Ludovic APVRILLE
  */
-public class TGCTimeDelay extends TGCWithoutInternalComponent{
-    protected int minWidth = 10;
-    private String minDelay = "";
-    private String maxDelay = "";
-	private String unit = "ns"; // can be "ns" or "us" or "ms" or "s";
-	private boolean hasMaxDelay;
-	private boolean isActiveDelay;
-    
-    public TGCTimeDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbConnectingPoint = 0;
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = true;
-        removable = false;
-        
-        name = "";
-        value = "interval value";
-        
-        myImageIcon = IconManager.imgic302;
+public class TGCTimeDelay extends TGCWithoutInternalComponent {
+  protected int minWidth = 10;
+  private String minDelay = "";
+  private String maxDelay = "";
+  private String unit = "ns"; // can be "ns" or "us" or "ms" or "s";
+  private boolean hasMaxDelay;
+  private boolean isActiveDelay;
+
+  public TGCTimeDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbConnectingPoint = 0;
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = true;
+    removable = false;
+
+    name = "";
+    value = "interval value";
+
+    myImageIcon = IconManager.imgic302;
+  }
+
+  public void internalDrawing(Graphics g) {
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 1);
+    if ((w1 != width) && (!tdp.isScaled())) {
+      // setCd(x + width/2 - w1/2, g.getFontMetrics().getHeight());
+      width = w1;
+      height = g.getFontMetrics().getHeight();
+      // updateConnectingPoints();
     }
-    
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 1);
-        if ((w1 != width) && (!tdp.isScaled())) {
-            //setCd(x + width/2 - w1/2, g.getFontMetrics().getHeight());
-            width = w1;
-            height = g.getFontMetrics().getHeight();
-            //updateConnectingPoints();
-        }
-       
-        if (value.equals("")) {
-            g.drawString("unspecified value", x, y);
-            if (!tdp.isScaled())
-				width = g.getFontMetrics().stringWidth("unspecified value");
-        } else {
-			 g.drawString(value, x, y);
-		}
+
+    if (value.equals("")) {
+      g.drawString("unspecified value", x, y);
+      if (!tdp.isScaled())
+        width = g.getFontMetrics().stringWidth("unspecified value");
+    } else {
+      g.drawString(value, x, y);
     }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
-            return this;
-        }
-        return null;
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
+      return this;
     }
-    
-    public void makeValue() {
-		if (hasMaxDelay) {
-			if (minDelay.equals("") && maxDelay.equals("")) {
-				value = "";
-				return;
-			}
-			if ((minDelay.equals("")) && (!maxDelay.equals(""))){
-				minDelay = "0";
-			}
-			
-			value = "[" + minDelay + ", " + maxDelay + "] " + getUnit();
-		} else {
-			if (minDelay.equals("")) {
-				value = "";
-				return;
-			}
-			
-			value = minDelay + " " + getUnit();
-		}
+    return null;
+  }
+
+  public void makeValue() {
+    if (hasMaxDelay) {
+      if (minDelay.equals("") && maxDelay.equals("")) {
+        value = "";
+        return;
+      }
+      if ((minDelay.equals("")) && (!maxDelay.equals(""))) {
+        minDelay = "0";
+      }
+
+      value = "[" + minDelay + ", " + maxDelay + "] " + getUnit();
+    } else {
+      if (minDelay.equals("")) {
+        value = "";
+        return;
+      }
+
+      value = minDelay + " " + getUnit();
     }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldMin = getMinDelay();
-        String oldMax = getMaxDelay();
-		String oldUnit = getUnit();
-        String[] array = new String[3];
-		String ind;
-		String sec = "max";
-		if (hasMaxDelay) {
-			ind = "min";
-		} else {
-			ind = "delay value";
-			sec = "";
-		}
-        array[0] = getMinDelay(); array[1] = getMaxDelay(); array[2] = getUnit();
-        
-        JDialogTimeIntervalUnit jdti = new JDialogTimeIntervalUnit(getTDiagramPanel().getMainGUI(), frame, array, hasMaxDelay, isActiveDelay,
-                "Setting time parameters", ind,
-                sec);
-        //jdti.setSize(350, 250);
-        GraphicLib.centerOnParent(jdti, 350, 250);
-        jdti.setVisible( true ); // blocked until dialog has been closed
-        isActiveDelay = jdti.isActiveDelay();
-        minDelay = array[0]; maxDelay = array[1]; unit = array[2];
-        
-		if (hasMaxDelay) {
-			if ((minDelay != null) && (maxDelay != null) && (unit != null) && ((!minDelay.equals(oldMin)) || (!maxDelay.equals(oldMax) || (!unit.equals(oldUnit))))){
-				makeValue();
-				return true;
-			}
-		} else {
-			if ((minDelay != null) && (unit != null) && ((!minDelay.equals(oldMin)) || (!unit.equals(oldUnit)))){
-				makeValue();
-				return true;
-			}
-		}
-		
-        minDelay = oldMin;
-        maxDelay = oldMax;
-		unit = oldUnit;
-        return false;
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldMin = getMinDelay();
+    String oldMax = getMaxDelay();
+    String oldUnit = getUnit();
+    String[] array = new String[3];
+    String ind;
+    String sec = "max";
+    if (hasMaxDelay) {
+      ind = "min";
+    } else {
+      ind = "delay value";
+      sec = "";
     }
-    
-    public String getMinDelay() {
-        return minDelay;
-    }
-    
-    public String getMaxDelay() {
-        return maxDelay;
-    }
-	
-	public void setHasMaxValue(boolean b) {
-		hasMaxDelay = b;
-	}
-    public void setActiveDelay(boolean b) {
-        isActiveDelay = b;
-    }
-    public boolean getActiveDelay() {
-       return isActiveDelay;
-    }
-    
-    public void setMinDelay(String del) {
-        minDelay = del;
+    array[0] = getMinDelay();
+    array[1] = getMaxDelay();
+    array[2] = getUnit();
+
+    JDialogTimeIntervalUnit jdti = new JDialogTimeIntervalUnit(getTDiagramPanel().getMainGUI(), frame, array,
+        hasMaxDelay, isActiveDelay, "Setting time parameters", ind, sec);
+    // jdti.setSize(350, 250);
+    GraphicLib.centerOnParent(jdti, 350, 250);
+    jdti.setVisible(true); // blocked until dialog has been closed
+    isActiveDelay = jdti.isActiveDelay();
+    minDelay = array[0];
+    maxDelay = array[1];
+    unit = array[2];
+
+    if (hasMaxDelay) {
+      if ((minDelay != null) && (maxDelay != null) && (unit != null)
+          && ((!minDelay.equals(oldMin)) || (!maxDelay.equals(oldMax) || (!unit.equals(oldUnit))))) {
         makeValue();
-    }
-    
-    public void setMaxDelay(String del) {
-        maxDelay = del;
+        return true;
+      }
+    } else {
+      if ((minDelay != null) && (unit != null) && ((!minDelay.equals(oldMin)) || (!unit.equals(oldUnit)))) {
         makeValue();
+        return true;
+      }
     }
-	
-	public void setUnit(String _unit) {
-		unit = _unit;
-	}
-	
-	public String getUnit() {
-		return unit;
-	}
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<TimeDelay minDelay=\"");
-        sb.append(getMinDelay());
-        sb.append("\" maxDelay=\"");
-        sb.append(getMaxDelay());
-		sb.append("\" hasMaxDelay=\"");
-		sb.append(hasMaxDelay);
-        sb.append("\" isActiveDelay=\"");
-        sb.append(isActiveDelay);
-		sb.append("\" unit=\"");
-		sb.append(getUnit());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item( j );
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("TimeDelay")) {
-                                minDelay = elt.getAttribute("minDelay");
-                                maxDelay = elt.getAttribute("maxDelay");
-								if (elt.getAttribute("hasMaxDelay") != null) {
-                                    hasMaxDelay = elt.getAttribute("hasMaxDelay").compareTo("true") == 0;
-								}
-                                if (elt.getAttribute("isActiveDelay") != null) {
-                                    isActiveDelay = elt.getAttribute("isActiveDelay").compareTo("true") == 0;
-                                }
-								unit = elt.getAttribute("unit");
-                            }
-                        }
-                    }
+
+    minDelay = oldMin;
+    maxDelay = oldMax;
+    unit = oldUnit;
+    return false;
+  }
+
+  public String getMinDelay() {
+    return minDelay;
+  }
+
+  public String getMaxDelay() {
+    return maxDelay;
+  }
+
+  public void setHasMaxValue(boolean b) {
+    hasMaxDelay = b;
+  }
+
+  public void setActiveDelay(boolean b) {
+    isActiveDelay = b;
+  }
+
+  public boolean getActiveDelay() {
+    return isActiveDelay;
+  }
+
+  public void setMinDelay(String del) {
+    minDelay = del;
+    makeValue();
+  }
+
+  public void setMaxDelay(String del) {
+    maxDelay = del;
+    makeValue();
+  }
+
+  public void setUnit(String _unit) {
+    unit = _unit;
+  }
+
+  public String getUnit() {
+    return unit;
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<TimeDelay minDelay=\"");
+    sb.append(getMinDelay());
+    sb.append("\" maxDelay=\"");
+    sb.append(getMaxDelay());
+    sb.append("\" hasMaxDelay=\"");
+    sb.append(hasMaxDelay);
+    sb.append("\" isActiveDelay=\"");
+    sb.append(isActiveDelay);
+    sb.append("\" unit=\"");
+    sb.append(getUnit());
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("TimeDelay")) {
+                minDelay = elt.getAttribute("minDelay");
+                maxDelay = elt.getAttribute("maxDelay");
+                if (elt.getAttribute("hasMaxDelay") != null) {
+                  hasMaxDelay = elt.getAttribute("hasMaxDelay").compareTo("true") == 0;
                 }
+                if (elt.getAttribute("isActiveDelay") != null) {
+                  isActiveDelay = elt.getAttribute("isActiveDelay").compareTo("true") == 0;
+                }
+                unit = elt.getAttribute("unit");
+              }
             }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
+          }
         }
-        makeValue();
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
+    makeValue();
+  }
 }

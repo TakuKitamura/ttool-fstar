@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package verification;
 
 import myutil.TraceManager;
@@ -47,24 +46,18 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Vector;
 
-
 /**
- * Class PropertyType
- * Creation: 10/04/2019
- * Version 1.0 10/04/2019
+ * Class PropertyType Creation: 10/04/2019 Version 1.0 10/04/2019
  *
  * @author Ludovic APVRILLE
  */
-public enum PropertyType  {
-    SAFETY(1), SECURITY(2), PERFORMANCE(3);
+public enum PropertyType {
+  SAFETY(1), SECURITY(2), PERFORMANCE(3);
 
-    private final int type;
+  private final int type;
 
-    PropertyType(int type) {
-        this.type = type;
-    }
-
-
-
+  PropertyType(int type) {
+    this.type = type;
+  }
 
 }

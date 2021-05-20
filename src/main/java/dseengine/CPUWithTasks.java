@@ -36,51 +36,41 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 import tmltranslator.TMLTask;
 
 import java.util.Vector;
 
-
 /**
-* Class CPUWithTasks
-* Object reprensenting a CPU on which tasks are mapped
-* Creation: 15/09/2011
-* @version 1.0 15/09/2011
-* @author Ludovic APVRILLE
+ * Class CPUWithTasks Object reprensenting a CPU on which tasks are mapped
+ * Creation: 15/09/2011
+ * 
+ * @version 1.0 15/09/2011
+ * @author Ludovic APVRILLE
  */
-public class CPUWithTasks  {
-	public int id0;
-	private Vector<TMLTask> tasks;
-	
-	public CPUWithTasks() {
-		tasks = new Vector<TMLTask>();
-	}
-	
-	public void addTask(TMLTask task) {
-		tasks.add(task);
-	}
-	
-	public void removeTask(TMLTask task) {
-		tasks.remove(task);
-	}
-	
-	public Vector<TMLTask> getTasks() {
-		return tasks;
-	}
-	
-	public int getNbOfTasks() {
-		return tasks.size();
-	}
-	
-	
-	
-	
-	
-	
-} // Class BusResult
+public class CPUWithTasks {
+  public int id0;
+  private Vector<TMLTask> tasks;
 
+  public CPUWithTasks() {
+    tasks = new Vector<TMLTask>();
+  }
+
+  public void addTask(TMLTask task) {
+    tasks.add(task);
+  }
+
+  public void removeTask(TMLTask task) {
+    tasks.remove(task);
+  }
+
+  public Vector<TMLTask> getTasks() {
+    return tasks;
+  }
+
+  public int getNbOfTasks() {
+    return tasks.size();
+  }
+
+} // Class BusResult

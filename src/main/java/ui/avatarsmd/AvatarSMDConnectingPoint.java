@@ -43,20 +43,22 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarSMDConnectingPoint
- * Definition of connecting points on which connectors of AVATAR State Machine Diagram can be connected
- * Creation: 06/04/2010
+ * Class AvatarSMDConnectingPoint Definition of connecting points on which
+ * connectors of AVATAR State Machine Diagram can be connected Creation:
+ * 06/04/2010
+ * 
  * @version 1.0 06/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDConnectingPoint extends  TGConnectingPointWidthHeight{
+public class AvatarSMDConnectingPoint extends TGConnectingPointWidthHeight {
 
-	public AvatarSMDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
+  public AvatarSMDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-	@Override
-	public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.AVATARSMD_CONNECTOR;
-    }
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.AVATARSMD_CONNECTOR;
+  }
 }

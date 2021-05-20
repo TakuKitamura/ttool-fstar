@@ -36,43 +36,39 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
-
 
 /**
  * Class DijkstraState
  *
  * Creation: 16/09/2004
+ * 
  * @version 1.0 16/09/2004
  * @author Ludovic APVRILLE
  */
 public class DijkstraState {
-   public int state;
-   public boolean used;
-   public int weight;
-   public int previous;
-   public int[] path;
-    
-    
-   public DijkstraState(int stateNb) {
-       state = stateNb;
-       used = false;
-   }
-   
-   public String toString() {
-       String s;
-       if (path != null) {
-           s = "state= " + state + " weight=" + weight + " path= ";
-           for (int i=0; i<path.length; i++) {
-                s += path[i] + " ";
-           }
-           return s;
-       } else {
-            return ("state= " + state + " no path");
-       }       
-   }
-    
+  public int state;
+  public boolean used;
+  public int weight;
+  public int previous;
+  public int[] path;
+
+  public DijkstraState(int stateNb) {
+    state = stateNb;
+    used = false;
+  }
+
+  public String toString() {
+    String s;
+    if (path != null) {
+      s = "state= " + state + " weight=" + weight + " path= ";
+      for (int i = 0; i < path.length; i++) {
+        s += path[i] + " ";
+      }
+      return s;
+    } else {
+      return ("state= " + state + " no path");
+    }
+  }
+
 }

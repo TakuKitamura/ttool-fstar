@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.atd;
 
 import myutil.GraphicLib;
@@ -49,291 +46,276 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
-
 /**
-   * Class ATDBlock
-   * Node. To be used in Attack Tree Diagrams
-   * Creation: 09/12/2009
-   * @version 1.1 09/12/2009
-   * @author Ludovic APVRILLE
+ * Class ATDBlock Node. To be used in Attack Tree Diagrams Creation: 09/12/2009
+ * 
+ * @version 1.1 09/12/2009
+ * @author Ludovic APVRILLE
  */
 public class ATDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {
-//    private int textY1 = 3;
-    private String stereotype = "block";
+  // private int textY1 = 3;
+  private String stereotype = "block";
 
-    private int maxFontSize = 12;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private boolean displayText = true;
-    private int textX = 1;
+  private int maxFontSize = 12;
+  private int minFontSize = 4;
+  private int currentFontSize = -1;
+  private boolean displayText = true;
+  private int textX = 1;
 
+  public ATDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public ATDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    width = 250;
+    height = 200;
+    minWidth = 5;
+    minHeight = 2;
+    // Issue #31
+    textY = 3;
+    initScaling(250, 200);
 
-        width = 250;
-        height = 200;
-        minWidth = 5;
-        minHeight = 2;
-        //Issue #31
-        textY = 3;
-        initScaling(250, 200);
+    nbConnectingPoint = 16;
+    connectingPoint = new TGConnectingPoint[16];
 
-        nbConnectingPoint = 16;
-        connectingPoint = new TGConnectingPoint[16];
+    connectingPoint[0] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
+    connectingPoint[1] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+    connectingPoint[2] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
+    connectingPoint[3] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+    connectingPoint[4] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+    connectingPoint[5] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
+    connectingPoint[6] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+    connectingPoint[7] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
 
-        connectingPoint[0] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
-        connectingPoint[1] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[2] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
-        connectingPoint[3] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[4] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[5] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
-        connectingPoint[6] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[7] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
+    connectingPoint[8] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+    connectingPoint[9] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+    connectingPoint[10] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+    connectingPoint[11] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+    connectingPoint[12] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+    connectingPoint[13] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+    connectingPoint[14] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+    connectingPoint[15] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
 
-        connectingPoint[8] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[9] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[10] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[11] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[12] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[13] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[14] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[15] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+    addTGConnectingPointsComment();
 
-        addTGConnectingPointsComment();
+    nbInternalTGComponent = 0;
 
-        nbInternalTGComponent = 0;
+    moveable = true;
+    editable = true;
+    removable = true;
+    userResizable = true;
 
-        moveable = true;
-        editable = true;
-        removable = true;
-        userResizable = true;
+    name = tdp.findBlockName("Block");
+    setValue(name);
 
-        name = tdp.findBlockName("Block");
-        setValue(name);
+    currentFontSize = maxFontSize;
+    oldScaleFactor = tdp.getZoom();
 
-        currentFontSize = maxFontSize;
-        oldScaleFactor = tdp.getZoom();
+    myImageIcon = IconManager.imgic700;
+  }
 
-        myImageIcon = IconManager.imgic700;
-    }
+  public void internalDrawing(Graphics g) {
+    String ster = "<<" + stereotype + ">>";
+    Font f = g.getFont();
+    Font fold = f;
 
-    public void internalDrawing(Graphics g) {
-        String ster = "<<" + stereotype + ">>";
-        Font f = g.getFont();
-        Font fold = f;
+    //
+    currentFontSize = f.getSize();
+    if ((rescaled) && (!tdp.isScaled())) {
 
-        //
+      if (currentFontSize == -1) {
         currentFontSize = f.getSize();
-        if ((rescaled) && (!tdp.isScaled())) {
+      }
+      rescaled = false;
+      // Must set the font size ..
+      // Find the biggest font not greater than max_font size
+      // By Increment of 1
+      // Or decrement of 1
+      // If font is less than 4, no text is displayed
 
-            if (currentFontSize == -1) {
-                currentFontSize = f.getSize();
-            }
-            rescaled = false;
-            // Must set the font size ..
-            // Find the biggest font not greater than max_font size
-            // By Increment of 1
-            // Or decrement of 1
-            // If font is less than 4, no text is displayed
+      int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+      int w0, w1, w2;
+      f = f.deriveFont((float) maxCurrentFontSize);
+      g.setFont(f);
+      //
+      // while(maxCurrentFontSize > (minFontSize-1)) {
+      // w0 = g.getFontMetrics().stringWidth(value);
+      // w1 = g.getFontMetrics().stringWidth(ster);
+      // w2 = Math.min(w0, w1);
+      // if (w2 < (width - (2*textX))) {
+      // break;
+      // }
+      // maxCurrentFontSize --;
+      // f = f.deriveFont((float)maxCurrentFontSize);
+      // g.setFont(f);
+      // }
+      // currentFontSize = maxCurrentFontSize;
 
-            int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-            int w0, w1, w2;
-            f = f.deriveFont((float)maxCurrentFontSize);
-            g.setFont(f);
-            //
-//            while(maxCurrentFontSize > (minFontSize-1)) {
-//                w0 = g.getFontMetrics().stringWidth(value);
-//                w1 = g.getFontMetrics().stringWidth(ster);
-//                w2 = Math.min(w0, w1);
-//                if (w2 < (width - (2*textX))) {
-//                    break;
-//                }
-//                maxCurrentFontSize --;
-//                f = f.deriveFont((float)maxCurrentFontSize);
-//                g.setFont(f);
-//            }
-//            currentFontSize = maxCurrentFontSize;
-
-            if(currentFontSize <minFontSize) {
-                displayText = false;
-            } else {
-                displayText = true;
-                f = f.deriveFont((float)currentFontSize);
-                g.setFont(f);
-            }
-
-        }
-
-        //
-        currentFontSize = f.getSize();
-        Color c = g.getColor();
-        g.draw3DRect(x, y, width, height, true);
-
-        g.setColor(ColorManager.ATD_BLOCK);
-        g.fill3DRect(x+1, y+1, width-1, height-1, true);
-        g.setColor(c);
-
-        // Strings
-        int w;
-        if (displayText) {
-            f = f.deriveFont((float)currentFontSize);
-            Font f0 = g.getFont();
-            g.setFont(f.deriveFont(Font.BOLD));
-
-            w = g.getFontMetrics().stringWidth(ster);
-            int h =  currentFontSize + textY;
-            if ((w < (2*textX + width)) && (h < height)) {
-                drawSingleString(g,ster, x + (width - w)/2, y +h);
-            }
-            g.setFont(f0);
-            w  = g.getFontMetrics().stringWidth(value);
-            h = 2* (currentFontSize + textY);
-            if ((w < (2*textX + width)) && (h < height)) {
-                drawSingleString(g,value, x + (width - w)/2, y + h);
-            }
-        }
-
-        g.setFont(fold);
-        /*int w  = g.getFontMetrics().stringWidth(ster);
-          Font f = g.getFont();
-          g.setFont(f.deriveFont(Font.BOLD));
-          g.drawString(ster, x + (width - w)/2, y + textY1);
-          g.setFont(f);
-          w  = g.getFontMetrics().stringWidth(value);
-          g.drawString(value, x + (width - w)/2, y + textY2);*/
-
-        // Icon
-        //g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-    }
-
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-
-    public String getStereotype() {
-        return stereotype;
+      if (currentFontSize < minFontSize) {
+        displayText = false;
+      } else {
+        displayText = true;
+        f = f.deriveFont((float) currentFontSize);
+        g.setFont(f);
+      }
 
     }
 
-    public String getNodeName() {
-        return name;
+    //
+    currentFontSize = f.getSize();
+    Color c = g.getColor();
+    g.draw3DRect(x, y, width, height, true);
+
+    g.setColor(ColorManager.ATD_BLOCK);
+    g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+    g.setColor(c);
+
+    // Strings
+    int w;
+    if (displayText) {
+      f = f.deriveFont((float) currentFontSize);
+      Font f0 = g.getFont();
+      g.setFont(f.deriveFont(Font.BOLD));
+
+      w = g.getFontMetrics().stringWidth(ster);
+      int h = currentFontSize + textY;
+      if ((w < (2 * textX + width)) && (h < height)) {
+        drawSingleString(g, ster, x + (width - w) / 2, y + h);
+      }
+      g.setFont(f0);
+      w = g.getFontMetrics().stringWidth(value);
+      h = 2 * (currentFontSize + textY);
+      if ((w < (2 * textX + width)) && (h < height)) {
+        drawSingleString(g, value, x + (width - w) / 2, y + h);
+      }
     }
 
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldValue = value;
+    g.setFont(fold);
+    /*
+     * int w = g.getFontMetrics().stringWidth(ster); Font f = g.getFont();
+     * g.setFont(f.deriveFont(Font.BOLD)); g.drawString(ster, x + (width - w)/2, y +
+     * textY1); g.setFont(f); w = g.getFontMetrics().stringWidth(value);
+     * g.drawString(value, x + (width - w)/2, y + textY2);
+     */
 
-        //String text = getName() + ": ";
-        String s = (String)JOptionPane.showInputDialog(frame, "Block name",
-                                                       "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                       null,
-                                                       getValue());
+    // Icon
+    // g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
+    // g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+  }
 
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            //boolean b;
-            if (!TAttribute.isAValidId(s, false, false, false)) {
-                JOptionPane.showMessageDialog(frame,
-                                              "Could not change the name of the Block: the new name is not a valid name",
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
+  public TGComponent isOnOnlyMe(int x1, int y1) {
 
-            if (!tdp.isBlockNameUnique(s)) {
-                JOptionPane.showMessageDialog(frame,
-                                              "Could not change the name of the Block: the new name is already in use",
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
 
-            setValue(s);
-            recalculateSize();
+  public String getStereotype() {
+    return stereotype;
 
+  }
 
+  public String getNodeName() {
+    return name;
+  }
 
-            if (tdp.actionOnDoubleClick(this)) {
-                return true;
-            } else {
-                JOptionPane.showMessageDialog(frame,
-                                              "Could not change the name of the Block: this name is already in use",
-                                              "Error",
-                                              JOptionPane.INFORMATION_MESSAGE);
-                setValue(oldValue);
-            }
-        }
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = value;
+
+    // String text = getName() + ": ";
+    String s = (String) JOptionPane.showInputDialog(frame, "Block name", "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
+
+    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+      // boolean b;
+      if (!TAttribute.isAValidId(s, false, false, false)) {
+        JOptionPane.showMessageDialog(frame, "Could not change the name of the Block: the new name is not a valid name",
+            "Error", JOptionPane.INFORMATION_MESSAGE);
         return false;
-    }
+      }
 
-
-    public int getType() {
-        return TGComponentManager.ATD_BLOCK;
-    }
-
-    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        return tgc instanceof ATDAttack;
-
-    }
-
-    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-        if (tgc instanceof ATDAttack) {
-            tgc.setFather(this);
-            tgc.setDrawingZone(true);
-            tgc.resizeWithFather();
-            addInternalComponent(tgc, 0);
-            return true;
-        }
-
-        if (tgc instanceof ATDConstraint) {
-            tgc.setFather(this);
-            tgc.setDrawingZone(true);
-            tgc.resizeWithFather();
-            addInternalComponent(tgc, 0);
-            return true;
-        }
-
-        if (tgc instanceof ATDCountermeasure) {
-            tgc.setFather(this);
-            tgc.setDrawingZone(true);
-            tgc.resizeWithFather();
-            addInternalComponent(tgc, 0);
-            return true;
-        }
-
+      if (!tdp.isBlockNameUnique(s)) {
+        JOptionPane.showMessageDialog(frame, "Could not change the name of the Block: the new name is already in use",
+            "Error", JOptionPane.INFORMATION_MESSAGE);
         return false;
+      }
+
+      setValue(s);
+      recalculateSize();
+
+      if (tdp.actionOnDoubleClick(this)) {
+        return true;
+      } else {
+        JOptionPane.showMessageDialog(frame, "Could not change the name of the Block: this name is already in use",
+            "Error", JOptionPane.INFORMATION_MESSAGE);
+        setValue(oldValue);
+      }
+    }
+    return false;
+  }
+
+  public int getType() {
+    return TGComponentManager.ATD_BLOCK;
+  }
+
+  public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+    return tgc instanceof ATDAttack;
+
+  }
+
+  public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    if (tgc instanceof ATDAttack) {
+      tgc.setFather(this);
+      tgc.setDrawingZone(true);
+      tgc.resizeWithFather();
+      addInternalComponent(tgc, 0);
+      return true;
     }
 
-    public void removeSwallowedTGComponent(TGComponent tgc) {
-        removeInternalComponent(tgc);
+    if (tgc instanceof ATDConstraint) {
+      tgc.setFather(this);
+      tgc.setDrawingZone(true);
+      tgc.resizeWithFather();
+      addInternalComponent(tgc, 0);
+      return true;
     }
 
-
-    public Vector<ATDAttack> getAttackList() {
-        Vector<ATDAttack> v = new Vector<>();
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof ATDAttack) {
-                v.add((ATDAttack) tgcomponent[i]);
-            }
-        }
-        return v;
+    if (tgc instanceof ATDCountermeasure) {
+      tgc.setFather(this);
+      tgc.setDrawingZone(true);
+      tgc.resizeWithFather();
+      addInternalComponent(tgc, 0);
+      return true;
     }
 
-    public void hasBeenResized() {
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof ATDAttack) {
-                tgcomponent[i].resizeWithFather();
-            }
-        }
+    return false;
+  }
 
+  public void removeSwallowedTGComponent(TGComponent tgc) {
+    removeInternalComponent(tgc);
+  }
+
+  public Vector<ATDAttack> getAttackList() {
+    Vector<ATDAttack> v = new Vector<>();
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof ATDAttack) {
+        v.add((ATDAttack) tgcomponent[i]);
+      }
+    }
+    return v;
+  }
+
+  public void hasBeenResized() {
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof ATDAttack) {
+        tgcomponent[i].resizeWithFather();
+      }
     }
 
-    public int getDefaultConnector() {
-        return TGComponentManager.ATD_COMPOSITION_CONNECTOR;
-    }
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.ATD_COMPOSITION_CONNECTOR;
+  }
 
 }

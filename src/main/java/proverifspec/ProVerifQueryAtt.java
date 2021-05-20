@@ -36,27 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifQueryAtt
- * Creation: 13/09/2015
+ * Class ProVerifQueryAtt Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifQueryAtt implements ProVerifDeclaration {
-    protected String name;
-    protected boolean isNew;
+  protected String name;
+  protected boolean isNew;
 
-    public ProVerifQueryAtt (String _name, boolean _isNew) {
-        this.name = _name;
-        this.isNew = _isNew;
-    }
+  public ProVerifQueryAtt(String _name, boolean _isNew) {
+    this.name = _name;
+    this.isNew = _isNew;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateQueryAtt (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateQueryAtt(this, _alinea);
+  }
 }

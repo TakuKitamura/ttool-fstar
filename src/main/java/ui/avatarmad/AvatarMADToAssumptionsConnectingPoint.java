@@ -44,27 +44,29 @@ import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarMADToOthersConnectingPoint
- * Definition of connecting points on which connectors between assumptions 
- * may be connected to other system elements
- * Creation: 05/02/2014
+ * Class AvatarMADToOthersConnectingPoint Definition of connecting points on
+ * which connectors between assumptions may be connected to other system
+ * elements Creation: 05/02/2014
+ * 
  * @version 1.0 05/02/2014
  * @author Ludovic APVRILLE
  */
-public class AvatarMADToAssumptionsConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-	public AvatarMADToAssumptionsConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = TGConnectingPoint.EAST;
-    }
-	
-    public AvatarMADToAssumptionsConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR;
-    }
+public class AvatarMADToAssumptionsConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public AvatarMADToAssumptionsConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+      double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = TGConnectingPoint.EAST;
+  }
+
+  public AvatarMADToAssumptionsConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+      double _w, double _h, int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR;
+  }
 }

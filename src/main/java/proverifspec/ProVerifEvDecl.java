@@ -36,27 +36,24 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifEvDecl
- * Creation: 13/09/2015
+ * Class ProVerifEvDecl Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifEvDecl implements ProVerifDeclaration {
-    protected String name;
-    protected String[] args;
+  protected String name;
+  protected String[] args;
 
-    public ProVerifEvDecl (String _name, String[] _args) {
-        this.name = _name;
-        this.args = _args;
-    }
+  public ProVerifEvDecl(String _name, String[] _args) {
+    this.name = _name;
+    this.args = _args;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateEvDecl (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateEvDecl(this, _alinea);
+  }
 }

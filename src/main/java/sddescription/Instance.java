@@ -36,23 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sddescription;
 
 /**
- * Class Instance
- * Creation: 16/08/2004
+ * Class Instance Creation: 16/08/2004
+ * 
  * @version 1.1 16/08/2004
  * @author Ludovic APVRILLE
  */
 public class Instance {
-    private String name;
-    
-    public Instance(String _name) {
-        name = _name;
-    }
-    
-    public String getName() { return name; }
+  private String name;
+
+  public Instance(String _name) {
+    name = _name;
+  }
+
+  public String getName() {
+    return name;
+  }
 }

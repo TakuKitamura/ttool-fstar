@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import common.ConfigurationTTool;
@@ -51,60 +50,60 @@ import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Set
- * Creation: 25/10/2018
- * Version 2.0 25/10/2018
+ * Class Set Creation: 25/10/2018 Version 2.0 25/10/2018
  *
  * @author Ludovic APVRILLE
  */
-public class Wait extends Command  {
+public class Wait extends Command {
 
+  public Wait() {
 
-    public Wait() {
+  }
 
-    }
+  public List<Command> getListOfSubCommands() {
+    return subcommands;
+  }
 
-    public List<Command> getListOfSubCommands() {
-        return subcommands;
-    }
+  public String getCommand() {
+    return "wait";
+  }
 
-    public String getCommand() {
-        return "wait";
-    }
+  public String getShortCommand() {
+    return "w";
+  }
 
-    public String getShortCommand() {
-        return "w";
-    }
+  public String getUsage() {
+    return "wait <time in s>";
+  }
 
-    public String getUsage() { return "wait <time in s>"; }
+  public String getDescription() {
+    return "Making a pause in the execution of TTool";
+  }
 
-    public String getDescription() { return "Making a pause in the execution of TTool"; }
+  public String getExample() {
+    return "wait 2";
+  }
 
-    public String getExample() {
-        return "wait 2";
-    }
+  public String executeCommand(String command, Interpreter interpreter) {
+    try {
+      int val = Integer.decode(command).intValue();
+      if (val <= 0) {
+        return Interpreter.BAD_WAIT_VALUE;
+      }
+      TraceManager.addDev("Waiting for " + val + " s.");
+      Thread.currentThread().sleep(val * 1000);
+      TraceManager.addDev("Waiting done");
 
-
-    public  String executeCommand(String command, Interpreter interpreter) {
-        try {
-            int val = Integer.decode(command).intValue();
-            if (val <= 0) {
-                return Interpreter.BAD_WAIT_VALUE;
-            }
-            TraceManager.addDev("Waiting for " + val + " s.");
-            Thread.currentThread().sleep(val * 1000);
-            TraceManager.addDev("Waiting done");
-
-            return null;
-        } catch (Exception e) {
-            TraceManager.addDev("Exception: " + e.getMessage());
-            return Interpreter.BAD_WAIT_VALUE;
-
-        }
-
-    }
-
-    public void fillSubCommands() {
+      return null;
+    } catch (Exception e) {
+      TraceManager.addDev("Exception: " + e.getMessage());
+      return Interpreter.BAD_WAIT_VALUE;
 
     }
+
+  }
+
+  public void fillSubCommands() {
+
+  }
 }

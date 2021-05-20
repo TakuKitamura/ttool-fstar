@@ -37,52 +37,49 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-   * Class TMLCPConnector
-   * Creation: 18/02/2014
-   * @version 1.0 18/06/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLCPConnector Creation: 18/02/2014
+ * 
+ * @version 1.0 18/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPConnector extends TMLCPElement implements Comparable<TMLCPConnector>  {
+public class TMLCPConnector extends TMLCPElement implements Comparable<TMLCPConnector> {
 
-    private String startName;
-    private String endName;
-    private int yCoord;
-		private String guard;
+  private String startName;
+  private String endName;
+  private int yCoord;
+  private String guard;
 
-    public TMLCPConnector( String _startName, String _endName, String _guard, int yCoord, Object _referenceObject ) {
-        super( "TMLCPconnector", _referenceObject );
-        this.startName = _startName;
-        this.endName = _endName;
-        this.yCoord = yCoord;
-				this.guard = _guard;
-    }
+  public TMLCPConnector(String _startName, String _endName, String _guard, int yCoord, Object _referenceObject) {
+    super("TMLCPconnector", _referenceObject);
+    this.startName = _startName;
+    this.endName = _endName;
+    this.yCoord = yCoord;
+    this.guard = _guard;
+  }
 
-    public int getYCoord()      {
-        return this.yCoord;
-    }
+  public int getYCoord() {
+    return this.yCoord;
+  }
 
-		public String getGuard()	{
-			return this.guard;
-		}
+  public String getGuard() {
+    return this.guard;
+  }
 
-    public String getStartName()        {
-        return this.startName;
-    }
+  public String getStartName() {
+    return this.startName;
+  }
 
-    public String getEndName()  {
-        return this.endName;
-    }
+  public String getEndName() {
+    return this.endName;
+  }
 
-    public int compareTo( TMLCPConnector _connector )   {
+  public int compareTo(TMLCPConnector _connector) {
 
-        int compareValue = _connector.getYCoord();
-        //sort in ascending order
-        return this.yCoord - compareValue;
-    }
+    int compareValue = _connector.getYCoord();
+    // sort in ascending order
+    return this.yCoord - compareValue;
+  }
 }

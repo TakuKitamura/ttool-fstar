@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class PostJavaCode
- * Components that can be followed with some Java code
+ * Class PostJavaCode Components that can be followed with some Java code
  * Creation: 20/04/2005
+ * 
  * @version 1.0 20/04/2005
  * @author Ludovic APVRILLE
  */
-public interface PostJavaCode  {
-    void setPostJavaCode(String code);
+public interface PostJavaCode {
+  void setPostJavaCode(String code);
 }

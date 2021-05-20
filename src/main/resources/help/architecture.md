@@ -5,7 +5,6 @@ The architecture is used to capture abstract hardware nodes that can be connecte
 - [CPU](file://cpu.md)
 - [FPGA](file://fpga.md)
 
-
 ## Storage nodes
 
 - [Memory](file://memory.md)

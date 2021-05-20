@@ -36,23 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
- * Class TMLActionState
- * Creation: 23/11/2005
+ * Class TMLActionState Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
 public class TMLActionState extends TMLActivityElementWithAction {
 
-    
-    public TMLActionState(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);
-    }
- 
+  public TMLActionState(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
 }

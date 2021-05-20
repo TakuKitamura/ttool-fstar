@@ -40,23 +40,24 @@
 package tmltranslator.modelcompiler;
 
 /**
-   * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class InterleaverMEC extends ArchUnitMEC	{
+public class InterleaverMEC extends ArchUnitMEC {
 
-	public static final String CONTEXT_CLEANUP = "intl_ctx_cleanup";
-	public static final String OPERATION = "Interleaver operation";
-	public static final String CONTEXT = "INTL_CONTEXT";
+  public static final String CONTEXT_CLEANUP = "intl_ctx_cleanup";
+  public static final String OPERATION = "Interleaver operation";
+  public static final String CONTEXT = "INTL_CONTEXT";
 
-	public InterleaverMEC()	{
+  public InterleaverMEC() {
 
-		index = 2;
-		initCtxRoutine = "intl_ctx_init";
-		localMemoryPointer = "intl_mss";
-		ctxCleanupRoutine = "intl_ctx_cleanup";
-	}
+    index = 2;
+    initCtxRoutine = "intl_ctx_init";
+    localMemoryPointer = "intl_mss";
+    ctxCleanupRoutine = "intl_ctx_cleanup";
+  }
 
-}	//End of class
+} // End of class

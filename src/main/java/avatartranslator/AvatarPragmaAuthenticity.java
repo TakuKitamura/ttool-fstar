@@ -36,59 +36,57 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import java.util.List;
 
 /**
- * Class AvatarPragma
- * Creation: 20/05/2010
+ * Class AvatarPragma Creation: 20/05/2010
+ * 
  * @version 1.1 01/07/2014
  * @author Ludovic APVRILLE, Raja GATGOUT
  */
 public class AvatarPragmaAuthenticity extends AvatarPragma {
 
-    private AvatarAttributeState attrA;
-    private AvatarAttributeState attrB;
+  private AvatarAttributeState attrA;
+  private AvatarAttributeState attrB;
 
-    public AvatarPragmaAuthenticity(String _name, Object _referenceObject, List<AvatarAttributeState> args) {
-        super(_name, _referenceObject);
-	
-        attrA= args.get(0);
-        attrB= args.get(1);
-    }
+  public AvatarPragmaAuthenticity(String _name, Object _referenceObject, List<AvatarAttributeState> args) {
+    super(_name, _referenceObject);
 
-    public AvatarPragmaAuthenticity(String _name, Object _referenceObject, AvatarAttributeState a, AvatarAttributeState b) {
-        super(_name, _referenceObject);
-	
-        attrA= a;
-        attrB= b;
-    }
-    
-    public AvatarAttributeState getAttrA(){
-    	return attrA;
-    }
-    
-    public AvatarAttributeState getAttrB(){
-	return attrB;
-    }
+    attrA = args.get(0);
+    attrB = args.get(1);
+  }
 
-    @Override
-    public String toString()
-    {
-        if (this.attrA == null || this.attrB == null)
-            return "<undefined>";
+  public AvatarPragmaAuthenticity(String _name, Object _referenceObject, AvatarAttributeState a,
+      AvatarAttributeState b) {
+    super(_name, _referenceObject);
 
-        return this.attrA.toString() + " ==> " + this.attrB.toString();
-    }
+    attrA = a;
+    attrB = b;
+  }
 
-    @Override
-    public AvatarPragmaAuthenticity advancedClone (AvatarSpecification avspec) {
-        AvatarPragmaAuthenticity result = new AvatarPragmaAuthenticity (this.name, this.referenceObject, this.attrA.advancedClone(avspec), this.attrB.advancedClone(avspec));
-        this.cloneLinkToReferenceObjects (result);
-        return result;
-    }
+  public AvatarAttributeState getAttrA() {
+    return attrA;
+  }
+
+  public AvatarAttributeState getAttrB() {
+    return attrB;
+  }
+
+  @Override
+  public String toString() {
+    if (this.attrA == null || this.attrB == null)
+      return "<undefined>";
+
+    return this.attrA.toString() + " ==> " + this.attrB.toString();
+  }
+
+  @Override
+  public AvatarPragmaAuthenticity advancedClone(AvatarSpecification avspec) {
+    AvatarPragmaAuthenticity result = new AvatarPragmaAuthenticity(this.name, this.referenceObject,
+        this.attrA.advancedClone(avspec), this.attrB.advancedClone(avspec));
+    this.cloneLinkToReferenceObjects(result);
+    return result;
+  }
 }

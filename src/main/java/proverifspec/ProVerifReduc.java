@@ -36,43 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifReduc
- * Creation: 13/09/2015
+ * Class ProVerifReduc Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifReduc implements ProVerifDeclaration {
-    protected ProVerifVar[] vars;
-    protected ProVerifReduc otherwise;
-    protected String formula;
-    protected boolean priv;
+  protected ProVerifVar[] vars;
+  protected ProVerifReduc otherwise;
+  protected String formula;
+  protected boolean priv;
 
-    public ProVerifReduc (ProVerifVar[] _vars, String _formula, ProVerifReduc _otherwise, boolean _priv) {
-        this.vars = _vars;
-        this.formula = _formula;
-        this.otherwise = _otherwise;
-        this.priv = _priv;
-    }
+  public ProVerifReduc(ProVerifVar[] _vars, String _formula, ProVerifReduc _otherwise, boolean _priv) {
+    this.vars = _vars;
+    this.formula = _formula;
+    this.otherwise = _otherwise;
+    this.priv = _priv;
+  }
 
-    public ProVerifReduc (ProVerifVar[] _vars, String _formula, boolean _priv) {
-        this (_vars, _formula, null, _priv);
-    }
+  public ProVerifReduc(ProVerifVar[] _vars, String _formula, boolean _priv) {
+    this(_vars, _formula, null, _priv);
+  }
 
-    public ProVerifReduc (ProVerifVar[] _vars, String _formula, ProVerifReduc _otherwise) {
-        this (_vars, _formula, _otherwise, false);
-    }
+  public ProVerifReduc(ProVerifVar[] _vars, String _formula, ProVerifReduc _otherwise) {
+    this(_vars, _formula, _otherwise, false);
+  }
 
-    public ProVerifReduc (ProVerifVar[] _vars, String _formula) {
-        this (_vars, _formula, null, false);
-    }
+  public ProVerifReduc(ProVerifVar[] _vars, String _formula) {
+    this(_vars, _formula, null, false);
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateReduc (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateReduc(this, _alinea);
+  }
 }

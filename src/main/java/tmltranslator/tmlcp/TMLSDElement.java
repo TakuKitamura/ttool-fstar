@@ -36,23 +36,20 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 import tmltranslator.TMLElement;
 
 /**
-* Class TMLSDElement
-* Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+ * Class TMLSDElement Creation: 18/02/2014
+ * 
+ * @version 1.0 18/02/2014
+ * @author Ludovic APVRILLE
  */
-public abstract class TMLSDElement extends TMLElement  {
-	
-    public TMLSDElement(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
+public abstract class TMLSDElement extends TMLElement {
+
+  public TMLSDElement(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
 }

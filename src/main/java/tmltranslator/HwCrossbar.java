@@ -36,38 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
- * Class HwCrossbar
- * Creation: 05/09/2007
+ * Class HwCrossbar Creation: 05/09/2007
+ * 
  * @version 1.0 05/09/2007
  * @author Ludovic APVRILLE
  */
-public class HwCrossbar extends HwCommunicationNode  {
+public class HwCrossbar extends HwCommunicationNode {
 
-    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
-   
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
-   
-    public HwCrossbar(String _name) {
-        super(_name);
-    }
-    
-    @Override
-    public String toXML() {
-	String s = "<CROSSBAR name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" />\n";
-	return s;
-    }
+  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof HwCrossbar)) return false;
-        if (!super.equalSpec(o)) return false;
-        HwCrossbar hwCrossbar = (HwCrossbar) o;
-        return byteDataSize == hwCrossbar.byteDataSize;
-    }
+  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+
+  public HwCrossbar(String _name) {
+    super(_name);
+  }
+
+  @Override
+  public String toXML() {
+    String s = "<CROSSBAR name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+        + "\" />\n";
+    return s;
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwCrossbar))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+    HwCrossbar hwCrossbar = (HwCrossbar) o;
+    return byteDataSize == hwCrossbar.byteDataSize;
+  }
 }

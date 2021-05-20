@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.GenericTree;
@@ -48,56 +45,55 @@ import ui.MainGUI;
 import java.util.Vector;
 
 /**
- * Class SearchTree
- * Creation: 29/06/2013
- * Version 1.0 29/06/2013
+ * Class SearchTree Creation: 29/06/2013 Version 1.0 29/06/2013
+ * 
  * @author Ludovic APVRILLE
  */
 public class SearchTree implements GenericTree {
-    
-    private MainGUI mgui;
-    private String name = "Search result";
-    private Vector<Object> elements;
-    
-    public SearchTree(MainGUI _mgui) {
-        mgui = _mgui;
-    }
-    
-    public void setElements(Vector<Object> _elements) {
-    	elements = _elements;
-    	TraceManager.addDev("Found in search " + elements.size() + " elements");
-    }
-    
-    // TREE MANAGEMENT
-    
-    public String toString() {
-        return name;
-    }
-    
-    public int getChildCount() {
-      //
-      if (elements == null) {
-      	  return 0;
-      }
-      return elements.size();
-    }
-    
-    public Object getChild(int index) {
+
+  private MainGUI mgui;
+  private String name = "Search result";
+  private Vector<Object> elements;
+
+  public SearchTree(MainGUI _mgui) {
+    mgui = _mgui;
+  }
+
+  public void setElements(Vector<Object> _elements) {
+    elements = _elements;
+    TraceManager.addDev("Found in search " + elements.size() + " elements");
+  }
+
+  // TREE MANAGEMENT
+
+  public String toString() {
+    return name;
+  }
+
+  public int getChildCount() {
     //
-        if (elements != null) {
-            return elements.get(index);
-        }
-        return null;
+    if (elements == null) {
+      return 0;
     }
-    
-    public int getIndexOfChild(Object child) {
-    	//
-    	if (elements != null) {
-    		return elements.indexOf(child);
-    	}
-    	
-    	return -1;
-    	
+    return elements.size();
+  }
+
+  public Object getChild(int index) {
+    //
+    if (elements != null) {
+      return elements.get(index);
     }
-    
+    return null;
+  }
+
+  public int getIndexOfChild(Object child) {
+    //
+    if (elements != null) {
+      return elements.indexOf(child);
+    }
+
+    return -1;
+
+  }
+
 }

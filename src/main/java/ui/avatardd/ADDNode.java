@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import tmltranslator.HwNode;
@@ -49,33 +46,34 @@ import ui.TGComponent;
 import java.util.ArrayList;
 
 /**
- * Class ADDNode
- * Node. To be used in Avatar deploiment diagrams.
- * Creation: 01/07/2014
+ * Class ADDNode Node. To be used in Avatar deploiment diagrams. Creation:
+ * 01/07/2014
+ * 
  * @version 1.0 01/07/2014
  * @author Ludovic APVRILLE
  */
-public abstract class ADDNode extends TGCWithInternalComponent  {
-    protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
-	
-    public ADDNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+public abstract class ADDNode extends TGCWithInternalComponent {
+  protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+
+  public ADDNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
+
+  public ArrayList<ADDArtifact> getAllADDArtifacts() {
+    ArrayList<ADDArtifact> artifacts = new ArrayList<ADDArtifact>();
+
+    for (int i = 0; i < nbInternalTGComponent; i++) {
+      if (tgcomponent[i] instanceof ADDArtifact) {
+        artifacts.add((ADDArtifact) (tgcomponent[i]));
+      }
     }
-	
-	public ArrayList<ADDArtifact> getAllADDArtifacts() {
-		ArrayList<ADDArtifact> artifacts = new ArrayList<ADDArtifact>();
-		
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof ADDArtifact) {
-                artifacts.add((ADDArtifact)(tgcomponent[i]));
-            }
-        }
-		
-		return artifacts;
-	}
-	
-	public int getClockRatio(){
-		  return clockRatio;
-	  }  
-    
+
+    return artifacts;
+  }
+
+  public int getClockRatio() {
+    return clockRatio;
+  }
+
 }

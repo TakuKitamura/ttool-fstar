@@ -36,19 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 /**
- * Class SteppedAlgorithm
- * For identifying algorithms providing percentage of completion
- * Creation: 2007
+ * Class SteppedAlgorithm For identifying algorithms providing percentage of
+ * completion Creation: 2007
+ * 
  * @version 1.1 02/05/2007
  * @author Ludovic APVRILLE
  */
-public interface SteppedAlgorithm  {
-	int getPercentage();
-  
+public interface SteppedAlgorithm {
+  int getPercentage();
+
 }

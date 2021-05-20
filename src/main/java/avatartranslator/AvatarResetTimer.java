@@ -36,31 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
- * Class AvatarResetTimer
- * Creation: 15/07/2010
+ * Class AvatarResetTimer Creation: 15/07/2010
+ * 
  * @version 1.0 15/07/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarResetTimer extends AvatarTimerOperator {
-	
-    public AvatarResetTimer(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
-	public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-		AvatarResetTimer art = new AvatarResetTimer(getName(), getReferenceObject());
-		art.setTimer(getTimer());
-		return art;
-	}
-	
-	public String getNiceName() {
-		return "Reseting of timer " + getName();
-	}
-	
+
+  public AvatarResetTimer(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+    AvatarResetTimer art = new AvatarResetTimer(getName(), getReferenceObject());
+    art.setTimer(getTimer());
+    return art;
+  }
+
+  public String getNiceName() {
+    return "Reseting of timer " + getName();
+  }
+
 }

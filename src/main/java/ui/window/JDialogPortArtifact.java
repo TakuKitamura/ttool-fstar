@@ -61,407 +61,407 @@ import ui.TGComponent;
 import ui.tmldd.TMLArchiMemoryNode;
 import ui.tmldd.TMLArchiPortArtifact;
 
-
 /**
- * Class JDialogTMLTaskArtifact
- * Dialog for managing artifact to map ports onto CPs
- * Creation: 19/09/2007
+ * Class JDialogTMLTaskArtifact Dialog for managing artifact to map ports onto
+ * CPs Creation: 19/09/2007
+ * 
  * @version 1.0 19/09/2007
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class JDialogPortArtifact extends JDialogBase implements ActionListener  {
+public class JDialogPortArtifact extends JDialogBase implements ActionListener {
 
-    private boolean regularClose;
-    private boolean emptyPortsList = false;
+  private boolean regularClose;
+  private boolean emptyPortsList = false;
 
-    private JPanel panel2;
-    //private Frame frame;
-    private TMLArchiPortArtifact artifact;
-    private String mappedMemory = "VOID";
+  private JPanel panel2;
+  // private Frame frame;
+  private TMLArchiPortArtifact artifact;
+  private String mappedMemory = "VOID";
 
-    protected JComboBox<String> mappedPortCB, memoryCB;
-    protected JTextField baseAddressTF, numSamplesTF, bitsPerSymbolTF;
-    protected String baseAddress, mappedPort, sampleLength, numSamples, bitsPerSymbol;
-    protected String bank, dataType, symmetricalValue;
-    protected JComboBox<String> dataTypeCB, bankCB, symmetricalValueCB;
+  protected JComboBox<String> mappedPortCB, memoryCB;
+  protected JTextField baseAddressTF, numSamplesTF, bitsPerSymbolTF;
+  protected String baseAddress, mappedPort, sampleLength, numSamples, bitsPerSymbol;
+  protected String bank, dataType, symmetricalValue;
+  protected JComboBox<String> dataTypeCB, bankCB, symmetricalValueCB;
 
-    //Intl Data In
-    protected JTextField widthIntl_TF, bitInOffsetIntl_TF, inputOffsetIntl_TF;
-    protected String widthIntl, bitInOffsetIntl, inputOffsetIntl, packedBinaryInIntl;
-    protected JComboBox<String> packedBinaryInIntl_CB;
+  // Intl Data In
+  protected JTextField widthIntl_TF, bitInOffsetIntl_TF, inputOffsetIntl_TF;
+  protected String widthIntl, bitInOffsetIntl, inputOffsetIntl, packedBinaryInIntl;
+  protected JComboBox<String> packedBinaryInIntl_CB;
 
-    //Intl Data Out
-    protected JTextField bitOutOffsetIntl_TF, outputOffsetIntl_TF;
-    protected JComboBox<String> packedBinaryOutIntl_CB;
-    protected String packedBinaryOutIntl, bitOutOffsetIntl, outputOffsetIntl;
+  // Intl Data Out
+  protected JTextField bitOutOffsetIntl_TF, outputOffsetIntl_TF;
+  protected JComboBox<String> packedBinaryOutIntl_CB;
+  protected String packedBinaryOutIntl, bitOutOffsetIntl, outputOffsetIntl;
 
-    //Intl Perm
-    protected JTextField lengthPermIntl_TF, offsetPermIntl_TF;
-    protected String lengthPermIntl, offsetPermIntl;
+  // Intl Perm
+  protected JTextField lengthPermIntl_TF, offsetPermIntl_TF;
+  protected String lengthPermIntl, offsetPermIntl;
 
-    //Mapper Data In
-    protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF;
-    protected String baseAddressDataInMapp, numSamplesDataInMapp, bitsPerSymbolDataInMapp, symmetricalValueDataInMapp;
-    protected JComboBox<String> symmetricalValueDataInMapp_CB;
-    //Mapper Data Out
-    protected JTextField baseAddressDataOutMapp_TF;
-    protected String baseAddressDataOutMapp;
-    //Mapper LUT
-    protected JTextField baseAddressLUTMapp_TF;
-    protected String baseAddressLUTMapp;
+  // Mapper Data In
+  protected JTextField baseAddressDataInMapp_TF, numSamplesDataInMapp_TF, bitsPerSymbolDataInMapp_TF;
+  protected String baseAddressDataInMapp, numSamplesDataInMapp, bitsPerSymbolDataInMapp, symmetricalValueDataInMapp;
+  protected JComboBox<String> symmetricalValueDataInMapp_CB;
+  // Mapper Data Out
+  protected JTextField baseAddressDataOutMapp_TF;
+  protected String baseAddressDataOutMapp;
+  // Mapper LUT
+  protected JTextField baseAddressLUTMapp_TF;
+  protected String baseAddressLUTMapp;
 
-    //Code generation
-    private JPanel panel3;//, panel4, panel5;
-    //private JTabbedPane tabbedPane;
-    //private String HALUnitName = "";
-    private Vector<String> portsList;
-    //private String appName = "";
+  // Code generation
+  private JPanel panel3;// , panel4, panel5;
+  // private JTabbedPane tabbedPane;
+  // private String HALUnitName = "";
+  private Vector<String> portsList;
+  // private String appName = "";
 
-    /* Creates new form  */
-    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, Vector<String> _portsList, String _mappedPort ) {
-        super(_frame, _title, true);
-        //frame = _frame;
-        artifact = _artifact;
-        mappedMemory = _mappedMemory;
-        portsList = _portsList;
-        mappedPort = _mappedPort;
-        //appName = mappedPort.split("::")[0];
-        initComponents();
-        pack();
+  /* Creates new form */
+  public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory,
+      Vector<String> _portsList, String _mappedPort) {
+    super(_frame, _title, true);
+    // frame = _frame;
+    artifact = _artifact;
+    mappedMemory = _mappedMemory;
+    portsList = _portsList;
+    mappedPort = _mappedPort;
+    // appName = mappedPort.split("::")[0];
+    initComponents();
+    pack();
+  }
+
+  private void initComponents() {
+
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    // GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+    panel2.setPreferredSize(new Dimension(650, 350));
+
+    panel3 = new JPanel();
+    panel3.setLayout(gridbag2);
+    panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
+    panel3.setPreferredSize(new Dimension(650, 350));
+
+    // Issue #41 Ordering of tabbed panes
+    // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+    // panel4 = new JPanel();
+    // panel5 = new JPanel();
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    int mappedPortIndex;
+    if (portsList.size() == 0) {
+      portsList.add("No available port");
+      mappedPortIndex = 0;
+    } else {
+      mappedPortIndex = portsList.indexOf(mappedPort);
     }
 
-    private void initComponents() {
+    mappedPortCB = new JComboBox<String>(portsList);
+    mappedPortCB.setSelectedIndex(mappedPortIndex);
+    panel2.add(new JLabel("Port:"), c2);
+    mappedPortCB.addActionListener(this);
+    panel2.add(mappedPortCB, c1);
 
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        //GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
-
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-        panel2.setPreferredSize(new Dimension(650, 350));
-
-        panel3 = new JPanel();
-        panel3.setLayout(gridbag2);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Code generation: memory configuration"));
-        panel3.setPreferredSize(new Dimension(650, 350));
-
-        // Issue #41 Ordering of tabbed panes
-        // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        //panel4 = new JPanel();
-        //   panel5 = new JPanel();
-
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        int mappedPortIndex;
-        if( portsList.size() == 0 ) {
-            portsList.add( "No available port" );
-            mappedPortIndex = 0;
-        }
-        else    {
-            mappedPortIndex = portsList.indexOf( mappedPort );
-        }
-
-        mappedPortCB = new JComboBox<String>( portsList );
-        mappedPortCB.setSelectedIndex( mappedPortIndex );
-        panel2.add( new JLabel( "Port:" ), c2 );
-        mappedPortCB.addActionListener(this);
-        panel2.add( mappedPortCB, c1 );
-
-        //Make the list of memories that are available for being mapped
-        List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
-        Vector<String> memoryList = new Vector<String>();
-        for( int k = 0; k < componentList.size(); k++ ) {
-            if( componentList.get(k) instanceof TMLArchiMemoryNode )    {
-                memoryList.add( componentList.get(k).getName() );
-            }
-        }
-        if( memoryList.size() == 0 )    { // In case there are no memories in the design
-            memoryList.add( "No available memory" );
-        }
-
-        memoryCB = new JComboBox<String>( memoryList );
-        if( !mappedMemory.equals( "VOID" ) && !mappedMemory.equals( "" ) )      {
-            memoryCB.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
-        }
-        else    {
-            memoryCB.setSelectedIndex( 0 );
-        }
-        panel2.add( new JLabel( "Memory: "),  c2 );
-        memoryCB.addActionListener(this);
-        panel2.add( memoryCB, c1 );
-
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c0.fill = GridBagConstraints.BOTH;
-        c.add( panel2, c0 );
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-
-        initButtons(c0, c, this);
+    // Make the list of memories that are available for being mapped
+    List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
+    Vector<String> memoryList = new Vector<String>();
+    for (int k = 0; k < componentList.size(); k++) {
+      if (componentList.get(k) instanceof TMLArchiMemoryNode) {
+        memoryList.add(componentList.get(k).getName());
+      }
     }
-    //
-    //  private String getBufferTypeFromSelectedMemory( String mappedMemory )   {
-    //
-    //          List<TGComponent> componentList = artifact.getTDiagramPanel().getComponentList();
-    //          //Vector<String> list = new Vector<String>();
-    //
-    //          for( int k = 0; k < componentList.size(); k++ ) {
-    //                  if( componentList.get(k) instanceof TMLArchiMemoryNode )        {
-    //                          TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
-    //                          if( memoryNode.getName().equals( mappedMemory ) )       {
-    //                                  return memoryNode.getName();
-    //                          }
-    //                  }
-    //          }
-    //          return "NO MEC";        //default: the main memory buffer
-    //  }
-
-    public void actionPerformed(ActionEvent evt)  {
-
-        /*if( evt.getSource() == memoryCB )     {
-          updateBufferPanel();
-          }*/
-        String command = evt.getActionCommand();
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-    //
-    //  private void updateBufferPanel()        {
-    //
-    //          GridBagConstraints c1 = new GridBagConstraints();
-    //          GridBagConstraints c2 = new GridBagConstraints();
-    //
-    //          c1.gridwidth = 1;
-    //          c1.gridheight = 1;
-    //          c1.weighty = 1.0;
-    //          c1.weightx = 1.0;
-    //          c1.fill = GridBagConstraints.HORIZONTAL;
-    //    c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    //
-    //          //flushBuffersStrings();
-    //          HALUnitName = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt( memoryCB.getSelectedIndex() ) );
-    //          ArrayList<JPanel> panelsList;
-    //
-    //          switch( HALUnitName )   {
-    //                  case "FEP_BUFFER":
-    //                          tabbedPane.removeAll();
-    //                          panelsList = FepBuffer.makePanel( c1, c2 );
-    //                          panel3 = panelsList.get(0);
-    //                          tabbedPane.addTab( "Data", panel3 );
-    //                          break;
-    //                  case "MAPPER_BUFFER":
-    //                          tabbedPane.removeAll();
-    //                          panelsList = MapperBuffer.makePanel( c1, c2 );
-    //                          tabbedPane.addTab( "Data In", panelsList.get(0) );
-    //                          tabbedPane.addTab( "Data Out", panelsList.get(1) );
-    //                          tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
-    //                          tabbedPane.setSelectedIndex(0);
-    //                          break;
-    //                  case "ADAIF_BUFFER":
-    //                          tabbedPane.removeAll();
-    //                          panelsList = AdaifBuffer.makePanel( c1, c2 );
-    //                          panel3 = panelsList.get(0);
-    //                          tabbedPane.addTab( "Data", panel3 );
-    //                          break;
-    //                  case "INTERLEAVER_BUFFER":
-    //                          tabbedPane.removeAll();
-    //                          panelsList = InterleaverBuffer.makePanel( c1, c2 );
-    //                          tabbedPane.addTab( "Data In", panelsList.get(0) );
-    //                          tabbedPane.addTab( "Data Out", panelsList.get(1) );
-    //                          tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
-    //                          tabbedPane.setSelectedIndex(0);
-    //                          break;
-    //                  case "MAIN_MEMORY_BUFFER":
-    //                          tabbedPane.removeAll();
-    //                          panelsList = MMBuffer.makePanel( c1, c2 );
-    //                          panel3 = panelsList.get(0);
-    //                          tabbedPane.addTab( "Data", panel3 );
-    //                          break;
-    //                  default:        //the main memory buffer
-    //                          tabbedPane.removeAll();
-    //                          panelsList = FepBuffer.makePanel( c1, c2 );
-    //                          panel3 = panelsList.get(0);
-    //                          tabbedPane.addTab( "Data", panel3 );
-    //                          break;
-    //          }
-    //  }
-
-    public void closeDialog() {
-        regularClose = true;
-        mappedMemory = memoryCB.getItemAt( memoryCB.getSelectedIndex() );
-        //        HALUnitName = getBufferTypeFromSelectedMemory(memoryCB.getItemAt( memoryCB.getSelectedIndex() ));
-        //        switch ( HALUnitName )        {
-        //                                      case "FEP_BUFFER":
-        //                                              if( !FepBuffer.closePanel( frame ) )    {
-        //                                                      return;
-        //                                              }
-        //                                              break;
-        //                                      case "MAPPER_BUFFER":
-        //                                              if( !MapperBuffer.closePanel( frame ) ) {
-        //                                                      return;
-        //                                              }
-        //                                              break;
-        //                                      case "ADAIF_BUFFER":
-        //                                              if( !AdaifBuffer.closePanel( frame ) )  {
-        //                                                      return;
-        //                                              }
-        //                                              break;
-        //                                      case "INTERLEAVER_BUFFER":
-        //                                              if( !InterleaverBuffer.closePanel( frame ) )    {
-        //                                                      return;
-        //                                              }
-        //                                              break;
-        //                                      case "MAIN_MEMORY_BUFFER":
-        //                                              if( !MMBuffer.closePanel( frame ) )     {
-        //                                                      return;
-        //                                              }
-        //                                              break;
-        //                                      default:        //the main memory buffer
-        //                                              if( !FepBuffer.closePanel( frame ) )    {
-        //                                                      return;
-        //                                              }
-        //                                              break;
-        //                              }
-        dispose();
+    if (memoryList.size() == 0) { // In case there are no memories in the design
+      memoryList.add("No available memory");
     }
 
-    public String getMappedPort()       {
-        return mappedPort;
+    memoryCB = new JComboBox<String>(memoryList);
+    if (!mappedMemory.equals("VOID") && !mappedMemory.equals("")) {
+      memoryCB.setSelectedIndex(memoryList.indexOf(mappedMemory));
+    } else {
+      memoryCB.setSelectedIndex(0);
     }
+    panel2.add(new JLabel("Memory: "), c2);
+    memoryCB.addActionListener(this);
+    panel2.add(memoryCB, c1);
 
-    public String getMappedMemory()     {
-        return mappedMemory;
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+  //
+  // private String getBufferTypeFromSelectedMemory( String mappedMemory ) {
+  //
+  // List<TGComponent> componentList =
+  // artifact.getTDiagramPanel().getComponentList();
+  // //Vector<String> list = new Vector<String>();
+  //
+  // for( int k = 0; k < componentList.size(); k++ ) {
+  // if( componentList.get(k) instanceof TMLArchiMemoryNode ) {
+  // TMLArchiMemoryNode memoryNode = (TMLArchiMemoryNode)componentList.get(k);
+  // if( memoryNode.getName().equals( mappedMemory ) ) {
+  // return memoryNode.getName();
+  // }
+  // }
+  // }
+  // return "NO MEC"; //default: the main memory buffer
+  // }
+
+  public void actionPerformed(ActionEvent evt) {
+
+    /*
+     * if( evt.getSource() == memoryCB ) { updateBufferPanel(); }
+     */
+    String command = evt.getActionCommand();
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
+  //
+  // private void updateBufferPanel() {
+  //
+  // GridBagConstraints c1 = new GridBagConstraints();
+  // GridBagConstraints c2 = new GridBagConstraints();
+  //
+  // c1.gridwidth = 1;
+  // c1.gridheight = 1;
+  // c1.weighty = 1.0;
+  // c1.weightx = 1.0;
+  // c1.fill = GridBagConstraints.HORIZONTAL;
+  // c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+  //
+  // //flushBuffersStrings();
+  // HALUnitName = getBufferTypeFromSelectedMemory( (String)memoryCB.getItemAt(
+  // memoryCB.getSelectedIndex() ) );
+  // ArrayList<JPanel> panelsList;
+  //
+  // switch( HALUnitName ) {
+  // case "FEP_BUFFER":
+  // tabbedPane.removeAll();
+  // panelsList = FepBuffer.makePanel( c1, c2 );
+  // panel3 = panelsList.get(0);
+  // tabbedPane.addTab( "Data", panel3 );
+  // break;
+  // case "MAPPER_BUFFER":
+  // tabbedPane.removeAll();
+  // panelsList = MapperBuffer.makePanel( c1, c2 );
+  // tabbedPane.addTab( "Data In", panelsList.get(0) );
+  // tabbedPane.addTab( "Data Out", panelsList.get(1) );
+  // tabbedPane.addTab( "Look Up Table", panelsList.get(2) );
+  // tabbedPane.setSelectedIndex(0);
+  // break;
+  // case "ADAIF_BUFFER":
+  // tabbedPane.removeAll();
+  // panelsList = AdaifBuffer.makePanel( c1, c2 );
+  // panel3 = panelsList.get(0);
+  // tabbedPane.addTab( "Data", panel3 );
+  // break;
+  // case "INTERLEAVER_BUFFER":
+  // tabbedPane.removeAll();
+  // panelsList = InterleaverBuffer.makePanel( c1, c2 );
+  // tabbedPane.addTab( "Data In", panelsList.get(0) );
+  // tabbedPane.addTab( "Data Out", panelsList.get(1) );
+  // tabbedPane.addTab( "Permutation Table", panelsList.get(2) );
+  // tabbedPane.setSelectedIndex(0);
+  // break;
+  // case "MAIN_MEMORY_BUFFER":
+  // tabbedPane.removeAll();
+  // panelsList = MMBuffer.makePanel( c1, c2 );
+  // panel3 = panelsList.get(0);
+  // tabbedPane.addTab( "Data", panel3 );
+  // break;
+  // default: //the main memory buffer
+  // tabbedPane.removeAll();
+  // panelsList = FepBuffer.makePanel( c1, c2 );
+  // panel3 = panelsList.get(0);
+  // tabbedPane.addTab( "Data", panel3 );
+  // break;
+  // }
+  // }
 
-    public String getStartAddress()     {
-        return baseAddress;
+  public void closeDialog() {
+    regularClose = true;
+    mappedMemory = memoryCB.getItemAt(memoryCB.getSelectedIndex());
+    // HALUnitName = getBufferTypeFromSelectedMemory(memoryCB.getItemAt(
+    // memoryCB.getSelectedIndex() ));
+    // switch ( HALUnitName ) {
+    // case "FEP_BUFFER":
+    // if( !FepBuffer.closePanel( frame ) ) {
+    // return;
+    // }
+    // break;
+    // case "MAPPER_BUFFER":
+    // if( !MapperBuffer.closePanel( frame ) ) {
+    // return;
+    // }
+    // break;
+    // case "ADAIF_BUFFER":
+    // if( !AdaifBuffer.closePanel( frame ) ) {
+    // return;
+    // }
+    // break;
+    // case "INTERLEAVER_BUFFER":
+    // if( !InterleaverBuffer.closePanel( frame ) ) {
+    // return;
+    // }
+    // break;
+    // case "MAIN_MEMORY_BUFFER":
+    // if( !MMBuffer.closePanel( frame ) ) {
+    // return;
+    // }
+    // break;
+    // default: //the main memory buffer
+    // if( !FepBuffer.closePanel( frame ) ) {
+    // return;
+    // }
+    // break;
+    // }
+    dispose();
+  }
+
+  public String getMappedPort() {
+    return mappedPort;
+  }
+
+  public String getMappedMemory() {
+    return mappedMemory;
+  }
+
+  public String getStartAddress() {
+    return baseAddress;
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean isRegularClose() {
+    return regularClose;
+  }
+
+  public String getReferenceCommunicationName() {
+    if (emptyPortsList) {
+      return null;
     }
-
-    public void cancelDialog() {
-        dispose();
-    }
-
-    public boolean isRegularClose() {
-        return regularClose;
-    }
-
-    public String getReferenceCommunicationName() {
-        if (emptyPortsList) {
-            return null;
-        }
-        String tmp = (String)( mappedPortCB.getSelectedItem() );
-        if( tmp.length() > 0 )    {
-            int index = tmp.indexOf("::");
-            if (index == -1) {
-                return tmp;
-            }
-            return tmp.substring(0, index);
-        }
-        else    {
-            return "ERROR EMPTY PORT NAME";
-        }
-    }
-
-    public String getCommunicationName() {
-        String tmp = (String)( mappedPortCB.getSelectedItem() );
-        int index = tmp.indexOf("::");
-        if (index == -1) {
-            return tmp;
-        }
-        tmp = tmp.substring(index+2, tmp.length());
-
-        index =  tmp.indexOf("(");
-        if (index > -1) {
-            tmp = tmp.substring(0, index).trim();
-        }
+    String tmp = (String) (mappedPortCB.getSelectedItem());
+    if (tmp.length() > 0) {
+      int index = tmp.indexOf("::");
+      if (index == -1) {
         return tmp;
+      }
+      return tmp.substring(0, index);
+    } else {
+      return "ERROR EMPTY PORT NAME";
     }
+  }
 
-    public String getTypeName() {
-        String tmp = (String)( mappedPortCB.getSelectedItem() );
-        int index1 = tmp.indexOf("(");
-        int index2 = tmp.indexOf(")");
-        if ((index1 > -1) && (index2 > index1)) {
-            return tmp.substring(index1+1, index2);
-        }
-        return "";
+  public String getCommunicationName() {
+    String tmp = (String) (mappedPortCB.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
     }
+    tmp = tmp.substring(index + 2, tmp.length());
 
-    public int indexOf(Vector<String> _list, String name) {
-        int i = 0;
-        for(String s : _list) {
-            if (s.equals(name)) {
-                return i;
-            }
-            i++;
-        }
-        return 0;
+    index = tmp.indexOf("(");
+    if (index > -1) {
+      tmp = tmp.substring(0, index).trim();
     }
+    return tmp;
+  }
 
-    //  public List<String> getBufferParameters()       {
-    //
-    //          List<String> params = new ArrayList<String>();
-    //params.add( String.valueOf( HALUnitName ) );
-    //          switch( HALUnitName )   {
-    //                  case "FEP_BUFFER":
-    //                          params = FepBuffer.getBufferParameters();
-    //                          break;
-    //            case "INTERLEAVER_BUFFER":
-    //                          params = InterleaverBuffer.getBufferParameters();
-    //                          break;
-    //                  case "ADAIF_BUFFER":
-    //                          params = AdaifBuffer.getBufferParameters();
-    //                          break;
-    //            case "MAPPER_BUFFER":
-    //                          params = MapperBuffer.getBufferParameters();
-    //                          break;
-    //                  case "MAIN_MEMORY_BUFFER":
-    //                          params = MMBuffer.getBufferParameters();
-    //                          break;
-    //                  default:        //the main memory buffer
-    //                          params = FepBuffer.getBufferParameters();
-    //                          break;
-    //          }
-    //          return params;
-    //  }
-    //
-    //  private void cleanPanels()      {
-    //          panel3.removeAll();
-    //          panel4.removeAll();
-    //          panel5.removeAll();
-    //          tabbedPane.removeAll();
-    //  }
+  public String getTypeName() {
+    String tmp = (String) (mappedPortCB.getSelectedItem());
+    int index1 = tmp.indexOf("(");
+    int index2 = tmp.indexOf(")");
+    if ((index1 > -1) && (index2 > index1)) {
+      return tmp.substring(index1 + 1, index2);
+    }
+    return "";
+  }
 
-    //  private void revalidateAndRepaintPanels()       {
-    //          panel3.revalidate();
-    //          panel3.repaint();
-    //          panel4.revalidate();
-    //          panel4.repaint();
-    //          panel5.revalidate();
-    //          panel5.repaint();
-    //  }
+  public int indexOf(Vector<String> _list, String name) {
+    int i = 0;
+    for (String s : _list) {
+      if (s.equals(name)) {
+        return i;
+      }
+      i++;
+    }
+    return 0;
+  }
 
-}       //End of class
+  // public List<String> getBufferParameters() {
+  //
+  // List<String> params = new ArrayList<String>();
+  // params.add( String.valueOf( HALUnitName ) );
+  // switch( HALUnitName ) {
+  // case "FEP_BUFFER":
+  // params = FepBuffer.getBufferParameters();
+  // break;
+  // case "INTERLEAVER_BUFFER":
+  // params = InterleaverBuffer.getBufferParameters();
+  // break;
+  // case "ADAIF_BUFFER":
+  // params = AdaifBuffer.getBufferParameters();
+  // break;
+  // case "MAPPER_BUFFER":
+  // params = MapperBuffer.getBufferParameters();
+  // break;
+  // case "MAIN_MEMORY_BUFFER":
+  // params = MMBuffer.getBufferParameters();
+  // break;
+  // default: //the main memory buffer
+  // params = FepBuffer.getBufferParameters();
+  // break;
+  // }
+  // return params;
+  // }
+  //
+  // private void cleanPanels() {
+  // panel3.removeAll();
+  // panel4.removeAll();
+  // panel5.removeAll();
+  // tabbedPane.removeAll();
+  // }
+
+  // private void revalidateAndRepaintPanels() {
+  // panel3.revalidate();
+  // panel3.repaint();
+  // panel4.revalidate();
+  // panel4.repaint();
+  // panel5.revalidate();
+  // panel5.repaint();
+  // }
+
+} // End of class

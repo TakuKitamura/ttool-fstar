@@ -36,12 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
 import myutil.Conversion;
@@ -49,359 +43,357 @@ import myutil.Conversion;
 import java.util.Vector;
 
 /**
-* Class ADChoice
-* Creation: 11/12/2003
-* @version 1.0 11/12/2003
-* @author Ludovic APVRILLE
+ * Class ADChoice Creation: 11/12/2003
+ * 
+ * @version 1.0 11/12/2003
+ * @author Ludovic APVRILLE
  */
 public class ADChoice extends ADComponent implements NonBlockingADComponent {
-    protected Vector<String> guard; // String
-    
-    public ADChoice() {
-        nbNext = 100000;
-        guard = new Vector<>();
+  protected Vector<String> guard; // String
+
+  public ADChoice() {
+    nbNext = 100000;
+    guard = new Vector<>();
+  }
+
+  public void addGuard(String s) {
+    if (s == null) {
+      s = "[ ]";
     }
-    
-    public void addGuard(String s) {
-		if (s == null) {
-			s = "[ ]";
-		}
-		s = s.trim();
-		if (s.length() > 2) {
-			String tmp = s.substring(1, s.length()-1);
-			tmp = tmp.trim();
-			if (tmp.length() == 0) {
-				s = "[ ]";
-			}
-		}
-        guard.addElement(s);
+    s = s.trim();
+    if (s.length() > 2) {
+      String tmp = s.substring(1, s.length() - 1);
+      tmp = tmp.trim();
+      if (tmp.length() == 0) {
+        s = "[ ]";
+      }
     }
-    
-    public void removeNext(Object o) {
-        //
-        int index = next.indexOf(o);
-        if (index > -1) {
-            //
-            next.removeElement(o);
-            removeGuard(index);
-        }
+    guard.addElement(s);
+  }
+
+  public void removeNext(Object o) {
+    //
+    int index = next.indexOf(o);
+    if (index > -1) {
+      //
+      next.removeElement(o);
+      removeGuard(index);
     }
-	
-	public void removeNext(int index) {
-        if (index > -1) {
-            //
-            next.removeElementAt(index);
-            removeGuard(index);
-        }
+  }
+
+  public void removeNext(int index) {
+    if (index > -1) {
+      //
+      next.removeElementAt(index);
+      removeGuard(index);
     }
-    
-    public void removeGuard(int index) {
-        if (index < guard.size()) {
-            guard.removeElementAt(index);
-        }
+  }
+
+  public void removeGuard(int index) {
+    if (index < guard.size()) {
+      guard.removeElementAt(index);
     }
-	
-	public void setGuard(String s, int index) {
-		if (index < guard.size()) {
-			guard.setElementAt(s, index);
-        }
-	}
-    
-    public String getGuard(int i) {
-        if (i<guard.size()) {
-            return guard.elementAt(i);
-        }
-        return null;
+  }
+
+  public void setGuard(String s, int index) {
+    if (index < guard.size()) {
+      guard.setElementAt(s, index);
     }
-    
-    public int getNbGuard() {
-        return guard.size();
+  }
+
+  public String getGuard(int i) {
+    if (i < guard.size()) {
+      return guard.elementAt(i);
     }
-    
-    public boolean isGuarded(int i) {
-        if (i>=guard.size()) {
+    return null;
+  }
+
+  public int getNbGuard() {
+    return guard.size();
+  }
+
+  public boolean isGuarded(int i) {
+    if (i >= guard.size()) {
+      return false;
+    } else {
+      String s = guard.elementAt(i);
+      String g = "";
+      if (s != null) {
+        g = Conversion.replaceAllChar(s.trim(), ' ', "");
+      }
+      return !((s == null) || (s.length() < 2) || (g.equals("[]")));
+    }
+  }
+
+  public boolean isGuarded() {
+    for (int i = 0; i < getNbGuard(); i++) {
+      if (isGuarded(i)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public String toString() {
+    String s = "Choice ";
+    String s1;
+    for (int i = 0; i < guard.size(); i++) {
+      s1 = getGuard(i);
+      if (i == 0) {
+        s += "(" + s1;
+      } else {
+        s += ", " + s1;
+      }
+    }
+    if (guard.size() > 0) {
+      s += ")";
+    }
+    return s;
+  }
+
+  public boolean isSpecialChoice(boolean variableAsActions) {
+    // All actions following the choice must either be a action on a gate or a delay
+    // - determinitic or not - followed by an action on a gate
+
+    ADComponent adc, adc1;
+
+    for (int i = 0; i < next.size(); i++) {
+      adc = getNext(i);
+
+      if (adc instanceof ADActionStateWithGate) {
+
+      } else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) || (adc instanceof ADTimeInterval)) {
+        adc1 = adc.getNext(0);
+        if (!(adc1 instanceof ADActionStateWithGate)) {
+          if (variableAsActions) {
+            if (!(adc1 instanceof ADActionStateWithParam)) {
+              return false;
+            }
+          } else {
             return false;
-        } else {
-            String s = guard.elementAt(i);
-			String g = "";
-			if (s != null) {
-				g = Conversion.replaceAllChar(s.trim(), ' ', "");
-			}
-            return !((s == null) || (s.length() < 2) || (g.equals("[]")));
+          }
         }
+      } else {
+        return false;
+      }
     }
-	
-	public boolean isGuarded() {
-		for(int i=0; i<getNbGuard(); i++){
-			if (isGuarded(i)) {
-				return true;
-			}
-		}
-		return false;
-	}
-    
-    public String toString() {
-        String s = "Choice ";
-        String s1;
-        for(int i=0; i<guard.size(); i++) {
-            s1 = getGuard(i);
-            if (i ==0) {
-                s += "(" + s1;
-            } else {
-                s += ", " + s1;
+
+    return true;
+  }
+
+  public boolean isSpecialChoiceDelay(boolean variableAsActions) {
+    ADComponent adc, adc1;
+    String value;
+
+    /*
+     * if (isElseChoice()) { return true; }
+     */
+
+    for (int i = 0; i < next.size(); i++) {
+      adc = getNext(i);
+
+      if (adc instanceof ADActionStateWithGate) {
+
+      } else if (adc instanceof ADDelay) {
+        adc1 = adc.getNext(0);
+        if (!(adc1 instanceof ADActionStateWithGate)) {
+          if (variableAsActions) {
+            if (!(adc1 instanceof ADActionStateWithParam)) {
+              return false;
             }
+          } else {
+            return false;
+          }
         }
-        if (guard.size() > 0) {
-            s += ")";
-        }
-        return s;
-    }
-    
-    public boolean isSpecialChoice(boolean variableAsActions) {
-        // All actions following the choice must either be a action on a gate or a delay - determinitic or not -  followed by an action on a gate
-        
-        ADComponent adc, adc1;
-        
-        for(int i=0; i<next.size(); i++) {
-            adc = getNext(i);
-            
-            if (adc instanceof ADActionStateWithGate) {
-                
-            } else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) ||(adc instanceof ADTimeInterval)) {
-                adc1 = adc.getNext(0);
-                if (!(adc1 instanceof ADActionStateWithGate)) {
-					if (variableAsActions) {
-						if (!(adc1 instanceof ADActionStateWithParam)) {
-							return false;
-						}
-					} else {
-						return false;
-					}
-                }
-            } else {
+      } else if (adc instanceof ADLatency) {
+        value = ((ADLatency) adc).getValue().trim();
+        if (value.equals("0")) {
+          adc1 = adc.getNext(0);
+          if (!(adc1 instanceof ADActionStateWithGate)) {
+            if (variableAsActions) {
+              if (!(adc instanceof ADActionStateWithParam)) {
                 return false;
+              }
+            } else {
+              return false;
             }
+          }
         }
-        
-        return true;
-    }
-    
-    public boolean isSpecialChoiceDelay(boolean variableAsActions) {
-		ADComponent adc, adc1;
-		String value;
-		
-		/*if (isElseChoice()) {
-		return true;
-		}*/
-		
-        
-        for(int i=0; i<next.size(); i++) {
-            adc = getNext(i);
-            
-            if (adc instanceof ADActionStateWithGate) {
-				
-			} else if (adc instanceof ADDelay) {
-				adc1 = adc.getNext(0);
-				if (!(adc1 instanceof ADActionStateWithGate)) {
-					if (variableAsActions) {
-						if (!(adc1 instanceof ADActionStateWithParam)) {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				}
-			} else if (adc instanceof ADLatency) {
-				value = ((ADLatency)adc).getValue().trim();
-				if (value.equals("0")) {
-					adc1 = adc.getNext(0);
-					if (!(adc1 instanceof ADActionStateWithGate)) {
-						if (variableAsActions) {
-							if (!(adc instanceof ADActionStateWithParam)) {
-								return false;
-							}
-						} else {
-							return false;
-						}
-					}
-				}
-			} else if (adc instanceof ADTimeInterval) {
-				ADTimeInterval adt = (ADTimeInterval)adc;
-				if (adt.getMinValue().equals(adt.getMaxValue())) {
-					adc1 = adc.getNext(0);
-					if (!(adc1 instanceof ADActionStateWithGate)) {
-						if (variableAsActions) {
-							if (!(adc1 instanceof ADActionStateWithParam)) {
-								return false;
-							}
-						} else {
-							return false;
-						}
-					}
-				}
-			} else {
-				return false;
-			}
-        }
-        
-        return true;
-    }
-	
-	public boolean isSpecialChoiceAction(boolean variableAsActions) {
-		ADComponent adc;//, adc1;
-		//String value;
-		
-        for(int i=0; i<next.size(); i++) {
-            adc = getNext(i);
-            
-            if (!(adc instanceof ADActionStateWithGate)) {
-				if (variableAsActions) {
-					if (!(adc instanceof ADActionStateWithParam)) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-			}
-			
-			
-        }
-        
-        return true;
-    }
-	
-	public boolean isSpecialChoice(int index, boolean variableAsActions) {
-		ADComponent adc, adc1;
-		adc = getNext(index);
-		
-		if (adc instanceof ADActionStateWithGate) {
-			
-		} else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) ||(adc instanceof ADTimeInterval)) {
-			adc1 = adc.getNext(0);
-			if (!(adc1 instanceof ADActionStateWithGate)) {
-				if (variableAsActions) {
-					if (!(adc1 instanceof ADActionStateWithParam)) {
-						return false;
-					}
-				} else {
-					return false;
-				}
-			}
-		} else {
-			return false;
-		}
-		
-        return true;
-    }
-	
-	
-	public boolean choiceFollowedWithADActionStateWithGates() {     
-        ADComponent adc;
-        
-        for(int i=0; i<next.size(); i++) {
-            adc = getNext(i);
-            
-            if (!(adc instanceof ADActionStateWithGate)) {
-				return false;
+      } else if (adc instanceof ADTimeInterval) {
+        ADTimeInterval adt = (ADTimeInterval) adc;
+        if (adt.getMinValue().equals(adt.getMaxValue())) {
+          adc1 = adc.getNext(0);
+          if (!(adc1 instanceof ADActionStateWithGate)) {
+            if (variableAsActions) {
+              if (!(adc1 instanceof ADActionStateWithParam)) {
+                return false;
+              }
+            } else {
+              return false;
             }
+          }
         }
-        
-        return true;
-	}
-	
-	// Choice with only two guards and one is exactly the other one but
-	// with a not() on the condition
-	public boolean isElseChoice() {  
-		//
-		if (getNbGuard() != 2) {
-			return false;
-		}
-		
-		if (!isGuarded(0) && !isGuarded(1)) {
-			return false;
-		}
-		
-		String g0 = new String(getGuard(0));
-		String g1 = new String(getGuard(1));
-		
-		//
-		
-		if ((g0.indexOf("not") < 0) && (g1.indexOf("not") < 0)) {
-			return false;
-		}
-		
-		g0 = Conversion.replaceAllChar(g0, '[', "");
-		g1 = Conversion.replaceAllChar(g1, '[', "");
-		g0 = Conversion.replaceAllChar(g0, ' ', "");
-		g1 = Conversion.replaceAllChar(g1, ' ', "");
-		g0 = Conversion.replaceAllChar(g0, ']', "").trim();
-		g1 = Conversion.replaceAllChar(g1, ']', "").trim();
-		
-		if (g0.startsWith("not(")) {
-			g0 = g0.substring(4, g0.length()-1);
-		} else if (g1.startsWith("not(")) {
-			g1 = g1.substring(4, g1.length()-1);
-		}
+      } else {
+        return false;
+      }
+    }
 
-        //
-        return g0.compareTo(g1) == 0;
-	}
-    
-	
-    // This function assumes that this is a special choice
-    // It returnes the gate of the first action of the choice
-    public ADActionStateWithGate getADActionStateWithGate(int index) {
-        ADComponent adc, adc1;
-        
-        adc = getNext(index);
-        if (adc instanceof ADActionStateWithGate) {
-            return (ADActionStateWithGate)adc;
-        } else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) ||(adc instanceof ADTimeInterval)) {
-            adc1 = adc.getNext(0);
-            if (adc1 instanceof ADActionStateWithGate) {
-                return (ADActionStateWithGate)adc1;
-            }
+    return true;
+  }
+
+  public boolean isSpecialChoiceAction(boolean variableAsActions) {
+    ADComponent adc;// , adc1;
+    // String value;
+
+    for (int i = 0; i < next.size(); i++) {
+      adc = getNext(i);
+
+      if (!(adc instanceof ADActionStateWithGate)) {
+        if (variableAsActions) {
+          if (!(adc instanceof ADActionStateWithParam)) {
+            return false;
+          }
+        } else {
+          return false;
         }
-        return null;
+      }
+
     }
-    
-    public String getMinDelay(int index) {
-        ADComponent adc;
-        
-        adc = getNext(index);
-        
-        if (adc instanceof ADTimeInterval) {
-            return ((ADTimeInterval)adc).getMinValue();
-        } else if (adc instanceof ADDelay) {
-            return ((ADDelay)adc).getValue();
+
+    return true;
+  }
+
+  public boolean isSpecialChoice(int index, boolean variableAsActions) {
+    ADComponent adc, adc1;
+    adc = getNext(index);
+
+    if (adc instanceof ADActionStateWithGate) {
+
+    } else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) || (adc instanceof ADTimeInterval)) {
+      adc1 = adc.getNext(0);
+      if (!(adc1 instanceof ADActionStateWithGate)) {
+        if (variableAsActions) {
+          if (!(adc1 instanceof ADActionStateWithParam)) {
+            return false;
+          }
+        } else {
+          return false;
         }
-		
-        return "-1";
+      }
+    } else {
+      return false;
     }
-    
-    public String getMaxDelay(int index) {
-        /*ADComponent adc, adc1;
-        
-        adc = getNext(index);*/
-        
-        return "-1";
+
+    return true;
+  }
+
+  public boolean choiceFollowedWithADActionStateWithGates() {
+    ADComponent adc;
+
+    for (int i = 0; i < next.size(); i++) {
+      adc = getNext(i);
+
+      if (!(adc instanceof ADActionStateWithGate)) {
+        return false;
+      }
     }
-	
-    public ADComponent makeSame() {
-		return new ADChoice();
+
+    return true;
+  }
+
+  // Choice with only two guards and one is exactly the other one but
+  // with a not() on the condition
+  public boolean isElseChoice() {
+    //
+    if (getNbGuard() != 2) {
+      return false;
     }
-	
-	public int getNextChoice() {
-		ADComponent adc;
-        
-        for(int i=0; i<next.size(); i++) {
-            adc = getNext(i);
-			if (adc instanceof ADChoice) {
-				return i;
-			}
-		}
-		return -1;
-	}
-    
+
+    if (!isGuarded(0) && !isGuarded(1)) {
+      return false;
+    }
+
+    String g0 = new String(getGuard(0));
+    String g1 = new String(getGuard(1));
+
+    //
+
+    if ((g0.indexOf("not") < 0) && (g1.indexOf("not") < 0)) {
+      return false;
+    }
+
+    g0 = Conversion.replaceAllChar(g0, '[', "");
+    g1 = Conversion.replaceAllChar(g1, '[', "");
+    g0 = Conversion.replaceAllChar(g0, ' ', "");
+    g1 = Conversion.replaceAllChar(g1, ' ', "");
+    g0 = Conversion.replaceAllChar(g0, ']', "").trim();
+    g1 = Conversion.replaceAllChar(g1, ']', "").trim();
+
+    if (g0.startsWith("not(")) {
+      g0 = g0.substring(4, g0.length() - 1);
+    } else if (g1.startsWith("not(")) {
+      g1 = g1.substring(4, g1.length() - 1);
+    }
+
+    //
+    return g0.compareTo(g1) == 0;
+  }
+
+  // This function assumes that this is a special choice
+  // It returnes the gate of the first action of the choice
+  public ADActionStateWithGate getADActionStateWithGate(int index) {
+    ADComponent adc, adc1;
+
+    adc = getNext(index);
+    if (adc instanceof ADActionStateWithGate) {
+      return (ADActionStateWithGate) adc;
+    } else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) || (adc instanceof ADTimeInterval)) {
+      adc1 = adc.getNext(0);
+      if (adc1 instanceof ADActionStateWithGate) {
+        return (ADActionStateWithGate) adc1;
+      }
+    }
+    return null;
+  }
+
+  public String getMinDelay(int index) {
+    ADComponent adc;
+
+    adc = getNext(index);
+
+    if (adc instanceof ADTimeInterval) {
+      return ((ADTimeInterval) adc).getMinValue();
+    } else if (adc instanceof ADDelay) {
+      return ((ADDelay) adc).getValue();
+    }
+
+    return "-1";
+  }
+
+  public String getMaxDelay(int index) {
+    /*
+     * ADComponent adc, adc1;
+     * 
+     * adc = getNext(index);
+     */
+
+    return "-1";
+  }
+
+  public ADComponent makeSame() {
+    return new ADChoice();
+  }
+
+  public int getNextChoice() {
+    ADComponent adc;
+
+    for (int i = 0; i < next.size(); i++) {
+      adc = getNext(i);
+      if (adc instanceof ADChoice) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
 }
-

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 //import java.io.*;
@@ -50,122 +47,116 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
-
 /**
-   * Class JPanelTransactions
-   * Creation: 23/05/2016
-   * version 1.0 23/05/2016
-   * @author Ludovic APVRILLE
+ * Class JPanelTransactions Creation: 23/05/2016 version 1.0 23/05/2016
+ * 
+ * @author Ludovic APVRILLE
  */
-public  class JPanelTransactions extends JPanel  {
+public class JPanelTransactions extends JPanel {
 
+  private JFrameInteractiveSimulation jfis;
+  private TransactionTableModel ttm;
+  private JButton updateTransactionInformationButton;
+  private JScrollPane jspTransactionInfo;
 
-    private JFrameInteractiveSimulation jfis;
-    private TransactionTableModel ttm;
-    private JButton updateTransactionInformationButton;
-    private JScrollPane jspTransactionInfo;
-    
+  private JTextField nbOfTransactions;
+  private int defaultNbOfTransactions;
 
-    private JTextField nbOfTransactions;
-    private int defaultNbOfTransactions;
+  public JPanelTransactions(JFrameInteractiveSimulation _jfis, int _defaultNbOfTransactions) {
+    super();
 
+    jfis = _jfis;
+    defaultNbOfTransactions = _defaultNbOfTransactions;
 
+    makeComponents();
+    setComponents();
+  }
 
-    public JPanelTransactions(JFrameInteractiveSimulation _jfis, int _defaultNbOfTransactions) {
-        super();
+  public void makeComponents() {
+    TableSorter sorterPI;
+    JTable jtablePI;
 
-        jfis = _jfis;
-	defaultNbOfTransactions = _defaultNbOfTransactions;
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c2 = new GridBagConstraints();
+    setLayout(gridbag2);
+    setBorder(new javax.swing.border.TitledBorder("Managing transactions"));
 
-        makeComponents();
-        setComponents();
+    ttm = new TransactionTableModel(jfis);
+    sorterPI = new TableSorter(ttm);
+    jtablePI = new JTable(sorterPI);
+    sorterPI.setTableHeader(jtablePI.getTableHeader());
+    ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+    ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
+    ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
+    ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+    ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+    ((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
+    ((jtablePI.getColumnModel()).getColumn(6)).setPreferredWidth(100);
+    jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+    jspTransactionInfo = new JScrollPane(jtablePI);
+    jspTransactionInfo.setWheelScrollingEnabled(true);
+    jspTransactionInfo.getVerticalScrollBar().setUnitIncrement(10);
+    jspTransactionInfo.setPreferredSize(new Dimension(500, 300));
+
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridheight = 5;
+    c2.weighty = 10.0;
+    c2.weightx = 10.0;
+    add(jspTransactionInfo, c2);
+
+    // 2nd line panel2
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridheight = 1;
+    add(new JLabel(""), c2);
+    add(new JLabel("# of transactions per node:"), c2);
+
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.HORIZONTAL;
+
+    nbOfTransactions = new JTextField(Integer.toString(defaultNbOfTransactions), defaultNbOfTransactions);
+    add(nbOfTransactions, c2);
+
+    add(new JLabel(" "), c2);
+
+    updateTransactionInformationButton = new JButton(
+        jfis.actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
+    add(updateTransactionInformationButton, c2);
+
+  }
+
+  public void setComponents() {
+
+  }
+
+  public TransactionTableModel getTableModel() {
+    return ttm;
+  }
+
+  public void resetTable() {
+    if (ttm != null) {
+      ttm.setData(null);
     }
+  }
 
-    public void makeComponents() {
-	TableSorter sorterPI;
-	JTable jtablePI;
-	
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c2 = new GridBagConstraints();
-        setLayout(gridbag2);
-        setBorder(new javax.swing.border.TitledBorder("Managing transactions"));
+  public int getNbOfTransactions() {
 
-	ttm = new TransactionTableModel(jfis);
-	sorterPI = new TableSorter(ttm);
-        jtablePI = new JTable(sorterPI);
-        sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
-        ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
-	((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
-	((jtablePI.getColumnModel()).getColumn(6)).setPreferredWidth(100);
-        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        jspTransactionInfo = new JScrollPane(jtablePI);
-        jspTransactionInfo.setWheelScrollingEnabled(true);
-        jspTransactionInfo.getVerticalScrollBar().setUnitIncrement(10);
-        jspTransactionInfo.setPreferredSize(new Dimension(500, 300));
-
-	
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 5;
-        c2.weighty = 10.0;
-        c2.weightx = 10.0;
-        add(jspTransactionInfo, c2);
-
-        // 2nd line panel2
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 1;
-        add(new JLabel(""), c2);
-	add(new JLabel("# of transactions per node:"), c2);
-
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.HORIZONTAL;
-
-		nbOfTransactions = new JTextField(Integer.toString(defaultNbOfTransactions), defaultNbOfTransactions);
-        add(nbOfTransactions, c2);
-
-        add(new JLabel(" "), c2);
-
-	updateTransactionInformationButton = new JButton(jfis.actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
-	add(updateTransactionInformationButton, c2);
-
+    try {
+      defaultNbOfTransactions = Integer.decode(nbOfTransactions.getText()).intValue();
+    } catch (Exception e) {
+      // TraceManager.addDev(nbOfTransactions.getText());
+      // TraceManager.addDev("Invalid default transaction");
+      defaultNbOfTransactions = 0;
     }
+    return defaultNbOfTransactions;
+  }
 
-    public void setComponents() {
-        
+  public void setData(Vector<SimulationTransaction> _trans) {
+    if (ttm != null) {
+      ttm.setData(_trans);
     }
-
-    public TransactionTableModel getTableModel() {
-	return ttm;
-    }
-
-    public void resetTable() {
-        if (ttm != null) {
-            ttm.setData(null);
-        }
-    }
-
-    public int getNbOfTransactions() {
-	
-	try {
-	    defaultNbOfTransactions = Integer.decode(nbOfTransactions.getText()).intValue();
-	} catch (Exception e) {
-	    //TraceManager.addDev(nbOfTransactions.getText());
-	    //TraceManager.addDev("Invalid default transaction");
-	    defaultNbOfTransactions = 0;
-	}
-	return defaultNbOfTransactions;
-    }
-
-    public void setData(Vector<SimulationTransaction> _trans) {
-	if (ttm != null) {
-	    ttm.setData(_trans);
-	}
-    }
+  }
 
 } // Class

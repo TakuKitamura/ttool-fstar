@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import myutil.TraceManager;
@@ -54,227 +51,220 @@ import java.util.Vector;
 
 //import javax.swing.event.*;
 
-
 /**
- * Class JDialogTMLTaskArtifact
- * Dialog for managing artifacts on hw nodes
+ * Class JDialogTMLTaskArtifact Dialog for managing artifacts on hw nodes
  * Creation: 19/09/2007
+ * 
  * @version 1.0 19/09/2007
  * @author Ludovic APVRILLE
  */
-public class JDialogCommunicationArtifact extends JDialogBase implements ActionListener  {
-    
-    private boolean regularClose;
-	private boolean emptyList = false;
-    
-    private JPanel panel2;
-    private Frame frame;
-    private TMLArchiCommunicationArtifact artifact;
-    
-	protected JComboBox<String> referenceCommunicationName, priority;
-    
-    /* Creates new form  */
-    public JDialogCommunicationArtifact(Frame _frame, String _title, TMLArchiCommunicationArtifact _artifact) {
-        super(_frame, _title, true);
-        frame = _frame;
-        artifact = _artifact;
-		
-		//
-        
-		TraceManager.addDev("init components");
-		
-        initComponents();
-		
-		TraceManager.addDev("my init components");
-		
-        myInitComponents();
-		
-		TraceManager.addDev("pack");
-        pack();
+public class JDialogCommunicationArtifact extends JDialogBase implements ActionListener {
+
+  private boolean regularClose;
+  private boolean emptyList = false;
+
+  private JPanel panel2;
+  private Frame frame;
+  private TMLArchiCommunicationArtifact artifact;
+
+  protected JComboBox<String> referenceCommunicationName, priority;
+
+  /* Creates new form */
+  public JDialogCommunicationArtifact(Frame _frame, String _title, TMLArchiCommunicationArtifact _artifact) {
+    super(_frame, _title, true);
+    frame = _frame;
+    artifact = _artifact;
+
+    //
+
+    TraceManager.addDev("init components");
+
+    initComponents();
+
+    TraceManager.addDev("my init components");
+
+    myInitComponents();
+
+    TraceManager.addDev("pack");
+    pack();
+  }
+
+  private void myInitComponents() {
+    selectPriority();
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+    panel2.setPreferredSize(new Dimension(650, 350));
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("Channel:"), c2);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    TraceManager.addDev("Getting communications");
+    Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
+    int index = 0;
+    if (list.size() == 0) {
+      list.add("No communication to map");
+      emptyList = true;
+    } else {
+
+      index = indexOf(list, artifact.getFullValue());
+      //
     }
-    
-    private void myInitComponents() {
-		selectPriority();
+
+    TraceManager.addDev("Got communications");
+
+    referenceCommunicationName = new JComboBox<>(list);
+    referenceCommunicationName.setSelectedIndex(index);
+    referenceCommunicationName.addActionListener(this);
+    // referenceTaskName.setEditable(true);
+    // referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(referenceCommunicationName, c1);
+
+    list = new Vector<String>();
+    for (int i = 0; i < 11; i++) {
+      list.add("" + i);
     }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-        panel2.setPreferredSize(new Dimension(650, 350));
-        
-		c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Channel:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		TraceManager.addDev("Getting communications");
-		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
-		int index = 0;
-		if (list.size() == 0) {
-			list.add("No communication to map");
-			emptyList = true;
-		} else {
-			
-			index = indexOf(list, artifact.getFullValue());
-			//
-		}
-		
-		TraceManager.addDev("Got communications");
-		
-        referenceCommunicationName = new JComboBox<>(list);
-		referenceCommunicationName.setSelectedIndex(index);
-		referenceCommunicationName.addActionListener(this);
-        //referenceTaskName.setEditable(true);
-        //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(referenceCommunicationName, c1);
-		
-		list = new Vector<String>();
-		for(int i=0; i<11; i++) {
-			list.add(""+i);
-		}
-		panel2.add(new JLabel("Priority:"), c1);
-		priority = new JComboBox<>(list);
-		priority.setSelectedIndex(artifact.getPriority());
-		panel2.add(priority, c1);
-		
-		/*c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Name:"), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        taskName = new JTextField(artifact.getTaskName(), 30);
-        taskName.setEditable(true);
-        taskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(taskName, c1);*/
-        
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-		c0.fill = GridBagConstraints.BOTH;
-        c.add(panel2, c0);
-        
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+    panel2.add(new JLabel("Priority:"), c1);
+    priority = new JComboBox<>(list);
+    priority.setSelectedIndex(artifact.getPriority());
+    panel2.add(priority, c1);
+
+    /*
+     * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
+     * c1.fill = GridBagConstraints.HORIZONTAL; panel2.add(new JLabel("Name:"), c2);
+     * c1.gridwidth = GridBagConstraints.REMAINDER; //end row taskName = new
+     * JTextField(artifact.getTaskName(), 30); taskName.setEditable(true);
+     * taskName.setFont(new Font("times", Font.PLAIN, 12)); panel2.add(taskName,
+     * c1);
+     */
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    if (evt.getSource() == referenceCommunicationName) {
+      selectPriority();
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-       /* if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }*/
-		
-		if (evt.getSource() == referenceCommunicationName) {
-			selectPriority();
-		}
-        
-        
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
+
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
-	
-	
-	public void selectPriority() {
-		//
-		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
-		priority.setSelectedIndex(index);
-	}
-    
-    public void closeDialog() {
-        regularClose = true;
-        dispose();
+  }
+
+  public void selectPriority() {
+    //
+    int index = ((TMLArchiDiagramPanel) artifact.getTDiagramPanel())
+        .getMaxPriority((String) (referenceCommunicationName.getSelectedItem()));
+    priority.setSelectedIndex(index);
+  }
+
+  public void closeDialog() {
+    regularClose = true;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean isRegularClose() {
+    return regularClose;
+  }
+
+  public String getReferenceCommunicationName() {
+    if (emptyList) {
+      return null;
     }
-    
-    public void cancelDialog() {
-        dispose();
+    String tmp = (String) (referenceCommunicationName.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
     }
-    
-    public boolean isRegularClose() {
-        return regularClose;
+    return tmp.substring(0, index);
+  }
+
+  public String getCommunicationName() {
+    String tmp = (String) (referenceCommunicationName.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
     }
-	
-	public String getReferenceCommunicationName() {
-		if (emptyList) {
-			return null;
-		}
-		String tmp = (String)(referenceCommunicationName.getSelectedItem());
-		int index = tmp.indexOf("::");
-		if (index == -1) {
-			return tmp;
-		}
-        return tmp.substring(0, index);
+    tmp = tmp.substring(index + 2, tmp.length());
+
+    index = tmp.indexOf("(");
+    if (index > -1) {
+      tmp = tmp.substring(0, index).trim();
     }
-    
-    public String getCommunicationName() {
-        String tmp = (String)(referenceCommunicationName.getSelectedItem());
-		int index = tmp.indexOf("::");
-		if (index == -1) {
-			return tmp;
-		}
-        tmp = tmp.substring(index+2, tmp.length());
-		
-		index =  tmp.indexOf("(");
-		if (index > -1) {
-			tmp = tmp.substring(0, index).trim();
-		}
-		//
-		return tmp;
+    //
+    return tmp;
+  }
+
+  public String getTypeName() {
+    String tmp = (String) (referenceCommunicationName.getSelectedItem());
+    int index1 = tmp.indexOf("(");
+    int index2 = tmp.indexOf(")");
+    if ((index1 > -1) && (index2 > index1)) {
+      return tmp.substring(index1 + 1, index2);
     }
-	
-	 public String getTypeName() {
-		String tmp = (String)(referenceCommunicationName.getSelectedItem());
-		int index1 = tmp.indexOf("(");
-		int index2 = tmp.indexOf(")");
-		if ((index1 > -1) && (index2 > index1)) {
-			return tmp.substring(index1+1, index2);
-		}
-		return "";
-	 }
-	
-	
-	public int indexOf(Vector<String> _list, String name) {
-		int i = 0;
-		for(String s : _list) {
-			if (s.equals(name)) {
-				return i;
-			}
-			i++;
-		}
-		return 0;
-	}
-	
-	public int getPriority() {
-		return priority.getSelectedIndex();
-	}
-    
+    return "";
+  }
+
+  public int indexOf(Vector<String> _list, String name) {
+    int i = 0;
+    for (String s : _list) {
+      if (s.equals(name)) {
+        return i;
+      }
+      i++;
+    }
+    return 0;
+  }
+
+  public int getPriority() {
+    return priority.getSelectedIndex();
+  }
+
 }

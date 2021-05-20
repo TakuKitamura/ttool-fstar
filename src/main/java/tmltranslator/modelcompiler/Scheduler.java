@@ -40,43 +40,34 @@
 package tmltranslator.modelcompiler;
 
 /**
-   * Class TMLCCodeGeneration
-   * Creation: 09/02/2014
-   * @version 1.0 09/02/2014
-   * @author Andrea ENRICI
+ * Class TMLCCodeGeneration Creation: 09/02/2014
+ * 
+ * @version 1.0 09/02/2014
+ * @author Andrea ENRICI
  */
 public class Scheduler implements CCodeGenConstants {
 
-	public static final int JAIR = 0;
+  public static final int JAIR = 0;
 
-	private final String code;// = "";
-	//private String CR = "\n";
-//	private String CR2 = "\n\n";
-//	private String TAB = "\t";
-//	private String TAB2 = "\t\t";
-//	private String TAB3 = "\t\t\t";
-//	private String TAB4 = "\t\t\t\t";
-//	private String SP = " ";
-//	private String SC = ";";
+  private final String code;// = "";
+  // private String CR = "\n";
+  // private String CR2 = "\n\n";
+  // private String TAB = "\t";
+  // private String TAB2 = "\t\t";
+  // private String TAB3 = "\t\t\t";
+  // private String TAB4 = "\t\t\t\t";
+  // private String SP = " ";
+  // private String SC = ";";
 
-	public Scheduler( int type )	{
-		code =	TAB + "while( !exit_rule() )	{" + CR +
-						TAB2 + "for( int n_op = 0; n_op < NUM_OPS; ++n_op )	{" + CR +
-						TAB3 + "valid_signal = (*fire_rule[n_op])();" + CR +
-						TAB3 + "if( valid_signal )	{" + CR +
-						TAB4 + "status = (*operation[n_op])();" + CR + 
-						TAB4 + "blocked = false;" + CR +
-						TAB3 + "}" + CR +
-						TAB2 + "}" + CR +
-						TAB2 + "if( blocked )	{" + CR +
-						TAB3 + "printf(\"ERROR: the system got blocked, no new signals\\n\");" + CR +
-						TAB3 + "return 1;" + CR +
-						TAB2 + "}" + CR +
-						TAB2 + "blocked = true;" + CR +
-						TAB + "}";
-	}
+  public Scheduler(int type) {
+    code = TAB + "while( !exit_rule() )	{" + CR + TAB2 + "for( int n_op = 0; n_op < NUM_OPS; ++n_op )	{" + CR + TAB3
+        + "valid_signal = (*fire_rule[n_op])();" + CR + TAB3 + "if( valid_signal )	{" + CR + TAB4
+        + "status = (*operation[n_op])();" + CR + TAB4 + "blocked = false;" + CR + TAB3 + "}" + CR + TAB2 + "}" + CR
+        + TAB2 + "if( blocked )	{" + CR + TAB3 + "printf(\"ERROR: the system got blocked, no new signals\\n\");" + CR
+        + TAB3 + "return 1;" + CR + TAB2 + "}" + CR + TAB2 + "blocked = true;" + CR + TAB + "}";
+  }
 
-	public String getCode()	{
-		return code;
-	}
+  public String getCode() {
+    return code;
+  }
 }

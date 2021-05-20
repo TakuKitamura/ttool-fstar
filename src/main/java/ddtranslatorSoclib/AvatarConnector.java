@@ -38,37 +38,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
-
 package ddtranslatorSoclib;
 
-public class AvatarConnector{
-    
-    private AvatarConnectingPoint connectingPoint1;
-    private AvatarConnectingPoint connectingPoint2;
-    private int  monitored;
+public class AvatarConnector {
 
-    public AvatarConnector(AvatarConnectingPoint _connectingPoint1,AvatarConnectingPoint _connectingPoint2, int _monitored){
-      
-      connectingPoint1 = _connectingPoint1;
-      connectingPoint2 = _connectingPoint2; 
-      monitored = _monitored;
-    }
+  private AvatarConnectingPoint connectingPoint1;
+  private AvatarConnectingPoint connectingPoint2;
+  private int monitored;
 
-    public AvatarConnectingPoint get_p1(){
-      return connectingPoint1;
-    }
+  public AvatarConnector(AvatarConnectingPoint _connectingPoint1, AvatarConnectingPoint _connectingPoint2,
+      int _monitored) {
 
-    public AvatarConnectingPoint get_p2(){
-      return connectingPoint2;
-    }
+    connectingPoint1 = _connectingPoint1;
+    connectingPoint2 = _connectingPoint2;
+    monitored = _monitored;
+  }
 
-    public int getMonitored(){
-      return monitored;
-    } 
+  public AvatarConnectingPoint get_p1() {
+    return connectingPoint1;
+  }
+
+  public AvatarConnectingPoint get_p2() {
+    return connectingPoint2;
+  }
+
+  public int getMonitored() {
+    return monitored;
+  }
 
 }

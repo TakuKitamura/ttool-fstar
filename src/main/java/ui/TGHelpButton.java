@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import help.HelpEntry;
@@ -53,93 +50,87 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class TGHelpButton
- * GGeneric help button
- * Creation: 20/05/2019
+ * Class TGHelpButton GGeneric help button Creation: 20/05/2019
+ * 
  * @version 1.1 20/05/2019
  * @author Ludovic APVRILLE
  */
 public class TGHelpButton extends JButton {
 
-    private JDialogTGComponentHelp helpDialog;
-    private HelpEntry he;
-    private MainGUI mgui;
+  private JDialogTGComponentHelp helpDialog;
+  private HelpEntry he;
+  private MainGUI mgui;
 
-    public TGHelpButton(Icon icon, String helpWord, MainGUI mgui, HelpManager hm) {
-        super(icon);
-        this.mgui = mgui;
-        setGeneralConfiguration();
-        makeHelpConfiguration(helpWord, mgui, hm);
-    }
+  public TGHelpButton(Icon icon, String helpWord, MainGUI mgui, HelpManager hm) {
+    super(icon);
+    this.mgui = mgui;
+    setGeneralConfiguration();
+    makeHelpConfiguration(helpWord, mgui, hm);
+  }
 
-    private void setGeneralConfiguration() {
-        setOpaque(false);
-        setFocusPainted(false);
-        setContentAreaFilled(false);
-        setBorderPainted(false);
-        setPreferredSize(new Dimension(20,20));
-    }
+  private void setGeneralConfiguration() {
+    setOpaque(false);
+    setFocusPainted(false);
+    setContentAreaFilled(false);
+    setBorderPainted(false);
+    setPreferredSize(new Dimension(20, 20));
+  }
 
-    public void makeHelpConfiguration(String helpWord, MainGUI mgui, HelpManager hm) {
-        if (hm != null) {
-            if (hm.loadEntries()) {
-                if (helpWord.endsWith(".html")) {
-                    he = hm.getHelpEntryWithHTMLFile(helpWord);
-                } else{
-                    he = hm.getFromMasterKeyword(helpWord);
-                }
-                if (he == null) {
-                    TraceManager.addDev("NULL HE");
-                }
-            }
+  public void makeHelpConfiguration(String helpWord, MainGUI mgui, HelpManager hm) {
+    if (hm != null) {
+      if (hm.loadEntries()) {
+        if (helpWord.endsWith(".html")) {
+          he = hm.getHelpEntryWithHTMLFile(helpWord);
+        } else {
+          he = hm.getFromMasterKeyword(helpWord);
         }
-    }
-
-    // helpword can reference a HTML file or a master keyword
-    public void addToPanel(JPanel panel, GridBagConstraints c) {
         if (he == null) {
-            return;
+          TraceManager.addDev("NULL HE");
         }
-        c.weighty = 0.5;
-        c.weightx = 0.5;
-        c.gridwidth = GridBagConstraints.REMAINDER;
-
-        buttonClick(this, he, mgui);
-        panel.add(this, c);
+      }
     }
+  }
 
-    public void addToPanel(JPanel panel) {
-        if (he == null) {
-            return;
+  // helpword can reference a HTML file or a master keyword
+  public void addToPanel(JPanel panel, GridBagConstraints c) {
+    if (he == null) {
+      return;
+    }
+    c.weighty = 0.5;
+    c.weightx = 0.5;
+    c.gridwidth = GridBagConstraints.REMAINDER;
+
+    buttonClick(this, he, mgui);
+    panel.add(this, c);
+  }
+
+  public void addToPanel(JPanel panel) {
+    if (he == null) {
+      return;
+    }
+    buttonClick(this, he, mgui);
+    panel.add(this);
+
+  }
+
+  private void buttonClick(JButton but, HelpEntry he, MainGUI mgui) {
+    but.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (helpDialog == null) {
+          helpDialog = new JDialogTGComponentHelp(mgui, he);
+          helpDialog.setLocationHelpWindow(but);
+        } else {
+          if (!helpDialog.isVisible()) {
+            // helpDialog = new JDialogTGComponentHelp(mgui, he);
+            helpDialog.setLocationHelpWindow(but);
+            helpDialog.setVisible(true);
+          } else {
+            helpDialog.setVisible(false);
+          }
         }
-        buttonClick(this, he, mgui);
-        panel.add(this);
-
-    }
-
-
-
-
-    private void buttonClick(JButton but, HelpEntry he, MainGUI mgui) {
-        but.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(helpDialog == null) {
-                    helpDialog = new JDialogTGComponentHelp(mgui, he);
-                    helpDialog.setLocationHelpWindow(but);
-                } else {
-                    if(!helpDialog.isVisible()) {
-                        //helpDialog = new JDialogTGComponentHelp(mgui, he);
-                        helpDialog.setLocationHelpWindow(but);
-                        helpDialog.setVisible(true);
-                    } else{
-                        helpDialog.setVisible(false);
-                    }
-                }
-            }
-        });
-    }
-
-
+      }
+    });
+  }
 
 }

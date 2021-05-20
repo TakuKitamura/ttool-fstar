@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.iod;
 
 import ui.*;
@@ -47,69 +44,63 @@ import ui.util.IconManager;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
-
 /**
- * Class IODJunction
- * Junction between several interactions, without any synchronization. To be used in interaction overview diagrams
- * Creation: 30/09/2004
+ * Class IODJunction Junction between several interactions, without any
+ * synchronization. To be used in interaction overview diagrams Creation:
+ * 30/09/2004
+ * 
  * @version 1.0 30/09/2004
  * @author Ludovic APVRILLE
  */
 public class IODJunction extends TGCWithoutInternalComponent {
-	
-	public IODJunction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
-		width = 30;
-		height = 30;
 
-		nbConnectingPoint = 4;
-		connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-		connectingPoint[0] = new TGConnectingPointIOD(this, 0, 0, true, false, 0.5, 0.0);
-		connectingPoint[1] = new TGConnectingPointIOD(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[2] = new TGConnectingPointIOD(this, 0, 0, true, false, 1.0, 0.5);
-		connectingPoint[3] = new TGConnectingPointIOD(this, 0, 0, false, true, 0.5, 1);
+  public IODJunction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		moveable = true;
-		editable = false;
-		removable = true;
-	
-		value = "";
-		name = "junction";
-		
-		myImageIcon = IconManager.imgic212;
-	}
+    width = 30;
+    height = 30;
 
-	public void internalDrawing(Graphics g) {
-		g.drawLine(x +width/2, y,  x+width/2, y + height);
-		g.drawLine(x, y + (height/2), x+width, y + (height/2));
-	}
+    nbConnectingPoint = 4;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new TGConnectingPointIOD(this, 0, 0, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointIOD(this, 0, 0, true, false, 0.0, 0.5);
+    connectingPoint[2] = new TGConnectingPointIOD(this, 0, 0, true, false, 1.0, 0.5);
+    connectingPoint[3] = new TGConnectingPointIOD(this, 0, 0, false, true, 0.5, 1);
 
-	public TGComponent isOnMe(int _x, int _y) {
-		// vertical line
-		if ((int)(Line2D.ptSegDistSq(x +width/2, y,  x+width/2, y + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-		// horizontal line
-		if ((int)(Line2D.ptSegDistSq(x, y + (height/2), x+width, y + (height/2), _x, _y)) < distanceSelected) {
-			return this;	
-		}
-		return null;
-	}
-	
-	public int getType() {
-		return TGComponentManager.IOD_JUNCTION;
-	}
-	
-	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_INTERACTION;
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    value = "";
+    name = "junction";
+
+    myImageIcon = IconManager.imgic212;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawLine(x + width / 2, y, x + width / 2, y + height);
+    g.drawLine(x, y + (height / 2), x + width, y + (height / 2));
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    // vertical line
+    if ((int) (Line2D.ptSegDistSq(x + width / 2, y, x + width / 2, y + height, _x, _y)) < distanceSelected) {
+      return this;
     }
+    // horizontal line
+    if ((int) (Line2D.ptSegDistSq(x, y + (height / 2), x + width, y + (height / 2), _x, _y)) < distanceSelected) {
+      return this;
+    }
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.IOD_JUNCTION;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_INTERACTION;
+  }
 
 }
-
-
-
-
-    
-
-

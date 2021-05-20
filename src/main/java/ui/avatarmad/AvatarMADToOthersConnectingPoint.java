@@ -44,31 +44,33 @@ import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarMADToOthersConnectingPoint
- * Definition of connecting points on which connectors between assumptions 
- * may be connected to other system elements
- * Creation: 27/08/2013
+ * Class AvatarMADToOthersConnectingPoint Definition of connecting points on
+ * which connectors between assumptions may be connected to other system
+ * elements Creation: 27/08/2013
+ * 
  * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  */
 public class AvatarMADToOthersConnectingPoint extends TGConnectingPointWidthHeight {
-    
-    public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = TGConnectingPoint.EAST;
-    }
-	
-    public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        if (type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR) {
-            return true;
-        }
 
-        return type == TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
+  public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = TGConnectingPoint.EAST;
+  }
+
+  public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h, int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    if (type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR) {
+      return true;
     }
+
+    return type == TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
+  }
 }

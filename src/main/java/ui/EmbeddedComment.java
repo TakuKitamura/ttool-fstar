@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class EmbeddedComment
- * Components that can have an internal comment
- * Creation: 07/01/2008
+ * Class EmbeddedComment Components that can have an internal comment Creation:
+ * 07/01/2008
+ * 
  * @version 1.0 07/01/2008
  * @author Ludovic APVRILLE
  */
-public interface EmbeddedComment  {
-    void setInternalComment(String comment);
+public interface EmbeddedComment {
+  void setInternalComment(String comment);
 }

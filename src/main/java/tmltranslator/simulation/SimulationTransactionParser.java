@@ -54,64 +54,64 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SimulationTransactionParser extends DefaultHandler {
 
-    private Vector<SimulationTransaction> trans;
-    private SimulationTransaction st = new SimulationTransaction();
+  private Vector<SimulationTransaction> trans;
+  private SimulationTransaction st = new SimulationTransaction();
 
-    private StringBuilder data = null;
+  private StringBuilder data = null;
 
-    public Vector<SimulationTransaction> getStList() {
-        return trans;
-    }
+  public Vector<SimulationTransaction> getStList() {
+    return trans;
+  }
 
-    @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+  @Override
+  public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
-        if (qName.equals("transinfo")) {
+    if (qName.equals("transinfo")) {
 
-            st = new SimulationTransaction();
-            st.nodeType = attributes.getValue("deviceid");
+      st = new SimulationTransaction();
+      st.nodeType = attributes.getValue("deviceid");
 
-            try {
-                st.uniqueID = Long.parseLong(attributes.getValue("uniqueid"));
-            } catch (Exception e) {
+      try {
+        st.uniqueID = Long.parseLong(attributes.getValue("uniqueid"));
+      } catch (Exception e) {
 
-            }
+      }
 
-            st.deviceName = attributes.getValue("devicename");
-            st.coreNumber = attributes.getValue("corenumber");
-            String commandT = attributes.getValue("command");
-            if (commandT != null) {
-                int index = commandT.indexOf(": ");
-                if (index == -1) {
-                    st.taskName = "Unknown";
-                    st.command = commandT;
-                } else {
-                    st.taskName = commandT.substring(0, index).trim();
-                    st.command = commandT.substring(index + 1, commandT.length()).trim();
-                }
-            }
-
-            st.startTime = attributes.getValue("starttime");
-            st.endTime = attributes.getValue("endtime");
-            st.length = attributes.getValue("length");
-            st.virtualLength = attributes.getValue("virtuallength");
-            st.channelName = attributes.getValue("ch");
-            st.id = attributes.getValue("id");
-            st.runnableTime = attributes.getValue("runnableTime");
-
-            if (trans == null) {
-                trans = new Vector<SimulationTransaction>();
-            }
-            trans.add(st);
-
+      st.deviceName = attributes.getValue("devicename");
+      st.coreNumber = attributes.getValue("corenumber");
+      String commandT = attributes.getValue("command");
+      if (commandT != null) {
+        int index = commandT.indexOf(": ");
+        if (index == -1) {
+          st.taskName = "Unknown";
+          st.command = commandT;
+        } else {
+          st.taskName = commandT.substring(0, index).trim();
+          st.command = commandT.substring(index + 1, commandT.length()).trim();
         }
+      }
 
-        data = new StringBuilder();
+      st.startTime = attributes.getValue("starttime");
+      st.endTime = attributes.getValue("endtime");
+      st.length = attributes.getValue("length");
+      st.virtualLength = attributes.getValue("virtuallength");
+      st.channelName = attributes.getValue("ch");
+      st.id = attributes.getValue("id");
+      st.runnableTime = attributes.getValue("runnableTime");
+
+      if (trans == null) {
+        trans = new Vector<SimulationTransaction>();
+      }
+      trans.add(st);
 
     }
 
-    @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
-        data.append(new String(ch, start, length));
-    }
+    data = new StringBuilder();
+
+  }
+
+  @Override
+  public void characters(char ch[], int start, int length) throws SAXException {
+    data.append(new String(ch, start, length));
+  }
 }

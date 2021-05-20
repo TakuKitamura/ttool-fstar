@@ -57,174 +57,173 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 /**
- * Class JDialogAvatarTimer
- * Dialog for managing timer set, reset and expire
+ * Class JDialogAvatarTimer Dialog for managing timer set, reset and expire
  * Creation: 15/07/2010
+ * 
  * @version 1.0 15/07/2010
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
+public class JDialogAvatarTimer extends JDialogBase implements ActionListener {
 
-    private List<String> timers;
+  private List<String> timers;
 
-    private boolean cancelled = true;
-    private JPanel panel1, panel2;
+  private boolean cancelled = true;
+  private JPanel panel1, panel2;
 
-    // Panel1
-    private JComboBox<String> listTimers;
-    private JButton selectTimer;
-    private JTextField ttimer;
+  // Panel1
+  private JComboBox<String> listTimers;
+  private JButton selectTimer;
+  private JTextField ttimer;
+
+  // Panel2
+  private JTextField tvalue;
+
+  // Main Panel
+  private String timer, value;
+  private boolean setValue;
+
+  /* Creates new form */
+  public JDialogAvatarTimer(Frame _f, String _title, String _timer, String _value, List<String> _timers,
+      boolean _setValue) {
+    super(_f, _title, true);
+
+    timers = _timers;
+    timer = _timer;
+    value = _value;
+    setValue = _setValue;
+
+    initComponents();
+    // myInitComponents();
+    pack();
+  }
+  //
+  //
+  // private void myInitComponents() {
+  // }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    // GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+
+    panel1.setBorder(new TitledBorder("Timer"));
+
+    panel1.setPreferredSize(new Dimension(300, 150));
+
+    // first line panel1
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
+    panel1.add(new JLabel(" "), c1);
+
+    // Combo box
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    listTimers = new JComboBox<String>(timers.toArray(new String[0]));
+    panel1.add(listTimers, c1);
+
+    // Selection of the timer
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    selectTimer = new JButton("Select timer");
+    panel1.add(selectTimer, c1);
+    selectTimer.setEnabled(timers.size() > 0);
+    selectTimer.addActionListener(this);
+
+    // Text
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    ttimer = new JTextField(timer, 30);
+    panel1.add(ttimer, c1);
+    // panel1.setEditable(true);
 
     // Panel2
-    private JTextField tvalue;
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Timer value"));
+    panel2.setPreferredSize(new Dimension(300, 75));
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
+    panel2.add(new JLabel(" "), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    tvalue = new JTextField(value, 30);
+    panel2.add(tvalue, c1);
 
-    // Main Panel
-    private String timer, value;
-    private boolean setValue;
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
 
-
-    /* Creates new form  */
-    public JDialogAvatarTimer(Frame _f, String _title, String _timer, String _value, List<String> _timers, boolean _setValue) {
-        super(_f, _title, true);
-
-        timers = _timers;
-        timer = _timer;
-        value = _value;
-        setValue = _setValue;
-
-        initComponents();
-     //   myInitComponents();
-        pack();
-    }
-//
-//
-//    private void myInitComponents() {
-//    }
-
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        //GridBagConstraints c2 = new GridBagConstraints();
-
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-
-        panel1.setBorder(new TitledBorder("Timer"));
-
-        panel1.setPreferredSize(new Dimension(300, 150));
-
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        panel1.add(new JLabel(" "), c1);
-
-        // Combo box
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        listTimers = new JComboBox<String> (timers.toArray (new String[0]));
-        panel1.add(listTimers, c1);
-
-
-        // Selection of the timer
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        selectTimer = new JButton("Select timer");
-        panel1.add(selectTimer, c1);
-        selectTimer.setEnabled(timers.size() > 0);
-        selectTimer.addActionListener(this);
-
-        // Text
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        ttimer = new JTextField(timer, 30);
-        panel1.add(ttimer, c1);
-        //panel1.setEditable(true);
-
-        // Panel2
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Timer value"));
-        panel2.setPreferredSize(new Dimension(300, 75));
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        panel2.add(new JLabel(" "), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        tvalue = new JTextField(value, 30);
-        panel2.add(tvalue, c1);
-
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-        c.add(panel1, c0);
-        if (setValue) {
-            c.add(panel2, c0);
-        }
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+    c.add(panel1, c0);
+    if (setValue) {
+      c.add(panel2, c0);
     }
 
-    public void	actionPerformed(ActionEvent evt)  {
-        //String command = evt.getActionCommand();
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
 
-        // Compare the action command to the known actions.
-        if (evt.getSource() == closeButton)  {
-            closeDialog();
-        } else if (evt.getSource() == cancelButton)  {
-            cancelDialog();
-        } else if (evt.getSource() == selectTimer)  {
-            selectTimer();
-        }
-    }
+    initButtons(c0, c, this);
+  }
 
-    public void selectTimer() {
-        int index = listTimers.getSelectedIndex();
-        ttimer.setText(timers.get(index).toString());
-    }
+  public void actionPerformed(ActionEvent evt) {
+    // String command = evt.getActionCommand();
 
-    public void closeDialog() {
-        cancelled = false;
-        dispose();
+    // Compare the action command to the known actions.
+    if (evt.getSource() == closeButton) {
+      closeDialog();
+    } else if (evt.getSource() == cancelButton) {
+      cancelDialog();
+    } else if (evt.getSource() == selectTimer) {
+      selectTimer();
     }
+  }
 
-    public String getTimer() {
-        return ttimer.getText();
-    }
+  public void selectTimer() {
+    int index = listTimers.getSelectedIndex();
+    ttimer.setText(timers.get(index).toString());
+  }
 
-    public String getValue() {
-        return tvalue.getText();
-    }
+  public void closeDialog() {
+    cancelled = false;
+    dispose();
+  }
 
-    public boolean hasBeenCancelled() {
-        return cancelled;
-    }
+  public String getTimer() {
+    return ttimer.getText();
+  }
 
-    public void cancelDialog() {
-        dispose();
-    }
+  public String getValue() {
+    return tvalue.getText();
+  }
+
+  public boolean hasBeenCancelled() {
+    return cancelled;
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
 }

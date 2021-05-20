@@ -37,138 +37,134 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package tmltranslator;
 
 /**
- * Class TMLAttribute
- * Notion of attribute for a TML Task
- * Creation: 24/11/2005
+ * Class TMLAttribute Notion of attribute for a TML Task Creation: 24/11/2005
+ * 
  * @version 1.0 21/05/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public class TMLAttribute extends DIPLOElement {
 
-    public TMLType type;
-    public String name = "";
-    public String initialValue = "";
-    private String instanceName = "";
+  public TMLType type;
+  public String name = "";
+  public String initialValue = "";
+  private String instanceName = "";
 
-    public TMLAttribute( String _name, String _instanceName, TMLType _type, String _initialValue ) {
-        this.name = _name;
-        this.instanceName = _instanceName;
-        this.type = _type;
-        this.initialValue = _initialValue;
-    }
+  public TMLAttribute(String _name, String _instanceName, TMLType _type, String _initialValue) {
+    this.name = _name;
+    this.instanceName = _instanceName;
+    this.type = _type;
+    this.initialValue = _initialValue;
+  }
 
-    public TMLAttribute( String _name, String _instanceName, TMLType _type ) {
-        this.name = _name;
-        this.instanceName = _instanceName;
-        this.type = _type;
-        this.initialValue = "";
-    }
+  public TMLAttribute(String _name, String _instanceName, TMLType _type) {
+    this.name = _name;
+    this.instanceName = _instanceName;
+    this.type = _type;
+    this.initialValue = "";
+  }
 
-    public TMLAttribute( String _name, TMLType _type ) {
-        this.name = _name;
-        this.instanceName = "NO_NAME";
-        this.type = _type;
-        this.initialValue = "";
-    }
+  public TMLAttribute(String _name, TMLType _type) {
+    this.name = _name;
+    this.instanceName = "NO_NAME";
+    this.type = _type;
+    this.initialValue = "";
+  }
 
-    public TMLAttribute( String _name, TMLType _type, String _initialValue ) {
-        this.name = _name;
-        this.instanceName = "NO_NAME";
-        this.type = _type;
-        this.initialValue = _initialValue;
-    }
+  public TMLAttribute(String _name, TMLType _type, String _initialValue) {
+    this.name = _name;
+    this.instanceName = "NO_NAME";
+    this.type = _type;
+    this.initialValue = _initialValue;
+  }
 
-    public TMLAttribute( String _name ) {
-        this.name = _name;
-        this.instanceName = "NO_NAME";
-        this.type = new TMLType( TMLType.OTHER );
-        this.initialValue = "";
-    }
+  public TMLAttribute(String _name) {
+    this.name = _name;
+    this.instanceName = "NO_NAME";
+    this.type = new TMLType(TMLType.OTHER);
+    this.initialValue = "";
+  }
 
-    public String getInstanceName()     {
-        return instanceName;
-    }
+  public String getInstanceName() {
+    return instanceName;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public TMLType getType() {
-        return type;
-    }
+  public TMLType getType() {
+    return type;
+  }
 
-    public boolean isNat() {
-        return (type.getType() == TMLType.NATURAL);
-    }
+  public boolean isNat() {
+    return (type.getType() == TMLType.NATURAL);
+  }
 
-    public boolean isBool() {
-        return (type.getType() ==  TMLType.BOOLEAN);
-    }
+  public boolean isBool() {
+    return (type.getType() == TMLType.BOOLEAN);
+  }
 
-    public boolean isAddress() {
-        return (type.getType() ==  TMLType.ADDRESS);
-    }
+  public boolean isAddress() {
+    return (type.getType() == TMLType.ADDRESS);
+  }
 
-    public String getInitialValue() {
-        return initialValue;
-    }
+  public String getInitialValue() {
+    return initialValue;
+  }
 
-    public String toString() {
-        return instanceName + "." + name + ":" + type.toString() + "=" + initialValue;
-    }
+  public String toString() {
+    return instanceName + "." + name + ":" + type.toString() + "=" + initialValue;
+  }
 
-    public boolean hasInitialValue() {
-        return ((initialValue != null) && (initialValue.length() > 0));
-    }
+  public boolean hasInitialValue() {
+    return ((initialValue != null) && (initialValue.length() > 0));
+  }
 
-    public String getDefaultInitialValue() {
-        if (isNat()) {
-            return "0";
-        } else {
-            if (isBool()) {
-                return "false";
-            }
-        }
-        return "unknown";
+  public String getDefaultInitialValue() {
+    if (isNat()) {
+      return "0";
+    } else {
+      if (isBool()) {
+        return "false";
+      }
     }
+    return "unknown";
+  }
 
-    @Override public boolean equals( Object o )        {
-        if( !(o instanceof TMLAttribute ) )     {
-            return false;
-        }
-        else    {
-            TMLAttribute attr = (TMLAttribute)o;
-            return ( name.equals( attr.getName() ) && ( type.equals( attr.getType()) ) );
-        }
-        //return ( (name.equals( _other.getName() )) && ( initialValue.equals( _other.getInitialValue() )) && (type.equals( _other.getType() )) );
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof TMLAttribute)) {
+      return false;
+    } else {
+      TMLAttribute attr = (TMLAttribute) o;
+      return (name.equals(attr.getName()) && (type.equals(attr.getType())));
     }
+    // return ( (name.equals( _other.getName() )) && ( initialValue.equals(
+    // _other.getInitialValue() )) && (type.equals( _other.getType() )) );
+  }
 
-    @Override public int hashCode()     {
-        int result = 17;
-        if( name == null )      {
-            result = 31 * result;
-        }
-        else    {
-            result = 31 * result + name.hashCode();
-        }
-        if( type == null )      {
-            result = 31 * result;
-        }
-        else    {
-            result = 31 * result + type.hashCode();
-        }
-        return result;
+  @Override
+  public int hashCode() {
+    int result = 17;
+    if (name == null) {
+      result = 31 * result;
+    } else {
+      result = 31 * result + name.hashCode();
     }
+    if (type == null) {
+      result = 31 * result;
+    } else {
+      result = 31 * result + type.hashCode();
+    }
+    return result;
+  }
 
-    public String toXML() {
-	String s = "<ATTRIBUTE type=\"" + type.getType() + "\" name=\"" + name + "\" initialValue=\"" + initialValue + "\"/>\n";
-	return s;
-    }
-}//End of class
+  public String toXML() {
+    String s = "<ATTRIBUTE type=\"" + type.getType() + "\" name=\"" + name + "\" initialValue=\"" + initialValue
+        + "\"/>\n";
+    return s;
+  }
+}// End of class

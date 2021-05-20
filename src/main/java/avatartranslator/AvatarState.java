@@ -39,93 +39,92 @@
 package avatartranslator;
 
 /**
- * Class AvatarState
- * Creation: 20/05/2010
+ * Class AvatarState Creation: 20/05/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.0 20/05/2010
  */
 public class AvatarState extends AvatarStateElement {
-    private String entryCode;
-    private boolean hidden; // i.e, not present in the original state machine
-    public int stateID; // to be used by code generator to more efficiently keep track of states.
-    private boolean checkLatency;
+  private String entryCode;
+  private boolean hidden; // i.e, not present in the original state machine
+  public int stateID; // to be used by code generator to more efficiently keep track of states.
+  private boolean checkLatency;
 
-    public AvatarState(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
+  public AvatarState(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
 
-        //TraceManager.addDev("CREATING state with name = "+ _name);
-    }
+    // TraceManager.addDev("CREATING state with name = "+ _name);
+  }
 
-    public AvatarState(String _name, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
-        super(_name, _referenceObject, _isCheckable, _isChecked);
-        //TraceManager.addDev("CREATING state with name = "+ _name);
-    }
+  public AvatarState(String _name, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
+    super(_name, _referenceObject, _isCheckable, _isChecked);
+    // TraceManager.addDev("CREATING state with name = "+ _name);
+  }
 
-    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-        AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable(), isChecked());
-        as.setAsVerifiable(canBeVerified());
-        as.addEntryCode(getEntryCode());
-        return as;
-    }
+  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+    AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable(), isChecked());
+    as.setAsVerifiable(canBeVerified());
+    as.addEntryCode(getEntryCode());
+    return as;
+  }
 
-    public void setHidden(boolean _hidden) {
-        hidden = _hidden;
-    }
+  public void setHidden(boolean _hidden) {
+    hidden = _hidden;
+  }
 
-    public boolean isHidden() {
-        return hidden;
-    }
+  public boolean isHidden() {
+    return hidden;
+  }
 
-    public String getNiceName() {
-        return "State " + getName();
-    }
+  public String getNiceName() {
+    return "State " + getName();
+  }
 
-    public boolean getCheckLatency() {
-        return checkLatency;
-    }
+  public boolean getCheckLatency() {
+    return checkLatency;
+  }
 
-    public void setCheckLatency(boolean b) {
-        checkLatency = b;
-    }
+  public void setCheckLatency(boolean b) {
+    checkLatency = b;
+  }
 
-    public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
-        AvatarTransition at;
-        int cpt = 0;
+  public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
+    AvatarTransition at;
+    int cpt = 0;
 
-        for (AvatarStateMachineElement asme : nexts) {
-            if (asme instanceof AvatarTransition) {
-                at = (AvatarTransition) asme;
-                if (at.isEmpty()) {
-                    if (at.getNext(0) == this) {
-                        cpt++;
-                    }
-                }
-            }
+    for (AvatarStateMachineElement asme : nexts) {
+      if (asme instanceof AvatarTransition) {
+        at = (AvatarTransition) asme;
+        if (at.isEmpty()) {
+          if (at.getNext(0) == this) {
+            cpt++;
+          }
         }
-
-        return cpt;
+      }
     }
 
-    public void addEntryCode(String _code) {
-        if (_code == null) {
-            return;
-        }
-        if (entryCode == null) {
-            entryCode = _code;
-            return;
-        }
-        entryCode += _code + "\n";
-    }
+    return cpt;
+  }
 
-    public String getEntryCode() {
-        if (entryCode == null) {
-            return "";
-        }
-        return entryCode;
+  public void addEntryCode(String _code) {
+    if (_code == null) {
+      return;
     }
+    if (entryCode == null) {
+      entryCode = _code;
+      return;
+    }
+    entryCode += _code + "\n";
+  }
 
-    public void translate(AvatarTranslator translator, Object arg) {
-        translator.translateState(this, arg);
+  public String getEntryCode() {
+    if (entryCode == null) {
+      return "";
     }
+    return entryCode;
+  }
+
+  public void translate(AvatarTranslator translator, Object arg) {
+    translator.translateState(this, arg);
+  }
 }

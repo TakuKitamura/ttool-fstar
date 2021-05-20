@@ -36,45 +36,54 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
-
 /**
- * Class TMLCPForLoop
- * Creation: 03/06/2015
+ * Class TMLCPForLoop Creation: 03/06/2015
+ * 
  * @version 1.0 03/06/2015
  * @author Ludovic APVRILLE
  */
 public class TMLCPForLoop extends TMLCPElement {
-    //next #0 -> loop
-    //next #1 -> after loop
-    
-    private String init, condition, increment;
+  // next #0 -> loop
+  // next #1 -> after loop
 
-    //private boolean isInfinite;
-    
-    public TMLCPForLoop(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);   
-    }
-    
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
+  private String init, condition, increment;
 
-    /*public void setInfinite(boolean b) {
-	isInfinite = b;
-    }
+  // private boolean isInfinite;
 
-    public boolean isInfinite() {
-	return isInfinite;
-	}*/
+  public TMLCPForLoop(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
- 
+  public void setInit(String _init) {
+    init = _init;
+  }
+
+  public void setCondition(String _condition) {
+    condition = _condition;
+  }
+
+  public void setIncrement(String _increment) {
+    increment = _increment;
+  }
+
+  public String getInit() {
+    return init;
+  }
+
+  public String getCondition() {
+    return condition;
+  }
+
+  public String getIncrement() {
+    return increment;
+  }
+
+  /*
+   * public void setInfinite(boolean b) { isInfinite = b; }
+   * 
+   * public boolean isInfinite() { return isInfinite; }
+   */
+
 }

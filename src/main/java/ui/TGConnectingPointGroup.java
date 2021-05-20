@@ -36,39 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui;
 
 //import java.awt.*;
 
 /**
- * Class TGConnectingPointGroup
- * Definition of groups of connecting point. If one of the item of the group is free, then, the whole group is free.
- * Creation: 22/12/2003
+ * Class TGConnectingPointGroup Definition of groups of connecting point. If one
+ * of the item of the group is free, then, the whole group is free. Creation:
+ * 22/12/2003
+ * 
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointGroup  {
-	protected boolean free;
-	
-	public TGConnectingPointGroup(boolean b) {
-		free = b;
-	}
+public class TGConnectingPointGroup {
+  protected boolean free;
 
-	public boolean isFree() {
-		return free;
-	}
+  public TGConnectingPointGroup(boolean b) {
+    free = b;
+  }
 
-	public void setFree(boolean b) {
-		free = b;
-	}
+  public boolean isFree() {
+    return free;
+  }
+
+  public void setFree(boolean b) {
+    free = b;
+  }
 }
-
-
-
-
-    
-
-

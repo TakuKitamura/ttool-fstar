@@ -36,61 +36,63 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
-
 
 import java.util.Objects;
 
 /**
- * Class TMLActivityElementWithIntervalAction
- * Creation: 30/05/2008
+ * Class TMLActivityElementWithIntervalAction Creation: 30/05/2008
+ * 
  * @version 1.0 30/05/2008
  * @author Ludovic APVRILLE
  */
 public class TMLActivityElementWithIntervalAction extends TMLActivityElement {
-    protected String minDelay, maxDelay;
-    protected boolean isActiveDelay = false;
+  protected String minDelay, maxDelay;
+  protected boolean isActiveDelay = false;
 
-    public TMLActivityElementWithIntervalAction(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public TMLActivityElementWithIntervalAction(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    public void setMinDelay(String _action) {
-        minDelay = _action;
-    }
+  public void setMinDelay(String _action) {
+    minDelay = _action;
+  }
 
-    public String getMinDelay() {
-        return minDelay;
-    }
+  public String getMinDelay() {
+    return minDelay;
+  }
 
-    public void setMaxDelay(String _action) {
-        maxDelay = _action;
-    }
+  public void setMaxDelay(String _action) {
+    maxDelay = _action;
+  }
 
-    public String getMaxDelay() {
-        return maxDelay;
-    }
-    
-    @Override
-    public String customExtraToXML() {
-	return " min=\"" + minDelay +  "\" max=\"" + maxDelay + "\" " + "isActiveDelay=\"" + isActiveDelay + "\" ";
-    }
+  public String getMaxDelay() {
+    return maxDelay;
+  }
 
-    public void setActiveDelay(boolean _b){
-        isActiveDelay = _b;}
-    public boolean getActiveDelay(){return isActiveDelay;}
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof TMLActivityElementWithIntervalAction)) return false;
-        if (!super.equalSpec(o)) return false;
+  @Override
+  public String customExtraToXML() {
+    return " min=\"" + minDelay + "\" max=\"" + maxDelay + "\" " + "isActiveDelay=\"" + isActiveDelay + "\" ";
+  }
 
-        TMLActivityElementWithIntervalAction tmlAEIAction = (TMLActivityElementWithIntervalAction) o;
-        return Objects.equals(minDelay, tmlAEIAction.getMinDelay()) &&
-                Objects.equals(maxDelay, tmlAEIAction.getMaxDelay()) &&
-                Objects.equals(isActiveDelay, tmlAEIAction.getActiveDelay());
+  public void setActiveDelay(boolean _b) {
+    isActiveDelay = _b;
+  }
 
-    }
+  public boolean getActiveDelay() {
+    return isActiveDelay;
+  }
+
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLActivityElementWithIntervalAction))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+
+    TMLActivityElementWithIntervalAction tmlAEIAction = (TMLActivityElementWithIntervalAction) o;
+    return Objects.equals(minDelay, tmlAEIAction.getMinDelay()) && Objects.equals(maxDelay, tmlAEIAction.getMaxDelay())
+        && Objects.equals(isActiveDelay, tmlAEIAction.getActiveDelay());
+
+  }
 
 }

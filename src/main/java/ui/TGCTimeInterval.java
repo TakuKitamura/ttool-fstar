@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -54,151 +51,154 @@ import java.awt.*;
 //import java.awt.geom.*;
 
 /**
- * Class TGCTimeInterval
- * Internal component that is a time interval
- * Creation: 10/02/2004
+ * Class TGCTimeInterval Internal component that is a time interval Creation:
+ * 10/02/2004
+ * 
  * @version 1.0 10/02/2004
  * @author Ludovic APVRILLE
  */
-public class TGCTimeInterval extends TGCScalableWithoutInternalComponent{
-    protected int minWidth = 10;
-    private String minDelay = "";
-    private String maxDelay = "";
-    
-    public TGCTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbConnectingPoint = 0;
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = true;
-        removable = false;
-        
-        name = "";
-        value = "interval value";
-        
-        myImageIcon = IconManager.imgic302;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 1);
-        if ((w1 != width) && (!tdp.isScaled())) {
-            //setCd(x + width/2 - w1/2, g.getFontMetrics().getHeight());
-            width = w1;
-            height = g.getFontMetrics().getHeight();
-            //updateConnectingPoints();
-        }
-        g.drawString(value, x, y);
-        if (value.equals("")) {
-            g.drawString("interval value", x, y);
-            if (!tdp.isScaled())
-               width = g.getFontMetrics().stringWidth("interval value");
-        }
-    }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public void makeValue() {
-        if (minDelay.equals("") && maxDelay.equals("")) {
-            value = "";
-            return;
-        }
-        if ((minDelay.equals("")) && (!maxDelay.equals(""))){
-            minDelay = "0";
-        }
-        
-        value = "[" + minDelay + ", " + maxDelay + "]";
-    }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldMin = getMinDelay();
-        String oldMax = getMaxDelay();
-        String[] array = new String[2];
-        array[0] = getMinDelay(); array[1] = getMaxDelay();
-        
-        JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting time interval");
-       // jdti.setSize(350, 250);
-        GraphicLib.centerOnParent(jdti, 350, 250);
-        jdti.setVisible( true ); // blocked until dialog has been closed
-        
-        minDelay = array[0]; maxDelay = array[1];
-        
-        if ((minDelay != null) && (maxDelay != null) && ((!minDelay.equals(oldMin)) || (!maxDelay.equals(oldMax)))){
-            makeValue();
-            return true;
-        }
-        minDelay = oldMin;
-        maxDelay = oldMax;
-        return false;
-    }
-    
-    public String getMinDelay() {
-        return minDelay;
-    }
-    
-    public String getMaxDelay() {
-        return maxDelay;
-    }
-    
-    public void setMinDelay(String del) {
-        minDelay = del;
-        makeValue();
-    }
-    
-    public void setMaxDelay(String del) {
-        maxDelay = del;
-        makeValue();
-    }
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Interval minDelay=\"");
-        sb.append(getMinDelay());
-        sb.append("\" maxDelay=\"");
-        sb.append(getMaxDelay());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
+public class TGCTimeInterval extends TGCScalableWithoutInternalComponent {
+  protected int minWidth = 10;
+  private String minDelay = "";
+  private String maxDelay = "";
 
-                    // Issue #17 copy-paste error on j index
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Interval")) {
-                                minDelay = elt.getAttribute("minDelay");
-                                maxDelay = elt.getAttribute("maxDelay");
-                            }
-                        }
-                    }
-                }
-            }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-        makeValue();
+  public TGCTimeInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbConnectingPoint = 0;
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = true;
+    removable = false;
+
+    name = "";
+    value = "interval value";
+
+    myImageIcon = IconManager.imgic302;
+  }
+
+  public void internalDrawing(Graphics g) {
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 1);
+    if ((w1 != width) && (!tdp.isScaled())) {
+      // setCd(x + width/2 - w1/2, g.getFontMetrics().getHeight());
+      width = w1;
+      height = g.getFontMetrics().getHeight();
+      // updateConnectingPoints();
     }
+    g.drawString(value, x, y);
+    if (value.equals("")) {
+      g.drawString("interval value", x, y);
+      if (!tdp.isScaled())
+        width = g.getFontMetrics().stringWidth("interval value");
+    }
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public void makeValue() {
+    if (minDelay.equals("") && maxDelay.equals("")) {
+      value = "";
+      return;
+    }
+    if ((minDelay.equals("")) && (!maxDelay.equals(""))) {
+      minDelay = "0";
+    }
+
+    value = "[" + minDelay + ", " + maxDelay + "]";
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldMin = getMinDelay();
+    String oldMax = getMaxDelay();
+    String[] array = new String[2];
+    array[0] = getMinDelay();
+    array[1] = getMaxDelay();
+
+    JDialogTimeInterval jdti = new JDialogTimeInterval(frame, array, "Setting time interval");
+    // jdti.setSize(350, 250);
+    GraphicLib.centerOnParent(jdti, 350, 250);
+    jdti.setVisible(true); // blocked until dialog has been closed
+
+    minDelay = array[0];
+    maxDelay = array[1];
+
+    if ((minDelay != null) && (maxDelay != null) && ((!minDelay.equals(oldMin)) || (!maxDelay.equals(oldMax)))) {
+      makeValue();
+      return true;
+    }
+    minDelay = oldMin;
+    maxDelay = oldMax;
+    return false;
+  }
+
+  public String getMinDelay() {
+    return minDelay;
+  }
+
+  public String getMaxDelay() {
+    return maxDelay;
+  }
+
+  public void setMinDelay(String del) {
+    minDelay = del;
+    makeValue();
+  }
+
+  public void setMaxDelay(String del) {
+    maxDelay = del;
+    makeValue();
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Interval minDelay=\"");
+    sb.append(getMinDelay());
+    sb.append("\" maxDelay=\"");
+    sb.append(getMaxDelay());
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+
+          // Issue #17 copy-paste error on j index
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Interval")) {
+                minDelay = elt.getAttribute("minDelay");
+                maxDelay = elt.getAttribute("maxDelay");
+              }
+            }
+          }
+        }
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
+    }
+    makeValue();
+  }
 }

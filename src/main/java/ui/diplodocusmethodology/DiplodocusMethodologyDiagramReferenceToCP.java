@@ -36,63 +36,55 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.diplodocusmethodology;
-
 
 import ui.*;
 
 /**
-   * Class DiplodocusMethodologyDiagramReferenceToCP
-   * Diagram reference CP: Used to reference diagrams from the
-   * Diplodocus methodology
-   * Creation: 04/12/2015
-   * @version 1.0 04/12/2015
-   * @author Ludovic APVRILLE
+ * Class DiplodocusMethodologyDiagramReferenceToCP Diagram reference CP: Used to
+ * reference diagrams from the Diplodocus methodology Creation: 04/12/2015
+ * 
+ * @version 1.0 04/12/2015
+ * @author Ludovic APVRILLE
  */
-public class DiplodocusMethodologyDiagramReferenceToCP extends DiplodocusMethodologyDiagramReference  {
+public class DiplodocusMethodologyDiagramReferenceToCP extends DiplodocusMethodologyDiagramReference {
 
+  public DiplodocusMethodologyDiagramReferenceToCP(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public DiplodocusMethodologyDiagramReferenceToCP(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    initScaling(200, 120);
 
-        initScaling(200, 120);
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
+        TGConnectingPoint.WEST);
 
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.WEST);
+    typeOfReference = CP;
 
-        typeOfReference = CP;
+    addTGConnectingPointsCommentTop();
 
-        addTGConnectingPointsCommentTop();
+  }
 
-    }
+  @Override
+  public int getType() {
+    return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_CP;
+  }
 
+  @Override
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    return panel instanceof TMLCommunicationPatternPanel;
 
-    @Override
-    public  int getType() {
-        return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_CP;
-    }
+  }
 
+  @Override
+  public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+    dn.setValidationsNumber(0);
+  }
 
-    @Override
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof TMLCommunicationPatternPanel;
-
-    }
-
-    @Override
-    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-        dn.setValidationsNumber(0);
-    }
-
-    @Override
-    public boolean makeCall(String diagramName, int index) {
-        return true;
-    }
-
-
+  @Override
+  public boolean makeCall(String diagramName, int index) {
+    return true;
+  }
 
 }

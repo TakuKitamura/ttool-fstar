@@ -40,22 +40,23 @@
 package tmltranslator.modelcompiler;
 
 /**
-   * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class MapperMEC extends ArchUnitMEC	{
+public class MapperMEC extends ArchUnitMEC {
 
-	public static final String CONTEXT_CLEANUP = "mapper_ctx_cleanup";
-	public static final String OPERATION = "Mapper operation";
-    public static final String CONTEXT = "MAPPER_CONTEXT";
+  public static final String CONTEXT_CLEANUP = "mapper_ctx_cleanup";
+  public static final String OPERATION = "Mapper operation";
+  public static final String CONTEXT = "MAPPER_CONTEXT";
 
-	public MapperMEC()	{
+  public MapperMEC() {
 
-		index = 3;
-		initCtxRoutine = "mapper_ctx_init";
-		localMemoryPointer = "mapper_mss";
-		ctxCleanupRoutine = "mapper_ctx_cleanup";
-	}
-}	//End of class
+    index = 3;
+    initCtxRoutine = "mapper_ctx_init";
+    localMemoryPointer = "mapper_mss";
+    ctxCleanupRoutine = "mapper_ctx_cleanup";
+  }
+} // End of class

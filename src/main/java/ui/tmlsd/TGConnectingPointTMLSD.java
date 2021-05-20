@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 //import java.awt.*;
@@ -48,26 +45,27 @@ import ui.TGComponentManager;
 import ui.TGConnectingPoint;
 
 /**
- * Class TGConnectingPointTMLSD
- * Definition of connecting points on which connectors of sequence diagrams can be connected
-* Creation: 17/02/2004
+ * Class TGConnectingPointTMLSD Definition of connecting points on which
+ * connectors of sequence diagrams can be connected Creation: 17/02/2004
+ * 
  * @version 1.0 17/02/2004
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTMLSD extends  TGConnectingPoint{
-    
-    public TGConnectingPointTMLSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
-        super(_container, _x, _y, _in, _out);
+public class TGConnectingPointTMLSD extends TGConnectingPoint {
+
+  public TGConnectingPointTMLSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
+    super(_container, _x, _y, _in, _out);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_TMLSD)) {
+      //
+      return true;
     }
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_TMLSD)) {
-            //
-            return true;
-        }
-        //
-        return false;
-    }
-    
+    //
+    return false;
+  }
+
 }

@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
-
 
 import help.HelpEntry;
 import help.HelpManager;
@@ -64,298 +60,280 @@ import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
 /**
- * Class JFrameHelp
- * Creation: 07/03/2019
- * version 1.0 07/03/2019
+ * Class JFrameHelp Creation: 07/03/2019 version 1.0 07/03/2019
+ * 
  * @author Ludovic APVRILLE
  */
-public	class JFrameHelp extends JFrame implements ActionListener {
-    private JEditorPane pane;
-    private HelpEntry he;
-    private HelpManager hm;
-    private JPanel jp01;
-    private JButton back, forward, up, search;
-    private JTextField searchT;
-    private Vector<HelpEntry> visitedEntries;
-    private int currentHEPointer;
-    
-    public JFrameHelp(String title, HelpManager hm, HelpEntry he) {
-        super(title);
-        this.he = he;
-        this.hm = hm;
-        visitedEntries = new Vector<>();
+public class JFrameHelp extends JFrame implements ActionListener {
+  private JEditorPane pane;
+  private HelpEntry he;
+  private HelpManager hm;
+  private JPanel jp01;
+  private JButton back, forward, up, search;
+  private JTextField searchT;
+  private Vector<HelpEntry> visitedEntries;
+  private int currentHEPointer;
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
-        Container framePanel = getContentPane();
-        framePanel.setLayout(new BorderLayout());
-        Font f = new Font("Courrier", Font.BOLD, 12);
+  public JFrameHelp(String title, HelpManager hm, HelpEntry he) {
+    super(title);
+    this.he = he;
+    this.hm = hm;
+    visitedEntries = new Vector<>();
 
-        JPanel topButtons = new JPanel();
-        back = new JButton("Back", IconManager.imgic53r);
-        back.addActionListener(this);
-        topButtons.add(back);
-        forward = new JButton("Forward", IconManager.imgic53);
-        forward.addActionListener(this);
-        topButtons.add(forward);
-        up = new JButton("Up", IconManager.imgic78Big);
-        up.addActionListener(this);
-        topButtons.add(up);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+    Container framePanel = getContentPane();
+    framePanel.setLayout(new BorderLayout());
+    Font f = new Font("Courrier", Font.BOLD, 12);
 
+    JPanel topButtons = new JPanel();
+    back = new JButton("Back", IconManager.imgic53r);
+    back.addActionListener(this);
+    topButtons.add(back);
+    forward = new JButton("Forward", IconManager.imgic53);
+    forward.addActionListener(this);
+    topButtons.add(forward);
+    up = new JButton("Up", IconManager.imgic78Big);
+    up.addActionListener(this);
+    topButtons.add(up);
 
-        // search
-        searchT = new JTextField("", 20);
-        searchT.setEnabled(true);
-        searchT.setEditable(true);
-        searchT.addActionListener(this);
-        topButtons.add(searchT);
+    // search
+    searchT = new JTextField("", 20);
+    searchT.setEnabled(true);
+    searchT.setEditable(true);
+    searchT.addActionListener(this);
+    topButtons.add(searchT);
 
-        search = new JButton("Search", IconManager.imgic5200);
-        search.addActionListener(this);
-        topButtons.add(search);
+    search = new JButton("Search", IconManager.imgic5200);
+    search.addActionListener(this);
+    topButtons.add(search);
 
-        framePanel.add(topButtons, BorderLayout.NORTH);
-        // End of top panel
+    framePanel.add(topButtons, BorderLayout.NORTH);
+    // End of top panel
 
+    jp01 = new JPanel();
+    jp01.setLayout(new BorderLayout());
+    jp01.setBorder(new javax.swing.border.TitledBorder("Help "));
+    HTMLEditorKit kit = new HTMLEditorKit();
+    pane = new JEditorPane("text/html;charset=UTF-8", "");
+    pane.setEditorKit(kit);
+    pane.setEditable(false);
+    StyleSheet styleSheet = kit.getStyleSheet();
 
-        jp01 = new JPanel();
-        jp01.setLayout(new BorderLayout());
-        jp01.setBorder(new javax.swing.border.TitledBorder("Help "));
-        HTMLEditorKit kit = new HTMLEditorKit();
-        pane = new JEditorPane("text/html;charset=UTF-8", "");
-        pane.setEditorKit(kit);
-        pane.setEditable(false);
-        StyleSheet styleSheet = kit.getStyleSheet();
+    // Load help.css
 
-        // Load help.css
+    URL url = HelpManager.getURL("help.css");
+    try {
+      BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+      String line;
 
-        URL url = HelpManager.getURL("help.css");
-        try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(url.openStream()));
-            String line;
+      while ((line = in.readLine()) != null) {
+        styleSheet.addRule(line);
+      }
+    } catch (Exception e) {
+      styleSheet.addRule("body {color:#000; font-family:times; margin: 4px; }");
+      styleSheet.addRule("h1 {color: blue; margin-top: 20px;}");
+      styleSheet.addRule("h2 {color: #ff0000; margin-top: 20px;}");
+      styleSheet.addRule("h3 {color: green; margin-top: 15px;}");
+    }
 
-            while ((line = in.readLine()) != null) {
-                styleSheet.addRule(line);
+    pane.addHyperlinkListener(new HyperlinkListener() {
+      public void hyperlinkUpdate(HyperlinkEvent e) {
+        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+          URL url = e.getURL();
+          if (url == null) {
+            return;
+          }
+
+          String link = e.getURL().toString();
+          if (link.startsWith("file://")) {
+            // Open the corresponding file in TTool
+            String fileToOpen = link.substring(7, link.length());
+            TraceManager.addDev("File to open:" + fileToOpen);
+            if (hm == null) {
+              return;
             }
-        } catch (Exception e) {
-            styleSheet.addRule("body {color:#000; font-family:times; margin: 4px; }");
-            styleSheet.addRule("h1 {color: blue; margin-top: 20px;}");
-            styleSheet.addRule("h2 {color: #ff0000; margin-top: 20px;}");
-            styleSheet.addRule("h3 {color: green; margin-top: 15px;}");
-        }
-
-
-
-
-
-
-        pane.addHyperlinkListener(new HyperlinkListener() {
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    URL url = e.getURL();
-                    if (url == null) {
-                        return;
-                    }
-
-                    String link = e.getURL().toString();
-                   if (link.startsWith("file://")) {
-                       // Open the corresponding file in TTool
-                       String fileToOpen = link.substring(7, link.length());
-                       TraceManager.addDev("File to open:" + fileToOpen);
-                       if (hm == null) {
-                           return;
-                       }
-                       HelpEntry he = hm.getHelpEntryWithHTMLFile(fileToOpen);
-                       if (he != null) {
-                           setHelpEntry(he);
-                       } else {
-                           TraceManager.addDev("Null HE");
-                       }
-                   }
-                }
-            }
-        });
-
-
-        //TraceManager.addDev("HMLTContent:" + he.getHTMLContent());
-        JScrollPane jsp1 = new JScrollPane(pane);
-        jsp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        jp01.add(jsp1, BorderLayout.CENTER);
-
-        framePanel.add(jp01, BorderLayout.CENTER);
-
-        JButton button1 = new JButton("Close", IconManager.imgic27);
-        button1.addActionListener(this);
-        JPanel jp = new JPanel();
-        jp.add(button1);
-        framePanel.add(jp, BorderLayout.SOUTH);
-
-        setHelpEntry(he);
-
-        setSize(500,600);
-        pack();
-
-    }
-
-
-
-    public void setHelpEntry(HelpEntry he) {
-        TraceManager.addDev("Set Help Entry to " + he.getPathToHTMLFile());
-        if(visitedEntries.size() > 0) {
-            if (currentHEPointer < visitedEntries.size() - 1) {
-                visitedEntries.subList(currentHEPointer+1, visitedEntries.size()).clear();
-            }
-        }
-
-        visitedEntries.add(he);
-        currentHEPointer = visitedEntries.size() - 1;
-        this.he = he;
-        updatePanel();
-    }
-
-    private void updatePanel() {
-        TraceManager.addDev("Update panel");
-        back.setEnabled(currentHEPointer != 0);
-        forward.setEnabled(currentHEPointer < visitedEntries.size()-1);
-        up.setEnabled(he.getFather() != null);
-
-
-        jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
-        String content = handleImages(he.getHTMLContent());
-        he.setHTMLContent(content);
-        //String content = he.getHTMLContent();
-        //TraceManager.addDev("HTML content is:" + content);
-        pane.setText(content);
-        setVisible(true);
-    }
-    
-    public void actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();        
-        if (command.equals("Close")) {
-            setVisible (false);
-            return;
-        } else if (evt.getSource() == back) {
-            back();
-        } else if (evt.getSource() == forward) {
-            forward();
-        } else if (evt.getSource() == up) {
-            up();
-        } else if ((evt.getSource() == search) || (evt.getSource() == searchT)) {
-            search();
-        }
-    }
-
-    public void back() {
-        //TraceManager.addDev("Back");
-        if (currentHEPointer < 1) {
-            return;
-        }
-        currentHEPointer --;
-        he = visitedEntries.get(currentHEPointer);
-        updatePanel();
-    }
-
-    public void forward() {
-        //TraceManager.addDev("Forward");
-
-        if (currentHEPointer >= visitedEntries.size()-1) {
-            return;
-        }
-        currentHEPointer ++;
-        he = visitedEntries.get(currentHEPointer);
-        updatePanel();
-
-    }
-
-    public void up() {
-        //TraceManager.addDev("Up");
-
-        if (he.getFather() == null) {
-            return;
-        }
-        setHelpEntry(he.getFather());
-    }
-
-    public void search() {
-        TraceManager.addDev("Search");
-
-        if (hm == null) {
-            TraceManager.addDev("Null HM");
-            return;
-        }
-
-
-        String test = searchT.getText().trim().toLowerCase();
-        if (test.length() == 0) {
-            TraceManager.addDev("Empty search");
-            return;
-        }
-
-        SearchResultHelpEntry srhe = new SearchResultHelpEntry();
-        srhe.fillInfos("searchresult search help list index");
-
-
-        Vector<ScoredHelpEntry> scores = new Vector<>();
-
-        hm.searchInKeywords(test.split(" "), srhe, scores);
-        hm.searchInContent(test.split(" "), srhe, scores);
-        srhe.setScores(scores);
-
-        TraceManager.addDev("search help: " + srhe.toString());
-
-        srhe.mergeResults();
-
-        TraceManager.addDev("search help after merge: " + srhe.toString());
-
-        srhe.sortResults();
-
-        TraceManager.addDev("search help after sort: " + srhe.toString());
-
-
-        TraceManager.addDev("Setting new help entry with search results ");
-        setHelpEntry(srhe);
-    }
-
-    private String handleImages(String initialContent) {
-        int index;
-        int cpt = 0;
-
-        while ((index = initialContent.indexOf("<img src=\"file:")) != -1) {
-
-            String tmpContent = initialContent.substring(index + 15, initialContent.length());
-            int index2 = tmpContent.indexOf("\"");
-            if (index2 == -1) return initialContent;
-
-            String infoFile = tmpContent.substring(0, index2);
-
-            if (infoFile.startsWith("../ui/util/")) {
-                infoFile = infoFile.substring(11, infoFile.length());
-            }
-
-            URL url = IconManager.class.getResource(infoFile);
-            if (url != null) {
-                String imgsrc = url.toString();
-                TraceManager.addDev("Infofile:" + infoFile + " imgsrc=" + imgsrc);
-                String tmp1 = initialContent.substring(0, index + 10);
-                String tmp2 = initialContent.substring(index + 15 + index2, initialContent.length());
-                initialContent = tmp1 + imgsrc + tmp2;
-                TraceManager.addDev("New initial content:" + initialContent);
+            HelpEntry he = hm.getHelpEntryWithHTMLFile(fileToOpen);
+            if (he != null) {
+              setHelpEntry(he);
             } else {
-                return initialContent;
+              TraceManager.addDev("Null HE");
             }
-            cpt ++;
-            if (cpt == 1000) {
-                return initialContent;
-            }
+          }
         }
+      }
+    });
 
+    // TraceManager.addDev("HMLTContent:" + he.getHTMLContent());
+    JScrollPane jsp1 = new JScrollPane(pane);
+    jsp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    jp01.add(jsp1, BorderLayout.CENTER);
+
+    framePanel.add(jp01, BorderLayout.CENTER);
+
+    JButton button1 = new JButton("Close", IconManager.imgic27);
+    button1.addActionListener(this);
+    JPanel jp = new JPanel();
+    jp.add(button1);
+    framePanel.add(jp, BorderLayout.SOUTH);
+
+    setHelpEntry(he);
+
+    setSize(500, 600);
+    pack();
+
+  }
+
+  public void setHelpEntry(HelpEntry he) {
+    TraceManager.addDev("Set Help Entry to " + he.getPathToHTMLFile());
+    if (visitedEntries.size() > 0) {
+      if (currentHEPointer < visitedEntries.size() - 1) {
+        visitedEntries.subList(currentHEPointer + 1, visitedEntries.size()).clear();
+      }
+    }
+
+    visitedEntries.add(he);
+    currentHEPointer = visitedEntries.size() - 1;
+    this.he = he;
+    updatePanel();
+  }
+
+  private void updatePanel() {
+    TraceManager.addDev("Update panel");
+    back.setEnabled(currentHEPointer != 0);
+    forward.setEnabled(currentHEPointer < visitedEntries.size() - 1);
+    up.setEnabled(he.getFather() != null);
+
+    jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
+    String content = handleImages(he.getHTMLContent());
+    he.setHTMLContent(content);
+    // String content = he.getHTMLContent();
+    // TraceManager.addDev("HTML content is:" + content);
+    pane.setText(content);
+    setVisible(true);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+    if (command.equals("Close")) {
+      setVisible(false);
+      return;
+    } else if (evt.getSource() == back) {
+      back();
+    } else if (evt.getSource() == forward) {
+      forward();
+    } else if (evt.getSource() == up) {
+      up();
+    } else if ((evt.getSource() == search) || (evt.getSource() == searchT)) {
+      search();
+    }
+  }
+
+  public void back() {
+    // TraceManager.addDev("Back");
+    if (currentHEPointer < 1) {
+      return;
+    }
+    currentHEPointer--;
+    he = visitedEntries.get(currentHEPointer);
+    updatePanel();
+  }
+
+  public void forward() {
+    // TraceManager.addDev("Forward");
+
+    if (currentHEPointer >= visitedEntries.size() - 1) {
+      return;
+    }
+    currentHEPointer++;
+    he = visitedEntries.get(currentHEPointer);
+    updatePanel();
+
+  }
+
+  public void up() {
+    // TraceManager.addDev("Up");
+
+    if (he.getFather() == null) {
+      return;
+    }
+    setHelpEntry(he.getFather());
+  }
+
+  public void search() {
+    TraceManager.addDev("Search");
+
+    if (hm == null) {
+      TraceManager.addDev("Null HM");
+      return;
+    }
+
+    String test = searchT.getText().trim().toLowerCase();
+    if (test.length() == 0) {
+      TraceManager.addDev("Empty search");
+      return;
+    }
+
+    SearchResultHelpEntry srhe = new SearchResultHelpEntry();
+    srhe.fillInfos("searchresult search help list index");
+
+    Vector<ScoredHelpEntry> scores = new Vector<>();
+
+    hm.searchInKeywords(test.split(" "), srhe, scores);
+    hm.searchInContent(test.split(" "), srhe, scores);
+    srhe.setScores(scores);
+
+    TraceManager.addDev("search help: " + srhe.toString());
+
+    srhe.mergeResults();
+
+    TraceManager.addDev("search help after merge: " + srhe.toString());
+
+    srhe.sortResults();
+
+    TraceManager.addDev("search help after sort: " + srhe.toString());
+
+    TraceManager.addDev("Setting new help entry with search results ");
+    setHelpEntry(srhe);
+  }
+
+  private String handleImages(String initialContent) {
+    int index;
+    int cpt = 0;
+
+    while ((index = initialContent.indexOf("<img src=\"file:")) != -1) {
+
+      String tmpContent = initialContent.substring(index + 15, initialContent.length());
+      int index2 = tmpContent.indexOf("\"");
+      if (index2 == -1)
         return initialContent;
 
+      String infoFile = tmpContent.substring(0, index2);
+
+      if (infoFile.startsWith("../ui/util/")) {
+        infoFile = infoFile.substring(11, infoFile.length());
+      }
+
+      URL url = IconManager.class.getResource(infoFile);
+      if (url != null) {
+        String imgsrc = url.toString();
+        TraceManager.addDev("Infofile:" + infoFile + " imgsrc=" + imgsrc);
+        String tmp1 = initialContent.substring(0, index + 10);
+        String tmp2 = initialContent.substring(index + 15 + index2, initialContent.length());
+        initialContent = tmp1 + imgsrc + tmp2;
+        TraceManager.addDev("New initial content:" + initialContent);
+      } else {
+        return initialContent;
+      }
+      cpt++;
+      if (cpt == 1000) {
+        return initialContent;
+      }
     }
 
-    
-} // Class
+    return initialContent;
 
+  }
+
+} // Class

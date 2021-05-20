@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.procsd;
 
 import ui.MainGUI;
@@ -48,119 +45,111 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
- * Class ProactiveCSDToolBar
- * Toolbar associated with ProActive state machine diagrams
- * Creation: 05/07/2006
+ * Class ProactiveCSDToolBar Toolbar associated with ProActive state machine
+ * diagrams Creation: 05/07/2006
+ * 
  * @version 1.0 05/07/2006
  * @author Ludovic APVRILLE
  */
 public class ProactiveCSDToolBar extends TToolBar {
-    
-    
-    public ProactiveCSDToolBar(MainGUI _mgui) {
-        super(_mgui);
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.PROCSD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.PROCSD_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.PROCSD_CONNECTOR_DELEGATE].setEnabled(b);
-        mgui.actions[TGUIAction.PROCSD_COMPONENT].setEnabled(b);
-        //Delegate port action removed, by Solange
-        //mgui.actions[TGUIAction.PROCSD_DELEGATE_PORT].setEnabled(b);
-        mgui.actions[TGUIAction.PROCSD_IN_PORT].setEnabled(b); 
-        mgui.actions[TGUIAction.PROCSD_OUT_PORT].setEnabled(b);
-        
-        mgui.actions[TGUIAction.PROCSD_INTERFCE].setEnabled(b);
-        
-        //mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE].setEnabled(b);
-        
-        mgui.actions[TGUIAction.PROCSD_CONNECTOR_PORT_INTERFACE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        //Enable the new action created by Solange
-        //mgui.actions[TGUIAction.PRUEBA_1].setEnabled(b);
-		
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-        
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		mgui.updateZoomInfo();
-	}
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.PROCSD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        
-        button = this.add(mgui.actions[TGUIAction.PROCSD_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.PROCSD_CONNECTOR_DELEGATE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        button = this.add(mgui.actions[TGUIAction.PROCSD_COMPONENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        // Delegate port button removed, by Solange
-        //button = this.add(mgui.actions[TGUIAction.PROCSD_DELEGATE_PORT]);
-        //button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.PROCSD_IN_PORT]);
-        button.addMouseListener(mgui.mouseHandler);
-     
-        button = this.add(mgui.actions[TGUIAction.PROCSD_OUT_PORT]);
-        button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.PROCSD_INTERFCE]);
-        button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
-        
-        //button = this.add(mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE]);
-        //button.addMouseListener(mgui.mouseHandler);
-        //this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.PROCSD_CONNECTOR_PORT_INTERFACE]);
-        button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
-        
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        this.addSeparator();
-        
-        //New button, created by Solange
-      //  button = this.add(mgui.actions[TGUIAction.PRUEBA_1]);
-      //  button.addMouseListener(mgui.mouseHandler);
-       // this.addSeparator();
-        
-            }
+
+  public ProactiveCSDToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.PROCSD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.PROCSD_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.PROCSD_CONNECTOR_DELEGATE].setEnabled(b);
+    mgui.actions[TGUIAction.PROCSD_COMPONENT].setEnabled(b);
+    // Delegate port action removed, by Solange
+    // mgui.actions[TGUIAction.PROCSD_DELEGATE_PORT].setEnabled(b);
+    mgui.actions[TGUIAction.PROCSD_IN_PORT].setEnabled(b);
+    mgui.actions[TGUIAction.PROCSD_OUT_PORT].setEnabled(b);
+
+    mgui.actions[TGUIAction.PROCSD_INTERFCE].setEnabled(b);
+
+    // mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE].setEnabled(b);
+
+    mgui.actions[TGUIAction.PROCSD_CONNECTOR_PORT_INTERFACE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    // Enable the new action created by Solange
+    // mgui.actions[TGUIAction.PRUEBA_1].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_CONNECTOR_DELEGATE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.PROCSD_COMPONENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    // Delegate port button removed, by Solange
+    // button = this.add(mgui.actions[TGUIAction.PROCSD_DELEGATE_PORT]);
+    // button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_IN_PORT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_OUT_PORT]);
+    button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_INTERFCE]);
+    button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
+
+    // button = this.add(mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE]);
+    // button.addMouseListener(mgui.mouseHandler);
+    // this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.PROCSD_CONNECTOR_PORT_INTERFACE]);
+    button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
+
+    // New button, created by Solange
+    // button = this.add(mgui.actions[TGUIAction.PRUEBA_1]);
+    // button.addMouseListener(mgui.mouseHandler);
+    // this.addSeparator();
+
+  }
 } // Class
-
-
-
-
-

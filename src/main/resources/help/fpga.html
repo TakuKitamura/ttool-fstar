@@ -1,44 +1,127 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>TTool help</title>
-  <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-</head>
-<body>
-<h1 id="fpga">FPGA</h1>
-<p>The FPGA node abstracts programmable Field-programmable gate array.</p>
-<h2 id="attributes">Attributes</h2>
-<p>They have the following attributes.</p>
-<ul>
-<li><p><em>FPGA name</em></p></li>
-<li><p><em>Data size</em> gives the size of data that can manipulated in one clock cycle. For a FPGA, this represents for instance the size of the bus to access the internal memory</p></li>
-<li><p><em>Mapping penalty</em> gives the number of cycles before tasks can start</p></li>
-<li><p><em>The reconfiguration time</em>, given in ms, models the time the FPGA takes to switch from a task set to another task set</p></li>
-<li><p><em>Go idle time</em> gives the number of cycles it takes for a FPGA to switch to a power saving mode, or to switch to regular power mode</p></li>
-<li><p><em>Max consecutive cycles before going idle</em> expresses the number of cycles before the FPGA goes to a power saving mode</p></li>
-<li><p><em>ExecI</em> gives the number of clock cycles the FPGA takes to execute one integer operation (average value)</p></li>
-<li><p><em>ExecC</em> gives the number of clock cycles the FPGA takes to execute one <em>custom</em> operation (average value)</p></li>
-<li><p><em>Operation</em> documents the typical operations performed by this FPGA. This could be “JPEG”, “LDPC” or else.</p></li>
-<li><p><em>Scheduling</em> expresses how tasks are scheduled. Next section focuses on this attribute</p></li>
-<li><p><em>Clock divider</em> gives the ratio between the master clock and the clock of the FPGA</p></li>
-</ul>
-<h2 id="scheduling">Scheduling</h2>
-<p>Let us assume that n tasks have been mapped to a FPGA.</p>
-<p>If the <em>Scheduling</em> attribute is left empty, the system assumes that all tasks mapped to the FPGA can be executed at the same time, in parallel. Said differently, the designer thinks that all tasks can fit at the same time in the FPGA.</p>
-<p>IF all tasks cannot fit at the same time in the FPGA matrix, then the design can give a static schedule that represents in which sequence tasks are executed.</p>
-<p>A scheduling is described by sets of tasks executed together, separated by “;”.</p>
-<p>For instance: <code>T1 T2 ; T3 ; T4 T5</code></p>
-<p>A “;” means that the FPGA performs a dynamic reconfiguration before switching to the next set of tasks. The FPGA switches to the next set of tasks only once the tasks of the previous set have all terminated their execution.</p>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>TTool help</title>
+    <style>
+      code {
+        white-space: pre-wrap;
+      }
+      span.smallcaps {
+        font-variant: small-caps;
+      }
+      span.underline {
+        text-decoration: underline;
+      }
+      div.column {
+        display: inline-block;
+        vertical-align: top;
+        width: 50%;
+      }
+    </style>
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1 id="fpga">FPGA</h1>
+    <p>The FPGA node abstracts programmable Field-programmable gate array.</p>
+    <h2 id="attributes">Attributes</h2>
+    <p>They have the following attributes.</p>
+    <ul>
+      <li>
+        <p><em>FPGA name</em></p>
+      </li>
+      <li>
+        <p>
+          <em>Data size</em> gives the size of data that can manipulated in one
+          clock cycle. For a FPGA, this represents for instance the size of the
+          bus to access the internal memory
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>Mapping penalty</em> gives the number of cycles before tasks can
+          start
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>The reconfiguration time</em>, given in ms, models the time the
+          FPGA takes to switch from a task set to another task set
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>Go idle time</em> gives the number of cycles it takes for a FPGA
+          to switch to a power saving mode, or to switch to regular power mode
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>Max consecutive cycles before going idle</em> expresses the number
+          of cycles before the FPGA goes to a power saving mode
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>ExecI</em> gives the number of clock cycles the FPGA takes to
+          execute one integer operation (average value)
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>ExecC</em> gives the number of clock cycles the FPGA takes to
+          execute one <em>custom</em> operation (average value)
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>Operation</em> documents the typical operations performed by this
+          FPGA. This could be “JPEG”, “LDPC” or else.
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>Scheduling</em> expresses how tasks are scheduled. Next section
+          focuses on this attribute
+        </p>
+      </li>
+      <li>
+        <p>
+          <em>Clock divider</em> gives the ratio between the master clock and
+          the clock of the FPGA
+        </p>
+      </li>
+    </ul>
+    <h2 id="scheduling">Scheduling</h2>
+    <p>Let us assume that n tasks have been mapped to a FPGA.</p>
+    <p>
+      If the <em>Scheduling</em> attribute is left empty, the system assumes
+      that all tasks mapped to the FPGA can be executed at the same time, in
+      parallel. Said differently, the designer thinks that all tasks can fit at
+      the same time in the FPGA.
+    </p>
+    <p>
+      IF all tasks cannot fit at the same time in the FPGA matrix, then the
+      design can give a static schedule that represents in which sequence tasks
+      are executed.
+    </p>
+    <p>
+      A scheduling is described by sets of tasks executed together, separated by
+      “;”.
+    </p>
+    <p>For instance: <code>T1 T2 ; T3 ; T4 T5</code></p>
+    <p>
+      A “;” means that the FPGA performs a dynamic reconfiguration before
+      switching to the next set of tasks. The FPGA switches to the next set of
+      tasks only once the tasks of the previous set have all terminated their
+      execution.
+    </p>
+  </body>
 </html>

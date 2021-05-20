@@ -48,53 +48,54 @@ import java.awt.geom.Point2D;
 import java.util.Vector;
 
 /**
- * Class TGConnectorTMLCP
- * Basic connector with a full arrow at the end. Used in activity diagram.
- * Creation: 17/02/2014
+ * Class TGConnectorTMLCP Basic connector with a full arrow at the end. Used in
+ * activity diagram. Creation: 17/02/2014
+ * 
  * @version 1.0 17/02/2014
  * @author Ludovic APVRILLE
  */
-public class TGConnectorTMLCP extends TADConnector /* Issue #69 TGConnector*/ {
-    
-	// Issue #31
-	//protected int arrowLength = 10;
-	
-	protected String guard = "";
-    
-    public TGConnectorTMLCP(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic202;
+public class TGConnectorTMLCP extends TADConnector /* Issue #69 TGConnector */ {
 
-        name = "connector";
-		_p1.setReferenceToConnector( this );
-		_p2.setReferenceToConnector( this );
-				//editable = true;
+  // Issue #31
+  // protected int arrowLength = 10;
+
+  protected String guard = "";
+
+  public TGConnectorTMLCP(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic202;
+
+    name = "connector";
+    _p1.setReferenceToConnector(this);
+    _p2.setReferenceToConnector(this);
+    // editable = true;
+  }
+
+  @Override
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+      g.drawLine(x1, y1, x2, y2);
+    } else {
+      GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
     }
-    
-    @Override
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-            g.drawLine(x1, y1, x2, y2);
-        } else {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.CONNECTOR_TMLCP;
+  }
+
+  public String getGuard() {
+    CDElement container = p1.getFather();
+    if (container instanceof TMLCPChoice) {
+      TGConnectingPoint[] connectingPoint = ((TMLCPChoice) container).getConnectingPoints();
+      for (int j = 0; j < connectingPoint.length; j++) {
+        if (connectingPoint[j] == p1) {
+          return ((TMLCPChoice) container).getGuard(j - 1);
         }
+      }
     }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.CONNECTOR_TMLCP;
-    }
-
-	public String getGuard()	{
-		CDElement container = p1.getFather();
-		if( container instanceof TMLCPChoice )	{
-			TGConnectingPoint[] connectingPoint = ((TMLCPChoice)container).getConnectingPoints();
-			for( int j = 0; j < connectingPoint.length; j++ )	{
-				if( connectingPoint[j] == p1 )	{
-						return ((TMLCPChoice)container).getGuard(j-1);
-				}
-			}
-		}
-		return "noGuard";
-	}
-}//End of class
+    return "noGuard";
+  }
+}// End of class

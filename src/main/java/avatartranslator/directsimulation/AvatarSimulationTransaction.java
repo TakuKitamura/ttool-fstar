@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator.directsimulation;
 
 import avatartranslator.AvatarBlock;
@@ -47,8 +46,7 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 /**
- * Class AvatarSimulationTransaction
- * Avatar: notion of transaction in simulation
+ * Class AvatarSimulationTransaction Avatar: notion of transaction in simulation
  * Creation: 14/12/2010
  *
  * @author Ludovic APVRILLE
@@ -56,189 +54,190 @@ import java.util.Vector;
  */
 public class AvatarSimulationTransaction {
 
-    public static long ID;
-    public static Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements;
-    public static LinkedList<AvatarStateMachineElement> allExecutedElements;
+  public static long ID;
+  public static Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements;
+  public static LinkedList<AvatarStateMachineElement> allExecutedElements;
 
-    public AvatarBlock block;
-    public AvatarSimulationBlock asb;
-    public AvatarStateMachineElement executedElement;
-    public AvatarStateMachineElement concernedElement; // Used for communication
-    public AvatarSimulationTransaction linkedTransaction;
-    public long initialClockValue;
-    public long duration;
-    public long clockValueWhenFinished;
-    public long id;
-    public long bunchid;
+  public AvatarBlock block;
+  public AvatarSimulationBlock asb;
+  public AvatarStateMachineElement executedElement;
+  public AvatarStateMachineElement concernedElement; // Used for communication
+  public AvatarSimulationTransaction linkedTransaction;
+  public long initialClockValue;
+  public long duration;
+  public long clockValueWhenFinished;
+  public long id;
+  public long bunchid;
 
-    // Indicates whether the transaction is a silent transaction, or not
-    // Silent means that the transaction was automatically selecteed by the simulator ->
-    // not assumed to be part of RG or state comparison computation
-    public boolean silent;
+  // Indicates whether the transaction is a silent transaction, or not
+  // Silent means that the transaction was automatically selecteed by the
+  // simulator ->
+  // not assumed to be part of RG or state comparison computation
+  public boolean silent;
 
+  public Vector<String> attributeValues;
+  public Vector<String> actions;
 
-    public Vector<String> attributeValues;
-    public Vector<String> actions;
+  public int x, y; // for graphical representation only
+  public long stamp;
 
-    public int x, y; // for graphical representation only
-    public long stamp;
+  public AvatarSimulationAsynchronousTransaction sentMessage;
+  public AvatarSimulationAsynchronousTransaction receivedMessage;
 
-    public AvatarSimulationAsynchronousTransaction sentMessage;
-    public AvatarSimulationAsynchronousTransaction receivedMessage;
+  public boolean isBroadcast;
+  public boolean isSolo; // Used in broadcast transactions to know whether the signal was forwarded to
+                         // other elements, or not
+  public boolean isLost; // Used in lossy channel to know whether the message was lost or not
 
-    public boolean isBroadcast;
-    public boolean isSolo; // Used in broadcast transactions to know whether the signal was forwarded to other elements, or not
-    public boolean isLost; // Used in lossy channel to know whether the message was lost or not
+  public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
+    executedElement = _executeElement;
+    addExecutedElement(executedElement);
+    duration = 0;
+  }
 
-    public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
-        executedElement = _executeElement;
-        addExecutedElement(executedElement);
-        duration = 0;
+  public int[] getAttributeValues() {
+    if (attributeValues == null) {
+      return new int[0];
     }
 
-    public int[] getAttributeValues() {
-        if (attributeValues == null) {
-            return new int[0];
-        }
-
-        int[] vals = new int[attributeValues.size()];
-        for(int i=0; i<vals.length; i++) {
-            String v = attributeValues.get(i);
-            if (v.equals("true")) {
-                vals[i] = 1;
-            } else if (v.equals("false")) {
-                vals[i] = 0;
-            } else {
-                vals[i] = Integer.decode(v);
-            }
-        }
-
-        return vals;
+    int[] vals = new int[attributeValues.size()];
+    for (int i = 0; i < vals.length; i++) {
+      String v = attributeValues.get(i);
+      if (v.equals("true")) {
+        vals[i] = 1;
+      } else if (v.equals("false")) {
+        vals[i] = 0;
+      } else {
+        vals[i] = Integer.decode(v);
+      }
     }
 
-    public static int[] getAttributeValues(Vector<String> attributeValues) {
-        if (attributeValues == null) {
-            return new int[0];
-        }
+    return vals;
+  }
 
-        int[] vals = new int[attributeValues.size()];
-        for(int i=0; i<vals.length; i++) {
-            String v = attributeValues.get(i);
-            if (v.equals("true")) {
-                vals[i] = 1;
-            } else if (v.equals("false")) {
-                vals[i] = 0;
-            } else {
-                vals[i] = Integer.decode(v);
-            }
-        }
-
-        return vals;
+  public static int[] getAttributeValues(Vector<String> attributeValues) {
+    if (attributeValues == null) {
+      return new int[0];
     }
 
-    public static void reinit() {
-        ID = 0;
-        allExecutedElements = new LinkedList<AvatarStateMachineElement>();
-        hashOfAllElements = new Hashtable<AvatarStateMachineElement, Integer>();
+    int[] vals = new int[attributeValues.size()];
+    for (int i = 0; i < vals.length; i++) {
+      String v = attributeValues.get(i);
+      if (v.equals("true")) {
+        vals[i] = 1;
+      } else if (v.equals("false")) {
+        vals[i] = 0;
+      } else {
+        vals[i] = Integer.decode(v);
+      }
     }
 
-    public static void addExecutedElement(AvatarStateMachineElement _asme) {
-        if (!allExecutedElements.contains(_asme)) {
-            allExecutedElements.add(_asme);
-        }
+    return vals;
+  }
 
-        Integer val = hashOfAllElements.get(_asme);
-        if (val == null) {
-            hashOfAllElements.put(_asme, 1);
-        } else {
-            hashOfAllElements.put(_asme, 1 + val);
-        }
+  public static void reinit() {
+    ID = 0;
+    allExecutedElements = new LinkedList<AvatarStateMachineElement>();
+    hashOfAllElements = new Hashtable<AvatarStateMachineElement, Integer>();
+  }
 
+  public static void addExecutedElement(AvatarStateMachineElement _asme) {
+    if (!allExecutedElements.contains(_asme)) {
+      allExecutedElements.add(_asme);
     }
 
-    public static void removeExecutedElement(AvatarStateMachineElement _asme) {
-        if (!allExecutedElements.contains(_asme)) {
-            return;
-        }
-
-        Integer val = hashOfAllElements.get(_asme);
-        if (val == null) {
-            return;
-        }
-
-        hashOfAllElements.put(_asme, val - 1);
-
-
+    Integer val = hashOfAllElements.get(_asme);
+    if (val == null) {
+      hashOfAllElements.put(_asme, 1);
+    } else {
+      hashOfAllElements.put(_asme, 1 + val);
     }
 
-    public static synchronized long setID() {
-        long tmp = ID;
-        ID++;
-        return tmp;
+  }
+
+  public static void removeExecutedElement(AvatarStateMachineElement _asme) {
+    if (!allExecutedElements.contains(_asme)) {
+      return;
     }
 
-    public static synchronized void setID(long _id) {
-        ID = _id;
+    Integer val = hashOfAllElements.get(_asme);
+    if (val == null) {
+      return;
     }
 
-    public String toString() {
-        String res = "" + id + " bunchid:" + bunchid + " @" + clockValueWhenFinished + "/ " + duration + ": " + executedElement + " in block " + block.getName();
-        if (silent) {
-            res += " (silent)";
-        }
-        if (isBroadcast) {
-            if (isSolo) {
-                res += " (solo broadcast)";
-            } else {
-                res += " (broadcast)";
-            }
-        }
-        res += "\nattributes=";
-        for (String s : attributeValues) {
-            res += s + " ";
-        }
-        if (actions != null) {
-            int cpt = 0;
-            res += "\n";
-            for (String action : actions) {
-                res += "action#" + cpt + ": " + action + " ";
-                cpt++;
-            }
-        }
-        return res;
+    hashOfAllElements.put(_asme, val - 1);
+
+  }
+
+  public static synchronized long setID() {
+    long tmp = ID;
+    ID++;
+    return tmp;
+  }
+
+  public static synchronized void setID(long _id) {
+    ID = _id;
+  }
+
+  public String toString() {
+    String res = "" + id + " bunchid:" + bunchid + " @" + clockValueWhenFinished + "/ " + duration + ": "
+        + executedElement + " in block " + block.getName();
+    if (silent) {
+      res += " (silent)";
+    }
+    if (isBroadcast) {
+      if (isSolo) {
+        res += " (solo broadcast)";
+      } else {
+        res += " (broadcast)";
+      }
+    }
+    res += "\nattributes=";
+    for (String s : attributeValues) {
+      res += s + " ";
+    }
+    if (actions != null) {
+      int cpt = 0;
+      res += "\n";
+      for (String action : actions) {
+        res += "action#" + cpt + ": " + action + " ";
+        cpt++;
+      }
+    }
+    return res;
+  }
+
+  public String getAttributesString() {
+    String res = "";
+    for (String s : attributeValues) {
+      res += s + " ";
+    }
+    return res;
+  }
+
+  public String getActionsString() {
+    if ((actions == null) || (actions.size() == 0)) {
+      return "null";
     }
 
-    public String getAttributesString() {
-        String res = "";
-        for (String s : attributeValues) {
-            res += s + " ";
-        }
-        return res;
+    String res = "";
+
+    int cpt = 0;
+    // res+= "\n";
+    for (String action : actions) {
+      res += "action#" + cpt + ": " + action + " ";
+      cpt++;
     }
 
-    public String getActionsString() {
-        if ((actions == null) || (actions.size() == 0)) {
-            return "null";
-        }
+    return res;
+  }
 
-        String res = "";
-
-        int cpt = 0;
-        //res+= "\n";
-        for (String action : actions) {
-            res += "action#" + cpt + ": " + action + " ";
-            cpt++;
-        }
-
-        return res;
+  public boolean setAttributeValue(int _index, String _value) {
+    if (_index >= attributeValues.size()) {
+      return false;
     }
+    attributeValues.set(_index, _value);
+    return true;
 
-    public boolean setAttributeValue(int _index, String _value) {
-        if (_index >= attributeValues.size()) {
-            return false;
-        }
-        attributeValues.set(_index, _value);
-        return true;
-
-    }
+  }
 }

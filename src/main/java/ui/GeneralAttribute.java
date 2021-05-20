@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui;
 
 import tmltranslator.TMLTextSpecification;
@@ -47,69 +46,63 @@ import translator.UPPAALKeyword;
 import java.util.List;
 
 /**
- * Class GeneralAttribute
- * Definition of a general attribute
- * Creation: 03/07/2019
+ * Class GeneralAttribute Definition of a general attribute Creation: 03/07/2019
  *
  * @author Ludovic APVRILLE
  * @version 1.0 03/07/2019
  */
 public class GeneralAttribute {
 
-    private String id;
-    private String initialValue;
-    private String type;
+  private String id;
+  private String initialValue;
+  private String type;
 
+  public GeneralAttribute(String _id, String _initialValue, String _type) {
+    id = new String(_id);
+    initialValue = new String(_initialValue);
+    type = new String(_type);
+  }
 
-    public GeneralAttribute(String _id, String _initialValue, String _type) {
-        id = new String(_id);
-        initialValue = new String(_initialValue);
-        type = new String(_type);
+  public String getId() {
+    return id;
+  }
+
+  public String getInitialValue() {
+    return initialValue;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setId(String _id) {
+    id = _id;
+  }
+
+  public void setInitialValue(String _initialValue) {
+    initialValue = _initialValue;
+  }
+
+  public void setType(String _type) {
+    type = _type;
+  }
+
+  public String toString() {
+    String ret = "";
+    if (id != null)
+      ret += id;
+    if ((initialValue != null) && (initialValue.length() > 0)) {
+      ret += " = " + initialValue;
+    }
+    if ((type != null) && (type.length() > 0)) {
+      ret += " : " + type;
     }
 
+    return ret;
+  }
 
-
-    public String getId() {
-        return id;
-    }
-
-    public String getInitialValue() {
-        return initialValue;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setId(String _id) {
-        id = _id;
-    }
-
-    public void setInitialValue(String _initialValue) {
-        initialValue = _initialValue;
-    }
-
-    public void setType(String _type) {
-        type = _type;
-    }
-
-
-    public String toString() {
-        String ret = "";
-        if (id != null) ret += id;
-        if ((initialValue != null) && (initialValue.length() > 0)) {
-            ret += " = " + initialValue;
-        }
-        if ((type != null) && (type.length() > 0)) {
-            ret += " : " + type;
-        }
-
-        return ret;
-    }
-
-    public GeneralAttribute makeClone() {
-        return new GeneralAttribute(id, initialValue, type);
-    }
-
+  public GeneralAttribute makeClone() {
+    return new GeneralAttribute(id, initialValue, type);
+  }
 
 }

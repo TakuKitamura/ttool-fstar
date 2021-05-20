@@ -39,40 +39,42 @@
 package ui;
 
 /**
- * Class TGConnectingPointWidthHeight
- * Connecting points of TClasses
- * Creation: 09/12/2003
+ * Class TGConnectingPointWidthHeight Connecting points of TClasses Creation:
+ * 09/12/2003
+ * 
  * @version 1.0 09/12/2003
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointWidthHeight extends TGConnectingPoint {
 
-	protected double w;
-    
-	protected double h;
+  protected double w;
 
-    public TGConnectingPointWidthHeight(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out);
-        w = _w;
-        h = _h;
-    }
-    /* From Interface ui.CDElement*/
-    @Override
-    public int getX() {
-        return scaledX() + container.getX() + (int)(container.getWidth() * w );
-    }
-    
-    /* From Interface ui.CDElement*/
-    @Override
-    public int getY() {
-        return scaledY() + container.getY() + (int)(container.getHeight() * h);
-    }
+  protected double h;
 
-    public void setW(double _w) {
-        w = _w;
-    }
+  public TGConnectingPointWidthHeight(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out);
+    w = _w;
+    h = _h;
+  }
 
-    public void setH(double _h) {
-        h = _h;
-    }
+  /* From Interface ui.CDElement */
+  @Override
+  public int getX() {
+    return scaledX() + container.getX() + (int) (container.getWidth() * w);
+  }
+
+  /* From Interface ui.CDElement */
+  @Override
+  public int getY() {
+    return scaledY() + container.getY() + (int) (container.getHeight() * h);
+  }
+
+  public void setW(double _w) {
+    w = _w;
+  }
+
+  public void setH(double _h) {
+    h = _h;
+  }
 } // Class

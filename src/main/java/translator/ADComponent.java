@@ -36,175 +36,169 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
 import java.util.Vector;
 
 /**
- * Class ADComponent
- * Creation: 10/12/2003
+ * Class ADComponent Creation: 10/12/2003
+ * 
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
 public abstract class ADComponent implements Cloneable {
-    protected boolean selected = false;
-    protected int nbNext;
-    protected int minNbNext;
-    protected Vector<ADComponent> next;
-    public ADComponent substitute; // For modification of AD
-    protected String pre, post;
-    
-    public ADComponent() {
-        next = new Vector<ADComponent>();
-        minNbNext = 1;
-    }
-    
-    public abstract ADComponent makeSame();
+  protected boolean selected = false;
+  protected int nbNext;
+  protected int minNbNext;
+  protected Vector<ADComponent> next;
+  public ADComponent substitute; // For modification of AD
+  protected String pre, post;
 
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }   
-    
-    public ADComponent getNext(int index) {
-        if (index < next.size()) {
-            return next.elementAt(index);
-        } else {
-            return null;
-        }
-    }
-    
-    public int getNbNext() {
-        return  next.size();
-    }
-    
-    public int getMinNext() {
-        return  minNbNext;
-    }
-    
-    public int realNbOfNext() {
-        return next.size();
-    }
-    
-    public Vector<ADComponent> getAllNext() {
-        return next;
-    }
-    
-    public void setNewNext(Vector<ADComponent> newNext) {
-        next = newNext;
-    }
-    
-    public void removeNext(int i) {
-		if(i<next.size()) { 
-           next.removeElementAt(i);
-		}
-    }
-	
-	public void removeAllNextAfter(int index) {
-		
-		for(int i=index+1; i<getNbNext(); i++){
-			removeNext(i);
-			i--;
-		}
-	}
+  public ADComponent() {
+    next = new Vector<ADComponent>();
+    minNbNext = 1;
+  }
 
-    public void removeNext(Object o) {
-        next.removeElement(o);
+  public abstract ADComponent makeSame();
+
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+
+  public ADComponent getNext(int index) {
+    if (index < next.size()) {
+      return next.elementAt(index);
+    } else {
+      return null;
     }
-    
-    public void removeAllNext() {
-        next.removeAllElements();
+  }
+
+  public int getNbNext() {
+    return next.size();
+  }
+
+  public int getMinNext() {
+    return minNbNext;
+  }
+
+  public int realNbOfNext() {
+    return next.size();
+  }
+
+  public Vector<ADComponent> getAllNext() {
+    return next;
+  }
+
+  public void setNewNext(Vector<ADComponent> newNext) {
+    next = newNext;
+  }
+
+  public void removeNext(int i) {
+    if (i < next.size()) {
+      next.removeElementAt(i);
     }
-    
-    public void addNext(ADComponent adc) {
-        if (next.size() < nbNext) {
-            next.add(adc);
-        }
+  }
+
+  public void removeAllNextAfter(int index) {
+
+    for (int i = index + 1; i < getNbNext(); i++) {
+      removeNext(i);
+      i--;
     }
-    
-    public void addNextAtIndex(ADComponent adc, int index) {
-        if (index > next.size()) {
-            index = next.size();
-        }
-        next.insertElementAt(adc, index);
+  }
+
+  public void removeNext(Object o) {
+    next.removeElement(o);
+  }
+
+  public void removeAllNext() {
+    next.removeAllElements();
+  }
+
+  public void addNext(ADComponent adc) {
+    if (next.size() < nbNext) {
+      next.add(adc);
     }
-    
-    public void setNextAtIndex(ADComponent adc, int index) {
-        if (index > next.size()) {
-            index = next.size();
-        }
-        next.insertElementAt(adc, index);
-        next.removeElementAt(index+1);
+  }
+
+  public void addNextAtIndex(ADComponent adc, int index) {
+    if (index > next.size()) {
+      index = next.size();
     }
-    
-    public boolean hasNextTo(ADComponent adc) {
-        ADComponent adc1;
-        for(int i=0; i<next.size(); i++) {
-            adc1 = next.elementAt(i);
-            if (adc == adc1) {
-                return true;
-            }
-        }
-        return false;
+    next.insertElementAt(adc, index);
+  }
+
+  public void setNextAtIndex(ADComponent adc, int index) {
+    if (index > next.size()) {
+      index = next.size();
     }
-    
-    public void updateNext(ADComponent oldOne, ADComponent newOne) {
+    next.insertElementAt(adc, index);
+    next.removeElementAt(index + 1);
+  }
+
+  public boolean hasNextTo(ADComponent adc) {
+    ADComponent adc1;
+    for (int i = 0; i < next.size(); i++) {
+      adc1 = next.elementAt(i);
+      if (adc == adc1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void updateNext(ADComponent oldOne, ADComponent newOne) {
+    //
+    ADComponent adc1;
+    for (int i = 0; i < next.size(); i++) {
+      adc1 = next.elementAt(i);
+      //
+      if (adc1 == oldOne) {
         //
-        ADComponent adc1;
-        for(int i=0; i<next.size(); i++) {
-            adc1 = next.elementAt(i);
-            //
-            if (adc1 == oldOne) {
-                //
-                next.insertElementAt(newOne, i);
-                next.removeElement(oldOne);
-            }
+        next.insertElementAt(newOne, i);
+        next.removeElement(oldOne);
+      }
+    }
+    return;
+  }
+
+  public boolean isSelected() {
+    return selected;
+  }
+
+  public void setSelected(boolean b) {
+    selected = b;
+  }
+
+  public void setPreJavaCode(String _pre) {
+    pre = _pre;
+  }
+
+  public void setPostJavaCode(String _post) {
+    post = _post;
+  }
+
+  public String getPreJavaCode() {
+    return pre;
+  }
+
+  public String getPostJavaCode() {
+    return post;
+  }
+
+  public Vector<ADComponent> getLastBeforeStop(Vector<ADComponent> v, ADComponent previous) {
+    if (this instanceof ADStop) {
+      v.add(previous);
+      return v;
+    } else {
+      ADComponent adc1;
+      for (int i = 0; i < next.size(); i++) {
+        adc1 = next.elementAt(i);
+        if (adc1 != null) {
+          v = adc1.getLastBeforeStop(v, this);
         }
-        return;
+      }
+      return v;
     }
-    
-    public boolean isSelected() {
-        return selected;
-    }
-    
-    public void setSelected(boolean b) {
-        selected = b;
-    }
-    
-    public void setPreJavaCode(String _pre) {
-        pre = _pre;
-    }
-    
-    public void setPostJavaCode(String _post) {
-        post = _post;
-    }
-    
-     public String getPreJavaCode() {
-        return pre;
-    }
-    
-    public String getPostJavaCode() {
-        return post;
-    }
-    
-    public Vector<ADComponent> getLastBeforeStop(Vector<ADComponent> v, ADComponent previous) {
-        if (this instanceof ADStop) {
-            v.add(previous);
-            return v;
-        } else {
-            ADComponent adc1;
-            for(int i=0; i<next.size(); i++) {
-                adc1 = next.elementAt(i);
-                if (adc1 != null) {
-                    v = adc1.getLastBeforeStop(v, this);
-                }
-            }
-            return v;
-        }
-    }
+  }
 }

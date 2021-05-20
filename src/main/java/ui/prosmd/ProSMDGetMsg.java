@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.prosmd;
 
 import myutil.Conversion;
@@ -53,184 +50,168 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class ProSMDGetMsg
- * Action of getting a message
- * Creation: 10/07/2006
+ * Class ProSMDGetMsg Action of getting a message Creation: 10/07/2006
+ * 
  * @version 1.0 10/07/2006
  * @author Ludovic APVRILLE
  */
 public class ProSMDGetMsg extends TGCOneLineText {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    /*protected int arc = 5;*/
-    protected int linebreak = 10;
-    protected String viaPort="";
-    
-    
-    public ProSMDGetMsg(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointProSMD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointProSMD(this, 0, lineLength, false, true, 0.5, 1.0);
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        name = "send msg";
-        value = "gate";
-        
-        myImageIcon = IconManager.imgic2002;
-    }
-    
-    public void internalDrawing(Graphics g) {
-       
-    	  if (this.x<=0)
-			  this.x=1;
-		  if (this.y<=0)
-			  this.y=1;
-    	
-    	int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2* textX + linebreak);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
-        
-        // Lines to connecting points
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        
-        // Drawing in clockwise fashion
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x+width, y, x+width-linebreak, y+height/2);
-        g.drawLine(x+width-linebreak, y+height/2, x+width, y+height);
-        g.drawLine(x+width, y+height, x, y+height);
-        g.drawLine(x, y, x, y+height);
-        
-        g.drawString(value, x + textX , y + textY);
-        
-        //g.drawString("chl", x+(width-w) / 2, y);
-        if (!viaPort.equals("")) 
-         {
-            g.setColor(Color.BLUE);
-        	g.drawString("(via "+viaPort+")", x + textX -5, y + 2*textY+3);	
-            g.setColor(Color.BLACK);
-         }
-        }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    
-    public String getAction() {
-        return value;
-    }
-    
+  protected int lineLength = 5;
+  protected int textX = 5;
+  protected int textY = 15;
+  /* protected int arc = 5; */
+  protected int linebreak = 10;
+  protected String viaPort = "";
 
-    public int getType() {
-        return TGComponentManager.PROSMD_GETMSG;
-    } 
+  public ProSMDGetMsg(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public String getViaPort()
-    {
-    	return this.viaPort;
-    	
+    width = 30;
+    height = 20;
+    minWidth = 30;
+
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[2];
+    connectingPoint[0] = new TGConnectingPointProSMD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointProSMD(this, 0, lineLength, false, true, 0.5, 1.0);
+
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    name = "send msg";
+    value = "gate";
+
+    myImageIcon = IconManager.imgic2002;
+  }
+
+  public void internalDrawing(Graphics g) {
+
+    if (this.x <= 0)
+      this.x = 1;
+    if (this.y <= 0)
+      this.y = 1;
+
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 2 * textX + linebreak);
+    if ((w1 != width) & (!tdp.isScaled())) {
+      setCd(x + width / 2 - w1 / 2, y);
+      width = w1;
+      // updateConnectingPoints();
     }
 
-     public void setViaPort(String p)
-     {
-    	 viaPort=p;
-    	 
-     }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-            super.editOnDoubleClick(frame);
-    	String oldViaPort = viaPort;
-        String text = "Via port: ";
-        
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting via port", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        viaPort);
-        
-        if (s != null) {
-            s = Conversion.removeFirstSpaces(s);
-        }
-        
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldViaPort))) {
-            setViaPort(s);
-             //
-            return true;
-        }
-         
-    
-        return false;
-    
+    // Lines to connecting points
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+    // Drawing in clockwise fashion
+    g.drawLine(x, y, x + width, y);
+    g.drawLine(x + width, y, x + width - linebreak, y + height / 2);
+    g.drawLine(x + width - linebreak, y + height / 2, x + width, y + height);
+    g.drawLine(x + width, y + height, x, y + height);
+    g.drawLine(x, y, x, y + height);
+
+    g.drawString(value, x + textX, y + textY);
+
+    // g.drawString("chl", x+(width-w) / 2, y);
+    if (!viaPort.equals("")) {
+      g.setColor(Color.BLUE);
+      g.drawString("(via " + viaPort + ")", x + textX - 5, y + 2 * textY + 3);
+      g.setColor(Color.BLACK);
+    }
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public String getAction() {
+    return value;
+  }
+
+  public int getType() {
+    return TGComponentManager.PROSMD_GETMSG;
+  }
+
+  public String getViaPort() {
+    return this.viaPort;
+
+  }
+
+  public void setViaPort(String p) {
+    viaPort = p;
+
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    super.editOnDoubleClick(frame);
+    String oldViaPort = viaPort;
+    String text = "Via port: ";
+
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting via port", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, viaPort);
+
+    if (s != null) {
+      s = Conversion.removeFirstSpaces(s);
     }
 
-
-    protected String translateExtraParam() {
-  
-    	StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Via port=\"");
-        sb.append(viaPort);
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
+    if ((s != null) && (s.length() > 0) && (!s.equals(oldViaPort))) {
+      setViaPort(s);
+      //
+      return true;
     }
-    
 
-    
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    return false;
+
+  }
+
+  protected String translateExtraParam() {
+
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Via port=\"");
+    sb.append(viaPort);
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
 
-                    // Issue #17 copy-paste error on j index
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Via")) {
-                            	 viaPort = elt.getAttribute("port");
-                                
-                            }
-                        }
-                    }
-                }
+          // Issue #17 copy-paste error on j index
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Via")) {
+                viaPort = elt.getAttribute("port");
+
+              }
             }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
+          }
         }
-     
-    }
-    
-    
+      }
 
+    } catch (Exception e) {
+      throw new MalformedModelingException();
+    }
+
+  }
 
 }

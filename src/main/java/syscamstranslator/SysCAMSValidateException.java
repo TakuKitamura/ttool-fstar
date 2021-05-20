@@ -36,26 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package syscamstranslator;
 
-
 /**
- * Class SysCAMSValidateException
- * Creation: 14/08/2018
- * version 1.0 14/08/2018
+ * Class SysCAMSValidateException Creation: 14/08/2018 version 1.0 14/08/2018
+ * 
  * @author Rodrigo CORTES PORTO
  */
 public class SysCAMSValidateException extends Exception {
-    
-    public SysCAMSValidateException() {
-        super("SysC-AMS diagram validation exception");
-    }
-    
-    public SysCAMSValidateException(String msg) {
-        super(msg);
-    }
-    
+
+  public SysCAMSValidateException() {
+    super("SysC-AMS diagram validation exception");
+  }
+
+  public SysCAMSValidateException(String msg) {
+    super(msg);
+  }
+
 } // Class

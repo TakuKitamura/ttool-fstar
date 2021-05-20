@@ -36,22 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-* Class TMLCPFork
-* Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+ * Class TMLCPFork Creation: 18/02/2014
+ * 
+ * @version 1.0 18/02/2014
+ * @author Ludovic APVRILLE
  */
-public class TMLCPFork extends TMLCPElement  {
+public class TMLCPFork extends TMLCPElement {
 
-	
-    public TMLCPFork(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-	
+  public TMLCPFork(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -52,251 +49,246 @@ import java.awt.event.ActionListener;
 //import javax.swing.event.*;
 //import java.util.*;
 
-
 /**
-* Class JDialogADDCPUNode
-* Dialog for managing attributes of cpu nodes in ADD
-* Creation: 02/07/2014
-* @version 1.0 02/07/2014
-* @author Ludovic APVRILLE
+ * Class JDialogADDCPUNode Dialog for managing attributes of cpu nodes in ADD
+ * Creation: 02/07/2014
+ * 
+ * @version 1.0 02/07/2014
+ * @author Ludovic APVRILLE
  */
 public class JDialogADDCPUNode extends JDialogBase implements ActionListener {
-	 private static String[] tracemodeTab = {"VCI logger"};
+  private static String[] tracemodeTab = { "VCI logger" };
 
-	private boolean regularClose;
-	
-	private JPanel panel2;
-	private Frame frame;
-	private ADDCPUNode node;
+  private boolean regularClose;
 
-        protected JComboBox<String> tracemode;
-        private static int  selectedTracemode = 0;
-	
-	
-	// Panel1
-	protected JTextField nodeName;
-	
-	// Panel2
-	protected JTextField nbOfIrq, iCacheWays, iCacheSets, iCacheWords, dCacheWays, dCacheSets, dCacheWords;
-	 protected JTextField index;
-         protected JTextField cluster_index;
-	 protected JTextField monitored;	
-	
-	/* Creates new form  */
-	public JDialogADDCPUNode(Frame _frame, String _title, ADDCPUNode _node) {
-		super(_frame, _title, true);
-		frame = _frame;
-		node = _node;
-		
-		initComponents();
-		myInitComponents();
-		pack();
-	}
-	
-	private void myInitComponents() {
-	}
-	
-	private void initComponents() {
-		Container c = getContentPane();
-		GridBagLayout gridbag0 = new GridBagLayout();
-		GridBagLayout gridbag1 = new GridBagLayout();
-		GridBagLayout gridbag2 = new GridBagLayout();
-		GridBagConstraints c0 = new GridBagConstraints();
-		//GridBagConstraints c1 = new GridBagConstraints();
-		GridBagConstraints c2 = new GridBagConstraints();
-		
-		setFont(new Font("Helvetica", Font.PLAIN, 14));
-		c.setLayout(gridbag0);
-		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		
-		panel2 = new JPanel();
-		panel2.setLayout(gridbag2);
-		panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
-		panel2.setPreferredSize(new Dimension(400, 300));
-		
-		c2.gridwidth = 1;
-		c2.gridheight = 1;
-		c2.weighty = 1.0;
-		c2.weightx = 1.0;
-		c2.fill = GridBagConstraints.HORIZONTAL;
-		panel2.add(new JLabel("CPU name:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		nodeName = new JTextField(node.getNodeName(), 30);
-		nodeName.setEditable(true);
-		nodeName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(nodeName, c2);
-		
-		c2.gridwidth = 1;
-		c2.gridheight = 1;
-		c2.weighty = 1.0;
-		c2.weightx = 1.0;
-		c2.fill = GridBagConstraints.HORIZONTAL;
-	
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb Of IRQs :"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		nbOfIrq = new JTextField(""+node.getNbOfIRQs(), 15);
-		panel2.add(nbOfIrq, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb of inst. cache ways:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		iCacheWays = new JTextField(""+node.getICacheWays(), 15);
-		panel2.add(iCacheWays, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb of inst. cache sets:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		iCacheSets = new JTextField(""+node.getICacheSets(), 15);
-		panel2.add(iCacheSets, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb of inst. cache words:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		iCacheWords = new JTextField(""+node.getICacheWords(), 15);
-		panel2.add(iCacheWords, c2);       
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb of data cache ways:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		dCacheWays = new JTextField(""+node.getDCacheWays(), 15);
-		panel2.add(dCacheWays, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb of data cache sets:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		dCacheSets = new JTextField(""+node.getDCacheSets(), 15);
-		panel2.add(dCacheSets, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Nb of data cache words:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		dCacheWords = new JTextField(""+node.getDCacheWords(), 15);
-		panel2.add(dCacheWords, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Index:"), c2);//DG 2.7.
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		index = new JTextField(""+node.getIndex(), 15);
-		panel2.add(index, c2);
+  private JPanel panel2;
+  private Frame frame;
+  private ADDCPUNode node;
 
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Cluster Index:"), c2);//DG 2.7.
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		cluster_index = new JTextField(""+node.getIndex(), 15);
-		panel2.add(cluster_index, c2);
-		
-		c2.gridwidth = 1;
-		panel2.add(new JLabel("Monitored:"), c2);
-		//c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		//monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-		tracemode = new JComboBox<>(tracemodeTab);
-		tracemode.setSelectedIndex(selectedTracemode);
-		tracemode.addActionListener(this);
-		panel2.add(tracemode, c2);
-		
-		/*c2.gridwidth = 1;
-		panel2.add(new JLabel("Clock ratio:"), c2);
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		clockRatio = new JTextField(""+node.getClockRatio(), 15);
-		panel2.add(clockRatio, c2);*/
-		
-		// main panel;
-		c0.gridheight = 10;
-		c0.weighty = 1.0;
-		c0.weightx = 1.0;
-		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-		c.add(panel2, c0);
-		
-		c0.gridwidth = 1;
-		c0.gridheight = 1;
-		c0.fill = GridBagConstraints.HORIZONTAL;
-		
-		initButtons(c0, c, this);
-	}
-	
-	public void	actionPerformed(ActionEvent evt)  {
-		/* if (evt.getSource() == typeBox) {
-		boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-		initialValue.setEnabled(b);
-		return;
-		}*/
-		
-	    	if (evt.getSource() == tracemode) {
-		    selectedTracemode = tracemode.getSelectedIndex();          
-		}
-		
-		String command = evt.getActionCommand();
-		
-		// Compare the action command to the known actions.
-		if (command.equals("Save and Close"))  {
-			closeDialog();
-		} else if (command.equals("Cancel")) {
-			cancelDialog();
-		}
-	}
-	
-	public void closeDialog() {
-		regularClose = true;
-		dispose();
-	}
-	
-	public void cancelDialog() {
-		dispose();
-	}
-	
-	public boolean isRegularClose() {
-		return regularClose;
-	}
-	
-	public String getNodeName() {
-		return nodeName.getText();
-	}
-	
-	public String getNbOFIRQ() {
-			return nbOfIrq.getText();
-	}
-	
-	public String getICacheWays() {
-			return iCacheWays.getText();
-	}       
-	
-	public String getICacheSets() {
-			return iCacheSets.getText();
-	}
-	
-	public String getICacheWords() {
-			return iCacheWords.getText();
-	}
-	
-	public String getDCacheWays() {
-			return dCacheWays.getText();
-	}       
-	
-	public String getDCacheSets() {
-			return dCacheSets.getText();
-	}
-	
-	public String getDCacheWords() {
-			return dCacheWords.getText();
-	}
+  protected JComboBox<String> tracemode;
+  private static int selectedTracemode = 0;
 
-	 public String getIndex() {
-        return index.getText();
-	 }
-    
-	public int getMonitored() {
-	//return tracemodeTab[tracemode.getSelectedIndex()];
-	return tracemode.getSelectedIndex();
-        //return monitored.getText();
+  // Panel1
+  protected JTextField nodeName;
+
+  // Panel2
+  protected JTextField nbOfIrq, iCacheWays, iCacheSets, iCacheWords, dCacheWays, dCacheSets, dCacheWords;
+  protected JTextField index;
+  protected JTextField cluster_index;
+  protected JTextField monitored;
+
+  /* Creates new form */
+  public JDialogADDCPUNode(Frame _frame, String _title, ADDCPUNode _node) {
+    super(_frame, _title, true);
+    frame = _frame;
+    node = _node;
+
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    // GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
+    panel2.setPreferredSize(new Dimension(400, 300));
+
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("CPU name:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nodeName = new JTextField(node.getNodeName(), 30);
+    nodeName.setEditable(true);
+    nodeName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(nodeName, c2);
+
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.fill = GridBagConstraints.HORIZONTAL;
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb Of IRQs :"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nbOfIrq = new JTextField("" + node.getNbOfIRQs(), 15);
+    panel2.add(nbOfIrq, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb of inst. cache ways:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    iCacheWays = new JTextField("" + node.getICacheWays(), 15);
+    panel2.add(iCacheWays, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb of inst. cache sets:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    iCacheSets = new JTextField("" + node.getICacheSets(), 15);
+    panel2.add(iCacheSets, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb of inst. cache words:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    iCacheWords = new JTextField("" + node.getICacheWords(), 15);
+    panel2.add(iCacheWords, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb of data cache ways:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    dCacheWays = new JTextField("" + node.getDCacheWays(), 15);
+    panel2.add(dCacheWays, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb of data cache sets:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    dCacheSets = new JTextField("" + node.getDCacheSets(), 15);
+    panel2.add(dCacheSets, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Nb of data cache words:"), c2);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    dCacheWords = new JTextField("" + node.getDCacheWords(), 15);
+    panel2.add(dCacheWords, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Index:"), c2);// DG 2.7.
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    index = new JTextField("" + node.getIndex(), 15);
+    panel2.add(index, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Cluster Index:"), c2);// DG 2.7.
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    cluster_index = new JTextField("" + node.getIndex(), 15);
+    panel2.add(cluster_index, c2);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Monitored:"), c2);
+    // c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+    // monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
+    tracemode = new JComboBox<>(tracemodeTab);
+    tracemode.setSelectedIndex(selectedTracemode);
+    tracemode.addActionListener(this);
+    panel2.add(tracemode, c2);
+
+    /*
+     * c2.gridwidth = 1; panel2.add(new JLabel("Clock ratio:"), c2); c2.gridwidth =
+     * GridBagConstraints.REMAINDER; //end row clockRatio = new
+     * JTextField(""+node.getClockRatio(), 15); panel2.add(clockRatio, c2);
+     */
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    if (evt.getSource() == tracemode) {
+      selectedTracemode = tracemode.getSelectedIndex();
     }
 
-	/*public String getClockRatio(){
-		return clockRatio.getText();
-	} */ 
+    String command = evt.getActionCommand();
 
-	
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
+    }
+  }
+
+  public void closeDialog() {
+    regularClose = true;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean isRegularClose() {
+    return regularClose;
+  }
+
+  public String getNodeName() {
+    return nodeName.getText();
+  }
+
+  public String getNbOFIRQ() {
+    return nbOfIrq.getText();
+  }
+
+  public String getICacheWays() {
+    return iCacheWays.getText();
+  }
+
+  public String getICacheSets() {
+    return iCacheSets.getText();
+  }
+
+  public String getICacheWords() {
+    return iCacheWords.getText();
+  }
+
+  public String getDCacheWays() {
+    return dCacheWays.getText();
+  }
+
+  public String getDCacheSets() {
+    return dCacheSets.getText();
+  }
+
+  public String getDCacheWords() {
+    return dCacheWords.getText();
+  }
+
+  public String getIndex() {
+    return index.getText();
+  }
+
+  public int getMonitored() {
+    // return tracemodeTab[tracemode.getSelectedIndex()];
+    return tracemode.getSelectedIndex();
+    // return monitored.getText();
+  }
+
+  /*
+   * public String getClockRatio(){ return clockRatio.getText(); }
+   */
+
 }

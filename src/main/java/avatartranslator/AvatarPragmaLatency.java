@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
@@ -50,83 +47,79 @@ package avatartranslator;
 import java.util.List;
 
 public class AvatarPragmaLatency extends AvatarPragma {
-    private AvatarStateMachineElement state1;
-    private AvatarBlock block1;
-	private AvatarStateMachineElement state2;
-	private AvatarBlock block2;
-	private int symbolType;
-	public static final int lessThan =1;
-	public static final int greaterThan=2;
-	public static final int query=3;
-	private int time;
-	private List<String> id1;
-	private List<String> id2;
-	private String pragmaString="";	
+  private AvatarStateMachineElement state1;
+  private AvatarBlock block1;
+  private AvatarStateMachineElement state2;
+  private AvatarBlock block2;
+  private int symbolType;
+  public static final int lessThan = 1;
+  public static final int greaterThan = 2;
+  public static final int query = 3;
+  private int time;
+  private List<String> id1;
+  private List<String> id2;
+  private String pragmaString = "";
 
-    public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1, AvatarStateMachineElement state1, AvatarBlock block2, AvatarStateMachineElement state2,  int symbolType, int time, List<String> id1, List<String> id2, String pragmaString)
-    {
-        super(_name, _referenceObject);
-        this.block1 = block1;
-        this.state1 = state1;
-        this.block2 = block2;
-        this.state2 = state2;
-		this.symbolType = symbolType;
-		this.time = time;
-		this.id1=id1;
-		this.id2=id2;
-		this.pragmaString=pragmaString;
-    }
+  public AvatarPragmaLatency(String _name, Object _referenceObject, AvatarBlock block1,
+      AvatarStateMachineElement state1, AvatarBlock block2, AvatarStateMachineElement state2, int symbolType, int time,
+      List<String> id1, List<String> id2, String pragmaString) {
+    super(_name, _referenceObject);
+    this.block1 = block1;
+    this.state1 = state1;
+    this.block2 = block2;
+    this.state2 = state2;
+    this.symbolType = symbolType;
+    this.time = time;
+    this.id1 = id1;
+    this.id2 = id2;
+    this.pragmaString = pragmaString;
+  }
 
-    public AvatarStateMachineElement getState1()
-    {
-        return this.state1;
-    }
+  public AvatarStateMachineElement getState1() {
+    return this.state1;
+  }
 
-    public AvatarBlock getBlock1()
-    {
-        return this.block1;
-    }
+  public AvatarBlock getBlock1() {
+    return this.block1;
+  }
 
-    public AvatarStateMachineElement getState2()
-    {
-        return this.state2;
-    }
+  public AvatarStateMachineElement getState2() {
+    return this.state2;
+  }
 
-    public AvatarBlock getBlock2()
-    {
-        return this.block2;
-    }
+  public AvatarBlock getBlock2() {
+    return this.block2;
+  }
 
-	public List<String> getId1(){
-		return this.id1;
-	}
+  public List<String> getId1() {
+    return this.id1;
+  }
 
-	public List<String> getId2(){
-		return this.id2;
-	}
+  public List<String> getId2() {
+    return this.id2;
+  }
 
-	public int getSymbolType(){
-		return this.symbolType;
-	}
+  public int getSymbolType() {
+    return this.symbolType;
+  }
 
-	public int getTime(){
-		return this.time;
-	}
-	
-	public String getPragmaString(){
-		return this.pragmaString;
-	}
+  public int getTime() {
+    return this.time;
+  }
 
-    public String toString()
-    {
-		String type = this.symbolType==lessThan ? "<" : ">";
-        return "Latency(" + this.block1.getName().replaceAll("__", ".") + "." + this.state1.getName() + "," + this.block2.getName().replaceAll("__", ".") + "." + this.state2.getName() +")" + type + this.time; 
-    }
+  public String getPragmaString() {
+    return this.pragmaString;
+  }
 
-    @Override
-    public AvatarPragmaLatency advancedClone(AvatarSpecification avspec)
-    {
-        // !!! Should never be called !!!
-        return null;
-    }
+  public String toString() {
+    String type = this.symbolType == lessThan ? "<" : ">";
+    return "Latency(" + this.block1.getName().replaceAll("__", ".") + "." + this.state1.getName() + ","
+        + this.block2.getName().replaceAll("__", ".") + "." + this.state2.getName() + ")" + type + this.time;
+  }
+
+  @Override
+  public AvatarPragmaLatency advancedClone(AvatarSpecification avspec) {
+    // !!! Should never be called !!!
+    return null;
+  }
 }

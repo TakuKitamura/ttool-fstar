@@ -39,28 +39,28 @@
 package elntranslator;
 
 /**
- * Class ELNTClusterTerminal
- * Parameters of a ELN composite component : cluster terminal
- * Creation: 03/08/2018
+ * Class ELNTClusterTerminal Parameters of a ELN composite component : cluster
+ * terminal Creation: 03/08/2018
+ * 
  * @version 1.0 03/08/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ELNTClusterTerminal extends ELNTComponent {
-	private String name;
-	
-	private ELNTCluster cluster;
-	
-	public ELNTClusterTerminal(String _name, ELNTCluster _cluster) {
-		name = _name;
-		cluster = _cluster;
-	}
+  private String name;
 
-	public String getName() {
-		return name;
-	}
+  private ELNTCluster cluster;
 
-	public ELNTCluster getCluster() {
-		return cluster;
-	}
+  public ELNTClusterTerminal(String _name, ELNTCluster _cluster) {
+    name = _name;
+    cluster = _cluster;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public ELNTCluster getCluster() {
+    return cluster;
+  }
 }

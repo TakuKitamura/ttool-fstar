@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ebrdd;
 
 import myutil.GraphicLib;
@@ -54,209 +51,209 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class EBRDDForLoop
- * For loop of an EBRDD
- * Creation: 09/09/2009
+ * Class EBRDDForLoop For loop of an EBRDD Creation: 09/09/2009
+ * 
  * @version 1.0 09/09/2009
  * @author Ludovic APVRILLE
  */
-public class EBRDDForLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
-    
-    protected String init = "i=0";
-    protected String condition = "i<5";
-    protected String increment = "i = i+1";
-	
-	protected int stateOfError = 0; // Not yet checked
-    
-    public EBRDDForLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        
-        nbConnectingPoint = 3;
-        connectingPoint = new TGConnectingPoint[3];
-        connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
-        connectingPoint[2] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        makeValue();
-        
-        name = "for loop";
-        
-        myImageIcon = IconManager.imgic912;
+public class EBRDDForLoop extends TGCWithoutInternalComponent
+    implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+  protected int lineLength = 5;
+  protected int textX = 5;
+  protected int textY = 15;
+  protected int arc = 5;
+
+  protected String init = "i=0";
+  protected String condition = "i<5";
+  protected String increment = "i = i+1";
+
+  protected int stateOfError = 0; // Not yet checked
+
+  public EBRDDForLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 30;
+    height = 20;
+    minWidth = 30;
+
+    nbConnectingPoint = 3;
+    connectingPoint = new TGConnectingPoint[3];
+    connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+    connectingPoint[2] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    makeValue();
+
+    name = "for loop";
+
+    myImageIcon = IconManager.imgic912;
+  }
+
+  public void internalDrawing(Graphics g) {
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 2 * textX);
+    if ((w1 != width) & (!tdp.isScaled())) {
+      setCd(x + width / 2 - w1 / 2, y);
+      width = w1;
+      // updateConnectingPoints();
     }
-    
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
-		
-		if (stateOfError > 0)  {
-			Color c = g.getColor();
-			switch(stateOfError) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.FOR);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
-			g.fillRoundRect(x, y, width, height, arc, arc);
-			g.setColor(c);
-		}
-		
-        g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
-        
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+
+    if (stateOfError > 0) {
+      Color c = g.getColor();
+      switch (stateOfError) {
+        case ErrorHighlight.OK:
+          g.setColor(ColorManager.FOR);
+          break;
+        default:
+          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+      }
+      g.fillRoundRect(x, y, width, height, arc, arc);
+      g.setColor(c);
     }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        String [] labels = new String[3];
-        String [] values = new String[3];
-        labels[0] = "Initialisation of variables";
-        values[0] = init;
-        labels[1] = "Condition to stay in loop";
-        values[1] = condition;
-        labels[2] = "Increment at each loop";
-        values[2] = increment;
-        
-        
-        JDialogMultiString jdms = new JDialogMultiString(frame, "Setting loop's properties", 3, labels, values);
-    //   jdms.setSize(350, 300);
-        GraphicLib.centerOnParent(jdms, 350, 300);
-        jdms.setVisible( true ); // blocked until dialog has been closed
-        
-        if (jdms.hasBeenSet()) {
-            init = jdms.getString(0);
-            condition = jdms.getString(1);
-            increment = jdms.getString(2);
-            
-            makeValue();
-            return true;
-        }
-        
-        return false;
-        
+
+    g.drawRoundRect(x, y, width, height, arc, arc);
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+    g.drawLine(x + width, y + height / 2, x + width + lineLength, y + height / 2);
+
+    g.drawString(value, x + (width - w) / 2, y + textY);
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    String[] labels = new String[3];
+    String[] values = new String[3];
+    labels[0] = "Initialisation of variables";
+    values[0] = init;
+    labels[1] = "Condition to stay in loop";
+    values[1] = condition;
+    labels[2] = "Increment at each loop";
+    values[2] = increment;
+
+    JDialogMultiString jdms = new JDialogMultiString(frame, "Setting loop's properties", 3, labels, values);
+    // jdms.setSize(350, 300);
+    GraphicLib.centerOnParent(jdms, 350, 300);
+    jdms.setVisible(true); // blocked until dialog has been closed
+
+    if (jdms.hasBeenSet()) {
+      init = jdms.getString(0);
+      condition = jdms.getString(1);
+      increment = jdms.getString(2);
+
+      makeValue();
+      return true;
     }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y-lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-		
-		if ((int)(Line2D.ptSegDistSq(x+width, y+height/2, x+width +lineLength, y+height/2, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-        
-        return null;
+
+    return false;
+
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-    
-    public void makeValue() {
-        value = "for(" + init + ";" + condition + ";" + increment + ")";
+
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
-    
-    public String getAction() {
-        return value;
+
+    if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + lineLength, y + height / 2, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
-    
-    public String getInit() {
-        return init;
-    }
-    
-    public String getCondition() {
-        return condition;
-    }
-    
-    public String getIncrement() {
-        return increment;
-    }
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Data init=\"");
-        sb.append(getInit());
-        sb.append("\" condition=\"");
-        sb.append(GTURTLEModeling.transformString(getCondition()));
-        sb.append("\" increment=\"");
-        sb.append(getIncrement());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-	@Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+
+    return null;
+  }
+
+  public void makeValue() {
+    value = "for(" + init + ";" + condition + ";" + increment + ")";
+  }
+
+  public String getAction() {
+    return value;
+  }
+
+  public String getInit() {
+    return init;
+  }
+
+  public String getCondition() {
+    return condition;
+  }
+
+  public String getIncrement() {
+    return increment;
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Data init=\"");
+    sb.append(getInit());
+    sb.append("\" condition=\"");
+    sb.append(GTURTLEModeling.transformString(getCondition()));
+    sb.append("\" increment=\"");
+    sb.append(getIncrement());
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      // int k;
+      // String s;
+
+      //
+      //
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        try {
-            
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-     //       int k;
-        //    String s;
-            
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
             //
-            //
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Data")) {
-                                init = elt.getAttribute("init");
-                                condition = elt.getAttribute("condition");
-                                increment = elt.getAttribute("increment");
-                            }
-                            
-                        }
-                    }
-                }
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Data")) {
+                init = elt.getAttribute("init");
+                condition = elt.getAttribute("condition");
+                increment = elt.getAttribute("increment");
+              }
+
             }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
+          }
         }
-        makeValue();
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
-    
-    
-    public int getType() {
-        return TGComponentManager.EBRDD_FOR_LOOP;
-    }
-    
-    public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_EBRDD;
-    }
-	
-	public void setStateAction(int _stateAction) {
-		stateOfError = _stateAction;
-	}
-    
-    
+    makeValue();
+  }
+
+  public int getType() {
+    return TGComponentManager.EBRDD_FOR_LOOP;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_EBRDD;
+  }
+
+  public void setStateAction(int _stateAction) {
+    stateOfError = _stateAction;
+  }
+
 }

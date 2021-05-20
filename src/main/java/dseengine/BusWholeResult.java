@@ -36,56 +36,49 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class BusWholeResult
-* Object for storing a whole bus result after a simulation
-* Creation: 07/09/2011
-* @version 1.0 07/09/2011
-* @author Ludovic APVRILLE
+ * Class BusWholeResult Object for storing a whole bus result after a simulation
+ * Creation: 07/09/2011
+ * 
+ * @version 1.0 07/09/2011
+ * @author Ludovic APVRILLE
  */
-public class BusWholeResult  {
-	public int id;
-	public String name;
-	
-	public double minUtilization;
-	public double maxUtilization;
-	public double averageUtilization;
-	public int nbOfResults;
-	
-	public BusWholeResult(BusResult resbus) {
-		
-		id = resbus.id;
-		name = resbus.name;
-		minUtilization = resbus.utilization;
-		maxUtilization = resbus.utilization;
-		averageUtilization = resbus.utilization;
-		nbOfResults = 1;
-	}
-	
-	public void updateResults(BusResult resbus) {
-		minUtilization = Math.min(minUtilization, resbus.utilization);
-		maxUtilization = Math.max(maxUtilization, resbus.utilization);
-		averageUtilization = ((averageUtilization *  nbOfResults)+resbus.utilization)/(nbOfResults + 1);
-		nbOfResults ++;
-	}
+public class BusWholeResult {
+  public int id;
+  public String name;
 
+  public double minUtilization;
+  public double maxUtilization;
+  public double averageUtilization;
+  public int nbOfResults;
 
-	public String toStringResult() {
-		StringBuffer sb = new StringBuffer("");
-		sb.append("BUS " + id + " " + name + " " + nbOfResults + " " + minUtilization + " " + averageUtilization + " " + maxUtilization );
-		
-		
-		return sb.toString();
-	}	
-	
-	
-	
+  public BusWholeResult(BusResult resbus) {
+
+    id = resbus.id;
+    name = resbus.name;
+    minUtilization = resbus.utilization;
+    maxUtilization = resbus.utilization;
+    averageUtilization = resbus.utilization;
+    nbOfResults = 1;
+  }
+
+  public void updateResults(BusResult resbus) {
+    minUtilization = Math.min(minUtilization, resbus.utilization);
+    maxUtilization = Math.max(maxUtilization, resbus.utilization);
+    averageUtilization = ((averageUtilization * nbOfResults) + resbus.utilization) / (nbOfResults + 1);
+    nbOfResults++;
+  }
+
+  public String toStringResult() {
+    StringBuffer sb = new StringBuffer("");
+    sb.append("BUS " + id + " " + name + " " + nbOfResults + " " + minUtilization + " " + averageUtilization + " "
+        + maxUtilization);
+
+    return sb.toString();
+  }
+
 } // Class BusResult
-

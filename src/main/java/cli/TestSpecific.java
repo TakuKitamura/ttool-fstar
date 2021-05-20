@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import common.ConfigurationTTool;
@@ -53,93 +52,93 @@ import java.io.File;
 import java.util.BitSet;
 import java.util.*;
 
-
 /**
- * Class Set
- * Creation: 19/03/2019
- * Version 2.0 19/03/2019
+ * Class Set Creation: 19/03/2019 Version 2.0 19/03/2019
  *
  * @author Ludovic APVRILLE
  */
-public class TestSpecific extends Command  {
+public class TestSpecific extends Command {
 
+  public TestSpecific() {
 
-    public TestSpecific() {
+  }
 
-    }
+  public List<Command> getListOfSubCommands() {
+    return subcommands;
+  }
 
-    public List<Command> getListOfSubCommands() {
-        return subcommands;
-    }
+  public String getCommand() {
+    return "specifictest";
+  }
 
-    public String getCommand() {
-        return "specifictest";
-    }
+  public String getShortCommand() {
+    return "st";
+  }
 
-    public String getShortCommand() {
-        return "st";
-    }
+  public String getUsage() {
+    return "specifictest <arg>";
+  }
 
-    public String getUsage() { return "specifictest <arg>"; }
+  public String getDescription() {
+    return "Starting s specific test. Reserved for Development purpose";
+  }
 
-    public String getDescription() { return "Starting s specific test. Reserved for Development purpose"; }
+  public String getExample() {
+    return "specifictest x*y";
+  }
 
-    public String getExample() {
-        return "specifictest x*y";
-    }
+  public String executeCommand(String command, Interpreter interpreter) {
+    try {
+      AvatarSpecification as = new AvatarSpecification("Spec", null);
+      AvatarBlock block = new AvatarBlock("myblock", as, null);
+      as.addBlock(block);
+      AvatarAttribute x = new AvatarAttribute("x", AvatarType.INTEGER, block, null);
+      block.addAttribute(x);
+      AvatarAttribute y = new AvatarAttribute("y", AvatarType.INTEGER, block, null);
+      block.addAttribute(y);
+      AvatarAttribute z = new AvatarAttribute("z", AvatarType.INTEGER, block, null);
+      block.addAttribute(z);
 
+      x.setInitialValue("10");
+      y.setInitialValue("5");
+      z.setInitialValue("2");
 
-    public  String executeCommand(String command, Interpreter interpreter) {
-        try {
-            AvatarSpecification as = new AvatarSpecification("Spec", null);
-            AvatarBlock block = new AvatarBlock("myblock", as, null);
-            as.addBlock(block);
-            AvatarAttribute x = new AvatarAttribute("x", AvatarType.INTEGER, block, null);
-            block.addAttribute(x);
-            AvatarAttribute y = new AvatarAttribute("y", AvatarType.INTEGER, block, null);
-            block.addAttribute(y);
-            AvatarAttribute z = new AvatarAttribute("z", AvatarType.INTEGER, block, null);
-            block.addAttribute(z);
+      AvatarTransition at = new AvatarTransition(block, "at", null);
+      at.addAction(command);
 
-            x.setInitialValue("10");
-            y.setInitialValue("5");
-            z.setInitialValue("2");
+      IntExpressionEvaluator iee = new IntExpressionEvaluator();
 
-            AvatarTransition at = new AvatarTransition(block, "at", null);
-            at.addAction(command);
+      System.out
+          .println("Value of x=" + x.getInitialValue() + " y=" + y.getInitialValue() + " z=" + z.getInitialValue());
+      String expr = at.getAction(0).toString();
+      int index = expr.indexOf('=');
+      if (index == -1) {
+        System.out.println("Invalid expr");
+        return "Test failed no '=' in assignation";
+      }
 
-            IntExpressionEvaluator iee = new IntExpressionEvaluator();
+      expr = expr.substring(index + 1, expr.length()).trim();
+      System.out.println("Evaluating: " + expr);
 
-            System.out.println("Value of x=" + x.getInitialValue() + " y=" + y.getInitialValue() + " z=" +z.getInitialValue());
-            String expr = at.getAction(0).toString();
-            int index = expr.indexOf('=');
-            if (index == -1) {
-                System.out.println("Invalid expr");
-                return "Test failed no '=' in assignation";
-            }
+      for (AvatarAttribute aa : block.getAttributes()) {
+        expr = Conversion.putVariableValueInString(AvatarSpecification.ops, expr, aa.getName(), aa.getInitialValue());
+      }
 
-            expr = expr.substring(index+1, expr.length()).trim();
-            System.out.println("Evaluating: " + expr);
+      System.out.println("Evaluating: " + expr);
 
-            for(AvatarAttribute aa: block.getAttributes()) {
-                expr = Conversion.putVariableValueInString(AvatarSpecification.ops, expr, aa.getName(), aa.getInitialValue());
-            }
+      double result = iee.getResultOf(expr);
+      System.out.println("Result = " + result);
 
-            System.out.println("Evaluating: " + expr);
-
-            double result = iee.getResultOf(expr);
-            System.out.println("Result = " + result);
-
-            return null;
-        } catch (Exception e) {
-            TraceManager.addDev("Exception: " + e.getMessage());
-            return "Test failed";
-
-        }
-
-    }
-
-    public void fillSubCommands() {
+      return null;
+    } catch (Exception e) {
+      TraceManager.addDev("Exception: " + e.getMessage());
+      return "Test failed";
 
     }
+
+  }
+
+  public void fillSubCommands() {
+
+  }
 }

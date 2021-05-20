@@ -1,54 +1,52 @@
-// TML Application - FORMAT 0.1
-// Application: /Users/localapvrille/TToolgit/TTool/modeling/DIPLODOCUS/simpleSDF.xml
-// Generated: Tue Oct 22 14:46:16 CEST 2019
+//TML Application - FORMAT 0.1
+//Application: /Users/localapvrille/TToolgit/TTool/modeling/DIPLODOCUS/simpleSDF.xml
+//Generated: Tue Oct 22 14:46:16 CEST 2019
 
-// Channels
-CHANNEL ApplicationSimple_FixedSize__chToT1 BRBW 4 500 OUT ApplicationSimple_FixedSize__Src IN ApplicationSimple_FixedSize__T1
+//CHANNEL ApplicationSimple_FixedSize__chToT1 BRBW 4 500 OUT ApplicationSimple_FixedSize__Src IN ApplicationSimple_FixedSize__T1
 VCCHANNEL ApplicationSimple_FixedSize__chToT1 0
 CHANNEL ApplicationSimple_FixedSize__chToT2 BRBW 4 8 OUT ApplicationSimple_FixedSize__T1 IN ApplicationSimple_FixedSize__T2
-VCCHANNEL ApplicationSimple_FixedSize__chToT2 0
+VCCHANNEL ApplicationSimple_FixedSize__chToT2 0Channels
 
-// Events
+//Events
 
-// Requests
+//Requests
 
 TASK ApplicationSimple_FixedSize__Src
-    TASKOP
-    //Local variables
-    
-    //Behavior
-    WRITE ApplicationSimple_FixedSize__chToT1 50
+//Local variables
+
+//WRITE ApplicationSimple_FixedSize__chToT1 50
+Behavior
 ENDTASK
+TASKOP
 
 TASK ApplicationSimple_FixedSize__T1
-    TASKOP
-    //Local variables
-    
-    //Behavior
-    READ ApplicationSimple_FixedSize__chToT1 50
-    EXECI 100
-    WRITE ApplicationSimple_FixedSize__chToT2 15
+//Local variables
+
+//READ ApplicationSimple_FixedSize__chToT1 50
+EXECI 100
+WRITE ApplicationSimple_FixedSize__chToT2 15
+Behavior
 ENDTASK
+TASKOP
 
 TASK ApplicationSimple_FixedSize__T2
-    TASKOP
-    //Local variables
-    int loop__0 = 0
-    
-    //Behavior
-    FOR(loop__0 = 0; loop__0<1; loop__0 = loop__0 + 1)
-        RAND
-            CASERAND 50
-                READ ApplicationSimple_FixedSize__chToT2 50
-                EXECI 25
-            ENDCASERAND
-            CASERAND 50
-                READ ApplicationSimple_FixedSize__chToT2 100
-                EXECI 150
-            ENDCASERAND
-        ENDRAND
-    ENDFOR
-    READ ApplicationSimple_FixedSize__chToT2 50
-    EXECI 20
-ENDTASK
+//Local variables
+int loop__0 = 0
 
+//FOR(loop__0 = 0; loop__0<1; loop__0 = loop__0 + 1)
+CASERAND 50
+READ ApplicationSimple_FixedSize__chToT2 50
+EXECI 25
+CASERAND 50
+READ ApplicationSimple_FixedSize__chToT2 100
+EXECI 150
+READ ApplicationSimple_FixedSize__chToT2 50
+EXECI 20
+Behavior
+ENDCASERAND
+ENDCASERAND
+ENDFOR
+ENDRAND
+ENDTASK
+RAND
+TASKOP

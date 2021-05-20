@@ -36,36 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class TaskResult
-* Object for storing a simulation result
-* Creation: 07/09/2011
-* @version 1.0 07/09/2011
-* @author Ludovic APVRILLE
+ * Class TaskResult Object for storing a simulation result Creation: 07/09/2011
+ * 
+ * @version 1.0 07/09/2011
+ * @author Ludovic APVRILLE
  */
-public class TaskResult  {
-	public int id;
-	public String name;
-	
-	public long nbOfExecutedCycles;
-	public String state;
-	
-	
-	public TaskResult() {
-	}
-	
-	public String toStringResult() {
-		return "TASK " + id + " " + name + " " + nbOfExecutedCycles + " " + state;
-	}
-	
-	
-	
-} // Class TaskResult
+public class TaskResult {
+  public int id;
+  public String name;
 
+  public long nbOfExecutedCycles;
+  public String state;
+
+  public TaskResult() {
+  }
+
+  public String toStringResult() {
+    return "TASK " + id + " " + name + " " + nbOfExecutedCycles + " " + state;
+  }
+
+} // Class TaskResult

@@ -36,43 +36,37 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import tmltranslator.*;
 
 import java.util.Vector;
 
-
 /**
- * Class EmptyTMLTask
- * Creation: 21/05/2019
+ * Class EmptyTMLTask Creation: 21/05/2019
  *
  * @author Ludovic Apvrille
  * @version 1.0 21/05/2019
  */
 public class EmptyTMLTask extends TMLTask {
 
-    public EmptyTMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
-        super(name, referenceToClass, referenceToActivityDiagram);
-    }
+  public EmptyTMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+    super(name, referenceToClass, referenceToActivityDiagram);
+  }
 
-    public void generate() {
+  public void generate() {
 
+    // Attributes
 
-        // Attributes
+    // Events
 
+    // Activity Diagram
+    TMLStartState start = new TMLStartState("mainStart", referenceObject);
+    activity.setFirst(start);
 
-        // Events
+    TMLStopState stopMain = new TMLStopState("mainStop", referenceObject);
+    addElement(start, stopMain);
 
-        // Activity Diagram
-        TMLStartState start = new TMLStartState("mainStart", referenceObject);
-        activity.setFirst(start);
-
-
-        TMLStopState stopMain = new TMLStopState("mainStop", referenceObject);
-        addElement(start, stopMain);
-
-    }
+  }
 
 }

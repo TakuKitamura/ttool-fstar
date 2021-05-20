@@ -36,45 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class TOneAttribute
- * Tattribute plus its TClass
- * Creation: 06/07/2004
+ * Class TOneAttribute Tattribute plus its TClass Creation: 06/07/2004
+ * 
  * @version 1.0 06/07/2004
  * @author Ludovic APVRILLE
  */
 public class TOneAttribute {
-    
-    public TClassInterface t1;
-    public TAttribute ta1;
-    public int t1id;
-    public String ta1s;
-    
-    public TOneAttribute(TClassInterface _t1,  TAttribute _ta1) {
-        t1 = _t1;
-        ta1 = _ta1;
+
+  public TClassInterface t1;
+  public TAttribute ta1;
+  public int t1id;
+  public String ta1s;
+
+  public TOneAttribute(TClassInterface _t1, TAttribute _ta1) {
+    t1 = _t1;
+    ta1 = _ta1;
+  }
+
+  public TOneAttribute(int _t1id, String _ta1s) {
+    t1id = _t1id;
+    ta1s = _ta1s;
+  }
+
+  public String toString() {
+    if ((t1 == null) || (ta1 == null)) {
+      return "TClass/TObject of id " + t1 + "." + ta1s;
+    } else {
+      return t1.getValue() + "." + ta1.getId();
     }
-    
-    public TOneAttribute(int _t1id, String _ta1s) {
-        t1id = _t1id;
-        ta1s = _ta1s;
-    }
-    
-    public String toString() {
-        if ((t1 == null) || (ta1 == null)) {
-            return "TClass/TObject of id " + t1 + "." + ta1s;
-        } else {
-            return t1.getValue() + "." + ta1.getId();
-        }
-    }
-    
-    public String toShortString() {
-        return toString();
-    }
+  }
+
+  public String toShortString() {
+    return toString();
+  }
 }

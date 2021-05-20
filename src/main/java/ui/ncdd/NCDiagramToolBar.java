@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ncdd;
 
 import ui.MainGUI;
@@ -51,88 +48,83 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class NCDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a NC diagram
- * Creation: 18/11/2008
+ * Class NCDiagramToolBar Implements the toolbar to be used in conjunction with
+ * the panel of a NC diagram Creation: 18/11/2008
+ * 
  * @version 1.0 18/11/2008
  * @author Ludovic APVRILLE
  * @see NCDiagramToolBar
  */
 public class NCDiagramToolBar extends TToolBar {
-    
-    public NCDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-        
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.NCDD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.NCDD_LINK].setEnabled(b);
-        mgui.actions[TGUIAction.NCDD_EQNODE].setEnabled(b);
-		mgui.actions[TGUIAction.NCDD_SWITCHNODE].setEnabled(b);
-        mgui.actions[TGUIAction.NCDD_TRAFFIC_ARTIFACT].setEnabled(b);
-		mgui.actions[TGUIAction.NCDD_ROUTE_ARTIFACT].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		
-		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-		
-		mgui.updateZoomInfo();
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.NCDD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.NCDD_LINK]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.NCDD_EQNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.NCDD_SWITCHNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-        button = this.add(mgui.actions[TGUIAction.NCDD_TRAFFIC_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.NCDD_ROUTE_ARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
-    }
-    
+
+  public NCDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.NCDD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.NCDD_LINK].setEnabled(b);
+    mgui.actions[TGUIAction.NCDD_EQNODE].setEnabled(b);
+    mgui.actions[TGUIAction.NCDD_SWITCHNODE].setEnabled(b);
+    mgui.actions[TGUIAction.NCDD_TRAFFIC_ARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.NCDD_ROUTE_ARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+
+    mgui.updateZoomInfo();
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.NCDD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.NCDD_LINK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.NCDD_EQNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.NCDD_SWITCHNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.NCDD_TRAFFIC_ARTIFACT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.NCDD_ROUTE_ARTIFACT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
+  }
+
 } // Class
-
-
-
-
-

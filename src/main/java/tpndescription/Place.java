@@ -36,65 +36,61 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tpndescription;
 
 /**
- * Class Place
- * Creation: 04/07/2006
+ * Class Place Creation: 04/07/2006
+ * 
  * @version 1.1 04/07/2006
  * @author Ludovic APVRILLE
  */
 public class Place {
-    public static int INDEX  = 0;
-    
-    public int nbOfTokens = 0;
-    public String name;
-    public int x, y;
-    
-    public Place() {
-        name = generateName();
-    }
-    
-    public Place(String _name) {
-        name = _name;
-    }
-    
-    public String getName() {
-    	return name;
-    }
-    
-    public int getMarking() {
-    	return nbOfTokens;
-    }
-    
-    public String generateName() {
-        int index = INDEX;
-        INDEX ++;
-        return "p" + index;
-    }
-    
-    public void setMark() {
-        nbOfTokens = 1;
-    }
-    
-    public void addMark() {
-        nbOfTokens ++;
-    }
-    
-    public String toString() {
-        return name;
-    }
-    
-    public String toTINAString() {
-        return "pl " + name + " (" + nbOfTokens + ")";
-    }
-    
-    public String toNDRFormat() {
-    	return "p " + x + " " + y + " " + name + " " + nbOfTokens + " n\n";
-    }
-    
+  public static int INDEX = 0;
+
+  public int nbOfTokens = 0;
+  public String name;
+  public int x, y;
+
+  public Place() {
+    name = generateName();
+  }
+
+  public Place(String _name) {
+    name = _name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getMarking() {
+    return nbOfTokens;
+  }
+
+  public String generateName() {
+    int index = INDEX;
+    INDEX++;
+    return "p" + index;
+  }
+
+  public void setMark() {
+    nbOfTokens = 1;
+  }
+
+  public void addMark() {
+    nbOfTokens++;
+  }
+
+  public String toString() {
+    return name;
+  }
+
+  public String toTINAString() {
+    return "pl " + name + " (" + nbOfTokens + ")";
+  }
+
+  public String toNDRFormat() {
+    return "p " + x + " " + y + " " + name + " " + nbOfTokens + " n\n";
+  }
 
 }

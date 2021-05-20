@@ -36,50 +36,49 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class AvatarPragma
- * Creation: 20/05/2010
+ * Class AvatarPragma Creation: 20/05/2010
+ * 
  * @version 1.1 01/07/2014
  * @author Ludovic APVRILLE, Raja GATGOUT
  */
 public class AvatarPragmaInitialKnowledge extends AvatarPragma {
 
-    private List<AvatarAttribute> arguments;
-    private boolean isSystem;
+  private List<AvatarAttribute> arguments;
+  private boolean isSystem;
 
-    public AvatarPragmaInitialKnowledge(String _name, Object _referenceObject, List<AvatarAttribute> args, boolean isSystem) {
-        super(_name, _referenceObject);
-        
-        arguments = args;
-        this.isSystem = isSystem;
-    }
-    
-    public List<AvatarAttribute> getArgs(){
-    	return arguments;
-    }
-    
-    public boolean isSystem(){	
-    	return isSystem;
-    }
+  public AvatarPragmaInitialKnowledge(String _name, Object _referenceObject, List<AvatarAttribute> args,
+      boolean isSystem) {
+    super(_name, _referenceObject);
 
-    @Override
-    public AvatarPragmaInitialKnowledge advancedClone (AvatarSpecification avspec) {
-        List<AvatarAttribute> l = new LinkedList<AvatarAttribute> ();
-        
-        for (AvatarAttribute aa: this.arguments)
-            l.add (avspec.getMatchingAttribute (aa));
-        
-        AvatarPragmaInitialKnowledge result = new AvatarPragmaInitialKnowledge (this.name, this.referenceObject, l, this.isSystem);
-        this.cloneLinkToReferenceObjects (result);
-        
-        return result;
-    }
+    arguments = args;
+    this.isSystem = isSystem;
+  }
+
+  public List<AvatarAttribute> getArgs() {
+    return arguments;
+  }
+
+  public boolean isSystem() {
+    return isSystem;
+  }
+
+  @Override
+  public AvatarPragmaInitialKnowledge advancedClone(AvatarSpecification avspec) {
+    List<AvatarAttribute> l = new LinkedList<AvatarAttribute>();
+
+    for (AvatarAttribute aa : this.arguments)
+      l.add(avspec.getMatchingAttribute(aa));
+
+    AvatarPragmaInitialKnowledge result = new AvatarPragmaInitialKnowledge(this.name, this.referenceObject, l,
+        this.isSystem);
+    this.cloneLinkToReferenceObjects(result);
+
+    return result;
+  }
 }

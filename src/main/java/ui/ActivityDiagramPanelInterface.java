@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import java.util.List;
-
 
 /**
  * Class ActivityDiagramPanelInterface
  *
  * Creation: 23/01/2007
+ * 
  * @version 1.0 23/01/2007
  * @author Ludovic APVRILLE
  */

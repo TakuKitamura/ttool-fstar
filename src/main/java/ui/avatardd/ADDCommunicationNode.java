@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import ui.TDiagramPanel;
@@ -47,20 +44,20 @@ import ui.TGComponent;
 import ui.TGComponentManager;
 
 /**
- * Class ADDCommunicationNode
- * Node. To be used in TML architecture diagrams.
- * Creation: 23/11/2007
- * Creation: 30/06/2014
+ * Class ADDCommunicationNode Node. To be used in TML architecture diagrams.
+ * Creation: 23/11/2007 Creation: 30/06/2014
+ * 
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public abstract class ADDCommunicationNode extends ADDNode {
-    
-    public ADDCommunicationNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
 
-    @Override
-    public int getDefaultConnector() {
-  	return TGComponentManager.ADD_CONNECTOR;
+  public ADDCommunicationNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.ADD_CONNECTOR;
   }
 }

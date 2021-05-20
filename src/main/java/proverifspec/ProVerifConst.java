@@ -36,31 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifConst
- * Creation: 13/09/2015
+ * Class ProVerifConst Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifConst implements ProVerifDeclaration {
-    protected String name;
-    protected String type;
+  protected String name;
+  protected String type;
 
-    public ProVerifConst (String _name) {
-        this.name = _name;
-    }
+  public ProVerifConst(String _name) {
+    this.name = _name;
+  }
 
-    public ProVerifConst (String _name, String _type) {
-        this (_name);
-        this.type = _type;
-    }
+  public ProVerifConst(String _name, String _type) {
+    this(_name);
+    this.type = _type;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateConst (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateConst(this, _alinea);
+  }
 }

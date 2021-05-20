@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -48,154 +45,151 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
- * Class JDialogNCEqNode
- * Dialog for managing NC equipments properties
- * Creation: 20/10/2009
+ * Class JDialogNCEqNode Dialog for managing NC equipments properties Creation:
+ * 20/10/2009
+ * 
  * @version 1.0 20/10/2009
  * @author Ludovic APVRILLE
  */
 public class JDialogNCEqNode extends JDialogBase implements ActionListener {
 
-    private String eqName;
-    private int schedulingPolicy;
-	private int type;
-	
-	private boolean data;
-    
-    // Panel1
-    private JTextField eqNameText;
-	private JComboBox<String> schedulingPolicyBox;
-	private JComboBox<String> typeBox;
+  private String eqName;
+  private int schedulingPolicy;
+  private int type;
 
-    /* Creates new form  */
-    public JDialogNCEqNode(Frame _f, String _title, String _eqName, int _schedulingPolicy, int _type) {
-        super(_f, _title, true);
+  private boolean data;
 
-        eqName = _eqName;
-        schedulingPolicy = _schedulingPolicy;
-		type = _type;
-        
-        myInitComponents();
-        initComponents();
-        pack();
-    }
-    
-    private void myInitComponents() {
-		data = false;
-    }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  // Panel1
+  private JTextField eqNameText;
+  private JComboBox<String> schedulingPolicyBox;
+  private JComboBox<String> typeBox;
 
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
-        panel1.setPreferredSize(new Dimension(300, 200));
-        
-        // first line panel1
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 3;
-        panel1.add(new JLabel(" "), c1);
-        
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("Equipment name:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        eqNameText = new JTextField(eqName);
-        panel1.add(eqNameText, c1);
-        
-        c1.gridwidth = 1;
-        panel1.add(new JLabel("Scheduling policy:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        schedulingPolicyBox = new JComboBox<>();
-		schedulingPolicyBox.addItem("First Come First Served");
-		schedulingPolicyBox.addItem("Static Priority");
-		schedulingPolicyBox.setSelectedIndex(schedulingPolicy);
-        panel1.add(schedulingPolicyBox, c1);
-		
-		c1.gridwidth = 1;
-        panel1.add(new JLabel("Type:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeBox = new JComboBox<>();
-		typeBox.addItem("Standard");
-		typeBox.addItem("Client/server (not supported yet)");
-		typeBox.setSelectedIndex(type);
-        panel1.add(typeBox, c1);
-        
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
-        c.add(panel1, c0);
-        
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+  /* Creates new form */
+  public JDialogNCEqNode(Frame _f, String _title, String _eqName, int _schedulingPolicy, int _type) {
+    super(_f, _title, true);
+
+    eqName = _eqName;
+    schedulingPolicy = _schedulingPolicy;
+    type = _type;
+
+    myInitComponents();
+    initComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+    data = false;
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+    panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
+    panel1.setPreferredSize(new Dimension(300, 200));
+
+    // first line panel1
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 3;
+    panel1.add(new JLabel(" "), c1);
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("Equipment name:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    eqNameText = new JTextField(eqName);
+    panel1.add(eqNameText, c1);
+
+    c1.gridwidth = 1;
+    panel1.add(new JLabel("Scheduling policy:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    schedulingPolicyBox = new JComboBox<>();
+    schedulingPolicyBox.addItem("First Come First Served");
+    schedulingPolicyBox.addItem("Static Priority");
+    schedulingPolicyBox.setSelectedIndex(schedulingPolicy);
+    panel1.add(schedulingPolicyBox, c1);
+
+    c1.gridwidth = 1;
+    panel1.add(new JLabel("Type:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    typeBox = new JComboBox<>();
+    typeBox.addItem("Standard");
+    typeBox.addItem("Client/server (not supported yet)");
+    typeBox.setSelectedIndex(type);
+    panel1.add(typeBox, c1);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+    c.add(panel1, c0);
+
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-		// Compare the action command to the known actions.
-		if (command.equals("Save and Close"))  {
-            closeDialog();
-		} else if (command.equals("Cancel")) {
-            cancelDialog();
-		}
-    }
-    
-    
-    public void closeDialog() {
-        data = true;
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-	public boolean hasBeenCancelled() {
-		return (!data);
-	}
-	
-    public boolean hasNewData() {
-        return data;
-    }
-    
-    public String getEqName() {
-        return eqNameText.getText();
-    }
-    
-    public int getSchedulingPolicy() {
-        return schedulingPolicyBox.getSelectedIndex();
-    }
-	
-	public int getMyType() {
-        return typeBox.getSelectedIndex();
-    }
-    
-  
+  }
+
+  public void closeDialog() {
+    data = true;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public boolean hasBeenCancelled() {
+    return (!data);
+  }
+
+  public boolean hasNewData() {
+    return data;
+  }
+
+  public String getEqName() {
+    return eqNameText.getText();
+  }
+
+  public int getSchedulingPolicy() {
+    return schedulingPolicyBox.getSelectedIndex();
+  }
+
+  public int getMyType() {
+    return typeBox.getSelectedIndex();
+  }
+
 }

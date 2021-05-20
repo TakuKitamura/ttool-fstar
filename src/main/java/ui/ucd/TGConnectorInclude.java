@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ucd;
 
 import ui.*;
@@ -48,24 +45,24 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
- * Class TGConnectorInclude
- * Connector to be used in use case diagram. Connects two use cases
- * Creation: 22/02/2005
+ * Class TGConnectorInclude Connector to be used in use case diagram. Connects
+ * two use cases Creation: 22/02/2005
+ * 
  * @version 1.0 22/02/2005
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorInclude extends TGConnectorUC {
-    
-    public TGConnectorInclude(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint, "<<include>>");
-        
-        myImageIcon = IconManager.imgic606;
-    }
-    
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.CONNECTOR_INCLUDE_UCD;
-    }
-    
+public class TGConnectorInclude extends TGConnectorUC {
+
+  public TGConnectorInclude(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint, "<<include>>");
+
+    myImageIcon = IconManager.imgic606;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.CONNECTOR_INCLUDE_UCD;
+  }
+
 }

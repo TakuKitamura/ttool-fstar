@@ -37,30 +37,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
-   * Class AdaifMEC, Model Extension Construct (MEC) class for Embb Adaif operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class AdaifMEC, Model Extension Construct (MEC) class for Embb Adaif
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class AdaifMEC extends ArchUnitMEC	{
+public class AdaifMEC extends ArchUnitMEC {
 
-	public static final String CTX_CLEANUP = "adaif_ctx_cleanup";
-	public static final String OPERATION = "Adaif operation";
-	
-	// Issue #98: Compilation problem
-    public static final String CONTEXT = "ADAIF_CONTEXT";
+  public static final String CTX_CLEANUP = "adaif_ctx_cleanup";
+  public static final String OPERATION = "Adaif operation";
 
-	public AdaifMEC()	{
-		index = 4;
-		initCtxRoutine = "adaif_ctx_init";
-		localMemoryPointer = "adaif_mss";
-		ctxCleanupRoutine = CTX_CLEANUP;//"adaif_ctx_cleanup";
-	}
+  // Issue #98: Compilation problem
+  public static final String CONTEXT = "ADAIF_CONTEXT";
 
-}	//End of class
+  public AdaifMEC() {
+    index = 4;
+    initCtxRoutine = "adaif_ctx_init";
+    localMemoryPointer = "adaif_mss";
+    ctxCleanupRoutine = CTX_CLEANUP;// "adaif_ctx_cleanup";
+  }
+
+} // End of class

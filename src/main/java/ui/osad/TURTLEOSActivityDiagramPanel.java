@@ -36,77 +36,76 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.osad;
-
-
 
 import ui.*;
 
 /**
- * Class TURTLEOSActivityDiagramPanel
- * Panel used for drawing TURTLEOS activity diagrams
- * Creation: 29/09/2006
+ * Class TURTLEOSActivityDiagramPanel Panel used for drawing TURTLEOS activity
+ * diagrams Creation: 29/09/2006
+ * 
  * @version 1.0 29/09/2006
  * @author Ludovic APVRILLE
  */
-public class TURTLEOSActivityDiagramPanel extends TDiagramPanel implements ActivityDiagramPanelInterface{
-    
-    public  TURTLEOSActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        //addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
-    }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return false;
-    }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
-    }
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
-    }
-    
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
-    }
-    
-    public String getXMLHead() {
-        return "<TURTLEOSActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</TURTLEOSActivityDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</TURTLEOSActivityDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</TURTLEOSActivityDiagramPanelCopy>";
-    }
-    
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
-        
-        // Components over others
-        
-        // Position correctly guards of choice
-    }
-    
+public class TURTLEOSActivityDiagramPanel extends TDiagramPanel implements ActivityDiagramPanelInterface {
+
+  public TURTLEOSActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    // addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<TURTLEOSActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</TURTLEOSActivityDiagramPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</TURTLEOSActivityDiagramPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<TURTLEOSActivityDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\""
+        + 0 + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</TURTLEOSActivityDiagramPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
 }

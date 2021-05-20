@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
-
 
 import myutil.TraceManager;
 import org.w3c.dom.Element;
@@ -50,82 +45,80 @@ import org.w3c.dom.NodeList;
 import ui.tmlad.TMLActivityDiagramPanel;
 
 /**
- * Class ModelParameters
- * Used as an abstraction of TMLTask and TMLTaskObject
+ * Class ModelParameters Used as an abstraction of TMLTask and TMLTaskObject
  * Creation: 19/06/2019
+ * 
  * @version 1.0 19/06/2019
  * @author Ludovic APVRILLE
  */
-public class ModelParameters  {
-    private static String[] ids = {"ANIMATE_INTERACTIVE_SIMULATION", // Diplodocus animate simulation
-            "ACTIVATE_PENALTIES", // Diplodocus penalties in C++ simulation
-            "UPDATE_INFORMATION_DIPLO_SIM", // Diplo simulator
-            "ANIMATE_WITH_INFO_DIPLO_SIM", // Diplo simulator
-            "OPEN_DIAG_DIPLO_SIM", // Diplo simulator
-            "LAST_SELECTED_MAIN_TAB",
-            "LAST_SELECTED_SUB_TAB"
-    };
-    private static String[] values = {"true", "true", "true", "true", "false", "0", "0"};
+public class ModelParameters {
+  private static String[] ids = { "ANIMATE_INTERACTIVE_SIMULATION", // Diplodocus animate simulation
+      "ACTIVATE_PENALTIES", // Diplodocus penalties in C++ simulation
+      "UPDATE_INFORMATION_DIPLO_SIM", // Diplo simulator
+      "ANIMATE_WITH_INFO_DIPLO_SIM", // Diplo simulator
+      "OPEN_DIAG_DIPLO_SIM", // Diplo simulator
+      "LAST_SELECTED_MAIN_TAB", "LAST_SELECTED_SUB_TAB" };
+  private static String[] values = { "true", "true", "true", "true", "false", "0", "0" };
 
-    public static boolean getBooleanValueFromID(String value) {
-        for(int i=0; i<ids.length; i++) {
-            if (ids[i].compareTo(value) == 0) {
-                return values[i].compareTo("true") == 0;
-            }
+  public static boolean getBooleanValueFromID(String value) {
+    for (int i = 0; i < ids.length; i++) {
+      if (ids[i].compareTo(value) == 0) {
+        return values[i].compareTo("true") == 0;
+      }
+    }
+    return false;
+  }
+
+  public static int getIntegerValueFromID(String value) {
+    for (int i = 0; i < ids.length; i++) {
+      if (ids[i].compareTo(value) == 0) {
+        return Integer.decode(values[i]);
+      }
+    }
+    return 0;
+  }
+
+  public static String toXML() {
+    String ret = "";
+    for (int i = 0; i < ids.length; i++) {
+      ret += " " + ids[i] + "=\"" + values[i] + "\"";
+    }
+    return ret;
+  }
+
+  public static void loadValuesFromXML(org.w3c.dom.Node node) {
+    String tmp;
+    Element elt;
+
+    TraceManager.addDev("Loading parameters from XML");
+
+    if (node.getNodeType() == Node.ELEMENT_NODE) {
+      elt = (Element) node;
+      for (int i = 0; i < ids.length; i++) {
+        try {
+          tmp = elt.getAttribute(ids[i]);
+          if ((tmp != null) && (tmp.length() > 0)) {
+            // TraceManager.addDev("Setting value " + tmp + " to id " + ids[i]);
+            values[i] = tmp;
+          }
+        } catch (Exception e) {
+
         }
-        return false;
+      }
     }
 
-    public static int getIntegerValueFromID(String value) {
-        for(int i=0; i<ids.length; i++) {
-            if (ids[i].compareTo(value) == 0) {
-                return Integer.decode(values[i]);
-            }
-        }
-        return 0;
-    }
+  }
 
-    public static String toXML() {
-        String ret = "";
-        for(int i=0; i<ids.length; i++) {
-            ret += " " + ids[i] + "=\"" + values[i] + "\"";
-        }
-        return ret;
-    }
+  public static void setValueForID(String id, String value) {
+    // TraceManager.addDev("Trying to set value " + value + " to " + id);
 
-    public static void loadValuesFromXML(org.w3c.dom.Node node) {
-        String tmp;
-        Element elt;
-
-        TraceManager.addDev("Loading parameters from XML");
-
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            elt = (Element) node;
-            for(int i=0; i<ids.length; i++) {
-                try {
-                    tmp = elt.getAttribute(ids[i]);
-                    if ((tmp != null) && (tmp.length() > 0)){
-                        //TraceManager.addDev("Setting value " + tmp + " to id " + ids[i]);
-                        values[i] = tmp;
-                    }
-                } catch (Exception e) {
-
-                }
-            }
-        }
-
-    }
-
-    public static void setValueForID(String id, String value) {
-        //TraceManager.addDev("Trying to set value " + value + " to " + id);
-
-        for(int i=0; i<ids.length; i++) {
-            if (ids[i].compareTo(id) == 0) {
-                //TraceManager.addDev("Setting value " + value + " to " + id);
-                values[i] = value;
-                return;
-            }
-        }
+    for (int i = 0; i < ids.length; i++) {
+      if (ids[i].compareTo(id) == 0) {
+        // TraceManager.addDev("Setting value " + value + " to " + id);
+        values[i] = value;
         return;
+      }
     }
+    return;
+  }
 }

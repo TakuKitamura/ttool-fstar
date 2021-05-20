@@ -36,21 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
-
 
 import java.util.Vector;
 
 /**
-   * Class TMLArchiElementWithArtifactList
-   * Interface of  an architecture element
-   * Creation: 11/06/2019
-   * @version 1.0 11/06/2019
-   * @author Ludovic APVRILLE
+ * Class TMLArchiElementWithArtifactList Interface of an architecture element
+ * Creation: 11/06/2019
+ * 
+ * @version 1.0 11/06/2019
+ * @author Ludovic APVRILLE
  */
-public interface TMLArchiElementWithArtifactList  {
-    Vector<TMLArchiArtifact> getArtifactList();
+public interface TMLArchiElementWithArtifactList {
+  Vector<TMLArchiArtifact> getArtifactList();
 }

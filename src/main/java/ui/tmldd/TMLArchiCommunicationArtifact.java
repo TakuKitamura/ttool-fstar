@@ -50,317 +50,320 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class TMLArchiCommunicationArtifact
-   * Communication Artifact of a deployment diagram
-   * Creation: 22/11/2007
-   * @version 1.0 22/11/2007
-   * @author Ludovic APVRILLE
+ * Class TMLArchiCommunicationArtifact Communication Artifact of a deployment
+ * diagram Creation: 22/11/2007
+ * 
+ * @version 1.0 22/11/2007
+ * @author Ludovic APVRILLE
  */
-public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiChannelInterface {
+public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent
+    implements SwallowedTGComponent, WithAttributes, TMLArchiChannelInterface {
 
-	// Issue #31
-	private static final int SPACE = 5;
-	private static final int CRAN = 5;
-	private static final int FILE_X = 20;
-	private static final int FILE_Y = 25;
-//    protected int lineLength = 5;
-//    protected int textX =  5;
-//    protected int textY =  15;
-//    protected int textY2 =  35;
-//    protected int space = 5;
-//    protected int fileX = 20;
-//    protected int fileY = 25;
-//    protected int cran = 5;
+  // Issue #31
+  private static final int SPACE = 5;
+  private static final int CRAN = 5;
+  private static final int FILE_X = 20;
+  private static final int FILE_Y = 25;
+  // protected int lineLength = 5;
+  // protected int textX = 5;
+  // protected int textY = 15;
+  // protected int textY2 = 35;
+  // protected int space = 5;
+  // protected int fileX = 20;
+  // protected int fileY = 25;
+  // protected int cran = 5;
 
-    protected String oldValue = "";
-    protected String referenceCommunicationName = "TMLCommunication";
-    protected String communicationName = "name";
-    protected String typeName = "channel";
-    protected int priority = 5; // Between 0 and 10
+  protected String oldValue = "";
+  protected String referenceCommunicationName = "TMLCommunication";
+  protected String communicationName = "name";
+  protected String typeName = "channel";
+  protected int priority = 5; // Between 0 and 10
 
-    public TMLArchiCommunicationArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public TMLArchiCommunicationArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    	// Issue #31
-//        width = 75;
-//        height = 40;
-        textX = 5;
-        textY = 15;
-        minWidth = 75;
-        initScaling( 75, 40 );
+    // Issue #31
+    // width = 75;
+    // height = 40;
+    textX = 5;
+    textY = 15;
+    minWidth = 75;
+    initScaling(75, 40);
 
-        nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
+    nbConnectingPoint = 0;
+    addTGConnectingPointsComment();
 
-        moveable = true;
-        editable = true;
-        removable = true;
+    moveable = true;
+    editable = true;
+    removable = true;
 
-        value = "";
-        communicationName = "name";
-        referenceCommunicationName = "TMLCommunication";
+    value = "";
+    communicationName = "name";
+    referenceCommunicationName = "TMLCommunication";
 
-        makeFullValue();
+    makeFullValue();
 
-        //setPriority(((TMLArchiDiagramPanel)tdp).getPriority(getFullValue(), priority);
+    // setPriority(((TMLArchiDiagramPanel)tdp).getPriority(getFullValue(),
+    // priority);
 
-        myImageIcon = IconManager.imgic702;
+    myImageIcon = IconManager.imgic702;
+  }
+
+  @Override
+  public boolean isHidden() {
+    // TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+    boolean ret = false;
+    if (tdp != null) {
+      if (tdp instanceof TMLArchiDiagramPanel) {
+        ret = !(((TMLArchiDiagramPanel) (tdp)).inCurrentView(this));
+
+      }
+    }
+    // TraceManager.addDev("Hidden? -> " + ret);
+    return ret;
+  }
+
+  public int getPriority() {
+    return priority;
+  }
+
+  public void setPriority(int _priority) {
+    priority = _priority;
+  }
+
+  @Override
+  protected void internalDrawing(Graphics g) {
+    if (oldValue.compareTo(value) != 0) {
+      setValue(value, g);
     }
 
-    @Override
-    public boolean isHidden() {
-		//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
-		boolean ret = false;
-		if (tdp != null) {
-		    if (tdp instanceof TMLArchiDiagramPanel) {
-			ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
-			
-		    }
-		}
-		//TraceManager.addDev("Hidden? -> " + ret);
-		return ret;
+    g.drawRect(x, y, width, height);
+
+    // Issue #31
+    final int space = scale(SPACE);
+    final int marginFileX = scale(SPACE + FILE_X);
+    final int marginFileY = scale(SPACE + FILE_Y);
+    final int marginCran = scale(SPACE + CRAN);
+
+    g.drawLine(x + width - marginFileX/* space-fileX */, y + space, x + width - marginFileX/* space-fileX */,
+        y + marginFileY/* space+fileY */);
+    g.drawLine(x + width - marginFileX/* space-fileX */, y + space, x + width - marginCran/* space-cran */, y + space);
+    g.drawLine(x + width - marginCran/* space-cran */, y + space, x + width - space, y + marginCran/* space + cran */);
+    g.drawLine(x + width - space, y + marginCran/* space + cran */, x + width - space,
+        y + marginFileY/* space+fileY */);
+    g.drawLine(x + width - space, y + marginFileY/* space+fileY */, x + width - marginFileX/* space-fileX */,
+        y + marginFileY/* space+fileY */);
+    g.drawLine(x + width - marginCran/* space-cran */, y + space, x + width - marginCran/* space-cran */,
+        y + marginCran/* space+cran */);
+    g.drawLine(x + width - marginCran/* space-cran */, y + marginCran/* space+cran */, x + width - space,
+        y + marginCran/* space+cran */);
+
+    g.drawString(value, x + textX, y + textY);
+
+    Font f = g.getFont();
+    g.setFont(f.deriveFont(Font.ITALIC));
+    g.drawString(typeName, x + textX, y + textY + scale(20));// Issue #31
+    g.setFont(f);
+  }
+
+  public void setValue(String val, Graphics g) {
+    oldValue = value;
+    int w = g.getFontMetrics().stringWidth(value);
+
+    // Issue #31
+    final int marginFileX = scale(SPACE + FILE_X);
+
+    int w1 = Math.max(minWidth, w + 2 * textX + marginFileX /* fileX + space */);
+
+    //
+    if (w1 != width) {
+      width = w1;
+      resizeWithFather();
+    }
+    //
+  }
+
+  @Override
+  public void resizeWithFather() {
+    if ((father != null) && (father instanceof TMLArchiCommunicationNode)) {
+      //
+      setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+      // setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y,
+      // father.getHeight() - getHeight()));
+      setMoveCd(x, y);
+    }
+  }
+
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    String tmp;
+    boolean error = false;
+
+    JDialogCommunicationArtifact dialog = new JDialogCommunicationArtifact(frame, "Setting channel artifact attributes",
+        this);
+    GraphicLib.centerOnParent(dialog, 400, 300);
+    dialog.setVisible(true); // blocked until dialog has been closed
+
+    if (!dialog.isRegularClose()) {
+      return false;
     }
 
-    public int getPriority() {
-        return priority;
+    if (dialog.getReferenceCommunicationName() == null) {
+      return false;
     }
 
-    public void setPriority(int _priority) {
-        priority = _priority;
+    if (dialog.getReferenceCommunicationName().length() != 0) {
+      tmp = dialog.getReferenceCommunicationName();
+      referenceCommunicationName = tmp;
+
     }
 
-    @Override
-    protected void internalDrawing(Graphics g) {
-        if (oldValue.compareTo(value) != 0) {
-            setValue(value, g);
-        }
+    if (dialog.getCommunicationName().length() != 0) {
+      tmp = dialog.getCommunicationName();
 
-        g.drawRect(x, y, width, height);
-
-        // Issue #31
-        final int space = scale( SPACE );
-        final int marginFileX = scale( SPACE + FILE_X );
-        final int marginFileY = scale( SPACE + FILE_Y );
-        final int marginCran = scale( SPACE + CRAN );
-        
-        g.drawLine(x+width-marginFileX/*space-fileX*/, y + space, x+width- marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
-        g.drawLine(x+width-marginFileX/*space-fileX*/, y + space, x+width- marginCran/*space-cran*/, y+space);
-        g.drawLine(x+width- marginCran/*space-cran*/, y+space, x+width-space, y+ marginCran/*space + cran*/);
-        g.drawLine(x+width-space, y+ marginCran/*space + cran*/, x+width-space, y+ marginFileY/*space+fileY*/);
-        g.drawLine(x+width-space, y+ marginFileY/*space+fileY*/, x+width- marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
-        g.drawLine(x+width- marginCran/*space-cran*/, y+space, x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/);
-        g.drawLine(x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/, x + width-space, y+ marginCran/*space+cran*/);
-
-
-
-
-
-        g.drawString(value, x + textX , y + textY);
-
-        Font f = g.getFont();
-        g.setFont(f.deriveFont(Font.ITALIC));
-        g.drawString(typeName, x + textX , y + textY + scale( 20 ) );// Issue #31
-        g.setFont(f);
+      if (!TAttribute.isAValidId(tmp, false, false, false, false, false)) {
+        error = true;
+      } else {
+        communicationName = tmp;
+      }
     }
 
-    public void setValue(String val, Graphics g) {
-        oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
+    if (dialog.getTypeName().length() != 0) {
+      typeName = dialog.getTypeName();
+    }
 
-        // Issue #31
-        final int marginFileX = scale( SPACE + FILE_X );
+    priority = dialog.getPriority();
 
-        int w1 = Math.max(minWidth, w + 2 * textX + marginFileX /*fileX + space*/);
+    ((TMLArchiDiagramPanel) tdp).setPriority(getFullValue(), priority);
 
+    if (error) {
+      JOptionPane.showMessageDialog(frame, "Name is non-valid", "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    makeFullValue();
+
+    return !error;
+
+  }
+
+  private void makeFullValue() {
+    value = referenceCommunicationName + "::" + communicationName;
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT;
+  }
+
+  @Override
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append(
+        "<info value=\"" + value + "\" communicationName=\"" + communicationName + "\" referenceCommunicationName=\"");
+    sb.append(referenceCommunicationName);
+    sb.append("\" priority=\"");
+    sb.append(priority);
+    sb.append("\" typeName=\"" + typeName);
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    try {
+
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
+      String prio = null;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-        if (w1 != width) {
-            width = w1;
-            resizeWithFather();
-        }
-        //
-    }
-
-    @Override
-    public void resizeWithFather() {
-        if ((father != null) && (father instanceof TMLArchiCommunicationNode)) {
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
             //
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
-            setMoveCd(x, y);
-        }
-    }
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("info")) {
+                svalue = elt.getAttribute("value");
+                sname = elt.getAttribute("communicationName");
+                sreferenceCommunication = elt.getAttribute("referenceCommunicationName");
+                stype = elt.getAttribute("typeName");
+                prio = elt.getAttribute("priority");
+              }
+              if (svalue != null) {
+                value = svalue;
+              }
+              if (sname != null) {
+                communicationName = sname;
+              }
+              if (sreferenceCommunication != null) {
+                referenceCommunicationName = sreferenceCommunication;
+              }
+              if (stype != null) {
+                typeName = stype;
+              }
 
-    @Override
-    public boolean editOnDoubleClick(JFrame frame) {
-        String tmp;
-        boolean error = false;
-
-        JDialogCommunicationArtifact dialog = new JDialogCommunicationArtifact(frame, "Setting channel artifact attributes", this);
-        GraphicLib.centerOnParent(dialog, 400, 300);
-        dialog.setVisible( true ); // blocked until dialog has been closed
-
-        if (!dialog.isRegularClose()) {
-            return false;
-        }
-
-        if (dialog.getReferenceCommunicationName() == null) {
-            return false;
-        }
-
-        if (dialog.getReferenceCommunicationName().length() != 0) {
-            tmp = dialog.getReferenceCommunicationName();
-            referenceCommunicationName = tmp;
-
-        }
-
-        if (dialog.getCommunicationName().length() != 0) {
-            tmp = dialog.getCommunicationName();
-
-            if (!TAttribute.isAValidId(tmp, false, false, false, false, false)) {
-                error = true;
-            } else {
-                communicationName = tmp;
+              if ((prio != null) && (prio.trim().length() > 0)) {
+                priority = Integer.decode(prio).intValue();
+              }
             }
+          }
         }
+      }
 
-        if (dialog.getTypeName().length() != 0) {
-            typeName = dialog.getTypeName();
-        }
+    } catch (Exception e) {
 
-        priority = dialog.getPriority();
-
-        ((TMLArchiDiagramPanel)tdp).setPriority(getFullValue(), priority);
-
-
-        if (error) {
-            JOptionPane.showMessageDialog(frame,
-                                          "Name is non-valid",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
-        }
-
-        makeFullValue();
-
-        return !error;
-
+      throw new MalformedModelingException(e);
     }
 
-    private void makeFullValue() {
-        value = referenceCommunicationName + "::" + communicationName;
-    }
+    makeFullValue();
+  }
 
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
+  public DesignPanel getDesignPanel() {
+    return tdp.getGUI().getDesignPanel(value);
+  }
 
-    @Override
-    public int getType() {
-        return TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT;
-    }
+  public String getReferenceCommunicationName() {
+    return referenceCommunicationName;
+  }
 
-    @Override
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info value=\"" + value + "\" communicationName=\"" + communicationName + "\" referenceCommunicationName=\"");
-        sb.append(referenceCommunicationName);
-        sb.append("\" priority=\"");
-        sb.append(priority);
-        sb.append("\" typeName=\"" + typeName);
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
+  public void setReferenceCommunicationName(String _referenceCommunicationName) {
+    referenceCommunicationName = _referenceCommunicationName;
+    makeFullValue();
+  }
 
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //
-        try {
+  public String getCommunicationName() {
+    return communicationName;
+  }
 
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
-            String prio = null;
+  public String getFullValue() {
+    String tmp = getValue();
+    tmp += " (" + getTypeName() + ")";
+    return tmp;
+  }
 
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("info")) {
-                                svalue = elt.getAttribute("value");
-                                sname = elt.getAttribute("communicationName");
-                                sreferenceCommunication = elt.getAttribute("referenceCommunicationName");
-                                stype = elt.getAttribute("typeName");
-                                prio = elt.getAttribute("priority");
-                            }
-                            if (svalue != null) {
-                                value = svalue;
-                            }
-                            if (sname != null){
-                                communicationName = sname;
-                            }
-                            if (sreferenceCommunication != null) {
-                                referenceCommunicationName = sreferenceCommunication;
-                            }
-                            if (stype != null){
-                                typeName = stype;
-                            }
+  public String getTypeName() {
+    return typeName;
+  }
 
-                            if ((prio != null) && (prio.trim().length() > 0)) {
-                                priority = Integer.decode(prio).intValue();
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            
-            throw new MalformedModelingException( e );
-        }
-        
-        makeFullValue();
-    }
-
-    public DesignPanel getDesignPanel() {
-        return tdp.getGUI().getDesignPanel(value);
-    }
-
-    public String getReferenceCommunicationName() {
-        return referenceCommunicationName;
-    }
-
-    public void setReferenceCommunicationName(String _referenceCommunicationName) {
-        referenceCommunicationName = _referenceCommunicationName;
-        makeFullValue();
-    }
-
-    public String getCommunicationName() {
-        return communicationName;
-    }
-
-    public String getFullValue() {
-        String tmp = getValue();
-        tmp += " (" + getTypeName() + ")";
-        return tmp;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    @Override
-    public String getAttributes() {
-        return "Priority = " + priority;
-    }
+  @Override
+  public String getAttributes() {
+    return "Priority = " + priority;
+  }
 }

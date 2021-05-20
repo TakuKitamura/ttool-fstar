@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import javax.swing.*;
@@ -47,52 +44,45 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class SaveCommandsToolBar
- * Toolbar associated with interactive simulation (save commands)
- * Creation: 28/05/2009
+ * Class SaveCommandsToolBar Toolbar associated with interactive simulation
+ * (save commands) Creation: 28/05/2009
+ * 
  * @version 1.0 28/05/2009
  * @author Ludovic APVRILLE
  */
 public class SaveCommandsToolBar extends InteractiveSimulationBar {
-    
-    
-    public SaveCommandsToolBar(JFrameInteractiveSimulation _jfis) {
-        super(_jfis);
-    }
-    
-    protected void setActive(boolean b) {
-		jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_SAVE_XML].setEnabled(b);
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD]);
-        button.addMouseListener(jfis.mouseHandler);
-        
-		this.addSeparator();
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML]);
-        button.addMouseListener(jfis.mouseHandler);
-        
-		this.addSeparator();
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT]);
-        button.addMouseListener(jfis.mouseHandler);
 
-        this.addSeparator();
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_XML]);
-        button.addMouseListener(jfis.mouseHandler);
-        
-       
-    }
+  public SaveCommandsToolBar(JFrameInteractiveSimulation _jfis) {
+    super(_jfis);
+  }
+
+  protected void setActive(boolean b) {
+    jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+    jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+    jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+    jfis.actions[InteractiveSimulationActions.ACT_SAVE_XML].setEnabled(b);
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD]);
+    button.addMouseListener(jfis.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML]);
+    button.addMouseListener(jfis.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT]);
+    button.addMouseListener(jfis.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_XML]);
+    button.addMouseListener(jfis.mouseHandler);
+
+  }
 } // Class
-
-
-
-
-

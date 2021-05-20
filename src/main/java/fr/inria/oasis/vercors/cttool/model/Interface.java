@@ -36,25 +36,27 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
 package fr.inria.oasis.vercors.cttool.model;
 
 import java.util.Collection;
 
 public interface Interface {
 
-	Collection<Message> getMessages();
-	
-	String getName() ;
+  Collection<Message> getMessages();
 
-	void setName(String name);
+  String getName();
 
-	void addMessage(Message m);
-	void removeMessage(Message m);
-	void removeMessage(String messageName);
-	Message getMessageByName(String messageName);
+  void setName(String name);
 
-	boolean isMandatory();
-	void setMandatory(boolean isMandatory);
+  void addMessage(Message m);
+
+  void removeMessage(Message m);
+
+  void removeMessage(String messageName);
+
+  Message getMessageByName(String messageName);
+
+  boolean isMandatory();
+
+  void setMandatory(boolean isMandatory);
 }

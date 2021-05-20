@@ -35,31 +35,31 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
- 
+
 package ui;
 
 /**
- * Class TGConnectingPointTmp
- * Definition of connecting points that are used when model is loaded
- * Creation: 16/12/2003
+ * Class TGConnectingPointTmp Definition of connecting points that are used when
+ * model is loaded Creation: 16/12/2003
+ * 
  * @version 1.0 16/12/2003
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointTmp extends TGConnectingPoint {
-	private int id;
-	
-	public TGConnectingPointTmp(CDElement _container, int _x, int _y, int _id) {
-		super(_container, _x, _y, true, true);
-		id = _id;
-	}
+  private int id;
 
-	@Override
-	public boolean isCompatibleWith(int type) {
-		return false;
-	}
-	
-	@Override
-	public int getId() {
-		return id;
-	}
+  public TGConnectingPointTmp(CDElement _container, int _x, int _y, int _id) {
+    super(_container, _x, _y, true, true);
+    id = _id;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return false;
+  }
+
+  @Override
+  public int getId() {
+    return id;
+  }
 }

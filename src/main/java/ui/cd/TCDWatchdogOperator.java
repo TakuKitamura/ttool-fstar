@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
 
 import ui.*;
@@ -47,61 +44,62 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TCDWatchdogOperator
- * Watchdog composition operator
- * To be used in class diagrams
- * Creation: 06/07/2004
+ * Class TCDWatchdogOperator Watchdog composition operator To be used in class
+ * diagrams Creation: 06/07/2004
+ * 
  * @version 1.0 06/07/2004
  * @author Ludovic APVRILLE
  */
 public class TCDWatchdogOperator extends TCDCompositionOperatorWithSynchro {
-    protected TClassInterface oldt1;
-    
-    public TCDWatchdogOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        TCDWatchdogGateList tgc = new TCDWatchdogGateList(x, y+40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
-        tgc.setValue("{watchdog gates}");
-        tgc.setDefaultValue("{watchdog gates}");
-        tgc.setName("OCL formula listing all watchdog gates");
-        tgc.setMoveWithFather(false);
-        tgcomponent[0] = tgc;
-        
-        name = "watchdog composition operator";
-        value = "Watchdog";
-        
-        myImageIcon = IconManager.imgic110;
-    }
-    
-    public void internalDrawing(Graphics g) {
-        g.drawRect(x, y, width, height);
-        g.setColor(ColorManager.COMPOSITION_OPERATOR);
-        g.fillRect(x+1, y+1, width-1, height-1);
-        g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
-        ColorManager.setColor(g, getState(), 0);
-        g.setFont((g.getFont()).deriveFont(Font.BOLD));
-        g.drawString(value, x + textX, y + textY);
-        g.setFont((g.getFont()).deriveFont(Font.PLAIN));
-    }
-    
-    public int getType() {
-        return TGComponentManager.TCD_WATCHDOG_OPERATOR;
-    }
-    
-    public void structureChanged() {
-        if (tdp instanceof TClassDiagramPanel) {
-            t1 = tdp.getTClass1ToWhichIamConnected(this);
-            if (t1 != oldt1){
-                oldt1 = t1;
-                ((TCDWatchdogGateList)tgcomponent[0]).setTClass(t1);
-                if (t1 != null) {
-                    setName("watchdog composition operator between " + t1.getValue() + " and " + t2.getValue());
-                }	 else {
-                    setName("watchdog composition operator");
-                }
-            }
+  protected TClassInterface oldt1;
+
+  public TCDWatchdogOperator(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
+    TCDWatchdogGateList tgc = new TCDWatchdogGateList(x, y + 40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
+        tdp.getMaxY(), false, this, _tdp);
+    tgc.setValue("{watchdog gates}");
+    tgc.setDefaultValue("{watchdog gates}");
+    tgc.setName("OCL formula listing all watchdog gates");
+    tgc.setMoveWithFather(false);
+    tgcomponent[0] = tgc;
+
+    name = "watchdog composition operator";
+    value = "Watchdog";
+
+    myImageIcon = IconManager.imgic110;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.setColor(ColorManager.COMPOSITION_OPERATOR);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
+    ColorManager.setColor(g, getState(), 0);
+    g.setFont((g.getFont()).deriveFont(Font.BOLD));
+    g.drawString(value, x + textX, y + textY);
+    g.setFont((g.getFont()).deriveFont(Font.PLAIN));
+  }
+
+  public int getType() {
+    return TGComponentManager.TCD_WATCHDOG_OPERATOR;
+  }
+
+  public void structureChanged() {
+    if (tdp instanceof TClassDiagramPanel) {
+      t1 = tdp.getTClass1ToWhichIamConnected(this);
+      if (t1 != oldt1) {
+        oldt1 = t1;
+        ((TCDWatchdogGateList) tgcomponent[0]).setTClass(t1);
+        if (t1 != null) {
+          setName("watchdog composition operator between " + t1.getValue() + " and " + t2.getValue());
+        } else {
+          setName("watchdog composition operator");
         }
-    }  
+      }
+    }
+  }
 }

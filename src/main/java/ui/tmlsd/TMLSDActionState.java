@@ -45,96 +45,97 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TMLSDActionState
- * Action state of a TML sequence diagram
- * Creation: 17/02/2004
+ * Class TMLSDActionState Action state of a TML sequence diagram Creation:
+ * 17/02/2004
+ * 
  * @version 1.0 17/02/2004
  * @author Ludovic APVRILLE
  */
 public class TMLSDActionState extends TGCOneLineText implements SwallowedTGComponent {
 
-	// Issue #31
-	//    protected int lineLength = 5;
-//    protected int textX =  5;
-//    protected int textY =  15;
-//    protected int arc = 5;
-    //protected int w; //w1;
-    
-    public TMLSDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        // Issue #31
-        initScaling( 30, 20 );
-//        width = 30;
-//        height = 20;
-        minWidth = scale( 30 );
-        
-        nbConnectingPoint = 0;
-        addTGConnectingPointsCommentMiddle();
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        value = "action";
-        name = "action state";
-        
-        myImageIcon = IconManager.imgic512;
-    }
-    
-    @Override
-    protected void internalDrawing(Graphics g) {
+  // Issue #31
+  // protected int lineLength = 5;
+  // protected int textX = 5;
+  // protected int textY = 15;
+  // protected int arc = 5;
+  // protected int w; //w1;
 
-    	// Issue #31
-        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
-//        int w1 = Math.max(minWidth, w + 2 * textX);
-//        if ((w1 != width) && (!tdp.isScaled())) {
-//            width = w1;
-//        }
-        g.drawRoundRect(x - width/2, y, width, height, arc, arc);
-        
-        drawSingleString(g,value, x - w / 2 , y + textY);
+  public TMLSDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    // Issue #31
+    initScaling(30, 20);
+    // width = 30;
+    // height = 20;
+    minWidth = scale(30);
+
+    nbConnectingPoint = 0;
+    addTGConnectingPointsCommentMiddle();
+
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    value = "action";
+    name = "action state";
+
+    myImageIcon = IconManager.imgic512;
+  }
+
+  @Override
+  protected void internalDrawing(Graphics g) {
+
+    // Issue #31
+    final int w = checkWidth(g);// g.getFontMetrics().stringWidth(value);
+    // int w1 = Math.max(minWidth, w + 2 * textX);
+    // if ((w1 != width) && (!tdp.isScaled())) {
+    // width = w1;
+    // }
+    g.drawRoundRect(x - width / 2, y, width, height, arc, arc);
+
+    drawSingleString(g, value, x - w / 2, y + textY);
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x - width / 2, y, width, height)) {
+      return this;
     }
-    
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
-            return this;
-        }
-        return null;
+    return null;
+  }
+
+  public String getAction() {
+    return value;
+  }
+
+  public String getAction(int cpt) {
+    if (cpt < 0) {
+      return value;
     }
-    
-    public String getAction() {
-        return value;
+
+    String ret;
+
+    try {
+      ret = value;
+      while (cpt > 0) {
+        ret = ret.substring(ret.indexOf(';') + 1, ret.length());
+        cpt--;
+      }
+
+      int index = ret.indexOf(';');
+
+      if (index > 0) {
+        ret = ret.substring(0, index + 1);
+      }
+    } catch (Exception e) {
+      return value;
     }
-    
-    public String getAction(int cpt) {
-        if (cpt <0) {
-            return value;
-        }
-        
-        String ret;
-        
-        try {
-            ret = value;
-            while(cpt >0) {
-                ret = ret.substring(ret.indexOf(';') + 1, ret.length());
-                cpt --;
-            }
-            
-            int index = ret.indexOf(';');
-            
-            if (index > 0) {
-                ret = ret.substring(0, index+1);
-            }
-        } catch (Exception e) {
-            return value;
-        }
-        return ret;
-    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.TMLSD_ACTION_STATE;
-    }
+    return ret;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TMLSD_ACTION_STATE;
+  }
 }

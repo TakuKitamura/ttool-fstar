@@ -36,35 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sddescription;
 
 /**
- * Class Order
- * Creation: 16/08/2004
+ * Class Order Creation: 16/08/2004
+ * 
  * @version 1.1 16/08/2004
  * @author Ludovic APVRILLE
  */
 public class Order {
-    public Evt evt1;
-    public Evt evt2; // evt1 < evt2
-    
-    public Order(Evt _evt1, Evt _evt2) {
-        evt1 = _evt1;
-        evt2 = _evt2;
-    }
-    
-    public Order() {}
-    
-    public Evt getFirstEvt() {
-        return evt1;
-    }
-    
-    public Evt getLastEvt() {
-        return evt2;
-    }
-    
-    
+  public Evt evt1;
+  public Evt evt2; // evt1 < evt2
+
+  public Order(Evt _evt1, Evt _evt2) {
+    evt1 = _evt1;
+    evt2 = _evt2;
+  }
+
+  public Order() {
+  }
+
+  public Evt getFirstEvt() {
+    return evt1;
+  }
+
+  public Evt getLastEvt() {
+    return evt2;
+  }
+
 }

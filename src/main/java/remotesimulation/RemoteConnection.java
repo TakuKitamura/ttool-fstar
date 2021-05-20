@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package remotesimulation;
 
 import java.io.BufferedReader;
@@ -47,115 +46,111 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 /**
- * Class RemoteConnection
- * For remote control of the simulator
- * Creation: 16/04/2009
+ * Class RemoteConnection For remote control of the simulator Creation:
+ * 16/04/2009
  *
  * @author Ludovic APVRILLE
  * @version 1.1 16/04/2009
  */
 public class RemoteConnection {
 
-    private static String NO_HOST = "Application has no execution host";
-    private static String INET = "Bad internet address for host ";
-    private static String SERV_NOT_RESP = "Server not responding on ";
-    private static String IO_ERROR = "Communication pb with server ";
+  private static String NO_HOST = "Application has no execution host";
+  private static String INET = "Bad internet address for host ";
+  private static String SERV_NOT_RESP = "Server not responding on ";
+  private static String IO_ERROR = "Communication pb with server ";
 
-    private String host;
-    //private String cmd;
-    private static int port = 3490;
-    //private int portString = -1;
-    //private int portString2 = -1;
-    private Socket clientSocket = null;
-    private BufferedReader in;
-    //private DataInputStream in2;
-    private PrintStream out;
-    //private int offset = 0;
+  private String host;
+  // private String cmd;
+  private static int port = 3490;
+  // private int portString = -1;
+  // private int portString2 = -1;
+  private Socket clientSocket = null;
+  private BufferedReader in;
+  // private DataInputStream in2;
+  private PrintStream out;
+  // private int offset = 0;
 
-    //private boolean go;
+  // private boolean go;
 
-    public RemoteConnection(String _host, int _port) {
-        host = _host;
-        port = _port;
+  public RemoteConnection(String _host, int _port) {
+    host = _host;
+    port = _port;
+  }
+
+  public RemoteConnection(String _host) {
+    host = _host;
+  }
+
+  public void connect() throws RemoteConnectionException {
+    InetAddress ina = null;
+
+    if (host == null) {
+      throw new RemoteConnectionException(NO_HOST);
     }
 
-    public RemoteConnection(String _host) {
-        host = _host;
+    try {
+      ina = InetAddress.getByName(host);
+    } catch (UnknownHostException e) {
+      throw new RemoteConnectionException(INET + host, e);
     }
 
-    public void connect() throws RemoteConnectionException {
-        InetAddress ina = null;
-
-
-        if (host == null) {
-            throw new RemoteConnectionException(NO_HOST);
-        }
-
-        try {
-            ina = InetAddress.getByName(host);
-        } catch (UnknownHostException e) {
-            throw new RemoteConnectionException(INET + host, e);
-        }
-
-        try {
-            clientSocket = new Socket(ina, port);
-        } catch (IOException io) {
-            throw new RemoteConnectionException(SERV_NOT_RESP + host, io);
-        }
-
-        try {
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            //in2 = new DataInputStream(clientSocket.getInputStream());
-            out = new PrintStream(clientSocket.getOutputStream());
-        } catch (Exception e) {
-            throw new RemoteConnectionException(SERV_NOT_RESP + host, e);
-        }
+    try {
+      clientSocket = new Socket(ina, port);
+    } catch (IOException io) {
+      throw new RemoteConnectionException(SERV_NOT_RESP + host, io);
     }
 
-    public void disconnect() throws RemoteConnectionException {
-        try {
-            clientSocket.close();
-        } catch (IOException io) {
-            throw new RemoteConnectionException(IO_ERROR + host, io);
-        } catch (NullPointerException npe) {
-            throw new RemoteConnectionException(SERV_NOT_RESP + host, npe);
-        }
+    try {
+      in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+      // in2 = new DataInputStream(clientSocket.getInputStream());
+      out = new PrintStream(clientSocket.getOutputStream());
+    } catch (Exception e) {
+      throw new RemoteConnectionException(SERV_NOT_RESP + host, e);
+    }
+  }
+
+  public void disconnect() throws RemoteConnectionException {
+    try {
+      clientSocket.close();
+    } catch (IOException io) {
+      throw new RemoteConnectionException(IO_ERROR + host, io);
+    } catch (NullPointerException npe) {
+      throw new RemoteConnectionException(SERV_NOT_RESP + host, npe);
+    }
+  }
+
+  public void send(String s) throws RemoteConnectionException {
+    s = s.trim() + " \n";
+    if (s.length() == 0) {
+      return;
+    }
+    try {
+      out.print(s);
+      out.flush();
+    } catch (Exception e) {
+      throw new RemoteConnectionException(IO_ERROR, e);
+    }
+  }
+
+  public String readOneLine() throws RemoteConnectionException {
+    // int nb;
+    String s = null;
+    try {
+      s = in.readLine();
+    } catch (IOException io) {
+      throw new RemoteConnectionException(IO_ERROR, io);
     }
 
-    public void send(String s) throws RemoteConnectionException {
-        s = s.trim() + " \n";
-        if (s.length() == 0) {
-            return;
-        }
-        try {
-            out.print(s);
-            out.flush();
-        } catch (Exception e) {
-            throw new RemoteConnectionException(IO_ERROR, e);
-        }
+    if (s == null) {
+      throw new RemoteConnectionException(IO_ERROR);
     }
 
-    public String readOneLine()
-            throws RemoteConnectionException {
-        // int nb;
-        String s = null;
-        try {
-            s = in.readLine();
-        } catch (IOException io) {
-            throw new RemoteConnectionException(IO_ERROR, io);
-        }
-
-        if (s == null) {
-            throw new RemoteConnectionException(IO_ERROR);
-        }
-
-        if (s.equals("null")) {
-            throw new RemoteConnectionException(IO_ERROR);
-        }
-
-        return s;
+    if (s.equals("null")) {
+      throw new RemoteConnectionException(IO_ERROR);
     }
+
+    return s;
+  }
 
 }

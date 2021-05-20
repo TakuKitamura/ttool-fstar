@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class ATDCompositionConnectingPoint
- * Definition of connecting points on which composition connectors can be connected
- * Creation: 09/12/2009
+ * Class ATDCompositionConnectingPoint Definition of connecting points on which
+ * composition connectors can be connected Creation: 09/12/2009
+ * 
  * @version 1.0 09/12/2009
  * @author Ludovic APVRILLE
  */
-public class ATDCompositionConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-    public ATDCompositionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.ATD_COMPOSITION_CONNECTOR;
-    }
+public class ATDCompositionConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public ATDCompositionConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.ATD_COMPOSITION_CONNECTOR;
+  }
 }

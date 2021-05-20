@@ -36,33 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPESignalComponent
- * Creation: 16/02/2011
+ * Class TEPESignalComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPESignalComponent  extends TEPEComponent  {
-	protected String blockName;
-	
-    public TEPESignalComponent(String _name, Object _referenceObject, String _blockName) {
-		super(_name, _referenceObject);
-		blockName = _blockName;
-		outSignalComponents = new Vector<TEPEComponent>();
-    }
-    
-    public String getBlockName() {
-		return blockName;
-	}
-	
-	public String getExtraString() {
-		return "\nDeclared in block: " + blockName;
-	}
+public class TEPESignalComponent extends TEPEComponent {
+  protected String blockName;
+
+  public TEPESignalComponent(String _name, Object _referenceObject, String _blockName) {
+    super(_name, _referenceObject);
+    blockName = _blockName;
+    outSignalComponents = new Vector<TEPEComponent>();
+  }
+
+  public String getBlockName() {
+    return blockName;
+  }
+
+  public String getExtraString() {
+    return "\nDeclared in block: " + blockName;
+  }
 }

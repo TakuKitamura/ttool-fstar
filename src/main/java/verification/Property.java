@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package verification;
 
 import myutil.TraceManager;
@@ -48,26 +47,23 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Vector;
 
-
 /**
- * Class Property
- * Creation: 10/04/2019
- * Version 1.0 10/04/2019
+ * Class Property Creation: 10/04/2019 Version 1.0 10/04/2019
  *
  * @author Ludovic APVRILLE
  */
-public class Property  {
+public class Property {
 
-    public PropertyType type;
-    public String name;
-    public String propertyDescription;
-    public PropertyResultType resultType;
-    public String result;
-    public Object reference;
-    public Date date;
+  public PropertyType type;
+  public String name;
+  public String propertyDescription;
+  public PropertyResultType resultType;
+  public String result;
+  public Object reference;
+  public Date date;
 
-    public Property() {
-        date = new Date();
-    }
+  public Property() {
+    date = new Date();
+  }
 
 }

@@ -36,28 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifProcCall
- * Creation: 13/09/2015
+ * Class ProVerifProcCall Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifProcCall extends ProVerifProcInstr {
 
-    protected String name;
-    protected ProVerifVar[] args;
+  protected String name;
+  protected ProVerifVar[] args;
 
-    public ProVerifProcCall (String _name, ProVerifVar[] _args) {
-        this.name = _name;
-        this.args = _args;
-    }
+  public ProVerifProcCall(String _name, ProVerifVar[] _args) {
+    this.name = _name;
+    this.args = _args;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateProcCall (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateProcCall(this, _alinea);
+  }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
 
 import myutil.GraphicLib;
@@ -51,33 +48,28 @@ import java.util.Vector;
 //import java.awt.geom.*;
 
 /**
- * Class TGConnectorAssociationWithNavigation
- * Association with a navigation arrow. To be used in class diagram. Connects two TClasses.
- * Creation: 12/12/2003
+ * Class TGConnectorAssociationWithNavigation Association with a navigation
+ * arrow. To be used in class diagram. Connects two TClasses. Creation:
+ * 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorAssociationWithNavigation extends TGConnectorAssociation {
-	protected int arrowLength = 15;
+public class TGConnectorAssociationWithNavigation extends TGConnectorAssociation {
+  protected int arrowLength = 15;
 
-	public TGConnectorAssociationWithNavigation(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-		super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-		myImageIcon = IconManager.imgic106;
-	}
+  public TGConnectorAssociationWithNavigation(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic106;
+  }
 
-	protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-		GraphicLib.arrowWithLine(g, 1, 1, arrowLength, x1, y1, x2, y2, false);	
-	} 
-	
-	public int getType() {
-       return TGComponentManager.CONNECTOR_ASSOCIATION_NAVIGATION;
-	}
-	
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    GraphicLib.arrowWithLine(g, 1, 1, arrowLength, x1, y1, x2, y2, false);
+  }
+
+  public int getType() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION_NAVIGATION;
+  }
+
 }
-
-
-
-
-    
-
-

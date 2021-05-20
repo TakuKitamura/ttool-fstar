@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.atd;
 
 //import java.awt.*;
@@ -55,112 +52,116 @@ import java.util.ListIterator;
 //import javax.xml.parsers.*;
 
 /**
- * Class AttackTreePanel
- * Panel used for drawing attack trees
- * Creation: 03/11/2009
+ * Class AttackTreePanel Panel used for drawing attack trees Creation:
+ * 03/11/2009
+ * 
  * @version 1.0 03/11/2009
  * @author Ludovic APVRILLE
  */
-public class AttackTreeDiagramPanel extends TDiagramPanel implements TDPWithAttributes{
-    
-    public  AttackTreeDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        //addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);*/
+public class AttackTreeDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
+
+  public AttackTreeDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
+    // addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
+
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
+
+  public boolean actionOnAdd(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    return false;
+  }
+
+  public boolean actionOnRemove(TGComponent tgc) {
+    return false;
+  }
+
+  public String getXMLHead() {
+    return "<AttackTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
+
+  public String getXMLTail() {
+    return "</AttackTreeDiagramPanel>";
+  }
+
+  public String getXMLSelectedHead() {
+    return "<AttackTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\""
+        + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
+
+  public String getXMLSelectedTail() {
+    return "</AttackTreeDiagramPanelCopy>";
+  }
+
+  public String getXMLCloneHead() {
+    return "<AttackTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0
+        + "\" heightSel=\"" + 0 + "\" >";
+  }
+
+  public String getXMLCloneTail() {
+    return "</AttackTreeDiagramPanelCopy>";
+  }
+
+  public void makeGraphicalOptimizations() {
+    // Segments of connector that mask components
+
+    // Components over others
+
+    // Position correctly guards of choice
+  }
+
+  public LinkedList<TGComponent> getAllAttacks() {
+    LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+    TGComponent tgc;
+
+    ListIterator iterator = getComponentList().listIterator();
+
+    while (iterator.hasNext()) {
+      tgc = (TGComponent) (iterator.next());
+      if (tgc instanceof ATDAttack) {
+        list.add(tgc);
+      }
     }
-    
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
+
+    return list;
+
+  }
+
+  public boolean hasAutoConnect() {
+    return false;
+  }
+
+  public void setConnectorsToFront() {
+    TGComponent tgc;
+
+    //
+
+    Iterator iterator = componentList.listIterator();
+
+    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+
+    while (iterator.hasNext()) {
+      tgc = (TGComponent) (iterator.next());
+      if (!(tgc instanceof TGConnector)) {
+        list.add(tgc);
+      }
     }
-    
-    public boolean actionOnAdd(TGComponent tgc) {
-        return false;
+
+    //
+    for (TGComponent tgc1 : list) {
+      //
+      componentList.remove(tgc1);
+      componentList.add(tgc1);
     }
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        return false;
-    }
-    
-    public  boolean actionOnRemove(TGComponent tgc) {
-        return false;
-    }
-    
-    public String getXMLHead() {
-        return "<AttackTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
-    
-    public String getXMLTail() {
-        return "</AttackTreeDiagramPanel>";
-    }
-    
-    public String getXMLSelectedHead() {
-        return "<AttackTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
-    }
-    
-    public String getXMLSelectedTail() {
-        return "</AttackTreeDiagramPanelCopy>";
-    }
-    
-    public String getXMLCloneHead() {
-        return "<AttackTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
-    }
-    
-    public String getXMLCloneTail() {
-        return "</AttackTreeDiagramPanelCopy>";
-    }
-    
-    public void makeGraphicalOptimizations() {
-        // Segments of connector that mask components
-        
-        // Components over others
-        
-        // Position correctly guards of choice
-    }
-    
-    public LinkedList<TGComponent> getAllAttacks() {
-		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
-		TGComponent tgc;
-		
-		ListIterator iterator = getComponentList().listIterator();
-		
-		while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof ATDAttack) {
-				list.add(tgc);
-			}
-		}
-		
-		return list;
-		
-	}
-	
-	public boolean hasAutoConnect() {
-		return false;
-	}
-	
-	public void setConnectorsToFront() {
-		TGComponent tgc;
-		
-		//
-		
-        Iterator iterator = componentList.listIterator();
-        
-		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-		
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-			if (!(tgc instanceof TGConnector)) {
-				list.add(tgc);
-			}
-		}
-		
-		//
-		for(TGComponent tgc1: list) {
-			//
-			componentList.remove(tgc1);
-			componentList.add(tgc1);
-		}
-	}
-    
+  }
+
 }

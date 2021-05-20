@@ -36,36 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
-
 /**
- * Class TMLSendEvent
- * Creation: 23/11/2005
+ * Class TMLSendEvent Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
 public class TMLSendEvent extends TMLActivityElementEvent {
- 
-    
-    public TMLSendEvent(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-    
-    public String toString() {
-	return "Send event:" + event.getName() + "(" + getAllParams() +")";
-    }
 
-    public String customExtraToXML() {
-        String ret = " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
-        ret += " blocking=\"" + event.isBlocking() + "\" ";
-        return ret;
-    }
+  public TMLSendEvent(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    
-    
+  public String toString() {
+    return "Send event:" + event.getName() + "(" + getAllParams() + ")";
+  }
+
+  public String customExtraToXML() {
+    String ret = " event=\"" + event.getName() + "\" params=\"" + getAllParams() + "\" ";
+    ret += " blocking=\"" + event.isBlocking() + "\" ";
+    return ret;
+  }
+
 }

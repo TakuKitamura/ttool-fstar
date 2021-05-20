@@ -36,50 +36,47 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package attacktrees;
 
 import java.awt.*;
 
 /**
- * Class ORNode
- * Creation: 13/04/2015
+ * Class ORNode Creation: 13/04/2015
  *
  * @author Ludovic APVRILLE
  * @version 1.0 13/04/2015
  */
 public class XORNode extends BooleanNode {
 
-    public XORNode(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        type = "XOR";
+  public XORNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "XOR";
+  }
+
+  public int getLowestCost(int _expertise) {
+
+    // TraceManager.addDev("In node: " + this.getClass());
+
+    if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
+      return -1;
     }
 
-    public int getLowestCost(int _expertise)  {
+    // Built from the lower attacks. Assume all attacks are necessary
 
-        //TraceManager.addDev("In node: " + this.getClass());
-
-        if ((inputAttacks == null) || (inputAttacks.size() == 0)) {
-            return -1;
-        }
-
-        // Built from the lower attacks. Assume all attacks are necessary
-
-        // We task the lowest cost;
-        int cost = Integer.MAX_VALUE;
-        for(Attack attack: inputAttacks) {
-            int ret = attack.getLowestCost(_expertise);
-            if (ret != -1) {
-                cost = Math.min(cost, ret);
-            }
-        }
-
-        if (cost == Integer.MAX_VALUE) {
-            return -1; // no solution found
-        }
-
-        return cost;
+    // We task the lowest cost;
+    int cost = Integer.MAX_VALUE;
+    for (Attack attack : inputAttacks) {
+      int ret = attack.getLowestCost(_expertise);
+      if (ret != -1) {
+        cost = Math.min(cost, ret);
+      }
     }
 
+    if (cost == Integer.MAX_VALUE) {
+      return -1; // no solution found
+    }
+
+    return cost;
+  }
 
 }

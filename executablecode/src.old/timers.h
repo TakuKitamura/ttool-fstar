@@ -14,5 +14,3 @@ void waitForTimerExpiration(int myid, int timer_id);
 void resetTimer(int myid, int timer_id);
 
 #endif
-
-

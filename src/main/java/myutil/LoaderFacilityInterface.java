@@ -36,19 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 /**
-   * Class LoaderFacilityInterface
-   * Creation: 31/05/2017
-   * @version 1.1 31/05/2017
-   * @author Ludovic APVRILLE
+ * Class LoaderFacilityInterface Creation: 31/05/2017
+ * 
+ * @version 1.1 31/05/2017
+ * @author Ludovic APVRILLE
  */
 public interface LoaderFacilityInterface {
 
-    void load(int index);
+  void load(int index);
 
 }

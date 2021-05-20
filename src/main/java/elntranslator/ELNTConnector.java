@@ -40,45 +40,44 @@ package elntranslator;
 
 import java.util.LinkedList;
 
-/** 
- * Class ELNTConnector 
- * Parameters of a ELN connector
- * Creation: 23/07/2018
+/**
+ * Class ELNTConnector Parameters of a ELN connector Creation: 23/07/2018
+ * 
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
-public class ELNTConnector{
-    private ELNTConnectingPoint connectingPoint1;
-    private ELNTConnectingPoint connectingPoint2;
-    
-    private String name;
-    private LinkedList<ELNTMidPortTerminal> term;
+public class ELNTConnector {
+  private ELNTConnectingPoint connectingPoint1;
+  private ELNTConnectingPoint connectingPoint2;
 
-    public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2, String _name) {
-    	connectingPoint1 = _connectingPoint1;
-    	connectingPoint2 = _connectingPoint2; 
-    	name = _name;
-    	term = new LinkedList<ELNTMidPortTerminal>();
-    }
+  private String name;
+  private LinkedList<ELNTMidPortTerminal> term;
 
-    public ELNTConnectingPoint get_p1() {
-    	return connectingPoint1;
-    }
+  public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2, String _name) {
+    connectingPoint1 = _connectingPoint1;
+    connectingPoint2 = _connectingPoint2;
+    name = _name;
+    term = new LinkedList<ELNTMidPortTerminal>();
+  }
 
-    public ELNTConnectingPoint get_p2() {
-    	return connectingPoint2;
-    }
-    
-    public String getName() {
-		return name;
-	}
+  public ELNTConnectingPoint get_p1() {
+    return connectingPoint1;
+  }
 
-	public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
-		return term;
-	}
-	
-	public void addMidPortTerminal(ELNTMidPortTerminal _term){
-		term.add(_term);
-	}
+  public ELNTConnectingPoint get_p2() {
+    return connectingPoint2;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
+    return term;
+  }
+
+  public void addMidPortTerminal(ELNTMidPortTerminal _term) {
+    term.add(_term);
+  }
 }

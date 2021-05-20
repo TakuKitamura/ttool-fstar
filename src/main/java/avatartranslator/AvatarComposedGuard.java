@@ -39,17 +39,17 @@
 package avatartranslator;
 
 /**
-   * Class AvatarComposedGuard
-   * Creation: 16/09/2015
-   * @version 1.0 16/09/2015
-   * @author Florian LUGOU
+ * Class AvatarComposedGuard Creation: 16/09/2015
+ * 
+ * @version 1.0 16/09/2015
+ * @author Florian LUGOU
  */
 public abstract class AvatarComposedGuard extends AvatarGuard {
-    
-	public AvatarComposedGuard getOpposite () {
-        //return new AvatarUnaryGuard ("not", "(", ")", this);
-        return new AvatarUnaryGuard ("", "(", ") == false", this);
-    }
 
-    public abstract AvatarComposedGuard clone ();
+  public AvatarComposedGuard getOpposite() {
+    // return new AvatarUnaryGuard ("not", "(", ")", this);
+    return new AvatarUnaryGuard("", "(", ") == false", this);
+  }
+
+  public abstract AvatarComposedGuard clone();
 }

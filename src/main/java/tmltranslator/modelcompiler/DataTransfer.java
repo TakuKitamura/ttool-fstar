@@ -46,134 +46,133 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-   * Class DataTransfer for code generation
-   * Creation: 11/02/2014
-   * @version 1.0 11/02/2014
-   * @author Andrea ENRICI
+ * Class DataTransfer for code generation Creation: 11/02/2014
+ * 
+ * @version 1.0 11/02/2014
+ * @author Andrea ENRICI
  */
-public class DataTransfer	{
+public class DataTransfer {
 
-	public static final int DMA = 0;
-	public static final int DOUBLE_DMA = 1;
-	public static final int MEMORY_COPY = 2;
-	public static final String TAB = "\t";
-	public static final String CR = "\n";
+  public static final int DMA = 0;
+  public static final int DOUBLE_DMA = 1;
+  public static final int MEMORY_COPY = 2;
+  public static final String TAB = "\t";
+  public static final String CR = "\n";
 
-	private int type;
-	private String name = "";
-	private List<Buffer> inBuffers;
-	private Buffer outBuffer;
-	private TMLCPLib tmlcplib;
-	private TMLCP tmlcp;
-	private List<Signal> outSignals;
-	private List<Signal> inSignals;
+  private int type;
+  private String name = "";
+  private List<Buffer> inBuffers;
+  private Buffer outBuffer;
+  private TMLCPLib tmlcplib;
+  private TMLCP tmlcp;
+  private List<Signal> outSignals;
+  private List<Signal> inSignals;
 
-	public DataTransfer( TMLCPLib _tmlcplib, TMLCP _tmlcp, List<Signal> _inSignals, List<Signal> _outSignals )	{
-		name = _tmlcplib.getName();
-		tmlcplib = _tmlcplib;
-		tmlcp = _tmlcp;
-		inSignals = _inSignals;
-		if( _outSignals == null )	{
-			outSignals = new ArrayList<Signal>();
-		}
-		else	{
-			outSignals = _outSignals;
-		}
-		init();
-	}
+  public DataTransfer(TMLCPLib _tmlcplib, TMLCP _tmlcp, List<Signal> _inSignals, List<Signal> _outSignals) {
+    name = _tmlcplib.getName();
+    tmlcplib = _tmlcplib;
+    tmlcp = _tmlcp;
+    inSignals = _inSignals;
+    if (_outSignals == null) {
+      outSignals = new ArrayList<Signal>();
+    } else {
+      outSignals = _outSignals;
+    }
+    init();
+  }
 
-	private void init()	{
-		inBuffers = new ArrayList<Buffer>();
-	}
+  private void init() {
+    inBuffers = new ArrayList<Buffer>();
+  }
 
-	public TMLCPLib getTMLCPLib()	{
-		return tmlcplib;
-	}
+  public TMLCPLib getTMLCPLib() {
+    return tmlcplib;
+  }
 
-	public String getName()	{
-		return name.split("::")[0];
-	}
+  public String getName() {
+    return name.split("::")[0];
+  }
 
-	public int getType()	{
-		return type;
-	}
+  public int getType() {
+    return type;
+  }
 
-	public List<Signal> getInSignals()	{
-		return inSignals;
-	}
+  public List<Signal> getInSignals() {
+    return inSignals;
+  }
 
-	public List<Signal> getOutSignals()	{
-		return outSignals;
-	}
+  public List<Signal> getOutSignals() {
+    return outSignals;
+  }
 
-	/*public void setOutSignal( Signal _outSignal )	{
-		outSignal = _outSignal;
-	}*/
+  /*
+   * public void setOutSignal( Signal _outSignal ) { outSignal = _outSignal; }
+   */
 
-	public void addOutSignal( Signal _outSignal )	{
-		outSignals.add( _outSignal );
-	}
+  public void addOutSignal(Signal _outSignal) {
+    outSignals.add(_outSignal);
+  }
 
-	public void addInSignal( Signal _inSignal )	{
-		inSignals.add( _inSignal );
-	}
+  public void addInSignal(Signal _inSignal) {
+    inSignals.add(_inSignal);
+  }
 
-	/*public void setInBuffer( Buffer _inBuffer)	{
-		inBuffer = _inBuffer;
-	}*/
+  /*
+   * public void setInBuffer( Buffer _inBuffer) { inBuffer = _inBuffer; }
+   */
 
-	public void addInBuffer( Buffer _inBuffer )	{
-		inBuffers.add( _inBuffer );
-	}
+  public void addInBuffer(Buffer _inBuffer) {
+    inBuffers.add(_inBuffer);
+  }
 
-	public List<Buffer> getInBuffers()	{
-		return inBuffers;
-	}
+  public List<Buffer> getInBuffers() {
+    return inBuffers;
+  }
 
-	public void setOutBuffer( Buffer _outBuffer)	{
-		outBuffer = _outBuffer;
-	}
+  public void setOutBuffer(Buffer _outBuffer) {
+    outBuffer = _outBuffer;
+  }
 
-	public Buffer getOutBuffer()	{
-		return outBuffer;
-	}
+  public Buffer getOutBuffer() {
+    return outBuffer;
+  }
 
-	public String getFireRuleCondition()	{
+  public String getFireRuleCondition() {
 
-		StringBuffer s = new StringBuffer();
-		for( Signal sig: inSignals )	{
-			s.append( "( sig[ " + sig.getName() + " ].f ) &&" );
-		}
-		for( Signal sig: outSignals )	{
-			s.append( "( !sig[ " + sig.getName() + " ].f ) &&" );
-		}
-		return s.toString().substring( 0, s.length() - 3 );
-	}
+    StringBuffer s = new StringBuffer();
+    for (Signal sig : inSignals) {
+      s.append("( sig[ " + sig.getName() + " ].f ) &&");
+    }
+    for (Signal sig : outSignals) {
+      s.append("( !sig[ " + sig.getName() + " ].f ) &&");
+    }
+    return s.toString().substring(0, s.length() - 3);
+  }
 
-	public String getContextName()	{
-		return getTMLCPLib().getName().split("::")[0] + "_ctx";
-	}
+  public String getContextName() {
+    return getTMLCPLib().getName().split("::")[0] + "_ctx";
+  }
 
-	public String toString()	{
-		
-		StringBuffer s  = new StringBuffer( "DATA TRANSFER " + name + "\n\t" );
-		for( Signal sig: inSignals )	{
-			s.append( "inSignal: " + sig.getName() + "\n\t" );
-		}
-		for( Signal sig: outSignals )	{
-			s.append( "outSignal: " + sig.getName() + "\n\t" );
-		}
-		for( Buffer buff: inBuffers )	{
-			s.append( "inBuffer: " + buff.toString() + "\n\t" );
-		}
-		if( outBuffer != null )	{
-			s.append( "outBuffer: " + outBuffer.toString() + "\n\t" );
-		}
-		if( tmlcp != null )	{
-			s.append( "TMLCP: " + tmlcp.toString() );
-		}
-	
-		return s.toString();
-	}
+  public String toString() {
 
-}	//End of class
+    StringBuffer s = new StringBuffer("DATA TRANSFER " + name + "\n\t");
+    for (Signal sig : inSignals) {
+      s.append("inSignal: " + sig.getName() + "\n\t");
+    }
+    for (Signal sig : outSignals) {
+      s.append("outSignal: " + sig.getName() + "\n\t");
+    }
+    for (Buffer buff : inBuffers) {
+      s.append("inBuffer: " + buff.toString() + "\n\t");
+    }
+    if (outBuffer != null) {
+      s.append("outBuffer: " + outBuffer.toString() + "\n\t");
+    }
+    if (tmlcp != null) {
+      s.append("TMLCP: " + tmlcp.toString());
+    }
+
+    return s.toString();
+  }
+
+} // End of class

@@ -36,55 +36,52 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package vcd;
 
 /**
- * Class VCDVariable
- * Creation: 13/07/2009
+ * Class VCDVariable Creation: 13/07/2009
+ * 
  * @version 1.0 13/07/2009
  * @author Ludovic APVRILLE
  */
-public class VCDVariable  {
-    private String  name;
-	private int bitwidth;
-	private String type = "integer";
-	private char shortcut;
-	
-	private static int IDShortcut;
-    
-    public VCDVariable(String _name) {
-       name = _name;
-	   shortcut = getShortcut();
-    }
-	
-	public String getName() {
-		return name;
-	}
-	
-	public char getLocalShortcut() {
-		return shortcut;
-	}
-	
-	public void setBitwidth(int _bitwidth) {
-		bitwidth = _bitwidth;
-	}
-	
-	public String decToString() {
-		String s = "$var " + type + " "  + bitwidth + " " + shortcut + " " + name + " $end\n";
-		return s;
-	}
-	
-	public static void  reinitShortcut() {
-		IDShortcut = 35;
-	}
-	
-	public static char getShortcut() {
-		int tmp = IDShortcut;
-		IDShortcut ++;
-		return (char)tmp;
-	}
-  
+public class VCDVariable {
+  private String name;
+  private int bitwidth;
+  private String type = "integer";
+  private char shortcut;
+
+  private static int IDShortcut;
+
+  public VCDVariable(String _name) {
+    name = _name;
+    shortcut = getShortcut();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public char getLocalShortcut() {
+    return shortcut;
+  }
+
+  public void setBitwidth(int _bitwidth) {
+    bitwidth = _bitwidth;
+  }
+
+  public String decToString() {
+    String s = "$var " + type + " " + bitwidth + " " + shortcut + " " + name + " $end\n";
+    return s;
+  }
+
+  public static void reinitShortcut() {
+    IDShortcut = 35;
+  }
+
+  public static char getShortcut() {
+    int tmp = IDShortcut;
+    IDShortcut++;
+    return (char) tmp;
+  }
+
 }

@@ -36,27 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
-
 /**
- * Class TMLStartState
- * Creation: 23/11/2005
+ * Class TMLStartState Creation: 23/11/2005
+ * 
  * @version 1.0 23/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLStartState extends TMLActivityElement{
-    
-    public TMLStartState(String _name, Object _referenceObject) {
-         super(_name, _referenceObject); 
-    }
+public class TMLStartState extends TMLActivityElement {
 
-    public String customExtraToXML() {
-	return "";
-    }
- 
+  public TMLStartState(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public String customExtraToXML() {
+    return "";
+  }
+
 }

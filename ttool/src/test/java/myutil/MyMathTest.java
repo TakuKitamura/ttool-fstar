@@ -44,41 +44,37 @@ import static org.junit.Assert.assertTrue;
 
 public class MyMathTest {
 
-    @Test
-    public void testGaussianDistributionLaw() {
-        System.out.println("Testing gaussian distribution law between 1 and 10");
+  @Test
+  public void testGaussianDistributionLaw() {
+    System.out.println("Testing gaussian distribution law between 1 and 10");
 
-        int[] tab = new int[10];
+    int[] tab = new int[10];
 
-        int loop = 10000;
-        double average  = 0;
-        double a = 1.0;
-        double b = 10.0;
+    int loop = 10000;
+    double average = 0;
+    double a = 1.0;
+    double b = 10.0;
 
-        for(int i=0; i<loop; i++) {
-            double d = MyMath.gaussianDistribution(a-0.4999, b+0.49999, 2.0);
-            average += d;
-            int r = (int)(Math.round(d));
-            //System.out.println("d=" + d + " r=" + r);
-            //assertTrue(r>=a);
-            //assertTrue(r<=b);
-            tab[r-1]++;
-        }
-
-        System.out.println("Results of gaussian test:");
-        for(int i=0; i<tab.length; i++) {
-            System.out.println("tab[" + (i+1) + "]=" + tab[i]);
-        }
-        average = average / loop;
-        System.out.println("Average:" + average);
-
-        assertTrue((int)average > ((b-a)/2) - 1);
-        assertTrue((int)average < ((b-a)/2) + 1);
-
-
-
-
+    for (int i = 0; i < loop; i++) {
+      double d = MyMath.gaussianDistribution(a - 0.4999, b + 0.49999, 2.0);
+      average += d;
+      int r = (int) (Math.round(d));
+      // System.out.println("d=" + d + " r=" + r);
+      // assertTrue(r>=a);
+      // assertTrue(r<=b);
+      tab[r - 1]++;
     }
 
+    System.out.println("Results of gaussian test:");
+    for (int i = 0; i < tab.length; i++) {
+      System.out.println("tab[" + (i + 1) + "]=" + tab[i]);
+    }
+    average = average / loop;
+    System.out.println("Average:" + average);
+
+    assertTrue((int) average > ((b - a) / 2) - 1);
+    assertTrue((int) average < ((b - a) / 2) + 1);
+
+  }
 
 }

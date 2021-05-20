@@ -67,453 +67,413 @@ import ui.avatarrd.AvatarRDRequirement;
 import ui.tmlad.TMLADWriteChannel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarSignal;
+
 /**
-   * Class AvatarSMDSendAMSSignal
-   * Action of sending a signal
-   * Creation: 12/04/2010
-   * @version 1.0 12/04/2010
-   * @author Ludovic APVRILLE
+ * Class AvatarSMDSendAMSSignal Action of sending a signal Creation: 12/04/2010
+ * 
+ * @version 1.0 12/04/2010
+ * @author Ludovic APVRILLE
  */
-public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
-    protected int lineLength = 5;
-//    protected int textX =  5;
-//    protected int textY =  15;
-    protected int arc = 5;
-    protected int linebreak = 10;
+public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
+    /* Issue #69 AvatarSMDBasicComponent */ implements CheckableAccessibility, LinkedReference, CheckableLatency,
+    BasicErrorHighlight, PartOfInvariant {
+  protected int lineLength = 5;
+  // protected int textX = 5;
+  // protected int textY = 15;
+  protected int arc = 5;
+  protected int linebreak = 10;
 
-	private ConcurrentHashMap<String, String> latencyVals;
+  private ConcurrentHashMap<String, String> latencyVals;
 
-	protected int latencyX=30;
-	protected int latencyY=25;
-	protected int textWidth=10;
-	protected int textHeight=20;
+  protected int latencyX = 30;
+  protected int latencyY = 25;
+  protected int textWidth = 10;
+  protected int textHeight = 20;
 
-    protected int stateOfError = 0; // Not yet checked
+  protected int stateOfError = 0; // Not yet checked
 
-    public AvatarSMDSendAMSSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public AvatarSMDSendAMSSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        textX = 5;
-        textY = 15;
-        initScaling(30,20);
+    width = 30;
+    height = 20;
+    minWidth = 30;
+    textX = 5;
+    textY = 15;
+    initScaling(30, 20);
 
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[2];
+    connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
 
-        addTGConnectingPointsComment();
+    addTGConnectingPointsComment();
 
-        moveable = true;
-        editable = true;
-        removable = true;
+    moveable = true;
+    editable = true;
+    removable = true;
 
-        name = "Send AMS signal";
-        value = "amsSig()";
-	
-        //makeValue();
+    name = "Send AMS signal";
+    value = "amsSig()";
 
-        myImageIcon = IconManager.imgic904;
-		latencyVals = new ConcurrentHashMap<String, String>();
-    }
-    
-	public void addLatency(String name, String num){
-		latencyVals.put(name,num);
-	}
-	
-	@Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;            //updateConnectingPoints();
-        }
+    // makeValue();
 
-        if (stateOfError > 0)  {
-            Color c = g.getColor();
-	    //Color c =  g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
-            switch(stateOfError) {
-            case ErrorHighlight.OK:
-                g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
-                break;
-            default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);		
-            }
-            // Making the polygon
-            int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
-            int [] py1 = {y, y, y+(height/2), y+height, y+height};
-            g.fillPolygon(px1, py1, 5);
-            g.setColor(c);
-        }
+    myImageIcon = IconManager.imgic904;
+    latencyVals = new ConcurrentHashMap<String, String>();
+  }
 
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        Color c = g.getColor();
-        //
+  public void addLatency(String name, String num) {
+    latencyVals.put(name, num);
+  }
 
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-
-        /*if (g.getColor().equals(ColorManager.NORMAL_0)) {
-          g.setColor(ColorManager.TML_PORT_EVENT);
-          }*/
-
-        int x1 = x + 1;
-        int y1 = y + 1;
-        int height1 = height;
-        int width1 = width;
-        g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
-        g.drawLine(x1, y1, x1+width1-linebreak, y1);
-        g.drawLine(x1, y1+height1, x1+width1-linebreak, y1+height1);
-        g.drawLine(x1, y1, x1, y1+height1);
-        g.drawLine(x1+width1-linebreak, y1, x1+width1, y1+height1/2);
-        g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
-        g.setColor(c);
-
-        final Polygon shape = new Polygon();
-        shape.addPoint( x, y );
-        shape.addPoint( x + width - linebreak, y );
-        shape.addPoint( x + width, y + height / 2 );
-        shape.addPoint( x + width - linebreak, y + height );
-        shape.addPoint( x, y + height );
-        
-        g.drawPolygon( shape );
-
-        // Issue #69
-    	if ( !isEnabled() && isContainedInEnabledState() ) {
-	    	g.setColor( ColorManager.DISABLED_FILLING );
-	    	g.fillPolygon( shape );
-	    	g.setColor( c );
-    	}
-//        g.drawLine(x, y, x+width-linebreak, y);
-//        g.drawLine(x, y+height, x+width-linebreak, y+height);
-//        g.drawLine(x, y, x, y+height);
-//        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
-//        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
-
-
-        //g.drawString("sig()", x+(width-w) / 2, y);
-//        g.drawString(value, x + (width - w) / 2 , y + textY);
-        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
-		//g.drawString("Reference " + reference, x-latencyX/2, y+latencyY/2);
-		
-        if (getCheckLatency()){
-			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getAVATARID());
-			if (latency!=null){
-				latencyVals=latency;
-				drawLatencyInformation(g);
-			}
-		}
-		if (reference!=null){
-			if (reference instanceof AvatarRDRequirement){
-				AvatarRDRequirement refReq = (AvatarRDRequirement) reference;
-//				g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
-				drawSingleString(g, "ref: "+ refReq.getValue(), x, y+height1+textY);
-			}
-		}
+  @Override
+  public void internalDrawing(Graphics g) {
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 2 * textX);
+    if ((w1 != width) & (!tdp.isScaled())) {
+      setCd(x + width / 2 - w1 / 2, y);
+      width = w1; // updateConnectingPoints();
     }
 
-	private void drawLatencyInformation(Graphics g){
-		int index=1;
-		for (String s:latencyVals.keySet()){
-			int w  = g.getFontMetrics().stringWidth(s);
-			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
-			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
-			g.drawLine(x,y,x-latencyX, y-latencyY*index);
-			Color c = g.getColor();
-			if (reference !=null){
-				//References must be in the form "The max delay between send/recieve signal:(signalname) and send/receive signal (signalname) is (less than/greater than) X.
-				String req= ((AvatarRDRequirement) reference).getText().trim();
-				if (req.contains("The max delay between")){
-					//Attempt to parse string
-					boolean lessThan= req.contains(" less than ");
-					String sig1 = req.split(" between ")[1].split(" and ")[0].trim();
-					String sig2 = req.split(" and ")[1].split(" is ")[0].trim();
-					String num = req.split(" than ")[1];
-
-					num = num.replaceAll("\\.","");
-					
-					int refNum = -1;
-					try { 
-						refNum = Integer.valueOf(num);
-					}
-					catch(Exception e){
-					}
-					if (sig1.equals(sig2)){
-						//
-					}
-					else if (sig1.equals("send signal: " + value.split("\\(")[0])){
-						if (sig2.replaceAll(": ","-").equalsIgnoreCase(s)){
-							//Compare times
-							int tActual=Integer.valueOf(latencyVals.get(s.split(":")[0]));
-							if (refNum>0){
-								if (lessThan){
-									if (tActual < refNum){
-										g.setColor(Color.GREEN);
-									}
-									else {
-										g.setColor(Color.RED);	
-									}	
-								}
-								else {
-									if (tActual> refNum){
-										g.setColor(Color.GREEN);
-									}
-									else {
-										g.setColor(Color.RED);	
-									}
-								}
-							}
-						}
-					}
-					else if (sig2.equals("send signal: " + value.split("\\(")[0])){
-						if (sig1.replaceAll(": ","-").trim().equalsIgnoreCase(s.split(":")[0].trim())){
-							//Compare times
-							int tActual=Integer.valueOf(latencyVals.get(s));
-							//
-							if (refNum>0){
-								if (lessThan){
-									if (tActual < refNum){
-										g.setColor(Color.GREEN);
-									}
-									else {
-										g.setColor(Color.RED);	
-									}	
-								}
-								else {
-									if (tActual> refNum){
-										g.setColor(Color.GREEN);
-									}
-									else {
-										g.setColor(Color.RED);	
-									}
-								}
-							}
-						}
-					}
-				}
-				if (reference instanceof TMLADWriteChannel){
-					//	
-					TMLADWriteChannel rc = (TMLADWriteChannel) reference;
-					Map<String, String> refLats =rc.getLatencyMap();
-					//
-					for (String checkpoint:refLats.keySet()){
-						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split(":")[1].split(" ")[0])){
-							String time=refLats.get(checkpoint);
-							int tdip= Integer.valueOf(time);
-							int tav=Integer.valueOf(latencyVals.get(s));
-							if (Math.abs(tdip-tav)>tdip){
-								g.setColor(Color.RED);		
-							}
-							else {
-								g.setColor(Color.GREEN);
-							}
-						}
-					}
-				}
-			}
-			
-//			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
-			drawSingleString(g, latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
-			g.setColor(c);
-			index++;
-		}
-	}
-
-	@Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y-lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-            return this;
-        }
-
-        return null;
-    }
-
-//    public void makeValue() {
-//        /*boolean first = true;
-//          value = eventName + "(";
-//          for(int i=0; i<nParam; i++) {
-//          if (params[i].length() > 0) {
-//          if (!first) {
-//          value += ", " + params[i];
-//          } else {
-//          first = false;
-//          value += params[i];
-//          }
-//
-//          }
-//          }
-//          value += ")";*/
-//
-//    }
-
-    public String getSignalName() {
-        if (value == null) {
-            return null;
-        }
-
-        if (value.length() == 0) {
-            return "";
-        }
-
-        int index = value.indexOf('(');
-        if (index == -1) {
-            return value;
-        }
-        return value.substring(0, index).trim();
-    }
-
-    /*public String getParamValue(int i) {
-      return params[i];
+    if (stateOfError > 0) {
+      Color c = g.getColor();
+      // Color c = g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
+      switch (stateOfError) {
+        case ErrorHighlight.OK:
+          g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
+          break;
+        default:
+          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
       }
-
-      public int nbOfParams() {
-      return nParam;
-      }*/
-
-    // Return -1 in case of error
-    public int getNbOfValues() {
-        return AvatarSignal.getNbOfValues(value);
+      // Making the polygon
+      int[] px1 = { x, x + width - linebreak, x + width, x + width - linebreak, x };
+      int[] py1 = { y, y, y + (height / 2), y + height, y + height };
+      g.fillPolygon(px1, py1, 5);
+      g.setColor(c);
     }
 
-    // Return null in case of error
-    public String getValue(int _index) {
-        return AvatarSignal.getValue(value, _index);
-    }
+    // g.drawRoundRect(x, y, width, height, arc, arc);
+    Color c = g.getColor();
+    //
 
-    @Override
-    public boolean editOnDoubleClick(JFrame frame) {
-        List<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
-        //TraceManager.addDev("Nb of signals:" + signals.size());
-		List<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
-		
-		Vector<TGComponent> refs = new Vector<TGComponent>();
-		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+
+    /*
+     * if (g.getColor().equals(ColorManager.NORMAL_0)) {
+     * g.setColor(ColorManager.TML_PORT_EVENT); }
+     */
+
+    int x1 = x + 1;
+    int y1 = y + 1;
+    int height1 = height;
+    int width1 = width;
+    g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
+    g.drawLine(x1, y1, x1 + width1 - linebreak, y1);
+    g.drawLine(x1, y1 + height1, x1 + width1 - linebreak, y1 + height1);
+    g.drawLine(x1, y1, x1, y1 + height1);
+    g.drawLine(x1 + width1 - linebreak, y1, x1 + width1, y1 + height1 / 2);
+    g.drawLine(x1 + width1 - linebreak, y1 + height1, x1 + width1, y1 + height1 / 2);
+    g.setColor(c);
+
+    final Polygon shape = new Polygon();
+    shape.addPoint(x, y);
+    shape.addPoint(x + width - linebreak, y);
+    shape.addPoint(x + width, y + height / 2);
+    shape.addPoint(x + width - linebreak, y + height);
+    shape.addPoint(x, y + height);
+
+    g.drawPolygon(shape);
+
+    // Issue #69
+    if (!isEnabled() && isContainedInEnabledState()) {
+      g.setColor(ColorManager.DISABLED_FILLING);
+      g.fillPolygon(shape);
+      g.setColor(c);
+    }
+    // g.drawLine(x, y, x+width-linebreak, y);
+    // g.drawLine(x, y+height, x+width-linebreak, y+height);
+    // g.drawLine(x, y, x, y+height);
+    // g.drawLine(x+width-linebreak, y, x+width, y+height/2);
+    // g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
+
+    // g.drawString("sig()", x+(width-w) / 2, y);
+    // g.drawString(value, x + (width - w) / 2 , y + textY);
+    drawSingleString(g, value, x + (width - w) / 2, y + textY);
+    // g.drawString("Reference " + reference, x-latencyX/2, y+latencyY/2);
+
+    if (getCheckLatency()) {
+      ConcurrentHashMap<String, String> latency = tdp.getMGUI().getLatencyVals(getAVATARID());
+      if (latency != null) {
+        latencyVals = latency;
+        drawLatencyInformation(g);
+      }
+    }
+    if (reference != null) {
+      if (reference instanceof AvatarRDRequirement) {
+        AvatarRDRequirement refReq = (AvatarRDRequirement) reference;
+        // g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
+        drawSingleString(g, "ref: " + refReq.getValue(), x, y + height1 + textY);
+      }
+    }
+  }
+
+  private void drawLatencyInformation(Graphics g) {
+    int index = 1;
+    for (String s : latencyVals.keySet()) {
+      int w = g.getFontMetrics().stringWidth(s);
+      g.drawString(s, x - latencyX - w + 1, y - latencyY * index - 2);
+      g.drawRect(x - latencyX - w, y - latencyY * index - textHeight, w + 4, textHeight);
+      g.drawLine(x, y, x - latencyX, y - latencyY * index);
+      Color c = g.getColor();
+      if (reference != null) {
+        // References must be in the form "The max delay between send/recieve
+        // signal:(signalname) and send/receive signal (signalname) is (less
+        // than/greater than) X.
+        String req = ((AvatarRDRequirement) reference).getText().trim();
+        if (req.contains("The max delay between")) {
+          // Attempt to parse string
+          boolean lessThan = req.contains(" less than ");
+          String sig1 = req.split(" between ")[1].split(" and ")[0].trim();
+          String sig2 = req.split(" and ")[1].split(" is ")[0].trim();
+          String num = req.split(" than ")[1];
+
+          num = num.replaceAll("\\.", "");
+
+          int refNum = -1;
+          try {
+            refNum = Integer.valueOf(num);
+          } catch (Exception e) {
+          }
+          if (sig1.equals(sig2)) {
             //
-            if (req instanceof AvatarRDRequirement){
-                refs.add((AvatarRDRequirement) req);
+          } else if (sig1.equals("send signal: " + value.split("\\(")[0])) {
+            if (sig2.replaceAll(": ", "-").equalsIgnoreCase(s)) {
+              // Compare times
+              int tActual = Integer.valueOf(latencyVals.get(s.split(":")[0]));
+              if (refNum > 0) {
+                if (lessThan) {
+                  if (tActual < refNum) {
+                    g.setColor(Color.GREEN);
+                  } else {
+                    g.setColor(Color.RED);
+                  }
+                } else {
+                  if (tActual > refNum) {
+                    g.setColor(Color.GREEN);
+                  } else {
+                    g.setColor(Color.RED);
+                  }
+                }
+              }
             }
+          } else if (sig2.equals("send signal: " + value.split("\\(")[0])) {
+            if (sig1.replaceAll(": ", "-").trim().equalsIgnoreCase(s.split(":")[0].trim())) {
+              // Compare times
+              int tActual = Integer.valueOf(latencyVals.get(s));
+              //
+              if (refNum > 0) {
+                if (lessThan) {
+                  if (tActual < refNum) {
+                    g.setColor(Color.GREEN);
+                  } else {
+                    g.setColor(Color.RED);
+                  }
+                } else {
+                  if (tActual > refNum) {
+                    g.setColor(Color.GREEN);
+                  } else {
+                    g.setColor(Color.RED);
+                  }
+                }
+              }
+            }
+          }
         }
-
-		for (TGComponent tg:comps){
-			if (tg instanceof TMLADWriteChannel){
-				refs.add(tg);
-			}
-		}
-        JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting send signal",  value, signals, true, reference, refs);
-   //     jdas.setSize(350, 300);
-        GraphicLib.centerOnParent(jdas, 550, 300);
-        jdas.setVisible( true ); // blocked until dialog has been closed
-
-        if (jdas.hasBeenCancelled()) {
-            return false;
+        if (reference instanceof TMLADWriteChannel) {
+          //
+          TMLADWriteChannel rc = (TMLADWriteChannel) reference;
+          Map<String, String> refLats = rc.getLatencyMap();
+          //
+          for (String checkpoint : refLats.keySet()) {
+            if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split(":")[1].split(" ")[0])) {
+              String time = refLats.get(checkpoint);
+              int tdip = Integer.valueOf(time);
+              int tav = Integer.valueOf(latencyVals.get(s));
+              if (Math.abs(tdip - tav) > tdip) {
+                g.setColor(Color.RED);
+              } else {
+                g.setColor(Color.GREEN);
+              }
+            }
+          }
         }
+      }
 
-        String val = jdas.getSignal();
-	//	if (jdas.getReference()!=null ){
-			reference = jdas.getReference();
-		//}
+      // g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+      drawSingleString(g, latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
+      g.setColor(c);
+      index++;
+    }
+  }
 
-        if (val.indexOf('(') == -1) {
-            val += "()";
-        }
-
-        // valid signal?
-        if (AvatarSignal.isAValidUseSignal(val)) {
-            value = val;
-            return true;
-        }
-
-        JOptionPane.showMessageDialog(frame,
-                                      "Could not change the setting of the signal: invalid declaration",
-                                      "Error",
-                                      JOptionPane.INFORMATION_MESSAGE);
-        return false;
-
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
 
-    /*protected String translateExtraParam() {
-      StringBuffer sb = new StringBuffer("<extraparam>\n");
-      sb.append("<Data eventName=\"");
-      sb.append(getEventName());
-      sb.append("\" nbOfParams=\"");
-      sb.append(nbOfParams());
-      sb.append("\" />\n");
-      for(int i=0; i<nParam; i++) {
-      if (params[i].length() > 0) {
-      sb.append("<Param index=\"");
-      sb.append(i);
-      sb.append("\" value=\"");
-      sb.append(params[i]);
-      sb.append("\" />\n");
-      }
-      }
-      sb.append("</extraparam>\n");
-      return new String(sb);
-      }
-
-      public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-      //
-      try {
-
-      NodeList nli;
-      Node n1, n2;
-      Element elt;
-      int k;
-      String s;
-
-      //
-      //
-
-      for(int i=0; i<nl.getLength(); i++) {
-      n1 = nl.item(i);
-      //
-      if (n1.getNodeType() == Node.ELEMENT_NODE) {
-      nli = n1.getChildNodes();
-      for(int j=0; i<nli.getLength(); i++) {
-      n2 = nli.item(i);
-      //
-      if (n2.getNodeType() == Node.ELEMENT_NODE) {
-      elt = (Element) n2;
-      if (elt.getTagName().equals("Data")) {
-      eventName = elt.getAttribute("eventName");
-      nParam = Integer.decode(elt.getAttribute("nbOfParams")).intValue();
-      }
-      if (elt.getTagName().equals("Param")) {
-      s = elt.getAttribute("value");
-      k = Integer.decode(elt.getAttribute("index")).intValue();
-      params[k] = s;
-      }
-      }
-      }
-      }
-      }
-
-      } catch (Exception e) {
-      throw new MalformedModelingException();
-      }
-      makeValue();
-      }*/
-
-	@Override
-    public int getType() {
-        return TGComponentManager.AVATARSMD_SEND_AMS_SIGNAL;
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
 
-	@Override
-    public int getDefaultConnector() {
-        return TGComponentManager.AVATARSMD_CONNECTOR;
+    return null;
+  }
+
+  // public void makeValue() {
+  // /*boolean first = true;
+  // value = eventName + "(";
+  // for(int i=0; i<nParam; i++) {
+  // if (params[i].length() > 0) {
+  // if (!first) {
+  // value += ", " + params[i];
+  // } else {
+  // first = false;
+  // value += params[i];
+  // }
+  //
+  // }
+  // }
+  // value += ")";*/
+  //
+  // }
+
+  public String getSignalName() {
+    if (value == null) {
+      return null;
     }
 
-	@Override
-    public void setStateAction(int _stateAction) {
-        stateOfError = _stateAction;
+    if (value.length() == 0) {
+      return "";
     }
+
+    int index = value.indexOf('(');
+    if (index == -1) {
+      return value;
+    }
+    return value.substring(0, index).trim();
+  }
+
+  /*
+   * public String getParamValue(int i) { return params[i]; }
+   * 
+   * public int nbOfParams() { return nParam; }
+   */
+
+  // Return -1 in case of error
+  public int getNbOfValues() {
+    return AvatarSignal.getNbOfValues(value);
+  }
+
+  // Return null in case of error
+  public String getValue(int _index) {
+    return AvatarSignal.getValue(value, _index);
+  }
+
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    List<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
+    // TraceManager.addDev("Nb of signals:" + signals.size());
+    List<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
+
+    Vector<TGComponent> refs = new Vector<TGComponent>();
+    for (TGComponent req : tdp.getMGUI().getAllRequirements()) {
+      //
+      if (req instanceof AvatarRDRequirement) {
+        refs.add((AvatarRDRequirement) req);
+      }
+    }
+
+    for (TGComponent tg : comps) {
+      if (tg instanceof TMLADWriteChannel) {
+        refs.add(tg);
+      }
+    }
+    JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting send signal", value, signals, true, reference,
+        refs);
+    // jdas.setSize(350, 300);
+    GraphicLib.centerOnParent(jdas, 550, 300);
+    jdas.setVisible(true); // blocked until dialog has been closed
+
+    if (jdas.hasBeenCancelled()) {
+      return false;
+    }
+
+    String val = jdas.getSignal();
+    // if (jdas.getReference()!=null ){
+    reference = jdas.getReference();
+    // }
+
+    if (val.indexOf('(') == -1) {
+      val += "()";
+    }
+
+    // valid signal?
+    if (AvatarSignal.isAValidUseSignal(val)) {
+      value = val;
+      return true;
+    }
+
+    JOptionPane.showMessageDialog(frame, "Could not change the setting of the signal: invalid declaration", "Error",
+        JOptionPane.INFORMATION_MESSAGE);
+    return false;
+
+  }
+
+  /*
+   * protected String translateExtraParam() { StringBuffer sb = new
+   * StringBuffer("<extraparam>\n"); sb.append("<Data eventName=\"");
+   * sb.append(getEventName()); sb.append("\" nbOfParams=\"");
+   * sb.append(nbOfParams()); sb.append("\" />\n"); for(int i=0; i<nParam; i++) {
+   * if (params[i].length() > 0) { sb.append("<Param index=\""); sb.append(i);
+   * sb.append("\" value=\""); sb.append(params[i]); sb.append("\" />\n"); } }
+   * sb.append("</extraparam>\n"); return new String(sb); }
+   * 
+   * public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws
+   * MalformedModelingException{ // try {
+   * 
+   * NodeList nli; Node n1, n2; Element elt; int k; String s;
+   * 
+   * // //
+   * 
+   * for(int i=0; i<nl.getLength(); i++) { n1 = nl.item(i); // if
+   * (n1.getNodeType() == Node.ELEMENT_NODE) { nli = n1.getChildNodes(); for(int
+   * j=0; i<nli.getLength(); i++) { n2 = nli.item(i); // if (n2.getNodeType() ==
+   * Node.ELEMENT_NODE) { elt = (Element) n2; if (elt.getTagName().equals("Data"))
+   * { eventName = elt.getAttribute("eventName"); nParam =
+   * Integer.decode(elt.getAttribute("nbOfParams")).intValue(); } if
+   * (elt.getTagName().equals("Param")) { s = elt.getAttribute("value"); k =
+   * Integer.decode(elt.getAttribute("index")).intValue(); params[k] = s; } } } }
+   * }
+   * 
+   * } catch (Exception e) { throw new MalformedModelingException(); }
+   * makeValue(); }
+   */
+
+  @Override
+  public int getType() {
+    return TGComponentManager.AVATARSMD_SEND_AMS_SIGNAL;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.AVATARSMD_CONNECTOR;
+  }
+
+  @Override
+  public void setStateAction(int _stateAction) {
+    stateOfError = _stateAction;
+  }
 }

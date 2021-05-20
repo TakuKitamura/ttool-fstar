@@ -41,36 +41,37 @@ package ui.avatarsmd;
 import ui.*;
 
 /**
- * Class AvatarSMDBasicComponent
- * Used to common functionalities of Avatar SMD Components
- * Creation: 13/04/2010
+ * Class AvatarSMDBasicComponent Used to common functionalities of Avatar SMD
+ * Components Creation: 13/04/2010
+ * 
  * @version 1.0 13/04/2010
  * @author Ludovic APVRILLE
  */
 public abstract class AvatarSMDBasicComponent extends TGCWithoutInternalComponent implements SwallowedTGComponent {
-    //private int lineLength = 5;
-    
-    public AvatarSMDBasicComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
-    
-    @Override
-    public int getDefaultConnector() {
-    	return TGComponentManager.AVATARSMD_CONNECTOR;
-    }
-	
-    @Override
-	public void resizeWithFather() {
-        if ((father != null) && (father instanceof AvatarSMDState)) {
-			// Too large to fit in the father? -> resize it!
-			resizeToFatherSize();
-			
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            setMoveCd(x, y);
-        }
-    }
+  // private int lineLength = 5;
 
-    protected boolean isContainedInEnabledState() {
-    	return getFather() instanceof AvatarSMDState && getFather().isEnabled();
+  public AvatarSMDBasicComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.AVATARSMD_CONNECTOR;
+  }
+
+  @Override
+  public void resizeWithFather() {
+    if ((father != null) && (father instanceof AvatarSMDState)) {
+      // Too large to fit in the father? -> resize it!
+      resizeToFatherSize();
+
+      setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+      setMoveCd(x, y);
     }
+  }
+
+  protected boolean isContainedInEnabledState() {
+    return getFather() instanceof AvatarSMDState && getFather().isEnabled();
+  }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui;
 
 import myutil.GraphicLib;
@@ -52,128 +49,122 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
- * Class AvatarMADsPanel
- * Management of Avatar modeling hypothesis panels
+ * Class AvatarMADsPanel Management of Avatar modeling hypothesis panels
  * Creation: 27/08/2013
+ * 
  * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
 public class AvatarMADsPanel extends TURTLEPanel {
-    
-    public AvatarMADsPanel(MainGUI _mgui) {
-        super(_mgui);
 
-        // Issue #41 Ordering of tabbed panes
-        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);//new JTabbedPane();
-        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        cl = new ChangeListener() {
-        	
-        	@Override
-            public void stateChanged(ChangeEvent e){
-                mgui.paneMADAction(e);
-            }
-        };
-        
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-    }
-	
-    
-   public AvatarMADPanel getMADPanel(String name) {
-        AvatarMADPanel amadp;
-        for(int i=1; i<panels.size(); i++) {
-            amadp = (AvatarMADPanel)(panels.elementAt(i));
-            if (amadp.getName().compareTo(name) ==0) {
-                return amadp;
-            }
-        }
-        return null;
-    }
-    
-    public void addAvatarMADPanel(String s) {
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        
-        AvatarMADToolBar toolBarActivity = new AvatarMADToolBar(mgui);
-        toolbars.add(toolBarActivity);
-        
-        AvatarMADPanel amadp = new AvatarMADPanel(mgui, toolBarActivity);
-        amadp.tp = this;
-        amadp.setName(s);
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(amadp);
-        amadp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
-        toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        panels.add(amadp);
-        tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens Modeling Assumption Panel of " + s);
-        //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
-        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
-        mgui.changeMade(amadp, TDiagramPanel.NEW_COMPONENT);
-        return;
-    }
-    
-    public void init() {
-         mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-        //  Class Diagram toolbar
-        /*AvatarMADToolBar toolBarAvatarMAD = new AvatarMADToolBar(mgui);
-        toolbars.add(toolBarAvatarMAD);
-        
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        
-        //Class	diagram
-        AvatarMADPanel amadp = new AvatarMADPanel(mgui, toolBarAvatarMAD);
-        amadp.setName("Modeling Assumption Diagram");
-        amadp.tp = this;
-        tdp = amadp;
-        panels.add(amadp); // Always first in list
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(amadp);
-        amadp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
-        toolBarPanel.add(toolBarAvatarMAD, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("Model Assumption Diagram", IconManager.imgic80, toolBarPanel, "Opens the MAD");
-        tabbedPane.setSelectedIndex(0);
-        //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
-        
-        //jsp.setVisible(true);*/
- 
-    }
-	
+  public AvatarMADsPanel(MainGUI _mgui) {
+    super(_mgui);
 
-    public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"Avatar MAD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"Avatar MAD\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-    }
-    
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
-    }
-    
-    public String toString() {
-        return mgui.getTitleAt(this) + " (Avatar MAD)";
-    }
-	
-	
-    public boolean isAvatarMADEnabled() {
-        return true;
-    }
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);// new JTabbedPane();
+    // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+    cl = new ChangeListener() {
 
-    public boolean canFirstDiagramBeMoved() {
-	return true;
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneMADAction(e);
+      }
+    };
+
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+  }
+
+  public AvatarMADPanel getMADPanel(String name) {
+    AvatarMADPanel amadp;
+    for (int i = 1; i < panels.size(); i++) {
+      amadp = (AvatarMADPanel) (panels.elementAt(i));
+      if (amadp.getName().compareTo(name) == 0) {
+        return amadp;
+      }
     }
-    
-    public boolean removeEnabled(int index) {
-        return true;
+    return null;
+  }
+
+  public void addAvatarMADPanel(String s) {
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    AvatarMADToolBar toolBarActivity = new AvatarMADToolBar(mgui);
+    toolbars.add(toolBarActivity);
+
+    AvatarMADPanel amadp = new AvatarMADPanel(mgui, toolBarActivity);
+    amadp.tp = this;
+    amadp.setName(s);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(amadp);
+    amadp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    panels.add(amadp);
+    tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens Modeling Assumption Panel of " + s);
+    // tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
+    tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+    mgui.changeMade(amadp, TDiagramPanel.NEW_COMPONENT);
+    return;
+  }
+
+  public void init() {
+    mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
+    // Class Diagram toolbar
+    /*
+     * AvatarMADToolBar toolBarAvatarMAD = new AvatarMADToolBar(mgui);
+     * toolbars.add(toolBarAvatarMAD);
+     * 
+     * toolBarPanel = new JPanel(); toolBarPanel.setLayout(new BorderLayout());
+     * 
+     * //Class diagram AvatarMADPanel amadp = new AvatarMADPanel(mgui,
+     * toolBarAvatarMAD); amadp.setName("Modeling Assumption Diagram"); amadp.tp =
+     * this; tdp = amadp; panels.add(amadp); // Always first in list
+     * JScrollDiagramPanel jsp = new JScrollDiagramPanel(amadp); amadp.jsp = jsp;
+     * jsp.setWheelScrollingEnabled(true);
+     * jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+     * toolBarPanel.add(toolBarAvatarMAD, BorderLayout.NORTH); toolBarPanel.add(jsp,
+     * BorderLayout.CENTER); tabbedPane.addTab("Model Assumption Diagram",
+     * IconManager.imgic80, toolBarPanel, "Opens the MAD");
+     * tabbedPane.setSelectedIndex(0);
+     * //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
+     * 
+     * //jsp.setVisible(true);
+     */
+
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"Avatar MAD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
-    
-    public boolean renameEnabled(int index) {
-        return true;
-    }
+    return "<Modeling type=\"Avatar MAD\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+  }
+
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
+
+  public String toString() {
+    return mgui.getTitleAt(this) + " (Avatar MAD)";
+  }
+
+  public boolean isAvatarMADEnabled() {
+    return true;
+  }
+
+  public boolean canFirstDiagramBeMoved() {
+    return true;
+  }
+
+  public boolean removeEnabled(int index) {
+    return true;
+  }
+
+  public boolean renameEnabled(int index) {
+    return true;
+  }
 }

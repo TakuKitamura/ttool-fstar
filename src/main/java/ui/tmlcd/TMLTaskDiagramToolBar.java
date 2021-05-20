@@ -45,101 +45,100 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
- * Class TMLTaskDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a TMLTask diagram
- * Creation: 27/10/2005
+ * Class TMLTaskDiagramToolBar Implements the toolbar to be used in conjunction
+ * with the panel of a TMLTask diagram Creation: 27/10/2005
+ * 
  * @version 1.0 27/10/2005
  * @author Ludovic APVRILLE
  * @see TMLTaskDiagramPanel
  */
 public class TMLTaskDiagramToolBar extends TToolBar {
-    
-    public TMLTaskDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.TMLTD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_TASK].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_CHANNEL].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_EVENT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_REQ].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_ASSOC].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
-		
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
 
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		
-		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
-		
-		mgui.updateZoomInfo();
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_ASSOC]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_TASK]);
-        button.addMouseListener(mgui.mouseHandler);
-       
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_CHANNEL]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_EVENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TMLTD_REQ]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-         
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS]);
-        button.addMouseListener(mgui.mouseHandler);
-         
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS]);
-        button.addMouseListener(mgui.mouseHandler);
-         
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS]);
-        button.addMouseListener(mgui.mouseHandler);
-		 
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
-        button.addMouseListener(mgui.mouseHandler);
-    }
+  public TMLTaskDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
+
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.TMLTD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.TMLTD_TASK].setEnabled(b);
+    mgui.actions[TGUIAction.TMLTD_CHANNEL].setEnabled(b);
+    mgui.actions[TGUIAction.TMLTD_EVENT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLTD_REQ].setEnabled(b);
+    mgui.actions[TGUIAction.TMLTD_ASSOC].setEnabled(b);
+    mgui.actions[TGUIAction.TMLTD_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
+
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
+
+    mgui.updateZoomInfo();
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_ASSOC]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_TASK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_CHANNEL]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_EVENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TMLTD_REQ]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
+    button.addMouseListener(mgui.mouseHandler);
+  }
 } // Class

@@ -36,44 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.LinkedList;
 
 /**
- * Class FIFOFiniteAndGetSizeTClass
- * Creation: 02/11/2006
+ * Class FIFOFiniteAndGetSizeTClass Creation: 02/11/2006
+ * 
  * @version 1.0 02/11/2006
  * @author Ludovic APVRILLE
  */
-public interface FIFOFiniteAndGetSizeTClass  {
-    int getNbPara();
-    int getMaxSamples();
+public interface FIFOFiniteAndGetSizeTClass {
+  int getNbPara();
 
-    /**
-     * Returns the first write gate
-     * @return the first write gate
-     */
-    Gate getGateWrite();
+  int getMaxSamples();
 
-    /**
-     * Returns the first read gate
-     * @return the first read gate
-     */
-    Gate getGateRead();
+  /**
+   * Returns the first write gate
+   * 
+   * @return the first write gate
+   */
+  Gate getGateWrite();
 
-    /**
-     * Returns the first size gate
-     * @return the first size gate
-     */
-    Gate getGateSize();
+  /**
+   * Returns the first read gate
+   * 
+   * @return the first read gate
+   */
+  Gate getGateRead();
 
-    LinkedList<Gate> getGatesWrite();
-    LinkedList<Gate> getGatesRead();
-    LinkedList<Gate> getGatesSize();
-    boolean isBlocking();
+  /**
+   * Returns the first size gate
+   * 
+   * @return the first size gate
+   */
+  Gate getGateSize();
+
+  LinkedList<Gate> getGatesWrite();
+
+  LinkedList<Gate> getGatesRead();
+
+  LinkedList<Gate> getGatesSize();
+
+  boolean isBlocking();
 
 }

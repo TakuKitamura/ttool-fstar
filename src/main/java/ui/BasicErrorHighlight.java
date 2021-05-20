@@ -36,22 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
-
 /**
- * Class BasicErrorHighlight
- * Creation: 23/06/2009
- * version 1.0 23/06/2009
+ * Class BasicErrorHighlight Creation: 23/06/2009 version 1.0 23/06/2009
+ * 
  * @author Ludovic APVRILLE
  */
 public interface BasicErrorHighlight {
-	
-	void setStateAction(int _stateAction);
-	
-} // Class 
 
-	
+  void setStateAction(int _stateAction);
+
+} // Class

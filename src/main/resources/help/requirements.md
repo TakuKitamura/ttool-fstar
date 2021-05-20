@@ -1,4 +1,5 @@
 # Requirements
+
 Requirements can be captured in SysML Requirement Diagrams.
 
 ## Requirement node
@@ -10,6 +11,3 @@ Requirements can be captured in SysML Requirement Diagrams.
 ### Refine
 
 ### DeriveReqt
-
-
-

@@ -36,65 +36,61 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package vcd;
 
 import java.util.ArrayList;
 
 /**
- * Class VCDTimeChange
- * Creation: 13/07/2009
+ * Class VCDTimeChange Creation: 13/07/2009
+ * 
  * @version 1.0 13/07/2009
  * @author Ludovic APVRILLE
  */
-public class VCDTimeChange  {
-    private String timeValue;
-	private ArrayList<VCDVariable> variables;
-	private ArrayList<String> values; // In binary format, without the "b"
-	
-	//private static int IDShortcut;
-    
-    public VCDTimeChange(String _timeValue) {
-      timeValue = _timeValue;
-	  variables = new ArrayList<VCDVariable>();
-	  values = new ArrayList<String>();
+public class VCDTimeChange {
+  private String timeValue;
+  private ArrayList<VCDVariable> variables;
+  private ArrayList<String> values; // In binary format, without the "b"
+
+  // private static int IDShortcut;
+
+  public VCDTimeChange(String _timeValue) {
+    timeValue = _timeValue;
+    variables = new ArrayList<VCDVariable>();
+    values = new ArrayList<String>();
+  }
+
+  public void addVariable(VCDVariable _variable, String _value) {
+    variables.add(_variable);
+    values.add(_value);
+  }
+
+  public int getNbOfVariables() {
+    return variables.size();
+  }
+
+  public VCDVariable getVariable(int _index) {
+    return variables.get(_index);
+  }
+
+  public String getValue(int _index) {
+    return values.get(_index);
+  }
+
+  public String toString() {
+    String s = "#" + timeValue + "\n";
+    for (int i = 0; i < variables.size(); i++) {
+      s += "b" + values.get(i) + " " + variables.get(i).getLocalShortcut() + "\n";
     }
-	
-	public void addVariable(VCDVariable _variable, String _value) {
-		variables.add(_variable);
-		values.add(_value);
-	}
-	
-	public int getNbOfVariables() {
-		return variables.size();
-	}
-	
-	public VCDVariable getVariable(int _index) {
-		return variables.get(_index);
-	}
-	
-	public String getValue(int _index) {
-		return values.get(_index);
-	}
-	
-	public String toString() {
-		String s = "#" + timeValue + "\n";
-		for(int i=0; i<variables.size(); i++) {
-			s += "b" + values.get(i) + " " + variables.get(i).getLocalShortcut() + "\n";
-		}
-		return s;
-	}
-	
-	public boolean hasValueChangeOnVariable(VCDVariable _variable) {
-		for(VCDVariable var: variables) {
-			if (var == _variable) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-  
+    return s;
+  }
+
+  public boolean hasValueChangeOnVariable(VCDVariable _variable) {
+    for (VCDVariable var : variables) {
+      if (var == _variable) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }

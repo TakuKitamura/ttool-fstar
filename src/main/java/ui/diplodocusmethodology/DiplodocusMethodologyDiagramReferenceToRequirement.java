@@ -36,55 +36,56 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.diplodocusmethodology;
-
 
 import ui.*;
 
 /**
-* Class DiplodocusMethodologyDiagramReferenceToRequirement
-* Diagram reference requirement: Used to reference diagrams from the
-* Diplodocus methodology
-* Creation: 28/03/2014
-* @version 1.0 28/03/2014
-* @author Ludovic APVRILLE
+ * Class DiplodocusMethodologyDiagramReferenceToRequirement Diagram reference
+ * requirement: Used to reference diagrams from the Diplodocus methodology
+ * Creation: 28/03/2014
+ * 
+ * @version 1.0 28/03/2014
+ * @author Ludovic APVRILLE
  */
-public class DiplodocusMethodologyDiagramReferenceToRequirement extends DiplodocusMethodologyDiagramReference  {
-   
-	
-    public DiplodocusMethodologyDiagramReferenceToRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-		initScaling(200, 120);
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.WEST);
-        
-        typeOfReference = REQUIREMENT;
-        
-        addTGConnectingPointsCommentTop();    
-        
-    }
-    @Override
-    public  int getType() {
-        return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
-    }
-    @Override
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof AvatarRequirementPanel;
+public class DiplodocusMethodologyDiagramReferenceToRequirement extends DiplodocusMethodologyDiagramReference {
 
-    }
-    @Override
-    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-    	dn.setValidationsNumber(0);
-    }
-    @Override
-    public boolean makeCall(String diagramName, int index) {
-    	return true;
-    }
-      
+  public DiplodocusMethodologyDiagramReferenceToRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    initScaling(200, 120);
+
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new DiplodocusMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
+        TGConnectingPoint.WEST);
+
+    typeOfReference = REQUIREMENT;
+
+    addTGConnectingPointsCommentTop();
+
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
+  }
+
+  @Override
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    return panel instanceof AvatarRequirementPanel;
+
+  }
+
+  @Override
+  public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+    dn.setValidationsNumber(0);
+  }
+
+  @Override
+  public boolean makeCall(String diagramName, int index) {
+    return true;
+  }
+
 }

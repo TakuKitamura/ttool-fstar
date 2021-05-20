@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 /**
- * Class ExternalCall
- * For managing external calls
- * Creation: 2007
+ * Class ExternalCall For managing external calls Creation: 2007
+ * 
  * @version 1.1 02/05/2007
  * @author Ludovic APVRILLE
  */
-public interface ExternalCall  {
-	void computeFunction(int id);
-  
+public interface ExternalCall {
+  void computeFunction(int id);
+
 }

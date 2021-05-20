@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class MultipleDiagDeclarationsException
- * Creation: 21/05/2014
+ * Class MultipleDiagDeclarationsException Creation: 21/05/2014
+ * 
  * @version 1.0 21/05/2014
  * @author Andrea ENRICI
  */
-public class MultipleDiagDeclarationsException extends Exception
-{
-	
-	public MultipleDiagDeclarationsException()	{
-		super( "TMLCP COMPILER ERROR: multiple declarations of diagrams" );
-	}
+public class MultipleDiagDeclarationsException extends Exception {
 
-	public MultipleDiagDeclarationsException( String message )	{
-			super( message );	
-	}
+  public MultipleDiagDeclarationsException() {
+    super("TMLCP COMPILER ERROR: multiple declarations of diagrams");
+  }
+
+  public MultipleDiagDeclarationsException(String message) {
+    super(message);
+  }
 }

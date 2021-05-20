@@ -36,19 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
-
-
 /**
- * Class ADComponent
- * Creation: 24/11/2004
+ * Class ADComponent Creation: 24/11/2004
+ * 
  * @version 1.0 24/11/2004
  * @author Ludovic APVRILLE
  */
-public interface NonBlockingADComponent  {
-  
+public interface NonBlockingADComponent {
+
 }

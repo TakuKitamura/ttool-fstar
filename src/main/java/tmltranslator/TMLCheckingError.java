@@ -36,54 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package tmltranslator;
 
 import translator.CheckingError;
 
-
-
 /**
- * Class TMLCheckingError
- * Creation: 07/06/2017
+ * Class TMLCheckingError Creation: 07/06/2017
+ * 
  * @version 1.0 07/06/2017
  * @author Florian LUGOU
  */
 public class TMLCheckingError extends CheckingError {
 
-    private TMLTask tmlt;
+  private TMLTask tmlt;
 
-    private TMLActivityElement tmlae;
+  private TMLActivityElement tmlae;
 
-    public TMLCheckingError(int _type, String _message) {
-        super(_type, _message);
+  public TMLCheckingError(int _type, String _message) {
+    super(_type, _message);
+  }
+
+  public void setTMLTask(TMLTask _tmlt) {
+    tmlt = _tmlt;
+  }
+
+  public TMLTask getTMLTask() {
+    return tmlt;
+  }
+
+  public void setTMLActivityElement(TMLActivityElement tmlae) {
+    this.tmlae = tmlae;
+  }
+
+  public TMLActivityElement getTMLActivityElement() {
+    return tmlae;
+  }
+
+  @Override
+  public String toString() {
+    if (tmlt != null) {
+      return tmlt.getName() + ": " + message;
     }
 
-    public void setTMLTask(TMLTask _tmlt) {
-        tmlt = _tmlt;
-    }
-
-    public TMLTask getTMLTask() {
-        return tmlt;
-    }
-
-    public void setTMLActivityElement(TMLActivityElement tmlae) {
-        this.tmlae = tmlae;
-    }
-
-    public TMLActivityElement getTMLActivityElement() {
-        return tmlae;
-    }
-
-    @Override
-    public String toString() {
-        if (tmlt != null) {
-            return tmlt.getName() + ": " + message;
-        }
-
-        return message;
-    }
+    return message;
+  }
 }

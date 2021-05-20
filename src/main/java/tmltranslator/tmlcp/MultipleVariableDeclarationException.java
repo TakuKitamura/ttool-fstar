@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class MultipleVariableDeclarationException
- * Creation: 21/05/2014
+ * Class MultipleVariableDeclarationException Creation: 21/05/2014
+ * 
  * @version 1.0 21/05/2014
  * @author Andrea ENRICI
  */
-public class MultipleVariableDeclarationException extends Exception
-{
-	
-	public MultipleVariableDeclarationException()	{
-		super( "TMLCP COMPILER ERROR: multiple declarations of variables" );
-	}
+public class MultipleVariableDeclarationException extends Exception {
 
-	public MultipleVariableDeclarationException( String message )	{
-			super( message );	
-	}
+  public MultipleVariableDeclarationException() {
+    super("TMLCP COMPILER ERROR: multiple declarations of variables");
+  }
+
+  public MultipleVariableDeclarationException(String message) {
+    super(message);
+  }
 }

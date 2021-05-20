@@ -36,54 +36,49 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
-   * Class AUTSplitter
-   * Creation : 06/01/2017
-   ** @version 1.0 06/01/2017
-   * @author Ludovic APVRILLE
+ * Class AUTSplitter Creation : 06/01/2017
+ ** 
+ * @version 1.0 06/01/2017
+ * @author Ludovic APVRILLE
  */
-public class AUTSplitter  {
+public class AUTSplitter {
 
-    
-    public ArrayList<AUTPartition> partitions;
+  public ArrayList<AUTPartition> partitions;
 
-    public AUTSplitter() {
-	partitions = new ArrayList<AUTPartition>();
+  public AUTSplitter() {
+    partitions = new ArrayList<AUTPartition>();
+  }
+
+  public void addPartition(AUTPartition _p) {
+    partitions.add(_p);
+  }
+
+  public String toString() {
+    StringBuffer sb = new StringBuffer("");
+    for (AUTPartition partition : partitions) {
+      sb.append("{" + partition.toString() + "}");
     }
+    return sb.toString();
+  }
 
-    public void addPartition(AUTPartition _p) {
-        partitions.add(_p);
+  public int size() {
+    return partitions.size();
+  }
+
+  public int getHashCode() {
+    int[] values = new int[partitions.size()];
+    int cpt = 0;
+    for (AUTPartition p : partitions) {
+      values[cpt] = p.getHashCode();
+      cpt++;
     }
-
-    public String toString() {
-	StringBuffer sb = new StringBuffer("");
-	for(AUTPartition partition: partitions) {
-	    sb.append("{" + partition.toString() + "}");
-	}
-	return sb.toString();
-    }
-
-    public int size() {
-	return partitions.size();
-    }
-
-    public int getHashCode() {
-        int[] values = new int[partitions.size()];
-        int cpt = 0;
-        for (AUTPartition p : partitions) {
-            values[cpt] = p.getHashCode();
-            cpt++;
-        }
-        return Arrays.hashCode(values);
-    }
-
+    return Arrays.hashCode(values);
+  }
 
 }

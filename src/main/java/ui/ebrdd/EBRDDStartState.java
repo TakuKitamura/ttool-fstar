@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ebrdd;
 
 import myutil.GraphicLib;
@@ -49,59 +46,61 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class EBRDDStartState
- * Used to start a new activity of an EBRDD
- * Creation: 08/09/2009
+ * Class EBRDDStartState Used to start a new activity of an EBRDD Creation:
+ * 08/09/2009
+ * 
  * @version 1.0 08/09/2009
  * @author Ludovic APVRILLE
  */
-public class EBRDDStartState extends TGCWithoutInternalComponent implements EmbeddedComment{
-    private int lineLength = 5;
-    
-    public EBRDDStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 15;
-        height = 15;
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-        connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0);
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "start state";
-        
-        myImageIcon = IconManager.imgic222;
+public class EBRDDStartState extends TGCWithoutInternalComponent implements EmbeddedComment {
+  private int lineLength = 5;
+
+  public EBRDDStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 15;
+    height = 15;
+
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[1];
+    connectingPoint[0] = new TGConnectingPointEBRDD(this, 0, lineLength, false, true, 0.5, 1.0);
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "start state";
+
+    myImageIcon = IconManager.imgic222;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.fillOval(x, y, width, height);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-    
-    public void internalDrawing(Graphics g) {
-        g.fillOval(x, y, width, height);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + lineLength + height, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y+height, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-        
-        return null;
-    }
-    
-    public int getType() {
-        return TGComponentManager.EBRDD_START_STATE;
-    }
-    
-    public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_EBRDD;
-    }
-    
+
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.EBRDD_START_STATE;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_EBRDD;
+  }
+
 }

@@ -36,23 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class HiddenInternalComponents
- * Component for which internal components may not be displayed ie. graphically
- * hidden
- * Creation: 10/04/2008
+ * Class HiddenInternalComponents Component for which internal components may
+ * not be displayed ie. graphically hidden Creation: 10/04/2008
+ * 
  * @version 1.0 10/04/2008
  * @author Ludovic APVRILLE
  */
-public interface HiddenInternalComponents  {
-	void setInternalsHidden(boolean hide);
-	boolean areInternalsHidden();
+public interface HiddenInternalComponents {
+  void setInternalsHidden(boolean hide);
+
+  boolean areInternalsHidden();
 }

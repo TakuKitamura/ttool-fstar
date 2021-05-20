@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
 
 //import java.awt.*;
@@ -54,42 +51,42 @@ import java.util.List;
 //import myutil.*;
 
 /**
- * Class TCDReducedAttributeBox
- * Box for storing the attributes  of a Tclass
- * To be used in class diagrams
- * Creation: 10/05/2004
+ * Class TCDReducedAttributeBox Box for storing the attributes of a Tclass To be
+ * used in class diagrams Creation: 10/05/2004
+ * 
  * @version 1.0 10/05/2004
  * @author Ludovic APVRILLE
  */
 public class TCDReducedAttributeBox extends TGCReducedAttributeBox {
-    
-    public TCDReducedAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        name = "TObject attribute setting";
-        value = "";
-        
-        attributeText = "Attribute";
-        
-        attributes = true; // It contains attributes
-        
-        addTGConnectingPointsCommentCorner();
-        
-        myColor = ColorManager.ATTRIBUTE_BOX;
-        
-        myImageIcon = IconManager.imgic118;
-    }
-    
-    protected void setJDialogOptions(JDialogReducedAttribute jda) {
-    }
-    
-    protected List<TAttribute> getCustomAttributes() {
-        TCDTObject to = (TCDTObject)(getFather());
-        TCDTClass tc = to.getMasterTClass();
-        return tc.getAttributes();
-    }
-    
- 	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_ASSOCIATION;
-      }
+
+  public TCDReducedAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    name = "TObject attribute setting";
+    value = "";
+
+    attributeText = "Attribute";
+
+    attributes = true; // It contains attributes
+
+    addTGConnectingPointsCommentCorner();
+
+    myColor = ColorManager.ATTRIBUTE_BOX;
+
+    myImageIcon = IconManager.imgic118;
+  }
+
+  protected void setJDialogOptions(JDialogReducedAttribute jda) {
+  }
+
+  protected List<TAttribute> getCustomAttributes() {
+    TCDTObject to = (TCDTObject) (getFather());
+    TCDTClass tc = to.getMasterTClass();
+    return tc.getAttributes();
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION;
+  }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
 
 //import java.awt.*;
@@ -52,25 +49,25 @@ import ui.TGComponentManager;
 import ui.TGConnectingPoint;
 
 /**
- * Class TCDOperationBoxNoConnection
- * Box for storing the operations of a Tclass with no possibility to connect it (no connection point)
- * To be used in class diagrams
- * Creation: 02/03/2005
+ * Class TCDOperationBoxNoConnection Box for storing the operations of a Tclass
+ * with no possibility to connect it (no connection point) To be used in class
+ * diagrams Creation: 02/03/2005
+ * 
  * @version 1.0 02/03/2005
  * @author Ludovic APVRILLE
  */
 public class TCDOperationBoxNoConnection extends TCDOperationBox {
-    
-    
-    public TCDOperationBoxNoConnection(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbConnectingPoint = 0;
-        connectingPoint = new TGConnectingPoint[0];
-        addTGConnectingPointsCommentDown();
-    }
-    
- 	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_ASSOCIATION;
-      }
+
+  public TCDOperationBoxNoConnection(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbConnectingPoint = 0;
+    connectingPoint = new TGConnectingPoint[0];
+    addTGConnectingPointsCommentDown();
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION;
+  }
 }

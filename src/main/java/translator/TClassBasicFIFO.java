@@ -36,83 +36,80 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 /**
-* Class TClassBasicFIFO
-* Creation: 23/05/2007
-* @version 1.0 23/05/2007
-* @author Ludovic APVRILLE
+ * Class TClassBasicFIFO Creation: 23/05/2007
+ * 
+ * @version 1.0 23/05/2007
+ * @author Ludovic APVRILLE
  */
 public class TClassBasicFIFO extends TClassBuffer {
-    
-    public TClassBasicFIFO(String name) {
-		super(name, true);
-    }
-	
-    public void makeTClass() {
-        //
-        if ((paramInForExchange.size() == 0) && (paramOutForExchange.size() == 0)) {
-            return;
-        }
-        
-        //
-        Param cpt = new Param("cpt", Param.NAT, "0");
-        addParameter(cpt);
-        
-        ActivityDiagram ad = new ActivityDiagram();
-        
-        ADJunction adj = new ADJunction();
-        ad.getStartState().addNext(adj);
-        ad.add(adj);
-        
-        ADChoice adc = new ADChoice();
-        ad.add(adc);
-        adj.addNext(adc);
-        
-		Gate g1, g2;
-        ADActionStateWithGate adag1, adag2;
-        ADActionStateWithParam adap1, adap2;  
-		
-		for(String m1:paramInForExchange) {
-			g1 = addNewGateIfApplicable(m1);
-			adag1 = new ADActionStateWithGate(g1);
-            adag1.setActionValue("");
 
-            adap1 = new ADActionStateWithParam(cpt);
-            adap1.setActionValue("cpt+1");
-			
-			adc.addNext(adag1);
-			adc.addGuard("[]");
-			adag1.addNext(adap1);
-			adap1.addNext(adj);
-			
-			ad.add(adag1);
-            ad.add(adap1);
-		}
-		
-		for(String m2:paramOutForExchange) {
-			g2 = addNewGateIfApplicable(m2);
-			
-			adag2 = new ADActionStateWithGate(g2);
-            adag2.setActionValue("");
-			
-			adap2 = new ADActionStateWithParam(cpt);
-            adap2.setActionValue("cpt-1");
-			
-			adc.addNext(adag2);
-			adc.addGuard("[cpt>0]");
-			adag2.addNext(adap2);
-			adap2.addNext(adj);
-            
-            // adding components to AD
-   
-            ad.add(adag2);
-            ad.add(adap2);
-		}
-        setActivityDiagram(ad);
+  public TClassBasicFIFO(String name) {
+    super(name, true);
+  }
+
+  public void makeTClass() {
+    //
+    if ((paramInForExchange.size() == 0) && (paramOutForExchange.size() == 0)) {
+      return;
     }
-}  
+
+    //
+    Param cpt = new Param("cpt", Param.NAT, "0");
+    addParameter(cpt);
+
+    ActivityDiagram ad = new ActivityDiagram();
+
+    ADJunction adj = new ADJunction();
+    ad.getStartState().addNext(adj);
+    ad.add(adj);
+
+    ADChoice adc = new ADChoice();
+    ad.add(adc);
+    adj.addNext(adc);
+
+    Gate g1, g2;
+    ADActionStateWithGate adag1, adag2;
+    ADActionStateWithParam adap1, adap2;
+
+    for (String m1 : paramInForExchange) {
+      g1 = addNewGateIfApplicable(m1);
+      adag1 = new ADActionStateWithGate(g1);
+      adag1.setActionValue("");
+
+      adap1 = new ADActionStateWithParam(cpt);
+      adap1.setActionValue("cpt+1");
+
+      adc.addNext(adag1);
+      adc.addGuard("[]");
+      adag1.addNext(adap1);
+      adap1.addNext(adj);
+
+      ad.add(adag1);
+      ad.add(adap1);
+    }
+
+    for (String m2 : paramOutForExchange) {
+      g2 = addNewGateIfApplicable(m2);
+
+      adag2 = new ADActionStateWithGate(g2);
+      adag2.setActionValue("");
+
+      adap2 = new ADActionStateWithParam(cpt);
+      adap2.setActionValue("cpt-1");
+
+      adc.addNext(adag2);
+      adc.addGuard("[cpt>0]");
+      adag2.addNext(adap2);
+      adap2.addNext(adj);
+
+      // adding components to AD
+
+      ad.add(adag2);
+      ad.add(adap2);
+    }
+    setActivityDiagram(ad);
+  }
+}

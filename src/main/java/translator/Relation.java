@@ -36,203 +36,200 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package translator;
 
 import java.util.Vector;
 
 /**
- * Class Relation
- * Creation: 2001
+ * Class Relation Creation: 2001
+ * 
  * @version 1.1 10/12/2003
  * @author Ludovic APVRILLE
  */
 public class Relation {
-    // composition operator
-    public static final int WAT = 6;
-    public static final int PRE = 5;
-    public static final int SEQ = 4;
-    public static final int INV = 3;
-    public static final int SYN = 2;
-    public static final int PAR = 1;
-    
-    public static int gateNumber;
-    
-    // attributes
-    public int type;
-    private String name;
-    public TClass t1;
-    public TClass t2;
-    public Vector<Gate> gatesOfT1;
-    public Vector<Gate> gatesOfT2;
-    public boolean navigation;
-    
-    public Relation(int type, TClass t1, TClass t2, boolean navigation) {
-        this.type = type;
-        this.t1 = t1;
-        this.t2 = t2;
-        switch(type) {
-            case 1:
-                name = "Parallel";
-                break;
-            case 2:
-                name = "Synchro";
-                break;
-            case 3:
-                name = "Invocation";
-                break;
-            case 4:
-                name = "Sequence";
-                break;
-            case 5:
-                name = "Preemption";
-                break;
-            case 6:
-                name = "Watchdog";
-                break;
-            default:
-                name = "Unknown";
-        }
-        gatesOfT1 = new Vector<>();
-        gatesOfT2 = new Vector<>();
+  // composition operator
+  public static final int WAT = 6;
+  public static final int PRE = 5;
+  public static final int SEQ = 4;
+  public static final int INV = 3;
+  public static final int SYN = 2;
+  public static final int PAR = 1;
+
+  public static int gateNumber;
+
+  // attributes
+  public int type;
+  private String name;
+  public TClass t1;
+  public TClass t2;
+  public Vector<Gate> gatesOfT1;
+  public Vector<Gate> gatesOfT2;
+  public boolean navigation;
+
+  public Relation(int type, TClass t1, TClass t2, boolean navigation) {
+    this.type = type;
+    this.t1 = t1;
+    this.t2 = t2;
+    switch (type) {
+      case 1:
+        name = "Parallel";
+        break;
+      case 2:
+        name = "Synchro";
+        break;
+      case 3:
+        name = "Invocation";
+        break;
+      case 4:
+        name = "Sequence";
+        break;
+      case 5:
+        name = "Preemption";
+        break;
+      case 6:
+        name = "Watchdog";
+        break;
+      default:
+        name = "Unknown";
     }
-    
-    public static boolean hasNavigation(int type) {
-        switch(type) {
-            case 1:
-                return false;
-            case 2:
-                return false;
-            case 3:
-                return true;
-            case 4:
-                return true;
-            case 5:
-                return true;
-            case 6:
-                return true;
-            default:
-                return false;
-        }
-    }
-	
-    public void addGates(Gate g1, Gate g2) {
-        gatesOfT1.add(g1);
-        gatesOfT2.add(g2);
-    }
-	
-	public void removeGates(Gate g1, Gate g2) {
-		gatesOfT1.removeElement(g1);
-		gatesOfT2.removeElement(g1);
-		gatesOfT1.removeElement(g2);
-		gatesOfT2.removeElement(g2);
-	}
-    
-    public void addGatesIfApplicable(Gate g1, Gate g2) {
-        if (!gatesOfT1.contains(g1) && !gatesOfT2.contains(g2)) {
-            gatesOfT1.add(g1);
-            gatesOfT2.add(g2);
-        }
-    }
-    
-    public String generateGateName() {
-        int tmp = Relation.gateNumber;
-        Relation.gateNumber ++;
-        return "g" + tmp;
-    }
-    
-    public static String translation(int type) {
-        String name;
-        switch(type) {
-            case 1:
-                name = "|||";
-                break;
-            case 2:
-                name = "|[ ]|";
-                break;
-            case 3:
-                name = "|[ ]|";
-                break;
-            case 4:
-                name = ">>";
-                break;
-            case 5:
-                name = "[>";
-                break;
-            case 6:
-                name = "Watchdog";
-                break;
-            default:
-                name = " ";
-        }
-        return name;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public boolean hasGate() {
-        return ((gatesOfT1.size() > 0) && (gatesOfT2.size() > 0));
-    }
-    
-    public Gate correspondingGate(Gate g, TClass tc) {
-        if (!gatesOfRelation(g, tc)) {
-            return null;
-        } else {
-            int index;
-            if (tc == t1) {
-                index = gatesOfT1.indexOf(g);
-                if (index == -1)
-                    return null;
-                return gatesOfT2.elementAt(index);
-            } else {
-                index = gatesOfT2.indexOf(g);
-                if (index == -1)
-                    return null;
-                return gatesOfT1.elementAt(index);
-            }
-        }
-        
-    }
-    
-    public boolean gatesOfRelation(Gate g, TClass tc) {
-        if (tc == t1) {
-            return 	gatesOfT1.contains(g);
-        }
-        
-        if (tc == t2) {
-            return 	gatesOfT2.contains(g);
-        }
-        
+    gatesOfT1 = new Vector<>();
+    gatesOfT2 = new Vector<>();
+  }
+
+  public static boolean hasNavigation(int type) {
+    switch (type) {
+      case 1:
+        return false;
+      case 2:
+        return false;
+      case 3:
+        return true;
+      case 4:
+        return true;
+      case 5:
+        return true;
+      case 6:
+        return true;
+      default:
         return false;
     }
-    
-    public boolean gatesConnected(Gate g1, Gate g2) {
-        if ((!(gatesOfT1.contains(g1))) ||(!(gatesOfT2.contains(g2)))) {
-            return false;
-        }
-        int index1 = gatesOfT1.indexOf(g1);
-        int index2 = gatesOfT2.indexOf(g2);
-        
-        return (index1 == index2);
+  }
+
+  public void addGates(Gate g1, Gate g2) {
+    gatesOfT1.add(g1);
+    gatesOfT2.add(g2);
+  }
+
+  public void removeGates(Gate g1, Gate g2) {
+    gatesOfT1.removeElement(g1);
+    gatesOfT2.removeElement(g1);
+    gatesOfT1.removeElement(g2);
+    gatesOfT2.removeElement(g2);
+  }
+
+  public void addGatesIfApplicable(Gate g1, Gate g2) {
+    if (!gatesOfT1.contains(g1) && !gatesOfT2.contains(g2)) {
+      gatesOfT1.add(g1);
+      gatesOfT2.add(g2);
     }
-    
-    public TClass otherTClass(TClass tc) {
-        if (tc == t1) {
-            return t2;
-        } else {
-            return t1;
-        }
+  }
+
+  public String generateGateName() {
+    int tmp = Relation.gateNumber;
+    Relation.gateNumber++;
+    return "g" + tmp;
+  }
+
+  public static String translation(int type) {
+    String name;
+    switch (type) {
+      case 1:
+        name = "|||";
+        break;
+      case 2:
+        name = "|[ ]|";
+        break;
+      case 3:
+        name = "|[ ]|";
+        break;
+      case 4:
+        name = ">>";
+        break;
+      case 5:
+        name = "[>";
+        break;
+      case 6:
+        name = "Watchdog";
+        break;
+      default:
+        name = " ";
     }
-    
-    public void print() {
-        
+    return name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public boolean hasGate() {
+    return ((gatesOfT1.size() > 0) && (gatesOfT2.size() > 0));
+  }
+
+  public Gate correspondingGate(Gate g, TClass tc) {
+    if (!gatesOfRelation(g, tc)) {
+      return null;
+    } else {
+      int index;
+      if (tc == t1) {
+        index = gatesOfT1.indexOf(g);
+        if (index == -1)
+          return null;
+        return gatesOfT2.elementAt(index);
+      } else {
+        index = gatesOfT2.indexOf(g);
+        if (index == -1)
+          return null;
+        return gatesOfT1.elementAt(index);
+      }
     }
-    
-    public void printToStringBuffer(StringBuffer sb) {
-        sb.append("Relation: " + name +" between   " + t1.getName() + "   and   " + t2.getName() + "\n");
+
+  }
+
+  public boolean gatesOfRelation(Gate g, TClass tc) {
+    if (tc == t1) {
+      return gatesOfT1.contains(g);
     }
+
+    if (tc == t2) {
+      return gatesOfT2.contains(g);
+    }
+
+    return false;
+  }
+
+  public boolean gatesConnected(Gate g1, Gate g2) {
+    if ((!(gatesOfT1.contains(g1))) || (!(gatesOfT2.contains(g2)))) {
+      return false;
+    }
+    int index1 = gatesOfT1.indexOf(g1);
+    int index2 = gatesOfT2.indexOf(g2);
+
+    return (index1 == index2);
+  }
+
+  public TClass otherTClass(TClass tc) {
+    if (tc == t1) {
+      return t2;
+    } else {
+      return t1;
+    }
+  }
+
+  public void print() {
+
+  }
+
+  public void printToStringBuffer(StringBuffer sb) {
+    sb.append("Relation: " + name + " between   " + t1.getName() + "   and   " + t2.getName() + "\n");
+  }
 }

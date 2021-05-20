@@ -36,24 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class UndeclaredVariableException
- * Creation: 22/05/2014
+ * Class UndeclaredVariableException Creation: 22/05/2014
+ * 
  * @version 1.0 22/05/2014
  * @author Andrea ENRICI
  */
 public class UndeclaredVariableException extends Exception {
-	
-	public UndeclaredVariableException()	{
-		super( "TMLCP COMPILER ERROR: undeclared variable" );
-	}
 
-	public UndeclaredVariableException( String message )	{
-		super( message );	
-	}
+  public UndeclaredVariableException() {
+    super("TMLCP COMPILER ERROR: undeclared variable");
+  }
+
+  public UndeclaredVariableException(String message) {
+    super(message);
+  }
 }

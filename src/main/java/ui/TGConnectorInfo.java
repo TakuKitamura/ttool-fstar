@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 /**
- * Class TGConnectorInfo
- * Class for storing a TGConnector with diagram, and connecting point
- * information.
- * Creation: 25/05/2009
+ * Class TGConnectorInfo Class for storing a TGConnector with diagram, and
+ * connecting point information. Creation: 25/05/2009
+ * 
  * @version 1.0 25/05/2009
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorInfo  {
-    
-    public TGConnector connector;
+public class TGConnectorInfo {
 
-    public TGConnectorInfo() {
-       
-    }
-    
+  public TGConnector connector;
+
+  public TGConnectorInfo() {
+
+  }
+
 }

@@ -36,40 +36,51 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
-
 /**
- * Class EBRDDLoop
- * Creation: 18/09/2009
+ * Class EBRDDLoop Creation: 18/09/2009
+ * 
  * @version 1.0 18/09/2009
  * @author Ludovic APVRILLE
  */
 public class EBRDDLoop extends EBRDDComponent {
-    //next #0 -> loop
-    //next #1 -> after loop
-    
-    private String init, condition, increment;
-    
-    public EBRDDLoop(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-		nbNext = 2;
-    }
-    
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
-	
-	 public String toString() {
-        return "Loop: (" + init + ";" + condition + ";" + increment + ")";
-    }
-    
- 
+  // next #0 -> loop
+  // next #1 -> after loop
+
+  private String init, condition, increment;
+
+  public EBRDDLoop(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    nbNext = 2;
+  }
+
+  public void setInit(String _init) {
+    init = _init;
+  }
+
+  public void setCondition(String _condition) {
+    condition = _condition;
+  }
+
+  public void setIncrement(String _increment) {
+    increment = _increment;
+  }
+
+  public String getInit() {
+    return init;
+  }
+
+  public String getCondition() {
+    return condition;
+  }
+
+  public String getIncrement() {
+    return increment;
+  }
+
+  public String toString() {
+    return "Loop: (" + init + ";" + condition + ";" + increment + ")";
+  }
+
 }

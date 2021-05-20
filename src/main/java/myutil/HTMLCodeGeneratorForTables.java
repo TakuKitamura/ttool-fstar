@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package myutil;
 
 import ui.util.DefaultText;
@@ -51,8 +50,7 @@ import java.util.List;
 //import java.awt.*;
 
 /**
- * Class HTMLCodeGeneratorForTables
- * HTML code generator for AbstractTableModel
+ * Class HTMLCodeGeneratorForTables HTML code generator for AbstractTableModel
  * Creation: 20/02/2009
  *
  * @author Ludovic APVRILLE
@@ -60,134 +58,130 @@ import java.util.List;
  */
 public class HTMLCodeGeneratorForTables {
 
-    public HTMLCodeGeneratorForTables() {
+  public HTMLCodeGeneratorForTables() {
+  }
+
+  public StringBuffer getHTMLCode(ArrayList<AbstractTableModel> atms, ArrayList<String> titles, String mainTitle) {
+    StringBuffer sb = new StringBuffer();
+    int max = Math.min(atms.size(), titles.size());
+
+    sb.append("<html>\n");
+    sb.append(getHTMLHeader(mainTitle));
+
+    sb.append("<body>\n");
+    sb.append("<center><h1>" + mainTitle + "</h1></center>\n");
+
+    for (int i = 0; i < max; i++) {
+      sb.append(getHTMLCode(atms.get(i), titles.get(i)));
     }
 
-    public StringBuffer getHTMLCode(ArrayList<AbstractTableModel> atms, ArrayList<String> titles, String mainTitle) {
-        StringBuffer sb = new StringBuffer();
-        int max = Math.min(atms.size(), titles.size());
+    sb.append("</body>\n</html>");
 
+    return sb;
+  }
 
-        sb.append("<html>\n");
-        sb.append(getHTMLHeader(mainTitle));
+  public StringBuffer getHTMLCode(AbstractTableModel atm, String title) {
+    int i, j;
+    String s;
 
-        sb.append("<body>\n");
-        sb.append("<center><h1>" + mainTitle + "</h1></center>\n");
+    StringBuffer sb = new StringBuffer("\n<BR><BR>\n<TABLE BORDER>\n");
+    sb.append("<CAPTION><B>" + title + "</B></CAPTION>\n");
 
-        for (int i = 0; i < max; i++) {
-            sb.append(getHTMLCode(atms.get(i), titles.get(i)));
+    // Top part of table
+    sb.append("<TR>");
+    for (j = 0; j < atm.getColumnCount(); j++) {
+      sb.append("<TH BGCOLOR=\"#C0C0C0\"> " + atm.getColumnName(j) + " </TH> ");
+    }
+    sb.append("</TR>\n");
+
+    // Table itself
+    for (i = 0; i < atm.getRowCount(); i++) {
+      sb.append("<TR>");
+      for (j = 0; j < atm.getColumnCount(); j++) {
+        s = atm.getValueAt(i, j).toString();
+        if (s.length() == 0) {
+          s = "-";
         }
-
-        sb.append("</body>\n</html>");
-
-        return sb;
+        sb.append("<TD> " + s + " </TD> ");
+      }
+      sb.append("</TR>\n");
     }
 
+    // End of table
+    sb.append("</TABLE>\n\n");
 
-    public StringBuffer getHTMLCode(AbstractTableModel atm, String title) {
-        int i, j;
-        String s;
+    return sb;
 
-        StringBuffer sb = new StringBuffer("\n<BR><BR>\n<TABLE BORDER>\n");
-        sb.append("<CAPTION><B>" + title + "</B></CAPTION>\n");
+  }
 
-        // Top part of table
-        sb.append("<TR>");
-        for (j = 0; j < atm.getColumnCount(); j++) {
-            sb.append("<TH BGCOLOR=\"#C0C0C0\"> " + atm.getColumnName(j) + " </TH> ");
-        }
-        sb.append("</TR>\n");
+  public StringBuffer getHTMLCodeFromSorters(List<TableSorter> tss, List<String> titles, String mainTitle) {
+    StringBuffer sb = new StringBuffer();
+    int max = Math.min(tss.size(), titles.size());
 
-        // Table itself
-        for (i = 0; i < atm.getRowCount(); i++) {
-            sb.append("<TR>");
-            for (j = 0; j < atm.getColumnCount(); j++) {
-                s = atm.getValueAt(i, j).toString();
-                if (s.length() == 0) {
-                    s = "-";
-                }
-                sb.append("<TD> " + s + " </TD> ");
-            }
-            sb.append("</TR>\n");
-        }
+    sb.append("<html>\n");
+    sb.append(getHTMLHeader(mainTitle));
 
-        // End of table
-        sb.append("</TABLE>\n\n");
+    sb.append("<body>\n");
+    sb.append("<center><h1>" + mainTitle + "</h1></center>\n");
 
-        return sb;
-
+    for (int i = 0; i < max; i++) {
+      sb.append(getHTMLCodeFromSorter(tss.get(i), titles.get(i)));
     }
 
-    public StringBuffer getHTMLCodeFromSorters(List<TableSorter> tss, List<String> titles, String mainTitle) {
-        StringBuffer sb = new StringBuffer();
-        int max = Math.min(tss.size(), titles.size());
+    sb.append("</body>\n</html>");
 
+    return sb;
+  }
 
-        sb.append("<html>\n");
-        sb.append(getHTMLHeader(mainTitle));
+  public StringBuffer getHTMLCodeFromSorter(TableSorter ts, String title) {
+    int i, j;
+    String s;
 
-        sb.append("<body>\n");
-        sb.append("<center><h1>" + mainTitle + "</h1></center>\n");
+    StringBuffer sb = new StringBuffer("\n<BR><BR>\n<TABLE BORDER>\n");
+    sb.append("<CAPTION><B>" + title + "</B></CAPTION>\n");
 
-        for (int i = 0; i < max; i++) {
-            sb.append(getHTMLCodeFromSorter(tss.get(i), titles.get(i)));
+    // Top part of table
+    sb.append("<TR>");
+    for (j = 0; j < ts.getColumnCount(); j++) {
+      sb.append("<TH BGCOLOR=\"#C0C0C0\"> " + ts.getColumnName(j) + " </TH> ");
+    }
+    sb.append("</TR>\n");
+
+    // Table itself
+    for (i = 0; i < ts.getRowCount(); i++) {
+      sb.append("<TR>");
+      for (j = 0; j < ts.getColumnCount(); j++) {
+        s = ts.getValueAt(i, j).toString();
+        if (s.length() == 0) {
+          s = "-";
         }
-
-        sb.append("</body>\n</html>");
-
-        return sb;
+        sb.append("<TD> " + s + " </TD> ");
+      }
+      sb.append("</TR>\n");
     }
 
+    // End of table
+    sb.append("</TABLE>\n\n");
 
-    public StringBuffer getHTMLCodeFromSorter(TableSorter ts, String title) {
-        int i, j;
-        String s;
+    return sb;
 
-        StringBuffer sb = new StringBuffer("\n<BR><BR>\n<TABLE BORDER>\n");
-        sb.append("<CAPTION><B>" + title + "</B></CAPTION>\n");
+  }
 
-        // Top part of table
-        sb.append("<TR>");
-        for (j = 0; j < ts.getColumnCount(); j++) {
-            sb.append("<TH BGCOLOR=\"#C0C0C0\"> " + ts.getColumnName(j) + " </TH> ");
-        }
-        sb.append("</TR>\n");
+  public String getHTMLHeader(String mainTitle) {
+    GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+    Date date = calendar.getTime();
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+    String formattedDate = formatter.format(date);
 
-        // Table itself
-        for (i = 0; i < ts.getRowCount(); i++) {
-            sb.append("<TR>");
-            for (j = 0; j < ts.getColumnCount(); j++) {
-                s = ts.getValueAt(i, j).toString();
-                if (s.length() == 0) {
-                    s = "-";
-                }
-                sb.append("<TD> " + s + " </TD> ");
-            }
-            sb.append("</TR>\n");
-        }
-
-        // End of table
-        sb.append("</TABLE>\n\n");
-
-        return sb;
-
-    }
-
-    public String getHTMLHeader(String mainTitle) {
-        GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
-        Date date = calendar.getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        String formattedDate = formatter.format(date);
-
-        String tmpdoc = "";
-        tmpdoc += "<!----- Automatically generated by TTool version ";
-        tmpdoc += DefaultText.getVersion();
-        tmpdoc += " generation date: " + formattedDate;
-        tmpdoc += "---->\n";
-        tmpdoc += "\n<head>\n<title>";
-        tmpdoc += mainTitle;
-        tmpdoc += "</title>\n</head>\n";
-        return tmpdoc;
-    }
+    String tmpdoc = "";
+    tmpdoc += "<!----- Automatically generated by TTool version ";
+    tmpdoc += DefaultText.getVersion();
+    tmpdoc += " generation date: " + formattedDate;
+    tmpdoc += "---->\n";
+    tmpdoc += "\n<head>\n<title>";
+    tmpdoc += mainTitle;
+    tmpdoc += "</title>\n</head>\n";
+    return tmpdoc;
+  }
 
 }

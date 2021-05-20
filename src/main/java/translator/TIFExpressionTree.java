@@ -36,39 +36,31 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
-
-
 /**
- * Class TIFExpressionTree
- * Creation: 20/02/2008
+ * Class TIFExpressionTree Creation: 20/02/2008
+ * 
  * @version 1.0 20/02/2008
  * @author Ludovic APVRILLE
  */
-public class TIFExpressionTree  {
-    
-    private TIFTreeNode rootNode;
-    
-    public TIFExpressionTree() {
-    }
-    
-    public boolean buildTree(String action) {
-		action = action.trim();
-		
-		return true;
-    }
-	
-	public void addPrefixToVariables(String prefix) {
-	}
-	
-	public String getExpression() {
-		return "";
-	}
+public class TIFExpressionTree {
+
+  private TIFTreeNode rootNode;
+
+  public TIFExpressionTree() {
+  }
+
+  public boolean buildTree(String action) {
+    action = action.trim();
+
+    return true;
+  }
+
+  public void addPrefixToVariables(String prefix) {
+  }
+
+  public String getExpression() {
+    return "";
+  }
 }

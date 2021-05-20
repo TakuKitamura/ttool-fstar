@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import myutil.Conversion;
@@ -50,359 +49,349 @@ import java.util.Scanner;
 import java.util.Vector;
 
 /**
- * Class Interpreter
- * Creation: 05/10/2018
- * Version 2.0 05/10/2018
+ * Class Interpreter Creation: 05/10/2018 Version 2.0 05/10/2018
  *
  * @author Ludovic APVRILLE
  */
 public class Interpreter implements Runnable, TerminalProviderInterface {
 
-    public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new Plan(), new PluginAction(), new Quit(),
-            new TestSpecific(), new TML(), new Set(), new Wait(), new Robot(), new BF(), new SimulatorScript()};
+  public final static Command[] commands = { new Action(), new Help(), new History(), new Print(), new Plan(),
+      new PluginAction(), new Quit(), new TestSpecific(), new TML(), new Set(), new Wait(), new Robot(), new BF(),
+      new SimulatorScript() };
 
-    // Errors
-    public final static String UNKNOWN = "Unknown command";
-    public final static String BAD = "Badly formatted expression";
-    public final static String BAD_WAIT_VALUE = "Must provide a int value > 0";
-    public final static String BAD_VAR_VALUE = "Unvalid value for variable";
-    public final static String BAD_VAR_NAME = "Unvalid variable name";
-    public final static String UNKNOWN_NEXT_COMMAND = "Invalid action: ";
-    public final static String TTOOL_NOT_STARTED = "TTool is not yet started. Cannot execute command.";
-    public final static String TTOOL_ALREADY_STARTED = "TTool is already started. Cannot execute command.";
-    public final static String BAD_COMMAND_NAME = "The provided command is invalid";
-    public final static String ROBOT_EXCEPTION = "Robot could not be started";
-    public final static String BAD_FILE_NAME = "Unvalid file identifier";
-    public final static String BAD_FILE = "Badly formatted file";
-    public final static String AVATAR_NO_SPEC = "No Avatar specification";
-    public final static String NO_WINDOW = "The targeted window does not exist";
+  // Errors
+  public final static String UNKNOWN = "Unknown command";
+  public final static String BAD = "Badly formatted expression";
+  public final static String BAD_WAIT_VALUE = "Must provide a int value > 0";
+  public final static String BAD_VAR_VALUE = "Unvalid value for variable";
+  public final static String BAD_VAR_NAME = "Unvalid variable name";
+  public final static String UNKNOWN_NEXT_COMMAND = "Invalid action: ";
+  public final static String TTOOL_NOT_STARTED = "TTool is not yet started. Cannot execute command.";
+  public final static String TTOOL_ALREADY_STARTED = "TTool is already started. Cannot execute command.";
+  public final static String BAD_COMMAND_NAME = "The provided command is invalid";
+  public final static String ROBOT_EXCEPTION = "Robot could not be started";
+  public final static String BAD_FILE_NAME = "Unvalid file identifier";
+  public final static String BAD_FILE = "Badly formatted file";
+  public final static String AVATAR_NO_SPEC = "No Avatar specification";
+  public final static String NO_WINDOW = "The targeted window does not exist";
 
+  private String script;
+  private InterpreterOutputInterface printInterface;
+  private boolean show;
 
-    private String script;
-    private InterpreterOutputInterface printInterface;
-    private boolean show;
+  // State management
+  private HashMap<String, String> variables;
+  private String error;
+  private boolean ttoolStarted = false;
+  public MainGUI mgui;
+  private Vector<String> formerCommands;
+  private Terminal term;
+  private int currentLine;
 
-    // State management
-    private HashMap<String, String> variables;
-    private String error;
-    private boolean ttoolStarted = false;
-    public MainGUI mgui;
-    private Vector<String> formerCommands;
-    private Terminal term;
-    private int currentLine;
+  public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
+    this.script = script;
+    this.printInterface = printInterface;
+    variables = new HashMap<>();
+    this.show = show;
+    formerCommands = new Vector<>();
+  }
 
+  @Override
+  public void run() {
+    interact();
+  }
 
-    public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
-        this.script = script;
-        this.printInterface = printInterface;
-        variables = new HashMap<>();
-        this.show = show;
-        formerCommands = new Vector<>();
+  public void interact() {
+    Terminal term = new Terminal();
+    term.setTerminalProvider(this);
+
+    String line;
+    currentLine = 0;
+    while ((line = term.getNextCommand()) != null) {
+      // TraceManager.addDev("Dealing with line: " + line);
+      for (String subCommand : line.split(";")) {
+        // TraceManager.addDev("Executing: " + subCommand);
+        executeLine(subCommand, currentLine, false);
+      }
+      currentLine++;
+    }
+  }
+
+  public void interactIntegratedTerminal() {
+    /*
+     * if (RawConsoleInput.isWindows) { print("In Windows"); } else {
+     * print("In Unix"); }
+     */
+
+    Scanner scanner = new Scanner(System.in);
+    int cptLine = 0;
+    printPrompt(cptLine);
+    while (scanner.hasNextLine()) {
+      String line = scanner.nextLine();
+      executeLine(line, cptLine, false);
+      cptLine++;
+      printPrompt(cptLine);
+    }
+  }
+
+  private void printPrompt(int lineNb) {
+    System.out.print("" + lineNb + " -> ");
+    System.out.flush();
+  }
+
+  public void interpret() {
+    Scanner scanner = new Scanner(script);
+    currentLine = 0;
+    while (scanner.hasNextLine()) {
+      String line = scanner.nextLine();
+      currentLine++;
+      // TraceManager.addDev("Dealing with line: " + line);
+      for (String subCommand : line.split(";")) {
+        // TraceManager.addDev("Executing: " + subCommand);
+        executeLine(subCommand, currentLine, true);
+      }
+
+    }
+    scanner.close();
+    printInterface.print("All done. See you soon.");
+    printInterface.exit(0);
+
+  }
+
+  private void executeLine(String line, int cptLine, boolean exitOnError) {
+    // Comment
+    // TraceManager.addDev("Executing line:" + line);
+
+    line = line.trim();
+    if (line.length() == 0) {
+      return;
     }
 
-    @Override
-    public void run() {
-        interact();
-    }
+    if (line.startsWith("#")) {
 
+    } else {
 
-    public void interact() {
-        Terminal term = new Terminal();
-        term.setTerminalProvider(this);
+      formerCommands.add(line);
 
-        String line;
-        currentLine = 0;
-        while ((line = term.getNextCommand()) != null) {
-            //TraceManager.addDev("Dealing with line: " + line);
-            for(String subCommand: line.split(";")) {
-                //TraceManager.addDev("Executing: " + subCommand);
-                executeLine(subCommand, currentLine, false);
-            }
-            currentLine++;
+      // Replace all double space by one unique space
+      line = Conversion.replaceAllString(line, "  ", " ").trim();
+
+      // TraceManager.addDev("Handling line: " + line);
+      // Replace variable value in the current line
+      String lineWithNoVariable = removeVariablesIn(line).trim();
+
+      String begOfLine = lineWithNoVariable;
+      int index = lineWithNoVariable.indexOf(' ');
+      if (index > -1) {
+        begOfLine = begOfLine.substring(0, index).trim();
+      }
+
+      // TraceManager.addDev("Handling line: " + lineWithNoVariable);
+      String[] commandInfo = lineWithNoVariable.split(" ");
+
+      if ((commandInfo == null) || (commandInfo.length < 1)) {
+        System.out.println("Empty command");
+        if (exitOnError) {
+          System.exit(-1);
         }
-    }
+      }
 
-    public void interactIntegratedTerminal() {
-        /*if (RawConsoleInput.isWindows) {
-            print("In Windows");
-        } else  {
-            print("In Unix");
-        }*/
-
-        Scanner scanner = new Scanner(System.in);
-        int cptLine = 0;
-        printPrompt(cptLine);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            executeLine(line, cptLine, false);
-            cptLine++;
-            printPrompt(cptLine);
+      // Analyze current line
+      error = "";
+      for (Command c : commands) {
+        if (commandInfo[0].compareTo(c.getCommand()) == 0) {
+          error = c.executeCommand(
+              lineWithNoVariable.substring(c.getCommand().length(), lineWithNoVariable.length()).trim(), this);
+          TraceManager.addDev("Command executed");
+          break;
         }
-    }
-
-    private void printPrompt(int lineNb) {
-        System.out.print("" + lineNb + " -> ");
-        System.out.flush();
-    }
-
-    public void interpret() {
-        Scanner scanner = new Scanner(script);
-        currentLine = 0;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            currentLine++;
-            //TraceManager.addDev("Dealing with line: " + line);
-            for(String subCommand: line.split(";")) {
-                //TraceManager.addDev("Executing: " + subCommand);
-                executeLine(subCommand, currentLine, true);
-            }
+        if (commandInfo[0].compareTo(c.getShortCommand()) == 0) {
+          error = c.executeCommand(
+              lineWithNoVariable.substring(c.getShortCommand().length(), lineWithNoVariable.length()).trim(), this);
+          TraceManager.addDev("Short Command executed");
+          break;
 
         }
-        scanner.close();
-        printInterface.print("All done. See you soon.");
-        printInterface.exit(0);
+      }
 
-    }
-
-    private void executeLine(String line, int cptLine, boolean exitOnError) {
-        // Comment
-        //TraceManager.addDev("Executing line:" + line);
-
-        line = line.trim();
-        if (line.length() == 0) {
-            return;
+      if ((error != null) && (error.length() > 0)) {
+        System.out.println("Error in line " + cptLine + " : " + error);
+        if (exitOnError) {
+          System.exit(-1);
         }
+      } else if ((error != null) && (error.length() == 0)) {
+        System.out.println("Unknown command in line " + cptLine + " : " + commandInfo[0]);
+      }
+    }
+  }
 
-        if (line.startsWith("#")) {
+  public void addVariable(String name, String value) {
+    variables.put(name, value);
+  }
 
-        } else {
+  public String getVariableValue(String name) {
+    String v = variables.get(name);
+    if (v == null) {
+      return "";
+    }
+    return v;
+  }
 
-            formerCommands.add(line);
+  private String removeVariablesIn(String input) {
+    String ret = "";
+    String initialLine = input;
 
-            // Replace all double space by one unique space
-            line = Conversion.replaceAllString(line, "  ", " ").trim();
+    int index;
+    while ((index = input.indexOf("$")) > -1) {
+      ret = ret + input.substring(0, index);
+      input = input.substring(index + 1, input.length());
+      int indexSpace = input.indexOf(" ");
+      String varName;
+      if (indexSpace == -1) {
+        varName = input;
+        input = "";
+      } else {
+        varName = input.substring(0, indexSpace);
+        input = input.substring(indexSpace, input.length());
+      }
 
-            //TraceManager.addDev("Handling line: " + line);
-            // Replace variable value in the current line
-            String lineWithNoVariable = removeVariablesIn(line).trim();
+      // Identifying variable
+      String value = variables.get(varName);
+      if (value == null) {
+        printInterface.printError("Unknown variable name:" + varName + " in " + initialLine);
+        printInterface.exit(-1);
+      }
+      ret = ret + value;
+    }
 
-            String begOfLine = lineWithNoVariable;
-            int index = lineWithNoVariable.indexOf(' ');
-            if (index > -1) {
-                begOfLine = begOfLine.substring(0, index).trim();
-            }
+    ret = ret + input;
+    return ret;
+  }
 
-            //TraceManager.addDev("Handling line: " + lineWithNoVariable);
-            String[] commandInfo = lineWithNoVariable.split(" ");
+  public boolean exitCLI() {
+    System.exit(-1);
+    return true;
+  }
 
-            if ((commandInfo == null) || (commandInfo.length < 1)) {
-                System.out.println("Empty command");
-                if (exitOnError) {
-                    System.exit(-1);
-                }
-            }
+  public boolean isTToolStarted() {
+    return ttoolStarted;
+  }
 
+  public void setTToolStarted(boolean b) {
+    ttoolStarted = b;
+  }
 
-            // Analyze current line
-            error = "";
-            for (Command c : commands) {
-                if (commandInfo[0].compareTo(c.getCommand()) == 0) {
-                    error = c.executeCommand(lineWithNoVariable.substring(c.getCommand().length(),
-                            lineWithNoVariable.length()).trim(), this);
-                    TraceManager.addDev("Command executed");
-                    break;
-                }
-                if (commandInfo[0].compareTo(c.getShortCommand()) == 0) {
-                    error = c.executeCommand(lineWithNoVariable.substring(c.getShortCommand().length(),
-                            lineWithNoVariable.length()).trim(), this);
-                    TraceManager.addDev("Short Command executed");
-                    break;
+  public void setMGUI(MainGUI mgui) {
+    this.mgui = mgui;
+  }
 
-                }
-            }
+  public boolean showWindow() {
+    return show;
+  }
 
-            if ((error != null) && (error.length() > 0)) {
-                System.out.println("Error in line " + cptLine + " : " + error);
-                if (exitOnError) {
-                    System.exit(-1);
-                }
-            } else if ((error != null) && (error.length() == 0)) {
-                System.out.println("Unknown command in line " + cptLine + " : " + commandInfo[0]);
-            }
+  public Command getSubCommandByName(String cmd) {
+    String comm = cmd;
+
+    int index = cmd.indexOf(" ");
+
+    if (index > 0) {
+      comm = cmd.substring(0, index);
+    }
+
+    for (Command c : commands) {
+      if ((c.getShortCommand().compareTo(comm) == 0) || (c.getCommand().compareTo(comm) == 0)) {
+        if (index == -1) {
+          return c;
         }
+        return c.getSubCommandByName(cmd.substring(index + 1, cmd.length()).trim());
+      }
+    }
+    return null;
+  }
+
+  public String getHelp() {
+    StringBuffer buf = new StringBuffer("");
+    for (Command c : commands) {
+      buf.append(c.getHelp(0) + "\n");
+    }
+    return buf.toString();
+  }
+
+  public void print(String s) {
+    printInterface.print(s);
+  }
+
+  // History
+  public String printAllFormerCommands() {
+    StringBuffer sb = new StringBuffer("");
+    for (int i = 0; i < formerCommands.size(); i++) {
+      sb.append("" + i + "\t" + formerCommands.get(i) + "\n");
+    }
+    print(sb.toString());
+    return null;
+  }
+
+  public String executeFormerCommand(int indexOfCommand) {
+    if (indexOfCommand >= formerCommands.size() || (indexOfCommand < 0)) {
+      return "Invalid command index";
     }
 
+    String formerCommand = formerCommands.get(indexOfCommand);
+    System.out.println("Executing: " + formerCommand);
+    executeLine(formerCommand, currentLine, false);
 
-    public void addVariable(String name, String value) {
-        variables.put(name, value);
+    return null;
+  }
+
+  // Terminal provider interface
+  public String getMidPrompt() {
+    return "> ";
+  }
+
+  public boolean tabAction(String buffer) {
+    // Print all possibilities from current buffer
+    String buf = Conversion.replaceAllString(buffer, "  ", " ");
+    String[] split = buf.split(" ");
+
+    // From the split, determine commands already entered and completes it
+    Vector<Command> listOfCommands = findCommands(split, 0);
+
+    if (listOfCommands.size() == 0) {
+      return false;
     }
 
-    public String getVariableValue(String name) {
-        String v = variables.get(name);
-        if (v == null) {
-            return "";
+    for (Command c : listOfCommands) {
+      System.out.println("" + c.getCommand());
+      return true;
+    }
+
+    return true;
+
+  }
+
+  public Vector<Command> findCommands(String[] split, int index) {
+    if (split == null) {
+      return null;
+    }
+
+    if (index >= split.length) {
+      return null;
+    }
+
+    String s = split[index];
+    Vector<Command> couldBe = new Vector<>();
+
+    // Search of all compatible commands starting with s
+    for (Command c : commands) {
+      if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
+        Vector<Command> others = c.findCommands(split, index + 1);
+        if (others != null) {
+          couldBe.addAll(others);
         }
-        return v;
+      }
     }
 
-    private String removeVariablesIn(String input) {
-        String ret = "";
-        String initialLine = input;
-
-        int index;
-        while ((index = input.indexOf("$")) > -1) {
-            ret = ret + input.substring(0, index);
-            input = input.substring(index + 1, input.length());
-            int indexSpace = input.indexOf(" ");
-            String varName;
-            if (indexSpace == -1) {
-                varName = input;
-                input = "";
-            } else {
-                varName = input.substring(0, indexSpace);
-                input = input.substring(indexSpace, input.length());
-            }
-
-            // Identifying variable
-            String value = variables.get(varName);
-            if (value == null) {
-                printInterface.printError("Unknown variable name:" + varName + " in " + initialLine);
-                printInterface.exit(-1);
-            }
-            ret = ret + value;
-        }
-
-        ret = ret + input;
-        return ret;
-    }
-
-
-    public boolean exitCLI() {
-        System.exit(-1);
-        return true;
-    }
-
-
-    public boolean isTToolStarted() {
-        return ttoolStarted;
-    }
-
-    public void setTToolStarted(boolean b) {
-        ttoolStarted = b;
-    }
-
-    public void setMGUI(MainGUI mgui) {
-        this.mgui = mgui;
-    }
-
-    public boolean showWindow() {
-        return show;
-    }
-
-    public Command getSubCommandByName(String cmd) {
-        String comm = cmd;
-
-        int index = cmd.indexOf(" ");
-
-        if (index > 0) {
-            comm = cmd.substring(0, index);
-        }
-
-        for (Command c : commands) {
-            if ((c.getShortCommand().compareTo(comm) == 0) || (c.getCommand().compareTo(comm) == 0)) {
-                if (index == -1) {
-                    return c;
-                }
-                return c.getSubCommandByName(cmd.substring(index+1, cmd.length()).trim());
-            }
-        }
-        return null;
-    }
-
-    public String getHelp() {
-        StringBuffer buf = new StringBuffer("");
-        for (Command c : commands) {
-            buf.append(c.getHelp(0) + "\n");
-        }
-        return buf.toString();
-    }
-
-    public void print(String s) {
-        printInterface.print(s);
-    }
-
-    // History
-    public String printAllFormerCommands() {
-        StringBuffer sb = new StringBuffer("");
-        for (int i = 0; i < formerCommands.size(); i++) {
-            sb.append("" + i + "\t" + formerCommands.get(i) + "\n");
-        }
-        print(sb.toString());
-        return null;
-    }
-
-    public String executeFormerCommand(int indexOfCommand) {
-        if (indexOfCommand >= formerCommands.size() || (indexOfCommand < 0)) {
-            return "Invalid command index";
-        }
-
-        String formerCommand = formerCommands.get(indexOfCommand);
-        System.out.println("Executing: " + formerCommand);
-        executeLine(formerCommand, currentLine, false);
-
-        return null;
-    }
-
-    // Terminal provider interface
-    public String getMidPrompt() {
-        return "> ";
-    }
-
-    public boolean tabAction(String buffer) {
-        // Print all possibilities from current buffer
-        String buf = Conversion.replaceAllString(buffer, "  ", " ");
-        String[] split = buf.split(" ");
-
-        // From the split, determine commands already entered and completes it
-        Vector<Command> listOfCommands = findCommands(split, 0);
-
-        if (listOfCommands.size() == 0) {
-            return false;
-        }
-
-        for (Command c : listOfCommands) {
-            System.out.println("" + c.getCommand());
-            return true;
-        }
-
-        return true;
-
-    }
-
-    public Vector<Command> findCommands(String[] split, int index) {
-        if (split == null) {
-            return null;
-        }
-
-        if (index >= split.length) {
-            return null;
-        }
-
-        String s = split[index];
-        Vector<Command> couldBe = new Vector<>();
-
-        // Search of all compatible commands starting with s
-        for (Command c : commands) {
-            if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
-                Vector<Command> others = c.findCommands(split, index + 1);
-                if (others != null) {
-                    couldBe.addAll(others);
-                }
-            }
-        }
-
-        return couldBe;
-    }
-
+    return couldBe;
+  }
 
 }

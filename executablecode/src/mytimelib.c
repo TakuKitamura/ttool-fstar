@@ -1,4 +1,4 @@
-#include<time.h>
+#include <time.h>
 
 #include "mytimelib.h"
 #include "random.h"
@@ -7,7 +7,8 @@
 #ifndef CLOCK_REALTIME
 #define CLOCK_REALTIME
 
-int clock_gettime(struct timespec *ts) {
+int clock_gettime(struct timespec *ts)
+{
   struct timeval tv;
   gettimeofday(&tv, NULL);
   ts->tv_sec = tv.tv_sec;
@@ -15,83 +16,93 @@ int clock_gettime(struct timespec *ts) {
   return 0;
 }
 
-int my_clock_gettime(struct timespec *tp) {
+int my_clock_gettime(struct timespec *tp)
+{
   return clock_gettime(tp);
 }
 
 #else
 
-int my_clock_gettime(struct timespec *tp) {
+int my_clock_gettime(struct timespec *tp)
+{
   return clock_gettime(CLOCK_REALTIME, tp);
 }
 
 #endif
 
-
-
-void addTime(struct timespec *src1, struct timespec *src2, struct timespec *dest) {
+void addTime(struct timespec *src1, struct timespec *src2, struct timespec *dest)
+{
   dest->tv_nsec = src1->tv_nsec + src2->tv_nsec;
   dest->tv_sec = src1->tv_sec + src2->tv_sec;
-  if (dest->tv_nsec > 1000000000) {
+  if (dest->tv_nsec > 1000000000)
+  {
     dest->tv_sec = dest->tv_sec + (dest->tv_nsec / 1000000000);
     dest->tv_nsec = dest->tv_nsec % 1000000000;
   }
 }
 
-void diffTime(struct timespec *src1, struct timespec *src2, struct timespec *dest) {
+void diffTime(struct timespec *src1, struct timespec *src2, struct timespec *dest)
+{
   int diff = 0;
-  if (src1->tv_nsec > src2->tv_nsec) {
-    diff ++;
+  if (src1->tv_nsec > src2->tv_nsec)
+  {
+    diff++;
     dest->tv_nsec = src2->tv_nsec - src1->tv_nsec + 1000000000;
-  } else {
+  }
+  else
+  {
     dest->tv_nsec = src2->tv_nsec - src1->tv_nsec;
   }
 
   dest->tv_sec = src2->tv_sec - src1->tv_sec - diff;
 }
 
-
-
-int isBefore(struct timespec *src1, struct timespec *src2) {
-  if (src1->tv_sec > src2->tv_sec) {
+int isBefore(struct timespec *src1, struct timespec *src2)
+{
+  if (src1->tv_sec > src2->tv_sec)
+  {
     return 0;
   }
 
-  if (src1->tv_sec < src2->tv_sec) {
+  if (src1->tv_sec < src2->tv_sec)
+  {
     return 1;
   }
 
-  if (src1->tv_nsec < src2->tv_nsec) {
+  if (src1->tv_nsec < src2->tv_nsec)
+  {
     return 1;
   }
   return 0;
 }
 
-void minTime(struct timespec *src1, struct timespec *src2, struct timespec *dest) {
+void minTime(struct timespec *src1, struct timespec *src2, struct timespec *dest)
+{
   debugMsg("MIN TIME COMPUTATION");
-  if (isBefore(src1,src2)) {
+  if (isBefore(src1, src2))
+  {
     dest->tv_nsec = src1->tv_nsec;
     dest->tv_sec = src1->tv_sec;
-  } else {
+  }
+  else
+  {
     dest->tv_nsec = src2->tv_nsec;
     dest->tv_sec = src2->tv_sec;
   }
-  
 }
 
-
-void delayToTimeSpec(struct timespec *ts, long delay) {
-  ts->tv_nsec = (delay % 1000000)*1000;
+void delayToTimeSpec(struct timespec *ts, long delay)
+{
+  ts->tv_nsec = (delay % 1000000) * 1000;
   ts->tv_sec = (delay / 1000000);
 }
 
-void waitFor(long minDelay, long maxDelay) {
+void waitFor(long minDelay, long maxDelay)
+{
   struct timespec tssrc;
   struct timespec tsret;
   int delay;
 
-
-  
   debugMsg("Computing random delay");
   //debugLong("Min delay", minDelay);
   //debugLong("Max delay", maxDelay);
@@ -105,4 +116,3 @@ void waitFor(long minDelay, long maxDelay) {
   nanosleep(&tssrc, &tsret);
   debugLong("............. waiting Done for: ", delay);
 }
-

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.GenericTree;
@@ -48,46 +45,44 @@ import graph.RG;
 import java.util.List;
 
 /**
- * Class InvariantDataTree
- * Creation: 15/02/2012
- * Version 2.0 15/02/2012
+ * Class InvariantDataTree Creation: 15/02/2012 Version 2.0 15/02/2012
+ * 
  * @author Ludovic APVRILLE
  */
 public class GraphTree implements GenericTree {
-    
-    private MainGUI mgui;
-    private String name = "R. Graphs";
- 
-    
-    public GraphTree(MainGUI _mgui) {
-        mgui = _mgui;
+
+  private MainGUI mgui;
+  private String name = "R. Graphs";
+
+  public GraphTree(MainGUI _mgui) {
+    mgui = _mgui;
+  }
+
+  // TREE MANAGEMENT
+  public String toString() {
+    return name;
+  }
+
+  public int getChildCount() {
+    int nb = mgui.getRGs().size();
+    if (nb == 0) {
+      return 1;
     }
-    
-    // TREE MANAGEMENT
-    public String toString() {
-        return name;
+    return nb;
+  }
+
+  public Object getChild(int index) {
+    List<RG> rgs = mgui.getRGs();
+    if (rgs.size() == 0) {
+      return "No graph";
     }
-    
-    public int getChildCount() {
-        int nb =  mgui.getRGs().size();
-        if (nb == 0) {
-        	return 1;
-        }
-        return nb;
+    return mgui.getRGs().get(index);
+  }
+
+  public int getIndexOfChild(Object child) {
+    if (child instanceof String) {
+      return 0;
     }
-    
-    public Object getChild(int index) {
-    	List<RG> rgs = mgui.getRGs();
-    	if (rgs.size() == 0) {
-    		return "No graph";
-    	}
-    	return mgui.getRGs().get(index);
-    }
-    
-    public int getIndexOfChild(Object child) {
-    	if (child instanceof String) {
-    		return 0;
-    	}
-       return  mgui.getRGs().indexOf(child);
-    }
+    return mgui.getRGs().indexOf(child);
+  }
 }

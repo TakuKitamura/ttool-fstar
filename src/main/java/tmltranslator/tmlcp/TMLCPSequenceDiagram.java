@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 import tmltranslator.TMLAttribute;
@@ -49,105 +46,106 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-   * Class TMLCPSequenceDiagram. A sequence diagram is simply represented as a set of instances. Each instance is associated to
-   * variables, actions, messages and a mapped unit (the architecture unit where the instance is mapped to).
-   * Creation: 18/02/2014
-   * @version 1.2 04/11/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLCPSequenceDiagram. A sequence diagram is simply represented as a set
+ * of instances. Each instance is associated to variables, actions, messages and
+ * a mapped unit (the architecture unit where the instance is mapped to).
+ * Creation: 18/02/2014
+ * 
+ * @version 1.2 04/11/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPSequenceDiagram  extends TMLElement {
+public class TMLCPSequenceDiagram extends TMLElement {
 
-    private List<TMLSDInstance> instancesList;
+  private List<TMLSDInstance> instancesList;
 
-//    private int hashCode;
-//    private boolean hashCodeComputed = false;
+  // private int hashCode;
+  // private boolean hashCodeComputed = false;
 
+  public TMLCPSequenceDiagram(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    init();
+  }
 
-    public TMLCPSequenceDiagram( String _name, Object _referenceObject )        {
-        super( _name, _referenceObject );
-        init();
+  // Constructor to be called from the parser, no reference object
+  public TMLCPSequenceDiagram(String _name) {
+    super(_name, null);
+    init();
+  }
+
+  private void init() {
+    // globalVariables = new ArrayList<TMLAttribute>();
+    instancesList = new ArrayList<TMLSDInstance>();
+    /*
+     * messages = new ArrayList<TMLSDMessage>(); actions = new
+     * ArrayList<TMLSDAction>(); items = new ArrayList<TMLSDItem>();
+     */
+  }
+
+  public void addInstance(TMLSDInstance _inst) {
+    instancesList.add(_inst);
+  }
+
+  public List<TMLSDInstance> getInstances() {
+    return instancesList;
+  }
+
+  // return the list of all TMLAttributes declared for all instances
+  public ArrayList<TMLAttribute> getAttributes() {
+
+    ArrayList<TMLAttribute> attributesList = new ArrayList<TMLAttribute>();
+
+    for (TMLSDInstance instance : instancesList) {
+      attributesList.addAll(instance.getAttributes());
     }
+    return attributesList;
+  }
 
-		// Constructor to be called from the parser, no reference object
-    public TMLCPSequenceDiagram( String _name )        {
-        super( _name, null );
-        init();
+  public ArrayList<TMLSDMessage> getMessages() {
+
+    ArrayList<TMLSDMessage> messagesList = new ArrayList<TMLSDMessage>();
+
+    for (TMLSDInstance instance : instancesList) {
+      messagesList.addAll(instance.getMessages());
     }
+    return messagesList;
+  }
 
-    private void init() {
-        //globalVariables = new ArrayList<TMLAttribute>();
-        instancesList = new ArrayList<TMLSDInstance>();
-        /*messages = new ArrayList<TMLSDMessage>();
-          actions = new ArrayList<TMLSDAction>();
-          items = new ArrayList<TMLSDItem>();*/
+  public ArrayList<TMLSDAction> getActions() {
+
+    ArrayList<TMLSDAction> actionsList = new ArrayList<TMLSDAction>();
+
+    for (TMLSDInstance instance : instancesList) {
+      actionsList.addAll(instance.getActions());
     }
+    return actionsList;
+  }
 
-    public void addInstance( TMLSDInstance _inst )      {
-        instancesList.add( _inst );
+  // An event is either an action or a message
+  public ArrayList<TMLSDEvent> getEvents() {
+
+    ArrayList<TMLSDEvent> eventsList = new ArrayList<TMLSDEvent>();
+
+    for (TMLSDInstance instance : instancesList) {
+      eventsList.addAll(instance.getEvents());
     }
+    return eventsList;
+  }
 
-    public List<TMLSDInstance> getInstances()      {
-        return instancesList;
+  public String toString() {
+    String s = "*** Sequence diagram " + getName() + "\n";
+    for (tmltranslator.tmlcp.TMLSDInstance instance : getInstances()) {
+      s += "\t" + "--- Instance " + instance.toString() + "\n";
+      for (tmltranslator.tmlcp.TMLSDAction action : instance.getActions()) {
+        s += "\t\t" + " +++ Action " + action.toString() + "\n";
+      }
+      for (tmltranslator.TMLAttribute attribute : instance.getAttributes()) {
+        s += "\t\t" + " +++ Attribute " + attribute.toString() + "\n";
+      }
+      for (tmltranslator.tmlcp.TMLSDMessage message : instance.getMessages()) {
+        s += "\t\t" + " +++ Message " + message.toString() + "\n";
+      }
     }
+    return s;
+  }
 
-    //return the list of all TMLAttributes declared for all instances
-    public ArrayList<TMLAttribute> getAttributes()      {
-
-        ArrayList<TMLAttribute> attributesList = new ArrayList<TMLAttribute>();
-
-        for( TMLSDInstance instance: instancesList )    {
-            attributesList.addAll( instance.getAttributes() );
-        }
-        return attributesList;
-    }
-
-    public ArrayList<TMLSDMessage> getMessages()        {
-
-        ArrayList<TMLSDMessage> messagesList = new ArrayList<TMLSDMessage>();
-
-        for( TMLSDInstance instance: instancesList )    {
-            messagesList.addAll( instance.getMessages() );
-        }
-        return messagesList;
-    }
-
-    public ArrayList<TMLSDAction> getActions()  {
-
-        ArrayList<TMLSDAction> actionsList = new ArrayList<TMLSDAction>();
-
-        for( TMLSDInstance instance: instancesList )    {
-            actionsList.addAll( instance.getActions() );
-        }
-        return actionsList;
-    }
-
-    //An event is either an action or a message
-    public ArrayList<TMLSDEvent> getEvents()    {
-
-        ArrayList<TMLSDEvent> eventsList = new ArrayList<TMLSDEvent>();
-
-        for( TMLSDInstance instance: instancesList )    {
-            eventsList.addAll( instance.getEvents() );
-        }
-        return eventsList;
-    }
-
-
-    public String toString() {
-        String s = "*** Sequence diagram " + getName() + "\n";
-        for( tmltranslator.tmlcp.TMLSDInstance instance: getInstances() )      {
-            s += "\t" + "--- Instance " + instance.toString() + "\n";
-            for( tmltranslator.tmlcp.TMLSDAction action: instance.getActions() )    {
-                s += "\t\t" + " +++ Action " + action.toString() + "\n";
-            }
-            for( tmltranslator.TMLAttribute attribute: instance.getAttributes() )   {
-                s += "\t\t" + " +++ Attribute " + attribute.toString() + "\n";
-            }
-            for( tmltranslator.tmlcp.TMLSDMessage message: instance.getMessages() ) {
-                s += "\t\t" + " +++ Message " + message.toString() + "\n";
-            }
-        }
-        return s;
-    }
-
-}       //End of class
+} // End of class

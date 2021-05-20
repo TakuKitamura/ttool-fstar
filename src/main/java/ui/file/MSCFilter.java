@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.file;
 
 import myutil.FileUtils;
@@ -46,41 +43,33 @@ import myutil.FileUtils;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-
 /**
- * Class MSCFilter
- * Creation : 17/07/2009
+ * Class MSCFilter Creation : 17/07/2009
+ * 
  * @author Ludovic APVRILLE
  */
 public class MSCFilter extends FileFilter {
 
-//Accept all directories and  xml files
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
+  // Accept all directories and xml files
+  public boolean accept(File f) {
+    if (f.isDirectory()) {
+      return true;
+    }
 
-        String extension = FileUtils.getExtension(f);
-        if (extension != null) {
-            return extension.equals(FileUtils.xml);
-        }
+    String extension = FileUtils.getExtension(f);
+    if (extension != null) {
+      return extension.equals(FileUtils.xml);
+    }
 
-        return false;
-    }
-    
-    public String getDescription() {
-        return "MSC XML files";
-    }
-    
-    public static String getExtension() {
-	 	return  FileUtils.xml;  
-    }
+    return false;
+  }
+
+  public String getDescription() {
+    return "MSC XML files";
+  }
+
+  public static String getExtension() {
+    return FileUtils.xml;
+  }
 
 }
-
-
-
-
-    
-
-

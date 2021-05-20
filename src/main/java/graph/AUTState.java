@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package graph;
 
 import java.util.ArrayList;
@@ -44,230 +43,227 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * Class AUTState
- * Creation : 05/03/2008
- * * @version 1.0 05/03/2008
+ * Class AUTState Creation : 05/03/2008 * @version 1.0 05/03/2008
  *
  * @author Ludovic APVRILLE
  */
 public class AUTState implements Comparable<AUTState> {
 
-    public String info;
-    public int id;
-    public ArrayList<AUTTransition> inTransitions; // Arriving to that state
-    public ArrayList<AUTTransition> outTransitions; // Departing from that state
-    public boolean met = false;
-    public Object referenceObject;
-    public boolean isOrigin = false;
+  public String info;
+  public int id;
+  public ArrayList<AUTTransition> inTransitions; // Arriving to that state
+  public ArrayList<AUTTransition> outTransitions; // Departing from that state
+  public boolean met = false;
+  public Object referenceObject;
+  public boolean isOrigin = false;
 
+  public AUTState(int _id) {
+    id = _id;
+    inTransitions = new ArrayList<AUTTransition>();
+    outTransitions = new ArrayList<AUTTransition>();
+  }
 
-    public AUTState(int _id) {
-        id = _id;
-        inTransitions = new ArrayList<AUTTransition>();
-        outTransitions = new ArrayList<AUTTransition>();
+  public int compareTo(AUTState _s) {
+    return id - _s.id;
+  }
+
+  public void addInTransition(AUTTransition tr) {
+    inTransitions.add(tr);
+  }
+
+  public void addOutTransition(AUTTransition tr) {
+    outTransitions.add(tr);
+  }
+
+  public int getNbInTransitions() {
+    return inTransitions.size();
+  }
+
+  public int getNbOutTransitions() {
+    return outTransitions.size();
+  }
+
+  public boolean isTerminationState() {
+    return (outTransitions.size() == 0);
+  }
+
+  public AUTTransition getTransitionTo(int destination) {
+    for (AUTTransition tr : outTransitions) {
+      if (tr.destination == destination) {
+        return tr;
+      }
+    }
+    return null;
+  }
+
+  public boolean hasTransitionTo(int destination) {
+    for (AUTTransition aut1 : outTransitions) {
+      if (aut1.destination == destination) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public AUTTransition returnRandomTransition() {
+    int size = outTransitions.size();
+    if (size == 0) {
+      return null;
     }
 
-    public int compareTo(AUTState _s) {
-        return id - _s.id;
+    if (size == 1) {
+      return outTransitions.get(0);
     }
 
-    public void addInTransition(AUTTransition tr) {
-        inTransitions.add(tr);
+    Random generator = new Random();
+    int choice = generator.nextInt(size);
+    return outTransitions.get(choice);
+
+  }
+
+  public void updateID(int _newID) {
+    id = _newID;
+    for (AUTTransition inT : inTransitions) {
+      inT.destination = id;
     }
 
-    public void addOutTransition(AUTTransition tr) {
-        outTransitions.add(tr);
+    for (AUTTransition outT : outTransitions) {
+      outT.origin = id;
+    }
+  }
+
+  public AUTTransition[] getAtLeastTwoOutTauTransitions() {
+    if (outTransitions == null) {
+      return null;
     }
 
-    public int getNbInTransitions() {
-        return inTransitions.size();
+    int cpt = 0;
+    AUTTransition[] trans = new AUTTransition[2];
+    for (AUTTransition tr : outTransitions) {
+      if (tr.isTau) {
+        trans[cpt] = tr;
+        cpt++;
+        if (cpt == 2) {
+          return trans;
+        }
+      }
+    }
+    return null;
+  }
+
+  public boolean hasOneIncomingTauAndOneFollower() {
+    if (outTransitions.size() != 1) {
+      return false;
     }
 
-    public int getNbOutTransitions() {
-        return outTransitions.size();
+    if (inTransitions.size() != 1) {
+      return false;
     }
 
-    public boolean isTerminationState() {
-        return (outTransitions.size() == 0);
+    return inTransitions.get(0).isTau;
+  }
+
+  public boolean hasOutputTauTransition() {
+    if (outTransitions.size() < 1) {
+      return false;
     }
 
-    public AUTTransition getTransitionTo(int destination) {
-        for (AUTTransition tr : outTransitions) {
-            if (tr.destination == destination) {
-                return tr;
-            }
-        }
-        return null;
+    for (AUTTransition outT : outTransitions) {
+      if (outT.isTau) {
+        return true;
+      }
     }
 
-    public boolean hasTransitionTo(int destination) {
-        for (AUTTransition aut1 : outTransitions) {
-            if (aut1.destination == destination) {
-                return true;
-            }
-        }
-        return false;
+    return false;
+  }
+
+  public boolean hasSimilarTransition(AUTTransition _tr) {
+    if (outTransitions.size() == 0) {
+      return false;
+    }
+    for (AUTTransition tr : outTransitions) {
+      if ((tr.origin == _tr.origin) && (tr.destination == _tr.destination)
+          && (tr.transition.compareTo(_tr.transition) == 0)) {
+        return true;
+      }
     }
 
-    public AUTTransition returnRandomTransition() {
-        int size = outTransitions.size();
-        if (size == 0) {
-            return null;
-        }
+    return false;
+  }
 
-        if (size == 1) {
-            return outTransitions.get(0);
-        }
-
-        Random generator = new Random();
-        int choice = generator.nextInt(size);
-        return outTransitions.get(choice);
-
+  public void removeAllOutTauTransitions(ArrayList<AUTTransition> _transitions, ArrayList<AUTState> _states) {
+    ArrayList<AUTTransition> outTransitions2 = new ArrayList<AUTTransition>();
+    for (AUTTransition tr : outTransitions) {
+      if (!(tr.isTau)) {
+        outTransitions2.add(tr);
+      } else {
+        _transitions.remove(tr);
+        _states.get(tr.destination).removeInTransition(tr);
+      }
     }
+    outTransitions = outTransitions2;
+  }
 
-    public void updateID(int _newID) {
-        id = _newID;
-        for (AUTTransition inT : inTransitions) {
-            inT.destination = id;
-        }
+  public void removeInTransition(AUTTransition _tr) {
+    inTransitions.remove(_tr);
+  }
 
-        for (AUTTransition outT : outTransitions) {
-            outT.origin = id;
-        }
+  public void createTransitionsButNotDuplicate(LinkedList<AUTTransition> _newTransitions, ArrayList<AUTState> _states,
+      ArrayList<AUTTransition> _transitions) {
+    for (AUTTransition tr : _newTransitions) {
+      if (!(hasSimilarTransition(tr))) {
+        AUTTransition ntr = tr.basicClone();
+        ntr.origin = id;
+        outTransitions.add(ntr);
+        _states.get(ntr.destination).addInTransition(ntr);
+        _transitions.add(ntr);
+      }
     }
+  }
 
-    public AUTTransition[] getAtLeastTwoOutTauTransitions() {
-        if (outTransitions == null) {
-            return null;
-        }
-
-        int cpt = 0;
-        AUTTransition[] trans = new AUTTransition[2];
-        for (AUTTransition tr : outTransitions) {
-            if (tr.isTau) {
-                trans[cpt] = tr;
-                cpt++;
-                if (cpt == 2) {
-                    return trans;
-                }
-            }
-        }
-        return null;
+  public void removeAllTransitionsWithId(int id) {
+    ArrayList<AUTTransition> toBeRemoved = new ArrayList<AUTTransition>();
+    for (AUTTransition tr : outTransitions) {
+      if (tr.destination == id) {
+        toBeRemoved.add(tr);
+      }
     }
-
-    public boolean hasOneIncomingTauAndOneFollower() {
-        if (outTransitions.size() != 1) {
-            return false;
-        }
-
-        if (inTransitions.size() != 1) {
-            return false;
-        }
-
-        return inTransitions.get(0).isTau;
+    for (AUTTransition tr : toBeRemoved) {
+      outTransitions.remove(tr);
     }
+    toBeRemoved.clear();
 
-    public boolean hasOutputTauTransition() {
-        if (outTransitions.size() < 1) {
-            return false;
-        }
-
-        for (AUTTransition outT : outTransitions) {
-            if (outT.isTau) {
-                return true;
-            }
-        }
-
-        return false;
+    for (AUTTransition tr : inTransitions) {
+      if (tr.origin == id) {
+        toBeRemoved.add(tr);
+      }
     }
-
-    public boolean hasSimilarTransition(AUTTransition _tr) {
-        if (outTransitions.size() == 0) {
-            return false;
-        }
-        for (AUTTransition tr : outTransitions) {
-            if ((tr.origin == _tr.origin) && (tr.destination == _tr.destination) && (tr.transition.compareTo(_tr.transition) == 0)) {
-                return true;
-            }
-        }
-
-        return false;
+    for (AUTTransition tr : toBeRemoved) {
+      inTransitions.remove(tr);
     }
+  }
 
-    public void removeAllOutTauTransitions(ArrayList<AUTTransition> _transitions, ArrayList<AUTState> _states) {
-        ArrayList<AUTTransition> outTransitions2 = new ArrayList<AUTTransition>();
-        for (AUTTransition tr : outTransitions) {
-            if (!(tr.isTau)) {
-                outTransitions2.add(tr);
-            } else {
-                _transitions.remove(tr);
-                _states.get(tr.destination).removeInTransition(tr);
-            }
-        }
-        outTransitions = outTransitions2;
+  public String toString() {
+    String s = "" + id + " ";
+    if (info != null) {
+      s += "\"" + info + "\"";
     }
-
-    public void removeInTransition(AUTTransition _tr) {
-        inTransitions.remove(_tr);
+    s += "\n";
+    for (AUTTransition tr : inTransitions) {
+      s += "\t in: " + tr.toString() + "\n";
     }
-
-
-    public void createTransitionsButNotDuplicate(LinkedList<AUTTransition> _newTransitions, ArrayList<AUTState> _states, ArrayList<AUTTransition> _transitions) {
-        for (AUTTransition tr : _newTransitions) {
-            if (!(hasSimilarTransition(tr))) {
-                AUTTransition ntr = tr.basicClone();
-                ntr.origin = id;
-                outTransitions.add(ntr);
-                _states.get(ntr.destination).addInTransition(ntr);
-                _transitions.add(ntr);
-            }
-        }
+    for (AUTTransition tr : outTransitions) {
+      s += "\tout: " + tr.toString() + "\n";
     }
+    return s;
+  }
 
-    public void removeAllTransitionsWithId(int id) {
-        ArrayList<AUTTransition> toBeRemoved = new ArrayList<AUTTransition>();
-        for (AUTTransition tr : outTransitions) {
-            if (tr.destination == id) {
-                toBeRemoved.add(tr);
-            }
-        }
-        for (AUTTransition tr : toBeRemoved) {
-            outTransitions.remove(tr);
-        }
-        toBeRemoved.clear();
-
-        for (AUTTransition tr : inTransitions) {
-            if (tr.origin == id) {
-                toBeRemoved.add(tr);
-            }
-        }
-        for (AUTTransition tr : toBeRemoved) {
-            inTransitions.remove(tr);
-        }
-    }
-
-    public String toString() {
-        String s = "" + id + " ";
-        if (info != null) {
-            s += "\"" + info + "\"";
-        }
-        s += "\n";
-        for (AUTTransition tr : inTransitions) {
-            s += "\t in: " + tr.toString() + "\n";
-        }
-        for (AUTTransition tr : outTransitions) {
-            s += "\tout: " + tr.toString() + "\n";
-        }
-        return s;
-    }
-
-    public AUTState clone() {
-    	AUTState s = new AUTState(id);
-		s.info = info;
-		s.referenceObject = referenceObject;
-		s.isOrigin = isOrigin;
-    	return s;
-	}
-
+  public AUTState clone() {
+    AUTState s = new AUTState(id);
+    s.info = info;
+    s.referenceObject = referenceObject;
+    s.isOrigin = isOrigin;
+    return s;
+  }
 
 }

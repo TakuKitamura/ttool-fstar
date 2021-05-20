@@ -36,27 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
-
-
 /**
- * Class EBRDDStart
- * Creation: 18/09/2009
+ * Class EBRDDStart Creation: 18/09/2009
+ * 
  * @version 1.0 18/09/2009
  * @author Ludovic APVRILLE
  */
 public class EBRDDStart extends EBRDDComponent {
-    
-    public EBRDDStart(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-        nbNext = 1;
-    }
-    
-    public String toString() {
-        return "Start state";
-    }
+
+  public EBRDDStart(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    nbNext = 1;
+  }
+
+  public String toString() {
+    return "Start state";
+  }
 }

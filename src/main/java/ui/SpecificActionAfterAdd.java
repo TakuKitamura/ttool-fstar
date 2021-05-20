@@ -36,21 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class SpecificActionAfterAdd
- * Component that executes actions after it has been added to a diagram
- * Creation: 22/04/2008
+ * Class SpecificActionAfterAdd Component that executes actions after it has
+ * been added to a diagram Creation: 22/04/2008
+ * 
  * @version 1.0 22/04/2008
  * @author Ludovic APVRILLE
  */
-public interface SpecificActionAfterAdd  {
-    void specificActionAfterAdd();
+public interface SpecificActionAfterAdd {
+  void specificActionAfterAdd();
 }

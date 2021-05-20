@@ -36,36 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPEAttributeComponent
- * Creation: 16/02/2011
+ * Class TEPEAttributeComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPEAttributeComponent  extends TEPEComponent  {
-	protected String blockName;
-	
-    public TEPEAttributeComponent(String _name, Object _referenceObject, String _blockName) {
-		super(_name, _referenceObject);
-		blockName = _blockName;
-		outAttributeComponents = new Vector<TEPEComponent>();
-		outSignalComponents = new Vector<TEPEComponent>(); // toggle
-    }
-	
-	public String getBlockName() {
-		return blockName;
-	}
-	
-	public String getExtraString() {
-		return "\nDeclared in block: " + blockName;
-	}
-    
-    
+public class TEPEAttributeComponent extends TEPEComponent {
+  protected String blockName;
+
+  public TEPEAttributeComponent(String _name, Object _referenceObject, String _blockName) {
+    super(_name, _referenceObject);
+    blockName = _blockName;
+    outAttributeComponents = new Vector<TEPEComponent>();
+    outSignalComponents = new Vector<TEPEComponent>(); // toggle
+  }
+
+  public String getBlockName() {
+    return blockName;
+  }
+
+  public String getExtraString() {
+    return "\nDeclared in block: " + blockName;
+  }
+
 }

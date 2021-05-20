@@ -36,48 +36,47 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import java.util.LinkedList;
 
-
 /**
- * Class AvatarPragma
- * Creation: 20/05/2010
+ * Class AvatarPragma Creation: 20/05/2010
+ * 
  * @version 1.1 01/07/2014
  * @author Ludovic APVRILLE, Raja GATGOUT
  */
 public class AvatarPragmaPrivatePublicKey extends AvatarPragma {
 
-    private AvatarAttribute privateKey;
-    private AvatarAttribute publicKey;
+  private AvatarAttribute privateKey;
+  private AvatarAttribute publicKey;
 
-    public AvatarPragmaPrivatePublicKey(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
-        super(_name, _referenceObject);
-	this.privateKey = args.get(0);
-	this.publicKey = args.get(1);
-    }
-    public AvatarPragmaPrivatePublicKey(String _name, Object _referenceObject, AvatarAttribute privateKey, AvatarAttribute publicKey) {
-        super(_name, _referenceObject);
-	this.privateKey = privateKey;
-	this.publicKey = publicKey;
-    }
-    
-    public AvatarAttribute getPrivateKey(){
-	return privateKey;
-    }
-    
-    public AvatarAttribute getPublicKey(){
-	return publicKey;
-    }
+  public AvatarPragmaPrivatePublicKey(String _name, Object _referenceObject, LinkedList<AvatarAttribute> args) {
+    super(_name, _referenceObject);
+    this.privateKey = args.get(0);
+    this.publicKey = args.get(1);
+  }
 
-    @Override
-    public AvatarPragmaPrivatePublicKey advancedClone (AvatarSpecification avspec) {
-        AvatarPragmaPrivatePublicKey result = new AvatarPragmaPrivatePublicKey (this.name, this.referenceObject, avspec.getMatchingAttribute(this.privateKey), avspec.getMatchingAttribute(this.publicKey));
-        this.cloneLinkToReferenceObjects (result);
-        return result;
-    }
+  public AvatarPragmaPrivatePublicKey(String _name, Object _referenceObject, AvatarAttribute privateKey,
+      AvatarAttribute publicKey) {
+    super(_name, _referenceObject);
+    this.privateKey = privateKey;
+    this.publicKey = publicKey;
+  }
+
+  public AvatarAttribute getPrivateKey() {
+    return privateKey;
+  }
+
+  public AvatarAttribute getPublicKey() {
+    return publicKey;
+  }
+
+  @Override
+  public AvatarPragmaPrivatePublicKey advancedClone(AvatarSpecification avspec) {
+    AvatarPragmaPrivatePublicKey result = new AvatarPragmaPrivatePublicKey(this.name, this.referenceObject,
+        avspec.getMatchingAttribute(this.privateKey), avspec.getMatchingAttribute(this.publicKey));
+    this.cloneLinkToReferenceObjects(result);
+    return result;
+  }
 }

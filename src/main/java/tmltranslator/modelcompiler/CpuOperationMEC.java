@@ -40,24 +40,25 @@
 package tmltranslator.modelcompiler;
 
 /**
-   * Class CpuOperationMEC, Model Extension Construct (MEC) class for CPU operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class CpuOperationMEC, Model Extension Construct (MEC) class for CPU
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class CpuOperationMEC extends OperationMEC	{
+public class CpuOperationMEC extends OperationMEC {
 
-	public CpuOperationMEC( String ctxName, String ID0, String OD0 )	{
-		name = "CpuOperationMEC";
-		
-		// Issue #98: Provide default value for compilation
-		exec_code = TAB + CR + TAB + DEFAULT_NUM_VAL + USER_TO_DO + CR;
-		
-		init_code =	"/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
-								"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB + USER_TO_DO + CR + "}";
+  public CpuOperationMEC(String ctxName, String ID0, String OD0) {
+    name = "CpuOperationMEC";
 
-		// Issue #98: Provide default value for compilation
-		cleanup_code = DEFAULT_NUM_VAL + USER_TO_DO;
-		context = "EMBB_CONTEXT";
-	}
-}	//End of class
+    // Issue #98: Provide default value for compilation
+    exec_code = TAB + CR + TAB + DEFAULT_NUM_VAL + USER_TO_DO + CR;
+
+    init_code = "/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR + "void init_" + ctxName.split("_ctx")[0]
+        + "(void){" + CR + TAB + USER_TO_DO + CR + "}";
+
+    // Issue #98: Provide default value for compilation
+    cleanup_code = DEFAULT_NUM_VAL + USER_TO_DO;
+    context = "EMBB_CONTEXT";
+  }
+} // End of class

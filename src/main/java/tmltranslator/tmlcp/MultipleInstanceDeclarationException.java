@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class MultipleInstanceDeclarationException
- * Creation: 21/05/2014
+ * Class MultipleInstanceDeclarationException Creation: 21/05/2014
+ * 
  * @version 1.0 21/05/2014
  * @author Andrea ENRICI
  */
-public class MultipleInstanceDeclarationException extends Exception
-{
-	
-	public MultipleInstanceDeclarationException()	{
-		super( "TMLCP COMPILER ERROR: multiple declarations of instances" );
-	}
+public class MultipleInstanceDeclarationException extends Exception {
 
-	public MultipleInstanceDeclarationException( String message )	{
-			super( message );	
-	}
+  public MultipleInstanceDeclarationException() {
+    super("TMLCP COMPILER ERROR: multiple declarations of instances");
+  }
+
+  public MultipleInstanceDeclarationException(String message) {
+    super(message);
+  }
 }

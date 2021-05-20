@@ -36,22 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package faulttrees;
 
 /**
- * Class ORNode
- * Creation: 13/04/2015
+ * Class ORNode Creation: 13/04/2015
  *
  * @author Ludovic APVRILLE
  * @version 1.0 13/04/2015
  */
 public class XORNode extends BooleanNode {
 
-    public XORNode(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        type = "XOR";
-    }
-
+  public XORNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    type = "XOR";
+  }
 
 }

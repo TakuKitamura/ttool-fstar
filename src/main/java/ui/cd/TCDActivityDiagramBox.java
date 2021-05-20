@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
-
 
 import myutil.GraphicLib;
 import ui.*;
@@ -49,69 +45,64 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class TCDActivityDiagramBox
- * Box for storing the activity diagram of a Tclass
- * To be used in class diagrams
- * Creation: 12/12/2003
+ * Class TCDActivityDiagramBox Box for storing the activity diagram of a Tclass
+ * To be used in class diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class TCDActivityDiagramBox extends TGCWithoutInternalComponent {
-	public String oldValue;
-	protected int textX = 5;
-	protected int textY = 20;
-	
-	public TCDActivityDiagramBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  public String oldValue;
+  protected int textX = 5;
+  protected int textY = 20;
 
-		width = 150; height = 30;
-		minWidth = 150; minHeight = 30; 
-		minDesiredWidth = 150;
-		minDesiredHeight = 30;
+  public TCDActivityDiagramBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		nbConnectingPoint = 5;
-		connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-		connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, .5);
-		connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
-		connectingPoint[2] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.25, 1.0);
-		connectingPoint[3] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.5, 1.0);
-		connectingPoint[4] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.75, 1.0);
-                addTGConnectingPointsCommentDown();
-                
-		moveable = false;
-		editable = true;
-		removable = false;
-	
-		name = "Tclass activity Diagram";
-		value = "";
-		
-		myImageIcon = IconManager.imgic124;
-	}
+    width = 150;
+    height = 30;
+    minWidth = 150;
+    minHeight = 30;
+    minDesiredWidth = 150;
+    minDesiredHeight = 30;
 
-	public void internalDrawing(Graphics g) {
-		g.drawRect(x, y, width, height);
-		g.setColor(ColorManager.ACTIVITY_BOX);
-		g.fillRect(x+1, y+1, width-1, height-1);
-		ColorManager.setColor(g, getState(), 0);
-		//g.drawString(value, x + textX, y + textY);
-	}
+    nbConnectingPoint = 5;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.0, .5);
+    connectingPoint[1] = new TGConnectingPointTClasses(this, 0, 0, true, true, 1.0, 0.5);
+    connectingPoint[2] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.25, 1.0);
+    connectingPoint[3] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.5, 1.0);
+    connectingPoint[4] = new TGConnectingPointTClasses(this, 0, 0, true, true, 0.75, 1.0);
+    addTGConnectingPointsCommentDown();
 
-	public TGComponent isOnMe(int x1, int y1) {
-		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-			return this;
-		}
-		return null;
-	}
-	
-  	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_ASSOCIATION;
-      }
+    moveable = false;
+    editable = true;
+    removable = false;
+
+    name = "Tclass activity Diagram";
+    value = "";
+
+    myImageIcon = IconManager.imgic124;
+  }
+
+  public void internalDrawing(Graphics g) {
+    g.drawRect(x, y, width, height);
+    g.setColor(ColorManager.ACTIVITY_BOX);
+    g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    ColorManager.setColor(g, getState(), 0);
+    // g.drawString(value, x + textX, y + textY);
+  }
+
+  public TGComponent isOnMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
+    }
+    return null;
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION;
+  }
 
 }
-
-
-
-
-    
-
-

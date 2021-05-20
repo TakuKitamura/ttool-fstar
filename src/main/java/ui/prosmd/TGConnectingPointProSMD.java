@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointProSMD
- * Definition of connecting points on which connectors of TML activity diagram can be connected
- * Creation: 05/07/2006
+ * Class TGConnectingPointProSMD Definition of connecting points on which
+ * connectors of TML activity diagram can be connected Creation: 05/07/2006
+ * 
  * @version 1.0 05/07/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointProSMD extends  TGConnectingPointWidthHeight{
-    
-    public TGConnectingPointProSMD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_PROSMD;
-    }
+public class TGConnectingPointProSMD extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointProSMD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_PROSMD;
+  }
 }

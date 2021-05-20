@@ -36,23 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
-
 
 /**
  * Class TURTLEDesignPanelInterface
  *
  * Creation: 23/01/2007
+ * 
  * @version 1.0 23/01/2007
  * @author Ludovic APVRILLE
  */
 public interface TURTLEDesignPanelInterface {
 
-       ActivityDiagramPanelInterface getBehaviourPanel(String name);
-       ClassDiagramPanelInterface getStructurePanel();
-       TDiagramPanel panelAt(int index);
+  ActivityDiagramPanelInterface getBehaviourPanel(String name);
+
+  ClassDiagramPanelInterface getStructurePanel();
+
+  TDiagramPanel panelAt(int index);
 }

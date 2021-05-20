@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package sddescription;
 
 import java.util.Iterator;
@@ -44,131 +43,129 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class HMSCNode
- * Creation: 16/08/2004
+ * Class HMSCNode Creation: 16/08/2004
  *
  * @author Ludovic APVRILLE
  * @version 1.2 07/10/2004
  */
 public class HMSCNode extends HMSCElement {
 
-    public static final int START = 0;
-    public static final int STOP = 1;
-    public static final int CHOICE = 2;
-    public static final int PARALLEL = 3;
-    public static final int PREEMPT = 4;
-    public static final int SEQUENCE = 5;
+  public static final int START = 0;
+  public static final int STOP = 1;
+  public static final int CHOICE = 2;
+  public static final int PARALLEL = 3;
+  public static final int PREEMPT = 4;
+  public static final int SEQUENCE = 5;
 
-    private int type;
-    private List<MSC> nextMSCs;
-    protected List<HMSCNode> nextNodes;
-    private List<MSC> nextInformationMSCs;
-    private List<HMSCNode> nextInformationNodes;
-    private List<String> nextMSCGuards;
-    private List<String> nextNodeGuards;
+  private int type;
+  private List<MSC> nextMSCs;
+  protected List<HMSCNode> nextNodes;
+  private List<MSC> nextInformationMSCs;
+  private List<HMSCNode> nextInformationNodes;
+  private List<String> nextMSCGuards;
+  private List<String> nextNodeGuards;
 
-    public HMSCNode(String _name, int _type) {
-        super(_name);
-        type = _type;
-        nextMSCs = new LinkedList<MSC>();
-        nextNodes = new LinkedList<HMSCNode>();
-        nextInformationMSCs = new LinkedList<MSC>();
-        nextInformationNodes = new LinkedList<HMSCNode>();
-        nextMSCGuards = new LinkedList<String>();
-        nextNodeGuards = new LinkedList<String>();
+  public HMSCNode(String _name, int _type) {
+    super(_name);
+    type = _type;
+    nextMSCs = new LinkedList<MSC>();
+    nextNodes = new LinkedList<HMSCNode>();
+    nextInformationMSCs = new LinkedList<MSC>();
+    nextInformationNodes = new LinkedList<HMSCNode>();
+    nextMSCGuards = new LinkedList<String>();
+    nextNodeGuards = new LinkedList<String>();
+  }
+
+  public void addNextNode(HMSCNode c) {
+    nextNodes.add(c);
+  }
+
+  public void addNextMSC(MSC m) {
+    nextMSCs.add(m);
+  }
+
+  public int sizeMSCGuard() {
+    return nextMSCGuards.size();
+  }
+
+  public void addMSCGuard(String s) {
+    // TraceManager.addDev("Adding MSC guard " + s + " on " + name);
+    nextMSCGuards.add(s);
+  }
+
+  public String getMSCGuard(int index) {
+    return nextMSCGuards.get(index);
+  }
+
+  public int sizeNodeGuard() {
+    return nextNodeGuards.size();
+  }
+
+  public void addNodeGuard(String s) {
+    // TraceManager.addDev("Adding Node guard " + s + " on " + name);
+    nextNodeGuards.add(s);
+  }
+
+  public String getNodeGuard(int index) {
+    return nextNodeGuards.get(index);
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public List<HMSCNode> getNextNodes() {
+    return nextNodes;
+  }
+
+  public List<MSC> getNextMSCs() {
+    return nextMSCs;
+  }
+
+  public List<HMSCNode> getInformationNextNodes() {
+    return nextInformationNodes;
+  }
+
+  public List<MSC> getInformationNextMSCs() {
+    return nextInformationMSCs;
+  }
+
+  public String toString() {
+    // List ll;
+    int index = 0;
+    HMSCNode n;
+    MSC msc;
+    String s = "";
+
+    s += "Name=" + getName();
+    s += "\n\tnextNodes= ";
+
+    final Iterator<HMSCNode> nodeIterator = getNextNodes().listIterator();
+    while (nodeIterator.hasNext()) {
+      n = nodeIterator.next();
+      s += n.getName() + " ";
+      if (sizeNodeGuard() > index) {
+        s += "guard= " + getNodeGuard(index) + " ";
+      }
+      index++;
     }
 
-    public void addNextNode(HMSCNode c) {
-        nextNodes.add(c);
+    s += "\n\tnextMSCs= ";
+    index = 0;
+    final Iterator<MSC> mscIterator = getNextMSCs().listIterator();
+    while (mscIterator.hasNext()) {
+      msc = mscIterator.next();
+      s += msc.getName() + " ";
+      if (sizeMSCGuard() > index) {
+        s += "guard= " + getMSCGuard(index) + " ";
+      }
+      index++;
     }
-
-    public void addNextMSC(MSC m) {
-        nextMSCs.add(m);
-    }
-
-    public int sizeMSCGuard() {
-        return nextMSCGuards.size();
-    }
-
-    public void addMSCGuard(String s) {
-        //TraceManager.addDev("Adding MSC guard " + s + " on " + name);
-        nextMSCGuards.add(s);
-    }
-
-    public String getMSCGuard(int index) {
-        return nextMSCGuards.get(index);
-    }
-
-    public int sizeNodeGuard() {
-        return nextNodeGuards.size();
-    }
-
-    public void addNodeGuard(String s) {
-        //TraceManager.addDev("Adding Node guard " + s + " on " + name);
-        nextNodeGuards.add(s);
-    }
-
-    public String getNodeGuard(int index) {
-        return nextNodeGuards.get(index);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-
-    public List<HMSCNode> getNextNodes() {
-        return nextNodes;
-    }
-
-    public List<MSC> getNextMSCs() {
-        return nextMSCs;
-    }
-
-    public List<HMSCNode> getInformationNextNodes() {
-        return nextInformationNodes;
-    }
-
-    public List<MSC> getInformationNextMSCs() {
-        return nextInformationMSCs;
-    }
-
-    public String toString() {
-        // List ll;
-        int index = 0;
-        HMSCNode n;
-        MSC msc;
-        String s = "";
-
-        s += "Name=" + getName();
-        s += "\n\tnextNodes= ";
-
-        final Iterator<HMSCNode> nodeIterator = getNextNodes().listIterator();
-        while (nodeIterator.hasNext()) {
-            n = nodeIterator.next();
-            s += n.getName() + " ";
-            if (sizeNodeGuard() > index) {
-                s += "guard= " + getNodeGuard(index) + " ";
-            }
-            index++;
-        }
-
-        s += "\n\tnextMSCs= ";
-        index = 0;
-        final Iterator<MSC> mscIterator = getNextMSCs().listIterator();
-        while (mscIterator.hasNext()) {
-            msc = mscIterator.next();
-            s += msc.getName() + " ";
-            if (sizeMSCGuard() > index) {
-                s += "guard= " + getMSCGuard(index) + " ";
-            }
-            index++;
-        }
-        //s+="\n";
-        return s;
-    }
+    // s+="\n";
+    return s;
+  }
 }

@@ -36,60 +36,55 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
 import java.util.ArrayList;
 
 /**
- * Class EBRDDComponent
- * Creation: 18/09/2009
+ * Class EBRDDComponent Creation: 18/09/2009
+ * 
  * @version 1.0 18/09/2009
  * @author Ludovic APVRILLE
  */
 public abstract class EBRDDComponent extends EBRDDGeneralComponent implements Cloneable {
-	protected int nbNext = 1; // -1 means more than 1
-    protected ArrayList<EBRDDComponent> nexts;
+  protected int nbNext = 1; // -1 means more than 1
+  protected ArrayList<EBRDDComponent> nexts;
 
-    
-    public EBRDDComponent(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-        nexts = new ArrayList<EBRDDComponent>();
+  public EBRDDComponent(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    nexts = new ArrayList<EBRDDComponent>();
+  }
+
+  public EBRDDComponent getNextElement(int index) {
+    if (index < nexts.size()) {
+      return nexts.get(index);
+    } else {
+      return null;
     }
-    
-    
-    public EBRDDComponent getNextElement(int index) {
-        if (index < nexts.size()) {
-            return nexts.get(index);
-        } else {
-            return null;
-        }
-    }
-    
-    public int getNbNext() {
-        return  nexts.size();
-    }
-    
-    public int getNormalizedNbNext() {
-        return  nbNext;
-    }
-    
-    public ArrayList<EBRDDComponent> getNexts() {
-        return nexts;
-    }
-	
-	 public void addNext(EBRDDComponent _comp) {
-        nexts.add(_comp);
-    }
-    
-     public void addNext(int _index, EBRDDComponent _comp) {
-        nexts.add(_index, _comp);
-    }
-	
-	public void removeNext(int index) {
-        nexts.remove(index);
-    }
-    
+  }
+
+  public int getNbNext() {
+    return nexts.size();
+  }
+
+  public int getNormalizedNbNext() {
+    return nbNext;
+  }
+
+  public ArrayList<EBRDDComponent> getNexts() {
+    return nexts;
+  }
+
+  public void addNext(EBRDDComponent _comp) {
+    nexts.add(_comp);
+  }
+
+  public void addNext(int _index, EBRDDComponent _comp) {
+    nexts.add(_index, _comp);
+  }
+
+  public void removeNext(int index) {
+    nexts.remove(index);
+  }
+
 }

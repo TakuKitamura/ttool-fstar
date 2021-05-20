@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.file;
 
 import myutil.FileUtils;
@@ -46,42 +43,33 @@ import myutil.FileUtils;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-
 /**
- * Class AUTFileFilter
- * Creation : 12/08/2004
+ * Class AUTFileFilter Creation : 12/08/2004
+ * 
  * @author Ludovic APVRILLE
  */
 public class AUTFileFilter extends FileFilter {
 
-//Accept all directories and  xml files
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
-
-        String extension = FileUtils.getExtension(f);
-        if (extension != null) {
-            return extension.equals(FileUtils.aut);
-        }
-
-        return false;
-    }
-    
-    public String getDescription() {
-        return "AUT";
-    }
-    
-    public static String getExtension() {
-	 	return  FileUtils.aut;  
+  // Accept all directories and xml files
+  public boolean accept(File f) {
+    if (f.isDirectory()) {
+      return true;
     }
 
+    String extension = FileUtils.getExtension(f);
+    if (extension != null) {
+      return extension.equals(FileUtils.aut);
+    }
+
+    return false;
+  }
+
+  public String getDescription() {
+    return "AUT";
+  }
+
+  public static String getExtension() {
+    return FileUtils.aut;
+  }
 
 }
-
-
-
-
-    
-
-

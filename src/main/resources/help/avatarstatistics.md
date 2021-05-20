@@ -3,8 +3,8 @@
 Once several simulation have been performed, the following statistics can be displayed as curves. Data are listed in a left tree. A right click on a data makes it possible to show a specific curve or to save the related data in CSV format.
 
 ## Simulation time
-The frequency of simulation times can be shown as histogram or pie chart
 
+The frequency of simulation times can be shown as histogram or pie chart
 
 ## Blocks
 
@@ -22,4 +22,4 @@ The frequency of simulation times can be shown as histogram or pie chart
 
 - The time at each last transactions of simulation can be displayed as histogram or pie chart
 
-- For each state, one can display the number of times it has been reached in function of time. Also, this frequency value can be displayed as histogram or pie chart for all simulation, or for each simulation (reach the leaves of each state for this). For instance, if state "s0" has been reached 40 times at time 2 and 40 times at time 10, this histogram will represent at x = "40" y = "2".  
+- For each state, one can display the number of times it has been reached in function of time. Also, this frequency value can be displayed as histogram or pie chart for all simulation, or for each simulation (reach the leaves of each state for this). For instance, if state "s0" has been reached 40 times at time 2 and 40 times at time 10, this histogram will represent at x = "40" y = "2".

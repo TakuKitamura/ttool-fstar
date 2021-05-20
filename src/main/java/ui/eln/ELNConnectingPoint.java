@@ -43,34 +43,35 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class ELNConnectingPoint
- * Definition of connecting points on which connectors of ELN components can be connected
- * Creation: 11/06/2018
+ * Class ELNConnectingPoint Definition of connecting points on which connectors
+ * of ELN components can be connected Creation: 11/06/2018
+ * 
  * @version 1.0 11/06/2018
  * @author Irina Kit Yan LEE
  */
 
 public class ELNConnectingPoint extends TGConnectingPointWidthHeight {
-	public boolean positionned;
-	private String name;
+  public boolean positionned;
+  private String name;
 
-	public ELNConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, String _name) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-		
-		name = _name;
-	}
+  public ELNConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h,
+      String _name) {
+    super(_container, _x, _y, _in, _out, _w, _h);
 
-	@Override
-	public boolean isCompatibleWith(int type) {
-		return type == TGComponentManager.ELN_CONNECTOR;
-	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
+    name = _name;
+  }
 
-	public void setName(String _name) {
-		name = _name;
-	}
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.ELN_CONNECTOR;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String _name) {
+    name = _name;
+  }
 }

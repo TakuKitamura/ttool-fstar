@@ -37,22 +37,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
-* Class TMLSDReceiveMessage
-* Creation: 18/02/2014
-* @version 1.0 22/05/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLSDReceiveMessage Creation: 18/02/2014
+ * 
+ * @version 1.0 22/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLSDReceiveMessage extends TMLSDMessageManipulation  {
-	
-    public TMLSDReceiveMessage(TMLSDMessage _msg, String _name, Object _referenceObject) {
-        super( _msg, _name, _referenceObject);
+public class TMLSDReceiveMessage extends TMLSDMessageManipulation {
 
-    }
-	
+  public TMLSDReceiveMessage(TMLSDMessage _msg, String _name, Object _referenceObject) {
+    super(_msg, _name, _referenceObject);
+
+  }
+
 }

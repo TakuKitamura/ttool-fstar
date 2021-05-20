@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
 import myutil.Conversion;
@@ -46,117 +43,114 @@ import myutil.Conversion;
 import java.util.ArrayList;
 
 /**
- * Class EBRDDLoop
- * Creation: 22/09/2009
+ * Class EBRDDLoop Creation: 22/09/2009
+ * 
  * @version 1.0 22/09/2009
  * @author Ludovic APVRILLE
  */
 public class EBRDDChoice extends EBRDDComponent {
-    private ArrayList<String> guards;
-    
-    public EBRDDChoice(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-        nbNext = -1;
-        guards = new ArrayList<String>();
+  private ArrayList<String> guards;
+
+  public EBRDDChoice(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    nbNext = -1;
+    guards = new ArrayList<String>();
+  }
+
+  public void addGuard(String _g) {
+    guards.add(_g);
+  }
+
+  public int getNbGuard() {
+    return guards.size();
+  }
+
+  public String getGuard(int i) {
+    if (i < getNbGuard()) {
+      return guards.get(i);
+    } else {
+      return null;
     }
-    
-    public void addGuard(String _g) {
-        guards.add(_g);
+  }
+
+  public void setGuardAt(int _i, String _g) {
+    guards.set(_i, _g);
+  }
+
+  public boolean hasMoreThanOneElse() {
+    int cpt = 0;
+    String guard;
+    for (int i = 0; i < getNbGuard(); i++) {
+      guard = getGuard(i);
+      guard = Conversion.replaceAllChar(guard, '[', " ");
+      guard = Conversion.replaceAllChar(guard, ']', " ");
+      guard = guard.trim();
+      if (guard.compareTo("else") == 0) {
+        cpt++;
+      }
     }
-    
-    public int getNbGuard() {
-        return guards.size();
+
+    return (cpt > 1);
+  }
+
+  public int getElseGuard() {
+    // int cpt = 0;
+    String guard;
+    for (int i = 0; i < getNbGuard(); i++) {
+      guard = getGuard(i);
+      guard = Conversion.replaceAllChar(guard, '[', " ");
+      guard = Conversion.replaceAllChar(guard, ']', " ");
+      guard = guard.trim();
+      if (guard.compareTo("else") == 0) {
+        return i;
+      }
     }
-    
-    public String getGuard(int i) {
-        if (i < getNbGuard()) {
-            return guards.get(i);
+
+    return -1;
+  }
+
+  public String getValueOfElse() {
+    String g = "";
+    int cpt = 0;
+    String guard;
+
+    for (int i = 0; i < getNbGuard(); i++) {
+      guard = getGuard(i);
+      guard = Conversion.replaceAllChar(guard, '[', " ");
+      guard = Conversion.replaceAllChar(guard, ']', " ");
+      guard = guard.trim();
+      if ((!(guard.compareTo("else") == 0)) && (!(guard.compareTo("after") == 0))) {
+        guard = getGuard(i);
+        guard = Conversion.replaceAllChar(guard, '[', "(");
+        guard = Conversion.replaceAllChar(guard, ']', ")");
+        guard = "(" + guard + ")";
+        if (cpt == 0) {
+          g = guard;
         } else {
-            return null;
+          g = g + " or " + guard;
         }
+        cpt++;
+      }
     }
-	
-	
-    
-    public void setGuardAt(int _i, String _g) {
-        guards.set(_i, _g);
+
+    return "[not(" + g + ")]";
+  }
+
+  public void orderGuards() {
+    int index;
+    String guard;
+    EBRDDComponent next;
+
+    // Put else at the end
+    index = getElseGuard();
+    if ((index > -1) && (index != (getNbGuard() - 1))) {
+      next = getNextElement(index);
+      guard = getGuard(index);
+      guards.remove(index);
+      removeNext(index);
+      addNext(next);
+      addGuard(guard);
     }
-    
-    public boolean hasMoreThanOneElse() {
-        int cpt = 0;
-        String guard;
-        for(int i=0; i<getNbGuard(); i++) {
-            guard = getGuard(i);
-            guard = Conversion.replaceAllChar(guard, '[', " ");
-            guard = Conversion.replaceAllChar(guard, ']', " ");
-            guard = guard.trim();
-            if (guard.compareTo("else") == 0) {
-                cpt ++;
-            }
-        }
-        
-        return (cpt > 1);
-    }
-	
-    
-    public int getElseGuard() {
-        //int cpt = 0;
-        String guard;
-        for(int i=0; i<getNbGuard(); i++) {
-            guard = getGuard(i);
-            guard = Conversion.replaceAllChar(guard, '[', " ");
-            guard = Conversion.replaceAllChar(guard, ']', " ");
-            guard = guard.trim();
-            if (guard.compareTo("else") == 0) {
-                return i;
-            }
-        }
-        
-        return -1;
-    }
-    
-    public String getValueOfElse() {
-        String g = "";
-        int cpt = 0;
-        String guard;
-        
-        for(int i=0; i<getNbGuard(); i++) {
-            guard = getGuard(i);
-            guard = Conversion.replaceAllChar(guard, '[', " ");
-            guard = Conversion.replaceAllChar(guard, ']', " ");
-            guard = guard.trim();
-            if ((!(guard.compareTo("else") == 0)) && (!(guard.compareTo("after") == 0))) {
-                guard = getGuard(i);
-                guard = Conversion.replaceAllChar(guard, '[', "(");
-                guard = Conversion.replaceAllChar(guard, ']', ")");
-                guard = "(" + guard + ")";
-                if (cpt == 0) {
-                    g = guard;
-                } else {
-                    g = g + " or " +guard;
-                }
-                cpt ++;
-            }
-        }
-        
-        return "[not(" + g + ")]"; 
-    }
-	
-	 public void orderGuards() {
-        int index;
-        String guard;
-        EBRDDComponent next;
-        
-        // Put else at the end
-        index = getElseGuard();
-        if ((index > -1) && (index != (getNbGuard() - 1))) {
-            next = getNextElement(index);
-            guard = getGuard(index);
-            guards.remove(index);
-			removeNext(index);
-            addNext(next);
-            addGuard(guard); 
-        }
-    }
-    
+  }
+
 }

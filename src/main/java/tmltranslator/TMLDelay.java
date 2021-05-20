@@ -36,69 +36,67 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
-
 
 import java.util.Objects;
 
 /**
- * Class TMLDelay
- * Creation: 10/11/2008
+ * Class TMLDelay Creation: 10/11/2008
+ * 
  * @version 1.0 10/11/2008
  * @author Ludovic APVRILLE
  */
 public class TMLDelay extends TMLActivityElementWithIntervalAction {
-    
-	private String timeUnit = "ns"; // Shall be either "ns" or "us" or "ms" or "s"
-	
-    public TMLDelay(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
+
+  private String timeUnit = "ns"; // Shall be either "ns" or "us" or "ms" or "s"
+
+  public TMLDelay(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public void setUnit(String _timeUnit) {
+    timeUnit = _timeUnit;
+  }
+
+  public String getUnit() {
+    return timeUnit;
+  }
+
+  public static boolean isAValidUnit(String unit) {
+    if (unit.equals("ns")) {
+      return true;
+    } else if (unit.equals("us")) {
+      return true;
+    } else if (unit.equals("ms")) {
+      return true;
+    } else if (unit.equals("s")) {
+      return true;
     }
-	
-	public void setUnit(String _timeUnit) {
-		timeUnit = _timeUnit;
-	}
-	
-	public String getUnit() {
-		return timeUnit;
-	}
-	
-	public static boolean isAValidUnit(String unit) {
-		if (unit.equals("ns")) {
-			return true;
-		} else if (unit.equals("us")) {
-			return true;
-		} else if (unit.equals("ms")) {
-			return true;
-		} else if (unit.equals("s")) {
-			return true;
-		}
-		
-		return false;
-	}
 
-	public String getMasterClockFactor(){
-		if (timeUnit.equals("ns")) {
-			return "/1000";
-		} else if (timeUnit.equals("us")) {
-			return "";
-		} else if (timeUnit.equals("ms")) {
-			return "*1000";
-		} else if (timeUnit.equals("s")) {
-			return "*1000000";
-		}
-		return "";
-	}
+    return false;
+  }
 
-	public boolean equalSpec(Object o) {
-    	if (! (o instanceof TMLDelay)) return false;
-		if (!super.equalSpec(o)) return false;
+  public String getMasterClockFactor() {
+    if (timeUnit.equals("ns")) {
+      return "/1000";
+    } else if (timeUnit.equals("us")) {
+      return "";
+    } else if (timeUnit.equals("ms")) {
+      return "*1000";
+    } else if (timeUnit.equals("s")) {
+      return "*1000000";
+    }
+    return "";
+  }
 
-		TMLDelay tmlDelay = (TMLDelay) o;
-		return Objects.equals(timeUnit,tmlDelay.getUnit());
-	}
-    
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof TMLDelay))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+
+    TMLDelay tmlDelay = (TMLDelay) o;
+    return Objects.equals(timeUnit, tmlDelay.getUnit());
+  }
+
 }

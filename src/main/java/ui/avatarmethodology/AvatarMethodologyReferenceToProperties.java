@@ -36,59 +36,56 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarmethodology;
-
 
 import ui.*;
 
 /**
-* Class AvatarMethodologyReferenceToProperties
-* Diagram reference to safety properties: Used to reference diagrams from the
-* Avatar methodology
-* Creation: 29/08/2014
-* @version 1.0 29/08/2014
-* @author Ludovic APVRILLE
+ * Class AvatarMethodologyReferenceToProperties Diagram reference to safety
+ * properties: Used to reference diagrams from the Avatar methodology Creation:
+ * 29/08/2014
+ * 
+ * @version 1.0 29/08/2014
+ * @author Ludovic APVRILLE
  */
-public class AvatarMethodologyReferenceToProperties extends AvatarMethodologyDiagramReference  {
-   
-	
-    public AvatarMethodologyReferenceToProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-		initScaling(180, 70);
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.2, 0.0, TGConnectingPoint.WEST);
-        
-        typeOfReference = PROPERTY;
-        
-        addTGConnectingPointsCommentTop();    
-        
-    }
-    
-    @Override
-    public  int getType() {
-        return TGComponentManager.AVATARMETHODOLOGY_REF_PROPERTIES;
-    }
+public class AvatarMethodologyReferenceToProperties extends AvatarMethodologyDiagramReference {
 
-    @Override
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof AvatarRequirementPanel;
+  public AvatarMethodologyReferenceToProperties(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    }
+    initScaling(180, 70);
 
-    @Override
-    public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
-    	dn.setValidationsNumber(0);
-    }
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.2, 0.0,
+        TGConnectingPoint.WEST);
 
-    @Override
-    public boolean makeCall(String diagramName, int index) {
-    	return true;
-    }
-      
+    typeOfReference = PROPERTY;
+
+    addTGConnectingPointsCommentTop();
+
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.AVATARMETHODOLOGY_REF_PROPERTIES;
+  }
+
+  @Override
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    return panel instanceof AvatarRequirementPanel;
+
+  }
+
+  @Override
+  public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
+    dn.setValidationsNumber(0);
+  }
+
+  @Override
+  public boolean makeCall(String diagramName, int index) {
+    return true;
+  }
+
 }

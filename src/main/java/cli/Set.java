@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package cli;
 
 import common.ConfigurationTTool;
@@ -51,68 +50,64 @@ import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Set
- * Creation: 25/10/2018
- * Version 2.0 25/10/2018
+ * Class Set Creation: 25/10/2018 Version 2.0 25/10/2018
  *
  * @author Ludovic APVRILLE
  */
-public class Set extends Command  {
+public class Set extends Command {
 
+  public Set() {
 
-    public Set() {
+  }
 
+  public List<Command> getListOfSubCommands() {
+    return subcommands;
+  }
+
+  public String getCommand() {
+    return "set";
+  }
+
+  public String getShortCommand() {
+    return "s";
+  }
+
+  public String getUsage() {
+    return "set <variable name> <value>";
+  }
+
+  public String getDescription() {
+    return "Used to set a variable to a given value";
+  }
+
+  public String getExample() {
+    return "set model modeling/AVATAR/PressureController.xml";
+  }
+
+  public String executeCommand(String command, Interpreter interpreter) {
+    int index = command.indexOf(" ");
+    if (index == -1) {
+      return Interpreter.BAD;
     }
 
-    public List<Command> getListOfSubCommands() {
-        return subcommands;
+    String varName = command.substring(0, index);
+
+    if (varName.length() < 1) {
+      return Interpreter.BAD_VAR_NAME;
     }
 
-    public String getCommand() {
-        return "set";
+    String attr = command.substring(index + 1, command.length()).trim();
+    if (attr.length() < 1) {
+      return Interpreter.BAD_VAR_VALUE;
     }
 
-    public String getShortCommand() {
-        return "s";
-    }
+    TraceManager.addDev("Adding variable " + varName + " with value: " + attr);
+    interpreter.addVariable(varName, attr);
 
-    public String getUsage() {
-        return "set <variable name> <value>";
-    }
+    return null;
+  }
 
-    public String getDescription() {
-        return "Used to set a variable to a given value";
-    }
+  public void fillSubCommands() {
 
-    public String getExample() {
-        return "set model modeling/AVATAR/PressureController.xml";
-    }
-
-
-    public  String executeCommand(String command, Interpreter interpreter) {
-        int index = command.indexOf(" ");
-        if (index == -1) {
-            return Interpreter.BAD;
-        }
-
-        String varName = command.substring(0, index);
-
-        if (varName.length() < 1) {
-            return Interpreter.BAD_VAR_NAME;
-        }
-
-        String attr = command.substring(index+1, command.length()).trim();
-        if (attr.length() < 1) {
-            return Interpreter.BAD_VAR_VALUE;
-        }
-
-        TraceManager.addDev("Adding variable " + varName + " with value: " + attr);
-        interpreter.addVariable(varName, attr);
-
-        return null;
-    }
-
-    public void fillSubCommands() {
-
-    }
+  }
 }

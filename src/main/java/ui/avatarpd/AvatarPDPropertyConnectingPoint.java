@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarPDPropertyConnectingPoint
- * Definition of connecting points on which property connectors can be connected
- * Creation: 22/04/2010
+ * Class AvatarPDPropertyConnectingPoint Definition of connecting points on
+ * which property connectors can be connected Creation: 22/04/2010
+ * 
  * @version 1.0 22/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarPDPropertyConnectingPoint extends  TGConnectingPointWidthHeight {
-    
-    public AvatarPDPropertyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.APD_PROPERTY_CONNECTOR;
-    }
+public class AvatarPDPropertyConnectingPoint extends TGConnectingPointWidthHeight {
+
+  public AvatarPDPropertyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.APD_PROPERTY_CONNECTOR;
+  }
 }

@@ -43,27 +43,30 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
-   * Class TGConnectingPointMessageSD
-   * Definition of connecting points on which connectors of sequence diagrams can be connected
-   * Creation: 06/10/2004
-   * @version 1.0 06/10/2004
-   * @author Ludovic APVRILLE
+ * Class TGConnectingPointMessageSD Definition of connecting points on which
+ * connectors of sequence diagrams can be connected Creation: 06/10/2004
+ * 
+ * @version 1.0 06/10/2004
+ * @author Ludovic APVRILLE
  */
-public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
+public class TGConnectingPointMessageSD extends TGConnectingPointWidthHeight {
 
-    public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
+  public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //TraceManager.addDev("is compatible with " + type);
-        if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
-	    //TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" + getY()) ;
-            //
-            return true;
-        }
-        //
-        return false;
+  @Override
+  public boolean isCompatibleWith(int type) {
+    // TraceManager.addDev("is compatible with " + type);
+    if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)
+        || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
+      // TraceManager.addDev("is compatible with " + type + " x= " + getX() + " y=" +
+      // getY()) ;
+      //
+      return true;
     }
+    //
+    return false;
+  }
 }

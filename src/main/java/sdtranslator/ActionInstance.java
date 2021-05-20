@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package sdtranslator;
 
 import sddescription.Instance;
@@ -46,24 +43,22 @@ import sddescription.MSC;
 import translator.ADComponent;
 import translator.TClass;
 
-
-
 /**
- * Class Evt
- * Creation: 24/11/2004
+ * Class Evt Creation: 24/11/2004
+ * 
  * @version 1.0 24/11/2004
  * @author Ludovic APVRILLE
  */
 public class ActionInstance {
-    
-    public ADComponent first;
-    public ADComponent last;
-    public Instance ins;
-    public TClass t;
-    public int nbAction;
-    public MSC msc;
-    
-    
-    public ActionInstance() {}
-  
+
+  public ADComponent first;
+  public ADComponent last;
+  public Instance ins;
+  public TClass t;
+  public int nbAction;
+  public MSC msc;
+
+  public ActionInstance() {
+  }
+
 }

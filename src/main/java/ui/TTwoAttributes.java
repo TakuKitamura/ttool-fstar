@@ -36,61 +36,57 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class TTwoAttributes
- * Correspondance between data of a Turtle modeling and graphical elements 
- * Creation: 13/12/2003
+ * Class TTwoAttributes Correspondance between data of a Turtle modeling and
+ * graphical elements Creation: 13/12/2003
+ * 
  * @version 1.0 13/12/2003
  * @author Ludovic APVRILLE
  */
 public class TTwoAttributes {
-	
-	public TClassInterface t1;
-	public TClassInterface t2;
-	public TAttribute ta1;
-	public TAttribute ta2;
-	
-	public int t1id;
-	public int t2id;
-	public String ta1s;
-	public String ta2s;
-	
-	public TTwoAttributes (TClassInterface _t1, TClassInterface _t2, TAttribute _ta1, TAttribute _ta2) {
-		t1 = _t1;
-		t2 = _t2;
-		ta1 = _ta1;
-		ta2 = _ta2;
-	}
-	
-	public TTwoAttributes (int _t1id, int _t2id, String _ta1s, String _ta2s) {
-		t1id = _t1id;
-		t2id = _t2id;
-		ta1s = _ta1s;
-		ta2s = _ta2s;
-	}
-	
-	public String toString() {
-		if ((t1 == null) || (t2 == null) || (ta1 == null) || (ta2 == null)) {
-			return "TClass/TObject of id " + t1 + "." + ta1s + " = " + "TClass/TObject of id " + t2 + "." + ta2s;
-		} else {
-			return t1.getValue() + "." + ta1.getId() + " = " + t2.getValue() + "." + ta2.getId();
-		}
-	}
-        
-        public String toShortString() {
-            if ((t1 == null) || (t2 == null) || (ta1 == null) || (ta2 == null)) {
-		return "TClass/TObject of id " + t1 + "." + ta1s + " = " + "TClass/TObject of id " + t2 + "." + ta2s;
-            } else {
-                if (ta1.getId().equals(ta2.getId())) {
-                    return ta1.getId();
-                }
-		return t1.getValue() + "." + ta1.getId() + " = " + t2.getValue() + "." + ta2.getId();
-            }
-        }
+
+  public TClassInterface t1;
+  public TClassInterface t2;
+  public TAttribute ta1;
+  public TAttribute ta2;
+
+  public int t1id;
+  public int t2id;
+  public String ta1s;
+  public String ta2s;
+
+  public TTwoAttributes(TClassInterface _t1, TClassInterface _t2, TAttribute _ta1, TAttribute _ta2) {
+    t1 = _t1;
+    t2 = _t2;
+    ta1 = _ta1;
+    ta2 = _ta2;
+  }
+
+  public TTwoAttributes(int _t1id, int _t2id, String _ta1s, String _ta2s) {
+    t1id = _t1id;
+    t2id = _t2id;
+    ta1s = _ta1s;
+    ta2s = _ta2s;
+  }
+
+  public String toString() {
+    if ((t1 == null) || (t2 == null) || (ta1 == null) || (ta2 == null)) {
+      return "TClass/TObject of id " + t1 + "." + ta1s + " = " + "TClass/TObject of id " + t2 + "." + ta2s;
+    } else {
+      return t1.getValue() + "." + ta1.getId() + " = " + t2.getValue() + "." + ta2.getId();
+    }
+  }
+
+  public String toShortString() {
+    if ((t1 == null) || (t2 == null) || (ta1 == null) || (ta2 == null)) {
+      return "TClass/TObject of id " + t1 + "." + ta1s + " = " + "TClass/TObject of id " + t2 + "." + ta2s;
+    } else {
+      if (ta1.getId().equals(ta2.getId())) {
+        return ta1.getId();
+      }
+      return t1.getValue() + "." + ta1.getId() + " = " + t2.getValue() + "." + ta2.getId();
+    }
+  }
 }

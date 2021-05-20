@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 import ui.AvatarDesignPanel;
@@ -47,13 +44,15 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 /**
- * Class ProVerifResultTraceStep
- * Creation: 24/05/2017
+ * Class ProVerifResultTraceStep Creation: 24/05/2017
+ * 
  * @version 1.0 24/05/2017
  * @author Florian LUGOU
  */
 public interface ProVerifResultTraceStep {
-    String describeAsString(AvatarDesignPanel adp);
-    void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException;
-    void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException;
+  String describeAsString(AvatarDesignPanel adp);
+
+  void describeAsTMLSDTransaction(BufferedWriter writer, int step) throws IOException;
+
+  void describeAsSDTransaction(AvatarDesignPanel adp, BufferedWriter writer, int step) throws IOException;
 }

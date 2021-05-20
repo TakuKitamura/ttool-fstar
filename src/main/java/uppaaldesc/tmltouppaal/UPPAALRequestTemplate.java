@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package uppaaldesc.tmltouppaal;
 
 import tmltranslator.TMLRequest;
@@ -48,74 +45,72 @@ import uppaaldesc.UPPAALTransition;
 
 import java.awt.*;
 
-
 /**
- * Class UPPAALRequestTemplate
- * Creation: 07/11/2006
+ * Class UPPAALRequestTemplate Creation: 07/11/2006
+ * 
  * @version 1.0 07/11/2006
  * @author Ludovic APVRILLE
  */
 public class UPPAALRequestTemplate extends UPPAALTemplate {
 
-    public UPPAALRequestTemplate(String name, TMLRequest request, String defaultSizeValue) {
-           super();
-           
-           int i;
-           setName(name);
-           declaration = "const int maxR = " + defaultSizeValue + ";\nint size = 0;\nint head = 0;\nint tail = 0;\n";
-           for(i=0;i<request.getNbOfParams(); i++) {
-             declaration += request.getType(i).toString() + " listR" + i + "[maxR];\n\n";
-           }
+  public UPPAALRequestTemplate(String name, TMLRequest request, String defaultSizeValue) {
+    super();
 
-           // Function code: enqueueR
-           declaration += "void enqueueR(){\n";
-           for(i=0;i<request.getNbOfParams(); i++) {
-            declaration += "  listR" + i + "[tail] = tail" + i + "__" + request.getName() + ";\n";
-           }
-           declaration += "  tail = (tail+1)%maxR;\n  size ++;\n}\n\n";
-
-           // Function code: dequeueR
-           declaration += "void dequeueR(){\n";
-           for(i=0;i<request.getNbOfParams(); i++) {
-             declaration += "  head" + i + "__" + request.getName() + " = listR" + i + "[head];\n";
-           }
-           declaration += "  head = (head+1)%maxR;\n  size --;\n}\n\n";
-
-           // Main state
-           initLocation = new UPPAALLocation();
-           initLocation.idPoint = new Point(-64, -80);
-           initLocation.namePoint = new Point(-80, -56);
-           initLocation.name = "main_state";
-           locations.add(initLocation);
-
-           // Transition for getting request
-           UPPAALTransition tr = new UPPAALTransition();
-           tr.sourceLoc = initLocation;
-           tr.destinationLoc = initLocation;
-           tr.guard = "size < maxR";
-           tr.guardPoint = new Point(-336, -112);
-           tr.synchronization = "request__" +  request.getName() + "?";
-           tr.synchronizationPoint = new Point(-280, -88);
-           tr.assignment = "enqueueR()";
-           tr.assignmentPoint = new Point(-304, -64);
-           tr.points.add(new Point(-208, -232));
-           tr.points.add(new Point(-208, 104));
-           transitions.add(tr);
-           
-           // Transition for releasing request
-           tr = new UPPAALTransition();
-           tr.sourceLoc = initLocation;
-           tr.destinationLoc = initLocation;
-           tr.guard = "size>0";
-           tr.guardPoint = new Point(16, -112);
-           tr.synchronization = "wait__" + request.getName() + "!";
-           tr.synchronizationPoint = new Point(40, -88);
-           tr.assignment = "dequeueR()";
-           tr.assignmentPoint = new Point(24, -72);
-           tr.points.add(new Point(64, 80));
-           tr.points.add(new Point(64, -232));
-           transitions.add(tr);
+    int i;
+    setName(name);
+    declaration = "const int maxR = " + defaultSizeValue + ";\nint size = 0;\nint head = 0;\nint tail = 0;\n";
+    for (i = 0; i < request.getNbOfParams(); i++) {
+      declaration += request.getType(i).toString() + " listR" + i + "[maxR];\n\n";
     }
 
+    // Function code: enqueueR
+    declaration += "void enqueueR(){\n";
+    for (i = 0; i < request.getNbOfParams(); i++) {
+      declaration += "  listR" + i + "[tail] = tail" + i + "__" + request.getName() + ";\n";
+    }
+    declaration += "  tail = (tail+1)%maxR;\n  size ++;\n}\n\n";
+
+    // Function code: dequeueR
+    declaration += "void dequeueR(){\n";
+    for (i = 0; i < request.getNbOfParams(); i++) {
+      declaration += "  head" + i + "__" + request.getName() + " = listR" + i + "[head];\n";
+    }
+    declaration += "  head = (head+1)%maxR;\n  size --;\n}\n\n";
+
+    // Main state
+    initLocation = new UPPAALLocation();
+    initLocation.idPoint = new Point(-64, -80);
+    initLocation.namePoint = new Point(-80, -56);
+    initLocation.name = "main_state";
+    locations.add(initLocation);
+
+    // Transition for getting request
+    UPPAALTransition tr = new UPPAALTransition();
+    tr.sourceLoc = initLocation;
+    tr.destinationLoc = initLocation;
+    tr.guard = "size < maxR";
+    tr.guardPoint = new Point(-336, -112);
+    tr.synchronization = "request__" + request.getName() + "?";
+    tr.synchronizationPoint = new Point(-280, -88);
+    tr.assignment = "enqueueR()";
+    tr.assignmentPoint = new Point(-304, -64);
+    tr.points.add(new Point(-208, -232));
+    tr.points.add(new Point(-208, 104));
+    transitions.add(tr);
+
+    // Transition for releasing request
+    tr = new UPPAALTransition();
+    tr.sourceLoc = initLocation;
+    tr.destinationLoc = initLocation;
+    tr.guard = "size>0";
+    tr.guardPoint = new Point(16, -112);
+    tr.synchronization = "wait__" + request.getName() + "!";
+    tr.synchronizationPoint = new Point(40, -88);
+    tr.assignment = "dequeueR()";
+    tr.assignmentPoint = new Point(24, -72);
+    tr.points.add(new Point(64, 80));
+    tr.points.add(new Point(64, -232));
+    transitions.add(tr);
+  }
 
 }

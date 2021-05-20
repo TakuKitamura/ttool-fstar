@@ -7,5 +7,3 @@ void criticalErrorInt(char *msg, int value);
 void criticalError(char *msg);
 
 #endif
-
-

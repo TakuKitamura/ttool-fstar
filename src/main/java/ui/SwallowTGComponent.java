@@ -36,23 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
-
 /**
- * Class SwallowTGComponent
- * Component that can swallow another component into its internal components
- * Creation: 05/10/2004
+ * Class SwallowTGComponent Component that can swallow another component into
+ * its internal components Creation: 05/10/2004
+ * 
  * @version 1.0 05/10/2004
  * @author Ludovic APVRILLE
  */
-public interface SwallowTGComponent  {
-	boolean acceptSwallowedTGComponent(TGComponent tgc);
-    boolean addSwallowedTGComponent(TGComponent tgc, int x, int y);
-    void removeSwallowedTGComponent(TGComponent tgc);
+public interface SwallowTGComponent {
+  boolean acceptSwallowedTGComponent(TGComponent tgc);
+
+  boolean addSwallowedTGComponent(TGComponent tgc, int x, int y);
+
+  void removeSwallowedTGComponent(TGComponent tgc);
 }

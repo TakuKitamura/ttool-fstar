@@ -36,26 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
-
-
 /**
- * Class TerminalProviderInterface
- * Creation: 21/03/2019
- * Version 1.0 21/03/2019
+ * Class TerminalProviderInterface Creation: 21/03/2019 Version 1.0 21/03/2019
+ * 
  * @author Ludovic APVRILLE
  */
 public interface TerminalProviderInterface {
 
+  public String getMidPrompt();
 
-    public String getMidPrompt();
-
-    public boolean tabAction(String buffer);
-
-
+  public boolean tabAction(String buffer);
 
 }

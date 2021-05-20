@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.atd;
 
 import ui.MainGUI;
@@ -49,9 +48,8 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class AttackTreeDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of an attack tree diagram
- * Creation: 03/11/2009
+ * Class AttackTreeDiagramToolBar Implements the toolbar to be used in
+ * conjunction with the panel of an attack tree diagram Creation: 03/11/2009
  *
  * @author Ludovic APVRILLE
  * @version 1.0 03/11/2009
@@ -59,95 +57,94 @@ import javax.swing.*;
  */
 public class AttackTreeDiagramToolbar extends TToolBar {
 
-    public AttackTreeDiagramToolbar(MainGUI _mgui) {
-        super(_mgui);
-    }
+  public AttackTreeDiagramToolbar(MainGUI _mgui) {
+    super(_mgui);
+  }
 
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-        mgui.updateZoomInfo();
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
 
-        mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_ATTACKER_POPULATION].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_ATTACKER_POPULATION].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_BLOCK].setEnabled(b);
-        mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_BLOCK].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
 
-        mgui.actions[TGUIAction.ATD_COUNTERMEASURE].setEnabled(b);
-        mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_COUNTERMEASURE].setEnabled(b);
+    mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
-    }
+  }
 
-    protected void setButtons() {
-        JButton button;
+  protected void setButtons() {
+    JButton button;
 
-        button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.IOD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_BLOCK]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_BLOCK]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_ATTACKER_POPULATION]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_ATTACKER_POPULATION]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_CONSTRAINT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
-        button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        this.addSeparator();
-        this.addSeparator();
+    this.addSeparator();
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-
-    }
+  }
 
 } // Class

@@ -36,98 +36,94 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 import java.util.ArrayList;
 
 /**
- * Class TreeCell
- * Creation: 21/11/2008
- * Version 2.0 21/11/2008
+ * Class TreeCell Creation: 21/11/2008 Version 2.0 21/11/2008
+ * 
  * @author Ludovic APVRILLE
  */
 public class TreeCell {
-   private Object element;
-   private ArrayList<TreeCell> children;
-   
-   public TreeCell() {
-	   children = new ArrayList<TreeCell>();
-   }
-   
-   public void setElement(Object _element) {
-	   element = _element;
-   }
-   
-   public Object getElement() {
-	   return element;
-   }
-   
-   public void addChildren(TreeCell tc) {
-	   children.add(tc);
-   }
-   
-   public boolean isLeaf() {
-	   return (children.size() == 0);
-   }
-   
-   public int getNbOfChildren() {
-	   return children.size();
-   }
-   
-   public TreeCell getChildrenByIndex(int index) {
-	   if (index < children.size()) {
-		   return children.get(index);
-	   }
-	   return null;
-   }
-   
-   public boolean containsElement(Object o){
-	   if (element == o) {
-		   return true;
-	   }
-	   
-	   for(TreeCell tc: children) {
-		   if (tc.containsElement(o)) {
-			   return true;
-		   }
-	   }
-	   
-	   return false;
-   }
-   
-   public ArrayList<TreeCell> getAllLeafs() {
-	   ArrayList<TreeCell> leafs = new ArrayList<TreeCell>();
-	   if (isLeaf()) {
-		   leafs.add(this);
-		   return leafs;
-	   }
-	   
-	   for(TreeCell cells: children) {
-		   leafs.addAll(cells.getAllLeafs());
-	   }
-	   
-	   return leafs;
-   }
-   
-   public String toString() {
-	   String s;
-	   if (element == null) {
-		   s = "(empty element)";
-	   } else {
-		   s = "element:" + element.toString();
-	   }
-	   if (isLeaf()) {
-		   s = "Leaf: " + s + "\n";
-	   } else {
-		   s += "\n I have " + children.size() + " sons\nExploring my sons:\n";
-		   for(TreeCell cells: children) {
-			   s += cells.toString();
-		   }
-	   }
-	   
-	   return s;
-   }
+  private Object element;
+  private ArrayList<TreeCell> children;
+
+  public TreeCell() {
+    children = new ArrayList<TreeCell>();
+  }
+
+  public void setElement(Object _element) {
+    element = _element;
+  }
+
+  public Object getElement() {
+    return element;
+  }
+
+  public void addChildren(TreeCell tc) {
+    children.add(tc);
+  }
+
+  public boolean isLeaf() {
+    return (children.size() == 0);
+  }
+
+  public int getNbOfChildren() {
+    return children.size();
+  }
+
+  public TreeCell getChildrenByIndex(int index) {
+    if (index < children.size()) {
+      return children.get(index);
+    }
+    return null;
+  }
+
+  public boolean containsElement(Object o) {
+    if (element == o) {
+      return true;
+    }
+
+    for (TreeCell tc : children) {
+      if (tc.containsElement(o)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public ArrayList<TreeCell> getAllLeafs() {
+    ArrayList<TreeCell> leafs = new ArrayList<TreeCell>();
+    if (isLeaf()) {
+      leafs.add(this);
+      return leafs;
+    }
+
+    for (TreeCell cells : children) {
+      leafs.addAll(cells.getAllLeafs());
+    }
+
+    return leafs;
+  }
+
+  public String toString() {
+    String s;
+    if (element == null) {
+      s = "(empty element)";
+    } else {
+      s = "element:" + element.toString();
+    }
+    if (isLeaf()) {
+      s = "Leaf: " + s + "\n";
+    } else {
+      s += "\n I have " + children.size() + " sons\nExploring my sons:\n";
+      for (TreeCell cells : children) {
+        s += cells.toString();
+      }
+    }
+
+    return s;
+  }
 }

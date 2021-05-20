@@ -11,42 +11,35 @@ Example:
 T A<> Block1.x > 0
 means that the attribute "x" of block "Block1" is always strictly positive.
 
-
 ## A[] p
 
-"A" means *on All paths* and "[]" means in *all states*. "A[] p" therefore means that "p" is expected to be satisfied in all states of all paths.
+"A" means _on All paths_ and "[]" means in _all states_. "A[] p" therefore means that "p" is expected to be satisfied in all states of all paths.
 
 <center>
 ![](file:../help/ctlaall_small.png)
 </center>
 
-
 ## A<>p
 
-"A" means *on All paths* and "<>" means in *at least one state*. "A<> p" therefore means that "p" is expected to be satisfied in at least one state of all paths. 
+"A" means _on All paths_ and "<>" means in _at least one state_. "A<> p" therefore means that "p" is expected to be satisfied in at least one state of all paths.
 
 <center>
 ![](file:../help/ctlaone_small.png)
 </center>
 
-
-
 ## E[] properties
-"E" means *on one paths* and "[]" means in *all states*. "E<> p" therefore means that "p" is expected to be satisfied in at least all states of at least one path.
+
+"E" means _on one paths_ and "[]" means in _all states_. "E<> p" therefore means that "p" is expected to be satisfied in at least all states of at least one path.
 
 <center>
 ![](file:../help/ctleall_small.png)
 </center>
-
-
 
 ## E<> properties
 
 <center>
 ![](file:../help/ctleone_small.png)
 </center>
-
-
 
 ## "Leads to" properties
 
@@ -57,25 +50,26 @@ means that the attribute "x" of block "Block1" is always strictly positive.
 </center>
 
 ## True / False
+
 A pragma may start with "T" or "F". "T" stands for True and "F" for False. T or F precise if the pragma is expected to be true or false during verification.
+
 - If a pragma starts with a "T" and is satisfied, then a green check is added on its left side.
 - if a pragma starts with a "T" and is not satisfied, then a red cross is added on its left side.
-- If a pragma starts with a  "F" and is satisfied, then a red cross is added on its left side.
+- If a pragma starts with a "F" and is satisfied, then a red cross is added on its left side.
 - if a pragma starts with a "F" and is not satisfied, then a green check is added on its left side.
 
 Adding "T" or "F" before at the beginning of a pragma is **optional**. A pragma with no "T" or "F" is assumed to start with a "T".
 
-
 ## "p" properties
 
 A pragma termines with a property. A property is a boolean expression. The following operators can be used between sub-boolean expressions:
+
 - "&&", "||"
 
 A boolean expression can:
+
 - State that a given state s of a block b has been reached: b.s
 - Use boolean or integer attributes of blocks, comparing them with operators such as : "==", "<", ">", ">=", "<="
-
-
 
 ## Examples
 
@@ -101,7 +95,7 @@ The following figures gives the pragmas that are given in the CoffeeMachine use 
 
 - CoffeeMachine.Beverage --> CoffeeMachine.CoffeeDelivered || CoffeeMachine.TeaDelivered
 
-- CoffeeMachine.Beverage --> CoffeeMachine.WaitingForFirstCoin 
+- CoffeeMachine.Beverage --> CoffeeMachine.WaitingForFirstCoin
 
 - F CoffeeMachine.WaitingForFirstCoin --> CoffeeMachine.EjectState
 
@@ -114,4 +108,3 @@ After verifying them with TTool's internal model checker, we obtain the followin
 <center>
 ![](file:../help/pragmas_cm.png)
 </center>
-

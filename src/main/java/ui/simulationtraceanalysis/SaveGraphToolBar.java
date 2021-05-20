@@ -50,24 +50,25 @@ import javax.swing.JButton;
  * @author Maysam Zoor
  */
 public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
-    protected void setActive(boolean b) {
-        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_PNG].setEnabled(b);
-        getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_GRAPHML].setEnabled(b);
-        // getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
-    }
+  protected void setActive(boolean b) {
+    getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_PNG].setEnabled(b);
+    getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_GRAPHML].setEnabled(b);
+    // getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
+  }
 
-    protected void setButtons() {
-        JButton button;
-        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_PNG]);
-        // button.addMouseListener(jflda.mouseHandler);
-        this.addSeparator();
-        button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_GRAPHML]);
-        this.addSeparator();
-        // button =
-        // this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
-    }
+  protected void setButtons() {
+    JButton button;
+    button = this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_PNG]);
+    // button.addMouseListener(jflda.mouseHandler);
+    this.addSeparator();
+    button = this
+        .add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_SAVE_GRAPH_GRAPHML]);
+    this.addSeparator();
+    // button =
+    // this.add(getLatencyDetailedAnalysisF().getActions()[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
+  }
 
-    protected SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
-        super(_jflda);
-    }
+  protected SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
+    super(_jflda);
+  }
 }

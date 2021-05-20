@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator;
 
 import myutil.TraceManager;
@@ -45,144 +44,140 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * Class AvatarActionOnSignal
- * Creation: 20/05/2010
+ * Class AvatarActionOnSignal Creation: 20/05/2010
+ * 
  * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  */
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
-    private AvatarSignal signal;
-    private List<String> values;
-	private boolean checkLatency;
-	private List<AvatarExpressionAttributeInterface> actionAttr;
+  private AvatarSignal signal;
+  private List<String> values;
+  private boolean checkLatency;
+  private List<AvatarExpressionAttributeInterface> actionAttr;
 
+  public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject) {
+    this(_name, _signal, _referenceObject, false);
+  }
 
-	public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject ) {
-		this( _name, _signal, _referenceObject, false );
-	}
+  public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable) {
+    super(_name, _referenceObject, _isCheckable, false);
 
-	public AvatarActionOnSignal(	String _name,
-									AvatarSignal _signal,
-									Object _referenceObject,
-									boolean _isCheckable ) {
-		super( _name, _referenceObject, _isCheckable, false );
-		
-		signal = _signal;
-		values = new LinkedList<String>();
-		actionAttr = null;
-	}
+    signal = _signal;
+    values = new LinkedList<String>();
+    actionAttr = null;
+  }
 
-    public AvatarSignal getSignal() {
-        return signal;
-    }
+  public AvatarSignal getSignal() {
+    return signal;
+  }
 
-    public void addValue(String _val) {
-        values.add(_val);
-    }
+  public void addValue(String _val) {
+    values.add(_val);
+  }
 
-    public List<String> getValues() {
-        return values;
-    }
+  public List<String> getValues() {
+    return values;
+  }
 
-    public int getNbOfValues() {
-        return values.size();
-    }
+  public int getNbOfValues() {
+    return values.size();
+  }
 
-    public String getValue(int _index) {
-        return values.get(_index);
-    }
+  public String getValue(int _index) {
+    return values.get(_index);
+  }
 
-    public boolean isSending() {
-        return signal.isOut();
-    }
+  public boolean isSending() {
+    return signal.isOut();
+  }
 
-	public boolean getCheckLatency(){
-		return checkLatency;
-	}
+  public boolean getCheckLatency() {
+    return checkLatency;
+  }
 
-	public void setCheckLatency(boolean b){
-		checkLatency=b;
-	}
+  public void setCheckLatency(boolean b) {
+    checkLatency = b;
+  }
 
-    public boolean isReceiving() {
-        return signal.isIn();
-    }
-    
-    public boolean buildActionSolver(AvatarBlock block) {
-        AvatarExpressionAttribute aea;
-        AvatarExpressionConstant cnst;
-        AvatarElement attr;
-        boolean res = true;
-        
-        actionAttr = new ArrayList<AvatarExpressionAttributeInterface>();
-        for (String val : values) {
-            attr = AvatarExpressionAttribute.getElement(val, block);
-            if (attr != null && AvatarExpressionSolver.containsElementAttribute(attr)) {
-                actionAttr.add(AvatarExpressionSolver.getElementAttribute(attr));
-            } else {
-                aea = new AvatarExpressionAttribute(block, val);
-                res &= !aea.hasError();
-                if (aea.isConstant()) {
-                    AvatarAttribute attribute = aea.getConstAttribute();
-                    cnst = new AvatarExpressionConstant(attribute.getInitialValueInInt());
-                    actionAttr.add(cnst);
-                } else if (res) {
-                    AvatarExpressionSolver.addElementAttribute(attr, aea);
-                    actionAttr.add(aea);
-                }
-            }
+  public boolean isReceiving() {
+    return signal.isIn();
+  }
+
+  public boolean buildActionSolver(AvatarBlock block) {
+    AvatarExpressionAttribute aea;
+    AvatarExpressionConstant cnst;
+    AvatarElement attr;
+    boolean res = true;
+
+    actionAttr = new ArrayList<AvatarExpressionAttributeInterface>();
+    for (String val : values) {
+      attr = AvatarExpressionAttribute.getElement(val, block);
+      if (attr != null && AvatarExpressionSolver.containsElementAttribute(attr)) {
+        actionAttr.add(AvatarExpressionSolver.getElementAttribute(attr));
+      } else {
+        aea = new AvatarExpressionAttribute(block, val);
+        res &= !aea.hasError();
+        if (aea.isConstant()) {
+          AvatarAttribute attribute = aea.getConstAttribute();
+          cnst = new AvatarExpressionConstant(attribute.getInitialValueInInt());
+          actionAttr.add(cnst);
+        } else if (res) {
+          AvatarExpressionSolver.addElementAttribute(attr, aea);
+          actionAttr.add(aea);
         }
-        return res;
+      }
     }
-    
-    public AvatarExpressionAttributeInterface getExpressionAttribute(int index) {
-        return actionAttr.get(index);
-    }
+    return res;
+  }
 
-    public AvatarActionOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
-    	//TraceManager.addDev("I HAVE BEEN CLONED: " + this);
-    	AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
-    	if (sig != null) {
-    		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", sig, getReferenceObject(), isCheckable()/*, isChecked()*/);
-    		for(int i=0; i<getNbOfValues(); i++) {
-    			aaos.addValue(getValue(i));
-    		}
-    		return aaos;
-    	} else {
-    	    if (getSignal() != null) {
-                TraceManager.addDev("NULL signal in new spec: " + getSignal().getName());
-            } else {
-                TraceManager.addDev("NULL signal in aaos");
-            }
-    	}
+  public AvatarExpressionAttributeInterface getExpressionAttribute(int index) {
+    return actionAttr.get(index);
+  }
 
-    	return null;
-    }
-
-    public String getExtendedName() {
-    	if (getSignal() == null) {
-    		String s = getName() + " refobjt=" + referenceObject.toString();
-    		TraceManager.addDev("Null signal" + " res=" + s);
-    		return s;
-    	}
-    	if (getName() == null) {
-    		TraceManager.addDev("Null name");
-    	}
-
-    	return getName() + ":" + getSignal().getName();
+  public AvatarActionOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
+    // TraceManager.addDev("I HAVE BEEN CLONED: " + this);
+    AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
+    if (sig != null) {
+      AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", sig, getReferenceObject(),
+          isCheckable()/* , isChecked() */);
+      for (int i = 0; i < getNbOfValues(); i++) {
+        aaos.addValue(getValue(i));
+      }
+      return aaos;
+    } else {
+      if (getSignal() != null) {
+        TraceManager.addDev("NULL signal in new spec: " + getSignal().getName());
+      } else {
+        TraceManager.addDev("NULL signal in aaos");
+      }
     }
 
-    public String getNiceName() {
-        if (signal.isIn()) {
-            return "Receiving signal " + signal.getName();
-        } else {
-            return "Sending signal " + signal.getName();
-        }
+    return null;
+  }
+
+  public String getExtendedName() {
+    if (getSignal() == null) {
+      String s = getName() + " refobjt=" + referenceObject.toString();
+      TraceManager.addDev("Null signal" + " res=" + s);
+      return s;
+    }
+    if (getName() == null) {
+      TraceManager.addDev("Null name");
     }
 
-    public void translate (AvatarTranslator translator, Object arg) {
-        translator.translateActionOnSignal (this, arg);
+    return getName() + ":" + getSignal().getName();
+  }
+
+  public String getNiceName() {
+    if (signal.isIn()) {
+      return "Receiving signal " + signal.getName();
+    } else {
+      return "Sending signal " + signal.getName();
     }
+  }
+
+  public void translate(AvatarTranslator translator, Object arg) {
+    translator.translateActionOnSignal(this, arg);
+  }
 }

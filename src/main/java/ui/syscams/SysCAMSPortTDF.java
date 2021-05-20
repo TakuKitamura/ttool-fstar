@@ -53,66 +53,66 @@ import ui.TGComponent;
  */
 
 public class SysCAMSPortTDF extends SysCAMSPrimitivePort {
-    private double period;
-    private String time;
-    private int rate;
-    private int delay;
-    private int arity;
-    private String TDFType;
+  private double period;
+  private String time;
+  private int rate;
+  private int delay;
+  private int arity;
+  private String TDFType;
 
-    public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-            TDiagramPanel _tdp) {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
+  public SysCAMSPortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  }
 
-    public String getTime() {
-        return time;
-    }
+  public String getTime() {
+    return time;
+  }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+  public void setTime(String time) {
+    this.time = time;
+  }
 
-    public String getTDFType() {
-        return TDFType;
-    }
+  public String getTDFType() {
+    return TDFType;
+  }
 
-    public void setTDFType(String tDFType) {
-        TDFType = tDFType;
-    }
+  public void setTDFType(String tDFType) {
+    TDFType = tDFType;
+  }
 
-    public double getPeriod() {
-        return period;
-    }
+  public double getPeriod() {
+    return period;
+  }
 
-    public void setPeriod(double period) {
-        this.period = period;
-    }
+  public void setPeriod(double period) {
+    this.period = period;
+  }
 
-    public int getRate() {
-        return rate;
-    }
+  public int getRate() {
+    return rate;
+  }
 
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
+  public void setRate(int rate) {
+    this.rate = rate;
+  }
 
-    public int getDelay() {
-        return delay;
-    }
+  public int getDelay() {
+    return delay;
+  }
 
-    public void setDelay(int delay) {
-        this.delay = delay;
-    }
+  public void setDelay(int delay) {
+    this.delay = delay;
+  }
 
-    public int getArity() {
-        return arity;
-    }
+  public int getArity() {
+    return arity;
+  }
 
-    public void setArity(int arity) {
-        this.arity = arity;
-    }
+  public void setArity(int arity) {
+    this.arity = arity;
+  }
 
-    public void drawParticularity(Graphics g) {
-    }
+  public void drawParticularity(Graphics g) {
+  }
 }

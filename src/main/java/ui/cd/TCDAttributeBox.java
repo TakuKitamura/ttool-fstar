@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
-
 
 import ui.*;
 import ui.util.IconManager;
@@ -52,58 +48,57 @@ import java.util.List;
 //import myutil.*;
 
 /**
- * Class TCDAttributeBox
- * Box for storing the attributes  of a Tclass
- * To be used in class diagrams
- * Creation: 12/12/2003
+ * Class TCDAttributeBox Box for storing the attributes of a Tclass To be used
+ * in class diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
 public class TCDAttributeBox extends TGCAttributeBox {
-    
-    public TCDAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        name = "Tclass attributes";
-        value = "";
-        
-        attributeText = "Attribute";
-        
-        attributes = true; // It contains attributes
-        
-        addTGConnectingPointsCommentCorner();
-        
-        myColor = ColorManager.ATTRIBUTE_BOX;
-        
-        myImageIcon = IconManager.imgic118;
-    }
-    
-    protected void setJDialogOptions(JDialogAttribute jda) {
-        jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
-        jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-        jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
-        jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
-		jda.addType(TAttribute.getStringType(TAttribute.QUEUE_NAT), true);
-		jda.addType(TAttribute.getStringType(TAttribute.ARRAY_NAT), true);
-        
-        //jda.enableInitialValue(true);
-        jda.enableRTLOTOSKeyword(false);
-        jda.enableJavaKeyword(false);
-        //jda.enableOtherTypes(true);
-        
-        List<TGComponent> ll = tdp.getComponentList();
-        Iterator<TGComponent> iterator = ll.listIterator();
-        TGComponent tgc;
-        while(iterator.hasNext()) {
-            tgc = iterator.next();
-            if (tgc instanceof TCDTData) {
-                jda.addType(tgc.getValue(), false);
-            }
-        }
-    }
-    
- 	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_ASSOCIATION;
-      }
-}
 
+  public TCDAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    name = "Tclass attributes";
+    value = "";
+
+    attributeText = "Attribute";
+
+    attributes = true; // It contains attributes
+
+    addTGConnectingPointsCommentCorner();
+
+    myColor = ColorManager.ATTRIBUTE_BOX;
+
+    myImageIcon = IconManager.imgic118;
+  }
+
+  protected void setJDialogOptions(JDialogAttribute jda) {
+    jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+    jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+    jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
+    jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
+    jda.addType(TAttribute.getStringType(TAttribute.QUEUE_NAT), true);
+    jda.addType(TAttribute.getStringType(TAttribute.ARRAY_NAT), true);
+
+    // jda.enableInitialValue(true);
+    jda.enableRTLOTOSKeyword(false);
+    jda.enableJavaKeyword(false);
+    // jda.enableOtherTypes(true);
+
+    List<TGComponent> ll = tdp.getComponentList();
+    Iterator<TGComponent> iterator = ll.listIterator();
+    TGComponent tgc;
+    while (iterator.hasNext()) {
+      tgc = iterator.next();
+      if (tgc instanceof TCDTData) {
+        jda.addType(tgc.getValue(), false);
+      }
+    }
+  }
+
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_ASSOCIATION;
+  }
+}

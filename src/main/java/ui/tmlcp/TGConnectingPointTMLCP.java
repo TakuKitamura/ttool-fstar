@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointTMLCP
- * Definition of connecting points on which connectors of TML Communication Patterns diagrams can be connected
- * Creation: 17/02/2014
+ * Class TGConnectingPointTMLCP Definition of connecting points on which
+ * connectors of TML Communication Patterns diagrams can be connected Creation:
+ * 17/02/2014
+ * 
  * @version 1.0 17/02/2014
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTMLCP extends  TGConnectingPointWidthHeight{
-    
-    public TGConnectingPointTMLCP(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_TMLCP;
-    }
+public class TGConnectingPointTMLCP extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointTMLCP(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_TMLCP;
+  }
 }

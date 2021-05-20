@@ -36,111 +36,104 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package nc;
 
-
-
 /**
-* Class NCSwitch
-* Creation: 14/11/2008
-* @version 1.0 14/11/2008
-* @author Ludovic APVRILLE
+ * Class NCSwitch Creation: 14/11/2008
+ * 
+ * @version 1.0 14/11/2008
+ * @author Ludovic APVRILLE
  */
-public class NCSwitch extends NCLinkedElement  {
-	
-	// Scheduling policies
-	public static String FCFS = "FCFS"; // FIFO
-	public static String SP = "SP"; // Static priority
-	public static String WFQ = "WFQ"; // Weight Fair Queuing
-	
-	public static String[] SchedulingPolicies = {FCFS, SP, WFQ};
-	
-	// Switching techniques
-	public static String SF = "SF"; // Store and Forward
-	public static String CT = "CT"; // Cut Through
-	
-	public static String[] SwitchingTechniques = {SF, CT};
-	
-	private int schedulingPolicy = 0;
-	private int switchingTechnique = 0;
-	private int capacity = 0;
-	private int technicalLatency = 0;
-	private NCCapacityUnit unitCapacity = new NCCapacityUnit(); // Default value: Mbs 
-	
-	public NCSwitch() {
-	}
-	
-	public void setSchedulingPolicy(int _sp) {
-		schedulingPolicy = _sp;
-	}
-	
-	public int getSchedulingPolicy() {
-		return schedulingPolicy;
-	}
-	
-	public static String getStringSchedulingPolicy(int sp) {
-			return SchedulingPolicies[sp];
-	}
-	
-	public static int getFromStringSchedulingPolicy(String _sp) {
-		for(int i=0; i<SchedulingPolicies.length; i++) {
-			if (SchedulingPolicies[i].compareTo(_sp) == 0) {
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	public void setSwitchingTechnique(int _st) {
-		switchingTechnique = _st;
-	}
-	
-	public int getSwitchingTechnique() {
-		return switchingTechnique;
-	}
-	
-	public static String getStringSwitchingTechnique(int _st) {
-			return SwitchingTechniques[_st];
-	}
-	
-	public static int getFromStringSwitchingTechnique(String _st) {
-		for(int i=0; i<SwitchingTechniques.length; i++) {
-			if (SwitchingTechniques[i].compareTo(_st) == 0) {
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	public void setCapacity(int _capacity) {
-		capacity = _capacity;
-	}
-	
-	public int getCapacity() {
-		return capacity;
-	}
-	
-	public void setTechnicalLatency(int _technicalLatency) {
-		technicalLatency = _technicalLatency;
-	}
-	
-	public int getTechnicalLatency() {
-		return technicalLatency;
-	}
-	
-	public void setCapacityUnit(NCCapacityUnit _unit) {
-		unitCapacity = _unit;
-	}
-	
-	public NCCapacityUnit getCapacityUnit() {
-		return unitCapacity;
-	}
-	
-	
+public class NCSwitch extends NCLinkedElement {
+
+  // Scheduling policies
+  public static String FCFS = "FCFS"; // FIFO
+  public static String SP = "SP"; // Static priority
+  public static String WFQ = "WFQ"; // Weight Fair Queuing
+
+  public static String[] SchedulingPolicies = { FCFS, SP, WFQ };
+
+  // Switching techniques
+  public static String SF = "SF"; // Store and Forward
+  public static String CT = "CT"; // Cut Through
+
+  public static String[] SwitchingTechniques = { SF, CT };
+
+  private int schedulingPolicy = 0;
+  private int switchingTechnique = 0;
+  private int capacity = 0;
+  private int technicalLatency = 0;
+  private NCCapacityUnit unitCapacity = new NCCapacityUnit(); // Default value: Mbs
+
+  public NCSwitch() {
+  }
+
+  public void setSchedulingPolicy(int _sp) {
+    schedulingPolicy = _sp;
+  }
+
+  public int getSchedulingPolicy() {
+    return schedulingPolicy;
+  }
+
+  public static String getStringSchedulingPolicy(int sp) {
+    return SchedulingPolicies[sp];
+  }
+
+  public static int getFromStringSchedulingPolicy(String _sp) {
+    for (int i = 0; i < SchedulingPolicies.length; i++) {
+      if (SchedulingPolicies[i].compareTo(_sp) == 0) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  public void setSwitchingTechnique(int _st) {
+    switchingTechnique = _st;
+  }
+
+  public int getSwitchingTechnique() {
+    return switchingTechnique;
+  }
+
+  public static String getStringSwitchingTechnique(int _st) {
+    return SwitchingTechniques[_st];
+  }
+
+  public static int getFromStringSwitchingTechnique(String _st) {
+    for (int i = 0; i < SwitchingTechniques.length; i++) {
+      if (SwitchingTechniques[i].compareTo(_st) == 0) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  public void setCapacity(int _capacity) {
+    capacity = _capacity;
+  }
+
+  public int getCapacity() {
+    return capacity;
+  }
+
+  public void setTechnicalLatency(int _technicalLatency) {
+    technicalLatency = _technicalLatency;
+  }
+
+  public int getTechnicalLatency() {
+    return technicalLatency;
+  }
+
+  public void setCapacityUnit(NCCapacityUnit _unit) {
+    unitCapacity = _unit;
+  }
+
+  public NCCapacityUnit getCapacityUnit() {
+    return unitCapacity;
+  }
 
 }

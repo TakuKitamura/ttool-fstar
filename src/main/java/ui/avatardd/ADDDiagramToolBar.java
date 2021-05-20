@@ -37,7 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatardd;
 
 import ui.MainGUI;
@@ -51,9 +50,8 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class ADDDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of an avatar deployment diagram
- * Creation: 30/06/2014
+ * Class ADDDiagramToolBar Implements the toolbar to be used in conjunction with
+ * the panel of an avatar deployment diagram Creation: 30/06/2014
  *
  * @author Ludovic APVRILLE
  * @author Ludovic APVRILLE (update by Julien HENON, Daniela GENIUS)
@@ -62,139 +60,138 @@ import javax.swing.*;
  */
 public class ADDDiagramToolBar extends TToolBar {
 
-    public ADDDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
+  public ADDDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
 
-    }
+  }
 
-    protected void setActive(boolean b) {
+  protected void setActive(boolean b) {
 
-        TraceManager.addDev("Active ADDtoolbar b=" +b);
+    TraceManager.addDev("Active ADDtoolbar b=" + b);
 
-        mgui.actions[TGUIAction.ADD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_LINK].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_CPUNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_BUSNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_BRIDGENODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_VGMNNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_CROSSBARNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_TTYNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_RAMNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_ROMNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_DMANODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_ICUNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_COPROMWMRNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_TIMERNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_CLUSTERNODE].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_LINK].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_CPUNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_BUSNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_BRIDGENODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_VGMNNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_CROSSBARNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_TTYNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_RAMNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_ROMNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_DMANODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_ICUNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_COPROMWMRNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_TIMERNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ADD_CLUSTERNODE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 
-        // julien -------------------------------------------------
+    // julien -------------------------------------------------
 
-        mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].setEnabled(b);
-        mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].setEnabled(b);
+    mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].setEnabled(b);
+    mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].setEnabled(b);
 
+    // --------------------------------------------------------
 
-        // --------------------------------------------------------
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
+    mgui.updateZoomInfo();
+  }
 
-        mgui.updateZoomInfo();
-    }
+  protected void setButtons() {
+    JButton button;
 
-    protected void setButtons() {
-        JButton button;
+    button = this.add(mgui.actions[TGUIAction.ADD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ADD_LINK]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_LINK]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ADD_CPUNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_BLOCKARTIFACT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_CPUNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_BLOCKARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ADD_DMANODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_DMANODE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_ICUNODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_ICUNODE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_COPROMWMRNODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_COPROMWMRNODE]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_TIMERNODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_TIMERNODE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ADD_TTYNODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_TTYNODE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ADD_BUSNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_BRIDGENODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_VGMNNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_CROSSBARNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_RAMNODE]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.ADD_ROMNODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ADD_BUSNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_BRIDGENODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_VGMNNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_CROSSBARNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_RAMNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.ADD_ROMNODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.ADD_CLUSTERNODE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ADD_CLUSTERNODE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE]);
-        button.addMouseListener(mgui.mouseHandler);
+    this.addSeparator();
 
-        button = this.add(mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM]);
-        button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        // -----------------------------------------------------
+    button = this.add(mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM]);
+    button.addMouseListener(mgui.mouseHandler);
 
-    }
+    // -----------------------------------------------------
+
+  }
 
 } // Class

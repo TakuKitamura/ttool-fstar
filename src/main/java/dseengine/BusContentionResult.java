@@ -36,35 +36,28 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class BusContentionResult
-* Object for storing a bus contention result after a simulation
-* Creation: 07/09/2011
-* @version 1.0 07/09/2011
-* @author Ludovic APVRILLE
+ * Class BusContentionResult Object for storing a bus contention result after a
+ * simulation Creation: 07/09/2011
+ * 
+ * @version 1.0 07/09/2011
+ * @author Ludovic APVRILLE
  */
-public class BusContentionResult  {
-	public int id;
-	public String name;
-	
-	public long contention;
-	
-	public BusContentionResult() {
-	}
-	
-	public String toStringResult(int cpuid, String cpuname) {
-		return "CPU_BUS_CONTENTION " + cpuid + " " + cpuname + " " + id + " " + name + " " + contention;
-	}
-	
-	
-	
-	
-} // Class BusResult
+public class BusContentionResult {
+  public int id;
+  public String name;
 
+  public long contention;
+
+  public BusContentionResult() {
+  }
+
+  public String toStringResult(int cpuid, String cpuname) {
+    return "CPU_BUS_CONTENTION " + cpuid + " " + cpuname + " " + id + " " + name + " " + contention;
+  }
+
+} // Class BusResult

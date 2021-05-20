@@ -36,26 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ddtranslator;
 
-
 /**
- * Class DDSyntaxException
- * Creation: 31/05/2005
- * version 1.0 31/05/2005
+ * Class DDSyntaxException Creation: 31/05/2005 version 1.0 31/05/2005
+ * 
  * @author Ludovic APVRILLE
  */
-public	class DDSyntaxException extends Exception {
-    
-    public DDSyntaxException() {
-        super("DD does not follows the restricted format");
-    }
-    
-    public DDSyntaxException(String msg) {
-        super("DD does not follows the restricted format: " + msg);
-    }
-    
+public class DDSyntaxException extends Exception {
+
+  public DDSyntaxException() {
+    super("DD does not follows the restricted format");
+  }
+
+  public DDSyntaxException(String msg) {
+    super("DD does not follows the restricted format: " + msg);
+  }
+
 } // Class

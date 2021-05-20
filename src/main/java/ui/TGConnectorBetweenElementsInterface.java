@@ -36,20 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
  * Class TGConnectorBetweenElementsInterface
  *
  * Creation: 23/01/2007
+ * 
  * @version 1.0 23/01/2007
  * @author Ludovic APVRILLE
  */
 public interface TGConnectorBetweenElementsInterface {
   TGConnectingPoint getTGConnectingPointP1();
+
   TGConnectingPoint getTGConnectingPointP2();
 }

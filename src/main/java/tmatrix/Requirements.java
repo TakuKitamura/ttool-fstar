@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package tmatrix;
 
 import translator.TURTLEModeling;
@@ -48,46 +44,47 @@ import ui.req.Requirement;
 import ui.req.RequirementObserver;
 
 /**
- * Class Requirements
- * Formal requirements: line of a tracability matrix
+ * Class Requirements Formal requirements: line of a tracability matrix
  * Creation: 11/08/2006
+ * 
  * @version 1.0 11/08/2006
  * @author Ludovic APVRILLE
  */
 public class Requirements {
-    public Requirement req;
-    public RequirementObserver ro;
-    public String diagramName;
-    public TURTLEModeling tm;
-    public String formalSpec;
-    public String graphDot;
-    public String graphAut;
-    public boolean satisfiedStudied = false;
-    public boolean satisfied = false;
-    
-    public Requirements() {}
-       
-    public String toString() {
-        String ret = "";
-        ret += req.getValue() + "\t";
-        ret += ro.getValue() +  "\t";
-        ret += diagramName + "\t";
-        if (satisfiedStudied) {
-            ret += "satisfied=" + satisfied;
-        } else {
-            ret += "not yet studied";
-        }
-        
-        return ret;
+  public Requirement req;
+  public RequirementObserver ro;
+  public String diagramName;
+  public TURTLEModeling tm;
+  public String formalSpec;
+  public String graphDot;
+  public String graphAut;
+  public boolean satisfiedStudied = false;
+  public boolean satisfied = false;
+
+  public Requirements() {
+  }
+
+  public String toString() {
+    String ret = "";
+    ret += req.getValue() + "\t";
+    ret += ro.getValue() + "\t";
+    ret += diagramName + "\t";
+    if (satisfiedStudied) {
+      ret += "satisfied=" + satisfied;
+    } else {
+      ret += "not yet studied";
     }
-    
-    public void setGraphAut(String data) {
-        graphAut = data;
-        satisfiedStudied = true;
-        
-        // Study graph data
-        AUTGraph graph = new AUTGraph();
-        graph.buildGraph(data);
-        satisfied = !(graph.hasTransitionWithAction(req.getViolatedAction()));
-    }
+
+    return ret;
+  }
+
+  public void setGraphAut(String data) {
+    graphAut = data;
+    satisfiedStudied = true;
+
+    // Study graph data
+    AUTGraph graph = new AUTGraph();
+    graph.buildGraph(data);
+    satisfied = !(graph.hasTransitionWithAction(req.getViolatedAction()));
+  }
 }

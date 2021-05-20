@@ -36,9 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator.tomappingsystemc2;
-
 
 import myutil.FileException;
 import myutil.FileUtils;
@@ -47,77 +45,74 @@ import myutil.TraceManager;
 import java.io.File;
 
 /**
- * Class Penalties
- * Management of penalty file
- * Creation: 23/07/2018
+ * Class Penalties Management of penalty file Creation: 23/07/2018
  *
  * @author Ludovic APVRILLE
  * @version 1.0 23/07/2018
  */
 public class Penalties {
-    public static final String FILE_NAME = "penalties.h";
-    private static final String NOT_ACTIVATED = "#undef PENALTIES_ENABLED";
-    private static final String ACTIVATED = "#define PENALTIES_ENABLED";
-    private static final String FILE_HEADER = "// DO NOT EDIT: AUTOMATICALLY GENERATED";
+  public static final String FILE_NAME = "penalties.h";
+  private static final String NOT_ACTIVATED = "#undef PENALTIES_ENABLED";
+  private static final String ACTIVATED = "#define PENALTIES_ENABLED";
+  private static final String FILE_HEADER = "// DO NOT EDIT: AUTOMATICALLY GENERATED";
 
-    private String pathToFile;
+  private String pathToFile;
 
-    public Penalties(String pathToFile) {
-        this.pathToFile = pathToFile;
-    }
+  public Penalties(String pathToFile) {
+    this.pathToFile = pathToFile;
+  }
 
-    // Return 0 in case no change, 1 if changes were made
-    // -1 in case of error
-    public int handlePenalties(boolean mustHandlePenalties)  {
-        // Load file and check for current status
-        String fullPath = pathToFile + File.separator + FILE_NAME;
-        String data = "";
-        boolean mustChange = false;
+  // Return 0 in case no change, 1 if changes were made
+  // -1 in case of error
+  public int handlePenalties(boolean mustHandlePenalties) {
+    // Load file and check for current status
+    String fullPath = pathToFile + File.separator + FILE_NAME;
+    String data = "";
+    boolean mustChange = false;
 
-        try {
-            data = FileUtils.loadFile(fullPath);
-            int indexU = data.indexOf(NOT_ACTIVATED);
-            int indexD = data.indexOf(ACTIVATED);
+    try {
+      data = FileUtils.loadFile(fullPath);
+      int indexU = data.indexOf(NOT_ACTIVATED);
+      int indexD = data.indexOf(ACTIVATED);
 
-
-            //  No penalty
-            if ((indexD == -1) && (indexU == -1)) {
-                mustChange = true;
-            } else if ((indexD > -1) && (indexU > -1)) {
-                mustChange = true;
-            } else {
-                if (indexD > -1) {
-                    mustChange = mustHandlePenalties == false;
-                } else {
-                    mustChange = mustHandlePenalties == true;
-                }
-            }
-        } catch (FileException e) {
-            mustChange = true;
-        }
-
-        //TraceManager.addDev("Changing penalty file? " + mustChange);
-
-        // Set new value if necessary
-        if (!mustChange) {
-            //TraceManager.addDev("No need to change the source file");
-            return 0;
-        }
-
-        data = FILE_HEADER + "\n";
-        if (mustHandlePenalties) {
-            data += ACTIVATED;
+      // No penalty
+      if ((indexD == -1) && (indexU == -1)) {
+        mustChange = true;
+      } else if ((indexD > -1) && (indexU > -1)) {
+        mustChange = true;
+      } else {
+        if (indexD > -1) {
+          mustChange = mustHandlePenalties == false;
         } else {
-            data += NOT_ACTIVATED;
+          mustChange = mustHandlePenalties == true;
         }
-
-        try {
-            FileUtils.saveFile(fullPath, data);
-        } catch (FileException e) {
-            return -1;
-        }
-
-        return 1;
+      }
+    } catch (FileException e) {
+      mustChange = true;
     }
+
+    // TraceManager.addDev("Changing penalty file? " + mustChange);
+
+    // Set new value if necessary
+    if (!mustChange) {
+      // TraceManager.addDev("No need to change the source file");
+      return 0;
+    }
+
+    data = FILE_HEADER + "\n";
+    if (mustHandlePenalties) {
+      data += ACTIVATED;
+    } else {
+      data += NOT_ACTIVATED;
+    }
+
+    try {
+      FileUtils.saveFile(fullPath, data);
+    } catch (FileException e) {
+      return -1;
+    }
+
+    return 1;
+  }
 
 }

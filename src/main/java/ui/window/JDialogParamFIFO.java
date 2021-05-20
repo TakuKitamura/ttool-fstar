@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -50,245 +47,246 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
-
 /**
- * Class JDialogParamFIFO
- * Dialog for managing channel properties
- * Creation: 02/11/2006
+ * Class JDialogParamFIFO Dialog for managing channel properties Creation:
+ * 02/11/2006
+ * 
  * @version 1.0 02/11/2006
  * @author Ludovic APVRILLE
  */
 public class JDialogParamFIFO extends JDialogBase implements ActionListener {
 
-    private String name;
-    private int type1, type2, type3;
-    private boolean isFinite, isBlocking;
-    private String maxInFIFO;
+  private String name;
+  private int type1, type2, type3;
+  private boolean isFinite, isBlocking;
+  private String maxInFIFO;
 
-    public boolean data;
+  public boolean data;
 
-    
-    
-    // Panel1
-    private JTextField nameText, maxText;
-    private JComboBox<String> typeList1, typeList2, typeList3;
-    private JCheckBox finite, blocking;
-    private Vector<String> types1, types2, types3;
+  // Panel1
+  private JTextField nameText, maxText;
+  private JComboBox<String> typeList1, typeList2, typeList3;
+  private JCheckBox finite, blocking;
+  private Vector<String> types1, types2, types3;
 
-    /* Creates new form  */
-    public JDialogParamFIFO(String _name, int _type1, int _type2, int _type3, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, Frame f, String title) {
-        super(f, title, true);
+  /* Creates new form */
+  public JDialogParamFIFO(String _name, int _type1, int _type2, int _type3, boolean _isFinite, boolean _isBlocking,
+      String _maxInFIFO, Frame f, String title) {
+    super(f, title, true);
 
-        name = _name;
-        type1 = _type1; type2 = _type2; type3 = _type3;
-        
-        data = false;
-        
-        maxInFIFO = _maxInFIFO;
-        isFinite = _isFinite;
-        isBlocking = _isBlocking;
-        
-        myInitComponents();
-        initComponents();
-        checkMode();
-        pack();
-    }
-    
-    private void myInitComponents() {
-        types1 = new Vector<>(); types2 = new Vector<>(); types3 = new Vector<>();
-        types1.add(TType.getStringType(0));
-        types1.add(TType.getStringType(1));
-        types1.add(TType.getStringType(2));
-        types2.add(TType.getStringType(0));
-        types2.add(TType.getStringType(1));
-        types2.add(TType.getStringType(2));
-        types3.add(TType.getStringType(0));
-        types3.add(TType.getStringType(1));
-        types3.add(TType.getStringType(2));
-    }
-    
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c2 = new GridBagConstraints();
-        
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-        
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    name = _name;
+    type1 = _type1;
+    type2 = _type2;
+    type3 = _type3;
 
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters "));
-        panel1.setPreferredSize(new Dimension(300, 150));
-        
-        // first line panel1
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 3;
-        panel1.add(new JLabel(" "), c1);
-        
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("name:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nameText = new JTextField(name);
-        panel1.add(nameText, c1);
-        
-        // second line panel1
-        c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("type:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList1 = new JComboBox<>(types1);
-        typeList1.setSelectedIndex(type1);
-        panel1.add(typeList1, c1);
-        
-        c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("type:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList2 = new JComboBox<>(types2);
-        typeList2.setSelectedIndex(type2);
-        panel1.add(typeList2, c1);
-        
-        c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("type:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        typeList3 = new JComboBox<>(types3);
-        typeList3.setSelectedIndex(type3);
-        panel1.add(typeList3, c1);
+    data = false;
 
-        // FIFO parameters
-        JPanel panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Setting FIFO parameters "));
-        panel2.setPreferredSize(new Dimension(300, 100));
+    maxInFIFO = _maxInFIFO;
+    isFinite = _isFinite;
+    isBlocking = _isBlocking;
 
-        // first line panel2
-        c2.gridwidth = 1;
-        c2.gridheight = 1;
-        c2.weighty = 1.0;
-        c2.weightx = 1.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.BOTH;
-        c2.gridheight = 3;
-        panel2.add(new JLabel(" "), c2);
-        
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        finite = new JCheckBox("Finite FIFO");
-        finite.setSelected(isFinite);
-        finite.addActionListener(this);
-        panel2.add(finite, c1);
-        
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Max samples="), c1);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxText = new JTextField(maxInFIFO);
-        panel2.add(maxText, c1);
-        
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c2.fill = GridBagConstraints.HORIZONTAL;
-        c2.anchor = GridBagConstraints.CENTER;
-        blocking = new JCheckBox("Blocking FIFO");
-        blocking.setSelected(isBlocking);
-        blocking.addActionListener(this);
-        panel2.add(blocking, c1);
+    myInitComponents();
+    initComponents();
+    checkMode();
+    pack();
+  }
 
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
-        c.add(panel1, c0);
-        c.add(panel2, c0);
-        
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-        if (evt.getSource() == finite) {
-           checkMode();
-        }
+  private void myInitComponents() {
+    types1 = new Vector<>();
+    types2 = new Vector<>();
+    types3 = new Vector<>();
+    types1.add(TType.getStringType(0));
+    types1.add(TType.getStringType(1));
+    types1.add(TType.getStringType(2));
+    types2.add(TType.getStringType(0));
+    types2.add(TType.getStringType(1));
+    types2.add(TType.getStringType(2));
+    types3.add(TType.getStringType(0));
+    types3.add(TType.getStringType(1));
+    types3.add(TType.getStringType(2));
+  }
 
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-    
-    
-    public void closeDialog() {
-        data = true;
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-    public void checkMode() {
-           maxText.setEnabled(finite.isSelected());
-           blocking.setEnabled(finite.isSelected());
-    }
-    
-    public boolean hasNewData() {
-        return data;
-    }
-    
-    public String getParamName() {
-        return nameText.getText();
-    }
-    
-    public String getMaxSamples() {
-           return maxText.getText();
-    }
-    
-    public boolean isFinite() {
-           return finite.isSelected();
-    }
-    
-    public boolean isBlocking() {
-           return blocking.isSelected();
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
+    panel1.setBorder(new javax.swing.border.TitledBorder("Setting parameters "));
+    panel1.setPreferredSize(new Dimension(300, 150));
+
+    // first line panel1
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 3;
+    panel1.add(new JLabel(" "), c1);
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("name:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    nameText = new JTextField(name);
+    panel1.add(nameText, c1);
+
+    // second line panel1
+    c1.gridwidth = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("type:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    typeList1 = new JComboBox<>(types1);
+    typeList1.setSelectedIndex(type1);
+    panel1.add(typeList1, c1);
+
+    c1.gridwidth = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("type:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    typeList2 = new JComboBox<>(types2);
+    typeList2.setSelectedIndex(type2);
+    panel1.add(typeList2, c1);
+
+    c1.gridwidth = 1;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
+    panel1.add(new JLabel("type:"), c1);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    typeList3 = new JComboBox<>(types3);
+    typeList3.setSelectedIndex(type3);
+    panel1.add(typeList3, c1);
+
+    // FIFO parameters
+    JPanel panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Setting FIFO parameters "));
+    panel2.setPreferredSize(new Dimension(300, 100));
+
+    // first line panel2
+    c2.gridwidth = 1;
+    c2.gridheight = 1;
+    c2.weighty = 1.0;
+    c2.weightx = 1.0;
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.BOTH;
+    c2.gridheight = 3;
+    panel2.add(new JLabel(" "), c2);
+
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    c2.anchor = GridBagConstraints.CENTER;
+    finite = new JCheckBox("Finite FIFO");
+    finite.setSelected(isFinite);
+    finite.addActionListener(this);
+    panel2.add(finite, c1);
+
+    c2.gridwidth = 1;
+    panel2.add(new JLabel("Max samples="), c1);
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    maxText = new JTextField(maxInFIFO);
+    panel2.add(maxText, c1);
+
+    c2.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c2.fill = GridBagConstraints.HORIZONTAL;
+    c2.anchor = GridBagConstraints.CENTER;
+    blocking = new JCheckBox("Blocking FIFO");
+    blocking.setSelected(isBlocking);
+    blocking.addActionListener(this);
+    panel2.add(blocking, c1);
+
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+    c.add(panel1, c0);
+    c.add(panel2, c0);
+
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    if (evt.getSource() == finite) {
+      checkMode();
     }
 
-    public int getType(int i) {
-        switch(i) {
-            case 0:
-                return typeList1.getSelectedIndex();
-            case 1:
-                return typeList2.getSelectedIndex();
-            case 2:
-                return typeList3.getSelectedIndex();
-            default:
-                return typeList1.getSelectedIndex();
-        }
-        
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
+
+  public void closeDialog() {
+    data = true;
+    dispose();
+  }
+
+  public void cancelDialog() {
+    dispose();
+  }
+
+  public void checkMode() {
+    maxText.setEnabled(finite.isSelected());
+    blocking.setEnabled(finite.isSelected());
+  }
+
+  public boolean hasNewData() {
+    return data;
+  }
+
+  public String getParamName() {
+    return nameText.getText();
+  }
+
+  public String getMaxSamples() {
+    return maxText.getText();
+  }
+
+  public boolean isFinite() {
+    return finite.isSelected();
+  }
+
+  public boolean isBlocking() {
+    return blocking.isSelected();
+  }
+
+  public int getType(int i) {
+    switch (i) {
+      case 0:
+        return typeList1.getSelectedIndex();
+      case 1:
+        return typeList2.getSelectedIndex();
+      case 2:
+        return typeList3.getSelectedIndex();
+      default:
+        return typeList1.getSelectedIndex();
+    }
+
+  }
 }

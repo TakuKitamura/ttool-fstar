@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -48,103 +45,101 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
- * Class JDialogTitleAndNote
- * Dialog for entering a note
- * Creation: 06/12/2003
+ * Class JDialogTitleAndNote Dialog for entering a note Creation: 06/12/2003
+ * 
  * @version 1.0 06/12/2003
  * @author Ludovic APVRILLE
  */
 public class JDialogTitleAndNote extends JDialogBase implements ActionListener {
 
-    protected String id;
-    protected String text;
-    
-    
-    //components
-    protected JTextField idText;
-    protected JTextArea jta;
-    protected JButton close;
-    protected JButton cancel;
-    
-    /* Creates new form  */
-    public JDialogTitleAndNote(Frame f, String title, String _id, String _text) {
-        super(f, title, true);
-        id = _id;
-        text = _text;
-        
-        initComponents();
-        pack();
-    }
-    
-    
-    protected void initComponents() {
-        
-        Container c = getContentPane();
-        Font f = new Font("Helvetica", Font.PLAIN, 14);
-        setFont(f);
-        c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  protected String id;
+  protected String text;
 
-        JPanel panelId = new JPanel();
-        panelId.add(new JLabel("Stereotype / identifier"));
-        idText = new JTextField(id, 30);
-        panelId.add(idText);
-        c.add(panelId, BorderLayout.NORTH);
-        
-        jta = new JTextArea();
-        jta.setEditable(true);
-        jta.setMargin(new Insets(10, 10, 10, 10));
-        jta.setTabSize(3);
-        jta.append(text);
-        jta.setFont(new Font("times", Font.PLAIN, 12));
-        JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setPreferredSize(new Dimension(300, 300));
-        c.add(jsp, BorderLayout.CENTER);
-        
-        close = new JButton("Ok", IconManager.imgic25);
-        cancel = new JButton("Cancel", IconManager.imgic27);
-        
-        close.setPreferredSize(new Dimension(150, 30));
-        cancel.setPreferredSize(new Dimension(150, 30));
-        
-        close.addActionListener(this);
-        cancel.addActionListener(this);
-        
-        JPanel jp = new JPanel();
-        jp.add(cancel);
-        jp.add(close);
-        
-        c.add(jp, BorderLayout.SOUTH);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Cancel"))  {
-            cancel();
-        } else if (command.equals("Ok")) {
-            close();
-        }
-    }
-    
-    public void cancel() {
-        dispose();
-    }
-    
-    public void close() {
-        id = idText.getText();
-        text = jta.getText();
-        dispose();
-    }
-    
-    public String getText() {
-        return text;
-    }
+  // components
+  protected JTextField idText;
+  protected JTextArea jta;
+  protected JButton close;
+  protected JButton cancel;
 
-    public String getId() { return id;}
-    
-    
+  /* Creates new form */
+  public JDialogTitleAndNote(Frame f, String title, String _id, String _text) {
+    super(f, title, true);
+    id = _id;
+    text = _text;
+
+    initComponents();
+    pack();
+  }
+
+  protected void initComponents() {
+
+    Container c = getContentPane();
+    Font f = new Font("Helvetica", Font.PLAIN, 14);
+    setFont(f);
+    c.setLayout(new BorderLayout());
+    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel panelId = new JPanel();
+    panelId.add(new JLabel("Stereotype / identifier"));
+    idText = new JTextField(id, 30);
+    panelId.add(idText);
+    c.add(panelId, BorderLayout.NORTH);
+
+    jta = new JTextArea();
+    jta.setEditable(true);
+    jta.setMargin(new Insets(10, 10, 10, 10));
+    jta.setTabSize(3);
+    jta.append(text);
+    jta.setFont(new Font("times", Font.PLAIN, 12));
+    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    jsp.setPreferredSize(new Dimension(300, 300));
+    c.add(jsp, BorderLayout.CENTER);
+
+    close = new JButton("Ok", IconManager.imgic25);
+    cancel = new JButton("Cancel", IconManager.imgic27);
+
+    close.setPreferredSize(new Dimension(150, 30));
+    cancel.setPreferredSize(new Dimension(150, 30));
+
+    close.addActionListener(this);
+    cancel.addActionListener(this);
+
+    JPanel jp = new JPanel();
+    jp.add(cancel);
+    jp.add(close);
+
+    c.add(jp, BorderLayout.SOUTH);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Cancel")) {
+      cancel();
+    } else if (command.equals("Ok")) {
+      close();
+    }
+  }
+
+  public void cancel() {
+    dispose();
+  }
+
+  public void close() {
+    id = idText.getText();
+    text = jta.getText();
+    dispose();
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public String getId() {
+    return id;
+  }
+
 }

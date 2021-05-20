@@ -36,26 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class CheckableAccessibility
- * Components for whcih accessibility might be checked-out
- * Creation: 15/05/2007
+ * Class CheckableAccessibility Components for whcih accessibility might be
+ * checked-out Creation: 15/05/2007
+ * 
  * @version 1.0 15/05/2007
  * @author Ludovic APVRILLE
  */
-public interface CheckableAccessibility  {
-	//public static final int UNKNOWN;
-	//public static final int NON_REACHABLE;
-	
-	
-    void setCheckableAccessibility(boolean b);
-	boolean getCheckableAccessibility();
-	
-	//public void setReachability();
+public interface CheckableAccessibility {
+  // public static final int UNKNOWN;
+  // public static final int NON_REACHABLE;
+
+  void setCheckableAccessibility(boolean b);
+
+  boolean getCheckableAccessibility();
+
+  // public void setReachability();
 }

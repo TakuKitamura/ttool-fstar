@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.osad;
 
 import ui.MainGUI;
@@ -48,89 +45,81 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
- * Class TURTLEOSActivityDiagramToolBar
- * Toolbar associated with TURTLEOS activity diagrams
- * Creation: 29/09/2006
+ * Class TURTLEOSActivityDiagramToolBar Toolbar associated with TURTLEOS
+ * activity diagrams Creation: 29/09/2006
+ * 
  * @version 1.0 29/09/2006
  * @author Ludovic APVRILLE
  */
 public class TURTLEOSActivityDiagramToolBar extends TToolBar {
-    
-    
-    public TURTLEOSActivityDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-    }
-    
-    protected void setActive(boolean b) {
-        mgui.actions[TGUIAction.TMLAD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_START_STATE].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_STOP_STATE].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_ACTION_STATE].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_JUNCTION].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_CHOICE].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_TIME_INTERVAL].setEnabled(b);
-        mgui.actions[TGUIAction.TOSAD_INT_TIME_INTERVAL].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
-		mgui.updateZoomInfo();
-    }
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.TMLAD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TOSAD_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TOSAD_START_STATE]);
-        button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.TOSAD_STOP_STATE]);
-        button.addMouseListener(mgui.mouseHandler);
+  public TURTLEOSActivityDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
 
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.TMLAD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_START_STATE].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_STOP_STATE].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_ACTION_STATE].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_JUNCTION].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_CHOICE].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_TIME_INTERVAL].setEnabled(b);
+    mgui.actions[TGUIAction.TOSAD_INT_TIME_INTERVAL].setEnabled(b);
 
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TOSAD_ACTION_STATE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TOSAD_CHOICE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TOSAD_JUNCTION]);
-        button.addMouseListener(mgui.mouseHandler);
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+    mgui.updateZoomInfo();
+  }
 
+  protected void setButtons() {
+    JButton button;
 
-        this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.TMLAD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
 
-        button = this.add(mgui.actions[TGUIAction.TOSAD_TIME_INTERVAL]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = this.add(mgui.actions[TGUIAction.TOSAD_INT_TIME_INTERVAL]);
-        button.addMouseListener(mgui.mouseHandler);
-       
-    }
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_START_STATE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_STOP_STATE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_ACTION_STATE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_CHOICE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_JUNCTION]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TOSAD_TIME_INTERVAL]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TOSAD_INT_TIME_INTERVAL]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
 } // Class
-
-
-
-
-

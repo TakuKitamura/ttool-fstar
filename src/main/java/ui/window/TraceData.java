@@ -36,27 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.window;
 
-
 /**
- * Class TraceData
- * Data of an action on a simulation trace
- * Creation: 24/11/2003
+ * Class TraceData Data of an action on a simulation trace Creation: 24/11/2003
+ * 
  * @version 1.0 24/11/2003
  * @author Ludovic APVRILLE
  */
 public class TraceData {
-   	public int time;
-   	public int action;
-   	public String values;
-   	
-    public TraceData(int _time, int _action, String _values) {
-     	time = _time;
-     	action = _action;
-     	values = _values;
-    }
+  public int time;
+  public int action;
+  public String values;
+
+  public TraceData(int _time, int _action, String _values) {
+    time = _time;
+    action = _action;
+    values = _values;
+  }
 }

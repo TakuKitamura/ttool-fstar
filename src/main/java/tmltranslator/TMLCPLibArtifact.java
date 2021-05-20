@@ -37,67 +37,65 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import java.util.List;
 
 /**
- * Class TMLCPLibArtifact: Artifact mapped on a TMLCPLib
- * Creation: 16/02/2015
+ * Class TMLCPLibArtifact: Artifact mapped on a TMLCPLib Creation: 16/02/2015
+ * 
  * @version 1.0 16/02/2015
  * @author Ludovic APVRILLE
  */
 public class TMLCPLibArtifact extends TMLElement {
 
-    public String taskName;
-    public String portName;
-    public String memoryName;
-    public int priority;
-    private List<String> bufferParameters;
+  public String taskName;
+  public String portName;
+  public String memoryName;
+  public int priority;
+  private List<String> bufferParameters;
 
+  public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName,
+      int _priority, List<String> _bufferParameters) {
+    super(_name, _referenceObject);
+    taskName = _taskName;
+    portName = _portName;
+    memoryName = _memoryName;
+    priority = _priority;
+    bufferParameters = _bufferParameters;
+  }
 
-    public TMLCPLibArtifact(String _name, Object _referenceObject, String _taskName, String _portName, String _memoryName, int _priority, List<String> _bufferParameters ) {
-        super( _name, _referenceObject );
-        taskName = _taskName;
-        portName = _portName;
-        memoryName = _memoryName;
-        priority = _priority;
-        bufferParameters = _bufferParameters;
+  public TMLCPLibArtifact() {
+    super("DefaultCP", null); // no reference to any object in the default constructor
+  }
+
+  public String getTaskName() {
+    return taskName;
+  }
+
+  public String getPortName() {
+    return portName;
+  }
+
+  public String getMemoryName() {
+    return memoryName;
+  }
+
+  public int getPriority() {
+    return priority;
+  }
+
+  public List<String> getBufferParameters() {
+    return bufferParameters;
+  }
+
+  public String toXML() {
+    String s = "<TMLCPLIBARTIFACT taskName=\"" + taskName + "\" portName=\"" + portName + "\" memoryName=\""
+        + memoryName + "\" priority=\"" + priority + "\" >\n";
+    for (String bp : bufferParameters) {
+      s += "<BUFFERPARAMETERS param=\"" + bp + "\" />\n";
     }
-
-    public TMLCPLibArtifact() {
-        super( "DefaultCP", null );     //no reference to any object in the default constructor
-    }
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public String getPortName() {
-        return portName;
-    }
-
-    public String getMemoryName()       {
-        return memoryName;
-    }
-
-    public int getPriority()    {
-        return priority;
-    }
-
-    public List<String> getBufferParameters()   {
-        return bufferParameters;
-    }
-
-    public String toXML() {
-        String s = "<TMLCPLIBARTIFACT taskName=\"" + taskName + "\" portName=\"" + portName + "\" memoryName=\"" + memoryName + "\" priority=\"" + priority + "\" >\n";
-	for(String bp: bufferParameters) {
-	    s += "<BUFFERPARAMETERS param=\"" + bp + "\" />\n";
-	}
-        s += "</TMLCPLIBARTIFACT>\n";
-        return s;
-    }
-}       //End of the class
+    s += "</TMLCPLIBARTIFACT>\n";
+    return s;
+  }
+} // End of the class

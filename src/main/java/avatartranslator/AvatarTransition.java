@@ -44,499 +44,497 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
- * Class AvatarTransition
- * Creation: 20/05/2010
+ * Class AvatarTransition Creation: 20/05/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.0 20/05/2010
  */
 public class AvatarTransition extends AvatarStateMachineElement {
-    // Delay distribution laws
-    public final static int DELAY_UNIFORM_LAW = 0;
-    public final static int DELAY_TRIANGULAR_LAW = 1;
-    public final static int DELAY_GAUSSIAN_LAW = 2;
-    public final static int RANDOM_LOG_NORMAL_LAW = 3;
-    public final static int RANDOM_EXPONENTIAL_LAW = 4;
-    public final static int RANDOM_WEIBULL_LAW = 5;
-    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian", "Log normal", "Exponential", "Weibull"};
-    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ", "ln", "e^", "w"};
+  // Delay distribution laws
+  public final static int DELAY_UNIFORM_LAW = 0;
+  public final static int DELAY_TRIANGULAR_LAW = 1;
+  public final static int DELAY_GAUSSIAN_LAW = 2;
+  public final static int RANDOM_LOG_NORMAL_LAW = 3;
+  public final static int RANDOM_EXPONENTIAL_LAW = 4;
+  public final static int RANDOM_WEIBULL_LAW = 5;
+  public final static String[] DISTRIBUTION_LAWS = { "Uniform", "Triangular", "Gaussian", "Log normal", "Exponential",
+      "Weibull" };
+  public final static String[] DISTRIBUTION_LAWS_SHORT = { "", " ^", "ĝ", "ln", "e^", "w" };
 
-    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1, 2, 1, 2};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = {"", "triangle top", "standard deviation", "standard deviation", "mean", "shape"};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = {"", "", "", "mean", "", "scale"};
+  public final static int[] NB_OF_EXTRA_ATTRIBUTES = { 0, 1, 1, 2, 1, 2 };
+  public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = { "", "triangle top", "standard deviation",
+      "standard deviation", "mean", "shape" };
+  public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = { "", "", "", "mean", "", "scale" };
 
+  // Type management: to be used by code generators
+  public static final int UNDEFINED = -1;
 
-    // Type management: to be used by code generators
-    public static final int UNDEFINED = -1;
+  public static final int TYPE_SEND_SYNC = 0;
+  public static final int TYPE_RECV_SYNC = 1;
 
-    public static final int TYPE_SEND_SYNC = 0;
-    public static final int TYPE_RECV_SYNC = 1;
+  public static final int TYPE_ACTIONONLY = 2;
+  public static final int TYPE_EMPTY = 3;
+  public static final int TYPE_METHODONLY = 4;
+  public static final int TYPE_ACTION_AND_METHOD = 5;
 
-    public static final int TYPE_ACTIONONLY = 2;
-    public static final int TYPE_EMPTY = 3;
-    public static final int TYPE_METHODONLY = 4;
-    public static final int TYPE_ACTION_AND_METHOD = 5;
+  public static final double DEFAULT_PROBABILITY = 1; // In fact the weight
 
-    public static final double DEFAULT_PROBABILITY = 1; // In fact the weight
+  public int type = UNDEFINED;
 
-    public int type = UNDEFINED;
+  private double probability = DEFAULT_PROBABILITY;
+  private AvatarGuard guard;
+  private String minDelay = "", maxDelay = "";
+  private String delayExtra1 = ""; // Used for some of the distribution law
+  private String delayExtra2 = ""; // Used for some of the distribution law
+  private int delayDistributionLaw = 0;
 
-    private double probability = DEFAULT_PROBABILITY;
-    private AvatarGuard guard;
-    private String minDelay = "", maxDelay = "";
-    private String delayExtra1 = ""; // Used for some of the distribution law
-    private String delayExtra2 = ""; // Used for some of the distribution law
-    private int delayDistributionLaw = 0;
+  private String minCompute = "", maxCompute = "";
+  private AvatarStateMachineOwner block;
 
-    private String minCompute = "", maxCompute = "";
-    private AvatarStateMachineOwner block;
+  private AvatarExpressionSolver guardSolver;
+  private AvatarExpressionSolver minDelaySolver;
+  private AvatarExpressionSolver maxDelaySolver;
 
-    private AvatarExpressionSolver guardSolver;
-    private AvatarExpressionSolver minDelaySolver;
-    private AvatarExpressionSolver maxDelaySolver;
+  private List<AvatarAction> actions; // actions on variable, or method call
 
-    private List<AvatarAction> actions; // actions on variable, or method call
+  public AvatarTransition(AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    actions = new LinkedList<AvatarAction>();
+    this.guard = new AvatarGuardEmpty();
+    this.block = _block;
+    guardSolver = null;
+    minDelaySolver = null;
+    maxDelaySolver = null;
+  }
 
-    public AvatarTransition(AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        actions = new LinkedList<AvatarAction>();
-        this.guard = new AvatarGuardEmpty();
-        this.block = _block;
-        guardSolver = null;
-        minDelaySolver = null;
-        maxDelaySolver = null;
+  public AvatarGuard getGuard() {
+    return guard;
+  }
+
+  public boolean buildGuardSolver() {
+    if (isGuarded()) {
+      String expr = guard.toString().replaceAll("\\[", "").trim();
+      expr = expr.replaceAll("\\]", "");
+      guardSolver = new AvatarExpressionSolver(expr);
+      return guardSolver.buildExpression((AvatarBlock) block);
     }
+    return true;
+  }
 
-    public AvatarGuard getGuard() {
-        return guard;
+  public boolean buildDelaySolver() {
+    boolean result;
+    if (hasDelay()) {
+      minDelaySolver = new AvatarExpressionSolver(minDelay);
+      result = minDelaySolver.buildExpression((AvatarBlock) block);
+      if (maxDelay.trim().length() != 0) {
+        maxDelaySolver = new AvatarExpressionSolver(maxDelay);
+        result &= maxDelaySolver.buildExpression((AvatarBlock) block);
+      } else {
+        maxDelaySolver = minDelaySolver;
+      }
+      return result;
     }
-    
-    public boolean buildGuardSolver() {
-        if (isGuarded()) {
-            String expr = guard.toString().replaceAll("\\[", "").trim();
-            expr = expr.replaceAll("\\]", "");
-            guardSolver = new AvatarExpressionSolver(expr);
-            return guardSolver.buildExpression((AvatarBlock) block);
-        }
+    return true;
+  }
+
+  public AvatarExpressionSolver getGuardSolver() {
+    return guardSolver;
+  }
+
+  public AvatarExpressionSolver getMinDelaySolver() {
+    return minDelaySolver;
+  }
+
+  public AvatarExpressionSolver getMaxDelaySolver() {
+    return maxDelaySolver;
+  }
+
+  public void setGuard(AvatarGuard _guard) {
+    this.guard = _guard;
+  }
+
+  public void setGuard(String _guard) {
+    this.guard = AvatarGuard.createFromString(this.block, _guard);
+    // TraceManager.addDev("Setting guard = " + guard);
+  }
+
+  public void setProbability(double _probability) {
+    probability = _probability;
+  }
+
+  public double getProbability() {
+    return probability;
+  }
+
+  public void addGuard(String _g) {
+    AvatarGuard guard = AvatarGuard.createFromString(this.block, _g);
+    // TraceManager.addDev("Adding guard = " + guard);
+    this.guard = AvatarGuard.addGuard(this.guard, guard, "and");
+  }
+
+  public int getNbOfAction() {
+    return actions.size();
+  }
+
+  public static boolean isActionType(int _type) {
+    return ((_type == TYPE_ACTIONONLY) || (_type == TYPE_METHODONLY) || (_type == TYPE_ACTION_AND_METHOD));
+  }
+
+  public boolean hasMethod() {
+    for (AvatarAction aa : actions) {
+      if (aa.containsAMethodCall()) {
         return true;
+      }
     }
-    
-    public boolean buildDelaySolver() {
-        boolean result;
-        if (hasDelay()) {
-            minDelaySolver = new AvatarExpressionSolver(minDelay);
-            result = minDelaySolver.buildExpression((AvatarBlock) block);
-            if (maxDelay.trim().length() != 0) {
-                maxDelaySolver = new AvatarExpressionSolver(maxDelay);
-                result &= maxDelaySolver.buildExpression((AvatarBlock) block);
-            } else {
-                maxDelaySolver = minDelaySolver;
-            }
-            return result;
-        }
+    return false;
+  }
+
+  public boolean hasAction() {
+    for (AvatarAction aa : actions) {
+      if (!(aa.containsAMethodCall())) {
         return true;
+      }
     }
-    
-    public AvatarExpressionSolver getGuardSolver() {
-        return guardSolver;
-    }
-    
-    public AvatarExpressionSolver getMinDelaySolver() {
-        return minDelaySolver;
-    }
-    
-    public AvatarExpressionSolver getMaxDelaySolver() {
-        return maxDelaySolver;
-    }
+    return false;
+  }
 
-    public void setGuard(AvatarGuard _guard) {
-        this.guard = _guard;
-    }
+  public List<AvatarAction> getActions() {
+    return this.actions;
+  }
 
-    public void setGuard(String _guard) {
-        this.guard = AvatarGuard.createFromString(this.block, _guard);
-        //TraceManager.addDev("Setting guard = " + guard);
-    }
+  public AvatarStateMachineOwner getBlock() {
+    return this.block;
+  }
 
-    public void setProbability(double _probability) {
-        probability = _probability;
-    }
-    public double getProbability() {
-        return probability;
-    }
+  private <T extends AvatarAction> Iterable<T> getIterableForClass(final Class<T> childClass) {
+    return new Iterable<T>() {
+      @Override
+      public Iterator<T> iterator() {
+        return new Iterator<T>() {
+          private Iterator<AvatarAction> actions = AvatarTransition.this.actions.iterator();
+          private boolean hasCached = false;
+          private T cached;
 
-
-    public void addGuard(String _g) {
-        AvatarGuard guard = AvatarGuard.createFromString(this.block, _g);
-        //TraceManager.addDev("Adding guard = " + guard);
-        this.guard = AvatarGuard.addGuard(this.guard, guard, "and");
-    }
-
-    public int getNbOfAction() {
-        return actions.size();
-    }
-
-    public static boolean isActionType(int _type) {
-        return ((_type == TYPE_ACTIONONLY) || (_type == TYPE_METHODONLY) || (_type == TYPE_ACTION_AND_METHOD));
-    }
-
-    public boolean hasMethod() {
-        for (AvatarAction aa : actions) {
-            if (aa.containsAMethodCall()) {
+          @Override
+          public boolean hasNext() {
+            if (this.hasCached)
+              return true;
+            while (this.actions.hasNext()) {
+              AvatarAction action = this.actions.next();
+              if (childClass.isInstance(action)) {
+                this.hasCached = true;
+                this.cached = childClass.cast(action);
                 return true;
+              }
             }
-        }
-        return false;
-    }
+            return false;
+          }
 
-    public boolean hasAction() {
-        for (AvatarAction aa : actions) {
-            if (!(aa.containsAMethodCall())) {
-                return true;
+          @Override
+          public T next() {
+            if (this.hasCached) {
+              this.hasCached = false;
+              return this.cached;
             }
-        }
-        return false;
-    }
 
-    public List<AvatarAction> getActions() {
-        return this.actions;
-    }
-
-    public AvatarStateMachineOwner getBlock() {
-        return this.block;
-    }
-
-    private <T extends AvatarAction> Iterable<T> getIterableForClass(final Class<T> childClass) {
-        return new Iterable<T>() {
-            @Override
-            public Iterator<T> iterator() {
-                return new Iterator<T>() {
-                    private Iterator<AvatarAction> actions = AvatarTransition.this.actions.iterator();
-                    private boolean hasCached = false;
-                    private T cached;
-
-                    @Override
-                    public boolean hasNext() {
-                        if (this.hasCached)
-                            return true;
-                        while (this.actions.hasNext()) {
-                            AvatarAction action = this.actions.next();
-                            if (childClass.isInstance(action)) {
-                                this.hasCached = true;
-                                this.cached = childClass.cast(action);
-                                return true;
-                            }
-                        }
-                        return false;
-                    }
-
-                    @Override
-                    public T next() {
-                        if (this.hasCached) {
-                            this.hasCached = false;
-                            return this.cached;
-                        }
-
-                        while (this.actions.hasNext()) {
-                            AvatarAction action = this.actions.next();
-                            if (childClass.isInstance(action))
-                                return childClass.cast(action);
-                        }
-
-                        return null;
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
-                };
+            while (this.actions.hasNext()) {
+              AvatarAction action = this.actions.next();
+              if (childClass.isInstance(action))
+                return childClass.cast(action);
             }
+
+            return null;
+          }
+
+          @Override
+          public void remove() {
+            throw new UnsupportedOperationException();
+          }
         };
+      }
+    };
+  }
+
+  public Iterable<AvatarTermFunction> getFunctionCalls() {
+    return this.getIterableForClass(AvatarTermFunction.class);
+  }
+
+  public Iterable<AvatarActionAssignment> getAssignments() {
+    return this.getIterableForClass(AvatarActionAssignment.class);
+  }
+
+  public AvatarAction getAction(int _index) {
+    return actions.get(_index);
+  }
+
+  public void addAction(String _action) {
+    // TraceManager.addDev("\n**************************** String expr to be added:
+    // >" + _action + "<");
+    AvatarAction aa = AvatarTerm.createActionFromString(block, _action);
+    // TraceManager.addDev("**************************** Adding Avatar action from
+    // String : " + aa + "\n");
+    if (aa != null) {
+      actions.add(aa);
+    }
+  }
+
+  public void addAction(AvatarAction _action) {
+    if (_action != null)
+      // TraceManager.addDev("**************************** Avatar action from
+      // AvatarAction: " + _action);
+      this.actions.add(_action);
+  }
+
+  public void setDelays(String _minDelay, String _maxDelay) {
+    minDelay = _minDelay;
+    maxDelay = _maxDelay;
+  }
+
+  public void setDistributionLaw(int _law, String _delayExtra1, String _delayExtra2) {
+    delayDistributionLaw = _law;
+    delayExtra1 = _delayExtra1;
+    delayExtra2 = _delayExtra2;
+  }
+
+  public void setComputes(String _minCompute, String _maxCompute) {
+    minCompute = _minCompute;
+    maxCompute = _maxCompute;
+  }
+
+  public String getMinDelay() {
+    return minDelay;
+  }
+
+  public String getMaxDelay() {
+    if (maxDelay.trim().length() == 0) {
+      return getMinDelay();
+    }
+    return maxDelay;
+  }
+
+  public int getDelayDistributionLaw() {
+    return delayDistributionLaw;
+  }
+
+  public String getDelayExtra1() {
+    return delayExtra1;
+  }
+
+  public String getDelayExtra2() {
+    return delayExtra2;
+  }
+
+  public String getMinCompute() {
+    return minCompute;
+  }
+
+  public String getMaxCompute() {
+    if (maxCompute.trim().length() == 0) {
+      return getMinCompute();
+    }
+    return maxCompute;
+  }
+
+  public boolean hasElseGuard() {
+    if (guard == null) {
+      return false;
     }
 
-    public Iterable<AvatarTermFunction> getFunctionCalls() {
-        return this.getIterableForClass(AvatarTermFunction.class);
+    return guard.isElseGuard();
+  }
+
+  public boolean hasNonDeterministicGuard() {
+    if (guard == null)
+      return false;
+
+    return !guard.isGuarded();
+  }
+
+  public boolean isEmpty() {
+    if (hasDelay() || hasCompute()) {
+      return false;
     }
 
-    public Iterable<AvatarActionAssignment> getAssignments() {
-        return this.getIterableForClass(AvatarActionAssignment.class);
+    return (actions.size() == 0);
+  }
+
+  public AvatarTransition cloneMe() {
+    AvatarTransition at = new AvatarTransition(block, getName(), getReferenceObject());
+    at.setGuard(getGuard());
+    at.setDelays(getMinDelay(), getMaxDelay());
+    at.setComputes(getMinCompute(), getMaxCompute());
+    at.setProbability(getProbability());
+
+    // TraceManager.addDev("-------------- Cloning actions of " + this);
+    for (int i = 0; i < getNbOfAction(); i++) {
+      // TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
+      at.addAction(getAction(i));
     }
 
-    public AvatarAction getAction(int _index) {
-        return actions.get(_index);
+    for (int i = 0; i < nbOfNexts(); i++) {
+      at.addNext(getNext(i));
     }
 
-    public void addAction(String _action) {
-        //TraceManager.addDev("\n****************************  String expr to be added: >" + _action + "<");
-        AvatarAction aa = AvatarTerm.createActionFromString(block, _action);
-        //TraceManager.addDev("****************************  Adding Avatar action from String : " + aa + "\n");
-        if (aa != null) {
-            actions.add(aa);
-        }
+    return at;
+  }
+
+  public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
+    AvatarTransition at = new AvatarTransition(_block, getName() + "_clone", getReferenceObject());
+
+    at.setGuard(getGuard());
+
+    // TraceManager.addDev("Cloning actions of " + this);
+    for (int i = 0; i < getNbOfAction(); i++) {
+      // TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
+      at.addAction(getAction(i));
     }
 
-    public void addAction(AvatarAction _action) {
-        if (_action != null)
-            //TraceManager.addDev("****************************  Avatar action from AvatarAction: " + _action);
-            this.actions.add(_action);
+    at.setComputes(getMinCompute(), getMaxCompute());
+    at.setDelays(getMinDelay(), getMaxDelay());
+    at.setProbability(getProbability());
+
+    return at;
+  }
+
+  /*
+   * public AvatarStateMachineElement basicCloneMe() { }
+   */
+
+  public void removeAllActionsButTheFirstOne() {
+    if (actions.size() < 2) {
+      return;
+    }
+    AvatarAction action = actions.get(0);
+    actions.clear();
+    actions.add(action);
+  }
+
+  public void removeFirstAction() {
+    actions.remove(0);
+  }
+
+  public void removeAllActions() {
+    actions.clear();
+  }
+
+  // No actions
+  // public boolean isAGuardTransition() {
+  // }
+
+  public boolean isGuarded() {
+    if (guard == null)
+      return false;
+
+    return guard.isGuarded();
+  }
+
+  public boolean hasDelay() {
+    return minDelay.trim().length() != 0;
+  }
+
+  public boolean hasCompute() {
+    return minCompute.trim().length() != 0;
+  }
+
+  public boolean hasActions() {
+    if (actions.size() == 0) {
+      return false;
     }
 
-    public void setDelays(String _minDelay, String _maxDelay) {
-        minDelay = _minDelay;
-        maxDelay = _maxDelay;
+    for (AvatarAction a : actions) {
+      if (a.toString().trim().length() > 0) {
+        return true;
+      }
     }
 
-    public void setDistributionLaw(int _law, String _delayExtra1, String _delayExtra2 ) {
-        delayDistributionLaw = _law;
-        delayExtra1 = _delayExtra1;
-        delayExtra2 = _delayExtra2;
+    return false;
+  }
+
+  public String specificToString() {
+    String ret = "";
+    if (hasDelay()) {
+      ret += "minDelay=" + getMinDelay() + " maxDelay=" + getMaxDelay() + "\n";
     }
 
-    public void setComputes(String _minCompute, String _maxCompute) {
-        minCompute = _minCompute;
-        maxCompute = _maxCompute;
+    if (hasCompute()) {
+      ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
     }
 
-    public String getMinDelay() {
-        return minDelay;
+    ret += "weight=" + getProbability() + "\n";
+
+    for (AvatarAction a : actions) {
+      String s = a.toString();
+      if (s.trim().length() > 0) {
+        ret += s.trim() + " / ";
+      }
+    }
+    String s = "";
+    if (guard == null) {
+      s = "";
+    } else {
+      s = guard.toString();
+    }
+    if (s.trim().length() > 0) {
+      ret += "guard " + s.trim() + " / ";
+    }
+    if (ret.length() > 0) {
+      ret = "\n" + ret;
     }
 
+    return ret;
+  }
 
+  // Assumes actions are correctly formatted
+  public boolean hasMethodCall() {
 
-    public String getMaxDelay() {
-        if (maxDelay.trim().length() == 0) {
-            return getMinDelay();
-        }
-        return maxDelay;
+    for (AvatarAction action : actions)
+      if (action.isAMethodCall())
+        return true;
+
+    return false;
+  }
+
+  public String toString() {
+    return toString(getNiceName());
+  }
+
+  public String getNiceName() {
+    String s = " weight:" + getProbability() + " ";
+    if (isGuarded())
+      s += " guard=" + guard;
+
+    if (hasDelay())
+      s += " delay(" + minDelay + ", " + maxDelay + ")";
+
+    if (actions.size() > 0) {
+      s += " actions: ";
+      for (AvatarAction act : actions) {
+        s += " " + act;
+      }
     }
 
-    public int getDelayDistributionLaw() {
-        return delayDistributionLaw;
+    return s;
+
+    // return "Empty transition" + s;
+  }
+
+  public String getNiceNameOld() {
+    String s = " weight:" + getProbability();
+    if (isGuarded())
+      return "Transition (guard=" + guard + ", ...)" + s;
+
+    if (hasDelay())
+      return "Transition (delay=(" + minDelay + ", " + maxDelay + "), ...)" + s;
+
+    if (actions.size() > 0) {
+      return "Transition (" + actions.get(0) + ", ...)" + s;
     }
 
-    public String getDelayExtra1() {
-        return delayExtra1;
-    }
+    return "Empty transition" + s;
+  }
 
-    public String getDelayExtra2() {
-        return delayExtra2;
-    }
-
-    public String getMinCompute() {
-        return minCompute;
-    }
-
-    public String getMaxCompute() {
-        if (maxCompute.trim().length() == 0) {
-            return getMinCompute();
-        }
-        return maxCompute;
-    }
-
-    public boolean hasElseGuard() {
-        if (guard == null) {
-            return false;
-        }
-
-        return guard.isElseGuard();
-    }
-
-    public boolean hasNonDeterministicGuard() {
-        if (guard == null)
-            return false;
-
-        return !guard.isGuarded();
-    }
-
-    public boolean isEmpty() {
-        if (hasDelay() || hasCompute()) {
-            return false;
-        }
-
-        return (actions.size() == 0);
-    }
-
-
-    public AvatarTransition cloneMe() {
-        AvatarTransition at = new AvatarTransition(block, getName(), getReferenceObject());
-        at.setGuard(getGuard());
-        at.setDelays(getMinDelay(), getMaxDelay());
-        at.setComputes(getMinCompute(), getMaxCompute());
-        at.setProbability(getProbability());
-
-        //TraceManager.addDev("-------------- Cloning actions of " + this);
-        for (int i = 0; i < getNbOfAction(); i++) {
-            //TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
-            at.addAction(getAction(i));
-        }
-
-        for (int i = 0; i < nbOfNexts(); i++) {
-            at.addNext(getNext(i));
-        }
-
-        return at;
-    }
-
-    public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
-        AvatarTransition at = new AvatarTransition(_block, getName() + "_clone", getReferenceObject());
-
-        at.setGuard(getGuard());
-
-        //TraceManager.addDev("Cloning actions of " + this);
-        for (int i = 0; i < getNbOfAction(); i++) {
-            //TraceManager.addDev("-------------- Cloning actions:" + getAction(i));
-            at.addAction(getAction(i));
-        }
-
-        at.setComputes(getMinCompute(), getMaxCompute());
-        at.setDelays(getMinDelay(), getMaxDelay());
-        at.setProbability(getProbability());
-
-        return at;
-    }
-
-    /*public AvatarStateMachineElement basicCloneMe() {
-      }*/
-
-    public void removeAllActionsButTheFirstOne() {
-        if (actions.size() < 2) {
-            return;
-        }
-        AvatarAction action = actions.get(0);
-        actions.clear();
-        actions.add(action);
-    }
-
-    public void removeFirstAction() {
-        actions.remove(0);
-    }
-
-    public void removeAllActions() {
-        actions.clear();
-    }
-
-    // No actions
-    //public boolean isAGuardTransition() {
-    //}
-
-    public boolean isGuarded() {
-        if (guard == null)
-            return false;
-
-        return guard.isGuarded();
-    }
-
-    public boolean hasDelay() {
-        return minDelay.trim().length() != 0;
-    }
-
-    public boolean hasCompute() {
-        return minCompute.trim().length() != 0;
-    }
-
-    public boolean hasActions() {
-        if (actions.size() == 0) {
-            return false;
-        }
-
-        for (AvatarAction a : actions) {
-            if (a.toString().trim().length() > 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public String specificToString() {
-        String ret = "";
-        if (hasDelay()) {
-            ret += "minDelay=" + getMinDelay() + " maxDelay=" + getMaxDelay() + "\n";
-        }
-
-        if (hasCompute()) {
-            ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
-        }
-
-        ret += "weight=" + getProbability() + "\n";
-
-        for (AvatarAction a : actions) {
-            String s = a.toString();
-            if (s.trim().length() > 0) {
-                ret += s.trim() + " / ";
-            }
-        }
-        String s = "";
-        if (guard == null) {
-            s = "";
-        } else {
-            s = guard.toString();
-        }
-        if (s.trim().length() > 0) {
-            ret += "guard " + s.trim() + " / ";
-        }
-        if (ret.length() > 0) {
-            ret = "\n" + ret;
-        }
-
-        return ret;
-    }
-
-
-    // Assumes actions are correctly formatted
-    public boolean hasMethodCall() {
-
-        for (AvatarAction action : actions)
-            if (action.isAMethodCall())
-                return true;
-
-        return false;
-    }
-
-    public String toString() {
-        return toString(getNiceName());
-    }
-
-    public String getNiceName() {
-        String s = " weight:" + getProbability() + " ";
-        if (isGuarded())
-            s += " guard=" + guard;
-
-        if (hasDelay())
-            s += " delay(" + minDelay + ", " + maxDelay + ")";
-
-        if (actions.size() > 0) {
-            s+= " actions: ";
-            for (AvatarAction act: actions) {
-                s += " " + act;
-            }
-        }
-
-        return s;
-
-        //return "Empty transition" + s;
-    }
-
-    public String getNiceNameOld() {
-        String s = " weight:" + getProbability();
-        if (isGuarded())
-            return "Transition (guard=" + guard + ", ...)" + s;
-
-        if (hasDelay())
-            return "Transition (delay=(" + minDelay + ", " + maxDelay + "), ...)" + s;
-
-        if (actions.size() > 0) {
-            return "Transition (" + actions.get(0) + ", ...)" + s;
-        }
-
-        return "Empty transition" + s;
-    }
-
-
-    public void translate(AvatarTranslator translator, Object arg) {
-        translator.translateTransition(this, arg);
-    }
+  public void translate(AvatarTranslator translator, Object arg) {
+    translator.translateTransition(this, arg);
+  }
 }

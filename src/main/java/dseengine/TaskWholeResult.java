@@ -36,97 +36,93 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class TaskWholeResult
-* Object for storing a whole task result after a simulation
-* Creation: 08/09/2011
-* @version 1.0 08/09/2011
-* @author Ludovic APVRILLE
+ * Class TaskWholeResult Object for storing a whole task result after a
+ * simulation Creation: 08/09/2011
+ * 
+ * @version 1.0 08/09/2011
+ * @author Ludovic APVRILLE
  */
-public class TaskWholeResult  {
-	public int id;
-	public String name;
-	
-	public double minNbOfExecutedCycles;
-	public double maxNbOfExecutedCycles;
-	public double averageNbOfExecutedCycles;
-	public int nbOfResults;
-	
-	public int nbOfRunningStates;
-	public int nbOfRunnableStates;
-	public int nbOfSuspendedStates;
-	public int nbOfTerminatedStates;
-	
-	public TaskWholeResult(TaskResult taskres) {
-		
-		id = taskres.id;
-		name = taskres.name;
-		minNbOfExecutedCycles = taskres.nbOfExecutedCycles;
-		maxNbOfExecutedCycles = taskres.nbOfExecutedCycles;
-		averageNbOfExecutedCycles = taskres.nbOfExecutedCycles;
-		nbOfResults = 1;
-		
-		if (taskres.state.toLowerCase().compareTo("runnable") == 0) {
-			nbOfRunnableStates = 1 ;
-		} else {
-			nbOfRunnableStates = 0 ;
-		}
-		
-		if (taskres.state.toLowerCase().compareTo("running") == 0) {
-			nbOfRunningStates = 1 ;
-		} else {
-			nbOfRunningStates = 0 ;
-		}
-		
-		if (taskres.state.toLowerCase().compareTo("suspended") == 0) {
-			nbOfSuspendedStates = 1 ;
-		} else {
-			nbOfSuspendedStates = 0 ;
-		}
-		
-		if (taskres.state.toLowerCase().compareTo("terminated") == 0) {
-			nbOfTerminatedStates = 1 ;
-		} else {
-			nbOfTerminatedStates = 0 ;
-		}
-	}
-	
-	public void updateResults(TaskResult restask) {
-		minNbOfExecutedCycles = Math.min(minNbOfExecutedCycles, restask.nbOfExecutedCycles);
-		maxNbOfExecutedCycles = Math.max(maxNbOfExecutedCycles, restask.nbOfExecutedCycles);
-		averageNbOfExecutedCycles = ((averageNbOfExecutedCycles *  nbOfResults)+restask.nbOfExecutedCycles)/(nbOfResults + 1);
-		
-		if (restask.state.toLowerCase().compareTo("running") == 0) {
-			nbOfRunningStates ++ ;
-		}
-		if (restask.state.toLowerCase().compareTo("runnable") == 0) {
-			nbOfRunnableStates ++ ;
-		}
-		if (restask.state.toLowerCase().compareTo("suspended") == 0) {
-			nbOfSuspendedStates ++ ;
-		}
-		if (restask.state.toLowerCase().compareTo("terminated") == 0) {
-			nbOfRunnableStates ++ ;
-		}
-		nbOfResults ++;
-	}
+public class TaskWholeResult {
+  public int id;
+  public String name;
 
+  public double minNbOfExecutedCycles;
+  public double maxNbOfExecutedCycles;
+  public double averageNbOfExecutedCycles;
+  public int nbOfResults;
 
-	public String toStringResult() {
-		StringBuffer sb = new StringBuffer("");
-		sb.append("TASK " + id + " " + name + " " + nbOfResults + " " + minNbOfExecutedCycles + " " + averageNbOfExecutedCycles + " " + maxNbOfExecutedCycles + " " + nbOfRunnableStates + " " + nbOfRunningStates +" " + nbOfSuspendedStates + " " + nbOfTerminatedStates);
-		
-		return sb.toString();
-	}	
-	
-	
-	
+  public int nbOfRunningStates;
+  public int nbOfRunnableStates;
+  public int nbOfSuspendedStates;
+  public int nbOfTerminatedStates;
+
+  public TaskWholeResult(TaskResult taskres) {
+
+    id = taskres.id;
+    name = taskres.name;
+    minNbOfExecutedCycles = taskres.nbOfExecutedCycles;
+    maxNbOfExecutedCycles = taskres.nbOfExecutedCycles;
+    averageNbOfExecutedCycles = taskres.nbOfExecutedCycles;
+    nbOfResults = 1;
+
+    if (taskres.state.toLowerCase().compareTo("runnable") == 0) {
+      nbOfRunnableStates = 1;
+    } else {
+      nbOfRunnableStates = 0;
+    }
+
+    if (taskres.state.toLowerCase().compareTo("running") == 0) {
+      nbOfRunningStates = 1;
+    } else {
+      nbOfRunningStates = 0;
+    }
+
+    if (taskres.state.toLowerCase().compareTo("suspended") == 0) {
+      nbOfSuspendedStates = 1;
+    } else {
+      nbOfSuspendedStates = 0;
+    }
+
+    if (taskres.state.toLowerCase().compareTo("terminated") == 0) {
+      nbOfTerminatedStates = 1;
+    } else {
+      nbOfTerminatedStates = 0;
+    }
+  }
+
+  public void updateResults(TaskResult restask) {
+    minNbOfExecutedCycles = Math.min(minNbOfExecutedCycles, restask.nbOfExecutedCycles);
+    maxNbOfExecutedCycles = Math.max(maxNbOfExecutedCycles, restask.nbOfExecutedCycles);
+    averageNbOfExecutedCycles = ((averageNbOfExecutedCycles * nbOfResults) + restask.nbOfExecutedCycles)
+        / (nbOfResults + 1);
+
+    if (restask.state.toLowerCase().compareTo("running") == 0) {
+      nbOfRunningStates++;
+    }
+    if (restask.state.toLowerCase().compareTo("runnable") == 0) {
+      nbOfRunnableStates++;
+    }
+    if (restask.state.toLowerCase().compareTo("suspended") == 0) {
+      nbOfSuspendedStates++;
+    }
+    if (restask.state.toLowerCase().compareTo("terminated") == 0) {
+      nbOfRunnableStates++;
+    }
+    nbOfResults++;
+  }
+
+  public String toStringResult() {
+    StringBuffer sb = new StringBuffer("");
+    sb.append("TASK " + id + " " + name + " " + nbOfResults + " " + minNbOfExecutedCycles + " "
+        + averageNbOfExecutedCycles + " " + maxNbOfExecutedCycles + " " + nbOfRunnableStates + " " + nbOfRunningStates
+        + " " + nbOfSuspendedStates + " " + nbOfTerminatedStates);
+
+    return sb.toString();
+  }
+
 } // Class BusResult
-

@@ -47,180 +47,192 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class TADTimeLimitedOffer
- * Action which must happen before a duration + jitter has elasped. Otherwise, anoterh activity is executed.
- * To be used in activity diagrams
- * Creation: 12/12/2003
+ * Class TADTimeLimitedOffer Action which must happen before a duration + jitter
+ * has elasped. Otherwise, anoterh activity is executed. To be used in activity
+ * diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent*/ implements ActionStateErrorHighlight {
-	protected int lineLength = 25;
-	protected int lineDistance = 10;
-	protected int textX =  5;
-	protected int textY =  15;
-	protected int arc = 5;
-	protected int distanceStateLine = 20;
-	protected int distanceTwoLines = 15;
-	protected int arrowLength = 10;
-	
-	protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
+public class TADTimeLimitedOffer extends TADComponentWithSubcomponents
+    /* Issue #69 TGCWithInternalComponent */ implements ActionStateErrorHighlight {
+  protected int lineLength = 25;
+  protected int lineDistance = 10;
+  protected int textX = 5;
+  protected int textY = 15;
+  protected int arc = 5;
+  protected int distanceStateLine = 20;
+  protected int distanceTwoLines = 15;
+  protected int arrowLength = 10;
 
-	public TADTimeLimitedOffer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
-		width = 30;
-		height = 20;
-		minWidth = 30;
-		
-		nbConnectingPoint = 3;
-		connectingPoint = new TGConnectingPoint[3];
-		connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-		connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-		connectingPoint[2] = new TGConnectingPointAD(this, distanceTwoLines, lineLength, false, true, 0.5, 1.0);
-        addTGConnectingPointsComment();
+  protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
 
-		nbInternalTGComponent = 1;
-		tgcomponent = new TGComponent[nbInternalTGComponent];
+  public TADTimeLimitedOffer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		TGCOneLineText tgc = new TGCOneLineText(x + textX + width + distanceStateLine, y + textY, width + distanceStateLine + 2, width + distanceStateLine + 10, textY - 10, textY + 10, true, this, _tdp);
-		tgc.setValue("delay value");
-		tgc.setName("value of the delay");
-		tgcomponent[0] = tgc;
+    width = 30;
+    height = 20;
+    minWidth = 30;
 
-		moveable = true;
-		editable = true;
-		removable = true;
-	
-		value = "action";
-		name = "time-limited offer";
-		
-		myImageIcon = IconManager.imgic218;
-	}
+    nbConnectingPoint = 3;
+    connectingPoint = new TGConnectingPoint[3];
+    connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+    connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+    connectingPoint[2] = new TGConnectingPointAD(this, distanceTwoLines, lineLength, false, true, 0.5, 1.0);
+    addTGConnectingPointsComment();
 
-	@Override
-	public void internalDrawing(Graphics g) {
-		int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max(minWidth, w + 2 * textX);
-		int w2 = width;
-		int x1 = x;
-		if (w1 != width) {
-			x = x + width/2 - w1/2;
-			width = w1;
-			//updateConnectingPoints();
-			updateInternalComponents(width - w2, x - x1);
-		}
-		
-		if (stateAction > 0)  {
-			Color c = g.getColor();
-			switch(stateAction) {
-			case ErrorHighlight.GATE:
-				g.setColor(ColorManager.GATE_BOX_ACTION);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
-			g.fillRoundRect(x, y, width, height, arc, arc);
-			g.setColor(c);
-		}
-		
-		// action state
-		g.drawRoundRect(x, y, width, height, arc, arc);
-		g.drawString(value, x + (width - w) / 2 , y + textY);
-		
-		// lines of the state
-		g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-		g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-		
-		// time limited offer
-		g.drawLine(x+(width/2), y - lineLength + lineDistance, x+ width + distanceStateLine, y - lineLength + lineDistance);
-		g.drawLine(x+ width + distanceStateLine, y - lineLength + lineDistance, x+ width + distanceStateLine, y + height + lineLength - lineDistance);
-		GraphicLib.arrowWithLine(g, 1, 1, arrowLength, x + width + distanceStateLine, y + height + lineLength - lineDistance, x + (width/2) + distanceTwoLines, y + height + lineLength - lineDistance, false);
-		g.drawLine(x + (width/2) + distanceTwoLines, y + height + lineLength - lineDistance, x + (width/2) + distanceTwoLines, y + lineLength + height);
-	
-	}
+    nbInternalTGComponent = 1;
+    tgcomponent = new TGComponent[nbInternalTGComponent];
 
-	@Override
-	public TGComponent isOnOnlyMe(int x1, int y1) {
-		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-			return this;
-		} 
-		// ligen verticale
-		if ((int)(Line2D.ptSegDistSq(x + (width/2), y - lineLength, x + (width/2), y + height + lineLength, x1, y1)) < distanceSelected) {
-			return this;	
-		}
-		// horizontale haute
-		if ((int)(Line2D.ptSegDistSq(x + (width/2), y - lineLength + lineDistance, x+ width + distanceStateLine, y - lineLength + lineDistance, x1, y1)) < distanceSelected) {
-			return this;	
-		}
-		// verticale droite
-		if ((int)(Line2D.ptSegDistSq(x+ width + distanceStateLine, y - lineLength + lineDistance, x+ width + distanceStateLine, y + height + lineLength - lineDistance, x1, y1)) < distanceSelected) {	
-			return this;	
-		}
-		//horizontale basse 
-		if ((int)(Line2D.ptSegDistSq(x + width + distanceStateLine, y + height + lineLength - lineDistance, x + (width/2) + distanceTwoLines, y + height + lineLength - lineDistance, x1, y1)) < distanceSelected) {	
-			return this;	
-		}
-		//verticale basse droite
-		if ((int)(Line2D.ptSegDistSq(x + (width/2) + distanceTwoLines, y + height + lineLength - lineDistance, x + (width/2) + distanceTwoLines, y + lineLength + height, x1, y1)) < distanceSelected) {	
-			return this;	
-		}
-		return null;
-	}
+    TGCOneLineText tgc = new TGCOneLineText(x + textX + width + distanceStateLine, y + textY,
+        width + distanceStateLine + 2, width + distanceStateLine + 10, textY - 10, textY + 10, true, this, _tdp);
+    tgc.setValue("delay value");
+    tgc.setName("value of the delay");
+    tgcomponent[0] = tgc;
 
-	/*public void updateConnectingPoints() {
-		connectingPoint[0].setCdX(width / 2);
-		connectingPoint[1].setCdX(width / 2);
-		connectingPoint[2].setCdX(width / 2 + distanceTwoLines);	
-	}*/
-	
-	protected void updateInternalComponents(int diffWidth, int diffX) {
-		int x1 = tgcomponent[0].getX();
-		int y1 = tgcomponent[0].getY();
-		tgcomponent[0].setCdRectangle(width + distanceStateLine + 2, width + distanceStateLine + 10, textY - 10, textY + 10);
-		//
-		tgcomponent[0].setCd(x1 + diffWidth + diffX, y1);
-		//
-	}
-	
-	@Override
-	public boolean editOnDoubleClick(JFrame frame) {
-		String oldValue = value;
-		String text = getName() + ": ";
-		if (hasFather()) {
-			text = getTopLevelName() + " / " + text;
-		} 
-		String s = (String)JOptionPane.showInputDialog(frame, text,
-					"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                    null,
-                    getValue());
-		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				setValue(s);
-				return true;
-		}
-		return false;
-	}
-	
-	public String getAction() {
-		return value;	
-	}
-	
-	public String getDelay() {
-		return tgcomponent[0].getValue();	
-	}
-	
-	@Override
-	public int getType() {
-		return TGComponentManager.TAD_TIME_LIMITED_OFFER;
-	}
-	
-	@Override
-	public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    value = "action";
+    name = "time-limited offer";
+
+    myImageIcon = IconManager.imgic218;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    int w = g.getFontMetrics().stringWidth(value);
+    int w1 = Math.max(minWidth, w + 2 * textX);
+    int w2 = width;
+    int x1 = x;
+    if (w1 != width) {
+      x = x + width / 2 - w1 / 2;
+      width = w1;
+      // updateConnectingPoints();
+      updateInternalComponents(width - w2, x - x1);
     }
-	
-	@Override
-	public void setStateAction(int _stateAction) {
-		stateAction = _stateAction;
-	}
+
+    if (stateAction > 0) {
+      Color c = g.getColor();
+      switch (stateAction) {
+        case ErrorHighlight.GATE:
+          g.setColor(ColorManager.GATE_BOX_ACTION);
+          break;
+        default:
+          g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+      }
+      g.fillRoundRect(x, y, width, height, arc, arc);
+      g.setColor(c);
+    }
+
+    // action state
+    g.drawRoundRect(x, y, width, height, arc, arc);
+    g.drawString(value, x + (width - w) / 2, y + textY);
+
+    // lines of the state
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+
+    // time limited offer
+    g.drawLine(x + (width / 2), y - lineLength + lineDistance, x + width + distanceStateLine,
+        y - lineLength + lineDistance);
+    g.drawLine(x + width + distanceStateLine, y - lineLength + lineDistance, x + width + distanceStateLine,
+        y + height + lineLength - lineDistance);
+    GraphicLib.arrowWithLine(g, 1, 1, arrowLength, x + width + distanceStateLine,
+        y + height + lineLength - lineDistance, x + (width / 2) + distanceTwoLines,
+        y + height + lineLength - lineDistance, false);
+    g.drawLine(x + (width / 2) + distanceTwoLines, y + height + lineLength - lineDistance,
+        x + (width / 2) + distanceTwoLines, y + lineLength + height);
+
+  }
+
+  @Override
+  public TGComponent isOnOnlyMe(int x1, int y1) {
+    if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+      return this;
+    }
+    // ligen verticale
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + height + lineLength, x1,
+        y1)) < distanceSelected) {
+      return this;
+    }
+    // horizontale haute
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength + lineDistance, x + width + distanceStateLine,
+        y - lineLength + lineDistance, x1, y1)) < distanceSelected) {
+      return this;
+    }
+    // verticale droite
+    if ((int) (Line2D.ptSegDistSq(x + width + distanceStateLine, y - lineLength + lineDistance,
+        x + width + distanceStateLine, y + height + lineLength - lineDistance, x1, y1)) < distanceSelected) {
+      return this;
+    }
+    // horizontale basse
+    if ((int) (Line2D.ptSegDistSq(x + width + distanceStateLine, y + height + lineLength - lineDistance,
+        x + (width / 2) + distanceTwoLines, y + height + lineLength - lineDistance, x1, y1)) < distanceSelected) {
+      return this;
+    }
+    // verticale basse droite
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2) + distanceTwoLines, y + height + lineLength - lineDistance,
+        x + (width / 2) + distanceTwoLines, y + lineLength + height, x1, y1)) < distanceSelected) {
+      return this;
+    }
+    return null;
+  }
+
+  /*
+   * public void updateConnectingPoints() { connectingPoint[0].setCdX(width / 2);
+   * connectingPoint[1].setCdX(width / 2); connectingPoint[2].setCdX(width / 2 +
+   * distanceTwoLines); }
+   */
+
+  protected void updateInternalComponents(int diffWidth, int diffX) {
+    int x1 = tgcomponent[0].getX();
+    int y1 = tgcomponent[0].getY();
+    tgcomponent[0].setCdRectangle(width + distanceStateLine + 2, width + distanceStateLine + 10, textY - 10,
+        textY + 10);
+    //
+    tgcomponent[0].setCd(x1 + diffWidth + diffX, y1);
+    //
+  }
+
+  @Override
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = value;
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
+    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+      setValue(s);
+      return true;
+    }
+    return false;
+  }
+
+  public String getAction() {
+    return value;
+  }
+
+  public String getDelay() {
+    return tgcomponent[0].getValue();
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TAD_TIME_LIMITED_OFFER;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+  }
+
+  @Override
+  public void setStateAction(int _stateAction) {
+    stateAction = _stateAction;
+  }
 }

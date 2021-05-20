@@ -36,69 +36,65 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package req.ebrdd;
 
 import java.util.ArrayList;
 import java.util.Vector;
 
-
 /**
- * Class EBRDDSequence
- * Creation: 22/09/2009
+ * Class EBRDDSequence Creation: 22/09/2009
  *
  * @author Ludovic APVRILLE
  * @version 1.0 22/09/2009
  */
 public class EBRDDSequence extends EBRDDComponent {
-    private Vector<Integer> indexes;
+  private Vector<Integer> indexes;
 
-    public EBRDDSequence(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        nbNext = -1;
-        indexes = new Vector<>();
+  public EBRDDSequence(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    nbNext = -1;
+    indexes = new Vector<>();
+  }
+
+  public void addIndex(int index) {
+    indexes.add(index);
+  }
+
+  public void sortNexts() {
+    if (indexes.size() == 0) {
+      return;
     }
 
-    public void addIndex(int index) {
-        indexes.add(index);
-    }
+    //
+    //
+    ArrayList<EBRDDComponent> nextsbis = new ArrayList<EBRDDComponent>();
 
-    public void sortNexts() {
-        if (indexes.size() == 0) {
-            return;
+    // Sort according to index stored in indexes
+    // The smaller is removed at each step
+    Integer i0;
+    int index;
+    int i;
+
+    while (indexes.size() > 0) {
+      i0 = 1000;
+      index = -1;
+      for (i = 0; i < indexes.size(); i++) {
+        if ((indexes.elementAt(i).compareTo(i0)) < 0) {
+          index = i;
+          i0 = indexes.elementAt(i);
         }
-
-        //
-        //
-        ArrayList<EBRDDComponent> nextsbis = new ArrayList<EBRDDComponent>();
-
-        // Sort according to index stored in indexes
-        // The smaller is removed at each step
-        Integer i0;
-        int index;
-        int i;
-
-        while (indexes.size() > 0) {
-            i0 = 1000;
-            index = -1;
-            for (i = 0; i < indexes.size(); i++) {
-                if ((indexes.elementAt(i).compareTo(i0)) < 0) {
-                    index = i;
-                    i0 = indexes.elementAt(i);
-                }
-            }
-            nextsbis.add(nexts.get(index));
-            nexts.remove(index);
-            indexes.remove(index);
-        }
-
-        nexts = nextsbis;
-
-        //for(i=0; i<nexts.size(); i++){
-        //
-        //}
-
+      }
+      nextsbis.add(nexts.get(index));
+      nexts.remove(index);
+      indexes.remove(index);
     }
 
+    nexts = nextsbis;
+
+    // for(i=0; i<nexts.size(); i++){
+    //
+    // }
+
+  }
 
 }

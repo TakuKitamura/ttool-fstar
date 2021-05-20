@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import launcher.LauncherException;
@@ -55,318 +52,317 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class JDialogSimulation
- * Dialog for managing remote processes call for simulation
- * Creation: 13/12/2003
+ * Class JDialogSimulation Dialog for managing remote processes call for
+ * simulation Creation: 13/12/2003
+ * 
  * @version 1.0 13/12/2003
  * @author Ludovic APVRILLE
  */
-public class JDialogSimulation extends JDialog implements ActionListener, Runnable  {
-    
-    private static String simulationTime = "";
-    
-    protected MainGUI mgui;
-    
-    protected String cmdRTL;
-    protected String fileName;
-    protected String spec;
-    protected String host;
-    protected int mode;
-    protected RshClient rshc;
-    protected Thread t;
-    
-    protected int simuTime = 0;
-    
-    protected final static int NOT_STARTED = 1;
-    protected final static int STARTED = 2;
-    protected final static int STOPPED = 3;
-    
-    //components
-    protected JTextArea jta;
-    protected JTextField jtf;
-    protected JButton start;
-    protected JButton stop;
-    protected JButton close;
-    
-    protected JRadioButton makeLOGIC, makeBOTH;
-    
-    /* Creates new form  */
-    public JDialogSimulation(Frame f, MainGUI _mgui, String title, String _cmdRTL, String _fileName, String _spec, String _host) {
-        super(f, title, true);
-        
-        mgui = _mgui;
-        
-        cmdRTL = _cmdRTL;
-        fileName = _fileName;
-        spec = _spec;
-        host = _host;
-        
-        initComponents();
-        myInitComponents();
-        pack();
-        
-        //getGlassPane().addMouseListener( new MouseAdapter() {});
-        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-    }
-    
-    
-    protected void myInitComponents() {
-        mode = NOT_STARTED;
-        setButtons();
-    }
-    
-    protected void initComponents() {
-        
-        Container c = getContentPane();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        JPanel jp1 = new JPanel();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c1 = new GridBagConstraints();
-        
-        
-        
-        jp1.setLayout(gridbag1);
-        jp1.setBorder(new javax.swing.border.TitledBorder("Simulation options"));
-        //jp1.setPreferredSize(new Dimension(300, 150));
-        
-        // first line panel1
-        //c1.gridwidth = 3;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
-        c1.gridheight = 1;
-        
-        makeLOGIC = new JRadioButton("Logical actions > temporal actions (default option)");
-        makeLOGIC.addActionListener(this);
-        
-        makeBOTH = new JRadioButton("Logical actions = temporal actions (SIM-1 option)");
-        makeBOTH.addActionListener(this);
-        
-        jp1.add(makeLOGIC, c1);
-        jp1.add(makeBOTH, c1);
-        
-        ButtonGroup bg = new ButtonGroup();
-        bg.add(makeLOGIC);
-        bg.add(makeBOTH);
-        
-        makeLOGIC.setSelected(true);
-        
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("Simulation time:"), c1);
-        
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jtf = new JTextField(simulationTime, 25);
-        jp1.add(jtf, c1);
-        
-        c.add(jp1, BorderLayout.NORTH);
-        
-        jta = new ScrolledJTextArea();
-        jta.setEditable(false);
-        jta.setMargin(new Insets(10, 10, 10, 10));
-        jta.setTabSize(3);
-        jta.append("Select options and then, click on 'start' to launch simulation\n");
-        Font f = new Font("Courrier", Font.BOLD, 12);
-        jta.setFont(f);
-        JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
-        c.add(jsp, BorderLayout.CENTER);
-        
-        start = new JButton("Start", IconManager.imgic53);
-        stop = new JButton("Stop", IconManager.imgic55);
-        close = new JButton("Close", IconManager.imgic27);
-        
-        start.setPreferredSize(new Dimension(100, 30));
-        stop.setPreferredSize(new Dimension(100, 30));
-        close.setPreferredSize(new Dimension(100, 30));
-        
-        start.addActionListener(this);
-        stop.addActionListener(this);
-        close.addActionListener(this);
-        
-        JPanel jp2 = new JPanel();
-        jp2.add(start);
-        jp2.add(stop);
-        jp2.add(close);
-        
-        c.add(jp2, BorderLayout.SOUTH);
-    }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Start"))  {
-            startProcess();
-        } else if (command.equals("Stop")) {
-            stopProcess();
-        } else if (command.equals("Close")) {
-            closeDialog();
-        }
-    }
-    
-    
-    public void closeDialog() {
-        if (mode == STARTED) {
-            stopProcess();
-        }
-        dispose();
-    }
-    
-    public void stopProcess() {
-        try {
-            rshc.stopCommand();
-        } catch (LauncherException le) {
-        }
-        rshc = null;
-        mode = 	STOPPED;
-        setButtons();
-    }
-    
-    public void startProcess() {
-        if (checkSimulationTime()) {
-            t = new Thread(this);
-            mode = STARTED;
-            setButtons();
-            t.start();
-        }
-    }
-    
-    protected boolean checkSimulationTime() {
-        simulationTime = jtf.getText();
-        try {
-            simuTime = Integer.decode(simulationTime).intValue();
-            if (simuTime < 1) {
-                return false;
-            }
-        }	catch (Exception e) {
-            jta.append("Incorrect simulation time\n");
-            mode  = NOT_STARTED;
-            setButtons();
-            return false;
-        }
-        return true;
-    }
-    
-    public void run() {
-        
-        String cmd1 = "";
-        String fileSIM = fileName + ".sim";
-        String data;
-        int id = 0;
-        
-        rshc = new RshClient(host);
-		RshClient rshctmp = rshc;
-		
-        
-        try {
-          id = rshc.getId();
-          fileName = FileUtils.addBeforeFileExtension(fileName, "_" + id);
-          fileSIM = FileUtils.addBeforeFileExtension(fileSIM, "_" + id);
-            jta.append("Sending file data\n");
+public class JDialogSimulation extends JDialog implements ActionListener, Runnable {
 
-            // file data
-            rshc.sendFileData(fileName, spec);
-            
-            // Command
-            if (makeLOGIC.isSelected()) {
-                cmd1 = cmdRTL + " " + fileName + " -SIM0 -max-spec-t-" + simuTime;
-            } else {
-                cmd1 = cmdRTL + " " + fileName + " -SIM-1 -max-spec-t-" + simuTime;
-            }
-            
-            mgui.gtm.reinitSIM();
-            // Simulation trace
-            jta.append("\nMaking Simulation trace\n");
-            data = processCmd(cmd1);
-            jta.append(data);
-            
-            // GETTING DATA
-            jta.append("\nGetting simulation trace\n");
-            
-            data = rshc.getFileData(fileSIM);
-            mgui.gtm.setSIM(data);
-            mgui.saveSIM();
-            
-            rshc.deleteFile(fileName);
-            rshc.deleteFile(fileSIM);
-            rshc.freeId(id);
-            
-            int nbAction = FormatManager.nbActionSimulation(data);
-            jta.append("Nb of actions: " + nbAction + "\n");
-            
-            jta.append("\nSimulation trace:\n");
-            jta.append(data);
-            
-            jta.append("\nSimulation trace done\n");
-            
-        } catch (LauncherException le) {
-            jta.append(le.getMessage() + "\n");
-            mode = 	STOPPED;
-            setButtons();
-			try{
-				if (rshctmp != null) {
-					rshctmp.freeId(id);
-				}
-			} catch (LauncherException leb) {}
-            return;
-        } catch (Exception e) {
-            mode = 	STOPPED;
-            setButtons();
-			try{
-				if (rshctmp != null) {
-					rshctmp.freeId(id);
-				}
-			} catch (LauncherException leb) {}
-            return;
+  private static String simulationTime = "";
+
+  protected MainGUI mgui;
+
+  protected String cmdRTL;
+  protected String fileName;
+  protected String spec;
+  protected String host;
+  protected int mode;
+  protected RshClient rshc;
+  protected Thread t;
+
+  protected int simuTime = 0;
+
+  protected final static int NOT_STARTED = 1;
+  protected final static int STARTED = 2;
+  protected final static int STOPPED = 3;
+
+  // components
+  protected JTextArea jta;
+  protected JTextField jtf;
+  protected JButton start;
+  protected JButton stop;
+  protected JButton close;
+
+  protected JRadioButton makeLOGIC, makeBOTH;
+
+  /* Creates new form */
+  public JDialogSimulation(Frame f, MainGUI _mgui, String title, String _cmdRTL, String _fileName, String _spec,
+      String _host) {
+    super(f, title, true);
+
+    mgui = _mgui;
+
+    cmdRTL = _cmdRTL;
+    fileName = _fileName;
+    spec = _spec;
+    host = _host;
+
+    initComponents();
+    myInitComponents();
+    pack();
+
+    // getGlassPane().addMouseListener( new MouseAdapter() {});
+    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+  }
+
+  protected void myInitComponents() {
+    mode = NOT_STARTED;
+    setButtons();
+  }
+
+  protected void initComponents() {
+
+    Container c = getContentPane();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel jp1 = new JPanel();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c1 = new GridBagConstraints();
+
+    jp1.setLayout(gridbag1);
+    jp1.setBorder(new javax.swing.border.TitledBorder("Simulation options"));
+    // jp1.setPreferredSize(new Dimension(300, 150));
+
+    // first line panel1
+    // c1.gridwidth = 3;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
+
+    makeLOGIC = new JRadioButton("Logical actions > temporal actions (default option)");
+    makeLOGIC.addActionListener(this);
+
+    makeBOTH = new JRadioButton("Logical actions = temporal actions (SIM-1 option)");
+    makeBOTH.addActionListener(this);
+
+    jp1.add(makeLOGIC, c1);
+    jp1.add(makeBOTH, c1);
+
+    ButtonGroup bg = new ButtonGroup();
+    bg.add(makeLOGIC);
+    bg.add(makeBOTH);
+
+    makeLOGIC.setSelected(true);
+
+    c1.gridwidth = 1;
+    jp1.add(new JLabel("Simulation time:"), c1);
+
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    jtf = new JTextField(simulationTime, 25);
+    jp1.add(jtf, c1);
+
+    c.add(jp1, BorderLayout.NORTH);
+
+    jta = new ScrolledJTextArea();
+    jta.setEditable(false);
+    jta.setMargin(new Insets(10, 10, 10, 10));
+    jta.setTabSize(3);
+    jta.append("Select options and then, click on 'start' to launch simulation\n");
+    Font f = new Font("Courrier", Font.BOLD, 12);
+    jta.setFont(f);
+    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+    c.add(jsp, BorderLayout.CENTER);
+
+    start = new JButton("Start", IconManager.imgic53);
+    stop = new JButton("Stop", IconManager.imgic55);
+    close = new JButton("Close", IconManager.imgic27);
+
+    start.setPreferredSize(new Dimension(100, 30));
+    stop.setPreferredSize(new Dimension(100, 30));
+    close.setPreferredSize(new Dimension(100, 30));
+
+    start.addActionListener(this);
+    stop.addActionListener(this);
+    close.addActionListener(this);
+
+    JPanel jp2 = new JPanel();
+    jp2.add(start);
+    jp2.add(stop);
+    jp2.add(close);
+
+    c.add(jp2, BorderLayout.SOUTH);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Start")) {
+      startProcess();
+    } else if (command.equals("Stop")) {
+      stopProcess();
+    } else if (command.equals("Close")) {
+      closeDialog();
+    }
+  }
+
+  public void closeDialog() {
+    if (mode == STARTED) {
+      stopProcess();
+    }
+    dispose();
+  }
+
+  public void stopProcess() {
+    try {
+      rshc.stopCommand();
+    } catch (LauncherException le) {
+    }
+    rshc = null;
+    mode = STOPPED;
+    setButtons();
+  }
+
+  public void startProcess() {
+    if (checkSimulationTime()) {
+      t = new Thread(this);
+      mode = STARTED;
+      setButtons();
+      t.start();
+    }
+  }
+
+  protected boolean checkSimulationTime() {
+    simulationTime = jtf.getText();
+    try {
+      simuTime = Integer.decode(simulationTime).intValue();
+      if (simuTime < 1) {
+        return false;
+      }
+    } catch (Exception e) {
+      jta.append("Incorrect simulation time\n");
+      mode = NOT_STARTED;
+      setButtons();
+      return false;
+    }
+    return true;
+  }
+
+  public void run() {
+
+    String cmd1 = "";
+    String fileSIM = fileName + ".sim";
+    String data;
+    int id = 0;
+
+    rshc = new RshClient(host);
+    RshClient rshctmp = rshc;
+
+    try {
+      id = rshc.getId();
+      fileName = FileUtils.addBeforeFileExtension(fileName, "_" + id);
+      fileSIM = FileUtils.addBeforeFileExtension(fileSIM, "_" + id);
+      jta.append("Sending file data\n");
+
+      // file data
+      rshc.sendFileData(fileName, spec);
+
+      // Command
+      if (makeLOGIC.isSelected()) {
+        cmd1 = cmdRTL + " " + fileName + " -SIM0 -max-spec-t-" + simuTime;
+      } else {
+        cmd1 = cmdRTL + " " + fileName + " -SIM-1 -max-spec-t-" + simuTime;
+      }
+
+      mgui.gtm.reinitSIM();
+      // Simulation trace
+      jta.append("\nMaking Simulation trace\n");
+      data = processCmd(cmd1);
+      jta.append(data);
+
+      // GETTING DATA
+      jta.append("\nGetting simulation trace\n");
+
+      data = rshc.getFileData(fileSIM);
+      mgui.gtm.setSIM(data);
+      mgui.saveSIM();
+
+      rshc.deleteFile(fileName);
+      rshc.deleteFile(fileSIM);
+      rshc.freeId(id);
+
+      int nbAction = FormatManager.nbActionSimulation(data);
+      jta.append("Nb of actions: " + nbAction + "\n");
+
+      jta.append("\nSimulation trace:\n");
+      jta.append(data);
+
+      jta.append("\nSimulation trace done\n");
+
+    } catch (LauncherException le) {
+      jta.append(le.getMessage() + "\n");
+      mode = STOPPED;
+      setButtons();
+      try {
+        if (rshctmp != null) {
+          rshctmp.freeId(id);
         }
-        
-        mode = STOPPED;
-        setButtons();
-    }
-    
-    protected String processCmd(String cmd) throws LauncherException {
-        rshc.setCmd(cmd);
-        String s = null;
-        rshc.sendExecuteCommandRequest();
-        s = rshc.getDataFromProcess();
-        return s;
-    }
-    
-    protected void setButtons() {
-        switch(mode) {
-            case NOT_STARTED:
-                makeLOGIC.setEnabled(true);
-                makeBOTH.setEnabled(true);
-                jtf.setEnabled(true);
-                start.setEnabled(true);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
-                makeLOGIC.setEnabled(false);
-                makeBOTH.setEnabled(false);
-                jtf.setEnabled(false);
-                start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(true);
-                break;
-            case STOPPED:
-            default:
-                makeLOGIC.setEnabled(false);
-                makeBOTH.setEnabled(false);
-                jtf.setEnabled(false);
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
+      } catch (LauncherException leb) {
+      }
+      return;
+    } catch (Exception e) {
+      mode = STOPPED;
+      setButtons();
+      try {
+        if (rshctmp != null) {
+          rshctmp.freeId(id);
         }
+      } catch (LauncherException leb) {
+      }
+      return;
     }
+
+    mode = STOPPED;
+    setButtons();
+  }
+
+  protected String processCmd(String cmd) throws LauncherException {
+    rshc.setCmd(cmd);
+    String s = null;
+    rshc.sendExecuteCommandRequest();
+    s = rshc.getDataFromProcess();
+    return s;
+  }
+
+  protected void setButtons() {
+    switch (mode) {
+      case NOT_STARTED:
+        makeLOGIC.setEnabled(true);
+        makeBOTH.setEnabled(true);
+        jtf.setEnabled(true);
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
+      case STARTED:
+        makeLOGIC.setEnabled(false);
+        makeBOTH.setEnabled(false);
+        jtf.setEnabled(false);
+        start.setEnabled(false);
+        stop.setEnabled(true);
+        close.setEnabled(false);
+        getGlassPane().setVisible(true);
+        break;
+      case STOPPED:
+      default:
+        makeLOGIC.setEnabled(false);
+        makeBOTH.setEnabled(false);
+        jtf.setEnabled(false);
+        start.setEnabled(false);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
+    }
+  }
 }

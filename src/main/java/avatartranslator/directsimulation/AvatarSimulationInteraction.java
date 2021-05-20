@@ -36,23 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator.directsimulation;
 
-
 /**
- * Class AvatarSimulationInteraction
- * Avatar: notion of driver of simulation
+ * Class AvatarSimulationInteraction Avatar: notion of driver of simulation
  * Creation: 21/01/2011
+ * 
  * @version 1.0 21/01/2011
  * @author Ludovic APVRILLE
  */
-public interface AvatarSimulationInteraction  {
-  
-	void setMode(int _mode);
-	
-	void updateTransactionAndTime(int _nbOfTransactions, long clockValue);
+public interface AvatarSimulationInteraction {
+
+  void setMode(int _mode);
+
+  void updateTransactionAndTime(int _nbOfTransactions, long clockValue);
 }

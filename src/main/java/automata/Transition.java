@@ -36,38 +36,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package automata;
 
-
 /**
- * Class Transition
- * Creation: 23/03/2006
+ * Class Transition Creation: 23/03/2006
+ * 
  * @version 1.0 23/03/2006
  * @author Ludovic APVRILLE
  */
 public class Transition {
-    private String value;
-    private State nextState;
-    
+  private String value;
+  private State nextState;
 
-    public Transition(String _value, State _nextState) {
-         value = _value;
-         nextState = _nextState;
-    }
-    
-    public String getValue() {
-        return value;
-    }
-    
-    public State getNextState() {
-        return nextState;
-    }
-    
-    public void setNextState(State _nextState) {
-        nextState = _nextState;
-    }
-    
+  public Transition(String _value, State _nextState) {
+    value = _value;
+    nextState = _nextState;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public State getNextState() {
+    return nextState;
+  }
+
+  public void setNextState(State _nextState) {
+    nextState = _nextState;
+  }
+
 }

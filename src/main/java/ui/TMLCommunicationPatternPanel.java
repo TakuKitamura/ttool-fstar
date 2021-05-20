@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -55,166 +52,163 @@ import java.awt.*;
 import java.util.Vector;
 
 /**
-   * Class TMLCommunicationPatternPanel
-   * Managenemt of CP panels
-   * Creation: 17/02/2014
-   * @version 1.0 17/02/2014
-   * @author Ludovic APVRILLE
-   * @see MainGUI
+ * Class TMLCommunicationPatternPanel Managenemt of CP panels Creation:
+ * 17/02/2014
+ * 
+ * @version 1.0 17/02/2014
+ * @author Ludovic APVRILLE
+ * @see MainGUI
  */
 public class TMLCommunicationPatternPanel extends TURTLEPanel {
-    public TMLCPPanel tmlcpp;
-    public Vector<TGComponent> validated, ignored;
+  public TMLCPPanel tmlcpp;
+  public Vector<TGComponent> validated, ignored;
 
-    public TMLCommunicationPatternPanel(MainGUI _mgui) {
-        super(_mgui);
-        
-    	// Issue #41 Ordering of tabbed panes 
-        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPaneFixedAt0(this);//new JTabbedPane();
-        
-        cl = new ChangeListener() {
-        	
-        	@Override
-            public void stateChanged(ChangeEvent e){
-                mgui.paneAnalysisAction(e);
-            }
-        };
+  public TMLCommunicationPatternPanel(MainGUI _mgui) {
+    super(_mgui);
 
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+    // Issue #41 Ordering of tabbed panes
+    // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+    tabbedPane = GraphicLib.createDraggableEnhancedTabbedPaneFixedAt0(this);// new JTabbedPane();
+
+    cl = new ChangeListener() {
+
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneAnalysisAction(e);
+      }
+    };
+
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+  }
+
+  public void init() {
+
+    // Main CP toolbar
+    TMLCPToolBar toolBarMainCP = new TMLCPToolBar(mgui);
+    toolbars.add(toolBarMainCP);
+
+    toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    // TMLCPPanel
+    tmlcpp = new TMLCPPanel(mgui, toolBarMainCP);
+    tmlcpp.setName("MainCP");
+    tmlcpp.tp = this;
+    tdp = tmlcpp;
+    panels.add(tmlcpp);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlcpp);
+    tmlcpp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab("MainCP", IconManager.imgic17, toolBarPanel, "Opens the main communication pattern");
+    tabbedPane.setSelectedIndex(0);
+    // jsp.setVisible(true);
+    mgui.changeMade(tmlcpp, TDiagramPanel.NEW_COMPONENT);
+  }
+
+  public boolean addCPSequenceDiagram(String s) {
+
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    TMLSDToolBar toolBarSequence = new TMLSDToolBar(mgui);
+    toolbars.add(toolBarSequence);
+
+    TMLSDPanel sdp = new TMLSDPanel(mgui, toolBarSequence);
+    sdp.setName(s);
+    sdp.tp = this;
+    panels.add(sdp);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(sdp);
+    sdp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarSequence, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the communication pattern sequence diagram of " + s);
+
+    // Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
+    /*
+     * TDiagramPanel mainCP = panels.get( 0 ); //get the Main CP
+     * TraceManager.addDev( mainCP.getName() ); LinkedList mainCPelems =
+     * mainCP.getComponentList(); for( int i = 0; i < mainCPelems.size(); i++ ) {
+     * TGComponent elem = (TGComponent) mainCPelems.get(i); TraceManager.addDev(
+     * elem.getName() ); if( elem instanceof TMLCPRefSD && s.equals(elem.getName())
+     * ) { TMLCPRefSD cpRefSD = (TMLCPRefSD) mainCPelems.get(i);
+     * cpRefSD.setReferenceToSD( sdp ); //cpRefSD.setIndex( i );
+     * TraceManager.addDev( "Found and added the reference" ); } }
+     */
+    // tabbedPane.setVisible(true);
+    // sdp.setVisible(true);
+    // jsp.setVisible(true);
+    // tabbedPane.setSelectedIndex(panels.size()-1);
+
+    return true;
+  }
+
+  public boolean addCPDiagram(String s) {
+    TMLCPToolBar toolBarMainCP = new TMLCPToolBar(mgui);
+    toolbars.add(toolBarMainCP);
+
+    toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    TMLCPPanel tmlcppNew = new TMLCPPanel(mgui, toolBarMainCP);
+    tmlcppNew.setName(s);
+    tmlcppNew.tp = this;
+    tdp = tmlcppNew;
+    panels.add(tmlcppNew);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlcppNew);
+    tmlcppNew.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab(s, IconManager.imgic17, toolBarPanel, "Opens communication pattern diagram");
+
+    return true;
+
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"TML CP\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
+    return "<Modeling type=\"TML CP\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+  }
 
-    public void init() {
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
 
-        //  Main CP toolbar
-        TMLCPToolBar toolBarMainCP = new TMLCPToolBar(mgui);
-        toolbars.add(toolBarMainCP);
+  public String toString() {
+    return "DIPLODOCUS Communication Pattern: " + mgui.getTitleAt(this);
+  }
 
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
+  public String getName() {
+    return mgui.getTitleAt(this);
+  }
 
-        // TMLCPPanel
-        tmlcpp = new TMLCPPanel(mgui, toolBarMainCP);
-        tmlcpp.setName("MainCP");
-        tmlcpp.tp = this;
-        tdp = tmlcpp;
-        panels.add(tmlcpp);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlcpp);
-        tmlcpp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("MainCP", IconManager.imgic17, toolBarPanel, "Opens the main communication pattern");
-        tabbedPane.setSelectedIndex(0);
-        //jsp.setVisible(true);
-        mgui.changeMade(tmlcpp, TDiagramPanel.NEW_COMPONENT);
+  public boolean removeEnabled(int index) {
+    if (index == 0) {
+      return false;
     }
+    return (panels.elementAt(index) instanceof TMLCPPanel) || (panels.elementAt(index) instanceof TMLSDPanel)
+        || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0);
+  }
 
-    public boolean addCPSequenceDiagram( String s ) {
-
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout( new BorderLayout() );
-
-        TMLSDToolBar toolBarSequence    = new TMLSDToolBar( mgui );
-        toolbars.add( toolBarSequence );
-
-        TMLSDPanel sdp = new TMLSDPanel( mgui, toolBarSequence );
-        sdp.setName( s );
-        sdp.tp = this;
-        panels.add( sdp );
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel( sdp );
-        sdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled( true );
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarSequence, BorderLayout.NORTH );
-        toolBarPanel.add( jsp, BorderLayout.CENTER );
-        tabbedPane.addTab( s, IconManager.imgic18, toolBarPanel, "Open the communication pattern sequence diagram of " + s );
-
-        //Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
-        /*TDiagramPanel mainCP = panels.get( 0 );       //get the Main CP
-          TraceManager.addDev( mainCP.getName() );
-          LinkedList mainCPelems = mainCP.getComponentList();
-          for( int i = 0; i < mainCPelems.size(); i++ ) {
-          TGComponent elem = (TGComponent) mainCPelems.get(i);
-          TraceManager.addDev( elem.getName() );
-          if( elem instanceof TMLCPRefSD && s.equals(elem.getName()) )  {
-          TMLCPRefSD cpRefSD = (TMLCPRefSD) mainCPelems.get(i);
-          cpRefSD.setReferenceToSD( sdp );
-          //cpRefSD.setIndex( i );
-          TraceManager.addDev( "Found and added the reference" );
-          }
-          }*/
-        //tabbedPane.setVisible(true);
-        //sdp.setVisible(true);
-        //jsp.setVisible(true);
-        //tabbedPane.setSelectedIndex(panels.size()-1);
-
-        return true;
+  public boolean renameEnabled(int index) {
+    if (index == 0) {
+      return false;
     }
+    return (panels.elementAt(index) instanceof TMLCPPanel) || (panels.elementAt(index) instanceof TMLSDPanel)
+        || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0);
+  }
 
-    public boolean addCPDiagram(String s) {
-        TMLCPToolBar toolBarMainCP = new TMLCPToolBar(mgui);
-        toolbars.add(toolBarMainCP);
-
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-
-        TMLCPPanel tmlcppNew = new TMLCPPanel(mgui, toolBarMainCP);
-        tmlcppNew.setName(s);
-        tmlcppNew.tp = this;
-        tdp = tmlcppNew;
-        panels.add( tmlcppNew );
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(tmlcppNew);
-        tmlcppNew.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic17, toolBarPanel, "Opens communication pattern diagram");
-
-        return true;
-
-    }
-
-
-    public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"TML CP\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"TML CP\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-    }
-
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
-    }
-
-    public String toString() {
-        return "DIPLODOCUS Communication Pattern: " + mgui.getTitleAt(this);
-    }
-
-    public String getName()     {
-        return mgui.getTitleAt(this);
-    }
-
-    public boolean removeEnabled(int index) {
-        if (index ==0) {
-            return false;
-        }
-        return (panels.elementAt(index) instanceof TMLCPPanel) || (panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0);
-    }
-
-    public boolean renameEnabled(int index) {
-        if (index ==0) {
-            return false;
-        }
-        return (panels.elementAt(index) instanceof TMLCPPanel) || (panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0);
-    }
-
-
-    public boolean isTMLSDEnabled() {
-        return true;
-    }
+  public boolean isTMLSDEnabled() {
+    return true;
+  }
 
 }

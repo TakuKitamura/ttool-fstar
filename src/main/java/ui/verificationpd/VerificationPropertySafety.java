@@ -36,48 +36,42 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.verificationpd;
-
 
 import ui.*;
 import ui.verificationpd.VerificationPropertyGeneric;
 
 /**
-   * Class VerificationPropertySafety
-   * Safety verification tracking
-   * Creation: 10/04/2019
-   * @version 1.0 10/04/2019
-   * @author Ludovic APVRILLE
+ * Class VerificationPropertySafety Safety verification tracking Creation:
+ * 10/04/2019
+ * 
+ * @version 1.0 10/04/2019
+ * @author Ludovic APVRILLE
  */
 public class VerificationPropertySafety extends VerificationPropertyGeneric {
 
+  public VerificationPropertySafety(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public VerificationPropertySafety(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    initScaling(180, 70);
 
-        initScaling(180, 70);
+    nbConnectingPoint = 0;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    // connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0,
+    // false, true, 0.5, 0, TGConnectingPoint.WEST);
 
-        nbConnectingPoint = 0;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        //connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0, TGConnectingPoint.WEST);
+    addTGConnectingPointsCommentTop();
 
+  }
 
-        addTGConnectingPointsCommentTop();
+  public int getType() {
+    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
+  }
 
-    }
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    return panel instanceof AvatarRequirementPanel;
 
-    public  int getType() {
-        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
-    }
-
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof AvatarRequirementPanel;
-
-    }
-
-
+  }
 
 }

@@ -36,27 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPEAliasComponent
- * Creation: 16/02/2011
+ * Class TEPEAliasComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPEAliasComponent extends TEPEComponent  {
-	
-	
-    public TEPEAliasComponent(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-		inSignalComponents = new Vector<TEPEComponent>();
-		outSignalComponents = new Vector<TEPEComponent>();
-    }
-    
-    
+public class TEPEAliasComponent extends TEPEComponent {
+
+  public TEPEAliasComponent(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    inSignalComponents = new Vector<TEPEComponent>();
+    outSignalComponents = new Vector<TEPEComponent>();
+  }
+
 }

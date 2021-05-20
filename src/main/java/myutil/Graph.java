@@ -36,25 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
-
 
 /**
  * Class Graph
  *
  * Creation: 16/09/2004
+ * 
  * @version 1.0 16/09/2004
  * @author Ludovic APVRILLE
  */
 public interface Graph {
-   
-    
-    int getNbOfStates();
 
-    // Returns 0 is no transition, 1 otherwise
-    int getWeightOfTransition(int originState, int destinationState);
-    
+  int getNbOfStates();
+
+  // Returns 0 is no transition, 1 otherwise
+  int getWeightOfTransition(int originState, int destinationState);
+
 }

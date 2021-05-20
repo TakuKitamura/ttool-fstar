@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd;
 
 import org.w3c.dom.NodeList;
@@ -53,110 +50,108 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
-
 /**
-   * Class TGConnectorMessageAsyncOrSyncSD
-   * Connector used in SD for exchanging messages between instances
-   * Creation: 18/04/2016
-   * @version 1.0 18/04/2016
-   * @author Ludovic APVRILLE
+ * Class TGConnectorMessageAsyncOrSyncSD Connector used in SD for exchanging
+ * messages between instances Creation: 18/04/2016
+ * 
+ * @version 1.0 18/04/2016
+ * @author Ludovic APVRILLE
  */
-public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
-    public boolean isAsync;
+public class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
+  public boolean isAsync;
 
-    protected int arrowLength = 10;
+  protected int arrowLength = 10;
 
-    public TGConnectorMessageAsyncOrSyncSD( int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
-                                            TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
-                                            Vector<Point> _listPoint ) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic504;
+  public TGConnectorMessageAsyncOrSyncSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+    super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+    myImageIcon = IconManager.imgic504;
+  }
+
+  protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+    if (isAsync) {
+      if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+        g.drawLine(x1, y1, x2, y2);
+      } else {
+        GraphicLib.arrowWithLine(g, 1, 1, 10, x1, y1, x2, y2, false);
+      }
+
+      if (!tdp.isScaled()) {
+        widthValue = g.getFontMetrics().stringWidth(value);
+        heightValue = g.getFontMetrics().getHeight();
+      }
+
+      drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2) - widthValue / 2, ((p1.getY() + p2.getY()) / 2) - 5);
+    } else {
+      if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+        g.drawLine(x1, y1, x2, y2);
+      } else {
+        GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+      }
+
+      if (!tdp.isScaled()) {
+        widthValue = g.getFontMetrics().stringWidth(value);
+        heightValue = g.getFontMetrics().getHeight();
+      }
+
+      // drawSingleString(g, value, (p1.getX() + p2.getX()) / 2, ((p1.getY() +
+      // p2.getY()) / 2) - 5);
+      drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2) - widthValue / 2, ((p1.getY() + p2.getY()) / 2) - 5);
     }
+  }
 
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        if (isAsync) {
-            if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-                g.drawLine(x1, y1, x2, y2);
-            } else {
-                GraphicLib.arrowWithLine(g, 1, 1, 10, x1, y1, x2, y2, false);
+  public void setType(boolean _isAsync) {
+    isAsync = _isAsync;
+  }
+
+  public int getType() {
+    if (isAsync) {
+      return TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD;
+    } else {
+      return TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD;
+    }
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<isAsync value=\"" + isAsync + "\" /> ");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    String s;
+    String tmpGlobalCode = "";
+
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+      isAsync = false;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
+        //
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("isAsync")) {
+                s = elt.getAttribute("value");
+                isAsync = s.equals("true");
+              }
             }
-
-            if (!tdp.isScaled()) {
-                widthValue  = g.getFontMetrics().stringWidth(value);
-                heightValue = g.getFontMetrics().getHeight();
-            }
-
-            drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
-        } else {
-            if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-                g.drawLine(x1, y1, x2, y2);
-            } else {
-                GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-            }
-
-            if (!tdp.isScaled()) {
-                widthValue  = g.getFontMetrics().stringWidth(value);
-                heightValue = g.getFontMetrics().getHeight();
-            }
-
-            //drawSingleString(g, value, (p1.getX() + p2.getX()) / 2, ((p1.getY() + p2.getY()) / 2) - 5);
-            drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
+          }
         }
+      }
+
+    } catch (Exception e) {
+      throw new MalformedModelingException();
     }
-
-    public void setType(boolean _isAsync) {
-        isAsync = _isAsync;
-    }
-
-    public int getType() {
-        if (isAsync) {
-            return TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD;
-        } else {
-            return  TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD;
-        }
-    }
-
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<isAsync value=\"" + isAsync + "\" /> ");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-
-
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        String s;
-        String tmpGlobalCode = "";
-
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            isAsync = false;
-
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("isAsync")) {
-                                s = elt.getAttribute("value");
-                                isAsync = s.equals("true");
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
+  }
 
 }

@@ -36,25 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
-* Class ProVerifFunction
-* Creation: 03/09/2010
-* @version 1.0 03/09/2010
-* @author Ludovic APVRILLE
+ * Class ProVerifFunction Creation: 03/09/2010
+ * 
+ * @version 1.0 03/09/2010
+ * @author Ludovic APVRILLE
  */
 public class ProVerifFunction {
-	public String functionName;
-	public int functionArity;
-	public String functionDefiniton;
-	public boolean isRedunc;
+  public String functionName;
+  public int functionArity;
+  public String functionDefiniton;
+  public boolean isRedunc;
 
-    public ProVerifFunction() {
-		functionArity = 1;
-    }
-	
+  public ProVerifFunction() {
+    functionArity = 1;
+  }
+
 }

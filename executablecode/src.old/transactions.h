@@ -3,7 +3,7 @@
 #ifndef TRANSACTIONS_H
 #define TRANSACTIONS_H
 
-#include <pthread.h> 
+#include <pthread.h>
 #include <signal.h>
 #include <time.h>
 #include <sys/time.h>
@@ -22,8 +22,9 @@
 
 #define MIN_TIMER_VALUE 1000 // in nanoseconds
 
-struct synccell{
-  struct synccell* next;
+struct synccell
+{
+  struct synccell *next;
   int ID;
   int taskID;
   int type; /* RECEIVING, SENDING, TIMER */
@@ -42,16 +43,14 @@ extern pthread_mutex_t syncmutex;
 extern pthread_cond_t waitingForReceiving, waitingForSending, waitingForTimer, multiType;
 
 /* Linked list management */
-extern synccell* head;
+extern synccell *head;
 extern int nbOfCells;
 
 void addCell(synccell *cell);
-synccell * getRandomCell();
-synccell * getPending(int channel_id, int type);
+synccell *getRandomCell();
+synccell *getPending(int channel_id, int type);
 void removeRequest(synccell *cell);
 
 int makeRequests(synccell *cells[], int nbOfRequests);
 
 #endif
-
-

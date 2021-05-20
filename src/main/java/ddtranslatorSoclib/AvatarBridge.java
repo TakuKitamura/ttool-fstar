@@ -38,33 +38,31 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 /* * @version 1.0 07/07/2015
    * @author  Julien Henon, Daniela Genius */
 
 package ddtranslatorSoclib;
 
-public class AvatarBridge extends AvatarComponent{
+public class AvatarBridge extends AvatarComponent {
 
-    private String bridgeName;
-    private int nbConnectingPoint = 16;
-    
-    AvatarConnectingPoint[] connectingPoints = new AvatarConnectingPoint[16];
+  private String bridgeName;
+  private int nbConnectingPoint = 16;
 
-    public AvatarBridge(String _bridgeName)  {        
-      bridgeName = _bridgeName; 
-    }
-    
-    AvatarConnectingPoint[] getAvatarConnectingPoints(){
-	return connectingPoints;
-    }
-    int getnbConnectingPoint(){
-	return nbConnectingPoint;
-    }
+  AvatarConnectingPoint[] connectingPoints = new AvatarConnectingPoint[16];
 
-    void setConnectingPoint(int indexConnectingPoint, AvatarConnector connector){
-	return;
-    }
-} 
+  public AvatarBridge(String _bridgeName) {
+    bridgeName = _bridgeName;
+  }
+
+  AvatarConnectingPoint[] getAvatarConnectingPoints() {
+    return connectingPoints;
+  }
+
+  int getnbConnectingPoint() {
+    return nbConnectingPoint;
+  }
+
+  void setConnectingPoint(int indexConnectingPoint, AvatarConnector connector) {
+    return;
+  }
+}

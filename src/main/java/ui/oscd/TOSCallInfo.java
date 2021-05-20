@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 import myutil.Conversion;
@@ -52,77 +49,73 @@ import java.awt.*;
 //import java.awt.geom.*;
 
 /**
- * Class TOSCallInfo
- * Management of information coming along with Call composition operator in TURTLE-OS
- * Creation: 05/10/2006
+ * Class TOSCallInfo Management of information coming along with Call
+ * composition operator in TURTLE-OS Creation: 05/10/2006
+ * 
  * @version 1.0 05/10/2006
  * @author Ludovic APVRILLE
  */
-public class TOSCallInfo extends TGCWithoutInternalComponent{
-    
-    public TOSCallInfo(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
-        super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        nbConnectingPoint = 0;
-        minWidth = 10;
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = true;
-        removable = false;
-        
-        name = "action";
-        value = "action";
-        
-        myImageIcon = IconManager.imgic302;
+public class TOSCallInfo extends TGCWithoutInternalComponent {
+
+  public TOSCallInfo(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    nbConnectingPoint = 0;
+    minWidth = 10;
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = true;
+    removable = false;
+
+    name = "action";
+    value = "action";
+
+    myImageIcon = IconManager.imgic302;
+  }
+
+  public void internalDrawing(Graphics g) {
+    if (!tdp.isScaled()) {
+      width = g.getFontMetrics().stringWidth(value);
+      height = g.getFontMetrics().getHeight();
     }
-    
-    public void internalDrawing(Graphics g) {
-        if (!tdp.isScaled()) {
-            width = g.getFontMetrics().stringWidth(value);
-            height = g.getFontMetrics().getHeight();
-        }
-        g.drawString("{" + value + "}", x, y);
-        if (value.equals("")) {
-            g.drawString("value?", x, y);
-        }
+    g.drawString("{" + value + "}", x, y);
+    if (value.equals("")) {
+      g.drawString("value?", x, y);
     }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
-            return this;
-        }
-        return null;
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
+      return this;
     }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldValue = value;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "Setting call action", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        getValue());
-        
-        if (s != null) {
-            s = Conversion.removeFirstSpaces(s);
-        }
-        
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-          if (!TAttribute.isAValidId(s, false, false, false)) {
-                  JOptionPane.showMessageDialog(frame,
-                  "Could not set the action: the new name is not a valid name",
-                  "Error",
-                  JOptionPane.INFORMATION_MESSAGE);
-                  return false;
-            }
-            setValue(s);
-            return true;
-        }
-         
-         
+    return null;
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = value;
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text, "Setting call action", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getValue());
+
+    if (s != null) {
+      s = Conversion.removeFirstSpaces(s);
+    }
+
+    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+      if (!TAttribute.isAValidId(s, false, false, false)) {
+        JOptionPane.showMessageDialog(frame, "Could not set the action: the new name is not a valid name", "Error",
+            JOptionPane.INFORMATION_MESSAGE);
         return false;
+      }
+      setValue(s);
+      return true;
     }
+
+    return false;
+  }
 }

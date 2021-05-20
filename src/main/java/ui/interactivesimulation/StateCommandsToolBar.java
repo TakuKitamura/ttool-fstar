@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import javax.swing.*;
@@ -47,39 +44,33 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class StateCommandsToolBar
- * Toolbar associated with interactive simulation (save / restore state commands)
- * Creation: 28/05/2009
+ * Class StateCommandsToolBar Toolbar associated with interactive simulation
+ * (save / restore state commands) Creation: 28/05/2009
+ * 
  * @version 1.0 28/05/2009
  * @author Ludovic APVRILLE
  */
 public class StateCommandsToolBar extends InteractiveSimulationBar {
-    
-    
-    public StateCommandsToolBar(JFrameInteractiveSimulation _jfis) {
-        super(_jfis);
-    }
-    
-    protected void setActive(boolean b) {
-		jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
-	}
-    
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE]);
-        button.addMouseListener(jfis.mouseHandler);
-        
-		this.addSeparator();
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE]);
-        button.addMouseListener(jfis.mouseHandler);
-       
-    }
+
+  public StateCommandsToolBar(JFrameInteractiveSimulation _jfis) {
+    super(_jfis);
+  }
+
+  protected void setActive(boolean b) {
+    jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
+    jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
+  }
+
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_STATE]);
+    button.addMouseListener(jfis.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESTORE_STATE]);
+    button.addMouseListener(jfis.mouseHandler);
+
+  }
 } // Class
-
-
-
-
-

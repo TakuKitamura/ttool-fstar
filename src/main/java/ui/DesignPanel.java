@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui;
 
 import myutil.GraphicLib;
@@ -55,127 +52,126 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
- * Class DesignPanel
- * Managenemt of design panels
- * Creation: 14/01/2005
+ * Class DesignPanel Managenemt of design panels Creation: 14/01/2005
+ * 
  * @version 1.0 14/01/2005
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
 public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterface {
 
-	public TClassDiagramPanel tcdp; 
-    
-	public java.util.List<TClassInterface> validated, ignored;
+  public TClassDiagramPanel tcdp;
 
-    public DesignPanel(MainGUI _mgui) {
-        super(_mgui);
-        
-    	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        
-        cl = new ChangeListener() {
-        	
-        	@Override
-            public void stateChanged(ChangeEvent e){
-                mgui.paneDesignAction(e);
-            }
-        };
-        
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
-    }
+  public java.util.List<TClassInterface> validated, ignored;
 
-    public TActivityDiagramPanel getActivityDiagramPanel(String name) {
-        TActivityDiagramPanel tadp;
-        for(int i=1; i<panels.size(); i++) {
-            tadp = (TActivityDiagramPanel)(panels.elementAt(i));
-            if (tadp.getName().compareTo(name) ==0) {
-                return tadp;
-            }
-        }
-        return null;
-    }
+  public DesignPanel(MainGUI _mgui) {
+    super(_mgui);
 
-    public ActivityDiagramPanelInterface getBehaviourPanel(String name) {
-           return getActivityDiagramPanel(name);
-    }
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
 
-    public ClassDiagramPanelInterface getStructurePanel() {
-           return tcdp;
-    }
-    
-    public void addTActivityDiagram(String s) {
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        
-        TActivityDiagramToolBar toolBarActivity	= new TActivityDiagramToolBar(mgui);
-        toolbars.add(toolBarActivity);
-        
-        TActivityDiagramPanel tadp = new TActivityDiagramPanel(mgui, toolBarActivity);
-        tadp.tp = this;
-        tadp.setName(s);
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tadp);
-        tadp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        panels.add(tadp);
-        tabbedPane.addTab(s, IconManager.imgic15, toolBarPanel, "Opens the activity diagram of " + s);
-        //tabbedPane.setVisible(true);
-        //tadp.setVisible(true);
-        //jsp.setVisible(true);
-        //tabbedPane.setSelectedIndex(panels.size()-1);
-        
-        return;
-    }
-    
-    public void init() {
-         
-        //  Class Diagram toolbar
-        TClassDiagramToolBar toolBarClass = new TClassDiagramToolBar(mgui);
-        toolbars.add(toolBarClass);
-        
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        
-        //Class	diagram
-        tcdp = new TClassDiagramPanel(mgui, toolBarClass);
-        tcdp.setName("Class Diagram");
-        tcdp.tp = this;
-        tdp = tcdp;
-        panels.add(tcdp); // Always first in list
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tcdp);
-        tcdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT );
-        toolBarPanel.add(toolBarClass, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("Class Diagram", IconManager.imgic14, toolBarPanel, "Opens class diagram");
-        tabbedPane.setSelectedIndex(0);
-        
-        //jsp.setVisible(true);
- 
-    }
+    cl = new ChangeListener() {
 
-    public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-	
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneDesignAction(e);
+      }
+    };
+
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+  }
+
+  public TActivityDiagramPanel getActivityDiagramPanel(String name) {
+    TActivityDiagramPanel tadp;
+    for (int i = 1; i < panels.size(); i++) {
+      tadp = (TActivityDiagramPanel) (panels.elementAt(i));
+      if (tadp.getName().compareTo(name) == 0) {
+        return tadp;
+      }
     }
-    
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
+    return null;
+  }
+
+  public ActivityDiagramPanelInterface getBehaviourPanel(String name) {
+    return getActivityDiagramPanel(name);
+  }
+
+  public ClassDiagramPanelInterface getStructurePanel() {
+    return tcdp;
+  }
+
+  public void addTActivityDiagram(String s) {
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    TActivityDiagramToolBar toolBarActivity = new TActivityDiagramToolBar(mgui);
+    toolbars.add(toolBarActivity);
+
+    TActivityDiagramPanel tadp = new TActivityDiagramPanel(mgui, toolBarActivity);
+    tadp.tp = this;
+    tadp.setName(s);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tadp);
+    tadp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    panels.add(tadp);
+    tabbedPane.addTab(s, IconManager.imgic15, toolBarPanel, "Opens the activity diagram of " + s);
+    // tabbedPane.setVisible(true);
+    // tadp.setVisible(true);
+    // jsp.setVisible(true);
+    // tabbedPane.setSelectedIndex(panels.size()-1);
+
+    return;
+  }
+
+  public void init() {
+
+    // Class Diagram toolbar
+    TClassDiagramToolBar toolBarClass = new TClassDiagramToolBar(mgui);
+    toolbars.add(toolBarClass);
+
+    toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    // Class diagram
+    tcdp = new TClassDiagramPanel(mgui, toolBarClass);
+    tcdp.setName("Class Diagram");
+    tcdp.tp = this;
+    tdp = tcdp;
+    panels.add(tcdp); // Always first in list
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tcdp);
+    tcdp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarClass, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab("Class Diagram", IconManager.imgic14, toolBarPanel, "Opens class diagram");
+    tabbedPane.setSelectedIndex(0);
+
+    // jsp.setVisible(true);
+
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
-    
-    public String toString() {
-        return mgui.getTitleAt(this) + "(TURTLE Design)";
-    }
-    
-    public TCDTClass getTCDTClass(String name) {
-        return tcdp.getTCDTClass(name);
-    }
+    return "<Modeling type=\"Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+
+  }
+
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
+
+  public String toString() {
+    return mgui.getTitleAt(this) + "(TURTLE Design)";
+  }
+
+  public TCDTClass getTCDTClass(String name) {
+    return tcdp.getTCDTClass(name);
+  }
 }

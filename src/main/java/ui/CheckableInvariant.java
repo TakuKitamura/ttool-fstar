@@ -36,26 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class CheckableInvariant
- * Components for which invariant might be checked-out
+ * Class CheckableInvariant Components for which invariant might be checked-out
  * Creation: 16/07/2012
+ * 
  * @version 1.0 16/07/2012
  * @author Ludovic APVRILLE
  */
-public interface CheckableInvariant  {
-	//public static final int UNKNOWN;
-	//public static final int NON_REACHABLE;
-	
-	
-    void setCheckableInvariant(boolean b);
-	boolean getCheckableInvariant();
-	
-	//public void setReachability();
+public interface CheckableInvariant {
+  // public static final int UNKNOWN;
+  // public static final int NON_REACHABLE;
+
+  void setCheckableInvariant(boolean b);
+
+  boolean getCheckableInvariant();
+
+  // public void setReachability();
 }

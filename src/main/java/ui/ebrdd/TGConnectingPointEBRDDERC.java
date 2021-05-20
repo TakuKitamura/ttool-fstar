@@ -35,7 +35,7 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
- 
+
 package ui.ebrdd;
 
 import ui.CDElement;
@@ -43,20 +43,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointEBRDDERC
- * Definition of connecting points on which connectors of EBRDD can be connected
-  * Creation: 09/09/2009
+ * Class TGConnectingPointEBRDDERC Definition of connecting points on which
+ * connectors of EBRDD can be connected Creation: 09/09/2009
+ * 
  * @version 1.0 09/09/2009
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointEBRDDERC extends TGConnectingPointWidthHeight {
 
-	public TGConnectingPointEBRDDERC(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
+  public TGConnectingPointEBRDDERC(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-	@Override
-	public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_EBRDD_ERC;
-    }
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_EBRDD_ERC;
+  }
 }

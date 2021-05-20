@@ -37,44 +37,39 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.modelcompiler;
 
 /**
-   * Class MappOperationMEC, Model Extension Construct (MEC) class for Mapper operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class MappOperationMEC, Model Extension Construct (MEC) class for Mapper
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class MappOperationMEC extends OperationMEC	{
+public class MappOperationMEC extends OperationMEC {
 
-	public MappOperationMEC( String ctxName, String ID0, String OD0 )	{
-		name = "MapperOperationMEC";
-		exec_code = TAB + CR + TAB + "/*start execution*/" + CR + TAB +
-//								"int status;" + CR + TAB +
-								"mapper_start(&" + ctxName + ");" + CR + TAB +
-								"status = mapper_wait(&" + ctxName + ");" + CR;
-		
-		init_code ="/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR +
-			"void init_" + ctxName.split("_ctx")[0] + "(void){" + CR + TAB +
-			"mapper_ctx_init(&" + ctxName + ", (uintptr_t) mapper_mss );" + CR + TAB +
-			"// initialize context" + CR + TAB +
-			"mapper_set_lenm1(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->num_symbols));" + CR + TAB +
-			"mapper_set_lba(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->lut_base_address));" + CR + TAB +
-			"mapper_set_oba(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->output_base_address));" + CR + TAB +
-			"mapper_set_iba(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->input_base_address));" + CR + TAB +
-			"mapper_set_mult(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"mapper_set_men(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"mapper_set_sym(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->symmetrical_value));" + CR + TAB +
-			"mapper_set_bpsm1(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->num_bits_per_symbol));" + CR + TAB +
-			"mapper_set_m(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"mapper_set_n(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"mapper_set_s(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB +
-			"}" + CR;
-		cleanup_code = "mapper_ctx_cleanup(&" + ctxName + ");";
-		context = "MAPPER_CONTEXT";
-	}
+  public MappOperationMEC(String ctxName, String ID0, String OD0) {
+    name = "MapperOperationMEC";
+    exec_code = TAB + CR + TAB + "/*start execution*/" + CR + TAB +
+    // "int status;" + CR + TAB +
+        "mapper_start(&" + ctxName + ");" + CR + TAB + "status = mapper_wait(&" + ctxName + ");" + CR;
 
-}	//End of class
+    init_code = "/***** INIT " + ctxName.split("_ctx")[0] + " *******/" + CR + "void init_" + ctxName.split("_ctx")[0]
+        + "(void){" + CR + TAB + "mapper_ctx_init(&" + ctxName + ", (uintptr_t) mapper_mss );" + CR + TAB
+        + "// initialize context" + CR + TAB + "mapper_set_lenm1(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0
+        + "].pBuff)->num_symbols));" + CR + TAB + "mapper_set_lba(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0
+        + "].pBuff)->lut_base_address));" + CR + TAB + "mapper_set_oba(&" + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig["
+        + ID0 + "].pBuff)->output_base_address));" + CR + TAB + "mapper_set_iba(&" + ctxName
+        + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->input_base_address));" + CR + TAB + "mapper_set_mult(&"
+        + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "mapper_set_men(&" + ctxName
+        + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "mapper_set_sym(&" + ctxName
+        + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->symmetrical_value));" + CR + TAB + "mapper_set_bpsm1(&"
+        + ctxName + ", (((MAPPER_BUFFER_TYPE*)sig[" + ID0 + "].pBuff)->num_bits_per_symbol));" + CR + TAB
+        + "mapper_set_m(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "mapper_set_n(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB
+        + "mapper_set_s(&" + ctxName + ", (uint64_t)" + DEFAULT_NUM_VAL + USER_TO_DO + " );" + CR + TAB + "}" + CR;
+    cleanup_code = "mapper_ctx_cleanup(&" + ctxName + ");";
+    context = "MAPPER_CONTEXT";
+  }
+
+} // End of class

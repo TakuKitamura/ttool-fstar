@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package verification;
 
 import myutil.TraceManager;
@@ -47,21 +46,18 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Vector;
 
-
 /**
- * Class PropertyResultType
- * Creation: 10/04/2019
- * Version 1.0 10/04/2019
+ * Class PropertyResultType Creation: 10/04/2019 Version 1.0 10/04/2019
  *
  * @author Ludovic APVRILLE
  */
-public enum PropertyResultType  {
-    SATISFIED("passed"), NONSATISFIED("failed"), CANNOTBEPROVED("Cannot be proved"), ERROR("error");
+public enum PropertyResultType {
+  SATISFIED("passed"), NONSATISFIED("failed"), CANNOTBEPROVED("Cannot be proved"), ERROR("error");
 
-    private final String info;
+  private final String info;
 
-    PropertyResultType(String info) {
-        this.info = info;
-    }
+  PropertyResultType(String info) {
+    this.info = info;
+  }
 
 }

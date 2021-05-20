@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.verificationpd;
 
 import myutil.TraceManager;
@@ -46,89 +43,87 @@ import org.w3c.dom.Element;
 import ui.*;
 
 /**
- * Class VerificationPropertyDiagramPanel
- * Panel for tracking verifications
+ * Class VerificationPropertyDiagramPanel Panel for tracking verifications
  * Creation: 10/04/2019
+ * 
  * @version 1.0 10/04/2019
  * @author Ludovic APVRILLE
  */
 public class VerificationPropertyDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-    //public Vector validated, ignored;
+  // public Vector validated, ignored;
 
-    public  VerificationPropertyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
-        super(mgui, _ttb);
-        
-        //TraceManager.addDev("Sysmlsec metho diagram created");
-        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-          addMouseListener(tdmm);
-          addMouseMotionListener(tdmm);*/
-    }
+  public VerificationPropertyDiagramPanel(MainGUI mgui, TToolBar _ttb) {
+    super(mgui, _ttb);
 
-    public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
-    }
+    // TraceManager.addDev("Sysmlsec metho diagram created");
+    /*
+     * TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+     * addMouseListener(tdmm); addMouseMotionListener(tdmm);
+     */
+  }
 
-    public boolean actionOnAdd(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-          TCDTClass tgcc = (TCDTClass)(tgc);
-          mgui.addTClass(tgcc.getClassName());
-          return true;
-          }*/
-        return false;
-    }
+  public boolean actionOnDoubleClick(TGComponent tgc) {
+    return true;
+  }
 
-    public boolean actionOnRemove(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-          TCDTClass tgcc = (TCDTClass)(tgc);
-          mgui.removeTClass(tgcc.getClassName());
-          resetAllInstancesOf(tgcc);
-          return true;
-          }*/
-        return false;
-    }
+  public boolean actionOnAdd(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.addTClass(tgcc.getClassName()); return true; }
+     */
+    return false;
+  }
 
-    public boolean actionOnValueChanged(TGComponent tgc) {
-        /*if (tgc instanceof TCDTClass) {
-          return actionOnDoubleClick(tgc);
-          }*/
-        return false;
-    }
+  public boolean actionOnRemove(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { TCDTClass tgcc = (TCDTClass)(tgc);
+     * mgui.removeTClass(tgcc.getClassName()); resetAllInstancesOf(tgcc); return
+     * true; }
+     */
+    return false;
+  }
 
-    public String getXMLHead() {
-        return "<VerificationPropertyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
-    }
+  public boolean actionOnValueChanged(TGComponent tgc) {
+    /*
+     * if (tgc instanceof TCDTClass) { return actionOnDoubleClick(tgc); }
+     */
+    return false;
+  }
 
-    public String getXMLTail() {
-        return "</VerificationPropertyDiagramPanel>";
-    }
+  public String getXMLHead() {
+    return "<VerificationPropertyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
+  }
 
-    public String getXMLSelectedHead() {
-        return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel +
-                "\" heightSel=\"" + heightSel + "\" >";
-    }
+  public String getXMLTail() {
+    return "</VerificationPropertyDiagramPanel>";
+  }
 
-    public String getXMLSelectedTail() {
-        return "</VerificationPropertyDiagramPanelCopy>";
-    }
+  public String getXMLSelectedHead() {
+    return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel
+        + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+  }
 
-    public String getXMLCloneHead() {
-        return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\""
-                + 0 + "\" >";
-    }
+  public String getXMLSelectedTail() {
+    return "</VerificationPropertyDiagramPanelCopy>";
+  }
 
-    public String getXMLCloneTail() {
-        return "</VerificationPropertyDiagramPanelCopy>";
-    }
+  public String getXMLCloneHead() {
+    return "<VerificationPropertyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0
+        + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+  }
 
+  public String getXMLCloneTail() {
+    return "</VerificationPropertyDiagramPanelCopy>";
+  }
 
-    public void makePostLoadingProcessing() throws MalformedModelingException {
+  public void makePostLoadingProcessing() throws MalformedModelingException {
 
-    }
+  }
 
-    public void enhance() {
-        autoAdjust();
-    }
+  public void enhance() {
+    autoAdjust();
+  }
 
-    public void loadExtraParameters(Element elt) {
-    }
+  public void loadExtraParameters(Element elt) {
+  }
 }

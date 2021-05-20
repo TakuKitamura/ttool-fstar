@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
 
 import ui.MainGUI;
@@ -48,121 +45,115 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
- * Class TMLComponentTaskDiagramToolBar
- * Implements the toolbar to be used in conjunction with the panel of a TMLTask diagram
- * Creation: 10/13/2008
+ * Class TMLComponentTaskDiagramToolBar Implements the toolbar to be used in
+ * conjunction with the panel of a TMLTask diagram Creation: 10/13/2008
+ * 
  * @version 1.0 10/03/2008
  * @author Ludovic APVRILLE
  * @see TMLComponentTaskDiagramPanel
  */
 public class TMLComponentTaskDiagramToolBar extends TToolBar {
-    
-    public TMLComponentTaskDiagramToolBar(MainGUI _mgui) {
-        super(_mgui);
-        
-    }
-    
-    @Override
-    protected void setActive(boolean b) {
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-		
-        mgui.actions[TGUIAction.TMLCTD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-		mgui.actions[TGUIAction.TML_PRAGMA].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_CCOMPONENT].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_CPORT].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_FORK].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_JOIN].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_PCOMPONENT].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_COPORT].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_PORT_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.TMLCTD_RCOMPONENT].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-		mgui.updateZoomInfo();
-		
 
-    }
-    
-    @Override
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.TMLCTD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
+  public TMLComponentTaskDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
 
-        button = this.add(mgui.actions[TGUIAction.TML_PRAGMA]);
-        button.addMouseListener(mgui.mouseHandler);
+  }
 
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.TMLCTD_CCOMPONENT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.TMLCTD_CPORT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        //if (MainGUI.experimentalOn) {
-        	this.addSeparator();
-        	button = this.add(mgui.actions[TGUIAction.TMLCTD_FORK]);
-        	button.addMouseListener(mgui.mouseHandler);
-        	button = this.add(mgui.actions[TGUIAction.TMLCTD_JOIN]);
-        	button.addMouseListener(mgui.mouseHandler);
-        //}
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.TMLCTD_PCOMPONENT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.TMLCTD_COPORT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.TMLCTD_PORT_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.TMLCTD_RCOMPONENT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-    }
-    
+  @Override
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+
+    mgui.actions[TGUIAction.TMLCTD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.TML_PRAGMA].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_CCOMPONENT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_CPORT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_FORK].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_JOIN].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_PCOMPONENT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_COPORT].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_PORT_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.TMLCTD_RCOMPONENT].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
+
+  }
+
+  @Override
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TML_PRAGMA]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_CCOMPONENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_CPORT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    // if (MainGUI.experimentalOn) {
+    this.addSeparator();
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_FORK]);
+    button.addMouseListener(mgui.mouseHandler);
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_JOIN]);
+    button.addMouseListener(mgui.mouseHandler);
+    // }
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_PCOMPONENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_COPORT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_PORT_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.TMLCTD_RCOMPONENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
+    button.addMouseListener(mgui.mouseHandler);
+
+  }
+
 } // Class
-
-
-
-
-

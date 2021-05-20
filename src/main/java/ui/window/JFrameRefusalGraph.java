@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import myutil.Conversion;
@@ -62,226 +61,218 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 
-
 /**
- * Class JFrameRefusalGraph
- * Frame for handling the construction of the refusal graph
- * Creation: 18/08/2017
+ * Class JFrameRefusalGraph Frame for handling the construction of the refusal
+ * graph Creation: 18/08/2017
  *
  * @author Ludovic APVRILLE
  * @version 1.0 18/08/2017
  */
 public class JFrameRefusalGraph extends javax.swing.JFrame implements ActionListener, Runnable {
-    /*private static boolean isAldebaranSelected = false;
-    private static boolean isOminSelected = false;
-    private static boolean isStrongSelected = true;*/
+  /*
+   * private static boolean isAldebaranSelected = false; private static boolean
+   * isOminSelected = false; private static boolean isStrongSelected = true;
+   */
 
+  protected static boolean graphSelected = true;
 
-    protected static boolean graphSelected = true;
+  private MainGUI mgui;
+  private RG rg;
+  private RG newRG;
+  private RG newRGTS;
 
-    private MainGUI mgui;
-    private RG rg;
-    private RG newRG;
-    private RG newRGTS;
+  protected Thread t;
 
-    protected Thread t;
+  private int mode;
 
-    private int mode;
+  protected final static int NOT_STARTED = 1;
+  protected final static int STARTED = 2;
+  protected final static int STOPPED = 3;
 
-    protected final static int NOT_STARTED = 1;
-    protected final static int STARTED = 2;
-    protected final static int STOPPED = 3;
+  // subpanels & components
+  private JPanel panel2;
+  private JCheckBox saveGraphAUT;
+  private JTextField graphPath;
+  private String graphDir;
 
-    //subpanels & components
-    private JPanel panel2;
-    private JCheckBox saveGraphAUT;
-    private JTextField graphPath;
-    private String graphDir;
+  // Main Panel
+  private ScrolledJTextArea jta;
+  private JButton start, stop, close;
 
-    // Main Panel
-    private ScrolledJTextArea jta;
-    private JButton start, stop, close;
+  /*
+   * Creates new form
+   */
+  public JFrameRefusalGraph(Frame _f, MainGUI _mgui, String _title, RG _rg, String _graphDir) {
+    super(_title);
 
-    /*
-     * Creates new form
-     */
-    public JFrameRefusalGraph(Frame _f, MainGUI _mgui, String _title, RG _rg, String _graphDir) {
-        super(_title);
+    mgui = _mgui;
+    rg = _rg;
 
-        mgui = _mgui;
-        rg = _rg;
-
-        if (graphDir == null) {
-            graphDir = _graphDir + File.separator + "testsequences$.aut";
-        }
-
-        initComponents();
-        myInitComponents();
-        pack();
-
-        //getGlassPane().addMouseListener( new MouseAdapter() {});
-        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    if (graphDir == null) {
+      graphDir = _graphDir + File.separator + "testsequences$.aut";
     }
 
+    initComponents();
+    myInitComponents();
+    pack();
 
-    private void myInitComponents() {
-        mode = NOT_STARTED;
+    // getGlassPane().addMouseListener( new MouseAdapter() {});
+    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+  }
+
+  private void myInitComponents() {
+    mode = NOT_STARTED;
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    JPanel compPanel = new JPanel(new BorderLayout());
+    saveGraphAUT = new JCheckBox("Save the generated sequences in AUT format", graphSelected);
+    compPanel.add(saveGraphAUT, BorderLayout.NORTH);
+    // saveGraphAUT.addSelectionListener(this);
+    graphPath = new JTextField(graphDir);
+    compPanel.add(graphPath, BorderLayout.SOUTH);
+    c.add(compPanel, BorderLayout.NORTH);
+
+    // textarea panel
+    jta = new ScrolledJTextArea();
+    jta.setEditable(false);
+    jta.setMargin(new Insets(10, 10, 10, 10));
+    jta.setTabSize(3);
+    jta.append("Click on 'start' to generate test sequences\n");
+    Font f = new Font("Courrier", Font.BOLD, 12);
+    jta.setFont(f);
+    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+    c.add(jsp, BorderLayout.CENTER);
+
+    // Button panel;
+    start = new JButton("Start", IconManager.imgic53);
+    stop = new JButton("Stop", IconManager.imgic55);
+    close = new JButton("Close", IconManager.imgic27);
+
+    start.setPreferredSize(new Dimension(150, 30));
+    stop.setPreferredSize(new Dimension(150, 30));
+    close.setPreferredSize(new Dimension(150, 30));
+
+    start.addActionListener(this);
+    stop.addActionListener(this);
+    close.addActionListener(this);
+
+    JPanel jp2 = new JPanel();
+    jp2.add(start);
+    jp2.add(stop);
+    jp2.add(close);
+
+    c.add(jp2, BorderLayout.SOUTH);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Start")) {
+      startProcess();
+    } else if (command.equals("Stop")) {
+      stopProcess();
+    } else if (command.equals("Close")) {
+      closeDialog();
     }
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        JPanel compPanel = new JPanel(new BorderLayout());
-        saveGraphAUT = new JCheckBox("Save the generated sequences in AUT format", graphSelected);
-        compPanel.add(saveGraphAUT, BorderLayout.NORTH);
-        //saveGraphAUT.addSelectionListener(this);
-        graphPath = new JTextField(graphDir);
-        compPanel.add(graphPath, BorderLayout.SOUTH);
-        c.add(compPanel, BorderLayout.NORTH);
-
-
-        // textarea panel
-        jta = new ScrolledJTextArea();
-        jta.setEditable(false);
-        jta.setMargin(new Insets(10, 10, 10, 10));
-        jta.setTabSize(3);
-        jta.append("Click on 'start' to generate test sequences\n");
-        Font f = new Font("Courrier", Font.BOLD, 12);
-        jta.setFont(f);
-        JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-        c.add(jsp, BorderLayout.CENTER);
-
-
-        // Button panel;
-        start = new JButton("Start", IconManager.imgic53);
-        stop = new JButton("Stop", IconManager.imgic55);
-        close = new JButton("Close", IconManager.imgic27);
-
-        start.setPreferredSize(new Dimension(150, 30));
-        stop.setPreferredSize(new Dimension(150, 30));
-        close.setPreferredSize(new Dimension(150, 30));
-
-        start.addActionListener(this);
-        stop.addActionListener(this);
-        close.addActionListener(this);
-
-        JPanel jp2 = new JPanel();
-        jp2.add(start);
-        jp2.add(stop);
-        jp2.add(close);
-
-        c.add(jp2, BorderLayout.SOUTH);
+  private void setButtons() {
+    switch (mode) {
+      case NOT_STARTED:
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
+      case STARTED:
+        start.setEnabled(false);
+        stop.setEnabled(true);
+        close.setEnabled(false);
+        getGlassPane().setVisible(false);
+        break;
+      case STOPPED:
+      default:
+        start.setEnabled(false);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
     }
+  }
 
-    public void actionPerformed(ActionEvent evt) {
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (command.equals("Start")) {
-            startProcess();
-        } else if (command.equals("Stop")) {
-            stopProcess();
-        } else if (command.equals("Close")) {
-            closeDialog();
-        }
+  public void closeDialog() {
+    if (mode == STARTED) {
+      stopProcess();
     }
+    graphSelected = saveGraphAUT.isSelected();
+    dispose();
+  }
 
+  public void stopProcess() {
+    mode = STOPPED;
+    setButtons();
+  }
 
-    private void setButtons() {
-        switch (mode) {
-            case NOT_STARTED:
-                start.setEnabled(true);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
-                start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(false);
-                break;
-            case STOPPED:
-            default:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
-        }
-    }
+  public void startProcess() {
+    t = new Thread(this);
+    mode = STARTED;
+    setButtons();
+    t.start();
+  }
 
+  public void run() {
 
-    public void closeDialog() {
-        if (mode == STARTED) {
-            stopProcess();
-        }
-        graphSelected = saveGraphAUT.isSelected();
-        dispose();
-    }
+    jta.append("\nBuilding refusal graph...\n");
 
-    public void stopProcess() {
-        mode = STOPPED;
-        setButtons();
-    }
+    newRG = rg.generateRefusalGraph();
 
-    public void startProcess() {
-        t = new Thread(this);
-        mode = STARTED;
-        setButtons();
-        t.start();
-    }
+    if (newRG != null) {
+      newRG.nbOfStates = newRG.graph.getNbOfStates();
+      newRG.nbOfTransitions = newRG.graph.getTransitions().size();
+      // mgui.addRG(newRG);
+      jta.append("\nRefusal Graph: " + newRG.nbOfStates + " states, " + newRG.nbOfTransitions + " transitions\n");
+      jta.append("Generating test sequences\n");
+      newRGTS = newRG.generateTestSequences();
+      newRGTS.nbOfStates = newRGTS.graph.getNbOfStates();
+      newRGTS.nbOfTransitions = newRGTS.graph.getTransitions().size();
+      mgui.addRG(newRGTS);
+      jta.append("\nTest sequences: " + newRGTS.nbOfStates + " states, " + newRGTS.nbOfTransitions + " transitions\n");
 
+      if (saveGraphAUT.isSelected()) {
+        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String dateAndTime = dateFormat.format(date);
+        String graphAUT = newRGTS.graph.toAUTStringFormat();
+        String autfile;
 
-    public void run() {
-
-        jta.append("\nBuilding refusal graph...\n");
-
-        newRG = rg.generateRefusalGraph();
-
-        if (newRG != null) {
-            newRG.nbOfStates = newRG.graph.getNbOfStates();
-            newRG.nbOfTransitions = newRG.graph.getTransitions().size();
-            //mgui.addRG(newRG);
-            jta.append("\nRefusal Graph: " + newRG.nbOfStates + " states, " + newRG.nbOfTransitions + " transitions\n");
-            jta.append("Generating test sequences\n");
-            newRGTS = newRG.generateTestSequences();
-            newRGTS.nbOfStates = newRGTS.graph.getNbOfStates();
-            newRGTS.nbOfTransitions = newRGTS.graph.getTransitions().size();
-            mgui.addRG(newRGTS);
-            jta.append("\nTest sequences: " + newRGTS.nbOfStates + " states, " + newRGTS.nbOfTransitions + " transitions\n");
-
-            if (saveGraphAUT.isSelected()) {
-                DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-                Date date = new Date();
-                String dateAndTime = dateFormat.format(date);
-                String graphAUT = newRGTS.graph.toAUTStringFormat();
-                String autfile;
-
-                if (graphPath.getText().indexOf("$") != -1) {
-                    autfile = Conversion.replaceAllChar(graphPath.getText(), '$', dateAndTime);
-                } else {
-                    autfile = graphPath.getText();
-                }
-
-                try {
-                    FileUtils.saveFile(autfile, graphAUT);
-                } catch (FileException e) {
-                    jta.append("Graph could not be saved in " + autfile + "\n");
-                }
-                jta.append("Graph saved in " + autfile + "\n");
-            }
+        if (graphPath.getText().indexOf("$") != -1) {
+          autfile = Conversion.replaceAllChar(graphPath.getText(), '$', dateAndTime);
         } else {
-            jta.append("\nCould not build Refusal Graph\n");
+          autfile = graphPath.getText();
         }
 
-        mode = STOPPED;
-        setButtons();
+        try {
+          FileUtils.saveFile(autfile, graphAUT);
+        } catch (FileException e) {
+          jta.append("Graph could not be saved in " + autfile + "\n");
+        }
+        jta.append("Graph saved in " + autfile + "\n");
+      }
+    } else {
+      jta.append("\nCould not build Refusal Graph\n");
     }
 
+    mode = STOPPED;
+    setButtons();
+  }
 
 }

@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 import tmltranslator.TMLElement;
@@ -48,76 +45,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-   * Class TMLCPElement
-   * Creation: 18/02/2014
-   * @version 1.0 22/05/2014
-   * @author Ludovic APVRILLE, Andrea ENRICI
+ * Class TMLCPElement Creation: 18/02/2014
+ * 
+ * @version 1.0 22/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public abstract class TMLCPElement extends TMLElement  {
-    protected List<TMLCPElement> nexts;
+public abstract class TMLCPElement extends TMLElement {
+  protected List<TMLCPElement> nexts;
 
-    public TMLCPElement(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        nexts = new ArrayList<TMLCPElement>();
+  public TMLCPElement(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    nexts = new ArrayList<TMLCPElement>();
+  }
+
+  public String getShortName() {
+    int index = name.indexOf("_#");
+    if (index == 0) {
+      return getName();
     }
 
-    public String getShortName() {
-	int index = name.indexOf("_#");
-	if (index == 0) {
-	    return getName();
-	}
-	
-	return name.substring(0, index);
+    return name.substring(0, index);
 
+  }
+
+  public void addNextElement(TMLCPElement _elt) {
+    nexts.add(_elt);
+  }
+
+  public void setNextElement(TMLCPElement _elt) {
+    nexts.clear();
+    addNextElement(_elt);
+  }
+
+  public void setNextElementAtIndex(TMLCPElement _elt, int _index) {
+    nexts.set(_index, _elt);
+  }
+
+  public void clearNexts() {
+    nexts.clear();
+  }
+
+  public List<TMLCPElement> getNextElements() {
+    return nexts;
+  }
+
+  public void setNexts(List<TMLCPElement> _nexts) {
+    nexts = _nexts;
+  }
+
+  public void replaceNext(TMLCPElement oldOne, TMLCPElement newOne) {
+    int index;
+    while ((index = nexts.indexOf(oldOne)) != -1) {
+      nexts.set(index, newOne);
     }
 
-    public void addNextElement(TMLCPElement _elt) {
-        nexts.add(_elt);
+  }
+
+  public String toShortString() {
+    return getClass().getCanonicalName() + " " + getName() + "\n";
+  }
+
+  public String toString() {
+    String s = "\t+" + toShortString();
+    for (TMLCPElement elt : nexts) {
+      s += "\t\t->" + elt.toShortString();
     }
+    return s;
+  }
 
-    public void setNextElement(TMLCPElement _elt) {
-        nexts.clear();
-        addNextElement(_elt);
-    }
-
-    public void setNextElementAtIndex(TMLCPElement _elt, int _index) {
-        nexts.set(_index, _elt); 
-    }
-    
-    public void clearNexts() {
-	nexts.clear();
-    }
-
-    public List<TMLCPElement> getNextElements() {
-        return nexts;
-    }
-
-    public void setNexts( List<TMLCPElement> _nexts) {
-	nexts = _nexts;
-    }
-
-    public void replaceNext(TMLCPElement oldOne, TMLCPElement newOne) {
-	int index;
-	while ((index = nexts.indexOf(oldOne)) != -1) {
-	    nexts.set(index, newOne); 
-	}
-	
-    }
-
-    
-
-
-
-    public String toShortString() {
-	return getClass().getCanonicalName() + " " + getName() + "\n";
-    }
-
-    public String toString() {
-	String s = "\t+" + toShortString();
-	for(TMLCPElement elt: nexts) {
-	    s += "\t\t->" + elt.toShortString();
-	}
-	return s;
-    }
-
-}       //End of class
+} // End of class

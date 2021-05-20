@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -53,174 +50,167 @@ import java.util.Vector;
 
 //import javax.swing.event.*;
 
-
 /**
- * Class JDialogAvatarChannelArtifact
- * Dialog for managing channel artifacts on memory nodes
- * Creation: 25/08/2014
+ * Class JDialogAvatarChannelArtifact Dialog for managing channel artifacts on
+ * memory nodes Creation: 25/08/2014
+ * 
  * @version 1.0 25/08/2014
  * @author Ludovic APVRILLE
  */
-public class JDialogAvatarChannelArtifact extends JDialogBase implements ActionListener  {
+public class JDialogAvatarChannelArtifact extends JDialogBase implements ActionListener {
 
-    private boolean regularClose;
-    private boolean emptyList = false;
+  private boolean regularClose;
+  private boolean emptyList = false;
 
-    private JPanel panel2;
-    private Frame frame;
-    private ADDChannelArtifact artifact;
+  private JPanel panel2;
+  private Frame frame;
+  private ADDChannelArtifact artifact;
 
-    //protected JTextField taskName;
-    protected JComboBox<String> referenceDiagram;
+  // protected JTextField taskName;
+  protected JComboBox<String> referenceDiagram;
 
-    /* Creates new form  */
-    public JDialogAvatarChannelArtifact(Frame _frame, String _title, ADDChannelArtifact _artifact) {
-        super(_frame, _title, true);
-        frame = _frame;
-        artifact = _artifact;
+  /* Creates new form */
+  public JDialogAvatarChannelArtifact(Frame _frame, String _title, ADDChannelArtifact _artifact) {
+    super(_frame, _title, true);
+    frame = _frame;
+    artifact = _artifact;
 
-        initComponents();
-        myInitComponents();
-        pack();
+    initComponents();
+    myInitComponents();
+    pack();
+  }
+
+  private void myInitComponents() {
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagLayout gridbag2 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
+    GridBagConstraints c2 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    panel2 = new JPanel();
+    panel2.setLayout(gridbag2);
+    panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+    panel2.setPreferredSize(new Dimension(550, 250));
+
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    panel2.add(new JLabel("channel: "), c2);
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedAvatarChannelNames(
+        (ADDDiagramPanel) (artifact.getTDiagramPanel()), artifact.getReferenceDiagram(), artifact.getChannelName());
+    int index = 0;
+    if (list.size() == 0) {
+      list.add("No more channel to map");
+      emptyList = true;
+    } else {
+      index = indexOf(list, artifact.getValue());
     }
+    referenceDiagram = new JComboBox<>(list);
+    referenceDiagram.setSelectedIndex(index);
+    // referenceTaskName.setEditable(true);
+    // referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
+    panel2.add(referenceDiagram, c1);
 
-    private void myInitComponents() {
+    /*
+     * c1.gridwidth = 1; c1.gridheight = 1; c1.weighty = 1.0; c1.weightx = 1.0;
+     * c1.fill = GridBagConstraints.HORIZONTAL; panel2.add(new JLabel("Name:"), c2);
+     * c1.gridwidth = GridBagConstraints.REMAINDER; //end row taskName = new
+     * JTextField(artifact.getTaskName(), 30); taskName.setEditable(true);
+     * taskName.setFont(new Font("times", Font.PLAIN, 12)); panel2.add(taskName,
+     * c1);
+     */
+
+    // main panel;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c.add(panel2, c0);
+
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
+
+    initButtons(c0, c, this);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    /*
+     * if (evt.getSource() == typeBox) { boolean b =
+     * ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
+     * initialValue.setEnabled(b); return; }
+     */
+
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
 
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagLayout gridbag2 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
+  public void closeDialog() {
+    regularClose = true;
+    dispose();
+  }
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+  public void cancelDialog() {
+    dispose();
+  }
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  public boolean isRegularClose() {
+    return regularClose;
+  }
 
-
-        panel2 = new JPanel();
-        panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-        panel2.setPreferredSize(new Dimension(550, 250));
-
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("channel: "), c2);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedAvatarChannelNames((ADDDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceDiagram(), artifact.getChannelName());
-        int index = 0;
-        if (list.size() == 0) {
-            list.add("No more channel to map");
-            emptyList = true;
-        } else {
-            index = indexOf(list, artifact.getValue());
-        }
-        referenceDiagram = new JComboBox<>(list);
-        referenceDiagram.setSelectedIndex(index);
-        //referenceTaskName.setEditable(true);
-        //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-        panel2.add(referenceDiagram, c1);
-
-
-        /*c1.gridwidth = 1;
-          c1.gridheight = 1;
-          c1.weighty = 1.0;
-          c1.weightx = 1.0;
-          c1.fill = GridBagConstraints.HORIZONTAL;
-          panel2.add(new JLabel("Name:"), c2);
-          c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-          taskName = new JTextField(artifact.getTaskName(), 30);
-          taskName.setEditable(true);
-          taskName.setFont(new Font("times", Font.PLAIN, 12));
-          panel2.add(taskName, c1);*/
-
-        // main panel;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c.add(panel2, c0);
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-        
-        initButtons(c0, c, this);
+  public String getReferenceDiagram() {
+    if (emptyList) {
+      return null;
     }
-
-    public void actionPerformed(ActionEvent evt)  {
-        /* if (evt.getSource() == typeBox) {
-           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-           initialValue.setEnabled(b);
-           return;
-           }*/
-
-
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        }
+    String tmp = (String) (referenceDiagram.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
     }
+    return tmp.substring(0, index);
+  }
 
-    public void closeDialog() {
-        regularClose = true;
-        dispose();
+  public String getChannelName() {
+    String tmp = (String) (referenceDiagram.getSelectedItem());
+    int index = tmp.indexOf("::");
+    if (index == -1) {
+      return tmp;
     }
+    return tmp.substring(index + 2, tmp.length());
+  }
 
-    public void cancelDialog() {
-        dispose();
+  public String getFullChannelName() {
+    return (String) (referenceDiagram.getSelectedItem());
+  }
+
+  public int indexOf(Vector<String> _list, String name) {
+    int i = 0;
+    for (String s : _list) {
+      if (s.equals(name)) {
+        return i;
+      }
+      i++;
     }
-
-    public boolean isRegularClose() {
-        return regularClose;
-    }
-
-    public String getReferenceDiagram() {
-        if (emptyList) {
-            return null;
-        }
-        String tmp = (String)(referenceDiagram.getSelectedItem());
-        int index = tmp.indexOf("::");
-        if (index == -1) {
-            return tmp;
-        }
-        return tmp.substring(0, index);
-    }
-
-    public String getChannelName() {
-        String tmp = (String)(referenceDiagram.getSelectedItem());
-        int index = tmp.indexOf("::");
-        if (index == -1) {
-            return tmp;
-        }
-        return tmp.substring(index+2, tmp.length());
-    }
-
-    public String getFullChannelName() {
-	return (String)(referenceDiagram.getSelectedItem());
-    }
-
-
-    public int indexOf(Vector<String> _list, String name) {
-        int i = 0;
-        for(String s : _list) {
-            if (s.equals(name)) {
-                return i;
-            }
-            i++;
-        }
-        return 0;
-    }
+    return 0;
+  }
 
 }

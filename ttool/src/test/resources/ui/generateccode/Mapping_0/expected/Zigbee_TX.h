@@ -13,63 +13,65 @@ extern char adaif_mss[];
 extern char intl_mss[];
 extern char mapper_mss[];
 
-struct SIG_TYPE	{
-	bool f;
-	void *pBuff;
+struct SIG_TYPE
+{
+  bool f;
+  void *pBuff;
 };
 
 typedef struct SIG_TYPE SIG_TYPE;
 extern SIG_TYPE sig[];
 
-
-
 /**** Buffers ****/
-struct FEP_BUFFER_TYPE {
-	uint8_t num_samples;
-	uint64_t base_address;
-	uint8_t bank;
-	uint8_t data_type;
+struct FEP_BUFFER_TYPE
+{
+  uint8_t num_samples;
+  uint64_t base_address;
+  uint8_t bank;
+  uint8_t data_type;
 };
 
 typedef FEP_BUFFER_TYPE FEP_BUFFER_TYPE;
 
-struct MAPPER_BUFFER_TYPE {
-	uint16_t num_symbols;
-	uint16_t input_base_address;
-	uint16_t num_bits_per_symbol;
-	bool symmetrical_value;
-	uint16_t output_base_address;
-	uint16_t lut_base_address;
+struct MAPPER_BUFFER_TYPE
+{
+  uint16_t num_symbols;
+  uint16_t input_base_address;
+  uint16_t num_bits_per_symbol;
+  bool symmetrical_value;
+  uint16_t output_base_address;
+  uint16_t lut_base_address;
 };
 
 typedef MAPPER_BUFFER_TYPE MAPPER_BUFFER_TYPE;
 
-struct INTERLEAVER_BUFFER_TYPE {
-	bool packed_binary_input_mode;
-	uint8_t samples_width;
-	uint8_t bit_input_offset;
-	uint16_t input_offset;
-	bool packed_binary_output_mode;
-	uint8_t bit_output_offset;
-	uint16_t output_offset;
-	uint16_t permutation_offset;
-	uint16_t permutation_length;
+struct INTERLEAVER_BUFFER_TYPE
+{
+  bool packed_binary_input_mode;
+  uint8_t samples_width;
+  uint8_t bit_input_offset;
+  uint16_t input_offset;
+  bool packed_binary_output_mode;
+  uint8_t bit_output_offset;
+  uint16_t output_offset;
+  uint16_t permutation_offset;
+  uint16_t permutation_length;
 };
 
 typedef INTERLEAVER_BUFFER_TYPE INTERLEAVER_BUFFER_TYPE;
 
-
-struct MM_BUFFER_TYPE {
-	uint8_t num_samples;
-	uint32_t* base_address;
+struct MM_BUFFER_TYPE
+{
+  uint8_t num_samples;
+  uint32_t *base_address;
 };
 
 typedef MM_BUFFER_TYPE MM_BUFFER_TYPE;
 
-
-struct ADAIF_BUFFER_TYPE {
-	uint8_t num_samples;
-	uint32_t* base_address;
+struct ADAIF_BUFFER_TYPE
+{
+  uint8_t num_samples;
+  uint32_t *base_address;
 };
 
 typedef ADAIF_BUFFER_TYPE ADAIF_BUFFER_TYPE;
@@ -110,7 +112,6 @@ extern FEP_CONTEXT X_CWP_Q_ctx;
 extern FEP_CONTEXT X_CWP_I_ctx;
 extern EMBB_CONTEXT X_Chip2Octet_ctx;
 
-
 /**** Data Transfers Instructions ****/
 extern INTL_CONTEXT CP_Symbol2ChipSeq_Chips2Octet_ctx;
 extern FEP_CONTEXT CP_Chip2Octet_CWL_ctx;
@@ -118,36 +119,39 @@ extern ADAIF_CONTEXT CP_sink_ctx_0;
 extern ADAIF_CONTEXT CP_sink_ctx_1;
 extern MAPPER_CONTEXT CP_Source_to_Bits2Symbol_ctx;
 
+enum sigs_enu
+{
+  Source_ch_out,
+  chip2octet_ch_out,
+  JOINPORTORIGIN_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in,
+  cwl_ch_out,
+  symbol2ChipSeq_ch_out,
+  FORKPORTORIGIN_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
+  FORKPORTORIGIN_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
+  cwpI_ch_out,
+  cwpQ_ch_out,
+  symbol2ChipSeq_ch_out_CP,
+  chip2octet_ch_out_CP,
+  JOINPORTORIGIN_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in_CP,
+  Source_ch_out_CP,
+  sink_ch_in,
+  NUM_SIGS
+};
 
-enum sigs_enu {
-	Source_ch_out,
-	chip2octet_ch_out,
-	JOINPORTORIGIN_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in,
-	cwl_ch_out,
-	symbol2ChipSeq_ch_out,
-	FORKPORTORIGIN_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
-	FORKPORTORIGIN_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in,
-	cwpI_ch_out,
-	cwpQ_ch_out,
-	symbol2ChipSeq_ch_out_CP,
-	chip2octet_ch_out_CP,
-	JOINPORTORIGIN_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in_CP,
-	Source_ch_out_CP,
-	sink_ch_in,
-NUM_SIGS };
-
-enum ops_enu   {
-	F_Source,
-	F_Symbol2ChipSeq,
-	F_Sink,
-	F_CWL,
-	F_CWP_Q,
-	F_CWP_I,
-	F_Chip2Octet,
-	CP_Symbol2ChipSeq_Chips2Octet,
-	CP_Chip2Octet_CWL,
-	CP_sink,
-	CP_Source_to_Bits2Symbol,
-NUM_OPS };
+enum ops_enu
+{
+  F_Source,
+  F_Symbol2ChipSeq,
+  F_Sink,
+  F_CWL,
+  F_CWP_Q,
+  F_CWP_I,
+  F_Chip2Octet,
+  CP_Symbol2ChipSeq_Chips2Octet,
+  CP_Chip2Octet_CWL,
+  CP_sink,
+  CP_Source_to_Bits2Symbol,
+  NUM_OPS
+};
 
 #endif

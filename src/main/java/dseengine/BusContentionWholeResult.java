@@ -36,50 +36,45 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package dseengine;
 
 //import uppaaldesc.*;
 
 /**
-* Class BusContentionWholeResult
-* Object for storing a bus contention result after a simulation
-* Creation: 07/09/2011
-* @version 1.0 07/09/2011
-* @author Ludovic APVRILLE
+ * Class BusContentionWholeResult Object for storing a bus contention result
+ * after a simulation Creation: 07/09/2011
+ * 
+ * @version 1.0 07/09/2011
+ * @author Ludovic APVRILLE
  */
-public class BusContentionWholeResult  {
-	public int id;
-	public String name;
-	
-	public long minContention;
-	public long maxContention;
-	public long averageContention;
-	public int nbOfResults;
-	
-	public BusContentionWholeResult(BusContentionResult bct) {
-		id = bct.id;
-		name = bct.name;
-		minContention = bct.contention;
-		maxContention = bct.contention;
-		averageContention = bct.contention;
-		nbOfResults = 1;
-	}
-	
-	public void updateResults(BusContentionResult bct) {
-		minContention = Math.min(minContention, bct.contention);
-		maxContention = Math.max(maxContention, bct.contention);
-		averageContention = ((averageContention *  nbOfResults)+bct.contention)/(nbOfResults + 1);
-		nbOfResults ++;
-	}
-	
-	public String toStringResult(int idcpu, String nameCPU) {
-		return "CPU_BUS_CONTENTION " + idcpu + " " + nameCPU + " " + id + " " + name + " " + nbOfResults + " " + minContention + " " + averageContention + " " + maxContention;
-	}
-	
-	
-	
-} // Class BusContentionWholeResult
+public class BusContentionWholeResult {
+  public int id;
+  public String name;
 
+  public long minContention;
+  public long maxContention;
+  public long averageContention;
+  public int nbOfResults;
+
+  public BusContentionWholeResult(BusContentionResult bct) {
+    id = bct.id;
+    name = bct.name;
+    minContention = bct.contention;
+    maxContention = bct.contention;
+    averageContention = bct.contention;
+    nbOfResults = 1;
+  }
+
+  public void updateResults(BusContentionResult bct) {
+    minContention = Math.min(minContention, bct.contention);
+    maxContention = Math.max(maxContention, bct.contention);
+    averageContention = ((averageContention * nbOfResults) + bct.contention) / (nbOfResults + 1);
+    nbOfResults++;
+  }
+
+  public String toStringResult(int idcpu, String nameCPU) {
+    return "CPU_BUS_CONTENTION " + idcpu + " " + nameCPU + " " + id + " " + name + " " + nbOfResults + " "
+        + minContention + " " + averageContention + " " + maxContention;
+  }
+
+} // Class BusContentionWholeResult

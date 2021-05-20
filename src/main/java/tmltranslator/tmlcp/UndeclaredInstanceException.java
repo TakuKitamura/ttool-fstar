@@ -36,24 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class UndeclaredInstanceException
- * Creation: 22/05/2014
+ * Class UndeclaredInstanceException Creation: 22/05/2014
+ * 
  * @version 1.0 22/05/2014
  * @author Andrea ENRICI
  */
 public class UndeclaredInstanceException extends Exception {
-	
-	public UndeclaredInstanceException()	{
-		super( "TMLCP COMPILER ERROR: undeclared instance" );
-	}
 
-	public UndeclaredInstanceException( String message )	{
-		super( message );	
-	}
+  public UndeclaredInstanceException() {
+    super("TMLCP COMPILER ERROR: undeclared instance");
+  }
+
+  public UndeclaredInstanceException(String message) {
+    super(message);
+  }
 }

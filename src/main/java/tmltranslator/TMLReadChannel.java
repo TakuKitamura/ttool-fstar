@@ -36,26 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
 /**
-   * Class TMLReadChannel
-   * Creation: 23/11/2005
-   * @version 1.0 23/11/2005
-   * @author Ludovic APVRILLE
+ * Class TMLReadChannel Creation: 23/11/2005
+ * 
+ * @version 1.0 23/11/2005
+ * @author Ludovic APVRILLE
  */
 public class TMLReadChannel extends TMLActivityElementChannel {
 
-    public TMLReadChannel(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
+  public TMLReadChannel(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
 
-    public String toString() {
-        return "Read " + nbOfSamples + " samples in channel: " + getChannel(0).getName();
-    }
+  public String toString() {
+    return "Read " + nbOfSamples + " samples in channel: " + getChannel(0).getName();
+  }
 
 }

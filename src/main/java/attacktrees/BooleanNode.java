@@ -36,22 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package attacktrees;
 
 /**
- * Class BooleanNode
- * Creation: 13/04/2015
+ * Class BooleanNode Creation: 13/04/2015
+ * 
  * @version 1.0 13/04/2015
  * @author Ludovic APVRILLE
  */
-public abstract class BooleanNode extends AttackNode{
-    
-    public BooleanNode(String _name, Object _referenceObject) {
-	super(_name, _referenceObject);
-    }
-    
-    
+public abstract class BooleanNode extends AttackNode {
+
+  public BooleanNode(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
 }

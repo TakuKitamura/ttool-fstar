@@ -36,50 +36,46 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tepe;
 
 import java.util.Vector;
 
 /**
- * Class TEPELogicalConstraintComponent
- * Creation: 16/02/2011
+ * Class TEPELogicalConstraintComponent Creation: 16/02/2011
+ * 
  * @version 1.0 16/02/2011
  * @author Ludovic APVRILLE
  */
-public  class TEPELogicalConstraintComponent  extends TEPEComponent  {
-	
-	public static final int SEQUENCE = 0;
-	public static final int NO_SEQUENCE = 1;
-	
-	protected int type;
-	
-    public TEPELogicalConstraintComponent(String _name, Object _referenceObject, int _type) {
-		super(_name, _referenceObject);
-		type = _type;
-		inSignalComponents = new Vector<TEPEComponent>();
-		inNegatedSignalComponents = new Vector<TEPEComponent>();
-		outSignalComponents = new Vector<TEPEComponent>();
-		inPropertyComponents = new Vector<TEPEComponent>();
-		inNegatedProperty = new Vector<Boolean>();
-		outPropertyComponents = new Vector<TEPEComponent>();
+public class TEPELogicalConstraintComponent extends TEPEComponent {
+
+  public static final int SEQUENCE = 0;
+  public static final int NO_SEQUENCE = 1;
+
+  protected int type;
+
+  public TEPELogicalConstraintComponent(String _name, Object _referenceObject, int _type) {
+    super(_name, _referenceObject);
+    type = _type;
+    inSignalComponents = new Vector<TEPEComponent>();
+    inNegatedSignalComponents = new Vector<TEPEComponent>();
+    outSignalComponents = new Vector<TEPEComponent>();
+    inPropertyComponents = new Vector<TEPEComponent>();
+    inNegatedProperty = new Vector<Boolean>();
+    outPropertyComponents = new Vector<TEPEComponent>();
+  }
+
+  public int getType() {
+    return type;
+  }
+
+  public String getExtraString() {
+    if (type == SEQUENCE) {
+      return "\nSequence";
     }
-	
-	public int getType() {
-		return type;
-	}
-	
-	public String getExtraString() {
-		if (type == SEQUENCE) {
-			return "\nSequence";
-		}
-		if (type == NO_SEQUENCE) {
-			return "\nSet of signals";
-		}
-		return "Unknown type";
-	}
-    
-    
+    if (type == NO_SEQUENCE) {
+      return "\nSet of signals";
+    }
+    return "Unknown type";
+  }
+
 }

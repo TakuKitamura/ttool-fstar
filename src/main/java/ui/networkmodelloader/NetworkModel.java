@@ -36,68 +36,60 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.networkmodelloader;
 
 import javax.swing.*;
 import java.io.File;
 import java.awt.image.*;
 
-
 /**
- * Class NetworkModel
- * Dialog for managing the loading of network models
+ * Class NetworkModel Dialog for managing the loading of network models
  * Creation: 29/05/2017
+ * 
  * @version 1.1 29/05/2017
  * @author Ludovic APVRILLE
  * @author Ludovic APVRILLE
  */
-public class NetworkModel  {
+public class NetworkModel {
 
-    public String fileName;
-    public boolean [] features;
-    public boolean [] props;
-    public String author = "";
-    public String description = "";
-    public String image;
-    public BufferedImage bi;
-    public BufferedImage scaledImg;
+  public String fileName;
+  public boolean[] features;
+  public boolean[] props;
+  public String author = "";
+  public String description = "";
+  public String image;
+  public BufferedImage bi;
+  public BufferedImage scaledImg;
 
-    public int x, y, width, height;
+  public int x, y, width, height;
 
-    public NetworkModel(String _fileName) {
-	//super(_fileName);
-	fileName = _fileName;
-	features = new boolean[JDialogLoadingNetworkModel.FEATURES.length];
-	features[0] = true;
-	props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
-    }
+  public NetworkModel(String _fileName) {
+    // super(_fileName);
+    fileName = _fileName;
+    features = new boolean[JDialogLoadingNetworkModel.FEATURES.length];
+    features[0] = true;
+    props = new boolean[JDialogLoadingNetworkModel.PROPS.length];
+  }
 
-    public void update() {
-	
-    }
+  public void update() {
 
-    /*public static NetworkModelType stringToNetworkModelType(String type) {
-	type = type.toLowerCase();
-	if (type.compareTo("software design") == 0) {
-	    return NetworkModelType.SOFTWARE_DESIGN;
-	}
+  }
 
-	if (type.compareTo("partitioning") == 0) {
-	    return NetworkModelType.PARTITIONING;
-	}
-
-	if (type.compareTo("attack tree") == 0) {
-	    return NetworkModelType.ATTACK_TREE;
-	}
-
-	if (type.compareTo("security protocol") == 0) {
-	    return NetworkModelType.SECURITY_PROTOCOL;
-	}
-
-	return NetworkModelType.SOFTWARE_DESIGN;
-	}*/
+  /*
+   * public static NetworkModelType stringToNetworkModelType(String type) { type =
+   * type.toLowerCase(); if (type.compareTo("software design") == 0) { return
+   * NetworkModelType.SOFTWARE_DESIGN; }
+   * 
+   * if (type.compareTo("partitioning") == 0) { return
+   * NetworkModelType.PARTITIONING; }
+   * 
+   * if (type.compareTo("attack tree") == 0) { return
+   * NetworkModelType.ATTACK_TREE; }
+   * 
+   * if (type.compareTo("security protocol") == 0) { return
+   * NetworkModelType.SECURITY_PROTOCOL; }
+   * 
+   * return NetworkModelType.SOFTWARE_DESIGN; }
+   */
 
 }

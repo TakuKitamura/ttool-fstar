@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator.directsimulation;
 
 import avatartranslator.AvatarBlock;
@@ -50,15 +49,14 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 /**
- * Class AvatarSimulationRunnerListener
- * Interface for interacting with the simulation runner
- * Creation: 08/01/2021
+ * Class AvatarSimulationRunnerListener Interface for interacting with the
+ * simulation runner Creation: 08/01/2021
  *
  * @author Ludovic APVRILLE
  * @version 1.0 08/01/2021
  */
 
 public interface AvatarSimulationRunnerListener {
-    public void setSimulationDone(int nb);
+  public void setSimulationDone(int nb);
 
 }

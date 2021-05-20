@@ -36,21 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
-
 /**
- * Class ConstraintListInterface
- * Class having a list of different constraints
+ * Class ConstraintListInterface Class having a list of different constraints
  * Creation: 23/04/2010
+ * 
  * @version 1.0 23/04/2010
  * @author Ludovic APVRILLE
  */
-public interface ConstraintListInterface  {
-    String[] getConstraintList();
-    String getCurrentConstraint();
+public interface ConstraintListInterface {
+  String[] getConstraintList();
+
+  String getCurrentConstraint();
 }

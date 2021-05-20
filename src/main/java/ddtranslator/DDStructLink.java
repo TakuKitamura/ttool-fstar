@@ -36,29 +36,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ddtranslator;
 
 import translator.Gate;
 
 /**
- * Class DDStructLink
- * Creation: 31/05/2005
- * version 1.0 31/05/2005
+ * Class DDStructLink Creation: 31/05/2005 version 1.0 31/05/2005
+ * 
  * @author Ludovic APVRILLE
  */
-public class DDStructLink  {
-    public Gate lgate;
-    public Gate rgate;
-    public Gate linklg;
-    public Gate linkrg;
-    public boolean added;
-    
-    public DDStructLink() {
-    }
-    
- 
-    
+public class DDStructLink {
+  public Gate lgate;
+  public Gate rgate;
+  public Gate linklg;
+  public Gate linkrg;
+  public boolean added;
+
+  public DDStructLink() {
+  }
+
 } // Class

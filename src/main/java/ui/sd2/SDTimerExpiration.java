@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd2;
 
 import myutil.GraphicLib;
@@ -52,169 +49,166 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class SDTimerExpiration
- * Setting of a timer for a given duration. To be used in Sequence Diagrams.
- * Creation: 06/10/2004
+ * Class SDTimerExpiration Setting of a timer for a given duration. To be used
+ * in Sequence Diagrams. Creation: 06/10/2004
+ * 
  * @version 1.0 06/10/2004
  * @author Ludovic APVRILLE
  */
 public class SDTimerExpiration extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
-    private String timer = "myTimer";
-    private int widthValue, heightValue;
-    
-    public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+  private String timer = "myTimer";
+  private int widthValue, heightValue;
 
-	    width = (int)(30 * tdp.getZoom());
-        height = (int)(25 * tdp.getZoom());
-        oldScaleFactor = tdp.getZoom();
+  public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        nbConnectingPoint = 0;
-        addTGConnectingPointsComment();
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = true;
-        removable = true;
-        
-        name = "timer expiration";
-        makeValue();
-        widthValue = 0; heightValue=0;
-        
-        myImageIcon = IconManager.imgic516;
-    }
-    
-    public void internalDrawing(Graphics g) {
+    width = (int) (30 * tdp.getZoom());
+    height = (int) (25 * tdp.getZoom());
+    oldScaleFactor = tdp.getZoom();
 
-        if (!tdp.isScaled()) {
-            widthValue  = g.getFontMetrics().stringWidth(value);
-            heightValue = g.getFontMetrics().getHeight();
-        }
-        
-        g.drawString(value, x+width, y+height/2+3);
-        
-        g.drawLine(x+width/2, y, x+width, y+height);
-        g.drawLine(x+width/2, y, x+width, y);
-        g.drawLine(x+width/2, y+height, x+width, y+height);
-        g.drawLine(x+width, y, x+width/2, y+height);
-        
-        GraphicLib.arrowWithLine(g, 2, 0, 10, x, y+height/2, x+width/2, y+height/2, true);
+    nbConnectingPoint = 0;
+    addTGConnectingPointsComment();
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = true;
+    removable = true;
+
+    name = "timer expiration";
+    makeValue();
+    widthValue = 0;
+    heightValue = 0;
+
+    myImageIcon = IconManager.imgic516;
+  }
+
+  public void internalDrawing(Graphics g) {
+
+    if (!tdp.isScaled()) {
+      widthValue = g.getFontMetrics().stringWidth(value);
+      heightValue = g.getFontMetrics().getHeight();
     }
 
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x+width/2, y, width/2, height)) {
-            return this;
-        }
-        
-        /* text */
-        if (GraphicLib.isInRectangle(_x, _y, x+width, y+height/2-heightValue+3, widthValue, heightValue)) {
-            return this;
-        }
-        
-        /* line */
-        if (GraphicLib.isInRectangle(_x, _y, x, y+height/2-2, width/2, 4)) {
-            return this;
-        }
-        return null;
+    g.drawString(value, x + width, y + height / 2 + 3);
+
+    g.drawLine(x + width / 2, y, x + width, y + height);
+    g.drawLine(x + width / 2, y, x + width, y);
+    g.drawLine(x + width / 2, y + height, x + width, y + height);
+    g.drawLine(x + width, y, x + width / 2, y + height);
+
+    GraphicLib.arrowWithLine(g, 2, 0, 10, x, y + height / 2, x + width / 2, y + height / 2, true);
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x + width / 2, y, width / 2, height)) {
+      return this;
     }
-    
-    public int getMyCurrentMaxX() {
-        return x+width + widthValue;
+
+    /* text */
+    if (GraphicLib.isInRectangle(_x, _y, x + width, y + height / 2 - heightValue + 3, widthValue, heightValue)) {
+      return this;
     }
-    
-    public int getType() {
-        return TGComponentManager.SDZV_TIMER_EXPIRATION;
+
+    /* line */
+    if (GraphicLib.isInRectangle(_x, _y, x, y + height / 2 - 2, width / 2, 4)) {
+      return this;
     }
-    
-    public String getTimer() {
-        return timer;
+    return null;
+  }
+
+  public int getMyCurrentMaxX() {
+    return x + width + widthValue;
+  }
+
+  public int getType() {
+    return TGComponentManager.SDZV_TIMER_EXPIRATION;
+  }
+
+  public String getTimer() {
+    return timer;
+  }
+
+  public int getYOrder() {
+    return y + height / 2;
+  }
+
+  public void makeValue() {
+    value = "{timer=" + timer + "}";
+  }
+
+  public boolean editOnDoubleClick(JFrame frame) {
+    String oldValue = timer;
+    String text = getName() + ": ";
+    if (hasFather()) {
+      text = getTopLevelName() + " / " + text;
     }
-    
-    public int getYOrder() {
-        return y+height/2;
+    String s = (String) JOptionPane.showInputDialog(frame, text, "setting timer value", JOptionPane.PLAIN_MESSAGE,
+        IconManager.imgic101, null, getTimer());
+
+    if (s != null) {
+      s = s.trim();
     }
-    
-    public void makeValue() {
-        value = "{timer=" + timer + "}";
-    }
-    
-    public boolean editOnDoubleClick(JFrame frame) {
-        String oldValue = timer;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting timer value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        getTimer());
-        
-        if (s != null) {
-            s = s.trim();
-        }
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            if (!TAttribute.isAValidId(s, false, false, false)) {
-                JOptionPane.showMessageDialog(frame,
-                "Could not perform any change: the new name is not a valid name",
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
-            timer = s;
-            makeValue();
-            return true;
-        }
+    if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+      if (!TAttribute.isAValidId(s, false, false, false)) {
+        JOptionPane.showMessageDialog(frame, "Could not perform any change: the new name is not a valid name", "Error",
+            JOptionPane.INFORMATION_MESSAGE);
         return false;
+      }
+      timer = s;
+      makeValue();
+      return true;
     }
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Interval timer=\"");
-        sb.append(getTimer());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    return false;
+  }
+
+  protected String translateExtraParam() {
+    StringBuffer sb = new StringBuffer("<extraparam>\n");
+    sb.append("<Interval timer=\"");
+    sb.append(getTimer());
+    sb.append("\" />\n");
+    sb.append("</extraparam>\n");
+    return new String(sb);
+  }
+
+  @Override
+  public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    //
+    boolean timerSet = false;
+
+    try {
+      NodeList nli;
+      Node n1, n2;
+      Element elt;
+
+      for (int i = 0; i < nl.getLength(); i++) {
+        n1 = nl.item(i);
         //
-		boolean timerSet = false;
+        if (n1.getNodeType() == Node.ELEMENT_NODE) {
+          nli = n1.getChildNodes();
 
-		try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-
-                    // Issue #17 copy-paste error on j index
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Interval")) {
-                                timer = elt.getAttribute("timer");
-								timerSet = true;
-                            }
-                        }
-                    }
-                }
+          // Issue #17 copy-paste error on j index
+          for (int j = 0; j < nli.getLength(); j++) {
+            n2 = nli.item(j);
+            //
+            if (n2.getNodeType() == Node.ELEMENT_NODE) {
+              elt = (Element) n2;
+              if (elt.getTagName().equals("Interval")) {
+                timer = elt.getAttribute("timer");
+                timerSet = true;
+              }
             }
-            
-        } catch (Exception e) {
-			//
-			if (!timerSet) {
-				throw new MalformedModelingException();
-			}
+          }
         }
-        makeValue();
+      }
+
+    } catch (Exception e) {
+      //
+      if (!timerSet) {
+        throw new MalformedModelingException();
+      }
     }
+    makeValue();
+  }
 }

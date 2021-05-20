@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.osad;
 
 //import java.awt.*;
@@ -48,27 +45,21 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TOSADConnectingPoint
- * Definition of connecting points on which connectors of TURTLE-OS activity diagram can be connected
- * Creation: 06/10/2006
+ * Class TOSADConnectingPoint Definition of connecting points on which
+ * connectors of TURTLE-OS activity diagram can be connected Creation:
+ * 06/10/2006
+ * 
  * @version 1.0 06/10/2006
  * @author Ludovic APVRILLE
  */
-public class TOSADConnectingPoint extends  TGConnectingPointWidthHeight{
+public class TOSADConnectingPoint extends TGConnectingPointWidthHeight {
 
-	public TOSADConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
+  public TOSADConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
 
-	public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.TOSAD_CONNECTOR;
-    }
-       
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.TOSAD_CONNECTOR;
+  }
+
 }
-
-
-
-
-    
-
-

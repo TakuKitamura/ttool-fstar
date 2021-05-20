@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.prosmd;
 
 import myutil.GraphicLib;
@@ -48,65 +45,59 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class ProSMDStopState
- * Used to terminate an activity of a ProActive state machine diagram
- * Creation: 05/07/2006
+ * Class ProSMDStopState Used to terminate an activity of a ProActive state
+ * machine diagram Creation: 05/07/2006
+ * 
  * @version 1.0 05/07/2006
  * @author Ludovic APVRILLE
  */
-public class ProSMDStopState extends TGCWithoutInternalComponent{
-    private int internalCircleSize = 16;
-    private int lineLength = 5;
-    
-    public ProSMDStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 20;
-        height = 20;
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-        connectingPoint[0] = new TGConnectingPointProSMD(this, 0, - lineLength, true, false, 0.5, 0.0);
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "stop state";
-        
-        myImageIcon = IconManager.imgic210;
+public class ProSMDStopState extends TGCWithoutInternalComponent {
+  private int internalCircleSize = 16;
+  private int lineLength = 5;
+
+  public ProSMDStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 20;
+    height = 20;
+
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[1];
+    connectingPoint[0] = new TGConnectingPointProSMD(this, 0, -lineLength, true, false, 0.5, 0.0);
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "stop state";
+
+    myImageIcon = IconManager.imgic210;
+  }
+
+  public void internalDrawing(Graphics g) {
+    if (this.x <= 0)
+      this.x = 1;
+    if (this.y <= 0)
+      this.y = 1;
+    ColorManager.setColor(g, state, 0);
+    g.fillOval(x + (width - internalCircleSize) / 2, y + (height - internalCircleSize) / 2, internalCircleSize,
+        internalCircleSize);
+    g.drawOval(x, y, width, height);
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
+  }
+
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-    
-    public void internalDrawing(Graphics g) {
-    	  if (this.x<=0)
-			  this.x=1;
-		  if (this.y<=0)
-			  this.y=1;
-    	ColorManager.setColor(g, state, 0);
-        g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
-        g.drawOval(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-    }
-    
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
-    public int getType() {
-        return TGComponentManager.PROSMD_STOP_STATE;
-    }
-    
+    return null;
+  }
+
+  public int getType() {
+    return TGComponentManager.PROSMD_STOP_STATE;
+  }
+
 }
-
-
-
-
-
-
-

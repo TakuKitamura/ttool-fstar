@@ -36,59 +36,56 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sysmlsecmethodology;
-
 
 import ui.*;
 
 /**
-   * Class SysmlsecMethodologyReferenceToAnalysis
-   * Diagram reference analysis: Used to reference diagrams from the
-   * Sysmlsec methodology
-   * Creation: 29/01/2016
-   * @version 1.0 29/01/2016
-   * @author Ludovic APVRILLE
+ * Class SysmlsecMethodologyReferenceToAnalysis Diagram reference analysis: Used
+ * to reference diagrams from the Sysmlsec methodology Creation: 29/01/2016
+ * 
+ * @version 1.0 29/01/2016
+ * @author Ludovic APVRILLE
  */
-public class SysmlsecMethodologyReferenceToAnalysis extends SysmlsecMethodologyDiagramReference  {
+public class SysmlsecMethodologyReferenceToAnalysis extends SysmlsecMethodologyDiagramReference {
 
+  public SysmlsecMethodologyReferenceToAnalysis(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public SysmlsecMethodologyReferenceToAnalysis(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    initScaling(200, 70);
 
-        initScaling(200, 70);
+    nbConnectingPoint = 2;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5,
+        TGConnectingPoint.WEST);
+    connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0,
+        TGConnectingPoint.WEST);
 
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.0, 0.5, TGConnectingPoint.WEST);
-        connectingPoint[1] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.3, 1.0, TGConnectingPoint.WEST);
+    typeOfReference = ANALYSIS;
 
-        typeOfReference = ANALYSIS;
+    addTGConnectingPointsCommentTop();
 
-        addTGConnectingPointsCommentTop();
+  }
 
+  public int getType() {
+    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ANALYSIS;
+  }
+
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    if (panel instanceof AvatarAnalysisPanel) {
+      return true;
     }
+    return panel instanceof AttackTreePanel;
 
-    public  int getType() {
-        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ANALYSIS;
-    }
+  }
 
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        if (panel instanceof AvatarAnalysisPanel) {
-            return true;
-        }
-        return panel instanceof AttackTreePanel;
+  public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
+    dn.setValidationsNumber(0);
+  }
 
-    }
-
-    public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-        dn.setValidationsNumber(0);
-    }
-
-    public boolean makeCall(String diagramName, int index) {
-        return true;
-    }
+  public boolean makeCall(String diagramName, int index) {
+    return true;
+  }
 
 }

@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package attacktrees;
 
 import myutil.Conversion;
@@ -47,107 +46,96 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-
 /**
- * Class Attacker
- * Creation: 03/02/2021
+ * Class Attacker Creation: 03/02/2021
  *
  * @author Ludovic APVRILLE
  * @version 1.0 03/02/2021
  */
 public class AttackerPopulation extends AttackElement {
 
-    private ArrayList<AttackerGroup> groups;
-    
-    public AttackerPopulation(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        groups = new ArrayList<>();
+  private ArrayList<AttackerGroup> groups;
+
+  public AttackerPopulation(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+    groups = new ArrayList<>();
+  }
+
+  public void addAttacker(Attacker attacker, int nb) {
+    AttackerGroup ag = new AttackerGroup(attacker.getName() + "_group", attacker.getReferenceObject());
+    ag.attacker = attacker;
+    ag.occurrence = nb;
+    groups.add(ag);
+  }
+
+  public AttackerGroup addCloneAttackerGroup(AttackerGroup _group) {
+    AttackerGroup ag = new AttackerGroup(_group.getName(), _group.getReferenceObject());
+    ag.setAttributes(_group.getMoney(), _group.getExpertise(), _group.getOccurrence());
+    groups.add(ag);
+    return ag;
+  }
+
+  public AttackerGroup addAttackerGroup(String _name, String _money, String _expertise, String _occurrence) {
+    if (!Attacker.isValidID(_name)) {
+      return null;
     }
 
-    public void addAttacker(Attacker attacker, int nb) {
-        AttackerGroup ag = new AttackerGroup(attacker.getName() + "_group", attacker.getReferenceObject());
-        ag.attacker = attacker;
-        ag.occurrence = nb;
-        groups.add(ag);
+    if (!Attacker.isValidMoney(_money)) {
+      return null;
     }
 
-
-    public AttackerGroup addCloneAttackerGroup(AttackerGroup _group) {
-        AttackerGroup ag = new AttackerGroup(_group.getName(), _group.getReferenceObject());
-        ag.setAttributes(_group.getMoney(),_group.getExpertise(), _group.getOccurrence());
-        groups.add(ag);
-        return ag;
+    if (!Attacker.isValidExpertise(_expertise)) {
+      return null;
     }
 
-    public AttackerGroup addAttackerGroup(String _name, String _money, String _expertise, String _occurrence) {
-        if (!Attacker.isValidID(_name)) {
-            return null;
-        }
-
-        if (!Attacker.isValidMoney(_money)) {
-            return null;
-        }
-
-        if (!Attacker.isValidExpertise(_expertise)) {
-            return null;
-        }
-
-        if (!AttackerGroup.isValidOccurrence(_occurrence)) {
-            return null;
-        }
-
-        AttackerGroup ag = new AttackerGroup(_name, getReferenceObject());
-        ag.attacker.money = Integer.decode(_money);
-        ag.attacker.expertise = Integer.decode(_expertise);
-        ag.occurrence = Integer.decode(_occurrence);
-
-        groups.add(ag);
-
-        return ag;
+    if (!AttackerGroup.isValidOccurrence(_occurrence)) {
+      return null;
     }
 
-    public int getTotalPopulation() {
-        int cpt = 0;
-        for(AttackerGroup ag: groups) {
-            cpt += ag.occurrence;
-        }
-        return cpt;
+    AttackerGroup ag = new AttackerGroup(_name, getReferenceObject());
+    ag.attacker.money = Integer.decode(_money);
+    ag.attacker.expertise = Integer.decode(_expertise);
+    ag.occurrence = Integer.decode(_occurrence);
+
+    groups.add(ag);
+
+    return ag;
+  }
+
+  public int getTotalPopulation() {
+    int cpt = 0;
+    for (AttackerGroup ag : groups) {
+      cpt += ag.occurrence;
     }
+    return cpt;
+  }
 
-
-
-    public int getTotalAttackers(AttackTree _at) {
-        int cpt = 0;
-        for(AttackerGroup ag: groups) {
-            if (_at.canPerformRootAttack(ag.getMoney(), ag.getExpertise())) {
-                cpt += ag.occurrence;
-            }
-        }
-        return cpt;
+  public int getTotalAttackers(AttackTree _at) {
+    int cpt = 0;
+    for (AttackerGroup ag : groups) {
+      if (_at.canPerformRootAttack(ag.getMoney(), ag.getExpertise())) {
+        cpt += ag.occurrence;
+      }
     }
+    return cpt;
+  }
 
-    public void setGroup(ArrayList<AttackerGroup> _newGroup) {
-        groups.clear();
-        groups.addAll(_newGroup);
+  public void setGroup(ArrayList<AttackerGroup> _newGroup) {
+    groups.clear();
+    groups.addAll(_newGroup);
+  }
+
+  public ArrayList<AttackerGroup> getAttackerGroups() {
+    return groups;
+  }
+
+  public String toString() {
+    StringBuffer sb = new StringBuffer();
+    sb.append(getName() + ":\n");
+    for (AttackerGroup ag : groups) {
+      sb.append(ag.toString() + "\n");
     }
-
-
-    public ArrayList<AttackerGroup> getAttackerGroups() {
-        return groups;
-    }
-
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getName() + ":\n");
-        for(AttackerGroup ag: groups) {
-            sb.append(ag.toString() + "\n");
-        }
-        return sb.toString();
-    }
-
-
-
-
-
+    return sb.toString();
+  }
 
 }

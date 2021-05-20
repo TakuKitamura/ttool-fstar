@@ -36,28 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package remotesimulation;
 
 /**
-* Class SimulationCommand
-* Commands that can be sent to the remote simulator
-* Creation: 17/04/2009
-* @version 1.1 17/04/2009
-* @author Ludovic APVRILLE
+ * Class SimulationCommand Commands that can be sent to the remote simulator
+ * Creation: 17/04/2009
+ * 
+ * @version 1.1 17/04/2009
+ * @author Ludovic APVRILLE
  */
 public class SimulationCommandSaveState extends SimulationCommand {
 
-    
-	public SimulationCommandSaveState(String _userCommand, String _alias, String _simulatorCommand, int _params[], String _paramNames[], String _help) {
-		super(_userCommand, _alias, _simulatorCommand, _params, _paramNames, _help);
-	}
-	
-	public String translateCommand(String cmds[]) {
-		String ret = super.translateCommand(cmds);
-		return ret + " 0";
-	}
-    
+  public SimulationCommandSaveState(String _userCommand, String _alias, String _simulatorCommand, int _params[],
+      String _paramNames[], String _help) {
+    super(_userCommand, _alias, _simulatorCommand, _params, _paramNames, _help);
+  }
+
+  public String translateCommand(String cmds[]) {
+    String ret = super.translateCommand(cmds);
+    return ret + " 0";
+  }
+
 }

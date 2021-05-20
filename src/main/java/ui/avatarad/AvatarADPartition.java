@@ -45,60 +45,60 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class AvatarADPartition 
- * Used to partition activities
- * Creation: 02/09/2011
+ * Class AvatarADPartition Used to partition activities Creation: 02/09/2011
+ * 
  * @version 1.0 02/09/2011
  * @author Ludovic APVRILLE
  */
-public class AvatarADPartition extends AvatarADBasicComponent implements EmbeddedComment{
-    //private int lineLength = 5;
-    
-    public AvatarADPartition(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-		initScaling(10, 500);
-		oldScaleFactor = tdp.getZoom();
-		
-		minWidth = (int)(10* tdp.getZoom());
-		maxWidth = (int)(30* tdp.getZoom());
-		minHeight = (int)(250* tdp.getZoom());
-		maxHeight = (int)(1500* tdp.getZoom());
-	
-        nbConnectingPoint = 0;
+public class AvatarADPartition extends AvatarADBasicComponent implements EmbeddedComment {
+  // private int lineLength = 5;
 
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        removable = true;
-        userResizable = true;
-        
-        name = "start state";
-        
-        myImageIcon = IconManager.imgic222;
+  public AvatarADPartition(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    initScaling(10, 500);
+    oldScaleFactor = tdp.getZoom();
+
+    minWidth = (int) (10 * tdp.getZoom());
+    maxWidth = (int) (30 * tdp.getZoom());
+    minHeight = (int) (250 * tdp.getZoom());
+    maxHeight = (int) (1500 * tdp.getZoom());
+
+    nbConnectingPoint = 0;
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    removable = true;
+    userResizable = true;
+
+    name = "start state";
+
+    myImageIcon = IconManager.imgic222;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    g.drawLine(x + (width / 2), y, x + (width / 2), y + height);
+    g.drawLine(x + (width / 2) + 1, y, x + (width / 2) + 1, y + height);
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-       g.drawLine(x+(width/2), y, x+(width/2), y +height);
-       g.drawLine(x+(width/2)+1, y, x+(width/2)+1, y +height);
-    }
-    
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-       if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        
-        return null;
-    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.AAD_PARTITION;
-    }
-//    
-//    public int getDefaultConnector() {
-//      return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-//    }
+
+    return null;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.AAD_PARTITION;
+  }
+  //
+  // public int getDefaultConnector() {
+  // return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+  // }
 }

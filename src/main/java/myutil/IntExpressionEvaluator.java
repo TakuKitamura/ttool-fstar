@@ -36,263 +36,249 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package myutil;
 
 import java.util.StringTokenizer;
 
 /**
-   * Class IntExpressionEvaluator
-   * Creation: 13/12/2010
-   * Version 2.0 13/12/2010
-   * @author Ludovic APVRILLE
+ * Class IntExpressionEvaluator Creation: 13/12/2010 Version 2.0 13/12/2010
+ * 
+ * @author Ludovic APVRILLE
  */
 public class IntExpressionEvaluator {
-    public static final int NUMBER_TOKEN = -1;
-    public static final int EOLN_TOKEN = -2;
+  public static final int NUMBER_TOKEN = -1;
+  public static final int EOLN_TOKEN = -2;
 
-    private StringTokenizer tokens;
-    private String errorMessage = null;
+  private StringTokenizer tokens;
+  private String errorMessage = null;
 
-    private int currentType;
-    private int currentValue;
+  private int currentType;
+  private int currentValue;
 
-    private int nbOpen;
+  private int nbOpen;
 
-    public IntExpressionEvaluator() {
+  public IntExpressionEvaluator() {
+  }
+
+  public String getError() {
+    return errorMessage;
+  }
+
+  public boolean hasError() {
+    return errorMessage != null;
+  }
+
+  public boolean hasFinished() {
+    return currentType == EOLN_TOKEN;
+  }
+
+  public double getResultOf(String _expr) {
+    // TraceManager.addDev("IntExpr: Computing:" + _expr);
+    tokens = new java.util.StringTokenizer(_expr, " \t\n\r+-*/()", true);
+
+    computeNextToken();
+    double d = parseExpression();
+
+    if ((errorMessage == null) && (nbOpen != 0)) {
+      errorMessage = "Badly placed parenthesis";
     }
 
-    public String getError() {
-        return errorMessage;
+    if (errorMessage != null) {
+      TraceManager.addDev("Expr contains an error: " + errorMessage + " for expr:" + _expr);
+    } else {
+      // TraceManager.addDev("Expr is correct");
     }
 
-    public boolean hasError() {
-        return errorMessage != null;
+    return d;
+  }
+
+  /**
+   * Match a given token and advance to the next. This utility is used by our
+   * parsing routines. If the given token does not match lexer.nextToken(), we
+   * generate an appropriate error message. Advancing to the next token may also
+   * cause an error.
+   *
+   * @param token the token that must match
+   */
+  private void match(int token) {
+
+    // First check that the current token matches the
+    // one we were passed; if not, make an error.
+
+    if (currentType != token) {
+      if (token == EOLN_TOKEN)
+        errorMessage = "Unexpected text after the expression.";
+      else if (token == NUMBER_TOKEN)
+        errorMessage = "Expected a number.";
+      else
+        errorMessage = "Expected a " + ((char) token) + ".";
+      return;
     }
 
-    public boolean hasFinished() {
-        return currentType == EOLN_TOKEN;
+    // Now advance to the next token.
+
+    computeNextToken();
+  }
+
+  /**
+   * Parse an expression. If any error occurs we return immediately.
+   *
+   * @return the double value of the expression or garbage in case of errors.
+   */
+  private double parseExpression() {
+
+    // <expression> ::=
+    // <mulexp> { ('+' <mulexp>) | ('-' <mulexp>) }
+
+    double result = parseMulexp();
+    if (errorMessage != null)
+      return result;
+
+    while (true) {
+      if (currentType == '+') {
+        match('+');
+        if (errorMessage != null)
+          return result;
+        result += parseMulexp();
+        if (errorMessage != null)
+          return result;
+      } else if (currentType == '-') {
+        match('-');
+        if (errorMessage != null)
+          return result;
+        result -= parseMulexp();
+        if (errorMessage != null)
+          return result;
+      } else
+        return result;
     }
+  }
 
-    public double getResultOf(String _expr) {
-        //TraceManager.addDev("IntExpr: Computing:" + _expr);
-        tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()",true);
+  /**
+   * Parse a mulexp, a subexpression at the precedence level of * and /. If any
+   * error occurs we return immediately.
+   *
+   * @return the double value of the mulexp or garbage in case of errors.
+   */
+  private double parseMulexp() {
 
-        computeNextToken();
-        double d = parseExpression();
+    // <mulexp> ::=
+    // <rootexp> { ('*' <rootexp>) | ('/' <rootexp>) }
 
+    double result = parseRootexp();
+    if (errorMessage != null)
+      return result;
 
-        if ((errorMessage == null) && (nbOpen!=0)) {
-            errorMessage = "Badly placed parenthesis";
-        }
-
-        if (errorMessage != null) {
-            TraceManager.addDev("Expr contains an error: " + errorMessage + " for expr:" + _expr);
-        } else {
-            //TraceManager.addDev("Expr is correct");
-        }
-
-        return d;
+    while (true) {
+      if (currentType == '*') {
+        match('*');
+        if (errorMessage != null)
+          return result;
+        result *= parseRootexp();
+        if (errorMessage != null)
+          return result;
+      } else if (currentType == '/') {
+        match('/');
+        if (errorMessage != null)
+          return result;
+        result /= parseRootexp();
+        if (errorMessage != null)
+          return result;
+      } else
+        return result;
     }
+  }
 
+  /**
+   * Parse a rootexp, which is a constant or parenthesized subexpression. If any
+   * error occurs we return immediately.
+   *
+   * @return the double value of the rootexp or garbage in case of errors
+   */
+  private double parseRootexp() {
+    double result = 0.0;
 
+    // <rootexp> ::= '(' <expression> ')'
 
-    /**
-     * Match a given token and advance to the next.
-     * This utility is used by our parsing routines.
-     * If the given token does not match
-     * lexer.nextToken(), we generate an appropriate
-     * error message.  Advancing to the next token may
-     * also cause an error.
-     *
-     * @param token the token that must match
-     */
-    private void match(int token) {
-
-        // First check that the current token matches the
-        // one we were passed; if not, make an error.
-
-        if (currentType != token) {
-            if (token == EOLN_TOKEN)
-                errorMessage =
-                    "Unexpected text after the expression.";
-            else if (token == NUMBER_TOKEN)
-                errorMessage = "Expected a number.";
-            else errorMessage =
-                     "Expected a " + ((char) token) + ".";
-            return;
-        }
-
-        // Now advance to the next token.
-
-        computeNextToken();
-    }
-
-    /**
-     * Parse an expression.  If any error occurs we
-     * return immediately.
-     *
-     * @return the double value of the expression
-     * or garbage in case of errors.
-     */
-    private double parseExpression() {
-
-        // <expression> ::=
-        //    <mulexp> { ('+' <mulexp>) | ('-' <mulexp>) }
-
-        double result = parseMulexp();
-        if (errorMessage != null) return result;
-
-        while (true) {
-            if (currentType == '+') {
-                match('+');
-                if (errorMessage != null) return result;
-                result += parseMulexp();
-                if (errorMessage != null) return result;
-            }
-            else if (currentType == '-') {
-                match('-');
-                if (errorMessage != null) return result;
-                result -= parseMulexp();
-                if (errorMessage != null) return result;
-            }
-            else return result;
-        }
-    }
-
-
-    /**
-     * Parse a mulexp, a subexpression at the precedence
-     * level of * and /.  If any error occurs we return
-     * immediately.
-     *
-     * @return the double value of the mulexp or
-     * garbage in case of errors.
-     */
-    private double parseMulexp() {
-
-        // <mulexp> ::=
-        //   <rootexp> { ('*' <rootexp>) | ('/' <rootexp>) }
-
-        double result = parseRootexp();
-        if (errorMessage != null) return result;
-
-        while (true) {
-            if (currentType == '*') {
-                match('*');
-                if (errorMessage != null) return result;
-                result *= parseRootexp();
-                if (errorMessage != null) return result;
-            }
-            else if (currentType == '/') {
-                match('/');
-                if (errorMessage != null) return result;
-                result /= parseRootexp();
-                if (errorMessage != null) return result;
-            }
-            else return result;
-        }
-    }
-
-    /**
-     * Parse a rootexp, which is a constant or
-     * parenthesized subexpression.  If any error occurs
-     * we return immediately.
-     *
-     * @return the double value of the rootexp or garbage
-     * in case of errors
-     */
-    private double parseRootexp() {
-        double result = 0.0;
-
-        // <rootexp> ::= '(' <expression> ')'
-
-        if (currentType == '(') {
-            match('(');
-            if (errorMessage != null) return result;
-            result = parseExpression();
-            if (errorMessage != null) return result;
-            match(')');
-            if (errorMessage != null) return result;
-        }
-
-        // <rootexp> ::= number
-
-        else if (currentType == NUMBER_TOKEN){
-            result = currentValue;
-            if (errorMessage != null) return result;
-            match(NUMBER_TOKEN);
-            if (errorMessage != null) return result;
-        }
-
-        else {
-            errorMessage =
-                "Expected a number or a parenthesis for currentType = " + currentType;
-        }
-
+    if (currentType == '(') {
+      match('(');
+      if (errorMessage != null)
+        return result;
+      result = parseExpression();
+      if (errorMessage != null)
+        return result;
+      match(')');
+      if (errorMessage != null)
         return result;
     }
 
+    // <rootexp> ::= number
 
-
-
-
-    public void computeNextToken() {
-        while (true) {
-            // If we're at the end, make it an EOLN_TOKEN.
-            if (!tokens.hasMoreTokens()) {
-                currentType = EOLN_TOKEN;
-                return;
-            }
-
-            // Get a token--if it looks like a number,
-            // make it a NUMBER_TOKEN.
-
-            String s = tokens.nextToken();
-            char c1 = s.charAt(0);
-            if (s.length()>1 || Character.isDigit(c1)) {
-                try {
-                    currentValue = Integer.valueOf(s);
-                    currentType = NUMBER_TOKEN;
-                }
-                catch (NumberFormatException x) {
-                    errorMessage = "Illegal format for a number.";
-                }
-                return;
-            }
-
-            else if (c1 == ')') {
-                currentType = c1;
-                nbOpen --;
-                //TraceManager.addDev(") met: Nb of open=" + nbOpen);
-                if (nbOpen < 0) {
-                    TraceManager.addDev("int Expr: found pb with a parenthesis");
-                }
-                return;
-            }
-
-            else if (c1 == '(') {
-                nbOpen ++;
-                //TraceManager.addDev("( met: Nb of open=" + nbOpen);
-                currentType = c1;
-
-                return;
-            }
-
-            // Any other single character that is not
-            // white space is a token.
-
-            else if (!Character.isWhitespace(c1)) {
-                currentType = c1;
-                return;
-            }
-        }
+    else if (currentType == NUMBER_TOKEN) {
+      result = currentValue;
+      if (errorMessage != null)
+        return result;
+      match(NUMBER_TOKEN);
+      if (errorMessage != null)
+        return result;
     }
 
+    else {
+      errorMessage = "Expected a number or a parenthesis for currentType = " + currentType;
+    }
 
+    return result;
+  }
 
+  public void computeNextToken() {
+    while (true) {
+      // If we're at the end, make it an EOLN_TOKEN.
+      if (!tokens.hasMoreTokens()) {
+        currentType = EOLN_TOKEN;
+        return;
+      }
 
+      // Get a token--if it looks like a number,
+      // make it a NUMBER_TOKEN.
+
+      String s = tokens.nextToken();
+      char c1 = s.charAt(0);
+      if (s.length() > 1 || Character.isDigit(c1)) {
+        try {
+          currentValue = Integer.valueOf(s);
+          currentType = NUMBER_TOKEN;
+        } catch (NumberFormatException x) {
+          errorMessage = "Illegal format for a number.";
+        }
+        return;
+      }
+
+      else if (c1 == ')') {
+        currentType = c1;
+        nbOpen--;
+        // TraceManager.addDev(") met: Nb of open=" + nbOpen);
+        if (nbOpen < 0) {
+          TraceManager.addDev("int Expr: found pb with a parenthesis");
+        }
+        return;
+      }
+
+      else if (c1 == '(') {
+        nbOpen++;
+        // TraceManager.addDev("( met: Nb of open=" + nbOpen);
+        currentType = c1;
+
+        return;
+      }
+
+      // Any other single character that is not
+      // white space is a token.
+
+      else if (!Character.isWhitespace(c1)) {
+        currentType = c1;
+        return;
+      }
+    }
+  }
 
 }

@@ -42,389 +42,386 @@ import avatartranslator.modelchecker.SpecificationBlock;
 import avatartranslator.modelchecker.SpecificationState;
 
 /**
- * Class AvatarExpressionAttribute
- * Avatar Expression Attribute
- * Creation: 17/04/2020
+ * Class AvatarExpressionAttribute Avatar Expression Attribute Creation:
+ * 17/04/2020
  *
  * @author Alessandro TEMPIA CALVINO
  * @version 1.0 17/04/2020
  */
-public class AvatarExpressionAttribute implements AvatarExpressionAttributeInterface{
-    private AvatarBlock block;
-    private int blockIndex;
-    private int accessIndex;
-    private AvatarStateMachineElement state;
-    private String s;
-    private boolean isState;
-    private int error;  //0: no error; -1: building error; -2: is constant
-    private int shift;
-    private int mask;
-    
-    
-    public AvatarExpressionAttribute(AvatarSpecification spec, String s) {
-        this.s = s;
-        isState = false;
-        
-        error = initAttributes(spec);
+public class AvatarExpressionAttribute implements AvatarExpressionAttributeInterface {
+  private AvatarBlock block;
+  private int blockIndex;
+  private int accessIndex;
+  private AvatarStateMachineElement state;
+  private String s;
+  private boolean isState;
+  private int error; // 0: no error; -1: building error; -2: is constant
+  private int shift;
+  private int mask;
+
+  public AvatarExpressionAttribute(AvatarSpecification spec, String s) {
+    this.s = s;
+    isState = false;
+
+    error = initAttributes(spec);
+  }
+
+  public AvatarExpressionAttribute(AvatarBlock block, String s) {
+    this.s = s;
+    isState = false;
+
+    error = initAttributes(block);
+  }
+
+  public AvatarExpressionAttribute(AvatarBlock block, AvatarStateMachineElement asme) {
+    this.s = asme.name;
+    isState = true;
+    state = asme;
+    error = 0;
+    accessIndex = -1;
+    shift = 0;
+    mask = 0xFFFFFFFF;
+    block = null;
+  }
+
+  private int initAttributes(AvatarSpecification spec) {
+    // Extract Block and Attribute
+    String[] splitS;
+    String blockString;
+    String fieldString;
+
+    if (spec == null) {
+      return -1;
     }
-    
-    public AvatarExpressionAttribute(AvatarBlock block, String s) {
-        this.s = s;
-        isState = false;
-        
-        error = initAttributes(block);
+
+    if (s.matches(".+\\..+")) {
+      splitS = s.split("\\.");
+      blockString = splitS[0];
+      fieldString = splitS[1];
+    } else {
+      return -1;
     }
-    
-    public AvatarExpressionAttribute(AvatarBlock block, AvatarStateMachineElement asme) {
-        this.s = asme.name;
+
+    block = spec.getBlockWithName(blockString);
+
+    if (block == null) {
+      return -1;
+    }
+
+    blockIndex = spec.getBlockIndex(block);
+
+    int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
+
+    shift = 0;
+    mask = 0xFFFFFFFF;
+
+    if (attributeIndex == -1) {
+      attributeIndex = block.getIndexOfConstantWithName(fieldString);
+      if (attributeIndex == -1) {
+        // state?
+        state = block.getStateMachine().getStateWithName(fieldString);
+        if (state == null) {
+          return -1;
+        }
         isState = true;
-        state = asme;
-        error = 0;
+        accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+      } else {
+        accessIndex = attributeIndex;
+        return -2; // constant
+      }
+    } else {
+      int offset = block.getBooleanOffset();
+      int optRatio = block.getAttributeOptRatio();
+      if (offset == -1 || attributeIndex < offset) {
+        accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
+        shift = (attributeIndex % optRatio) * (32 / optRatio);
+        if (optRatio == 2) {
+          mask = 0xFFFF;
+        } else if (optRatio == 4) {
+          mask = 0xFF;
+        }
+      } else {
+        accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio
+            + ((attributeIndex - offset) / 32);
+        shift = (attributeIndex - offset) % 32;
+        mask = 1;
+      }
+    }
+    return 0;
+  }
+
+  private int initAttributes(AvatarBlock block) {
+    // Extract Attribute
+    if (block == null) {
+      return -1;
+    }
+
+    this.block = block;
+    this.blockIndex = -1; // not initialized
+
+    int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
+
+    shift = 0;
+    mask = 0xFFFFFFFF;
+
+    if (attributeIndex == -1) {
+      attributeIndex = block.getIndexOfConstantWithName(s);
+      if (attributeIndex == -1) {
+        // state?
+        state = block.getStateMachine().getStateWithName(s);
+        if (state == null) {
+          return -1;
+        }
+        isState = true;
+        accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+      } else {
+        accessIndex = attributeIndex;
+        return -2; // constant
+      }
+    } else {
+      int offset = block.getBooleanOffset();
+      int optRatio = block.getAttributeOptRatio();
+      if (offset == -1 || attributeIndex < offset) {
+        accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
+        shift = (attributeIndex % optRatio) * (32 / optRatio);
+        if (optRatio == 2) {
+          mask = 0xFFFF;
+        } else if (optRatio == 4) {
+          mask = 0xFF;
+        }
+      } else {
+        accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio
+            + ((attributeIndex - offset) / 32);
+        shift = (attributeIndex - offset) % 32;
+        mask = 1;
+      }
+    }
+    return 0;
+  }
+
+  public boolean hasError() {
+    return error == -1;
+  }
+
+  public boolean isConstant() {
+    return error == -2;
+  }
+
+  public void setBlockIndex(AvatarSpecification spec) {
+    if (blockIndex == -1) {
+      // initialize it
+      blockIndex = spec.getBlockIndex(block);
+    }
+  }
+
+  public AvatarAttribute getConstAttribute() {
+    if (error == -2) {
+      return block.getConstantWithIndex(accessIndex);
+    }
+    return null;
+  }
+
+  public int getValue(SpecificationState ss) {
+    int value;
+
+    if (isState) {
+      if (ss.blocks == null || accessIndex == -1) {
+        return 0;
+      }
+      if (ss.blocks[blockIndex].values[SpecificationBlock.STATE_INDEX] == accessIndex) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+    value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
+
+    if (mask > 1 && value > (mask >> 1)) {
+      // convert to negative
+      value = ~((value ^ mask) + 1) + 1;
+    }
+
+    return value;
+  }
+
+  public int getValue(SpecificationState ss, AvatarStateMachineElement asme) {
+    int value;
+
+    if (isState) {
+      return (state == asme) ? 1 : 0;
+    }
+
+    value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
+
+    if (mask > 1 && value > (mask >> 1)) {
+      // convert to negative
+      value = ~((value ^ mask) + 1) + 1;
+    }
+
+    return value;
+  }
+
+  public int getValue(SpecificationBlock sb) {
+    int value;
+
+    if (isState) {
+      if (sb == null || accessIndex == -1) {
+        return 0;
+      }
+      if (sb.values[SpecificationBlock.STATE_INDEX] == accessIndex) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+    value = (sb.values[accessIndex] >> shift) & mask;
+
+    if (mask > 1 && value > (mask >> 1)) {
+      // convert to negative
+      value = ~((value ^ mask) + 1) + 1;
+    }
+
+    return value;
+  }
+
+  public int getValue(int[] attributesValues) {
+    int value;
+
+    if (isState) {
+      return 0;
+    }
+
+    // Cancel offset based on Specification Blocks
+    value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> shift) & mask;
+
+    if (mask > 1 && value > (mask >> 1)) {
+      // convert to negative
+      value = ~(value ^ mask + 1) + 1;
+    }
+
+    return value;
+  }
+
+  public void setValue(SpecificationState ss, int value) {
+    if (isState) {
+      return;
+    }
+
+    ss.blocks[blockIndex].values[accessIndex] = (ss.blocks[blockIndex].values[accessIndex] & (~(mask << shift)))
+        | ((value & mask) << shift);
+  }
+
+  public void setValue(SpecificationBlock sb, int value) {
+    if (isState) {
+      return;
+    }
+
+    sb.values[accessIndex] = (sb.values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
+  }
+
+  // Link state to access index in the state machine
+  public void linkState() {
+    if (isState) {
+      if (block != null) {
+        accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+      } else {
         accessIndex = -1;
-        shift = 0;
-        mask = 0xFFFFFFFF;
-        block = null;
+      }
+    }
+  }
+
+  public int getAttributeType() {
+    if (isState) {
+      return AvatarExpressionSolver.IMMEDIATE_BOOL;
+    }
+    int offset = block.getBooleanOffset();
+    int ratio = block.getAttributeOptRatio();
+    int attributeIndex = (accessIndex - SpecificationBlock.ATTR_INDEX) * ratio + shift * ratio / 32;
+    if (offset == -1 || (attributeIndex < offset)) {
+      if (block.getAttribute((accessIndex - SpecificationBlock.ATTR_INDEX)).getType() == AvatarType.BOOLEAN) {
+        return AvatarExpressionSolver.IMMEDIATE_BOOL;
+      } else {
+        return AvatarExpressionSolver.IMMEDIATE_INT;
+      }
+    } else {
+      return AvatarExpressionSolver.IMMEDIATE_BOOL;
+    }
+  }
+
+  public boolean isState() {
+    return isState;
+  }
+
+  public String toString() {
+    return s;
+  }
+
+  public static AvatarElement getElement(String s, AvatarSpecification spec) {
+    // Extract Block and Attribute
+    String[] splitS;
+    String blockString;
+    String fieldString;
+    AvatarBlock block;
+    int blockIndex;
+
+    if (spec == null) {
+      return null;
     }
 
-    
-    private int initAttributes(AvatarSpecification spec) {
-        //Extract Block and Attribute
-        String[] splitS;
-        String blockString;
-        String fieldString;
-        
-        if (spec == null) {
-            return -1;
-        }
-        
-        if (s.matches(".+\\..+")) {
-            splitS = s.split("\\.");
-            blockString = splitS[0];
-            fieldString = splitS[1];
-        } else {
-            return -1;
-        }
-        
-        block = spec.getBlockWithName(blockString);
-        
-        if (block == null) {
-            return -1;
-        }
-        
-        blockIndex = spec.getBlockIndex(block);
-        
-        int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
-        
-        shift = 0;
-        mask = 0xFFFFFFFF;
-        
-        if (attributeIndex == -1) {
-            attributeIndex = block.getIndexOfConstantWithName(fieldString);
-            if (attributeIndex == -1) {
-                // state?
-                state = block.getStateMachine().getStateWithName(fieldString);
-                if (state == null) {
-                    return -1;
-                }
-                isState = true;
-                accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
-            } else {
-                accessIndex = attributeIndex;
-                return -2; //constant
-            }
-        } else {
-            int offset = block.getBooleanOffset();
-            int optRatio = block.getAttributeOptRatio();
-            if (offset == -1 || attributeIndex < offset) {
-                accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
-                shift = (attributeIndex % optRatio) * (32 / optRatio);
-                if (optRatio == 2) {
-                    mask = 0xFFFF;
-                } else if (optRatio == 4) {
-                    mask = 0xFF;
-                }
-            } else {
-                accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio + ((attributeIndex - offset) / 32);
-                shift = (attributeIndex - offset) % 32;
-                mask = 1;
-            }
-        }
-        return 0;
+    if (s.matches(".+\\..+")) {
+      splitS = s.split("\\.");
+      blockString = splitS[0];
+      fieldString = splitS[1];
+    } else {
+      return null;
     }
-    
-    private int initAttributes(AvatarBlock block) {
-        //Extract Attribute
-        if (block == null) {
-            return -1;
-        }
-        
-        this.block = block;
-        this.blockIndex = -1; //not initialized
-        
-        int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
-        
-        shift = 0;
-        mask = 0xFFFFFFFF;
-        
-        if (attributeIndex == -1) {
-            attributeIndex = block.getIndexOfConstantWithName(s);
-            if (attributeIndex == -1) {
-                // state?
-                state = block.getStateMachine().getStateWithName(s);
-                if (state == null) {
-                    return -1;
-                }
-                isState = true;
-                accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
-            } else {
-                accessIndex = attributeIndex;
-                return -2; //constant
-            }
-        } else {
-            int offset = block.getBooleanOffset();
-            int optRatio = block.getAttributeOptRatio();
-            if (offset == -1 || attributeIndex < offset) {
-                accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
-                shift = (attributeIndex % optRatio) * (32 / optRatio);
-                if (optRatio == 2) {
-                    mask = 0xFFFF;
-                } else if (optRatio == 4) {
-                    mask = 0xFF;
-                }
-            } else {
-                accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio + ((attributeIndex - offset) / 32);
-                shift = (attributeIndex - offset) % 32;
-                mask = 1;
-            }
-        }
-        return 0;
+
+    block = spec.getBlockWithName(blockString);
+
+    if (block == null) {
+      return null;
     }
-    
-    public boolean hasError() {
-        return error == -1;
-    }
-    
-    public boolean isConstant() {
-        return error == -2;
-    }
-    
-    public void setBlockIndex(AvatarSpecification spec) {
-        if (blockIndex == -1) {
-            //initialize it
-            blockIndex = spec.getBlockIndex(block);
-        }
-    }
-    
-    public AvatarAttribute getConstAttribute() {
-        if (error == -2) {
-            return block.getConstantWithIndex(accessIndex);
-        }
+
+    blockIndex = spec.getBlockIndex(block);
+
+    int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
+
+    if (attributeIndex == -1) {
+      attributeIndex = block.getIndexOfConstantWithName(fieldString);
+      if (attributeIndex == -1) {
+        // state?
+        return block.getStateMachine().getStateWithName(fieldString);
+      } else {
+        // not created for constants
         return null;
+      }
+    } else {
+      return block.getAvatarAttributeWithName(fieldString);
     }
- 
-    public int getValue(SpecificationState ss) {
-        int value;
-        
-        if (isState) {
-            if (ss.blocks == null || accessIndex == -1) {
-                return 0;
-            }
-            if (ss.blocks[blockIndex].values[SpecificationBlock.STATE_INDEX] == accessIndex) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-        
-        value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
-        
-        if (mask > 1 && value > (mask >> 1)) {
-            //convert to negative
-            value = ~((value ^ mask) + 1) + 1;
-        }
-        
-        return value;
-    }
-    
-    public int getValue(SpecificationState ss, AvatarStateMachineElement asme) {
-        int value;
-        
-        if (isState) {
-            return (state == asme) ? 1 : 0;
-        }
-        
-        value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
-        
-        if (mask > 1 && value > (mask >> 1)) {
-            //convert to negative
-            value = ~((value ^ mask) + 1) + 1;
-        }
-        
-        return value;
-    }
-    
-    public int getValue(SpecificationBlock sb) {
-        int value;
-        
-        if (isState) {
-            if (sb == null || accessIndex == -1) {
-                return 0;
-            }     
-            if (sb.values[SpecificationBlock.STATE_INDEX] == accessIndex) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-        
-        value = (sb.values[accessIndex] >> shift) & mask;
-        
-        if (mask > 1 && value > (mask >> 1)) {
-            //convert to negative
-            value = ~((value ^ mask) + 1) + 1;
-        }
-        
-        return value;
-    }
-    
-    public int getValue(int[] attributesValues) {
-        int value;
-        
-        if (isState) {
-            return 0;
-        }
-        
-        //Cancel offset based on Specification Blocks
-        value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> shift) & mask;
-        
-        if (mask > 1 && value > (mask >> 1)) {
-            //convert to negative
-            value = ~(value ^ mask + 1) + 1;
-        }
-        
-        return value;
-    }
-    
-    public void setValue(SpecificationState ss, int value) {        
-        if (isState) {
-            return;
-        }
-        
-        ss.blocks[blockIndex].values[accessIndex] = (ss.blocks[blockIndex].values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
-    }
-    
-    public void setValue(SpecificationBlock sb, int value) {      
-        if (isState) {
-            return;
-        }
+  }
 
-        sb.values[accessIndex] = (sb.values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
+  public static AvatarElement getElement(String s, AvatarBlock block) {
+    // Extract Attribute
+    if (block == null) {
+      return null;
     }
-    
-    //Link state to access index in the state machine
-    public void linkState() {
-        if (isState) {
-            if (block != null) {
-                accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
-            } else {
-                accessIndex = -1;
-            }
-        }
+
+    int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
+
+    if (attributeIndex == -1) {
+      attributeIndex = block.getIndexOfConstantWithName(s);
+      if (attributeIndex == -1) {
+        // state?
+        return block.getStateMachine().getStateWithName(s);
+      } else {
+        // not created for constants
+        return null;
+      }
+    } else {
+      return block.getAvatarAttributeWithName(s);
     }
-    
-    
-    public int getAttributeType() {
-        if (isState) {
-            return AvatarExpressionSolver.IMMEDIATE_BOOL;
-        }
-        int offset = block.getBooleanOffset();
-        int ratio = block.getAttributeOptRatio();
-        int attributeIndex = (accessIndex - SpecificationBlock.ATTR_INDEX) * ratio + shift * ratio / 32;
-        if (offset == -1 || (attributeIndex < offset)) {
-            if (block.getAttribute((accessIndex - SpecificationBlock.ATTR_INDEX)).getType() == AvatarType.BOOLEAN) {
-                return AvatarExpressionSolver.IMMEDIATE_BOOL;
-            } else {
-                return AvatarExpressionSolver.IMMEDIATE_INT;
-            }
-        } else {
-            return AvatarExpressionSolver.IMMEDIATE_BOOL;
-        }
-    }
-    
-    
-    public boolean isState() {
-        return isState;
-    }
-    
-    public String toString() {
-        return s;
-    }
-    
-    public static AvatarElement getElement(String s, AvatarSpecification spec) {
-        //Extract Block and Attribute
-        String[] splitS;
-        String blockString;
-        String fieldString;
-        AvatarBlock block;
-        int blockIndex;
-        
-        if (spec == null) {
-            return null;
-        }
-        
-        if (s.matches(".+\\..+")) {
-            splitS = s.split("\\.");
-            blockString = splitS[0];
-            fieldString = splitS[1];
-        } else {
-            return null;
-        }
-        
-        block = spec.getBlockWithName(blockString);
-        
-        if (block == null) {
-            return null;
-        }
-        
-        blockIndex = spec.getBlockIndex(block);
-        
-        int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
-        
-        if (attributeIndex == -1) {
-            attributeIndex = block.getIndexOfConstantWithName(fieldString);
-            if (attributeIndex == -1) {
-                // state?
-                return block.getStateMachine().getStateWithName(fieldString);
-            } else {
-                //not created for constants
-                return null;
-            }
-        } else {
-            return block.getAvatarAttributeWithName(fieldString);
-        }
-    }
-    
-    public static AvatarElement getElement(String s, AvatarBlock block) {
-        //Extract Attribute        
-        if (block == null) {
-            return null;
-        }
-        
-        
-        int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
-        
-        if (attributeIndex == -1) {
-            attributeIndex = block.getIndexOfConstantWithName(s);
-            if (attributeIndex == -1) {
-                // state?
-                return block.getStateMachine().getStateWithName(s);
-            } else {
-                //not created for constants
-                return null;
-            }
-        } else {
-            return block.getAvatarAttributeWithName(s);
-        }
-    }
-    
+  }
+
 }

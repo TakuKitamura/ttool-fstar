@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -54,139 +51,138 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 /**
- * Class FaultTreePanel
- * Management of fault trees
- * Creation: 14/12/2017
+ * Class FaultTreePanel Management of fault trees Creation: 14/12/2017
+ * 
  * @version 1.0 14/12/2017
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
 public class FaultTreePanel extends TURTLEPanel {
-    public FaultTreeDiagramPanel ftdp;
+  public FaultTreeDiagramPanel ftdp;
 
-    public FaultTreePanel(MainGUI _mgui) {
-        super(_mgui);
+  public FaultTreePanel(MainGUI _mgui) {
+    super(_mgui);
 
-        // Issue #41 Ordering of tabbed panes
-        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);//new JTabbedPane();
-        UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
-        UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
-        SwingUtilities.updateComponentTreeUI(tabbedPane);
-        //tabbedPane.setOpaque(true);
+    // Issue #41 Ordering of tabbed panes
+    // tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+    tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);// new JTabbedPane();
+    UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
+    UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
+    SwingUtilities.updateComponentTreeUI(tabbedPane);
+    // tabbedPane.setOpaque(true);
 
-        cl = new ChangeListener() {
-                public void stateChanged(ChangeEvent e){
-                    mgui.paneRequirementAction(e);
-                }
-            };
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+    cl = new ChangeListener() {
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneRequirementAction(e);
+      }
+    };
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
 
+  }
+
+  public void init() {
+    mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
+    // Requirement Diagram toolbar
+    // addRequirementDiagram("Requirement Diagram");
+
+    // jsp.setVisible(true);
+  }
+
+  public boolean addFaultTreeDiagram(String s) {
+    FaultTreeDiagramToolbar toolBarAt = new FaultTreeDiagramToolbar(mgui);
+    toolbars.add(toolBarAt);
+
+    toolBarPanel = new JPanel();
+    // toolBarPanel.setBackground(Color.red);
+    toolBarPanel.setLayout(new BorderLayout());
+    // toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+
+    // The diagram
+    ftdp = new FaultTreeDiagramPanel(mgui, toolBarAt);
+    ftdp.setName(s);
+    ftdp.tp = this;
+    tdp = ftdp;
+    panels.add(ftdp);
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(ftdp);
+    ftdp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Open Fault Tree Diagram");
+    tabbedPane.setSelectedIndex(0);
+    JPanel toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+    tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+    return true;
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"FaultTree\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
+    return "<Modeling type=\"FaultTree\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+  }
 
-    public void init() {
-        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
-        // Requirement Diagram toolbar
-        //addRequirementDiagram("Requirement Diagram");
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
 
-        //jsp.setVisible(true);
+  public String toString() {
+    return mgui.getTitleAt(this) + " (SysML Parametric Diagram)";
+  }
+
+  public boolean canFirstDiagramBeMoved() {
+    return true;
+  }
+
+  public boolean removeEnabled(int index) {
+    return panels.size() > 1;
+  }
+
+  public boolean renameEnabled(int index) {
+    if (panels.size() == 0) {
+      return false;
     }
+    return (panels.elementAt(index) instanceof FaultTreeDiagramPanel);
 
-    public boolean addFaultTreeDiagram(String s) {
-        FaultTreeDiagramToolbar toolBarAt = new FaultTreeDiagramToolbar(mgui);
-        toolbars.add(toolBarAt);
+  }
 
-        toolBarPanel = new JPanel();
-        //toolBarPanel.setBackground(Color.red);
-        toolBarPanel.setLayout(new BorderLayout());
-        //toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+  public boolean isFTDEnabled() {
+    return true;
+  }
 
-        //The diagram
-        ftdp = new FaultTreeDiagramPanel(mgui, toolBarAt);
-        ftdp.setName(s);
-        ftdp.tp = this;
-        tdp = ftdp;
-        panels.add(ftdp);
-        JScrollDiagramPanel jsp = new JScrollDiagramPanel(ftdp);
-        ftdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-        toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Open Fault Tree Diagram");
-        tabbedPane.setSelectedIndex(0);
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
-
-        return true;
-    }
-
-    public String saveHeaderInXml(String extensionToName) {
-        if (extensionToName == null) {
-            return "<Modeling type=\"FaultTree\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+  public ArrayList<TGComponent> getAllFaults() {
+    ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+    TDiagramPanel tp;
+    for (int i = 0; i < panels.size(); i++) {
+      tp = panels.get(i);
+      if (tp instanceof FaultTreeDiagramPanel) {
+        for (TGComponent s : ((FaultTreeDiagramPanel) tp).getAllFaults()) {
+          list.add(s);
         }
-        return "<Modeling type=\"FaultTree\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+      }
+    }
+    return list;
+
+  }
+
+  public void resetMetElements() {
+    // TraceManager.addDev("Reset met elements");
+    TGComponent tgc;
+
+    for (int i = 0; i < panels.size(); i++) {
+      Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
+
+      while (iterator.hasNext()) {
+        tgc = iterator.next();
+        tgc.setAVATARMet(0);
+        tgc.setInternalAvatarMet(0);
+      }
     }
 
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
-    }
-
-    public String toString() {
-        return mgui.getTitleAt(this) + " (SysML Parametric Diagram)";
-    }
-
-    public boolean canFirstDiagramBeMoved() {
-        return true;
-    }
-
-    public boolean removeEnabled(int index) {
-        return panels.size() > 1;
-    }
-
-    public boolean renameEnabled(int index) {
-        if (panels.size() == 0) {
-            return false;
-        }
-        return (panels.elementAt(index) instanceof FaultTreeDiagramPanel);
-
-    }
-
-    public boolean isFTDEnabled() {
-        return true;
-    }
-
-    public ArrayList<TGComponent> getAllFaults(){
-        ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-        TDiagramPanel tp;
-        for(int i=0; i<panels.size(); i++) {
-            tp = panels.get(i);
-            if (tp instanceof FaultTreeDiagramPanel) {
-                for (TGComponent s:((FaultTreeDiagramPanel)tp).getAllFaults()){
-                    list.add(s);
-                }
-            }
-        }
-        return list;
-
-    }
-
-    public void resetMetElements() {
-        //TraceManager.addDev("Reset met elements");
-        TGComponent tgc;
-
-        for(int i=0; i<panels.size(); i++) {
-            Iterator<TGComponent> iterator = panels.get(i).getComponentList().listIterator();
-
-            while(iterator.hasNext()) {
-                tgc = iterator.next();
-                tgc.setAVATARMet(0);
-                tgc.setInternalAvatarMet(0);
-            }
-        }
-
-    }
+  }
 
 }

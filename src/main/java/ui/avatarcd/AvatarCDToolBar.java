@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarcd;
 
 import ui.MainGUI;
@@ -51,103 +48,97 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 /**
- * Class AvatarCDToolBar
- * Implements the toolbar to be used in conjunction with the panel of 
- * AVATAR Parametric Diagram
- * Creation: 31/08/2011
+ * Class AvatarCDToolBar Implements the toolbar to be used in conjunction with
+ * the panel of AVATAR Parametric Diagram Creation: 31/08/2011
+ * 
  * @version 1.0 31/08/2011
  * @author Ludovic APVRILLE
  * @see ui.cd.TClassDiagramPanel
  */
 public class AvatarCDToolBar extends TToolBar {
-    
-    public AvatarCDToolBar(MainGUI _mgui) {
-        super(_mgui);
-        
-    }
-    
-    @Override
-    protected void setActive(boolean b) {
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-		mgui.updateZoomInfo();
-		
-        mgui.actions[TGUIAction.ACD_EDIT].setEnabled(b);
-        mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-        mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACD_BLOCK].setEnabled(b);
-		mgui.actions[TGUIAction.ACD_COMPOSITION_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.ACD_AGGREGATION_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ACD_ASSOCIATION_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.ACD_SPECIA_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ACD_ACTOR_BOX].setEnabled(b);
-		mgui.actions[TGUIAction.ACD_ACTOR_STICKMAN].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
-    }
-    
-    @Override
-    protected void setButtons() {
-        JButton button;
-        
-        button = this.add(mgui.actions[TGUIAction.ACD_EDIT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.ACD_BLOCK]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ACD_COMPOSITION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+  public AvatarCDToolBar(MainGUI _mgui) {
+    super(_mgui);
 
-        button = this.add(mgui.actions[TGUIAction.ACD_AGGREGATION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACD_ACTOR_STICKMAN]);
-        button.addMouseListener(mgui.mouseHandler);
+  }
 
-		button = this.add(mgui.actions[TGUIAction.ACD_ACTOR_BOX]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ACD_ASSOCIATION_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
+  @Override
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-        button = this.add(mgui.actions[TGUIAction.ACD_SPECIA_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		/*this.addSeparator();
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);*/
-		
-		
-    }
-    
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
+
+    mgui.actions[TGUIAction.ACD_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACD_BLOCK].setEnabled(b);
+    mgui.actions[TGUIAction.ACD_COMPOSITION_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACD_AGGREGATION_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACD_ASSOCIATION_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACD_SPECIA_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ACD_ACTOR_BOX].setEnabled(b);
+    mgui.actions[TGUIAction.ACD_ACTOR_STICKMAN].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID].setEnabled(b);
+
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(!b);
+  }
+
+  @Override
+  protected void setButtons() {
+    JButton button;
+
+    button = this.add(mgui.actions[TGUIAction.ACD_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACD_BLOCK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACD_COMPOSITION_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACD_AGGREGATION_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACD_ACTOR_STICKMAN]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACD_ACTOR_BOX]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACD_ASSOCIATION_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ACD_SPECIA_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    /*
+     * this.addSeparator(); this.addSeparator();
+     * 
+     * button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+     * button.addMouseListener(mgui.mouseHandler);
+     */
+
+  }
+
 } // Class
-
-
-
-
-

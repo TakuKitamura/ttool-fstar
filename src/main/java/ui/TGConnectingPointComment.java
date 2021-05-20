@@ -39,20 +39,21 @@
 package ui;
 
 /**
- * Class TGConnectingPointComment
- * Definition of connecting points on which connectors can be connected to UML comments
- * Creation: 10/05/2006
+ * Class TGConnectingPointComment Definition of connecting points on which
+ * connectors can be connected to UML comments Creation: 10/05/2006
+ * 
  * @version 1.0 10/05/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointComment extends  TGConnectingPointWidthHeight {
-    
-    public TGConnectingPointComment(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CONNECTOR_COMMENT;
-    }
+public class TGConnectingPointComment extends TGConnectingPointWidthHeight {
+
+  public TGConnectingPointComment(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CONNECTOR_COMMENT;
+  }
 }

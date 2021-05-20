@@ -46,79 +46,83 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 /**
- * Class TADStartState
- * used to start a new activity. To be used in activity diagrams
- * Creation: 12/12/2003
+ * Class TADStartState used to start a new activity. To be used in activity
+ * diagrams Creation: 12/12/2003
+ * 
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ {
-	
-	//protected int lineLength = 5;
+public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent */ {
 
-	public TADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-		
-		// Issue #3&
-		createConnectingPoints();
-//		width = 15;
-//		height = 15;
-		initScaling( 15, 15 );
+  // protected int lineLength = 5;
 
-		nbInternalTGComponent = 0;
+  public TADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
+      TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		moveable = true;
-		editable = false;
-		removable = true;
-	
-		name = "start state";
-		
-		myImageIcon = IconManager.imgic222;
-	}
+    // Issue #3&
+    createConnectingPoints();
+    // width = 15;
+    // height = 15;
+    initScaling(15, 15);
 
-    protected void createConnectingPoints() {
-		nbConnectingPoint = 1;
-		connectingPoint = new TGConnectingPoint[1];
-		connectingPoint[0] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "start state";
+
+    myImageIcon = IconManager.imgic222;
+  }
+
+  protected void createConnectingPoints() {
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[1];
+    connectingPoint[0] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+  }
+
+  @Override
+  protected void internalDrawing(Graphics g) {
+    final int radius = width / 2;
+
+    g.fillOval(x, y, radius * 2, radius * 2);// width, height);
+    g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength /** oldScaleFactor */
+        + height);
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
 
-    @Override
-	protected void internalDrawing(Graphics g) {
-    	final int radius = width / 2;
-
-    	g.fillOval(x, y, radius * 2, radius * 2 );//width, height);
-		g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength /** oldScaleFactor*/ + height);
-	}
-
-    @Override
-	public TGComponent isOnMe(int _x, int _y) {
-		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-			return this;
-		}
-		
-		if ((int)(Line2D.ptSegDistSq(x+(width/2), y+height, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-		
-		return null;
-	}
-	
-    @Override
-	public int getType() {
-		return TGComponentManager.TAD_START_STATE;
-	}
-	
-    @Override
-	public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    if ((int) (Line2D.ptSegDistSq(x + (width / 2), y + height, x + (width / 2), y + lineLength + height, _x,
+        _y)) < distanceSelected) {
+      return this;
     }
-    
-    /* Issue #69
-     * (non-Javadoc)
-     * @see ui.AbstractCDElement#canBeDisabled()
-     */
-    @Override
-    public boolean canBeDisabled() {
-    	return false;
-    }
+
+    return null;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.TAD_START_STATE;
+  }
+
+  @Override
+  public int getDefaultConnector() {
+    return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+  }
+
+  /*
+   * Issue #69 (non-Javadoc)
+   * 
+   * @see ui.AbstractCDElement#canBeDisabled()
+   */
+  @Override
+  public boolean canBeDisabled() {
+    return false;
+  }
 }

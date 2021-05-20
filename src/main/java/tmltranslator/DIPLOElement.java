@@ -36,46 +36,45 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import myutil.TraceManager;
 
 /**
- * Class DIPLOElement
- * Creation: 24/03/2008
+ * Class DIPLOElement Creation: 24/03/2008
+ * 
  * @version 1.0 24/03/2008
  * @author Ludovic APVRILLE
  */
 public class DIPLOElement {
-	
-	protected static int ID=0;
-	protected String customData="";
-	
-    private int myID;
-    
-    public DIPLOElement() {
-       myID=++ID;
-    }
-    
-    public int getID(){
-		return myID;
-    }
-	
-	public static void setGeneralID(int _IDValue) {
-		ID = _IDValue;
-	}
-	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
-	}
 
-	public String getCustomData() { return customData;};
+  protected static int ID = 0;
+  protected String customData = "";
 
-	public void setCustomData(String _customData) {
-		customData = _customData;
-	}
+  private int myID;
+
+  public DIPLOElement() {
+    myID = ++ID;
+  }
+
+  public int getID() {
+    return myID;
+  }
+
+  public static void setGeneralID(int _IDValue) {
+    ID = _IDValue;
+  }
+
+  public static void resetID() {
+    TraceManager.addDev("Reset DIPLOID");
+    ID = 0;
+  }
+
+  public String getCustomData() {
+    return customData;
+  };
+
+  public void setCustomData(String _customData) {
+    customData = _customData;
+  }
 }

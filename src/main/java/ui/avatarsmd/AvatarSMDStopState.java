@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import myutil.GraphicLib;
@@ -48,63 +45,59 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
- * Class AvatarSMDStopState
- * Used to terminate a new state machine of an AVATAR block
- * Creation: 06/04/2010
+ * Class AvatarSMDStopState Used to terminate a new state machine of an AVATAR
+ * block Creation: 06/04/2010
+ * 
  * @version 1.0 06/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDStopState extends AvatarSMDBasicComponent implements EmbeddedComment, AllowedBreakpoint, PartOfInvariant, PartOfHighInvariant {
-    private int internalCircleSize = 16;
-    private int lineLength = 5;
-    
-    public AvatarSMDStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 20;
-        height = 20;
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-        connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, - lineLength, true, false, 0.5, 0.0);
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "stop state";
-        
-        myImageIcon = IconManager.imgic210;
-    }
-    
-    @Override
-    public void internalDrawing(Graphics g) {
-        ColorManager.setColor(g, state, 0);
-        g.fillOval(x + (width - scale(internalCircleSize))/2, y + (height - scale(internalCircleSize))/2, scale(internalCircleSize), scale(internalCircleSize));
-        g.drawOval(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - scale(lineLength));
-    }
+public class AvatarSMDStopState extends AvatarSMDBasicComponent
+    implements EmbeddedComment, AllowedBreakpoint, PartOfInvariant, PartOfHighInvariant {
+  private int internalCircleSize = 16;
+  private int lineLength = 5;
 
-    @Override
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
+  public AvatarSMDStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    width = 20;
+    height = 20;
+
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[1];
+    connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+
+    nbInternalTGComponent = 0;
+
+    moveable = true;
+    editable = false;
+    removable = true;
+
+    name = "stop state";
+
+    myImageIcon = IconManager.imgic210;
+  }
+
+  @Override
+  public void internalDrawing(Graphics g) {
+    ColorManager.setColor(g, state, 0);
+    g.fillOval(x + (width - scale(internalCircleSize)) / 2, y + (height - scale(internalCircleSize)) / 2,
+        scale(internalCircleSize), scale(internalCircleSize));
+    g.drawOval(x, y, width, height);
+    g.drawLine(x + (width / 2), y, x + (width / 2), y - scale(lineLength));
+  }
+
+  @Override
+  public TGComponent isOnMe(int _x, int _y) {
+    if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+      return this;
     }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.AVATARSMD_STOP_STATE;
-    }
-    
+    return null;
+  }
+
+  @Override
+  public int getType() {
+    return TGComponentManager.AVATARSMD_STOP_STATE;
+  }
+
 }
-
-
-
-
-
-
-

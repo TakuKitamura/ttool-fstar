@@ -45,9 +45,9 @@ import ui.TToolBar;
 import javax.swing.*;
 
 /**
- * Class ELNDiagramToolBar 
- * Implements the toolbar to be used in conjunction with the panel of a ELN diagram 
- * Creation: 11/06/2018
+ * Class ELNDiagramToolBar Implements the toolbar to be used in conjunction with
+ * the panel of a ELN diagram Creation: 11/06/2018
+ * 
  * @version 1.0 11/06/2018
  * @author Irina Kit Yan LEE
  * @see ELNDiagramPanel
@@ -57,170 +57,170 @@ import javax.swing.*;
 
 public class ELNDiagramToolBar extends TToolBar {
 
-	public ELNDiagramToolBar(MainGUI _mgui) {
-		super(_mgui);
-	}
+  public ELNDiagramToolBar(MainGUI _mgui) {
+    super(_mgui);
+  }
 
-	protected void setActive(boolean b) {
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+  protected void setActive(boolean b) {
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
-		mgui.actions[TGUIAction.ELN_EDIT].setEnabled(b);
-		mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_RESISTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CAPACITOR].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_INDUCTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_NODE_REF].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_MODULE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_MODULE_TERMINAL].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_MODULE_PORT_DE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_TOGGLE_ATTR].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CLUSTER].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_GENCODE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE].setEnabled(b);
-		
-		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
-		
-		// Issue #31
-		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
-		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
-//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
-		mgui.updateZoomInfo();
-	}
+    mgui.actions[TGUIAction.ELN_EDIT].setEnabled(b);
+    mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_RESISTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_CAPACITOR].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_INDUCTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_NODE_REF].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_MODULE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_MODULE_TERMINAL].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_MODULE_PORT_DE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_TOGGLE_ATTR].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_CONNECTOR].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_CLUSTER].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_GENCODE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK].setEnabled(b);
+    mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE].setEnabled(b);
 
-	protected void setButtons() {
-		JButton button;
+    mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
 
-		button = this.add(mgui.actions[TGUIAction.ELN_EDIT]);
-		button.addMouseListener(mgui.mouseHandler);
+    // Issue #31
+    mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+    mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    // mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+    mgui.updateZoomInfo();
+  }
 
-		button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
-		button.addMouseListener(mgui.mouseHandler);
+  protected void setButtons() {
+    JButton button;
 
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CONNECTOR]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_MODULE]);
-		button.addMouseListener(mgui.mouseHandler);
-	
-		button = this.add(mgui.actions[TGUIAction.ELN_MODULE_TERMINAL]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_MODULE_PORT_DE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_RESISTOR]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CAPACITOR]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_INDUCTOR]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_NODE_REF]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_GENCODE]);
-		button.addMouseListener(mgui.mouseHandler);
-	}
+    button = this.add(mgui.actions[TGUIAction.ELN_EDIT]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_CONNECTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_MODULE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_MODULE_TERMINAL]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_MODULE_PORT_DE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_RESISTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_CAPACITOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_INDUCTOR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_NODE_REF]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR]);
+    button.addMouseListener(mgui.mouseHandler);
+
+    this.addSeparator();
+
+    button = this.add(mgui.actions[TGUIAction.ELN_GENCODE]);
+    button.addMouseListener(mgui.mouseHandler);
+  }
 }

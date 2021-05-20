@@ -36,58 +36,52 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package req.ebrdd;
 
 /**
- * Class ERB
- * Event Reaction Block
- * Creation: 22/09/2009
+ * Class ERB Event Reaction Block Creation: 22/09/2009
+ * 
  * @version 1.0 22/09/2009
  * @author Ludovic APVRILLE
  */
-public class ERB extends ERCElement  {
-	
-	protected String evt, condition, action; 
-    
-    public ERB(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-    }
-	
-	public void setEvent(String _evt) {
-		evt = _evt;
-	}
-	
-	public void setCondition(String _condition) {
-		condition = _condition;
-	}
-	
-	public void setAction(String _action) {
-		action = _action;
-	}
-    
-    public String getEvent() {
-		return evt;
-	}
-	
-	public String getCondition() {
-		return condition;
-	}
-	
-	public String getAction() {
-		return action;
-	}
-	
-	public String toString() {
-		String s = "ERB(" + evt + ", " + condition + ", " + action + ")";
-		/*if (isNegated()) {
-			s += " [negated]";
-		}*/
-		return s;
-	}
-  
-	
-    
+public class ERB extends ERCElement {
+
+  protected String evt, condition, action;
+
+  public ERB(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public void setEvent(String _evt) {
+    evt = _evt;
+  }
+
+  public void setCondition(String _condition) {
+    condition = _condition;
+  }
+
+  public void setAction(String _action) {
+    action = _action;
+  }
+
+  public String getEvent() {
+    return evt;
+  }
+
+  public String getCondition() {
+    return condition;
+  }
+
+  public String getAction() {
+    return action;
+  }
+
+  public String toString() {
+    String s = "ERB(" + evt + ", " + condition + ", " + action + ")";
+    /*
+     * if (isNegated()) { s += " [negated]"; }
+     */
+    return s;
+  }
+
 }

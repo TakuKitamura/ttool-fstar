@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package help;
 
 import myutil.Conversion;
@@ -52,29 +51,24 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-
 /**
- * Class ScoredHelpEntry
- * Creation: 18/11/2019
- * Version 2.0 18/11/2019
+ * Class ScoredHelpEntry Creation: 18/11/2019 Version 2.0 18/11/2019
  *
  * @author Ludovic APVRILLE
  */
 public class ScoredHelpEntry implements Comparable<ScoredHelpEntry> {
 
-   public int score;
-   public HelpEntry he;
+  public int score;
+  public HelpEntry he;
 
-    public ScoredHelpEntry(int score, HelpEntry he) {
-        this.score = score;
-        this.he = he;
-    }
+  public ScoredHelpEntry(int score, HelpEntry he) {
+    this.score = score;
+    this.he = he;
+  }
 
-    public int compareTo(ScoredHelpEntry compareEntry) {
-        // descending order
-        return this.score - compareEntry.score;
-    }
-
-
+  public int compareTo(ScoredHelpEntry compareEntry) {
+    // descending order
+    return this.score - compareEntry.score;
+  }
 
 }

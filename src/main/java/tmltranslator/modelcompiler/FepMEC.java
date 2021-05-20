@@ -43,36 +43,37 @@ import java.util.Arrays;
 import java.util.Vector;
 
 /**
-   * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper operations
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
-   * @author Andrea ENRICI
+ * Class MapperMEC, Model Extension Construct (MEC) class for Embb Mapper
+ * operations Creation: 05/02/2014
+ * 
+ * @version 1.0 05/02/2014
+ * @author Andrea ENRICI
  */
-public class FepMEC extends ArchUnitMEC	{
+public class FepMEC extends ArchUnitMEC {
 
-	public static final String CONTEXT_CLEANUP = "fep_ctx_cleanup";
+  public static final String CONTEXT_CLEANUP = "fep_ctx_cleanup";
 
-	private static String[] OPERATIONS = { "CWA", "CWP", "CWM", "CWL", "SUM", "FFT" };
-	public static final Vector<String> OPERATIONS_LIST = new Vector<String>( Arrays.asList( OPERATIONS ) );
-//	public static final int CWAIndex = 0;
-//	public static final int CWPIndex = 1;
-//	public static final int CWMIndex = 2;
-//	public static final int CWLIndex = 3;
-//	public static final int SUMIndex = 4;
-//	public static final int FFTIndex = 5;
-    
-	public static final String CONTEXT = "FEP_CONTEXT";
+  private static String[] OPERATIONS = { "CWA", "CWP", "CWM", "CWL", "SUM", "FFT" };
+  public static final Vector<String> OPERATIONS_LIST = new Vector<String>(Arrays.asList(OPERATIONS));
+  // public static final int CWAIndex = 0;
+  // public static final int CWPIndex = 1;
+  // public static final int CWMIndex = 2;
+  // public static final int CWLIndex = 3;
+  // public static final int SUMIndex = 4;
+  // public static final int FFTIndex = 5;
 
-	public FepMEC()	{
+  public static final String CONTEXT = "FEP_CONTEXT";
 
-		index = 1;
-		initCtxRoutine = "fep_ctx_init";
-		localMemoryPointer = "fep_mss";
-		ctxCleanupRoutine = "fep_ctx_cleanup";
-	}
+  public FepMEC() {
 
-    /*public static String getContext()   {
-        return context;
-    }*/
+    index = 1;
+    initCtxRoutine = "fep_ctx_init";
+    localMemoryPointer = "fep_mss";
+    ctxCleanupRoutine = "fep_ctx_cleanup";
+  }
 
-}	//End of class
+  /*
+   * public static String getContext() { return context; }
+   */
+
+} // End of class

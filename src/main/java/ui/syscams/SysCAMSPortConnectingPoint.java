@@ -43,23 +43,25 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class SysCAMSPortConnectingPoint
- * Definition of connecting points on which connectors of SystemC-AMS Component Task diagrams can be connected
- * Creation: 22/04/2018
+ * Class SysCAMSPortConnectingPoint Definition of connecting points on which
+ * connectors of SystemC-AMS Component Task diagrams can be connected Creation:
+ * 22/04/2018
+ * 
  * @version 1.0 22/04/2018
  * @author Irina Kit Yan LEE
  */
 
 public class SysCAMSPortConnectingPoint extends TGConnectingPointWidthHeight {
-    public SysCAMSPrimitivePort port;
-	public boolean positionned;
-	
-    public SysCAMSPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-    }
-    
-    @Override
-    public boolean isCompatibleWith(int type) {
-        return type == TGComponentManager.CAMS_CONNECTOR;
-    }
+  public SysCAMSPrimitivePort port;
+  public boolean positionned;
+
+  public SysCAMSPortConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    return type == TGComponentManager.CAMS_CONNECTOR;
+  }
 }

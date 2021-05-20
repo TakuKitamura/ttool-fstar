@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import ui.cd.TCDTClass;
@@ -47,53 +43,52 @@ import ui.cd.TCDTClass;
 import java.util.Collection;
 import java.util.Vector;
 
-
 /**
- * Class VectorLRArtifactTClassGate
- * Vector of LRArtifactTClassGate
- * Creation: 09/05/2004
+ * Class VectorLRArtifactTClassGate Vector of LRArtifactTClassGate Creation:
+ * 09/05/2004
+ * 
  * @version 1.0 09/05/2004
  * @author Ludovic APVRILLE
  */
 public class VectorLRArtifactTClassGate extends Vector<ui.LRArtifactTClassGate> {
-    
-    public VectorLRArtifactTClassGate() {
-        super();
+
+  public VectorLRArtifactTClassGate() {
+    super();
+  }
+
+  public VectorLRArtifactTClassGate(Collection<ui.LRArtifactTClassGate> c) {
+    super(c);
+  }
+
+  public boolean isInList(String artifact, TCDTClass t, TAttribute ta) {
+    String tname = t.getClassName();
+    String gname = ta.getId();
+
+    return isInList(new ArtifactTClassGate(artifact, tname, gname));
+  }
+
+  public LRArtifactTClassGate getElementAt(int i) {
+    return elementAt(i);
+  }
+
+  public boolean isInList(ArtifactTClassGate arti) {
+    LRArtifactTClassGate lratg;
+    for (int i = 0; i < size(); i++) {
+      lratg = elementAt(i);
+      if (lratg.hasEquivalent(arti)) {
+        return true;
+      }
     }
-    
-    public VectorLRArtifactTClassGate(Collection<ui.LRArtifactTClassGate> c) {
-        super(c);
+    return false;
+  }
+
+  public String toString() {
+    String ret = "";
+    LRArtifactTClassGate lratg;
+    for (int i = 0; i < size(); i++) {
+      lratg = elementAt(i);
+      ret += lratg.toString() + "\n";
     }
-    
-   public boolean isInList(String artifact, TCDTClass t, TAttribute ta) {
-        String tname = t.getClassName();
-        String gname = ta.getId();
-        
-        return isInList(new ArtifactTClassGate(artifact, tname, gname));
-   }
-   
-   public LRArtifactTClassGate getElementAt(int i) {
-        return elementAt(i);
-   }
-   
-   public boolean isInList(ArtifactTClassGate arti) {
-        LRArtifactTClassGate lratg;
-        for(int i=0; i<size(); i++) {
-            lratg = elementAt(i);
-            if (lratg.hasEquivalent(arti)) {
-                return true;
-            }
-        }
-        return false;
-   }
-   
-   public String toString() {
-        String ret = "";
-        LRArtifactTClassGate lratg;
-        for(int i=0; i<size(); i++) {
-            lratg = elementAt(i);
-            ret += lratg.toString() + "\n";
-        }
-        return ret;
-   }
+    return ret;
+  }
 }

@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.procsd;
-
 
 import ui.CDElement;
 import ui.TGComponent;
@@ -48,44 +44,38 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class TGConnectingPointProSMD
- * Definition of connecting points on which connectors of TML activity diagram can be connected
- * Creation: 05/07/2006
+ * Class TGConnectingPointProSMD Definition of connecting points on which
+ * connectors of TML activity diagram can be connected Creation: 05/07/2006
+ * 
  * @version 1.0 05/07/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointProCSD extends  TGConnectingPointWidthHeight{
-    private TGComponent myOwnerComp;
-    public TGConnectingPointProCSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, TGComponent myOwner) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-        myOwnerComp=myOwner;
-    }
-    
-    public boolean isCompatibleWith(int type) {
-        if ((type == TGComponentManager.CONNECTOR_PROCSD)){
-            return true;
-        }
-        if ((type == TGComponentManager.CONNECTOR_DELEGATE_PROCSD)){
-            return true;
-        }
-        // To link ports to interfaces
-        if ((type == TGComponentManager.CONNECTOR_ATTRIBUTE)){
-            return true;
-        }
+public class TGConnectingPointProCSD extends TGConnectingPointWidthHeight {
+  private TGComponent myOwnerComp;
 
-        return (type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);
+  public TGConnectingPointProCSD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h,
+      TGComponent myOwner) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    myOwnerComp = myOwner;
+  }
 
+  public boolean isCompatibleWith(int type) {
+    if ((type == TGComponentManager.CONNECTOR_PROCSD)) {
+      return true;
+    }
+    if ((type == TGComponentManager.CONNECTOR_DELEGATE_PROCSD)) {
+      return true;
+    }
+    // To link ports to interfaces
+    if ((type == TGComponentManager.CONNECTOR_ATTRIBUTE)) {
+      return true;
+    }
 
-    }
-    
-    public TGComponent getMyOwnerComponent()
-    {
-    	return myOwnerComp;
-    }
+    return (type == TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);
+
+  }
+
+  public TGComponent getMyOwnerComponent() {
+    return myOwnerComp;
+  }
 }
-
-
-
-
-
-

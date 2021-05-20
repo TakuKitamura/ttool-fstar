@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 import tmltranslator.HwMemory;
@@ -51,100 +48,98 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class MemTableModel
- * Information on memories
- * Creation: 02/06/2009
+ * Class MemTableModel Information on memories Creation: 02/06/2009
+ * 
  * @version 1.0 02/06/2009
  * @author Ludovic APVRILLE
  */
 public class MemTableModel extends AbstractTableModel {
-	
-	private TMLMapping<?> tmap;
-	private List<HwMemory> mems;
-	private Map<Integer, String> valueTable;
-	private Map<Integer, Integer> rowTable;
-	
-	private int nbOfRows;
-	
-	//private String [] names;
-	public MemTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
-		tmap = _tmap;
-		valueTable = _valueTable;
-		rowTable = _rowTable;
-		computeData();
-	}
 
-	// From AbstractTableModel
-	public int getRowCount() {
-		return nbOfRows;
-	}
+  private TMLMapping<?> tmap;
+  private List<HwMemory> mems;
+  private Map<Integer, String> valueTable;
+  private Map<Integer, Integer> rowTable;
 
-	public int getColumnCount() {
-		return 3;
-	}
+  private int nbOfRows;
 
-	public Object getValueAt(int row, int column) {
-		if (tmap == null) {
-			return "-";
-		}
-		
-		if (column == 0) {
-			return mems.get(row).getName();
-		} else if (column == 1) {
-			return mems.get(row).getID();
-		} else if (column == 2) {
-			return getMemStatus(row);
-		} 
-		return "";
-	}
+  // private String [] names;
+  public MemTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
+    tmap = _tmap;
+    valueTable = _valueTable;
+    rowTable = _rowTable;
+    computeData();
+  }
 
-	public String getColumnName(int columnIndex) {
-		switch(columnIndex) {
-		case 0:
-			return "Memory Name";
-		case 1:
-			return "Memory ID";
-		case 2:
-			return "State";
-		}
-		return "unknown";
-	}
-	
-	// Assumes tmlm != null
-	private String getMemStatus(int row) {
-		int ID = mems.get(row).getID();
-		String s = valueTable.get(ID);
-		
-		if (s != null) {
-			return s;
-		}
-		
-	
-		valueTable.put(ID, "-");
-		rowTable.put(ID, row);
-		return "-";
-		
-	}
-		
-	private void computeData() {
-		if (tmap == null) {
-			nbOfRows = 0;
-			return ;
-		}
-		
-		mems = new ArrayList<HwMemory>();
-		
-		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-			if (node instanceof HwMemory) {
-				mems.add((HwMemory)node);
-			}
-		}
-		
-		nbOfRows = mems.size();
-		
-		for(int i=0; i<nbOfRows; i++) {
-			getMemStatus(i);
-		}
-		return;
-	}
+  // From AbstractTableModel
+  public int getRowCount() {
+    return nbOfRows;
+  }
+
+  public int getColumnCount() {
+    return 3;
+  }
+
+  public Object getValueAt(int row, int column) {
+    if (tmap == null) {
+      return "-";
+    }
+
+    if (column == 0) {
+      return mems.get(row).getName();
+    } else if (column == 1) {
+      return mems.get(row).getID();
+    } else if (column == 2) {
+      return getMemStatus(row);
+    }
+    return "";
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Memory Name";
+      case 1:
+        return "Memory ID";
+      case 2:
+        return "State";
+    }
+    return "unknown";
+  }
+
+  // Assumes tmlm != null
+  private String getMemStatus(int row) {
+    int ID = mems.get(row).getID();
+    String s = valueTable.get(ID);
+
+    if (s != null) {
+      return s;
+    }
+
+    valueTable.put(ID, "-");
+    rowTable.put(ID, row);
+    return "-";
+
+  }
+
+  private void computeData() {
+    if (tmap == null) {
+      nbOfRows = 0;
+      return;
+    }
+
+    mems = new ArrayList<HwMemory>();
+
+    for (HwNode node : tmap.getTMLArchitecture().getHwNodes()) {
+      if (node instanceof HwMemory) {
+        mems.add((HwMemory) node);
+      }
+    }
+
+    nbOfRows = mems.size();
+
+    for (int i = 0; i < nbOfRows; i++) {
+      getMemStatus(i);
+    }
+    return;
+  }
 }

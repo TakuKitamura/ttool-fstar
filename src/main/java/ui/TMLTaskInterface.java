@@ -36,23 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
-
 
 import ui.tmlad.TMLActivityDiagramPanel;
 
 /**
- * Class TMLTaskInterface
- * Used as an abstraction of TMLTask and TMLTaskObject
+ * Class TMLTaskInterface Used as an abstraction of TMLTask and TMLTaskObject
  * Creation: 28/10/2005
+ * 
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public interface TMLTaskInterface  {
-    String getTaskName();
-    TMLActivityDiagramPanel getTMLActivityDiagramPanel();
+public interface TMLTaskInterface {
+  String getTaskName();
+
+  TMLActivityDiagramPanel getTMLActivityDiagramPanel();
 }

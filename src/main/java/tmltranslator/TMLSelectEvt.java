@@ -36,55 +36,48 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
-
-
 /**
- * Class TMLSelectEvt
- * Creation: 06/04/2007
+ * Class TMLSelectEvt Creation: 06/04/2007
+ * 
  * @version 1.0 06/04/2007
  * @author Ludovic APVRILLE
  */
-public class TMLSelectEvt extends TMLActivityElement{
+public class TMLSelectEvt extends TMLActivityElement {
 
-    public TMLSelectEvt(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
+  public TMLSelectEvt(String _name, Object _referenceObject) {
+    super(_name, _referenceObject);
+  }
+
+  public boolean isARealSelectEvt() {
+    TMLActivityElement tmlae;
+    for (int i = 0; i < getNbNext(); i++) {
+      tmlae = getNextElement(i);
+      if (!(tmlae instanceof TMLWaitEvent)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public TMLEvent getEvent(int index) {
+    TMLActivityElement tmlae = getNextElement(index);
+    if (!(tmlae instanceof TMLWaitEvent)) {
+      return null;
     }
 
-    public boolean isARealSelectEvt() {
-        TMLActivityElement tmlae;
-        for(int i=0; i<getNbNext(); i++){
-            tmlae = getNextElement(i);
-            if (!(tmlae instanceof TMLWaitEvent)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    return ((TMLWaitEvent) (tmlae)).getEvent();
 
-    public TMLEvent getEvent(int index) {
-        TMLActivityElement tmlae = getNextElement(index);
-        if (!(tmlae instanceof TMLWaitEvent)) {
-            return null;
-        }
+  }
 
-        return ((TMLWaitEvent)(tmlae)).getEvent();
+  public String getParam(int index, int param) {
+    TMLActivityElement tmlae = getNextElement(index);
+    return ((TMLWaitEvent) (tmlae)).getParam(param);
+  }
 
-    }
-
-    public String getParam(int index, int param) {
-        TMLActivityElement tmlae = getNextElement(index);
-        return ((TMLWaitEvent)(tmlae)).getParam(param);
-    }
-
-    public String customExtraToXML() {
-	return "";
-    }
-
-
+  public String customExtraToXML() {
+    return "";
+  }
 
 }

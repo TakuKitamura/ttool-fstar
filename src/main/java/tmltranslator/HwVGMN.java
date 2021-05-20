@@ -36,39 +36,39 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 /**
- * Class HwVGMN
- * Creation: 05/09/2007
+ * Class HwVGMN Creation: 05/09/2007
+ * 
  * @version 1.0 05/09/2007
  * @author Ludovic APVRILLE adapted by Daniela Genius 10/08/2016
  */
-public class HwVGMN extends HwCommunicationNode  {
+public class HwVGMN extends HwCommunicationNode {
 
-    public static final int DEFAULT_BYTE_DATA_SIZE = 4;
+  public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+  public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
 
-    public HwVGMN(String _name) {
-        super(_name);
-    }
-    
-    @Override
-    public String toXML() {
-	String s = "<VGMN name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" />\n";
-	return s;
-    }
+  public HwVGMN(String _name) {
+    super(_name);
+  }
 
-    public boolean equalSpec(Object o) {
-        if (!(o instanceof HwVGMN)) return false;
-        if (!super.equalSpec(o)) return false;
+  @Override
+  public String toXML() {
+    String s = "<VGMN name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize
+        + "\" />\n";
+    return s;
+  }
 
-        HwVGMN hwVGMN = (HwVGMN) o;
-        return byteDataSize == hwVGMN.byteDataSize;
-    }
+  public boolean equalSpec(Object o) {
+    if (!(o instanceof HwVGMN))
+      return false;
+    if (!super.equalSpec(o))
+      return false;
+
+    HwVGMN hwVGMN = (HwVGMN) o;
+    return byteDataSize == hwVGMN.byteDataSize;
+  }
 
 }

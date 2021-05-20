@@ -36,43 +36,38 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tree;
 
 import myutil.GenericTree;
 import ui.MainGUI;
 
-
 /**
- * Class TClassesValidationDataTree
- * Creation: 22/12/2003
- * Version 1.0 22/12/2003
+ * Class TClassesValidationDataTree Creation: 22/12/2003 Version 1.0 22/12/2003
+ * 
  * @author Ludovic APVRILLE
  */
 public class TClassesValidationDataTree<T> implements GenericTree {
-    	
-    private MainGUI mgui;
-    private String name = "Validated TClasses";
-    
-	public TClassesValidationDataTree(MainGUI mgui) {
-		this.mgui = mgui;
-	}
-	
-	public String toString() {
-		return name;	
-	}
-	
-	public int getChildCount() {
-		return this.mgui.tclassesToValidate.size();
-	}
-	
-	public Object getChild(int index) {
-		return this.mgui.tclassesToValidate.get (index);
-	}
-	
-	public int getIndexOfChild(Object child) {
-		return this.mgui.tclassesToValidate.indexOf(child);
-	}
+
+  private MainGUI mgui;
+  private String name = "Validated TClasses";
+
+  public TClassesValidationDataTree(MainGUI mgui) {
+    this.mgui = mgui;
+  }
+
+  public String toString() {
+    return name;
+  }
+
+  public int getChildCount() {
+    return this.mgui.tclassesToValidate.size();
+  }
+
+  public Object getChild(int index) {
+    return this.mgui.tclassesToValidate.get(index);
+  }
+
+  public int getIndexOfChild(Object child) {
+    return this.mgui.tclassesToValidate.indexOf(child);
+  }
 }

@@ -36,24 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
-
 /**
- * Class AnalysisSyntaxException
- * Creation: 11/10/2004
- * version 1.0 11/10/2004
+ * Class AnalysisSyntaxException Creation: 11/10/2004 version 1.0 11/10/2004
+ * 
  * @author Ludovic APVRILLE
  */
-public	class AnalysisSyntaxException extends Exception {
-	
-	public AnalysisSyntaxException(String msg) {
-		super(msg);
-	}
-    
-} // Class 
+public class AnalysisSyntaxException extends Exception {
 
-	
+  public AnalysisSyntaxException(String msg) {
+    super(msg);
+  }
+
+} // Class

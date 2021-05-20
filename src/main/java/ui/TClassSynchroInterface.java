@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import ui.cd.TCDSynchroGateList;
@@ -47,12 +43,12 @@ import ui.cd.TCDSynchroGateList;
 import java.util.List;
 
 /**
- * Class TClassSynchroInterface
- * Used for TClass and TObjects translations
+ * Class TClassSynchroInterface Used for TClass and TObjects translations
  * Creation: 23/01/2007
+ * 
  * @version 1.0 23/01/2007
  * @author Ludovic APVRILLE
  */
-public interface TClassSynchroInterface extends TClassInterface  {
-    List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);
+public interface TClassSynchroInterface extends TClassInterface {
+  List<TAttribute> gatesNotSynchronizedOn(TCDSynchroGateList tcdsgl);
 }

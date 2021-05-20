@@ -52,8 +52,7 @@ import java.util.Map;
 import javax.swing.*;
 
 /**
- * Class JDialogMultiString
- * Dialog for managing several string components
+ * Class JDialogMultiString Dialog for managing several string components
  * Creation: 18/11/2005
  *
  * @author Ludovic APVRILLE
@@ -61,217 +60,208 @@ import javax.swing.*;
  */
 public class JDialogMultiString extends JDialogBase implements ActionListener {
 
-    private String[] labels;
-    private String[] values;
+  private String[] labels;
+  private String[] values;
 
-    // Help
-    private String[] helpKeywords;
-    private HelpManager hm;
-    private MainGUI mgui;
+  // Help
+  private String[] helpKeywords;
+  private HelpManager hm;
+  private MainGUI mgui;
 
-    private int nbString;
+  private int nbString;
 
-    private boolean set = false;
+  private boolean set = false;
 
-    private JPanel panel1;
+  private JPanel panel1;
 
-    // Panel1
-    private JTextField[] texts;
-    private JButton inserts[];
-    private Map<Integer, JComboBox<String>> helps;
+  // Panel1
+  private JTextField[] texts;
+  private JButton inserts[];
+  private Map<Integer, JComboBox<String>> helps;
 
-    private List<String[]> possibleValues = null;
+  private List<String[]> possibleValues = null;
 
+  /*
+   * Creates new form
+   */
+  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+  public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values) {
 
-    /*
-     * Creates new form
-     */
-    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values) {
+    super(f, title, true);
 
-        super(f, title, true);
+    nbString = _nbString;
+    labels = _labels;
+    values = _values;
 
-        nbString = _nbString;
-        labels = _labels;
-        values = _values;
+    texts = new JTextField[nbString];
 
+    initComponents();
+    // myInitComponents();
+    pack();
+  }
 
-        texts = new JTextField[nbString];
+  public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values,
+      String[] _helpKeywords, HelpManager _hm, MainGUI _mgui) {
 
-        initComponents();
-     //   myInitComponents();
-        pack();
-    }
+    super(f, title, true);
 
-    public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values,
-                              String[] _helpKeywords, HelpManager _hm, MainGUI _mgui) {
+    nbString = _nbString;
+    labels = _labels;
+    values = _values;
+    helpKeywords = _helpKeywords;
+    hm = _hm;
+    mgui = _mgui;
 
-        super(f, title, true);
+    texts = new JTextField[nbString];
 
-        nbString = _nbString;
-        labels = _labels;
-        values = _values;
-        helpKeywords = _helpKeywords;
-        hm = _hm;
-        mgui = _mgui;
+    initComponents();
+    // myInitComponents();
+    pack();
+  }
 
+  public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values,
+      List<String[]> _possibleValues) {
 
-        texts = new JTextField[nbString];
+    super(f, title, true);
 
-        initComponents();
-        //   myInitComponents();
-        pack();
-    }
+    nbString = _nbString;
+    labels = _labels;
+    values = _values;
+    possibleValues = _possibleValues;
 
-    public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values, List<String[]> _possibleValues) {
+    texts = new JTextField[nbString];
 
-        super(f, title, true);
+    initComponents();
+    // myInitComponents();
+    pack();
+  }
 
-        nbString = _nbString;
-        labels = _labels;
-        values = _values;
-        possibleValues = _possibleValues;
+  private void initComponents() {
 
-        texts = new JTextField[nbString];
+    inserts = new JButton[labels.length];
+    helps = new HashMap<>();
 
-        initComponents();
-    //    myInitComponents();
-        pack();
-    }
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+    GridBagConstraints c1 = new GridBagConstraints();
 
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
 
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-    private void initComponents() {
+    panel1 = new JPanel();
+    panel1.setLayout(gridbag1);
 
+    panel1.setBorder(new javax.swing.border.TitledBorder("Values"));
 
+    // panel1.setPreferredSize(new Dimension(600, 300));
 
-        inserts = new JButton[labels.length];
-        helps = new HashMap<>();
+    // first line panel1
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.gridheight = 1;
+    panel1.add(new JLabel(" "), c1);
 
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagLayout gridbag1 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-        GridBagConstraints c1 = new GridBagConstraints();
+    // second line panel1
+    c1.gridwidth = 1;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.anchor = GridBagConstraints.CENTER;
+    c1.fill = GridBagConstraints.HORIZONTAL;
+    c1.anchor = GridBagConstraints.CENTER;
 
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
+    // String1
+    for (int i = 0; i < nbString; i++) {
+      c1.gridwidth = 1;
+      c1.fill = GridBagConstraints.BOTH;
+      panel1.add(new JLabel(labels[i] + " = "), c1);
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        panel1 = new JPanel();
-        panel1.setLayout(gridbag1);
-
-        panel1.setBorder(new javax.swing.border.TitledBorder("Values"));
-
-        //panel1.setPreferredSize(new Dimension(600, 300));
-
-        // first line panel1
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.gridheight = 1;
-        panel1.add(new JLabel(" "), c1);
-
-        // second line panel1
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
-        c1.anchor = GridBagConstraints.CENTER;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-
-        // String1
-        for (int i = 0; i < nbString; i++) {
-            c1.gridwidth = 1;
-            c1.fill = GridBagConstraints.BOTH;
-            panel1.add(new JLabel(labels[i] + " = "), c1);
-
-            if (possibleValues != null) {
-                if (i < possibleValues.size()) {
-                    String[] tmp = possibleValues.get(i);
-                    if (tmp != null) {
-                        helps.put(i, new JComboBox<>(tmp));
-                        panel1.add(helps.get(i), c1);
-                        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-                        inserts[i] = new JButton("Use");
-                        inserts[i].addActionListener(this);
-                        panel1.add(inserts[i], c1);
-                    }
-                }
-            }
-            if ((helpKeywords != null) && (helpKeywords[i] != null)) {
-                texts[i] = new TGTextFieldWithHelp(values[i], 15);
-                panel1.add(texts[i], c1);
-                ((TGTextFieldWithHelp)texts[i]).makeEndHelpButton(helpKeywords[i], mgui, hm, panel1, c1);
-            } else {
-                c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-                texts[i] = new JTextField(values[i], 15);
-                panel1.add(texts[i], c1);
-            }
+      if (possibleValues != null) {
+        if (i < possibleValues.size()) {
+          String[] tmp = possibleValues.get(i);
+          if (tmp != null) {
+            helps.put(i, new JComboBox<>(tmp));
+            panel1.add(helps.get(i), c1);
+            c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+            inserts[i] = new JButton("Use");
+            inserts[i].addActionListener(this);
+            panel1.add(inserts[i], c1);
+          }
         }
-
-
-        // main panel;
-        c0.gridwidth = 1;
-        c0.gridheight = 10;
-        c0.weighty = 1.0;
-        c0.weightx = 1.0;
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c0.fill = GridBagConstraints.BOTH;
-        c.add(panel1, c0);
-
-        c0.gridwidth = 1;
-        c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
-
-        initButtons(c0, c, this);
+      }
+      if ((helpKeywords != null) && (helpKeywords[i] != null)) {
+        texts[i] = new TGTextFieldWithHelp(values[i], 15);
+        panel1.add(texts[i], c1);
+        ((TGTextFieldWithHelp) texts[i]).makeEndHelpButton(helpKeywords[i], mgui, hm, panel1, c1);
+      } else {
+        c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+        texts[i] = new JTextField(values[i], 15);
+        panel1.add(texts[i], c1);
+      }
     }
 
+    // main panel;
+    c0.gridwidth = 1;
+    c0.gridheight = 10;
+    c0.weighty = 1.0;
+    c0.weightx = 1.0;
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c0.fill = GridBagConstraints.BOTH;
+    c.add(panel1, c0);
 
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        String command = evt.getActionCommand();
+    c0.gridwidth = 1;
+    c0.gridheight = 1;
+    c0.fill = GridBagConstraints.HORIZONTAL;
 
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close")) {
-            closeDialog();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        } else if (inserts != null) {
-            for (int i = 0; i < inserts.length; i++) {
-                if (evt.getSource() == inserts[i]) {
-                    if (helps.get(i) != null) {
-                        if (helps.get(i).getSelectedItem() != null) {
-                            texts[i].setText(helps.get(i).getSelectedItem().toString());
-                        }
-                    }
-                }
+    initButtons(c0, c, this);
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Save and Close")) {
+      closeDialog();
+    } else if (command.equals("Cancel")) {
+      cancelDialog();
+    } else if (inserts != null) {
+      for (int i = 0; i < inserts.length; i++) {
+        if (evt.getSource() == inserts[i]) {
+          if (helps.get(i) != null) {
+            if (helps.get(i).getSelectedItem() != null) {
+              texts[i].setText(helps.get(i).getSelectedItem().toString());
             }
+          }
         }
+      }
     }
+  }
 
-    public void closeDialog() {
-        set = true;
-        dispose();
-    }
+  public void closeDialog() {
+    set = true;
+    dispose();
+  }
 
-    public String getString(int i) {
-        return texts[i].getText();
-    }
+  public String getString(int i) {
+    return texts[i].getText();
+  }
 
-    public boolean hasValidString(int i) {
-        return texts[i].getText().length() > 0;
-    }
+  public boolean hasValidString(int i) {
+    return texts[i].getText().length() > 0;
+  }
 
+  public boolean hasBeenSet() {
+    return set;
+  }
 
-    public boolean hasBeenSet() {
-        return set;
-    }
-
-    public void cancelDialog() {
-        dispose();
-    }
+  public void cancelDialog() {
+    dispose();
+  }
 }

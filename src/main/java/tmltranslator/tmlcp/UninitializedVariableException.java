@@ -36,24 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 /**
- * Class UninitializedException
- * Creation: 21/05/2014
+ * Class UninitializedException Creation: 21/05/2014
+ * 
  * @version 1.0 21/05/2014
  * @author Andrea ENRICI
  */
 public class UninitializedVariableException extends Exception {
-	
-	public UninitializedVariableException()	{
-		super( "TMLCP COMPILER ERROR: uninitialized variable" );
-	}
 
-	public UninitializedVariableException( String message )	{
-		super( message );	
-	}
+  public UninitializedVariableException() {
+    super("TMLCP COMPILER ERROR: uninitialized variable");
+  }
+
+  public UninitializedVariableException(String message) {
+    super(message);
+  }
 }

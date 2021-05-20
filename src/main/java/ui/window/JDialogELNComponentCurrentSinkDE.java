@@ -45,139 +45,131 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Class JDialogELNComponentCurrentSinkDE
- * Dialog for managing the conversion of a ELN current to a DE output signal
- * Creation: 07/08/2018
+ * Class JDialogELNComponentCurrentSinkDE Dialog for managing the conversion of
+ * a ELN current to a DE output signal Creation: 07/08/2018
+ * 
  * @version 1.0 07/08/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 @SuppressWarnings("serial")
 
 public class JDialogELNComponentCurrentSinkDE extends JDialog implements ActionListener {
-	private JTextField nameTextField;
-	private JTextField valueTextField;
+  private JTextField nameTextField;
+  private JTextField valueTextField;
 
-	private ELNComponentCurrentSinkDE isink;
+  private ELNComponentCurrentSinkDE isink;
 
-	public JDialogELNComponentCurrentSinkDE(ELNComponentCurrentSinkDE _isink) {
-		setTitle("Setting the conversion of current to DE output signal");
-		setLocationRelativeTo(null);
-		setVisible(true);
-		setAlwaysOnTop(true);
-		setResizable(false);
+  public JDialogELNComponentCurrentSinkDE(ELNComponentCurrentSinkDE _isink) {
+    setTitle("Setting the conversion of current to DE output signal");
+    setLocationRelativeTo(null);
+    setVisible(true);
+    setAlwaysOnTop(true);
+    setResizable(false);
 
-		isink = _isink;
-		
-		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-		getRootPane().getActionMap().put("close", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-		        dispose();
-			}
-		});
-		
-		dialog();
-	}
+    isink = _isink;
 
-	public void dialog() {
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		this.add(mainPanel);
-		
-		JPanel attributesMainPanel = new JPanel(new GridLayout());
-		mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
-		
-		Box box = Box.createVerticalBox();
-		box.setBorder(BorderFactory.createTitledBorder("Setting eln_de_isink attributes"));
+    getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+    getRootPane().getActionMap().put("close", new AbstractAction() {
+      public void actionPerformed(ActionEvent e) {
+        dispose();
+      }
+    });
 
-		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints constraints = new GridBagConstraints();
-		JPanel boxPanel = new JPanel();
-		boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		boxPanel.setLayout(gridBag); 
+    dialog();
+  }
 
-		JLabel labelName = new JLabel("nm : ");
-		constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(labelName, constraints);
-	   	boxPanel.add(labelName);
+  public void dialog() {
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    this.add(mainPanel);
 
-		nameTextField = new JTextField(isink.getValue().toString(), 10);
-	    	constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-	    	gridBag.setConstraints(nameTextField, constraints);
-	    	boxPanel.add(nameTextField);
-	   
-		JLabel valueLabel = new JLabel("scale : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(valueLabel, constraints);
-	   	boxPanel.add(valueLabel);
+    JPanel attributesMainPanel = new JPanel(new GridLayout());
+    mainPanel.add(attributesMainPanel, BorderLayout.NORTH);
 
-		valueTextField = new JTextField("" + isink.getScale(), 10);
-	    	constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH,
-                new Insets(5, 10, 5, 10), 0, 0);
-	    	gridBag.setConstraints(valueTextField, constraints);
-	    	boxPanel.add(valueTextField);
-	    
-		box.add(boxPanel);
-		attributesMainPanel.add(box); 
+    Box box = Box.createVerticalBox();
+    box.setBorder(BorderFactory.createTitledBorder("Setting eln_de_isink attributes"));
 
-		JPanel downPanel = new JPanel(new FlowLayout());
+    GridBagLayout gridBag = new GridBagLayout();
+    GridBagConstraints constraints = new GridBagConstraints();
+    JPanel boxPanel = new JPanel();
+    boxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
+    boxPanel.setLayout(gridBag);
 
-		JButton saveCloseButton = new JButton("Save and close");
-		saveCloseButton.setIcon(IconManager.imgic25);
-		saveCloseButton.setActionCommand("Save_Close");
-		saveCloseButton.addActionListener(this);
-		saveCloseButton.setPreferredSize(new Dimension(200, 30));
-		downPanel.add(saveCloseButton);
+    JLabel labelName = new JLabel("nm : ");
+    constraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(labelName, constraints);
+    boxPanel.add(labelName);
 
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setIcon(IconManager.imgic27);
-		cancelButton.setActionCommand("Cancel");
-		cancelButton.addActionListener(this);
-		cancelButton.setPreferredSize(new Dimension(200, 30));
-		downPanel.add(cancelButton);
+    nameTextField = new JTextField(isink.getValue().toString(), 10);
+    constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(nameTextField, constraints);
+    boxPanel.add(nameTextField);
 
-		mainPanel.add(downPanel, BorderLayout.CENTER);
-		pack();
-		this.getRootPane().setDefaultButton(saveCloseButton);
-	}
+    JLabel valueLabel = new JLabel("scale : ");
+    constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(valueLabel, constraints);
+    boxPanel.add(valueLabel);
 
-	public void actionPerformed(ActionEvent e) {
-		if ("Save_Close".equals(e.getActionCommand())) {
-			isink.setValue(new String(nameTextField.getText()));
+    valueTextField = new JTextField("" + isink.getScale(), 10);
+    constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+        new Insets(5, 10, 5, 10), 0, 0);
+    gridBag.setConstraints(valueTextField, constraints);
+    boxPanel.add(valueTextField);
 
-			if (!(valueTextField.getText().isEmpty())) {
-				Boolean valValueDouble = false;
-				try {
-					Double.parseDouble(valueTextField.getText());
-				} catch (NumberFormatException e1) {
-					JDialog msg = new JDialog(this);
-					msg.setLocationRelativeTo(null);
-					JOptionPane.showMessageDialog(msg, "The scale coefficient is not a Double", "Warning !",
-							JOptionPane.WARNING_MESSAGE);
-					valValueDouble = true;
-				}
-				if (valValueDouble == false) {
-					isink.setScale(Double.parseDouble(valueTextField.getText()));
-				}
-			} else {
-				isink.setScale(1.0);
-			}
-			
-			this.dispose();
-		}
+    box.add(boxPanel);
+    attributesMainPanel.add(box);
 
-		if ("Cancel".equals(e.getActionCommand())) {
-			this.dispose();
-		}
-	}
+    JPanel downPanel = new JPanel(new FlowLayout());
+
+    JButton saveCloseButton = new JButton("Save and close");
+    saveCloseButton.setIcon(IconManager.imgic25);
+    saveCloseButton.setActionCommand("Save_Close");
+    saveCloseButton.addActionListener(this);
+    saveCloseButton.setPreferredSize(new Dimension(200, 30));
+    downPanel.add(saveCloseButton);
+
+    JButton cancelButton = new JButton("Cancel");
+    cancelButton.setIcon(IconManager.imgic27);
+    cancelButton.setActionCommand("Cancel");
+    cancelButton.addActionListener(this);
+    cancelButton.setPreferredSize(new Dimension(200, 30));
+    downPanel.add(cancelButton);
+
+    mainPanel.add(downPanel, BorderLayout.CENTER);
+    pack();
+    this.getRootPane().setDefaultButton(saveCloseButton);
+  }
+
+  public void actionPerformed(ActionEvent e) {
+    if ("Save_Close".equals(e.getActionCommand())) {
+      isink.setValue(new String(nameTextField.getText()));
+
+      if (!(valueTextField.getText().isEmpty())) {
+        Boolean valValueDouble = false;
+        try {
+          Double.parseDouble(valueTextField.getText());
+        } catch (NumberFormatException e1) {
+          JDialog msg = new JDialog(this);
+          msg.setLocationRelativeTo(null);
+          JOptionPane.showMessageDialog(msg, "The scale coefficient is not a Double", "Warning !",
+              JOptionPane.WARNING_MESSAGE);
+          valValueDouble = true;
+        }
+        if (valValueDouble == false) {
+          isink.setScale(Double.parseDouble(valueTextField.getText()));
+        }
+      } else {
+        isink.setScale(1.0);
+      }
+
+      this.dispose();
+    }
+
+    if ("Cancel".equals(e.getActionCommand())) {
+      this.dispose();
+    }
+  }
 }

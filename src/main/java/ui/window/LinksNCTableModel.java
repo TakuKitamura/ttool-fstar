@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import nc.NCStructure;
@@ -46,51 +43,51 @@ import nc.NCStructure;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Class TrafficsNCTableModel
- * Main data of links in NC structures
- * Creation: 27/11/2008
+ * Class TrafficsNCTableModel Main data of links in NC structures Creation:
+ * 27/11/2008
+ * 
  * @version 1.0 27/11/2008
  * @author Ludovic APVRILLE
  */
 public class LinksNCTableModel extends AbstractTableModel {
-	private NCStructure ncs;
-	
-	//private String [] names;
-	public LinksNCTableModel(NCStructure _ncs) {
-		ncs = _ncs;
-		//computeData(_ncs);
-	}
+  private NCStructure ncs;
 
-	// From AbstractTableModel
-	public int getRowCount() {
-		return ncs.links.size();
-	}
+  // private String [] names;
+  public LinksNCTableModel(NCStructure _ncs) {
+    ncs = _ncs;
+    // computeData(_ncs);
+  }
 
-	public int getColumnCount() {
-		return 3;
-	}
+  // From AbstractTableModel
+  public int getRowCount() {
+    return ncs.links.size();
+  }
 
-	public Object getValueAt(int row, int column) {
-		if (column == 0) {
-			return ncs.links.get(row).getName();
-		} else if (column == 1) {
-			return ncs.links.get(row).getCapacity() + " " + ncs.links.get(row).getCapacityUnit().getStringUnit();
-		} 
-		
-		return ncs.links.get(row).getLinkedElement1().getName() + " -> " + ncs.links.get(row).getLinkedElement2().getName();
-		
-	}
+  public int getColumnCount() {
+    return 3;
+  }
 
-	public String getColumnName(int columnIndex) {
-		switch(columnIndex) {
-		case 0:
-			return "Link";
-		case 1:
-			return "Capacity";
-		case 2:
-			return "Link from -> to";
-		}
-		return "none";
-	}
+  public Object getValueAt(int row, int column) {
+    if (column == 0) {
+      return ncs.links.get(row).getName();
+    } else if (column == 1) {
+      return ncs.links.get(row).getCapacity() + " " + ncs.links.get(row).getCapacityUnit().getStringUnit();
+    }
+
+    return ncs.links.get(row).getLinkedElement1().getName() + " -> " + ncs.links.get(row).getLinkedElement2().getName();
+
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "Link";
+      case 1:
+        return "Capacity";
+      case 2:
+        return "Link from -> to";
+    }
+    return "none";
+  }
 
 }

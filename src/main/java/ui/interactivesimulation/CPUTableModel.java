@@ -46,103 +46,100 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class CPUTableModel
- * Information on CPUs
- * Creation: 29/05/2009
+ * Class CPUTableModel Information on CPUs Creation: 29/05/2009
+ * 
  * @version 1.0 29/05/2009
  * @author Ludovic APVRILLE
  */
 public class CPUTableModel extends AbstractTableModel {
-	
-	private TMLMapping<?> tmap;
-	private List<HwExecutionNode> cpus;
-	private Map<Integer, String> valueTable;
-	private Map<Integer, Integer> rowTable;
-	
-	private int nbOfRows;
-	
-	//private String [] names;
-	public CPUTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
-		tmap = _tmap;
-		valueTable = _valueTable;
-		rowTable = _rowTable;
-		computeData();
-	}
 
-	// From AbstractTableModel
-	public int getRowCount() {
-		return nbOfRows;
-	}
+  private TMLMapping<?> tmap;
+  private List<HwExecutionNode> cpus;
+  private Map<Integer, String> valueTable;
+  private Map<Integer, Integer> rowTable;
 
-	public int getColumnCount() {
-		return 3;
-	}
+  private int nbOfRows;
 
-	public Object getValueAt(int row, int column) {
-		if (tmap == null) {
-			return "-";
-		}
-		
-		if (column == 0) {
-			return cpus.get(row).getName();
-		} else if (column == 1) {
-			return cpus.get(row).getID();
-		} else if (column == 2) {
-			return getCPUStatus(row);
-		} 
-		return "";
-	}
+  // private String [] names;
+  public CPUTableModel(TMLMapping<?> _tmap, Map<Integer, String> _valueTable, Map<Integer, Integer> _rowTable) {
+    tmap = _tmap;
+    valueTable = _valueTable;
+    rowTable = _rowTable;
+    computeData();
+  }
 
-	public String getColumnName(int columnIndex) {
-		switch(columnIndex) {
-		case 0:
-			return "CPU/HwA Name";
-		case 1:
-			return "CPU ID";
-		case 2:
-			return "State";
-		}
-		return "unknown";
-	}
-	
-	// Assumes tmlm != null
-	private String getCPUStatus(int row) {
-		int ID = cpus.get(row).getID();
-		String s = valueTable.get(ID);
-		
-		if (s != null) {
-			return s;
-		}
-		
-	
-		valueTable.put(ID, "-");
-		//
-		rowTable.put(ID, row);
-		return "-";
-		
-	}
-		
-	
-	private void computeData() {
-		if (tmap == null) {
-			nbOfRows = 0;
-			return ;
-		}
-		
-		cpus = new ArrayList<HwExecutionNode>();
-		
-		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-			if ((node instanceof HwCPU) || (node instanceof HwA)) {
-				cpus.add((HwExecutionNode)node);
-			}
-		}
-		
-		nbOfRows = cpus.size();
-		
-		for(int i=0; i<nbOfRows; i++) {
-			getCPUStatus(i);
-		}
+  // From AbstractTableModel
+  public int getRowCount() {
+    return nbOfRows;
+  }
 
-	}
+  public int getColumnCount() {
+    return 3;
+  }
+
+  public Object getValueAt(int row, int column) {
+    if (tmap == null) {
+      return "-";
+    }
+
+    if (column == 0) {
+      return cpus.get(row).getName();
+    } else if (column == 1) {
+      return cpus.get(row).getID();
+    } else if (column == 2) {
+      return getCPUStatus(row);
+    }
+    return "";
+  }
+
+  public String getColumnName(int columnIndex) {
+    switch (columnIndex) {
+      case 0:
+        return "CPU/HwA Name";
+      case 1:
+        return "CPU ID";
+      case 2:
+        return "State";
+    }
+    return "unknown";
+  }
+
+  // Assumes tmlm != null
+  private String getCPUStatus(int row) {
+    int ID = cpus.get(row).getID();
+    String s = valueTable.get(ID);
+
+    if (s != null) {
+      return s;
+    }
+
+    valueTable.put(ID, "-");
+    //
+    rowTable.put(ID, row);
+    return "-";
+
+  }
+
+  private void computeData() {
+    if (tmap == null) {
+      nbOfRows = 0;
+      return;
+    }
+
+    cpus = new ArrayList<HwExecutionNode>();
+
+    for (HwNode node : tmap.getTMLArchitecture().getHwNodes()) {
+      if ((node instanceof HwCPU) || (node instanceof HwA)) {
+        cpus.add((HwExecutionNode) node);
+      }
+    }
+
+    nbOfRows = cpus.size();
+
+    for (int i = 0; i < nbOfRows; i++) {
+      getCPUStatus(i);
+    }
+
+  }
 
 }

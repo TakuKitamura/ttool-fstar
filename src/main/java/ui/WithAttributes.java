@@ -36,19 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 /**
- * Class WithAttributes
- * Components that may want to display attributes
- * Creation: 21/09/2007
+ * Class WithAttributes Components that may want to display attributes Creation:
+ * 21/09/2007
+ * 
  * @version 1.0 21/09/2007
  * @author Ludovic APVRILLE
  */
-public interface WithAttributes  {
-    String getAttributes();
+public interface WithAttributes {
+  String getAttributes();
 }

@@ -43,43 +43,44 @@ import ui.TGComponentManager;
 import ui.TGConnectingPointWidthHeight;
 
 /**
- * Class AvatarRDConnectingPointDerive
- * Definition of connecting points on which connectors between requirements may be connected
- * Creation: 20/04/2010
+ * Class AvatarRDConnectingPointDerive Definition of connecting points on which
+ * connectors between requirements may be connected Creation: 20/04/2010
+ * 
  * @version 1.0 20/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarRDConnectingPointDerive extends  TGConnectingPointWidthHeight {
+public class AvatarRDConnectingPointDerive extends TGConnectingPointWidthHeight {
 
-    public AvatarRDConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-        orientation = _orientation;
+  public AvatarRDConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w,
+      double _h, int _orientation) {
+    super(_container, _x, _y, _in, _out, _w, _h);
+    orientation = _orientation;
+  }
+
+  @Override
+  public boolean isCompatibleWith(int type) {
+    //
+    if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
+      //
+      return true;
     }
 
-    @Override
-    public boolean isCompatibleWith(int type) {
-        //
-        if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
-            //
-            return true;
-        }
-
-        if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
-            //
-            return true;
-        }
-
-        if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
-            //
-            return true;
-        }
-
-        if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
-            //
-            return true;
-        }
-        //System.out.pr
-        //
-        return false;
+    if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
+      //
+      return true;
     }
+
+    if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
+      //
+      return true;
+    }
+
+    if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
+      //
+      return true;
+    }
+    // System.out.pr
+    //
+    return false;
+  }
 }

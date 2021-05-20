@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 import ui.*;
@@ -46,51 +43,48 @@ import ui.util.IconManager;
 import ui.window.JDialogAttribute;
 
 /**
- * Class TOSCDAttributeBox
- * Box for storing the attributes  of a Tclass
- * To be used in TURTLE-OS class diagrams
- * Creation: 03/10/2006
+ * Class TOSCDAttributeBox Box for storing the attributes of a Tclass To be used
+ * in TURTLE-OS class diagrams Creation: 03/10/2006
+ * 
  * @version 1.0 03/10/2006
  * @author Ludovic APVRILLE
  */
 public class TOSCDAttributeBox extends TGCAttributeBox {
-    
-    public TOSCDAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        name = "Tclass attributes";
-        value = "";
-        
-        attributeText = "Attribute";
-        
-        attributes = true; // It contains attributes
-        
-        addTGConnectingPointsCommentCorner();
-        
-        myColor = ColorManager.ATTRIBUTE_BOX;
-        
-        myImageIcon = IconManager.imgic118;
-    }
-    
-    protected void setJDialogOptions(JDialogAttribute jda) {
-        jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
-        jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-        jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
-        jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
-        //jda.enableInitialValue(true);
-        jda.enableRTLOTOSKeyword(false);
-        jda.enableJavaKeyword(false);
-        //jda.enableOtherTypes(true);
-        
-//        List ll = tdp.getComponentList();
-//        Iterator iterator = ll.listIterator();
-//        TGComponent tgc;
-        /*while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TCDTData) {
-                jda.addType(tgc.getValue(), false);
-            }
-        }  */
-    }
-}
 
+  public TOSCDAttributeBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    name = "Tclass attributes";
+    value = "";
+
+    attributeText = "Attribute";
+
+    attributes = true; // It contains attributes
+
+    addTGConnectingPointsCommentCorner();
+
+    myColor = ColorManager.ATTRIBUTE_BOX;
+
+    myImageIcon = IconManager.imgic118;
+  }
+
+  protected void setJDialogOptions(JDialogAttribute jda) {
+    jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+    jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+    jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
+    jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
+    // jda.enableInitialValue(true);
+    jda.enableRTLOTOSKeyword(false);
+    jda.enableJavaKeyword(false);
+    // jda.enableOtherTypes(true);
+
+    // List ll = tdp.getComponentList();
+    // Iterator iterator = ll.listIterator();
+    // TGComponent tgc;
+    /*
+     * while(iterator.hasNext()) { tgc = (TGComponent)(iterator.next()); if (tgc
+     * instanceof TCDTData) { jda.addType(tgc.getValue(), false); } }
+     */
+  }
+}

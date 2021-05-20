@@ -36,118 +36,111 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-
-
 package translator;
 
 /**
- * Class Param
- * Creation: 11/12/2003
+ * Class Param Creation: 11/12/2003
+ * 
  * @version 1.1 11/12/2003
  * @author Ludovic APVRILLE
  */
 public class Param {
-    private String name;
-    private String lotosName;
-    private String type;
-    private String value;
-    private String access;
-    
-    public static final String NAT = "nat" ;
-    public static final String BOOL = "bool" ;
-	public static final String QUEUE_NAT = "Queue_nat";
-    
-    public Param(String _name, String _type, String _value) {
-        name = _name;
-        type = _type;
-        value = _value;
-        //
+  private String name;
+  private String lotosName;
+  private String type;
+  private String value;
+  private String access;
+
+  public static final String NAT = "nat";
+  public static final String BOOL = "bool";
+  public static final String QUEUE_NAT = "Queue_nat";
+
+  public Param(String _name, String _type, String _value) {
+    name = _name;
+    type = _type;
+    value = _value;
+    //
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setAccess(String s) {
+    access = s;
+    //
+  }
+
+  public String getAccess() {
+    return access;
+  }
+
+  public boolean isNat() {
+    return (type.compareTo(NAT) == 0);
+  }
+
+  public boolean isBool() {
+    return (type.compareTo(BOOL) == 0);
+  }
+
+  public boolean isQueueNat() {
+    return (type.compareTo(QUEUE_NAT) == 0);
+  }
+
+  public String getValue() {
+    if ((value == null) || (value.equals(""))) {
+      return getDefaultValue();
+    } else {
+      return value;
     }
-    
-    public String getName() {
-        return name;
+  }
+
+  public String getDefaultValue() {
+    if (type.equals(NAT)) {
+      return "0";
+    } else if (type.equals(BOOL)) {
+      return "false";
+    } else if (type.equals(QUEUE_NAT)) {
+      return "nil";
     }
-    
-    public String getType() {
-        return type;
+    return "";
+  }
+
+  public String getTranslation() {
+    return name + ":" + type;
+  }
+
+  public String getLotosTranslation() {
+    return lotosName + ":" + type;
+  }
+
+  public String getLotosName() {
+    return lotosName;
+  }
+
+  public void setLotosName(String _lotosName) {
+    lotosName = _lotosName;
+  }
+
+  public static boolean isAValidParamName(String id) {
+    // test whether _id is a word
+
+    if ((id == null) || (id.length() < 1)) {
+      return false;
     }
-    
-    public void setAccess(String s) {
-        access = s;
-        //
-    }
-    
-    public String getAccess() {
-        return access;
-    }
-    
-    public boolean isNat() {
-      return (type.compareTo(NAT) == 0);
-    }
-	
-	public boolean isBool() {
-      return (type.compareTo(BOOL) == 0);
-    }
-	
-	public boolean isQueueNat() {
-      return (type.compareTo(QUEUE_NAT) == 0);
-    }
-    
-    public String getValue() {
-        if ((value == null) || (value.equals("")))   {
-            return getDefaultValue();
-        } else {
-            return value;
-        }
-    }
-    
-    public String getDefaultValue() {
-        if (type.equals(NAT)) {
-            return "0";
-        } else if (type.equals(BOOL)) {
-            return "false";
-        } else if (type.equals(QUEUE_NAT)) {
-            return "nil";
-		}
-        return ""  ;
-    }
-    
-    
-    public String getTranslation() {
-        return name + ":" + type;
-    }
-    
-    public String getLotosTranslation() {
-        return lotosName + ":" + type;
-    }
-    
-    public String getLotosName() {
-        return lotosName;
-    }
-    
-    public void setLotosName(String _lotosName) {
-        lotosName = _lotosName;
-    }
-	
-	public static boolean isAValidParamName(String id) {
-		 // test whether _id is a word
-        
-        if ((id == null) || (id.length() < 1)) {
-            return false;
-        }
-        
-        String lowerid = id.toLowerCase();
-        boolean b1, b2, b3, b5;
-        b1 = (id.substring(0,1)).matches("[a-zA-Z]");
-        b2 = id.matches("\\w*");
-        b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
-        b5 = !JKeyword.isAKeyword(lowerid);
-     
-        return (b1 && b2 && b3 && b5);
-	}
-    
+
+    String lowerid = id.toLowerCase();
+    boolean b1, b2, b3, b5;
+    b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
+    b2 = id.matches("\\w*");
+    b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
+    b5 = !JKeyword.isAKeyword(lowerid);
+
+    return (b1 && b2 && b3 && b5);
+  }
+
 }

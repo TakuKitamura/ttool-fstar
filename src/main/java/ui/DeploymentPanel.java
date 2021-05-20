@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui;
 
 import myutil.GraphicLib;
@@ -52,76 +49,75 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
- * Class DeploymentPanel
- * Managenemt of deployment panels
- * Creation: 02/05/2005
+ * Class DeploymentPanel Managenemt of deployment panels Creation: 02/05/2005
+ * 
  * @version 1.0 02/05/2005
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
 public class DeploymentPanel extends TURTLEPanel {
-    public TDeploymentDiagramPanel tddp; 
-    //public Vector validated, ignored;
-    
-    public DeploymentPanel(MainGUI _mgui) {
-        super(_mgui);
+  public TDeploymentDiagramPanel tddp;
+  // public Vector validated, ignored;
 
-    	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
-       
-        cl = new ChangeListener() {
-        	
-        	@Override
-            public void stateChanged(ChangeEvent e){
-                mgui.paneDesignAction(e);
-            }
-        };
-        
-        tabbedPane.addChangeListener(cl);
-        tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+  public DeploymentPanel(MainGUI _mgui) {
+    super(_mgui);
+
+    // Issue #41 Ordering of tabbed panes
+    tabbedPane = GraphicLib.createTabbedPane();// new JTabbedPane();
+
+    cl = new ChangeListener() {
+
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        mgui.paneDesignAction(e);
+      }
+    };
+
+    tabbedPane.addChangeListener(cl);
+    tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+  }
+
+  public void init() {
+
+    // Class Diagram toolbar
+    TDeploymentDiagramToolBar toolBarDep = new TDeploymentDiagramToolBar(mgui);
+    toolbars.add(toolBarDep);
+
+    toolBarPanel = new JPanel();
+    toolBarPanel.setLayout(new BorderLayout());
+
+    // Class diagram
+    tddp = new TDeploymentDiagramPanel(mgui, toolBarDep);
+    tddp.setName("Deployment Diagram");
+    tddp.tp = this;
+    tdp = tddp;
+    panels.add(tddp); // Always first in list
+    JScrollDiagramPanel jsp = new JScrollDiagramPanel(tddp);
+    tddp.jsp = jsp;
+    jsp.setWheelScrollingEnabled(true);
+    jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+    toolBarPanel.add(toolBarDep, BorderLayout.NORTH);
+    toolBarPanel.add(jsp, BorderLayout.CENTER);
+    tabbedPane.addTab("Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
+    tabbedPane.setSelectedIndex(0);
+
+    // jsp.setVisible(true);
+
+  }
+
+  public String saveHeaderInXml(String extensionToName) {
+    if (extensionToName == null) {
+      return "<Modeling type=\"Deployment\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
-    
-    public void init() {
-         
-        //  Class Diagram toolbar
-        TDeploymentDiagramToolBar toolBarDep = new TDeploymentDiagramToolBar(mgui);
-        toolbars.add(toolBarDep);
-        
-        toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
-        
-        //Class	diagram
-        tddp = new TDeploymentDiagramPanel(mgui, toolBarDep);
-        tddp.setName("Deployment Diagram");
-        tddp.tp = this;
-        tdp = tddp;
-        panels.add(tddp); // Always first in list
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tddp);
-        tddp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement( MainGUI.INCREMENT);
-        toolBarPanel.add(toolBarDep, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
-        tabbedPane.setSelectedIndex(0);
-        
-        //jsp.setVisible(true);
- 
-    }
-    
-    public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"Deployment\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"Deployment\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
-	
-    }
-    
-    public String saveTailInXml() {
-        return "</Modeling>\n\n\n";
-    }
-    
-    public String toString() {
-        return "TURTLE Deployment: " + mgui.getTitleAt(this);
-    }
+    return "<Modeling type=\"Deployment\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+
+  }
+
+  public String saveTailInXml() {
+    return "</Modeling>\n\n\n";
+  }
+
+  public String toString() {
+    return "TURTLE Deployment: " + mgui.getTitleAt(this);
+  }
 }

@@ -51,115 +51,115 @@ import java.io.*;
 import java.util.LinkedList;
 
 /**
- * Class TopCellGenerator
- * Save the components and connectors in files
- * Creation: 14/05/2018
+ * Class TopCellGenerator Save the components and connectors in files Creation:
+ * 14/05/2018
+ * 
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
  * @version 1.1 12/07/2018
  * @author Irina Kit Yan LEE, Daniela GENIUS
-*/
+ */
 
 public class TopCellGenerator {
-	public static SysCAMSSpecification syscams;
+  public static SysCAMSSpecification syscams;
 
-	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
-	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
-	private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
+  private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
+  private final static String GENERATED_PATH2 = "generated_H" + File.separator;
+  private final static String CR = "\n";
+  private final static String CR2 = "\n\n";
 
-	public TopCellGenerator(SysCAMSSpecification sys) {
-		syscams = sys;
-	}
+  public TopCellGenerator(SysCAMSSpecification sys) {
+    syscams = sys;
+  }
 
-	public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
-		if (c == null) {
-			System.out.println("***Warning: require at least one cluster***");
-		}
-		if (TopCellGenerator.syscams.getNbBlockTDF() == 0) {
-			System.out.println("***Warning: require at least one TDF block***");
-		}
-		if (TopCellGenerator.syscams.getNbPortTDF() == 0) {
-			System.out.println("***Warning: require at least one TDF port***");
-		}
-		if (TopCellGenerator.syscams.getNbBlockDE() == 0) {
-			System.out.println("***Warning: require at least one DE block***");
-		}
-		if (TopCellGenerator.syscams.getNbPortDE() == 0) {
-			System.out.println("***Warning: require at least one DE port***");
-		}
-		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
-			System.out.println("***Warning: require at least one converter port***");
-		}
-		if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
-			System.out.println("***Warning: require at least one connector***");
-		}
-		String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
-		return (top);
-	}
+  public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
+    if (c == null) {
+      System.out.println("***Warning: require at least one cluster***");
+    }
+    if (TopCellGenerator.syscams.getNbBlockTDF() == 0) {
+      System.out.println("***Warning: require at least one TDF block***");
+    }
+    if (TopCellGenerator.syscams.getNbPortTDF() == 0) {
+      System.out.println("***Warning: require at least one TDF port***");
+    }
+    if (TopCellGenerator.syscams.getNbBlockDE() == 0) {
+      System.out.println("***Warning: require at least one DE block***");
+    }
+    if (TopCellGenerator.syscams.getNbPortDE() == 0) {
+      System.out.println("***Warning: require at least one DE port***");
+    }
+    if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
+      System.out.println("***Warning: require at least one converter port***");
+    }
+    if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
+      System.out.println("***Warning: require at least one connector***");
+    }
+    String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
+    return (top);
+  }
 
-    public void saveFile(String path, Boolean standalone) {
-		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
-		FileWriter fw; 
-		String top;
+  public void saveFile(String path, Boolean standalone) {
+    SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
+    LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
+    FileWriter fw;
+    String top;
 
-		try {
-			// Save file .cpp
-			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			System.err.println(path + cluster.getClusterName() + ".cpp");			
-			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
-			    //}
-			fw = new FileWriter(path + "/" + cluster.getClusterName() + "_tb.cpp");
-			top = generateTopCell(cluster, connectors);
-			fw.write(top);
-			fw.close();
-		
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		// Save files .h
-		saveFileBlock(path, cluster, standalone);
-	}
+    try {
+      // Save file .cpp
+      System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
+      System.err.println(path + cluster.getClusterName() + ".cpp");
+      fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+      // }
+      fw = new FileWriter(path + "/" + cluster.getClusterName() + "_tb.cpp");
+      top = generateTopCell(cluster, connectors);
+      fw.write(top);
+      fw.close();
 
-    public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
-		String headerTDF, headerDE, codeTDF, codeDE;
-		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
-		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
-		FileWriter fw; 
-		for (SysCAMSTBlockTDF t : tdf) {
-			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				System.err.println(path + t.getName() + ".h"); 						
-			    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-			
-				headerTDF = Header.getPrimitiveHeaderTDF(t);
-				fw.write(headerTDF);
-				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
-			
-				fw.write(codeTDF);
-				fw.close();
-			
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		for (SysCAMSTBlockDE t : de) {
-			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				System.err.println(path + t.getName() + ".h");
-							
-				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-				headerDE = Header.getPrimitiveHeaderDE(t);
-				fw.write(headerDE);
-				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
-			
-				fw.write(codeDE);
-				fw.close();
-			
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    // Save files .h
+    saveFileBlock(path, cluster, standalone);
+  }
+
+  public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
+    String headerTDF, headerDE, codeTDF, codeDE;
+    LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
+    LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
+    FileWriter fw;
+    for (SysCAMSTBlockTDF t : tdf) {
+      try {
+        System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
+        System.err.println(path + t.getName() + ".h");
+        fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+
+        headerTDF = Header.getPrimitiveHeaderTDF(t);
+        fw.write(headerTDF);
+        codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
+
+        fw.write(codeTDF);
+        fw.close();
+
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+    for (SysCAMSTBlockDE t : de) {
+      try {
+        System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
+        System.err.println(path + t.getName() + ".h");
+
+        fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+        headerDE = Header.getPrimitiveHeaderDE(t);
+        fw.write(headerDE);
+        codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
+
+        fw.write(codeDE);
+        fw.close();
+
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
 }

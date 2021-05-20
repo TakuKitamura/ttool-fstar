@@ -41,60 +41,61 @@ package avatartranslator;
 import java.util.Map;
 
 /**
- * An AvatarGuardElse is an {@link AvatarGuard} that is of the form:
- * else
+ * An AvatarGuardElse is an {@link AvatarGuard} that is of the form: else
  * Creation: 25/09/2015
+ * 
  * @version 1.0 25/09/2015
  * @author Florian LUGOU
  */
 public class AvatarGuardElse extends AvatarGuard {
-    public AvatarGuardElse () {
+  public AvatarGuardElse() {
+  }
+
+  public AvatarGuard getRealGuard(AvatarStateMachineElement precedent) {
+    AvatarGuard result = null;
+
+    for (AvatarStateMachineElement asme : precedent.getNexts()) {
+      if (!(asme instanceof AvatarTransition))
+        continue;
+
+      AvatarGuard guard = ((AvatarTransition) asme).getGuard();
+      if (guard == this)
+        continue;
+
+      if (guard == null || !guard.isGuarded())
+        // another guard is empty: else will never trigger
+        // FIXME: add warning
+        return new AvatarConstantGuard(AvatarConstant.FALSE);
+
+      if (guard.isElseGuard())
+        // there were two else guards... Shouldn't happen
+        // FIXME: add warning
+        continue;
+
+      if (result == null)
+        result = ((AvatarComposedGuard) guard).getOpposite();
+      else
+        result = AvatarGuard.addGuard(result, ((AvatarComposedGuard) guard).getOpposite(), "and");
     }
 
-    public AvatarGuard getRealGuard (AvatarStateMachineElement precedent) {
-        AvatarGuard result = null;
+    return result;
+  }
 
-        for (AvatarStateMachineElement asme: precedent.getNexts ()) {
-            if (! (asme instanceof AvatarTransition))
-                continue;
+  public String getAsString(AvatarSyntaxTranslator translator) {
+    return "else";
+  }
 
-            AvatarGuard guard = ((AvatarTransition) asme).getGuard ();
-            if (guard == this)
-                continue;
+  @Override
+  public boolean isElseGuard() {
+    return true;
+  }
 
-            if (guard == null || !guard.isGuarded ())
-                // another guard is empty: else will never trigger
-                // FIXME: add warning
-                return new AvatarConstantGuard (AvatarConstant.FALSE);
+  @Override
+  public AvatarGuardElse clone() {
+    return new AvatarGuardElse();
+  }
 
-            if (guard.isElseGuard ())
-                // there were two else guards... Shouldn't happen
-                // FIXME: add warning
-                continue;
-
-            if (result == null)
-                result = ((AvatarComposedGuard) guard).getOpposite ();
-            else
-                result = AvatarGuard.addGuard (result, ((AvatarComposedGuard) guard).getOpposite (), "and");
-        }
-
-        return result;
-    }
-
-    public String getAsString (AvatarSyntaxTranslator translator) {
-        return "else";
-    }
-
-    @Override
-    public boolean isElseGuard () {
-        return true;
-    }
-
-    @Override
-    public AvatarGuardElse clone () {
-        return new AvatarGuardElse ();
-    }
-
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+  }
 }

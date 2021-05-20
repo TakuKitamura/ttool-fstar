@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -50,130 +47,126 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
-   * Class JDialogCancel
-   * Dialog for managing cancel over other frames
-   * Creation: 27/04/2007
-   * @version 1.0 27/04/2007
-   * @author Ludovic APVRILLE
+ * Class JDialogCancel Dialog for managing cancel over other frames Creation:
+ * 27/04/2007
+ * 
+ * @version 1.0 27/04/2007
+ * @author Ludovic APVRILLE
  */
-public class JDialogCancel extends JDialog implements ActionListener, Runnable  {
+public class JDialogCancel extends JDialog implements ActionListener, Runnable {
 
-    private static String DEFAULT_WAIT = "Please wait";
+  private static String DEFAULT_WAIT = "Please wait";
 
-    private StoppableGUIElement sge;
-    private Thread t;
+  private StoppableGUIElement sge;
+  private Thread t;
 
+  private JButton cancelButton;
+  private String info;
+  private JLabel percentage;
+  private JLabel message;
+  private String wait = DEFAULT_WAIT;
+  private int cpt = 0;
 
-    private JButton cancelButton;
-    private String info;
-    private JLabel percentage;
-    private JLabel message;
-    private String wait = DEFAULT_WAIT;
-    private int cpt = 0;
+  /* Creates new form */
+  // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+  public JDialogCancel(Frame f, String _title, String _info, StoppableGUIElement _sge) {
 
-    /* Creates new form  */
-    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogCancel(Frame f, String _title, String _info, StoppableGUIElement _sge) {
+    super(f, _title, true);
 
-        super(f, _title, true);
+    sge = _sge;
+    info = _info;
 
-        sge = _sge;
-        info = _info;
+    initComponents();
+    myInitComponents();
+    // pack();
+  }
 
-        initComponents();
-        myInitComponents();
-        //pack();
+  private void myInitComponents() {
+    t = new Thread(this);
+    t.start();
+  }
+
+  private void initComponents() {
+    Container c = getContentPane();
+    GridBagLayout gridbag0 = new GridBagLayout();
+    GridBagConstraints c0 = new GridBagConstraints();
+
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(gridbag0);
+
+    c0.gridwidth = GridBagConstraints.REMAINDER; // end row
+
+    c.add(new JLabel("          "), c0);
+    message = new JLabel(info);
+    c.add(message, c0);
+    c.add(new JLabel("          "), c0);
+    percentage = new JLabel("0%");
+    c.add(percentage, c0);
+    c.add(new JLabel("          "), c0);
+    cancelButton = new JButton("Cancel", IconManager.imgic27);
+    cancelButton.addActionListener(this);
+
+    c.add(cancelButton, c0);
+  }
+
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
+
+    // Compare the action command to the known actions.
+    if (command.equals("Cancel")) {
+      cancelDialog();
     }
+  }
 
-
-    private void myInitComponents() {
-        t = new Thread(this);
-        t.start();
-    }
-
-    private void initComponents() {
-        Container c = getContentPane();
-        GridBagLayout gridbag0 = new GridBagLayout();
-        GridBagConstraints c0 = new GridBagConstraints();
-
-        setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(gridbag0);
-
-        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-
-        c.add(new JLabel("          "), c0);
-        message = new JLabel(info);
-        c.add(message, c0);
-        c.add(new JLabel("          "), c0);
-        percentage = new JLabel("0%");
-        c.add(percentage, c0);
-        c.add(new JLabel("          "), c0);
-        cancelButton = new JButton("Cancel", IconManager.imgic27);
-        cancelButton.addActionListener(this);
-
-        c.add(cancelButton, c0);
-    }
-
-    public void actionPerformed(ActionEvent evt)  {
-        String command = evt.getActionCommand();
-
-        // Compare the action command to the known actions.
-        if (command.equals("Cancel")) {
-            cancelDialog();
-        }
-    }
-
-    public void run() {
-        int percentage;
-        try {
-            while(sge !=null) {
-                Thread.sleep(100);
-                if (sge != null) {
-                    percentage = sge.getPercentage();
-                    setPercentage(percentage);
-                    setCurrentMessage(sge.getCurrentActivity());
-                }
-            }
-        } catch (InterruptedException ie) {}
-    }
-
-    public void setPercentage(int p) {
-        if (p <0) {
-            cpt ++;
-            if (cpt%10 == 0) {
-                wait += ".";
-                if (cpt%100 == 0) {
-                    wait = DEFAULT_WAIT;
-                    cpt = 0;
-                }
-                percentage.setText(wait);
-                repaint();
-            }
-
-        } else {
-            percentage.setText(p+"%");
-            repaint();
-        }
-    }
-
-    public void setCurrentMessage(String _msg) {
-        message.setText(_msg);
-        repaint();
-    }
-
-
-
-    public void cancelDialog() {
+  public void run() {
+    int percentage;
+    try {
+      while (sge != null) {
+        Thread.sleep(100);
         if (sge != null) {
-            sge.stopElement();
+          percentage = sge.getPercentage();
+          setPercentage(percentage);
+          setCurrentMessage(sge.getCurrentActivity());
         }
-        sge = null;
-        dispose();
+      }
+    } catch (InterruptedException ie) {
     }
+  }
 
-    public void stopAll() {
-        sge = null;
-        dispose();
+  public void setPercentage(int p) {
+    if (p < 0) {
+      cpt++;
+      if (cpt % 10 == 0) {
+        wait += ".";
+        if (cpt % 100 == 0) {
+          wait = DEFAULT_WAIT;
+          cpt = 0;
+        }
+        percentage.setText(wait);
+        repaint();
+      }
+
+    } else {
+      percentage.setText(p + "%");
+      repaint();
     }
+  }
+
+  public void setCurrentMessage(String _msg) {
+    message.setText(_msg);
+    repaint();
+  }
+
+  public void cancelDialog() {
+    if (sge != null) {
+      sge.stopElement();
+    }
+    sge = null;
+    dispose();
+  }
+
+  public void stopAll() {
+    sge = null;
+    dispose();
+  }
 }

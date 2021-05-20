@@ -36,32 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 /**
- * Class ProVerifProcNew
- * Creation: 13/09/2015
+ * Class ProVerifProcNew Creation: 13/09/2015
+ * 
  * @version 1.0 13/09/2015
  * @author Florian LUGOU
  */
 public class ProVerifProcNew extends ProVerifProcInstr {
 
-    protected String name;
-    protected String type;
+  protected String name;
+  protected String type;
 
-    public ProVerifProcNew (String _name) {
-        this.name = _name;
-    }
+  public ProVerifProcNew(String _name) {
+    this.name = _name;
+  }
 
-    public ProVerifProcNew (String _name, String _type) {
-        this (_name);
-        this.type = _type;
-    }
+  public ProVerifProcNew(String _name, String _type) {
+    this(_name);
+    this.type = _type;
+  }
 
-    public void translate (ProVerifSyntaxer _syntaxer, int _alinea) {
-        _syntaxer.translateProcNew (this, _alinea);
-    }
+  public void translate(ProVerifSyntaxer _syntaxer, int _alinea) {
+    _syntaxer.translateProcNew(this, _alinea);
+  }
 }

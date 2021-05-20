@@ -36,59 +36,51 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sysmlsecmethodology;
-
 
 import ui.*;
 
 /**
-   * Class SysmlMethodologyReferenceToArchitecture
-   * Diagram reference architecture: Used to reference diagrams from the
-   * Sysmlsec methodology
-   * Creation: 28/01/2016
-   * @version 1.0 28/01/2016
-   * @author Ludovic APVRILLE
+ * Class SysmlMethodologyReferenceToArchitecture Diagram reference architecture:
+ * Used to reference diagrams from the Sysmlsec methodology Creation: 28/01/2016
+ * 
+ * @version 1.0 28/01/2016
+ * @author Ludovic APVRILLE
  */
-public class SysmlsecMethodologyReferenceToArchitecture extends SysmlsecMethodologyDiagramReference  {
+public class SysmlsecMethodologyReferenceToArchitecture extends SysmlsecMethodologyDiagramReference {
 
+  public SysmlsecMethodologyReferenceToArchitecture(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
+      boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-    public SysmlsecMethodologyReferenceToArchitecture(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    initScaling(200, 70);
 
-        initScaling(200, 70);
+    nbConnectingPoint = 1;
+    connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+    connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0,
+        TGConnectingPoint.WEST);
 
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.WEST);
+    typeOfReference = ARCHITECTURE_VIEW;
 
-        typeOfReference = ARCHITECTURE_VIEW;
+    addTGConnectingPointsCommentTop();
 
-        addTGConnectingPointsCommentTop();
+  }
 
-    }
+  public int getType() {
+    return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW;
+  }
 
+  public boolean isAValidPanelType(TURTLEPanel panel) {
+    return panel instanceof TMLArchiPanel;
 
-    public  int getType() {
-        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_ARCHITECTURE_VIEW;
-    }
+  }
 
+  public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
+    dn.setValidationsNumber(0);
+  }
 
-    public boolean isAValidPanelType(TURTLEPanel panel) {
-        return panel instanceof TMLArchiPanel;
-
-    }
-
-    public void makeValidationInfos(SysmlsecMethodologyDiagramName dn) {
-        dn.setValidationsNumber(0);
-    }
-
-    public boolean makeCall(String diagramName, int index) {
-        return true;
-    }
-
-
+  public boolean makeCall(String diagramName, int index) {
+    return true;
+  }
 
 }

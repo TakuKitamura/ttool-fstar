@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator;
 
 import java.util.Map;
@@ -44,163 +43,155 @@ import java.util.Map;
 import myutil.TraceManager;
 
 /**
- * Class AvatarAttribute
- * Avatar attributes, either of blocks, or manipulated by signals / methods
- * Creation: 20/05/2010
+ * Class AvatarAttribute Avatar attributes, either of blocks, or manipulated by
+ * signals / methods Creation: 20/05/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.0 20/05/2010
  */
 public class AvatarAttribute extends AvatarLeftHand {
 
-    // Types of parameters
-    private AvatarType type;
-    private String initialValue;
+  // Types of parameters
+  private AvatarType type;
+  private String initialValue;
 
-    private AvatarStateMachineOwner block;
+  private AvatarStateMachineOwner block;
 
+  public AvatarAttribute(String _name, AvatarType _type, AvatarStateMachineOwner _block, Object _referenceObject) {
+    super(_name, _referenceObject);
+    /*
+     * if (_type == -1) { TraceManager.addDev("- - - - - - - - - - - - " + _name +
+     * ": " + _type); try { int x = 1 / 0; } catch (Exception e) {
+     * e.printStackTrace(); System.exit(0); } }
+     */
+    type = _type;
+    this.block = _block;
+  }
 
-    public AvatarAttribute(String _name, AvatarType _type, AvatarStateMachineOwner _block, Object _referenceObject) {
-        super(_name, _referenceObject);
-        /*if (_type == -1) {
-          TraceManager.addDev("- - - - - - - - - - - - " + _name + ": " + _type);
-          try {
-          int x = 1 / 0;
-          } catch (Exception e) {
-          e.printStackTrace();
-          System.exit(0);
-          }
-          }*/
-        type = _type;
-        this.block = _block;
+  public AvatarStateMachineOwner getBlock() {
+    return this.block;
+  }
+
+  public void setInitialValue(String _initialValue) {
+    initialValue = _initialValue;
+  }
+
+  public boolean hasInitialValue() {
+    if (getInitialValue() == null) {
+      return false;
+    }
+    return (!(getInitialValue().trim().length() == 0));
+  }
+
+  public String getInitialValue() {
+    if ((initialValue == null) || (initialValue.length() == 0)) {
+      return getDefaultInitialValue();
+    }
+    return initialValue;
+  }
+
+  public int getInitialValueInInt() {
+    if ((initialValue == null) || (initialValue.length() == 0)) {
+      return getDefaultInitialValueInInt();
     }
 
-    public AvatarStateMachineOwner getBlock() {
-        return this.block;
+    if (isInt()) {
+      try {
+        return Integer.decode(initialValue).intValue();
+      } catch (Exception e) {
+        return -1;
+      }
     }
 
-    public void setInitialValue(String _initialValue) {
-        initialValue = _initialValue;
-    }
-
-    public boolean hasInitialValue() {
-        if (getInitialValue() == null) {
-            return false;
-        }
-        return (!(getInitialValue().trim().length() == 0));
-    }
-
-    public String getInitialValue() {
-        if ((initialValue == null) || (initialValue.length() == 0)) {
-            return getDefaultInitialValue();
-        }
-        return initialValue;
-    }
-
-
-    public int getInitialValueInInt() {
-        if ((initialValue == null) || (initialValue.length() == 0)) {
-            return getDefaultInitialValueInInt();
-        }
-
-        if (isInt()) {
-            try {
-                return Integer.decode(initialValue).intValue();
-            } catch (Exception e) {
-                return -1;
-            }
-        }
-
-        if (isBool()) {
-            if (initialValue.charAt(0) == 'f') {
-                return 0;
-            } else {
-                return 1;
-            }
-        }
-
+    if (isBool()) {
+      if (initialValue.charAt(0) == 'f') {
         return 0;
+      } else {
+        return 1;
+      }
     }
 
-    public String getDefaultInitialValue() {
-        return this.type.getDefaultInitialValue();
+    return 0;
+  }
+
+  public String getDefaultInitialValue() {
+    return this.type.getDefaultInitialValue();
+  }
+
+  public String getDefaultInitialValueTF() {
+    return this.type.getDefaultInitialValueTF();
+  }
+
+  public int getDefaultInitialValueInInt() {
+    return this.type.getDefaultInitialValueInInt();
+  }
+
+  public AvatarType getType() {
+    return this.type;
+  }
+
+  public boolean isInt() {
+    return (type == AvatarType.INTEGER);
+  }
+
+  public boolean isBool() {
+    return (type == AvatarType.BOOLEAN);
+  }
+
+  public boolean isTimer() {
+    return (type == AvatarType.TIMER);
+  }
+
+  public String toString() {
+    String ret = this.type.getStringType() + " " + getName();
+    if (initialValue == null) {
+      return ret;
     }
 
-    public String getDefaultInitialValueTF() {
-        return this.type.getDefaultInitialValueTF();
+    return ret + " = " + initialValue;
+  }
+
+  public String toBasicString() {
+    String ret = this.type.getStringType() + " " + getName();
+    return ret;
+  }
+
+  public String toStringType() {
+    String ret = type.getStringType() + " " + getName() + " typeid= " + getType();
+    if (initialValue == null) {
+      return ret;
     }
 
-    public int getDefaultInitialValueInInt() {
-        return this.type.getDefaultInitialValueInInt();
+    return ret + " = " + initialValue;
+  }
+
+  public boolean isLeftHand() {
+    return true;
+  }
+
+  @Override
+  public boolean containsAMethodCall() {
+    return false;
+  }
+
+  @Override
+  public AvatarAttribute clone() {
+    return this;
+  }
+
+  @Override
+  public void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    TraceManager.addDev("!!! ERROR !!! (replaceAttributes in AvatarAttribute)");
+    /* !!! We should never arrive here !!! */
+  }
+
+  public AvatarAttribute advancedClone(AvatarStateMachineOwner _block) {
+    AvatarAttribute aa = new AvatarAttribute(getName(), getType(), _block, getReferenceObject());
+    if (hasInitialValue()) {
+      aa.setInitialValue(getInitialValue());
     }
 
-    public AvatarType getType() {
-        return this.type;
-    }
-
-    public boolean isInt() {
-        return (type == AvatarType.INTEGER);
-    }
-
-    public boolean isBool() {
-        return (type == AvatarType.BOOLEAN);
-    }
-
-    public boolean isTimer() {
-        return (type == AvatarType.TIMER);
-    }
-
-
-    public String toString() {
-        String ret = this.type.getStringType() + " " + getName();
-        if (initialValue == null) {
-            return ret;
-        }
-
-        return ret + " = " + initialValue;
-    }
-
-    public String toBasicString() {
-        String ret = this.type.getStringType() + " " + getName();
-        return ret;
-    }
-
-    public String toStringType() {
-        String ret = type.getStringType() + " " + getName() + " typeid= " + getType();
-        if (initialValue == null) {
-            return ret;
-        }
-
-        return ret + " = " + initialValue;
-    }
-
-    public boolean isLeftHand() {
-        return true;
-    }
-
-    @Override
-    public boolean containsAMethodCall() {
-        return false;
-    }
-
-    @Override
-    public AvatarAttribute clone() {
-        return this;
-    }
-
-    @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        TraceManager.addDev("!!! ERROR !!! (replaceAttributes in AvatarAttribute)");
-        /* !!! We should never arrive here !!! */
-    }
-
-    public AvatarAttribute advancedClone(AvatarStateMachineOwner _block) {
-        AvatarAttribute aa = new AvatarAttribute(getName(), getType(), _block, getReferenceObject());
-        if (hasInitialValue()) {
-            aa.setInitialValue(getInitialValue());
-        }
-
-        return aa;
-    }
+    return aa;
+  }
 
 }

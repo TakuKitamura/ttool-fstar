@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
 import launcher.LauncherException;
@@ -53,292 +50,283 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class JDialogTPNValidation
- * Dialog for managing the syntax analysis of TPN specifications
- * Creation: 13/07/2006
+ * Class JDialogTPNValidation Dialog for managing the syntax analysis of TPN
+ * specifications Creation: 13/07/2006
+ * 
  * @version 1.0 13/07/2006
  * @author Ludovic APVRILLE
  */
-public class JDialogTPNValidation extends JDialog implements ActionListener, Runnable  {
-	private static boolean verboseChecked, summaryChecked = false;
+public class JDialogTPNValidation extends JDialog implements ActionListener, Runnable {
+  private static boolean verboseChecked, summaryChecked = false;
 
-	protected MainGUI mgui;
+  protected MainGUI mgui;
 
-	protected String cmdTina;
-	protected String fileName;
-	protected String spec;
-	protected String host;
-	protected int mode;
-	protected RshClient rshc;
-	protected Thread t;
+  protected String cmdTina;
+  protected String fileName;
+  protected String spec;
+  protected String host;
+  protected int mode;
+  protected RshClient rshc;
+  protected Thread t;
 
-	protected int simuTime = 0;
+  protected int simuTime = 0;
 
-	protected final static int NOT_STARTED = 1;
-	protected final static int STARTED = 2;
-	protected final static int STOPPED = 3;
+  protected final static int NOT_STARTED = 1;
+  protected final static int STARTED = 2;
+  protected final static int STOPPED = 3;
 
-	//components
-	protected JTextArea jta;
-	protected JButton start;
-	protected JButton stop;
-	protected JButton close;
+  // components
+  protected JTextArea jta;
+  protected JButton start;
+  protected JButton stop;
+  protected JButton close;
 
-	protected JCheckBox verbose, summary;
+  protected JCheckBox verbose, summary;
 
-	/* Creates new form  */
-	public JDialogTPNValidation(Frame f, MainGUI _mgui, String title, String _cmdTina, String _fileName, String _spec, String _host) {
-		super(f, title, true);
+  /* Creates new form */
+  public JDialogTPNValidation(Frame f, MainGUI _mgui, String title, String _cmdTina, String _fileName, String _spec,
+      String _host) {
+    super(f, title, true);
 
-		mgui = _mgui;
+    mgui = _mgui;
 
-		cmdTina = _cmdTina;
+    cmdTina = _cmdTina;
 
-		fileName = _fileName;
-		spec = _spec;
-		host = _host;
+    fileName = _fileName;
+    spec = _spec;
+    host = _host;
 
-		initComponents();
-		myInitComponents();
-		pack();
+    initComponents();
+    myInitComponents();
+    pack();
 
-		//getGlassPane().addMouseListener( new MouseAdapter() {});
-		getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-	}
+    // getGlassPane().addMouseListener( new MouseAdapter() {});
+    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+  }
 
+  protected void myInitComponents() {
+    mode = NOT_STARTED;
+    setButtons();
+  }
 
-	protected void myInitComponents() {
-		mode = NOT_STARTED;
-		setButtons();
-	}
+  protected void initComponents() {
 
-	protected void initComponents() {
+    Container c = getContentPane();
+    setFont(new Font("Helvetica", Font.PLAIN, 14));
+    c.setLayout(new BorderLayout());
+    // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		Container c = getContentPane();
-		setFont(new Font("Helvetica", Font.PLAIN, 14));
-		c.setLayout(new BorderLayout());
-		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    JPanel jp1 = new JPanel();
+    GridBagLayout gridbag1 = new GridBagLayout();
+    GridBagConstraints c1 = new GridBagConstraints();
 
-		JPanel jp1 = new JPanel();
-		GridBagLayout gridbag1 = new GridBagLayout();
-		GridBagConstraints c1 = new GridBagConstraints();
+    jp1.setLayout(gridbag1);
+    jp1.setBorder(new javax.swing.border.TitledBorder("RG generation options"));
+    // jp1.setPreferredSize(new Dimension(300, 150));
 
-		jp1.setLayout(gridbag1);
-		jp1.setBorder(new javax.swing.border.TitledBorder("RG generation options"));
-		//jp1.setPreferredSize(new Dimension(300, 150));
+    // first line panel1
+    // c1.gridwidth = 3;
+    c1.gridheight = 1;
+    c1.weighty = 1.0;
+    c1.weightx = 1.0;
+    c1.gridwidth = GridBagConstraints.REMAINDER; // end row
+    c1.fill = GridBagConstraints.BOTH;
+    c1.gridheight = 1;
 
-		// first line panel1
-		//c1.gridwidth = 3;
-		c1.gridheight = 1;
-		c1.weighty = 1.0;
-		c1.weightx = 1.0;
-		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		c1.fill = GridBagConstraints.BOTH;
-		c1.gridheight = 1;
+    verbose = new JCheckBox("Verbose");
+    verbose.addActionListener(this);
+    jp1.add(verbose, c1);
+    verbose.setSelected(verboseChecked);
 
+    summary = new JCheckBox("Summary");
+    summary.addActionListener(this);
+    jp1.add(summary, c1);
+    summary.setSelected(summaryChecked);
 
-		verbose = new JCheckBox("Verbose");
-		verbose.addActionListener(this);
-		jp1.add(verbose, c1);
-		verbose.setSelected(verboseChecked);
+    c.add(jp1, BorderLayout.NORTH);
 
-		summary = new JCheckBox("Summary");
-		summary.addActionListener(this);
-		jp1.add(summary, c1);
-		summary.setSelected(summaryChecked);
+    jta = new ScrolledJTextArea();
+    jta.setEditable(false);
+    jta.setMargin(new Insets(10, 10, 10, 10));
+    jta.setTabSize(3);
+    jta.append("Select options and then, click on 'start' to start analysis of TPN\n");
+    Font f = new Font("Courrier", Font.BOLD, 12);
+    jta.setFont(f);
+    JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-		c.add(jp1, BorderLayout.NORTH);
+    c.add(jsp, BorderLayout.CENTER);
 
-		jta = new ScrolledJTextArea();
-		jta.setEditable(false);
-		jta.setMargin(new Insets(10, 10, 10, 10));
-		jta.setTabSize(3);
-		jta.append("Select options and then, click on 'start' to start analysis of TPN\n");
-		Font f = new Font("Courrier", Font.BOLD, 12);
-		jta.setFont(f);
-		JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    start = new JButton("Start", IconManager.imgic53);
+    stop = new JButton("Stop", IconManager.imgic55);
+    close = new JButton("Close", IconManager.imgic27);
 
-		c.add(jsp, BorderLayout.CENTER);
+    start.setPreferredSize(new Dimension(100, 30));
+    stop.setPreferredSize(new Dimension(100, 30));
+    close.setPreferredSize(new Dimension(100, 30));
 
-		start = new JButton("Start", IconManager.imgic53);
-		stop = new JButton("Stop", IconManager.imgic55);
-		close = new JButton("Close", IconManager.imgic27);
+    start.addActionListener(this);
+    stop.addActionListener(this);
+    close.addActionListener(this);
 
-		start.setPreferredSize(new Dimension(100, 30));
-		stop.setPreferredSize(new Dimension(100, 30));
-		close.setPreferredSize(new Dimension(100, 30));
+    JPanel jp2 = new JPanel();
+    jp2.add(start);
+    jp2.add(stop);
+    jp2.add(close);
 
-		start.addActionListener(this);
-		stop.addActionListener(this);
-		close.addActionListener(this);
+    c.add(jp2, BorderLayout.SOUTH);
+  }
 
-		JPanel jp2 = new JPanel();
-		jp2.add(start);
-		jp2.add(stop);
-		jp2.add(close);
+  public void actionPerformed(ActionEvent evt) {
+    String command = evt.getActionCommand();
 
-		c.add(jp2, BorderLayout.SOUTH);
-	}
+    // Compare the action command to the known actions.
+    if (command.equals("Start")) {
+      startProcess();
+    } else if (command.equals("Stop")) {
+      stopProcess();
+    } else if (command.equals("Close")) {
+      closeDialog();
+    }
+  }
 
-	public void	actionPerformed(ActionEvent evt)  {
-		String command = evt.getActionCommand();
+  public void closeDialog() {
+    if (mode == STARTED) {
+      stopProcess();
+    }
+    summaryChecked = summary.isSelected();
+    verboseChecked = verbose.isSelected();
+    dispose();
+  }
 
-		// Compare the action command to the known actions.
-		if (command.equals("Start"))  {
-			startProcess();
-		} else if (command.equals("Stop")) {
-			stopProcess();
-		} else if (command.equals("Close")) {
-			closeDialog();
-		}
-	}
+  public void stopProcess() {
+    try {
+      rshc.stopCommand();
+    } catch (LauncherException le) {
+    }
+    rshc = null;
+    mode = STOPPED;
+    setButtons();
+  }
 
+  public void startProcess() {
+    t = new Thread(this);
+    mode = STARTED;
+    setButtons();
+    t.start();
+  }
 
-	public void closeDialog() {
-		if (mode == STARTED) {
-			stopProcess();
-		}
-		summaryChecked = summary.isSelected();
-		verboseChecked = verbose.isSelected();
-		dispose();
-	}
+  public void run() {
 
-	public void stopProcess() {
-		try {
-			rshc.stopCommand();
-		} catch (LauncherException le) {
-		}
-		rshc = null;
-		mode = 	STOPPED;
-		setButtons();
-	}
+    String cmd1 = "";
+    String data;
+    Point p;
 
-	public void startProcess() {
-		t = new Thread(this);
-		mode = STARTED;
-		setButtons();
-		t.start();
-	}
+    rshc = new RshClient(host);
 
+    try {
+      jta.append("Sending TPN specification data\n");
 
-	public void run() {
+      rshc.deleteFile(fileName);
 
-		String cmd1 = "";
-		String data;
-		Point p;
+      // file data
+      rshc.sendFileData(fileName, spec);
+      fileName = fileName.substring(0, fileName.length() - 4);
+      // Removing old graph
+      // rshc.deleteFile(fileName + ".aut");
 
-		rshc = new RshClient(host);
+      // Command for RG
+      cmd1 = cmdTina + " ";
 
-		try {
-			jta.append("Sending TPN specification data\n");
+      if (summary.isSelected()) {
+        cmd1 += "-q ";
+      }
 
-			rshc.deleteFile(fileName);
+      if (verbose.isSelected()) {
+        cmd1 += "-v ";
+      }
 
-			// file data
-			rshc.sendFileData(fileName, spec);
-			fileName = fileName.substring(0, fileName.length()-4);
-			//Removing old graph
-			//rshc.deleteFile(fileName + ".aut");
+      cmd1 += fileName + ".net" /* + " >toto.res" */;
 
-			// Command for RG
-			cmd1 = cmdTina + " ";
+      jta.append("\nAnalyzing TPN\n");
+      data = processCmd(cmd1);
+      jta.append(data);
 
-			if (summary.isSelected()) {
-				cmd1 += "-q ";
-			}
+      // Getting graph
 
-			if (verbose.isSelected()) {
-				cmd1 += "-v ";
-			}
+      /*
+       * jta.append("Result:\n"); // Getting data data = rshc.getFileData("toto.res");
+       * jta.append(data);
+       */
 
-			cmd1 += fileName + ".net"  /*+ " >toto.res"*/;
+      // AUT dot
+      /*
+       * jta.append("\nConverting to aut and dotty format\n");
+       * //rshc.sendFileData(fileName + ".bcg", data); cmd1 = cmdBcgio + " -bcg " +
+       * fileName + ".bcg" + " -aldebaran " + fileName + ".aut"; data =
+       * processCmd(cmd1); data = rshc.getFileData(fileName + ".aut"); data =
+       * mgui.gtm.convertCADP_AUT_to_RTL_AUT(data); // mgui.gtm.setRGAut(data);
+       * mgui.saveRGAut(); p = FormatManager.nbStateTransitionRGAldebaran(data);
+       * jta.append("\n" + p.x + " state(s), " + p.y + " transition(s)\n\n");
+       * 
+       * // Bcgio command rshc.sendFileData(fileName + ".aut", data); cmd1 = cmdBcgio
+       * + " -aldebaran " + fileName + ".aut" + " -graphviz " + fileName + ".aut.dot";
+       * data = processCmd(cmd1); data = rshc.getFileData(fileName + ".aut.dot");
+       * mgui.gtm.setRGAutDOT(data); mgui.saveRGAutDOT();
+       */
+      jta.append("\nAll Done\n");
+      // rshc.deleteFile(fileName);
 
-			jta.append("\nAnalyzing TPN\n");
-			data = processCmd(cmd1);
-			jta.append(data);
+    } catch (LauncherException le) {
+      jta.append(le.getMessage() + "\n");
+      mode = STOPPED;
+      setButtons();
+      return;
+    } catch (Exception e) {
+      mode = STOPPED;
+      setButtons();
+      return;
+    }
 
-			// Getting graph
+    mode = STOPPED;
+    setButtons();
+  }
 
-			/*jta.append("Result:\n");
-                // Getting data
-                data = rshc.getFileData("toto.res");
-                jta.append(data);*/
+  protected String processCmd(String cmd) throws LauncherException {
+    rshc.setCmd(cmd);
+    String s = null;
+    rshc.sendExecuteCommandRequest();
+    s = rshc.getDataFromProcess();
+    return s;
+  }
 
-
-
-			// AUT  dot
-			/*jta.append("\nConverting to aut and dotty format\n");
-                  //rshc.sendFileData(fileName + ".bcg", data);
-                  cmd1 = cmdBcgio + " -bcg " + fileName + ".bcg" + " -aldebaran " + fileName + ".aut";
-                  data = processCmd(cmd1);
-                  data = rshc.getFileData(fileName + ".aut");
-                  data = mgui.gtm.convertCADP_AUT_to_RTL_AUT(data);
-                  //
-                  mgui.gtm.setRGAut(data);
-                  mgui.saveRGAut();
-                  p = FormatManager.nbStateTransitionRGAldebaran(data);
-                  jta.append("\n" + p.x + " state(s), " + p.y + " transition(s)\n\n");
-
-                  // Bcgio command
-                  rshc.sendFileData(fileName + ".aut", data);
-                  cmd1 = cmdBcgio + " -aldebaran " + fileName + ".aut" + " -graphviz " + fileName + ".aut.dot";
-                  data = processCmd(cmd1);
-                  data = rshc.getFileData(fileName + ".aut.dot");
-                  mgui.gtm.setRGAutDOT(data);
-                  mgui.saveRGAutDOT();*/
-			jta.append("\nAll Done\n");
-			//rshc.deleteFile(fileName);      
-
-		} catch (LauncherException le) {
-			jta.append(le.getMessage() + "\n");
-			mode = 	STOPPED;
-			setButtons();
-			return;
-		} catch (Exception e) {
-			mode = 	STOPPED;
-			setButtons();
-			return;
-		}
-
-		mode = STOPPED;
-		setButtons();
-	}
-
-	protected String processCmd(String cmd) throws LauncherException {
-		rshc.setCmd(cmd);
-		String s = null;
-		rshc.sendExecuteCommandRequest();
-		s = rshc.getDataFromProcess();
-		return s;
-	}
-
-	protected void setButtons() {
-		switch(mode) {
-		case NOT_STARTED:
-			summary.setEnabled(true);
-			verbose.setEnabled(true);
-			start.setEnabled(true);
-			stop.setEnabled(false);
-			close.setEnabled(true);
-			getGlassPane().setVisible(false);
-			break;
-		case STARTED:
-			summary.setEnabled(false);
-			verbose.setEnabled(false);
-			start.setEnabled(false);
-			stop.setEnabled(true);
-			close.setEnabled(false);
-			getGlassPane().setVisible(true);
-			break;
-		case STOPPED:
-		default:
-			summary.setEnabled(false);
-		verbose.setEnabled(false);
-		start.setEnabled(false);
-		stop.setEnabled(false);
-		close.setEnabled(true);
-		getGlassPane().setVisible(false);
-		break;
-		}
-	}
+  protected void setButtons() {
+    switch (mode) {
+      case NOT_STARTED:
+        summary.setEnabled(true);
+        verbose.setEnabled(true);
+        start.setEnabled(true);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
+      case STARTED:
+        summary.setEnabled(false);
+        verbose.setEnabled(false);
+        start.setEnabled(false);
+        stop.setEnabled(true);
+        close.setEnabled(false);
+        getGlassPane().setVisible(true);
+        break;
+      case STOPPED:
+      default:
+        summary.setEnabled(false);
+        verbose.setEnabled(false);
+        start.setEnabled(false);
+        stop.setEnabled(false);
+        close.setEnabled(true);
+        getGlassPane().setVisible(false);
+        break;
+    }
+  }
 }

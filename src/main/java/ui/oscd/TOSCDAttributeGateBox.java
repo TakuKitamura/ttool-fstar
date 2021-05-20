@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.oscd;
 
 //import java.awt.*;
@@ -52,40 +49,40 @@ import ui.util.IconManager;
 import ui.window.JDialogAttribute;
 
 /**
- * Class TOSCDAttributeGateBox
- * Box for storing the attributes (type Gate, InGate, OutGate)  of a Tclass
- * To be used in class diagrams
- * Creation: 03/10/2006
+ * Class TOSCDAttributeGateBox Box for storing the attributes (type Gate,
+ * InGate, OutGate) of a Tclass To be used in class diagrams Creation:
+ * 03/10/2006
+ * 
  * @version 1.0 03/10/2006
  * @author Ludovic APVRILLE
  */
 public class TOSCDAttributeGateBox extends TGCAttributeBox {
-    
-    
-    public TOSCDAttributeGateBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        name = "Tclass gates";
-        value = "";
-        
-        attributeText = "Gate";
-        
-        attributes = false; // It contains gates
-        
-        myColor = ColorManager.GATE_BOX;
-        
-        myImageIcon = IconManager.imgic120;
-    }
-    
-    protected void setJDialogOptions(JDialogAttribute jda) {
-        jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
-        jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-        jda.addType(TAttribute.getStringType(TAttribute.GATE));
-        jda.addType(TAttribute.getStringType(TAttribute.OUTGATE));
-        jda.addType(TAttribute.getStringType(TAttribute.INGATE));
-        jda.enableInitialValue(false);
-        jda.enableRTLOTOSKeyword(true);
-        jda.enableJavaKeyword(true);
-    }
-    
+
+  public TOSCDAttributeGateBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+      TGComponent _father, TDiagramPanel _tdp) {
+    super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+    name = "Tclass gates";
+    value = "";
+
+    attributeText = "Gate";
+
+    attributes = false; // It contains gates
+
+    myColor = ColorManager.GATE_BOX;
+
+    myImageIcon = IconManager.imgic120;
+  }
+
+  protected void setJDialogOptions(JDialogAttribute jda) {
+    jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+    jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+    jda.addType(TAttribute.getStringType(TAttribute.GATE));
+    jda.addType(TAttribute.getStringType(TAttribute.OUTGATE));
+    jda.addType(TAttribute.getStringType(TAttribute.INGATE));
+    jda.enableInitialValue(false);
+    jda.enableRTLOTOSKeyword(true);
+    jda.enableJavaKeyword(true);
+  }
+
 }
