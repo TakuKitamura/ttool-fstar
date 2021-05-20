@@ -88,7 +88,7 @@ public class TAttribute {
   private int type;
   private String typeOther;
 
-  private RefinementType refinmentType;
+  private RefinementType refinementType = new RefinementType("");
 
   private int confidentialityVerification = NOT_VERIFIED;
 
@@ -103,7 +103,6 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = _type;
     typeOther = "";
-    refinmentType = new RefinementType("");
   }
 
   public TAttribute(int _access, String _id, String _initialValue, int _type, RefinementType _refinementType) {
@@ -112,7 +111,7 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = _type;
     typeOther = "";
-    refinmentType = _refinementType;
+    refinementType = _refinementType;
   }
 
   public TAttribute(int _access, String _id, String _initialValue, String _typeOther) {
@@ -121,7 +120,6 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = OTHER;
     typeOther = _typeOther;
-    refinmentType = new RefinementType("");
   }
 
   public TAttribute(int _access, String _id, String _initialValue, int _type, String _typeOther) {
@@ -130,7 +128,17 @@ public class TAttribute {
     initialValue = new String(_initialValue);
     type = _type;
     typeOther = new String(_typeOther);
-    refinmentType = new RefinementType("");
+  }
+
+  public TAttribute(int _access, String _id, String _initialValue, int _type, String _typeOther,
+      RefinementType _refinementType) {
+    access = _access;
+    id = new String(_id);
+    initialValue = new String(_initialValue);
+    type = _type;
+    typeOther = new String(_typeOther);
+
+    refinementType = _refinementType;
   }
 
   public int getAccess() {
@@ -164,6 +172,10 @@ public class TAttribute {
 
   public String getTypeOther() {
     return typeOther;
+  }
+
+  public RefinementType getRefinementType() {
+    return refinementType;
   }
 
   public boolean hasSameType(TAttribute ta) {
@@ -495,9 +507,9 @@ public class TAttribute {
       if (type == ARRAY_NAT) {
         return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
       } else {
-        // TraceManager.addDev(refinmentType.toString());
+        // TraceManager.addDev(refinementType.toString());
         return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + "{"
-            + refinmentType.toString() + "}";
+            + refinementType.toString() + "}";
       }
     }
   }
@@ -579,7 +591,7 @@ public class TAttribute {
   }
 
   public TAttribute makeClone() {
-    TAttribute ta = new TAttribute(access, id, initialValue, type, typeOther);
+    TAttribute ta = new TAttribute(access, id, initialValue, type, typeOther, refinementType);
     ta.isAvatar = isAvatar;
     return ta;
   }
