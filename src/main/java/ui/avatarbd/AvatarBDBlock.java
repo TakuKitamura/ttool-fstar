@@ -45,6 +45,8 @@ import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import fstar.RefinementType;
 import proverifspec.ProVerifResultTrace;
 import proverifspec.ProVerifResultTraceStep;
 import ui.*;
@@ -59,6 +61,8 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
+
+import myutil.Xml;
 
 /**
  * Class AvatarBDBlock Node. To be used in AVATAR Block Diagrams Creation:
@@ -1141,6 +1145,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
       sb.append(a.getType());
       sb.append("\" typeOther=\"");
       sb.append(a.getTypeOther());
+      sb.append("\" refinmentType=\"");
+      sb.append(new Xml().sanitize(a.getRefinementType().toString()));
       sb.append("\" />\n");
     }
     for (AvatarMethod am : this.myMethods) {
@@ -1178,6 +1184,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
       Element elt;
       int access, type;
       String typeOther;
+      RefinementType refinmentType;
       String id, valueAtt;
       String method;
       String signal;
@@ -1219,6 +1226,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                 } catch (Exception e) {
                   typeOther = "";
                 }
+
+                try {
+                  refinmentType = new RefinementType(new Xml().decode(elt.getAttribute("refinmentType")));
+                } catch (Exception e) {
+                  refinmentType = new RefinementType("");
+                }
+
                 id = elt.getAttribute("id");
 
                 try {
@@ -1240,7 +1254,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                     if (type == TAttribute.NATURAL) {
                       type = TAttribute.INTEGER;
                     }
-                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther, refinmentType);
                     ta.isAvatar = true;
                     this.myAttributes.add(ta);
                   }
