@@ -106,11 +106,7 @@ public class TAttribute {
     }
 
     public TAttribute(int _access, String _id, String _initialValue, int _type, RefinementType _refinementType) {
-        access = _access;
-        id = new String(_id);
-        initialValue = new String(_initialValue);
-        type = _type;
-        typeOther = "";
+        this(_access, _id, _initialValue, _type);
         refinementType = _refinementType;
     }
 
@@ -132,12 +128,7 @@ public class TAttribute {
 
     public TAttribute(int _access, String _id, String _initialValue, int _type, String _typeOther,
             RefinementType _refinementType) {
-        access = _access;
-        id = new String(_id);
-        initialValue = new String(_initialValue);
-        type = _type;
-        typeOther = new String(_typeOther);
-
+        this(_access, _id, _initialValue, _type, _typeOther);
         refinementType = _refinementType;
     }
 

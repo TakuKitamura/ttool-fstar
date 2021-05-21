@@ -846,7 +846,11 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     public void addMethod() {
         // TraceManager.addDev("addMethod");
         String s = methodText.getText();
-        AvatarMethod am = AvatarMethod.isAValidMethod(s);
+
+        RefinementType requireRefinementType = new RefinementType(methodRequireText.getText());
+        RefinementType ensureRefinementType = new RefinementType(methodEnsureText.getText());
+
+        AvatarMethod am = AvatarMethod.isAValidMethod(s, requireRefinementType, ensureRefinementType );
 
         AvatarMethod amtmp;
 

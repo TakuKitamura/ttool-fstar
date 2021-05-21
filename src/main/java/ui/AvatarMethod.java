@@ -46,6 +46,8 @@ import translator.UPPAALKeyword;
 
 import java.util.Vector;
 
+import fstar.RefinementType;
+
 /**
  * Class AvatarMethod Method in Avatar ... Creation: 08/04/2010
  *
@@ -272,6 +274,11 @@ public class AvatarMethod {
         // TraceManager.addDev("Returning method");
 
         return new AvatarMethod(id, types, typeIds, rt);
+    }
+
+    public static AvatarMethod isAValidMethod(String _method, RefinementType requireRefinementType, RefinementType ensureRefinementType) {
+
+        return isAValidMethod(_method);
     }
 
     public String getId() {
