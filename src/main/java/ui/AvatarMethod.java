@@ -80,6 +80,9 @@ public class AvatarMethod {
 
     protected String returnType;
 
+    protected RefinementType requireRefinementType = new RefinementType("");
+    protected RefinementType ensureRefinementType = new RefinementType("");
+
     protected boolean implementationProvided;
 
     public AvatarMethod(String _id, String _types[], String _typeIds[]) {
@@ -276,9 +279,12 @@ public class AvatarMethod {
         return new AvatarMethod(id, types, typeIds, rt);
     }
 
-    public static AvatarMethod isAValidMethod(String _method, RefinementType requireRefinementType, RefinementType ensureRefinementType) {
-
-        return isAValidMethod(_method);
+    public static AvatarMethod isAValidMethod(String _method, RefinementType _requireRefinementType,
+            RefinementType _ensureRefinementType) {
+        AvatarMethod avatarMethod = isAValidMethod(_method);
+        avatarMethod.requireRefinementType = _requireRefinementType;
+        avatarMethod.ensureRefinementType = _ensureRefinementType;
+        return avatarMethod;
     }
 
     public String getId() {
@@ -295,6 +301,14 @@ public class AvatarMethod {
 
     public String getReturnType() {
         return returnType;
+    }
+
+    public RefinementType getRequireRefinementType() {
+        return requireRefinementType;
+    }
+
+    public RefinementType getEnsureRefinementType() {
+        return ensureRefinementType;
     }
 
     public String getType(int _index) {
@@ -395,9 +409,7 @@ public class AvatarMethod {
         return "";
     }
 
-    public String toString() {
-        int cpt = 0;
-
+    public String toStringOnlyMethod() {
         String method = "";
         if (returnType.length() > 0) {
             method += returnType + " ";
@@ -411,6 +423,16 @@ public class AvatarMethod {
             }
         }
         method += ")";
+        return method;
+    }
+
+    public String toString() {
+        String method = this.toStringOnlyMethod();
+        method += ": (require{";
+        method += requireRefinementType;
+        method += "}, ensure{";
+        method += ensureRefinementType;
+        method += "})";
         return method;
     }
 
@@ -461,7 +483,7 @@ public class AvatarMethod {
      */
 
     public AvatarMethod makeClone() {
-        AvatarMethod am = isAValidMethod(toString());
+        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType);
         am.setImplementationProvided(isImplementationProvided());
         return am;
     }

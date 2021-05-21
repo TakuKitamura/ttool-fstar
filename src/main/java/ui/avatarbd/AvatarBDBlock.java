@@ -1148,13 +1148,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
             sb.append(a.getType());
             sb.append("\" typeOther=\"");
             sb.append(a.getTypeOther());
-            sb.append("\" refinmentType=\"");
+            sb.append("\" refinementType=\"");
             sb.append(new Xml().sanitize(a.getRefinementType().toString()));
             sb.append("\" />\n");
         }
         for (AvatarMethod am : this.myMethods) {
             sb.append("<Method value=\"");
-            sb.append(am.toSaveString());
+            sb.append(am.toStringOnlyMethod());
+            sb.append("\" requireRefinementType=\"");
+            sb.append(new Xml().sanitize(am.getRequireRefinementType().toString()));
+            sb.append("\" ensureRefinementType=\"");
+            sb.append(new Xml().sanitize(am.getEnsureRefinementType().toString()));
             sb.append("\" />\n");
         }
         for (AvatarSignal as : this.mySignals) {
@@ -1187,9 +1191,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
             Element elt;
             int access, type;
             String typeOther;
-            RefinementType refinmentType;
+            RefinementType refinementType;
             String id, valueAtt;
             String method;
+            RefinementType requireRefinementType;
+            RefinementType ensureRefinementType;
             String signal;
             AvatarMethod am;
             AvatarSignal as;
@@ -1231,10 +1237,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                                 }
 
                                 try {
-                                    refinmentType = new RefinementType(
-                                            new Xml().decode(elt.getAttribute("refinmentType")));
+                                    refinementType = new RefinementType(
+                                            new Xml().decode(elt.getAttribute("refinementType")));
                                 } catch (Exception e) {
-                                    refinmentType = new RefinementType("");
+                                    refinementType = new RefinementType("");
                                 }
 
                                 id = elt.getAttribute("id");
@@ -1260,7 +1266,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                                             type = TAttribute.INTEGER;
                                         }
                                         TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther,
-                                                refinmentType);
+                                                refinementType);
                                         ta.isAvatar = true;
                                         this.myAttributes.add(ta);
                                     }
@@ -1312,7 +1318,21 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                                     // addCryptoElements();
                                 }
 
-                                am = AvatarMethod.isAValidMethod(method);
+                                try {
+                                    requireRefinementType = new RefinementType(
+                                            new Xml().decode(elt.getAttribute("requireRefinementType")));
+                                } catch (Exception e) {
+                                    requireRefinementType = new RefinementType("");
+                                }
+
+                                try {
+                                    ensureRefinementType = new RefinementType(
+                                            new Xml().decode(elt.getAttribute("ensureRefinementType")));
+                                } catch (Exception e) {
+                                    ensureRefinementType = new RefinementType("");
+                                }
+
+                                am = AvatarMethod.isAValidMethod(method, requireRefinementType, ensureRefinementType);
                                 if (am != null) {
                                     // TraceManager.addDev("Setting to " + implementation + " the implementation of
                                     // " + am);
