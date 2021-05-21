@@ -123,6 +123,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     private boolean hasMethods = true;
     private JPanel panel3, panel4;
     private JTextField methodText;
+    private JTextField methodRequireText;
+    private JTextField methodEnsureText;
     private JButton addMethodButton;
     private JList<AvatarMethod> listMethod;
     private JButton upMethodButton;
@@ -390,7 +392,9 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         c3.weightx = 1.0;
         c3.anchor = GridBagConstraints.CENTER;
         c3.gridwidth = GridBagConstraints.REMAINDER; // end row
-        panel3.add(new JLabel("method:"), c3);
+        panel3.add(new JLabel("method"), c3);
+        panel3.add(new JLabel("require"), c3);
+        panel3.add(new JLabel("ensure"), c3);
 
         // second line panel3
         c3.fill = GridBagConstraints.HORIZONTAL;
@@ -398,6 +402,16 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         methodText.setColumns(50);
         methodText.setEditable(true);
         panel3.add(methodText, c3);
+
+        methodRequireText = new JTextField();
+        methodRequireText.setColumns(50);
+        methodRequireText.setEditable(true);
+        panel3.add(methodRequireText, c3);
+
+        methodEnsureText = new JTextField();
+        methodEnsureText.setColumns(50);
+        methodEnsureText.setEditable(true);
+        panel3.add(methodEnsureText, c3);
 
         // third line panel3
         c3.gridwidth = GridBagConstraints.REMAINDER; // end row
