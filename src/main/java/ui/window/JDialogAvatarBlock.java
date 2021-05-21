@@ -871,6 +871,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             }
             listMethod.setListData(methods.toArray(new AvatarMethod[0]));
             methodText.setText("");
+            methodRequireText.setText("");
+            methodEnsureText.setText("");
 
         } else {
             JOptionPane.showMessageDialog(frame, "Badly formatted method declaration", "Error",
