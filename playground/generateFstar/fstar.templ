@@ -1,0 +1,72 @@
+module @module_name@
+
+open LowStar.BufferOps
+open FStar.HyperStack.ST
+open LowStar.Printf
+open C.String
+
+module I8 = FStar.Int8
+module I16 = FStar.Int16
+module I32 = FStar.Int32
+
+module U8 = FStar.UInt8
+module U16 = FStar.UInt16
+module U32 = FStar.UInt32
+
+type struct_error = {
+  code: I32.t;
+  message: C.String.t;
+}
+
+let none_error: struct_error = 
+    {
+        code = 0l;
+        message = !$"";
+    }
+
+let ng_error: struct_error = 
+    {
+        code = 1l;
+        message = !$"input is invalid range value";
+    }
+
+type struct_ret = {
+    value: @ret_integer_type@.t;
+    error: struct_error;
+}
+
+let ng_ret: struct_ret = {
+    value = 0@ret_integer_type_suffix@;
+    error = ng_error;
+}
+
+@arg_constraint@
+
+@ret_constraint@
+
+val @interface_func_name@_body:
+  @interface_func_body_arg@
+Stack (ret: @ret_integer_type@.t) (requires fun h0 -> 
+    @interface_func_body_arg_require@
+  )
+  (ensures fun h0 ret h1 -> 
+    retConstraint ret
+  )
+let @interface_func_name@_body @args@ = @unimplemented_func_ret_value@@ret_integer_type_suffix@
+
+val @interface_func_name@: 
+  @interface_func_arg@
+  Stack (ret: struct_ret) (requires fun h0 -> 
+    true
+  )
+  (ensures fun h0 ret h1 -> 
+    (retConstraint ret.value && I32.v ret.error.code = 0) || (I32.v ret.error.code > 0)
+  )
+let @interface_func_name@ @args@ = 
+  if @valid_func_body_call_condition@ then
+    {
+        value = @interface_func_name@_body @args@;
+        error = none_error;
+    }
+  else
+    ng_ret
