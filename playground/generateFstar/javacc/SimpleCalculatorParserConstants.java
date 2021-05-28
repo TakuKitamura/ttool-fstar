@@ -21,27 +21,29 @@ public interface SimpleCalculatorParserConstants {
   /** RegularExpression Id. */
   int CLOSE_BRACKET = 9;
   /** RegularExpression Id. */
-  int IDENTIFIER = 10;
+  int PLUSMINUS = 10;
   /** RegularExpression Id. */
-  int LETTER = 11;
+  int IDENTIFIER = 11;
   /** RegularExpression Id. */
-  int DIGIT = 12;
+  int LETTER = 12;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 13;
+  int DIGIT = 13;
   /** RegularExpression Id. */
-  int DECIMAL_LITERAL = 14;
+  int INTEGER_LITERAL = 14;
   /** RegularExpression Id. */
-  int HEX_LITERAL = 15;
+  int DECIMAL_LITERAL = 15;
   /** RegularExpression Id. */
-  int OCTAL_LITERAL = 16;
+  int HEX_LITERAL = 16;
   /** RegularExpression Id. */
-  int FLOATING_POINT_LITERAL = 17;
+  int OCTAL_LITERAL = 17;
   /** RegularExpression Id. */
-  int EXPONENT = 18;
+  int FLOATING_POINT_LITERAL = 18;
   /** RegularExpression Id. */
-  int CHARACTER_LITERAL = 19;
+  int EXPONENT = 19;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 20;
+  int CHARACTER_LITERAL = 20;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 21;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -58,6 +60,7 @@ public interface SimpleCalculatorParserConstants {
     "\"||\"",
     "\"(\"",
     "\")\"",
+    "<PLUSMINUS>",
     "<IDENTIFIER>",
     "<LETTER>",
     "<DIGIT>",

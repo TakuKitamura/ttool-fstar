@@ -21,7 +21,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   protected static JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
 
 /*@egen*/
-  public static List<Token> rpn = new ArrayList<Token>();
+  public static List<String> rpn = new ArrayList<String>();
   public static void main(String [] args)
   {
     SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
@@ -55,6 +55,7 @@ TOKEN :
 | < OR : "||" >
 | < OPEN_BRACKET : "(" >
 | < CLOSE_BRACKET : ")" >
+| < PLUSMINUS : "+" | "-" >
 }
 
 TOKEN : /* IDENTIFIERS */
@@ -235,7 +236,7 @@ void ConditionalOrExpression() :
 {/*@bgen(jjtree) ConditionalOrExpression */
     try {
 /*@egen*/
-    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t);} )*/*@bgen(jjtree)*/
+    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -276,7 +277,7 @@ void ConditionalAndExpression() :
 {/*@bgen(jjtree) ConditionalAndExpression */
   try {
 /*@egen*/
-  EqualityExpression() (t = < AND > EqualityExpression(){rpn.add(t);} )*/*@bgen(jjtree)*/
+  EqualityExpression() (t = < AND > EqualityExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -317,7 +318,7 @@ void EqualityExpression() :
 {/*@bgen(jjtree) EqualityExpression */
   try {
 /*@egen*/
-  RelationalExpression() (t = < EQUALITY > RelationalExpression(){rpn.add(t);} )*/*@bgen(jjtree)*/
+  RelationalExpression() (t = < EQUALITY > RelationalExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -358,13 +359,59 @@ void RelationalExpression() :
 {/*@bgen(jjtree) RelationalExpression */
   try {
 /*@egen*/
-  PrimaryPrefix() ( t = < RELATIONAL > PrimaryPrefix(){rpn.add(t);} )*/*@bgen(jjtree)*/
+  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
 }
 /*@egen*/
 {}/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void AdditiveExpression() :
+{/*@bgen(jjtree) AdditiveExpression */
+  ASTAdditiveExpression jjtn000 = new ASTAdditiveExpression(JJTADDITIVEEXPRESSION);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/
+  Token t = null;
+}
+{/*@bgen(jjtree) AdditiveExpression */
+  try {
+/*@egen*/
+  t = < PLUSMINUS > PrimaryPrefix()/*@bgen(jjtree)*/
+                                    {
+                                      jjtree.closeNodeScope(jjtn000, true);
+                                      jjtc000 = false;
+                                    }
+/*@egen*/ {
+      if (t.toString().equals("-")) {
+        int rpnSize = rpn.size();
+        rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
+      }
+  }
+|
+  PrimaryPrefix()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -424,7 +471,6 @@ void PrimaryPrefix() :
   }
 /*@egen*/
 }
-// (3 < 4) && (5 > 6)
 
 
 void Literal() :
@@ -494,7 +540,7 @@ void Name() :
   }
 /*@egen*/
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -520,7 +566,7 @@ void Integer():
   }
 /*@egen*/
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
    if (jjtc000) {
@@ -546,7 +592,7 @@ void Floating():
   }
 /*@egen*/
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -572,7 +618,7 @@ void Character():
   }
 /*@egen*/
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
    if (jjtc000) {
@@ -598,7 +644,7 @@ void String():
   }
 /*@egen*/
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
    if (jjtc000) {
@@ -626,7 +672,7 @@ void BooleanLiteral() :
   }
 /*@egen*/
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -654,7 +700,7 @@ void NullLiteral() :
   }
 /*@egen*/
   {
-      rpn.add(t);
+      rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {

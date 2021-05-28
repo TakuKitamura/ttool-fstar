@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class SimpleCalculatorParser
 {
-  public static List<Token> rpn = new ArrayList<Token>();
+  public static List<String> rpn = new ArrayList<String>();
   public static void main(String [] args)
   {
     SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
@@ -51,6 +51,7 @@ TOKEN :
 | < OR : "||" >
 | < OPEN_BRACKET : "(" >
 | < CLOSE_BRACKET : ")" >
+| < PLUSMINUS : "+" | "-" >
 }
 
 TOKEN : /* IDENTIFIERS */
@@ -168,7 +169,7 @@ void ConditionalOrExpression() :
   Token t = null;
 }
 {
-    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t);} )*
+    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t.toString());} )*
 {}
 }
 
@@ -178,7 +179,7 @@ void ConditionalAndExpression() :
   Token t = null;
 }
 {
-  EqualityExpression() (t = < AND > EqualityExpression(){rpn.add(t);} )*
+  EqualityExpression() (t = < AND > EqualityExpression(){rpn.add(t.toString());} )*
 {}
 }
 
@@ -188,7 +189,7 @@ void EqualityExpression() :
   Token t = null;
 }
 {
-  RelationalExpression() (t = < EQUALITY > RelationalExpression(){rpn.add(t);} )*
+  RelationalExpression() (t = < EQUALITY > RelationalExpression(){rpn.add(t.toString());} )*
 {}
 }
 
@@ -198,8 +199,23 @@ void RelationalExpression() :
   Token t = null;
 }
 {
-  PrimaryPrefix() ( t = < RELATIONAL > PrimaryPrefix(){rpn.add(t);} )*
+  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){rpn.add(t.toString());} )*
 {}
+}
+
+void AdditiveExpression() :
+{
+  Token t = null;
+}
+{
+  t = < PLUSMINUS > PrimaryPrefix() {
+      if (t.toString().equals("-")) {
+        int rpnSize = rpn.size();
+        rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
+      }
+  }
+|
+  PrimaryPrefix()
 }
 
 void PrimaryPrefix() :
@@ -213,7 +229,6 @@ void PrimaryPrefix() :
   |
   < OPEN_BRACKET > Expr() < CLOSE_BRACKET >
 }
-// (3 < 4) && (5 > 6)
 
 
 void Literal() :
@@ -246,7 +261,7 @@ void Name() :
   ( LOOKAHEAD(2) "." <IDENTIFIER>
   )*
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }
 }
 
@@ -255,7 +270,7 @@ void Integer():
 {
  t = <INTEGER_LITERAL>
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }
 }
 
@@ -264,7 +279,7 @@ void Floating():
 {
   t = <FLOATING_POINT_LITERAL>
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }
 }
 
@@ -273,7 +288,7 @@ void Character():
 {
  t = <CHARACTER_LITERAL>
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }
 }
 
@@ -282,7 +297,7 @@ void String():
 {
  t = <STRING_LITERAL>
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }
 }
 
@@ -293,7 +308,7 @@ void BooleanLiteral() :
 {
   t = "true" | "false"
   {
-    rpn.add(t);
+    rpn.add(t.toString());
   }
 }
 
@@ -304,7 +319,7 @@ void NullLiteral() :
 {
   t = "null"
   {
-      rpn.add(t);
+      rpn.add(t.toString());
   }
 }
 

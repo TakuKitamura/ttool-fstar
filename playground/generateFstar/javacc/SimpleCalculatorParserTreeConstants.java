@@ -7,15 +7,16 @@ public interface SimpleCalculatorParserTreeConstants
   public int JJTCONDITIONALANDEXPRESSION = 3;
   public int JJTEQUALITYEXPRESSION = 4;
   public int JJTRELATIONALEXPRESSION = 5;
-  public int JJTPRIMARYPREFIX = 6;
-  public int JJTLITERAL = 7;
-  public int JJTNAME = 8;
-  public int JJTINTEGER = 9;
-  public int JJTFLOATING = 10;
-  public int JJTCHARACTER = 11;
-  public int JJTSTRING = 12;
-  public int JJTBOOLEANLITERAL = 13;
-  public int JJTNULLLITERAL = 14;
+  public int JJTADDITIVEEXPRESSION = 6;
+  public int JJTPRIMARYPREFIX = 7;
+  public int JJTLITERAL = 8;
+  public int JJTNAME = 9;
+  public int JJTINTEGER = 10;
+  public int JJTFLOATING = 11;
+  public int JJTCHARACTER = 12;
+  public int JJTSTRING = 13;
+  public int JJTBOOLEANLITERAL = 14;
+  public int JJTNULLLITERAL = 15;
 
 
   public String[] jjtNodeName = {
@@ -25,6 +26,7 @@ public interface SimpleCalculatorParserTreeConstants
     "ConditionalAndExpression",
     "EqualityExpression",
     "RelationalExpression",
+    "AdditiveExpression",
     "PrimaryPrefix",
     "Literal",
     "Name",
@@ -36,4 +38,4 @@ public interface SimpleCalculatorParserTreeConstants
     "NullLiteral",
   };
 }
-/* JavaCC - OriginalChecksum=b80f99d8ccc95f59f5e712c80065c3be (do not edit this line) */
+/* JavaCC - OriginalChecksum=c2d70a4b2904bbe9c510cc992b2c48de (do not edit this line) */

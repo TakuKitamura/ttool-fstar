@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorParserTreeConstants, SimpleCalculatorParserConstants {/*@bgen(jjtree)*/
-  protected static JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();public static List<Token> rpn = new ArrayList<Token>();
+  protected static JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();public static List<String> rpn = new ArrayList<String>();
   public static void main(String [] args)
   {
     SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
@@ -23,7 +23,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       Expr();
-      jj_consume_token(21);
+      jj_consume_token(22);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
     {if (true) return jjtn000;}
@@ -96,7 +96,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
         t = jj_consume_token(OR);
         ConditionalAndExpression();
-                                                                      rpn.add(t);
+                                                                      rpn.add(t.toString());
       }
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -142,7 +142,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
         t = jj_consume_token(AND);
         EqualityExpression();
-                                                         rpn.add(t);
+                                                         rpn.add(t.toString());
       }
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -188,7 +188,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
         t = jj_consume_token(EQUALITY);
         RelationalExpression();
-                                                                  rpn.add(t);
+                                                                  rpn.add(t.toString());
       }
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -221,7 +221,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);//   List tokens = new ArrayList();
   Token t = null;
     try {
-      PrimaryPrefix();
+      AdditiveExpression();
       label_4:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -233,12 +233,66 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
           break label_4;
         }
         t = jj_consume_token(RELATIONAL);
-        PrimaryPrefix();
-                                                       rpn.add(t);
+        AdditiveExpression();
+                                                                 rpn.add(t.toString());
       }
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
 
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
+  static final public void AdditiveExpression() throws ParseException {
+ /*@bgen(jjtree) AdditiveExpression */
+  ASTAdditiveExpression jjtn000 = new ASTAdditiveExpression(JJTADDITIVEEXPRESSION);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PLUSMINUS:
+        t = jj_consume_token(PLUSMINUS);
+        PrimaryPrefix();
+                                      jjtree.closeNodeScope(jjtn000, true);
+                                      jjtc000 = false;
+      if (t.toString().equals("-")) {
+        int rpnSize = rpn.size();
+        rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
+      }
+        break;
+      case OPEN_BRACKET:
+      case IDENTIFIER:
+      case INTEGER_LITERAL:
+      case FLOATING_POINT_LITERAL:
+      case CHARACTER_LITERAL:
+      case STRING_LITERAL:
+      case 24:
+      case 25:
+      case 26:
+        PrimaryPrefix();
+        break;
+      default:
+        jj_la1[4] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -271,9 +325,9 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case FLOATING_POINT_LITERAL:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
-      case 23:
       case 24:
       case 25:
+      case 26:
         Literal();
         break;
       case IDENTIFIER:
@@ -285,7 +339,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         jj_consume_token(CLOSE_BRACKET);
         break;
       default:
-        jj_la1[4] = jj_gen;
+        jj_la1[5] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -310,7 +364,6 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-// (3 < 4) && (5 > 6)
   static final public void Literal() throws ParseException {
  /*@bgen(jjtree) Literal */
   ASTLiteral jjtn000 = new ASTLiteral(JJTLITERAL);
@@ -330,15 +383,15 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case STRING_LITERAL:
         String();
         break;
-      case 23:
       case 24:
+      case 25:
         BooleanLiteral();
         break;
-      case 25:
+      case 26:
         NullLiteral();
         break;
       default:
-        jj_la1[5] = jj_gen;
+        jj_la1[6] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -377,12 +430,12 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         } else {
           break label_5;
         }
-        jj_consume_token(22);
+        jj_consume_token(23);
         jj_consume_token(IDENTIFIER);
       }
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    rpn.add(t);
+    rpn.add(t.toString());
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -399,7 +452,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(INTEGER_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    rpn.add(t);
+    rpn.add(t.toString());
     } finally {
    if (jjtc000) {
      jjtree.closeNodeScope(jjtn000, true);
@@ -416,7 +469,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(FLOATING_POINT_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    rpn.add(t);
+    rpn.add(t.toString());
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -433,7 +486,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(CHARACTER_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    rpn.add(t);
+    rpn.add(t.toString());
     } finally {
    if (jjtc000) {
      jjtree.closeNodeScope(jjtn000, true);
@@ -450,7 +503,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(STRING_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    rpn.add(t);
+    rpn.add(t.toString());
     } finally {
    if (jjtc000) {
      jjtree.closeNodeScope(jjtn000, true);
@@ -465,17 +518,17 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 23:
-        t = jj_consume_token(23);
-        break;
       case 24:
-        jj_consume_token(24);
+        t = jj_consume_token(24);
+        break;
+      case 25:
+        jj_consume_token(25);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-    rpn.add(t);
+    rpn.add(t.toString());
         break;
       default:
-        jj_la1[6] = jj_gen;
+        jj_la1[7] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -492,10 +545,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(25);
+      t = jj_consume_token(26);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-      rpn.add(t);
+      rpn.add(t.toString());
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -511,7 +564,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   static private boolean jj_3_1() {
-    if (jj_scan_token(22)) return true;
+    if (jj_scan_token(23)) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
@@ -531,13 +584,13 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   static private boolean jj_lookingAhead = false;
   static private boolean jj_semLA;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[7];
+  static final private int[] jj_la1 = new int[8];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x39a2500,0x39a2000,0x1800000,};
+      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x7344d00,0x7344900,0x7344000,0x3000000,};
    }
   static final private JJCalls[] jj_2_rtns = new JJCalls[1];
   static private boolean jj_rescan = false;
@@ -561,7 +614,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -577,7 +630,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -595,7 +648,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -607,7 +660,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -624,7 +677,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -635,7 +688,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 7; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 8; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -750,12 +803,12 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[26];
+    boolean[] la1tokens = new boolean[27];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -764,7 +817,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
       }
     }
-    for (int i = 0; i < 26; i++) {
+    for (int i = 0; i < 27; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
