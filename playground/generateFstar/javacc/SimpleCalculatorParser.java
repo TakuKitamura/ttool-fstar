@@ -9,12 +9,44 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   {
     SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
     try {
-        parser.Expr();
+        parser.Root();
+        System.out.println(rpn);
     } catch (Exception e) {
         e.printStackTrace();
     }
+  }
 
-    System.out.println(rpn);
+  static final public SimpleNode Root() throws ParseException {
+ /*@bgen(jjtree) Root */
+  ASTRoot jjtn000 = new ASTRoot(JJTROOT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+    try {
+      Expr();
+      jj_consume_token(21);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    {if (true) return jjtn000;}
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+    throw new Error("Missing return statement in function");
   }
 
   static final public void Expr() throws ParseException {
@@ -24,7 +56,6 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       ConditionalOrExpression();
-      jj_consume_token(21);
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -236,7 +267,6 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case IDENTIFIER:
       case INTEGER_LITERAL:
       case FLOATING_POINT_LITERAL:
       case CHARACTER_LITERAL:
@@ -245,6 +275,9 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 24:
       case 25:
         Literal();
+        break;
+      case IDENTIFIER:
+        Name();
         break;
       case OPEN_BRACKET:
         jj_consume_token(OPEN_BRACKET);
@@ -277,6 +310,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
+// (3 < 4) && (5 > 6)
   static final public void Literal() throws ParseException {
  /*@bgen(jjtree) Literal */
   ASTLiteral jjtn000 = new ASTLiteral(JJTLITERAL);
@@ -284,9 +318,6 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case IDENTIFIER:
-        Name();
-        break;
       case INTEGER_LITERAL:
         Integer();
         break;
@@ -506,7 +537,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x39a2500,0x39a2400,0x1800000,};
+      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x39a2500,0x39a2000,0x1800000,};
    }
   static final private JJCalls[] jj_2_rtns = new JJCalls[1];
   static private boolean jj_rescan = false;
