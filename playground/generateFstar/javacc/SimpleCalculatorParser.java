@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorParserTreeConstants, SimpleCalculatorParserConstants {/*@bgen(jjtree)*/
-  protected JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();public static List<String> rpn = new ArrayList<String>();
+  protected static JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();public static List<String> rpn = new ArrayList<String>();
 
 
   public static void main(String [] args)
@@ -21,7 +21,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public SimpleNode Root() throws ParseException {
+  static final public SimpleNode Root() throws ParseException {
  /*@bgen(jjtree) Root */
   ASTRoot jjtn000 = new ASTRoot(JJTROOT);
   boolean jjtc000 = true;
@@ -56,7 +56,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     throw new Error("Missing return statement in function");
   }
 
-  final public void Expr() throws ParseException {
+  static final public void Expr() throws ParseException {
  /*@bgen(jjtree) Expr */
   ASTExpr jjtn000 = new ASTExpr(JJTEXPR);
   boolean jjtc000 = true;
@@ -84,7 +84,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void ConditionalOrExpression() throws ParseException {
+  static final public void ConditionalOrExpression() throws ParseException {
  /*@bgen(jjtree) ConditionalOrExpression */
   ASTConditionalOrExpression jjtn000 = new ASTConditionalOrExpression(JJTCONDITIONALOREXPRESSION);
   boolean jjtc000 = true;
@@ -129,7 +129,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void ConditionalAndExpression() throws ParseException {
+  static final public void ConditionalAndExpression() throws ParseException {
  /*@bgen(jjtree) ConditionalAndExpression */
   ASTConditionalAndExpression jjtn000 = new ASTConditionalAndExpression(JJTCONDITIONALANDEXPRESSION);
   boolean jjtc000 = true;
@@ -175,7 +175,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void EqualityExpression() throws ParseException {
+  static final public void EqualityExpression() throws ParseException {
  /*@bgen(jjtree) EqualityExpression */
   ASTEqualityExpression jjtn000 = new ASTEqualityExpression(JJTEQUALITYEXPRESSION);
   boolean jjtc000 = true;
@@ -223,7 +223,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void RelationalExpression() throws ParseException {
+  static final public void RelationalExpression() throws ParseException {
  /*@bgen(jjtree) RelationalExpression */
   ASTRelationalExpression jjtn000 = new ASTRelationalExpression(JJTRELATIONALEXPRESSION);
   boolean jjtc000 = true;
@@ -271,7 +271,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void AdditiveExpression() throws ParseException {
+  static final public void AdditiveExpression() throws ParseException {
  /*@bgen(jjtree) AdditiveExpression */
   ASTAdditiveExpression jjtn000 = new ASTAdditiveExpression(JJTADDITIVEEXPRESSION);
   boolean jjtc000 = true;
@@ -286,6 +286,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       if (t.toString().equals("-")) {
         int rpnSize = rpn.size();
         rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
+        jjtn000.jjtSetValue(t.image);
       }
         break;
       case OPEN_BRACKET:
@@ -325,7 +326,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void PrimaryPrefix() throws ParseException {
+  static final public void PrimaryPrefix() throws ParseException {
  /*@bgen(jjtree) PrimaryPrefix */
   ASTPrimaryPrefix jjtn000 = new ASTPrimaryPrefix(JJTPRIMARYPREFIX);
   boolean jjtc000 = true;
@@ -375,7 +376,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void Literal() throws ParseException {
+  static final public void Literal() throws ParseException {
  /*@bgen(jjtree) Literal */
   ASTLiteral jjtn000 = new ASTLiteral(JJTLITERAL);
   boolean jjtc000 = true;
@@ -427,7 +428,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void Name() throws ParseException {
+  static final public void Name() throws ParseException {
  /*@bgen(jjtree) Name */
  ASTName jjtn000 = new ASTName(JJTNAME);
  boolean jjtc000 = true;
@@ -446,6 +447,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       }
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
     rpn.add(t.toString());
     } finally {
     if (jjtc000) {
@@ -454,7 +456,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void Integer() throws ParseException {
+  static final public void Integer() throws ParseException {
  /*@bgen(jjtree) Integer */
  ASTInteger jjtn000 = new ASTInteger(JJTINTEGER);
  boolean jjtc000 = true;
@@ -472,7 +474,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void Floating() throws ParseException {
+  static final public void Floating() throws ParseException {
  /*@bgen(jjtree) Floating */
  ASTFloating jjtn000 = new ASTFloating(JJTFLOATING);
  boolean jjtc000 = true;
@@ -481,6 +483,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(FLOATING_POINT_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
     rpn.add(t.toString());
     } finally {
     if (jjtc000) {
@@ -489,7 +492,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void Character() throws ParseException {
+  static final public void Character() throws ParseException {
  /*@bgen(jjtree) Character */
  ASTCharacter jjtn000 = new ASTCharacter(JJTCHARACTER);
  boolean jjtc000 = true;
@@ -498,6 +501,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(CHARACTER_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
     rpn.add(t.toString());
     } finally {
    if (jjtc000) {
@@ -506,7 +510,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void String() throws ParseException {
+  static final public void String() throws ParseException {
  /*@bgen(jjtree) String */
  ASTString jjtn000 = new ASTString(JJTSTRING);
  boolean jjtc000 = true;
@@ -515,6 +519,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(STRING_LITERAL);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
     rpn.add(t.toString());
     } finally {
    if (jjtc000) {
@@ -523,7 +528,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void BooleanLiteral() throws ParseException {
+  static final public void BooleanLiteral() throws ParseException {
  /*@bgen(jjtree) BooleanLiteral */
   ASTBooleanLiteral jjtn000 = new ASTBooleanLiteral(JJTBOOLEANLITERAL);
   boolean jjtc000 = true;
@@ -537,6 +542,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         jj_consume_token(25);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
     rpn.add(t.toString());
         break;
       default:
@@ -551,7 +557,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void NullLiteral() throws ParseException {
+  static final public void NullLiteral() throws ParseException {
  /*@bgen(jjtree) NullLiteral */
   ASTNullLiteral jjtn000 = new ASTNullLiteral(JJTNULLLITERAL);
   boolean jjtc000 = true;
@@ -560,7 +566,8 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       t = jj_consume_token(26);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
-      rpn.add(t.toString());
+    jjtn000.jjtSetValue(t.image);
+    rpn.add(t.toString());
     } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -568,34 +575,35 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  private boolean jj_2_1(int xla) {
+  static private boolean jj_2_1(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_1(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(0, xla); }
   }
 
-  private boolean jj_3_1() {
+  static private boolean jj_3_1() {
     if (jj_scan_token(23)) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
+  static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
-  public SimpleCalculatorParserTokenManager token_source;
-  SimpleCharStream jj_input_stream;
+  static public SimpleCalculatorParserTokenManager token_source;
+  static SimpleCharStream jj_input_stream;
   /** Current token. */
-  public Token token;
+  static public Token token;
   /** Next token. */
-  public Token jj_nt;
-  private int jj_ntk;
-  private Token jj_scanpos, jj_lastpos;
-  private int jj_la;
+  static public Token jj_nt;
+  static private int jj_ntk;
+  static private Token jj_scanpos, jj_lastpos;
+  static private int jj_la;
   /** Whether we are looking ahead. */
-  private boolean jj_lookingAhead = false;
-  private boolean jj_semLA;
-  private int jj_gen;
-  final private int[] jj_la1 = new int[8];
+  static private boolean jj_lookingAhead = false;
+  static private boolean jj_semLA;
+  static private int jj_gen;
+  static final private int[] jj_la1 = new int[8];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
@@ -603,9 +611,9 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
    private static void jj_la1_init_0() {
       jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x7344d00,0x7344900,0x7344000,0x3000000,};
    }
-  final private JJCalls[] jj_2_rtns = new JJCalls[1];
-  private boolean jj_rescan = false;
-  private int jj_gc = 0;
+  static final private JJCalls[] jj_2_rtns = new JJCalls[1];
+  static private boolean jj_rescan = false;
+  static private int jj_gc = 0;
 
   /** Constructor with InputStream. */
   public SimpleCalculatorParser(java.io.InputStream stream) {
@@ -613,6 +621,13 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
   /** Constructor with InputStream and supplied encoding */
   public SimpleCalculatorParser(java.io.InputStream stream, String encoding) {
+    if (jj_initialized_once) {
+      System.out.println("ERROR: Second call to constructor of static parser.  ");
+      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
+      System.out.println("       during parser generation.");
+      throw new Error();
+    }
+    jj_initialized_once = true;
     try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new SimpleCalculatorParserTokenManager(jj_input_stream);
     token = new Token();
@@ -623,11 +638,11 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   /** Reinitialise. */
-  public void ReInit(java.io.InputStream stream) {
+  static public void ReInit(java.io.InputStream stream) {
      ReInit(stream, null);
   }
   /** Reinitialise. */
-  public void ReInit(java.io.InputStream stream, String encoding) {
+  static public void ReInit(java.io.InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -640,6 +655,13 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
   /** Constructor. */
   public SimpleCalculatorParser(java.io.Reader stream) {
+    if (jj_initialized_once) {
+      System.out.println("ERROR: Second call to constructor of static parser. ");
+      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
+      System.out.println("       during parser generation.");
+      throw new Error();
+    }
+    jj_initialized_once = true;
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new SimpleCalculatorParserTokenManager(jj_input_stream);
     token = new Token();
@@ -650,7 +672,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   /** Reinitialise. */
-  public void ReInit(java.io.Reader stream) {
+  static public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -663,6 +685,13 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
   /** Constructor with generated Token Manager. */
   public SimpleCalculatorParser(SimpleCalculatorParserTokenManager tm) {
+    if (jj_initialized_once) {
+      System.out.println("ERROR: Second call to constructor of static parser. ");
+      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
+      System.out.println("       during parser generation.");
+      throw new Error();
+    }
+    jj_initialized_once = true;
     token_source = tm;
     token = new Token();
     jj_ntk = -1;
@@ -682,7 +711,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  private Token jj_consume_token(int kind) throws ParseException {
+  static private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -707,8 +736,8 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   static private final class LookaheadSuccess extends java.lang.Error { }
-  final private LookaheadSuccess jj_ls = new LookaheadSuccess();
-  private boolean jj_scan_token(int kind) {
+  static final private LookaheadSuccess jj_ls = new LookaheadSuccess();
+  static private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
       jj_la--;
       if (jj_scanpos.next == null) {
@@ -731,7 +760,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
 
 /** Get the next Token. */
-  final public Token getNextToken() {
+  static final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -740,7 +769,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
 /** Get the specific Token. */
-  final public Token getToken(int index) {
+  static final public Token getToken(int index) {
     Token t = jj_lookingAhead ? jj_scanpos : token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -749,20 +778,20 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     return t;
   }
 
-  private int jj_ntk() {
+  static private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }
 
-  private java.util.List jj_expentries = new java.util.ArrayList();
-  private int[] jj_expentry;
-  private int jj_kind = -1;
-  private int[] jj_lasttokens = new int[100];
-  private int jj_endpos;
+  static private java.util.List jj_expentries = new java.util.ArrayList();
+  static private int[] jj_expentry;
+  static private int jj_kind = -1;
+  static private int[] jj_lasttokens = new int[100];
+  static private int jj_endpos;
 
-  private void jj_add_error_token(int kind, int pos) {
+  static private void jj_add_error_token(int kind, int pos) {
     if (pos >= 100) return;
     if (pos == jj_endpos + 1) {
       jj_lasttokens[jj_endpos++] = kind;
@@ -791,7 +820,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   /** Generate ParseException. */
-  public ParseException generateParseException() {
+  static public ParseException generateParseException() {
     jj_expentries.clear();
     boolean[] la1tokens = new boolean[27];
     if (jj_kind >= 0) {
@@ -825,14 +854,14 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   /** Enable tracing. */
-  final public void enable_tracing() {
+  static final public void enable_tracing() {
   }
 
   /** Disable tracing. */
-  final public void disable_tracing() {
+  static final public void disable_tracing() {
   }
 
-  private void jj_rescan_token() {
+  static private void jj_rescan_token() {
     jj_rescan = true;
     for (int i = 0; i < 1; i++) {
     try {
@@ -851,7 +880,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_rescan = false;
   }
 
-  private void jj_save(int index, int xla) {
+  static private void jj_save(int index, int xla) {
     JJCalls p = jj_2_rtns[index];
     while (p.gen > jj_gen) {
       if (p.next == null) { p = p.next = new JJCalls(); break; }

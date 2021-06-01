@@ -4,7 +4,7 @@
  */
 options
 {
-  STATIC = false; // parserクラスのメソッドをstaticにしない
+  STATIC = true; // parserクラスのメソッドをstaticにしない
   MULTI = true; // ASTXXXクラスを生成する
   VISITOR = true; // Visitorクラスを生成する
   UNICODE_INPUT = false; // ユニコードで解析を行わない（日本語等を使わない）
@@ -237,6 +237,7 @@ void AdditiveExpression() :
       if (t.toString().equals("-")) {
         int rpnSize = rpn.size();
         rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
+        jjtThis.jjtSetValue(t.image);
       }
   }
 |
@@ -286,6 +287,7 @@ void Name() :
   ( LOOKAHEAD(2) "." <IDENTIFIER>
   )*
   {
+    jjtThis.jjtSetValue(t.image);
     rpn.add(t.toString());
   }
 }
@@ -305,6 +307,7 @@ void Floating():
 {
   t = <FLOATING_POINT_LITERAL>
   {
+    jjtThis.jjtSetValue(t.image);
     rpn.add(t.toString());
   }
 }
@@ -314,6 +317,7 @@ void Character():
 {
  t = <CHARACTER_LITERAL>
   {
+    jjtThis.jjtSetValue(t.image);
     rpn.add(t.toString());
   }
 }
@@ -323,6 +327,7 @@ void String():
 {
  t = <STRING_LITERAL>
   {
+    jjtThis.jjtSetValue(t.image);
     rpn.add(t.toString());
   }
 }
@@ -334,6 +339,7 @@ void BooleanLiteral() :
 {
   t = "true" | "false"
   {
+    jjtThis.jjtSetValue(t.image);
     rpn.add(t.toString());
   }
 }
@@ -345,7 +351,8 @@ void NullLiteral() :
 {
   t = "null"
   {
-      rpn.add(t.toString());
+    jjtThis.jjtSetValue(t.image);
+    rpn.add(t.toString());
   }
 }
 

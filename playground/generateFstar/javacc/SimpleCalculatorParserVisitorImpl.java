@@ -3,7 +3,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: マイナス符号の対応を検討
+// TODO: 整数以外の型への対応
+
 public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParserVisitor {
+
+    public boolean haveMinusSign = false;
 
     public String rep(List<String> children, List<String> ops) {
         String x = children.get(0);
@@ -159,9 +164,9 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
                 fstarOps.add("I32.lt");
             } else if (ops.get(i).equals("<=")) {
                 fstarOps.add("I32.lte");
-            }  else if (ops.get(i).equals(">")) {
+            } else if (ops.get(i).equals(">")) {
                 fstarOps.add("I32.gt");
-            }  else if (ops.get(i).equals(">=")) {
+            } else if (ops.get(i).equals(">=")) {
                 fstarOps.add("I32.gte");
             } else {
                 System.out.println("unkown EqualityExpression ope");
@@ -185,6 +190,9 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTAdditiveExpression node, Object data) {
         System.out.println(node);
+        if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-")) {
+            this.haveMinusSign = true;
+        }
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
@@ -203,31 +211,53 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTName node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTInteger node, Object data) {
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
+        System.out.println(node);
+
+        String ret = (String) node.jjtGetValue();
+
+        if (this.haveMinusSign) {
+            ret = "-" + ret;
+            this.haveMinusSign = false;
+        }
+
+        System.out.println(ret);
+
+        return ret;
     }
 
     @Override
     public Object visit(ASTFloating node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+
+        String ret = (String) node.jjtGetValue();
+
+        if (this.haveMinusSign) {
+            ret = "-" + ret;
+            this.haveMinusSign = false;
+        }
+
+        System.out.println(ret);
+
+        return ret;
     }
 
     @Override
     public Object visit(ASTCharacter node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTString node, Object data) {
-        System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
     }
 
     @Override
