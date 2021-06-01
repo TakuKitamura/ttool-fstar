@@ -4,7 +4,7 @@
  */
 options
 {
-  STATIC = true; // parserクラスのメソッドをstaticにしない
+  STATIC = false; // parserクラスのメソッドをstaticにしない
   MULTI = true; // ASTXXXクラスを生成する
   VISITOR = true; // Visitorクラスを生成する
   UNICODE_INPUT = false; // ユニコードで解析を行わない（日本語等を使わない）
@@ -18,13 +18,18 @@ import java.util.ArrayList;
 public class SimpleCalculatorParser
 {
   public static List<String> rpn = new ArrayList<String>();
+  
+  
   public static void main(String [] args)
   {
     SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
+
+    SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
     try {
-        parser.Root();
-        System.out.println(rpn);
+        parser.Root().dump("");
+        parser.Root().jjtAccept(visitor, null);
     } catch (Exception e) {
+        System.out.println("構文エラーです");
         e.printStackTrace();
     }
   }
@@ -150,16 +155,20 @@ TOKEN : /* LITERALS */
 }
 
 SimpleNode Root() :
-{}
+{
+}
 {
   Expr() "\n"
   {
+    // Node tree = jjtree.rootNode();
+    // System.out.println(tree.jjtGetChild(0));
     return jjtThis;
   }
 }
 
 void Expr() :
-{}
+{
+}
 {
   ConditionalOrExpression()
 }
@@ -170,7 +179,10 @@ void ConditionalOrExpression() :
 }
 {
     ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t.toString());} )*
-{}
+{
+//   Node x =  jjtThis.jjtGetChild(0);
+//   System.out.println(x);
+}
 }
 
 void ConditionalAndExpression() :
@@ -179,17 +191,25 @@ void ConditionalAndExpression() :
   Token t = null;
 }
 {
-  EqualityExpression() (t = < AND > EqualityExpression(){rpn.add(t.toString());} )*
+  EqualityExpression() (t = < AND > EqualityExpression()
+  {
+      rpn.add(t.toString());
+  } )*
 {}
 }
 
 void EqualityExpression() :
 {
-//   List tokens = new ArrayList();
+  List<String> ts = new ArrayList();
   Token t = null;
 }
 {
-  RelationalExpression() (t = < EQUALITY > RelationalExpression(){rpn.add(t.toString());} )*
+  RelationalExpression() (t = < EQUALITY > RelationalExpression()
+  {
+    ts.add(t.image);
+    jjtThis.jjtSetValue(ts);
+    rpn.add(t.toString());
+  } )*
 {}
 }
 
@@ -199,7 +219,9 @@ void RelationalExpression() :
   Token t = null;
 }
 {
-  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){rpn.add(t.toString());} )*
+  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){
+    rpn.add(t.toString());
+  } )*
 {}
 }
 
@@ -270,6 +292,7 @@ void Integer():
 {
  t = <INTEGER_LITERAL>
   {
+    jjtThis.jjtSetValue(t.image);
     rpn.add(t.toString());
   }
 }

@@ -5,7 +5,7 @@
  */
 options
 {
-  STATIC = true;                             
+  STATIC = false;                             
                                  
                   // Visitor\u30af\u30e9\u30b9\u3092\u751f\u6210\u3059\u308b
   UNICODE_INPUT = false; // \u30e6\u30cb\u30b3\u30fc\u30c9\u3067\u89e3\u6790\u3092\u884c\u308f\u306a\u3044\uff08\u65e5\u672c\u8a9e\u7b49\u3092\u4f7f\u308f\u306a\u3044\uff09
@@ -18,17 +18,22 @@ import java.util.ArrayList;
 
 public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorParserTreeConstants/*@egen*/
 {/*@bgen(jjtree)*/
-  protected static JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
+  protected JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
 
 /*@egen*/
   public static List<String> rpn = new ArrayList<String>();
+  
+  
   public static void main(String [] args)
   {
     SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
+
+    SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
     try {
-        parser.Root();
-        System.out.println(rpn);
+        parser.Root().dump("");
+        parser.Root().jjtAccept(visitor, null);
     } catch (Exception e) {
+        System.out.println("\u69cb\u6587\u30a8\u30e9\u30fc\u3067\u3059");
         e.printStackTrace();
     }
   }
@@ -158,7 +163,8 @@ SimpleNode Root() :
   ASTRoot jjtn000 = new ASTRoot(JJTROOT);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/
+}
 {/*@bgen(jjtree) Root */
   try {
 /*@egen*/
@@ -169,6 +175,8 @@ SimpleNode Root() :
   }
 /*@egen*/
   {
+    // Node tree = jjtree.rootNode();
+    // System.out.println(tree.jjtGetChild(0));
     return jjtn000;
   }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
@@ -198,7 +206,8 @@ void Expr() :
   ASTExpr jjtn000 = new ASTExpr(JJTEXPR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/
+}
 {/*@bgen(jjtree) Expr */
   try {
 /*@egen*/
@@ -242,7 +251,10 @@ void ConditionalOrExpression() :
   jjtc000 = false;
 }
 /*@egen*/
-{}/*@bgen(jjtree)*/
+{
+//   Node x =  jjtThis.jjtGetChild(0);
+//   System.out.println(x);
+}/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
       if (jjtc000) {
         jjtree.clearNodeScope(jjtn000);
@@ -277,7 +289,10 @@ void ConditionalAndExpression() :
 {/*@bgen(jjtree) ConditionalAndExpression */
   try {
 /*@egen*/
-  EqualityExpression() (t = < AND > EqualityExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
+  EqualityExpression() (t = < AND > EqualityExpression()
+  {
+      rpn.add(t.toString());
+  } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -312,13 +327,18 @@ void EqualityExpression() :
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
 /*@egen*/
-//   List tokens = new ArrayList();
+  List<String> ts = new ArrayList();
   Token t = null;
 }
 {/*@bgen(jjtree) EqualityExpression */
   try {
 /*@egen*/
-  RelationalExpression() (t = < EQUALITY > RelationalExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
+  RelationalExpression() (t = < EQUALITY > RelationalExpression()
+  {
+    ts.add(t.image);
+    jjtn000.jjtSetValue(ts);
+    rpn.add(t.toString());
+  } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -359,7 +379,9 @@ void RelationalExpression() :
 {/*@bgen(jjtree) RelationalExpression */
   try {
 /*@egen*/
-  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
+  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){
+    rpn.add(t.toString());
+  } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -566,6 +588,7 @@ void Integer():
   }
 /*@egen*/
   {
+    jjtn000.jjtSetValue(t.image);
     rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
