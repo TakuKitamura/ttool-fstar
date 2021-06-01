@@ -215,11 +215,14 @@ void EqualityExpression() :
 
 void RelationalExpression() :
 {
-//   List tokens = new ArrayList();
+  List<String> ts = new ArrayList();
   Token t = null;
 }
 {
-  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){
+  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression()
+  {
+    ts.add(t.image);
+    jjtThis.jjtSetValue(ts);
     rpn.add(t.toString());
   } )*
 {}

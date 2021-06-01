@@ -227,7 +227,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
  /*@bgen(jjtree) RelationalExpression */
   ASTRelationalExpression jjtn000 = new ASTRelationalExpression(JJTRELATIONALEXPRESSION);
   boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);//   List tokens = new ArrayList();
+  jjtree.openNodeScope(jjtn000);List<String> ts = new ArrayList();
   Token t = null;
     try {
       AdditiveExpression();
@@ -243,6 +243,8 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
         t = jj_consume_token(RELATIONAL);
         AdditiveExpression();
+    ts.add(t.image);
+    jjtn000.jjtSetValue(ts);
     rpn.add(t.toString());
       }
   jjtree.closeNodeScope(jjtn000, true);

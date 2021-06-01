@@ -108,6 +108,12 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     public Object visit(ASTEqualityExpression node, Object data) {
         System.out.println(node);
 
+        int leafNum = node.jjtGetNumChildren();
+
+        if (leafNum == 1) {
+            return node.jjtGetChild(0).jjtAccept(this, null).toString();
+        }
+
         List<String> ops = (List<String>) node.jjtGetValue();
         List<String> fstarOps = new ArrayList<>();
 
@@ -119,12 +125,6 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
             } else {
                 System.out.println("unkown EqualityExpression ope");
             }
-        }
-
-        int leafNum = node.jjtGetNumChildren();
-
-        if (leafNum == 1) {
-            return node.jjtGetChild(0).jjtAccept(this, null).toString();
         }
 
         List<String> leafs = new ArrayList<>();
@@ -144,7 +144,42 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTRelationalExpression node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+
+        int leafNum = node.jjtGetNumChildren();
+
+        if (leafNum == 1) {
+            return node.jjtGetChild(0).jjtAccept(this, null).toString();
+        }
+
+        List<String> ops = (List<String>) node.jjtGetValue();
+        List<String> fstarOps = new ArrayList<>();
+
+        for (int i = 0; i < ops.size(); i++) {
+            if (ops.get(i).equals("<")) {
+                fstarOps.add("I32.lt");
+            } else if (ops.get(i).equals("<=")) {
+                fstarOps.add("I32.lte");
+            }  else if (ops.get(i).equals(">")) {
+                fstarOps.add("I32.gt");
+            }  else if (ops.get(i).equals(">=")) {
+                fstarOps.add("I32.gte");
+            } else {
+                System.out.println("unkown EqualityExpression ope");
+            }
+        }
+
+        List<String> leafs = new ArrayList<>();
+        for (int i = 0; i < leafNum; i++) {
+            Node n = node.jjtGetChild(i);
+            String leaf = n.jjtAccept(this, null).toString();
+            leafs.add(leaf);
+        }
+
+        String ret = rep(leafs, fstarOps);
+
+        System.out.println(ret);
+
+        return ret;
     }
 
     @Override

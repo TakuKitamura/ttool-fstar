@@ -373,13 +373,16 @@ void RelationalExpression() :
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
 /*@egen*/
-//   List tokens = new ArrayList();
+  List<String> ts = new ArrayList();
   Token t = null;
 }
 {/*@bgen(jjtree) RelationalExpression */
   try {
 /*@egen*/
-  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression(){
+  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression()
+  {
+    ts.add(t.image);
+    jjtn000.jjtSetValue(ts);
     rpn.add(t.toString());
   } )*/*@bgen(jjtree)*/
 {
