@@ -72,7 +72,6 @@ public interface SimpleCalculatorParserConstants {
     "<EXPONENT>",
     "<CHARACTER_LITERAL>",
     "<STRING_LITERAL>",
-    "\"\\n\"",
     "\".\"",
     "\"true\"",
     "\"false\"",

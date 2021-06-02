@@ -5,7 +5,7 @@
  */
 options
 {
-  STATIC = true;                             
+  STATIC = false;                             
                                  
                   // Visitor\u30af\u30e9\u30b9\u3092\u751f\u6210\u3059\u308b
   UNICODE_INPUT = false; // \u30e6\u30cb\u30b3\u30fc\u30c9\u3067\u89e3\u6790\u3092\u884c\u308f\u306a\u3044\uff08\u65e5\u672c\u8a9e\u7b49\u3092\u4f7f\u308f\u306a\u3044\uff09
@@ -14,30 +14,40 @@ options
 PARSER_BEGIN(SimpleCalculatorParser)
 import java.util.List;
 import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 
 
 public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorParserTreeConstants/*@egen*/
 {/*@bgen(jjtree)*/
-  protected static JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
+  protected JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
 
 /*@egen*/
-  public static List<String> rpn = new ArrayList<String>();
   
   
   public static void main(String [] args)
   {
-    SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
+      String generated = transpile("x > 0");
+      if (generated != null) {
+        System.out.println(generated);
+      }
+  }
+
+  public static String transpile(String s) {
+    InputStream input = new ByteArrayInputStream(s.getBytes());
+    SimpleCalculatorParser parser = new SimpleCalculatorParser(input);
 
     SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
     try {
-        parser.Root().dump("");
-        parser.Root().jjtAccept(visitor, null);
+        return (String) parser.Root().jjtAccept(visitor, null);
     } catch (Exception e) {
-        System.out.println("\u69cb\u6587\u30a8\u30e9\u30fc\u3067\u3059");
         e.printStackTrace();
+        return null;
     }
   }
 }
+
+
 PARSER_END(SimpleCalculatorParser)
 
 SKIP :
@@ -168,7 +178,7 @@ SimpleNode Root() :
 {/*@bgen(jjtree) Root */
   try {
 /*@egen*/
-  Expr() "\n"/*@bgen(jjtree)*/
+  Expr() <EOF>/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -245,7 +255,9 @@ void ConditionalOrExpression() :
 {/*@bgen(jjtree) ConditionalOrExpression */
     try {
 /*@egen*/
-    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t.toString());} )*/*@bgen(jjtree)*/
+    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){
+
+    } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
   jjtc000 = false;
@@ -291,7 +303,7 @@ void ConditionalAndExpression() :
 /*@egen*/
   EqualityExpression() (t = < AND > EqualityExpression()
   {
-      rpn.add(t.toString());
+
   } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
@@ -337,7 +349,6 @@ void EqualityExpression() :
   {
     ts.add(t.image);
     jjtn000.jjtSetValue(ts);
-    rpn.add(t.toString());
   } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
@@ -383,7 +394,6 @@ void RelationalExpression() :
   {
     ts.add(t.image);
     jjtn000.jjtSetValue(ts);
-    rpn.add(t.toString());
   } )*/*@bgen(jjtree)*/
 {
   jjtree.closeNodeScope(jjtn000, true);
@@ -431,8 +441,6 @@ void AdditiveExpression() :
                                     }
 /*@egen*/ {
       if (t.toString().equals("-")) {
-        int rpnSize = rpn.size();
-        rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
         jjtn000.jjtSetValue(t.image);
       }
   }
@@ -567,7 +575,6 @@ void Name() :
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -594,7 +601,6 @@ void Integer():
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
    if (jjtc000) {
@@ -621,7 +627,6 @@ void Floating():
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -648,7 +653,6 @@ void Character():
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
    if (jjtc000) {
@@ -675,7 +679,6 @@ void String():
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
  } finally {
    if (jjtc000) {
@@ -704,7 +707,6 @@ void BooleanLiteral() :
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
@@ -733,7 +735,6 @@ void NullLiteral() :
 /*@egen*/
   {
     jjtn000.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {

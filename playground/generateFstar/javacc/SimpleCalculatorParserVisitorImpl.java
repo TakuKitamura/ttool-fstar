@@ -13,7 +13,6 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     public String rep(List<String> children, List<String> ops) {
         String x = children.get(0);
         String y = children.get(1);
-        System.out.println(ops);
 
         String op = ops.get(0);
         String ret = String.format("(%s %s %s)", op, x, y);
@@ -42,25 +41,25 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
 
     @Override
     public Object visit(SimpleNode node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return null;
     }
 
     @Override
     public Object visit(ASTRoot node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTExpr node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTConditionalOrExpression node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         String ret = "(";
 
         int leafNum = node.jjtGetNumChildren();
@@ -79,13 +78,12 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
         }
         ret += ")";
 
-        System.out.println(ret);
         return ret;
     }
 
     @Override
     public Object visit(ASTConditionalAndExpression node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         String ret = "(";
 
         int leafNum = node.jjtGetNumChildren();
@@ -105,13 +103,12 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
 
         ret += ")";
 
-        System.out.println(ret);
         return ret;
     }
 
     @Override
     public Object visit(ASTEqualityExpression node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
 
         int leafNum = node.jjtGetNumChildren();
 
@@ -141,14 +138,12 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
 
         String ret = rep(leafs, fstarOps);
 
-        System.out.println(ret);
-
         return ret;
     }
 
     @Override
     public Object visit(ASTRelationalExpression node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
 
         int leafNum = node.jjtGetNumChildren();
 
@@ -182,14 +177,12 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
 
         String ret = rep(leafs, fstarOps);
 
-        System.out.println(ret);
-
         return ret;
     }
 
     @Override
     public Object visit(ASTAdditiveExpression node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-")) {
             this.haveMinusSign = true;
         }
@@ -198,26 +191,25 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
 
     @Override
     public Object visit(ASTPrimaryPrefix node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTLiteral node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTName node, Object data) {
-        System.out.println(node);
-        System.out.println(node.jjtGetValue());
+        // System.out.println(node);
         return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTInteger node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
 
         String ret = (String) node.jjtGetValue();
 
@@ -225,15 +217,13 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
             ret = "-" + ret;
             this.haveMinusSign = false;
         }
-
-        System.out.println(ret);
 
         return ret;
     }
 
     @Override
     public Object visit(ASTFloating node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
 
         String ret = (String) node.jjtGetValue();
 
@@ -242,33 +232,29 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
             this.haveMinusSign = false;
         }
 
-        System.out.println(ret);
-
         return ret;
     }
 
     @Override
     public Object visit(ASTCharacter node, Object data) {
-        System.out.println(node);
-        System.out.println(node.jjtGetValue());
+        // System.out.println(node);
         return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTString node, Object data) {
-        System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTBooleanLiteral node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTNullLiteral node, Object data) {
-        System.out.println(node);
+        // System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 }

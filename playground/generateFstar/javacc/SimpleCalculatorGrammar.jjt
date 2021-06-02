@@ -4,7 +4,7 @@
  */
 options
 {
-  STATIC = true; // parserクラスのメソッドをstaticにしない
+  STATIC = false; // parserクラスのメソッドをstaticにしない
   MULTI = true; // ASTXXXクラスを生成する
   VISITOR = true; // Visitorクラスを生成する
   UNICODE_INPUT = false; // ユニコードで解析を行わない（日本語等を使わない）
@@ -13,27 +13,37 @@ options
 PARSER_BEGIN(SimpleCalculatorParser)
 import java.util.List;
 import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 
 
 public class SimpleCalculatorParser
 {
-  public static List<String> rpn = new ArrayList<String>();
   
   
   public static void main(String [] args)
   {
-    SimpleCalculatorParser parser = new SimpleCalculatorParser(System.in);
+      String generated = transpile("x > 0");
+      if (generated != null) {
+        System.out.println(generated);
+      }
+  }
+
+  public static String transpile(String s) {
+    InputStream input = new ByteArrayInputStream(s.getBytes());
+    SimpleCalculatorParser parser = new SimpleCalculatorParser(input);
 
     SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
     try {
-        parser.Root().dump("");
-        parser.Root().jjtAccept(visitor, null);
+        return (String) parser.Root().jjtAccept(visitor, null);
     } catch (Exception e) {
-        System.out.println("構文エラーです");
         e.printStackTrace();
+        return null;
     }
   }
 }
+
+
 PARSER_END(SimpleCalculatorParser)
 
 SKIP :
@@ -158,7 +168,7 @@ SimpleNode Root() :
 {
 }
 {
-  Expr() "\n"
+  Expr() <EOF>
   {
     // Node tree = jjtree.rootNode();
     // System.out.println(tree.jjtGetChild(0));
@@ -178,7 +188,9 @@ void ConditionalOrExpression() :
   Token t = null;
 }
 {
-    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){rpn.add(t.toString());} )*
+    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){
+
+    } )*
 {
 //   Node x =  jjtThis.jjtGetChild(0);
 //   System.out.println(x);
@@ -193,7 +205,7 @@ void ConditionalAndExpression() :
 {
   EqualityExpression() (t = < AND > EqualityExpression()
   {
-      rpn.add(t.toString());
+
   } )*
 {}
 }
@@ -208,7 +220,6 @@ void EqualityExpression() :
   {
     ts.add(t.image);
     jjtThis.jjtSetValue(ts);
-    rpn.add(t.toString());
   } )*
 {}
 }
@@ -223,7 +234,6 @@ void RelationalExpression() :
   {
     ts.add(t.image);
     jjtThis.jjtSetValue(ts);
-    rpn.add(t.toString());
   } )*
 {}
 }
@@ -235,8 +245,6 @@ void AdditiveExpression() :
 {
   t = < PLUSMINUS > PrimaryPrefix() {
       if (t.toString().equals("-")) {
-        int rpnSize = rpn.size();
-        rpn.set(rpnSize - 1, "-" + rpn.get(rpnSize - 1).toString());
         jjtThis.jjtSetValue(t.image);
       }
   }
@@ -288,7 +296,6 @@ void Name() :
   )*
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
@@ -298,7 +305,6 @@ void Integer():
  t = <INTEGER_LITERAL>
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
@@ -308,7 +314,6 @@ void Floating():
   t = <FLOATING_POINT_LITERAL>
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
@@ -318,7 +323,6 @@ void Character():
  t = <CHARACTER_LITERAL>
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
@@ -328,7 +332,6 @@ void String():
  t = <STRING_LITERAL>
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
@@ -340,7 +343,6 @@ void BooleanLiteral() :
   t = "true" | "false"
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
@@ -352,7 +354,6 @@ void NullLiteral() :
   t = "null"
   {
     jjtThis.jjtSetValue(t.image);
-    rpn.add(t.toString());
   }
 }
 
