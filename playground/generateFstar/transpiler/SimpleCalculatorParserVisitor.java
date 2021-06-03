@@ -20,12 +20,22 @@ public interface SimpleCalculatorParserVisitor
   public Object visit(ASTNullLiteral node, Object data);
   public Object visit(ASTMethodDeclarationRoot node, Object data);
   public Object visit(ASTPrimitiveType node, Object data);
+  public Object visit(ASTBooleanType node, Object data);
+  public Object visit(ASTCharType node, Object data);
+  public Object visit(ASTByteType node, Object data);
+  public Object visit(ASTShortType node, Object data);
+  public Object visit(ASTIntType node, Object data);
+  public Object visit(ASTLongType node, Object data);
+  public Object visit(ASTFloatType node, Object data);
+  public Object visit(ASTDoubleType node, Object data);
   public Object visit(ASTType node, Object data);
+  public Object visit(ASTVoidType node, Object data);
   public Object visit(ASTResultType node, Object data);
+  public Object visit(ASTArrayBrackets node, Object data);
   public Object visit(ASTVariableDeclaratorId node, Object data);
   public Object visit(ASTFormalParameter node, Object data);
   public Object visit(ASTFormalParameters node, Object data);
   public Object visit(ASTMethodDeclarator node, Object data);
   public Object visit(ASTMethodDeclaration node, Object data);
 }
-/* JavaCC - OriginalChecksum=8bead6e0685fd4c2a96f5d2bb3c8fe0e (do not edit this line) */
+/* JavaCC - OriginalChecksum=f94a8cf462c977a85b1aed5e8873b214 (do not edit this line) */

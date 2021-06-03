@@ -23,12 +23,12 @@ public class SimpleCalculatorParser
   
   public static void main(String [] args)
   {
-      String generatedRefinementType = transpile("x > 0", "RefinementType");
-      if (generatedRefinementType != null) {
-        System.out.println(generatedRefinementType);
-      }
+    //   String generatedRefinementType = transpile("x > 0", "RefinementType");
+    //   if (generatedRefinementType != null) {
+    //     System.out.println(generatedRefinementType);
+    //   }
 
-      String generatedMethodDeclaration = transpile("int x(int y, int z)\n", "MethodDeclaration");
+      String generatedMethodDeclaration = transpile("int a()\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
         System.out.println(generatedMethodDeclaration);
       }
@@ -42,9 +42,10 @@ public class SimpleCalculatorParser
     SimpleCalculatorParser parser = new SimpleCalculatorParser(input);
 
     SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
-    System.out.println(parseType);
+    // System.out.println(parseType);
     if (parseType == "RefinementType") {
         try {
+            // parser.ConditionRoot().dump("");
             return (String) parser.ConditionRoot().jjtAccept(visitor, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,8 +53,14 @@ public class SimpleCalculatorParser
         }
     } else if (parseType == "MethodDeclaration") {
         try {
-            // parser.MethodDeclarationRoot().jjtAccept(visitor, null);
             parser.MethodDeclarationRoot().dump("");
+
+            input = new ByteArrayInputStream(s.getBytes());
+            parser = new SimpleCalculatorParser(input);
+
+            visitor = new SimpleCalculatorParserVisitorImpl();
+            System.out.println("");
+            parser.MethodDeclarationRoot().jjtAccept(visitor, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -395,41 +402,159 @@ SimpleNode MethodDeclarationRoot() :
 void PrimitiveType() :
 {}
 {
-  "boolean"
+  BooleanType() 
 |
-  "char"
+  CharType()
 |
-  "byte"
+  ByteType()
 |
-  "short"
+  ShortType()
 |
-  "int"
+  IntType()
 |
-  "long"
+  LongType()
 |
-  "float"
+  FloatType()
 |
-  "double"
+  DoubleType()
 }
+
+void BooleanType():
+{
+    Token t = null;
+}
+{
+    t = "boolean "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void CharType():
+{
+    Token t = null;
+}
+{
+    t = "char "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void ByteType():
+{
+    Token t = null;
+}
+{
+    t = "byte "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void ShortType():
+{
+    Token t = null;
+}
+{
+    t = "short "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void IntType():
+{
+    Token t = null;
+}
+{
+    t = "int "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+
+}
+
+void LongType():
+{
+    Token t = null;
+}
+{
+    t = "long "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void FloatType():
+{
+    Token t = null;
+}
+{
+    t = "float "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void DoubleType():
+{
+    Token t = null;
+}
+{
+    t = "double "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
 
 void Type() :
 {}
 {
-  ( PrimitiveType() | Name() ) ( "[" "]" )*
+  PrimitiveType() ( "[" "]" )*
 }
 
-void ResultType() :
-{}
+void VoidType():
 {
-  "void"
-|
-  Type()
+    Token t = null;
+}
+{
+    t = "void "
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+
+void ResultType() :
+{
+    Token t = null;
+}
+{
+  VoidType() | Type()
+}
+
+void ArrayBrackets():
+{
+    Token t = null;
+}
+{
+    t = "[]" 
+    {
+        jjtThis.jjtSetValue(t.image);
+    }
 }
 
 void VariableDeclaratorId() :
-{}
 {
-  <IDENTIFIER> ( "[" "]" )*
+    Token t = null;
+}
+{
+  t = <IDENTIFIER> (ArrayBrackets()) *
+  {
+    jjtThis.jjtSetValue(t.image);
+  }
 }
 
 void FormalParameter() :

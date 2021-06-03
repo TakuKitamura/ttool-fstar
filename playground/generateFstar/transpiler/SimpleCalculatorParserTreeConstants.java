@@ -19,13 +19,23 @@ public interface SimpleCalculatorParserTreeConstants
   public int JJTNULLLITERAL = 15;
   public int JJTMETHODDECLARATIONROOT = 16;
   public int JJTPRIMITIVETYPE = 17;
-  public int JJTTYPE = 18;
-  public int JJTRESULTTYPE = 19;
-  public int JJTVARIABLEDECLARATORID = 20;
-  public int JJTFORMALPARAMETER = 21;
-  public int JJTFORMALPARAMETERS = 22;
-  public int JJTMETHODDECLARATOR = 23;
-  public int JJTMETHODDECLARATION = 24;
+  public int JJTBOOLEANTYPE = 18;
+  public int JJTCHARTYPE = 19;
+  public int JJTBYTETYPE = 20;
+  public int JJTSHORTTYPE = 21;
+  public int JJTINTTYPE = 22;
+  public int JJTLONGTYPE = 23;
+  public int JJTFLOATTYPE = 24;
+  public int JJTDOUBLETYPE = 25;
+  public int JJTTYPE = 26;
+  public int JJTVOIDTYPE = 27;
+  public int JJTRESULTTYPE = 28;
+  public int JJTARRAYBRACKETS = 29;
+  public int JJTVARIABLEDECLARATORID = 30;
+  public int JJTFORMALPARAMETER = 31;
+  public int JJTFORMALPARAMETERS = 32;
+  public int JJTMETHODDECLARATOR = 33;
+  public int JJTMETHODDECLARATION = 34;
 
 
   public String[] jjtNodeName = {
@@ -47,8 +57,18 @@ public interface SimpleCalculatorParserTreeConstants
     "NullLiteral",
     "MethodDeclarationRoot",
     "PrimitiveType",
+    "BooleanType",
+    "CharType",
+    "ByteType",
+    "ShortType",
+    "IntType",
+    "LongType",
+    "FloatType",
+    "DoubleType",
     "Type",
+    "VoidType",
     "ResultType",
+    "ArrayBrackets",
     "VariableDeclaratorId",
     "FormalParameter",
     "FormalParameters",
@@ -56,4 +76,4 @@ public interface SimpleCalculatorParserTreeConstants
     "MethodDeclaration",
   };
 }
-/* JavaCC - OriginalChecksum=15d5b068e01ab9a906bf9d123eeb0f71 (do not edit this line) */
+/* JavaCC - OriginalChecksum=29a1efdae5239023d6c8dccb552133d4 (do not edit this line) */
