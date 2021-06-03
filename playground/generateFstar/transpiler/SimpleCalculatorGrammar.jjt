@@ -22,17 +22,16 @@ public class SimpleCalculatorParser
   
   public static void main(String [] args)
   {
-    //   String generatedRefinementType = transpile("x > 0", "RefinementType");
-    //   if (generatedRefinementType != null) {
-    //     System.out.println(generatedRefinementType);
-    //   }
+    //   String generatedRefinementType = transpile("null", "RefinementType");
+      String generatedRefinementType = transpile("(a == true && b > 10l && c != null) || d != -1l", "RefinementType");
+      if (generatedRefinementType != null) {
+        System.out.println(generatedRefinementType);
+      }
 
       String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
         System.out.println(generatedMethodDeclaration);
       }
-
-      
   }
 
   public static String transpile(String s, String parseType) {
@@ -92,11 +91,43 @@ public class SimpleCalculatorParser
 
 PARSER_END(SimpleCalculatorParser)
 
+void BooleanLiteral() :
+{
+  Token t = null;
+}
+{
+  t = < BOOLEAN >
+  {
+    jjtThis.jjtSetValue(t.image);
+  }
+}
+
+void NullLiteral() :
+{
+  Token t = null;
+}
+{
+  t = < NULL >
+  {
+    jjtThis.jjtSetValue(t.image);
+  }
+}
+
 SKIP :
 {
   " "
 | "\t"
 | "\r"
+}
+
+TOKEN :
+{
+< BOOLEAN :
+  "true"
+  | "false"
+>
+|
+< NULL : "null">
 }
 
 TOKEN :
@@ -376,28 +407,6 @@ void String():
 {Token t = null;}
 {
  t = <STRING_LITERAL>
-  {
-    jjtThis.jjtSetValue(t.image);
-  }
-}
-
-void BooleanLiteral() :
-{
-  Token t = null;
-}
-{
-  t = "true" | "false"
-  {
-    jjtThis.jjtSetValue(t.image);
-  }
-}
-
-void NullLiteral() :
-{
-  Token t = null;
-}
-{
-  t = "null"
   {
     jjtThis.jjtSetValue(t.image);
   }

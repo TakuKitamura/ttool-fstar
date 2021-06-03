@@ -9,41 +9,45 @@ public interface SimpleCalculatorParserConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int RELATIONAL = 4;
+  int BOOLEAN = 4;
   /** RegularExpression Id. */
-  int EQUALITY = 5;
+  int NULL = 5;
   /** RegularExpression Id. */
-  int AND = 6;
+  int RELATIONAL = 6;
   /** RegularExpression Id. */
-  int OR = 7;
+  int EQUALITY = 7;
   /** RegularExpression Id. */
-  int OPEN_BRACKET = 8;
+  int AND = 8;
   /** RegularExpression Id. */
-  int CLOSE_BRACKET = 9;
+  int OR = 9;
   /** RegularExpression Id. */
-  int PLUSMINUS = 10;
+  int OPEN_BRACKET = 10;
   /** RegularExpression Id. */
-  int IDENTIFIER = 11;
+  int CLOSE_BRACKET = 11;
   /** RegularExpression Id. */
-  int LETTER = 12;
+  int PLUSMINUS = 12;
   /** RegularExpression Id. */
-  int DIGIT = 13;
+  int IDENTIFIER = 13;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 14;
+  int LETTER = 14;
   /** RegularExpression Id. */
-  int DECIMAL_LITERAL = 15;
+  int DIGIT = 15;
   /** RegularExpression Id. */
-  int HEX_LITERAL = 16;
+  int INTEGER_LITERAL = 16;
   /** RegularExpression Id. */
-  int OCTAL_LITERAL = 17;
+  int DECIMAL_LITERAL = 17;
   /** RegularExpression Id. */
-  int FLOATING_POINT_LITERAL = 18;
+  int HEX_LITERAL = 18;
   /** RegularExpression Id. */
-  int EXPONENT = 19;
+  int OCTAL_LITERAL = 19;
   /** RegularExpression Id. */
-  int CHARACTER_LITERAL = 20;
+  int FLOATING_POINT_LITERAL = 20;
   /** RegularExpression Id. */
-  int STRING_LITERAL = 21;
+  int EXPONENT = 21;
+  /** RegularExpression Id. */
+  int CHARACTER_LITERAL = 22;
+  /** RegularExpression Id. */
+  int STRING_LITERAL = 23;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -54,6 +58,8 @@ public interface SimpleCalculatorParserConstants {
     "\" \"",
     "\"\\t\"",
     "\"\\r\"",
+    "<BOOLEAN>",
+    "\"null\"",
     "<RELATIONAL>",
     "<EQUALITY>",
     "\"&&\"",
@@ -73,9 +79,6 @@ public interface SimpleCalculatorParserConstants {
     "<CHARACTER_LITERAL>",
     "<STRING_LITERAL>",
     "\".\"",
-    "\"true\"",
-    "\"false\"",
-    "\"null\"",
     "\"\\n\"",
     "\"boolean[]\"",
     "\"char[]\"",

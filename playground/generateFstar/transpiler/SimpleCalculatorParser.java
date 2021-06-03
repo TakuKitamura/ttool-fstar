@@ -9,10 +9,11 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
   public static void main(String [] args)
   {
-    //   String generatedRefinementType = transpile("x > 0", "RefinementType");
-    //   if (generatedRefinementType != null) {
-    //     System.out.println(generatedRefinementType);
-    //   }
+    //   String generatedRefinementType = transpile("null", "RefinementType");
+      String generatedRefinementType = transpile("(a == true && b > 10l && c != null) || d != -1l", "RefinementType");
+      if (generatedRefinementType != null) {
+        System.out.println(generatedRefinementType);
+      }
 
       String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
@@ -28,7 +29,6 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     SimpleCalculatorParser parser = new SimpleCalculatorParser(input);
 
     SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
-    // System.out.println(parseType);
     if (parseType == "RefinementType") {
         try {
             // parser.ConditionRoot().dump("");
@@ -74,6 +74,40 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
 
     return null;
+  }
+
+  final public void BooleanLiteral() throws ParseException {
+ /*@bgen(jjtree) BooleanLiteral */
+  ASTBooleanLiteral jjtn000 = new ASTBooleanLiteral(JJTBOOLEANLITERAL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(BOOLEAN);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
+  final public void NullLiteral() throws ParseException {
+ /*@bgen(jjtree) NullLiteral */
+  ASTNullLiteral jjtn000 = new ASTNullLiteral(JJTNULLLITERAL);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(NULL);
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+    jjtn000.jjtSetValue(t.image);
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
   }
 
   final public SimpleNode ConditionRoot() throws ParseException {
@@ -340,15 +374,14 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         jjtn000.jjtSetValue(t.image);
       }
         break;
+      case BOOLEAN:
+      case NULL:
       case OPEN_BRACKET:
       case IDENTIFIER:
       case INTEGER_LITERAL:
       case FLOATING_POINT_LITERAL:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
-      case 23:
-      case 24:
-      case 25:
         PrimaryPrefix();
         break;
       default:
@@ -384,13 +417,12 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case BOOLEAN:
+      case NULL:
       case INTEGER_LITERAL:
       case FLOATING_POINT_LITERAL:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
-      case 23:
-      case 24:
-      case 25:
         Literal();
         break;
       case IDENTIFIER:
@@ -446,11 +478,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case STRING_LITERAL:
         String();
         break;
-      case 23:
-      case 24:
+      case BOOLEAN:
         BooleanLiteral();
         break;
-      case 25:
+      case NULL:
         NullLiteral();
         break;
       default:
@@ -493,7 +524,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         } else {
           break label_5;
         }
-        jj_consume_token(22);
+        jj_consume_token(24);
         jj_consume_token(IDENTIFIER);
       }
     jjtree.closeNodeScope(jjtn000, true);
@@ -574,51 +605,6 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
-  final public void BooleanLiteral() throws ParseException {
- /*@bgen(jjtree) BooleanLiteral */
-  ASTBooleanLiteral jjtn000 = new ASTBooleanLiteral(JJTBOOLEANLITERAL);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);Token t = null;
-    try {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 23:
-        t = jj_consume_token(23);
-        break;
-      case 24:
-        jj_consume_token(24);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-    jjtn000.jjtSetValue(t.image);
-        break;
-      default:
-        jj_la1[7] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
-  }
-
-  final public void NullLiteral() throws ParseException {
- /*@bgen(jjtree) NullLiteral */
-  ASTNullLiteral jjtn000 = new ASTNullLiteral(JJTNULLLITERAL);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);Token t = null;
-    try {
-      t = jj_consume_token(25);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-    jjtn000.jjtSetValue(t.image);
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
-  }
-
 // Method
   final public SimpleNode MethodDeclarationRoot() throws ParseException {
  /*@bgen(jjtree) MethodDeclarationRoot */
@@ -627,7 +613,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       MethodDeclaration();
-      jj_consume_token(26);
+      jj_consume_token(25);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
     // Node tree = jjtree.rootNode();
@@ -662,32 +648,32 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 35:
+      case 34:
         BooleanType();
         break;
-      case 36:
+      case 35:
         CharType();
         break;
-      case 37:
+      case 36:
         ByteType();
         break;
-      case 38:
+      case 37:
         ShortType();
         break;
-      case 39:
+      case 38:
         IntType();
         break;
-      case 40:
+      case 39:
         LongType();
         break;
-      case 41:
+      case 40:
         FloatType();
         break;
-      case 42:
+      case 41:
         DoubleType();
         break;
       default:
-        jj_la1[8] = jj_gen;
+        jj_la1[7] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -719,32 +705,32 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 27:
+      case 26:
         BooleanBlacketType();
         break;
-      case 28:
+      case 27:
         CharBlacketType();
         break;
-      case 29:
+      case 28:
         ByteBlacketType();
         break;
-      case 30:
+      case 29:
         ShortBlacketType();
         break;
-      case 31:
+      case 30:
         IntBlacketType();
         break;
-      case 32:
+      case 31:
         LongBlacketType();
         break;
-      case 33:
+      case 32:
         FloatBlacketType();
         break;
-      case 34:
+      case 33:
         DoubleBlacketType();
         break;
       default:
-        jj_la1[9] = jj_gen;
+        jj_la1[8] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -775,7 +761,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(27);
+      t = jj_consume_token(26);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -792,7 +778,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(28);
+      t = jj_consume_token(27);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -809,7 +795,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(29);
+      t = jj_consume_token(28);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -826,7 +812,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(30);
+      t = jj_consume_token(29);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -843,7 +829,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(31);
+      t = jj_consume_token(30);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -860,7 +846,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(32);
+      t = jj_consume_token(31);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -877,7 +863,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(33);
+      t = jj_consume_token(32);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -894,7 +880,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(34);
+      t = jj_consume_token(33);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -911,7 +897,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(35);
+      t = jj_consume_token(34);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -928,7 +914,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(36);
+      t = jj_consume_token(35);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -945,7 +931,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(37);
+      t = jj_consume_token(36);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -962,7 +948,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(38);
+      t = jj_consume_token(37);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -979,7 +965,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(39);
+      t = jj_consume_token(38);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -996,7 +982,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(40);
+      t = jj_consume_token(39);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -1013,7 +999,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(41);
+      t = jj_consume_token(40);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -1030,7 +1016,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(42);
+      t = jj_consume_token(41);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -1048,6 +1034,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 34:
       case 35:
       case 36:
       case 37:
@@ -1055,9 +1042,9 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 39:
       case 40:
       case 41:
-      case 42:
         PrimitiveType();
         break;
+      case 26:
       case 27:
       case 28:
       case 29:
@@ -1065,11 +1052,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 31:
       case 32:
       case 33:
-      case 34:
         PrimitiveBlacketType();
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[9] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1100,7 +1086,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(43);
+      t = jj_consume_token(42);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -1118,9 +1104,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 43:
+      case 42:
         VoidType();
         break;
+      case 26:
       case 27:
       case 28:
       case 29:
@@ -1136,11 +1123,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 39:
       case 40:
       case 41:
-      case 42:
         Type();
         break;
       default:
-        jj_la1[11] = jj_gen;
+        jj_la1[10] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1171,7 +1157,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(44);
+      t = jj_consume_token(43);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.image);
@@ -1192,11 +1178,11 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 44:
+        case 43:
           ;
           break;
         default:
-          jj_la1[12] = jj_gen;
+          jj_la1[11] = jj_gen;
           break label_6;
         }
         ArrayBrackets();
@@ -1262,6 +1248,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     try {
       jj_consume_token(OPEN_BRACKET);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 26:
       case 27:
       case 28:
       case 29:
@@ -1277,24 +1264,23 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 39:
       case 40:
       case 41:
-      case 42:
         FormalParameter();
         label_7:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case 45:
+          case 44:
             ;
             break;
           default:
-            jj_la1[13] = jj_gen;
+            jj_la1[12] = jj_gen;
             break label_7;
           }
-          jj_consume_token(45);
+          jj_consume_token(44);
           FormalParameter();
         }
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[13] = jj_gen;
         ;
       }
       jj_consume_token(CLOSE_BRACKET);
@@ -1386,7 +1372,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   }
 
   private boolean jj_3_1() {
-    if (jj_scan_token(22)) return true;
+    if (jj_scan_token(24)) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
@@ -1405,7 +1391,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   private boolean jj_lookingAhead = false;
   private boolean jj_semLA;
   private int jj_gen;
-  final private int[] jj_la1 = new int[15];
+  final private int[] jj_la1 = new int[14];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1413,10 +1399,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x3b44d00,0x3b44900,0x3b44000,0x1800000,0x0,0xf8000000,0xf8000000,0xf8000000,0x0,0x0,0xf8000000,};
+      jj_la1_0 = new int[] {0x200,0x100,0x80,0x40,0xd13430,0xd12430,0xd10030,0x0,0xfc000000,0xfc000000,0xfc000000,0x0,0x0,0xfc000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x7f8,0x7,0x7ff,0xfff,0x1000,0x2000,0x7ff,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3fc,0x3,0x3ff,0x7ff,0x800,0x1000,0x3ff,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
@@ -1433,7 +1419,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1449,7 +1435,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1460,7 +1446,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1472,7 +1458,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1482,7 +1468,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1493,7 +1479,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1608,12 +1594,12 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[46];
+    boolean[] la1tokens = new boolean[45];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 14; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1625,7 +1611,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
       }
     }
-    for (int i = 0; i < 46; i++) {
+    for (int i = 0; i < 45; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

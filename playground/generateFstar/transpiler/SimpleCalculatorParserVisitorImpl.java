@@ -253,13 +253,13 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTBooleanLiteral node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTNullLiteral node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        return node.jjtGetValue();
     }
 
     // Method

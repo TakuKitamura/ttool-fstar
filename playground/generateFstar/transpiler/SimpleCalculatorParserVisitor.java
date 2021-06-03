@@ -2,6 +2,8 @@
 public interface SimpleCalculatorParserVisitor
 {
   public Object visit(SimpleNode node, Object data);
+  public Object visit(ASTBooleanLiteral node, Object data);
+  public Object visit(ASTNullLiteral node, Object data);
   public Object visit(ASTConditionRoot node, Object data);
   public Object visit(ASTExpr node, Object data);
   public Object visit(ASTConditionalOrExpression node, Object data);
@@ -16,8 +18,6 @@ public interface SimpleCalculatorParserVisitor
   public Object visit(ASTFloating node, Object data);
   public Object visit(ASTCharacter node, Object data);
   public Object visit(ASTString node, Object data);
-  public Object visit(ASTBooleanLiteral node, Object data);
-  public Object visit(ASTNullLiteral node, Object data);
   public Object visit(ASTMethodDeclarationRoot node, Object data);
   public Object visit(ASTPrimitiveType node, Object data);
   public Object visit(ASTPrimitiveBlacketType node, Object data);
@@ -47,4 +47,4 @@ public interface SimpleCalculatorParserVisitor
   public Object visit(ASTMethodDeclarator node, Object data);
   public Object visit(ASTMethodDeclaration node, Object data);
 }
-/* JavaCC - OriginalChecksum=222589b69b3cf819258fe09cb9109e81 (do not edit this line) */
+/* JavaCC - OriginalChecksum=68c2fab3df1e712d0850793d17ae95ee (do not edit this line) */
