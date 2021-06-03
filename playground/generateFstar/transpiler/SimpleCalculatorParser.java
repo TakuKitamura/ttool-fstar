@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 
-
 public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorParserTreeConstants, SimpleCalculatorParserConstants {/*@bgen(jjtree)*/
   protected JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
 
@@ -15,7 +14,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     //     System.out.println(generatedRefinementType);
     //   }
 
-      String generatedMethodDeclaration = transpile("int a()\n", "MethodDeclaration");
+      String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
         System.out.println(generatedMethodDeclaration);
       }
@@ -33,7 +32,17 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     if (parseType == "RefinementType") {
         try {
             // parser.ConditionRoot().dump("");
-            return (String) parser.ConditionRoot().jjtAccept(visitor, null);
+
+            Object ret = parser.ConditionRoot().jjtAccept(visitor, null);
+
+            if (ret instanceof String) {
+                return (String)ret;
+            } else {
+                System.out.println("ret is not string");
+                return "";
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -47,7 +56,17 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
             visitor = new SimpleCalculatorParserVisitorImpl();
             System.out.println("");
-            parser.MethodDeclarationRoot().jjtAccept(visitor, null);
+            Object ret = parser.MethodDeclarationRoot().jjtAccept(visitor, null);
+
+            if (ret instanceof MethodDeclaration) {
+                MethodDeclaration methodDeclaration = (MethodDeclaration) ret;
+                System.out.println(methodDeclaration);
+                return "";
+            } else {
+                System.out.println("ret is not methodDeclaration");
+                return "";
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -643,28 +662,28 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   jjtree.openNodeScope(jjtn000);
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 27:
+      case 35:
         BooleanType();
         break;
-      case 28:
+      case 36:
         CharType();
         break;
-      case 29:
+      case 37:
         ByteType();
         break;
-      case 30:
+      case 38:
         ShortType();
         break;
-      case 31:
+      case 39:
         IntType();
         break;
-      case 32:
+      case 40:
         LongType();
         break;
-      case 33:
+      case 41:
         FloatType();
         break;
-      case 34:
+      case 42:
         DoubleType();
         break;
       default:
@@ -693,13 +712,206 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     }
   }
 
+  final public void PrimitiveBlacketType() throws ParseException {
+ /*@bgen(jjtree) PrimitiveBlacketType */
+  ASTPrimitiveBlacketType jjtn000 = new ASTPrimitiveBlacketType(JJTPRIMITIVEBLACKETTYPE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+    try {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 27:
+        BooleanBlacketType();
+        break;
+      case 28:
+        CharBlacketType();
+        break;
+      case 29:
+        ByteBlacketType();
+        break;
+      case 30:
+        ShortBlacketType();
+        break;
+      case 31:
+        IntBlacketType();
+        break;
+      case 32:
+        LongBlacketType();
+        break;
+      case 33:
+        FloatBlacketType();
+        break;
+      case 34:
+        DoubleBlacketType();
+        break;
+      default:
+        jj_la1[9] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
+  final public void BooleanBlacketType() throws ParseException {
+ /*@bgen(jjtree) BooleanBlacketType */
+    ASTBooleanBlacketType jjtn000 = new ASTBooleanBlacketType(JJTBOOLEANBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(27);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void CharBlacketType() throws ParseException {
+ /*@bgen(jjtree) CharBlacketType */
+    ASTCharBlacketType jjtn000 = new ASTCharBlacketType(JJTCHARBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(28);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void ByteBlacketType() throws ParseException {
+ /*@bgen(jjtree) ByteBlacketType */
+    ASTByteBlacketType jjtn000 = new ASTByteBlacketType(JJTBYTEBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(29);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void ShortBlacketType() throws ParseException {
+ /*@bgen(jjtree) ShortBlacketType */
+    ASTShortBlacketType jjtn000 = new ASTShortBlacketType(JJTSHORTBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(30);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void IntBlacketType() throws ParseException {
+ /*@bgen(jjtree) IntBlacketType */
+    ASTIntBlacketType jjtn000 = new ASTIntBlacketType(JJTINTBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(31);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void LongBlacketType() throws ParseException {
+ /*@bgen(jjtree) LongBlacketType */
+    ASTLongBlacketType jjtn000 = new ASTLongBlacketType(JJTLONGBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(32);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void FloatBlacketType() throws ParseException {
+ /*@bgen(jjtree) FloatBlacketType */
+    ASTFloatBlacketType jjtn000 = new ASTFloatBlacketType(JJTFLOATBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(33);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
+  final public void DoubleBlacketType() throws ParseException {
+ /*@bgen(jjtree) DoubleBlacketType */
+    ASTDoubleBlacketType jjtn000 = new ASTDoubleBlacketType(JJTDOUBLEBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
+    try {
+      t = jj_consume_token(34);
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+        jjtn000.jjtSetValue(t.toString().trim());
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+  }
+
   final public void BooleanType() throws ParseException {
  /*@bgen(jjtree) BooleanType */
     ASTBooleanType jjtn000 = new ASTBooleanType(JJTBOOLEANTYPE);
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(27);
+      t = jj_consume_token(35);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -716,7 +928,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(28);
+      t = jj_consume_token(36);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -733,7 +945,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(29);
+      t = jj_consume_token(37);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -750,7 +962,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(30);
+      t = jj_consume_token(38);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -767,7 +979,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(31);
+      t = jj_consume_token(39);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -784,7 +996,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(32);
+      t = jj_consume_token(40);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -801,7 +1013,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(33);
+      t = jj_consume_token(41);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -818,7 +1030,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(34);
+      t = jj_consume_token(42);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -835,19 +1047,31 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {
-      PrimitiveType();
-      label_6:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 35:
-          ;
-          break;
-        default:
-          jj_la1[9] = jj_gen;
-          break label_6;
-        }
-        jj_consume_token(35);
-        jj_consume_token(36);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 35:
+      case 36:
+      case 37:
+      case 38:
+      case 39:
+      case 40:
+      case 41:
+      case 42:
+        PrimitiveType();
+        break;
+      case 27:
+      case 28:
+      case 29:
+      case 30:
+      case 31:
+      case 32:
+      case 33:
+      case 34:
+        PrimitiveBlacketType();
+        break;
+      default:
+        jj_la1[10] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
     } catch (Throwable jjte000) {
     if (jjtc000) {
@@ -876,7 +1100,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(37);
+      t = jj_consume_token(43);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.toString().trim());
@@ -894,7 +1118,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 37:
+      case 43:
         VoidType();
         break;
       case 27:
@@ -905,10 +1129,18 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 32:
       case 33:
       case 34:
+      case 35:
+      case 36:
+      case 37:
+      case 38:
+      case 39:
+      case 40:
+      case 41:
+      case 42:
         Type();
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[11] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -939,7 +1171,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      t = jj_consume_token(38);
+      t = jj_consume_token(44);
       jjtree.closeNodeScope(jjtn000, true);
       jjtc000 = false;
         jjtn000.jjtSetValue(t.image);
@@ -957,15 +1189,15 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     jjtree.openNodeScope(jjtn000);Token t = null;
     try {
       t = jj_consume_token(IDENTIFIER);
-      label_7:
+      label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 38:
+        case 44:
           ;
           break;
         default:
-          jj_la1[11] = jj_gen;
-          break label_7;
+          jj_la1[12] = jj_gen;
+          break label_6;
         }
         ArrayBrackets();
       }
@@ -1038,23 +1270,31 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       case 32:
       case 33:
       case 34:
+      case 35:
+      case 36:
+      case 37:
+      case 38:
+      case 39:
+      case 40:
+      case 41:
+      case 42:
         FormalParameter();
-        label_8:
+        label_7:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case 39:
+          case 45:
             ;
             break;
           default:
-            jj_la1[12] = jj_gen;
-            break label_8;
+            jj_la1[13] = jj_gen;
+            break label_7;
           }
-          jj_consume_token(39);
+          jj_consume_token(45);
           FormalParameter();
         }
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[14] = jj_gen;
         ;
       }
       jj_consume_token(CLOSE_BRACKET);
@@ -1081,25 +1321,13 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
   final public void MethodDeclarator() throws ParseException {
  /*@bgen(jjtree) MethodDeclarator */
-  ASTMethodDeclarator jjtn000 = new ASTMethodDeclarator(JJTMETHODDECLARATOR);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
+    ASTMethodDeclarator jjtn000 = new ASTMethodDeclarator(JJTMETHODDECLARATOR);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);Token t = null;
     try {
-      jj_consume_token(IDENTIFIER);
+      t = jj_consume_token(IDENTIFIER);
+    jjtn000.jjtSetValue(t.image);
       FormalParameters();
-      label_9:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 35:
-          ;
-          break;
-        default:
-          jj_la1[14] = jj_gen;
-          break label_9;
-        }
-        jj_consume_token(35);
-        jj_consume_token(36);
-      }
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1185,10 +1413,10 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x3b44d00,0x3b44900,0x3b44000,0x1800000,0xf8000000,0x0,0xf8000000,0x0,0x0,0xf8000000,0x0,};
+      jj_la1_0 = new int[] {0x80,0x40,0x20,0x10,0x3b44d00,0x3b44900,0x3b44000,0x1800000,0x0,0xf8000000,0xf8000000,0xf8000000,0x0,0x0,0xf8000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x7,0x8,0x27,0x40,0x80,0x7,0x8,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x7f8,0x7,0x7ff,0xfff,0x1000,0x2000,0x7ff,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
@@ -1380,7 +1608,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[40];
+    boolean[] la1tokens = new boolean[46];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1397,7 +1625,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
         }
       }
     }
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 46; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

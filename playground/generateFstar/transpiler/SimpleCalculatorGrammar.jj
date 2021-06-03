@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 
-
 public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorParserTreeConstants/*@egen*/
 {/*@bgen(jjtree)*/
   protected JJTSimpleCalculatorParserState jjtree = new JJTSimpleCalculatorParserState();
@@ -32,7 +31,7 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     //     System.out.println(generatedRefinementType);
     //   }
 
-      String generatedMethodDeclaration = transpile("int a()\n", "MethodDeclaration");
+      String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
         System.out.println(generatedMethodDeclaration);
       }
@@ -50,7 +49,17 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
     if (parseType == "RefinementType") {
         try {
             // parser.ConditionRoot().dump("");
-            return (String) parser.ConditionRoot().jjtAccept(visitor, null);
+
+            Object ret = parser.ConditionRoot().jjtAccept(visitor, null);
+
+            if (ret instanceof String) {
+                return (String)ret;
+            } else {
+                System.out.println("ret is not string");
+                return "";
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -64,7 +73,17 @@ public class SimpleCalculatorParser/*@bgen(jjtree)*/implements SimpleCalculatorP
 
             visitor = new SimpleCalculatorParserVisitorImpl();
             System.out.println("");
-            parser.MethodDeclarationRoot().jjtAccept(visitor, null);
+            Object ret = parser.MethodDeclarationRoot().jjtAccept(visitor, null);
+
+            if (ret instanceof MethodDeclaration) {
+                MethodDeclaration methodDeclaration = (MethodDeclaration) ret;
+                System.out.println(methodDeclaration);
+                return "";
+            } else {
+                System.out.println("ret is not methodDeclaration");
+                return "";
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -863,6 +882,277 @@ void PrimitiveType() :
 /*@egen*/
 }
 
+void PrimitiveBlacketType() :
+{/*@bgen(jjtree) PrimitiveBlacketType */
+  ASTPrimitiveBlacketType jjtn000 = new ASTPrimitiveBlacketType(JJTPRIMITIVEBLACKETTYPE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) PrimitiveBlacketType */
+  try {
+/*@egen*/
+  BooleanBlacketType()
+|
+  CharBlacketType()
+|
+  ByteBlacketType()
+|
+  ShortBlacketType()
+|
+  IntBlacketType()
+|
+  LongBlacketType()
+|
+  FloatBlacketType()
+|
+  DoubleBlacketType()/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void BooleanBlacketType():
+{/*@bgen(jjtree) BooleanBlacketType */
+    ASTBooleanBlacketType jjtn000 = new ASTBooleanBlacketType(JJTBOOLEANBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) BooleanBlacketType */
+    try {
+/*@egen*/
+    t = "boolean[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void CharBlacketType():
+{/*@bgen(jjtree) CharBlacketType */
+    ASTCharBlacketType jjtn000 = new ASTCharBlacketType(JJTCHARBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) CharBlacketType */
+    try {
+/*@egen*/
+    t = "char[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void ByteBlacketType():
+{/*@bgen(jjtree) ByteBlacketType */
+    ASTByteBlacketType jjtn000 = new ASTByteBlacketType(JJTBYTEBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) ByteBlacketType */
+    try {
+/*@egen*/
+    t = "byte[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void ShortBlacketType():
+{/*@bgen(jjtree) ShortBlacketType */
+    ASTShortBlacketType jjtn000 = new ASTShortBlacketType(JJTSHORTBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) ShortBlacketType */
+    try {
+/*@egen*/
+    t = "short[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void IntBlacketType():
+{/*@bgen(jjtree) IntBlacketType */
+    ASTIntBlacketType jjtn000 = new ASTIntBlacketType(JJTINTBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) IntBlacketType */
+    try {
+/*@egen*/
+    t = "int[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+
+}
+
+void LongBlacketType():
+{/*@bgen(jjtree) LongBlacketType */
+    ASTLongBlacketType jjtn000 = new ASTLongBlacketType(JJTLONGBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) LongBlacketType */
+    try {
+/*@egen*/
+    t = "long[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void FloatBlacketType():
+{/*@bgen(jjtree) FloatBlacketType */
+    ASTFloatBlacketType jjtn000 = new ASTFloatBlacketType(JJTFLOATBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) FloatBlacketType */
+    try {
+/*@egen*/
+    t = "float[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
+void DoubleBlacketType():
+{/*@bgen(jjtree) DoubleBlacketType */
+    ASTDoubleBlacketType jjtn000 = new ASTDoubleBlacketType(JJTDOUBLEBLACKETTYPE);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
+{/*@bgen(jjtree) DoubleBlacketType */
+    try {
+/*@egen*/
+    t = "double[]"/*@bgen(jjtree)*/
+    {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtc000 = false;
+    }
+/*@egen*/
+    {
+        jjtn000.jjtSetValue(t.toString().trim());
+    }/*@bgen(jjtree)*/
+    } finally {
+      if (jjtc000) {
+        jjtree.closeNodeScope(jjtn000, true);
+      }
+    }
+/*@egen*/
+}
+
 void BooleanType():
 {/*@bgen(jjtree) BooleanType */
     ASTBooleanType jjtn000 = new ASTBooleanType(JJTBOOLEANTYPE);
@@ -1098,7 +1388,7 @@ void Type() :
 {/*@bgen(jjtree) Type */
   try {
 /*@egen*/
-  PrimitiveType() ( "[" "]" )*/*@bgen(jjtree)*/
+  PrimitiveType() | PrimitiveBlacketType()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1321,14 +1611,19 @@ void FormalParameters() :
 
 void MethodDeclarator() :
 {/*@bgen(jjtree) MethodDeclarator */
-  ASTMethodDeclarator jjtn000 = new ASTMethodDeclarator(JJTMETHODDECLARATOR);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+    ASTMethodDeclarator jjtn000 = new ASTMethodDeclarator(JJTMETHODDECLARATOR);
+    boolean jjtc000 = true;
+    jjtree.openNodeScope(jjtn000);
+/*@egen*/
+    Token t = null;
+}
 {/*@bgen(jjtree) MethodDeclarator */
   try {
 /*@egen*/
-  <IDENTIFIER> FormalParameters() ( "[" "]" )*/*@bgen(jjtree)*/
+  t = <IDENTIFIER>
+  {
+    jjtn000.jjtSetValue(t.image);
+  } FormalParameters()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);

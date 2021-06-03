@@ -19,23 +19,32 @@ public interface SimpleCalculatorParserTreeConstants
   public int JJTNULLLITERAL = 15;
   public int JJTMETHODDECLARATIONROOT = 16;
   public int JJTPRIMITIVETYPE = 17;
-  public int JJTBOOLEANTYPE = 18;
-  public int JJTCHARTYPE = 19;
-  public int JJTBYTETYPE = 20;
-  public int JJTSHORTTYPE = 21;
-  public int JJTINTTYPE = 22;
-  public int JJTLONGTYPE = 23;
-  public int JJTFLOATTYPE = 24;
-  public int JJTDOUBLETYPE = 25;
-  public int JJTTYPE = 26;
-  public int JJTVOIDTYPE = 27;
-  public int JJTRESULTTYPE = 28;
-  public int JJTARRAYBRACKETS = 29;
-  public int JJTVARIABLEDECLARATORID = 30;
-  public int JJTFORMALPARAMETER = 31;
-  public int JJTFORMALPARAMETERS = 32;
-  public int JJTMETHODDECLARATOR = 33;
-  public int JJTMETHODDECLARATION = 34;
+  public int JJTPRIMITIVEBLACKETTYPE = 18;
+  public int JJTBOOLEANBLACKETTYPE = 19;
+  public int JJTCHARBLACKETTYPE = 20;
+  public int JJTBYTEBLACKETTYPE = 21;
+  public int JJTSHORTBLACKETTYPE = 22;
+  public int JJTINTBLACKETTYPE = 23;
+  public int JJTLONGBLACKETTYPE = 24;
+  public int JJTFLOATBLACKETTYPE = 25;
+  public int JJTDOUBLEBLACKETTYPE = 26;
+  public int JJTBOOLEANTYPE = 27;
+  public int JJTCHARTYPE = 28;
+  public int JJTBYTETYPE = 29;
+  public int JJTSHORTTYPE = 30;
+  public int JJTINTTYPE = 31;
+  public int JJTLONGTYPE = 32;
+  public int JJTFLOATTYPE = 33;
+  public int JJTDOUBLETYPE = 34;
+  public int JJTTYPE = 35;
+  public int JJTVOIDTYPE = 36;
+  public int JJTRESULTTYPE = 37;
+  public int JJTARRAYBRACKETS = 38;
+  public int JJTVARIABLEDECLARATORID = 39;
+  public int JJTFORMALPARAMETER = 40;
+  public int JJTFORMALPARAMETERS = 41;
+  public int JJTMETHODDECLARATOR = 42;
+  public int JJTMETHODDECLARATION = 43;
 
 
   public String[] jjtNodeName = {
@@ -57,6 +66,15 @@ public interface SimpleCalculatorParserTreeConstants
     "NullLiteral",
     "MethodDeclarationRoot",
     "PrimitiveType",
+    "PrimitiveBlacketType",
+    "BooleanBlacketType",
+    "CharBlacketType",
+    "ByteBlacketType",
+    "ShortBlacketType",
+    "IntBlacketType",
+    "LongBlacketType",
+    "FloatBlacketType",
+    "DoubleBlacketType",
     "BooleanType",
     "CharType",
     "ByteType",
@@ -76,4 +94,4 @@ public interface SimpleCalculatorParserTreeConstants
     "MethodDeclaration",
   };
 }
-/* JavaCC - OriginalChecksum=29a1efdae5239023d6c8dccb552133d4 (do not edit this line) */
+/* JavaCC - OriginalChecksum=8c2b6b8df0c33e685ffaf74223cc0e9f (do not edit this line) */

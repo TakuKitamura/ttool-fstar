@@ -20,6 +20,15 @@ public interface SimpleCalculatorParserVisitor
   public Object visit(ASTNullLiteral node, Object data);
   public Object visit(ASTMethodDeclarationRoot node, Object data);
   public Object visit(ASTPrimitiveType node, Object data);
+  public Object visit(ASTPrimitiveBlacketType node, Object data);
+  public Object visit(ASTBooleanBlacketType node, Object data);
+  public Object visit(ASTCharBlacketType node, Object data);
+  public Object visit(ASTByteBlacketType node, Object data);
+  public Object visit(ASTShortBlacketType node, Object data);
+  public Object visit(ASTIntBlacketType node, Object data);
+  public Object visit(ASTLongBlacketType node, Object data);
+  public Object visit(ASTFloatBlacketType node, Object data);
+  public Object visit(ASTDoubleBlacketType node, Object data);
   public Object visit(ASTBooleanType node, Object data);
   public Object visit(ASTCharType node, Object data);
   public Object visit(ASTByteType node, Object data);
@@ -38,4 +47,4 @@ public interface SimpleCalculatorParserVisitor
   public Object visit(ASTMethodDeclarator node, Object data);
   public Object visit(ASTMethodDeclaration node, Object data);
 }
-/* JavaCC - OriginalChecksum=f94a8cf462c977a85b1aed5e8873b214 (do not edit this line) */
+/* JavaCC - OriginalChecksum=222589b69b3cf819258fe09cb9109e81 (do not edit this line) */

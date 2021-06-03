@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 // TODO: マイナス符号の対応を検討
 // TODO: 整数以外の型への対応
@@ -9,6 +10,8 @@ import java.util.List;
 public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParserVisitor {
 
     public boolean haveMinusSign = false;
+
+    public MethodDeclaration methodDeclaration = new MethodDeclaration();
 
     public String rep(List<String> children, List<String> ops) {
         String x = children.get(0);
@@ -204,7 +207,6 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTName node, Object data) {
         System.out.println(node);
-        System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
@@ -272,16 +274,11 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTMethodDeclaration node, Object data) {
         System.out.println(node);
-        // System.out.println(node.jjtGetNumChildren());
-
-        // System.out.print("retType: ");
 
         Node resultTypeNode = (Node) node.jjtGetChild(0);
         while (true) {
             if (resultTypeNode.jjtGetNumChildren() == 0) {
-                String ret = (String) (resultTypeNode.jjtAccept(this, null));
-                System.out.print("resultTypeNode: ");
-                System.out.println(ret);
+                methodDeclaration.returnType = (String) (resultTypeNode.jjtAccept(this, null));
                 break;
             }
             resultTypeNode = resultTypeNode.jjtGetChild(0);
@@ -299,44 +296,44 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTMethodDeclarator node, Object data) {
         System.out.println(node);
+
+        String functionName = (String) node.jjtGetValue();
+        methodDeclaration.funcName = functionName;
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTFormalParameters node, Object data) {
         System.out.println(node);
-        // System.out.println(node.jjtGetNumChildren());
+
+        methodDeclaration.args = new HashMap<String, String>();
 
         for (int i = 0; i < node.jjtGetNumChildren(); i++) {
             Node formalParameters = (Node) node.jjtGetChild(i);
             Node formalParameter = (Node) formalParameters.jjtGetChild(0);
             Node variableDeclaratorId = (Node) formalParameters.jjtGetChild(1);
+
+            String argType = "";
+            String argName = "";
             while (true) {
                 if (formalParameter.jjtGetNumChildren() == 0) {
-                    String ret = (String) (formalParameter.jjtAccept(this, null));
-                    System.out.print("formalParameter: ");
-                    System.out.println(ret);
+                    argType = (String) (formalParameter.jjtAccept(this, null));
                     break;
                 }
 
-                // System.out.println(formalParameter.jjtGetNumChildren());
                 formalParameter = formalParameter.jjtGetChild(0);
 
-                // System.out.println(formalParameters.jjtGetChild(1));
             }
-            // System.out.println(variableDeclaratorId.jjtGetNumChildren());
-            // System.out.print(variableDeclaratorId.jjtAccept(this, null));
 
-            System.out.print("arg: ");
+            argName += (String) variableDeclaratorId.jjtAccept(this, null);
             if (variableDeclaratorId.jjtGetNumChildren() == 1) {
-                System.out.print(variableDeclaratorId.jjtAccept(this, null));
-                System.out.println("[]");
-            } else {
-                System.out.println(variableDeclaratorId.jjtAccept(this, null));
+                argName += "[]";
             }
+
+            methodDeclaration.args.put(argName, argType);
         }
 
-        return null;
+        return (Object) methodDeclaration;
     }
 
     @Override
@@ -358,68 +355,123 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     }
 
     public Object visit(ASTByteType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     public Object visit(ASTShortType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     public Object visit(ASTIntType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         // System.out.println(123);
         return node.jjtGetValue();
     }
 
     public Object visit(ASTLongType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     public Object visit(ASTFloatType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     public Object visit(ASTDoubleType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     public Object visit(ASTVoidType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTBooleanBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTCharBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTByteBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTShortBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTIntBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        // System.out.println(123);
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTLongBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTFloatBlacketType node, Object data) {
+        System.out.println(node);
+        // System.out.println(node.jjtGetValue());
+        return node.jjtGetValue();
+    }
+
+    public Object visit(ASTDoubleBlacketType node, Object data) {
+        System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
     }
 
     public Object visit(ASTType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTArrayBrackets node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTVariableDeclaratorId node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
         return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTPrimitiveType node, Object data) {
-        // System.out.println(node);
+        System.out.println(node);
+        return node.jjtGetChild(0).jjtAccept(this, null);
+    }
+
+    @Override
+    public Object visit(ASTPrimitiveBlacketType node, Object data) {
+        System.out.println(node);
         return node.jjtGetChild(0).jjtAccept(this, null);
     }
 }

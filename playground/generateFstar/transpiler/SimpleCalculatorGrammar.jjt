@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 
-
 public class SimpleCalculatorParser
 {
   
@@ -28,7 +27,7 @@ public class SimpleCalculatorParser
     //     System.out.println(generatedRefinementType);
     //   }
 
-      String generatedMethodDeclaration = transpile("int a()\n", "MethodDeclaration");
+      String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
         System.out.println(generatedMethodDeclaration);
       }
@@ -42,11 +41,20 @@ public class SimpleCalculatorParser
     SimpleCalculatorParser parser = new SimpleCalculatorParser(input);
 
     SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
-    // System.out.println(parseType);
     if (parseType == "RefinementType") {
         try {
             // parser.ConditionRoot().dump("");
-            return (String) parser.ConditionRoot().jjtAccept(visitor, null);
+
+            Object ret = parser.ConditionRoot().jjtAccept(visitor, null);
+
+            if (ret instanceof String) {
+                return (String)ret;
+            } else {
+                System.out.println("ret is not string");
+                return "";
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -60,7 +68,17 @@ public class SimpleCalculatorParser
 
             visitor = new SimpleCalculatorParserVisitorImpl();
             System.out.println("");
-            parser.MethodDeclarationRoot().jjtAccept(visitor, null);
+            Object ret = parser.MethodDeclarationRoot().jjtAccept(visitor, null);
+
+            if (ret instanceof MethodDeclaration) {
+                MethodDeclaration methodDeclaration = (MethodDeclaration) ret;
+                System.out.println(methodDeclaration);
+                return "";
+            } else {
+                System.out.println("ret is not methodDeclaration");
+                return "";
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -419,6 +437,115 @@ void PrimitiveType() :
   DoubleType()
 }
 
+void PrimitiveBlacketType() :
+{}
+{
+  BooleanBlacketType()
+|
+  CharBlacketType()
+|
+  ByteBlacketType()
+|
+  ShortBlacketType()
+|
+  IntBlacketType()
+|
+  LongBlacketType()
+|
+  FloatBlacketType()
+|
+  DoubleBlacketType()
+}
+
+void BooleanBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "boolean[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void CharBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "char[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void ByteBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "byte[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void ShortBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "short[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void IntBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "int[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+
+}
+
+void LongBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "long[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void FloatBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "float[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+void DoubleBlacketType():
+{
+    Token t = null;
+}
+{
+    t = "double[]"
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
 void BooleanType():
 {
     Token t = null;
@@ -512,7 +639,7 @@ void DoubleType():
 void Type() :
 {}
 {
-  PrimitiveType() ( "[" "]" )*
+  PrimitiveType() | PrimitiveBlacketType()
 }
 
 void VoidType():
@@ -571,9 +698,14 @@ void FormalParameters() :
 }
 
 void MethodDeclarator() :
-{}
 {
-  <IDENTIFIER> FormalParameters() ( "[" "]" )*
+    Token t = null;
+}
+{
+  t = <IDENTIFIER>
+  {
+    jjtThis.jjtSetValue(t.image);
+  } FormalParameters()
 }
 
 
