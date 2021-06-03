@@ -48,6 +48,12 @@ public interface SimpleCalculatorParserConstants {
   int CHARACTER_LITERAL = 22;
   /** RegularExpression Id. */
   int STRING_LITERAL = 23;
+  /** RegularExpression Id. */
+  int VOID_TYPE = 26;
+  /** RegularExpression Id. */
+  int DATA_TYPE = 27;
+  /** RegularExpression Id. */
+  int DATA_TYPE_BRACKET = 28;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -80,23 +86,9 @@ public interface SimpleCalculatorParserConstants {
     "<STRING_LITERAL>",
     "\".\"",
     "\"\\n\"",
-    "\"boolean[]\"",
-    "\"char[]\"",
-    "\"byte[]\"",
-    "\"short[]\"",
-    "\"int[]\"",
-    "\"long[]\"",
-    "\"float[]\"",
-    "\"double[]\"",
-    "\"boolean \"",
-    "\"char \"",
-    "\"byte \"",
-    "\"short \"",
-    "\"int \"",
-    "\"long \"",
-    "\"float \"",
-    "\"double \"",
     "\"void \"",
+    "<DATA_TYPE>",
+    "<DATA_TYPE_BRACKET>",
     "\"[]\"",
     "\",\"",
   };

@@ -23,10 +23,10 @@ public class SimpleCalculatorParser
   public static void main(String [] args)
   {
     //   String generatedRefinementType = transpile("null", "RefinementType");
-      String generatedRefinementType = transpile("(a == true && b > 10l && c != null) || d != -1l", "RefinementType");
-      if (generatedRefinementType != null) {
-        System.out.println(generatedRefinementType);
-      }
+    //   String generatedRefinementType = transpile("(a == true && b > 10l && c != null) || d != -1l", "RefinementType");
+    //   if (generatedRefinementType != null) {
+    //     System.out.println(generatedRefinementType);
+    //   }
 
       String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
       if (generatedMethodDeclaration != null) {
@@ -71,7 +71,9 @@ public class SimpleCalculatorParser
 
             if (ret instanceof MethodDeclaration) {
                 MethodDeclaration methodDeclaration = (MethodDeclaration) ret;
-                System.out.println(methodDeclaration);
+                System.out.println(methodDeclaration.funcName);
+                System.out.println(methodDeclaration.returnType);
+                System.out.println(methodDeclaration.args);
                 return "";
             } else {
                 System.out.println("ret is not methodDeclaration");
@@ -247,8 +249,6 @@ SimpleNode ConditionRoot() :
 {
   Expr() <EOF>
   {
-    // Node tree = jjtree.rootNode();
-    // System.out.println(tree.jjtGetChild(0));
     return jjtThis;
   }
 }
@@ -420,230 +420,59 @@ SimpleNode MethodDeclarationRoot() :
 {
   MethodDeclaration() "\n"
   {
-    // Node tree = jjtree.rootNode();
-    // System.out.println(tree.jjtGetChild(0));
     return jjtThis;
   }
 }
 
-void PrimitiveType() :
-{}
+TOKEN :
 {
-  BooleanType() 
+< VOID_TYPE : "void " >
 |
-  CharType()
+< DATA_TYPE :
+  "bool "
+  | "char "
+  | "byte "
+  | "short "
+  | "int "
+  | "long "
+  | "float "
+  | "double "
+>
 |
-  ByteType()
-|
-  ShortType()
-|
-  IntType()
-|
-  LongType()
-|
-  FloatType()
-|
-  DoubleType()
+< DATA_TYPE_BRACKET :
+  "bool[]"
+  | "char[]"
+  | "byte[]"
+  | "short[]"
+  | "int[]"
+  | "long[]"
+  | "float[]"
+  | "double[]"
+>
+}
+
+
+void PrimitiveType() :
+{
+    Token t = null;
+}
+{
+ t = <DATA_TYPE>
+  {
+    jjtThis.jjtSetValue(t.image);
+  }
 }
 
 void PrimitiveBlacketType() :
-{}
-{
-  BooleanBlacketType()
-|
-  CharBlacketType()
-|
-  ByteBlacketType()
-|
-  ShortBlacketType()
-|
-  IntBlacketType()
-|
-  LongBlacketType()
-|
-  FloatBlacketType()
-|
-  DoubleBlacketType()
-}
-
-void BooleanBlacketType():
 {
     Token t = null;
 }
 {
-    t = "boolean[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
+ t = <DATA_TYPE_BRACKET>
+  {
+    jjtThis.jjtSetValue(t.image);
+  }
 }
-
-void CharBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "char[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void ByteBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "byte[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void ShortBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "short[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void IntBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "int[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-
-}
-
-void LongBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "long[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void FloatBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "float[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void DoubleBlacketType():
-{
-    Token t = null;
-}
-{
-    t = "double[]"
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void BooleanType():
-{
-    Token t = null;
-}
-{
-    t = "boolean "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void CharType():
-{
-    Token t = null;
-}
-{
-    t = "char "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void ByteType():
-{
-    Token t = null;
-}
-{
-    t = "byte "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void ShortType():
-{
-    Token t = null;
-}
-{
-    t = "short "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void IntType():
-{
-    Token t = null;
-}
-{
-    t = "int "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-
-}
-
-void LongType():
-{
-    Token t = null;
-}
-{
-    t = "long "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void FloatType():
-{
-    Token t = null;
-}
-{
-    t = "float "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
-void DoubleType():
-{
-    Token t = null;
-}
-{
-    t = "double "
-    {
-        jjtThis.jjtSetValue(t.toString().trim());
-    }
-}
-
 
 void Type() :
 {}
@@ -656,7 +485,7 @@ void VoidType():
     Token t = null;
 }
 {
-    t = "void "
+    t = < VOID_TYPE >
     {
         jjtThis.jjtSetValue(t.toString().trim());
     }

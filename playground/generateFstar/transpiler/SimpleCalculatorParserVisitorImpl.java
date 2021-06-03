@@ -342,105 +342,7 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
         return null;
     }
 
-    public Object visit(ASTBooleanType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTCharType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTByteType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTShortType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTIntType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        // System.out.println(123);
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTLongType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTFloatType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTDoubleType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
     public Object visit(ASTVoidType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTBooleanBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTCharBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTByteBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTShortBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTIntBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        // System.out.println(123);
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTLongBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTFloatBlacketType node, Object data) {
-        System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
-    }
-
-    public Object visit(ASTDoubleBlacketType node, Object data) {
         System.out.println(node);
         // System.out.println(node.jjtGetValue());
         return node.jjtGetValue();
@@ -466,13 +368,13 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTPrimitiveType node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        return node.jjtGetValue();
     }
 
     @Override
     public Object visit(ASTPrimitiveBlacketType node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        return node.jjtGetValue();
     }
 }
 /*

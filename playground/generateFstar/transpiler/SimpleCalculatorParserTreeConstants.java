@@ -20,31 +20,15 @@ public interface SimpleCalculatorParserTreeConstants
   public int JJTMETHODDECLARATIONROOT = 16;
   public int JJTPRIMITIVETYPE = 17;
   public int JJTPRIMITIVEBLACKETTYPE = 18;
-  public int JJTBOOLEANBLACKETTYPE = 19;
-  public int JJTCHARBLACKETTYPE = 20;
-  public int JJTBYTEBLACKETTYPE = 21;
-  public int JJTSHORTBLACKETTYPE = 22;
-  public int JJTINTBLACKETTYPE = 23;
-  public int JJTLONGBLACKETTYPE = 24;
-  public int JJTFLOATBLACKETTYPE = 25;
-  public int JJTDOUBLEBLACKETTYPE = 26;
-  public int JJTBOOLEANTYPE = 27;
-  public int JJTCHARTYPE = 28;
-  public int JJTBYTETYPE = 29;
-  public int JJTSHORTTYPE = 30;
-  public int JJTINTTYPE = 31;
-  public int JJTLONGTYPE = 32;
-  public int JJTFLOATTYPE = 33;
-  public int JJTDOUBLETYPE = 34;
-  public int JJTTYPE = 35;
-  public int JJTVOIDTYPE = 36;
-  public int JJTRESULTTYPE = 37;
-  public int JJTARRAYBRACKETS = 38;
-  public int JJTVARIABLEDECLARATORID = 39;
-  public int JJTFORMALPARAMETER = 40;
-  public int JJTFORMALPARAMETERS = 41;
-  public int JJTMETHODDECLARATOR = 42;
-  public int JJTMETHODDECLARATION = 43;
+  public int JJTTYPE = 19;
+  public int JJTVOIDTYPE = 20;
+  public int JJTRESULTTYPE = 21;
+  public int JJTARRAYBRACKETS = 22;
+  public int JJTVARIABLEDECLARATORID = 23;
+  public int JJTFORMALPARAMETER = 24;
+  public int JJTFORMALPARAMETERS = 25;
+  public int JJTMETHODDECLARATOR = 26;
+  public int JJTMETHODDECLARATION = 27;
 
 
   public String[] jjtNodeName = {
@@ -67,22 +51,6 @@ public interface SimpleCalculatorParserTreeConstants
     "MethodDeclarationRoot",
     "PrimitiveType",
     "PrimitiveBlacketType",
-    "BooleanBlacketType",
-    "CharBlacketType",
-    "ByteBlacketType",
-    "ShortBlacketType",
-    "IntBlacketType",
-    "LongBlacketType",
-    "FloatBlacketType",
-    "DoubleBlacketType",
-    "BooleanType",
-    "CharType",
-    "ByteType",
-    "ShortType",
-    "IntType",
-    "LongType",
-    "FloatType",
-    "DoubleType",
     "Type",
     "VoidType",
     "ResultType",
@@ -94,4 +62,4 @@ public interface SimpleCalculatorParserTreeConstants
     "MethodDeclaration",
   };
 }
-/* JavaCC - OriginalChecksum=2536507eb00514bbada725c019520daa (do not edit this line) */
+/* JavaCC - OriginalChecksum=ce4a6fabe4c860575cfff2527fea5122 (do not edit this line) */
