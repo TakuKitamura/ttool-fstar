@@ -15,7 +15,16 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
 
     public String rep(List<String> children, List<String> ops) {
         String x = children.get(0);
+
+        if (x.startsWith("-")) {
+            x = String.format("(%s)", x);
+        }
+
         String y = children.get(1);
+
+        if (y.startsWith("-")) {
+            y = String.format("(%s)", y);
+        }
 
         String op = ops.get(0);
         String ret = String.format("(%s %s %s)", op, x, y);
