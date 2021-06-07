@@ -12,7 +12,7 @@ options
 
 PARSER_BEGIN(FstarTranspiler)
 
-package transpiler;
+package fstartranspiler;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
