@@ -11,6 +11,8 @@ options
 }
 
 PARSER_BEGIN(SimpleCalculatorParser)
+
+// package transpiler;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
@@ -53,17 +55,6 @@ public class SimpleCalculatorParser
 
     try {
         Object parseMethodDeclarationReuslt = methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null);
-
-        if (parseMethodDeclarationReuslt instanceof MethodDeclaration) {
-            // (MethodDeclaration) s;
-            System.out.println(methodDeclaration.funcName);
-            System.out.println(methodDeclaration.returnType);
-            System.out.println(methodDeclaration.args);
-            // return "";
-        } else {
-            System.out.println("ret is not methodDeclaration");
-            // return "";
-        }
     } catch (Exception e) {
             e.printStackTrace();
             return null;
