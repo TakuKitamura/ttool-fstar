@@ -35,68 +35,59 @@ public class FstarTranspiler
     Map<String, String> map = new HashMap<String, String>();
 
     map.put("methodDeclaration", "int32 add(int32 x, int32 y)");
-    map.put("require", "x > 0 && y > 0");
-    map.put("ensure", "ret > 0");
+    map.put("require", "x > 0 && y <= 10");
+    map.put("ensure", "0 == ret && ret == 3");
 
-    String generatedMethodDeclaration = transpile(map);
-    if (generatedMethodDeclaration != null) {
-        System.out.println(generatedMethodDeclaration);
+    try {
+        String result = transpile(map);
+        System.out.println(result);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
   }
 
-  public static String transpile(Map<String, String> map) {
+  public static String transpile(Map<String, String> map) throws Exception {
 
     InputStream methodDeclarationInput = new ByteArrayInputStream(map.get("methodDeclaration").getBytes());
     FstarTranspiler methodDeclarationParser = new FstarTranspiler(methodDeclarationInput);
 
 
     MethodDeclaration methodDeclaration = new MethodDeclaration();
-    FstarTranspilerVisitor visiter = new FstarTranspilerVisitorImpl(methodDeclaration);
+    
+    FstarTranspilerVisitorImpl visiter = new FstarTranspilerVisitorImpl(methodDeclaration);
 
-    try {
-        Object parseMethodDeclarationReuslt = methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null);
-    } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-    }
+    Object ret = visiter.filterObjException(
+        methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null)
+    );
+    
+    System.out.println("");
+
 
     InputStream requireInput = new ByteArrayInputStream(map.get("require").getBytes());
     FstarTranspiler requireParser = new FstarTranspiler(requireInput);
 
-    try {
-        Object ret = requireParser.ConditionRoot().jjtAccept(visiter, null);
+    ret = visiter.filterObjException(
+        requireParser.ConditionRoot().jjtAccept(visiter, null)
+    );
 
-        if (ret instanceof String) {
-            System.out.println((String)ret);
-            // return (String)ret;
-        } else {
-            System.out.println("ret is not string");
-            // return "";
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-    }
+    String requireParserResult = (String)ret;
+
+    System.out.println(requireParserResult);
+    System.out.println("");
 
     InputStream ensureInput = new ByteArrayInputStream(map.get("ensure").getBytes());
     FstarTranspiler ensureParser = new FstarTranspiler(ensureInput);
 
-    try {
-        Object ret = ensureParser.ConditionRoot().jjtAccept(visiter, null);
+    ret = visiter.filterObjException(
+        ensureParser.ConditionRoot().jjtAccept(visiter, null)
+    );
 
-        if (ret instanceof String) {
-            System.out.println((String)ret);
-            // return (String)ret;
-        } else {
-            System.out.println("ret is not string");
-            // return "";
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-    }
+    String ensureParserResult = (String)ret;
 
-    return null;
+    System.out.println(ensureParserResult);
+    System.out.println("");
+
+    return "hoge";
   }
 }
 
@@ -110,7 +101,7 @@ void BooleanLiteral() :
 {
   t = < BOOLEAN >
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -121,7 +112,7 @@ void NullLiteral() :
 {
   t = < NULL >
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -299,28 +290,28 @@ void ConditionalAndExpression() :
 
 void EqualityExpression() :
 {
-  List<String> ts = new ArrayList();
+//   List<String> ts = new ArrayList();
   Token t = null;
 }
 {
   RelationalExpression() (t = < EQUALITY > RelationalExpression()
   {
-    ts.add(t.image);
-    jjtThis.jjtSetValue(ts);
+    // ts.add(t.image.trim());
+    jjtThis.jjtSetValue(t.image.trim());
   } )*
 {}
 }
 
 void RelationalExpression() :
 {
-  List<String> ts = new ArrayList();
+//   List<String> ts = new ArrayList();
   Token t = null;
 }
 {
   AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression()
   {
-    ts.add(t.image);
-    jjtThis.jjtSetValue(ts);
+    // ts.add(t.image.trim());
+    jjtThis.jjtSetValue(t.image.trim());
   } )*
 {}
 }
@@ -332,7 +323,7 @@ void AdditiveExpression() :
 {
   t = < PLUSMINUS > PrimaryPrefix() {
       if (t.toString().equals("-")) {
-        jjtThis.jjtSetValue(t.image);
+        jjtThis.jjtSetValue(t.image.trim());
       }
   }
 |
@@ -382,7 +373,7 @@ void Name() :
   ( LOOKAHEAD(2) "." <IDENTIFIER>
   )*
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -391,7 +382,7 @@ void Integer():
 {
  t = <INTEGER_LITERAL>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim().trim());
   }
 }
 
@@ -400,7 +391,7 @@ void Floating():
 {
   t = <FLOATING_POINT_LITERAL>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -409,7 +400,7 @@ void Character():
 {
  t = <CHARACTER_LITERAL>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -418,7 +409,7 @@ void String():
 {
  t = <STRING_LITERAL>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -469,7 +460,7 @@ void PrimitiveType() :
 {
  t = <DATA_TYPE>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -480,7 +471,7 @@ void PrimitiveBlacketType() :
 {
  t = <DATA_TYPE_BRACKET>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -517,7 +508,7 @@ void ArrayBrackets():
 {
     t = "[]" 
     {
-        jjtThis.jjtSetValue(t.image);
+        jjtThis.jjtSetValue(t.image.trim());
     }
 }
 
@@ -528,7 +519,7 @@ void VariableDeclaratorId() :
 {
   t = <IDENTIFIER> (ArrayBrackets()) *
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 
@@ -552,7 +543,7 @@ void MethodDeclarator() :
 {
   t = <IDENTIFIER>
   {
-    jjtThis.jjtSetValue(t.image);
+    jjtThis.jjtSetValue(t.image.trim());
   } FormalParameters()
 }
 

@@ -5,6 +5,7 @@ package fstar.transpiler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 
 // TODO: マイナス符号の対応を検討
 // TODO: 整数以外の型への対応
@@ -19,43 +20,122 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         this.methodDeclaration = methodDeclaration;
     }
 
+    // private Map<String, String> typeMap = new HashMap<String, String>() {
+    // {
+    // put("int32", "I32");
+    // }
+    // };
+
     private boolean haveMinusSign = false;
 
+    // 関数宣言の読み取り結果
     private MethodDeclaration methodDeclaration = null;
 
-    private String rep(List<String> children, List<String> ops) {
-        String x = children.get(0);
+    // 読み取ったリファインメントタイプの変数と値
+    private Map<String, String> argMap = new HashMap<String, String>();
 
-        if (x.startsWith("-")) {
-            x = String.format("(%s)", x);
+    public Object filterObjException(Object obj) throws Exception {
+        if (obj instanceof Exception) {
+            Exception e = (Exception) obj;
+            throw e;
+        }
+        return obj;
+    }
+
+    private String generateFstarFormat(List<String> values, String op) throws Exception {
+
+        // TODO: マイナス実装を考える
+
+        System.out.println(values);
+        System.out.println(op);
+
+        Map<String, String> typeMap = new HashMap<String, String>() {
+            {
+                put("int32", "I32");
+            }
+        };
+
+        Map<String, String> typeSuffixMap = new HashMap<String, String>() {
+            {
+                put("int32", "l");
+            }
+        };
+
+        String x = values.get(0);
+
+        String xType = null;
+
+        String xVariableType = methodDeclaration.args.get(x);
+
+        if (methodDeclaration.args.get(x) != null) { // variable
+            xType = typeMap.get(xVariableType);
+        } else if (x.equals("ret") == true) {
+            xVariableType = methodDeclaration.returnType;
+            xType = typeMap.get(methodDeclaration.returnType);
+        } else { // value
+
         }
 
-        String y = children.get(1);
+        String y = values.get(1);
 
-        if (y.startsWith("-")) {
-            y = String.format("(%s)", y);
+        String yType = null;
+
+        String yVariableType = methodDeclaration.args.get(y);
+
+        if (methodDeclaration.args.get(y) != null) { // variable
+            yType = typeMap.get(yVariableType);
+        } else if (y.equals("ret") == true) {
+            yVariableType = methodDeclaration.returnType;
+            yType = typeMap.get(methodDeclaration.returnType);
+        } else { // value
+
         }
 
-        String op = ops.get(0);
-        String ret = String.format("(%s %s %s)", op, x, y);
-        if (op.equals("not I32.eq")) {
+        System.out.printf("xVariableType = %s, yVariableType = %s\n", xVariableType, yVariableType);
+        if (xVariableType == null && yVariableType != null) {
+            String suffix = typeSuffixMap.get(yVariableType);
+            x += suffix;
+        } else if (xVariableType != null && yVariableType == null) {
+            String suffix = typeSuffixMap.get(xVariableType);
+            y += suffix;
+        }
+
+        System.out.printf("%s, %s\n", x, y);
+
+        if (xType == null && yType == null && x.equals("ret") == false && y.equals("ret") == false) {
+            throw new Exception("find no need formula");
+        }
+
+        String type = null;
+
+        if (xType != null) {
+            System.out.printf("xType: %s\n", xVariableType);
+            type = xType;
+        } else {
+            System.out.printf("yType: %s\n", yVariableType);
+            type = yType;
+        }
+
+        Map<String, String> opeMap = new HashMap<String, String>() {
+            {
+                put("==", "eq");
+                put("!=", "neq"); // fstar don't have neq ope
+                put("<", "lt");
+                put("<=", "lte");
+                put(">", "gt");
+                put(">=", "gte");
+            }
+        };
+
+        String fstarOpName = opeMap.get(op); // I32
+        String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
+
+        String ret = String.format("(%s %s %s)", fstarOp, x, y);
+        if (op.equals("neq")) {
             String[] sepalate_op = op.split(" ", 2);
             String not = sepalate_op[0]; // not
             op = sepalate_op[1]; // I32
-            ret = String.format("(%s (%s %s %s))", not, op, x, y);
-        }
-
-        if (children.size() > 2) {
-            List<String> nextChildren = new ArrayList<String>();
-            List<String> nextOps = new ArrayList<String>();
-            nextChildren.add(ret);
-            for (int i = 2; i < children.size(); i++) {
-                nextChildren.add(children.get(i));
-            }
-            for (int i = 1; i < ops.size(); i++) {
-                nextOps.add(ops.get(i));
-            }
-            return rep(nextChildren, nextOps);
+            ret = String.format("(%s (%s %s %s))", not, fstarOp, x, y);
         }
 
         return ret;
@@ -70,216 +150,271 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTConditionRoot node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+
+        try {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
+
     }
 
     @Override
     public Object visit(ASTExpr node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTConditionalOrExpression node, Object data) {
         System.out.println(node);
-        String ret = "(";
 
-        int leafNum = node.jjtGetNumChildren();
+        try {
+            String ret = "(";
 
-        if (leafNum == 1) {
-            return node.jjtGetChild(0).jjtAccept(this, null).toString();
-        }
+            int leafNum = node.jjtGetNumChildren();
 
-        for (int i = 0; i < leafNum; i++) {
-            Node n = node.jjtGetChild(i);
-            String leaf = n.jjtAccept(this, null).toString();
-            ret += leaf;
-            if (i != leafNum - 1) {
-                ret += " || ";
+            if (leafNum == 1) {
+                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
             }
-        }
-        ret += ")";
 
-        return ret;
+            for (int i = 0; i < leafNum; i++) {
+                Node n = node.jjtGetChild(i);
+                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+                ret += leaf;
+                if (i != leafNum - 1) {
+                    ret += " || ";
+                }
+            }
+            ret += ")";
+
+            return ret;
+        } catch (Exception e) {
+            return e;
+        }
+
     }
 
     @Override
     public Object visit(ASTConditionalAndExpression node, Object data) {
         System.out.println(node);
-        String ret = "(";
+        try {
 
-        int leafNum = node.jjtGetNumChildren();
+            String ret = "(";
 
-        if (leafNum == 1) {
-            return node.jjtGetChild(0).jjtAccept(this, null).toString();
-        }
+            int leafNum = node.jjtGetNumChildren();
 
-        for (int i = 0; i < leafNum; i++) {
-            Node n = node.jjtGetChild(i);
-            String leaf = n.jjtAccept(this, null).toString();
-            ret += leaf;
-            if (i != leafNum - 1) {
-                ret += " && ";
+            if (leafNum == 1) {
+                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
             }
+
+            for (int i = 0; i < leafNum; i++) {
+                Node n = node.jjtGetChild(i);
+                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+                ret += leaf;
+                if (i != leafNum - 1) {
+                    ret += " && ";
+                }
+            }
+
+            ret += ")";
+
+            return ret;
+        } catch (Exception e) {
+            return e;
         }
-
-        ret += ")";
-
-        return ret;
     }
 
     @Override
     public Object visit(ASTEqualityExpression node, Object data) {
         System.out.println(node);
+        try {
 
-        int leafNum = node.jjtGetNumChildren();
+            int leafNum = node.jjtGetNumChildren();
 
-        if (leafNum == 1) {
-            return node.jjtGetChild(0).jjtAccept(this, null).toString();
-        }
-
-        List<String> ops = (List<String>) node.jjtGetValue();
-        List<String> fstarOps = new ArrayList<>();
-
-        for (int i = 0; i < ops.size(); i++) {
-            if (ops.get(i).equals("==")) {
-                fstarOps.add("I32.eq");
-            } else if (ops.get(i).equals("!=")) {
-                fstarOps.add("not I32.eq");
-            } else {
-                System.out.println("unkown EqualityExpression ope");
+            if (leafNum == 1) {
+                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
             }
+
+            String op = (String) node.jjtGetValue();
+
+            List<String> leafs = new ArrayList<>();
+            for (int i = 0; i < leafNum; i++) {
+                Node n = node.jjtGetChild(i);
+                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+                leafs.add(leaf);
+            }
+
+            String ret = generateFstarFormat(leafs, op);
+
+            return ret;
+        } catch (Exception e) {
+            return e;
         }
 
-        List<String> leafs = new ArrayList<>();
-        for (int i = 0; i < leafNum; i++) {
-            Node n = node.jjtGetChild(i);
-            String leaf = n.jjtAccept(this, null).toString();
-            leafs.add(leaf);
-        }
-
-        String ret = rep(leafs, fstarOps);
-
-        return ret;
     }
 
     @Override
     public Object visit(ASTRelationalExpression node, Object data) {
         System.out.println(node);
 
-        int leafNum = node.jjtGetNumChildren();
+        try {
+            int leafNum = node.jjtGetNumChildren();
 
-        if (leafNum == 1) {
-            return node.jjtGetChild(0).jjtAccept(this, null).toString();
-        }
-
-        List<String> ops = (List<String>) node.jjtGetValue();
-        List<String> fstarOps = new ArrayList<>();
-
-        for (int i = 0; i < ops.size(); i++) {
-            if (ops.get(i).equals("<")) {
-                fstarOps.add("I32.lt");
-            } else if (ops.get(i).equals("<=")) {
-                fstarOps.add("I32.lte");
-            } else if (ops.get(i).equals(">")) {
-                fstarOps.add("I32.gt");
-            } else if (ops.get(i).equals(">=")) {
-                fstarOps.add("I32.gte");
-            } else {
-                System.out.println("unkown EqualityExpression ope");
+            if (leafNum == 1) {
+                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
             }
+
+            String op = (String) node.jjtGetValue();
+
+            List<String> leafs = new ArrayList<>();
+            for (int i = 0; i < leafNum; i++) {
+                Node n = node.jjtGetChild(i);
+                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+                leafs.add(leaf);
+            }
+
+            String ret = generateFstarFormat(leafs, op);
+
+            return ret;
+        } catch (Exception e) {
+            return e;
         }
 
-        List<String> leafs = new ArrayList<>();
-        for (int i = 0; i < leafNum; i++) {
-            Node n = node.jjtGetChild(i);
-            String leaf = n.jjtAccept(this, null).toString();
-            leafs.add(leaf);
-        }
-
-        String ret = rep(leafs, fstarOps);
-
-        return ret;
     }
 
     @Override
     public Object visit(ASTAdditiveExpression node, Object data) {
         System.out.println(node);
-        if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-")) {
-            this.haveMinusSign = true;
+        try {
+            if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-")) {
+                this.haveMinusSign = true;
+            }
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
         }
-        return node.jjtGetChild(0).jjtAccept(this, null);
+
     }
 
     @Override
     public Object visit(ASTPrimaryPrefix node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTLiteral node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTName node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+
+            String argName = (String) node.jjtGetValue();
+
+            if (methodDeclaration.args.get(argName) == null && argName.equals(argName) == false) {
+                throw new Exception("find unkown variable");
+            }
+
+            return argName;
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTInteger node, Object data) {
         System.out.println(node);
-        System.out.println(this.methodDeclaration.funcName);
+        try {
 
-        String ret = (String) node.jjtGetValue();
+            String ret = (String) node.jjtGetValue();
 
-        if (this.haveMinusSign) {
-            ret = "-" + ret;
-            this.haveMinusSign = false;
+            if (this.haveMinusSign) {
+                ret = "-" + ret;
+                this.haveMinusSign = false;
+            }
+
+            return ret;
+        } catch (Exception e) {
+            return e;
         }
-
-        return ret;
     }
 
     @Override
     public Object visit(ASTFloating node, Object data) {
         System.out.println(node);
+        try {
 
-        String ret = (String) node.jjtGetValue();
+            String ret = (String) node.jjtGetValue();
 
-        if (this.haveMinusSign) {
-            ret = "-" + ret;
-            this.haveMinusSign = false;
+            if (this.haveMinusSign) {
+                ret = "-" + ret;
+                this.haveMinusSign = false;
+            }
+
+            return ret;
+        } catch (Exception e) {
+            return e;
         }
 
-        return ret;
     }
 
     @Override
     public Object visit(ASTCharacter node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
+
     }
 
     @Override
     public Object visit(ASTString node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
+
     }
 
     @Override
     public Object visit(ASTBooleanLiteral node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTNullLiteral node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     // Method
@@ -287,74 +422,95 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTMethodDeclarationRoot node, Object data) {
         System.out.println(node);
-
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTMethodDeclaration node, Object data) {
         System.out.println(node);
 
-        Node resultTypeNode = (Node) node.jjtGetChild(0);
-        while (true) {
-            if (resultTypeNode.jjtGetNumChildren() == 0) {
-                methodDeclaration.returnType = (String) (resultTypeNode.jjtAccept(this, null));
-                break;
+        try {
+            Node resultTypeNode = (Node) node.jjtGetChild(0);
+            while (true) {
+                if (resultTypeNode.jjtGetNumChildren() == 0) {
+                    methodDeclaration.returnType = (String) filterObjException(resultTypeNode.jjtAccept(this, null));
+                    break;
+                }
+                resultTypeNode = resultTypeNode.jjtGetChild(0);
             }
-            resultTypeNode = resultTypeNode.jjtGetChild(0);
+
+            return filterObjException(node.jjtGetChild(1).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
         }
 
-        return node.jjtGetChild(1).jjtAccept(this, null);
     }
 
     @Override
     public Object visit(ASTResultType node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTMethodDeclarator node, Object data) {
         System.out.println(node);
 
-        String functionName = (String) node.jjtGetValue();
-        methodDeclaration.funcName = functionName;
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            String functionName = (String) node.jjtGetValue();
+            methodDeclaration.funcName = functionName;
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
+        } catch (Exception e) {
+            return e;
+        }
+
     }
 
     @Override
     public Object visit(ASTFormalParameters node, Object data) {
         System.out.println(node);
 
-        methodDeclaration.args = new HashMap<String, String>();
+        try {
+            methodDeclaration.args = new HashMap<String, String>();
 
-        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-            Node formalParameters = (Node) node.jjtGetChild(i);
-            Node formalParameter = (Node) formalParameters.jjtGetChild(0);
-            Node variableDeclaratorId = (Node) formalParameters.jjtGetChild(1);
+            for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+                Node formalParameters = (Node) node.jjtGetChild(i);
+                Node formalParameter = (Node) formalParameters.jjtGetChild(0);
+                Node variableDeclaratorId = (Node) formalParameters.jjtGetChild(1);
 
-            String argType = "";
-            String argName = "";
-            while (true) {
-                if (formalParameter.jjtGetNumChildren() == 0) {
-                    argType = (String) (formalParameter.jjtAccept(this, null));
-                    break;
+                String argType = "";
+                String argName = "";
+                while (true) {
+                    if (formalParameter.jjtGetNumChildren() == 0) {
+                        argType = (String) filterObjException(formalParameter.jjtAccept(this, null));
+                        break;
+                    }
+
+                    formalParameter = formalParameter.jjtGetChild(0);
+
                 }
 
-                formalParameter = formalParameter.jjtGetChild(0);
+                argName += (String) filterObjException(variableDeclaratorId.jjtAccept(this, null));
+                if (variableDeclaratorId.jjtGetNumChildren() == 1) {
+                    argName += "[]";
+                }
 
+                methodDeclaration.args.put(argName, argType);
             }
 
-            argName += (String) variableDeclaratorId.jjtAccept(this, null);
-            if (variableDeclaratorId.jjtGetNumChildren() == 1) {
-                argName += "[]";
-            }
-
-            methodDeclaration.args.put(argName, argType);
+            return null;
+        } catch (Exception e) {
+            return e;
         }
 
-        // return (Object) methodDeclaration;
-        return null;
     }
 
     @Override
@@ -365,40 +521,61 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
     public Object visit(ASTVoidType node, Object data) {
         System.out.println(node);
-        // System.out.println(node.jjtGetValue());
-        return node.jjtGetValue();
+
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
+
     }
 
     public Object visit(ASTType node, Object data) {
         System.out.println(node);
-        return node.jjtGetChild(0).jjtAccept(this, null);
+        try {
+            return node.jjtGetChild(0).jjtAccept(this, null);
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTArrayBrackets node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTVariableDeclaratorId node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTPrimitiveType node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
     }
 
     @Override
     public Object visit(ASTPrimitiveBlacketType node, Object data) {
         System.out.println(node);
-        return node.jjtGetValue();
+        try {
+            return node.jjtGetValue();
+        } catch (Exception e) {
+            return e;
+        }
     }
 }
-/*
- * JavaCC - OriginalChecksum=b885522fef29c058f490c57bdc41604f (do not edit this
- * line)
- */
