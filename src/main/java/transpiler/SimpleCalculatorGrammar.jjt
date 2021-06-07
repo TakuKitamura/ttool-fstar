@@ -12,7 +12,7 @@ options
 
 PARSER_BEGIN(SimpleCalculatorParser)
 
-// package transpiler;
+package transpiler;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
