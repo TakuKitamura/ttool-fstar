@@ -1,2 +1,2 @@
 all:
-	jjtree SimpleCalculatorGrammar.jjt && javacc SimpleCalculatorGrammar.jj && javac *.java && java SimpleCalculatorParser
+	jjtree SimpleCalculatorGrammar.jjt > /dev/null && javacc SimpleCalculatorGrammar.jj > /dev/null && javac *.java > /dev/null && java SimpleCalculatorParser

@@ -9,11 +9,19 @@ import java.util.HashMap;
 
 public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParserVisitor {
 
-    public boolean haveMinusSign = false;
+    public SimpleCalculatorParserVisitorImpl() {
 
-    public MethodDeclaration methodDeclaration = new MethodDeclaration();
+    }
 
-    public String rep(List<String> children, List<String> ops) {
+    public SimpleCalculatorParserVisitorImpl(MethodDeclaration methodDeclaration) {
+        this.methodDeclaration = methodDeclaration;
+    }
+
+    private boolean haveMinusSign = false;
+
+    private MethodDeclaration methodDeclaration = null;
+
+    private String rep(List<String> children, List<String> ops) {
         String x = children.get(0);
 
         if (x.startsWith("-")) {
@@ -222,6 +230,7 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
     @Override
     public Object visit(ASTInteger node, Object data) {
         System.out.println(node);
+        System.out.println(this.methodDeclaration.funcName);
 
         String ret = (String) node.jjtGetValue();
 
@@ -342,7 +351,8 @@ public class SimpleCalculatorParserVisitorImpl implements SimpleCalculatorParser
             methodDeclaration.args.put(argName, argType);
         }
 
-        return (Object) methodDeclaration;
+        // return (Object) methodDeclaration;
+        return null;
     }
 
     @Override

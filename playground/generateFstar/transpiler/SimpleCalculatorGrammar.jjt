@@ -15,75 +15,94 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleCalculatorParser
 {
   
   
-  public static void main(String [] args)
-  {
+  public static void main(String [] args) {
+
     //   String generatedRefinementType = transpile("null", "RefinementType");
     //   String generatedRefinementType = transpile("(a == true && b > 10l && c != null) || d != -1l", "RefinementType");
     //   if (generatedRefinementType != null) {
     //     System.out.println(generatedRefinementType);
     //   }
+    
+    Map<String, String> map = new HashMap<String, String>();
 
-      String generatedMethodDeclaration = transpile("int[] a(int b, float c, byte d[])\n", "MethodDeclaration");
-      if (generatedMethodDeclaration != null) {
+    map.put("methodDeclaration", "int32 add(int32 x, int32 y)");
+    map.put("require", "x > 0 && y > 0");
+    map.put("ensure", "ret > 0");
+
+    String generatedMethodDeclaration = transpile(map);
+    if (generatedMethodDeclaration != null) {
         System.out.println(generatedMethodDeclaration);
-      }
+    }
   }
 
-  public static String transpile(String s, String parseType) {
+  public static String transpile(Map<String, String> map) {
 
-    InputStream input = new ByteArrayInputStream(s.getBytes());
-    SimpleCalculatorParser parser = new SimpleCalculatorParser(input);
-
-    SimpleCalculatorParserVisitor visitor = new SimpleCalculatorParserVisitorImpl();
-    if (parseType == "RefinementType") {
-        try {
-            // parser.ConditionRoot().dump("");
-
-            Object ret = parser.ConditionRoot().jjtAccept(visitor, null);
-
-            if (ret instanceof String) {
-                return (String)ret;
-            } else {
-                System.out.println("ret is not string");
-                return "";
-            }
+    InputStream methodDeclarationInput = new ByteArrayInputStream(map.get("methodDeclaration").getBytes());
+    SimpleCalculatorParser methodDeclarationParser = new SimpleCalculatorParser(methodDeclarationInput);
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    MethodDeclaration methodDeclaration = new MethodDeclaration();
+    SimpleCalculatorParserVisitor visiter = new SimpleCalculatorParserVisitorImpl(methodDeclaration);
+
+    try {
+        Object parseMethodDeclarationReuslt = methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null);
+
+        if (parseMethodDeclarationReuslt instanceof MethodDeclaration) {
+            // (MethodDeclaration) s;
+            System.out.println(methodDeclaration.funcName);
+            System.out.println(methodDeclaration.returnType);
+            System.out.println(methodDeclaration.args);
+            // return "";
+        } else {
+            System.out.println("ret is not methodDeclaration");
+            // return "";
         }
-    } else if (parseType == "MethodDeclaration") {
-        try {
-            parser.MethodDeclarationRoot().dump("");
-
-            input = new ByteArrayInputStream(s.getBytes());
-            parser = new SimpleCalculatorParser(input);
-
-            visitor = new SimpleCalculatorParserVisitorImpl();
-            System.out.println("");
-            Object ret = parser.MethodDeclarationRoot().jjtAccept(visitor, null);
-
-            if (ret instanceof MethodDeclaration) {
-                MethodDeclaration methodDeclaration = (MethodDeclaration) ret;
-                System.out.println(methodDeclaration.funcName);
-                System.out.println(methodDeclaration.returnType);
-                System.out.println(methodDeclaration.args);
-                return "";
-            } else {
-                System.out.println("ret is not methodDeclaration");
-                return "";
-            }
-
-        } catch (Exception e) {
+    } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }   
+    }
+
+    InputStream requireInput = new ByteArrayInputStream(map.get("require").getBytes());
+    SimpleCalculatorParser requireParser = new SimpleCalculatorParser(requireInput);
+
+    try {
+        Object ret = requireParser.ConditionRoot().jjtAccept(visiter, null);
+
+        if (ret instanceof String) {
+            System.out.println((String)ret);
+            // return (String)ret;
+        } else {
+            System.out.println("ret is not string");
+            // return "";
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+
+    InputStream ensureInput = new ByteArrayInputStream(map.get("ensure").getBytes());
+    SimpleCalculatorParser ensureParser = new SimpleCalculatorParser(ensureInput);
+
+    try {
+        Object ret = ensureParser.ConditionRoot().jjtAccept(visiter, null);
+
+        if (ret instanceof String) {
+            System.out.println((String)ret);
+            // return (String)ret;
+        } else {
+            System.out.println("ret is not string");
+            // return "";
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
     }
 
     return null;
@@ -418,7 +437,7 @@ SimpleNode MethodDeclarationRoot() :
 {
 }
 {
-  MethodDeclaration() "\n"
+  MethodDeclaration() <EOF>
   {
     return jjtThis;
   }
@@ -433,7 +452,7 @@ TOKEN :
   | "char "
   | "byte "
   | "short "
-  | "int "
+  | "int32 "
   | "long "
   | "float "
   | "double "
@@ -444,7 +463,7 @@ TOKEN :
   | "char[]"
   | "byte[]"
   | "short[]"
-  | "int[]"
+  | "int32[]"
   | "long[]"
   | "float[]"
   | "double[]"
