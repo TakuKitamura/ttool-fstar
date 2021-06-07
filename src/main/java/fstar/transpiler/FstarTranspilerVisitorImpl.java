@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: マイナス符号の対応を検討
 // TODO: 整数以外の型への対応
 
 public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
@@ -43,8 +42,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     }
 
     private String generateFstarFormat(List<String> values, String op) throws Exception {
-
-        // TODO: マイナス実装を考える
 
         System.out.println(values);
         System.out.println(op);
@@ -129,6 +126,14 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         String fstarOpName = opeMap.get(op); // I32
         String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
+
+        if (x.startsWith("-")) {
+            x = String.format("(%s)", x);
+        }
+
+        if (y.startsWith("-")) {
+            y = String.format("(%s)", y);
+        }
 
         String ret = String.format("(%s %s %s)", fstarOp, x, y);
         if (op.equals("neq")) {
@@ -291,9 +296,10 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTAdditiveExpression node, Object data) {
         System.out.println(node);
         try {
-            if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-")) {
-                this.haveMinusSign = true;
-            }
+            // if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-"))
+            // {
+            // this.haveMinusSign = true;
+            // }
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
         } catch (Exception e) {
             return e;
@@ -345,10 +351,10 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
             String ret = (String) node.jjtGetValue();
 
-            if (this.haveMinusSign) {
-                ret = "-" + ret;
-                this.haveMinusSign = false;
-            }
+            // if (this.haveMinusSign) {
+            // ret = "-" + ret;
+            // this.haveMinusSign = false;
+            // }
 
             return ret;
         } catch (Exception e) {
@@ -363,10 +369,10 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
             String ret = (String) node.jjtGetValue();
 
-            if (this.haveMinusSign) {
-                ret = "-" + ret;
-                this.haveMinusSign = false;
-            }
+            // if (this.haveMinusSign) {
+            // ret = "-" + ret;
+            // this.haveMinusSign = false;
+            // }
 
             return ret;
         } catch (Exception e) {
