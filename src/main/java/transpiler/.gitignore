@@ -1,6 +1,6 @@
 /*
 !.gitignore
 !Makefile
-!SimpleCalculatorGrammar.jjt
-!SimpleCalculatorParserVisitorImpl.java
+!FstarTranspiler.jjt
+!FstarTranspilerVisitorImpl.java
 !MethodDeclaration.java

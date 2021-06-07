@@ -10,7 +10,7 @@ options
   UNICODE_INPUT = false; // ユニコードで解析を行わない（日本語等を使わない）
 }
 
-PARSER_BEGIN(SimpleCalculatorParser)
+PARSER_BEGIN(FstarTranspiler)
 
 package transpiler;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleCalculatorParser
+public class FstarTranspiler
 {
   
   
@@ -47,11 +47,11 @@ public class SimpleCalculatorParser
   public static String transpile(Map<String, String> map) {
 
     InputStream methodDeclarationInput = new ByteArrayInputStream(map.get("methodDeclaration").getBytes());
-    SimpleCalculatorParser methodDeclarationParser = new SimpleCalculatorParser(methodDeclarationInput);
+    FstarTranspiler methodDeclarationParser = new FstarTranspiler(methodDeclarationInput);
 
 
     MethodDeclaration methodDeclaration = new MethodDeclaration();
-    SimpleCalculatorParserVisitor visiter = new SimpleCalculatorParserVisitorImpl(methodDeclaration);
+    FstarTranspilerVisitor visiter = new FstarTranspilerVisitorImpl(methodDeclaration);
 
     try {
         Object parseMethodDeclarationReuslt = methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null);
@@ -61,7 +61,7 @@ public class SimpleCalculatorParser
     }
 
     InputStream requireInput = new ByteArrayInputStream(map.get("require").getBytes());
-    SimpleCalculatorParser requireParser = new SimpleCalculatorParser(requireInput);
+    FstarTranspiler requireParser = new FstarTranspiler(requireInput);
 
     try {
         Object ret = requireParser.ConditionRoot().jjtAccept(visiter, null);
@@ -79,7 +79,7 @@ public class SimpleCalculatorParser
     }
 
     InputStream ensureInput = new ByteArrayInputStream(map.get("ensure").getBytes());
-    SimpleCalculatorParser ensureParser = new SimpleCalculatorParser(ensureInput);
+    FstarTranspiler ensureParser = new FstarTranspiler(ensureInput);
 
     try {
         Object ret = ensureParser.ConditionRoot().jjtAccept(visiter, null);
@@ -101,7 +101,7 @@ public class SimpleCalculatorParser
 }
 
 
-PARSER_END(SimpleCalculatorParser)
+PARSER_END(FstarTranspiler)
 
 void BooleanLiteral() :
 {
