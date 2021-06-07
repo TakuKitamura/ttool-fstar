@@ -1,4 +1,4 @@
-package fstartranspiler;
+package fstar.transpiler;
 
 import java.util.HashMap;
 
