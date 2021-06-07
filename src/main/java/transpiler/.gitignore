@@ -2,5 +2,5 @@
 !.gitignore
 !Makefile
 !SimpleCalculatorGrammar.jjt
-!SimpleCalculatorParserVisiorImpl.java
+!SimpleCalculatorParserVisitorImpl.java
 !MethodDeclaration.java
