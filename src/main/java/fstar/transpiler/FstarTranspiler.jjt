@@ -29,7 +29,7 @@ public class FstarTranspiler
     Map<String, String> map = new HashMap<String, String>();
 
     map.put("methodDeclaration", "int32 add(int32 x, int32 y)");
-    map.put("require", "x > 123 || y <= -10");
+    map.put("require", "x > 123 || y <= -10 || x == y");
     map.put("ensure", "0 < ret && ret == -3");
 
     try {
@@ -186,7 +186,8 @@ TOKEN : /* IDENTIFIERS */
   >
 }
 
-
+// F# suffix
+// https://docs.microsoft.com/ja-jp/dotnet/fsharp/language-reference/literals
 
 TOKEN : /* LITERALS */
 {
@@ -298,21 +299,13 @@ void RelationalExpression() :
   Token t = null;
 }
 {
-  AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression()
+  ValueOrExpr() ( t = < RELATIONAL > ValueOrExpr()
   {
     jjtThis.jjtSetValue(t.image.trim());
   } )*
 }
 
-void AdditiveExpression() :
-{
-  Token t = null;
-}
-{
-  PrimaryPrefix()
-}
-
-void PrimaryPrefix() :
+void ValueOrExpr() :
 {
   Token t = null;
 }
@@ -414,6 +407,7 @@ TOKEN :
 < DATA_TYPE :
   "bool "
   | "char "
+  | "string "
   | "byte "
   | "short "
   | "int32 "
@@ -425,6 +419,7 @@ TOKEN :
 < DATA_TYPE_BRACKET :
   "bool[]"
   | "char[]"
+  | "string[]"
   | "byte[]"
   | "short[]"
   | "int32[]"

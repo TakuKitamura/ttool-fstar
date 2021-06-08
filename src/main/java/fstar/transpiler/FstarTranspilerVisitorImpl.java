@@ -21,6 +21,30 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     // 関数宣言の読み取り結果
     private MethodDeclaration methodDeclaration = null;
 
+    final Map<String, String> fstarTypeMap = new HashMap<String, String>() {
+        {
+            put("int32", "I32");
+        }
+    };
+
+    final Map<String, String> typeSuffixMap = new HashMap<String, String>() {
+        {
+            put("int32", "l");
+        }
+    };
+
+    final Map<String, String> opeMap = new HashMap<String, String>() {
+        {
+            put("==", "eq");
+            put("!=", "neq"); // fstar don't have
+                              // neq ope
+            put("<", "lt");
+            put("<=", "lte");
+            put(">", "gt");
+            put(">=", "gte");
+        }
+    };
+
     public Object filterObjException(Object obj) throws Exception {
         if (obj instanceof Exception) {
             Exception e = (Exception) obj;
@@ -29,71 +53,82 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         return obj;
     }
 
-    private String generateFstarFormat(List<String> rawValues, String op) throws Exception {
+    private String tmpSearchingLiteral = null;
+
+    private String generateFstarFormat(List<String> rawValues, List<String> types, String op) throws Exception {
 
         System.out.println(rawValues);
         System.out.println(op);
 
-        Map<String, String> fstarTypeMap = new HashMap<String, String>() {
-            {
-                put("int32", "I32");
-            }
-        };
-
-        Map<String, String> typeSuffixMap = new HashMap<String, String>() {
-            {
-                put("int32", "l");
-            }
-        };
-
         String xRawValue = rawValues.get(0);
+        String yRawValue = rawValues.get(1);
+
+        // int32 x, x > 0 となったとき、'0'はintegerのどの型であるかを推論
+        String xVariableType = types.get(0);
+        String yVariableType = types.get(1);
+
+        boolean xIsNumber = false;
+        boolean yIsNumber = false;
+
+        if (xVariableType.equals("unkowonIntType") && fstarTypeMap.get(yVariableType) != null) {
+            xVariableType = yVariableType;
+            xIsNumber = true;
+        } else if (yVariableType.equals("unkowonIntType") && fstarTypeMap.get(xVariableType) != null) {
+            yVariableType = xVariableType;
+            yIsNumber = true;
+        }
+
+        // x, yの型が異なる場合
+        if (xVariableType.equals(yVariableType) == false) { // string == int32, bool == string
+            throw new Exception("each type is different.");
+        } else { // string == string, int32 == int32
+
+        }
 
         String xFstarType = null;
 
-        String xVariableType = methodDeclaration.args.get(xRawValue);
+        // String xVariableType = methodDeclaration.args.get(xRawValue);
 
         if (methodDeclaration.args.get(xRawValue) != null) { // variable
             xFstarType = fstarTypeMap.get(xVariableType);
         } else if (xRawValue.equals("ret") == true) { // ret
-            xVariableType = methodDeclaration.returnType;
             xFstarType = fstarTypeMap.get(methodDeclaration.returnType);
         } else { // value
 
         }
 
-        String yRawValue = rawValues.get(1);
-
         String yFstarType = null;
 
-        String yVariableType = methodDeclaration.args.get(yRawValue);
+        // String yVariableType = methodDeclaration.args.get(yRawValue);
 
         if (methodDeclaration.args.get(yRawValue) != null) { // variable
             yFstarType = fstarTypeMap.get(yVariableType);
         } else if (yRawValue.equals("ret") == true) { // ret
-            yVariableType = methodDeclaration.returnType;
             yFstarType = fstarTypeMap.get(methodDeclaration.returnType);
         } else { // value
 
         }
 
         System.out.printf("xVariableType = %s, yVariableType = %s\n", xVariableType, yVariableType);
-        if (xVariableType == null && yVariableType != null) {
+
+        // 数字であればsuffixを追加
+        if (xIsNumber) {
             String suffix = typeSuffixMap.get(yVariableType);
             xRawValue += suffix;
-        } else if (xVariableType != null && yVariableType == null) {
+        } else if (yIsNumber) {
             String suffix = typeSuffixMap.get(xVariableType);
             yRawValue += suffix;
         }
 
         System.out.printf("%s, %s\n", xRawValue, yRawValue);
 
+        // 2 > 1 のような無駄な条件は無効
         if (xFstarType == null && yFstarType == null && xRawValue.equals("ret") == false
                 && yRawValue.equals("ret") == false) {
             throw new Exception("find no need formula");
         }
 
-        String type = null;
-
+        String type = null; // lt, gt など
         if (xFstarType != null) {
             System.out.printf("xFstarType: %s\n", xVariableType);
             type = xFstarType;
@@ -102,20 +137,10 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             type = yFstarType;
         }
 
-        Map<String, String> opeMap = new HashMap<String, String>() {
-            {
-                put("==", "eq");
-                put("!=", "neq"); // fstar don't have neq ope
-                put("<", "lt");
-                put("<=", "lte");
-                put(">", "gt");
-                put(">=", "gte");
-            }
-        };
-
         String fstarOpName = opeMap.get(op); // I32
         String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
 
+        // -3l などの数字の場合はカッコで囲う
         if (xRawValue.startsWith("-")) {
             xRawValue = String.format("(%s)", xRawValue);
         }
@@ -156,13 +181,27 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         }
 
         List<String> leafs = new ArrayList<>();
+        List<String> leafsType = new ArrayList<>();
         for (int i = 0; i < leafNum; i++) {
             Node n = node.jjtGetChild(i);
+            System.out.printf("node = %s\n", n);
             String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+
+            if (this.tmpSearchingLiteral == null) {
+                if (leaf.equals("ret")) {
+                    leafsType.add(methodDeclaration.returnType);
+                } else {
+                    leafsType.add(methodDeclaration.args.get(leaf));
+                }
+            } else {
+                leafsType.add(this.tmpSearchingLiteral);
+            }
+
             leafs.add(leaf);
+            this.tmpSearchingLiteral = null;
         }
 
-        String ret = generateFstarFormat(leafs, op);
+        String ret = generateFstarFormat(leafs, leafsType, op);
 
         return ret;
     }
@@ -261,18 +300,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     }
 
     @Override
-    public Object visit(ASTAdditiveExpression node, Object data) {
-        System.out.println(node);
-        try {
-            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
-        } catch (Exception e) {
-            return e;
-        }
-
-    }
-
-    @Override
-    public Object visit(ASTPrimaryPrefix node, Object data) {
+    public Object visit(ASTValueOrExpr node, Object data) {
         System.out.println(node);
         try {
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
@@ -301,7 +329,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             if (methodDeclaration.args.get(argName) == null && argName.equals(argName) == false) {
                 throw new Exception("find unkown variable");
             }
-
             return argName;
         } catch (Exception e) {
             return e;
@@ -313,6 +340,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.println(node);
         try {
             String ret = (String) node.jjtGetValue();
+
+            // 正確な型はこの時点では不明
+            this.tmpSearchingLiteral = "unkowonIntType";
             return ret;
         } catch (Exception e) {
             return e;
@@ -324,6 +354,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.println(node);
         try {
             String ret = (String) node.jjtGetValue();
+            this.tmpSearchingLiteral = "unkowonFloatType";
             return ret;
         } catch (Exception e) {
             return e;
@@ -335,7 +366,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTCharacter node, Object data) {
         System.out.println(node);
         try {
-            return node.jjtGetValue();
+            String ret = (String) node.jjtGetValue();
+            this.tmpSearchingLiteral = "char";
+            return ret;
         } catch (Exception e) {
             return e;
         }
@@ -346,7 +379,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTString node, Object data) {
         System.out.println(node);
         try {
-            return node.jjtGetValue();
+            String ret = (String) node.jjtGetValue();
+            this.tmpSearchingLiteral = "string";
+            return ret;
         } catch (Exception e) {
             return e;
         }
@@ -357,7 +392,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTBooleanLiteral node, Object data) {
         System.out.println(node);
         try {
-            return node.jjtGetValue();
+            String ret = (String) node.jjtGetValue();
+            this.tmpSearchingLiteral = "bool";
+            return ret;
         } catch (Exception e) {
             return e;
         }
@@ -367,7 +404,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTNullLiteral node, Object data) {
         System.out.println(node);
         try {
-            return node.jjtGetValue();
+            String ret = (String) node.jjtGetValue();
+            this.tmpSearchingLiteral = "null";
+            return ret;
         } catch (Exception e) {
             return e;
         }
