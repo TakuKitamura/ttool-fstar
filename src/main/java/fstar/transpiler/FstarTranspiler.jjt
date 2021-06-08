@@ -29,8 +29,8 @@ public class FstarTranspiler
     Map<String, String> map = new HashMap<String, String>();
 
     map.put("methodDeclaration", "int32 add(int32 x, int32 y)");
-    map.put("require", "x > 1.0 && y <= -10");
-    map.put("ensure", "0 == ret && ret == -3");
+    map.put("require", "x > 123 || y <= -10");
+    map.put("ensure", "0 < ret && ret == -3");
 
     try {
         String result = transpile(map);
@@ -266,18 +266,12 @@ void ConditionalOrExpression() :
   Token t = null;
 }
 {
-    ConditionalAndExpression() (t = < OR > ConditionalAndExpression(){
+    ConditionalAndExpression() (t = < OR > ConditionalAndExpression())*
 
-    } )*
-{
-//   Node x =  jjtThis.jjtGetChild(0);
-//   System.out.println(x);
-}
 }
 
 void ConditionalAndExpression() :
 {
-//   List tokens = new ArrayList();
   Token t = null;
 }
 {
@@ -290,30 +284,24 @@ void ConditionalAndExpression() :
 
 void EqualityExpression() :
 {
-//   List<String> ts = new ArrayList();
   Token t = null;
 }
 {
   RelationalExpression() (t = < EQUALITY > RelationalExpression()
   {
-    // ts.add(t.image.trim());
     jjtThis.jjtSetValue(t.image.trim());
   } )*
-{}
 }
 
 void RelationalExpression() :
 {
-//   List<String> ts = new ArrayList();
   Token t = null;
 }
 {
   AdditiveExpression() ( t = < RELATIONAL > AdditiveExpression()
   {
-    // ts.add(t.image.trim());
     jjtThis.jjtSetValue(t.image.trim());
   } )*
-{}
 }
 
 void AdditiveExpression() :
@@ -321,12 +309,6 @@ void AdditiveExpression() :
   Token t = null;
 }
 {
-//   t = < MINUS > PrimaryPrefix() {
-//       if (t.toString().equals("-")) {
-//         jjtThis.jjtSetValue(t.image.trim());
-//       }
-//   }
-// |
   PrimaryPrefix()
 }
 

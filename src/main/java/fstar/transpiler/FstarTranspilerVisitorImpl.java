@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // TODO: 整数以外の型への対応
+// TOOD: Exceptionクラスを具体的なものに変更
 
 public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
@@ -18,14 +19,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public FstarTranspilerVisitorImpl(MethodDeclaration methodDeclaration) {
         this.methodDeclaration = methodDeclaration;
     }
-
-    // private Map<String, String> typeMap = new HashMap<String, String>() {
-    // {
-    // put("int32", "I32");
-    // }
-    // };
-
-    private boolean haveMinusSign = false;
 
     // 関数宣言の読み取り結果
     private MethodDeclaration methodDeclaration = null;
@@ -41,12 +34,12 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         return obj;
     }
 
-    private String generateFstarFormat(List<String> values, String op) throws Exception {
+    private String generateFstarFormat(List<String> rawValues, String op) throws Exception {
 
-        System.out.println(values);
+        System.out.println(rawValues);
         System.out.println(op);
 
-        Map<String, String> typeMap = new HashMap<String, String>() {
+        Map<String, String> fstarTypeMap = new HashMap<String, String>() {
             {
                 put("int32", "I32");
             }
@@ -58,32 +51,32 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             }
         };
 
-        String x = values.get(0);
+        String xRawValue = rawValues.get(0);
 
-        String xType = null;
+        String xFstarType = null;
 
-        String xVariableType = methodDeclaration.args.get(x);
+        String xVariableType = methodDeclaration.args.get(xRawValue);
 
-        if (methodDeclaration.args.get(x) != null) { // variable
-            xType = typeMap.get(xVariableType);
-        } else if (x.equals("ret") == true) {
+        if (methodDeclaration.args.get(xRawValue) != null) { // variable
+            xFstarType = fstarTypeMap.get(xVariableType);
+        } else if (xRawValue.equals("ret") == true) { // ret
             xVariableType = methodDeclaration.returnType;
-            xType = typeMap.get(methodDeclaration.returnType);
+            xFstarType = fstarTypeMap.get(methodDeclaration.returnType);
         } else { // value
 
         }
 
-        String y = values.get(1);
+        String yRawValue = rawValues.get(1);
 
-        String yType = null;
+        String yFstarType = null;
 
-        String yVariableType = methodDeclaration.args.get(y);
+        String yVariableType = methodDeclaration.args.get(yRawValue);
 
-        if (methodDeclaration.args.get(y) != null) { // variable
-            yType = typeMap.get(yVariableType);
-        } else if (y.equals("ret") == true) {
+        if (methodDeclaration.args.get(yRawValue) != null) { // variable
+            yFstarType = fstarTypeMap.get(yVariableType);
+        } else if (yRawValue.equals("ret") == true) { // ret
             yVariableType = methodDeclaration.returnType;
-            yType = typeMap.get(methodDeclaration.returnType);
+            yFstarType = fstarTypeMap.get(methodDeclaration.returnType);
         } else { // value
 
         }
@@ -91,26 +84,27 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.printf("xVariableType = %s, yVariableType = %s\n", xVariableType, yVariableType);
         if (xVariableType == null && yVariableType != null) {
             String suffix = typeSuffixMap.get(yVariableType);
-            x += suffix;
+            xRawValue += suffix;
         } else if (xVariableType != null && yVariableType == null) {
             String suffix = typeSuffixMap.get(xVariableType);
-            y += suffix;
+            yRawValue += suffix;
         }
 
-        System.out.printf("%s, %s\n", x, y);
+        System.out.printf("%s, %s\n", xRawValue, yRawValue);
 
-        if (xType == null && yType == null && x.equals("ret") == false && y.equals("ret") == false) {
+        if (xFstarType == null && yFstarType == null && xRawValue.equals("ret") == false
+                && yRawValue.equals("ret") == false) {
             throw new Exception("find no need formula");
         }
 
         String type = null;
 
-        if (xType != null) {
-            System.out.printf("xType: %s\n", xVariableType);
-            type = xType;
+        if (xFstarType != null) {
+            System.out.printf("xFstarType: %s\n", xVariableType);
+            type = xFstarType;
         } else {
-            System.out.printf("yType: %s\n", yVariableType);
-            type = yType;
+            System.out.printf("yFstarType: %s\n", yVariableType);
+            type = yFstarType;
         }
 
         Map<String, String> opeMap = new HashMap<String, String>() {
@@ -127,21 +121,75 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         String fstarOpName = opeMap.get(op); // I32
         String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
 
-        if (x.startsWith("-")) {
-            x = String.format("(%s)", x);
+        if (xRawValue.startsWith("-")) {
+            xRawValue = String.format("(%s)", xRawValue);
         }
 
-        if (y.startsWith("-")) {
-            y = String.format("(%s)", y);
+        if (yRawValue.startsWith("-")) {
+            yRawValue = String.format("(%s)", yRawValue);
         }
 
-        String ret = String.format("(%s %s %s)", fstarOp, x, y);
+        String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
         if (op.equals("neq")) {
             String[] sepalate_op = op.split(" ", 2);
             String not = sepalate_op[0]; // not
             op = sepalate_op[1]; // I32
-            ret = String.format("(%s (%s %s %s))", not, fstarOp, x, y);
+            ret = String.format("(%s (%s %s %s))", not, fstarOp, xRawValue, yRawValue);
         }
+
+        return ret;
+    }
+
+    private Object convertToFstarSpecFormat(Node node) throws Exception {
+
+        int leafNum = node.jjtGetNumChildren();
+
+        if (leafNum == 1) {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
+        }
+
+        String op = null;
+
+        if (node instanceof ASTEqualityExpression) {
+            ASTEqualityExpression equalityNode = (ASTEqualityExpression) node;
+            op = (String) equalityNode.jjtGetValue();
+        } else if (node instanceof ASTRelationalExpression) {
+            ASTRelationalExpression relationalNode = (ASTRelationalExpression) node;
+            op = (String) relationalNode.jjtGetValue();
+        } else {
+            throw new Exception("find invalid node");
+        }
+
+        List<String> leafs = new ArrayList<>();
+        for (int i = 0; i < leafNum; i++) {
+            Node n = node.jjtGetChild(i);
+            String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+            leafs.add(leaf);
+        }
+
+        String ret = generateFstarFormat(leafs, op);
+
+        return ret;
+    }
+
+    private Object assembleAndOrExpression(Node node, String ope) throws Exception {
+        String ret = "(";
+
+        int leafNum = node.jjtGetNumChildren();
+
+        if (leafNum == 1) {
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
+        }
+
+        for (int i = 0; i < leafNum; i++) {
+            Node n = node.jjtGetChild(i);
+            String leaf = filterObjException(n.jjtAccept(this, null)).toString();
+            ret += leaf;
+            if (i != leafNum - 1) {
+                ret += String.format(" %s ", ope);
+            }
+        }
+        ret += ")";
 
         return ret;
     }
@@ -155,7 +203,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTConditionRoot node, Object data) {
         System.out.println(node);
-
         try {
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
         } catch (Exception e) {
@@ -179,25 +226,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.println(node);
 
         try {
-            String ret = "(";
-
-            int leafNum = node.jjtGetNumChildren();
-
-            if (leafNum == 1) {
-                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
-            }
-
-            for (int i = 0; i < leafNum; i++) {
-                Node n = node.jjtGetChild(i);
-                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
-                ret += leaf;
-                if (i != leafNum - 1) {
-                    ret += " || ";
-                }
-            }
-            ret += ")";
-
-            return ret;
+            return assembleAndOrExpression(node, "||");
         } catch (Exception e) {
             return e;
         }
@@ -208,27 +237,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTConditionalAndExpression node, Object data) {
         System.out.println(node);
         try {
-
-            String ret = "(";
-
-            int leafNum = node.jjtGetNumChildren();
-
-            if (leafNum == 1) {
-                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
-            }
-
-            for (int i = 0; i < leafNum; i++) {
-                Node n = node.jjtGetChild(i);
-                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
-                ret += leaf;
-                if (i != leafNum - 1) {
-                    ret += " && ";
-                }
-            }
-
-            ret += ")";
-
-            return ret;
+            return assembleAndOrExpression(node, "&&");
         } catch (Exception e) {
             return e;
         }
@@ -238,25 +247,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTEqualityExpression node, Object data) {
         System.out.println(node);
         try {
-
-            int leafNum = node.jjtGetNumChildren();
-
-            if (leafNum == 1) {
-                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
-            }
-
-            String op = (String) node.jjtGetValue();
-
-            List<String> leafs = new ArrayList<>();
-            for (int i = 0; i < leafNum; i++) {
-                Node n = node.jjtGetChild(i);
-                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
-                leafs.add(leaf);
-            }
-
-            String ret = generateFstarFormat(leafs, op);
-
-            return ret;
+            return convertToFstarSpecFormat(node);
         } catch (Exception e) {
             return e;
         }
@@ -266,26 +257,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTRelationalExpression node, Object data) {
         System.out.println(node);
-
         try {
-            int leafNum = node.jjtGetNumChildren();
-
-            if (leafNum == 1) {
-                return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
-            }
-
-            String op = (String) node.jjtGetValue();
-
-            List<String> leafs = new ArrayList<>();
-            for (int i = 0; i < leafNum; i++) {
-                Node n = node.jjtGetChild(i);
-                String leaf = filterObjException(n.jjtAccept(this, null)).toString();
-                leafs.add(leaf);
-            }
-
-            String ret = generateFstarFormat(leafs, op);
-
-            return ret;
+            return convertToFstarSpecFormat(node);
         } catch (Exception e) {
             return e;
         }
@@ -296,10 +269,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTAdditiveExpression node, Object data) {
         System.out.println(node);
         try {
-            // if (node.jjtGetValue() != null && node.jjtGetValue().toString().equals("-"))
-            // {
-            // this.haveMinusSign = true;
-            // }
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
         } catch (Exception e) {
             return e;
@@ -348,14 +317,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTInteger node, Object data) {
         System.out.println(node);
         try {
-
             String ret = (String) node.jjtGetValue();
-
-            // if (this.haveMinusSign) {
-            // ret = "-" + ret;
-            // this.haveMinusSign = false;
-            // }
-
             return ret;
         } catch (Exception e) {
             return e;
@@ -366,14 +328,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public Object visit(ASTFloating node, Object data) {
         System.out.println(node);
         try {
-
             String ret = (String) node.jjtGetValue();
-
-            // if (this.haveMinusSign) {
-            // ret = "-" + ret;
-            // this.haveMinusSign = false;
-            // }
-
             return ret;
         } catch (Exception e) {
             return e;
