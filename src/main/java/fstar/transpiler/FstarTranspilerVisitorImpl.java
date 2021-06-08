@@ -23,9 +23,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     // 関数宣言の読み取り結果
     private MethodDeclaration methodDeclaration = null;
 
-    // 読み取ったリファインメントタイプの変数と値
-    private Map<String, String> argMap = new HashMap<String, String>();
-
     public Object filterObjException(Object obj) throws Exception {
         if (obj instanceof Exception) {
             Exception e = (Exception) obj;
