@@ -319,7 +319,7 @@ void PrimaryPrefix() :
 {
   Literal()
   |
-  Name()  
+  Variable()  
   |
   < OPEN_BRACKET > Expr() < CLOSE_BRACKET >
 }
@@ -344,9 +344,9 @@ void Literal() :
 }
 
 
-void Name() :
+void Variable() :
 /*
- * A lookahead of 2 is required below since "Name" can be followed
+ * A lookahead of 2 is required below since "Variable" can be followed
  * by a ".*" when used in the context of an "ImportDeclaration".
  */
 {Token t = null;}
