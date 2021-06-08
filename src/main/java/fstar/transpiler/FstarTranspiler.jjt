@@ -20,17 +20,33 @@ import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class FstarTranspiler
 {
-  
-  
+  public static String upperCaseFirst(String val) {
+    char[] arr = val.toCharArray();
+    arr[0] = Character.toUpperCase(arr[0]);
+    return new String(arr);
+  }
+
+  public static String readAll(String path) throws IOException {
+    Path fileName = Paths.get(path);
+    String readFile = Files.readString(fileName);
+    // System.out.println(actual);
+    return readFile;
+  }
+
   public static void main(String [] args) {
 
     Map<String, String> map = new HashMap<String, String>();
 
     map.put("methodDeclaration", "int32 add(int32 x, int32 y)");
-    map.put("require", "x > 123 || y <= -10 || x == y");
-    map.put("ensure", "0 < ret && ret == -3");
+    map.put("require", "x >= 0 && y >= 0");
+    map.put("ensure", "ret >= 0");
 
     try {
         String result = transpile(map);
@@ -66,7 +82,7 @@ public class FstarTranspiler
 
     String requireParserResult = (String)ret;
 
-    System.out.println(requireParserResult);
+    System.out.printf("require = %s\n", requireParserResult);
     System.out.println("");
 
     InputStream ensureInput = new ByteArrayInputStream(map.get("ensure").getBytes());
@@ -78,10 +94,73 @@ public class FstarTranspiler
 
     String ensureParserResult = (String)ret;
 
-    System.out.println(ensureParserResult);
+    System.out.printf("ensure = %s\n", ensureParserResult);
     System.out.println("");
 
-    return "hoge";
+    // generateWorkFstarCode
+
+    methodDeclaration = visiter.methodDeclaration;
+
+    String funcName = methodDeclaration.funcName;
+    String moduleName = upperCaseFirst(funcName);
+    String retValueType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.returnType));
+    System.out.println(retValueType);
+
+    String initValue = "0";
+    String ngRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
+
+    List<String> argsName = new ArrayList<String>(methodDeclaration.args.keySet());
+    
+    // requireParserResult
+    // ensureParserResult
+
+    String args = ""; // x, y
+    String funcArg = ""; // x: I32.t ->\n  y: I32.t ->
+
+    for (int i = 0; i < argsName.size(); i++) {
+
+        String argName = argsName.get(i);
+        args += String.format("%s ", argName);
+
+        String argType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.args.get(argName)));
+        funcArg += String.format("%s: %s ->\n  ", argName, argType);
+    }
+
+    String initRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
+
+    String retArgs = args + "ret";
+
+    // System.out.println(visiter.usedArgsInRequire);
+
+    String fstarCode = null;
+    try {
+        fstarCode = readAll("./fstar/transpiler/fstar.templ");
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+
+    fstarCode = fstarCode.replaceAll("@module_name@", moduleName); // funcName
+
+    fstarCode = fstarCode.replaceAll("@ret_value_type@", retValueType); // return.type
+
+    fstarCode = fstarCode.replaceAll("@ng_ret_value@", ngRetValue); // どうするか検討
+
+    fstarCode = fstarCode.replaceAll("@require@", requireParserResult);// パース結果から構成
+
+    fstarCode = fstarCode.replaceAll("@ensure@", ensureParserResult); // パース結果から構成
+
+    fstarCode = fstarCode.replaceAll("@func_name@", funcName); // funcName
+
+    fstarCode = fstarCode.replaceAll("@args@", args); // method.args
+
+    fstarCode = fstarCode.replaceAll("@init_ret_value@", initRetValue); // 検討
+
+    fstarCode = fstarCode.replaceAll("@func_arg@", funcArg); // method.args
+
+    fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
+    System.out.println(fstarCode);
+
+    return "";
   }
 }
 

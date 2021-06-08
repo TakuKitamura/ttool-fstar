@@ -12,20 +12,26 @@ public class GenerateFstar {
             System.out.println(e);
         }
 
-        fstarCode = fstarCode.replaceAll("@module_name@", "Add");
-        fstarCode = fstarCode.replaceAll("@ret_integer_type@", "I32");
-        fstarCode = fstarCode.replaceAll("@ret_integer_type_suffix@", "l");
-        fstarCode = fstarCode.replaceAll("@arg_constraint@",
-                "let xConstraint x = I32.gte x 1l && I32.lte x 100l\nlet yConstraint y = I32.gte y 1l && I32.lte y 100l");
-        fstarCode = fstarCode.replaceAll("@ret_constraint@",
-                "let retConstraint ret = I32.gte ret 2l && I32.lte ret 200l");
-        fstarCode = fstarCode.replaceAll("@interface_func_name@", "add");
-        fstarCode = fstarCode.replaceAll("@interface_func_body_arg@", "x: I32.t ->\n  y: I32.t ->");
-        fstarCode = fstarCode.replaceAll("@interface_func_body_arg_require@", "xConstraint x && yConstraint y");
-        fstarCode = fstarCode.replaceAll("@args@", "x y");
-        fstarCode = fstarCode.replaceAll("@unimplemented_func_ret_value@", "2");
-        fstarCode = fstarCode.replaceAll("@interface_func_arg@", "x: I32.t ->\n  y: I32.t ->");
-        fstarCode = fstarCode.replaceAll("@valid_func_body_call_condition@", "(xConstraint x) && (yConstraint y)");
+        fstarCode = fstarCode.replaceAll("@module_name@", "Add"); // funcName
+
+        fstarCode = fstarCode.replaceAll("@ret_value_type@", "I32.t"); // return.type
+
+        fstarCode = fstarCode.replaceAll("@ng_ret_value@", "0l"); // どうするか検討
+
+        fstarCode = fstarCode.replaceAll("@require@", // パース結果から構成
+                "I32.gte x 1l && I32.lte y 100l");
+
+        fstarCode = fstarCode.replaceAll("@ensure@", "I32.gte ret 2l && I32.lte ret 200l"); // パース結果から構成
+
+        fstarCode = fstarCode.replaceAll("@func_name@", "add"); // funcName
+
+        fstarCode = fstarCode.replaceAll("@args@", "x y"); // method.args
+
+        fstarCode = fstarCode.replaceAll("@init_ret_value@", "2l"); // 検討
+
+        fstarCode = fstarCode.replaceAll("@func_arg@", "x: I32.t ->\n  y: I32.t ->"); // method.args
+
+        fstarCode = fstarCode.replaceAll("@ret_args@", "ret"); // パース結果から構成, ret を最後に持ってくる
         System.out.println(fstarCode);
     }
 

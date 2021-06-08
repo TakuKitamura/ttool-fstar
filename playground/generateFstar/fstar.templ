@@ -31,41 +31,41 @@ let ng_error: struct_error =
     }
 
 type struct_ret = {
-    value: @ret_integer_type@.t;
+    value: @ret_value_type@;
     error: struct_error;
 }
 
 let ng_ret: struct_ret = {
-    value = 0@ret_integer_type_suffix@;
+    value = @ng_ret_value@;
     error = ng_error;
 }
 
-@arg_constraint@
+let argConstraint @args@ = @require@
 
-@ret_constraint@
+let retConstraint @ret_args@ = @ensure@
 
-val @interface_func_name@_body:
-  @interface_func_body_arg@
-Stack (ret: @ret_integer_type@.t) (requires fun h0 -> 
-    @interface_func_body_arg_require@
+val @func_name@_body:
+  @func_arg@
+Stack (ret: @ret_value_type@) (requires fun h0 -> 
+    argConstraint @args@
   )
   (ensures fun h0 ret h1 -> 
-    retConstraint ret
+    retConstraint @ret_args@
   )
-let @interface_func_name@_body @args@ = @unimplemented_func_ret_value@@ret_integer_type_suffix@
+let @func_name@_body @args@ = @init_ret_value@
 
-val @interface_func_name@: 
-  @interface_func_arg@
+val @func_name@: 
+  @func_arg@
   Stack (ret: struct_ret) (requires fun h0 -> 
     true
   )
   (ensures fun h0 ret h1 -> 
-    (retConstraint ret.value && I32.v ret.error.code = 0) || (I32.v ret.error.code > 0)
+    (retConstraint @ret_args@.value && I32.v ret.error.code = 0) || (I32.v ret.error.code > 0)
   )
-let @interface_func_name@ @args@ = 
-  if @valid_func_body_call_condition@ then
+let @func_name@ @args@ = 
+  if (argConstraint @args@) then
     {
-        value = @interface_func_name@_body @args@;
+        value = @func_name@_body @args@;
         error = none_error;
     }
   else

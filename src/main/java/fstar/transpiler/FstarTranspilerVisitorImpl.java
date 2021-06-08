@@ -19,15 +19,15 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     }
 
     // 関数宣言の読み取り結果
-    private MethodDeclaration methodDeclaration = null;
+    public MethodDeclaration methodDeclaration = null;
 
-    final Map<String, String> fstarTypeMap = new HashMap<String, String>() {
+    public final Map<String, String> fstarTypeMap = new HashMap<String, String>() {
         {
             put("int32", "I32");
         }
     };
 
-    final Map<String, String> typeSuffixMap = new HashMap<String, String>() {
+    public final Map<String, String> typeSuffixMap = new HashMap<String, String>() {
         {
             put("int32", "l");
         }
@@ -55,6 +55,11 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
     private String tmpSearchingLiteral = null;
 
+    public List<String> usedArgsInRequire = new ArrayList<String>();
+    public List<String> usedArgsInEnsure = new ArrayList<String>();
+
+    private int callConditionRootCounter = 0; // 1のときrequireParse, 2のときensureParse
+
     private String generateFstarFormat(List<String> rawValues, List<String> types, String op) throws Exception {
 
         System.out.println(rawValues);
@@ -67,6 +72,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         String xVariableType = types.get(0);
         String yVariableType = types.get(1);
 
+        // System.out.println(xVariableType);
+        // System.out.println(yVariableType);
+
         boolean xIsNumber = false;
         boolean yIsNumber = false;
 
@@ -78,6 +86,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             yIsNumber = true;
         }
 
+        System.out.println(123);
         // x, yの型が異なる場合
         if (xVariableType.equals(yVariableType) == false) { // string == int32, bool == string
             throw new Exception("each type is different.");
@@ -165,6 +174,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         int leafNum = node.jjtGetNumChildren();
 
         if (leafNum == 1) {
+            System.out.println(333);
+            System.out.println(this.tmpSearchingLiteral);
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
         }
 
@@ -189,17 +200,22 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
             if (this.tmpSearchingLiteral == null) {
                 if (leaf.equals("ret")) {
+                    System.out.println(1);
                     leafsType.add(methodDeclaration.returnType);
                 } else {
+                    System.out.println(2);
                     leafsType.add(methodDeclaration.args.get(leaf));
                 }
             } else {
+                System.out.println(3);
                 leafsType.add(this.tmpSearchingLiteral);
             }
 
             leafs.add(leaf);
             this.tmpSearchingLiteral = null;
         }
+
+        System.out.printf("leafType === %s\n", leafsType);
 
         String ret = generateFstarFormat(leafs, leafsType, op);
 
@@ -237,6 +253,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTConditionRoot node, Object data) {
         System.out.println(node);
+
+        this.tmpSearchingLiteral = null; // requireを探査したあとに、初期状態に戻したいため
+        callConditionRootCounter += 1;
         try {
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
         } catch (Exception e) {
@@ -325,6 +344,14 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         try {
 
             String argName = (String) node.jjtGetValue();
+
+            if (callConditionRootCounter == 1) {
+                usedArgsInRequire.add(argName);
+            } else if (callConditionRootCounter == 2) {
+                usedArgsInEnsure.add(argName);
+            } else {
+                throw new Exception("unexpected call astConditionRoot");
+            }
 
             if (methodDeclaration.args.get(argName) == null && argName.equals(argName) == false) {
                 throw new Exception("find unkown variable");
