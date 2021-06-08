@@ -47,6 +47,8 @@ public class FstarTranspiler
     map.put("methodDeclaration", "int32 add(int32 x, int32 y)");
     map.put("require", "x >= 0 && y >= 0");
     map.put("ensure", "ret >= 0");
+    map.put("okInitRetValue", "0");
+    map.put("ngInitRetValue", "0");
 
     try {
         String result = transpile(map);
@@ -80,9 +82,9 @@ public class FstarTranspiler
         requireParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String requireParserResult = (String)ret;
+    String require = (String)ret;
 
-    System.out.printf("require = %s\n", requireParserResult);
+    System.out.printf("require = %s\n", require);
     System.out.println("");
 
     InputStream ensureInput = new ByteArrayInputStream(map.get("ensure").getBytes());
@@ -92,9 +94,9 @@ public class FstarTranspiler
         ensureParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String ensureParserResult = (String)ret;
+    String ensure = (String)ret;
 
-    System.out.printf("ensure = %s\n", ensureParserResult);
+    System.out.printf("ensure = %s\n", ensure);
     System.out.println("");
 
     // generateWorkFstarCode
@@ -106,16 +108,17 @@ public class FstarTranspiler
     String retValueType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.returnType));
     System.out.println(retValueType);
 
-    String initValue = "0";
-    String ngRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
+    String initValue = map.get("okInitRetValue");
+    String ngValue = map.get("ngInitRetValue");
+    String ngInitRetValue = String.format("%s%s", ngValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
 
     List<String> argsName = new ArrayList<String>(methodDeclaration.args.keySet());
     
-    // requireParserResult
-    // ensureParserResult
+    // require
+    // ensure
 
     String args = ""; // x, y
-    String funcArg = ""; // x: I32.t ->\n  y: I32.t ->
+    String fstarFuncArgs = ""; // x: I32.t ->\n  y: I32.t ->
 
     for (int i = 0; i < argsName.size(); i++) {
 
@@ -123,10 +126,10 @@ public class FstarTranspiler
         args += String.format("%s ", argName);
 
         String argType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.args.get(argName)));
-        funcArg += String.format("%s: %s ->\n  ", argName, argType);
+        fstarFuncArgs += String.format("%s: %s ->\n  ", argName, argType);
     }
 
-    String initRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
+    String okInitRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
 
     String retArgs = args + "ret";
 
@@ -143,19 +146,19 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_value_type@", retValueType); // return.type
 
-    fstarCode = fstarCode.replaceAll("@ng_ret_value@", ngRetValue); // どうするか検討
+    fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", ngInitRetValue); // どうするか検討
 
-    fstarCode = fstarCode.replaceAll("@require@", requireParserResult);// パース結果から構成
+    fstarCode = fstarCode.replaceAll("@require@", require);// パース結果から構成
 
-    fstarCode = fstarCode.replaceAll("@ensure@", ensureParserResult); // パース結果から構成
+    fstarCode = fstarCode.replaceAll("@ensure@", ensure); // パース結果から構成
 
     fstarCode = fstarCode.replaceAll("@func_name@", funcName); // funcName
 
     fstarCode = fstarCode.replaceAll("@args@", args); // method.args
 
-    fstarCode = fstarCode.replaceAll("@init_ret_value@", initRetValue); // 検討
+    fstarCode = fstarCode.replaceAll("@ok_init_ret_value@", okInitRetValue); // 検討
 
-    fstarCode = fstarCode.replaceAll("@func_arg@", funcArg); // method.args
+    fstarCode = fstarCode.replaceAll("@fstar_func_args@", fstarFuncArgs); // method.args
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
     System.out.println(fstarCode);
