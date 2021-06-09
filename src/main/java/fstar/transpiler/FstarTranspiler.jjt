@@ -105,7 +105,9 @@ public class FstarTranspiler
 
     String funcName = methodDeclaration.funcName;
     String moduleName = upperCaseFirst(funcName);
-    String retValueType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.returnType));
+
+    String retFstarType = visiter.fstarTypeMap.get(methodDeclaration.returnType);
+    String retValueType = String.format("%s.t", retFstarType);
     System.out.println(retValueType);
 
     String initValue = map.get("okInitRetValue");
@@ -162,6 +164,40 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
     System.out.println(fstarCode);
+
+    // Testing_test_start("Add Test");
+    // Testing_eq_i32("Add Test Case1", 3, add(1, 2).value);
+
+    String testTitle = "Unit Test";
+    String testStartFunc = String.format("Testing_test_start(\"%s\");\n", testTitle);
+    // String testCaseTitle = "Add Test Case1";
+
+    String[][]testArgs =  {
+        {"1", "2"},
+        {"2", "3"}
+    };
+    String[]expected = {"3", "5"};
+
+    String testFuncs = "";
+    for (int i = 0; i < expected.length; i++) {
+        String testCaseTitle = String.format("%s Func Test Case%d", moduleName, i);
+        String testFuncName = String.format("Testing_eq_%s", retFstarType.toLowerCase());
+        String callCFunc = String.format("%s(", funcName);
+        for (int j = 0; j < testArgs.length; j++) {
+            callCFunc += testArgs[i][j];
+            if (j != testArgs.length - 1) {
+                callCFunc += ", ";
+            } else {
+                callCFunc += ")";
+            }
+        }
+        String testFunc = String.format("%s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, expected[i], callCFunc);
+        testFuncs += testFunc;
+    }
+
+    System.out.println(testStartFunc);
+    System.out.println(testFuncs);
+    System.out.println("Testing_test_end();");
 
     return "";
   }
