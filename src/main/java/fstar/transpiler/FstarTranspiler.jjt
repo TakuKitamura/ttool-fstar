@@ -24,6 +24,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.util.stream.Stream;
+
+import java.util.Iterator;
 
 public class FstarTranspiler
 {
@@ -38,6 +46,13 @@ public class FstarTranspiler
     String readFile = Files.readString(fileName);
     // System.out.println(actual);
     return readFile;
+  }
+
+  public static void writeAll(String path, String content) throws IOException {
+    FileWriter file = new FileWriter(path);
+    PrintWriter pw = new PrintWriter(new BufferedWriter(file));
+    pw.println(content);
+    pw.close();
   }
 
   public static void main(String [] args) {
@@ -151,7 +166,7 @@ public class FstarTranspiler
 
     String fstarCode = null;
     try {
-        fstarCode = readAll("./fstar/transpiler/fstar.templ");
+        fstarCode = readAll("./fstar/transpiler/tmpl/fstar.tmpl");
     } catch (Exception e) {
         System.out.println(e);
     }
@@ -182,7 +197,7 @@ public class FstarTranspiler
 
     // TODO: 一つの関数の一つのエラーを強制するか
 
-    String testTitle = "Unit Test";
+    String testTitle = String.format("%s Func Unit Test", moduleName);
     String testStartFunc = String.format("Testing_test_start(\"%s\");\n", testTitle);
     // String testCaseTitle = "Add Test Case1";
 
@@ -192,7 +207,7 @@ public class FstarTranspiler
 
     String testFuncs = "";
     for (int i = 0; i < testExpectedResult.length; i++) {
-        String testCaseTitle = String.format("%s Func Test Case%d", moduleName, i + 1);
+        String testCaseTitle = String.format("Test Case%d", i + 1);
         String testFuncName = String.format("Testing_eq_%s", retFstarType.toLowerCase());
         String callCFunc = String.format("%s(", funcName);
         for (int j = 0; j < testFuncArgs.length; j++) {
@@ -209,13 +224,72 @@ public class FstarTranspiler
                 callCFunc += ")";
             }
         }
-        String testFunc = String.format("%s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, testExpectedResult[i], callCFunc);
+        String testFunc = String.format("  %s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, testExpectedResult[i], callCFunc);
         testFuncs += testFunc;
     }
 
-    System.out.println(testStartFunc);
-    System.out.println(testFuncs);
-    System.out.println("Testing_test_end();");
+    // System.out.println(testStartFunc);
+    // System.out.println(testFuncs);
+
+    String testEnd = "Testing_test_end();";
+    // System.out.println("Testing_test_end();");
+
+    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testFuncs, testEnd);
+
+    String testCode = null;
+
+    testCode = readAll("./fstar/transpiler/tmpl/test_c.tmpl");
+
+    testCode = testCode.replaceAll("@header_name@", moduleName);
+    testCode = testCode.replaceAll("@test_codes@", testCodes);
+
+    System.out.println(testCode);
+
+    String mainCode = null;
+
+    mainCode = readAll("./fstar/transpiler/tmpl/main_c.tmpl");
+
+    mainCode = mainCode.replaceAll("@func_name@", funcName);
+
+    System.out.println(mainCode);
+
+    String makefileCode = null;
+
+    makefileCode = readAll("./fstar/transpiler/tmpl/makefile.tmpl");
+    makefileCode = makefileCode.replaceAll("@func_name@", funcName);
+    makefileCode = makefileCode.replaceAll("@module_name@", moduleName);
+
+    System.out.println(makefileCode);
+
+    String dirPath = String.format("/tmp/%s", funcName);
+
+    Path p = Paths.get(dirPath);
+
+    // System.out.println(p.listFiles());
+
+    if (Files.exists(p)) {
+        Stream<Path>childrens = Files.list(p);
+
+        for (Iterator<Path> iterator = childrens.iterator(); iterator.hasNext();) {
+            Path childrenPath = iterator.next();
+            Files.delete(childrenPath);
+        }
+        Files.delete(p);
+    }
+
+    Files.createDirectory(p);
+
+    String fstarFilePath = String.format("%s/%s", dirPath, String.format("%s.fst", funcName));
+    writeAll(fstarFilePath, fstarCode);
+
+    String mainFilePath = String.format("%s/%s", dirPath, "main.c");
+    writeAll(mainFilePath, mainCode);
+
+    String testFilePath = String.format("%s/%s", dirPath, "test.c");
+    writeAll(testFilePath, testCode);
+
+    String makefilePath = String.format("%s/%s", dirPath, "Makefile");
+    writeAll(makefilePath, makefileCode);
 
     return "";
   }
