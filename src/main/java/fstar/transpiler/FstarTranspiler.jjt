@@ -263,32 +263,32 @@ public class FstarTranspiler
 
     String dirPath = String.format("/tmp/%s", funcName);
 
-    Path p = Paths.get(dirPath);
+    Path dp = Paths.get(dirPath);
 
     // System.out.println(p.listFiles());
 
-    if (Files.exists(p)) {
-        Stream<Path>childrens = Files.list(p);
-
-        for (Iterator<Path> iterator = childrens.iterator(); iterator.hasNext();) {
-            Path childrenPath = iterator.next();
-            Files.delete(childrenPath);
-        }
-        Files.delete(p);
-    }
-
-    Files.createDirectory(p);
 
     String fstarFilePath = String.format("%s/%s", dirPath, String.format("%s.fst", funcName));
+    String mainFilePath = String.format("%s/%s", dirPath, "main.c");
+    String testFilePath = String.format("%s/%s", dirPath, "test.c");
+    String makefilePath = String.format("%s/%s", dirPath, "Makefile");
+
+    if (Files.exists(dp)) {
+        Files.deleteIfExists(Paths.get(fstarFilePath));
+        Files.deleteIfExists(Paths.get(mainFilePath));
+        Files.deleteIfExists(Paths.get(testFilePath));
+        Files.deleteIfExists(Paths.get(makefilePath));
+    } else {
+        Files.createDirectory(dp);
+    }
+
     writeAll(fstarFilePath, fstarCode);
 
-    String mainFilePath = String.format("%s/%s", dirPath, "main.c");
     writeAll(mainFilePath, mainCode);
 
-    String testFilePath = String.format("%s/%s", dirPath, "test.c");
+
     writeAll(testFilePath, testCode);
 
-    String makefilePath = String.format("%s/%s", dirPath, "Makefile");
     writeAll(makefilePath, makefileCode);
 
     return "";
