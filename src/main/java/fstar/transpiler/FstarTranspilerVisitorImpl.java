@@ -23,13 +23,27 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
     public final Map<String, String> fstarTypeMap = new HashMap<String, String>() {
         {
+            put("int8", "I8");
+            put("int16", "I16");
             put("int32", "I32");
+            put("int64", "I64");
+            put("uint8", "U8");
+            put("uint16", "U16");
+            put("uint32", "U32");
+            put("uint64", "U64");
         }
     };
 
     public final Map<String, String> typeSuffixMap = new HashMap<String, String>() {
         {
+            put("int8", "y");
+            put("int16", "s");
             put("int32", "l");
+            put("int64", "L");
+            put("uint8", "uy");
+            put("uint16", "us");
+            put("uint32", "ul");
+            put("uint64", "UL");
         }
     };
 
