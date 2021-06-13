@@ -55,10 +55,10 @@ Stack (ret: struct_ret) (requires fun h0 ->
     retConstraint @ret_args@.value ret.error
   )
 let @func_name@_body @args@ =
-    {
-        value = @ok_init_ret_value@;
-        error = none_error;
-    }
+  {
+      value = @ok_init_ret_value@;
+      error = none_error;
+  }
 
 val @func_name@: 
   @fstar_func_args@
