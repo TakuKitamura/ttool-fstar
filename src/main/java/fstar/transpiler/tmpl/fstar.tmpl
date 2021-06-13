@@ -8,10 +8,12 @@ open C.String
 module I8 = FStar.Int8
 module I16 = FStar.Int16
 module I32 = FStar.Int32
+module I64 = FStar.Int64
 
 module U8 = FStar.UInt8
 module U16 = FStar.UInt16
 module U32 = FStar.UInt32
+module U64 = FStar.UInt64
 
 type struct_error = {
   code: I32.t;
@@ -42,17 +44,21 @@ let ng_ret: struct_ret = {
 
 let argConstraint @args@ = @require@
 
-let retConstraint @ret_args@ = @ensure@
+let retConstraint @ret_args@ ret_error = (@ensure@ && I32.v ret_error.code = 0) || (I32.v ret_error.code > 0)
 
 val @func_name@_body:
   @fstar_func_args@
-Stack (ret: @ret_value_type@) (requires fun h0 -> 
+Stack (ret: struct_ret) (requires fun h0 -> 
     argConstraint @args@
   )
   (ensures fun h0 ret h1 -> 
-    retConstraint @ret_args@
+    retConstraint @ret_args@.value ret.error
   )
-let @func_name@_body @args@ = @ok_init_ret_value@
+let @func_name@_body @args@ =
+    {
+        value = @ok_init_ret_value@;
+        error = none_error;
+    }
 
 val @func_name@: 
   @fstar_func_args@
@@ -60,13 +66,10 @@ val @func_name@:
     true
   )
   (ensures fun h0 ret h1 -> 
-    (retConstraint @ret_args@.value && I32.v ret.error.code = 0) || (I32.v ret.error.code > 0)
+    retConstraint @ret_args@.value ret.error
   )
 let @func_name@ @args@ = 
   if (argConstraint @args@) then
-    {
-        value = @func_name@_body @args@;
-        error = none_error;
-    }
+    @func_name@_body @args@
   else
     ng_ret
