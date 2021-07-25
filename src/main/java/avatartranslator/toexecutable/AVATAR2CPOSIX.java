@@ -102,19 +102,19 @@ public class AVATAR2CPOSIX {
 
     public void saveInFiles(String path) throws FileException {
 
-        // TraceManager.addDev("save In Files AVATAR2CPOSIX");
+        TraceManager.addDev("save In Files AVATAR2CPOSIX");
         if (!SpecConfigTTool.checkAndCreateAVATARCodeDir(path)) {
             TraceManager.addDev("Directory cannot be created: " + path);
             throw new FileException("ERROR: Executable code directory cannot be created.");
         }
-        // TraceManager.addDev("Creating dir for saving generated code");
+        TraceManager.addDev("Creating dir for saving generated code");
         File src_dir = new File(path + GENERATED_PATH);
         if (!src_dir.exists()) {
             TraceManager.addDev("Creating: " + src_dir.getAbsolutePath());
             src_dir.mkdir();
         }
 
-        // TraceManager.addDev("Generating main file");
+        TraceManager.addDev("Generating main file");
         if (mainFile != null) {
             TraceManager.addDev("Generating main files in " + path + mainFile.getName() + ".h");
             FileUtils.saveFile(path + GENERATED_PATH + mainFile.getName() + ".h",
@@ -123,7 +123,7 @@ public class AVATAR2CPOSIX {
                     Conversion.indentString(mainFile.getMainCode(), 2));
         }
 
-        // TraceManager.addDev("Generating task files");
+        TraceManager.addDev("Generating task files");
         for (TaskFile taskFile : taskFiles) {
             TraceManager.addDev("Generating task files: " + (path + GENERATED_PATH + taskFile.getName()));
             FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".h",
@@ -132,7 +132,7 @@ public class AVATAR2CPOSIX {
                     Conversion.indentString(taskFile.getMainCode(), 2));
         }
 
-        // TraceManager.addDev("Making Makefiles");
+        TraceManager.addDev("Making Makefiles");
         // Standard Makefile
         makeMakefileSrc(GENERATED_PATH);
         FileUtils.saveFile(path + "Makefile.src", makefile_src);

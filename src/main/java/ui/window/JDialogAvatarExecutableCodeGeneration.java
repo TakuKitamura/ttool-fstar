@@ -630,6 +630,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame
                             // tml2systc.saveFile(pathCode, "appmodel");
                             jta.append("Code saved\n");
                         } catch (Exception e) {
+                            e.printStackTrace();
                             jta.append("Could not generate files\n");
                         }
                     }

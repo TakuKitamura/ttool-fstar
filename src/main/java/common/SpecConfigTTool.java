@@ -429,7 +429,7 @@ public class SpecConfigTTool {
      * @author Fabien Tessier
      */
     public static boolean checkAndCreateAVATARCodeDir(String s) throws FileException {
-        // TraceManager.addDev("Trying to create the dir:" + s);
+        TraceManager.addDev("Trying to create the dir:" + s);
         File f = new File(s);
         try {
             if (!f.exists()) {
