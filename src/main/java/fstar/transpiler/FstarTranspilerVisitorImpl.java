@@ -31,6 +31,16 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             put("uint16", "U16");
             put("uint32", "U32");
             put("uint64", "U64");
+
+            put("int8[]", "B.buffer I8");
+            put("int16[]", "B.buffer I16");
+            put("int32[]", "B.buffer I32");
+            put("int64[]", "B.buffer I64");
+
+            put("uint8[]", "B.buffer U8");
+            put("uint16[]", "B.buffer U16");
+            put("uint32[]", "B.buffer U32");
+            put("uint64[]", "B.buffer U64");
         }
     };
 
@@ -538,6 +548,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 if (variableDeclaratorId.jjtGetNumChildren() == 1) {
                     argName += "[]";
                 }
+
+                // print
 
                 methodDeclaration.args.put(argName, argType);
             }
