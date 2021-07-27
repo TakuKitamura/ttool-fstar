@@ -59,9 +59,9 @@ public class FstarTranspiler
 
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
-    transpileSeed.put("methodDeclaration", "int32 add(int32[] x, int32 y)"); // 関数宣言
-    transpileSeed.put("logic", "len(x) > 0 && len(x) != 10"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("require", "y == 3"); // 事前条件
+    transpileSeed.put("methodDeclaration", "int32 checkFrame(uint32 can_id, uint8 can_dlc, uint8[]data)"); // 関数宣言
+    transpileSeed.put("logic", "len(data) == 8"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("require", "true"); // 事前条件
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
 
     transpileSeed.put("okInitRetValue", ""); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
@@ -71,12 +71,12 @@ public class FstarTranspiler
 
     // テスト関数の引数
     String[][]testFuncArgs =  { // test(arg1, arg2)
-        {"1", "2"}, // test1 arg
-        {"2", "3"} // test2 arg
+        {"1", "2", "[1,2,0,0,0,0,0,0]"}, // test1 arg
+        {"2", "3", "[1,2,3,0,0,0,0,0]"} // test2 arg
     };
 
     // 期待するテスト関数が返す値
-    String[]testExpectedResult = {"3", "5"}; // test1 expected, test2 expected, 
+    String[]testExpectedResult = {"0", "1"}; // test1 expected, test2 expected, 
 
     try {
         String result = transpile(transpileSeed, testFuncArgs, testExpectedResult);
@@ -163,6 +163,8 @@ public class FstarTranspiler
         ngInitRetValue = String.format("%s%s", ngValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
     }
 
+    System.out.println(methodDeclaration.args);
+
 
     List<String> argsName = new ArrayList<String>(methodDeclaration.args.keySet());
     
@@ -241,36 +243,35 @@ public class FstarTranspiler
         throw new Exception("test arg is invalid");
     }
 
-    String testFuncs = "";
-    for (int i = 0; i < testExpectedResult.length; i++) {
+    String testCode = "";
+    for (int i = 0; i < testFuncArgs.length; i++) {
         String testCaseTitle = String.format("Test Case%d", i + 1);
         String testFuncName = String.format("Testing_eq_%s", retFstarType.toLowerCase());
         String callCFunc = String.format("%s(", funcName);
-        for (int j = 0; j < testFuncArgs.length; j++) {
+        // System.out.println(testFuncArgs[i].length);
+        String[] arguments = testFuncArgs[i];
+        System.out.println(arguments.length);
+        for (int j = 0; j < arguments.length; j++) {
 
-            String []testArg = testFuncArgs[i];
-            if (testArg.length != argsName.size()) {
-                throw new Exception("test arg number is invalid");
-            }
+            String argument = arguments[j];
 
-            callCFunc += testArg[j];
-            if (j != testFuncArgs.length - 1) {
+            callCFunc += argument;
+            if (j != arguments.length - 1) {
                 callCFunc += ", ";
             } else {
                 callCFunc += ")";
             }
         }
+
+        System.out.println(callCFunc);
+
         String testFunc = String.format("  %s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, testExpectedResult[i], callCFunc);
-        testFuncs += testFunc;
+        testCode += testFunc;
     }
 
-    // System.out.println(testStartFunc);
-    // System.out.println(testFuncs);
-
     String testEnd = "Testing_test_end();";
-    // System.out.println("Testing_test_end();");
 
-    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testFuncs, testEnd);
+    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testCode, testEnd);
 
     String testCode = null;
 

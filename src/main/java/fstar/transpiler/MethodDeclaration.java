@@ -1,9 +1,9 @@
 package fstar.transpiler;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class MethodDeclaration {
     String funcName;
     String returnType;
-    HashMap<String, String> args;
+    LinkedHashMap<String, String> args;
 }

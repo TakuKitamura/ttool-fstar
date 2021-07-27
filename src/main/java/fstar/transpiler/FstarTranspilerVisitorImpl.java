@@ -2,7 +2,7 @@ package fstar.transpiler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 // TODO: 整数以外の型への対応
@@ -21,7 +21,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     // 関数宣言の読み取り結果
     public MethodDeclaration methodDeclaration = null;
 
-    public final Map<String, String> fstarTypeMap = new HashMap<String, String>() {
+    public final Map<String, String> fstarTypeMap = new LinkedHashMap<String, String>() {
         {
             put("int8", "I8");
             put("int16", "I16");
@@ -44,7 +44,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         }
     };
 
-    public final Map<String, String> typeSuffixMap = new HashMap<String, String>() {
+    public final Map<String, String> typeSuffixMap = new LinkedHashMap<String, String>() {
         {
             put("int8", "y");
             put("int16", "s");
@@ -57,7 +57,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         }
     };
 
-    final Map<String, String> opeMap = new HashMap<String, String>() {
+    final Map<String, String> opeMap = new LinkedHashMap<String, String>() {
         {
             put("==", "eq");
             put("!=", "neq"); // fstar don't have
@@ -622,7 +622,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.println(node);
 
         try {
-            methodDeclaration.args = new HashMap<String, String>();
+            methodDeclaration.args = new LinkedHashMap<String, String>();
 
             for (int i = 0; i < node.jjtGetNumChildren(); i++) {
                 Node formalParameters = (Node) node.jjtGetChild(i);
