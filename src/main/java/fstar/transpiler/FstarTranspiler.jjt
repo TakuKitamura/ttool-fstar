@@ -59,8 +59,9 @@ public class FstarTranspiler
 
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
-    transpileSeed.put("methodDeclaration", "int32[] add(int32[] x, int32 y)"); // 関数宣言
-    transpileSeed.put("require", "true"); // 事前条件
+    transpileSeed.put("methodDeclaration", "int32 add(int32[] x, int32 y)"); // 関数宣言
+    transpileSeed.put("logic", "len(x) > 0 && len(x) != 10"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("require", "y == 3"); // 事前条件
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
 
     transpileSeed.put("okInitRetValue", ""); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
@@ -100,6 +101,18 @@ public class FstarTranspiler
     );
     
     // System.out.println("");
+
+    InputStream logicInput = new ByteArrayInputStream(transpileSeed.get("logic").getBytes());
+    
+    FstarTranspiler logicParser = new FstarTranspiler(logicInput);
+
+    ret = visiter.filterObjException(
+        logicParser.ConditionRoot().jjtAccept(visiter, null)
+    );
+
+    String logic = (String)ret;
+
+    System.out.println("logic: " + logic);
 
 
     InputStream requireInput = new ByteArrayInputStream(transpileSeed.get("require").getBytes());
@@ -211,6 +224,8 @@ public class FstarTranspiler
     fstarCode = fstarCode.replaceAll("@fstar_func_args@", fstarFuncArgs); // method.args
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
+
+    fstarCode = fstarCode.replaceAll("@logic_constraint@", logic); // ロジック
     // System.out.println(fstarCode);
 
     // Testing_test_start("Add Test");
@@ -373,6 +388,7 @@ TOKEN :
 | < OPEN_BRACKET : "(" >
 | < CLOSE_BRACKET : ")" >
 | < MINUS : "-" >
+| < LEN : "len" >
 }
 
 TOKEN : /* IDENTIFIERS */
@@ -547,6 +563,8 @@ void ValueOrExpr() :
   Variable()  
   |
   < OPEN_BRACKET > Expr() < CLOSE_BRACKET >
+  |
+  Len()
 }
 
 
@@ -568,7 +586,6 @@ void Literal() :
   NullLiteral()
 }
 
-
 void Variable() :
 /*
  * A lookahead of 2 is required below since "Variable" can be followed
@@ -584,12 +601,26 @@ void Variable() :
   }
 }
 
+// 新たに関数を追加する際はこれを拡張する
+void Len():
+{
+    Token t = null;
+}
+{
+  t = < LEN > < OPEN_BRACKET > Variable() < CLOSE_BRACKET >
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+
+
 void Integer():
 {Token t = null;}
 {
   t = <INTEGER_LITERAL>
   {
-    jjtThis.jjtSetValue(t.image.trim().trim());
+    jjtThis.jjtSetValue(t.image.trim());
   }
 }
 

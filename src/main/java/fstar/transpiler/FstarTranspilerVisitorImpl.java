@@ -84,6 +84,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
     private int callConditionRootCounter = 0; // 1のときrequireParse, 2のときensureParse
 
+    private boolean findLenFunction = false; // len関数を利用する際はtrue, 使い終わったらfalse
+
     private String generateFstarFormat(List<String> rawValues, List<String> types, String op) throws Exception {
 
         System.out.println(rawValues);
@@ -99,6 +101,22 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         // System.out.println(xVariableType);
         // System.out.println(yVariableType);
 
+        boolean xParentIsLen = false;
+        boolean yParentIsLen = false;
+
+        if (xRawValue.startsWith("len ")) {
+            String xVariableName = xRawValue.substring(4);
+            // System.out.println("len variableName = " + variableName);
+            xRawValue = xVariableName;
+            xParentIsLen = true;
+        }
+
+        if (yRawValue.startsWith("len ")) {
+            String yVariableName = yRawValue.substring(4);
+            yRawValue = yVariableName;
+            yParentIsLen = true;
+        }
+
         boolean xIsNumber = false;
         boolean yIsNumber = false;
 
@@ -110,7 +128,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             yIsNumber = true;
         }
 
-        System.out.println(123);
+        // System.out.println(123);
         // x, yの型が異なる場合
         if (xVariableType.equals(yVariableType) == false) { // string == int32, bool == string
             throw new Exception("each type is different.");
@@ -154,6 +172,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         }
 
         System.out.printf("%s, %s\n", xRawValue, yRawValue);
+        System.out.printf("%s, %s\n", xFstarType, yFstarType);
 
         // 2 > 1 のような無駄な条件は無効
         if (xFstarType == null && yFstarType == null && xRawValue.equals("ret") == false
@@ -170,27 +189,77 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             type = yFstarType;
         }
 
-        String fstarOpName = opeMap.get(op); // I32
-        String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
+        // type: I32
+        String fstarOpName = opeMap.get(op); // gt
 
-        // -3l などの数字の場合はカッコで囲う
-        if (xRawValue.startsWith("-")) {
-            xRawValue = String.format("(%s)", xRawValue);
+        if (xParentIsLen == true || yParentIsLen == true) { // logic
+
+            System.out.printf("%s, %s\n", fstarOpName, type);
+            // String ret = String.format("(%s %s)", xRawValue, yRawValue);
+
+            String logicOp = "";
+            if (fstarOpName == "eq") {
+                logicOp = "=";
+            } else if (fstarOpName == "neq") {
+                logicOp = "!=";
+            } else if (fstarOpName == "lt") {
+                logicOp = "<";
+            } else if (fstarOpName == "lte") {
+                logicOp = "<=";
+            } else if (fstarOpName == "gt") {
+                logicOp = ">";
+            } else if (fstarOpName == "gte") {
+                logicOp = ">=";
+            }
+
+            // B.length packet_data <= U32.v max_request_size
+
+            String ret = "";
+
+            if (xParentIsLen == true && yParentIsLen == false) {
+                if (logicOp.equals("!=")) {
+                    ret = String.format("(not ((B.length %s) = (%s.v %s)))", xRawValue, type, yRawValue);
+                } else {
+                    ret = String.format("((B.length %s) %s (%s.v %s))", xRawValue, logicOp, type, yRawValue);
+                }
+            } else if (xParentIsLen == false && yParentIsLen == true) {
+                if (logicOp.equals("!=")) {
+                    ret = String.format("(not ((%s.v %s) = (B.length %s)))", type, xRawValue, yRawValue);
+                } else {
+                    ret = String.format("((%s.v %s) %s (B.length %s))", type, xRawValue, logicOp, yRawValue);
+                }
+            } else { // 両方true
+                if (logicOp.equals("!=")) {
+                    ret = String.format("( not ((B.length %s) = (B.length %s)))", xRawValue, yRawValue);
+                }
+                ret = String.format("((B.length %s) %s (B.length %s))", xRawValue, logicOp, yRawValue);
+            }
+
+            return ret;
+        } else { // expresstion
+            String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
+
+            // -3l などの数字の場合はカッコで囲う
+            if (xRawValue.startsWith("-")) {
+                xRawValue = String.format("(%s)", xRawValue);
+            }
+
+            if (yRawValue.startsWith("-")) {
+                yRawValue = String.format("(%s)", yRawValue);
+            }
+
+            String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
+            if (fstarOpName.equals("neq")) {
+                // String[] sepalate_op = op.split(" ", 2);
+                // String not = sepalate_op[0]; // not
+                // op = sepalate_op[1]; // I32
+                fstarOp = String.format("%s.eq", type, fstarOpName);
+                ret = String.format("(not (%s %s %s))", fstarOp, xRawValue, yRawValue);
+            }
+
+            return ret;
+
         }
-
-        if (yRawValue.startsWith("-")) {
-            yRawValue = String.format("(%s)", yRawValue);
-        }
-
-        String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
-        if (op.equals("neq")) {
-            String[] sepalate_op = op.split(" ", 2);
-            String not = sepalate_op[0]; // not
-            op = sepalate_op[1]; // I32
-            ret = String.format("(%s (%s %s %s))", not, fstarOp, xRawValue, yRawValue);
-        }
-
-        return ret;
     }
 
     private Object convertToFstarSpecFormat(Node node) throws Exception {
@@ -198,7 +267,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         int leafNum = node.jjtGetNumChildren();
 
         if (leafNum == 1) {
-            System.out.println(333);
             System.out.println(this.tmpSearchingLiteral);
             return filterObjException(node.jjtGetChild(0).jjtAccept(this, null)).toString();
         }
@@ -224,14 +292,20 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
             if (this.tmpSearchingLiteral == null) {
                 if (leaf.equals("ret")) {
-                    System.out.println(1);
+                    // System.out.println(1);
                     leafsType.add(methodDeclaration.returnType);
+                } else if (leaf.startsWith("len ") == true) {
+                    // get the string after the fifth character
+                    String argName = leaf.substring(4, leaf.length());
+                    String argArrayType = methodDeclaration.args.get(argName);
+                    String argType = argArrayType.substring(0, argArrayType.length() - 2);
+                    leafsType.add(argType);
                 } else {
-                    System.out.println(2);
+                    // System.out.println(2);
                     leafsType.add(methodDeclaration.args.get(leaf));
                 }
             } else {
-                System.out.println(3);
+                // System.out.println(3);
                 leafsType.add(this.tmpSearchingLiteral);
             }
 
@@ -368,6 +442,14 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         try {
 
             String argName = (String) node.jjtGetValue();
+            System.out.println("variable: " + argName);
+            System.out.println(findLenFunction);
+
+            if (findLenFunction == true) { // argName がlen関数の変数である場合
+                argName = "len " + argName;
+            }
+
+            findLenFunction = false;
 
             if (callConditionRootCounter == 1) {
                 usedArgsInRequire.add(argName);
@@ -381,6 +463,21 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 throw new Exception("find unkown variable");
             }
             return argName;
+        } catch (Exception e) {
+            return e;
+        }
+    }
+
+    public Object visit(ASTLen node, Object data) {
+        System.out.println(node);
+        try {
+            String ret = (String) node.jjtGetValue();
+            // System.out.println(ret);
+
+            // 正確な型はこの時点では不明
+            // this.tmpSearchingLiteral = "unkowonIntType";
+            findLenFunction = true;
+            return filterObjException(node.jjtGetChild(0).jjtAccept(this, null));
         } catch (Exception e) {
             return e;
         }

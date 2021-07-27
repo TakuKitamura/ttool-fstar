@@ -51,6 +51,7 @@ let retConstraint @ret_args@ ret_error = (@ensure@ && I32.v ret_error.code = 0) 
 val @func_name@_body:
   @fstar_func_args@
 Stack (ret: struct_ret) (requires fun h0 -> 
+    @logic_constraint@ &&
     argConstraint @args@
   )
   (ensures fun h0 ret h1 -> 
