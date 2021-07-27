@@ -243,7 +243,7 @@ public class FstarTranspiler
         throw new Exception("test arg is invalid");
     }
 
-    String testCode = "";
+    String testFuncs = "";
     for (int i = 0; i < testFuncArgs.length; i++) {
         String testCaseTitle = String.format("Test Case%d", i + 1);
         String testFuncName = String.format("Testing_eq_%s", retFstarType.toLowerCase());
@@ -266,12 +266,16 @@ public class FstarTranspiler
         System.out.println(callCFunc);
 
         String testFunc = String.format("  %s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, testExpectedResult[i], callCFunc);
-        testCode += testFunc;
+        testFuncs += testFunc;
     }
 
-    String testEnd = "Testing_test_end();";
+    // System.out.println(testStartFunc);
+    // System.out.println(testFuncs);
 
-    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testCode, testEnd);
+    String testEnd = "Testing_test_end();";
+    // System.out.println("Testing_test_end();");
+
+    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testFuncs, testEnd);
 
     String testCode = null;
 
