@@ -162,12 +162,17 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         System.out.printf("xVariableType = %s, yVariableType = %s\n", xVariableType, yVariableType);
 
+        String xNumber = "";
+        String yNumber = "";
+
         // 数字であればsuffixを追加
         if (xIsNumber) {
             String suffix = typeSuffixMap.get(yVariableType);
+            xNumber = xRawValue;
             xRawValue += suffix;
         } else if (yIsNumber) {
             String suffix = typeSuffixMap.get(xVariableType);
+            yNumber = yRawValue;
             yRawValue += suffix;
         }
 
@@ -217,16 +222,30 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             String ret = "";
 
             if (xParentIsLen == true && yParentIsLen == false) {
-                if (logicOp.equals("!=")) {
-                    ret = String.format("(not ((B.length %s) = (%s.v %s)))", xRawValue, type, yRawValue);
+                String integerPart = "";
+                if (yIsNumber == true) {
+                    integerPart = String.format("(%s)", yNumber);
                 } else {
-                    ret = String.format("((B.length %s) %s (%s.v %s))", xRawValue, logicOp, type, yRawValue);
+                    integerPart = String.format("(%s.v %s)", type, yRawValue);
+                }
+
+                if (logicOp.equals("!=")) {
+                    ret = String.format("(not ((B.length %s) = %s))", xRawValue, integerPart);
+                } else {
+                    ret = String.format("((B.length %s) %s %s)", xRawValue, logicOp, integerPart);
                 }
             } else if (xParentIsLen == false && yParentIsLen == true) {
-                if (logicOp.equals("!=")) {
-                    ret = String.format("(not ((%s.v %s) = (B.length %s)))", type, xRawValue, yRawValue);
+                String integerPart = "";
+                if (xIsNumber == true) {
+                    integerPart = String.format("(%s)", xNumber);
                 } else {
-                    ret = String.format("((%s.v %s) %s (B.length %s))", type, xRawValue, logicOp, yRawValue);
+                    integerPart = String.format("(%s.v %s)", type, xRawValue);
+                }
+
+                if (logicOp.equals("!=")) {
+                    ret = String.format("(not (%s = (B.length %s)))", integerPart, yRawValue);
+                } else {
+                    ret = String.format("(%s %s (B.length %s))", integerPart, logicOp, yRawValue);
                 }
             } else { // 両方true
                 if (logicOp.equals("!=")) {
