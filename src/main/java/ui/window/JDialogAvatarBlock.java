@@ -111,6 +111,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     private JTextField identifierText;
     private JTextField refinementText;
     private JTextField initialValue;
+    private JTextField typeText;
     private JButton addButton;
 
     // Panel2
@@ -308,7 +309,12 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         c1.gridwidth = GridBagConstraints.REMAINDER; // end row
         typeBox = new JComboBox<String>();
         typeBox.addActionListener(this);
-        panel1.add(typeBox, c1);
+        // panel1.add(typeBox, c1);
+
+        typeText = new JTextField();
+        typeText.setColumns(15);
+        typeText.setEditable(true);
+        panel1.add(typeText, c1);
 
         refinementText = new JTextField();
         refinementText.setColumns(15);
@@ -784,9 +790,11 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             if ((TAttribute.isAValidId(s, checkKeyword, checkUPPAALKeyword, checkJavaKeyword))
                     && (TAttribute.notIn(s, forbidden))) {
                 int i = TAttribute.getAccess(o1.toString());
-                int j = TAttribute.getAvatarType(o2.toString());
+                // int j = TAttribute.getAvatarType(o2.toString());
+                int j = TAttribute.getAvatarType(typeText.getText());
 
-                TraceManager.addDev("Type=" + o2.toString());
+                // TraceManager.addDev("Type=" + o2.toString());
+                TraceManager.addDev("Type=" + typeText.getText());
 
                 if ((j == TAttribute.ARRAY_NAT) && (value.length() < 1)) {
                     value = "2";
@@ -798,14 +806,16 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
                         value = "";
                     } else {
-                        if (!TAttribute.isAValidInitialValue(j, value)) {
-                            JOptionPane.showMessageDialog(frame, "The initial value is not valid", "Error",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            return;
-                        }
+                        // if (!TAttribute.isAValidInitialValue(j, value)) {
+                        // JOptionPane.showMessageDialog(frame, "The initial value is not valid",
+                        // "Error",
+                        // JOptionPane.INFORMATION_MESSAGE);
+                        // return;
+                        // }
                     }
                     if (j == TAttribute.OTHER) {
-                        a = new TAttribute(i, s, value, o2.toString());
+                        // a = new TAttribute(i, s, value, o2.toString());
+                        a = new TAttribute(i, s, value, typeText.getText());
                         a.isAvatar = true;
                         //
                     } else {
@@ -819,7 +829,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
                         a = attributes.get(index);
                         a.setAccess(i);
                         if (j == TAttribute.OTHER) {
-                            a.setTypeOther(o2.toString());
+                            // a.setTypeOther(o2.toString());
+                            a.setTypeOther(typeText.getText());
                         }
                         a.setType(j);
                         a.setInitialValue(value);
@@ -1054,6 +1065,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
             refinementText.setText(a.getRefinementType().toString());
+            typeText.setText(a.getStringAvatarType(a.getType()));
+
             select(accessBox, TAttribute.getStringAccess(a.getAccess()));
             if (a.getType() == TAttribute.OTHER) {
                 select(typeBox, a.getTypeOther());
