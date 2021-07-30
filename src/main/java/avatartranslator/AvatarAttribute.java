@@ -42,6 +42,8 @@ import java.util.Map;
 
 import myutil.TraceManager;
 
+import java.lang.reflect.Field;
+
 /**
  * Class AvatarAttribute Avatar attributes, either of blocks, or manipulated by
  * signals / methods Creation: 20/05/2010
@@ -59,11 +61,6 @@ public class AvatarAttribute extends AvatarLeftHand {
 
     public AvatarAttribute(String _name, AvatarType _type, AvatarStateMachineOwner _block, Object _referenceObject) {
         super(_name, _referenceObject);
-        /*
-         * if (_type == -1) { TraceManager.addDev("- - - - - - - - - - - - " + _name +
-         * ": " + _type); try { int x = 1 / 0; } catch (Exception e) {
-         * e.printStackTrace(); System.exit(0); } }
-         */
         type = _type;
         this.block = _block;
     }

@@ -64,6 +64,8 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     private int attributeOptRatio;
     private List<AvatarAttribute> constants;
 
+    public String type;
+
     public AvatarBlock(String _name, AvatarSpecification _avspec, Object _referenceObject) {
         super(_name, _referenceObject);
         this.avspec = _avspec;

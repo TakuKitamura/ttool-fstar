@@ -58,8 +58,16 @@ public enum AvatarType {
     private String defaultValue = "";
     private String defaultValueTF = "";
     private int defaultValueInInt = -1;
+    public String type = "";
 
     AvatarType(String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.defaultValueTF = defaultValueTF;
+        this.defaultValueInInt = defaultValueInInt;
+    }
+
+    AvatarType(String name, String defaultValue, String defaultValueTF, int defaultValueInInt, String type) {
         this.name = name;
         this.defaultValue = defaultValue;
         this.defaultValueTF = defaultValueTF;
@@ -93,6 +101,14 @@ public enum AvatarType {
     }
 
     public String getStringType() {
+        return this.name;
+    }
+
+    public void updateTypeName(String s) {
+        this.name = s;
+    }
+
+    public String getTypeName() {
         return this.name;
     }
 

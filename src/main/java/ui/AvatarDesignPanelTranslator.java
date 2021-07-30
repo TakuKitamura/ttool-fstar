@@ -1269,6 +1269,7 @@ public class AvatarDesignPanelTranslator {
 
     private AvatarAttribute createRegularAttribute(AvatarStateMachineOwner _ab, TAttribute _a, String _preName) {
         AvatarType type = AvatarType.UNDEFINED;
+
         if (_a.getType() == TAttribute.INTEGER) {
             type = AvatarType.INTEGER;
         } else if (_a.getType() == TAttribute.INT8) {
@@ -1293,6 +1294,10 @@ public class AvatarDesignPanelTranslator {
             type = AvatarType.BOOLEAN;
         } else if (_a.getType() == TAttribute.TIMER) {
             type = AvatarType.TIMER;
+        } else {
+            // type = AvatarType.newInstance("Second", 1);
+            // type =
+            type.updateTypeName(_a.getTypeOther());
         }
         AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _ab, _a);
         aa.setInitialValue(_a.getInitialValue());
@@ -1437,58 +1442,63 @@ public class AvatarDesignPanelTranslator {
             listE.addCor(ab, block);
             block.setAVATARID(ab.getID());
 
-            // Create attributes
             for (TAttribute a : block.getAttributeList()) {
-                if (a.getType() == TAttribute.INTEGER) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.INT8) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.INT16) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.INT32) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.INT64) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.UINT8) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.UINT16) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.UINT32) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.UINT64) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.NATURAL) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.BOOLEAN) {
-                    addRegularAttribute(ab, a, "");
-                } else if (a.getType() == TAttribute.TIMER) {
-                    addRegularAttribute(ab, a, "");
-                } else {
-                    // other
-                    // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
-                    List<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
-                    if (types == null) {
-                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
-                                "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
-                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                        addCheckingError(ce);
-                        return;
-                    } else {
-                        if (types.size() == 0) {
-                            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
-                                    "Data type definition must contain at least one attribute:  " + ab.getName());
-                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                            addCheckingError(ce);
-                        } else {
-                            nameTypeMap.put(block.getBlockName() + "." + a.getId(), a.getTypeOther());
-                            typeAttributesMap.put(a.getTypeOther(), types);
-                            for (TAttribute type : types)
-                                addRegularAttribute(ab, type, a.getId() + "__");
-                        }
-                    }
-
-                }
+                addRegularAttribute(ab, a, "");
             }
+
+            // Create attributes
+            // for (TAttribute a : block.getAttributeList()) {
+            // if (a.getType() == TAttribute.INTEGER) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.INT8) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.INT16) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.INT32) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.INT64) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.UINT8) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.UINT16) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.UINT32) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.UINT64) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.NATURAL) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.BOOLEAN) {
+            // addRegularAttribute(ab, a, "");
+            // } else if (a.getType() == TAttribute.TIMER) {
+            // addRegularAttribute(ab, a, "");
+            // } else {
+            // // other
+            // // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+            // List<TAttribute> types =
+            // adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
+            // if (types == null) {
+            // UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
+            // "Unknown data type: " + a.getTypeOther() + " used in " + ab.getName());
+            // ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            // addCheckingError(ce);
+            // return;
+            // } else {
+            // if (types.size() == 0) {
+            // UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
+            // "Data type definition must contain at least one attribute: " + ab.getName());
+            // ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            // addCheckingError(ce);
+            // } else {
+            // nameTypeMap.put(block.getBlockName() + "." + a.getId(), a.getTypeOther());
+            // typeAttributesMap.put(a.getTypeOther(), types);
+            // for (TAttribute type : types)
+            // addRegularAttribute(ab, type, a.getId() + "__");
+            // }
+            // }
+
+            // }
+            // }
 
             // Create methods
             for (ui.AvatarMethod uiam : block.getMethodList()) {
@@ -1624,17 +1634,14 @@ public class AvatarDesignPanelTranslator {
             return;
         }
 
-        if ((rt.compareTo("int") == 0) ||
-            (rt.compareTo("int8_t") == 0) ||
-            (rt.compareTo("int16_t") == 0) ||
-            (rt.compareTo("int32_t") == 0) ||
-            (rt.compareTo("int64_t") == 0) ||
-            (rt.compareTo("uint8_t") == 0) ||
-            (rt.compareTo("uint16_t") == 0) ||
-            (rt.compareTo("uint32_t") == 0) ||
-            (rt.compareTo("uint64_t") == 0) ||
-            (rt.compareTo("bool") == 0)) {
-            aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _ab, _block);
+        if (
+            // (rt.compareTo("int") == 0) || (rt.compareTo("int8_t") == 0) || (rt.compareTo("int16_t") == 0)
+            //     || (rt.compareTo("int32_t") == 0) || (rt.compareTo("int64_t") == 0) || (rt.compareTo("uint8_t") == 0)
+            //     || (rt.compareTo("uint16_t") == 0) || (rt.compareTo("uint32_t") == 0) || (rt.compareTo("uint64_t") == 0)
+            //     || (rt.compareTo("bool") == 0)
+            true
+            ) {
+            aa = new AvatarAttribute(rt, AvatarType.getType(rt), _ab, _block);
             _atam.addReturnParameter(aa);
         } else {
             List<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
@@ -1673,14 +1680,14 @@ public class AvatarDesignPanelTranslator {
         for (int i = 0; i < types.length; i++) {
             List<TAttribute> v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
             if (v == null) {
-                if (AvatarType.getType(types[i]) == AvatarType.UNDEFINED) {
-                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \""
-                            + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
-                    // TODO: adapt
-                    // ce.setAvatarBlock(_block);
-                    ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                    addCheckingError(ce);
-                }
+                // if (AvatarType.getType(types[i]) == AvatarType.UNDEFINED) {
+                //     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \""
+                //             + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
+                //     // TODO: adapt
+                //     // ce.setAvatarBlock(_block);
+                //     ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                //     addCheckingError(ce);
+                // }
                 AvatarAttribute aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _block, _uiam);
                 _atam.addParameter(aa);
             } else {
