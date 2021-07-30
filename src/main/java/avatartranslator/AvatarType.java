@@ -48,6 +48,10 @@ public enum AvatarType {
     // Types of parameters
     BOOLEAN("bool", "false", "f", 0), INTEGER("int", "0", "0", 0), TIMER("timer", "0", "0", 0),
 
+    INT8("int8_t", "0", "0", 0), INT16("int16_t", "0", "0", 0), INT32("int32_t", "0", "0", 0),
+    INT64("int64_t", "0", "0", 0), UINT8("uint8_t", "0", "0", 0), UINT16("uint16_t", "0", "0", 0),
+    UINT32("uint32_t", "0", "0", 0), UINT64("uint64_t", "0", "0", 0),
+
     UNDEFINED("undefined", "", "", -1);
 
     private String name = "";
@@ -67,7 +71,23 @@ public enum AvatarType {
             return AvatarType.BOOLEAN;
         else if (s.equals("int") || s.equals("Integer"))
             return AvatarType.INTEGER;
-        else if (s.equals("Timer"))
+        else if (s.equals("int8_t")) {
+            return AvatarType.INT8;
+        } else if (s.equals("int16_t")) {
+            return AvatarType.INT16;
+        } else if (s.equals("int32_t")) {
+            return AvatarType.INT32;
+        } else if (s.equals("int64_t")) {
+            return AvatarType.INT64;
+        } else if (s.equals("uint8_t")) {
+            return AvatarType.UINT8;
+        } else if (s.equals("uint16_t")) {
+            return AvatarType.UINT16;
+        } else if (s.equals("uint32_t")) {
+            return AvatarType.UINT32;
+        } else if (s.equals("uint64_t")) {
+            return AvatarType.UINT64;
+        } else if (s.equals("Timer"))
             return AvatarType.TIMER;
         return AvatarType.UNDEFINED;
     }

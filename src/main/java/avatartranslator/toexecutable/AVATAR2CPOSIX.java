@@ -917,10 +917,29 @@ public class AVATAR2CPOSIX {
     }
 
     public String getCTypeOf(AvatarAttribute _aa) {
-        String ret = "int";
+        String ret = "undefined_type";
         if (_aa.getType() == AvatarType.BOOLEAN) {
             ret = "bool";
+        }  else if (_aa.getType() == AvatarType.INTEGER) {
+            ret = "int";
+        } else if (_aa.getType() == AvatarType.INT8) {
+            ret = "int8_t";
+        } else if (_aa.getType() == AvatarType.INT16) {
+            ret = "int16_t";
+        } else if (_aa.getType() == AvatarType.INT32) {
+            ret = "int32_t";
+        } else if (_aa.getType() == AvatarType.INT64) {
+            ret = "int64_t";
+        } else if (_aa.getType() == AvatarType.UINT8) {
+            ret = "uint8_t";
+        } else if (_aa.getType() == AvatarType.UINT16) {
+            ret = "uint16_t";
+        } else if (_aa.getType() == AvatarType.UINT32) {
+            ret = "uint32_t";
+        } else if (_aa.getType() == AvatarType.UINT64) {
+            ret = "uint64_t";
         }
+
         return ret;
     }
 

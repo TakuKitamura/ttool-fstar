@@ -76,6 +76,16 @@ public class TAttribute {
     public final static int ADDRESS = 10;
     public final static int DOUBLE = 11;
 
+    public final static int UINT8 = 101;
+    public final static int UINT16 = 102;
+    public final static int UINT32 = 103;
+    public final static int UINT64 = 104;
+
+    public final static int INT8 = 201;
+    public final static int INT16 = 202;
+    public final static int INT32 = 203;
+    public final static int INT64 = 204;
+
     // Confidentiality verififcation
     public final static int NOT_VERIFIED = 0;
     public final static int CONFIDENTIALITY_OK = 1;
@@ -176,7 +186,11 @@ public class TAttribute {
 
     public boolean isAvatarDefault() {
         return (getType() == TAttribute.INTEGER) || (getType() == TAttribute.NATURAL)
-                || (getType() == TAttribute.BOOLEAN) || (getType() == TAttribute.TIMER);
+                || (getType() == TAttribute.BOOLEAN) || (getType() == TAttribute.TIMER)
+                || (getType() == TAttribute.UINT8) || (getType() == TAttribute.UINT16)
+                || (getType() == TAttribute.UINT32) || (getType() == TAttribute.UINT64)
+                || (getType() == TAttribute.INT8) || (getType() == TAttribute.INT16) || (getType() == TAttribute.INT32)
+                || (getType() == TAttribute.INT64);
     }
 
     public void setAccess(int _access) {
@@ -311,7 +325,16 @@ public class TAttribute {
                 }
                 return val > 0;
             case INTEGER:
-                // return value.matches("-?\\d+");
+            case INT8:
+            case INT16:
+            case INT32:
+            case INT64:
+                return value.matches("[+-]?\\d+");
+                // return value.matches("\\d+");
+            case UINT8:
+            case UINT16:
+            case UINT32:
+            case UINT64:
                 return value.matches("\\d+");
             default:
                 return false;
@@ -359,6 +382,22 @@ public class TAttribute {
             return ARRAY_NAT;
         } else if (s.equals("Integer")) {
             return INTEGER;
+        } else if (s.equals("Int8")) {
+            return INT8;
+        } else if (s.equals("Int16")) {
+            return INT16;
+        } else if (s.equals("Int32")) {
+            return INT32;
+        } else if (s.equals("Int64")) {
+            return INT64;
+        } else if (s.equals("UInt8")) {
+            return UINT8;
+        } else if (s.equals("UInt16")) {
+            return UINT16;
+        } else if (s.equals("UInt32")) {
+            return UINT32;
+        } else if (s.equals("UInt64")) {
+            return UINT64;
         } else if (s.equals("Timer")) {
             return TIMER;
         } else if (!s.equals("")) {
@@ -376,6 +415,22 @@ public class TAttribute {
             return TIMER;
         } else if (s.equals("Integer")) {
             return INTEGER;
+        } else if (s.equals("int8_t")) {
+            return INT8;
+        } else if (s.equals("int16_t")) {
+            return INT16;
+        } else if (s.equals("int32_t")) {
+            return INT32;
+        } else if (s.equals("int64_t")) {
+            return INT64;
+        } else if (s.equals("uint8_t")) {
+            return UINT8;
+        } else if (s.equals("uint16_t")) {
+            return UINT16;
+        } else if (s.equals("uint32_t")) {
+            return UINT32;
+        } else if (s.equals("uint64_t")) {
+            return UINT64;
         } else if (!s.equals("")) {
             return OTHER;
         }
@@ -428,6 +483,22 @@ public class TAttribute {
                 return "Array_nat";
             case INTEGER:
                 return "Integer";
+            case INT8:
+                return "Int8";
+            case INT16:
+                return "Int16";
+            case INT32:
+                return "Int32";
+            case INT64:
+                return "Int64";
+            case UINT8:
+                return "UInt8";
+            case UINT16:
+                return "UInt16";
+            case UINT32:
+                return "UInt32";
+            case UINT64:
+                return "UInt64";
             case TIMER:
                 return "Timer";
             default:
@@ -439,6 +510,22 @@ public class TAttribute {
         switch (type) {
             case INTEGER:
                 return "int";
+            case INT8:
+                return "int8_t";
+            case INT16:
+                return "int16_t";
+            case INT32:
+                return "int32_t";
+            case INT64:
+                return "int64_t";
+            case UINT8:
+                return "uint8_t";
+            case UINT16:
+                return "uint16_t";
+            case UINT32:
+                return "uint32_t";
+            case UINT64:
+                return "uint64_t";
             case BOOLEAN:
                 return "bool";
             case TIMER:

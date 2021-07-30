@@ -1018,6 +1018,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
         // _jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         _jdab.addType(TAttribute.getStringAvatarType(TAttribute.BOOLEAN), true);
         _jdab.addType(TAttribute.getStringAvatarType(TAttribute.INTEGER), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.INT8), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.INT16), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.INT32), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.INT64), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.UINT8), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.UINT16), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.UINT32), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.UINT64), true);
         _jdab.addType(TAttribute.getStringType(TAttribute.TIMER), false);
 
         for (String s : tdp.getAllDataTypes()) {

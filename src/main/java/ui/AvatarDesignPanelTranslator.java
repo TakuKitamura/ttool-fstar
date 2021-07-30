@@ -1271,6 +1271,22 @@ public class AvatarDesignPanelTranslator {
         AvatarType type = AvatarType.UNDEFINED;
         if (_a.getType() == TAttribute.INTEGER) {
             type = AvatarType.INTEGER;
+        } else if (_a.getType() == TAttribute.INT8) {
+            type = AvatarType.INT8;
+        } else if (_a.getType() == TAttribute.INT16) {
+            type = AvatarType.INT16;
+        } else if (_a.getType() == TAttribute.INT32) {
+            type = AvatarType.INT32;
+        } else if (_a.getType() == TAttribute.INT64) {
+            type = AvatarType.INT64;
+        } else if (_a.getType() == TAttribute.UINT8) {
+            type = AvatarType.UINT8;
+        } else if (_a.getType() == TAttribute.UINT16) {
+            type = AvatarType.UINT16;
+        } else if (_a.getType() == TAttribute.UINT32) {
+            type = AvatarType.UINT32;
+        } else if (_a.getType() == TAttribute.UINT64) {
+            type = AvatarType.UINT64;
         } else if (_a.getType() == TAttribute.NATURAL) {
             type = AvatarType.INTEGER;
         } else if (_a.getType() == TAttribute.BOOLEAN) {
@@ -1424,6 +1440,22 @@ public class AvatarDesignPanelTranslator {
             // Create attributes
             for (TAttribute a : block.getAttributeList()) {
                 if (a.getType() == TAttribute.INTEGER) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.INT8) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.INT16) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.INT32) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.INT64) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.UINT8) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.UINT16) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.UINT32) {
+                    addRegularAttribute(ab, a, "");
+                } else if (a.getType() == TAttribute.UINT64) {
                     addRegularAttribute(ab, a, "");
                 } else if (a.getType() == TAttribute.NATURAL) {
                     addRegularAttribute(ab, a, "");
@@ -1592,7 +1624,16 @@ public class AvatarDesignPanelTranslator {
             return;
         }
 
-        if ((rt.compareTo("int") == 0) || (rt.compareTo("bool") == 0)) {
+        if ((rt.compareTo("int") == 0) ||
+            (rt.compareTo("int8_t") == 0) ||
+            (rt.compareTo("int16_t") == 0) ||
+            (rt.compareTo("int32_t") == 0) ||
+            (rt.compareTo("int64_t") == 0) ||
+            (rt.compareTo("uint8_t") == 0) ||
+            (rt.compareTo("uint16_t") == 0) ||
+            (rt.compareTo("uint32_t") == 0) ||
+            (rt.compareTo("uint64_t") == 0) ||
+            (rt.compareTo("bool") == 0)) {
             aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _ab, _block);
             _atam.addReturnParameter(aa);
         } else {
