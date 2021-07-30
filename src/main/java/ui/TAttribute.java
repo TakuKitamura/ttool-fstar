@@ -219,7 +219,8 @@ public class TAttribute {
 
     public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeywords,
             boolean checkJavaKeyword) {
-        return isAValidId(id, checkKeyword, checkUPPAALKeywords, checkJavaKeyword, false, true);
+        // return isAValidId(id, checkKeyword, checkUPPAALKeywords, checkJavaKeyword, false, true);
+        return true;
     }
 
     public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeyword,
