@@ -1065,7 +1065,13 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             identifierText.setText(a.getId());
             initialValue.setText(a.getInitialValue());
             refinementText.setText(a.getRefinementType().toString());
-            typeText.setText(a.getStringAvatarType(a.getType()));
+
+            String setTypeText = a.getStringAvatarType(a.getType());
+            if (setTypeText.equals("unknown")) {
+                setTypeText = a.getTypeOther();
+            }
+
+            typeText.setText(setTypeText);
 
             select(accessBox, TAttribute.getStringAccess(a.getAccess()));
             if (a.getType() == TAttribute.OTHER) {
