@@ -292,54 +292,55 @@ public class TAttribute {
     }
 
     public static boolean isAValidInitialValue(int type, String value) {
+        return true;
         // boolean b;
-        int val;
+        // int val;
 
         // TraceManager.addDev("Is A Valid Inital Value type=" + type + " value=" +
         // value);
 
-        switch (type) {
-            case NATURAL:
-                return value.matches("\\d*");
-            case ADDRESS:
-                return value.matches("\\d*");
-            case BOOLEAN:
-                //
-                return ((value.equals("true")) || (value.equals("false")) || (value.equals("")));
-            case GATE:
-            case OUTGATE:
-            case INGATE:
-            case TIMER:
-            case OTHER:
-                return ((value == null) || (value.equals("")));
-            case QUEUE_NAT:
-                return ((value == null) || (value.equals("")) || (value.equals("nil")));
-            case ARRAY_NAT:
-                if (value == null) {
-                    return false;
-                }
+        // switch (type) {
+        //     case NATURAL:
+        //         return value.matches("\\d*");
+        //     case ADDRESS:
+        //         return value.matches("\\d*");
+        //     case BOOLEAN:
+        //         //
+        //         return ((value.equals("true")) || (value.equals("false")) || (value.equals("")));
+        //     case GATE:
+        //     case OUTGATE:
+        //     case INGATE:
+        //     case TIMER:
+        //     case OTHER:
+        //         return ((value == null) || (value.equals("")));
+        //     case QUEUE_NAT:
+        //         return ((value == null) || (value.equals("")) || (value.equals("nil")));
+        //     case ARRAY_NAT:
+        //         if (value == null) {
+        //             return false;
+        //         }
 
-                try {
-                    val = Integer.parseInt(value);
-                } catch (Exception e) {
-                    return false;
-                }
-                return val > 0;
-            case INTEGER:
-            case INT8:
-            case INT16:
-            case INT32:
-            case INT64:
-                return value.matches("[+-]?\\d+");
-                // return value.matches("\\d+");
-            case UINT8:
-            case UINT16:
-            case UINT32:
-            case UINT64:
-                return value.matches("\\d+");
-            default:
-                return false;
-        }
+        //         try {
+        //             val = Integer.parseInt(value);
+        //         } catch (Exception e) {
+        //             return false;
+        //         }
+        //         return val > 0;
+        //     case INTEGER:
+        //     case INT8:
+        //     case INT16:
+        //     case INT32:
+        //     case INT64:
+        //         return value.matches("[+-]?\\d+");
+        //         // return value.matches("\\d+");
+        //     case UINT8:
+        //     case UINT16:
+        //     case UINT32:
+        //     case UINT64:
+        //         return value.matches("\\d+");
+        //     default:
+        //         return false;
+        // }
     }
 
     public static boolean notIn(String s, List<TAttribute> forbidden) {
