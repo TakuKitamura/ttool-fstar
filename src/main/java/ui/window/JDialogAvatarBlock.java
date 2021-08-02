@@ -431,7 +431,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         c3.gridheight = 3;
         implementationProvided = new JCheckBox("Implementation provided by user");
         implementationProvided.setSelected(false);
-        panel3.add(implementationProvided, c3);
+        // panel3.add(implementationProvided, c3);
 
         // fifth line panel3
         c3.gridheight = 1;
