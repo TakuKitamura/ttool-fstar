@@ -126,6 +126,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     private JTextField methodText;
     private JTextField methodRequireRefinementTypeText;
     private JTextField methodEnsureRefinementTypeText;
+    private JTextField methodLogicText;
     private JButton addMethodButton;
     private JList<AvatarMethod> listMethod;
     private JButton upMethodButton;
@@ -401,6 +402,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel3.add(new JLabel("method"), c3);
         panel3.add(new JLabel("require"), c3);
         panel3.add(new JLabel("ensure"), c3);
+        panel3.add(new JLabel("logic"), c3);
 
         // second line panel3
         c3.fill = GridBagConstraints.HORIZONTAL;
@@ -418,6 +420,11 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         methodEnsureRefinementTypeText.setColumns(50);
         methodEnsureRefinementTypeText.setEditable(true);
         panel3.add(methodEnsureRefinementTypeText, c3);
+
+        methodLogicText = new JTextField();
+        methodLogicText.setColumns(50);
+        methodLogicText.setEditable(true);
+        panel3.add(methodLogicText, c3);
 
         // third line panel3
         c3.gridwidth = GridBagConstraints.REMAINDER; // end row
@@ -860,8 +867,9 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
         RefinementType requireRefinementType = new RefinementType(methodRequireRefinementTypeText.getText());
         RefinementType ensureRefinementType = new RefinementType(methodEnsureRefinementTypeText.getText());
+        RefinementType logic = new RefinementType(methodLogicText.getText());
 
-        AvatarMethod am = AvatarMethod.isAValidMethod(s, requireRefinementType, ensureRefinementType);
+        AvatarMethod am = AvatarMethod.isAValidMethod(s, requireRefinementType, ensureRefinementType, logic);
 
         AvatarMethod amtmp;
 
@@ -888,6 +896,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             methodText.setText("");
             methodRequireRefinementTypeText.setText("");
             methodEnsureRefinementTypeText.setText("");
+            methodLogicText.setText("");
 
         } else {
             JOptionPane.showMessageDialog(frame, "Badly formatted method declaration", "Error",
@@ -1104,6 +1113,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             methodText.setText(am.toStringOnlyMethod());
             methodRequireRefinementTypeText.setText(am.getRequireRefinementType().toString());
             methodEnsureRefinementTypeText.setText(am.getEnsureRefinementType().toString());
+            methodLogicText.setText(am.getLogic().toString());
 
             // TraceManager.addDev("Implementation of " + am + " is: " +
             // am.isImplementationProvided());

@@ -82,6 +82,7 @@ public class AvatarMethod {
 
     protected RefinementType requireRefinementType = new RefinementType("");
     protected RefinementType ensureRefinementType = new RefinementType("");
+    protected RefinementType logic = new RefinementType("");
 
     protected boolean implementationProvided;
 
@@ -280,10 +281,11 @@ public class AvatarMethod {
     }
 
     public static AvatarMethod isAValidMethod(String _method, RefinementType _requireRefinementType,
-            RefinementType _ensureRefinementType) {
+            RefinementType _ensureRefinementType, RefinementType _logic) {
         AvatarMethod avatarMethod = isAValidMethod(_method);
         avatarMethod.requireRefinementType = _requireRefinementType;
         avatarMethod.ensureRefinementType = _ensureRefinementType;
+        avatarMethod.logic = _logic;
         return avatarMethod;
     }
 
@@ -309,6 +311,10 @@ public class AvatarMethod {
 
     public RefinementType getEnsureRefinementType() {
         return ensureRefinementType;
+    }
+
+    public RefinementType getLogic() {
+        return logic;
     }
 
     public String getType(int _index) {
@@ -432,6 +438,8 @@ public class AvatarMethod {
         method += requireRefinementType;
         method += "}, ensure{";
         method += ensureRefinementType;
+        method += "}, logic{";
+        method += logic;
         method += "})";
         return method;
     }
@@ -483,7 +491,7 @@ public class AvatarMethod {
      */
 
     public AvatarMethod makeClone() {
-        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType);
+        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType, logic);
         am.setImplementationProvided(isImplementationProvided());
         return am;
     }

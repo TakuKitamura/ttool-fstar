@@ -1167,6 +1167,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
             sb.append(new Xml().sanitize(am.getRequireRefinementType().toString()));
             sb.append("\" ensureRefinementType=\"");
             sb.append(new Xml().sanitize(am.getEnsureRefinementType().toString()));
+            sb.append("\" logic=\"");
+            sb.append(new Xml().sanitize(am.getLogic().toString()));
             sb.append("\" />\n");
         }
         for (AvatarSignal as : this.mySignals) {
@@ -1204,6 +1206,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
             String method;
             RefinementType requireRefinementType;
             RefinementType ensureRefinementType;
+            RefinementType logic;
             String signal;
             AvatarMethod am;
             AvatarSignal as;
@@ -1340,7 +1343,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                                     ensureRefinementType = new RefinementType("");
                                 }
 
-                                am = AvatarMethod.isAValidMethod(method, requireRefinementType, ensureRefinementType);
+                                try {
+                                    logic = new RefinementType(
+                                            new Xml().decode(elt.getAttribute("logic")));
+                                } catch (Exception e) {
+                                    logic = new RefinementType("");
+                                }
+
+                                am = AvatarMethod.isAValidMethod(method, requireRefinementType, ensureRefinementType, logic);
                                 if (am != null) {
                                     // TraceManager.addDev("Setting to " + implementation + " the implementation of
                                     // " + am);
