@@ -434,14 +434,63 @@ public class AvatarMethod {
 
     public String toString() {
         String method = this.toStringOnlyMethod();
-        method += ": (require{";
-        method += requireRefinementType;
-        method += "}, ensure{";
-        method += ensureRefinementType;
-        method += "}, logic{";
-        method += logic;
-        method += "})";
-        return method;
+
+        if (!method.split("\\(")[0].contains(" ")) {
+            method = "void " + method;
+        }
+
+        // // match regex /^\s+ / == true
+        // if (method.split(" ")[0].equals("true")) {
+        // method = "void " + method;
+        // }
+
+        if (!requireRefinementType.toString().equals("") || !ensureRefinementType.toString().equals("")
+                || !logic.toString().equals("")) {
+            int refinementTypeCount = 0;
+
+            if (!requireRefinementType.toString().equals("")) {
+                if (refinementTypeCount == 0) {
+                    method += ": (require{";
+                    method += requireRefinementType;
+                    refinementTypeCount += 1;
+                }
+            }
+
+            if (!ensureRefinementType.toString().equals("")) {
+                if (refinementTypeCount == 0) {
+                    method += ": (ensure{";
+                    method += ensureRefinementType;
+                    refinementTypeCount += 1;
+                } else {
+                    method += "}, ensure{";
+                    method += ensureRefinementType;
+                }
+            }
+
+            if (!logic.toString().equals("")) {
+                if (refinementTypeCount == 0) {
+                    method += ": (logic{";
+                    method += logic;
+                    refinementTypeCount += 1;
+                } else {
+                    method += "}, logic{";
+                    method += logic;
+                }
+            }
+
+            // method += ": (";
+
+            // method += ": (require{";
+            // method += requireRefinementType;
+            // method += "}, ensure{";
+            // method += ensureRefinementType;
+            // method += "}, logic{";
+            // method += logic;
+            method += "})";
+            return method;
+        } else {
+            return method;
+        }
     }
 
     public String toSaveString() {

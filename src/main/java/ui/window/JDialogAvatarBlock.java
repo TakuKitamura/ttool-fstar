@@ -414,16 +414,19 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         methodRequireRefinementTypeText = new JTextField();
         methodRequireRefinementTypeText.setColumns(50);
         methodRequireRefinementTypeText.setEditable(true);
+        methodRequireRefinementTypeText.setText("");
         panel3.add(methodRequireRefinementTypeText, c3);
 
         methodEnsureRefinementTypeText = new JTextField();
         methodEnsureRefinementTypeText.setColumns(50);
         methodEnsureRefinementTypeText.setEditable(true);
+        methodEnsureRefinementTypeText.setText("");
         panel3.add(methodEnsureRefinementTypeText, c3);
 
         methodLogicText = new JTextField();
         methodLogicText.setColumns(50);
         methodLogicText.setEditable(true);
+        methodLogicText.setText("");
         panel3.add(methodLogicText, c3);
 
         // third line panel3
