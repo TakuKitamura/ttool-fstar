@@ -3107,7 +3107,8 @@ public class AvatarDesignPanelTranslator {
     }
 
     private String modifyString(String _input) {
-        return Conversion.replaceAllChar(_input, '.', "__");
+        return _input;
+        // return Conversion.replaceAllChar(_input, '.', "__");
     }
 
     private String modifyStringMethodCall(String _input, String _blockName) {
