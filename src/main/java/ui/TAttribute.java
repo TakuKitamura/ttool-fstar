@@ -589,8 +589,9 @@ public class TAttribute {
                 return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
             } else {
                 // TraceManager.addDev(refinementType.toString());
-                return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + "{"
-                        + refinementType.toString() + "}";
+                return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType;
+                
+                // + "{" + refinementType.toString() + "}";
             }
         }
     }

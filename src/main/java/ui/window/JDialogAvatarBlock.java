@@ -283,7 +283,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel1.add(new JLabel(" "), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; // end row
         panel1.add(new JLabel("type"), c1);
-        panel1.add(new JLabel("refinementType"), c1);
+        // panel1.add(new JLabel("refinementType"), c1);
 
         // second line panel1
         c1.gridwidth = 1;
@@ -319,7 +319,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         refinementText = new JTextField();
         refinementText.setColumns(15);
         refinementText.setEditable(true);
-        panel1.add(refinementText, c1);
+        // panel1.add(refinementText, c1);
 
         // third line panel1
         c1.gridwidth = GridBagConstraints.REMAINDER; // end row
