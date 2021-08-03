@@ -269,7 +269,7 @@ public class AVATAR2CPOSIX {
 
         defineAllStates(block, taskFile);
 
-        defineAllMethods(block, taskFile);
+        // defineAllMethods(block, taskFile);
 
         makeMainFunction(block, taskFile);
 
