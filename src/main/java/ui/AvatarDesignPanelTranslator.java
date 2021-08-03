@@ -1635,12 +1635,14 @@ public class AvatarDesignPanelTranslator {
         }
 
         if (
-            // (rt.compareTo("int") == 0) || (rt.compareTo("int8_t") == 0) || (rt.compareTo("int16_t") == 0)
-            //     || (rt.compareTo("int32_t") == 0) || (rt.compareTo("int64_t") == 0) || (rt.compareTo("uint8_t") == 0)
-            //     || (rt.compareTo("uint16_t") == 0) || (rt.compareTo("uint32_t") == 0) || (rt.compareTo("uint64_t") == 0)
-            //     || (rt.compareTo("bool") == 0)
-            true
-            ) {
+        // (rt.compareTo("int") == 0) || (rt.compareTo("int8_t") == 0) ||
+        // (rt.compareTo("int16_t") == 0)
+        // || (rt.compareTo("int32_t") == 0) || (rt.compareTo("int64_t") == 0) ||
+        // (rt.compareTo("uint8_t") == 0)
+        // || (rt.compareTo("uint16_t") == 0) || (rt.compareTo("uint32_t") == 0) ||
+        // (rt.compareTo("uint64_t") == 0)
+        // || (rt.compareTo("bool") == 0)
+        true) {
             aa = new AvatarAttribute(rt, AvatarType.getType(rt), _ab, _block);
             _atam.addReturnParameter(aa);
         } else {
@@ -1681,12 +1683,14 @@ public class AvatarDesignPanelTranslator {
             List<TAttribute> v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
             if (v == null) {
                 // if (AvatarType.getType(types[i]) == AvatarType.UNDEFINED) {
-                //     UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \""
-                //             + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
-                //     // TODO: adapt
-                //     // ce.setAvatarBlock(_block);
-                //     ce.setTDiagramPanel(adp.getAvatarBDPanel());
-                //     addCheckingError(ce);
+                // UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
+                // "Unknown data type: \""
+                // + types[i] + "\" declared in method " + _atam + " of block " +
+                // _block.getName());
+                // // TODO: adapt
+                // // ce.setAvatarBlock(_block);
+                // ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                // addCheckingError(ce);
                 // }
                 AvatarAttribute aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _block, _uiam);
                 _atam.addParameter(aa);
@@ -2596,30 +2600,31 @@ public class AvatarDesignPanelTranslator {
                     actionText = modifyStringMethodCall(actionText, block.getName());
                     // TraceManager.addDev("Action after modifyStringMethodCall :" + actionText);
 
-                    if (!AvatarBlock.isAValidMethodCall(block, actionText)) {
-                        UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR,
-                                "Badly formed transition method call: " + actionText);
-                        // TODO: adapt
-                        // ce.setAvatarBlock(_ab);
-                        ce.setTDiagramPanel(connector.tdp);
-                        ce.setTGComponent(connector);
-                        addCheckingError(ce);
-                    } else {
-                        // TraceManager.addDev("Adding method call action");
-                        transition.addAction(actionText);
-                    }
+                    // if (!AvatarBlock.isAValidMethodCall(block, actionText)) {
+                    // UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR,
+                    // "Badly formed transition method call: " + actionText);
+                    // // TODO: adapt
+                    // // ce.setAvatarBlock(_ab);
+                    // ce.setTDiagramPanel(connector.tdp);
+                    // ce.setTGComponent(connector);
+                    // addCheckingError(ce);
+                    // } else {
+                    // TraceManager.addDev("Adding method call action");
+                    transition.addAction(actionText);
+                    // }
                 } else {
                     // Variable assignment
 
                     // TraceManager.addDev("Variable Action:" + actionText);
                     error = AvatarSyntaxChecker.isAValidVariableExpr(block.getAvatarSpecification(), block, actionText);
 
-                    if (error < 0) {
-                        makeError(error, connector.tdp, block, connector, "transition action", actionText);
-                    } else {
-                        // TraceManager.addDev("Adding regular action:" + actionText);
-                        transition.addAction(actionText);
-                    }
+                    // if (error < 0) {
+                    // makeError(error, connector.tdp, block, connector, "transition action",
+                    // actionText);
+                    // } else {
+                    // TraceManager.addDev("Adding regular action:" + actionText);
+                    transition.addAction(actionText);
+                    // }
                 }
             }
         }
@@ -3167,23 +3172,25 @@ public class AvatarDesignPanelTranslator {
                 TraceManager.addDev("-> -> NULL Param " + param + " in block " + _blockName);
                 s = param + s.substring(index0, s.length());
             } else {
-                if (ta.getType() == TAttribute.OTHER) {
-                    // TraceManager.addDev("Attribute other:" + param);
-                    String newparams = "";
-                    boolean first = true;
-                    for (TAttribute tatmp : adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
-                        if (first)
-                            first = false;
-                        else
-                            newparams = newparams + ", ";
-                        newparams += param + "__" + tatmp.getId();
-                    }
-                    if (adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther()).size() > 1)
-                        newparams = "(" + newparams + ")";
-                    s = newparams + s.substring(index0, s.length());
-                } else {
-                    s = param + s.substring(index0, s.length());
-                }
+                // if (ta.getType() == TAttribute.OTHER) {
+                // // TraceManager.addDev("Attribute other:" + param);
+                // String newparams = "";
+                // boolean first = true;
+                // for (TAttribute tatmp :
+                // adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
+                // if (first)
+                // first = false;
+                // else
+                // newparams = newparams + ", ";
+                // newparams += param + "__" + tatmp.getId();
+                // }
+                // if (adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther()).size()
+                // > 1)
+                // newparams = "(" + newparams + ")";
+                // s = newparams + s.substring(index0, s.length());
+                // } else {
+                s = param + s.substring(index0, s.length());
+                // }
             }
         }
 

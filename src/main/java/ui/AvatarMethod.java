@@ -342,7 +342,8 @@ public class AvatarMethod {
         String lowerid = id.toLowerCase();
         boolean b1, b2, b3, b4, b5, b6;
         b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
-        b2 = id.matches("\\w*");
+        // b2 = id.matches("\\w*");
+        b2 = true;
         if (checkKeyword) {
             b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
         } else {
@@ -436,7 +437,7 @@ public class AvatarMethod {
         String method = this.toStringOnlyMethod();
 
         if (!method.split("\\(")[0].contains(" ")) {
-            method = "void " + method;
+            // method = "void " + method;
         }
 
         // // match regex /^\s+ / == true
