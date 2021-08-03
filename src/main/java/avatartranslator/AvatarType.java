@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+
 /**
  * Class AvatarType Avatar type Creation: 20/05/2010
  * 
@@ -58,6 +60,7 @@ public enum AvatarType {
     private String defaultValue = "";
     private String defaultValueTF = "";
     private int defaultValueInInt = -1;
+    private HashMap<String, String> typeMap = new HashMap<>();
     public String type = "";
 
     AvatarType(String name, String defaultValue, String defaultValueTF, int defaultValueInInt) {
@@ -104,13 +107,17 @@ public enum AvatarType {
         return this.name;
     }
 
-    public void updateTypeName(String s) {
-        this.name = s;
+    // 
+    public void addNewTypeName(String id, String typeName) {
+        // this.name = s;
+        // typesName.add(s);
+        typeMap.put(id, typeName);
     }
 
-    public String getTypeName() {
-        return this.name;
+    public String getTypeName(String id) {
+        return typeMap.get(id);
     }
+    // 
 
     public String getDefaultInitialValue() {
         return this.defaultValue;

@@ -1297,7 +1297,7 @@ public class AvatarDesignPanelTranslator {
         } else {
             // type = AvatarType.newInstance("Second", 1);
             // type =
-            type.updateTypeName(_a.getTypeOther());
+            type.addNewTypeName(_a.getId() ,_a.getTypeOther());
         }
         AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _ab, _a);
         aa.setInitialValue(_a.getInitialValue());

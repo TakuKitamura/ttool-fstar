@@ -939,7 +939,8 @@ public class AVATAR2CPOSIX {
         } else if (_aa.getType() == AvatarType.UINT64) {
             ret = "uint64_t";
         } else {
-            ret = _aa.getType().getTypeName();
+            String variableName = _aa.getName();
+            ret = _aa.getType().getTypeName(variableName);
         }
 
         return ret;
