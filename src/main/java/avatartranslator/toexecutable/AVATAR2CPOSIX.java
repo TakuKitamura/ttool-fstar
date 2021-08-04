@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 /**
  * Class AVATAR2CPOSIX Creation: 29/03/2011
@@ -282,19 +283,27 @@ public class AVATAR2CPOSIX {
 
         taskFiles.add(taskFile);
 
-        String writeFilePathStr = MainGUI.getFileName();
-
-        String readFilePathStr = writeFilePathStr + "~";
-
-        File writeFilePath = new File(writeFilePathStr);
-
         try {
-            FileOutputStream fos = new FileOutputStream(writeFilePath);
+
+            String writeFilePathStr = MainGUI.getFileName();
+
+            Path writeFilePath = Paths.get(writeFilePathStr);
+            byte[] writeFileBytes = Files.readAllBytes(writeFilePath);
+
+            String readFilePathStr = writeFilePathStr + "~";
+
             Path readFilePath = Paths.get(readFilePathStr);
-            byte[] fileBytes = Files.readAllBytes(readFilePath);
-            fos.write(fileBytes);
-            fos.close();
-            TraceManager.addDev("File Auto Saved!!");
+            byte[] readFileBytes = Files.readAllBytes(readFilePath);
+
+            if (Arrays.equals(writeFileBytes, readFileBytes) == false) {
+
+                File writeFile = new File(writeFilePathStr);
+
+                FileOutputStream fos = new FileOutputStream(writeFile);
+                fos.write(readFileBytes);
+                fos.close();
+                TraceManager.addDev("File Auto Saved!!");
+            }
         } catch (Exception e) {
             TraceManager.addDev("Error during autosave: " + e.getMessage());
             return;
