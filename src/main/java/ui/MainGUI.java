@@ -303,7 +303,7 @@ public class MainGUI
     private int idButtonSelected;
     private Plugin pluginSelected;
 
-    private File file;
+    private static File file;
     private File dir;
     private File config;
     private File lotosfile;
@@ -3248,7 +3248,7 @@ public class MainGUI
         return file.getName();
     }
 
-    public String getFileName() {
+    public static String getFileName() {
         return file.getAbsolutePath();
     }
 

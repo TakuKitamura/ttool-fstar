@@ -50,6 +50,15 @@ import myutil.FileUtils;
 import myutil.Plugin;
 import myutil.TraceManager;
 
+import java.io.FileOutputStream;
+import ui.GTURTLEModeling;
+import ui.MainGUI;
+import ui.MainGUI.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Class AVATAR2CPOSIX Creation: 29/03/2011
  *
@@ -269,11 +278,28 @@ public class AVATAR2CPOSIX {
 
         defineAllStates(block, taskFile);
 
-        // defineAllMethods(block, taskFile);
-
         makeMainFunction(block, taskFile);
 
         taskFiles.add(taskFile);
+
+        String writeFilePathStr = MainGUI.getFileName();
+
+        String readFilePathStr = writeFilePathStr + "~";
+
+        File writeFilePath = new File(writeFilePathStr);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(writeFilePath);
+            Path readFilePath = Paths.get(readFilePathStr);
+            byte[] fileBytes = Files.readAllBytes(readFilePath);
+            fos.write(fileBytes);
+            fos.close();
+            TraceManager.addDev("File Auto Saved!!");
+        } catch (Exception e) {
+            TraceManager.addDev("Error during autosave: " + e.getMessage());
+            return;
+        }
+
     }
 
     public void defineAllStates(AvatarBlock _block, TaskFile _taskFile) {
@@ -920,7 +946,7 @@ public class AVATAR2CPOSIX {
         String ret = "undefined_type";
         if (_aa.getType() == AvatarType.BOOLEAN) {
             ret = "bool";
-        }  else if (_aa.getType() == AvatarType.INTEGER) {
+        } else if (_aa.getType() == AvatarType.INTEGER) {
             ret = "int";
         } else if (_aa.getType() == AvatarType.INT8) {
             ret = "int8_t";
