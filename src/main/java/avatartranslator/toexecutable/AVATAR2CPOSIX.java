@@ -59,6 +59,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import javax.xml.parsers.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
 
 /**
  * Class AVATAR2CPOSIX Creation: 29/03/2011
@@ -283,14 +295,13 @@ public class AVATAR2CPOSIX {
 
         taskFiles.add(taskFile);
 
-        try {
+        String writeFilePathStr = MainGUI.getFileName();
+        String readFilePathStr = writeFilePathStr + "~";
 
-            String writeFilePathStr = MainGUI.getFileName();
+        try {
 
             Path writeFilePath = Paths.get(writeFilePathStr);
             byte[] writeFileBytes = Files.readAllBytes(writeFilePath);
-
-            String readFilePathStr = writeFilePathStr + "~";
 
             Path readFilePath = Paths.get(readFilePathStr);
             byte[] readFileBytes = Files.readAllBytes(readFilePath);
@@ -307,6 +318,62 @@ public class AVATAR2CPOSIX {
         } catch (Exception e) {
             TraceManager.addDev("Error during autosave: " + e.getMessage());
             return;
+        }
+
+        String blockName = block.getName();
+
+        try {
+            DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentbuilder = documentbuilderfactory.newDocumentBuilder();
+            Document document = documentbuilder.parse(new FileInputStream(writeFilePathStr));
+            Element element = document.getDocumentElement();
+            NodeList components = element.getElementsByTagName("COMPONENT");
+            for (int i = 0; i < components.getLength(); i++) {
+                Node component = components.item(i);
+                boolean findBlock = false;
+                for (int j = 0; j < component.getChildNodes().getLength(); j++) {
+                    Node maiItems = component.getChildNodes().item(j);
+
+                    // String nodeName = maiItems.getNodeName();
+                    if (findBlock == false) {
+                        if (maiItems.getNodeName().equals("infoparam")) {
+                            // String name = maiItems.getTextContent();
+                            NamedNodeMap infoparamAttributes = maiItems.getAttributes();
+                            // get the value of the attribute
+                            String bolockNameInXML = infoparamAttributes.getNamedItem("value").getNodeValue();
+
+                            if (blockName.equals(bolockNameInXML)) {
+                                findBlock = true;
+                            }
+
+                        }
+                    } else if (findBlock == true){
+                        if (maiItems.getNodeName().equals("extraparam")) {
+                            for (int k = 0; k < maiItems.getChildNodes().getLength(); k++) {
+                                Node extraItems = maiItems.getChildNodes().item(k);
+                                if (extraItems.getNodeName().equals("Method")) {
+                                    NamedNodeMap methodAttributes = extraItems.getAttributes();
+                                    String function = methodAttributes.getNamedItem("value").getNodeValue();
+                                    String requireRefinementType = methodAttributes
+                                            .getNamedItem("requireRefinementType").getNodeValue();
+                                    String ensureRefinementType = methodAttributes.getNamedItem("ensureRefinementType")
+                                            .getNodeValue();
+                                    String logic = methodAttributes.getNamedItem("logic").getNodeValue();
+                                    TraceManager.addDev(function + "," + requireRefinementType + ","
+                                            + ensureRefinementType + "," + logic);
+
+                                }
+
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("Error during xml file: " + e.getMessage());
         }
 
     }
