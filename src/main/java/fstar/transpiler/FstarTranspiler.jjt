@@ -1,0 +1,822 @@
+/**
+ * Simple calculator JJTree file
+ * 
+ */
+options
+{
+  STATIC = false; // parserクラスのメソッドをstaticにしない
+  MULTI = true; // ASTXXXクラスを生成する
+  VISITOR = true; // Visitorクラスを生成する
+  UNICODE_INPUT = false; // ユニコードで解析を行わない（日本語等を使わない）
+}
+
+PARSER_BEGIN(FstarTranspiler)
+
+package fstar.transpiler;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.util.stream.Stream;
+
+import java.util.Iterator;
+
+public class FstarTranspiler
+{
+  private static String upperCaseFirst(String val) {
+    char[] arr = val.toCharArray();
+    arr[0] = Character.toUpperCase(arr[0]);
+    return new String(arr);
+  }
+
+  private static String readAll(String path) throws IOException {
+    Path fileName = Paths.get(path);
+    String readFile = Files.readString(fileName);
+    // System.out.println(actual);
+    return readFile;
+  }
+
+  private static void writeAll(String path, String content) throws IOException {
+    FileWriter file = new FileWriter(path);
+    PrintWriter pw = new PrintWriter(new BufferedWriter(file));
+    pw.println(content);
+    pw.close();
+  }
+
+  private static void main(String [] args) {
+
+    Map<String, String> transpileSeed = new HashMap<String, String>();
+
+    transpileSeed.put("methodDeclaration", "int32 validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
+    transpileSeed.put("logic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("require", "true"); // 事前条件
+    transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
+
+    // TODO: ここは開発者の責任でコード上に手書きしてもらう
+    transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
+    transpileSeed.put("ngInitRetValue", "1"); // この関数がエラー処理を行った場合の返り値(テンプレート上の初期値)
+
+    // F*言語のテンプレートでの不足機能を正しく実装できたかの判定用テストコードの値
+
+    // TODO: ここは開発者の責任でコード上に手書きしてもらう
+    // テスト関数の引数
+    String[][]testFuncArgs =  { // test(arg1, arg2)
+        {"1", "2", "[1,2,0,0,0,0,0,0]"}, // test1 arg
+        {"2", "3", "[1,2,3,0,0,0,0,0]"} // test2 arg
+    };
+
+    // TODO: ここは開発者の責任でコード上に手書きしてもらう
+    // 期待するテスト関数が返す値
+    String[]testExpectedResult = {"0", "1"}; // test1 expected, test2 expected, 
+
+    try {
+        String result = transpile("/tmp", transpileSeed, testFuncArgs, testExpectedResult);
+        // System.out.println(result);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+  }
+
+  public static String transpile(String projectDirPath, Map<String, String> transpileSeed, String[][]testFuncArgs, String[]testExpectedResult) throws Exception {
+
+    InputStream methodDeclarationInput = new ByteArrayInputStream(transpileSeed.get("methodDeclaration").getBytes());
+    FstarTranspiler methodDeclarationParser = new FstarTranspiler(methodDeclarationInput);
+
+
+    MethodDeclaration methodDeclaration = new MethodDeclaration();
+    
+    FstarTranspilerVisitorImpl visiter = new FstarTranspilerVisitorImpl(methodDeclaration);
+
+    Object ret = visiter.filterObjException(
+        methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null)
+    );
+    
+    // System.out.println("");
+
+    InputStream logicInput = new ByteArrayInputStream(transpileSeed.get("logic").getBytes());
+    
+    FstarTranspiler logicParser = new FstarTranspiler(logicInput);
+
+    ret = visiter.filterObjException(
+        logicParser.ConditionRoot().jjtAccept(visiter, null)
+    );
+
+    String logic = (String)ret;
+
+    System.out.println("logic: " + logic);
+
+
+    InputStream requireInput = new ByteArrayInputStream(transpileSeed.get("require").getBytes());
+    FstarTranspiler requireParser = new FstarTranspiler(requireInput);
+
+    ret = visiter.filterObjException(
+        requireParser.ConditionRoot().jjtAccept(visiter, null)
+    );
+
+    String require = (String)ret;
+
+    // System.out.printf("require = %s\n", require);
+    // System.out.println("");
+
+    InputStream ensureInput = new ByteArrayInputStream(transpileSeed.get("ensure").getBytes());
+    FstarTranspiler ensureParser = new FstarTranspiler(ensureInput);
+
+    ret = visiter.filterObjException(
+        ensureParser.ConditionRoot().jjtAccept(visiter, null)
+    );
+
+    String ensure = (String)ret;
+
+    // System.out.printf("ensure = %s\n", ensure);
+    // System.out.println("");
+
+    // generateWorkFstarCode
+
+    methodDeclaration = visiter.methodDeclaration;
+
+    String funcName = methodDeclaration.funcName;
+    String moduleName = upperCaseFirst(funcName);
+
+    String retFstarType = visiter.fstarTypeMap.get(methodDeclaration.returnType);
+    String retValueType = String.format("%s.t", retFstarType);
+
+    // System.out.println(retValueType);
+
+    String initValue = transpileSeed.get("okInitRetValue");
+    String ngValue = transpileSeed.get("ngInitRetValue");
+
+
+
+    String ngInitRetValue = "";
+    if (ngValue.length() == 0) {
+        ngInitRetValue = "B.null";
+    } else {
+        ngInitRetValue = String.format("%s%s", ngValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
+    }
+
+    System.out.println(methodDeclaration.args);
+
+
+    List<String> argsName = new ArrayList<String>(methodDeclaration.args.keySet());
+    
+    // require
+    // ensure
+
+    String args = ""; // x, y
+    String fstarFuncArgs = ""; // x: I32.t ->\n  y: I32.t ->
+
+    // System.out.println(methodDeclaration);
+
+    for (int i = 0; i < argsName.size(); i++) {
+
+        String argName = argsName.get(i);
+        args += String.format("%s ", argName);
+
+        // System.out.println(777);
+        // System.out.println(methodDeclaration.args.get(argName));
+
+        String argType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.args.get(argName)));
+        fstarFuncArgs += String.format("%s: %s ->\n  ", argName, argType);
+    }
+
+    String okInitRetValue = "";
+
+    if (ngValue.length() == 0) {
+        okInitRetValue = "B.null";
+    } else {
+        okInitRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
+    }
+
+    String retArgs = args + "ret";
+
+    // System.out.println(visiter.usedArgsInRequire);
+
+    String fstarCode = null;
+    try {
+        fstarCode = readAll("./fstar/transpiler/tmpl/fstar.tmpl");
+    } catch (Exception e) {
+        System.out.println(e);
+    }
+
+    fstarCode = fstarCode.replaceAll("@module_name@", moduleName); // funcName
+
+    fstarCode = fstarCode.replaceAll("@ret_value_type@", retValueType); // return.type
+
+    // fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", ngInitRetValue); // どうするか検討
+    fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", "???"); // どうするか検討
+
+    fstarCode = fstarCode.replaceAll("@require@", require);// パース結果から構成
+
+    fstarCode = fstarCode.replaceAll("@ensure@", ensure); // パース結果から構成
+
+    fstarCode = fstarCode.replaceAll("@func_name@", funcName); // funcName
+
+    fstarCode = fstarCode.replaceAll("@args@", args); // method.args
+
+    // fstarCode = fstarCode.replaceAll("@ok_init_ret_value@", okInitRetValue); // 検討
+    fstarCode = fstarCode.replaceAll("@ok_init_ret_value@", "???"); // 検討
+
+    fstarCode = fstarCode.replaceAll("@fstar_func_args@", fstarFuncArgs); // method.args
+
+    fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
+
+    fstarCode = fstarCode.replaceAll("@logic_constraint@", logic); // ロジック
+    // System.out.println(fstarCode);
+
+    // Testing_test_start("Add Test");
+    // Testing_eq_i32("Add Test Case1", 3, add(1, 2).value);
+
+    // TODO: 一つの関数の一つのエラーを強制するか
+
+    String testTitle = String.format("%s Func Unit Test", moduleName);
+    String testStartFunc = String.format("Testing_test_start(\"%s\");\n", testTitle);
+    // String testCaseTitle = "Add Test Case1";
+
+    if (testExpectedResult.length != testFuncArgs.length) {
+        throw new Exception("test arg is invalid");
+    }
+
+    String testFuncs = "";
+    for (int i = 0; i < testFuncArgs.length; i++) {
+        String testCaseTitle = String.format("Test Case%d", i + 1);
+        String testFuncName = String.format("Testing_eq_%s", retFstarType.toLowerCase());
+        String callCFunc = String.format("%s(", funcName);
+        // System.out.println(testFuncArgs[i].length);
+        String[] arguments = testFuncArgs[i];
+        System.out.println(arguments.length);
+        for (int j = 0; j < arguments.length; j++) {
+
+            String argument = arguments[j];
+
+            callCFunc += argument;
+            if (j != arguments.length - 1) {
+                callCFunc += ", ";
+            } else {
+                callCFunc += ")";
+            }
+        }
+
+        System.out.println(callCFunc);
+
+        String testFunc = String.format("  %s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, testExpectedResult[i], callCFunc);
+        testFuncs += testFunc;
+    }
+
+    // System.out.println(testStartFunc);
+    // System.out.println(testFuncs);
+
+    String testEnd = "Testing_test_end();";
+    // System.out.println("Testing_test_end();");
+
+    // String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testFuncs, testEnd);
+
+    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, "???", testEnd);
+
+    String testCode = null;
+
+    testCode = readAll("./fstar/transpiler/tmpl/test_c.tmpl");
+
+    testCode = testCode.replaceAll("@header_name@", moduleName);
+    testCode = testCode.replaceAll("@test_codes@", testCodes);
+
+    // System.out.println(testCode);
+
+    String mainCode = null;
+
+    mainCode = readAll("./fstar/transpiler/tmpl/main_c.tmpl");
+
+    mainCode = mainCode.replaceAll("@func_name@", funcName);
+
+    // System.out.println(mainCode);
+
+    String makefileCode = null;
+
+    makefileCode = readAll("./fstar/transpiler/tmpl/makefile.tmpl");
+    makefileCode = makefileCode.replaceAll("@func_name@", funcName);
+    makefileCode = makefileCode.replaceAll("@module_name@", moduleName);
+
+    // System.out.println(makefileCode);
+
+    String dirPath = String.format(projectDirPath + "/%s", funcName);
+
+    Path dp = Paths.get(dirPath);
+
+    // System.out.println(p.listFiles());
+
+
+    String fstarFilePath = String.format("%s/%s", dirPath, String.format("%s.fst", funcName));
+    String mainFilePath = String.format("%s/%s", dirPath, "main.c");
+    String testFilePath = String.format("%s/%s", dirPath, "test.c");
+    String makefilePath = String.format("%s/%s", dirPath, "Makefile");
+
+    if (Files.exists(dp)) {
+        Files.deleteIfExists(Paths.get(fstarFilePath));
+        Files.deleteIfExists(Paths.get(mainFilePath));
+        Files.deleteIfExists(Paths.get(testFilePath));
+        Files.deleteIfExists(Paths.get(makefilePath));
+    } else {
+        Files.createDirectory(dp);
+    }
+
+    // TODO: これを外部に公開する際は、インジェクション攻撃対策をする
+
+    writeAll(fstarFilePath, fstarCode);
+
+    writeAll(mainFilePath, mainCode);
+
+    writeAll(testFilePath, testCode);
+
+    writeAll(makefilePath, makefileCode);
+
+    return "";
+  }
+}
+
+
+PARSER_END(FstarTranspiler)
+
+void BooleanLiteral() :
+{
+  Token t = null;
+}
+{
+  t = < BOOLEAN >
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void NullLiteral() :
+{
+  Token t = null;
+}
+{
+  t = < NULL >
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+SKIP :
+{
+  " "
+| "\t"
+| "\r"
+}
+
+TOKEN :
+{
+< BOOLEAN :
+  "true"
+  | "false"
+>
+|
+< NULL : "null">
+}
+
+TOKEN :
+{
+< RELATIONAL :
+  ">"
+  | ">="
+  | "<"
+  | "<="
+>
+| < EQUALITY : "==" | "!=" >
+| < AND : "&&" >
+| < OR : "||" >
+| < OPEN_BRACKET : "(" >
+| < CLOSE_BRACKET : ")" >
+| < MINUS : "-" >
+| < LEN : "len" >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+|
+  < #LETTER:
+      [
+       "\u0024",
+       "\u0041"-"\u005a",
+       "\u005f",
+       "\u0061"-"\u007a",
+       "\u00c0"-"\u00d6",
+       "\u00d8"-"\u00f6",
+       "\u00f8"-"\u00ff",
+       "\u0100"-"\u1fff",
+       "\u3040"-"\u318f",
+       "\u3300"-"\u337f",
+       "\u3400"-"\u3d2d",
+       "\u4e00"-"\u9fff",
+       "\uf900"-"\ufaff"
+      ]
+  >
+|
+  < #DIGIT:
+      [
+       "\u0030"-"\u0039",
+       "\u0660"-"\u0669",
+       "\u06f0"-"\u06f9",
+       "\u0966"-"\u096f",
+       "\u09e6"-"\u09ef",
+       "\u0a66"-"\u0a6f",
+       "\u0ae6"-"\u0aef",
+       "\u0b66"-"\u0b6f",
+       "\u0be7"-"\u0bef",
+       "\u0c66"-"\u0c6f",
+       "\u0ce6"-"\u0cef",
+       "\u0d66"-"\u0d6f",
+       "\u0e50"-"\u0e59",
+       "\u0ed0"-"\u0ed9",
+       "\u1040"-"\u1049"
+      ]
+  >
+}
+
+// F# suffix
+// https://docs.microsoft.com/ja-jp/dotnet/fsharp/language-reference/literals
+
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL:
+  (<MINUS>)* 
+    (
+        <DECIMAL_LITERAL> (["l","L"])?
+        | <HEX_LITERAL> (["l","L"])?
+        | <OCTAL_LITERAL> (["l","L"])?
+    )
+  >
+|
+  < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+|
+  < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+|
+  < #OCTAL_LITERAL: "0" (["0"-"7"])* >
+|
+  < FLOATING_POINT_LITERAL:
+    (<MINUS>)*
+    (
+        (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+      | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+      | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+      | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+    )
+  >
+|
+  < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+|
+  < CHARACTER_LITERAL:
+      "'"
+      (   (~["'","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )
+      "'"
+  >
+|
+  < STRING_LITERAL:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
+}
+
+SimpleNode ConditionRoot() :
+{
+}
+{
+  Expr() <EOF>
+  {
+    return jjtThis;
+  }
+}
+
+void Expr() :
+{
+}
+{
+  ConditionalOrExpression()
+}
+
+void ConditionalOrExpression() :
+{
+  Token t = null;
+}
+{
+    ConditionalAndExpression() (t = < OR > ConditionalAndExpression())*
+
+}
+
+void ConditionalAndExpression() :
+{
+  Token t = null;
+}
+{
+  EqualityExpression() (t = < AND > EqualityExpression()
+  {
+
+  } )*
+{}
+}
+
+void EqualityExpression() :
+{
+  Token t = null;
+}
+{
+  RelationalExpression() (t = < EQUALITY > RelationalExpression()
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  } )*
+}
+
+void RelationalExpression() :
+{
+  Token t = null;
+}
+{
+  ValueOrExpr() ( t = < RELATIONAL > ValueOrExpr()
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  } )*
+}
+
+void ValueOrExpr() :
+{
+  Token t = null;
+}
+{
+  Literal()
+  |
+  Variable()  
+  |
+  < OPEN_BRACKET > Expr() < CLOSE_BRACKET >
+  |
+  Len()
+}
+
+
+void Literal() :
+{
+  Token t = null;
+}
+{
+  Integer()
+|
+  Floating()
+|
+  Character()
+|
+  String()
+|
+  BooleanLiteral()
+|
+  NullLiteral()
+}
+
+void Variable() :
+/*
+ * A lookahead of 2 is required below since "Variable" can be followed
+ * by a ".*" when used in the context of an "ImportDeclaration".
+ */
+{Token t = null;}
+{
+  t = <IDENTIFIER>
+  ( LOOKAHEAD(2) "." <IDENTIFIER>
+  )*
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+// 新たに関数を追加する際はこれを拡張する
+void Len():
+{
+    Token t = null;
+}
+{
+  t = < LEN > < OPEN_BRACKET > Variable() < CLOSE_BRACKET >
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+
+
+void Integer():
+{Token t = null;}
+{
+  t = <INTEGER_LITERAL>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void Floating():
+{Token t = null;}
+{
+  t = <FLOATING_POINT_LITERAL>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void Character():
+{Token t = null;}
+{
+ t = <CHARACTER_LITERAL>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void String():
+{Token t = null;}
+{
+ t = <STRING_LITERAL>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+// Method
+
+SimpleNode MethodDeclarationRoot() :
+{
+}
+{
+  MethodDeclaration() <EOF>
+  {
+    return jjtThis;
+  }
+}
+
+TOKEN :
+{
+< VOID_TYPE : "void " >
+|
+< DATA_TYPE :
+  "bool "
+  | "char "
+  | "string "
+  | "byte "
+  | "short "
+  | "int8 "
+  | "int16 "
+  | "int32 "
+  | "int64 "
+  | "uint8 "
+  | "uint16 "
+  | "uint32 "
+  | "uint64 "
+  | "long "
+  | "float "
+  | "double "
+>
+|
+< DATA_TYPE_BRACKET :
+  "bool[]"
+  | "char[]"
+  | "string[]"
+  | "byte[]"
+  | "short[]"
+  | "int8[]"
+  | "int16[]"
+  | "int32[]"
+  | "int64[]"
+  | "uint8[]"
+  | "uint16[]"
+  | "uint32[]"
+  | "uint64[]"
+  | "long[]"
+  | "float[]"
+  | "double[]"
+>
+}
+
+
+void PrimitiveType() :
+{
+    Token t = null;
+}
+{
+ t = <DATA_TYPE>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void PrimitiveBlacketType() :
+{
+    Token t = null;
+}
+{
+ t = <DATA_TYPE_BRACKET>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void Type() :
+{}
+{
+  PrimitiveType() | PrimitiveBlacketType()
+}
+
+void VoidType():
+{
+    Token t = null;
+}
+{
+    t = < VOID_TYPE >
+    {
+        jjtThis.jjtSetValue(t.toString().trim());
+    }
+}
+
+
+void ResultType() :
+{
+    Token t = null;
+}
+{
+  VoidType() | Type()
+}
+
+void ArrayBrackets():
+{
+    Token t = null;
+}
+{
+    t = "[]" 
+    {
+        jjtThis.jjtSetValue(t.image.trim());
+    }
+}
+
+void VariableDeclaratorId() :
+{
+    Token t = null;
+}
+{
+  t = <IDENTIFIER> (ArrayBrackets()) *
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
+
+void FormalParameter() :
+{}
+{
+  Type() VariableDeclaratorId()
+}
+
+
+void FormalParameters() :
+{}
+{
+  "(" [ FormalParameter() ( "," FormalParameter() )* ] ")"
+}
+
+void MethodDeclarator() :
+{
+    Token t = null;
+}
+{
+  t = <IDENTIFIER>
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  } FormalParameters()
+}
+
+
+void MethodDeclaration() :
+{}
+{
+  ResultType() MethodDeclarator()
+}
+
