@@ -1,4 +1,4 @@
 buildTranspiler:
-	jjtree FstarTranspiler.jjt  && javacc FstarTranspiler.jj  && javac *.java  && pushd ../../ && java fstar/transpiler/FstarTranspiler
+	jjtree FstarTranspiler.jjt  && javacc FstarTranspiler.jj  && javac *.java  && cd ../../ && java fstar/transpiler/FstarTranspiler
 buildGenerator:
-	pushd fstar/generator && javac main.java && pushd ../../ && java fstar/generator/main ./AVATAR_executablecode ./out
+	cd fstar/generator && javac main.java && cd ../../ && java fstar/generator/main ./AVATAR_executablecode ./out
