@@ -135,11 +135,21 @@ public class main {
 
             cFiles.forEach(p -> {
                 try {
-                    String lines = Files.readString(p);
+                    // String lines = Files.readString(p);
+                    String lines = Files.readAllBytes(p).toString();
                     String regex = "(#define STATE__STOP__STATE \\d+\\n)([\\s\\S]*)(void \\*mainFunc__.*\\(void *\\*arg\\)\\{)";
                     String removedUserFunc = lines.replaceAll(regex, "$1\n$3");
 
-                    Files.writeString(p, removedUserFunc);
+                    // Files.writeString(p, removedUserFunc);
+
+                    // write to file
+                    FileWriter fileWriter = new FileWriter(p.toFile(), true);
+                    try {
+                        fileWriter.write(removedUserFunc);
+                        fileWriter.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 } catch (IOException e) {
                     System.out.println(e);

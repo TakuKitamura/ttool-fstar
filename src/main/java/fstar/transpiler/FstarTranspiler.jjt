@@ -28,6 +28,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.*;
 
 import java.util.stream.Stream;
 
@@ -43,9 +44,10 @@ public class FstarTranspiler
 
   private static String readAll(String path) throws IOException {
     Path fileName = Paths.get(path);
-    String readFile = Files.readString(fileName);
+    // String readFile = Files.readString(fileName);
     // System.out.println(actual);
-    return readFile;
+
+    return new String(Files.readAllBytes(fileName));
   }
 
   private static void writeAll(String path, String content) throws IOException {
@@ -55,11 +57,11 @@ public class FstarTranspiler
     pw.close();
   }
 
-  private static void main(String [] args) {
+  public static void main(String [] args) {
 
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
-    transpileSeed.put("methodDeclaration", "int32 validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
+    transpileSeed.put("methodDeclaration", "fstar_int32 validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
     transpileSeed.put("logic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
     transpileSeed.put("require", "true"); // 事前条件
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
@@ -91,7 +93,33 @@ public class FstarTranspiler
 
   public static String transpile(String projectDirPath, Map<String, String> transpileSeed, String[][]testFuncArgs, String[]testExpectedResult) throws Exception {
 
-    InputStream methodDeclarationInput = new ByteArrayInputStream(transpileSeed.get("methodDeclaration").getBytes());
+    String function = transpileSeed.get("methodDeclaration");
+
+    // regex match
+    Pattern functionPattern = Pattern.compile("^(fstar_(.*)) (.*\\(.*)");
+
+    Matcher functionMatcher = functionPattern.matcher(function);
+
+    String returnFstarTypeName = "";
+
+    if (functionMatcher.find()) {
+        returnFstarTypeName = functionMatcher.group(1);
+        String returnTypeName = functionMatcher.group(2);
+        String removedFstarTypeName = functionMatcher.group(3);
+        // transpileSeed update
+        // transpileSeed.put("methodDeclaration", returnTypeName);
+        function = returnTypeName + " " + removedFstarTypeName;
+    } else {
+        throw new Exception("require fstar_(???) as return-type");
+    }
+
+    // System.out.println(functionMatcher.find());
+
+
+    // throw new Exception("x");
+    
+
+    InputStream methodDeclarationInput = new ByteArrayInputStream(function.getBytes());
     FstarTranspiler methodDeclarationParser = new FstarTranspiler(methodDeclarationInput);
 
 
@@ -235,6 +263,10 @@ public class FstarTranspiler
     fstarCode = fstarCode.replaceAll("@logic_constraint@", logic); // ロジック
     // System.out.println(fstarCode);
 
+
+    fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
+
+
     // Testing_test_start("Add Test");
     // Testing_eq_i32("Add Test Case1", 3, add(1, 2).value);
 
@@ -282,7 +314,7 @@ public class FstarTranspiler
 
     // String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testFuncs, testEnd);
 
-    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, "???", testEnd);
+    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, "  ???", testEnd);
 
     String testCode = null;
 

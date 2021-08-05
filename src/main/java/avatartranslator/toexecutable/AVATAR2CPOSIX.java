@@ -72,6 +72,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import fstar.transpiler.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class AVATAR2CPOSIX Creation: 29/03/2011
  *
@@ -274,6 +279,10 @@ public class AVATAR2CPOSIX {
         }
     }
 
+    public String xmlUnescape(String s) {
+        return s.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+    }
+
     public void makeTask(AvatarBlock block) {
         TaskFile taskFile = new TaskFile(block.getName());
 
@@ -295,10 +304,10 @@ public class AVATAR2CPOSIX {
 
         taskFiles.add(taskFile);
 
-        // String writeFilePathStr = MainGUI.getFileName();
+        // String saveXMLPath = MainGUI.getFileName();
 
-        String writeFilePathStr = MainGUI.getFileName();
-        File file = new File(writeFilePathStr);
+        String saveXMLPath = MainGUI.getFileName();
+        File file = new File(saveXMLPath);
 
         //
         File fileSave = new File(file.getAbsolutePath());
@@ -323,41 +332,18 @@ public class AVATAR2CPOSIX {
             // status.setText("Error during autosave: " + e.getMessage());
             return;
         }
-        // }
-
-        //
-
-        // String writeFilePathStr = MainGUI.getFileName();
-        // String readFilePathStr = writeFilePathStr + "~";
-
-        // try {
-
-        // Path writeFilePath = Paths.get(writeFilePathStr);
-        // byte[] writeFileBytes = Files.readAllBytes(writeFilePath);
-
-        // Path readFilePath = Paths.get(readFilePathStr);
-        // byte[] readFileBytes = Files.readAllBytes(readFilePath);
-
-        // if (Arrays.equals(writeFileBytes, readFileBytes) == false) {
-
-        // File writeFile = new File(writeFilePathStr);
-
-        // FileOutputStream fos = new FileOutputStream(writeFile);
-        // fos.write(readFileBytes);
-        // fos.close();
-        // TraceManager.addDev("File Auto Saved!!");
-        // }
-        // } catch (Exception e) {
-        // TraceManager.addDev("Error during autosave: " + e.getMessage());
-        // return;
-        // }
 
         String blockName = block.getName();
+
+        ArrayList<String> functions = new ArrayList<>();
+        ArrayList<String> requireRefinementTypes = new ArrayList<>();
+        ArrayList<String> ensureRefinementTypes = new ArrayList<>();
+        ArrayList<String> logics = new ArrayList<>();
 
         try {
             DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentbuilder = documentbuilderfactory.newDocumentBuilder();
-            Document document = documentbuilder.parse(new FileInputStream(writeFilePathStr));
+            Document document = documentbuilder.parse(new FileInputStream(saveXMLPath));
             Element element = document.getDocumentElement();
             NodeList components = element.getElementsByTagName("COMPONENT");
             for (int i = 0; i < components.getLength(); i++) {
@@ -385,15 +371,38 @@ public class AVATAR2CPOSIX {
                                 Node extraItems = maiItems.getChildNodes().item(k);
                                 if (extraItems.getNodeName().equals("Method")) {
                                     NamedNodeMap methodAttributes = extraItems.getAttributes();
-                                    String function = methodAttributes.getNamedItem("value").getNodeValue();
-                                    String requireRefinementType = methodAttributes
-                                            .getNamedItem("requireRefinementType").getNodeValue();
-                                    String ensureRefinementType = methodAttributes.getNamedItem("ensureRefinementType")
-                                            .getNodeValue();
-                                    String logic = methodAttributes.getNamedItem("logic").getNodeValue();
-                                    TraceManager.addDev(function + "," + requireRefinementType + ","
-                                            + ensureRefinementType + "," + logic);
+                                    String function = xmlUnescape(
+                                            methodAttributes.getNamedItem("value").getNodeValue());
 
+                                    String requireRefinementType = xmlUnescape(methodAttributes
+                                            .getNamedItem("requireRefinementType").getNodeValue().trim());
+
+                                    String ensureRefinementType = xmlUnescape(methodAttributes
+                                            .getNamedItem("ensureRefinementType").getNodeValue().trim());
+
+                                    String logic = xmlUnescape(
+                                            methodAttributes.getNamedItem("logic").getNodeValue().trim());
+
+                                    if (requireRefinementType.length() != 0 || ensureRefinementType.length() != 0
+                                            || logic.length() != 0) {
+
+                                        if (requireRefinementType.length() == 0) {
+                                            requireRefinementType = "true";
+                                        }
+
+                                        if (ensureRefinementType.length() == 0) {
+                                            ensureRefinementType = "true";
+                                        }
+
+                                        if (logic.length() == 0) {
+                                            logic = "true";
+                                        }
+
+                                        functions.add(function);
+                                        requireRefinementTypes.add(requireRefinementType);
+                                        ensureRefinementTypes.add(ensureRefinementType);
+                                        logics.add(logic);
+                                    }
                                 }
 
                             }
@@ -406,6 +415,57 @@ public class AVATAR2CPOSIX {
             }
         } catch (Exception e) {
             TraceManager.addDev("Error during xml file: " + e.getMessage());
+        }
+
+        for (int i = 0; i < functions.size(); i++) {
+            String function = functions.get(i);
+            String requireRefinementType = requireRefinementTypes.get(i);
+            String ensureRefinementType = ensureRefinementTypes.get(i);
+            String logic = logics.get(i);
+
+            Map<String, String> transpileSeed = new HashMap<String, String>();
+
+            transpileSeed.put("methodDeclaration", function); // 関数宣言
+            transpileSeed.put("require", requireRefinementType); // 事前条件
+            transpileSeed.put("ensure", ensureRefinementType); // 事後条件(retは返り値を示す)
+            transpileSeed.put("logic", logic); // ロジック(配列長を扱う場合)
+
+            // TODO: ここは開発者の責任でコード上に手書きしてもらう
+            transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
+            transpileSeed.put("ngInitRetValue", "1"); // この関数がエラー処理を行った場合の返り値(テンプレート上の初期値)
+
+            // F*言語のテンプレートでの不足機能を正しく実装できたかの判定用テストコードの値
+
+            // TODO: ここは開発者の責任でコード上に手書きしてもらう
+            // テスト関数の引数
+            String[][] testFuncArgs = { // test(arg1, arg2)
+                    { "1", "2", "[1,2,0,0,0,0,0,0]" }, // test1 arg
+                    { "2", "3", "[1,2,3,0,0,0,0,0]" } // test2 arg
+            };
+
+            // TODO: ここは開発者の責任でコード上に手書きしてもらう
+            // 期待するテスト関数が返す値
+            String[] testExpectedResult = { "0", "1" }; // test1 expected, test2 expected,
+
+            String[] splited = saveXMLPath.split("/");
+            // String projectPathStr = projectPathStr.split("/")[]
+            // slice filter last element
+
+            String projectPathStr = "";
+            for (int j = 0; j < splited.length - 1; j++) {
+                projectPathStr += splited[j] + "/";
+            }
+            // String projectPathStr = splited[splited.length - 1];
+            String generatedSrcPath = projectPathStr + "AVATAR_executablecode/generated_src";
+
+            try {
+
+                String result = FstarTranspiler.transpile(generatedSrcPath, transpileSeed, testFuncArgs,
+                        testExpectedResult);
+                // System.out.println(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

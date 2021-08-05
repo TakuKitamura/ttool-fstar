@@ -34,12 +34,12 @@ let ng_error: struct_error =
     message = !$"input is invalid range value";
 }
 
-noeq type struct_ret = {
+noeq type @struct_ret_name@ = {
     value: @ret_value_type@;
     error: struct_error;
 }
 
-let ng_ret: struct_ret = {
+let ng_ret: @struct_ret_name@ = {
     value = @ng_init_ret_value@;
     error = ng_error;
 }
@@ -50,7 +50,7 @@ let retConstraint @ret_args@ ret_error = (@ensure@ && I32.v ret_error.code = 0) 
 
 val @func_name@_body:
   @fstar_func_args@
-Stack (ret: struct_ret) (requires fun h0 -> 
+Stack (ret: @struct_ret_name@) (requires fun h0 -> 
     @logic_constraint@ &&
     argConstraint @args@
   )
@@ -65,7 +65,7 @@ let @func_name@_body @args@ =
 
 val @func_name@: 
   @fstar_func_args@
-  Stack (ret: struct_ret) (requires fun h0 -> 
+  Stack (ret: @struct_ret_name@) (requires fun h0 -> 
     @logic_constraint@
   )
   (ensures fun h0 ret h1 -> 
