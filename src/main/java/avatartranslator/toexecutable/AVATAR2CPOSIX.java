@@ -295,30 +295,62 @@ public class AVATAR2CPOSIX {
 
         taskFiles.add(taskFile);
 
+        // String writeFilePathStr = MainGUI.getFileName();
+
         String writeFilePathStr = MainGUI.getFileName();
-        String readFilePathStr = writeFilePathStr + "~";
+        File file = new File(writeFilePathStr);
+
+        //
+        File fileSave = new File(file.getAbsolutePath());
+
+        File fileTmpSave = new File(file.getAbsolutePath() + "~");
+
+        TraceManager.addDev("Autosaving in " + fileSave.getAbsolutePath());
 
         try {
+            GTURTLEModeling gtm = MainGUI.getGTM();
+            String s = gtm.makeXMLFromTurtleModeling(-1);
 
-            Path writeFilePath = Paths.get(writeFilePathStr);
-            byte[] writeFileBytes = Files.readAllBytes(writeFilePath);
+            FileOutputStream fos = new FileOutputStream(fileSave);
+            fos.write(s.getBytes());
+            fos.close();
 
-            Path readFilePath = Paths.get(readFilePathStr);
-            byte[] readFileBytes = Files.readAllBytes(readFilePath);
-
-            if (Arrays.equals(writeFileBytes, readFileBytes) == false) {
-
-                File writeFile = new File(writeFilePathStr);
-
-                FileOutputStream fos = new FileOutputStream(writeFile);
-                fos.write(readFileBytes);
-                fos.close();
-                TraceManager.addDev("File Auto Saved!!");
-            }
+            FileOutputStream fosTmp = new FileOutputStream(fileTmpSave);
+            fosTmp.write(s.getBytes());
+            fosTmp.close();
         } catch (Exception e) {
             TraceManager.addDev("Error during autosave: " + e.getMessage());
+            // status.setText("Error during autosave: " + e.getMessage());
             return;
         }
+        // }
+
+        //
+
+        // String writeFilePathStr = MainGUI.getFileName();
+        // String readFilePathStr = writeFilePathStr + "~";
+
+        // try {
+
+        // Path writeFilePath = Paths.get(writeFilePathStr);
+        // byte[] writeFileBytes = Files.readAllBytes(writeFilePath);
+
+        // Path readFilePath = Paths.get(readFilePathStr);
+        // byte[] readFileBytes = Files.readAllBytes(readFilePath);
+
+        // if (Arrays.equals(writeFileBytes, readFileBytes) == false) {
+
+        // File writeFile = new File(writeFilePathStr);
+
+        // FileOutputStream fos = new FileOutputStream(writeFile);
+        // fos.write(readFileBytes);
+        // fos.close();
+        // TraceManager.addDev("File Auto Saved!!");
+        // }
+        // } catch (Exception e) {
+        // TraceManager.addDev("Error during autosave: " + e.getMessage());
+        // return;
+        // }
 
         String blockName = block.getName();
 
@@ -347,7 +379,7 @@ public class AVATAR2CPOSIX {
                             }
 
                         }
-                    } else if (findBlock == true){
+                    } else if (findBlock == true) {
                         if (maiItems.getNodeName().equals("extraparam")) {
                             for (int k = 0; k < maiItems.getChildNodes().getLength(); k++) {
                                 Node extraItems = maiItems.getChildNodes().item(k);

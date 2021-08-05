@@ -280,7 +280,7 @@ public class MainGUI
     public byte methoMode;
 
     // TURTLE Modeling
-    public GTURTLEModeling gtm;
+    public static GTURTLEModeling gtm;
 
     // TURTLE modeling graphic components
     // private JTabbedPane mainTabbedPane;
@@ -9913,6 +9913,10 @@ public class MainGUI
             e.printStackTrace();
         }
 
+    }
+
+    public static GTURTLEModeling getGTM() {
+        return gtm;
     }
 
 } // Class MainGUI
