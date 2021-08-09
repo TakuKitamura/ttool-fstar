@@ -67,7 +67,7 @@ public class main {
 
         Path fstarGeneratedPath = Paths.get(args[1]);
 
-        // copy file to fstarGeneratedPath directory
+        // copy required file to out directory
         try {
             copyDirectoryCompatibityMode(new File("include/kremlib.h"), new File(args[1] + "/kremlib.h"));
         } catch (IOException e) {
@@ -86,6 +86,7 @@ public class main {
             Stream<Path> generatedCFiles = Files.list(fstarGeneratedPath).filter(p -> p.toString().endsWith(".c"));
 
             // get file Names and strip exstention
+            // ex. [EDRSystemBlock]
             Stream<String> generatedCFilesNames = generatedCFiles
                     .map(p -> p.getFileName().toString().replace(".c", ""));
 
@@ -96,6 +97,7 @@ public class main {
             String makeFilesString = "";
             for (String generatedCFileName : generatedCFilesNamesList) {
                 // System.out.println(generatedCFileName);
+                // ex. #include "../../out/EDRSystemBlock.h"
                 headersString += "#include \"../../out/" + generatedCFileName + ".h\"\n";
 
                 makeFilesString += "../../out/" + generatedCFileName + ".c" + " ";
@@ -129,34 +131,5 @@ public class main {
 
         Path ttoolGenerated = Paths.get(ttoolGeneratedPathStr);
 
-        // get ttoolGenerated have c files
-        try {
-            Stream<Path> cFiles = Files.list(ttoolGenerated).filter(p -> p.toString().endsWith(".c"));
-
-            cFiles.forEach(p -> {
-                try {
-                    // String lines = Files.readString(p);
-                    String lines = Files.readAllBytes(p).toString();
-                    String regex = "(#define STATE__STOP__STATE \\d+\\n)([\\s\\S]*)(void \\*mainFunc__.*\\(void *\\*arg\\)\\{)";
-                    String removedUserFunc = lines.replaceAll(regex, "$1\n$3");
-
-                    // Files.writeString(p, removedUserFunc);
-
-                    // write to file
-                    FileWriter fileWriter = new FileWriter(p.toFile(), true);
-                    try {
-                        fileWriter.write(removedUserFunc);
-                        fileWriter.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-            });
-        } catch (IOException e) {
-            System.out.println(e);
-        }
     }
 }
