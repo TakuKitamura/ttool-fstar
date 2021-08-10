@@ -157,10 +157,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public int currentY;
 
     // drawing area
-    private int minLimit = 10000;
-    private int maxX = 10000;
-    private int maxY = 10000;
-    private final int limit = 10000;
+    private int minLimit = 10;
+    private int maxX = 25000;
+    private int maxY = 15000;
+    private final int limit = 10;
     // Issue #14 Useless data
     // private final int minimumXSize = 900;
     // private final int minimumYSize = 900;
@@ -2529,7 +2529,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void setMaxX(int x) {
-        maxX = x;
+        // maxX = x;
     }
 
     public void setMinX(int x) {
@@ -2541,7 +2541,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void setMaxY(int y) {
-        maxY = y;
+        // maxY = y;
     }
 
     public void updateSize() {

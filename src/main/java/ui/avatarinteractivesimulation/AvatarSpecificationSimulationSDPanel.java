@@ -64,8 +64,8 @@ import java.util.Vector;
  */
 public class AvatarSpecificationSimulationSDPanel extends JPanel implements MouseMotionListener {
 
-    private static int MAX_X = 800;
-    private static int MAX_Y = 200;
+    private static int MAX_X = 80000;
+    private static int MAX_Y = 20000;
     private static long stamp = 0;
     private final int limit = 10;
     // Drawing area
