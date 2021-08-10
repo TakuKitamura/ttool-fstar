@@ -61,7 +61,7 @@ public class FstarTranspiler
 
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
-    transpileSeed.put("methodDeclaration", "fstar_int32 validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
+    transpileSeed.put("methodDeclaration", "fstar_int32_array validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
     transpileSeed.put("logic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
     transpileSeed.put("require", "true"); // 事前条件
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
@@ -104,7 +104,7 @@ public class FstarTranspiler
 
     if (functionMatcher.find()) {
         returnFstarTypeName = functionMatcher.group(1);
-        String returnTypeName = functionMatcher.group(2);
+        String returnTypeName = functionMatcher.group(2).replaceAll("_array", "[]");
         String removedFstarTypeName = functionMatcher.group(3);
         // transpileSeed update
         // transpileSeed.put("methodDeclaration", returnTypeName);
