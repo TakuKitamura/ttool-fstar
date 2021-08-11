@@ -82,7 +82,8 @@ public class AvatarMethod {
 
     protected RefinementType requireRefinementType = new RefinementType("");
     protected RefinementType ensureRefinementType = new RefinementType("");
-    protected RefinementType logic = new RefinementType("");
+    protected RefinementType requireLogic = new RefinementType("");
+    protected RefinementType ensureLogic = new RefinementType("");
 
     protected boolean implementationProvided;
 
@@ -281,11 +282,12 @@ public class AvatarMethod {
     }
 
     public static AvatarMethod isAValidMethod(String _method, RefinementType _requireRefinementType,
-            RefinementType _ensureRefinementType, RefinementType _logic) {
+            RefinementType _ensureRefinementType, RefinementType _requireLogic, RefinementType _ensureLogic) {
         AvatarMethod avatarMethod = isAValidMethod(_method);
         avatarMethod.requireRefinementType = _requireRefinementType;
         avatarMethod.ensureRefinementType = _ensureRefinementType;
-        avatarMethod.logic = _logic;
+        avatarMethod.requireLogic = _requireLogic;
+        avatarMethod.ensureLogic = _ensureLogic;
         return avatarMethod;
     }
 
@@ -313,8 +315,12 @@ public class AvatarMethod {
         return ensureRefinementType;
     }
 
-    public RefinementType getLogic() {
-        return logic;
+    public RefinementType getRequireLogic() {
+        return requireLogic;
+    }
+
+    public RefinementType getEnsureLogic() {
+        return ensureLogic;
     }
 
     public String getType(int _index) {
@@ -446,7 +452,7 @@ public class AvatarMethod {
         // }
 
         if (!requireRefinementType.toString().equals("") || !ensureRefinementType.toString().equals("")
-                || !logic.toString().equals("")) {
+                || !requireLogic.toString().equals("") || !ensureLogic.toString().equals("")) {
             int refinementTypeCount = 0;
 
             if (!requireRefinementType.toString().equals("")) {
@@ -468,14 +474,25 @@ public class AvatarMethod {
                 }
             }
 
-            if (!logic.toString().equals("")) {
+            if (!requireLogic.toString().equals("")) {
                 if (refinementTypeCount == 0) {
-                    method += ": (logic{";
-                    method += logic;
+                    method += ": (requireLogic{";
+                    method += requireLogic;
                     refinementTypeCount += 1;
                 } else {
-                    method += "}, logic{";
-                    method += logic;
+                    method += "}, requireLogic{";
+                    method += requireLogic;
+                }
+            }
+
+            if (!ensureLogic.toString().equals("")) {
+                if (refinementTypeCount == 0) {
+                    method += ": (ensureLogic{";
+                    method += ensureLogic;
+                    refinementTypeCount += 1;
+                } else {
+                    method += "}, ensureLogic{";
+                    method += ensureLogic;
                 }
             }
 
@@ -485,8 +502,8 @@ public class AvatarMethod {
             // method += requireRefinementType;
             // method += "}, ensure{";
             // method += ensureRefinementType;
-            // method += "}, logic{";
-            // method += logic;
+            // method += "}, requireLogic{";
+            // method += requireLogic;
             method += "})";
             return method;
         } else {
@@ -541,7 +558,7 @@ public class AvatarMethod {
      */
 
     public AvatarMethod makeClone() {
-        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType, logic);
+        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType, requireLogic, ensureLogic);
         am.setImplementationProvided(isImplementationProvided());
         return am;
     }

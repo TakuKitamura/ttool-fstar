@@ -51,10 +51,11 @@ let retConstraint @ret_args@ ret_error = (@ensure@ && I32.v ret_error.code = 0) 
 val @func_name@_body:
   @fstar_func_args@
 Stack (ret: @struct_ret_name@) (requires fun h0 -> 
-    @logic_constraint@ &&
+    @require_logic_constraint@ &&
     argConstraint @args@
   )
   (ensures fun h0 ret h1 -> 
+    @ensure_logic_constraint@ &&
     retConstraint @ret_args@.value ret.error
   )
 let @func_name@_body @args@ =
@@ -66,9 +67,10 @@ let @func_name@_body @args@ =
 val @func_name@: 
   @fstar_func_args@
   Stack (ret: @struct_ret_name@) (requires fun h0 -> 
-    @logic_constraint@
+    @require_logic_constraint@
   )
   (ensures fun h0 ret h1 -> 
+    @ensure_logic_constraint@ &&
     retConstraint @ret_args@.value ret.error
   )
 let @func_name@ @args@ = 

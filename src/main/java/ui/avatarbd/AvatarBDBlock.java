@@ -1167,8 +1167,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
             sb.append(new Xml().sanitize(am.getRequireRefinementType().toString()));
             sb.append("\" ensureRefinementType=\"");
             sb.append(new Xml().sanitize(am.getEnsureRefinementType().toString()));
-            sb.append("\" logic=\"");
-            sb.append(new Xml().sanitize(am.getLogic().toString()));
+            sb.append("\" requireLogic=\"");
+            sb.append(new Xml().sanitize(am.getRequireLogic().toString()));
+            sb.append("\" ensureLogic=\"");
+            sb.append(new Xml().sanitize(am.getEnsureLogic().toString()));
             sb.append("\" />\n");
         }
         for (AvatarSignal as : this.mySignals) {
@@ -1206,7 +1208,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
             String method;
             RefinementType requireRefinementType;
             RefinementType ensureRefinementType;
-            RefinementType logic;
+            RefinementType requireLogic;
+            RefinementType ensureLogic;
             String signal;
             AvatarMethod am;
             AvatarSignal as;
@@ -1344,13 +1347,20 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent
                                 }
 
                                 try {
-                                    logic = new RefinementType(
-                                            new Xml().decode(elt.getAttribute("logic")));
+                                    requireLogic = new RefinementType(
+                                            new Xml().decode(elt.getAttribute("requireLogic")));
                                 } catch (Exception e) {
-                                    logic = new RefinementType("");
+                                    requireLogic = new RefinementType("");
                                 }
 
-                                am = AvatarMethod.isAValidMethod(method, requireRefinementType, ensureRefinementType, logic);
+                                try {
+                                    ensureLogic = new RefinementType(new Xml().decode(elt.getAttribute("ensureLogic")));
+                                } catch (Exception e) {
+                                    ensureLogic = new RefinementType("");
+                                }
+
+                                am = AvatarMethod.isAValidMethod(method, requireRefinementType, ensureRefinementType,
+                                        requireLogic, ensureLogic);
                                 if (am != null) {
                                     // TraceManager.addDev("Setting to " + implementation + " the implementation of
                                     // " + am);

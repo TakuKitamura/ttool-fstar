@@ -338,7 +338,8 @@ public class AVATAR2CPOSIX {
         ArrayList<String> functions = new ArrayList<>();
         ArrayList<String> requireRefinementTypes = new ArrayList<>();
         ArrayList<String> ensureRefinementTypes = new ArrayList<>();
-        ArrayList<String> logics = new ArrayList<>();
+        ArrayList<String> requireLogics = new ArrayList<>();
+        ArrayList<String> ensureLogics = new ArrayList<>();
 
         try {
             DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
@@ -380,11 +381,14 @@ public class AVATAR2CPOSIX {
                                     String ensureRefinementType = xmlUnescape(methodAttributes
                                             .getNamedItem("ensureRefinementType").getNodeValue().trim());
 
-                                    String logic = xmlUnescape(
-                                            methodAttributes.getNamedItem("logic").getNodeValue().trim());
+                                    String requireLogic = xmlUnescape(
+                                            methodAttributes.getNamedItem("requireLogic").getNodeValue().trim());
+
+                                    String ensureLogic = xmlUnescape(
+                                            methodAttributes.getNamedItem("ensureLogic").getNodeValue().trim());
 
                                     if (requireRefinementType.length() != 0 || ensureRefinementType.length() != 0
-                                            || logic.length() != 0) {
+                                            || requireLogic.length() != 0 || ensureLogic.length() != 0) {
 
                                         if (requireRefinementType.length() == 0) {
                                             requireRefinementType = "true";
@@ -394,14 +398,19 @@ public class AVATAR2CPOSIX {
                                             ensureRefinementType = "true";
                                         }
 
-                                        if (logic.length() == 0) {
-                                            logic = "true";
+                                        if (requireLogic.length() == 0) {
+                                            requireLogic = "true";
+                                        }
+
+                                        if (ensureLogic.length() == 0) {
+                                            ensureLogic = "true";
                                         }
 
                                         functions.add(function);
                                         requireRefinementTypes.add(requireRefinementType);
                                         ensureRefinementTypes.add(ensureRefinementType);
-                                        logics.add(logic);
+                                        requireLogics.add(requireLogic);
+                                        ensureLogics.add(ensureLogic);
                                     }
                                 }
 
@@ -421,14 +430,16 @@ public class AVATAR2CPOSIX {
             String function = functions.get(i);
             String requireRefinementType = requireRefinementTypes.get(i);
             String ensureRefinementType = ensureRefinementTypes.get(i);
-            String logic = logics.get(i);
+            String requireLogic = requireLogics.get(i);
+            String ensureLogic = ensureLogics.get(i);
 
             Map<String, String> transpileSeed = new HashMap<String, String>();
 
             transpileSeed.put("methodDeclaration", function); // 関数宣言
             transpileSeed.put("require", requireRefinementType); // 事前条件
             transpileSeed.put("ensure", ensureRefinementType); // 事後条件(retは返り値を示す)
-            transpileSeed.put("logic", logic); // ロジック(配列長を扱う場合)
+            transpileSeed.put("requireLogic", requireLogic); // 事前ロジック(配列長を扱う場合)
+            transpileSeed.put("ensureLogic", ensureLogic); // 事後ロジック(配列長を扱う場合)
 
             // TODO: ここは開発者の責任でコード上に手書きしてもらう
             transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)

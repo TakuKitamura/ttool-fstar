@@ -62,7 +62,8 @@ public class FstarTranspiler
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
     transpileSeed.put("methodDeclaration", "fstar_int32_array validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
-    transpileSeed.put("logic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("requireLogic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("ensureLogic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
     transpileSeed.put("require", "true"); // 事前条件
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
 
@@ -133,17 +134,32 @@ public class FstarTranspiler
     
     // System.out.println("");
 
-    InputStream logicInput = new ByteArrayInputStream(transpileSeed.get("logic").getBytes());
+    InputStream requireLogicInput = new ByteArrayInputStream(transpileSeed.get("requireLogic").getBytes());
     
-    FstarTranspiler logicParser = new FstarTranspiler(logicInput);
+    FstarTranspiler requireLogicParser = new FstarTranspiler(requireLogicInput);
 
     ret = visiter.filterObjException(
-        logicParser.ConditionRoot().jjtAccept(visiter, null)
+        requireLogicParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String logic = (String)ret;
+    String requireLogic = (String)ret;
 
-    System.out.println("logic: " + logic);
+    System.out.println("requireLogic: " + requireLogic);
+
+
+
+    InputStream ensureLogicInput = new ByteArrayInputStream(transpileSeed.get("ensureLogic").getBytes());
+    
+    FstarTranspiler ensureLogicParser = new FstarTranspiler(ensureLogicInput);
+
+    ret = visiter.filterObjException(
+        ensureLogicParser.ConditionRoot().jjtAccept(visiter, null)
+    );
+
+    String ensureLogic = (String)ret;
+
+    System.out.println("ensureLogic: " + ensureLogic);
+
 
 
     InputStream requireInput = new ByteArrayInputStream(transpileSeed.get("require").getBytes());
@@ -260,8 +276,10 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
 
-    fstarCode = fstarCode.replaceAll("@logic_constraint@", logic); // ロジック
+    fstarCode = fstarCode.replaceAll("@require_logic_constraint@", requireLogic); // 事前ロジック
     // System.out.println(fstarCode);
+
+    fstarCode = fstarCode.replaceAll("@ensure_logic_constraint@", ensureLogic); // 事後ロジック
 
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
