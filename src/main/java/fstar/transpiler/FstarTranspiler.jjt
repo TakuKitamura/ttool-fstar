@@ -64,7 +64,7 @@ public class FstarTranspiler
     transpileSeed.put("methodDeclaration", "fstar_int32_array validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
     transpileSeed.put("requireLogic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
     transpileSeed.put("ensureLogic", "len(frame_data) == 8"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("require", "true"); // 事前条件
+    transpileSeed.put("require", "get(frame_data, 1) == get(frame_data, 1)"); // 事前条件
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
@@ -451,6 +451,9 @@ TOKEN :
 | < CLOSE_BRACKET : ")" >
 | < MINUS : "-" >
 | < LEN : "len" >
+| < GET : "get" >
+| < LEFT_SQUARE_BRACKET : "[" >
+| < RIGHT_SQUARE_BRACKET : "]" >
 }
 
 TOKEN : /* IDENTIFIERS */
@@ -510,7 +513,7 @@ TOKEN : /* LITERALS */
     )
   >
 |
-  < #DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
+  < DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])* >
 |
   < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
 |
@@ -627,6 +630,8 @@ void ValueOrExpr() :
   < OPEN_BRACKET > Expr() < CLOSE_BRACKET >
   |
   Len()
+  |
+  ArrayIndex()
 }
 
 
@@ -675,6 +680,16 @@ void Len():
   }
 }
 
+void ArrayIndex():
+{
+    Token t = null;
+}
+{
+    t = < GET > < OPEN_BRACKET > Variable() "," (Integer() | Variable()) < CLOSE_BRACKET >
+  {
+    jjtThis.jjtSetValue(t.image.trim());
+  }
+}
 
 
 void Integer():

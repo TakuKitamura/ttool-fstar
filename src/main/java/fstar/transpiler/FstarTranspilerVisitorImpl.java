@@ -85,6 +85,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     private int callConditionRootCounter = 0; // 1のときrequireParse, 2のときensureParse
 
     private boolean findLenFunction = false; // len関数を利用する際はtrue, 使い終わったらfalse
+    private boolean findGetFunction = false; // get関数を利用する際はtrue, 使い終わったらfalse
 
     private String generateFstarFormat(List<String> rawValues, List<String> types, String op) throws Exception {
 
@@ -115,6 +116,36 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             String yVariableName = yRawValue.substring(4);
             yRawValue = yVariableName;
             yParentIsLen = true;
+        }
+
+        boolean xParentIsGet = false;
+        boolean yParentIsGet = false;
+
+        String[] xGetArgs = { "", "" };
+        String[] yGetArgs = { "", "" };
+
+        if (xRawValue.startsWith("get ")) {
+            // String getFormula = xRawValue.get(0);
+            String[] splitedX = xRawValue.split(" ");
+            String xVariableName = splitedX[1];
+            String xIndex = splitedX[2];
+            // System.out.println("len variableName = " + variableName);
+            xGetArgs[0] = xVariableName;
+            xGetArgs[1] = xIndex;
+            xRawValue = xVariableName;
+            xParentIsGet = true;
+        }
+
+        if (yRawValue.startsWith("get ")) {
+            // String getFormula = yRawValue.get(0);
+            String[] splitedY = yRawValue.split(" ");
+            String yVariableName = splitedY[1];
+            String yIndex = splitedY[2];
+
+            yGetArgs[0] = yVariableName;
+            yGetArgs[1] = yIndex;
+            yRawValue = yVariableName;
+            yParentIsGet = true;
         }
 
         boolean xIsNumber = false;
@@ -267,6 +298,26 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 yRawValue = String.format("(%s)", yRawValue);
             }
 
+            if (xParentIsGet == true) {
+                String indexX = xGetArgs[1];
+                try {
+                    Integer.parseInt(indexX);
+                    indexX += "ul";
+                } catch (NumberFormatException nfex) {
+                }
+                xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
+            }
+
+            if (yParentIsGet == true) {
+                String indexY = yGetArgs[1];
+                try {
+                    Integer.parseInt(indexY);
+                    indexY += "ul";
+                } catch (NumberFormatException nfex) {
+                }
+                yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
+            }
+
             String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
             if (fstarOpName.equals("neq")) {
                 // String[] sepalate_op = op.split(" ", 2);
@@ -304,12 +355,26 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         List<String> leafs = new ArrayList<>();
         List<String> leafsType = new ArrayList<>();
+
+        System.out.println("leafNum: " + leafNum);
+
         for (int i = 0; i < leafNum; i++) {
             Node n = node.jjtGetChild(i);
             System.out.printf("node = %s\n", n);
             String leaf = filterObjException(n.jjtAccept(this, null)).toString();
 
-            if (this.tmpSearchingLiteral == null) {
+            System.out.printf("tmpSearchingLiteral = %s\n", this.tmpSearchingLiteral);
+            System.out.printf("leaf = %s\n", leaf);
+
+            if (leaf.startsWith("get ") == true) {
+                String[] splited = leaf.split(" ");
+                // System.out.println(splited);
+                String argName = splited[1];
+                // System.out.println(argName);
+                String argArrayType = methodDeclaration.args.get(argName);
+                String argType = argArrayType.substring(0, argArrayType.length() - 2);
+                leafsType.add(argType);
+            } else if (this.tmpSearchingLiteral == null) {
                 if (leaf.equals("ret")) {
                     // System.out.println(1);
                     leafsType.add(methodDeclaration.returnType);
@@ -324,8 +389,12 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                     leafsType.add(methodDeclaration.args.get(leaf));
                 }
             } else {
-                // System.out.println(3);
-                leafsType.add(this.tmpSearchingLiteral);
+                if (findGetFunction == true) {
+                    leafsType.add(leafsType.get(0));
+                    findGetFunction = false;
+                } else {
+                    leafsType.add(this.tmpSearchingLiteral);
+                }
             }
 
             leafs.add(leaf);
@@ -475,7 +544,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             } else if (callConditionRootCounter == 2) {
                 usedArgsInEnsure.add(argName);
             } else {
-                throw new Exception("unexpected call astConditionRoot");
+                // System.out.println("callConditionRootCounter = " + callConditionRootCounter);
+                // throw new Exception("unexpected call astConditionRoot");
             }
 
             if (methodDeclaration.args.get(argName) == null && argName.equals(argName) == false) {
@@ -487,6 +557,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         }
     }
 
+    @Override
     public Object visit(ASTLen node, Object data) {
         System.out.println(node);
         try {
@@ -503,10 +574,31 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     }
 
     @Override
+    public Object visit(ASTArrayIndex node, Object data) {
+        System.out.println(node);
+        try {
+            String ret = (String) node.jjtGetValue();
+            System.out.println(ret);
+            // System.out.println(123);
+
+            // 正確な型はこの時点では不明
+            // this.tmpSearchingLiteral = "unkowonIntType";
+            findGetFunction = true;
+            Object args = (Object) ("get " + (String) node.jjtGetChild(0).jjtAccept(this, null) + " "
+                    + (String) node.jjtGetChild(1).jjtAccept(this, null));
+            return filterObjException(args);
+        } catch (Exception e) {
+            return e;
+        }
+    }
+
+    @Override
     public Object visit(ASTInteger node, Object data) {
         System.out.println(node);
         try {
             String ret = (String) node.jjtGetValue();
+            // System.out.println(ret);
+            // System.out.println(555);
 
             // 正確な型はこの時点では不明
             this.tmpSearchingLiteral = "unkowonIntType";
