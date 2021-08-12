@@ -228,25 +228,25 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         // type: I32
         String fstarOpName = opeMap.get(op); // gt
 
+        String logicOp = "";
+        if (fstarOpName == "eq") {
+            logicOp = "=";
+        } else if (fstarOpName == "neq") {
+            logicOp = "!=";
+        } else if (fstarOpName == "lt") {
+            logicOp = "<";
+        } else if (fstarOpName == "lte") {
+            logicOp = "<=";
+        } else if (fstarOpName == "gt") {
+            logicOp = ">";
+        } else if (fstarOpName == "gte") {
+            logicOp = ">=";
+        }
+
         if (xParentIsLen == true || yParentIsLen == true) { // logic
 
             System.out.printf("%s, %s\n", fstarOpName, type);
             // String ret = String.format("(%s %s)", xRawValue, yRawValue);
-
-            String logicOp = "";
-            if (fstarOpName == "eq") {
-                logicOp = "=";
-            } else if (fstarOpName == "neq") {
-                logicOp = "!=";
-            } else if (fstarOpName == "lt") {
-                logicOp = "<";
-            } else if (fstarOpName == "lte") {
-                logicOp = "<=";
-            } else if (fstarOpName == "gt") {
-                logicOp = ">";
-            } else if (fstarOpName == "gte") {
-                logicOp = ">=";
-            }
 
             // B.length packet_data <= U32.v max_request_size
 
@@ -286,6 +286,81 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             }
 
             return ret;
+        } else if (xParentIsGet == true || yParentIsGet == true) {
+            if (callConditionRootCounter == 1 || callConditionRootCounter == 2) { // require, or logic
+                String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
+                if (xParentIsGet == true) {
+                    String indexX = xGetArgs[1];
+                    try {
+                        Integer.parseInt(indexX);
+                        indexX += "ul";
+                    } catch (NumberFormatException nfex) {
+                    }
+                    xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
+                }
+
+                if (yParentIsGet == true) {
+                    String indexY = yGetArgs[1];
+                    try {
+                        Integer.parseInt(indexY);
+                        indexY += "ul";
+                    } catch (NumberFormatException nfex) {
+                    }
+                    yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
+                }
+
+                String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
+                if (fstarOpName.equals("neq")) {
+                    // String[] sepalate_op = op.split(" ", 2);
+                    // String not = sepalate_op[0]; // not
+                    // op = sepalate_op[1]; // I32
+                    fstarOp = String.format("%s.eq", type, fstarOpName);
+                    ret = String.format("(not (%s %s %s))", fstarOp, xRawValue, yRawValue);
+                }
+
+                return ret;
+            } else {
+                String ret = "";
+
+                if (xParentIsGet == true && yParentIsGet == false) {
+                    // String integerPart = yNumber + ;
+                    // if (yIsNumber == true) {
+                    //     integerPart = String.format("(%s)", yNumber);
+                    // } else {
+                    //     integerPart = String.format("(%s.v %s)", type, yRawValue);
+                    // }
+
+                    if (logicOp.equals("!=")) {
+                        ret = String.format("(not ((B.length %s) = %s))", xRawValue, yRawValue);
+
+                        ret = String.format("(not ((B.get h0 %s %s) = %s))", xGetArgs[0], xGetArgs[1], yRawValue);
+                    } else {
+                        ret = String.format("((B.get h0 %s %s) %s %s)", xGetArgs[0], xGetArgs[1], logicOp, yRawValue);
+                    }
+                } else if (xParentIsGet == false && yParentIsGet == true) {
+                    String integerPart = "";
+                    // if (xIsNumber == true) {
+                    //     integerPart = String.format("(%s)", xNumber);
+                    // } else {
+                    //     integerPart = String.format("(%s.v %s)", type, xRawValue);
+                    // }
+
+                    if (logicOp.equals("!=")) {
+                        ret = String.format("(not ((B.get h0 %s %s) = %s))", yGetArgs[0], yGetArgs[1], xRawValue);
+                    } else {
+                        ret = String.format("((B.get h0 %s %s) %s %s)", yGetArgs[0], yGetArgs[1], logicOp, xRawValue);
+                    }
+                } else { // 両方true
+                    if (logicOp.equals("!=")) {
+                        ret = String.format("(not ((B.get h0 %s %s) = (B.get h0 %s %s)))", xGetArgs[0], xGetArgs[1],
+                                yGetArgs[0], yGetArgs[1]);
+                    }
+                    ret = String.format("((B.get h0 %s %s) %s (B.get h0 %s %s))", xGetArgs[0], xGetArgs[1], logicOp,
+                            yGetArgs[0], yGetArgs[1]);
+                }
+
+                return ret;
+            }
         } else { // expresstion
             String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
 
@@ -298,26 +373,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 yRawValue = String.format("(%s)", yRawValue);
             }
 
-            if (xParentIsGet == true) {
-                String indexX = xGetArgs[1];
-                try {
-                    Integer.parseInt(indexX);
-                    indexX += "ul";
-                } catch (NumberFormatException nfex) {
-                }
-                xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
-            }
-
-            if (yParentIsGet == true) {
-                String indexY = yGetArgs[1];
-                try {
-                    Integer.parseInt(indexY);
-                    indexY += "ul";
-                } catch (NumberFormatException nfex) {
-                }
-                yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
-            }
-
             String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
             if (fstarOpName.equals("neq")) {
                 // String[] sepalate_op = op.split(" ", 2);
@@ -326,9 +381,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 fstarOp = String.format("%s.eq", type, fstarOpName);
                 ret = String.format("(not (%s %s %s))", fstarOp, xRawValue, yRawValue);
             }
-
             return ret;
-
         }
     }
 
@@ -389,12 +442,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                     leafsType.add(methodDeclaration.args.get(leaf));
                 }
             } else {
-                if (findGetFunction == true) {
-                    leafsType.add(leafsType.get(0));
-                    findGetFunction = false;
-                } else {
-                    leafsType.add(this.tmpSearchingLiteral);
-                }
+                leafsType.add(this.tmpSearchingLiteral);
             }
 
             leafs.add(leaf);

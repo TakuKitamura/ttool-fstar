@@ -5,6 +5,8 @@ open FStar.HyperStack.ST
 open LowStar.Printf
 open C.String
 
+#set-options "--z3rlimit 1000 --max_fuel 0 --max_ifuel 0 --detail_errors"
+
 module I8 = FStar.Int8
 module I16 = FStar.Int16
 module I32 = FStar.Int32
@@ -44,19 +46,14 @@ let ng_ret: @struct_ret_name@ = {
     error = ng_error;
 }
 
-let argConstraint @args@ = @require@
-
-let retConstraint @ret_args@ ret_error = (@ensure@ && I32.v ret_error.code = 0) || (I32.v ret_error.code > 0)
-
 val @func_name@_body:
   @fstar_func_args@
 Stack (ret: @struct_ret_name@) (requires fun h0 -> 
-    @require_logic_constraint@ &&
-    argConstraint @args@
+    @require_logic_constraint@
   )
   (ensures fun h0 ret h1 -> 
     @ensure_logic_constraint@ &&
-    retConstraint @ret_args@.value ret.error
+    (I32.v ret_error.code = 0) || (I32.v ret_error.code > 0)
   )
 let @func_name@_body @args@ =
   {
@@ -71,10 +68,10 @@ val @func_name@:
   )
   (ensures fun h0 ret h1 -> 
     @ensure_logic_constraint@ &&
-    retConstraint @ret_args@.value ret.error
+    (I32.v ret_error.code = 0) || (I32.v ret_error.code > 0)
   )
 let @func_name@ @args@ = 
-  if (argConstraint @args@) then
+  if (@require@) then
     @func_name@_body @args@
   else
     ng_ret
