@@ -150,6 +150,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         boolean xIsNumber = false;
         boolean yIsNumber = false;
 
+        System.out.printf("xVariableType = %s, yVariableType = %s\n", xVariableType, yVariableType);
+
         if (xVariableType.equals("unkowonIntType") && fstarTypeMap.get(yVariableType) != null) {
             xVariableType = yVariableType;
             xIsNumber = true;
@@ -157,6 +159,15 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             yVariableType = xVariableType;
             yIsNumber = true;
         }
+        // else if (fstarTypeMap.get(xVariableType.replaceAll("\\[\\]", "")) != null) {
+        //     xVariableType = yVariableType;
+        //     xIsNumber = true;
+        // } else if (fstarTypeMap.get(yVariableType.replaceAll("\\[\\]", "")) != null) {
+        //     yVariableType = xVariableType;
+        //     yIsNumber = true;
+        // }
+
+        System.out.printf("xIsNumber = %s, yIsNumber = %s\n", xIsNumber, yIsNumber);
 
         // System.out.println(123);
         // x, yの型が異なる場合
@@ -196,18 +207,17 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         }
 
-        System.out.printf("xVariableType = %s, yVariableType = %s\n", xVariableType, yVariableType);
 
         String xNumber = "";
         String yNumber = "";
 
         // 数字であればsuffixを追加
         if (xIsNumber) {
-            String suffix = typeSuffixMap.get(yVariableType);
+            String suffix = typeSuffixMap.get(yVariableType.replaceAll("\\[\\]", ""));
             xNumber = xRawValue;
             xRawValue += suffix;
         } else if (yIsNumber) {
-            String suffix = typeSuffixMap.get(xVariableType);
+            String suffix = typeSuffixMap.get(xVariableType.replaceAll("\\[\\]", ""));
             yNumber = yRawValue;
             yRawValue += suffix;
         }
