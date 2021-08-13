@@ -41,6 +41,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             put("uint16[]", "B.buffer U16");
             put("uint32[]", "B.buffer U32");
             put("uint64[]", "B.buffer U64");
+
+            put("error_code", "I32");
         }
     };
 
@@ -98,9 +100,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         // int32 x, x > 0 となったとき、'0'はintegerのどの型であるかを推論
         String xVariableType = types.get(0);
         String yVariableType = types.get(1);
-
-        // System.out.println(xVariableType);
-        // System.out.println(yVariableType);
 
         boolean xParentIsLen = false;
         boolean yParentIsLen = false;
@@ -173,8 +172,11 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         if (methodDeclaration.args.get(xRawValue) != null) { // variable
             xFstarType = fstarTypeMap.get(xVariableType);
-        } else if (xRawValue.equals("ret") == true) { // ret
+        } else if (xRawValue.equals("ret_value") == true) { // ret
             xFstarType = fstarTypeMap.get(methodDeclaration.returnType);
+        } else if (xRawValue.equals("ret_error_code") == true) { // ret
+            xFstarType = fstarTypeMap.get("error_code");
+            // xIsNumber = true;
         } else { // value
 
         }
@@ -185,8 +187,11 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         if (methodDeclaration.args.get(yRawValue) != null) { // variable
             yFstarType = fstarTypeMap.get(yVariableType);
-        } else if (yRawValue.equals("ret") == true) { // ret
+        } else if (yRawValue.equals("ret_value") == true) { // ret
             yFstarType = fstarTypeMap.get(methodDeclaration.returnType);
+        } else if (yRawValue.equals("ret_error_code") == true) { // ret
+            yFstarType = fstarTypeMap.get("error_code");
+            // yIsNumber = true;
         } else { // value
 
         }
@@ -211,8 +216,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.printf("%s, %s\n", xFstarType, yFstarType);
 
         // 2 > 1 のような無駄な条件は無効
-        if (xFstarType == null && yFstarType == null && xRawValue.equals("ret") == false
-                && yRawValue.equals("ret") == false) {
+        if (xFstarType == null && yFstarType == null && xRawValue.equals("ret_value") == false
+                && xRawValue.equals("ret_error_code") == false && yRawValue.equals("ret_value") == false
+                && yRawValue.equals("ret_error_code") == false) {
             throw new Exception("find no need formula");
         }
 
@@ -325,9 +331,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 if (xParentIsGet == true && yParentIsGet == false) {
                     // String integerPart = yNumber + ;
                     // if (yIsNumber == true) {
-                    //     integerPart = String.format("(%s)", yNumber);
+                    // integerPart = String.format("(%s)", yNumber);
                     // } else {
-                    //     integerPart = String.format("(%s.v %s)", type, yRawValue);
+                    // integerPart = String.format("(%s.v %s)", type, yRawValue);
                     // }
 
                     if (logicOp.equals("!=")) {
@@ -340,9 +346,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 } else if (xParentIsGet == false && yParentIsGet == true) {
                     String integerPart = "";
                     // if (xIsNumber == true) {
-                    //     integerPart = String.format("(%s)", xNumber);
+                    // integerPart = String.format("(%s)", xNumber);
                     // } else {
-                    //     integerPart = String.format("(%s.v %s)", type, xRawValue);
+                    // integerPart = String.format("(%s.v %s)", type, xRawValue);
                     // }
 
                     if (logicOp.equals("!=")) {
@@ -423,20 +429,37 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 String[] splited = leaf.split(" ");
                 // System.out.println(splited);
                 String argName = splited[1];
-                // System.out.println(argName);
-                String argArrayType = methodDeclaration.args.get(argName);
-                String argType = argArrayType.substring(0, argArrayType.length() - 2);
-                leafsType.add(argType);
-            } else if (this.tmpSearchingLiteral == null) {
-                if (leaf.equals("ret")) {
-                    // System.out.println(1);
+
+                if (argName.equals("ret_value")) {
                     leafsType.add(methodDeclaration.returnType);
-                } else if (leaf.startsWith("len ") == true) {
-                    // get the string after the fifth character
-                    String argName = leaf.substring(4, leaf.length());
+                } else {
                     String argArrayType = methodDeclaration.args.get(argName);
                     String argType = argArrayType.substring(0, argArrayType.length() - 2);
                     leafsType.add(argType);
+                }
+
+                // System.out.println(argName);
+
+            } else if (this.tmpSearchingLiteral == null) {
+                if (leaf.equals("ret_value")) {
+                    // System.out.println(1);
+                    leafsType.add(methodDeclaration.returnType);
+                } else if (leaf.equals("ret_error_code")) {
+                    // System.out.println(1);
+                    leafsType.add("int32");
+                } else if (leaf.startsWith("len ") == true) {
+                    // get the string after the fifth character
+                    String argName = leaf.substring(4, leaf.length());
+
+                    if (argName.equals("ret_value")) {
+                        leafsType.add(methodDeclaration.returnType);
+                    } else {
+                        String argArrayType = methodDeclaration.args.get(argName);
+                        System.out.println(argArrayType);
+                        System.out.println(33333);
+                        String argType = argArrayType.substring(0, argArrayType.length() - 2);
+                        leafsType.add(argType);
+                    }
                 } else {
                     // System.out.println(2);
                     leafsType.add(methodDeclaration.args.get(leaf));
