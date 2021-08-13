@@ -22,26 +22,9 @@ noeq type struct_error = {
   message: C.String.t;
 }
 
-let none_error: struct_error = 
-{
-    code = 0l;
-    message = !$"";
-}
-
-let ng_error: struct_error = 
-{
-    code = 1l;
-    message = !$"input is invalid range value";
-}
-
 noeq type @struct_ret_name@ = {
     value: @ret_value_type@;
     error: struct_error;
-}
-
-let ng_ret: @struct_ret_name@ = {
-    value = @ng_init_ret_value@;
-    error = ng_error;
 }
 
 val @func_name@_body:
@@ -55,10 +38,7 @@ Stack (ret: @struct_ret_name@) (requires fun h0 ->
     @ensure_logic_constraint@
   )
 let @func_name@_body @args@ =
-  {
-      value = @ok_init_ret_value@;
-      error = none_error;
-  }
+    ???
 
 val @func_name@: 
   @fstar_func_args@
@@ -71,7 +51,4 @@ val @func_name@:
     @ensure_logic_constraint@
   )
 let @func_name@ @args@ = 
-  if (@require@) then
-    @func_name@_body @args@
-  else
-    ng_ret
+    ???

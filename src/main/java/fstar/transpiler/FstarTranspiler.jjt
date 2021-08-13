@@ -61,10 +61,10 @@ public class FstarTranspiler
 
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
-    transpileSeed.put("methodDeclaration", "fstar_uint8 validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
-    transpileSeed.put("require", "get(frame_data, 0) == 0 && can_id == 1"); // 事前条件
+    transpileSeed.put("methodDeclaration", "fstar_uint8_array validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
+
     transpileSeed.put("requireLogic", "len(frame_data) == 1 && get(frame_data, 0) == 0"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("ensureLogic", "(ret_error_code == 0 && ret_value == 0) || (ret_error_code == 1 && ret_value == 1)"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("ensureLogic", "(ret_error_code == 0 && len(ret_value) == 1 && get(ret_value, 0) == 0)"); // ロジック(配列長を扱う場合)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
     transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
@@ -73,6 +73,7 @@ public class FstarTranspiler
     // F*言語のテンプレートでの不足機能を正しく実装できたかの判定用テストコードの値
 
     transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す) TODO: 一切今は使われていない
+    transpileSeed.put("require", "true"); // 一切今は使われていない
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
     // テスト関数の引数
