@@ -5,8 +5,6 @@ open FStar.HyperStack.ST
 open LowStar.Printf
 open C.String
 
-#set-options "--z3rlimit 1000 --max_fuel 0 --max_ifuel 0 --detail_errors"
-
 module I8 = FStar.Int8
 module I16 = FStar.Int16
 module I32 = FStar.Int32
@@ -19,7 +17,7 @@ module U64 = FStar.UInt64
 
 module B = LowStar.Buffer
 
-type struct_error = {
+noeq type struct_error = {
   code: I32.t;
   message: C.String.t;
 }
@@ -52,8 +50,7 @@ Stack (ret: @struct_ret_name@) (requires fun h0 ->
     @require_logic_constraint@
   )
   (ensures fun h0 ret h1 -> 
-    @ensure_logic_constraint@ &&
-    (I32.v ret_error.code = 0) || (I32.v ret_error.code > 0)
+    @ensure_logic_constraint@
   )
 let @func_name@_body @args@ =
   {
@@ -67,8 +64,7 @@ val @func_name@:
     @require_logic_constraint@
   )
   (ensures fun h0 ret h1 -> 
-    @ensure_logic_constraint@ &&
-    (I32.v ret_error.code = 0) || (I32.v ret_error.code > 0)
+    @ensure_logic_constraint@
   )
 let @func_name@ @args@ = 
   if (@require@) then
