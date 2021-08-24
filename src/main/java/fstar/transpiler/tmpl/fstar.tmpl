@@ -46,8 +46,8 @@ val @func_name@:
     @require_logic_constraint@
   )
   (ensures fun h0 ret h1 -> 
-    let ret_value = ret.value in
-    let ret_error_code = ret.error.code in
+    let ret = ret.value in
+    let code = ret.error.code in
     @ensure_logic_constraint@
   )
 let @func_name@ @args@ = 
