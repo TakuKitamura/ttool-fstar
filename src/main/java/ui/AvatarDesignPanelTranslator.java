@@ -1297,7 +1297,7 @@ public class AvatarDesignPanelTranslator {
         } else {
             // type = AvatarType.newInstance("Second", 1);
             // type =
-            type.addNewTypeName(_a.getId() ,_a.getTypeOther());
+            type.addNewTypeName(_a.getId(), _a.getTypeOther());
         }
         AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _ab, _a);
         aa.setInitialValue(_a.getInitialValue());
@@ -3136,27 +3136,38 @@ public class AvatarDesignPanelTranslator {
 
         String[] actions = s.split(",");
         s = "";
+        boolean first = true;
         for (int i = 0; i < actions.length; i++) {
             TAttribute ta = adp.getAvatarBDPanel().getAttribute(actions[i].trim(), _blockName);
             if (ta == null) {
                 s = s + actions[i].trim();
             } else {
                 if (ta.getType() == TAttribute.OTHER) {
-                    boolean first = true;
-                    for (TAttribute tatmp : adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
-                        if (first)
-                            first = false;
-                        else
-                            s = s + ", ";
-                        s += actions[i].trim() + "__" + tatmp.getId();
+                    // boolean first = true;
+                    // for (TAttribute tatmp :
+                    // adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther())) {
+                    // if (first)
+                    // first = false;
+                    // else
+                    // s = s + ", ";
+                    // s += actions[i].trim() + "__" + tatmp.getId();
+                    // }
+                    // s = s + ", ";
+
+                    if (first) {
+                        first = false;
+                    } else {
+                        s = s + ", ";
                     }
+
+                    s += actions[i].trim();// + "__" + ta.getId();
                 } else {
                     s = s + actions[i].trim();
                 }
             }
-            if (i != actions.length - 1) {
-                s = s + ", ";
-            }
+            // if (i != actions.length - 1) {
+            //     s = s + ", ";
+            // }
         }
 
         s = _input.substring(0, index0) + "(" + s + ")";
@@ -3164,7 +3175,9 @@ public class AvatarDesignPanelTranslator {
         // TraceManager.addDev("s:>" + s + "<");
         // Managing output parameters
         index0 = s.indexOf("=");
-        if (index0 != -1) {
+        if (index0 != -1)
+
+        {
             String param = s.substring(0, index0).trim();
             // TraceManager.addDev("Analyzing param: " + param);
             TAttribute ta = adp.getAvatarBDPanel().getAttribute(param, _blockName);
