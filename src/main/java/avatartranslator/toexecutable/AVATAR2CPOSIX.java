@@ -1046,7 +1046,12 @@ public class AVATAR2CPOSIX {
     public String makeAttributesDeclaration(AvatarBlock _block, TaskFile _taskFile) {
         String ret = "";
         for (AvatarAttribute aa : _block.getAttributes()) {
-            ret += getCTypeOf(aa) + " " + aa.getName() + " = " + aa.getInitialValue() + ";" + CR;
+
+            if (aa.getInitialValue().equals("")) {
+                ret += getCTypeOf(aa) + " " + aa.getName() + ";" + CR;
+            } else {
+                ret += getCTypeOf(aa) + " " + aa.getName() + " = " + aa.getInitialValue() + ";" + CR;
+            }
         }
         return ret;
     }
@@ -1211,7 +1216,9 @@ public class AVATAR2CPOSIX {
             return res + ")";
         }
         if (term instanceof AvatarTermFunction)
-            return _ab.getName() + "__" + ((AvatarTermFunction) term).getMethod().getName()
+            // return _ab.getName() + "__" + ((AvatarTermFunction) term).getMethod().getName()
+            //         + this.modifyMethodName(_ab, ((AvatarTermFunction) term).getArgs());
+            return ((AvatarTermFunction) term).getMethod().getName()
                     + this.modifyMethodName(_ab, ((AvatarTermFunction) term).getArgs());
         return "";
     }
