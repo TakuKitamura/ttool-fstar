@@ -128,63 +128,53 @@ public class FstarTranspiler
 
     MethodDeclaration methodDeclaration = new MethodDeclaration();
     
-    FstarTranspilerVisitorImpl visiter = new FstarTranspilerVisitorImpl(methodDeclaration);
+    FstarTranspilerVisitorImpl visiter = new FstarTranspilerVisitorImpl();
+
+    visiter.updateMethodDeclaration(methodDeclaration);
 
     Object ret = visiter.filterObjException(
         methodDeclarationParser.MethodDeclarationRoot().jjtAccept(visiter, null)
     );
-    
-    // System.out.println("");
-
-    // InputStream requireInput = new ByteArrayInputStream(transpileSeed.get("require").getBytes());
-    // FstarTranspiler requireParser = new FstarTranspiler(requireInput);
-
-    // ret = visiter.filterObjException(
-    //     requireParser.ConditionRoot().jjtAccept(visiter, null)
-    // );
-
-    // String require = (String)ret;
-
-    // System.out.printf("require = %s\n", require);
-    // System.out.println("");
-
-    // InputStream ensureInput = new ByteArrayInputStream(transpileSeed.get("ensure").getBytes());
-    // FstarTranspiler ensureParser = new FstarTranspiler(ensureInput);
-
-    // ret = visiter.filterObjException(
-    //     ensureParser.ConditionRoot().jjtAccept(visiter, null)
-    // );
-
-    // String ensure = (String)ret;
 
     InputStream requireRefinementTypeInput = new ByteArrayInputStream(transpileSeed.get("requireRefinementType").getBytes());
     
-    FstarTranspiler requireRefinementTypeParser = new FstarTranspiler(requireRefinementTypeInput);
+    FstarTranspiler requireConstraintParser = new FstarTranspiler(requireRefinementTypeInput);
 
-    ret = visiter.filterObjException(
-        requireRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
+    visiter.updateRefinementType("require");
+    visiter.updateRoleType("constraint");
+
+    String requireConstraint = (String)visiter.filterObjException(
+        requireConstraintParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String requireRefinementType = ""; //(String)ret;
+    InputStream requireImplementInput = new ByteArrayInputStream(transpileSeed.get("requireRefinementType").getBytes());
 
-        // array list
+    FstarTranspiler requireImplementParser = new FstarTranspiler(requireImplementInput);
+
+    visiter.updateRoleType("implement");
+
+    String requireImplement = (String)visiter.filterObjException(
+        requireImplementParser.ConditionRoot().jjtAccept(visiter, null)
+    );
+
+    // array list
     // List<String> arrayVariablesName = new ArrayList<String>();
 
 
-    for(Map.Entry<String, String> entry : methodDeclaration.args.entrySet()) {
-        String variableName = entry.getKey();
-        String variableType = entry.getValue();
+    // for(Map.Entry<String, String> entry : methodDeclaration.args.entrySet()) {
+    //     String variableName = entry.getKey();
+    //     String variableType = entry.getValue();
 
-        // endwith
-        if (variableType.endsWith("[]")) {
-            // arrayVariablesName.add(variableName);
-            requireRefinementType += "B.live h0 " + variableName + " /\\\\ ";
-        }
-    }
+    //     // endwith
+    //     if (variableType.endsWith("[]")) {
+    //         // arrayVariablesName.add(variableName);
+    //         requireRefinementType += "B.live h0 " + variableName + " /\\\\ ";
+    //     }
+    // }
 
-    requireRefinementType += (String)ret;
+    // requireRefinementType += (String)ret;
 
-    System.out.println("requireRefinementType: " + requireRefinementType);
+    System.out.println("requireConstraint: " + requireConstraint);
 
 
 
@@ -192,11 +182,11 @@ public class FstarTranspiler
     
     FstarTranspiler ensureRefinementTypeParser = new FstarTranspiler(ensureRefinementTypeInput);
 
-    ret = visiter.filterObjException(
+    String ensureRefinementType = (String)visiter.filterObjException(
         ensureRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String ensureRefinementType = (String)ret;
+    // String ensureRefinementType = (String)ret;
 
     System.out.println("ensureRefinementType: " + ensureRefinementType);
 
@@ -292,7 +282,7 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
 
-    fstarCode = fstarCode.replaceAll("@require_logic_constraint@", requireRefinementType); // 事前ロジック
+    fstarCode = fstarCode.replaceAll("@require_logic_constraint@", requireConstraint); // 事前ロジック
     // System.out.println(fstarCode);
 
     fstarCode = fstarCode.replaceAll("@ensure_logic_constraint@", ensureRefinementType); // 事後ロジック

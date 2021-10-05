@@ -14,12 +14,23 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
     }
 
-    public FstarTranspilerVisitorImpl(MethodDeclaration methodDeclaration) {
+    public void updateMethodDeclaration(MethodDeclaration methodDeclaration) {
         this.methodDeclaration = methodDeclaration;
+    }
+
+    public void updateRefinementType(String refinementTypeName) {
+        this.refinementTypeName = refinementTypeName;
+    }
+
+    public void updateRoleType(String roleTypeName) {
+        this.roleTypeName = roleTypeName;
     }
 
     // 関数宣言の読み取り結果
     public MethodDeclaration methodDeclaration = null;
+
+    public String refinementTypeName = ""; // require or ensure
+    public String roleTypeName = ""; // constraint or implement
 
     public final Map<String, String> fstarTypeMap = new LinkedHashMap<String, String>() {
         {
@@ -524,6 +535,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTConditionRoot node, Object data) {
         System.out.println(node);
+        // System.out.println(refinementTypeName);
+        // System.out.println(roleTypeName);
 
         this.tmpSearchingLiteral = null; // requireを探査したあとに、初期状態に戻したいため
         callConditionRootCounter += 1;
