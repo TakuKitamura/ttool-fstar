@@ -63,8 +63,8 @@ public class FstarTranspiler
 
     transpileSeed.put("methodDeclaration", "fstar_uint8_array validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
 
-    transpileSeed.put("requireLogic", "len(frame_data) == can_dlc && get(frame_data, 0) == 255 && can_id <= 10"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("ensureLogic", "(code == 0 && len(value) == 3) || code == 1"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("requireRefinementType", "len(frame_data) == can_dlc && get(frame_data, 0) == 255 && can_id <= 10"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("ensureRefinementType", "(code == 0 && len(ret) == 3) || code == 1"); // ロジック(配列長を扱う場合)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
     transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
@@ -72,8 +72,8 @@ public class FstarTranspiler
 
     // F*言語のテンプレートでの不足機能を正しく実装できたかの判定用テストコードの値
 
-    transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す) TODO: 一切今は使われていない
-    transpileSeed.put("require", "true"); // 一切今は使われていない
+    // transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す) TODO: 一切今は使われていない
+    // transpileSeed.put("require", "true"); // 一切今は使われていない
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
     // テスト関数の引数
@@ -87,14 +87,14 @@ public class FstarTranspiler
     String[]testExpectedResult = {"0", "1"}; // test1 expected, test2 expected, 
 
     try {
-        String result = transpile("/tmp", transpileSeed, testFuncArgs, testExpectedResult);
+        String result = transpile("/tmp", "./fstar/transpiler/tmpl/", transpileSeed, testFuncArgs, testExpectedResult);
         // System.out.println(result);
     } catch (Exception e) {
         e.printStackTrace();
     }
   }
 
-  public static String transpile(String projectDirPath, Map<String, String> transpileSeed, String[][]testFuncArgs, String[]testExpectedResult) throws Exception {
+  public static String transpile(String projectDirPath, String templatesPath, Map<String, String> transpileSeed, String[][]testFuncArgs, String[]testExpectedResult) throws Exception {
 
     String function = transpileSeed.get("methodDeclaration");
 
@@ -136,36 +136,36 @@ public class FstarTranspiler
     
     // System.out.println("");
 
-    InputStream requireInput = new ByteArrayInputStream(transpileSeed.get("require").getBytes());
-    FstarTranspiler requireParser = new FstarTranspiler(requireInput);
+    // InputStream requireInput = new ByteArrayInputStream(transpileSeed.get("require").getBytes());
+    // FstarTranspiler requireParser = new FstarTranspiler(requireInput);
 
-    ret = visiter.filterObjException(
-        requireParser.ConditionRoot().jjtAccept(visiter, null)
-    );
+    // ret = visiter.filterObjException(
+    //     requireParser.ConditionRoot().jjtAccept(visiter, null)
+    // );
 
-    String require = (String)ret;
+    // String require = (String)ret;
 
     // System.out.printf("require = %s\n", require);
     // System.out.println("");
 
-    InputStream ensureInput = new ByteArrayInputStream(transpileSeed.get("ensure").getBytes());
-    FstarTranspiler ensureParser = new FstarTranspiler(ensureInput);
+    // InputStream ensureInput = new ByteArrayInputStream(transpileSeed.get("ensure").getBytes());
+    // FstarTranspiler ensureParser = new FstarTranspiler(ensureInput);
 
-    ret = visiter.filterObjException(
-        ensureParser.ConditionRoot().jjtAccept(visiter, null)
-    );
+    // ret = visiter.filterObjException(
+    //     ensureParser.ConditionRoot().jjtAccept(visiter, null)
+    // );
 
-    String ensure = (String)ret;
+    // String ensure = (String)ret;
 
-    InputStream requireLogicInput = new ByteArrayInputStream(transpileSeed.get("requireLogic").getBytes());
+    InputStream requireRefinementTypeInput = new ByteArrayInputStream(transpileSeed.get("requireRefinementType").getBytes());
     
-    FstarTranspiler requireLogicParser = new FstarTranspiler(requireLogicInput);
+    FstarTranspiler requireRefinementTypeParser = new FstarTranspiler(requireRefinementTypeInput);
 
     ret = visiter.filterObjException(
-        requireLogicParser.ConditionRoot().jjtAccept(visiter, null)
+        requireRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String requireLogic = ""; //(String)ret;
+    String requireRefinementType = ""; //(String)ret;
 
         // array list
     // List<String> arrayVariablesName = new ArrayList<String>();
@@ -178,27 +178,27 @@ public class FstarTranspiler
         // endwith
         if (variableType.endsWith("[]")) {
             // arrayVariablesName.add(variableName);
-            requireLogic += "B.live h0 " + variableName + " /\\\\ ";
+            requireRefinementType += "B.live h0 " + variableName + " /\\\\ ";
         }
     }
 
-    requireLogic += (String)ret;
+    requireRefinementType += (String)ret;
 
-    System.out.println("requireLogic: " + requireLogic);
+    System.out.println("requireRefinementType: " + requireRefinementType);
 
 
 
-    InputStream ensureLogicInput = new ByteArrayInputStream(transpileSeed.get("ensureLogic").getBytes());
+    InputStream ensureRefinementTypeInput = new ByteArrayInputStream(transpileSeed.get("ensureRefinementType").getBytes());
     
-    FstarTranspiler ensureLogicParser = new FstarTranspiler(ensureLogicInput);
+    FstarTranspiler ensureRefinementTypeParser = new FstarTranspiler(ensureRefinementTypeInput);
 
     ret = visiter.filterObjException(
-        ensureLogicParser.ConditionRoot().jjtAccept(visiter, null)
+        ensureRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    String ensureLogic = (String)ret;
+    String ensureRefinementType = (String)ret;
 
-    System.out.println("ensureLogic: " + ensureLogic);
+    System.out.println("ensureRefinementType: " + ensureRefinementType);
 
     // System.out.printf("ensure = %s\n", ensure);
     // System.out.println("");
@@ -265,7 +265,7 @@ public class FstarTranspiler
 
     String fstarCode = null;
     try {
-        fstarCode = readAll("./fstar/transpiler/tmpl/fstar.tmpl");
+        fstarCode = readAll(templatesPath + "fstar.tmpl");
     } catch (Exception e) {
         System.out.println(e);
     }
@@ -277,9 +277,9 @@ public class FstarTranspiler
     // fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", ngInitRetValue); // どうするか検討
     fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", "???"); // どうするか検討
 
-    fstarCode = fstarCode.replaceAll("@require@", require);// パース結果から構成
+    // fstarCode = fstarCode.replaceAll("@require@", require);// パース結果から構成
 
-    fstarCode = fstarCode.replaceAll("@ensure@", ensure); // パース結果から構成
+    // fstarCode = fstarCode.replaceAll("@ensure@", ensure); // パース結果から構成
 
     fstarCode = fstarCode.replaceAll("@func_name@", funcName); // funcName
 
@@ -292,10 +292,10 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
 
-    fstarCode = fstarCode.replaceAll("@require_logic_constraint@", requireLogic); // 事前ロジック
+    fstarCode = fstarCode.replaceAll("@require_logic_constraint@", requireRefinementType); // 事前ロジック
     // System.out.println(fstarCode);
 
-    fstarCode = fstarCode.replaceAll("@ensure_logic_constraint@", ensureLogic); // 事後ロジック
+    fstarCode = fstarCode.replaceAll("@ensure_logic_constraint@", ensureRefinementType); // 事後ロジック
 
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
@@ -352,7 +352,7 @@ public class FstarTranspiler
 
     String testCode = null;
 
-    testCode = readAll("./fstar/transpiler/tmpl/test_c.tmpl");
+    testCode = readAll(templatesPath + "test_c.tmpl");
 
     testCode = testCode.replaceAll("@header_name@", moduleName);
     testCode = testCode.replaceAll("@test_codes@", testCodes);
@@ -361,7 +361,7 @@ public class FstarTranspiler
 
     String mainCode = null;
 
-    mainCode = readAll("./fstar/transpiler/tmpl/main_c.tmpl");
+    mainCode = readAll(templatesPath + "main_c.tmpl");
 
     mainCode = mainCode.replaceAll("@func_name@", funcName);
 
@@ -369,7 +369,7 @@ public class FstarTranspiler
 
     String makefileCode = null;
 
-    makefileCode = readAll("./fstar/transpiler/tmpl/makefile.tmpl");
+    makefileCode = readAll(templatesPath + "makefile.tmpl");
     makefileCode = makefileCode.replaceAll("@func_name@", funcName);
     makefileCode = makefileCode.replaceAll("@module_name@", moduleName);
 

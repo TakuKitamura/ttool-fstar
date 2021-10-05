@@ -430,8 +430,8 @@ public class AVATAR2CPOSIX {
             String function = functions.get(i);
             String requireRefinementType = requireRefinementTypes.get(i);
             String ensureRefinementType = ensureRefinementTypes.get(i);
-            String requireLogic = requireLogics.get(i);
-            String ensureLogic = ensureLogics.get(i);
+            // String requireLogic = requireLogics.get(i);
+            // String ensureLogic = ensureLogics.get(i);
 
             Map<String, String> transpileSeed = new HashMap<String, String>();
 
@@ -469,9 +469,11 @@ public class AVATAR2CPOSIX {
             // String projectPathStr = splited[splited.length - 1];
             String generatedSrcPath = projectPathStr + "AVATAR_executablecode/generated_src";
 
+            String templatesPath = "./src/main/java/fstar/transpiler/tmpl/";
+
             try {
 
-                String result = FstarTranspiler.transpile(generatedSrcPath, transpileSeed, testFuncArgs,
+                String result = FstarTranspiler.transpile(generatedSrcPath, templatesPath, transpileSeed, testFuncArgs,
                         testExpectedResult);
                 // System.out.println(result);
             } catch (Exception e) {
