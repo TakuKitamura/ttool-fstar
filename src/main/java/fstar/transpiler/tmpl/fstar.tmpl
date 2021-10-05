@@ -29,12 +29,12 @@ noeq type @struct_ret_name@ = {
 
 val @func_name@_body:
   @fstar_func_args@
-Stack (ret: @struct_ret_name@) (requires fun h0 -> 
+Stack (return_value: @struct_ret_name@) (requires fun h0 -> 
     @require_logic_constraint@
   )
-  (ensures fun h0 ret h1 -> 
-    let value = ret.value in
-    let code = ret.error.code in
+  (ensures fun h0 return_value h1 -> 
+    let value = return_value.value in
+    let code = return_value.error.code in
     @ensure_logic_constraint@
   )
 let @func_name@_body @args@ =
@@ -42,12 +42,12 @@ let @func_name@_body @args@ =
 
 val @func_name@: 
   @fstar_func_args@
-  Stack (ret: @struct_ret_name@) (requires fun h0 -> 
+  Stack (return_value: @struct_ret_name@) (requires fun h0 -> 
     @live_check@
   )
-  (ensures fun h0 ret h1 -> 
-    let ret = ret.value in
-    let code = ret.error.code in
+  (ensures fun h0 return_value h1 -> 
+    let ret = return_value.value in
+    let code = return_value.error.code in
     @ensure_logic_constraint@
   )
 let @func_name@ @args@ = 
