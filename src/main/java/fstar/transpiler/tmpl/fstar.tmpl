@@ -43,7 +43,7 @@ let @func_name@_body @args@ =
 val @func_name@: 
   @fstar_func_args@
   Stack (ret: @struct_ret_name@) (requires fun h0 -> 
-    @require_logic_constraint@
+    @live_check@
   )
   (ensures fun h0 ret h1 -> 
     let ret = ret.value in
