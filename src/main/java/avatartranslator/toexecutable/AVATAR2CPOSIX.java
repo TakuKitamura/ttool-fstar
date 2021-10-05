@@ -436,10 +436,10 @@ public class AVATAR2CPOSIX {
             Map<String, String> transpileSeed = new HashMap<String, String>();
 
             transpileSeed.put("methodDeclaration", function); // 関数宣言
-            transpileSeed.put("require", requireRefinementType); // 事前条件
-            transpileSeed.put("ensure", ensureRefinementType); // 事後条件(retは返り値を示す)
-            transpileSeed.put("requireLogic", requireLogic); // 事前ロジック(配列長を扱う場合)
-            transpileSeed.put("ensureLogic", ensureLogic); // 事後ロジック(配列長を扱う場合)
+            transpileSeed.put("requireRefinementType", requireRefinementType); // 事前条件
+            transpileSeed.put("ensureRefinementType", ensureRefinementType); // 事後条件(retは返り値を示す)
+            // transpileSeed.put("requireLogic", requireLogic); // 事前ロジック(配列長を扱う場合)
+            // transpileSeed.put("ensureLogic", ensureLogic); // 事後ロジック(配列長を扱う場合)
 
             // TODO: ここは開発者の責任でコード上に手書きしてもらう
             transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
