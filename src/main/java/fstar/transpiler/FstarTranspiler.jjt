@@ -61,9 +61,9 @@ public class FstarTranspiler
 
     Map<String, String> transpileSeed = new HashMap<String, String>();
 
-    transpileSeed.put("methodDeclaration", "fstar_uint8_array validatePacketData(uint32 can_id, uint8 can_dlc, uint8[] frame_data)"); // 関数宣言
+    transpileSeed.put("methodDeclaration", "fstar_uint8 parseDoor(uint32 can_id, uint8 can_dlc, uint8[] data)"); // 関数宣言
 
-    transpileSeed.put("requireRefinementType", "len(frame_data) == can_dlc && get(frame_data, 0) == 255 && can_id <= 10"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("requireRefinementType", "len(data) == 8 && can_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); // ロジック(配列長を扱う場合)
     transpileSeed.put("ensureRefinementType", "(code == 0 && len(ret) == 3) || code == 1"); // ロジック(配列長を扱う場合)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう

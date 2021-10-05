@@ -33,7 +33,7 @@ Stack (return_value: @struct_ret_name@) (requires fun h0 ->
     @require_logic_constraint@
   )
   (ensures fun h0 return_value h1 -> 
-    let value = return_value.value in
+    let ret = return_value.value in
     let code = return_value.error.code in
     @ensure_logic_constraint@
   )
