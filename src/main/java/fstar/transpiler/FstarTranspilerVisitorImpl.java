@@ -32,6 +32,14 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     public String refinementTypeName = ""; // require or ensure
     public String roleTypeName = ""; // constraint or implement
 
+    public List<String> arrayAccessStatements = new ArrayList<>();
+
+    private Integer arrayValueID = 1;
+
+    public List<String> getArrayAccessStatements() {
+        return arrayAccessStatements;
+    }
+
     public final Map<String, String> fstarTypeMap = new LinkedHashMap<String, String>() {
         {
             put("int8", "I8");
@@ -320,6 +328,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         } else if (xParentIsGet == true || yParentIsGet == true) {
             if (callConditionRootCounter == 1 || callConditionRootCounter == 2) { // require, or logic
                 String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
+
                 if (xParentIsGet == true) {
                     String indexX = xGetArgs[1];
 
@@ -337,7 +346,15 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                             indexX += "ul";
                         } catch (NumberFormatException nfex) {
                         }
-                        xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
+                        // xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
+                        String variableName = String.format("v%d", arrayValueID);
+                        xRawValue = variableName;
+
+                        arrayAccessStatements
+                                .add(String.format("let %s = %s.(%s) in ", variableName, xGetArgs[0], indexX));
+
+                        System.out.println(arrayAccessStatements);
+                        arrayValueID += 1;
                     } else {
                         throw new Exception("unknown roleTypeName");
                     }
@@ -361,7 +378,12 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                             indexY += "ul";
                         } catch (NumberFormatException nfex) {
                         }
-                        yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
+                        // yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
+                        String variableName = String.format("v%d", arrayValueID);
+                        yRawValue = variableName;
+                        arrayAccessStatements
+                                .add(String.format("let %s = %s.(%s) in", variableName, yGetArgs[0], indexY));
+                        arrayValueID += 1;
                     } else {
                         throw new Exception("unknown roleTypeName");
                     }

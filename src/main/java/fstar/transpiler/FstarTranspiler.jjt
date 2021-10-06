@@ -159,24 +159,37 @@ public class FstarTranspiler
         requireImplementParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
+    List<String> arrayAccessStatements = visiter.getArrayAccessStatements();
+
+    String arrayAccessStatement = "";
+
+    for (String s : arrayAccessStatements) {
+        // System.out.println(s);
+        arrayAccessStatement += s;
+    }
+
+    requireImplement = String.format("(%s%s)", arrayAccessStatement, requireImplement);
+
     System.out.println("requireImplement: " + requireImplement);
 
     // array list
-    // List<String> arrayVariablesName = new ArrayList<String>();
+    List<String> arrayVariablesName = new ArrayList<String>();
+
+    String liveCheckGrammar = "";
 
 
-    // for(Map.Entry<String, String> entry : methodDeclaration.args.entrySet()) {
-    //     String variableName = entry.getKey();
-    //     String variableType = entry.getValue();
+    for(Map.Entry<String, String> entry : methodDeclaration.args.entrySet()) {
+        String variableName = entry.getKey();
+        String variableType = entry.getValue();
 
-    //     // endwith
-    //     if (variableType.endsWith("[]")) {
-    //         // arrayVariablesName.add(variableName);
-    //         requireRefinementType += "B.live h0 " + variableName + " /\\\\ ";
-    //     }
-    // }
+        // endwith
+        if (variableType.endsWith("[]")) {
+            // arrayVariablesName.add(variableName);
+            liveCheckGrammar += "B.live h0 " + variableName + " /\\\\ ";
+        }
+    }
 
-    // requireRefinementType += (String)ret;
+    requireConstraint = liveCheckGrammar + requireConstraint;
 
 
 
@@ -235,7 +248,7 @@ public class FstarTranspiler
 
     // System.out.println(methodDeclaration);
 
-    String callFuncBody = funcName + "_body ";
+    // String callFuncBody = funcName + "_body ";
 
     for (int i = 0; i < argsName.size(); i++) {
 
@@ -249,7 +262,7 @@ public class FstarTranspiler
         fstarFuncArgs += String.format("%s: %s ->\n  ", argName, argType);
     }
 
-    callFuncBody += args + ";";
+    // callFuncBody += args + ";";
 
     // System.out.println(callFuncBody);
 
@@ -304,7 +317,7 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
 
-    fstarCode = fstarCode.replaceAll("@call_func_body@", callFuncBody);
+    // fstarCode = fstarCode.replaceAll("@call_func_body@", callFuncBody);
 
 
     // Testing_test_start("Add Test");

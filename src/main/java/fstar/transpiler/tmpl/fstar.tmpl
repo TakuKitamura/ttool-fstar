@@ -52,5 +52,5 @@ val @func_name@:
   )
 let @func_name@ @args@ = 
     if @require_implement@ then
-        @call_func_body@
+        @func_name@_body @args@;
     else
