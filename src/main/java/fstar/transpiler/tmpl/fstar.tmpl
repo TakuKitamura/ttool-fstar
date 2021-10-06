@@ -30,12 +30,12 @@ noeq type @struct_ret_name@ = {
 val @func_name@_body:
   @fstar_func_args@
 Stack (return_value: @struct_ret_name@) (requires fun h0 -> 
-    @require_logic_constraint@
+    @require_constraint@
   )
   (ensures fun h0 return_value h1 -> 
     let ret = return_value.value in
     let code = return_value.error.code in
-    @ensure_logic_constraint@
+    @ensure_constraint@
   )
 let @func_name@_body @args@ =
     ???
@@ -43,12 +43,14 @@ let @func_name@_body @args@ =
 val @func_name@: 
   @fstar_func_args@
   Stack (return_value: @struct_ret_name@) (requires fun h0 -> 
-    @require_logic_constraint@
+    @require_constraint@
   )
   (ensures fun h0 return_value h1 -> 
     let ret = return_value.value in
     let code = return_value.error.code in
-    @ensure_logic_constraint@
+    @ensure_constraint@
   )
 let @func_name@ @args@ = 
-    ???
+    if @require_implement@ then
+        @call_func_body@
+    else

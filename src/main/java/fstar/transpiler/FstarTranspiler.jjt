@@ -64,7 +64,7 @@ public class FstarTranspiler
     transpileSeed.put("methodDeclaration", "fstar_uint8 parseDoor(uint32 can_id, uint8 can_dlc, uint8[] data)"); // 関数宣言
 
     transpileSeed.put("requireRefinementType", "len(data) == 8 && can_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("ensureRefinementType", "(code == 0 && len(ret) == 3) || code == 1"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("ensureConstraint", "(code == 0 && len(ret) == 3) || code == 1"); // ロジック(配列長を扱う場合)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
     transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
@@ -180,21 +180,21 @@ public class FstarTranspiler
 
 
 
-    InputStream ensureRefinementTypeInput = new ByteArrayInputStream(transpileSeed.get("ensureRefinementType").getBytes());
+    InputStream ensureConstraintInput = new ByteArrayInputStream(transpileSeed.get("ensureConstraint").getBytes());
     
-    FstarTranspiler ensureRefinementTypeParser = new FstarTranspiler(ensureRefinementTypeInput);
+    FstarTranspiler ensureConstraintParser = new FstarTranspiler(ensureConstraintInput);
 
     visiter.updateRefinementType("ensure");
     visiter.updateRoleType("constraint");
 
 
-    String ensureRefinementType = (String)visiter.filterObjException(
-        ensureRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
+    String ensureConstraint = (String)visiter.filterObjException(
+        ensureConstraintParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    // String ensureRefinementType = (String)ret;
+    // String ensureConstraint = (String)ret;
 
-    System.out.println("ensureRefinementType: " + ensureRefinementType);
+    System.out.println("ensureConstraint: " + ensureConstraint);
 
     // System.out.printf("ensure = %s\n", ensure);
     // System.out.println("");
@@ -235,17 +235,23 @@ public class FstarTranspiler
 
     // System.out.println(methodDeclaration);
 
+    String callFuncBody = funcName + "_body ";
+
     for (int i = 0; i < argsName.size(); i++) {
 
         String argName = argsName.get(i);
         args += String.format("%s ", argName);
 
-        // System.out.println(777);
+        System.out.println(777);
         // System.out.println(methodDeclaration.args.get(argName));
 
         String argType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.args.get(argName)));
         fstarFuncArgs += String.format("%s: %s ->\n  ", argName, argType);
     }
+
+    callFuncBody += args + ";";
+
+    // System.out.println(callFuncBody);
 
     String okInitRetValue = "";
 
@@ -288,13 +294,17 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
 
-    fstarCode = fstarCode.replaceAll("@require_logic_constraint@", requireConstraint); // 事前ロジック
+    fstarCode = fstarCode.replaceAll("@require_constraint@", requireConstraint); // require 制約記述
     // System.out.println(fstarCode);
 
-    fstarCode = fstarCode.replaceAll("@ensure_logic_constraint@", ensureRefinementType); // 事後ロジック
+    fstarCode = fstarCode.replaceAll("@require_implement@", requireImplement); // require 実装記述
+
+    fstarCode = fstarCode.replaceAll("@ensure_constraint@", ensureConstraint); // ensure 制約記述
 
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
+
+    fstarCode = fstarCode.replaceAll("@call_func_body@", callFuncBody);
 
 
     // Testing_test_start("Add Test");
