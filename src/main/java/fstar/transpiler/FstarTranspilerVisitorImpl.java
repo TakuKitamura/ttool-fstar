@@ -751,7 +751,6 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
             String ret = (String) node.jjtGetValue();
             // System.out.println(ret);
             // System.out.println(555);
-
             // 正確な型はこの時点では不明
             this.tmpSearchingLiteral = "unkowonIntType";
             return ret;

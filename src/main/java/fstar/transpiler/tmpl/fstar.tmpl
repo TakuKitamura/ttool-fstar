@@ -27,30 +27,37 @@ noeq type @struct_ret_name@ = {
     error: struct_error;
 }
 
+// @function_define@
 val @func_name@_body:
   @fstar_func_args@
 Stack (return_value: @struct_ret_name@) (requires fun h0 -> 
+    // @simple_require_constraint@
     @require_constraint@
   )
   (ensures fun h0 return_value h1 -> 
     let ret = return_value.value in
     let code = return_value.error.code in
+    // @simple_ensure_constraint@
     @ensure_constraint@
   )
 let @func_name@_body @args@ =
-    ???
+    // TODO: you need to implement this function here
 
 val @func_name@: 
   @fstar_func_args@
   Stack (return_value: @struct_ret_name@) (requires fun h0 -> 
+    // @simple_require_constraint@
     @require_constraint@
   )
   (ensures fun h0 return_value h1 -> 
     let ret = return_value.value in
     let code = return_value.error.code in
+    // @simple_ensure_constraint@
     @ensure_constraint@
   )
 let @func_name@ @args@ = 
+    // meet the preconditions
     if @require_implement@ then
         @func_name@_body @args@
     else
+        // TODO: you need to return an error value here if the preconditions are not met

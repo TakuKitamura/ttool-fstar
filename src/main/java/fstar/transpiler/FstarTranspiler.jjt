@@ -120,6 +120,9 @@ public class FstarTranspiler
 
 
     // throw new Exception("x");
+
+    System.out.println(function);
+    System.out.println(11111);
     
 
     InputStream methodDeclarationInput = new ByteArrayInputStream(function.getBytes());
@@ -312,10 +315,16 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@require_implement@", requireImplement); // require 実装記述
 
+    fstarCode = fstarCode.replaceAll("@simple_require_constraint@", transpileSeed.get("requireRefinementType")); // ensure の refine type
+
     fstarCode = fstarCode.replaceAll("@ensure_constraint@", ensureRefinementType); // ensure 制約記述
+
+    fstarCode = fstarCode.replaceAll("@simple_ensure_constraint@", transpileSeed.get("ensureRefinementType")); // ensure 実装記述
 
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
+
+    fstarCode = fstarCode.replaceAll("@function_define@", function);
 
     // fstarCode = fstarCode.replaceAll("@call_func_body@", callFuncBody);
 
