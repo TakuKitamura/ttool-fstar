@@ -322,22 +322,50 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 String fstarOp = String.format("%s.%s", type, fstarOpName); // gt
                 if (xParentIsGet == true) {
                     String indexX = xGetArgs[1];
-                    try {
-                        Integer.parseInt(indexX);
-                        indexX += "ul";
-                    } catch (NumberFormatException nfex) {
+
+                    if (roleTypeName.equals("constraint")) {
+                        if (refinementTypeName.equals("require")) {
+                            xRawValue = String.format("(B.get h0 %s %s)", xGetArgs[0], indexX);
+                        } else if (refinementTypeName.equals("ensure")) {
+                            xRawValue = String.format("(B.get h1 %s %s)", xGetArgs[0], indexX);
+                        } else {
+                            throw new Exception("unknown refinement type");
+                        }
+                    } else if (roleTypeName.equals("implement")) {
+                        try {
+                            Integer.parseInt(indexX);
+                            indexX += "ul";
+                        } catch (NumberFormatException nfex) {
+                        }
+                        xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
+                    } else {
+                        throw new Exception("unknown roleTypeName");
                     }
-                    xRawValue = String.format("(%s.(%s))", xGetArgs[0], indexX);
                 }
 
                 if (yParentIsGet == true) {
                     String indexY = yGetArgs[1];
-                    try {
-                        Integer.parseInt(indexY);
-                        indexY += "ul";
-                    } catch (NumberFormatException nfex) {
-                    }
                     yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
+
+                    if (roleTypeName.equals("constraint")) {
+                        if (refinementTypeName.equals("require")) {
+                            yRawValue = String.format("(B.get h0 %s %s)", yGetArgs[0], indexY);
+                        } else if (refinementTypeName.equals("ensure")) {
+                            yRawValue = String.format("(B.get h1 %s %s)", yGetArgs[0], indexY);
+                        } else {
+                            throw new Exception("unknown refinement type");
+                        }
+                    } else if (roleTypeName.equals("implement")) {
+                        try {
+                            Integer.parseInt(indexY);
+                            indexY += "ul";
+                        } catch (NumberFormatException nfex) {
+                        }
+                        yRawValue = String.format("(%s.(%s))", yGetArgs[0], indexY);
+                    } else {
+                        throw new Exception("unknown roleTypeName");
+                    }
+
                 }
 
                 String ret = String.format("(%s %s %s)", fstarOp, xRawValue, yRawValue);
@@ -535,8 +563,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
     @Override
     public Object visit(ASTConditionRoot node, Object data) {
         System.out.println(node);
-        // System.out.println(refinementTypeName);
-        // System.out.println(roleTypeName);
+        System.out.println(refinementTypeName);
+        System.out.println(roleTypeName);
 
         this.tmpSearchingLiteral = null; // requireを探査したあとに、初期状態に戻したいため
         callConditionRootCounter += 1;

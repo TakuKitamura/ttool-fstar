@@ -182,6 +182,10 @@ public class FstarTranspiler
     
     FstarTranspiler ensureRefinementTypeParser = new FstarTranspiler(ensureRefinementTypeInput);
 
+    visiter.updateRefinementType("ensure");
+    visiter.updateRoleType("constraint");
+
+
     String ensureRefinementType = (String)visiter.filterObjException(
         ensureRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
     );
