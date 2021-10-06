@@ -147,6 +147,8 @@ public class FstarTranspiler
         requireConstraintParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
+    System.out.println("requireConstraint: " + requireConstraint);
+
     InputStream requireImplementInput = new ByteArrayInputStream(transpileSeed.get("requireRefinementType").getBytes());
 
     FstarTranspiler requireImplementParser = new FstarTranspiler(requireImplementInput);
@@ -156,6 +158,8 @@ public class FstarTranspiler
     String requireImplement = (String)visiter.filterObjException(
         requireImplementParser.ConditionRoot().jjtAccept(visiter, null)
     );
+
+    System.out.println("requireImplement: " + requireImplement);
 
     // array list
     // List<String> arrayVariablesName = new ArrayList<String>();
@@ -173,8 +177,6 @@ public class FstarTranspiler
     // }
 
     // requireRefinementType += (String)ret;
-
-    System.out.println("requireConstraint: " + requireConstraint);
 
 
 

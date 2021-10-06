@@ -544,9 +544,13 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         for (int i = 0; i < leafNum; i++) {
             Node n = node.jjtGetChild(i);
             String leaf = filterObjException(n.jjtAccept(this, null)).toString();
-            ret += leaf;
-            if (i != leafNum - 1) {
-                ret += String.format(" %s ", ope);
+            if (roleTypeName.equals("constraint")
+                    || (roleTypeName.equals("implement") && leaf.contains("B.length ") == false)) {
+                ret += leaf;
+                if (i != leafNum - 1) {
+                    ret += String.format(" %s ", ope);
+                }
+                // System.out.printf(" --- leaf = %s ---\n", leaf);
             }
         }
         ret += ")";
