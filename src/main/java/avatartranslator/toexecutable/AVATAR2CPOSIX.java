@@ -469,6 +469,9 @@ public class AVATAR2CPOSIX {
             // String projectPathStr = splited[splited.length - 1];
             String generatedSrcPath = projectPathStr + "AVATAR_executablecode/generated_src";
 
+            File generatedDirs = new File(generatedSrcPath);
+            generatedDirs.mkdirs();
+
             String templatesPath = "./src/main/java/fstar/transpiler/tmpl/";
 
             try {
@@ -1218,8 +1221,9 @@ public class AVATAR2CPOSIX {
             return res + ")";
         }
         if (term instanceof AvatarTermFunction)
-            // return _ab.getName() + "__" + ((AvatarTermFunction) term).getMethod().getName()
-            //         + this.modifyMethodName(_ab, ((AvatarTermFunction) term).getArgs());
+            // return _ab.getName() + "__" + ((AvatarTermFunction)
+            // term).getMethod().getName()
+            // + this.modifyMethodName(_ab, ((AvatarTermFunction) term).getArgs());
             return ((AvatarTermFunction) term).getMethod().getName()
                     + this.modifyMethodName(_ab, ((AvatarTermFunction) term).getArgs());
         return "";
