@@ -207,9 +207,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         if (methodDeclaration.args.get(xRawValue) != null) { // variable
             xFstarType = fstarTypeMap.get(xVariableType);
-        } else if (xRawValue.equals("ret") == true) { // ret
+        } else if (xRawValue.equals("__ret") == true) { // ret
             xFstarType = fstarTypeMap.get(methodDeclaration.returnType);
-        } else if (xRawValue.equals("code") == true) { // ret
+        } else if (xRawValue.equals("__code") == true) { // ret
             xFstarType = fstarTypeMap.get("error_code");
             // xIsNumber = true;
         } else { // value
@@ -222,9 +222,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
 
         if (methodDeclaration.args.get(yRawValue) != null) { // variable
             yFstarType = fstarTypeMap.get(yVariableType);
-        } else if (yRawValue.equals("ret") == true) { // ret
+        } else if (yRawValue.equals("__ret") == true) { // ret
             yFstarType = fstarTypeMap.get(methodDeclaration.returnType);
-        } else if (yRawValue.equals("code") == true) { // ret
+        } else if (yRawValue.equals("__code") == true) { // ret
             yFstarType = fstarTypeMap.get("error_code");
             // yIsNumber = true;
         } else { // value
@@ -249,9 +249,9 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
         System.out.printf("%s, %s\n", xFstarType, yFstarType);
 
         // 2 > 1 のような無駄な条件は無効
-        if (xFstarType == null && yFstarType == null && xRawValue.equals("ret") == false
-                && xRawValue.equals("code") == false && yRawValue.equals("ret") == false
-                && yRawValue.equals("code") == false) {
+        if (xFstarType == null && yFstarType == null && xRawValue.equals("__ret") == false
+                && xRawValue.equals("__code") == false && yRawValue.equals("__ret") == false
+                && yRawValue.equals("__code") == false) {
             throw new Exception("find no need formula");
         }
 
@@ -505,7 +505,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 // System.out.println(splited);
                 String argName = splited[1];
 
-                if (argName.equals("ret")) {
+                if (argName.equals("__ret")) {
                     leafsType.add(methodDeclaration.returnType);
                 } else {
                     String argArrayType = methodDeclaration.args.get(argName);
@@ -516,17 +516,17 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                 // System.out.println(argName);
 
             } else if (this.tmpSearchingLiteral == null) {
-                if (leaf.equals("ret")) {
+                if (leaf.equals("__ret")) {
                     // System.out.println(1);
                     leafsType.add(methodDeclaration.returnType);
-                } else if (leaf.equals("code")) {
+                } else if (leaf.equals("__code")) {
                     // System.out.println(1);
                     leafsType.add("int32");
                 } else if (leaf.startsWith("len ") == true) {
                     // get the string after the fifth character
                     String argName = leaf.substring(4, leaf.length());
 
-                    if (argName.equals("ret")) {
+                    if (argName.equals("__ret")) {
                         leafsType.add(methodDeclaration.returnType);
                     } else {
                         String argArrayType = methodDeclaration.args.get(argName);

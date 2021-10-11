@@ -64,7 +64,7 @@ public class FstarTranspiler
     transpileSeed.put("methodDeclaration", "fstar_uint8 parseDoor(uint32 can_id, uint8 can_dlc, uint8[] data)"); // 関数宣言
 
     transpileSeed.put("requireRefinementType", "len(data) == 8 && can_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("ensureRefinementType", "(code == 0 && ret == get(data, 2)) || code == 1"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("ensureRefinementType", "(fstar_uint8.error.code == 0 && fstar_uint8.value == get(data, 2)) || fstar_uint8.error.code == 1"); // ロジック(配列長を扱う場合)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
     transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
@@ -194,9 +194,21 @@ public class FstarTranspiler
 
     requireConstraint = liveCheckGrammar + requireConstraint;
 
+    String ensureRefinementTypeText = transpileSeed.get("ensureRefinementType");
+
+    String baseRegex = "fstar_(u|)int(8|32|16)(_array|)";
+
+    ensureRefinementTypeText = ensureRefinementTypeText.replaceAll(baseRegex + ".value", "__ret");
+
+    ensureRefinementTypeText = ensureRefinementTypeText.replaceAll(baseRegex + ".error.code", "__code");
+
+    ensureRefinementTypeText = ensureRefinementTypeText.replaceAll(baseRegex + ".error.message", "__message");
 
 
-    InputStream ensureRefinementTypeInput = new ByteArrayInputStream(transpileSeed.get("ensureRefinementType").getBytes());
+    System.out.println(ensureRefinementTypeText);
+
+
+    InputStream ensureRefinementTypeInput = new ByteArrayInputStream(ensureRefinementTypeText.getBytes());
     
     FstarTranspiler ensureRefinementTypeParser = new FstarTranspiler(ensureRefinementTypeInput);
 
@@ -317,9 +329,9 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@simple_require_constraint@", transpileSeed.get("requireRefinementType")); // ensure の refine type
 
-    fstarCode = fstarCode.replaceAll("@ensure_constraint@", ensureRefinementType); // ensure 制約記述
+    fstarCode = fstarCode.replaceAll("@ensure_constraint@", ensureRefinementType).replaceAll("__ret", returnFstarTypeName + "." + "value").replaceAll("__code", returnFstarTypeName + ".error.code").replaceAll("__message", returnFstarTypeName + ".error.message"); // ensure 制約記述
 
-    fstarCode = fstarCode.replaceAll("@simple_ensure_constraint@", transpileSeed.get("ensureRefinementType")); // ensure 実装記述
+    fstarCode = fstarCode.replaceAll("@simple_ensure_constraint@", transpileSeed.get("ensureRefinementType")).replaceAll("__ret", returnFstarTypeName + "." + "value").replaceAll("__code", returnFstarTypeName + ".error.code").replaceAll("__message", returnFstarTypeName + ".error.message"); // ensure 実装記述
 
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
