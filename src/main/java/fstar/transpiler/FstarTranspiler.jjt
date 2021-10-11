@@ -403,7 +403,8 @@ public class FstarTranspiler
 
     // System.out.println(makefileCode);
 
-    String dirPath = String.format(projectDirPath + "/%s", funcName);
+    // String dirPath = String.format(projectDirPath + "/%s", funcName);
+    String dirPath = projectDirPath + "/fstar_src";
 
     Path dp = Paths.get(dirPath);
 
@@ -428,11 +429,11 @@ public class FstarTranspiler
 
     writeAll(fstarFilePath, fstarCode);
 
-    writeAll(mainFilePath, mainCode);
+    // writeAll(mainFilePath, mainCode);
 
-    writeAll(testFilePath, testCode);
+    // writeAll(testFilePath, testCode);
 
-    writeAll(makefilePath, makefileCode);
+    // writeAll(makefilePath, makefileCode);
 
     return "";
   }
