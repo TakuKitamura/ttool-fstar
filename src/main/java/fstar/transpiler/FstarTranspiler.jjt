@@ -63,7 +63,7 @@ public class FstarTranspiler
 
     transpileSeed.put("methodDeclaration", "fstar_uint8 parseDoor(uint32 can_id, uint8 can_dlc, uint8[] data)"); // 関数宣言
 
-    transpileSeed.put("requireRefinementType", "len(data) == 8 && can_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("requireRefinementType", "len(data) == 8 &&\ncan_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); // ロジック(配列長を扱う場合)
     transpileSeed.put("ensureRefinementType", "(fstar_uint8.error.code == 0 && fstar_uint8.value == get(data, 2)) || fstar_uint8.error.code == 1"); // ロジック(配列長を扱う場合)
 
     // TODO: ここは開発者の責任でコード上に手書きしてもらう
@@ -481,6 +481,7 @@ SKIP :
   " "
 | "\t"
 | "\r"
+| "\n"
 }
 
 TOKEN :

@@ -430,8 +430,8 @@ public class AVATAR2CPOSIX {
 
         for (int i = 0; i < functions.size(); i++) {
             String function = functions.get(i);
-            String requireRefinementType = requireRefinementTypes.get(i);
-            String ensureRefinementType = ensureRefinementTypes.get(i);
+            String requireRefinementType = requireRefinementTypes.get(i).replaceAll("&return;", " ");
+            String ensureRefinementType = ensureRefinementTypes.get(i).replaceAll("&return;", " ");;
             // String requireLogic = requireLogics.get(i);
             // String ensureLogic = ensureLogics.get(i);
 

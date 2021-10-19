@@ -9,11 +9,11 @@ package myutil;
 public class Xml {
     public String sanitize(String s) {
         return s.replaceAll("\"", "&quot;").replaceAll("'", "&apos;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
-                .replaceAll("&", "&amp;");
+                .replaceAll("\n", "&return;").replaceAll("&", "&amp;");
     }
 
     public String decode(String s) {
         return s.replaceAll("&quot;", "\"").replaceAll("&apos;", "'").replaceAll("&lt;", "<").replaceAll("&gt;", ">")
-                .replaceAll("&amp;", "&");
+                .replaceAll("&return;", "\n").replaceAll("&amp;", "&");
     }
 }
