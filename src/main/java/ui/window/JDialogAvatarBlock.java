@@ -123,9 +123,9 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     // Method
     private boolean hasMethods = true;
     private JPanel panel3, panel4;
-    private JTextField methodText;
-    private JTextField methodRequireRefinementTypeText;
-    private JTextField methodEnsureRefinementTypeText;
+    private JTextArea methodText;
+    private JTextArea methodRequireRefinementTypeText;
+    private JTextArea methodEnsureRefinementTypeText;
     private JTextField methodRequireLogicText;
     private JTextField methodEnsureLogicText;
     private JButton addMethodButton;
@@ -408,18 +408,18 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
 
         // second line panel3
         c3.fill = GridBagConstraints.HORIZONTAL;
-        methodText = new JTextField();
+        methodText = new JTextArea();
         methodText.setColumns(50);
         methodText.setEditable(true);
         panel3.add(methodText, c3);
 
-        methodRequireRefinementTypeText = new JTextField();
+        methodRequireRefinementTypeText = new JTextArea();
         methodRequireRefinementTypeText.setColumns(50);
         methodRequireRefinementTypeText.setEditable(true);
         methodRequireRefinementTypeText.setText("");
         panel3.add(methodRequireRefinementTypeText, c3);
 
-        methodEnsureRefinementTypeText = new JTextField();
+        methodEnsureRefinementTypeText = new JTextArea();
         methodEnsureRefinementTypeText.setColumns(50);
         methodEnsureRefinementTypeText.setEditable(true);
         methodEnsureRefinementTypeText.setText("");
