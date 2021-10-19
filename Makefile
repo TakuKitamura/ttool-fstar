@@ -147,6 +147,7 @@ ttool: $(TTOOL_BINARY) install run
 ttoolnotest: 
 
 $(TTOOL_BINARY): FORCE
+	make -C src/main/java/fstar/transpiler
 	@($(GRADLE) :ttool:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 
