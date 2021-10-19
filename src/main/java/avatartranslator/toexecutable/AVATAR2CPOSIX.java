@@ -77,6 +77,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.regex.*;
+
 /**
  * Class AVATAR2CPOSIX Creation: 29/03/2011
  *
@@ -1050,12 +1052,29 @@ public class AVATAR2CPOSIX {
 
     public String makeAttributesDeclaration(AvatarBlock _block, TaskFile _taskFile) {
         String ret = "";
+
         for (AvatarAttribute aa : _block.getAttributes()) {
 
+            // String baseRegex = "fstar_(u|)int(8|32|16)(_array|)";
+
+            // ensureRefinementTypeText = ensureRefinementTypeText.replaceAll(baseRegex +
+            // ".value", "__ret");
+
+            String dataType = getCTypeOf(aa);
+
+            Pattern integerPattern = Pattern.compile("^((u|)int(8|32|16))");
+
+            Matcher integerMatcher = integerPattern.matcher(dataType);
+
+            if (integerMatcher.find()) {
+                dataType = dataType.replaceAll(integerMatcher.group(1), integerMatcher.group(1) + "_t")
+                        .replaceAll("\\[\\]", "*");
+            }
+
             if (aa.getInitialValue().equals("")) {
-                ret += getCTypeOf(aa) + " " + aa.getName() + ";" + CR;
+                ret += dataType + " " + aa.getName() + ";" + CR;
             } else {
-                ret += getCTypeOf(aa) + " " + aa.getName() + " = " + aa.getInitialValue() + ";" + CR;
+                ret += dataType + " " + aa.getName() + " = " + aa.getInitialValue() + ";" + CR;
             }
         }
         return ret;
