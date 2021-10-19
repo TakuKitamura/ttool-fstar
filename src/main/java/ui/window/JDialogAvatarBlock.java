@@ -403,8 +403,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         panel3.add(new JLabel("method"), c3);
         panel3.add(new JLabel("require"), c3);
         panel3.add(new JLabel("ensure"), c3);
-        panel3.add(new JLabel("requireLogic"), c3);
-        panel3.add(new JLabel("ensureLogic"), c3);
+        // panel3.add(new JLabel("requireLogic"), c3);
+        // panel3.add(new JLabel("ensureLogic"), c3);
 
         // second line panel3
         c3.fill = GridBagConstraints.HORIZONTAL;
@@ -429,13 +429,13 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         methodRequireLogicText.setColumns(50);
         methodRequireLogicText.setEditable(true);
         methodRequireLogicText.setText("");
-        panel3.add(methodRequireLogicText, c3);
+        // panel3.add(methodRequireLogicText, c3);
 
         methodEnsureLogicText = new JTextField();
         methodEnsureLogicText.setColumns(50);
         methodEnsureLogicText.setEditable(true);
         methodEnsureLogicText.setText("");
-        panel3.add(methodEnsureLogicText, c3);
+        // panel3.add(methodEnsureLogicText, c3);
 
         // third line panel3
         c3.gridwidth = GridBagConstraints.REMAINDER; // end row

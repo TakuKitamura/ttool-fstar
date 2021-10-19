@@ -441,7 +441,8 @@ public class AvatarMethod {
 
     public String toString() {
         String method = this.toStringOnlyMethod();
-
+        return method;
+        /*
         if (!method.split("\\(")[0].contains(" ")) {
             // method = "void " + method;
         }
@@ -509,6 +510,7 @@ public class AvatarMethod {
         } else {
             return method;
         }
+        */
     }
 
     public String toSaveString() {
