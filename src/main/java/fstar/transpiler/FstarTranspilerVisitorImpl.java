@@ -340,6 +340,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                         } else {
                             throw new Exception("unknown refinement type");
                         }
+                    } else if (roleTypeName.equals("constraintWrap")) {
+
                     } else if (roleTypeName.equals("implement")) {
                         try {
                             Integer.parseInt(indexX);
@@ -372,6 +374,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                         } else {
                             throw new Exception("unknown refinement type");
                         }
+                    } else if (roleTypeName.equals("constraintWrap")) {
+
                     } else if (roleTypeName.equals("implement")) {
                         try {
                             Integer.parseInt(indexY);
@@ -573,6 +577,8 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                     ret += String.format(" %s ", ope);
                 }
                 // System.out.printf(" --- leaf = %s ---\n", leaf);
+            } else if (roleTypeName.equals("constraintWrap") && leaf.contains("B.length ") == true) {
+                ret += leaf;
             }
         }
         ret += ")";

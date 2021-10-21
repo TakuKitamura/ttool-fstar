@@ -27,15 +27,12 @@ noeq type @struct_ret_name@ = {
     error: struct_error;
 }
 
-// @function_define@
 val @func_name@_body:
   @fstar_func_args@
 Stack (@struct_ret_name@: @struct_ret_name@) (requires fun h0 -> 
-    // @simple_require_constraint@
     @require_constraint@
   )
   (ensures fun h0 @struct_ret_name@ h1 -> 
-    // @simple_ensure_constraint@
     @ensure_constraint@
   )
 let @func_name@_body @args@ =
@@ -44,11 +41,9 @@ let @func_name@_body @args@ =
 val @func_name@: 
   @fstar_func_args@
   Stack (@struct_ret_name@: @struct_ret_name@) (requires fun h0 -> 
-    // @simple_require_constraint@
-    @require_constraint@
+    @require_constraint_wrap@
   )
   (ensures fun h0 @struct_ret_name@ h1 -> 
-    // @simple_ensure_constraint@
     @ensure_constraint@
   )
 let @func_name@ @args@ = 
