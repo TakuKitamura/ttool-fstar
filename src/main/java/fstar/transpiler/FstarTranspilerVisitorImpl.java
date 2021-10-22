@@ -353,7 +353,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                         xRawValue = variableName;
 
                         arrayAccessStatements
-                                .add(String.format("let %s = %s.(%s) in ", variableName, xGetArgs[0], indexX));
+                                .add(String.format("let %s = %s.(%s) in\n    ", variableName, xGetArgs[0], indexX));
 
                         System.out.println(arrayAccessStatements);
                         arrayValueID += 1;
@@ -574,7 +574,7 @@ public class FstarTranspilerVisitorImpl implements FstarTranspilerVisitor {
                     || (roleTypeName.equals("implement") && leaf.contains("B.length ") == false)) {
                 ret += leaf;
                 if (i != leafNum - 1) {
-                    ret += String.format(" %s ", ope);
+                    ret += String.format(" %s\n    ", ope);
                 }
                 // System.out.printf(" --- leaf = %s ---\n", leaf);
             } else if (roleTypeName.equals("constraintWrap") && leaf.contains("B.length ") == true) {
