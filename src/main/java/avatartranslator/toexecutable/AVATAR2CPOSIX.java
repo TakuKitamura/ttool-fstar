@@ -1062,7 +1062,7 @@ public class AVATAR2CPOSIX {
 
             String dataType = getCTypeOf(aa);
 
-            Pattern integerPattern = Pattern.compile("^((u|)int(8|32|16))");
+            Pattern integerPattern = Pattern.compile("^((u|)int(8|16|32|64))");
 
             Matcher integerMatcher = integerPattern.matcher(dataType);
 

@@ -213,7 +213,7 @@ public class FstarTranspiler
 
     String ensureRefinementTypeText = transpileSeed.get("ensureRefinementType");
 
-    String baseRegex = "fstar_(u|)int(8|32|16)(_array|)";
+    String baseRegex = "fstar_(u|)int(8|16|32|64)(_array|)";
 
     ensureRefinementTypeText = ensureRefinementTypeText.replaceAll(baseRegex + ".value", "__ret");
 
