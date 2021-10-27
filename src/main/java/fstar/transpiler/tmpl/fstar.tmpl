@@ -29,7 +29,7 @@ noeq type @struct_ret_name@ = {
 
 val @func_name@_body:
   @fstar_func_args@
-Stack (@struct_ret_name@: @struct_ret_name@) (requires fun h0 -> 
+Stack @struct_ret_name@ (requires fun h0 -> 
     @require_constraint@
   )
   (ensures fun h0 @struct_ret_name@ h1 -> 
@@ -40,7 +40,7 @@ let @func_name@_body @args@ =
 
 val @func_name@: 
   @fstar_func_args@
-  Stack (@struct_ret_name@: @struct_ret_name@) (requires fun h0 -> 
+  Stack @struct_ret_name@ (requires fun h0 -> 
     @require_constraint_wrap@
   )
   (ensures fun h0 @struct_ret_name@ h1 -> 
