@@ -435,7 +435,7 @@ public class FstarTranspiler
     // System.out.println(makefileCode);
 
     // String dirPath = String.format(projectDirPath + "/%s", funcName);
-    String dirPath = projectDirPath + "/fstar_src";
+    String dirPath = projectDirPath + "/../fstar";
 
     Path dp = Paths.get(dirPath);
 
