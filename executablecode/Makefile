@@ -1,12 +1,12 @@
-CC     = /usr/bin/gcc
+CC     = /usr/bin/clang
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
-OPT    = -O1 -pthread
+OPT    = -O2 -pthread
 # Solaris
-#LOPT   = -O1 -pthread -ldl -lnsl -lsocket
+#LOPT   = -O2 -pthread -ldl -lnsl -lsocket
 #Linux
-LOPT_UNIX   = -O1 -pthread -ldl -lm
-LOPT_MAC = -O1 -pthread -ldl
+LOPT_UNIX   = -O2 -pthread -ldl -lm -s
+LOPT_MAC = -O2 -pthread -ldl -s
 
 DEBUG  = -g
 OTHER  = -Wall
@@ -18,14 +18,64 @@ LFLAGS_UNIX = $(LOPT_UNIX) $(OTHER) $(TRY)
 OBJDIR = lib
 
 MODULE = run
-SRCS_generated_DIR = generated_src/
-include Makefile.src
-SRCS_base = src/request.c src/message.c src/myerrors.c src/debug.c src/syncchannel.c src/asyncchannel.c src/request_manager.c src/random.c src/mytimelib.c src/tracemanager.c
+SRCS_generated_DIR = generated_src
+SRCS_fstar_DIR = fstar/out
+SRCS_misrac_DIR = misrac
+SRCS_rust_DIR = rust
+# include Makefile.src
+SRCS_base_DIRSRC = src
+SRCS_base = $(foreach dir, $(SRCS_base_DIRSRC), $(wildcard $(dir)/*.c))
+SRCS_fstar = $(foreach dir, $(SRCS_fstar_DIR), $(wildcard $(dir)/*.c))
+SRCS_misrac = $(foreach dir, $(SRCS_misrac_DIR), $(wildcard $(dir)/*.c))
+SRCS = $(foreach dir, $(SRCS_generated_DIR), $(wildcard $(dir)/*.c))
 SRCS_base_DIR = .
-SRCS_base_DIRSRC = src/ 
+Kremlin_INCLUDE = $(KREMLIN_HOME)/include
+Rust_INCLUDE = $(SRCS_rust_DIR)/include
 OBJS_executor = $(SRCS_base:%.c=lib/%.o)
 OBJS = $(SRCS:%.c=lib/%.o)
+OBJS_fstar = $(SRCS_fstar:%.c=lib/%.o)
+OBJS_misrac = $(SRCS_misrac:%.c=lib/%.o)
 
-include Makefile.defs
+
+EXTRA_LIBS = -lrust -ldl
+INCDIR = -I. -I$(SRCS_base_DIR) -I$(SRCS_base_DIRSRC) -I$(SRCS_generated_DIR) -I$(Kremlin_INCLUDE) -I$(SRCS_fstar_DIR) -I$(SRCS_misrac_DIR) -I$(Rust_INCLUDE)
+LIBDIR = -L. -L.. -Lrust/target/release -Wl,-rpath rust/target/release
+LIBS   =  -lm $(EXTRA_LIBS)
+
+EXE    = verified-edr
+
+.SUFFIXES: .c .o .x
 
 
+$(EXE): makedir buildFstar buildRust $(OBJS_fstar) $(OBJS_misrac) $(OBJS) $(OBJS_executor) 
+ifeq ($(UNAME),Darwin)
+	$(CC) $(LFLAGS_MAC) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(OBJS_fstar) $(OBJS_misrac) $(LIBS) 2>&1 | c++filt
+endif
+ifneq ($(UNAME),Darwin)
+	$(CC) $(LFLAGS_UNIX) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(OBJS_fstar) $(OBJS_misrac) $(LIBS) 2>&1 | c++filt
+endif
+
+makedir:
+	echo Making directories
+	mkdir -p ./lib
+	mkdir -p ./lib/$(SRCS_generated_DIR)
+	mkdir -p ./lib/$(SRCS_base_DIRSRC)
+	mkdir -p ./lib/$(SRCS_fstar_DIR)
+	mkdir -p ./lib/$(SRCS_misrac_DIR)
+	mkdir -p ./lib/$(SRCS_rust_DIR)
+
+buildFstar:
+	make -C fstar
+
+buildRust:
+	make -C rust
+
+lib/%.o: ./%.c
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+
+clean:
+	rm -rf lib
+
+ultraclean: clean
+	rm -f Makefile.deps
