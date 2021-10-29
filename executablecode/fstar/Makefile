@@ -1,2 +1,2 @@
 all:
-	. build.bash
+	chmod +x build.bash && ./build.bash
