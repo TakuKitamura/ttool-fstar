@@ -163,12 +163,12 @@ public class AVATAR2CPOSIX {
 
         TraceManager.addDev("Making Makefiles");
         // Standard Makefile
-        makeMakefileSrc(GENERATED_PATH);
-        FileUtils.saveFile(path + "Makefile.src", makefile_src);
+        // makeMakefileSrc(GENERATED_PATH);
+        // FileUtils.saveFile(path + "Makefile.src", makefile_src);
 
         // Makefile for SocLib
-        makeMakefileSocLib();
-        FileUtils.saveFile(path + "Makefile.soclib", makefile_SocLib);
+        // makeMakefileSocLib();
+        // FileUtils.saveFile(path + "Makefile.soclib", makefile_SocLib);
     }
 
     public Vector getWarnings() {

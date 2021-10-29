@@ -90,7 +90,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame
     private static int selectedRun = 1;
     private static int selectedCompile = 0;
     private static int selectedViewTrace = 0;
-    private static boolean static_putUserCode = true;
+    private static boolean static_putUserCode = false;
 
     protected static String pathCode;
     protected static String pathCompiler;
@@ -101,7 +101,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame
     protected static String pathSoclibTraceFile;
     protected static String pathCompilerMPSoC;
     protected static String pathExecuteMPSoC;
-    protected static boolean optimizeModeSelected = true;
+    protected static boolean optimizeModeSelected = false;
 
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -131,7 +131,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame
     private static boolean removeCFilesValue = true;
     private static boolean removeXFilesValue = true;
     private static boolean debugValue = false;
-    private static boolean tracingValue = true;
+    private static boolean tracingValue = false;
     // private static boolean optimizeValue = true;
 
     private Thread t;
