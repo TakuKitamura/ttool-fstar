@@ -446,6 +446,7 @@ public class SpecConfigTTool {
                 File rust = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "rust");
                 File fstar = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "fstar");
                 File misrac = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "misrac");
+                File readme = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "README.md");
                 File lic = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE");
                 File liceng = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_ENG");
                 File licfr = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_FR");
@@ -459,6 +460,7 @@ public class SpecConfigTTool {
                 FileUtils.copyDirectoryToDirectory(rust, f);
                 FileUtils.copyDirectoryToDirectory(fstar, f);
                 FileUtils.copyDirectoryToDirectory(misrac, f);
+                FileUtils.copyFileToDirectory(readme, f, false);
                 FileUtils.copyFileToDirectory(lic, f, false);
                 FileUtils.copyFileToDirectory(liceng, f, false);
                 FileUtils.copyFileToDirectory(licfr, f, false);
