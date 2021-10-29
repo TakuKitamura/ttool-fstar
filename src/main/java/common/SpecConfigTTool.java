@@ -440,12 +440,15 @@ public class SpecConfigTTool {
             }
             if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
                 File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
-                // File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
-                // File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.forsoclib");
+                // File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory +
+                // "Makefile.defs");
+                // File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory +
+                // "Makefile.forsoclib");
                 File src = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "src");
                 File rust = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "rust");
                 File fstar = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "fstar");
                 File misrac = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "misrac");
+                File misracChecker = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "misraC-Checker");
                 File readme = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "README.md");
                 File lic = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE");
                 File liceng = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_ENG");
@@ -460,6 +463,7 @@ public class SpecConfigTTool {
                 FileUtils.copyDirectoryToDirectory(rust, f);
                 FileUtils.copyDirectoryToDirectory(fstar, f);
                 FileUtils.copyDirectoryToDirectory(misrac, f);
+                FileUtils.copyDirectoryToDirectory(misracChecker, f);
                 FileUtils.copyFileToDirectory(readme, f, false);
                 FileUtils.copyFileToDirectory(lic, f, false);
                 FileUtils.copyFileToDirectory(liceng, f, false);
