@@ -215,6 +215,7 @@ public class AVATAR2CPOSIX {
         mainFile.appendToHCode("/* Main mutex */" + CR);
         mainFile.appendToBeforeMainCode("/* Main mutex */" + CR);
         mainFile.appendToHCode("extern pthread_mutex_t __mainMutex;" + CR + CR);
+        mainFile.appendToHCode("#include \"extern.h\"" + CR + CR);
         mainFile.appendToBeforeMainCode("pthread_mutex_t __mainMutex;" + CR + CR);
 
     }
