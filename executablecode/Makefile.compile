@@ -47,7 +47,7 @@ EXE    = verified-edr
 .SUFFIXES: .c .o .x
 
 
-$(EXE): makedir buildRust $(OBJS_fstar) $(OBJS_misrac) $(OBJS) $(OBJS_executor) 
+$(EXE): makedir generateExternHeader buildRust $(OBJS_fstar) $(OBJS_misrac) $(OBJS) $(OBJS_executor) 
 ifeq ($(UNAME),Darwin)
 	$(CC) $(LFLAGS_MAC) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(OBJS_fstar) $(OBJS_misrac) $(LIBS) 2>&1 | c++filt
 endif
@@ -63,6 +63,9 @@ makedir:
 	mkdir -p ./lib/$(SRCS_fstar_DIR)
 	mkdir -p ./lib/$(SRCS_misrac_DIR)
 	mkdir -p ./lib/$(SRCS_rust_DIR)
+
+generateExternHeader:
+	ls -1 fstar/out/*.h misrac/*.h | xargs -i basename {} | xargs -r -I @ echo "#include \""@\" > generated_src/extern.h
 
 buildRust:
 	$(if $(shell find rust/src | grep -E ".rs$$") ,make -C rust ,exit 0)
