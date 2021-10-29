@@ -440,6 +440,7 @@ public class SpecConfigTTool {
             }
             if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
                 File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
+                File makeCompile = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.compile");
                 // File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory +
                 // "Makefile.defs");
                 // File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory +
@@ -457,6 +458,7 @@ public class SpecConfigTTool {
                 // "generated_topcell");
 
                 FileUtils.copyFileToDirectory(make, f, false);
+                FileUtils.copyFileToDirectory(makeCompile, f, false);
                 // FileUtils.copyFileToDirectory(defs, f, false);
                 // FileUtils.copyFileToDirectory(soclib, f, false);
                 FileUtils.copyDirectoryToDirectory(src, f);
