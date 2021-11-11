@@ -53,17 +53,6 @@ import myutil.TraceManager;
 import java.io.FileOutputStream;
 import ui.GTURTLEModeling;
 import ui.MainGUI;
-import ui.MainGUI.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.io.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -341,8 +330,6 @@ public class AVATAR2CPOSIX {
         ArrayList<String> functions = new ArrayList<>();
         ArrayList<String> requireRefinementTypes = new ArrayList<>();
         ArrayList<String> ensureRefinementTypes = new ArrayList<>();
-        ArrayList<String> requireLogics = new ArrayList<>();
-        ArrayList<String> ensureLogics = new ArrayList<>();
 
         try {
             DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
@@ -384,14 +371,7 @@ public class AVATAR2CPOSIX {
                                     String ensureRefinementType = xmlUnescape(methodAttributes
                                             .getNamedItem("ensureRefinementType").getNodeValue().trim());
 
-                                    String requireLogic = xmlUnescape(
-                                            methodAttributes.getNamedItem("requireLogic").getNodeValue().trim());
-
-                                    String ensureLogic = xmlUnescape(
-                                            methodAttributes.getNamedItem("ensureLogic").getNodeValue().trim());
-
-                                    if (requireRefinementType.length() != 0 || ensureRefinementType.length() != 0
-                                            || requireLogic.length() != 0 || ensureLogic.length() != 0) {
+                                    if (requireRefinementType.length() != 0 || ensureRefinementType.length() != 0) {
 
                                         if (requireRefinementType.length() == 0) {
                                             requireRefinementType = "true";
@@ -401,19 +381,9 @@ public class AVATAR2CPOSIX {
                                             ensureRefinementType = "true";
                                         }
 
-                                        if (requireLogic.length() == 0) {
-                                            requireLogic = "true";
-                                        }
-
-                                        if (ensureLogic.length() == 0) {
-                                            ensureLogic = "true";
-                                        }
-
                                         functions.add(function);
                                         requireRefinementTypes.add(requireRefinementType);
                                         ensureRefinementTypes.add(ensureRefinementType);
-                                        requireLogics.add(requireLogic);
-                                        ensureLogics.add(ensureLogic);
                                     }
                                 }
 
@@ -433,43 +403,20 @@ public class AVATAR2CPOSIX {
             String function = functions.get(i);
             String requireRefinementType = requireRefinementTypes.get(i).replaceAll("&return;", " ");
             String ensureRefinementType = ensureRefinementTypes.get(i).replaceAll("&return;", " ");;
-            // String requireLogic = requireLogics.get(i);
-            // String ensureLogic = ensureLogics.get(i);
 
             Map<String, String> transpileSeed = new HashMap<String, String>();
 
             transpileSeed.put("methodDeclaration", function); // 関数宣言
             transpileSeed.put("requireRefinementType", requireRefinementType); // 事前条件
             transpileSeed.put("ensureRefinementType", ensureRefinementType); // 事後条件(retは返り値を示す)
-            // transpileSeed.put("requireLogic", requireLogic); // 事前ロジック(配列長を扱う場合)
-            // transpileSeed.put("ensureLogic", ensureLogic); // 事後ロジック(配列長を扱う場合)
-
-            // TODO: ここは開発者の責任でコード上に手書きしてもらう
-            transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
-            transpileSeed.put("ngInitRetValue", "1"); // この関数がエラー処理を行った場合の返り値(テンプレート上の初期値)
-
-            // F*言語のテンプレートでの不足機能を正しく実装できたかの判定用テストコードの値
-
-            // TODO: ここは開発者の責任でコード上に手書きしてもらう
-            // テスト関数の引数
-            String[][] testFuncArgs = { // test(arg1, arg2)
-                    { "1", "2", "[1,2,0,0,0,0,0,0]" }, // test1 arg
-                    { "2", "3", "[1,2,3,0,0,0,0,0]" } // test2 arg
-            };
-
-            // TODO: ここは開発者の責任でコード上に手書きしてもらう
-            // 期待するテスト関数が返す値
-            String[] testExpectedResult = { "0", "1" }; // test1 expected, test2 expected,
 
             String[] splited = saveXMLPath.split("/");
-            // String projectPathStr = projectPathStr.split("/")[]
-            // slice filter last element
 
             String projectPathStr = "";
             for (int j = 0; j < splited.length - 1; j++) {
                 projectPathStr += splited[j] + "/";
             }
-            // String projectPathStr = splited[splited.length - 1];
+
             String generatedSrcPath = projectPathStr + "AVATAR_executablecode/generated_src";
 
             File generatedDirs = new File(generatedSrcPath);
@@ -478,15 +425,11 @@ public class AVATAR2CPOSIX {
             String templatesPath = "./src/main/java/fstar/transpiler/tmpl/";
 
             try {
-
-                String result = FstarTranspiler.transpile(generatedSrcPath, templatesPath, transpileSeed, testFuncArgs,
-                        testExpectedResult);
-                // System.out.println(result);
+                String result = FstarTranspiler.transpile(generatedSrcPath, templatesPath, transpileSeed);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void defineAllStates(AvatarBlock _block, TaskFile _taskFile) {

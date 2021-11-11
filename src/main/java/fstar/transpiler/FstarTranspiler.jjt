@@ -63,38 +63,19 @@ public class FstarTranspiler
 
     transpileSeed.put("methodDeclaration", "fstar_uint8 parseDoor(uint32 can_id, uint8 can_dlc, uint8[] data)"); // 関数宣言
 
-    transpileSeed.put("requireRefinementType", "len(data) == 8 &&\ncan_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); // ロジック(配列長を扱う場合)
-    transpileSeed.put("ensureRefinementType", "(fstar_uint8.error.code == 0 && fstar_uint8.value == get(data, 2)) || fstar_uint8.error.code == 1"); // ロジック(配列長を扱う場合)
+    transpileSeed.put("requireRefinementType", "len(data) == 8 &&\ncan_id == 0x19B && can_dlc == 6 && get(data, 0) == 0 && get(data, 1) == 0 && get(data, 2) <= 0x0F"); 
+    transpileSeed.put("ensureRefinementType", "(fstar_uint8.error.code == 0 && fstar_uint8.value == get(data, 2)) || fstar_uint8.error.code == 1"); 
 
-    // TODO: ここは開発者の責任でコード上に手書きしてもらう
-    transpileSeed.put("okInitRetValue", "0"); // この関数が正常系の処理を行った際の返り値(テンプレート上の初期値)
-    transpileSeed.put("ngInitRetValue", "1"); // この関数がエラー処理を行った場合の返り値(テンプレート上の初期値)
 
-    // F*言語のテンプレートでの不足機能を正しく実装できたかの判定用テストコードの値
-
-    // transpileSeed.put("ensure", "true"); // 事後条件(retは返り値を示す) TODO: 一切今は使われていない
-    // transpileSeed.put("require", "true"); // 一切今は使われていない
-
-    // TODO: ここは開発者の責任でコード上に手書きしてもらう
-    // テスト関数の引数
-    String[][]testFuncArgs =  { // test(arg1, arg2)
-        {"1", "2", "[1,2,0,0,0,0,0,0]"}, // test1 arg
-        {"2", "3", "[1,2,3,0,0,0,0,0]"} // test2 arg
-    };
-
-    // TODO: ここは開発者の責任でコード上に手書きしてもらう
-    // 期待するテスト関数が返す値
-    String[]testExpectedResult = {"0", "1"}; // test1 expected, test2 expected, 
 
     try {
-        String result = transpile("/tmp", "./fstar/transpiler/tmpl/", transpileSeed, testFuncArgs, testExpectedResult);
-        // System.out.println(result);
+        String result = transpile("/tmp", "./fstar/transpiler/tmpl/", transpileSeed);
     } catch (Exception e) {
         e.printStackTrace();
     }
   }
 
-  public static String transpile(String projectDirPath, String templatesPath, Map<String, String> transpileSeed, String[][]testFuncArgs, String[]testExpectedResult) throws Exception {
+  public static String transpile(String projectDirPath, String templatesPath, Map<String, String> transpileSeed) throws Exception {
 
     String function = transpileSeed.get("methodDeclaration");
 
@@ -109,25 +90,13 @@ public class FstarTranspiler
         returnFstarTypeName = functionMatcher.group(1);
         String returnTypeName = functionMatcher.group(2).replaceAll("_array", "[]");
         String removedFstarTypeName = functionMatcher.group(3);
-        // transpileSeed update
-        // transpileSeed.put("methodDeclaration", returnTypeName);
         function = returnTypeName + " " + removedFstarTypeName;
     } else {
         throw new Exception("require fstar_(???) as return-type");
     }
 
-    // System.out.println(functionMatcher.find());
-
-
-    // throw new Exception("x");
-
-    System.out.println(function);
-    System.out.println(11111);
-    
-
     InputStream methodDeclarationInput = new ByteArrayInputStream(function.getBytes());
     FstarTranspiler methodDeclarationParser = new FstarTranspiler(methodDeclarationInput);
-
 
     MethodDeclaration methodDeclaration = new MethodDeclaration();
     
@@ -150,9 +119,6 @@ public class FstarTranspiler
         requireConstraintParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    System.out.println("requireConstraint: " + requireConstraint);
-
-
     InputStream requireImplementInput = new ByteArrayInputStream(transpileSeed.get("requireRefinementType").getBytes());
 
     FstarTranspiler requireImplementParser = new FstarTranspiler(requireImplementInput);
@@ -174,27 +140,20 @@ public class FstarTranspiler
         requireConstraintWrapParser.ConditionRoot().jjtAccept(visiter, null)
     );
 
-    System.out.println("requireConstraintWrap" + requireConstraintWrap);
-
-
     List<String> arrayAccessStatements = visiter.getArrayAccessStatements();
 
     String arrayAccessStatement = "";
 
     for (String s : arrayAccessStatements) {
-        // System.out.println(s);
         arrayAccessStatement += s;
     }
 
     requireImplement = String.format("(%s%s)", arrayAccessStatement, requireImplement);
 
-    System.out.println("requireImplement: " + requireImplement);
-
     // array list
     List<String> arrayVariablesName = new ArrayList<String>();
 
     String liveCheckGrammar = "";
-
 
     for(Map.Entry<String, String> entry : methodDeclaration.args.entrySet()) {
         String variableName = entry.getKey();
@@ -202,7 +161,6 @@ public class FstarTranspiler
 
         // endwith
         if (variableType.endsWith("[]")) {
-            // arrayVariablesName.add(variableName);
             liveCheckGrammar += "B.live h0 " + variableName + " /\\\\ ";
         }
     }
@@ -221,10 +179,6 @@ public class FstarTranspiler
 
     ensureRefinementTypeText = ensureRefinementTypeText.replaceAll(baseRegex + ".error.message", "__message");
 
-
-    System.out.println(ensureRefinementTypeText);
-
-
     InputStream ensureRefinementTypeInput = new ByteArrayInputStream(ensureRefinementTypeText.getBytes());
     
     FstarTranspiler ensureRefinementTypeParser = new FstarTranspiler(ensureRefinementTypeInput);
@@ -232,19 +186,9 @@ public class FstarTranspiler
     visiter.updateRefinementType("ensure");
     visiter.updateRoleType("constraint");
 
-
     String ensureRefinementType = (String)visiter.filterObjException(
         ensureRefinementTypeParser.ConditionRoot().jjtAccept(visiter, null)
     );
-
-    // String ensureRefinementType = (String)ret;
-
-    System.out.println("ensureRefinementType: " + ensureRefinementType);
-
-    // System.out.printf("ensure = %s\n", ensure);
-    // System.out.println("");
-
-    // generateWorkFstarCode
 
     methodDeclaration = visiter.methodDeclaration;
 
@@ -254,22 +198,6 @@ public class FstarTranspiler
     String retFstarType = visiter.fstarTypeMap.get(methodDeclaration.returnType);
     String retValueType = String.format("%s.t", retFstarType);
 
-    // System.out.println(retValueType);
-
-    String initValue = transpileSeed.get("okInitRetValue");
-    String ngValue = transpileSeed.get("ngInitRetValue");
-
-
-
-    String ngInitRetValue = "";
-    if (ngValue.length() == 0) {
-        ngInitRetValue = "B.null";
-    } else {
-        ngInitRetValue = String.format("%s%s", ngValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
-    }
-
-    System.out.println(methodDeclaration.args);
-
     List<String> argsName = new ArrayList<String>(methodDeclaration.args.keySet());
     
     // require
@@ -278,37 +206,16 @@ public class FstarTranspiler
     String args = ""; // x, y
     String fstarFuncArgs = ""; // x: I32.t ->\n  y: I32.t ->
 
-    // System.out.println(methodDeclaration);
-
-    // String callFuncBody = funcName + "_body ";
-
     for (int i = 0; i < argsName.size(); i++) {
 
         String argName = argsName.get(i);
         args += String.format("%s ", argName);
 
-        System.out.println(777);
-        // System.out.println(methodDeclaration.args.get(argName));
-
         String argType = String.format("%s.t", visiter.fstarTypeMap.get(methodDeclaration.args.get(argName)));
         fstarFuncArgs += String.format("%s: %s ->\n  ", argName, argType);
     }
 
-    // callFuncBody += args + ";";
-
-    // System.out.println(callFuncBody);
-
-    String okInitRetValue = "";
-
-    if (ngValue.length() == 0) {
-        okInitRetValue = "B.null";
-    } else {
-        okInitRetValue = String.format("%s%s", initValue, visiter.typeSuffixMap.get(methodDeclaration.returnType));
-    }
-
     String retArgs = args + "ret";
-
-    // System.out.println(visiter.usedArgsInRequire);
 
     String fstarCode = null;
     try {
@@ -321,150 +228,37 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@ret_value_type@", retValueType); // return.type
 
-    // fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", ngInitRetValue); // どうするか検討
-    fstarCode = fstarCode.replaceAll("@ng_init_ret_value@", "???"); // どうするか検討
-
-    // fstarCode = fstarCode.replaceAll("@require@", require);// パース結果から構成
-
-    // fstarCode = fstarCode.replaceAll("@ensure@", ensure); // パース結果から構成
-
     fstarCode = fstarCode.replaceAll("@func_name@", funcName); // funcName
 
     fstarCode = fstarCode.replaceAll("@args@", args); // method.args
-
-    // fstarCode = fstarCode.replaceAll("@ok_init_ret_value@", okInitRetValue); // 検討
-    fstarCode = fstarCode.replaceAll("@ok_init_ret_value@", "???"); // 検討
 
     fstarCode = fstarCode.replaceAll("@fstar_func_args@", fstarFuncArgs); // method.args
 
     fstarCode = fstarCode.replaceAll("@ret_args@", retArgs); // パース結果から構成, ret を最後に持ってくる
 
     fstarCode = fstarCode.replaceAll("@require_constraint@", requireConstraint); // require 制約記述
-    // System.out.println(fstarCode);
 
     fstarCode = fstarCode.replaceAll("@require_constraint_wrap@", requireConstraintWrap); // wrap関数側のrequire制約記述
 
     fstarCode = fstarCode.replaceAll("@require_implement@", requireImplement); // require 実装記述
 
-    fstarCode = fstarCode.replaceAll("@simple_require_constraint@", transpileSeed.get("requireRefinementType")); // ensure の refine type
-
     fstarCode = fstarCode.replaceAll("@ensure_constraint@", ensureRefinementType).replaceAll("__ret", returnFstarTypeName + "." + "value").replaceAll("__code", returnFstarTypeName + ".error.code").replaceAll("__message", returnFstarTypeName + ".error.message"); // ensure 制約記述
-
-    fstarCode = fstarCode.replaceAll("@simple_ensure_constraint@", transpileSeed.get("ensureRefinementType")).replaceAll("__ret", returnFstarTypeName + "." + "value").replaceAll("__code", returnFstarTypeName + ".error.code").replaceAll("__message", returnFstarTypeName + ".error.message"); // ensure 実装記述
-
 
     fstarCode = fstarCode.replaceAll("@struct_ret_name@", returnFstarTypeName);
 
-    fstarCode = fstarCode.replaceAll("@function_define@", function);
-
-    // fstarCode = fstarCode.replaceAll("@call_func_body@", callFuncBody);
-
-
-    // Testing_test_start("Add Test");
-    // Testing_eq_i32("Add Test Case1", 3, add(1, 2).value);
-
-    // TODO: 一つの関数の一つのエラーを強制するか
-
-    String testTitle = String.format("%s Func Unit Test", moduleName);
-    String testStartFunc = String.format("Testing_test_start(\"%s\");\n", testTitle);
-    // String testCaseTitle = "Add Test Case1";
-
-    if (testExpectedResult.length != testFuncArgs.length) {
-        throw new Exception("test arg is invalid");
-    }
-
-    String testFuncs = "";
-    for (int i = 0; i < testFuncArgs.length; i++) {
-        String testCaseTitle = String.format("Test Case%d", i + 1);
-        String testFuncName = String.format("Testing_eq_%s", retFstarType.toLowerCase());
-        String callCFunc = String.format("%s(", funcName);
-        // System.out.println(testFuncArgs[i].length);
-        String[] arguments = testFuncArgs[i];
-        System.out.println(arguments.length);
-        for (int j = 0; j < arguments.length; j++) {
-
-            String argument = arguments[j];
-
-            callCFunc += argument;
-            if (j != arguments.length - 1) {
-                callCFunc += ", ";
-            } else {
-                callCFunc += ")";
-            }
-        }
-
-        System.out.println(callCFunc);
-
-        String testFunc = String.format("  %s(\"%s\", %s, %s.value);\n", testFuncName, testCaseTitle, testExpectedResult[i], callCFunc);
-        testFuncs += testFunc;
-    }
-
-    // System.out.println(testStartFunc);
-    // System.out.println(testFuncs);
-
-    String testEnd = "Testing_test_end();";
-    // System.out.println("Testing_test_end();");
-
-    // String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, testFuncs, testEnd);
-
-    String testCodes = String.format("  %s\n%s\n  %s", testStartFunc, "  ???", testEnd);
-
-    String testCode = null;
-
-    testCode = readAll(templatesPath + "test_c.tmpl");
-
-    testCode = testCode.replaceAll("@header_name@", moduleName);
-    testCode = testCode.replaceAll("@test_codes@", testCodes);
-
-    // System.out.println(testCode);
-
-    String mainCode = null;
-
-    mainCode = readAll(templatesPath + "main_c.tmpl");
-
-    mainCode = mainCode.replaceAll("@func_name@", funcName);
-
-    // System.out.println(mainCode);
-
-    String makefileCode = null;
-
-    makefileCode = readAll(templatesPath + "makefile.tmpl");
-    makefileCode = makefileCode.replaceAll("@func_name@", funcName);
-    makefileCode = makefileCode.replaceAll("@module_name@", moduleName);
-
-    // System.out.println(makefileCode);
-
-    // String dirPath = String.format(projectDirPath + "/%s", funcName);
     String dirPath = projectDirPath + "/../fstar";
 
     Path dp = Paths.get(dirPath);
 
-    // System.out.println(p.listFiles());
-
-
     String fstarFilePath = String.format("%s/%s", dirPath, String.format("%s.fst", funcName));
-    String mainFilePath = String.format("%s/%s", dirPath, "main.c");
-    String testFilePath = String.format("%s/%s", dirPath, "test.c");
-    String makefilePath = String.format("%s/%s", dirPath, "Makefile");
 
     if (Files.exists(dp)) {
         Files.deleteIfExists(Paths.get(fstarFilePath));
-        Files.deleteIfExists(Paths.get(mainFilePath));
-        Files.deleteIfExists(Paths.get(testFilePath));
-        Files.deleteIfExists(Paths.get(makefilePath));
     } else {
         Files.createDirectory(dp);
     }
 
-    // TODO: これを外部に公開する際は、インジェクション攻撃対策をする
-
     writeAll(fstarFilePath, fstarCode);
-
-    // writeAll(mainFilePath, mainCode);
-
-    // writeAll(testFilePath, testCode);
-
-    // writeAll(makefilePath, makefileCode);
 
     return "";
   }

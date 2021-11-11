@@ -82,8 +82,6 @@ public class AvatarMethod {
 
     protected RefinementType requireRefinementType = new RefinementType("");
     protected RefinementType ensureRefinementType = new RefinementType("");
-    protected RefinementType requireLogic = new RefinementType("");
-    protected RefinementType ensureLogic = new RefinementType("");
 
     protected boolean implementationProvided;
 
@@ -282,12 +280,10 @@ public class AvatarMethod {
     }
 
     public static AvatarMethod isAValidMethod(String _method, RefinementType _requireRefinementType,
-            RefinementType _ensureRefinementType, RefinementType _requireLogic, RefinementType _ensureLogic) {
+            RefinementType _ensureRefinementType) {
         AvatarMethod avatarMethod = isAValidMethod(_method);
         avatarMethod.requireRefinementType = _requireRefinementType;
         avatarMethod.ensureRefinementType = _ensureRefinementType;
-        avatarMethod.requireLogic = _requireLogic;
-        avatarMethod.ensureLogic = _ensureLogic;
         return avatarMethod;
     }
 
@@ -313,14 +309,6 @@ public class AvatarMethod {
 
     public RefinementType getEnsureRefinementType() {
         return ensureRefinementType;
-    }
-
-    public RefinementType getRequireLogic() {
-        return requireLogic;
-    }
-
-    public RefinementType getEnsureLogic() {
-        return ensureLogic;
     }
 
     public String getType(int _index) {
@@ -442,75 +430,6 @@ public class AvatarMethod {
     public String toString() {
         String method = this.toStringOnlyMethod();
         return method;
-        /*
-        if (!method.split("\\(")[0].contains(" ")) {
-            // method = "void " + method;
-        }
-
-        // // match regex /^\s+ / == true
-        // if (method.split(" ")[0].equals("true")) {
-        // method = "void " + method;
-        // }
-
-        if (!requireRefinementType.toString().equals("") || !ensureRefinementType.toString().equals("")
-                || !requireLogic.toString().equals("") || !ensureLogic.toString().equals("")) {
-            int refinementTypeCount = 0;
-
-            if (!requireRefinementType.toString().equals("")) {
-                if (refinementTypeCount == 0) {
-                    method += ": (require{";
-                    method += requireRefinementType;
-                    refinementTypeCount += 1;
-                }
-            }
-
-            if (!ensureRefinementType.toString().equals("")) {
-                if (refinementTypeCount == 0) {
-                    method += ": (ensure{";
-                    method += ensureRefinementType;
-                    refinementTypeCount += 1;
-                } else {
-                    method += "}, ensure{";
-                    method += ensureRefinementType;
-                }
-            }
-
-            if (!requireLogic.toString().equals("")) {
-                if (refinementTypeCount == 0) {
-                    method += ": (requireLogic{";
-                    method += requireLogic;
-                    refinementTypeCount += 1;
-                } else {
-                    method += "}, requireLogic{";
-                    method += requireLogic;
-                }
-            }
-
-            if (!ensureLogic.toString().equals("")) {
-                if (refinementTypeCount == 0) {
-                    method += ": (ensureLogic{";
-                    method += ensureLogic;
-                    refinementTypeCount += 1;
-                } else {
-                    method += "}, ensureLogic{";
-                    method += ensureLogic;
-                }
-            }
-
-            // method += ": (";
-
-            // method += ": (require{";
-            // method += requireRefinementType;
-            // method += "}, ensure{";
-            // method += ensureRefinementType;
-            // method += "}, requireLogic{";
-            // method += requireLogic;
-            method += "})";
-            return method;
-        } else {
-            return method;
-        }
-        */
     }
 
     public String toSaveString() {
@@ -560,7 +479,7 @@ public class AvatarMethod {
      */
 
     public AvatarMethod makeClone() {
-        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType, requireLogic, ensureLogic);
+        AvatarMethod am = isAValidMethod(toStringOnlyMethod(), requireRefinementType, ensureRefinementType);
         am.setImplementationProvided(isImplementationProvided());
         return am;
     }
