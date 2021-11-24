@@ -514,6 +514,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame
     }
 
     public void run() {
+        long ts = System.nanoTime();
         String cmd;
         String list;// , data;
         // int cycle = 0;
@@ -725,7 +726,9 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame
 
         checkMode();
         setButtons();
-
+        long te = System.nanoTime();
+        long tnsec = te - ts;
+        TraceManager.addDev(tnsec + " ns");
         //
     }
 

@@ -399,10 +399,13 @@ public class AVATAR2CPOSIX {
             TraceManager.addDev("Error during xml file: " + e.getMessage());
         }
 
+        long ts = System.nanoTime();
+
         for (int i = 0; i < functions.size(); i++) {
             String function = functions.get(i);
             String requireRefinementType = requireRefinementTypes.get(i).replaceAll("&return;", " ");
-            String ensureRefinementType = ensureRefinementTypes.get(i).replaceAll("&return;", " ");;
+            String ensureRefinementType = ensureRefinementTypes.get(i).replaceAll("&return;", " ");
+            ;
 
             Map<String, String> transpileSeed = new HashMap<String, String>();
 
@@ -430,6 +433,11 @@ public class AVATAR2CPOSIX {
                 e.printStackTrace();
             }
         }
+
+        long te = System.nanoTime();
+        // System.out.println();
+        long tnsec = te - ts;
+        TraceManager.addDev(tnsec + " ns");
     }
 
     public void defineAllStates(AvatarBlock _block, TaskFile _taskFile) {
@@ -1147,12 +1155,12 @@ public class AVATAR2CPOSIX {
     public String reworkDelay(String _delay) {
 
         switch (timeUnit) {
-            case USEC:
-                return _delay;
-            case MSEC:
-                return "(" + _delay + ")*1000";
-            case SEC:
-                return "(" + _delay + ")*1000000";
+        case USEC:
+            return _delay;
+        case MSEC:
+            return "(" + _delay + ")*1000";
+        case SEC:
+            return "(" + _delay + ")*1000000";
         }
 
         return _delay;
