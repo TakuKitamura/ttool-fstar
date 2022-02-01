@@ -238,6 +238,9 @@ public class FstarTranspiler
 
     fstarCode = fstarCode.replaceAll("@require_constraint@", requireConstraint); // require 制約記述
 
+    if (requireConstraintWrap.equals("()")) {
+        requireConstraintWrap = "true";
+    }
     fstarCode = fstarCode.replaceAll("@require_constraint_wrap@", requireConstraintWrap); // wrap関数側のrequire制約記述
 
     fstarCode = fstarCode.replaceAll("@require_implement@", requireImplement); // require 実装記述
